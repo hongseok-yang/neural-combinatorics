@@ -1,1 +1,1 @@
-# neural-combinatorics
+# Deep Learning for Extremal Combinatorics
