@@ -160,13 +160,11 @@ A large body of extremal graph theory concerns asymptotic optimisation problems 
 \begin{align}
 \liminf_{n \to \infty}
 \Big(\min_{G : v(G) = n}
-&\,f\bigl(t(H_1,G), \ldots, t(H_k,G)\bigr)
-\label{eqn:extremalproblem}
-\\
-\text{ s.t. }\,
-&\bigwedge\nolimits_{j = 1}^\ell\,
+ f\bigl(t(H_1,G), \ldots, t(H_k,G)\bigr)
+\text{ s.t. }
+\bigwedge\nolimits_{j = 1}^\ell\,
 g_j\bigl(t(F_1,G), \ldots, t(F_m,G)\bigr) = 0 \Big),
-\nonumber
+\label{eqn:extremalproblem}
 \end{align}
 where $H_1, \ldots, H_k, F_1, \ldots, F_m$ are graphs and $f : \R^k \to \R$, $g_j : \R^m \to \R$ are real-valued functions. We focus on two extremal-graph-theory cases below; after introducing graphons, we describe a third application that is intrinsically a graphon problem and arises from large-deviation theory. The display above is a schematic finite-$n$ form; when an equality constraint is not exactly attainable for every graph size, we use the graph-sequence formulation below.
 
@@ -199,9 +197,9 @@ t(H, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(H)} \stackrel{\mathrm{iid}}{
 \end{align}
 For continuous $f, g_1, \ldots, g_\ell$, the asymptotic value of~\eqref{eqn:extremalproblem} equals the optimum of the graphon problem
 \begin{align}
-\min_{W}\,&\, f\bigl(t(H_1, W), \ldots, t(H_k, W)\bigr) \nonumber
-\\
-\text{ s.t. }\,&\, \bigwedge\nolimits_{j = 1}^\ell\, g_j\bigl(t(F_1, W), \ldots, t(F_m, W)\bigr) = 0,
+\min_{W}\ f\bigl(t(H_1, W), \ldots, t(H_k, W)\bigr)
+\ \text{ s.t. }\
+\bigwedge\nolimits_{j = 1}^\ell\, g_j\bigl(t(F_1, W), \ldots, t(F_m, W)\bigr) = 0,
 \label{eqn:extremalproblem-graphon}
 \end{align}
 where $W$ ranges over graphons. We use this graphon formulation throughout the paper.
@@ -253,7 +251,8 @@ $c \in \R$, $b^{(\ell)} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell)} \in \R^{
 \begin{align*}
 c,\, b^{(\ell)}_i,\, V_{1,i},\, V^{(\ell')}_{i,j},\, W^{(\ell)}_{i,j}
 &\,\stackrel{\mathrm{iid}}{\sim}\, \mathrm{Unif}\bigl[-1/\sqrt{2d},\, 1/\sqrt{2d}\bigr],
-\\
+&
+\quad
 U^{(\ell)}_{i,k}
 &\,\stackrel{\mathrm{iid}}{\sim}\, \mathrm{Unif}\bigl[-s(\ell)/\sqrt{2},\, s(\ell)/\sqrt{2}\bigr],
 \end{align*}
