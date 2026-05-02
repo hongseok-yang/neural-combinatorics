@@ -83,8 +83,6 @@
 
 \newcommand*{\fix}{\marginpar{FIX}}
 \newcommand*{\new}{\marginpar{NEW}}
-\newcommand*{\TODO}[1]{\textcolor{red}{\textbf{[TODO: }#1\textbf{]}}}
-
 \newcommand*{\tk}[1]{\textcolor{olive}{\textbf{[TK : }#1\textbf{]}}}
 \newcommand*{\hy}[1]{\textcolor{blue}{\textbf{[HY : }#1\textbf{]}}}
 \newcommand*{\jb}[1]{\textcolor{orange}{\textbf{[JB : }#1\textbf{]}}}
@@ -117,7 +115,7 @@
 \allowdisplaybreaks
 
 \begin{abstract}
-Machine learning is opening new directions in mathematical discovery, from automatic provers for Olympiad problems to progress on long-standing conjectures. We propose a neural approach to \emph{asymptotic extremal problems} in graph theory, which study the limiting behaviour of graph optimisation as the number of vertices tends to infinity. Such problems can often be reformulated as continuous optimisation over \emph{graphons}---symmetric measurable functions $[0,1]^2 \to [0,1]$ that arise as limits of dense graph sequences---and we attack the graphon formulation directly with gradient descent on a neural network that represents the graphon. Two challenges shape our design. First, known optimal graphons are typically step-like, and standard architectures perform poorly on such targets; we therefore introduce a multi-scale sinusoidal residual network that injects sinusoidal encodings of increasing frequency into successive layers, biasing the model toward sharp, step-like structure. Second, the problems often involve constraints (e.g., a fixed edge density); we embed a numerical solver for an empirical version of the constraint into the forward pass and backpropagate through it via implicit differentiation. On generalised Tur\'an problems and density-domination problems that previously required substantial human effort, our method rediscovers known optimal graphons without human intervention. On open problems of the same kind, it produces novel candidate optima---including a previously unreported family of extremal structures---that may be of interest to the extremal graph theory community.
+Machine learning is opening new directions in mathematical discovery, from automatic provers for Olympiad problems to progress on long-standing conjectures. We propose a neural exploratory framework for \emph{asymptotic extremal problems} in graph theory, which study graph optimisation as the number of vertices tends to infinity. Such problems can often be reformulated as continuous optimisation over \emph{graphons}---symmetric measurable functions $[0,1]^2 \to [0,1]$ that arise as limits of dense graph sequences. We represent graphons by implicit neural networks and optimise graphon objectives by gradient descent. Our design combines three ingredients: a multi-scale sinusoidal residual architecture biased toward sharp, step-like graphons; an embedded solver that enforces a single empirical density constraint and is differentiated by implicit differentiation; and symmetry-aware Monte Carlo estimators for homomorphism densities. On generalised Tur\'an problems and density-domination problems that previously required substantial human effort, our method rediscovers known optimal graphons without human intervention. On open problems of the same kind, it produces candidate optima and candidate inequality violations, including a previously unreported family of extremal structures. We also formulate its application to the graphon variational problem governing upper-tail large deviations for triangle counts in Erd\H{o}s--R\'enyi random graphs. The method produces numerical candidates and structural conjectures rather than certificates, and is intended to complement rigorous tools such as flag algebras.
 \end{abstract}
 
 
@@ -138,7 +136,8 @@ A standard approach to such problems is to study their \emph{asymptotic} counter
 
 Two recurring challenges shape our design. First, known optimal graphons are typically step-like, and unknown optima are expected to share this structure; standard architectures struggle with such targets because of their bias toward smooth functions. We address this with a \emph{multi-scale sinusoidal residual architecture} that injects sinusoidal encodings of growing frequency into successive layers, biasing the model toward sharp, step-like solutions. Second, the problems often involve constraints (e.g., a fixed edge density), which are difficult to enforce by penalty terms alone. We embed a numerical solver for an empirical version of the constraint into the forward pass and backpropagate through it via implicit differentiation, as in deep equilibrium models~\citep{bai2019deep}. To improve sample efficiency, our training algorithm also exploits the symmetries of homomorphism-density objectives.
 
-We evaluate this framework on a range of constrained and unconstrained graphon optimisation problems. It recovers nontrivial known results, including triangle-density and $5$-cycle-density minimisation under an edge-density constraint~\citep{goodman1959on,bollobas1975relations,lovasz1983on,fisher1989lower,razborov2008minimal}, that previously required substantial human effort. Applied to open problems, the same framework produces candidate minimisers for the $7$-cycle density under the same constraint, candidate counterexamples to clique-density inequalities, and---through a systematic sweep over small graphs---a previously unreported family of candidate extremal structures for a six-vertex graph that does not match the complete $k$-partite pattern of classical examples.
+We evaluate this framework on a range of constrained and unconstrained graphon optimisation problems. It recovers nontrivial known results, including triangle-density and $5$-cycle-density minimisation under an edge-density constraint~\citep{goodman1959on,bollobas1975relations,lovasz1983on,fisher1989lower,razborov2008minimal}, that previously required substantial human effort. Applied to open problems, the same framework produces candidate minimisers for the $7$-cycle density under the same constraint, candidate violations of clique-density inequalities, and---through a systematic sweep over small graphs---a previously unreported family of candidate extremal structures for a six-vertex graph that does not match the complete $k$-partite pattern of classical examples.
+As an additional application, the same constrained graphon optimisation machinery applies to variational problems from dense random-graph large-deviation theory, where minimising a relative-entropy functional under a triangle-density constraint describes the upper tail of triangle counts in Erd\H{o}s--R\'enyi graphs.
 We view the framework as a flexible exploratory tool that complements rigorous lower-bound techniques such as flag algebras~\citep{razborov2007flag,falgas2013applications}: it produces candidate upper bounds, concrete candidate minimisers, and structural conjectures that can be inspected, refined, or subsequently certified.
 
 \section{Background} \label{sec:background}
@@ -169,7 +168,7 @@ A large body of extremal graph theory concerns asymptotic optimisation problems 
 g_j\bigl(t(F_1,G), \ldots, t(F_m,G)\bigr) = 0 \Big),
 \nonumber
 \end{align}
-where $H_1, \ldots, H_k, F_1, \ldots, F_m$ are graphs and $f : \R^k \to \R$, $g_j : \R^m \to \R$ are real-valued functions. We focus on two cases.
+where $H_1, \ldots, H_k, F_1, \ldots, F_m$ are graphs and $f : \R^k \to \R$, $g_j : \R^m \to \R$ are real-valued functions. We focus on two extremal-graph-theory cases below; after introducing graphons, we also describe a large-deviation application that natively lives in the graphon formulation. The display is a schematic finite-$n$ form; when an equality constraint is not exactly attainable for every graph size, we use the graph-sequence formulation below.
 
 \paragraph{Constrained density minimisation.}
 The first task is to minimise the homomorphism density of a fixed graph $H$ subject to a fixed edge density $p$. Because the edge density of a finite graph takes only certain rational values, we phrase the asymptotic problem in terms of graph sequences:
@@ -207,24 +206,38 @@ For continuous $f, g_1, \ldots, g_\ell$, the asymptotic value of~\eqref{eqn:extr
 \end{align}
 where $W$ ranges over graphons. We use this graphon formulation throughout the paper.
 
+\paragraph{Large-deviation variational problem.}
+Graphons also provide the natural variational language for dense random-graph large deviations. Fix $q \in (0,1)$, and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}\bigl(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q)\bigr)\,dx\,dy$. The Chatterjee--Varadhan large-deviation principle~\citep{chatterjee2011large,chatterjee2017large} implies that, for $r > q$, $\binom{n}{2}^{-1}\log\Pr[t(K_3, G(n,q)) \ge r^3]$ converges to $-\inf_{W: t(K_3,W) \ge r^3} h_q(W)$, and the typical structure of $G(n,q)$ conditioned on this upper-tail event is described by near-minimisers of the same variational problem~\citep{lubetzky2015replica}. Our method applies directly to the boundary form
+\begin{equation}
+\label{eqn:large-deviation-problem}
+  \min_W\, h_q(W)
+  \quad \text{s.t.}\quad
+  t(K_3,W) = r^3,
+\end{equation}
+which is the equality-constrained problem when the upper-tail optimum lies on the active boundary.
+
 \section{Implicit Neural Representations of Graphons} \label{sec:method}
 
-We tackle the graphon formulations of the two problems from \Cref{sec:background}:
+We tackle the graphon formulations of the two extremal problem classes from \Cref{sec:background}, together with the large-deviation application in~\eqref{eqn:large-deviation-problem}:
 \begin{align}
 \textbf{(P1)}\quad &\min_W\, t(H, W)
 \quad \text{subject to } t(K_2, W) = p, \nonumber
 \\
 \textbf{(P2)}\quad &\min_W\, \bigl(t(H_1, W)^{m_2} - t(H_2, W)^{m_1}\bigr),
+\nonumber
+\\
+\textbf{(P3)}\quad &\min_W\, h_q(W)
+\quad \text{subject to } t(K_3, W) = r^3,
 \label{eqn:targetproblems}
 \end{align}
-for graphs $H, H_1, H_2$, a real $p \in (0,1)$, and positive integers $m_1, m_2$, where $W$ ranges over graphons.
+for graphs $H, H_1, H_2$, reals $p,q,r \in (0,1)$, and positive integers $m_1, m_2$, where $W$ ranges over graphons. Problems (P1) and (P3) have a single scalar equality constraint; (P2) is unconstrained.
 
-Our approach represents $W$ as a neural network $f_\theta$, recasts (P1) and (P2) as optimisation over the parameters $\theta$, and applies gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, each occurrence of $t(\cdot, W)$ involves an intractable high-dimensional integral, and estimating these expectations and their powers efficiently requires problem-specific sampling. Third, the edge-density constraint in (P1) is poorly handled by penalty terms, so the architecture must enforce it more directly. The remainder of this section describes the architecture and training procedure that address these three challenges.
+Our approach represents $W$ as a neural network $f_\theta$, recasts these graphon programs as optimisation over the parameters $\theta$, and applies gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, each occurrence of $t(\cdot, W)$ involves an intractable high-dimensional integral, and estimating these expectations and their powers efficiently requires problem-specific sampling; the entropy objective $h_q(W)$ in (P3) is another graphon integral that must be estimated stochastically. Third, the scalar constraints in (P1) and (P3) are poorly handled by penalty terms, so the architecture must enforce them more directly. The remainder of this section describes the architecture and training procedure that address these three challenges.
 
 \paragraph{Architecture.}
-We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems (P1), the architecture additionally includes a constraint solver.
+We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems (P1) and (P3), the architecture additionally includes a constraint solver.
 
-Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing scale function $s : [L] \to (0, \infty)$; in our experiments $s(\ell) = \ell$ or $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
+Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing scale function $s : [L] \to (0, \infty)$; we consider schedules such as $s(\ell) = \ell$ and $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
 \begin{align*}
 &\, f_{\theta}[c] : [0,1]^2 \to [0,1],
 \quad
@@ -248,7 +261,7 @@ for all $i, j \in [d]$, $k \in [2]$, and we collect every parameter except $c$ i
 
 The architecture has two notable features. First, it repeatedly injects a sinusoidal encoding of the input $(x_1, x_2)$ at every layer, with an encoding scale that grows with depth. Increasing $s(\ell)$ with depth shifts higher-frequency content into deeper layers~\citep{tancik2020fourier} and encourages late layers to capture sharp boundaries, while early layers stabilise the coarse, low-frequency structure---an inductive bias that fits step-like graphons. A similar coarse-to-fine pattern arises in diffusion models~\citep{salmona2022can, dieleman2024spectral}, but we make no formal claim of equivalence; the design is a domain-specific choice for our setting.
 
-Second, in constrained problems we determine $c$ via a numerical solver rather than learning it directly. To enforce $t(K_2, f_\theta[c]) = p$, we use a batch of $K$ i.i.d.\ samples
+Second, in constrained problems we determine $c$ via a numerical solver rather than learning it directly. To enforce $t(K_2, f_\theta[c]) = p$ in (P1), we use a batch of $K$ i.i.d.\ samples
 \[
 \mathcal{E} = \bigl\{(x_1^{(k)}, x_2^{(k)})\bigr\}_{k \in [K]},
 \quad
@@ -262,6 +275,14 @@ and define
 \label{eqn:solver-specification}
 \end{align}
 The left-hand side is an unbiased estimator of $t(K_2, f_\theta[c])$, so~\eqref{eqn:solver-specification} is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped Newton variant (\Cref{alg:cap}) and use the resulting $c^*$ when evaluating $f_\theta[c^*]$ on other inputs.
+The same idea applies to any single homomorphism-density constraint of the form $t(F, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(F, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this empirical constraint remains a monotone scalar equation in $c$. For the large-deviation application (P3), this means sampling triples $(x,y,z)$ and solving the empirical equation
+\[
+  \frac{1}{|\mathcal{T}|}
+  \sum_{(x,y,z)\in\mathcal{T}}
+  f_\theta[c](x,y)f_\theta[c](y,z)f_\theta[c](z,x)
+  = r^3.
+\]
+Our present implementation does not exactly enforce multiple simultaneous constraints; extending the solver to vector-valued root finding or projection-based updates is an important direction for future work.
 For the unconstrained problem (P2) we drop the solver and learn $c$ jointly with $\theta$ by gradient descent.
 
 
@@ -277,14 +298,14 @@ Let $H$ be a graph with vertex set $[v(H)]$. By~\eqref{eqn:homomorphismdensitygr
   \!\!\!\!\!\! f_\theta[c]\bigl(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\bigr).
 \end{equation}
 The estimator is unbiased for any choice of $\mathcal{S}$ (\Cref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
-When $\mathcal{S} = \{\mathrm{id}\}$, \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing substantially lower variance at the same sampling cost. Different permutations also induce repeated evaluations of the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching reduces the number of network evaluations from $N |\mathcal{S}| e(H)$ to $N C e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
+When $\mathcal{S} = \{\mathrm{id}\}$, \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples, although not for exactly the same wall-clock cost. Different permutations also induce repeated evaluations of the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching reduces the number of network evaluations from $N |\mathcal{S}| e(H)$ to $N C e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
 
 The estimator extends to polynomials in homomorphism densities by way of the identity
 \begin{equation}
 \label{eqn:elimination densityproduct}
 t(H, f_\theta[c]) \, t(H', f_\theta[c]) \,=\, t(H \oplus H', f_\theta[c]),
 \end{equation}
-where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly.\footnote{In practice we use U-statistics of the monomials.} We use this extension for (P2).
+where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In implementation, each monomial is estimated as a U-statistic by using disjoint vertex-sample tuples for the copies in the disjoint union whenever possible, which avoids reusing the same sampled vertex as two independent variables within a monomial. We use this extension for (P2).
 
 \paragraph{Training algorithm.}
 
@@ -406,6 +427,9 @@ h_\theta(x_1, x_2) \,\coloneqq\, V g_\theta^{(L)}\!\bigl(\min(x_1, x_2), \max(x_
 \noindent\textit{Unconstrained problems.}
 For (P2), with graphs $H_1, H_2$ and positive integers $m_1, m_2$, we minimise $t(H_1, f_\theta[c])^{m_2} - t(H_2, f_\theta[c])^{m_1}$. Using~\eqref{eqn:elimination densityproduct}, we rewrite the objective as $t(H_1^{\oplus m_2}, f_\theta[c]) - t(H_2^{\oplus m_1}, f_\theta[c])$, where $H^{\oplus m}$ is the disjoint union of $m$ copies of $H$, and optimise $(\theta, c)$ by SGD on freshly resampled batches each iteration, applying~\eqref{eqn:estimator} to each term separately.
 
+\noindent\textit{Large-deviation variational problem.}
+For (P3), with parameters $q,r$, we use the same constrained loop with $F=K_3$ and target $r^3$, and minimise the Monte Carlo estimate of $h_q$ obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. Since the sigmoid output lies in $(0,1)$, the KL objective is differentiable in the network parameters. Experimental results for this application will be reported in a later version.
+
 \begin{figure}[t]
   \centering
   \begin{minipage}{0.40\textwidth}
@@ -459,15 +483,9 @@ For (P2), with graphs $H_1, H_2$ and positive integers $m_1, m_2$, we minimise $
 
 \section{Experiment Results} \label{sec:experiments}
 
-We empirically evaluate our method on both resolved and unresolved problems in extremal graph theory that fit one of the forms in \Cref{eqn:targetproblems}.
-The goals are (i) to test whether the method can rediscover known optima that required substantial human effort, and (ii) to investigate whether it can produce mathematically interesting candidates for open problems.
-We also include an ablation study that assesses the impact of key components of our architecture and training procedure.
+We empirically evaluate our method on resolved and unresolved extremal-graph-theory problems that fit (P1) or (P2) in \Cref{eqn:targetproblems}; experiments for the large-deviation application (P3) will be added in a later version. The goals are to test whether the method (i) can rediscover known optima that required substantial human effort and (ii) can produce mathematically interesting candidates for open problems. We also include an ablation study that assesses the impact of key components of our architecture and training procedure.
 
-In this section, we visualise graphons as heatmaps using a blue-to-yellow colormap (Viridis), where blue represents $0$ and yellow represents $1$; see \Cref{fig:triangledensity-minimisers}.
-Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is computationally infeasible or memory-intensive.
-Across multiple training runs, we report the run with the lowest objective value.
-See \Cref{sec:experimentdetails} for
-details.
+We visualise graphons as Viridis heatmaps (blue $\,=\,0$, yellow $\,=\,1$); see \Cref{fig:triangledensity-minimisers}. Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
 \paragraph{Constrained Homomorphism-Density Minimisation}
 We apply our method to the problem of minimising the homomorphism density of $K_n$ under an edge-density constraint $t(K_2,W)=p$. This is an instance of the first problem in \Cref{eqn:targetproblems}, with $H=K_n$.
@@ -540,13 +558,9 @@ where the first $k$ parts are equal in length but the last part $X_{k+1}$ is sho
 Again, its permutations $W_{p,\phi}$ by measure-preserving $\phi$ on $[0,1]$ are also optimal, though %in this regime 
 $W_p$ and $W_{\phi,p}$ do not exhaust all optima.
 
-%\tk{This paragraph has been updated to have consistent edge density as $C_5, C_7$, and include (f) case description.}
-We considered $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$, and trained our network for all the six cases of $p$.
-In the first three cases (i.e., $p \in \{1/2, 2/3, 4/5\}$), our method produced near-optimal graphons (top row of \Cref{fig:triangledensity-minimisers}) whose estimated objectives (via discretisation) are within $0.1\%$ of the theoretical optima.
-In those cases, $p=1-1/k$ for some integer $k$, and the learnt graphons closely match the complete $k$-partite graphons $W_k$ described above.
-While measure-preserving permutations yield graphons with equivalent objective values but more complex discontinuity patterns, our method consistently converged to the simpler representatives shown in \Cref{fig:triangledensity-minimisers}.
-For $p \in \{4/7, 5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$ for the corresponding $k$, the learnt graphons (\Cref{fig:k3-57,fig:k3-62}) capture the core structure of the known optimal $W_p$ described above.
-For $p = 5/7$, the learnt graphon (\Cref{fig:k3-71}) does not match the optimal structure $W_p$ described, but the bipartite middle block structure matches the characterisation of all optimal graphons described in \citep{pikhurko2017asymptotic}.
+We considered $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$. For the three cases with $p=1-1/k$ ($p\in\{1/2,2/3,4/5\}$), our method produced near-optimal graphons (top row of \Cref{fig:triangledensity-minimisers}) within $0.1\%$ of the theoretical optima, closely matching the complete $k$-partite graphons $W_k$; among the equivalent measure-preserving permutations, our method consistently converged to these simpler representatives.
+For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (\Cref{fig:k3-57,fig:k3-62}) capture the core structure of the known optimal $W_p$.
+For $p=5/7$, the learnt graphon (\Cref{fig:k3-71}) does not match $W_p$, but its bipartite middle-block structure matches the characterisation of all optimal graphons in~\citep{pikhurko2017asymptotic}.
 
 \begin{figure}[t]
   \centering
@@ -601,15 +615,13 @@ For $p = 5/7$, the learnt graphon (\Cref{fig:k3-71}) does not match the optimal 
   \end{minipage}
 \end{figure}
 
-For $K_k$ with $k > 3$, we applied our method to the following optimisation problems: $\min_W t(K_k, W)$ subject to $t(K_2, W) \,{=}\, 1 \,{-}\, 1/k$ for $k \,{\in}\, \{4,5,6\}$.
-The complete $k$-partite graphons and their permutations achieve optimal values of these problems. Despite the increasing complexity of these problems in the structures of their optimal graphons and the sample and computational complexities of our estimator, our method %successfully 
-found near-optimal graphons in \Cref{fig:clique}, which show the desired complete $k$-partite structure.
+For $K_k$ with $k>3$, we ran $\min_W t(K_k, W)$ s.t.\ $t(K_2, W){=}1{-}1/k$ for $k\in\{4,5,6\}$. Despite the increasing complexity, our method found near-optimal graphons (\Cref{fig:clique}) showing the complete $k$-partite structure.
 
 \begin{figure}[t]
   \centering
   \begin{minipage}{0.45\textwidth}
     \centering
-    \captionof{table}{Difference of normalised homomorphism densities of $K_r, K_s$ in graphons found by our method. Negative values indicate that the conjectured inequality fails on the learnt graphon.\label{tab:cliquedensitycomparison}}
+    \captionof{table}{Difference of normalised homomorphism densities of $K_r, K_s$ in graphons found by our method. Negative estimates indicate violations by the learnt graphon.\label{tab:cliquedensitycomparison}}
     {\small
     \begin{tabular}{lc}
        \toprule
@@ -642,21 +654,11 @@ found near-optimal graphons in \Cref{fig:clique}, which show the desired complet
 \end{figure}
 
 \noindent{\it Unresolved Problems: $C_5$ and $C_7$.}
-We next apply our method to three graphon optimisation problems that, to the best of our knowledge, remain open: minimising the homomorphism densities of $C_5$, $C_7$, each under a fixed edge density~$p$. In \Cref{sec:addexperiments}, we also report our results on applying our method to the Petersen graph, for which no prior results are known due to its large size and complexity.
+We next apply our method to two graphon optimisation problems that, to the best of our knowledge, remain open in the tested regimes: minimising the homomorphism densities of $C_5$ and $C_7$, each under a fixed edge density~$p$. In \Cref{sec:addexperiments}, we also report results for the Petersen graph, for which no prior optima or conjectured optima are known to us.
 
-For $C_5$, partial results are known. When $p\,{=}\,1\,{-}\,1/k$ for some $k$, \citet{bennet2020minimizing} characterised the minimisers; for other values of $p$, they conjectured both the minimisers and the optimum values.
-We applied our method for $p\in\{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$, which lie in the conjectured regime.
-The learnt graphons are shown in \Cref{fig:5cycleminimisation}.
-%We discretised each learnt graphon to a $(2^{14}\times 2^{14})$ grid and computed the corresponding densities.
-As shown in \Cref{tab:c5result}, the resulting values agree with the benchmark optima (proved for $p\in\{1/2,2/3,4/5\}$ and conjectured for the remaining $p$ values) within $0.1\%$ relative error, providing empirical support for the conjectured regime.
-Notably, when $p=1-1/k$ the learnt graphon recovers the complete $k$-partite structure (top row), whereas for other values of $p$ it exhibits pronounced diagonal (banded) structure (bottom row), suggesting a qualitatively different extremal configuration away from the rational breakpoints.
+For $C_5$, \citet{bennet2020minimizing} characterised the minimisers when $p=1-1/k$ and conjectured them for other $p$. We applied our method for $p\in\{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$ (\Cref{fig:5cycleminimisation}); the resulting values agree with the benchmark optima within $0.1\%$ (\Cref{tab:c5result}). When $p=1-1/k$ the learnt graphon recovers the complete $k$-partite structure (top row); for other $p$ it exhibits pronounced diagonal (banded) structure (bottom row), suggesting a qualitatively different extremal configuration away from the rational breakpoints.
 
-For $C_7$, to the best of our knowledge there are no established results.
-Motivated by the $C_5$ results of \citet{bennet2020minimizing}, we propose a conjecture for the structure and optimum value of $C_7$-minimising graphons under a fixed edge density; see \Cref{sec:oddcycleconjecture}.
-Empirically, the $C_7$ densities achieved by our learnt graphons match the conjectured optima with relative errors below $0.1\%$ across all tested values of $p$ (\Cref{tab:c7result}).
-For $p \in \{1/2, 2/3, 4/5\}$ (i.e., $p\,{=}\,1\,{-}\,1/k$), the learnt graphons recover the complete $k$-partite structure, up to small numerical artefacts (top row of \Cref{fig:7cycleminimisation}), consistent with the behaviour observed for triangles and $C_5$.
-For $p \in \{4/7, 5/8\}$, the learnt graphons show similar patterns to those found for $C_5$, suggesting that this diagonal structure is a common feature of odd-cycle minimisation.
-For $p=5/7$, however, the learnt graphon exhibits a qualitatively different structure, with block-like patterns rather than the diagonal pattern seen for $C_5$ at the same edge density (bottom-right of \Cref{fig:7cycleminimisation}).
+For $C_7$, no prior results are known to us. Motivated by the $C_5$ results of \citet{bennet2020minimizing}, we propose a conjecture for the structure and optimum value of $C_7$-minimising graphons under a fixed edge density; see \Cref{sec:oddcycleconjecture}. Empirically, our learnt graphons match the conjectured optima within $0.1\%$ across all tested $p$ (\Cref{tab:c7result}). For $p\in\{1/2,2/3,4/5\}$ ($p=1-1/k$), they recover the complete $k$-partite structure (top row of \Cref{fig:7cycleminimisation}); for $p\in\{4/7,5/8\}$ they show diagonal patterns similar to $C_5$, suggesting that this is a common feature of odd-cycle minimisation; for $p=5/7$ the structure is qualitatively different, with block-like rather than diagonal patterns (bottom-right of \Cref{fig:7cycleminimisation}).
 
 \noindent{\it Exhaustive Study over Small Graphs.}
 We now describe a systematic study enabled by our method.
@@ -672,41 +674,17 @@ $x \mapsto \min_{t(K_2,W)=x} t(H,W)$:
 the first and last values correspond to breakpoints of piecewise-defined curves established for several families of graphs~\citep{razborov2008minimal,reiher2016clique,bennet2020minimizing}, while the remaining values lie in the interior of the corresponding segments.
 We also implemented an automated tool for computing lower bounds on the minimum $H$-density using flag algebras~\citep{razborov2007flag}, which we used in our experiments.
 
-Across 76.5\% of the $(H,p)$ instances, our method produced a graphon whose $H$-density closely matches the corresponding flag-algebra lower bound, suggesting that the solutions are optimal or near-optimal.
-Among the remaining instance, 11.8\% were clearly 
-suboptimal or failed to train, while for the remaining 11.7\% we obtained graphons that appear optimal, but for which our flag-algebra bounds were not tight.
+Across 76.5\% of the $(H,p)$ instances, our method produced a graphon whose $H$-density closely matches the corresponding flag-algebra lower bound (within $1\%$ relative error, or $10^{-6}$ absolute when the bound is near zero), suggesting that the solutions are optimal or near-optimal. Of the rest, 11.8\% were clearly suboptimal or failed to train, while for the remaining 11.7\% the learnt graphons appear optimal but our flag-algebra bounds were not tight.
 
+We analysed the curve $x \mapsto \min_{t(K_2,W)=x} t(H,W)$ for each $H$, by interpolation, and examined whether it appears piecewise concave (as for cliques~\citep{reiher2016clique}) or convex (as conjectured for odd cycles~\citep{bennet2020minimizing}). Apparent piecewise concavity is associated with graphs close to complete graphs (i.e., complete after removing $1$ or $2$ edges and isolated vertices); the other graphs gave apparently convex curves.
 
-We analysed the curve $x \mapsto \min_{t(K_2,W)=x} t(H,W)$, for each $H$, by interpolating between the obtained points and examining whether it appears piecewise concave (as is the case for 
-%cliques~\citep{razborov2008minimal,reiher2016clique}) 
-cliques~\citep{reiher2016clique}) 
-or convex (as conjectured for odd cycles~\citep{bennet2020minimizing}).
-We found that apparent piecewise concavity is %strongly 
-associated with graphs that are close to complete graphs, in the sense that they become complete after removing
-$1$ or $2$ edges and isolated vertices.
-%For the other graphs we tested, the interpolated curves appeared convex.
-For the other graphs, the interpolated curves appeared convex.
-
-
-Finally, our experiments suggest a novel family of extremal graphon structures.
-As seen in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}, when $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers for several problems are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons.
-However, our results indicate that this phenomenon is not universal: for the graph $H_6$ visualised in~\Cref{fig:graph-222} at $p \,{=}\, 1 \,{-}\, 1/k$, our method finds a candidate minimiser that is neither complete $k$-partite nor a constant graphon (\Cref{fig:noveloptimum}). 
-These candidate graphons exhibit a geometric pattern: when the interval $[0,1]$ is interpreted as a circle, edge probabilities appear to depend primarily on the circular distance. 
-%between the two points.
+Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation} are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons. This is not universal: for the graph $H_6$ in~\Cref{fig:graph-222} at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
 \paragraph{Normalised Inequalities between Densities}
-In our experiments with the problem of the second type in \Cref{eqn:targetproblems}, our goal was to \emph{disprove}, for some problem instances $(H_1,H_2,m_1,m_2)$, that the minimum values of the instances are non-negative, equivalently,
-the inequality $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$ holds for all graphons $W$. 
-
-As an illustrative task, we tried to disprove, for each $r,s \in \{3,4,5\}$ with $r < s$, the \emph{edge-normalised} inequality
-$t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$ for all $W$ (the exponents $\binom{s}{2}, \binom{r}{2}$ are the edge counts $e(K_s), e(K_r)$).
-We note that such an inequality holds always if and only if $(\min_W t(K_r, W)^{\binom{s}{2}} - t(K_s, W)^{\binom{r}{2}}) \geq 0$. We applied our method to find a graphon witnessing that the minimum value here is negative. For all cases of $r$ and $s$, our method found graphons (\Cref{fig:cliqueinequality}) that strongly suggest the failure of the inequalities; the optimisation objectives at these graphons were estimated to be negative. See \Cref{tab:cliquedensitycomparison}.
+For (P2), we searched for graphons violating proposed inequalities $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. As an illustrative task, for each $r,s \in \{3,4,5\}$ with $r < s$, we considered the edge-normalised inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
 
 \paragraph{Ablation Study, Baselines, and Multi-task Variant}
-An ablation study on triangle-density minimisation under $t(K_2, W) = 7/9$ confirms that each component of our architecture matters: removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its quantitative accuracy.
-On the same task, four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ equal-sized blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all converged to qualitatively poorer solutions and worse objective values than even the ablated variants of our method, supporting the use of a neural representation for this class of problems.
-A preliminary FiLM-conditioned variant jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$ further shows that shared training across related tasks is feasible: it achieves absolute error at most $2.09 \times 10^{-4}$ relative to the known optimum (mean $3.12 \times 10^{-5}$), suggesting that the per-instance cost of our framework can be reduced through multi-task learning.
-Full details and per-variant graphons are deferred to \Cref{sec:ablation}.
+An ablation study on triangle-density minimisation under $t(K_2, W) = 7/9$ confirms that each component of our architecture matters: removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. On the same task, four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. A preliminary FiLM-conditioned multi-task variant jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$ further shows that shared training across related tasks is feasible. Full details are deferred to \Cref{sec:ablation}.
 
 
 % Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
@@ -739,7 +717,7 @@ In contrast, as demonstrated by visualisations of learned graphons, our method o
 
 From the perspective of implicit neural representations, the work most closely related to ours is \citet{mundinger2025neural}, which applies implicit neural representations to the Hadwiger--Nelson problem: colouring the plane $\mathbb{R}^2$ with the minimum number of colours such that no two points at unit distance share a colour. Analogously to our approach, they represent a colouring by a neural network and recover a 6-colouring by minimising a monochromatic edge-density objective. With human post-processing, they construct two new 6-colourings that expand the known range of realisable distances from $[0.415, 0.447]$ to $[0.354, 0.657]$. In contrast, we focus on asymptotic extremal problems in graph theory that can be phrased as constrained optimisation over graphons. Moreover, our approach integrates problem structure into the learning procedure, including an architectural bias toward discontinuous, step-like solutions, explicit constraint enforcement via an embedded solver, and variance reduction in homomorphism density estimation, with the aim of supporting systematic conjecture generation and exploration across diverse extremal problems in graph theory.
 
-\section{Unbiasedness of Our Density Estimator and Proof of \Cref{lem:implicitdifferentiation}}
+\section{Unbiasedness of Our Density Estimator and Proof of the Implicit-Differentiation Lemma}
 
 \begin{lemma} \label{lem:unbiased}
 The estimator in~\Cref{eqn:estimator} is unbiased, i.e., $\mathbb{E}[\widehat{t}(H,f_\theta[c])] = t(H,f_\theta[c])$.
@@ -749,15 +727,15 @@ We compute the claimed equality as follows:
 \begin{align*}
 \mathbb{E}\left[\widehat{t}(H, f_\theta{[c]})\right] 
 & {} = 
-\mathbb{E}\left[\frac{1}{N|\mathcal{S}|} \sum_{k \in [N], \pi \in \mathcal{S}} \left(\prod_{\{\pi(i), \pi(j)\} \in E(H)} f_\theta[c]\Big(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\Big)\right)\right]
+\mathbb{E}\left[\frac{1}{N|\mathcal{S}|} \sum_{k \in [N], \pi \in \mathcal{S}} \left(\prod_{\{i, j\} \in E(H)} f_\theta[c]\Big(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\Big)\right)\right]
 \\
 & {} = 
 \frac{1}{N|\mathcal{S}|} \sum_{k \in [N], \pi \in \mathcal{S}} 
-\mathbb{E}\left[\prod_{\{\pi(i), \pi(j)\} \in E(H)} f_\theta[c]\Big(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\Big)\right]
+\mathbb{E}\left[\prod_{\{i, j\} \in E(H)} f_\theta[c]\Big(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\Big)\right]
 \\
 & {} = 
 \frac{1}{N|\mathcal{S}|} \sum_{k \in [N], \pi \in \mathcal{S}} 
-\mathbb{E}_{x_1,\ldots,x_n \stackrel{\mathrm{iid}}{\sim}\mathrm{Unif}[0,1]}\left[\prod_{\{i, j\} \in E(H)} f_\theta[c](x_i, x_j)\right]
+\mathbb{E}_{x_1,\ldots,x_{v(H)} \stackrel{\mathrm{iid}}{\sim}\mathrm{Unif}[0,1]}\left[\prod_{\{i, j\} \in E(H)} f_\theta[c](x_i, x_j)\right]
 \\
 & {} = 
 \frac{1}{N{|\mathcal{S}|}} 
@@ -808,6 +786,7 @@ The execution time depends on the size of the graph, from 30 minutes for a trian
 
 In all experiments, we used a network of width $d=256$ and depth $L=6$, which was sufficient to represent sharp boundaries and structural properties.
 The activation function $\phi$ was either $\sin$ or the GELU nonlinearity; we did not observe a consistent advantage of one over the other.
+For the reported main experiments we used the increasing input-encoding scale $s(\ell)=\ell$; the alternative schedule $s(\ell)=2^{\ell-1}$ was used only in pilot runs. The constant-scale schedules in the ablation study are described in \Cref{sec:ablation}.
 
 The set $\mathcal{S}$ in Equation~\Cref{eqn:estimator} was chosen according to the graph. For example, for complete graphs we used $\mathcal{S}=\{\mathrm{id}\}$, since any permutation yields the same summand.
 For cycles, we used a set of representatives for the cosets $S_{V(C_k)} / \text{Aut}(C_k)$, where $\text{Aut}(C_k)$ is the automorphism group of $C_k$, which gives $|\mathcal{S}| = (k-1)! / 2$.
@@ -819,6 +798,7 @@ equals the set of all unordered pairs of distinct vertices $\{\{v, w\} : v, w \i
 
 For training, we used the largest number of samples that fit in GPU memory, ranging from $2^{12}$ to $2^{16}$.
 For large graphs such as the Petersen graph, we repeated multiple forward passes to accumulate gradients, yielding an effective sample size of $2^{16}$.
+With caching of pairwise network evaluations, the dominant per-iteration cost scales approximately as $N$ times the number of distinct unordered vertex pairs needed by the chosen permutation set $\mathcal{S}$, which is at most $O(Nv(H)^2)$. Larger motifs therefore reduce the feasible batch size under a fixed memory budget. The Monte Carlo estimator retains the usual $O(N^{-1/2})$ absolute-error rate for bounded integrands, but relative error becomes much harder to control when the true density is extremely small.
 
 For optimisation, we used the Adam optimiser with $\beta_1=0.9$ and $\beta_2=0.999$.
 We repeated the experiments with learning rates $\eta \in \{10^{-3}, 5 \times 10^{-4}, 10^{-4}, 5 \times 10^{-5}\}$, and set the minimum learning rate in the scheduler to 1\% of the initial learning rate.
@@ -851,7 +831,7 @@ The detailed algorithm is described in \Cref{alg:cap}.
 \end{algorithm}
 
 For the variants in the ablation study, we performed hyperparameter searches for each variant.
-When using constant per-layer input encoding scale $s$, we searched over $s(l) \in \{1, 2, 4, 8, 16\}$.
+When using constant per-layer input encoding scale $s$, we searched over $s(\ell) \in \{1, 2, 4, 8, 16\}$.
 For the strength of the regulariser, we searched over $\lambda \in \{0.01, 0.1, 1, 10, 100\}$.
 For the constant learning rate, we searched over the same set of values as the initial learning rates in the main experiments.
 
@@ -899,15 +879,16 @@ One can compute the $C_5$ density of this graphon, which can be written as a pol
 \end{align*}
 where $(k-1)_r$ is a falling factorial, $(k-1)_r = (k-1) \cdot (k-2) \cdots (k-r)$. 
 With these definitions, the conjectured optimal value is obtained by optimising over $x$, $y$, and $\rho$.
+The contribution of the $Y_1$--$Y_2$ rectangles to the ordered edge density is $\rho y^2/2$, since the two off-diagonal rectangles have total area $y^2/2$.
 Equivalently, one can compute the conjectured optimum by solving
 \begin{align*}
     &\min f_5(x, y, \rho)
     \\
   \text{subject to } & (k-1) x + y = 1, 
     \\
-    & (k-1)_2 x^2 + 2 (k-1) xy + \rho y^2 = p,
+    & (k-1)_2 x^2 + 2 (k-1) xy + \frac{\rho y^2}{2} = p,
     \\
-    & x, y \ge 0, \quad 0 \le \rho \le 0.5.
+    & x, y \ge 0, \quad 0 \le \rho \le 1.
 \end{align*}
 Using the same structure, we can generalise the conjecture to arbitrary odd cycles $C_{2\ell+1}$ by replacing $f_5$ with the corresponding $f_{2\ell+1}$.
 For instance, $f_7$ is given as follows.
@@ -1048,6 +1029,7 @@ We partition the interval $[0,1]$ into $k$ groups $X_1, \ldots, X_k, X_{k+1}$ wi
     1 & \text{otherwise}.
   \end{cases}
 \end{align*}
+For $1 - 1/k < p < 1 - 1/(k+1)$, both nontrivial edge probabilities above lie in $[0,1]$: their non-negativity follows from the lower bound on $p$, while $(k+1)p/k < 1$ and $\bigl(p(k+1)^2-k^2-k+2\bigr)/2 < 1$ follow from the upper bound.
 
 Finally, the last graphon is the constant graphon $W(x_1, x_2) = p$.
 
