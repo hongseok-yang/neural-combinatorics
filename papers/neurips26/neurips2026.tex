@@ -115,7 +115,7 @@
 \allowdisplaybreaks
 
 \begin{abstract}
-Machine learning is opening new directions in mathematical discovery, from automatic provers for Olympiad problems to progress on long-standing conjectures. We propose a neural exploratory framework for \emph{asymptotic extremal problems} in graph theory, which study graph optimisation as the number of vertices tends to infinity. Such problems can often be reformulated as continuous optimisation over \emph{graphons}---symmetric measurable functions $[0,1]^2 \to [0,1]$ that arise as limits of dense graph sequences. We represent graphons by implicit neural networks and optimise graphon objectives by gradient descent. Our design combines three ingredients: a multi-scale sinusoidal residual architecture biased toward sharp, step-like graphons; an embedded solver that enforces a single empirical density constraint and is differentiated by implicit differentiation; and symmetry-aware Monte Carlo estimators for homomorphism densities. On generalised Tur\'an problems and density-domination problems that previously required substantial human effort, our method rediscovers known optimal graphons without human intervention. Applied to open problems of the same kind, it produces candidate optima---including a previously unreported family of extremal structures that does not match the complete $k$-partite pattern of classical examples---and candidate violations of clique-density inequalities. Beyond extremal graph theory, the same machinery applies to the graphon variational problem governing upper-tail large deviations for triangle counts in Erd\H{o}s--R\'enyi random graphs. The method produces numerical candidates and structural conjectures rather than certificates, and is intended to complement rigorous tools such as flag algebras.
+Machine learning is opening new directions in mathematical discovery, from automatic provers for Olympiad problems to progress on long-standing conjectures. We propose a neural exploratory framework for \emph{asymptotic extremal problems} in graph theory, which study graph optimisation as the number of vertices tends to infinity. Such problems can often be reformulated as continuous optimisation over \emph{graphons}---symmetric measurable functions $[0,1]^2 \to [0,1]$ that arise as limits of dense graph sequences. We represent graphons by implicit neural networks and optimise graphon objectives by gradient descent. Our design combines three ingredients: a multi-scale sinusoidal residual architecture biased toward sharp, step-like graphons; an embedded solver that enforces a single empirical density constraint and is differentiated by implicit differentiation; and symmetry-aware Monte Carlo estimators for homomorphism densities. On generalised Tur\'an problems and density-domination problems that previously required substantial human effort, our method rediscovers known optimal graphons without human intervention. Applied to open problems of the same kind, it produces candidate optima---including a previously unreported family of extremal structures that does not match the complete $k$-partite pattern of classical examples---and candidate violations of clique-density inequalities. Beyond extremal graph theory, the same machinery applies to the graphon variational problem governing upper-tail large deviations for triangle counts in Erd\H{o}s--R\'enyi random graphs. %The method produces numerical candidates and structural conjectures rather than certificates, and is intended to complement rigorous tools such as flag algebras.
 \end{abstract}
 
 
@@ -297,7 +297,7 @@ Let $H$ be a graph with vertex set $[v(H)]$. By~\eqref{eqn:homomorphismdensitygr
   \prod_{\{i, j\} \in E(H)}
   \!\!\!\!\!\! f_\theta[c]\bigl(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\bigr).
 \end{equation}
-The estimator is unbiased for any choice of $\mathcal{S}$ (\Cref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
+The estimator is unbiased for any choice of $\mathcal{S}$ (Lemma~\ref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
 When $\mathcal{S} = \{\mathrm{id}\}$, \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples, although not for exactly the same wall-clock cost. Different permutations also induce repeated evaluations of the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching reduces the number of network evaluations from $N |\mathcal{S}| e(H)$ to $N C e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
 
 The estimator extends to polynomials in homomorphism densities by way of the identity
@@ -559,8 +559,8 @@ Again, its permutations $W_{p,\phi}$ by measure-preserving $\phi$ on $[0,1]$ are
 the $W_{p,\phi}$ do not exhaust all optima.
 
 We considered $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$. For the three cases with $p=1-1/k$ ($p\in\{1/2,2/3,4/5\}$), our method produced near-optimal graphons (top row of \Cref{fig:triangledensity-minimisers}) within $0.1\%$ of the theoretical optima, closely matching the complete $k$-partite graphons $W_k$; among the equivalent measure-preserving permutations, our method consistently converged to these simpler representatives.
-For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (\Cref{fig:k3-57,fig:k3-62}) capture the core structure of the known optimal $W_p$.
-For $p=5/7$, the learnt graphon (\Cref{fig:k3-71}) does not match $W_p$, but its bipartite middle-block structure matches the characterisation of all optimal graphons in~\citep{pikhurko2017asymptotic}.
+For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (Fig.~\ref{fig:triangledensity-minimisers}d and \ref{fig:triangledensity-minimisers}e) capture the core structure of the known optimal $W_p$.
+For $p=5/7$, the learnt graphon (Fig.~\ref{fig:triangledensity-minimisers}f) does not match $W_p$, but its bipartite middle-block structure matches the characterisation of all optimal graphons in~\citep{pikhurko2017asymptotic}.
 
 \begin{figure}[t]
   \centering
@@ -678,7 +678,7 @@ Across 76.5\% of the $(H,p)$ instances, our method produced a graphon whose $H$-
 
 We analysed the curve $x \mapsto \min_{t(K_2,W)=x} t(H,W)$ for each $H$, by interpolation, and examined whether it appears piecewise concave (as for cliques~\citep{reiher2016clique}) or convex (as conjectured for odd cycles~\citep{bennet2020minimizing}). Apparent piecewise concavity is associated with graphs close to complete graphs (i.e., complete after removing $1$ or $2$ edges and isolated vertices); the other graphs gave apparently convex curves.
 
-Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation} are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons. This is not universal: for the graph $H_6$ in~\Cref{fig:graph-222} at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
+Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation} are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons. This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
 \paragraph{Normalised Inequalities between Densities}
 For (P2), we searched for graphons violating proposed inequalities $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. As an illustrative task, for each $r,s \in \{3,4,5\}$ with $r < s$, we considered the edge-normalised inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
@@ -743,7 +743,7 @@ We compute the claimed equality as follows:
 \end{align*}
 \end{proof}
 
-\begin{proof}[Proof of \Cref{lem:implicitdifferentiation}]
+\begin{proof}[Proof of Lemma~\ref{lem:implicitdifferentiation}]
 Let $\mathbf{x} \in [0,1]^2$. Note that
 \begin{align*}
     \nabla_\theta\;f_\theta[c_\theta](\mathbf{x}) 
