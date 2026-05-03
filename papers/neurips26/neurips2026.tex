@@ -407,7 +407,7 @@ We set $\eta_t$ by cosine-annealing scheduling~\citep{ilya2017sgdr}, which alter
   \end{minipage}
 \end{figure}
 
-A direct alternative is to differentiate through an unrolled Newton iteration with autodiff, but this requires storing every intermediate iterate and is substantially more expensive in time and memory; the same trade-off motivates implicit-differentiation methods in deep equilibrium models~\citep{bai2019deep} and neural ODEs. The closed-form gradient is given by:
+A direct alternative is to differentiate through an unrolled Newton iteration with autodiff, but this requires storing every intermediate iterate and is substantially more expensive in time and memory; the same trade-off motivates implicit-differentiation methods in deep equilibrium models~\citep{bai2019deep} and neural ODEs~\citep{chen2018neural}. The closed-form gradient is given by:
 
 \begin{lemma}\label{lem:implicitdifferentiation}
 For all $\mathbf{x} \in [0,1]^2$,
@@ -1155,8 +1155,9 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 \paragraph{Non-neural Baselines.}
 On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. Each baseline was run four times from independent random initialisations, and we report the best objective value across runs. The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting.
 
+
 \paragraph{Multi-task Variant.}
-The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we ran a preliminary FiLM-conditioned architecture jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$. The resulting network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, with $p$ sampled uniformly from $[1/2, 2/3]$. While limited to a single graph, this experiment indicates that shared training across related tasks can substantially reduce the per-instance burden of our framework, and we view a fuller multi-task / multi-graph treatment as a natural extension.
+The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we ran a preliminary FiLM-conditioned architecture \citep{perez2018film} jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$. The resulting network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, with $p$ sampled uniformly from $[1/2, 2/3]$. While limited to a single graph, this experiment indicates that shared training across related tasks can substantially reduce the per-instance burden of our framework, and we view a fuller multi-task / multi-graph treatment as a natural extension.
 
 \end{document}
 
