@@ -151,63 +151,52 @@ t(H, G) \,\coloneqq\, {}
 \frac{1}{v(G)^{v(H)}}
 \!\!
 \sum_{\phi : V(H) \to V(G)}
-\prod_{\{u,v\} \in E(H)} \!\!\!\!\!\mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
+\prod_{\{u,v\} \in E(H)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
 \end{align}
 where $\mathbb{I}[\cdot]$ is the indicator function.
-Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}. Closely related motif densities are widely used in network analysis to summarise local structure in social, biological, and communication networks through the frequencies of small patterns such as edges, triangles, and other motifs.
+Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}.
 
-A large body of extremal graph theory concerns asymptotic optimisation problems of the form
+A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs. Along any graph sequence whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$, where
+$t(F,W)$ is the graphon homomorphism density of $F$ in $W$ defined by
 \begin{align}
-\liminf_{n \to \infty}
-\Big(\min_{G : v(G) = n}
- f\bigl(t(H_1,G), \ldots, t(H_k,G)\bigr)
-\text{ s.t. }
-\bigwedge\nolimits_{j = 1}^\ell\,
-g_j\bigl(t(F_1,G), \ldots, t(F_m,G)\bigr) = 0 \Big),
-\label{eqn:extremalproblem}
+t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
+\Big[ \prod_{\{i,j\} \in E(F)} W(x_i, x_j)\Big].
+\label{eqn:homomorphismdensitygraphon}
 \end{align}
-where $H_1, \ldots, H_k, F_1, \ldots, F_m$ are graphs and $f : \R^k \to \R$, $g_j : \R^m \to \R$ are real-valued functions. We focus on two extremal-graph-theory cases below; after introducing graphons, we describe a third application that is intrinsically a graphon problem and arises from large deviation theory. The display above is a schematic finite-$n$ form; when an equality constraint is not exactly attainable for every graph size, we use the graph-sequence formulation below.
+Conversely, every graphon arises in this way~\citep{lovasz2012large}. Familiar discrete structure is reflected in $W$: balanced complete bipartite graphs converge to the two-block graphon equal to $1$ on the off-diagonal blocks and $0$ on the diagonal blocks; an Erd\H{o}s--R\'enyi $G(n,q)$ converges to the constant graphon $W \equiv q$; a stochastic block model converges to a multi-block graphon whose blocks correspond to the communities. 
+
+Graphons provide a common language for all three problem classes studied in this paper: the objective and constraints in each involve graphon homomorphism densities $t(H,W)$ or closely related graphon integrals, and the structure of the optimisers is the central object of interest. The first two classes arise from extremal graph theory, where optimising over graphons is equivalent to optimising the corresponding asymptotic finite-graph problem~\citep{lovasz2012large}; the third arises from large deviation theory of dense random graphs. We describe each in turn.
 
 \paragraph{Constrained density minimisation.}
-The first task is to minimise the homomorphism density of a fixed graph $H$ subject to a fixed edge density $p$. Because the edge density of a finite graph takes only certain rational values, we phrase the asymptotic problem in terms of graph sequences:
+The first task is to minimise the homomorphism density of a fixed graph $H$ subject to a fixed edge density $p$. Because the edge density of a finite graph takes only certain rational values, we phrase the asymptotic extremal problem in terms of graph sequences:
 \begin{equation}
 \label{eqn:extremalproblem:generalisedTuran}
 \inf\Big\{\liminf_{n \to \infty} t(H, G_n) \,\Big|\, \text{$(G_n)$ is a graph sequence with } v(G_n)\to\infty \text{ and } t(K_2, G_n)\to p\Big\}.
 \end{equation}
+By the graph-limit theory~\citep{lovasz2012large}, this equals $\min_{W:\,t(K_2,W)=p}\, t(H, W)$, the graphon problem our method optimises directly.
 This generalises Tur\'an's theorem~\citep{Turan1941}
-%which solves the problem for $H=K_{r+1}$ and $p\leq 1-1/r$.
-and the Erd\H{o}s--Stone--Simonovits theorem~\citep{erdos1946on, erdos1966limit}, both classical results in extremal graph theory. For every $H$ and every $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum of~\eqref{eqn:extremalproblem:generalisedTuran} is $0$. For $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder, and complete solutions are known only for a handful of $H$: $H = K_3$~\citep{razborov2008minimal}, $H = K_4$~\citep{nikiforov2011number}, $H = K_r$ in general~\citep{reiher2016clique}, and even for $C_5$ the solution is known only for $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennet2020minimizing}.
+and the Erd\H{o}s--Stone--Simonovits theorem~\citep{erdos1946on, erdos1966limit}, both classical results in extremal graph theory,
+which say that for every $H$ and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum is $0$. But for $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder, and complete solutions are known only for a handful of $H$: $H = K_r$ for all $r \ge 3$~\citep{reiher2016clique}, with landmark earlier results for $r = 3$~\citep{razborov2008minimal} and $r = 4$~\citep{nikiforov2011number}; and for $C_5$, the solution is known only for $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennet2020minimizing}.
 
 \paragraph{Density inequalities.}
-The second task has no constraint and takes the form
+The second task asks whether the inequality $t(H_1, G)^{m_2} \geq t(H_2, G)^{m_1}$ holds asymptotically for all graphs $G$, for given graphs $H_1, H_2$ and positive integers $m_1, m_2$. Again by the graph-limit theory~\citep{lovasz2012large}, this reduces to asking whether the graphon optimum
 \begin{equation}
 \label{eqn:extremalproblem:dominationExponent}
-\liminf_{n \to \infty}\,
-\Bigl(\min_{G : v(G) = n}\,
-\bigl( t(H_1, G)^{m_2} - t(H_2, G)^{m_1} \bigr)\Bigr),
+\min_{W}\,\bigl( t(H_1, W)^{m_2} - t(H_2, W)^{m_1} \bigr)
 \end{equation}
-for graphs $H_1, H_2$ and positive integers $m_1, m_2$. The key question is typically whether this asymptotic optimum is non-negative; if so, the inequality $t(H_1, G)^{m_2} \geq t(H_2, G)^{m_1}$ holds asymptotically for all $G$. Sidorenko's conjecture~\citep{sidorenko1992, sidorenko1993correlation} predicts non-negativity when $H_1$ is bipartite, $H_2 = K_2$, and $(m_1, m_2) = (e(H_1), e(H_2))$, and more systematic studies of general pairs $(H_1, H_2)$ appear in recent work~\citep{conlonlee2024domination, behague2025}.
-
-\paragraph{Graphon reformulation.}
-Both tasks have an equivalent continuous reformulation in terms of \emph{graphons}, on which our method operates. A graphon $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$, and conversely every graphon arises in this way~\citep{lovasz2012large}. Familiar discrete structure is reflected in $W$: balanced complete bipartite graphs converge to a graphon that is $1$ on the off-diagonal blocks and $0$ on the diagonal blocks (under the partition $[0,1] = [0,\tfrac{1}{2}] \cup [\tfrac{1}{2},1]$), an Erd\H{o}s--R\'enyi $G(n,p)$ converges to the constant graphon $W \equiv p$, and a stochastic block model converges to a step graphon whose blocks correspond to the communities. The graphon homomorphism density of a graph $H$ with vertex set $[v(H)]$ is
-\begin{align}
-t(H, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(H)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
-\!\Big[\!\prod_{\{i,j\} \in E(H)} \!\!\!\!\!\!\!\! W(x_i, x_j)\Big].
-\label{eqn:homomorphismdensitygraphon}
-\end{align}
-For continuous $f, g_1, \ldots, g_\ell$, the asymptotic value of~\eqref{eqn:extremalproblem} equals the optimum of the graphon problem
-\begin{align}
-\min_{W}\ f\bigl(t(H_1, W), \ldots, t(H_k, W)\bigr)
-\ \text{ s.t. }\
-\bigwedge\nolimits_{j = 1}^\ell\, g_j\bigl(t(F_1, W), \ldots, t(F_m, W)\bigr) = 0,
-\label{eqn:extremalproblem-graphon}
-\end{align}
-where $W$ ranges over graphons. We use this graphon formulation throughout the paper.
+is non-negative.
+Sidorenko's conjecture~\citep{sidorenko1992, sidorenko1993correlation} predicts non-negativity when $H_1$ is bipartite, $H_2 = K_2$, and $(m_1, m_2) = (e(H_1), 1)$ (so the expression reduces to $t(H_1,W) - t(K_2,W)^{e(H_1)}$), and more systematic studies of general pairs $(H_1, H_2)$ appear in recent work~\citep{conlonlee2024domination, behague2025}.
 
 \paragraph{Variational problem from large deviation theory.}
-Graphons also provide the natural variational language for dense random-graph large deviations. 
-Fix $q \in (0,1)$, and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}\bigl(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q)\bigr)\,dx\,dy$. 
-The Chatterjee--Varadhan large deviation principle~\citep{chatterjee2011large} implies that, for $r > q$, $\binom{n}{2}^{-1}\log\Pr[t(K_3, G(n,q)) \ge r^3]$ converges to $-\inf_{W: t(K_3,W) \ge r^3} h_q(W)$, and the typical structure of $G(n,q)$ conditioned on this upper-tail event is described by near-minimisers of the same variational problem~\citep{lubetzky2015replica}. 
+Large deviation theory for random graphs addresses two related questions: at what exponential rate does $G(n,q)$ produce an atypically large subgraph density, and what does the graph typically look like when such a rare event occurs?
+These questions are of fundamental interest in probability theory and combinatorics, and they carry information-theoretic structure that is natural from an ML perspective: the Chatterjee--Varadhan framework reduces both questions to a single constrained optimisation over graphons whose objective is an averaged KL divergence~\citep{chatterjee2011large}.
+
+Concretely, fix $q \in (0,1)$ and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}\bigl(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q)\bigr)\,dx\,dy$, the integrated per-edge KL divergence of $W$ from the base Erd\H{o}s--R\'enyi graphon $W \equiv q$.
+For $r > q$, the large deviation principle implies that $\binom{n}{2}^{-1}\log\Pr[t(K_3, G(n,q)) \ge r^3]$ converges to $-\min_{W: t(K_3,W) \ge r^3} h_q(W)$
+and the typical structure of $G(n,q)$ conditioned on this upper-tail event is described by near-minimisers of the same variational problem~\citep{lubetzky2015replica}.
+The minimiser is therefore the graphon closest in KL divergence to the base model $W \equiv q$ that still achieves a triangle density of at least $r^3$: it is the most information-efficient explanation for the observed excess, in the same spirit as maximum-entropy modelling and variational inference in ML.
+Whether the excess triangles concentrate in a dense clique or spread more uniformly, and the precise structure of minimisers, remains incompletely understood across $(q, r)$ regimes.
+
 Our method applies directly to the boundary form
 \begin{equation}
 \label{eqn:large-deviation-problem}
@@ -215,11 +204,11 @@ Our method applies directly to the boundary form
   \quad \text{s.t.}\quad
   t(K_3,W) = r^3,
 \end{equation}
-which is equivalent to the inequality-constrained $\inf$ above, since for $r > q$ the unconstrained minimiser of $h_q$ is $W \equiv q$ with $t(K_3, W) = q^3 < r^3$, so the constraint is active at the optimum.
+which is equivalent to the inequality-constrained minimisation above.
 
 \section{Implicit Neural Representations of Graphons} \label{sec:method}
 
-We tackle the graphon formulations of the two extremal problem classes from \Cref{sec:background}, together with the large-deviation application in~\eqref{eqn:large-deviation-problem}:
+We tackle the three graphon optimisation problems introduced in \Cref{sec:background}:
 \begin{align}
 \textbf{(P1)}\ \, &\min_W\, t(H, W)\ \text{ s.t. }\ t(K_2, W) = p,
 &
