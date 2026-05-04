@@ -1104,6 +1104,12 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
   Regulariser                              & $0.434445$ \\
   Constant LR (low)                        & $0.430071$ \\
   Constant LR (high)                       & $0.431645$ \\
+  \midrule
+  SBM (256 blocks, fixed sizes)            & $0.428190$ \\
+  SBM (5 blocks, trainable sizes)          & $0.429441$ \\
+  SBM (64 blocks, trainable sizes)         & $0.429441$ \\
+  Decision Tree                            & $0.455558$ \\
+  Gradient Boosted Decision Tree                   & $0.454485$ \\
   \bottomrule
   \end{tabular}
   }
@@ -1153,8 +1159,8 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 \end{figure}
 
 \paragraph{Non-neural Baselines.}
-On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. Each baseline was run four times from independent random initialisations, and we report the best objective value across runs. The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting.
-
+On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \cref{tab:ablationstudy}. 
+The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting.
 
 \paragraph{Multi-task Variant.}
 The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we ran a preliminary FiLM-conditioned architecture \citep{perez2018film} jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$. The resulting network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, with $p$ sampled uniformly from $[1/2, 2/3]$. While limited to a single graph, this experiment indicates that shared training across related tasks can substantially reduce the per-instance burden of our framework, and we view a fuller multi-task / multi-graph treatment as a natural extension.
