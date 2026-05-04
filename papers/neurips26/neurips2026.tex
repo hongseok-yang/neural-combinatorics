@@ -224,7 +224,7 @@ Our approach represents $W$ as a neural network $f_\theta$, recasts these grapho
 \paragraph{Architecture.}
 We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems 	\textbf{(P1)} and 	\textbf{(P3)}, the architecture additionally includes a constraint solver.
 
-Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing scale function $s : [L] \to (0, \infty)$; we consider schedules such as $s(\ell) = \ell$ and $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
+Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing function $s : [L] \to (0, \infty)$ for scheduling the scale of weight initialisation at each layer $\ell \in [L]$; we consider schedules such as $s(\ell) = \ell$ and $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
 \begin{align*}
 &\, f_{\theta}[c] : [0,1]^2 \to [0,1],
 \quad
@@ -232,11 +232,10 @@ f_{\theta}[c](x_1, x_2) \,\coloneqq\, \mathit{sm}\bigl(V g^{(L)}_\theta(\min(x_1
 \\[0.4ex]
 &\, g^{(1)}_\theta(\mathbf{x}) \,\coloneqq\, \phi\bigl(W^{(1)} \sin(U^{(1)} \mathbf{x}) \,+\, b^{(1)}\bigr),
 \\
-&\, g^{(\ell)}_\theta(\mathbf{x}) \,\coloneqq\, g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, \phi\bigl(V^{(\ell-1)} g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, W^{(\ell)} \sin(U^{(\ell)} \mathbf{x}) \,+\, b^{(\ell)}\bigr),
+&\, g^{(\ell)}_\theta(\mathbf{x}) \,\coloneqq\, g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, \phi\bigl(V^{(\ell-1)} g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, W^{(\ell)} \sin(U^{(\ell)} \mathbf{x}) \,+\, b^{(\ell)}\bigr).
 \end{align*}
-where $\mathit{sm}$ is the sigmoid, $g^{(\ell)}_\theta : \{\mathbf{x} = (x_1, x_2) \in [0,1]^2 : x_1 \le x_2\} \to \R^d$, and the remaining parameters are
-$c \in \R$, $b^{(\ell)} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell)} \in \R^{d \times 2}$, $V^{(\ell')}, W^{(\ell)} \in \R^{d \times d}$
-(for $\ell' \in [L-1]$, $\ell \in [L]$). They are initialised i.i.d.\ by
+Here $\mathit{sm}$ is the sigmoid, and $g^{(\ell)}_\theta : \{\mathbf{x} = (x_1, x_2) \in [0,1]^2 : x_1 \le x_2\} \to \R^d$. The network parameters are
+$c \in \R$, $b^{(\ell)} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell)} \in \R^{d \times 2}$, and $V^{(\ell')}, W^{(\ell)} \in \R^{d \times d}$, for $\ell' \in [L-1]$, $\ell \in [L]$. These parameters are initialised i.i.d.\ by
 \begin{align*}
 c,\, b^{(\ell)}_i,\, V_{1,i},\, V^{(\ell')}_{i,j},\, W^{(\ell)}_{i,j}
 &\,\stackrel{\mathrm{iid}}{\sim}\, \mathrm{Unif}\bigl[-1/\sqrt{2d},\, 1/\sqrt{2d}\bigr],
@@ -245,7 +244,7 @@ c,\, b^{(\ell)}_i,\, V_{1,i},\, V^{(\ell')}_{i,j},\, W^{(\ell)}_{i,j}
 U^{(\ell)}_{i,k}
 &\,\stackrel{\mathrm{iid}}{\sim}\, \mathrm{Unif}\bigl[-s(\ell)/\sqrt{2},\, s(\ell)/\sqrt{2}\bigr],
 \end{align*}
-for all $i, j \in [d]$, $k \in [2]$, and we collect every parameter except $c$ into $\theta$. The use of $\min$ and $\max$ enforces $f_\theta[c](x_1, x_2) = f_\theta[c](x_2, x_1)$, so $f_\theta[c]$ is symmetric and represents a graphon.
+for all $i, j \in [d]$, $k \in [2]$. We collect every parameter except $c$ into $\theta$. The use of $\min$ and $\max$ in the definition of $f_\theta[c]$ enforces $f_\theta[c](x_1, x_2) = f_\theta[c](x_2, x_1)$, so $f_\theta[c]$ is symmetric and represents a graphon.
 
 The architecture has two notable features. First, it repeatedly injects a sinusoidal encoding of the input $(x_1, x_2)$ at every layer, with an encoding scale that grows with depth. Increasing $s(\ell)$ with depth shifts higher-frequency content into deeper layers~\citep{tancik2020fourier} and encourages late layers to capture sharp boundaries, while early layers stabilise the coarse, low-frequency structure, an inductive bias that fits step-like graphons. A similar coarse-to-fine pattern arises in diffusion models~\citep{salmona2022can, dieleman2024spectral}, but we make no formal claim of equivalence; the design is a domain-specific choice for our setting.
 
