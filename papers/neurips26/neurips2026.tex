@@ -209,21 +209,20 @@ which is equivalent to the inequality-constrained minimisation above.
 \section{Implicit Neural Representations of Graphons} \label{sec:method}
 
 We tackle the three graphon optimisation problems introduced in \Cref{sec:background}:
-\begin{align}
-\textbf{(P1)}\ \, &\min_W\, t(H, W)\ \text{ s.t. }\ t(K_2, W) = p,
-&
-\textbf{(P2)}\ \, &\min_W\, \bigl(t(H_1, W)^{m_2} - t(H_2, W)^{m_1}\bigr),
-\nonumber
-\\
-\textbf{(P3)}\ \, &\min_W\, h_q(W) \ \text{ s.t. }\ t(K_3, W) = r^3,
+\begin{equation}
+\textbf{(P1)}\!\!\! \min_{W : t(K_2, W) = p} \!\!\!\! t(H, W),
+\quad
+\textbf{(P2)}\  \min_W\, t(H_1, W)^{m_2} \,{-}\, t(H_2, W)^{m_1},
+\quad
+\textbf{(P3)}\!\!\! \min_{W : t(K_3, W) = r^3} \!\!\!\! h_q(W),
 \label{eqn:targetproblems}
-\end{align}
-for graphs $H, H_1, H_2$, reals $p,q,r \in (0,1)$, and positive integers $m_1, m_2$, where $W$ ranges over graphons. Problems (P1) and (P3) have a single scalar equality constraint; (P2) is unconstrained.
+\end{equation}
+for graphs $H, H_1, H_2$, reals $p,q,r \in (0,1)$, and positive integers $m_1, m_2$, where $W$ ranges over graphons. Problems \textbf{(P1)} and 	\textbf{(P3)} have a single scalar equality constraint; 	\textbf{(P2)} is unconstrained.
 
-Our approach represents $W$ as a neural network $f_\theta$, recasts these graphon programs as optimisation over the parameters $\theta$, and applies gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, each occurrence of $t(\cdot, W)$ involves an intractable high-dimensional integral, and estimating these expectations and their powers efficiently requires problem-specific sampling; the entropy objective $h_q(W)$ in (P3) is another graphon integral that must be estimated stochastically. Third, the scalar constraints in (P1) and (P3) are poorly handled by penalty terms, so the architecture must enforce them more directly. The remainder of this section describes the architecture and training procedure that address these three challenges.
+Our approach represents $W$ as a neural network $f_\theta$, recasts these graphon optimisations as optimisations over the parameters $\theta$, and applies gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, each occurrence of $t(\cdot, W)$ involves an intractable high-dimensional integral, and estimating these expectations and their powers efficiently requires problem-specific sampling. Third, the scalar constraints in 	\textbf{(P1)} and 	\textbf{(P3)} are poorly handled by penalty terms, so the architecture must enforce them more directly. The remainder of this section describes the architecture and training procedure that address these three challenges.
 
 \paragraph{Architecture.}
-We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems (P1) and (P3), the architecture additionally includes a constraint solver.
+We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems 	\textbf{(P1)} and 	\textbf{(P3)}, the architecture additionally includes a constraint solver.
 
 Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing scale function $s : [L] \to (0, \infty)$; we consider schedules such as $s(\ell) = \ell$ and $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
 \begin{align*}
@@ -250,7 +249,7 @@ for all $i, j \in [d]$, $k \in [2]$, and we collect every parameter except $c$ i
 
 The architecture has two notable features. First, it repeatedly injects a sinusoidal encoding of the input $(x_1, x_2)$ at every layer, with an encoding scale that grows with depth. Increasing $s(\ell)$ with depth shifts higher-frequency content into deeper layers~\citep{tancik2020fourier} and encourages late layers to capture sharp boundaries, while early layers stabilise the coarse, low-frequency structure, an inductive bias that fits step-like graphons. A similar coarse-to-fine pattern arises in diffusion models~\citep{salmona2022can, dieleman2024spectral}, but we make no formal claim of equivalence; the design is a domain-specific choice for our setting.
 
-Second, in constrained problems we determine $c$ via a numerical solver rather than learning it directly. To enforce $t(K_2, f_\theta[c]) = p$ in (P1), we use a batch of $K$ i.i.d.\ samples
+Second, in constrained problems we determine $c$ via a numerical solver rather than learning it directly. To enforce $t(K_2, f_\theta[c]) = p$ in 	extbf{(P1)}, we use a batch of $K$ i.i.d.\ samples
 \[
 \mathcal{E} = \bigl\{(x_1^{(k)}, x_2^{(k)})\bigr\}_{k \in [K]},
 \quad
@@ -264,7 +263,7 @@ and define
 \label{eqn:solver-specification}
 \end{align}
 The left-hand side is an unbiased estimator of $t(K_2, f_\theta[c])$, so~\eqref{eqn:solver-specification} is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped Newton variant (\Cref{alg:cap}) and use the resulting $c^*$ when evaluating $f_\theta[c^*]$ on other inputs.
-The same idea applies to any single homomorphism-density constraint of the form $t(F, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(F, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this empirical constraint remains a monotone scalar equation in $c$. For the large-deviation application (P3), this means sampling triples $(x,y,z)$ and solving the empirical equation
+The same idea applies to any single homomorphism-density constraint of the form $t(F, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(F, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this empirical constraint remains a monotone scalar equation in $c$. For the large-deviation application 	\textbf{(P3)}, this means sampling triples $(x,y,z)$ and solving the empirical equation
 \[
   \frac{1}{|\mathcal{T}|}
   \sum_{(x,y,z)\in\mathcal{T}}
@@ -272,7 +271,7 @@ The same idea applies to any single homomorphism-density constraint of the form 
   = r^3.
 \]
 Our present implementation does not exactly enforce multiple simultaneous constraints; extending the solver to vector-valued root finding or projection-based updates is an important direction for future work.
-For the unconstrained problem (P2) we drop the solver and learn $c$ jointly with $\theta$ by gradient descent.
+For the unconstrained problem 	\textbf{(P2)} we drop the solver and learn $c$ jointly with $\theta$ by gradient descent.
 
 
 \paragraph{Estimating homomorphism density.}
@@ -294,12 +293,12 @@ The estimator extends to polynomials in homomorphism densities by way of the ide
 \label{eqn:elimination densityproduct}
 t(H, f_\theta[c]) \, t(H', f_\theta[c]) \,=\, t(H \oplus H', f_\theta[c]),
 \end{equation}
-where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In implementation, each monomial is estimated as a U-statistic by using disjoint vertex-sample tuples for the copies in the disjoint union whenever possible, which avoids reusing the same sampled vertex as two independent variables within a monomial. We use this extension for (P2).
+where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In implementation, each monomial is estimated as a U-statistic by using disjoint vertex-sample tuples for the copies in the disjoint union whenever possible, which avoids reusing the same sampled vertex as two independent variables within a monomial. We use this extension for 	\textbf{(P2)}.
 
 \paragraph{Training algorithm.}
 
 \noindent\textit{Constrained problems.}
-For (P1), fix a graph $H$ on $[v(H)]$ and $p \in (0, 1)$. At each iteration, we sample $(N \cdot v(H))$ i.i.d.\ uniform values $\{x_i^{(k)}\}$ on $[0, 1]$, form
+For 	\textbf{(P1)}, fix a graph $H$ on $[v(H)]$ and $p \in (0, 1)$. At each iteration, we sample $(N \cdot v(H))$ i.i.d.\ uniform values $\{x_i^{(k)}\}$ on $[0, 1]$, form
 $\mathcal{D} = \{(x_1^{(k)}, \ldots, x_{v(H)}^{(k)}) : k \in [N]\}$ and the unordered-pair set $\mathcal{E} = \{(x^{(k)}_i, x^{(k)}_j) : k \in [N],\ 1 \le i < j \le v(H)\}$, set $c_\theta \coloneqq \textsc{Solve}_\theta(\mathcal{E}, p)$ to enforce the empirical constraint, and update
 \[
 \theta_{t+1} \,\leftarrow\, \theta_t - \eta_t\, \nabla_\theta \widehat{t}_{\mathcal{D}}(H, f_\theta[c_\theta])\big|_{\theta = \theta_t},
@@ -414,10 +413,10 @@ h_\theta(x_1, x_2) \,\coloneqq\, V g_\theta^{(L)}\!\bigl(\min(x_1, x_2), \max(x_
 \end{lemma}
 
 \noindent\textit{Unconstrained problems.}
-For (P2), with graphs $H_1, H_2$ and positive integers $m_1, m_2$, we minimise $t(H_1, f_\theta[c])^{m_2} - t(H_2, f_\theta[c])^{m_1}$. Using~\eqref{eqn:elimination densityproduct}, we rewrite the objective as $t(H_1^{\oplus m_2}, f_\theta[c]) - t(H_2^{\oplus m_1}, f_\theta[c])$, where $H^{\oplus m}$ is the disjoint union of $m$ copies of $H$, and optimise $(\theta, c)$ by SGD on freshly resampled batches each iteration, applying~\eqref{eqn:estimator} to each term separately.
+For 	\textbf{(P2)}, with graphs $H_1, H_2$ and positive integers $m_1, m_2$, we minimise $t(H_1, f_\theta[c])^{m_2} - t(H_2, f_\theta[c])^{m_1}$. Using~\eqref{eqn:elimination densityproduct}, we rewrite the objective as $t(H_1^{\oplus m_2}, f_\theta[c]) - t(H_2^{\oplus m_1}, f_\theta[c])$, where $H^{\oplus m}$ is the disjoint union of $m$ copies of $H$, and optimise $(\theta, c)$ by SGD on freshly resampled batches each iteration, applying~\eqref{eqn:estimator} to each term separately.
 
 \noindent\textit{Large-deviation variational problem.}
-For (P3), we reuse the constrained training loop with the triangle-density solver targeting $t(K_3, f_\theta[c]) = r^3$, and minimise the Monte Carlo estimate of $h_q$ obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. Because the sigmoid output lies in $(0,1)$, the KL objective is differentiable in $\theta$. The architecture, optimiser, and learning-rate schedule are unchanged from (P1).
+For 	\textbf{(P3)}, we reuse the constrained training loop with the triangle-density solver targeting $t(K_3, f_\theta[c]) = r^3$, and minimise the Monte Carlo estimate of $h_q$ obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. Because the sigmoid output lies in $(0,1)$, the KL objective is differentiable in $\theta$. The architecture, optimiser, and learning-rate schedule are unchanged from 	\textbf{(P1)}.
 
 \begin{figure}[t]
   \centering
@@ -472,7 +471,7 @@ For (P3), we reuse the constrained training loop with the triangle-density solve
 
 \section{Experiment Results} \label{sec:experiments}
 
-We evaluate our framework on instances of (P1), (P2), and (P3) drawn from the extremal-graph-theory and large-deviation literatures. The same architecture, solver, and training loop are used throughout; the only changes between problem classes are which constraint, if any, is enforced and how the objective is estimated. The experiments are organised to demonstrate three capabilities: (i) rediscovering classical optima that previously required substantial human effort, (ii) producing mathematically interesting candidates for open instances, and (iii) extending the same machinery beyond extremal graph theory to upper-tail large deviations. An ablation study at the end isolates the contribution of each architectural component.
+We evaluate our framework on instances of 	\textbf{(P1)}, 	\textbf{(P2)}, and 	\textbf{(P3)} drawn from the extremal-graph-theory and large-deviation literatures. The same architecture, solver, and training loop are used throughout; the only changes between problem classes are which constraint, if any, is enforced and how the objective is estimated. The experiments are organised to demonstrate three capabilities: (i) rediscovering classical optima that previously required substantial human effort, (ii) producing mathematically interesting candidates for open instances, and (iii) extending the same machinery beyond extremal graph theory to upper-tail large deviations. An ablation study at the end isolates the contribution of each architectural component.
 
 We visualise graphons as Viridis heatmaps (blue $\,=\,0$, yellow $\,=\,1$); see \Cref{fig:triangledensity-minimisers}. Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
@@ -670,14 +669,14 @@ We analysed the curve $x \mapsto \min_{t(K_2,W)=x} t(H,W)$ for each $H$, by inte
 Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation} are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons. This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
 \paragraph{Normalised Inequalities between Densities}
-For (P2), we searched for graphons violating proposed inequalities $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. As an illustrative task, for each $r,s \in \{3,4,5\}$ with $r < s$, we considered the edge-normalised inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
+For 	\textbf{(P2)}, we searched for graphons violating proposed inequalities $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. As an illustrative task, for each $r,s \in \{3,4,5\}$ with $r < s$, we considered the edge-normalised inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
 
 \paragraph{Variational Problem from Large Deviation Theory}
-We finally apply our framework to (P3), the upper-tail variational problem of \citet{chatterjee2011large}. The architecture, optimiser, and training loop carry over from (P1); only the edge-density solver is replaced by the triangle-density solver targeting $t(K_3, W) = r^3$ and the objective is the Monte Carlo estimate of $h_q$. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
+We finally apply our framework to 	\textbf{(P3)}, the upper-tail variational problem of \citet{chatterjee2011large}. The architecture, optimiser, and training loop carry over from 	\textbf{(P1)}; only the edge-density solver is replaced by the triangle-density solver targeting $t(K_3, W) = r^3$ and the objective is the Monte Carlo estimate of $h_q$. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
 
 \begin{table}[t]
   \centering
-  \captionof{table}{Relative-entropy $h_q(W)$ at our learnt graphon ($W_{\mathrm{ours}}$) and at the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ of \citet{lubetzky2015replica}, for (P3) on $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$. Lower is better.\label{tab:largedeviation}}
+  \captionof{table}{Relative-entropy $h_q(W)$ at our learnt graphon ($W_{\mathrm{ours}}$) and at the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ of \citet{lubetzky2015replica}, for 	\textbf{(P3)} on $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$. Lower is better.\label{tab:largedeviation}}
   {\small
   \begin{tabular}{lcccccc}
     \toprule
