@@ -191,9 +191,7 @@ Whether the excess triangles concentrate in a dense clique or spread more unifor
 Our method applies directly to the boundary form
 \begin{equation}
 \label{eqn:large-deviation-problem}
-  \min_W\, h_q(W)
-  \quad \text{s.t.}\quad
-  t(K_3,W) = r^3,
+  \min_{W : t(K_3,W) \ge r^3} h_q(W)
 \end{equation}
 which is equivalent to the inequality-constrained minimisation above.
 
@@ -201,9 +199,9 @@ which is equivalent to the inequality-constrained minimisation above.
 
 We tackle the two graphon optimisation problems introduced in \Cref{sec:background}:
 \begin{equation}
-\textbf{(P1)}\!\!\! \min_{W : t(K_2, W) = p} \!\!\!\! t(H, W),
-\qquad
-\textbf{(P2)}\!\!\! \min_{W : t(K_3, W) = r^3} \!\!\!\! h_q(W),
+\textbf{(P1)} \min_{W : t(K_2, W) = p}  t(H, W),
+\qquad\qquad
+\textbf{(P2)} \min_{W : t(K_3, W) = r^3} h_q(W),
 \label{eqn:targetproblems}
 \end{equation}
 for a graph $H$, reals $p,q,r \in (0,1)$, where $W$ ranges over graphons. Both problems carry a single scalar equality constraint.
