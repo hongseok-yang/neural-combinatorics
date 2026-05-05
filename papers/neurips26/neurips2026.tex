@@ -278,12 +278,13 @@ Let $H$ be a graph with vertex set $[v(H)]$. By~\eqref{eqn:homomorphismdensitygr
   \widehat{t}(H, f_\theta[c])
   \,\coloneqq\,
   \frac{1}{N \, |\mathcal{S}|}
-  \!\!\sum_{\substack{k \in [N] \\ \pi \in \mathcal{S}}}\,
+  \sum_{\substack{k \in [N], \pi \in \mathcal{S}}}\,
   \prod_{\{i, j\} \in E(H)}
-  \!\!\!\!\!\! f_\theta[c]\bigl(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\bigr).
+  f_\theta[c]\bigl(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\bigr).
 \end{equation}
 The estimator is unbiased for any choice of $\mathcal{S}$ (Lemma~\ref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
-When $\mathcal{S} = \{\mathrm{id}\}$, \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples, although not for exactly the same wall-clock cost. Different permutations also induce repeated evaluations of the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching reduces the number of network evaluations from $N |\mathcal{S}| e(H)$ to $N C e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
+When $\mathcal{S} = \{\mathrm{id}\}$, our estimator in \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples.
+Different permutations also induce repeated evaluations of the network $f_\theta[c]$ on the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching the evaluations reduces the number of network evaluations from $N |\mathcal{S}| e(H)$ to $N C e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
 
 The estimator extends to polynomials in homomorphism densities by way of the identity
 \begin{equation}
