@@ -466,16 +466,14 @@ For 	\textbf{(P2)}, with graphs $H_1, H_2$ and positive integers $m_1, m_2$, we 
   \end{minipage}
 \end{figure}
 
-\section{Experiment Results} \label{sec:experiments}
+\section{Experimental Results}\label{sec:experiments}
 
 We evaluate our framework on instances of 	\textbf{(P1)}, 	\textbf{(P2)}, and 	\textbf{(P3)} drawn from the extremal-graph-theory and large-deviation literatures. The same architecture, solver, and training loop are used throughout; the only changes between problem classes are which constraint, if any, is enforced and how the objective is estimated. The experiments are organised to demonstrate two capabilities: (i) rediscovering classical optima that previously required substantial human effort, and (ii) producing mathematically interesting candidates for open instances. An ablation study at the end isolates the contribution of each architectural component.
 
-We visualise graphons as Viridis heatmaps ($0$ as blue, $1$ as yellow) (\Cref{fig:triangledensity-minimisers}). Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
+We visualise graphons as Viridis heatmaps (blue $=0$, yellow $=1$); see \Cref{fig:triangledensity-minimisers}. Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
 \paragraph{Constrained homomorphism-density minimisation}
-We apply our method to the problem of minimising the homomorphism density of $K_n$ under an edge-density constraint $t(K_2,W)=p$. This is an instance of the first problem in \Cref{eqn:targetproblems}, with $H=K_n$.
-For $n=3$ (triangles), this optimisation problem has been studied extensively~\citep{goodman1959on,bollobas1975relations,lovasz1983on,fisher1989lower,razborov2008minimal}, and its full solution was established by~\citet{razborov2008minimal}.
-For general $n$, the full solution was obtained more recently by~\citet{reiher2016clique}.
+We apply our method to \textbf{(P1)} across three families of instances: clique densities ($H = K_n$, fully solved~\citep{razborov2008minimal,reiher2016clique}), odd-cycle densities ($H = C_5, C_7$, partly open), and a systematic sweep over 175 non-bipartite graphs with $v(H) \le 6$. The clique experiments validate the method against known optima; the latter two produce new candidate minimisers and, through the exhaustive sweep, a previously unreported family of extremal structures. We describe each in turn.
 
 
 \begin{figure}[t]
@@ -530,13 +528,14 @@ For general $n$, the full solution was obtained more recently by~\citet{reiher20
 \end{figure}
 
 
+\noindent{\it Clique densities ($H = K_n$).}
 We begin with the case $n\,{=}\,3$. When $p \,{=}\, 1 \,{-}\, 1/k$ for some integer $k \ge 2$, the optimal graphon is the complete $k$-partite graphon or any of its measure-preserving permutations.  
-For $i \in [k]$, let $X_i = [(i-1)/k, i/k]$. The complete $k$-partite graphon $W_k$ is defined as follows:
+For $i \in [k]$, let $X_i = ((i-1)/k, i/k]$. The complete $k$-partite graphon $W_k$ is defined as follows:
 $W_k(x_1,x_2) =
 1$ if $x_1 \in X_i$ and $x_2 \in X_j$ with $i \neq j$; otherwise,
 $W_k(x_1,x_2) = 0$.
 For a measure-preserving $\phi$ on $[0,1]$, its permutation is
-$W_{k,\phi}(x_1,x_2) = W_k(\phi(x_1), \phi(x_2))$. Every optimum is of this form.
+$W_{k,\phi}(x_1,x_2) = W_k(\phi(x_1), \phi(x_2))$. Every optimum is of this form in this case of $p = 1 - 1/k$.
 When $1 - 1/k < p < 1 - 1/(k+1)$, the minimisation admits multiple types of optima.  
 One example is a variant $W_p$ of $W_{k+1}$, %the $(k+1)$-partite graphon, 
 where the first $k$ parts are equal in length but the last part $X_{k+1}$ is shorter.  
@@ -544,7 +543,7 @@ Again, its permutations $W_{p,\phi}$ by measure-preserving $\phi$ on $[0,1]$ are
 the $W_{p,\phi}$ do not exhaust all optima.
 
 We considered $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$. For the three cases with $p=1-1/k$ ($p\in\{1/2,2/3,4/5\}$), our method produced near-optimal graphons (top row of \Cref{fig:triangledensity-minimisers}) within $0.1\%$ of the theoretical optima, closely matching the complete $k$-partite graphons $W_k$; among the equivalent measure-preserving permutations, our method consistently converged to these simpler representatives.
-For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (Fig.~\ref{fig:triangledensity-minimisers}d and \ref{fig:triangledensity-minimisers}e) capture the core structure of the known optimal $W_p$.
+For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (Figs.~\ref{fig:triangledensity-minimisers}d and \ref{fig:triangledensity-minimisers}e) capture the core structure of the known optimal $W_p$.
 For $p=5/7$, the learnt graphon (Fig.~\ref{fig:triangledensity-minimisers}f) does not match $W_p$, but its bipartite middle-block structure matches the characterisation of all optimal graphons in~\citep{pikhurko2017asymptotic}.
 
 \begin{figure}[t]
@@ -600,7 +599,7 @@ For $p=5/7$, the learnt graphon (Fig.~\ref{fig:triangledensity-minimisers}f) doe
   \end{minipage}
 \end{figure}
 
-For $K_k$ with $k>3$, we ran $\min_W t(K_k, W)$ s.t.\ $t(K_2, W){=}1{-}1/k$ for $k\in\{4,5,6\}$. Even though the larger motif size increases the variance of our estimator and the optimal graphon involves more blocks, our method recovers the complete $k$-partite structure (\Cref{fig:clique}).
+Turning to larger cliques ($k > 3$), we ran $\min_W t(K_k, W)$ s.t.\ $t(K_2, W){=}1{-}1/k$ for $k\in\{4,5,6\}$. Even though the larger motif size increases the variance of our estimator and the optimal graphon involves more blocks, our method recovers the complete $k$-partite structure (\Cref{fig:clique}).
 
 \begin{figure}[t]
   \centering
@@ -638,16 +637,16 @@ For $K_k$ with $k>3$, we ran $\min_W t(K_k, W)$ s.t.\ $t(K_2, W){=}1{-}1/k$ for 
   \end{minipage}
 \end{figure}
 
-\noindent{\it Unresolved Problems: $C_5$ and $C_7$.}
+\noindent{\it Open problems: $C_5$ and $C_7$.}
 We next apply our method to two graphon optimisation problems that, to the best of our knowledge, remain open in the tested regimes: minimising the homomorphism densities of $C_5$ and $C_7$, each under a fixed edge density~$p$. In \Cref{sec:addexperiments}, we also report results for the Petersen graph, for which no prior optima or conjectured optima are known to us.
 
-For $C_5$, \citet{bennet2020minimizing} characterised the minimisers when $p=1-1/k$ and conjectured them for other $p$. We applied our method for $p\in\{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$ (\Cref{fig:5cycleminimisation}); the resulting values agree with the benchmark optima within $0.1\%$ (\Cref{tab:c5result}). When $p=1-1/k$ the learnt graphon recovers the complete $k$-partite structure (top row); for other $p$ it exhibits pronounced diagonal (banded) structure (bottom row), suggesting a qualitatively different extremal configuration away from the rational breakpoints.
+For $C_5$, \citet{bennet2020minimizing} characterised the minimisers when $p=1-1/k$ and conjectured them for other $p$. We applied our method for $p\in\{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$ (\Cref{fig:5cycleminimisation}); the resulting values agree with the conjectured optima within $0.1\%$ (\Cref{tab:c5result}). When $p=1-1/k$, the learnt graphon recovers the complete $k$-partite structure (top row); for other $p$, it exhibits pronounced diagonal (banded) structure (bottom row), suggesting a qualitatively different extremal configuration away from the rational breakpoints.
 
-For $C_7$, no prior results are known to us. Motivated by the $C_5$ results of \citet{bennet2020minimizing}, we propose a conjecture for the structure and optimum value of $C_7$-minimising graphons under a fixed edge density; see \Cref{sec:oddcycleconjecture}. Empirically, our learnt graphons match the conjectured optima within $0.1\%$ across all tested $p$ (\Cref{tab:c7result}). For $p\in\{1/2,2/3,4/5\}$ ($p=1-1/k$), they recover the complete $k$-partite structure (top row of \Cref{fig:7cycleminimisation}); for $p\in\{4/7,5/8\}$ they show diagonal patterns similar to $C_5$, suggesting that this is a common feature of odd-cycle minimisation; for $p=5/7$ the structure is qualitatively different, with block-like rather than diagonal patterns (bottom-right of \Cref{fig:7cycleminimisation}).
+For $C_7$, no prior results are known to us. Motivated by the $C_5$ results of \citet{bennet2020minimizing}, we propose a conjecture for the structure and optimum value of $C_7$-minimising graphons under a fixed edge density; see \Cref{sec:oddcycleconjecture}. Empirically, our learnt graphons match our conjectured optima within $0.1\%$ across all tested $p$ (\Cref{tab:c7result}). For $p\in\{1/2,2/3,4/5\}$ ($p=1-1/k$), they recover the complete $k$-partite structure (top row of \Cref{fig:7cycleminimisation}); for $p\in\{4/7,5/8\}$, they show diagonal patterns similar to $C_5$, suggesting that this is a common feature of odd-cycle minimisation; for $p=5/7$, the structure is qualitatively different, with block-like rather than diagonal patterns (bottom-right of \Cref{fig:7cycleminimisation}).
 
 \noindent{\it Exhaustive study over small graphs.}
 We now describe a systematic study enabled by our method.
-We applied our method to the first problem in \Cref{eqn:targetproblems} for non-bipartite graphs $H$ with $v(H) \le 6$ and $e(H) \le 9$, and with no isolated vertices, for a total of 175 graphs.
+We applied our method to the problem \textbf{(P1)} in \eqref{eqn:targetproblems} for non-bipartite graphs $H$ with $v(H) \le 6$ and $e(H) \le 9$, and with no isolated vertices, for a total of 175 graphs.
 For each $H$, we trained our network to minimise $t(H,W)$ subject to $t(K_2,W)=p$, for
 $p \in \{\frac{k-2}{k-1},\ \frac{3k-5}{3k-2},\ \frac{2k-3}{2k-1},\ \frac{3k-4}{3k-1},\ \frac{k-1}{k}\}$,
 % \[
@@ -655,18 +654,18 @@ $p \in \{\frac{k-2}{k-1},\ \frac{3k-5}{3k-2},\ \frac{2k-3}{2k-1},\ \frac{3k-4}{3
 % \]
 where $k$ is the chromatic number of $H$.
 These values of $p$ are chosen to probe the structure of the curve
-$x \mapsto \min_{t(K_2,W)=x} t(H,W)$:
+$x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$:
 the first and last values correspond to breakpoints of piecewise-defined curves established for several families of graphs~\citep{razborov2008minimal,reiher2016clique,bennet2020minimizing}, while the remaining values lie in the interior of the corresponding segments.
-We also implemented an automated tool for computing lower bounds on the minimum $H$-density using flag algebras~\citep{razborov2007flag}, which we used in our experiments.
+We also implemented an automated tool for computing lower bounds on the minimum $H$-density using flag algebras~\citep{razborov2007flag}, in order to assess the optimality of our solutions.
 
-Across 76.5\% of the $(H,p)$ instances, our method produced a graphon whose $H$-density closely matches the corresponding flag-algebra lower bound (within $1\%$ relative error, or $10^{-6}$ absolute when the bound is near zero), suggesting that the solutions are optimal or near-optimal. Of the rest, 11.8\% were clearly suboptimal or failed to train, while for the remaining 11.7\% the learnt graphons appear optimal but our flag-algebra bounds were not tight.
+Across 76.5\% of the $(H,p)$ instances, our method produced a graphon whose $H$-density closely matches the corresponding flag-algebra lower bound (within $1\%$ relative error, or $10^{-6}$ absolute when the bound is near zero), suggesting that the solutions are optimal or near-optimal. Of the rest, 11.8\% have suboptimal graphons, while for the remaining 11.7\%, the learnt graphons appear optimal but our flag-algebra bounds were not tight.
 
-We analysed the curve $x \mapsto \min_{t(K_2,W)=x} t(H,W)$ for each $H$, by interpolation, and examined whether it appears piecewise concave (as for cliques~\citep{reiher2016clique}) or convex (as conjectured for odd cycles~\citep{bennet2020minimizing}). Apparent piecewise concavity is associated with graphs close to complete graphs (i.e., complete after removing $1$ or $2$ edges and isolated vertices); the other graphs gave apparently convex curves.
+We analysed the curve $x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$ for each $H$, by interpolation, and examined whether it appears piecewise concave (as for cliques~\citep{reiher2016clique}) or convex (as conjectured for odd cycles~\citep{bennet2020minimizing}). Apparent piecewise concavity is associated with graphs close to complete graphs (i.e., complete after removing $1$ or $2$ edges and isolated vertices); the other graphs gave apparently convex curves.
 
-Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation} are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons. This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
+Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$, the minimisers for cliques and $C_5$ are known to be complete $k$-partite~\citep{reiher2016clique,bennet2020minimizing}, and we conjecture the same for $C_7$; in all three cases our method recovers this structure (\Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}). This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
 \paragraph{Normalised inequalities between densities}
-For 	\textbf{(P2)}, we searched for graphons violating proposed inequalities $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. As an illustrative task, for each $r,s \in \{3,4,5\}$ with $r < s$, we considered the edge-normalised inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
+For 	\textbf{(P2)}, we searched for graphons violating inequalities of the form $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. Concretely, for each $r,s \in \{3,4,5\}$ with $r < s$, we tested the edge-normalised clique-density inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
 
 \paragraph{Variational problem from large deviation theory}
 We finally apply our framework to 	\textbf{(P3)}, the upper-tail variational problem of \citet{chatterjee2011large}. The architecture, optimiser, and training loop carry over from 	\textbf{(P1)}; only the edge-density solver is replaced by the triangle-density solver targeting $t(K_3, W) = r^3$ and the objective is the Monte Carlo estimate of $h_q$. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
@@ -689,7 +688,7 @@ We finally apply our framework to 	\textbf{(P3)}, the upper-tail variational pro
 \end{table}
 
 \paragraph{Ablation study, baselines, and multi-task variant}
-An ablation study on triangle-density minimisation under $t(K_2, W) = 7/9$ confirms that each component of our architecture matters: removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. On the same task, four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. A preliminary FiLM-conditioned multi-task variant jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$ further shows that shared training across related tasks is feasible. Full details are deferred to \Cref{sec:ablation}.
+An ablation study on triangle-density minimisation under $t(K_2, W) = 7/9$ confirms that each component of our architecture matters: removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. On the same task, four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. A FiLM-conditioned multi-task variant jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$ further demonstrates that the architecture extends naturally to simultaneous optimisation across related tasks. Full details are deferred to \Cref{sec:ablation}.
 
 
 % Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
