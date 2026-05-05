@@ -219,7 +219,7 @@ We tackle the three graphon optimisation problems introduced in \Cref{sec:backgr
 \end{equation}
 for graphs $H, H_1, H_2$, reals $p,q,r \in (0,1)$, and positive integers $m_1, m_2$, where $W$ ranges over graphons. Problems \textbf{(P1)} and 	\textbf{(P3)} have a single scalar equality constraint; 	\textbf{(P2)} is unconstrained.
 
-Our approach represents $W$ as a neural network $f_\theta$, recasts these graphon optimisations as optimisations over the parameters $\theta$, and applies gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, each occurrence of $t(\cdot, W)$ involves an intractable high-dimensional integral, and estimating these expectations and their powers efficiently requires problem-specific sampling. Third, the scalar constraints in 	\textbf{(P1)} and 	\textbf{(P3)} are poorly handled by penalty terms, so the architecture must enforce them more directly. The remainder of this section describes the architecture and training procedure that address these three challenges.
+We represent $W$ as a neural network $f_\theta$, recast these graphon optimisations as optimisations over the parameters $\theta$, and apply gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, the scalar constraints in 	\textbf{(P1)} and 	\textbf{(P3)} are poorly handled by penalty terms, so the architecture must enforce them more directly. Third, each occurrence of $t(\cdot, W)$ involves an intractable integral, and estimating these expectations and their powers efficiently requires problem-specific sampling. The remainder of this section describes the architecture and training procedure that address these three challenges.
 
 \paragraph{Architecture.}
 We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems 	\textbf{(P1)} and 	\textbf{(P3)}, the architecture additionally includes a constraint solver.
@@ -268,7 +268,7 @@ The same idea applies to any single homomorphism-density constraint of the form 
   f_\theta[c](x_1,x_2)f_\theta[c](x_2,x_3)f_\theta[c](x_3,x_1)
   = r^3.
 \]
-For the unconstrained problem 	\textbf{(P2)}, we drop the solver and learn $c$ jointly with $\theta$ by gradient descent.
+For the unconstrained problem \textbf{(P2)}, we drop the solver and learn $c$ jointly with $\theta$ by gradient descent.
 
 
 \paragraph{Estimating homomorphism density.}
