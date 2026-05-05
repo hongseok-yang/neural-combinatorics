@@ -472,7 +472,7 @@ We evaluate our framework on instances of 	\textbf{(P1)}, 	\textbf{(P2)}, and 	\
 
 We visualise graphons as Viridis heatmaps (blue $\,=\,0$, yellow $\,=\,1$); see \Cref{fig:triangledensity-minimisers}. Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
-\paragraph{Constrained Homomorphism-Density Minimisation}
+\paragraph{Constrained homomorphism-density minimisation}
 We apply our method to the problem of minimising the homomorphism density of $K_n$ under an edge-density constraint $t(K_2,W)=p$. This is an instance of the first problem in \Cref{eqn:targetproblems}, with $H=K_n$.
 For $n=3$ (triangles), this optimisation problem has been studied extensively~\citep{goodman1959on,bollobas1975relations,lovasz1983on,fisher1989lower,razborov2008minimal}, and its full solution was established by~\citet{razborov2008minimal}.
 For general $n$, the full solution was obtained more recently by~\citet{reiher2016clique}.
@@ -645,7 +645,7 @@ For $C_5$, \citet{bennet2020minimizing} characterised the minimisers when $p=1-1
 
 For $C_7$, no prior results are known to us. Motivated by the $C_5$ results of \citet{bennet2020minimizing}, we propose a conjecture for the structure and optimum value of $C_7$-minimising graphons under a fixed edge density; see \Cref{sec:oddcycleconjecture}. Empirically, our learnt graphons match the conjectured optima within $0.1\%$ across all tested $p$ (\Cref{tab:c7result}). For $p\in\{1/2,2/3,4/5\}$ ($p=1-1/k$), they recover the complete $k$-partite structure (top row of \Cref{fig:7cycleminimisation}); for $p\in\{4/7,5/8\}$ they show diagonal patterns similar to $C_5$, suggesting that this is a common feature of odd-cycle minimisation; for $p=5/7$ the structure is qualitatively different, with block-like rather than diagonal patterns (bottom-right of \Cref{fig:7cycleminimisation}).
 
-\noindent{\it Exhaustive Study over Small Graphs.}
+\noindent{\it Exhaustive study over small graphs.}
 We now describe a systematic study enabled by our method.
 We applied our method to the first problem in \Cref{eqn:targetproblems} for non-bipartite graphs $H$ with $v(H) \le 6$ and $e(H) \le 9$, and with no isolated vertices, for a total of 175 graphs.
 For each $H$, we trained our network to minimise $t(H,W)$ subject to $t(K_2,W)=p$, for
@@ -665,10 +665,10 @@ We analysed the curve $x \mapsto \min_{t(K_2,W)=x} t(H,W)$ for each $H$, by inte
 
 Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$ for an integer $k \,{\ge}\, 2$, the minimisers in \Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation} are uniquely characterised (up to measure-preserving transformations) as complete $k$-partite graphons. This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
-\paragraph{Normalised Inequalities between Densities}
+\paragraph{Normalised inequalities between densities}
 For 	\textbf{(P2)}, we searched for graphons violating proposed inequalities $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. As an illustrative task, for each $r,s \in \{3,4,5\}$ with $r < s$, we considered the edge-normalised inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
 
-\paragraph{Variational Problem from Large Deviation Theory}
+\paragraph{Variational problem from large deviation theory}
 We finally apply our framework to 	\textbf{(P3)}, the upper-tail variational problem of \citet{chatterjee2011large}. The architecture, optimiser, and training loop carry over from 	\textbf{(P1)}; only the edge-density solver is replaced by the triangle-density solver targeting $t(K_3, W) = r^3$ and the objective is the Monte Carlo estimate of $h_q$. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
 
 \begin{table}[t]
@@ -688,7 +688,7 @@ We finally apply our framework to 	\textbf{(P3)}, the upper-tail variational pro
   }
 \end{table}
 
-\paragraph{Ablation Study, Baselines, and Multi-task Variant}
+\paragraph{Ablation study, baselines, and multi-task variant}
 An ablation study on triangle-density minimisation under $t(K_2, W) = 7/9$ confirms that each component of our architecture matters: removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. On the same task, four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. A preliminary FiLM-conditioned multi-task variant jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$ further shows that shared training across related tasks is feasible. Full details are deferred to \Cref{sec:ablation}.
 
 
