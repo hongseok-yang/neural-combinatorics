@@ -131,13 +131,13 @@ A central object in extremal graph theory is the \emph{homomorphism density} $t(
   t(K_3, G) = 0 \;\land\; |V(G)| = n
   \label{eqn:mantel}
 \end{equation}
-asks for an $n$-vertex triangle-free graph that maximises the edge density. Here $K_m$ denotes the complete graph on $m$ vertices, so $K_2$ and $K_3$ represent an edge and a triangle, respectively. Although the answer is given by the classical theorem of Mantel~\yrcite{mantel1907vraagstuk}, a large family of similar problems involving homomorphism densities remain open~\citep{sidorenko1993correlation, borgs2006counting, razborov2008minimal}.
+asks for an $n$-vertex triangle-free graph that maximises the edge density. Here $K_m$ denotes the complete graph on $m$ vertices, so $K_2$ and $K_3$ represent an edge and a triangle, respectively. Although the answer is given by the classical theorem of Mantel~\yrcite{mantel1907vraagstuk}, a large family of similar problems involving homomorphism densities remains open~\citep{sidorenko1993correlation, borgs2006counting, razborov2008minimal}.
 
 A standard approach to such problems is to study their \emph{asymptotic} counterparts, taking $n \to \infty$ and analysing the limit of the optimum. These asymptotic problems can often be reformulated as continuous optimisation over \emph{graphons}: symmetric measurable functions $[0,1]^2 \to [0,1]$ that arise as limit objects of dense graph sequences~\citep{lovasz2012large}. Another source of graphon variational problems comes from the large deviation theory of dense random graphs~\citep{chatterjee2011large}, where the limiting structure of an Erd\H{o}s--R\'enyi graph conditioned on an unusually large subgraph density is itself characterised by a constrained optimisation over graphons. In both settings, the objective and constraints are integrals against the graphon $W$ (homomorphism densities or pointwise relative entropy), and known or conjectured optima are step-like.
 
 We attack these graphon problems directly with deep learning, representing $W$ as a neural network in the spirit of implicit neural representations~\citep{park2019deepsdf,mescheder2019occupancy,chen2019learning} and minimising the objective by gradient descent on the network parameters. Three recurring challenges shape our design. First, known and conjectured optima are typically step-like, and standard architectures struggle with such targets because of their bias toward smooth functions. We address this with a \emph{multi-scale sinusoidal residual architecture} that injects sinusoidal encodings of growing frequency into successive layers, biasing the model toward sharp, step-like solutions. Second, both the objective and the constraints are graphon integrals that must be estimated from samples, including the high-dimensional homomorphism-density integrals; we use symmetry-aware Monte Carlo estimators. Third, the problems often carry a single scalar density constraint (a fixed edge density, or a fixed triangle density) that is poorly handled by penalty terms; we embed a numerical solver for an empirical version of the constraint into the forward pass and backpropagate through it via implicit differentiation, as in deep equilibrium models~\citep{bai2019deep}.
 
-We evaluate this single framework on three classes of graphon variational problems that share these characteristics but originate in distinct mathematical contexts: \textbf{(P1)} generalised Tur\'an problems, minimising a homomorphism density under a fixed edge-density constraint; \textbf{(P2)} density-domination problems, testing whether one homomorphism density (raised to an integer power) dominates another; and \textbf{(P3)} the upper-tail variational problem of \citet{chatterjee2011large}, minimising a relative-entropy functional under a fixed triangle-density constraint. On \textbf{(P1)} and \textbf{(P2)}, our framework rediscovers nontrivial known optima that previously required substantial human effort~\citep{goodman1959on,bollobas1975relations,lovasz1983on,fisher1989lower,razborov2008minimal}, produces candidate minimisers for open instances such as $7$-cycle density, identifies candidate violations of clique-density inequalities, and through a systematic sweep over small graphs, uncovers a previously unreported family of extremal structures for a six-vertex graph that does not match the complete $k$-partite pattern of classical examples. On \textbf{(P3)}, the same architecture, solver, and training loop apply with only a change of objective and of the  constraint type, providing a uniform handle on a problem class whose optimisers describe the conditional structure of Erd\H{o}s--R\'enyi graphs in their upper-tail regime.
+We evaluate this single framework on three classes of graphon variational problems that share these characteristics but originate in distinct mathematical contexts: \textbf{(P1)} generalised Tur\'an problems, minimising a homomorphism density under a fixed edge-density constraint; \textbf{(P2)} density-domination problems, testing whether one homomorphism density (raised to an integer power) dominates another; and \textbf{(P3)} the upper-tail variational problem of \citet{chatterjee2011large}, minimising a relative-entropy functional under a fixed triangle-density constraint. On \textbf{(P1)} and \textbf{(P2)}, our framework rediscovers nontrivial known optima that previously required substantial human effort~\citep{goodman1959on,bollobas1975relations,lovasz1983on,fisher1989lower,razborov2008minimal}, produces candidate minimisers for open instances such as $7$-cycle density, identifies candidate violations of clique-density inequalities, and through a systematic sweep over small graphs, uncovers a previously unreported family of extremal structures for a six-vertex graph that does not match the complete $k$-partite pattern of classical examples. On \textbf{(P3)}, the same architecture, solver, and training loop apply with only a change of objective and of the constraint type, providing a uniform handle on a problem class whose optimisers describe the conditional structure of Erd\H{o}s--R\'enyi graphs in their upper-tail regime.
 We view the framework as a flexible exploratory tool that complements rigorous lower-bound techniques such as flag algebras~\citep{razborov2007flag,falgas2013applications}: it produces candidate upper bounds, concrete candidate minimisers, and structural conjectures that can be inspected, refined, or subsequently certified.
 
 \section{Background} \label{sec:background}
@@ -185,7 +185,7 @@ The second task asks whether the inequality $t(H_1, G)^{m_2} \geq t(H_2, G)^{m_1
 \min_{W}\,\bigl( t(H_1, W)^{m_2} - t(H_2, W)^{m_1} \bigr)
 \end{equation}
 is non-negative.
-Sidorenko's conjecture~\citep{sidorenko1992, sidorenko1993correlation} predicts non-negativity when $H_1$ is bipartite, $H_2 = K_2$, and $(m_1, m_2) = (e(H_1), 1)$ (so the expression reduces to $t(H_1,W) - t(K_2,W)^{e(H_1)}$), and more systematic studies of general pairs $(H_1, H_2)$ appear in recent work~\citep{conlonlee2024domination, behague2025}.
+Sidorenko's conjecture~\citep{sidorenko1993inequalities, sidorenko1993correlation} predicts non-negativity when $H_1$ is bipartite, $H_2 = K_2$, and $(m_1, m_2) = (e(H_1), 1)$ (so the expression reduces to $t(H_1,W) - t(K_2,W)^{e(H_1)}$), and more systematic studies of general pairs $(H_1, H_2)$ appear in recent work~\citep{conlonlee2024domination, behague2025}.
 
 \paragraph{Variational problem from large deviation theory.}
 Large deviation theory for random graphs addresses two related questions: at what exponential rate does $G(n,q)$ produce an atypically large subgraph density, and what does the graph typically look like when such a rare event occurs?
@@ -259,7 +259,7 @@ and define
 \frac{1}{|\mathcal{E}|} \sum_{(x_1, x_2) \in \mathcal{E}} f_\theta[c](x_1, x_2) \,=\, p.
 \label{eqn:solver-specification}
 \end{align}
-The left-hand side of the above equation in \eqref{eqn:solver-specification} is an unbiased estimator of $t(K_2, f_\theta[c])$, so the equation is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped variant
+The left-hand side of~\eqref{eqn:solver-specification} is an unbiased estimator of $t(K_2, f_\theta[c])$, so the equation is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped variant
 of Newton's method (\Cref{alg:cap}) and use the resulting $c^*$ when evaluating $f_\theta[c^*]$ on other inputs.
 The same idea applies to any single homomorphism-density constraint of the form $t(F, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(F, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this estimator remains monotone in $c$. For the large-deviation application 	\textbf{(P3)}, this means sampling triples $(x^{(k)}_1,x^{(k)}_2,x^{(k)}_3)$, storing those samples in $\mathcal{T}$, and solving the empirical equation
 \[
@@ -668,7 +668,7 @@ Our experiments also suggest a novel family of extremal graphon structures. When
 For 	\textbf{(P2)}, we searched for graphons violating inequalities of the form $t(H_1,W)^{m_2} \geq t(H_2,W)^{m_1}$. Concretely, for each $r,s \in \{3,4,5\}$ with $r < s$, we tested the edge-normalised clique-density inequality $t(K_r, W)^{\binom{s}{2}} \ge t(K_s, W)^{\binom{r}{2}}$. For all tested pairs, our method found graphons (\Cref{fig:cliqueinequality}) with negative objective, strongly suggesting failure of the inequalities; see \Cref{tab:cliquedensitycomparison}.
 
 \paragraph{Variational problem from large deviation theory}
-We apply our framework to 	\textbf{(P3)}, the upper-tail variational problem of \citet{chatterjee2011large}. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
+We apply our framework to 	\textbf{(P3)}, the upper-tail variational problem of \citet{chatterjee2011large}. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference, we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
 
 \begin{table}[t]
   \centering
@@ -688,7 +688,7 @@ We apply our framework to 	\textbf{(P3)}, the upper-tail variational problem of 
 \end{table}
 
 \paragraph{Ablation study, baselines, and multi-task variant}
-An ablation study on triangle-density minimisation under $t(K_2, W) = 7/9$ confirms that each component of our architecture matters: removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. On the same task, four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. A FiLM-conditioned multi-task variant jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$ further demonstrates that the architecture extends naturally to simultaneous optimisation across related tasks. Full details are deferred to \Cref{sec:ablation}.
+To verify that each architectural component is necessary and that the neural approach outperforms simpler alternatives, we ran an ablation study and four non-neural baselines on triangle-density minimisation under $t(K_2, W) = 7/9$. Removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. The four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. To explore whether a single model can handle multiple problem instances simultaneously, we also trained a FiLM-conditioned multi-task variant over $p \in [1/2, 2/3]$ for $H = K_3$, which demonstrates that the architecture extends naturally to this setting. Full details are deferred to \Cref{sec:ablation}.
 
 
 % Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
@@ -713,7 +713,7 @@ We view our method as \emph{complementary} to flag algebras rather than a replac
 
 For fixed values of $n$ (i.e., without taking the limit in \Cref{eqn:extremalproblem:generalisedTuran,eqn:extremalproblem:dominationExponent} or related formulations), one may instead attempt to solve the discrete optimisation problem directly. A classical approach is local (e.g., Tabu) search, which remains useful in combination with reinforcement learning; see, e.g.,~\citet{parczyk2024new,mehrabian2024finding}.
 As a direct reinforcement-learning approach, \citet{mehrabian2024finding} used {\sc AlphaZero} to find the maximum number of edges in an $n$-vertex graph with no copies of $K_3$ and $C_4$.
-Recently, the so-called \emph{deep cross entropy method} built upon reinforcement learning was used by~\citet{adam2021constructions} for analysing discrete problems in combinatorics. It iteratively trains a neural network to learn a policy that promotes the generation of high quality examples, which succeeded in disproving two conjectures regarding the eigenvalue of the adjacency matrix and matching number or proximity.
+Recently, the so-called \emph{deep cross entropy method} was used by~\citet{adam2021constructions} for analysing discrete problems in combinatorics. It iteratively trains a neural network to learn a policy that promotes the generation of high-quality examples, which succeeded in disproving two conjectures regarding the eigenvalue of the adjacency matrix and matching number or proximity.
 For discrete objectives, these approaches can be more versatile than our method because they can optimise non-differentiable quantities (e.g., the matching number). In contrast, they operate at a fixed graph size, whereas our method targets asymptotic problems in the dense-graph limit.
 Finally, {\sc PatternBoost}~\citep{charton2024patternboost} takes a hybrid approach that combines local search with reinforcement learning; one illustrative example is generating lower-bound examples related to Mantel's theorem by solving finite-$n$ instances of \Cref{eqn:extremalproblem:generalisedTuran} for $H=K_3$ (for small $n$) up to edge density $p \le 1/2$.
 Because many combinatorial objects are highly symmetric, solutions produced by such discrete approaches can be difficult to interpret or distil into human-understandable structure. 
@@ -806,7 +806,7 @@ With caching of pairwise network evaluations, the dominant per-iteration cost sc
 
 For optimisation, we used the Adam optimiser with $\beta_1=0.9$ and $\beta_2=0.999$.
 We repeated the experiments with learning rates $\eta \in \{10^{-3}, 5 \times 10^{-4}, 10^{-4}, 5 \times 10^{-5}\}$, and set the minimum learning rate in the scheduler to 1\% of the initial learning rate.
-We trained for 20,000 epochs, corresponding to five cycles of cosine-annealed learning-rate scheduling.
+We trained for 20,000 epochs, corresponding to five cosine-annealing cycles.
 
 For the constraint solver, we found that applying Newton's method directly (without modification) can be unstable, owing to vanishing derivatives in many regimes.
 In particular, since many optimal graphons take values close to 0 or 1, the sigmoid derivative $\mathit{sm}(x)\,(1-\mathit{sm}(x))$ is close to zero over much of the domain.
@@ -841,11 +841,9 @@ For the constant learning rate, we searched over the same set of values as the i
 
 When reporting the homomorphism density computed by discretisation, we use $(2^{14} \times 2^{14})$ grid for $K_3, C_5, C_7$ and $(2^{10} \times 2^{10})$ grid for $H_6$, and 64-bit floating point precision. 
 
-The environment setup and implementation to replicate our experiments can be seen in the following anonymous repository. \url{https://anonymous.4open.science/r/INR4AsymptoticExtremalGraphTheory-47DB/README.md}.
+The code to replicate our experiments is available at the following anonymous repository. \url{https://anonymous.4open.science/r/INR4AsymptoticExtremalGraphTheory-47DB/README.md}.
 
 \section{Conjecture on Odd Cycles} \label{sec:oddcycleconjecture}
-
-In this section, we provide further details of our conjecture on odd-cycle density minimisation.
 
 In \citet{bennet2020minimizing}, the optimal graphon's structure is constructed as follows.
 Let $k$ be the integer satisfying $1 - \frac{1}{k} < p < 1-\frac{1}{k+1}$.
@@ -917,8 +915,6 @@ For instance, $f_7$ is given as follows.
 
 \section{Additional Experimental Results}
 \label{sec:addexperiments}
-
-In this section, we provide additional experimental results.
 
 We consider the problem of minimising the homomorphism density of the Petersen graph under the edge-density constraint $t(K_2, W) = p$ for various values of $p$.
 For minimising the Petersen homomorphism density, there are (to the best of our knowledge) no known results or conjectures, likely due to the graph size and the lack of an obvious extremal structure.
@@ -998,7 +994,6 @@ As there is no known conjectured optimum, we compare our results to those obtain
 \section{Details of Hand-crafted Graphons}
 \label{sec:handcraftedgraphons}
 
-In this section, we describe the hand-crafted graphons used as baselines in our experiments.
 We consider edge densities satisfying $1 - 1/k < p < 1 - 1/(k+1)$, where $k$ is a positive integer.
 
 The first two instances are graphons arising from the optimal solution to edge-density-constrained $K_3$ homomorphism-density minimisation.
