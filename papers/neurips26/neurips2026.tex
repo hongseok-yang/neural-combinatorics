@@ -301,7 +301,9 @@ $\mathcal{D} = \{(x_1^{(k)}, \ldots, x_{v(H)}^{(k)}) : k \in [N]\}$ and the unor
 \[
 \theta_{t+1} \,\leftarrow\, \theta_t - \eta_t\, \nabla_\theta \widehat{t}_{\mathcal{D}}(H, f_\theta[c_\theta])\big|_{\theta = \theta_t},
 \]
-where $\widehat{t}_{\mathcal{D}}$ denotes the estimator~\eqref{eqn:estimator} evaluated on the tuples in $\mathcal{D}$. We resample $(\mathcal{D}, \mathcal{E})$ at every iteration to mitigate overfitting to particular Monte Carlo samples; reusing the $x_i^{(k)}$ across $\mathcal{D}$ and $\mathcal{E}$ saves forward evaluations.
+where $\widehat{t}_{\mathcal{D}}$ denotes the estimator~\eqref{eqn:estimator} evaluated on the tuples in $\mathcal{D}$. We resample $(\mathcal{D}, \mathcal{E})$ at every iteration to mitigate overfitting to particular Monte Carlo samples; reusing the $x_i^{(k)}$ across $\mathcal{D}$ and $\mathcal{E}$ saves forward evaluations of $f_\theta[c]$.
+We set $\eta_t$ by cosine-annealing scheduling~\citep{ilya2017sgdr}, which alternates between discovering coarse structure (high learning rate) and refining sharp boundaries (low learning rate). 
+
 
 \begin{figure}[t]
   \centering
@@ -354,9 +356,6 @@ where $\widehat{t}_{\mathcal{D}}$ denotes the estimator~\eqref{eqn:estimator} ev
   \end{minipage}
 \end{figure}
 
-
-We set $\eta_t$ by cosine-annealing scheduling~\citep{ilya2017sgdr}, which alternates between discovering coarse structure (high learning rate) and refining sharp boundaries (low learning rate). Computing $\nabla_\theta \widehat{t}_{\mathcal{D}}(H, f_\theta[c_\theta])$ requires only the standard product rule once $\nabla_\theta f_\theta[c_\theta]$ is known; the only non-routine ingredient is the gradient of the solver output $c_\theta$ with respect to $\theta$, which we compute via implicit differentiation.
-
 \begin{figure}[t]
   \centering
   \begin{minipage}{0.55\textwidth}
@@ -393,6 +392,7 @@ We set $\eta_t$ by cosine-annealing scheduling~\citep{ilya2017sgdr}, which alter
   \end{minipage}
 \end{figure}
 
+Computing $\nabla_\theta \widehat{t}_{\mathcal{D}}(H, f_\theta[c_\theta])$ requires only the standard product rule once $\nabla_\theta f_\theta[c_\theta]$ is known; the only non-routine ingredient is the gradient of the solver output $c_\theta$ with respect to $\theta$, which we compute via implicit differentiation.
 A direct alternative is to differentiate through an unrolled Newton iteration with autodiff, but this requires storing every intermediate iterate and is substantially more expensive in time and memory; the same trade-off motivates implicit-differentiation methods in deep equilibrium models~\citep{bai2019deep} and neural ODEs~\citep{chen2018neural}. The closed-form gradient is given by:
 
 \begin{lemma}\label{lem:implicitdifferentiation}
