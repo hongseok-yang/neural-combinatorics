@@ -191,7 +191,7 @@ Sidorenko's conjecture~\citep{sidorenko1992, sidorenko1993correlation} predicts 
 Large deviation theory for random graphs addresses two related questions: at what exponential rate does $G(n,q)$ produce an atypically large subgraph density, and what does the graph typically look like when such a rare event occurs?
 These questions are of fundamental interest in probability theory and combinatorics, and they carry information-theoretic structure that is natural from an ML perspective: the Chatterjee--Varadhan framework reduces both questions to a single constrained optimisation over graphons whose objective is an averaged KL divergence~\citep{chatterjee2011large}.
 
-Concretely, fix $q \in (0,1)$ and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}\bigl(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q)\bigr)\,dx\,dy$, the integrated per-edge KL divergence of $W$ from the base Erd\H{o}s--R\'enyi graphon $W \equiv q$.
+Concretely, fix $q \in (0,1)$ and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q))dxdy$, the integrated per-edge KL divergence of $W$ from the base Erd\H{o}s--R\'enyi graphon $W \equiv q$.
 For $r > q$, the large deviation principle implies that $\binom{n}{2}^{-1}\log\Pr[t(K_3, G(n,q)) \ge r^3]$ converges to $-\min_{W: t(K_3,W) \ge r^3} h_q(W)$
 and the typical structure of $G(n,q)$ conditioned on this upper-tail event is described by near-minimisers of the same variational problem~\citep{lubetzky2015replica}.
 The minimiser is therefore the graphon closest in KL divergence to the base model $W \equiv q$ that still achieves a triangle density of at least $r^3$: it is the most information-efficient explanation for the observed excess, in the same spirit as maximum-entropy modelling and variational inference in ML.
@@ -291,18 +291,18 @@ The estimator extends to polynomials in homomorphism densities by way of the ide
 \label{eqn:elimination densityproduct}
 t(H, f_\theta[c]) \, t(H', f_\theta[c]) \,=\, t(H \oplus H', f_\theta[c]),
 \end{equation}
-where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In our implementation, each monomial is estimated as a U-statistic: for a product such as $t(H, f_\theta[c])^k = t(H \oplus \cdots \oplus H, f_\theta[c])$, we sample $N$ tuples of $v(H)$ vertices, assign a distinct sample tuple to each copy of $H$ in $H \oplus \cdot \oplus H$, i.e., the $i_j$-th tuple to the $j$-th copy, where $i_1, \ldots, i_k$ are all distinct, and average over all such choices of $(i_1, \ldots, i_k)$, ensuring that no vertex sample is shared across copies. We use this extension for 	\textbf{(P2)}.
+where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In our implementation, each monomial is estimated as a U-statistic: for a product such as $t(H, f_\theta[c])^k = t(H \oplus \cdots \oplus H, f_\theta[c])$, we sample $N$ tuples of $v(H)$ vertices, assign a distinct sample tuple to each copy of $H$ in $H \oplus \cdots \oplus H$, i.e., the $i_j$-th tuple to the $j$-th copy, where $i_1, \ldots, i_k$ are all distinct, and average over all such choices of $(i_1, \ldots, i_k)$, ensuring that no vertex sample is shared across copies. We use this extension for 	\textbf{(P2)}.
 
 \paragraph{Training algorithm.}
 
 \noindent\textit{Constrained problems.}
-For 	\textbf{(P1)}, fix a graph $H$ on $[v(H)]$ and $p \in (0, 1)$. At each iteration, we sample $(N \cdot v(H))$ i.i.d.\ uniform values $\{x_i^{(k)}\}$ on $[0, 1]$, form
-$\mathcal{D} = \{(x_1^{(k)}, \ldots, x_{v(H)}^{(k)}) : k \in [N]\}$ and the unordered-pair set $\mathcal{E} = \{(x^{(k)}_i, x^{(k)}_j) : k \in [N],\ 1 \le i < j \le v(H)\}$, set $c_\theta \coloneqq \textsc{Solve}_\theta(\mathcal{E}, p)$ to enforce the empirical constraint, and update
+For 	\textbf{(P1)}, fix a graph $H$ on $[v(H)]$ and $p \in (0, 1)$. At each iteration, we sample $(N \cdot v(H))$ i.i.d.\ uniform values $\{x_i^{(k)}\}_{(i,k) \in [N] \times [v(H)]}$ on $[0, 1]$, and form
+$\mathcal{D} = \{(x_1^{(k)}, \ldots, x_{v(H)}^{(k)}) : k \in [N]\}$ and the unordered-pair set $\mathcal{E} = \{(x^{(k)}_i, x^{(k)}_j) : k \in [N],\ 1 \le i < j \le v(H)\}$. Then, we set $c_\theta \coloneqq \textsc{Solve}_\theta(\mathcal{E}, p)$ to enforce the empirical constraint, and update
 \[
 \theta_{t+1} \,\leftarrow\, \theta_t - \eta_t\, \nabla_\theta \widehat{t}_{\mathcal{D}}(H, f_\theta[c_\theta])\big|_{\theta = \theta_t},
 \]
-where $\widehat{t}_{\mathcal{D}}$ denotes the estimator~\eqref{eqn:estimator} evaluated on the tuples in $\mathcal{D}$. We resample $(\mathcal{D}, \mathcal{E})$ at every iteration to mitigate overfitting to particular Monte Carlo samples; reusing the $x_i^{(k)}$ across $\mathcal{D}$ and $\mathcal{E}$ saves forward evaluations of $f_\theta[c]$.
-We set $\eta_t$ by cosine-annealing scheduling~\citep{ilya2017sgdr}, which alternates between discovering coarse structure (high learning rate) and refining sharp boundaries (low learning rate). 
+where $\widehat{t}_{\mathcal{D}}$ denotes the estimator in \eqref{eqn:estimator} evaluated on the tuples in $\mathcal{D}$. Reusing the $x_i^{(k)}$ across $\mathcal{D}$ and $\mathcal{E}$ saves forward evaluations of $f_\theta[c]$. We resample $(\mathcal{D}, \mathcal{E})$ at every iteration to mitigate overfitting to particular Monte Carlo samples.
+We set $\eta_t$ via a cosine-annealing schedule~\citep{ilya2017sgdr}, which alternates between discovering coarse structure (high learning rate) and refining sharp boundaries (low learning rate). 
 
 
 \begin{figure}[t]
@@ -410,11 +410,10 @@ h_\theta(x_1, x_2) \,\coloneqq\, V g_\theta^{(L)}\!\bigl(\min(x_1, x_2), \max(x_
 \end{align*}
 \end{lemma}
 
+For 	\textbf{(P3)}, despite its different mathematical origins in large deviation theory, the same constrained loop applies with two substitutions: for given $0<q<r < 1$, the edge-density solver is replaced by the triangle-density solver targeting $t(K_3, f_\theta[c]) = r^3$, and the objective is replaced by the Monte Carlo estimate of $h_q(f_\theta[c_\theta])=\int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))dxdy$, obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. The sigmoid output ensures the KL objective is differentiable in $\theta$, and an analogous implicit-differentiation formula applies to the triangle-density constraint.
+
 \noindent\textit{Unconstrained problems.}
 For 	\textbf{(P2)}, with graphs $H_1, H_2$ and positive integers $m_1, m_2$, we minimise $t(H_1, f_\theta[c])^{m_2} - t(H_2, f_\theta[c])^{m_1}$. Using~\eqref{eqn:elimination densityproduct}, we rewrite the objective as $t(H_1^{\oplus m_2}, f_\theta[c]) - t(H_2^{\oplus m_1}, f_\theta[c])$, where $H^{\oplus m}$ is the disjoint union of $m$ copies of $H$, and optimise $(\theta, c)$ by SGD on freshly resampled batches each iteration, applying~\eqref{eqn:estimator} to each term separately.
-
-\noindent\textit{Large-deviation variational problem.}
-For 	\textbf{(P3)}, we reuse the constrained training loop with the triangle-density solver targeting $t(K_3, f_\theta[c]) = r^3$, and minimise the Monte Carlo estimate of $h_q$ obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. Because the sigmoid output lies in $(0,1)$, the KL objective is differentiable in $\theta$. The architecture, optimiser, and learning-rate schedule are unchanged from 	\textbf{(P1)}.
 
 \begin{figure}[t]
   \centering
