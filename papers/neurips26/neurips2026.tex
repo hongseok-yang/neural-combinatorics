@@ -284,14 +284,14 @@ Let $H$ be a graph with vertex set $[v(H)]$. By~\eqref{eqn:homomorphismdensitygr
 \end{equation}
 The estimator is unbiased for any choice of $\mathcal{S}$ (Lemma~\ref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
 When $\mathcal{S} = \{\mathrm{id}\}$, our estimator in \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples.
-Different permutations also induce repeated evaluations of the network $f_\theta[c]$ on the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching the evaluations reduces the number of network evaluations from $N |\mathcal{S}| e(H)$ to $N C e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
+Different permutations also induce repeated evaluations of the network $f_\theta[c]$ on the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching the evaluations reduces the number of network evaluations from $N \cdot |\mathcal{S}| \cdot e(H)$ to $N \cdot C \cdot e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
 
 The estimator extends to polynomials in homomorphism densities by way of the identity
 \begin{equation}
 \label{eqn:elimination densityproduct}
 t(H, f_\theta[c]) \, t(H', f_\theta[c]) \,=\, t(H \oplus H', f_\theta[c]),
 \end{equation}
-where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In implementation, each monomial is estimated as a U-statistic by using disjoint vertex-sample tuples for the copies in the disjoint union whenever possible, which avoids reusing the same sampled vertex as two independent variables within a monomial. We use this extension for 	\textbf{(P2)}.
+where $H \oplus H'$ is the disjoint union of $H$ and $H'$. Concretely, we expand the polynomial into a linear combination of monomials, rewrite each monomial as a single homomorphism density via~\eqref{eqn:elimination densityproduct}, estimate each resulting density with~\eqref{eqn:estimator}, and combine the estimates linearly. In our implementation, each monomial is estimated as a U-statistic: for a product such as $t(H, f_\theta[c]) \cdot t(H', f_\theta[c])$, we assign a distinct sample tuple to each factor, i.e., tuple $k$ to $H$ and a different tuple $k' \neq k$ to $H'$, and average over all such pairs $(k, k')$, ensuring that no vertex sample is shared between the two factors. We use this extension for 	\textbf{(P2)}.
 
 \paragraph{Training algorithm.}
 
