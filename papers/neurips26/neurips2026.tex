@@ -1003,24 +1003,23 @@ We visualised $W_1, \ldots, W_4$ for $p=0.7$ in \Cref{fig:handcraftedgraphons}.
 
 \begin{figure}
   \centering
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/onesmall.png}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/onelarge.png}
   \end{subfigure}
-  
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/uniformless.png}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/oneless.png}
   \end{subfigure}
-  \caption{Hand-crafted graphons $W_1$ (top left), $W_2$ (top right), $W_3$ (bottom left), and $W_4$ (bottom right) with edge density $t(K_2, W)=0.7$.}
+  \caption{Hand-crafted graphons $W_1, W_2, W_3, W_4$ (left to right) with edge density $t(K_2, W)=0.7$.}
   \label{fig:handcraftedgraphons}
 \end{figure}
 
@@ -1051,11 +1050,11 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
   Constant LR (low)                        & $0.430071$ \\
   Constant LR (high)                       & $0.431645$ \\
   \midrule
-  SBM (256 blocks, fixed sizes)            & $0.428190$ \\
-  SBM (5 blocks, trainable sizes)          & $0.429441$ \\
-  SBM (64 blocks, trainable sizes)         & $0.429441$ \\
+  SBM (256 blocks, fixed sizes)            & $0.435817$ \\
+  SBM (5 blocks, trainable sizes)          & $0.470508$ \\
+  SBM (64 blocks, trainable sizes)         & $0.470508$ \\
   Decision Tree                            & $0.455558$ \\
-  Gradient Boosted Decision Tree                   & $0.454485$ \\
+  Gradient Boosted Decision Tree           & $0.454485$ \\
   \bottomrule
   \end{tabular}
   }
@@ -1063,38 +1062,38 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 
 \begin{figure}[t]
   \centering
-  \begin{subfigure}{0.155\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/baseline.png}
     \caption{Our method.}
     \label{fig:baseline}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/resnet.png}
     \caption{ResNet variant.}
     \label{fig:resnet}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/const4.png}
     \caption{Constant-scale~$s$.}
     \label{fig:const2}
   \end{subfigure}
 
-  \begin{subfigure}{0.155\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/noconstraint.png}
     \caption{Regulariser.}
     \label{fig:noconsthighreg}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/noscaling-lowlr.png}
     \caption{Const.~LR (low).}
     \label{fig:noscheduling-lowlr}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/noscaling-highlr.png}
     \caption{Const.~LR (high).}
@@ -1105,7 +1104,8 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 \end{figure}
 
 \paragraph{Non-neural Baselines.}
-On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \cref{tab:ablationstudy}. 
+On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. 
+Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \cref{tab:ablationstudy}. 
 The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting.
 
 \paragraph{Multi-task Variant.}
