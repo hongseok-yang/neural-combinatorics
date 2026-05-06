@@ -137,7 +137,9 @@ A standard approach to such problems is to study their \emph{asymptotic} counter
 
 We attack these graphon problems directly with deep learning, representing $W$ as a neural network in the spirit of implicit neural representations~\citep{park2019deepsdf,mescheder2019occupancy,chen2019learning} and minimising the objective by gradient descent on the network parameters. Three recurring challenges shape our design. First, known and conjectured optima are typically step-like, and standard architectures struggle with such targets because of their bias toward smooth functions. We address this with a \emph{multi-scale sinusoidal residual architecture} that injects sinusoidal encodings of growing frequency into successive layers, biasing the model toward sharp, step-like solutions. Second, both the objective and the constraints are graphon integrals that must be estimated from samples, including the high-dimensional homomorphism-density integrals; we use symmetry-aware Monte Carlo estimators. Third, the problems often carry a single scalar density constraint (a fixed edge density, or a fixed triangle density) that is poorly handled by penalty terms; we embed a numerical solver for an empirical version of the constraint into the forward pass and backpropagate through it via implicit differentiation, as in deep equilibrium models~\citep{bai2019deep}.
 
-We evaluate this single framework on two classes of graphon variational problems that share these characteristics but originate in distinct mathematical contexts: \textbf{(P1)} generalised Tur\'an problems, minimising a homomorphism density under a fixed edge-density constraint; and \textbf{(P2)} the upper-tail variational problem of \citet{chatterjee2011large}, minimising a relative-entropy functional under a fixed triangle-density constraint. On \textbf{(P1)}, our framework rediscovers nontrivial known optima that previously required substantial human effort~\citep{goodman1959on,bollobas1976relations,lovasz1983on,fisher1989lower,razborov2008minimal}, produces candidate minimisers for open instances such as $7$-cycle density, and through a systematic sweep over small graphs, uncovers a previously unreported family of extremal structures for a six-vertex graph that does not match the complete $k$-partite pattern of classical examples. On \textbf{(P2)}, the same architecture, solver, and training loop apply with only a change of objective and of the constraint type, providing a uniform handle on a problem class whose optimisers describe the conditional structure of Erd\H{o}s--R\'enyi graphs in their upper-tail regime.
+We evaluate this single framework on two classes of graphon variational problems that share these characteristics but originate in distinct mathematical contexts: \textbf{(P1)} generalised Tur\'an problems, minimising a homomorphism density under a fixed edge-density constraint; and \textbf{(P2)} the variational problem of \citet{chatterjee2011large}, minimising a relative-entropy functional under a fixed triangle-density constraint. 
+On \textbf{(P1)}, our framework rediscovers nontrivial known optima that previously required substantial human effort~\citep{goodman1959on,bollobas1976relations,lovasz1983on,fisher1989lower,razborov2008minimal}, produces candidate minimisers for open instances such as $7$-cycle density, and through a systematic sweep over small graphs, uncovers a previously unreported family of extremal structures for a six-vertex graph that does not match the complete $k$-partite pattern of classical examples. 
+On \textbf{(P2)}, the same architecture, solver, and training loop apply with only a change of objective and of the constraint type, providing a uniform handle on a problem class whose optimisers describe the conditional structure of Erd\H{o}s--R\'enyi graphs in both upper-tail and lower-tail regimes.
 We view the framework as a flexible exploratory tool that complements rigorous lower-bound techniques such as flag algebras~\citep{razborov2007flag,falgas2013applications}: it produces candidate upper bounds, concrete candidate minimisers, and structural conjectures that can be inspected, refined, or subsequently certified.
 
 \section{Background} \label{sec:background}
@@ -182,18 +184,20 @@ which say that for every $H$ and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ i
 Large deviation theory for random graphs addresses two related questions: at what exponential rate does $G(n,q)$ produce an atypically large subgraph density, and what does the graph typically look like when such a rare event occurs?
 These questions are of fundamental interest in probability theory and combinatorics, and they carry information-theoretic structure that is natural from an ML perspective: the Chatterjee--Varadhan framework reduces both questions to a single constrained optimisation over graphons whose objective is an averaged KL divergence~\citep{chatterjee2011large}.
 
-Concretely, fix $q \in (0,1)$ and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q))dxdy$, the integrated per-edge KL divergence of $W$ from the base Erd\H{o}s--R\'enyi graphon $W \equiv q$.
-For $r > q$, the large deviation principle implies that $\binom{n}{2}^{-1}\log\Pr[t(K_3, G(n,q)) \ge r^3]$ converges to $-\min_{W: t(K_3,W) \ge r^3} h_q(W)$
-and the typical structure of $G(n,q)$ conditioned on this upper-tail event is described by near-minimisers of the same variational problem~\citep{lubetzky2015replica}.
-The minimiser is therefore the graphon closest in KL divergence to the base model $W \equiv q$ that still achieves a triangle density of at least $r^3$: it is the most information-efficient explanation for the observed excess, in the same spirit as maximum-entropy modelling and variational inference in ML.
-Whether the excess triangles concentrate in a dense clique or spread more uniformly, and the precise structure of minimisers, remains incompletely understood across $(q, r)$ regimes.
+Concretely, fix $q \in (0,1)$ and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q))dx dy$, the integrated per-edge KL divergence of $W$ from the base Erd\H{o}s--R\'enyi graphon $W \equiv q$.
+For a fixed graph $H$ and target level $r \in (0,1)$, the large deviation principle yields a variational characterisation of both tails.
+In the \emph{upper tail} ($r > q$), $\binom{n}{2}^{-1}\log\Pr[t(H, G(n,q)) \ge r^{e(H)}]$ converges to $-\min_{W: t(H,W) \ge r^{e(H)}} h_q(W)$.
+In the \emph{lower tail} ($r < q$), $\binom{n}{2}^{-1}\log\Pr[t(H, G(n,q)) \le r^{e(H)}]$ converges to $-\min_{W: t(H,W) \le r^{e(H)}} h_q(W)$.
+In either case, the typical structure of $G(n,q)$ conditioned on the rare event is described by near-minimisers of the corresponding variational problem~\citep{lubetzky2015replica}.
+Thus the minimiser is the graphon closest in KL divergence to $W \equiv q$ that explains the observed \emph{excess} (upper tail) or \emph{deficit} (lower tail) in $H$-density, in the same spirit as maximum-entropy modelling and variational inference in ML.
+Even in the triangle case $H = K_3$, understanding when the deviation localises (e.g. through a dense clique) versus spreads more uniformly, and the precise structure of minimisers across $(q,r)$, remains incompletely understood.
 
 Our method applies directly to the boundary form
 \begin{equation}
 \label{eqn:large-deviation-problem}
-  \min_{W : t(K_3,W) \ge r^3} h_q(W)
+  \min_{W : t(H,W) = r^{e(H)}} h_q(W)
 \end{equation}
-which is equivalent to the inequality-constrained minimisation above.
+which is equivalent to the inequality-constrained minimisations above (with $\ge$ in the upper tail $r>q$ and $\le$ in the lower tail $r<q$).
 
 \section{Implicit Neural Representations of Graphons} \label{sec:method}
 
@@ -201,7 +205,7 @@ We tackle the two graphon optimisation problems introduced in \Cref{sec:backgrou
 \begin{equation}
 \textbf{(P1)} \min_{W : t(K_2, W) = p}  t(H, W),
 \qquad\qquad
-\textbf{(P2)} \min_{W : t(K_3, W) = r^3} h_q(W),
+\textbf{(P2)} \min_{W : t(H, W) = r^{e(H)}} h_q(W),
 \label{eqn:targetproblems}
 \end{equation}
 for a graph $H$, reals $p,q,r \in (0,1)$, where $W$ ranges over graphons. Both problems carry a single scalar equality constraint.
@@ -603,7 +607,9 @@ We analysed the curve $x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$ for each $H$, by in
 Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$, the minimisers for cliques and $C_5$ are known to be complete $k$-partite~\citep{reiher2016clique,bennett2020minimizing}, and we conjecture the same for $C_7$; in all three cases our method recovers this structure (\Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}). This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
 \paragraph{Variational problem from large deviation theory}
-We apply our framework to \textbf{(P2)}, the upper-tail variational problem of \citet{chatterjee2011large}. We test $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$, a small-$q$, moderate-$r$ regime in which the structure of optimisers is, to our knowledge, not fully understood. As a reference, we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon. \TODO{Fill in: (i) qualitative structure of the learnt graphons (e.g., whether a consistent two-block / SBM pattern emerges across $(q,r)$); (ii) quantitative comparison summary; (iii) the resulting structural conjecture, placed in the context of the replica-symmetry boundary of \citet{lubetzky2015replica}.}
+We apply our framework to \textbf{(P2)}, the variational problem of \citet{chatterjee2011large}. 
+We test $(q, r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$ for upper tail variational problems for graphs $H = K_3, C_4, C_5, K_{1,3}$, and $()$ for lower tail variational problems for $H = K_3$, which are all regime the structure of optimisers is, to our knowledge, not fully understood. As a reference, we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q$ at our learnt graphon in the upper tail regimes.
+\TODO{Add some experiment details here.}
 
 \begin{table}[t]
   \centering
