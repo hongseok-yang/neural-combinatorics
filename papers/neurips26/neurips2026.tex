@@ -159,7 +159,7 @@ t(H, G) \,\coloneqq\, {}
 where $\mathbb{I}[\cdot]$ is the indicator function.
 Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}.
 
-A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$, where
+A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$, where
 $t(F,W)$ is the graphon homomorphism density of $F$ in $W$ defined by
 \begin{align}
 t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
@@ -168,7 +168,7 @@ t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{
 \end{align}
 Conversely, every graphon arises in this way~\citep{lovasz2012large}. Familiar discrete structure is reflected in $W$: balanced complete bipartite graphs converge to the two-block graphon equal to $1$ on the off-diagonal blocks and $0$ on the diagonal blocks; an Erd\H{o}s--R\'enyi $G(n,q)$ converges to the constant graphon $W \equiv q$; a stochastic block model converges to a multi-block graphon whose blocks correspond to the communities. 
 
-Graphons provide a common language for both problem classes studied in this paper: the objective and constraints in each involve graphon homomorphism densities $t(H,W)$ or closely related graphon integrals, and the structure of the optimisers is the central object of interest. The first class arises from extremal graph theory, where optimising over graphons is equivalent to optimising the corresponding asymptotic finite-graph problem~\citep{lovasz2012large}; the second arises from the large deviation theory of dense random graphs. We describe each in turn.
+Graphons provide a common language for both problem families studied in this paper: the objective and constraints in each involve graphon homomorphism densities $t(H,W)$ or closely related graphon integrals, and the structure of the optimal grpahons is the central object of interest. The first family arises from extremal graph theory, where optimising over graphons is equivalent to optimising the corresponding asymptotic finite-graph problem~\citep{lovasz2012large}; the second arises from the large deviation theory of dense random graphs. We describe each in turn.
 
 \paragraph{Constrained density minimisation.}
 The first task is to minimise the homomorphism density of a fixed graph $H$ subject to a fixed edge density $p$. To state the asymptotic problem formally, we phrase it in terms of graph sequences:
@@ -178,8 +178,8 @@ The first task is to minimise the homomorphism density of a fixed graph $H$ subj
 \end{equation}
 By the graph-limit theory~\citep{lovasz2012large}, this equals $\min_{W:\,t(K_2,W)=p}\, t(H, W)$, the graphon problem our method optimises directly.
 This generalises Tur\'an's theorem~\citep{turan1941}
-and the Erd\H{o}s--Stone--Simonovits theorem~\citep{erdos1946on, erdos1966limit}, both classical results in extremal graph theory,
-which say that for every $H$ and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum is $0$. But for $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder. The problem is completely solved only for cliques: $H = K_r$ for all $r \ge 3$~\citep{reiher2016clique}, with landmark earlier results for $r = 3$~\citep{razborov2008minimal} and $r = 4$~\citep{nikiforov2011number}. For $C_5$, the minimiser is known only at the special values $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennett2020minimizing}.
+and the Erd\H{o}s--Stone--Simonovits theorem~\citep{erdos1946on, erdos1966limit}. These classical results in extremal graph theory say
+that for every $H$ and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum is $0$. But for $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder. It is completely solved only for cliques: $H = K_r$ for all $r \ge 3$~\citep{reiher2016clique}, with landmark earlier results for $r = 3$~\citep{razborov2008minimal} and $r = 4$~\citep{nikiforov2011number}. For $C_5$, the minimiser is known only at the special values $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennett2020minimizing}.
 
 \paragraph{Variational problem from large deviation theory.}
 The large deviation theory for random graphs addresses two related questions: at what exponential rate does $G(n,q)$ produce an atypically large or small subgraph density, and what does the graph typically look like when such a rare event occurs?
