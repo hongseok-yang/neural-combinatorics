@@ -139,7 +139,7 @@ A standard approach to such problems is to study their \emph{asymptotic} counter
 We attack these graphon-optimisation problems directly with deep learning, representing a graphon $W$ as a neural network in the spirit of implicit neural representations~\citep{park2019deepsdf,mescheder2019occupancy,chen2019learning} and minimising the objective by gradient descent on the network parameters. Three recurring challenges shape our design. First, known and conjectured optima are typically step-like, and standard architectures struggle with such targets because of their bias toward smooth functions. We address this with a \emph{multi-scale sinusoidal residual architecture} that injects sinusoidal encodings of growing frequency into successive layers, biasing the model toward sharp, step-like solutions. Second, the problems often carry a single scalar density constraint (a fixed subgraph density) that is poorly handled by penalty terms; we embed a numerical solver for an empirical version of the constraint into the forward pass and backpropagate through it via implicit differentiation, as in deep equilibrium models~\citep{bai2019deep}. Third, both the objective and the constraints are graphon integrals that must be estimated from samples, including the high-dimensional homomorphism-density integrals; we use symmetry-aware Monte Carlo estimators.
 
 We demonstrate our framework on two families of graphon optimisation problems: \textbf{(P1)} generalised Tur\'an problems from extremal graph theory, minimising a homomorphism density under a fixed edge-density constraint; and \textbf{(P2)} the variational problems from the large deviation theory of dense random graphs \citep{chatterjee2011large}, minimising a relative-entropy functional under a fixed subgraph-density constraint.
-On \textbf{(P1)}, our framework rediscovers nontrivial known optima that previously required substantial human effort~\citep{goodman1959on,bollobas1976relations,lovasz1983on,fisher1989lower,razborov2008minimal}, produces candidate minimisers for open instances such as mimisation of $C_7$-homomorphism density, and through a systematic sweep over small graphs, uncovers, for a six-vertex graph, a previously unreported family of extremal structures that do not match the complete $k$-partite pattern of classical examples.
+On \textbf{(P1)}, our framework rediscovers nontrivial known optima that previously required substantial human effort~\citep{goodman1959on,bollobas1976relations,lovasz1983on,fisher1989lower,razborov2008minimal}, produces candidate minimisers for open instances such as minimisation of $C_7$-homomorphism density, and through a systematic sweep over small graphs, uncovers, for a six-vertex graph, a previously unreported family of extremal structures that do not match the complete $k$-partite pattern of classical examples.
 Applied to \textbf{(P2)}, the framework produces new candidate optimal graphons, in regimes where the optimal structure is not fully understood, for four pattern graphs in the upper-tail regime and $K_3$ in the lower-tail regime. For $K_3$, these candidates consistently improve upon the reference construction of \citet{lubetzky2015replica} in the upper-tail regime.
 We view the framework as a flexible exploratory tool that complements rigorous lower-bound techniques such as flag algebras~\citep{razborov2007flag,falgas2013applications}: it produces candidate upper bounds, concrete candidate minimisers, and structural conjectures that can be inspected, refined, or subsequently certified.
 
@@ -238,7 +238,7 @@ for all $i, j \in [d]$, $k \in [2]$. We collect every parameter except $c$ into 
 
 The architecture has two notable features. First, it repeatedly injects a sinusoidal encoding of the input $(x_1, x_2)$ at every layer, with an encoding scale that grows with depth. Increasing $s(\ell)$ with depth shifts higher-frequency content into deeper layers~\citep{tancik2020fourier} and encourages late layers to capture sharp boundaries, while early layers stabilise the coarse, low-frequency structure, an inductive bias that fits step-like graphons. A similar coarse-to-fine pattern arises in diffusion models~\citep{salmona2022can, dieleman2024spectral}, but we make no formal claim of equivalence; the design is a domain-specific choice for our setting.
 
-Second, in constrained problems, we determine $c$ via a numerical solver rather than learning it directly. To enforce $t(K_2, f_\theta[c]) = p$ in 	\textbf{(P1)}, we use a batch of $K$ i.i.d.\ samples
+Second, in constrained problems, we determine $c$ via a numerical solver rather than learning it directly. To enforce $t(K_2, f_\theta[c]) = p$ in \textbf{(P1)}, we use a batch of $K$ i.i.d.\ samples
 \[
 \mathcal{E} = \bigl\{(x_1^{(k)}, x_2^{(k)})\bigr\}_{k \in [K]},
 \quad
@@ -393,7 +393,7 @@ h_\theta(x_1, x_2) \,\coloneqq\, V g_\theta^{(L)}\!\bigl(\min(x_1, x_2), \max(x_
 \end{align*}
 \end{lemma}
 
-For \textbf{(P2)}, despite its different mathematical origins in the large deviation theory, the same constrained loop applies with two substitutions: for a given pattern graph $H$ and $0<q<1$ with target $r \neq q$, the edge-density solver is replaced by the $H$-density solver targeting $t(H, f_\theta[c]) = r^{e(H)}$, and the objective is replaced by the Monte Carlo estimate of $h_q(f_\theta[c_\theta])=\int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))dxdy$, obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. The sigmoid output ensures the KL objective is differentiable in $\theta$, and an analogous implicit-differentiation formula applies to the $H$-density constraint.
+For \textbf{(P2)}, despite its different mathematical origins in large deviation theory, the same constrained loop applies with two substitutions: for a given pattern graph $H$ and $0<q<1$ with target $r \neq q$, the edge-density solver is replaced by the $H$-density solver targeting $t(H, f_\theta[c]) = r^{e(H)}$, and the objective is replaced by the Monte Carlo estimate of $h_q(f_\theta[c_\theta])=\int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))dxdy$, obtained by averaging $\mathrm{KL}(\mathrm{Bern}(f_\theta[c_\theta](x,y))\,\|\,\mathrm{Bern}(q))$ over a fresh batch of pairs $(x,y)$. The sigmoid output ensures the KL objective is differentiable in $\theta$, and an analogous implicit-differentiation formula applies to the $H$-density constraint.
 
 \begin{figure}[t]
   \centering
@@ -452,7 +452,7 @@ We evaluate our framework on instances of \textbf{(P1)} and \textbf{(P2)} drawn 
 
 We visualise graphons as Viridis heatmaps (blue $=0$, yellow $=1$); see \Cref{fig:triangledensity-minimisers}. Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
-\paragraph{Constrained homomorphism-density minimisation}
+\paragraph{Constrained homomorphism-density minimisation.}
 We apply our method to \textbf{(P1)} across three families of instances: clique densities ($H = K_n$, fully solved~\citep{razborov2008minimal,reiher2016clique}), odd-cycle densities ($H = C_5, C_7$, partly open), and a systematic sweep over 175 non-bipartite graphs with $v(H) \le 6$. The clique experiments validate the method against known optima; the latter two produce new candidate minimisers and, through the exhaustive sweep, a previously unreported family of extremal structures. We describe each in turn.
 
 
@@ -608,7 +608,7 @@ We analysed the curve $x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$ for each $H$, by in
 
 Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$, the minimisers for cliques and $C_5$ are known to be complete $k$-partite~\citep{reiher2016clique,bennett2020minimizing}, and we conjecture the same for $C_7$; in all three cases our method recovers this structure (\Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}). This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
-\paragraph{Variational problem from the large deviation theory}
+\paragraph{Variational problem from large deviation theory.}
 We apply our framework to \textbf{(P2)}, the variational problem of \citet{chatterjee2011large}. 
 We test $(q, r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$ for upper-tail variational problems with $H \in \{K_3, C_4, C_5, K_{1,3}\}$, and $(q, r) \in \{0.7, 0.8, 0.9\} \times \{0.05, 0.1\}$ for lower-tail variational problems with $H = K_3$; in all these regimes the structure of optimisers is, to our knowledge, not fully understood. As a reference for $H = K_3$, we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q(W_{\mathrm{ours}})$ at our learnt graphon $W_{\mathrm{ours}}$ in the upper-tail regime.
 Qualitatively, the learnt graphons consistently find two-block structures for all graphs and in both upper- and lower-tail regimes.
@@ -656,7 +656,7 @@ Quantitatively, in the upper-tail problems for $H = K_3$, our method consistentl
   }
 \end{table}
 
-\paragraph{Ablation study, baselines, and multi-task variant}
+\paragraph{Ablation study, baselines, and multi-task variant.}
 To verify that each architectural component is necessary and that the neural approach outperforms simpler alternatives, we ran an ablation study and four non-neural baselines on triangle-density minimisation under $t(K_2, W) = 7/9$. Removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. The four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. To explore whether a single model can handle multiple problem instances simultaneously, we also trained a FiLM-conditioned multi-task variant over $p \in [1/2, 2/3]$ for $H = K_3$, which demonstrates that the architecture extends naturally to this setting. Full details are deferred to \Cref{sec:ablation}.
 
 
@@ -761,7 +761,7 @@ In all experiments, we used a network of width $d=256$ and depth $L=6$, which wa
 The activation function $\phi$ was either $\sin$ or the GELU nonlinearity; we did not observe a consistent advantage of one over the other.
 For the reported main experiments we used the increasing input-encoding scale $s(\ell)=\ell$; the alternative schedule $s(\ell)=2^{\ell-1}$ was used only in pilot runs. The constant-scale schedules in the ablation study are described in \Cref{sec:ablation}.
 
-The set $\mathcal{S}$ in Equation~\Cref{eqn:estimator} was chosen according to the graph. For example, for complete graphs we used $\mathcal{S}=\{\mathrm{id}\}$, since any permutation yields the same summand.
+The set $\mathcal{S}$ in \Cref{eqn:estimator} was chosen according to the graph. For example, for complete graphs we used $\mathcal{S}=\{\mathrm{id}\}$, since any permutation yields the same summand.
 For cycles, we used a set of representatives for the cosets $S_{V(C_k)} / \text{Aut}(C_k)$, where $\text{Aut}(C_k)$ is the automorphism group of $C_k$, which gives $|\mathcal{S}| = (k-1)! / 2$.
 For the other graphs, we used the set $\mathcal{S}=\{\pi^k : k \in \mathbb{N}\}$ generated by some permutation $\pi \in S_{V(G)}$, where $\pi$ is chosen so that the set
 \[
