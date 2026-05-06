@@ -658,7 +658,7 @@ For the lower-tail problems, we obtain a qualitatively different structure of ne
 Quantitatively, in the upper-tail problems for $H = K_3$, our method consistently finds graphons with lower relative entropy than the one-clique-on-uniform construction $W_{\mathrm{LZ}}$, showing that the latter is suboptimal in these regimes; see \Cref{sec:addexperiments} for details.
 
 \noindent{\bf Ablation study, baselines, and multi-task variant.}\ 
-To verify that each architectural component is necessary and that the neural approach outperforms simpler alternatives, we ran an ablation study and four non-neural baselines on triangle-density minimisation under $t(K_2, W) = 7/9$. Removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. The four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. To explore whether a single model can handle multiple problem instances simultaneously, we also trained a FiLM-conditioned multi-task variant over $p \in [1/2, 2/3]$ for $H = K_3$, which demonstrates that the architecture extends naturally to this setting. Full details are deferred to \Cref{sec:ablation}.
+To verify that each architectural component is necessary and that the neural approach outperforms simpler alternatives, we ran an ablation study and four non-neural baselines on triangle-density minimisation under $t(K_2, W) = 7/9$. Removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. The four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. To explore whether a single model can handle multiple problem instances simultaneously, we also trained a FiLM-conditioned multi-task variant over $p \in [1/2, 2/3]$ for $H = K_3$ \citep{perez2018film}, which demonstrates that the architecture extends naturally to this setting. Full details are deferred to \Cref{sec:ablation}.
 
 \bibliography{references}
 \bibliographystyle{plainnat}
@@ -910,12 +910,12 @@ For instance, $f_7$ is given as follows.
 We consider the problem of minimising the homomorphism density of the Petersen graph under the edge-density constraint $t(K_2, W) = p$ for various values of $p$.
 For minimising the Petersen homomorphism density, there are (to the best of our knowledge) no known results or conjectures, likely due to the graph size and the lack of an obvious extremal structure.
 We applied our method for $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$; the learnt graphons are shown in \Cref{fig:petersenminimisation}.
-As there is no known conjectured optimum, we compare our results to the best Petersen-graph density obtained over all hand-crafted graphons $W_1,\ldots,W_4$ and the constant graphon defined in \Cref{sec:handcraftedgraphons}.
-We estimated the Petersen homomorphism density for each learnt graphon using a Monte Carlo estimator; the ``Ours (Estimated)'' column in \Cref{tab:petersenresult2} reports 95\% bootstrap confidence intervals $[\ell, u]$, since discretisation-based computation is infeasible for large graphs at high resolution.
+As there is no known conjectured optimum, we compare our results to those obtained by a hand-crafted graphon motivated  from~\citet{razborov2008minimal}; see \Cref{sec:handcraftedgraphons} for details.
+%We estimated the homomorphism density of the Petersen graph for each learnt graphon using a Monte Carlo estimator with 95\% bootstrap confidence intervals, as discretisation-based computation is infeasible for large graphs and high-resolution grids.
 
 \begin{table}[t]
     \centering
-  \caption{Homomorphism densities of the Petersen graph under the edge-density constraint $t(K_2, W)=p$, found by our method and the hand-crafted constructions. ``Ours (Estimated)'' is a 95\% bootstrap confidence interval $[\ell, u]$.\label{tab:petersenresult2}}
+  \caption{Homomorphism densities of the Petersen graph in graphons under the edge-density constraint $t(K_2, W)=p$, which are found by our method and hand-crafted construction. \label{tab:petersenresult2}}
   {\small
     \begin{tabular}{cll}
          \toprule
@@ -940,40 +940,40 @@ We estimated the Petersen homomorphism density for each learnt graphon using a M
 
 \begin{figure}[t]
   \centering
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.3\textwidth}
     \centering
-    \includegraphics[width=\twoimagewidth]{new_figures/pet_50.png}
+    \includegraphics[width=\textwidth]{new_figures/pet_50.png}
     \caption{Found graphon, $p=1/2$.}
     \label{fig:opt-pet-50}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.3\textwidth}
     \centering
-    \includegraphics[width=\twoimagewidth]{new_figures/pet_67.png}
+    \includegraphics[width=\textwidth]{new_figures/pet_67.png}
     \caption{Found graphon, $p=2/3$.}
     \label{fig:opt-pet-67}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.3\textwidth}
     \centering
-    \includegraphics[width=\twoimagewidth]{new_figures/pet_80.png}
+    \includegraphics[width=\textwidth]{new_figures/pet_80.png}
     \caption{Found graphon, $p=4/5$.}
     \label{fig:opt-pet-80}
   \end{subfigure}
   
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.3\textwidth}
     \centering
-    \includegraphics[width=\twoimagewidth]{new_figures/pet_57.png}
+    \includegraphics[width=\textwidth]{new_figures/pet_57.png}
     \caption{Found graphon, $p=4/7$.}
     \label{fig:opt-pet-57}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.3\textwidth}
     \centering
-    \includegraphics[width=\twoimagewidth]{new_figures/pet_62.png}
+    \includegraphics[width=\textwidth]{new_figures/pet_62.png}
     \caption{Found graphon, $p=5/8$.}
     \label{fig:opt-pet-62}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.3\textwidth}
     \centering
-    \includegraphics[width=\twoimagewidth]{new_figures/pet_71.png}
+    \includegraphics[width=\textwidth]{new_figures/pet_71.png}
     \caption{Found graphon, $p=5/7$.}
     \label{fig:opt-pet-71}
   \end{subfigure}
@@ -981,6 +981,185 @@ We estimated the Petersen homomorphism density for each learnt graphon using a M
   \label{fig:petersenminimisation}
 \end{figure}
 
+We also report the complete results of the variational problem discussed in \Cref{sec:experiments}, see \Cref{fig:k3upperdeviation,fig:k3lowerdeviation,fig:c4upperdeviation,fig:c4lowerdeviation} for the found graphons.
+For the quantitative comparison, the one-clique-on-uniform construction $W_{LZ}$ only applies to the upper tail problem for 2-regular graphs, see \Cref{tab:upperdeviationcycle} for the comparison between the relative entropies of the found graphons and the one-clique-on-uniform construction under constraints $t(C_k, W)\ge r^k$, and \Cref{tab:lowerdeviationcycle} for the upper tail problem for $K_{1,3}$ and the lower tail problem for $K_3$. 
+
+
+\begin{table}[t]
+  \centering
+  \captionof{table}{Relative-entropy $h_q(W)$ at our learnt graphon ($W_{\mathrm{ours}}$) and at the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ of \citet{lubetzky2015replica}, for \textbf{(P2)} with $H = C_4, C_5$ on $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$. Lower is better.\label{tab:upperdeviationcycle}}
+  {\small
+  \begin{tabular}{lcccccc}
+    \toprule
+    & \multicolumn{3}{c}{$q=0.05$} & \multicolumn{3}{c}{$q=0.10$} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+    $r$ & $0.4$ & $0.5$ & $0.6$ & $0.4$ & $0.5$ & $0.6$ \\
+    \midrule
+    $h_q(W_{\mathrm{LZ}})$, $H=C_4$    & $0.556049$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510825$ & $0.750684$ \\
+    $h_q(W_{\mathrm{ours}})$, $H=C_4$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
+    \midrule
+    $h_q(W_{\mathrm{LZ}})$, $H=C_5$    & $0.556049$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510825$ & $0.750684$ \\
+    $h_q(W_{\mathrm{ours}})$, $H=C_5$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k3_5_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k3_5_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k3_5_60.png}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k3_10_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_k3_10_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k3_10_60.png}
+  \end{subfigure}
+  \caption{Found graphon for upper tail variational problems for $K_3$, for $q = 0.05$ (top) and $q = 0.1$ (bottom) and $r = 0.4, 0.5, 0.6$ (left to right).}
+  \label{fig:k3upperdeviation}
+\end{figure}
+
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/lowerdeviation_k3_70_5.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/lowerdeviation_k3_80_5.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/lowerdeviation_k3_90_5.png}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/lowerdeviation_k3_70_10.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/lowerdeviation_k3_80_10.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/lowerdeviation_k3_90_10.png}
+  \end{subfigure}
+  \caption{Found graphon for lower tail variational problems for $K_3$, for $r = 0.05$ (top) and $r = 0.1$ (bottom) and $q = 0.7, 0.8, 0.9$ (left to right).}
+  \label{fig:k3lowerdeviation}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c4_5_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c4_5_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c4_5_60.png}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c4_10_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c4_10_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c4_10_60.png}
+  \end{subfigure}
+  \caption{Found graphon for upper tail variational problems for $C_4$, for $q = 0.05$ (top) and $q = 0.1$ (bottom) and $r = 0.4, 0.5, 0.6$ (left to right).}
+  \label{fig:c4upperdeviation}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_c5_5_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_c5_5_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_c5_5_60.png}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c5_10_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c5_10_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_c5_10_60.png}
+  \end{subfigure}
+  \caption{Found graphon for upper tail variational problems for $C_5$, for $q = 0.05$ (top) and $q = 0.1$ (bottom) and $r = 0.4, 0.5, 0.6$ (left to right).}
+  \label{fig:c5upperdeviation}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k13_5_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k13_5_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    %\includegraphics[width=\textwidth]{new_figures/upperdeviation_k13_5_60.png}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_k13_10_40.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_k13_10_50.png}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/upperdeviation_k13_10_60.png}
+  \end{subfigure}
+  \caption{Found graphon for upper tail variational problems for $K_{1,3}$, for $q = 0.05$ (top) and $q = 0.1$ (bottom) and $r = 0.4, 0.5, 0.6$ (left to right).}
+  \label{fig:k13upperdeviation}
+\end{figure}
 
 
 \section{Details of Hand-crafted Graphons}
@@ -1003,8 +1182,8 @@ We set $|X_1| = \cdots = |X_k| = x$ and $|X_{k+1}| = 1 - kx$, and choose $x$ to 
 \]
 This quadratic has two solutions: one with $x > 1 - kx$ (denoted $W_1$) and one with $x < 1 - kx$ (denoted $W_2$). The first corresponds to the optimum for $K_3$ density minimisation.
 
-The next two graphons are constructed by modifying the complete $(k+1)$-partite structure.
-We partition the interval $[0,1]$ into $k+1$ groups $X_1, \ldots, X_{k+1}$ with $|X_1| = \cdots = |X_{k+1}| = 1/(k+1)$, and define
+The second instance is constructed by deleting edges from the complete $(k+1)$-partite graphon.
+We partition the interval $[0,1]$ into $k$ groups $X_1, \ldots, X_k, X_{k+1}$ with $|X_1| = \cdots = |X_k| = |X_{k+1}| = 1/(k+1)$, and define
 \begin{align*}
   W_3(x_1, x_2) &= \begin{cases}
     \frac{(k+1)p}{k} & \text{if } x_1 \in X_m,\ x_2 \in X_n,\ m \neq n
@@ -1062,7 +1241,7 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 
 \begin{table}[t]
   \centering
-  \caption{$K_3$ densities in graphons found by our method and ablations for $K_3$ density minimisation under $t(K_2, W)=7/9$.\label{tab:ablationstudy}}
+  \caption{$K_3$ densities in graphons found by our method and ablations for $K_3$ density minimisation under $t(K_2, W)=7/9$.  \label{tab:ablationstudy}}
   {\small
   \begin{tabular}{ll}
   \toprule
