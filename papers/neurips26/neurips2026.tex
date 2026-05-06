@@ -612,9 +612,11 @@ Our experiments also suggest a novel family of extremal graphon structures. When
 We apply our framework to \textbf{(P2)}, the variational problem of \citet{chatterjee2011large}. 
 We test $(q, r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$ for upper-tail variational problems with $H \in \{K_3, C_4, C_5, K_{1,3}\}$, and $(q, r) \in \{0.7, 0.8, 0.9\} \times \{0.05, 0.1\}$ for lower-tail variational problems with $H = K_3$; in all these regimes the structure of optimisers is, to our knowledge, not fully understood. As a reference for $H = K_3$, we use the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ proposed by \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q(W_{\mathrm{ours}})$ at our learnt graphon $W_{\mathrm{ours}}$ in the upper-tail regime.
 Qualitatively, the learnt graphons consistently find two-block structures for all graphs and in both upper- and lower-tail regimes.
-For the upper-tail problems, the 2-regular graphs $K_3$, $C_4$, $C_5$ share close edge densities and block sizes in their respective learnt optimisers, suggesting the same optimal graphon, while $K_{1,3}$ shows a qualitatively different structure with a much smaller block size; see \Cref{fig:upperdeviation} for the learnt graphons with $q=0.1, r=0.5$ and \Cref{fig:upperdeviation-all} for all upper-tail regimes.
+For the upper-tail problems, the 2-regular graphs $K_3$, $C_4$, $C_5$ share close edge densities and block sizes in their respective learnt optimisers, suggesting the same optimal graphon, while $K_{1,3}$ shows a qualitatively different structure with a much smaller block size; see \Cref{fig:upperdeviation} for the learnt graphons with $q=0.1, r=0.5$ and \Cref{sec:addexperiments} for all upper-tail regimes.
 For the lower-tail problems, we obtain a qualitatively different structure of nearly-bipartite graphons.
-Quantitatively, for $H = K_3$ our method consistently finds graphons with lower relative entropy than the one-clique-on-uniform construction $W_{\mathrm{LZ}}$, showing that the latter is suboptimal in these regimes; see \Cref{tab:largedeviation} for details.
+Quantitatively, in the upper tail problems for $H = K_3$ our method consistently finds graphons with lower relative entropy than the one-clique-on-uniform construction $W_{\mathrm{LZ}}$, showing that the latter is suboptimal in these regimes; see \Cref{sec:addexperiments} for details.
+
+\tk{I modified the text to say 'in the upper tail problems for $H = K_3$' instead of 'for $H = K_3$', since the construction by LZ only applies to the upper tail. Also, the `suggesting the same optimal graphon' is a misleading argument, as while the learnt graphons are similar, the numerical optimisation found that they are in fact not the same, just very close.}
 
 \begin{figure}
   \centering
@@ -635,7 +637,7 @@ Quantitatively, for $H = K_3$ our method consistently finds graphons with lower 
     \includegraphics[width=\linewidth]{new_figures/upperdeviation_k13_10_50.png}
     \label{fig:upperdeviation-k13-10-50}
   \end{subfigure}
-  \caption{Learnt graphons for upper-tail variational problems with $q=0.1, r=0.5$ for $H = K_3, C_4, C_5, K_{1,3}$ (left to right). \TODO{To be replaced with version corresponding to other figures. }}
+  \caption{Learnt graphons for upper-tail variational problems with $q=0.1, r=0.5$ for $H = K_3, C_4, C_5, K_{1,3}$ (left to right).}
   \label{fig:upperdeviation}
 \end{figure}
 
@@ -958,6 +960,7 @@ As there is no known conjectured optimum, we compare our results to those obtain
   \caption{Graphons found for the Petersen graph density minimisation under the edge-density constraint $t(K_2, W)=p$.}
   \label{fig:petersenminimisation}
 \end{figure}
+
 
 
 \section{Details of Hand-crafted Graphons}
