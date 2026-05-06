@@ -608,9 +608,7 @@ For $p=5/7$, the learnt graphon (\Cref{fig:triangledensity-minimisers}f) does no
   {\small
   \begin{tabular}{lcccccc}
     \toprule
-    & \multicolumn{3}{c}{$q=0.05$} & \multicolumn{3}{c}{$q=0.10$} \\
-    \cmidrule(lr){2-4}\cmidrule(lr){5-7}
-    $r$ & $0.4$ & $0.5$ & $0.6$ & $0.4$ & $0.5$ & $0.6$ \\
+    $(q,r)$ & $(0.05,0.4)$ & $(0.05,0.5)$ & $(0.05,0.6)$ & $(0.10,0.4)$ & $(0.10,0.5)$ & $(0.10,0.6)$ \\
     \midrule
     $h_q(W_{\mathrm{LZ}})$    & $0.556057$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510826$ & $0.750684$ \\
     $h_q(W_{\mathrm{ours}})$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
@@ -686,15 +684,17 @@ In contrast, as demonstrated by visualisations of learnt graphons, our method of
 
 From the perspective of implicit neural representations, the work most closely related to ours is \citet{mundinger2025neural}, which applies implicit neural representations to the Hadwiger--Nelson problem: colouring the plane $\mathbb{R}^2$ with the minimum number of colours such that no two points at unit distance share a colour. Analogously to our approach, they represent a colouring by a neural network and recover a 6-colouring by minimising a monochromatic edge-density objective. With human post-processing, they construct two new 6-colourings that expand the known range of realisable distances from $[0.415, 0.447]$ to $[0.354, 0.657]$. In contrast, we focus on asymptotic extremal problems in graph theory that can be phrased as constrained optimisation over graphons. Moreover, our approach integrates problem structure into the learning procedure, including an architectural bias toward discontinuous, step-like solutions, explicit constraint enforcement via an embedded solver, and variance reduction in homomorphism density estimation, with the aim of supporting systematic conjecture generation and exploration across diverse extremal problems in graph theory.
 
-\section{Societal impacts and limitations}
+\section{Societal Impacts and Limitations}
 
-Our work presents a tools for finding structured candidate optima of graphon variational problems, which are of interest in extremal graph theory and the large deviation theory of random graphs. 
-Our methods allows highly interpretable candidate optima compared to baselines, which can provides the insights for structure of optima and thus support mathematical conjecture generation and discovery.
-Our work does not include any major negative societal impacts.
+Our work presents a method for finding structured candidate optima of graphon variational problems, which is of interest to mathematicians working on extremal graph theory and the large deviation theory of dense random graphs.
+Compared with existing baselines, our method produces candidate optima that are markedly more interpretable, offering insight into the structure of optimal graphons and thereby supporting mathematical conjecture generation and discovery.
+We do not foresee any major negative societal impacts arising from this work.
 
-While our method is effective across a range of graphon variational problems, it is limited to graphon optimisation problems, therefore our method can not be applied to combinatorial problems involving sparse graphs.
-While our method suggests highly interpretable candidate optima, it does not provide rigorous guarantees on optimality, and should be used in conjunction with rigorous methods such as flag algebras to verify optimality and to provide certificates.
-We utilised either discretisation based computation or Monte-Carlo estimation for computing homomorphism densities when evaluating our methods, both of them can be computationally expensive for large motifs, for instance, discretisation based computation is infeasible for Petersen graph cliques due to high-exponent scaling of einsum used in computation, and Monte Carlo estimation can be prone to high relative error when the motif density is very low.
+Our method has several limitations.
+First, it is tailored to graphon optimisation and therefore does not apply to combinatorial problems on sparse graphs, for which the graphon limit is degenerate.
+Second, although the candidate optima it produces are highly interpretable, the method itself does not provide rigorous guarantees of optimality; it should therefore be used in conjunction with rigorous lower-bound techniques such as flag algebras~\citep{razborov2007flag,falgas2013applications} to verify optimality and provide certificates.
+Third, evaluating our method requires estimating homomorphism densities, for which we use either discretisation-based computation or Monte Carlo estimation; both can be computationally expensive for large motifs.
+Discretisation-based computation of $t(H, W)$ on an $M \times M$ grid scales as $O(M^{v(H)})$, which becomes infeasible for motifs with many vertices, such as the Petersen graph; Monte Carlo estimation, while less sensitive to $v(H)$, can suffer from large relative error when the motif density is very small.
 
 % Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
 % this work presents a tool for accelerating mathematical discovery in
