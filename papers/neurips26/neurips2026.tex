@@ -659,11 +659,6 @@ Quantitatively, in the upper-tail problems for $H = K_3$, our method consistentl
 \paragraph{Ablation study, baselines, and multi-task variant}
 To verify that each architectural component is necessary and that the neural approach outperforms simpler alternatives, we ran an ablation study and four non-neural baselines on triangle-density minimisation under $t(K_2, W) = 7/9$. Removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. The four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. To explore whether a single model can handle multiple problem instances simultaneously, we also trained a FiLM-conditioned multi-task variant over $p \in [1/2, 2/3]$ for $H = K_3$, which demonstrates that the architecture extends naturally to this setting. Full details are deferred to \Cref{sec:ablation}.
 
-
-% Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
-% this work presents a tool for accelerating mathematical discovery in
-% extremal graph theory, with no major foreseeable negative societal impacts.
-
 \bibliography{references}
 \bibliographystyle{plainnat}
 
@@ -689,6 +684,20 @@ Because many combinatorial objects are highly symmetric, solutions produced by s
 In contrast, as demonstrated by visualisations of learnt graphons, our method often captures structure that is amenable to inspection and interpretation.
 
 From the perspective of implicit neural representations, the work most closely related to ours is \citet{mundinger2025neural}, which applies implicit neural representations to the Hadwiger--Nelson problem: colouring the plane $\mathbb{R}^2$ with the minimum number of colours such that no two points at unit distance share a colour. Analogously to our approach, they represent a colouring by a neural network and recover a 6-colouring by minimising a monochromatic edge-density objective. With human post-processing, they construct two new 6-colourings that expand the known range of realisable distances from $[0.415, 0.447]$ to $[0.354, 0.657]$. In contrast, we focus on asymptotic extremal problems in graph theory that can be phrased as constrained optimisation over graphons. Moreover, our approach integrates problem structure into the learning procedure, including an architectural bias toward discontinuous, step-like solutions, explicit constraint enforcement via an embedded solver, and variance reduction in homomorphism density estimation, with the aim of supporting systematic conjecture generation and exploration across diverse extremal problems in graph theory.
+
+\section{Societal impacts and limitations}
+
+Our work presents a tools for finding structured candidate optima of graphon variational problems, which are of interest in extremal graph theory and the large deviation theory of random graphs. 
+Our methods allows highly interpretable candidate optima compared to baselines, which can provides the insights for structure of optima and thus support mathematical conjecture generation and discovery.
+Our work does not include any major negative societal impacts.
+
+While our method is effective across a range of graphon variational problems, it is limited to graphon optimisation problems, therefore our method can not be applied to combinatorial problems involving sparse graphs.
+While our method suggests highly interpretable candidate optima, it does not provide rigorous guarantees on optimality, and should be used in conjunction with rigorous methods such as flag algebras to verify optimality and to provide certificates.
+We utilised either discretisation based computation or Monte-Carlo estimation for computing homomorphism densities when evaluating our methods, both of them can be computationally expensive for large motifs, for instance, discretisation based computation is infeasible for Petersen graph cliques due to high-exponent scaling of einsum used in computation, and Monte Carlo estimation can be prone to high relative error when the motif density is very low.
+
+% Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
+% this work presents a tool for accelerating mathematical discovery in
+% extremal graph theory, with no major foreseeable negative societal impacts.
 
 \section{Unbiasedness of Our Density Estimator and Proof of the Implicit-Differentiation Lemma}
 
@@ -1184,7 +1193,9 @@ While limited to a single graph, this experiment indicates that shared training 
   \label{fig:parameterised_graphons}
 \end{figure}
 
+\newpage
 
+\input{checklist.tex}
 \end{document}
 
 % This document was modified from the file originally made available by
