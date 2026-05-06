@@ -274,7 +274,7 @@ Let $H$ be a graph with vertex set $[v(H)]$. By~\eqref{eqn:homomorphismdensitygr
   \prod_{\{i, j\} \in E(H)}
   f_\theta[c]\bigl(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\bigr).
 \end{equation}
-The estimator is unbiased for any choice of $\mathcal{S}$ (Lemma~\ref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
+The estimator is unbiased for any choice of $\mathcal{S}$ (\Cref{lem:unbiased}); the choice of $\mathcal{S}$ controls variance and computational cost.
 When $\mathcal{S} = \{\mathrm{id}\}$, our estimator in \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples.
 Different permutations also induce repeated evaluations of the network $f_\theta[c]$ on the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching the evaluations reduces the number of network evaluations from $N \cdot |\mathcal{S}| \cdot e(H)$ to $N \cdot C \cdot e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
 
@@ -523,8 +523,8 @@ Again, its permutations $W_{p,\phi}$ by measure-preserving $\phi$ on $[0,1]$ are
 the $W_{p,\phi}$ do not exhaust all optima.
 
 We considered $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$. For the three cases with $p=1-1/k$ ($p\in\{1/2,2/3,4/5\}$), our method produced near-optimal graphons (top row of \Cref{fig:triangledensity-minimisers}) within $0.1\%$ of the theoretical optima, closely matching the complete $k$-partite graphons $W_k$; among the equivalent measure-preserving permutations, our method consistently converged to these simpler representatives.
-For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (Figs.~\ref{fig:triangledensity-minimisers}d and \ref{fig:triangledensity-minimisers}e) capture the core structure of the known optimal $W_p$.
-For $p=5/7$, the learnt graphon (Fig.~\ref{fig:triangledensity-minimisers}f) does not match $W_p$, but its bipartite middle-block structure matches the characterisation of all optimal graphons in~\citep{pikhurko2017asymptotic}.
+For $p\in\{4/7,5/8\}$, which satisfy $1-1/k<p<1-1/(k+1)$, the learnt graphons (\Cref{fig:triangledensity-minimisers}d and~\Cref{fig:triangledensity-minimisers}e) capture the core structure of the known optimal $W_p$.
+For $p=5/7$, the learnt graphon (\Cref{fig:triangledensity-minimisers}f) does not match $W_p$, but its bipartite middle-block structure matches the characterisation of all optimal graphons in~\citep{pikhurko2017asymptotic}.
 
 \begin{figure}[t]
   \centering
@@ -683,9 +683,9 @@ We view our method as \emph{complementary} to flag algebras rather than a replac
 
 For fixed values of $n$ (i.e., without taking the limit in \Cref{eqn:extremalproblem:generalisedTuran} or related formulations), one may instead attempt to solve the discrete optimisation problem directly. A classical approach is local (e.g., Tabu) search, which remains useful in combination with reinforcement learning; see, e.g.,~\citet{parczyk2025new,mehrabian2024finding}.
 As a direct reinforcement-learning approach, \citet{mehrabian2024finding} used {\sc AlphaZero} to find the maximum number of edges in an $n$-vertex graph with no copies of $K_3$ and $C_4$.
-Recently, the so-called \emph{deep cross entropy method} was used by~\citet{wagner2021constructions} for analysing discrete problems in combinatorics. It iteratively trains a neural network to learn a policy that promotes the generation of high-quality examples, which succeeded in disproving conjectures regarding the eigenvalue of the adjacency matrix and the matching number.
+The so-called \emph{deep cross entropy method} was used by~\citet{wagner2021constructions} for analysing discrete problems in combinatorics. It iteratively trains a neural network to learn a policy that promotes the generation of high-quality examples, which succeeded in disproving conjectures regarding the eigenvalue of the adjacency matrix and the matching number.
 For discrete objectives, these approaches can be more versatile than our method because they can optimise non-differentiable quantities (e.g., the matching number). In contrast, they operate at a fixed graph size, whereas our method targets asymptotic problems in the dense-graph limit.
-Finally, {\sc PatternBoost}~\citep{charton2024patternboost} takes a hybrid approach that combines local search with reinforcement learning; one illustrative example is generating lower-bound examples related to Mantel's theorem by solving finite-$n$ instances of \Cref{eqn:extremalproblem:generalisedTuran} for $H=K_3$ (for small $n$) up to edge density $p \le 1/2$.
+Finally, {\sc PatternBoost}~\citep{charton2024patternboost} takes a hybrid approach that combines local search with a learned generative model; one illustrative example is generating lower-bound examples related to Mantel's theorem by solving finite-$n$ instances of \Cref{eqn:extremalproblem:generalisedTuran} for $H=K_3$ (for small $n$) up to edge density $p \le 1/2$.
 Because many combinatorial objects are highly symmetric, solutions produced by such discrete approaches can be difficult to interpret or distil into human-understandable structure. 
 In contrast, as demonstrated by visualisations of learnt graphons, our method often captures structure that is amenable to inspection and interpretation.
 
@@ -717,7 +717,19 @@ We compute the claimed equality as follows:
 \end{align*}
 \end{proof}
 
-\begin{proof}[Proof of Lemma~\ref{lem:implicitdifferentiation}]
+\begin{lemma}[Restatement of \Cref{lem:implicitdifferentiation}]
+For all $\mathbf{x} \in [0,1]^2$,
+\begin{align*}
+\nabla_\theta\, f_\theta[c_\theta](\mathbf{x})
+\,&=\, \frac{\partial f_\theta[c](\mathbf{x})}{\partial \theta}\bigg|_{c = c_\theta}
+\,-\, \mathit{sm}'\bigl(h_\theta(\mathbf{x}) + c_\theta\bigr)
+\sum_{\mathbf{y} \in \mathcal{E}} w_\theta(\mathbf{y})\, \nabla_\theta h_\theta(\mathbf{y}),
+\\
+\text{where }
+w_\theta(\mathbf{y}) \,&\coloneqq\, \frac{\mathit{sm}'(h_\theta(\mathbf{y}) + c_\theta)}{\sum_{\mathbf{z} \in \mathcal{E}} \mathit{sm}'(h_\theta(\mathbf{z}) + c_\theta)}.
+\end{align*}
+\end{lemma}
+\begin{proof}[Proof]
 Let $\mathbf{x} \in [0,1]^2$. Note that
 \begin{align*}
     \nabla_\theta\;f_\theta[c_\theta](\mathbf{x}) 
@@ -760,13 +772,13 @@ The execution time depends on the size of the graph, from 30 minutes for a trian
 
 In all experiments, we used a network of width $d=256$ and depth $L=6$, which was sufficient to represent sharp boundaries and structural properties.
 The activation function $\phi$ was either $\sin$ or the GELU nonlinearity; we did not observe a consistent advantage of one over the other.
-For the reported main experiments we used the increasing input-encoding scale $s(\ell)=\ell$; the alternative schedule $s(\ell)=2^{\ell-1}$ was used only in pilot runs. The constant-scale schedules in the ablation study are described in \Cref{sec:ablation}.
+For the reported main experiments, we used the increasing input-encoding scale $s(\ell)=\ell$; the alternative schedule $s(\ell)=2^{\ell-1}$ was used only in pilot runs. The constant-scale schedules in the ablation study are described in \Cref{sec:ablation}.
 
 The set $\mathcal{S}$ in \Cref{eqn:estimator} was chosen according to the graph. For example, for complete graphs we used $\mathcal{S}=\{\mathrm{id}\}$, since any permutation yields the same summand.
 For cycles, we used a set of representatives for the cosets $S_{V(C_k)} / \text{Aut}(C_k)$, where $\text{Aut}(C_k)$ is the automorphism group of $C_k$, which gives $|\mathcal{S}| = (k-1)! / 2$.
-For the other graphs, we used the set $\mathcal{S}=\{\pi^k : k \in \mathbb{N}\}$ generated by some permutation $\pi \in S_{V(G)}$, where $\pi$ is chosen so that the set
+For the other graphs, we used the set $\mathcal{S}=\{\pi^j : j \in \mathbb{N}\}$ generated by some permutation $\pi \in S_{V(G)}$, where $\pi$ is chosen so that the set
 \[
-  \{\{\pi^k(v), \pi^k(w)\} : \{v, w\} \in E(G) \text{ and } k \in \mathbb{N}\}
+  \{\{\pi^j(v), \pi^j(w)\} : \{v, w\} \in E(G) \text{ and } j \in \mathbb{N}\}
 \]
 equals the set of all unordered pairs of distinct vertices $\{\{v, w\} : v, w \in V(G) \text{ and } v \neq w\}$.
 
@@ -791,13 +803,13 @@ The detailed algorithm is described in \Cref{alg:cap}.
     \REQUIRE $p \in (0, 1), y \in \R^N$
     \ENSURE $\frac{1}{N} \sum_{i=1}^N \mathit{sm}(y_i + c^*) \approxeq p$
     \STATE $c_1 \gets \mathit{sm}^{-1}(p) - \frac{1}{N} \sum_{i=1}^N y_i$ \hfill \COMMENT{Initialise with guess}
-    \STATE $D = \max_i \{y_i\} - \min_i \{y_i\}$ \hfill \COMMENT{Compute difference between upper bound and lower bound}
-    \FOR{$t=1, 2, \ldots$}
+    \STATE $D \gets \max_i \{y_i\} - \min_i \{y_i\}$ \hfill \COMMENT{Compute range of $y$ values for clipping}
+    \FOR{$t=1, 2, \ldots, T_{\max}$}
       \STATE $f(c_t) \gets \frac{1}{N} \sum_{i=1}^N \mathit{sm}(y_i + c_t) - p$ 
       \IF{$|f(c_t)| < \epsilon$} 
         \STATE \textbf{break} 
       \ENDIF 
-      \STATE $f'(c_t) = \frac{1}{N} \sum_{i=1}^N \mathit{sm}(y_i + c_t) (1 - \mathit{sm}(y_i + c_t))$
+      \STATE $f'(c_t) \gets \frac{1}{N} \sum_{i=1}^N \mathit{sm}(y_i + c_t) (1 - \mathit{sm}(y_i + c_t))$
       \STATE $c_{t+1} \gets c_t - \mathrm{Clip}_{[-D/t, D/t]}\left(\frac{f(c_t)}{f'(c_t)}\right)$ \hfill \COMMENT{Clipping range $D/t$ shrinks with the iteration index $t$.}
     \ENDFOR
     \STATE \textbf{Return} $c_t$
@@ -809,7 +821,7 @@ When using constant per-layer input encoding scale $s$, we searched over $s(\ell
 For the strength of the regulariser, we searched over $\lambda \in \{0.01, 0.1, 1, 10, 100\}$.
 For the constant learning rate, we searched over the same set of values as the initial learning rates in the main experiments.
 
-When reporting the homomorphism density computed by discretisation, we use $(2^{14} \times 2^{14})$ grid for $K_3, C_5, C_7$ and $(2^{10} \times 2^{10})$ grid for $H_6$, and 64-bit floating point precision. 
+When reporting the homomorphism density computed by discretisation, we use a $(2^{14} \times 2^{14})$ grid for $K_3, C_5, C_7$ and a $(2^{10} \times 2^{10})$ grid for $H_6$, and 64-bit floating point precision.
 
 The code to replicate our experiments is available at \url{https://anonymous.4open.science/r/INR4AsymptoticExtremalGraphTheory-47DB/README.md}.
 
@@ -826,11 +838,11 @@ We then define the graphon by
     \\
     1 & \text{if } x_1 \in X_m,\ x_2 \in Y_n,\ \text{or vice versa}
     \\
-    0 & \text{if } x_1 \in X_m,\ x_2 \in X_m,
+    0 & \text{if } x_1 \in X_m,\ x_2 \in X_m
     \\
     \rho & \text{if } x_1 \in Y_1,\ x_2 \in Y_2\ \text{or vice versa}
     \\
-    0 & \text{if } x_1 \in Y_m,\ x_2 \in Y_m,
+    0 & \text{if } x_1 \in Y_m,\ x_2 \in Y_m
   \end{cases}
 \]
 where $\rho$ is chosen to satisfy the edge-density constraint.
@@ -850,7 +862,7 @@ One can compute the $C_5$ density of this graphon, which can be written as a pol
     {} + &\frac{\rho^3}{2} (k-1) xy^4,
 \end{align*}
 where $(k-1)_r$ is a falling factorial, $(k-1)_r = (k-1) \cdot (k-2) \cdots (k-r)$. 
-With these definitions, the conjectured optimal value is obtained by optimising over $x$, $y$, and $\rho$.
+With these definitions, the conjectured optimal value is obtained by optimising over $x$ and $\rho$ subject to the constraints below (with $y$ determined by $x$ via $(k-1)x + y = 1$).
 The contribution of the $Y_1$--$Y_2$ rectangles to the ordered edge density is $\rho y^2/2$, since the two off-diagonal rectangles have total area $y^2/2$.
 Equivalently, one can compute the conjectured optimum by solving
 \begin{align*}
@@ -889,12 +901,12 @@ For instance, $f_7$ is given as follows.
 We consider the problem of minimising the homomorphism density of the Petersen graph under the edge-density constraint $t(K_2, W) = p$ for various values of $p$.
 For minimising the Petersen homomorphism density, there are (to the best of our knowledge) no known results or conjectures, likely due to the graph size and the lack of an obvious extremal structure.
 We applied our method for $p \in \{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$; the learnt graphons are shown in \Cref{fig:petersenminimisation}.
-As there is no known conjectured optimum, we compare our results to those obtained by a hand-crafted graphon motivated  from~\citet{razborov2008minimal}; see \Cref{sec:handcraftedgraphons} for details.
-%We estimated the homomorphism density of the Petersen graph for each learnt graphon using a Monte Carlo estimator with 95\% bootstrap confidence intervals, as discretisation-based computation is infeasible for large graphs and high-resolution grids.
+As there is no known conjectured optimum, we compare our results to the best Petersen-graph density obtained over all hand-crafted graphons $W_1,\ldots,W_4$ and the constant graphon defined in \Cref{sec:handcraftedgraphons}.
+We estimated the Petersen homomorphism density for each learnt graphon using a Monte Carlo estimator; the ``Ours (Estimated)'' column in \Cref{tab:petersenresult2} reports 95\% bootstrap confidence intervals $[\ell, u]$, since discretisation-based computation is infeasible for large graphs at high resolution.
 
 \begin{table}[t]
     \centering
-  \caption{Homomorphism densities of the Petersen graph in graphons under the edge-density constraint $t(K_2, W)=p$, which are found by our method and hand-crafted construction. \label{tab:petersenresult2}}
+  \caption{Homomorphism densities of the Petersen graph under the edge-density constraint $t(K_2, W)=p$, found by our method and the hand-crafted constructions. ``Ours (Estimated)'' is a 95\% bootstrap confidence interval $[\ell, u]$.\label{tab:petersenresult2}}
   {\small
     \begin{tabular}{cll}
          \toprule
@@ -982,8 +994,8 @@ We set $|X_1| = \cdots = |X_k| = x$ and $|X_{k+1}| = 1 - kx$, and choose $x$ to 
 \]
 This quadratic has two solutions: one with $x > 1 - kx$ (denoted $W_1$) and one with $x < 1 - kx$ (denoted $W_2$). The first corresponds to the optimum for $K_3$ density minimisation.
 
-The second instance is constructed by deleting edges from the complete $(k+1)$-partite graphon.
-We partition the interval $[0,1]$ into $k$ groups $X_1, \ldots, X_k, X_{k+1}$ with $|X_1| = \cdots = |X_k| = |X_{k+1}| = 1/(k+1)$, and define
+The next two graphons are constructed by modifying the complete $(k+1)$-partite structure.
+We partition the interval $[0,1]$ into $k+1$ groups $X_1, \ldots, X_{k+1}$ with $|X_1| = \cdots = |X_{k+1}| = 1/(k+1)$, and define
 \begin{align*}
   W_3(x_1, x_2) &= \begin{cases}
     \frac{(k+1)p}{k} & \text{if } x_1 \in X_m,\ x_2 \in X_n,\ m \neq n
@@ -1041,7 +1053,7 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 
 \begin{table}[t]
   \centering
-  \caption{$K_3$ densities in graphons found by our method and ablations for $K_3$ density minimisation under $t(K_2, W)=7/9$.  \label{tab:ablationstudy}}
+  \caption{$K_3$ densities in graphons found by our method and ablations for $K_3$ density minimisation under $t(K_2, W)=7/9$.\label{tab:ablationstudy}}
   {\small
   \begin{tabular}{ll}
   \toprule
@@ -1109,8 +1121,8 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 
 \paragraph{Non-neural Baselines.}
 On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. 
-Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \cref{tab:ablationstudy}. 
-The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting, see \Cref{fig:baselines} for visualisations of the found graphons.
+Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \Cref{tab:ablationstudy}.
+The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting. See \Cref{fig:baselines} for visualisations of the found graphons.
 
 \begin{figure}
   % five figures
@@ -1140,7 +1152,7 @@ The SBMs with trainable block sizes collapsed to nearly constant graphons, sugge
 \end{figure}
 
 \paragraph{Multi-task Variant.}
-The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we trained a single conditional network jointly over $p \in [1/2, 2/3]$ for $H = K_3$. Concretely, we condition the network on $p$ using FiLM-style feature-wise affine modulation of hidden activations~\citep{perez2018film}. The resulting conditional network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, for $p$ over uniform grid of 100 points in $[1/2, 2/3]$, see \Cref{fig:parameterised_density} for the learnt density curve and its error and \Cref{fig:parameterised_graphons} for the learnt graphons.
+The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we trained a single conditional network jointly over $p \in [1/2, 2/3]$ for $H = K_3$. Concretely, we condition the network on $p$ using FiLM-style feature-wise affine modulation of hidden activations~\citep{perez2018film}. The resulting conditional network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, for $p$ on a uniform grid of 100 points in $[1/2, 2/3]$. See \Cref{fig:parameterised_density} for the learnt density curve and its error, and \Cref{fig:parameterised_graphons} for the learnt graphons.
 While limited to a single graph, this experiment indicates that shared training across related tasks can substantially reduce the per-instance burden of our framework, and we view a fuller multi-task / multi-graph treatment as a natural extension.
 
 \begin{figure}
