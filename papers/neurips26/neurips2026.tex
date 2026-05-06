@@ -46,7 +46,7 @@
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{lemma}{Lemma}[section]
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -612,7 +612,7 @@ For $p=5/7$, the learnt graphon (\Cref{fig:triangledensity-minimisers}f) does no
     \cmidrule(lr){2-4}\cmidrule(lr){5-7}
     $r$ & $0.4$ & $0.5$ & $0.6$ & $0.4$ & $0.5$ & $0.6$ \\
     \midrule
-    $h_q(W_{\mathrm{LZ}})$    & $0.556049$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510825$ & $0.750684$ \\
+    $h_q(W_{\mathrm{LZ}})$    & $0.556057$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510826$ & $0.750684$ \\
     $h_q(W_{\mathrm{ours}})$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
     \bottomrule
   \end{tabular}
@@ -982,12 +982,11 @@ As there is no known conjectured optimum, we compare our results to those obtain
 \end{figure}
 
 We also report the complete results of the variational problem discussed in \Cref{sec:experiments}, see \Cref{fig:k3upperdeviation,fig:k3lowerdeviation,fig:c4upperdeviation,fig:c4lowerdeviation} for the found graphons.
-For the quantitative comparison, the one-clique-on-uniform construction $W_{LZ}$ only applies to the upper tail problem for 2-regular graphs, see \Cref{tab:upperdeviationcycle} for the comparison between the relative entropies of the found graphons and the one-clique-on-uniform construction under constraints $t(C_k, W)\ge r^k$, and \Cref{tab:lowerdeviationcycle} for the upper tail problem for $K_{1,3}$ and the lower tail problem for $K_3$. 
-
+For the quantitative comparison, the one-clique-on-uniform construction $W_{LZ}$ only applies to the upper tail problem for 2-regular graphs, see \Cref{tab:upperdeviationcycle} for the comparison between the relative entropies of the found graphons and the one-clique-on-uniform construction under constraints $t(C_k, W)\ge r^k$, and \Cref{tab:lowerdeviation} for the upper tail problem for $K_{1,3}$ and the lower tail problem for $K_3$. 
 
 \begin{table}[t]
   \centering
-  \captionof{table}{Relative-entropy $h_q(W)$ at our learnt graphon ($W_{\mathrm{ours}}$) and at the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ of \citet{lubetzky2015replica}, for \textbf{(P2)} with $H = C_4, C_5$ on $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$. Lower is better.\label{tab:upperdeviationcycle}}
+  \captionof{table}{Relative-entropy $h_q(W)$ at our learnt graphon ($W_{\mathrm{ours}}$) and at the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ of \citet{lubetzky2015replica}, for \textbf{(P2)} with $H = C_4, C_5, K_{1,3}$ on $(q,r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$. Lower is better.\label{tab:upperdeviationcycle}}
   {\small
   \begin{tabular}{lcccccc}
     \toprule
@@ -995,15 +994,35 @@ For the quantitative comparison, the one-clique-on-uniform construction $W_{LZ}$
     \cmidrule(lr){2-4}\cmidrule(lr){5-7}
     $r$ & $0.4$ & $0.5$ & $0.6$ & $0.4$ & $0.5$ & $0.6$ \\
     \midrule
-    $h_q(W_{\mathrm{LZ}})$, $H=C_4$    & $0.556049$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510825$ & $0.750684$ \\
-    $h_q(W_{\mathrm{ours}})$, $H=C_4$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
+    $h_q(W_{\mathrm{LZ}})$, $H=C_4$    & $0.556057$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510826$ & $0.750684$ \\
+    $h_q(W_{\mathrm{ours}})$, $H=C_4$  & $0.464162$ & $0.727364$ & $1.050351$ & $0.309184$ & $0.506141$ & $0.747042$ \\
     \midrule
-    $h_q(W_{\mathrm{LZ}})$, $H=C_5$    & $0.556049$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510825$ & $0.750684$ \\
-    $h_q(W_{\mathrm{ours}})$, $H=C_5$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
+    $h_q(W_{\mathrm{LZ}})$, $H=C_5$    & $0.556057$ & $0.830366$ & $1.144945$ & $0.311239$ & $0.510826$ & $0.750684$ \\
+    $h_q(W_{\mathrm{ours}})$, $H=C_5$  & $0.000000$ & $0.000000$ & $1.000000$ & $0.308858$ & $0.506122$ & $0.746845$ \\
+    \midrule
+    $h_q(W_{\mathrm{ours}})$, $H=K_{1,3}$    & $0.000000$ & $0.000000$ & $1.000000$ & $0.263666$ & $0.484864$ & $0.748724$ \\
     \bottomrule
   \end{tabular}
   }
 \end{table}
+
+
+\begin{table}[t]
+  \centering
+  \captionof{table}{Relative-entropy $h_q(W)$ at our learnt graphon ($W_{\mathrm{ours}}$) and at the one-clique-on-uniform construction $W_{\mathrm{LZ}}$ of \citet{lubetzky2015replica}, for \textbf{(P2)} with $H = K_3$ on $(q,r) \in \{0.7, 0.8, 0.9\} \times \{0.05, 0.1\}$. Lower is better.\label{tab:lowerdeviation}}
+  {\small
+  \begin{tabular}{lcccccc}
+    \toprule
+    & \multicolumn{3}{c}{$q=0.05$} & \multicolumn{3}{c}{$q=0.10$} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+    $r$ & $0.4$ & $0.5$ & $0.6$ & $0.4$ & $0.5$ & $0.6$ \\
+    \midrule
+    $h_q(W_{\mathrm{ours}})$  & $0.460461$ & $0.725292$ & $1.051539$ & $0.308220$ & $0.506100$ & $0.747289$ \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
+
 
 \begin{figure}
   \centering
