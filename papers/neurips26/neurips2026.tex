@@ -1004,24 +1004,23 @@ We visualised $W_1, \ldots, W_4$ for $p=0.7$ in \Cref{fig:handcraftedgraphons}.
 
 \begin{figure}
   \centering
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/onesmall.png}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/onelarge.png}
   \end{subfigure}
-  
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/uniformless.png}
   \end{subfigure}
-  \begin{subfigure}{\twowidth}
+  \begin{subfigure}{0.22\textwidth}
       \centering
       \includegraphics[width=\twoimagewidth]{figures/oneless.png}
   \end{subfigure}
-  \caption{Hand-crafted graphons $W_1$ (top left), $W_2$ (top right), $W_3$ (bottom left), and $W_4$ (bottom right) with edge density $t(K_2, W)=0.7$.}
+  \caption{Hand-crafted graphons $W_1, W_2, W_3, W_4$ (left to right) with edge density $t(K_2, W)=0.7$.}
   \label{fig:handcraftedgraphons}
 \end{figure}
 
@@ -1052,11 +1051,11 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
   Constant LR (low)                        & $0.430071$ \\
   Constant LR (high)                       & $0.431645$ \\
   \midrule
-  SBM (256 blocks, fixed sizes)            & $0.428190$ \\
-  SBM (5 blocks, trainable sizes)          & $0.429441$ \\
-  SBM (64 blocks, trainable sizes)         & $0.429441$ \\
+  SBM (256 blocks, fixed sizes)            & $0.435817$ \\
+  SBM (5 blocks, trainable sizes)          & $0.470508$ \\
+  SBM (64 blocks, trainable sizes)         & $0.470508$ \\
   Decision Tree                            & $0.455558$ \\
-  Gradient Boosted Decision Tree                   & $0.454485$ \\
+  Gradient Boosted Decision Tree           & $0.454485$ \\
   \bottomrule
   \end{tabular}
   }
@@ -1064,38 +1063,38 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 
 \begin{figure}[t]
   \centering
-  \begin{subfigure}{0.155\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/baseline.png}
     \caption{Our method.}
     \label{fig:baseline}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/resnet.png}
     \caption{ResNet variant.}
     \label{fig:resnet}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/const4.png}
     \caption{Constant-scale~$s$.}
     \label{fig:const2}
   \end{subfigure}
 
-  \begin{subfigure}{0.155\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/noconstraint.png}
     \caption{Regulariser.}
     \label{fig:noconsthighreg}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/noscaling-lowlr.png}
     \caption{Const.~LR (low).}
     \label{fig:noscheduling-lowlr}
-  \end{subfigure}
-  \begin{subfigure}{0.155\textwidth}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=1.1\textwidth]{figures/noscaling-highlr.png}
     \caption{Const.~LR (high).}
@@ -1106,11 +1105,83 @@ Without cosine-annealing scheduling (4), the learnt graphon either fails to capt
 \end{figure}
 
 \paragraph{Non-neural Baselines.}
-On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \cref{tab:ablationstudy}. 
-The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting.
+On the same triangle-density-minimisation task we evaluated four non-neural baselines tailored to step graphons: (a) a stochastic block model (SBM) with $256$ equal-sized blocks and trainable edge densities; (b) SBMs with $5$ blocks and $64$ blocks, with trainable edge densities and trainable block sizes; (c) a decision tree; and (d) a tree ensemble. 
+Each baseline was run four times from independent random initialisations, and we report the best objective value across runs in \cref{tab:ablationstudy}. 
+The SBMs with trainable block sizes collapsed to nearly constant graphons, suggesting a difficult optimisation landscape; the fixed-block SBM recovered a noisy multi-block structure; the tree-based baselines produced structured but qualitatively different graphons. All four baselines achieved worse objective values than every ablated variant of our architecture above, providing direct support for the choice of a neural representation in this setting, see \Cref{fig:baselines} for visualisations of the found graphons.
+
+\begin{figure}
+  % five figures
+  \centering
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/sbm_train_4.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/variable_sbm5_1.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/variable_sbm64_1.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/tree_train_2.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/boosting_train_4.png}
+  \end{subfigure}
+  \caption{Graphons found by non-neural baselines, fixed-block SBM, trainable-block SBM with 5 / 64 blocks, decision tree, and tree ensemble (left to right), for $K_3$ density minimisation under the constraint $t(K_2, W) = 7/9$.}
+  \label{fig:baselines}
+\end{figure}
 
 \paragraph{Multi-task Variant.}
-The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we ran a preliminary FiLM-conditioned architecture \citep{perez2018film} jointly trained over $p \in [1/2, 2/3]$ for $H = K_3$. The resulting network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, with $p$ sampled uniformly from $[1/2, 2/3]$. While limited to a single graph, this experiment indicates that shared training across related tasks can substantially reduce the per-instance burden of our framework, and we view a fuller multi-task / multi-graph treatment as a natural extension.
+The main paper trains one network per $(H, p)$. To probe whether shared training across related tasks is viable, we trained a single conditional network jointly over $p \in [1/2, 2/3]$ for $H = K_3$. Concretely, we condition the network on $p$ using FiLM-style feature-wise affine modulation of hidden activations~\citep{perez2018film}. The resulting conditional network achieves absolute error at most $2.09 \times 10^{-4}$ and average absolute error $3.12 \times 10^{-5}$ relative to the known optimum, for $p$ over uniform grid of 100 points in $[1/2, 2/3]$, see \Cref{fig:parameterised_density} for the learnt density curve and its error and \Cref{fig:parameterised_graphons} for the learnt graphons.
+While limited to a single graph, this experiment indicates that shared training across related tasks can substantially reduce the per-instance burden of our framework, and we view a fuller multi-task / multi-graph treatment as a natural extension.
+
+\begin{figure}
+  % Two figures
+  \centering
+  \begin{subfigure}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_density.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_diff.png}
+  \end{subfigure}
+  \caption{(Left) Triangle density as a function of $p$ for the conditional network, compared to the known optimum. (Right) Absolute error of the conditional network's triangle density relative to the known optimum.}
+  \label{fig:parameterised_density}
+\end{figure}
+
+\begin{figure}
+  % five figures
+  \centering
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_50.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_57.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_60.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_62.png}
+  \end{subfigure} \hfill
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{new_figures/parameterised_67.png}
+  \end{subfigure}
+  \caption{Learnt graphons for the conditional network at $p \in \{1/2, 4/7, 3/5, 5/8, 2/3\}$ (left to right).}
+  \label{fig:parameterised_graphons}
+\end{figure}
+
 
 \end{document}
 
