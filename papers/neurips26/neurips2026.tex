@@ -145,21 +145,20 @@ We view the framework as a flexible exploratory tool that complements rigorous l
 
 \section{Background} \label{sec:background}
 
-For a positive integer $n$, write $[n] \coloneqq \{1,2,\ldots,n\}$. Throughout the paper, a \emph{graph} is an undirected, finite, simple graph (no self-loops and no multiple edges). For a graph $G$, we write $V(G)$ and $E(G)$ for its vertex and edge sets, and let $v(G) \coloneqq |V(G)|$ and $e(G) \coloneqq |E(G)|$. We use standard notation for familiar graphs: $K_n$ denotes the complete graph on $n$ vertices (with vertex set $[n]$ and edge set $\{\{i,j\} : i, j \in [n],\, i \neq j\}$), $K_{1,n}$ denotes the complete bipartite graph with part sizes $1$ and $n$ (with vertex set $[n+1]$ and edge set $\{\{1,i\} : 2\le i\le n+1\}$), and $C_n$ denotes the cycle on $n$ vertices (with vertex set $[n]$ and edge set $\{\{i,i+1\} : 1\le i\le n-1\} \cup \{\{n,1\}\}$).
+For a positive integer $n$, write $[n] \coloneqq \{1,2,\ldots,n\}$. Throughout the paper, a \emph{graph} is an undirected, finite, simple graph (no self-loops and no multiple edges). For a graph $G$, we write $V(G)$ and $E(G)$ for its vertex and edge sets, and let $v(G) \coloneqq |V(G)|$ and $e(G) \coloneqq |E(G)|$. We use standard notation for familiar graphs: $K_n$ denotes the complete graph on $n$ vertices (i.e., $V(K_n) = [n]$ and $E(K_n) = \{\{i,j\} : i, j \in [n],\, i \neq j\}$), $K_{1,n}$ denotes the complete bipartite graph with part sizes $1$ and $n$ (i.e., $V(K_{1,n}) = [n+1]$ and $E(K_{1,n}) = \{\{1,i\} : 2\le i\le n+1\}$), and $C_n$ denotes the cycle on $n$ vertices (i.e., $V(C_n) = [n]$ and $E(C_n) = \{\{i,i+1\} : 1\le i\le n-1\} \cup \{\{n,1\}\}$).
 
-Let $H$ and $G$ be graphs. A \emph{homomorphism} from $H$ to $G$ is a map $\phi : V(H) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(H)$. The \emph{homomorphism density} from $H$ to $G$, denoted $t(H, G)$, is the probability that a uniformly random map $\phi : V(H) \to V(G)$ is a homomorphism. Equivalently,
+Let $F$ and $G$ be graphs. A \emph{homomorphism} from $F$ to $G$ is a map $\phi : V(F) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(F)$. The \emph{homomorphism density} from $F$ to $G$, denoted $t(F, G)$, is the probability that a uniformly random map $\phi : V(F) \to V(G)$ is a homomorphism. Equivalently,
 \begin{align}
-t(H, G) \,\coloneqq\, {}
+t(F, G) \,\coloneqq\, {}
 \label{eqn:homomorphismdensity}
-\frac{1}{v(G)^{v(H)}}
-\!\!
-\sum_{\phi : V(H) \to V(G)}
-\prod_{\{u,v\} \in E(H)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
+\frac{1}{v(G)^{v(F)}}
+\sum_{\phi : V(F) \to V(G)}
+\prod_{\{u,v\} \in E(F)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
 \end{align}
 where $\mathbb{I}[\cdot]$ is the indicator function.
 Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}.
 
-A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$, where
+A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$ with vertex set $[v(F)]$, where
 $t(F,W)$ is the graphon homomorphism density of $F$ in $W$ defined by
 \begin{align}
 t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
@@ -177,12 +176,12 @@ The first problem family is concerned with minimising the homomorphism density o
 \inf\Big\{\liminf_{n \to \infty} t(H, G_n) \,\Big|\, \text{$(G_n)$ is a graph sequence with } v(G_n)\to\infty \text{ and } t(K_2, G_n)\to p\Big\}.
 \end{equation}
 By the graph-limit theory~\citep{lovasz2012large}, this equals $\min_{W:\,t(K_2,W)=p}\, t(H, W)$, the graphon problem our method optimises directly.
-This generalises Tur\'an's theorem~\citep{turan1941}
+It generalises Tur\'an's theorem~\citep{turan1941}
 and the Erd\H{o}s--Stone--Simonovits theorem~\citep{erdos1946on, erdos1966limit}. These classical results in extremal graph theory say
-that for every $H$ with at least one edge and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum is $0$. But for $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder. It is completely solved only for cliques: $H = K_r$ for all $r \ge 3$~\citep{reiher2016clique}, with landmark earlier results for $r = 3$~\citep{razborov2008minimal} and $r = 4$~\citep{nikiforov2011number}. For $C_5$, the minimiser is known only at the special values $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennett2020minimizing}.
+that for every $H$ with at least one edge and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum is $0$. But for $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder. It is completely solved only for cliques: $H = K_r$ for all $r \ge 3$~\citep{reiher2016clique}, with earlier results for $r = 3$~\citep{razborov2008minimal} and $r = 4$~\citep{nikiforov2011number}. For $C_5$, the minimiser is known only at the special values $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennett2020minimizing}.
 
 \noindent{\bf Variational problem from large deviation theory.}\ 
-The large deviation theory for random graphs addresses two related questions: at what exponential rate does $G(n,q)$ produce an atypically large or small subgraph density, and what does the graph typically look like when such a rare event occurs?
+The large deviation theory of dense random graphs addresses two related questions: at what exponential rate does the Erd\H{o}s--R\'enyi random graph $G(n,q)$ have an atypically large or small subgraph density, and what does the graph typically look like when such a rare event occurs?
 These questions are of fundamental interest in probability theory and combinatorics, and they carry information-theoretic structure that is natural from an ML perspective: the Chatterjee--Varadhan framework reduces both questions to a single constrained optimisation over graphons whose objective is an averaged KL divergence~\citep{chatterjee2011large}.
 
 Concretely, fix $q \in (0,1)$ and let $h_q(W) \coloneqq \int_{[0,1]^2} \mathrm{KL}(\mathrm{Bern}(W(x,y))\,\|\,\mathrm{Bern}(q))\,\mathrm{d}x\,\mathrm{d}y$, the integrated per-edge KL divergence of $W$ from the base Erd\H{o}s--R\'enyi graphon $W \equiv q$.
@@ -214,7 +213,7 @@ for a graph $H$, reals $p,q,r \in (0,1)$, where $W$ ranges over graphons. Both p
 We represent $W$ as a neural network $f_\theta$, recast these graphon optimisations as optimisations over the parameters $\theta$, and apply gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, the scalar constraints in \textbf{(P1)} and \textbf{(P2)} are poorly handled by penalty terms, so the architecture must enforce them more directly. Third, each occurrence of $t(\cdot, W)$ involves an intractable integral, and estimating these expectations efficiently requires problem-specific sampling. The remainder of this section describes the architecture and training procedure that address these three challenges.
 
 \noindent{\bf Architecture.}\ 
-We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. When used for constrained problems \textbf{(P1)} and \textbf{(P2)}, the architecture additionally includes a constraint solver.
+We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. To handle constraints in \textbf{(P1)} and \textbf{(P2)}, the architecture additionally includes a constraint solver.
 
 Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing function $s : [L] \to (0, \infty)$ for the scale of weight initialisation at each layer $\ell \in [L]$; we use $s(\ell) = \ell$ or $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c] : [0,1]^2 \to [0,1]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
 \begin{align*}
