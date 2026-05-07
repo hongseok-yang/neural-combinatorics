@@ -200,7 +200,7 @@ Our method applies directly to the boundary form
 \end{equation}
 which is equivalent to the inequality-constrained minimisations above (with $\ge$ in the upper tail $r>q$ and $\le$ in the lower tail $r<q$).
 
-\section{Implicit Neural Representations of Graphons} \label{sec:method}
+\section{Implicit neural representations of graphons} \label{sec:method}
 
 We tackle the two graphon optimisation problems introduced in \Cref{sec:background}:
 \begin{equation}
@@ -448,7 +448,7 @@ For \textbf{(P2)}, despite its different mathematical origins in large deviation
   \end{minipage}
 \end{figure}
 
-\section{Experimental Results}\label{sec:experiments}
+\section{Experimental results}\label{sec:experiments}
 
 We evaluate our framework on instances of \textbf{(P1)} and \textbf{(P2)} drawn from the extremal-graph-theory and large-deviation literatures. The same architecture, solver, and training loop are used throughout; the only changes between problem classes are which constraint is enforced and how the objective is estimated. The experiments are organised to demonstrate two capabilities: (i) rediscovering classical optima that previously required substantial human effort, and (ii) producing mathematically interesting candidates for open instances. An ablation study at the end isolates the contribution of each architectural component.
 
@@ -669,10 +669,10 @@ To verify that each architectural component is necessary and that the neural app
 
 \allowdisplaybreaks[0]
 
-\section{Related Work}
+\section{Related work}
 
 Razborov's \emph{flag algebra} framework~\citep{razborov2007flag} enables the proofs of inequalities between graph homomorphism densities by means of sums of squares (ultimately, applications of the Cauchy--Schwarz inequality) in an algebra of graphs, where each finite graph can be interpreted as a functional on the space of graphons. This viewpoint enables the automation of Cauchy--Schwarz-style arguments via semidefinite programming (SDP), and has been implemented in the package {\sc Flagmatic}~\citep{falgas2013applications}.
-Flag algebras and Flagmatic have resolved many open problems in extremal combinatorics over the past decade (for a survey, see~\citet{razborov2013survey}), but their computational cost can be prohibitive\footnote{For example, to derive a nontrivial inequality for a graph $G$, {\sc Flagmatic} typically enumerates all graphs $H$ with $v(H) \geq v(G)+1$ and solves an SDP over vectors indexed by such graphs. Graphs $H$ with more than eight vertices are currently unsupported due to computational complexity.}.
+Flag algebras and Flagmatic have resolved many open problems in extremal combinatorics over the past decade (for a survey, see~\citet{razborov2013survey}), but their computational cost can be prohibitive. \footnote{For example, to derive a nontrivial inequality for a graph $G$, {\sc Flagmatic} typically enumerates all graphs $H$ with $v(H) \geq v(G)+1$ and solves an SDP over vectors indexed by such graphs. Graphs $H$ with more than eight vertices are currently unsupported due to computational complexity.}
 This limits applicability to some instances we consider, such as problems involving the Petersen graph.
 We view our method as \emph{complementary} to flag algebras rather than a replacement: flag algebras provide rigorous \emph{lower} bounds together with certificates, whereas our method searches directly for candidate graphons and yields candidate \emph{upper} bounds and concrete candidate minimisers. When an upper bound from our method nearly matches a rigorous lower bound, this gives strong evidence for the correct optimum and produces a graphon whose structure can be inspected and turned into mathematical conjectures (as in our exhaustive sweep in \Cref{sec:experiments}).
 
@@ -686,7 +686,7 @@ In contrast, as demonstrated by visualisations of learnt graphons, our method of
 
 From the perspective of implicit neural representations, the work most closely related to ours is \citet{mundinger2025neural}, which applies implicit neural representations to the Hadwiger--Nelson problem: colouring the plane $\mathbb{R}^2$ with the minimum number of colours such that no two points at unit distance share a colour. Analogously to our approach, they represent a colouring by a neural network and recover a 6-colouring by minimising a monochromatic edge-density objective. With human post-processing, they construct two new 6-colourings that expand the known range of realisable distances from $[0.415, 0.447]$ to $[0.354, 0.657]$. In contrast, we focus on asymptotic extremal problems in graph theory that can be phrased as constrained optimisation over graphons. Moreover, our approach integrates problem structure into the learning procedure, including an architectural bias toward discontinuous, step-like solutions, explicit constraint enforcement via an embedded solver, and variance reduction in homomorphism density estimation, with the aim of supporting systematic conjecture generation and exploration across diverse extremal problems in graph theory.
 
-\section{Societal Impacts and Limitations}
+\section{Societal impacts and limitations}
 
 Our work presents a method for finding structured candidate optima of graphon variational problems, which is of interest to mathematicians working on extremal graph theory and the large deviation theory of dense random graphs.
 Compared with existing baselines, our method produces candidate optima that are markedly more interpretable, offering insight into the structure of optimal graphons and thereby supporting mathematical conjecture generation and discovery.
@@ -776,7 +776,7 @@ Thus,
 as desired.
 \end{proof}
 
-\section{Details of Experiments} \label{sec:experimentdetails}
+\section{Details of experiments} \label{sec:experimentdetails}
 
 All experiments were conducted on a single NVIDIA RTX A5000 GPU.
 The execution time depends on the size of the graph, from 30 minutes for a triangle to a few hours for the Petersen graph.
@@ -836,7 +836,7 @@ When reporting the homomorphism density computed by discretisation, we use a $(2
 
 The code to replicate our experiments is available at \url{https://anonymous.4open.science/r/INR4AsymptoticExtremalGraphTheory-47DB/README.md}.
 
-\section{Conjecture on Odd Cycles} \label{sec:oddcycleconjecture}
+\section{Conjecture odd cycles} \label{sec:oddcycleconjecture}
 
 In \citet{bennett2020minimizing}, the optimal graphon's structure is constructed as follows.
 Let $k$ be the integer satisfying $1 - \frac{1}{k} < p < 1-\frac{1}{k+1}$.
@@ -906,7 +906,7 @@ For instance, $f_7$ is given as follows.
   {} + & \frac{\rho^5}{2} (k-1) x y^6.
 \end{align*}
 
-\section{Additional Experimental Results}
+\section{Additional experimental results}
 \label{sec:addexperiments}
 
 We consider the problem of minimising the homomorphism density of the Petersen graph under the edge-density constraint $t(K_2, W) = p$ for various values of $p$.
@@ -1183,7 +1183,7 @@ For the quantitative comparison, the one-clique-on-uniform construction $W_{LZ}$
 \end{figure}
 
 
-\section{Details of Hand-crafted Graphons}
+\section{Details of hand-crafted graphons}
 \label{sec:handcraftedgraphons}
 
 We consider edge densities satisfying $1 - 1/k < p < 1 - 1/(k+1)$, where $k$ is a positive integer.
@@ -1248,7 +1248,7 @@ We visualised $W_1, \ldots, W_4$ for $p=0.7$ in \Cref{fig:handcraftedgraphons}.
   \label{fig:handcraftedgraphons}
 \end{figure}
 
-\section{Ablation Study, Non-neural Baselines, and Multi-task Variant}
+\section{Ablation study, non-neural baselines, and multi-task variant}
 \label{sec:ablation}
 
 \paragraph{Ablation Study.}
