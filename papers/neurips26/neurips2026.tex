@@ -696,7 +696,7 @@ Our method has several limitations.
 First, it is tailored to graphon optimisation and therefore does not apply to combinatorial problems on sparse graphs, for which the graphon limit is degenerate.
 Second, although the candidate optima it produces are highly interpretable, the method itself does not provide rigorous guarantees of optimality; it should therefore be used in conjunction with rigorous lower-bound techniques such as flag algebras~\citep{razborov2007flag,falgas2013applications} to verify optimality and provide certificates.
 Third, evaluating our method requires estimating homomorphism densities, for which we use either discretisation-based computation or Monte Carlo estimation; both can be computationally expensive for large motifs.
-Discretisation-based computation of $t(H, W)$ on an $M \times M$ grid scales as $O(M^{v(H)})$, which becomes infeasible for motifs with many vertices, such as the Petersen graph; Monte Carlo estimation, while less sensitive to $v(H)$, can suffer from large relative error when the motif density is very small.
+Discretisation-based computation of $t(H, W)$ on an $M \times M$ grid becomes infeasible for motifs with many vertices, such as the Petersen graph; Monte Carlo estimation can suffer from large relative error when the motif density is very small.
 
 % Broader impacts are addressed in the NeurIPS Paper Checklist; in short,
 % this work presents a tool for accelerating mathematical discovery in
