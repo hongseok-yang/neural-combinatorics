@@ -122,7 +122,7 @@ We propose a neural exploratory framework for \emph{variational problems over gr
 
 \section{Introduction} \label{sec:introduction}
 
-Machine learning is opening new directions in mathematical discovery. Recent work spans automatic provers and autoformalisation for Olympiad-style problems~\citep{polu2023formal, trinh2024solving, jiang2023draft, wu2022autoformalization, deepmind2024alphaproof, huang2025gemini}, neural search for combinatorial constructions~\citep{wagner2021constructions, charton2024patternboost, romera2024mathematical, novikov2025alphaevolve}, and pattern-driven progress on long-standing conjectures in pure mathematics~\citep{davies2021advancing, he2024murmurations}. In this paper, we extend this line of research to a class of \emph{continuous optimisation problems over graphons}, with two motivating problem families drawn from extremal graph theory and the large deviation theory of dense random graphs.
+Machine learning is opening new directions in mathematical discovery. Recent work spans automatic provers and autoformalisation for Olympiad-style or research-level problems~\citep{polu2023formal, trinh2024solving, jiang2023draft, wu2022autoformalization, deepmind2024alphaproof, huang2025gemini}, neural search for combinatorial constructions~\citep{wagner2021constructions, charton2024patternboost, romera2024mathematical, novikov2025alphaevolve}, and pattern-driven progress on long-standing conjectures in pure mathematics~\citep{davies2021advancing, he2024murmurations}. In this paper, we extend this line of research to a class of \emph{continuous optimisation problems over graphons}, with two motivating problem families drawn from extremal graph theory and the large deviation theory of dense random graphs.
 
 A central object in extremal graph theory is the \emph{homomorphism density} $t(H, G)$ between finite undirected graphs $H$ and $G$: the probability that a uniformly random map from $V(H)$ to $V(G)$ is a graph homomorphism. As a basic example, the constrained optimisation problem
 \begin{equation}
@@ -400,11 +400,19 @@ For \textbf{(P2)}, despite its different mathematical origins in large deviation
   \centering
   \begin{minipage}{0.40\textwidth}
     \centering
-    \captionof{table}{$C_5$ densities in graphons found by our method and the conjectured construction for $C_5$ density minimisation under $t(K_2, W)=p$.\label{tab:c5result}}
+    \captionof{table}{$C_5$ densities in graphons found by the known or conjectured optimal construction and our method for $C_5$ density minimisation under $t(K_2, W)=p$.\label{tab:c5result}}
     {\setlength{\tabcolsep}{4pt}\small
     \begin{tabular}{cll}
        \toprule
-       $\mathbf{p}$ & \textbf{Conjectured} & \textbf{Ours} \\
+       $\mathbf{p}$ 
+       & 
+       \begin{tabular}{@{}l@{}}
+       \textbf{Known} or \\
+       \textbf{Conjectured}
+       \end{tabular}
+       & 
+       \textbf{Ours} 
+       \\
        \midrule
        $1/2$ & $0$ & $0.00004086$ \\
        $2/3$ & $0.12345679$ & $0.12350364$ ($+0.04\%$) \\
@@ -454,14 +462,14 @@ We evaluate our framework on instances of \textbf{(P1)} and \textbf{(P2)} drawn 
 We visualise graphons as Viridis heatmaps (blue $=0$, yellow $=1$) (\Cref{fig:triangledensity-minimisers}). Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
 \noindent{\bf Constrained homomorphism-density minimisation.}\ $\,$
-We apply our method to \textbf{(P1)} across three families of instances: clique densities ($H = K_n$, fully solved~\citep{razborov2008minimal,reiher2016clique}), odd-cycle densities ($H = C_5, C_7$, partly open), and a systematic sweep over 175 non-bipartite graphs with $v(H) \le 6$. The clique experiments validate the method against known optima; the latter two produce new candidate minimisers and, through the exhaustive sweep, a previously unreported family of extremal structures. We describe each in turn.
+We apply our method to \textbf{(P1)} across three classes of instances: clique densities ($H = K_n$, fully solved~\citep{razborov2008minimal,reiher2016clique}), odd-cycle densities ($H = C_5, C_7$, partly open), and a systematic sweep over 175 non-bipartite graphs with $v(H) \le 6$. The clique experiments validate the method against known optima; the latter two produce new candidate minimisers and, through the exhaustive sweep, a previously unreported family of extremal structures. We describe each in turn.
 
 
 \begin{figure}[t]
   \centering
   \begin{minipage}{0.40\textwidth}
     \centering
-    \captionof{table}{$C_7$ densities in graphons found by our method and the conjectured construction for $C_7$ density minimisation under $t(K_2, W)=p$.\label{tab:c7result}}
+    \captionof{table}{$C_7$ densities in graphons found by the conjectured optimal construction and our method for $C_7$ density minimisation under $t(K_2, W)=p$.\label{tab:c7result}}
     {\setlength{\tabcolsep}{4pt}\small
     \begin{tabular}{cll}
        \toprule
@@ -639,20 +647,20 @@ $p \in \{\frac{k-2}{k-1},\ \frac{3k-5}{3k-2},\ \frac{2k-3}{2k-1},\ \frac{3k-4}{3
 where $k$ is the chromatic number of $H$.
 These values of $p$ are chosen to probe the structure of the curve
 $x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$:
-the first and last values correspond to breakpoints of piecewise-defined curves established for several families of graphs~\citep{razborov2008minimal,reiher2016clique,bennett2020minimizing}, while the remaining values lie in the interior of the corresponding segments.
+the first and last values correspond to breakpoints of piecewise-defined curves established for several classes of graphs~\citep{razborov2008minimal,reiher2016clique,bennett2020minimizing}, while the remaining values lie in the interior of the corresponding segments.
 We also implemented an automated tool for computing lower bounds on the minimum $H$-density using flag algebras~\citep{razborov2007flag}, in order to assess the optimality of our solutions.
 
 Across 76.5\% of the $(H,p)$ instances, our method produced a graphon whose $H$-density closely matches the corresponding flag-algebra lower bound (within $1\%$ relative error, or $10^{-6}$ absolute when the bound is near zero), suggesting that the solutions are optimal or near-optimal. Of the rest, 11.8\% have suboptimal graphons, while for the remaining 11.7\%, the learnt graphons appear optimal but our flag-algebra bounds were not tight.
 
 We analysed the curve $x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$ for each $H$, by interpolation, and examined whether it appears piecewise concave (as for cliques~\citep{reiher2016clique}) or convex (as conjectured for odd cycles~\citep{bennett2020minimizing}). Apparent piecewise concavity is associated with graphs obtained by removing at most two edges from a complete graph; the other graphs gave apparently convex curves.
 %
-Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$, the minimisers for cliques and $C_5$ are known to be complete $k$-partite~\citep{reiher2016clique,bennett2020minimizing}, and we conjecture the same for $C_7$; in all three cases our method recovers this structure (\Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}). This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
+Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$, the minimisers for cliques and $C_5$ are known to be complete $k$-partite~\citep{reiher2016clique,bennett2020minimizing}, and we conjecture the same for $C_7$; in all three cases, our method recovers this structure (\Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}). However, this is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
 \noindent{\bf Variational problem from large deviation theory.}\ $\,$
 We apply our framework to \textbf{(P2)}, the variational problem of \citet{chatterjee2011large}. 
-We test $(q, r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$ for upper-tail variational problems with $H \in \{K_3, C_4, C_5, K_{1,3}\}$, and $(q, r) \in \{0.7, 0.8, 0.9\} \times \{0.05, 0.1\}$ for lower-tail variational problems with $H = K_3$; in all these regimes the structure of optimisers is, to our knowledge, not fully understood. As a reference for $H = K_3$, we use the tripartite construction $W_{\mathrm{LZ}}$ proposed by Lemma 3.4 of \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q(W_{\mathrm{ours}})$ at our learnt graphon $W_{\mathrm{ours}}$ in the upper-tail regime.
+We test $(q, r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$ for upper-tail variational problems with $H \in \{K_3, C_4, C_5, K_{1,3}\}$, and $(q, r) \in \{0.7, 0.8, 0.9\} \times \{0.05, 0.1\}$ for lower-tail variational problems with $H = K_3$; in all these regimes, the structure of optimisers is, to our knowledge, not fully understood. As a reference for $H = K_3$, we use the tripartite construction $W_{\mathrm{LZ}}$ proposed by Lemma 3.4 of \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q(W_{\mathrm{ours}})$ at our learnt graphon $W_{\mathrm{ours}}$ in the upper-tail regime.
 Qualitatively, the learnt graphons consistently find two-block structures for all graphs and in both upper- and lower-tail regimes.
-For the upper-tail problems, the 2-regular $K_3$, $C_4$, $C_5$ share close edge densities and block sizes in their respective learnt optimisers, while the non-2-regular $K_{1,3}$ shows a qualitatively different structure with a much smaller block size; see \Cref{fig:upperdeviation} for the learnt graphons with $q=0.1, r=0.5$ and \Cref{sec:addexperiments} for all upper-tail regimes.
+For the upper-tail problems, the 2-regular graphs $K_3$, $C_4$, $C_5$ share close edge densities and block sizes in their respective learnt graphons, while the non-2-regular graph $K_{1,3}$ shows a qualitatively different structure with a much smaller block size; see \Cref{fig:upperdeviation} for the learnt graphons with $q=0.1, r=0.5$ and \Cref{sec:addexperiments} for all upper-tail regimes.
 For the lower-tail problems, we obtain a qualitatively different structure of nearly-bipartite graphons.
 Quantitatively, in the upper-tail problems for $H = K_3$, our method consistently finds graphons with lower relative entropy than the tripartite construction $W_{\mathrm{LZ}}$, showing that the latter is suboptimal in these regimes; see \Cref{sec:addexperiments} for details.
 
