@@ -776,6 +776,101 @@ Thus,
 as desired.
 \end{proof}
 
+When we extend our constraint solver beyond edge-density constraints to $H$-density constraints, we sample
+$x_{i}^{(k)}$ for $k \in [N]$ and $i \in [v(H)]$ independently from $\mathrm{Unif}[0,1]$, and estimate the $H$-density constraint by the Monte Carlo estimator
+\begin{align*}
+\widehat{t}(H, f_\theta[c])
+&= \frac{1}{N|\mathcal{S}|}
+\sum_{k \in [N]}\sum_{\pi \in \mathcal{S}}
+\prod_{\{i, j\} \in E(H)} f_\theta[c]\Big(x_{\pi(i)}^{(k)}, x_{\pi(j)}^{(k)}\Big),
+\end{align*}
+where $\mathcal{S}$ is a set of permutations of $V(H)$. 
+
+\begin{lemma}[Implicit differentiation for the $H$-density estimator]
+\label{lem:implicitdifferentiation:Hdensity}
+Fix the samples \(\{x_i^{(k)} : k\in[N],\ i\in[v(H)]\}\) and permutation set \(\mathcal{S}\). Suppose \(c_\theta\) is chosen so that
+\(\widehat{t}(H,f_\theta[c_\theta]) = p\), and that \(\partial_c\widehat{t}(H,f_\theta[c])\big|_{c=c_\theta} \neq 0\).
+Then for all \(x \in [0,1]^2\),
+\begin{align*}
+\nabla_\theta f_\theta[c_\theta](x)
+&= \frac{\partial f_\theta[c](x)}{\partial \theta}\Big|_{c=c_\theta}
+\;-
+\frac{\partial f_\theta[c](x)}{\partial c}\Big|_{c=c_\theta}
+\cdot
+\frac{\nabla_\theta\widehat{t}(H,f_\theta[c])\big|_{c=c_\theta}}{\partial_c\widehat{t}(H,f_\theta[c])\big|_{c=c_\theta}},
+\end{align*}
+where
+\begin{align*}
+&\nabla_\theta\widehat{t}(H,f_\theta[c])
+\\
+{} = &\frac{1}{N|\mathcal{S}|}
+\sum_{k\in[N],\,\pi\in\mathcal{S}}
+\sum_{\{i,j\}\in E(H)}
+\Bigg(\prod_{\substack{\{i',j'\}\in E(H)\\ \{i',j'\}\neq\{i,j\}}}
+f_\theta[c]\bigl(x_{\pi(i')}^{(k)},x_{\pi(j')}^{(k)}\bigr)\Bigg)
+\nabla_\theta f_\theta[c](x_{\pi(i)}^{(k)},x_{\pi(j)}^{(k)}),
+\\
+&\partial_c\widehat{t}(H,f_\theta[c])
+\\
+{} = &\frac{1}{N|\mathcal{S}|}
+\sum_{k\in[N],\,\pi\in\mathcal{S}}
+\sum_{\{i,j\}\in E(H)}
+\Bigg(\prod_{\substack{\{i',j'\}\in E(H)\\ \{i',j'\}\neq\{i,j\}}}
+f_\theta[c]\bigl(x_{\pi(i')}^{(k)},x_{\pi(j')}^{(k)}\bigr)\Bigg)
+\frac{\partial f_\theta[c](x_{\pi(i)}^{(k)},x_{\pi(j)}^{(k)})}{\partial c}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+Let \(x \in [0,1]^2\). By the chain rule,
+\begin{align*}
+\nabla_\theta\, f_\theta[c_\theta](x)
+&= \frac{\partial f_\theta[c](x)}{\partial \theta}\Big|_{c=c_\theta}
+ + \frac{\partial f_\theta[c](x)}{\partial c}\Big|_{c=c_\theta}\, \nabla_\theta c_\theta.
+\end{align*}
+Thus, it suffices to derive an expression for \(\nabla_\theta c_\theta\).
+
+By assumption, \(c_\theta\) is chosen so that
+\(\widehat{t}(H,f_\theta[c_\theta]) = p\).
+Differentiating both sides with respect to \(\theta\) yields
+\begin{align*}
+\nabla_\theta\,\widehat{t}(H,f_\theta[c_\theta]) &= \nabla_\theta p = 0.
+\end{align*}
+Viewing \(\widehat{t}(H,f_\theta[c])\) as a function of \((\theta,c)\), another application of the chain rule gives
+\begin{align*}
+0
+&= \nabla_\theta\,\widehat{t}(H,f_\theta[c])\Big|_{c=c_\theta}
+ + \partial_c\widehat{t}(H,f_\theta[c])\Big|_{c=c_\theta}\, \nabla_\theta c_\theta.
+\end{align*}
+Since \(\partial_c\widehat{t}(H,f_\theta[c])\big|_{c=c_\theta} \neq 0\), we can solve for
+\begin{align*}
+\nabla_\theta c_\theta
+&= {-}\,\frac{\nabla_\theta\widehat{t}(H,f_\theta[c])\big|_{c=c_\theta}}{\partial_c\widehat{t}(H,f_\theta[c])\big|_{c=c_\theta}}.
+\end{align*}
+Substituting this into the first display gives the claimed expression for
+\(\nabla_\theta f_\theta[c_\theta](x)\).
+
+Finally, we derive the displayed expressions for \(\nabla_\theta\widehat{t}(H,f_\theta[c])\) and
+\(\partial_c\widehat{t}(H,f_\theta[c])\). For fixed \(k\in[N]\) and \(\pi\in\mathcal{S}\), write
+\[
+P_{k,\pi}(c) \coloneqq \prod_{\{i,j\}\in E(H)} f_\theta[c]\bigl(x_{\pi(i)}^{(k)},x_{\pi(j)}^{(k)}\bigr).
+\]
+Then \(\widehat{t}(H,f_\theta[c]) = \frac{1}{N|\mathcal{S}|}\sum_{k,\pi} P_{k,\pi}(c)\), and hence
+\begin{align*}
+&\nabla_\theta\widehat{t}(H,f_\theta[c])
+\\
+{} = &\frac{1}{N|\mathcal{S}|}\sum_{k\in[N],\,\pi\in\mathcal{S}} \nabla_\theta P_{k,\pi}(c)
+\\
+{} = &\frac{1}{N|\mathcal{S}|}\sum_{k\in[N],\,\pi\in\mathcal{S}}
+\sum_{\{i,j\}\in E(H)}
+\Bigg(\prod_{\substack{\{i',j'\}\in E(H)\\ \{i',j'\}\neq\{i,j\}}}
+f_\theta[c]\bigl(x_{\pi(i')}^{(k)},x_{\pi(j')}^{(k)}\bigr)\Bigg)
+\nabla_\theta f_\theta[c]\bigl(x_{\pi(i)}^{(k)},x_{\pi(j)}^{(k)}\bigr),
+\end{align*}
+where the second line is the product rule.
+The expression for \(\partial_c\widehat{t}(H,f_\theta[c])\) is identical, replacing
+\(\nabla_\theta f_\theta[c](\cdot)\) by \(\partial_c f_\theta[c](\cdot)\).
+\end{proof}
+
 \section{Details of experiments} \label{sec:experimentdetails}
 
 All experiments were conducted on a single NVIDIA RTX A5000 GPU.
@@ -806,7 +901,7 @@ In particular, since many optimal graphons take values close to 0 or 1, the sigm
 Consequently, the denominator in the Newton update can become very small, leading to excessively large updates and unstable convergence.
 To address this, we use a clipped variant of Newton's method. To set the clipping range, we compute upper and lower bounds on the solution $c^*$ and use their difference as the initial clipping range.
 We then gradually decrease the clipping range as the iteration proceeds, which improves stability.
-The detailed algorithm is described in \Cref{alg:cap}.
+The detailed algorithms are described in \Cref{alg:cap} (edge-density constraint) and \Cref{alg:cap-hom} (homomorphism-density constraint).
 
 \begin{algorithm}
   \caption{Edge-Density Constraint Solver}\label{alg:cap}
@@ -822,6 +917,27 @@ The detailed algorithm is described in \Cref{alg:cap}.
       \ENDIF 
       \STATE $f'(c_t) \gets \frac{1}{N} \sum_{i=1}^N \mathit{sm}(y_i + c_t) (1 - \mathit{sm}(y_i + c_t))$
       \STATE $c_{t+1} \gets c_t - \mathrm{Clip}_{[-D/t, D/t]}\left(\frac{f(c_t)}{f'(c_t)}\right)$ \hfill \COMMENT{Clipping range $D/t$ shrinks with the iteration index $t$.}
+    \ENDFOR
+    \STATE \textbf{Return} $c_t$
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption{Homomorphism-Density Constraint Solver}\label{alg:cap-hom}
+  \begin{algorithmic}
+    \REQUIRE $p \in (0,1)$, $y \in \R^{B \times m}$
+    \ENSURE $\frac{1}{B} \sum_{b=1}^B \prod_{j=1}^m \mathit{sm}(y_{b,j} + c^*) \approxeq p$
+    \STATE $c_1 \gets \mathit{sm}^{-1}(p^{1/m}) - \frac{1}{Bm} \sum_{b=1}^B \sum_{j=1}^m y_{b,j}$ \hfill \COMMENT{Initialise with guess}
+    \STATE $D \gets \max_{b,j}\{y_{b,j}\} - \min_{b,j}\{y_{b,j}\}$ \hfill \COMMENT{Compute range of $y$ values for clipping}
+    \FOR{$t=1, 2, \ldots, T_{\max}$}
+      \STATE $S \gets \bigl(\mathit{sm}(y_{b,j} + c_t)\bigr)_{b \in [B],\, j \in [m]}$
+      \STATE $P \gets \Bigl(\prod_{j=1}^m S_{b,j}\Bigr)_{b \in [B]}$
+      \STATE $f(c_t) \gets \frac{1}{B} \sum_{b=1}^B P_b - p$
+      \IF{$|f(c_t)| < \epsilon$}
+        \STATE \textbf{break}
+      \ENDIF
+      \STATE $f'(c_t) \gets \frac{1}{B} \sum_{b=1}^B P_b\,\sum_{j=1}^m \frac{1}{S_{b,j}}$
+      \STATE $c_{t+1} \gets c_t - \mathrm{Clip}_{[-D/t,\, D/t]}\left(\frac{f(c_t)}{f'(c_t)}\right)$
     \ENDFOR
     \STATE \textbf{Return} $c_t$
   \end{algorithmic}
