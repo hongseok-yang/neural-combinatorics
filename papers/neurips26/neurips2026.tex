@@ -147,22 +147,22 @@ We view the framework as a flexible exploratory tool that complements rigorous l
 
 For a positive integer $n$, write $[n] \coloneqq \{1,2,\ldots,n\}$. Throughout the paper, a \emph{graph} is an undirected, finite, simple graph (no self-loops and no multiple edges). For a graph $G$, we write $V(G)$ and $E(G)$ for its vertex and edge sets, and let $v(G) \coloneqq |V(G)|$ and $e(G) \coloneqq |E(G)|$. We use standard notation for familiar graphs: $K_n$ denotes the complete graph on $n$ vertices (i.e., $V(K_n) = [n]$ and $E(K_n) = \{\{i,j\} : i, j \in [n],\, i \neq j\}$), $K_{1,n}$ denotes the complete bipartite graph with part sizes $1$ and $n$ (i.e., $V(K_{1,n}) = [n+1]$ and $E(K_{1,n}) = \{\{1,i\} : 2\le i\le n+1\}$), and $C_n$ denotes the cycle on $n$ vertices (i.e., $V(C_n) = [n]$ and $E(C_n) = \{\{i,i+1\} : 1\le i\le n-1\} \cup \{\{n,1\}\}$).
 
-Let $F$ and $G$ be graphs. A \emph{homomorphism} from $F$ to $G$ is a map $\phi : V(F) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(F)$. The \emph{homomorphism density} from $F$ to $G$, denoted $t(F, G)$, is the probability that a uniformly random map $\phi : V(F) \to V(G)$ is a homomorphism. Equivalently,
+Let $H$ and $G$ be graphs. A \emph{homomorphism} from $H$ to $G$ is a map $\phi : V(H) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(H)$. The \emph{homomorphism density} from $H$ to $G$, denoted $t(H, G)$, is the probability that a uniformly random map $\phi : V(H) \to V(G)$ is a homomorphism. Equivalently,
 \begin{align}
-t(F, G) \,\coloneqq\, {}
+t(H, G) \,\coloneqq\, {}
 \label{eqn:homomorphismdensity}
-\frac{1}{v(G)^{v(F)}}
-\sum_{\phi : V(F) \to V(G)}
-\prod_{\{u,v\} \in E(F)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
+\frac{1}{v(G)^{v(H)}}
+\sum_{\phi : V(H) \to V(G)}
+\prod_{\{u,v\} \in E(H)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
 \end{align}
 where $\mathbb{I}[\cdot]$ is the indicator function.
 Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}.
 
-A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$ with vertex set $[v(F)]$, where
-$t(F,W)$ is the graphon homomorphism density of $F$ in $W$ defined by
+A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(H, G_n)$ converge for every fixed graph $H$ with vertex set $[v(H)]$, there is a graphon $W$ with $t(H, G_n) \to t(H, W)$ for every $H$ with vertex set $[v(H)]$, where
+$t(H,W)$ is the graphon homomorphism density of $H$ in $W$ defined by
 \begin{align}
-t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
-\Big[ \prod_{\{i,j\} \in E(F)} W(x_i, x_j)\Big].
+t(H, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(H)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
+\Big[ \prod_{\{i,j\} \in E(H)} W(x_i, x_j)\Big].
 \label{eqn:homomorphismdensitygraphon}
 \end{align}
 Conversely, every graphon arises in this way~\citep{lovasz2006limits,lovasz2012large}. Familiar discrete structure is reflected in $W$: balanced complete bipartite graphs converge to the two-block graphon equal to $1$ on the off-diagonal blocks and $0$ on the diagonal blocks; an Erd\H{o}s--R\'enyi $G(n,q)$ converges to the constant graphon $W \equiv q$; a stochastic block model converges to a multi-block graphon whose blocks correspond to the communities. 
@@ -215,7 +215,7 @@ We represent $W$ as a neural network $f_\theta$, recast these graphon optimisati
 \noindent{\bf Architecture.}\ 
 We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. To handle constraints in \textbf{(P1)} and \textbf{(P2)}, the architecture additionally includes a constraint solver.
 
-Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing function $s : [L] \to (0, \infty)$ for the scale of weight initialisation at each layer $\ell \in [L]$; we use $s(\ell) = \ell$ or $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c] : [0,1]^2 \to [0,1]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
+Fix the number of layers $L \ge 2$, the hidden-layer width $d$, and a differentiable activation $\phi : \R \to \R$. Also, fix an increasing function $s : [L] \to (0, \infty)$, which determines the scale of weight initialisation at each layer; in our experiments, we use $s(\ell) = \ell$ or $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c] : [0,1]^2 \to [0,1]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
 \begin{align*}
 f_{\theta}[c](x_1, x_2) & \,\coloneqq\, \mathit{sm}\bigl(V g^{(L)}_\theta(\min(x_1, x_2), \max(x_1, x_2)) \,+\, c\bigr),
 \\
@@ -224,7 +224,7 @@ g^{(1)}_\theta(\mathbf{x}) & \,\coloneqq\, \phi\bigl(W^{(1)} \sin(U^{(1)} \mathb
 g^{(\ell)}_\theta(\mathbf{x}) & \,\coloneqq\, g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, \phi\bigl(V^{(\ell-1)} g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, W^{(\ell)} \sin(U^{(\ell)} \mathbf{x}) \,+\, b^{(\ell)}\bigr).
 \end{align*}
 Here $\mathit{sm}$ is the sigmoid, and $g^{(1)}_\theta, g^{(\ell)}_\theta$ are maps from $\{\mathbf{x} = (x_1, x_2) \in [0,1]^2 : x_1 \le x_2\}$ to $\R^d$. The network parameters are
-$c \in \R$, $b^{(\ell')} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell')} \in \R^{d \times 2}$, and $V^{(\ell'')}, W^{(\ell')} \in \R^{d \times d}$, for $\ell' \in [L]$, $\ell'' \in [L-1]$. These parameters are initialised i.i.d.\ by
+$c \in \R$, $b^{(\ell')} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell')} \in \R^{d \times 2}$, and $V^{(\ell'')}, W^{(\ell')} \in \R^{d \times d}$, for $\ell' \in [L]$, $\ell'' \in [L-1]$. These parameters are initialised independently by
 \begin{align*}
 c,\, b^{(\ell')}_i,\, V_{1,i},\, V^{(\ell'')}_{i,j},\, W^{(\ell')}_{i,j}
 &\,\stackrel{\mathrm{iid}}{\sim}\, \mathrm{Unif}\bigl[-1/\sqrt{2d},\, 1/\sqrt{2d}\bigr],
@@ -250,9 +250,9 @@ and define
 \frac{1}{|\mathcal{E}|} \sum_{(x_1, x_2) \in \mathcal{E}} f_\theta[c](x_1, x_2) \,=\, p.
 \label{eqn:solver-specification}
 \end{align}
-The left-hand side of~\eqref{eqn:solver-specification} is an unbiased estimator of $t(K_2, f_\theta[c])$, so the equation is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped variant
+The left-hand side of the equation in \eqref{eqn:solver-specification} is an unbiased estimator of $t(K_2, f_\theta[c])$, so the equation is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped variant
 of Newton's method (\Cref{alg:cap}) and use the resulting $c^*$ when evaluating $f_\theta[c^*]$ on other inputs.
-The same idea applies to any single homomorphism-density constraint of the form $t(F, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(F, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this estimator remains monotone in $c$. For the large-deviation application \textbf{(P2)} with $H = K_3$, for instance, this means sampling triples $(x^{(k)}_1,x^{(k)}_2,x^{(k)}_3)$, storing those samples in $\mathcal{T}$, and solving the empirical equation
+The same idea applies to any single homomorphism-density constraint of the form $t(H, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(H, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this estimator remains monotone in $c$. For the large-deviation application \textbf{(P2)} with $H = K_3$, for instance, this means sampling triples $(x^{(k)}_1,x^{(k)}_2,x^{(k)}_3)$, storing those samples in $\mathcal{T}$, and solving the empirical equation
 \[
   \frac{1}{|\mathcal{T}|}
   \sum_{(x_1,x_2,x_3)\in\mathcal{T}}
