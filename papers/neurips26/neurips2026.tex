@@ -147,29 +147,29 @@ We view the framework as a flexible exploratory tool that complements rigorous l
 
 For a positive integer $n$, write $[n] \coloneqq \{1,2,\ldots,n\}$. Throughout the paper, a \emph{graph} is an undirected, finite, simple graph (no self-loops and no multiple edges). For a graph $G$, we write $V(G)$ and $E(G)$ for its vertex and edge sets, and let $v(G) \coloneqq |V(G)|$ and $e(G) \coloneqq |E(G)|$. We use standard notation for familiar graphs: $K_n$ denotes the complete graph on $n$ vertices (i.e., $V(K_n) = [n]$ and $E(K_n) = \{\{i,j\} : i, j \in [n],\, i \neq j\}$), $K_{1,n}$ denotes the complete bipartite graph with part sizes $1$ and $n$ (i.e., $V(K_{1,n}) = [n+1]$ and $E(K_{1,n}) = \{\{1,i\} : 2\le i\le n+1\}$), and $C_n$ denotes the cycle on $n$ vertices (i.e., $V(C_n) = [n]$ and $E(C_n) = \{\{i,i+1\} : 1\le i\le n-1\} \cup \{\{n,1\}\}$).
 
-Let $F$ and $G$ be graphs. A \emph{homomorphism} from $F$ to $G$ is a map $\phi : V(F) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(F)$. The \emph{homomorphism density} from $F$ to $G$, denoted $t(F, G)$, is the probability that a uniformly random map $\phi : V(F) \to V(G)$ is a homomorphism. Equivalently,
+Let $H$ and $G$ be graphs. A \emph{homomorphism} from $H$ to $G$ is a map $\phi : V(H) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(H)$. The \emph{homomorphism density} from $H$ to $G$, denoted $t(H, G)$, is the probability that a uniformly random map $\phi : V(H) \to V(G)$ is a homomorphism. Equivalently,
 \begin{align}
-t(F, G) \,\coloneqq\, {}
+t(H, G) \,\coloneqq\, {}
 \label{eqn:homomorphismdensity}
-\frac{1}{v(G)^{v(F)}}
-\sum_{\phi : V(F) \to V(G)}
-\prod_{\{u,v\} \in E(F)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
+\frac{1}{v(G)^{v(H)}}
+\sum_{\phi : V(H) \to V(G)}
+\prod_{\{u,v\} \in E(H)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
 \end{align}
 where $\mathbb{I}[\cdot]$ is the indicator function.
 Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}.
 
-A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$ with vertex set $[v(F)]$, where
-$t(F,W)$ is the graphon homomorphism density of $F$ in $W$ defined by
+A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(H, G_n)$ converge for every fixed graph $H$ with vertex set $[v(H)]$, there is a graphon $W$ with $t(H, G_n) \to t(H, W)$ for every $H$ with vertex set $[v(H)]$, where
+$t(H,W)$ is the graphon homomorphism density of $H$ in $W$ defined by
 \begin{align}
-t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
-\Big[ \prod_{\{i,j\} \in E(F)} W(x_i, x_j)\Big].
+t(H, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(H)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
+\Big[ \prod_{\{i,j\} \in E(H)} W(x_i, x_j)\Big].
 \label{eqn:homomorphismdensitygraphon}
 \end{align}
 Conversely, every graphon arises in this way~\citep{lovasz2006limits,lovasz2012large}. Familiar discrete structure is reflected in $W$: balanced complete bipartite graphs converge to the two-block graphon equal to $1$ on the off-diagonal blocks and $0$ on the diagonal blocks; an Erd\H{o}s--R\'enyi $G(n,q)$ converges to the constant graphon $W \equiv q$; a stochastic block model converges to a multi-block graphon whose blocks correspond to the communities. 
 
 Graphons provide a common language for both problem families studied in this paper: the objective and constraints in each involve graphon homomorphism densities $t(H,W)$ or closely related graphon integrals, and the structure of the optimal graphons is the central object of interest. The first family arises from extremal graph theory, where optimising over graphons is equivalent to optimising the corresponding asymptotic finite-graph problem~\citep{lovasz2012large}; the second arises from the large deviation theory of dense random graphs. We describe each in turn.
 
-\noindent{\bf Constrained density minimisation.}\
+\noindent{\bf Constrained density minimisation.}\ $\,$
 The first problem family is concerned with minimising the homomorphism density of a fixed graph $H$ subject to a fixed edge density $p$. To state the asymptotic problem formally, we phrase it in terms of graph sequences:
 \begin{equation}
 \label{eqn:extremalproblem:generalisedTuran}
@@ -180,7 +180,7 @@ It generalises Tur\'an's theorem~\citep{turan1941}
 and the Erd\H{o}s--Stone--Simonovits theorem~\citep{erdos1946on, erdos1966limit}. These classical results in extremal graph theory say
 that for every $H$ with at least one edge and $p \leq 1 - 1/(\chi(H) - 1)$, where $\chi(H)$ is the chromatic number of $H$, the optimum is $0$. But for $p > 1 - 1/(\chi(H) - 1)$, the problem is much harder. It is completely solved only for cliques: $H = K_r$ for all $r \ge 3$~\citep{reiher2016clique}, with earlier results for $r = 3$~\citep{razborov2008minimal} and $r = 4$~\citep{nikiforov2011number}. For $C_5$, the minimiser is known only at the special values $p = 1 - 1/k$ ($k$ a positive integer)~\citep{bennett2020minimizing}.
 
-\noindent{\bf Variational problem from large deviation theory.}\ 
+\noindent{\bf Variational problem from large deviation theory.}\ $\,$
 The large deviation theory of dense random graphs addresses two related questions: at what exponential rate does the Erd\H{o}s--R\'enyi random graph $G(n,q)$ have an atypically large or small subgraph density, and what does the graph typically look like when such a rare event occurs?
 These questions are of fundamental interest in probability theory and combinatorics, and they carry information-theoretic structure that is natural from an ML perspective: the Chatterjee--Varadhan framework reduces both questions to a single constrained optimisation over graphons whose objective is an averaged KL divergence~\citep{chatterjee2011large}.
 
@@ -212,10 +212,10 @@ for a graph $H$, reals $p,q,r \in (0,1)$, where $W$ ranges over graphons. Both p
 
 We represent $W$ as a neural network $f_\theta$, recast these graphon optimisations as optimisations over the parameters $\theta$, and apply gradient-based training. A naive instantiation of this idea fails for three reasons. First, known optimal graphons are typically step functions, which standard architectures such as MLPs struggle to represent due to their bias toward smooth functions. Second, the scalar constraints in \textbf{(P1)} and \textbf{(P2)} are poorly handled by penalty terms, so the architecture must enforce them more directly. Third, each occurrence of $t(\cdot, W)$ involves an intractable integral, and estimating these expectations efficiently requires problem-specific sampling. The remainder of this section describes the architecture and training procedure that address these three challenges.
 
-\noindent{\bf Architecture.}\ 
+\noindent{\bf Architecture.}\ $\,$
 We parameterise graphons by a residual MLP that injects a layer-specific sinusoidal encoding of the input at every layer. To handle constraints in \textbf{(P1)} and \textbf{(P2)}, the architecture additionally includes a constraint solver.
 
-Fix the number of layers $L \ge 2$, the hidden width $d$, a differentiable activation $\phi : \R \to \R$, and an increasing function $s : [L] \to (0, \infty)$ for the scale of weight initialisation at each layer $\ell \in [L]$; we use $s(\ell) = \ell$ or $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c] : [0,1]^2 \to [0,1]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
+Fix the number of layers $L \ge 2$, the hidden-layer width $d$, and a differentiable activation $\phi : \R \to \R$. Also, fix an increasing function $s : [L] \to (0, \infty)$, which determines the scale of weight initialisation at each layer; in our experiments, we use $s(\ell) = \ell$ or $s(\ell) = 2^{\ell-1}$. The network $f_\theta[c] : [0,1]^2 \to [0,1]$ has a distinguished scalar bias $c \in \R$ and remaining parameters $\theta$, and is defined for $2 \le \ell \le L$ by
 \begin{align*}
 f_{\theta}[c](x_1, x_2) & \,\coloneqq\, \mathit{sm}\bigl(V g^{(L)}_\theta(\min(x_1, x_2), \max(x_1, x_2)) \,+\, c\bigr),
 \\
@@ -224,7 +224,7 @@ g^{(1)}_\theta(\mathbf{x}) & \,\coloneqq\, \phi\bigl(W^{(1)} \sin(U^{(1)} \mathb
 g^{(\ell)}_\theta(\mathbf{x}) & \,\coloneqq\, g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, \phi\bigl(V^{(\ell-1)} g_\theta^{(\ell-1)}(\mathbf{x}) \,+\, W^{(\ell)} \sin(U^{(\ell)} \mathbf{x}) \,+\, b^{(\ell)}\bigr).
 \end{align*}
 Here $\mathit{sm}$ is the sigmoid, and $g^{(1)}_\theta, g^{(\ell)}_\theta$ are maps from $\{\mathbf{x} = (x_1, x_2) \in [0,1]^2 : x_1 \le x_2\}$ to $\R^d$. The network parameters are
-$c \in \R$, $b^{(\ell')} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell')} \in \R^{d \times 2}$, and $V^{(\ell'')}, W^{(\ell')} \in \R^{d \times d}$, for $\ell' \in [L]$, $\ell'' \in [L-1]$. These parameters are initialised i.i.d.\ by
+$c \in \R$, $b^{(\ell')} \in \R^d$, $V \in \R^{1 \times d}$, $U^{(\ell')} \in \R^{d \times 2}$, and $V^{(\ell'')}, W^{(\ell')} \in \R^{d \times d}$, for $\ell' \in [L]$, $\ell'' \in [L-1]$. These parameters are initialised independently by
 \begin{align*}
 c,\, b^{(\ell')}_i,\, V_{1,i},\, V^{(\ell'')}_{i,j},\, W^{(\ell')}_{i,j}
 &\,\stackrel{\mathrm{iid}}{\sim}\, \mathrm{Unif}\bigl[-1/\sqrt{2d},\, 1/\sqrt{2d}\bigr],
@@ -250,9 +250,9 @@ and define
 \frac{1}{|\mathcal{E}|} \sum_{(x_1, x_2) \in \mathcal{E}} f_\theta[c](x_1, x_2) \,=\, p.
 \label{eqn:solver-specification}
 \end{align}
-The left-hand side of~\eqref{eqn:solver-specification} is an unbiased estimator of $t(K_2, f_\theta[c])$, so the equation is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped variant
+The left-hand side of the equation in \eqref{eqn:solver-specification} is an unbiased estimator of $t(K_2, f_\theta[c])$, so the equation is the empirical counterpart of the constraint. The solution exists and is unique, since the left-hand side is continuous and strictly increasing in $c$ and tends to $0$ and $1$ as $c \to -\infty$ and $c \to +\infty$, respectively. We solve~\eqref{eqn:solver-specification} with a clipped variant
 of Newton's method (\Cref{alg:cap}) and use the resulting $c^*$ when evaluating $f_\theta[c^*]$ on other inputs.
-The same idea applies to any single homomorphism-density constraint of the form $t(F, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(F, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this estimator remains monotone in $c$. For the large-deviation application \textbf{(P2)} with $H = K_3$, for instance, this means sampling triples $(x^{(k)}_1,x^{(k)}_2,x^{(k)}_3)$, storing those samples in $\mathcal{T}$, and solving the empirical equation
+The same idea applies to any single homomorphism-density constraint of the form $t(H, W)=\tau$: one replaces the edge-density estimator in~\eqref{eqn:solver-specification} by an estimator of $t(H, f_\theta[c])$. Because increasing the scalar bias $c$ increases every edge probability, this estimator remains monotone in $c$. For the large-deviation application \textbf{(P2)} with $H = K_3$, for instance, this means sampling triples $(x^{(k)}_1,x^{(k)}_2,x^{(k)}_3)$, storing those samples in $\mathcal{T}$, and solving the empirical equation
 \[
   \frac{1}{|\mathcal{T}|}
   \sum_{(x_1,x_2,x_3)\in\mathcal{T}}
@@ -262,7 +262,7 @@ The same idea applies to any single homomorphism-density constraint of the form 
 The same construction applies to any other pattern graph $H$ by replacing the triangle-density estimator with the corresponding $H$-density estimator from~\eqref{eqn:estimator}.
 
 
-\noindent{\bf Estimating homomorphism density.}\ 
+\noindent{\bf Estimating homomorphism density.}\ $\,$
 Let $H$ be a graph with vertex set $[v(H)]$. By~\eqref{eqn:homomorphismdensitygraphon}, $t(H, f_\theta[c])$ is an expectation that we estimate by Monte Carlo sampling. Our estimator is parameterised by a set $\mathcal{S}$ of permutations of $[v(H)]$. It draws $(N \cdot v(H))$ i.i.d.\ samples $x_i^{(k)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]$ for $(k, i) \in [N] \times [v(H)]$, and then computes
 \begin{equation}
 \label{eqn:estimator}
@@ -277,7 +277,7 @@ The estimator is unbiased for any choice of $\mathcal{S}$ (\Cref{lem:unbiased});
 When $\mathcal{S} = \{\mathrm{id}\}$, our estimator in \eqref{eqn:estimator} is the standard Monte Carlo estimator using $N$ independent samples of $(x_1, \ldots, x_{v(H)})$. With multiple permutations, the same $N$ tuples are reused across the $|\mathcal{S}|$ permuted copies, often producing lower variance for the same number of independent tuples.
 Different permutations also induce repeated evaluations of the network $f_\theta[c]$ on the same unordered pair $(x_i^{(k)}, x_j^{(k)})$ across summands, so caching the evaluations reduces the number of network evaluations from $N \cdot |\mathcal{S}| \cdot e(H)$ to $N \cdot C \cdot e(H)$ for some $C < |\mathcal{S}|$ that depends on $\mathcal{S}$ and $H$. We exploit this for larger graphs (e.g., the Petersen graph in \Cref{sec:addexperiments}).
 
-\noindent{\bf Training algorithm.}\ 
+\noindent{\bf Training algorithm.}\ $\,$
 For \textbf{(P1)}, fix a graph $H$ on $[v(H)]$ and $p \in (0, 1)$. At each iteration, we sample $(N \cdot v(H))$ i.i.d.\ uniform values $\{x_i^{(k)}\}_{(i,k) \in [N] \times [v(H)]}$ on $[0, 1]$, and form
 $\mathcal{D} = \{(x_1^{(k)}, \ldots, x_{v(H)}^{(k)}) : k \in [N]\}$ and the unordered-pair set $\mathcal{E} = \{(x^{(k)}_i, x^{(k)}_j) : k \in [N],\ 1 \le i < j \le v(H)\}$. Then, we set $c_\theta \coloneqq \textsc{Solve}_\theta(\mathcal{E}, p)$ to enforce the empirical constraint, and update
 \[
@@ -453,7 +453,7 @@ We evaluate our framework on instances of \textbf{(P1)} and \textbf{(P2)} drawn 
 
 We visualise graphons as Viridis heatmaps (blue $=0$, yellow $=1$) (\Cref{fig:triangledensity-minimisers}). Reported homomorphism densities are either numerically computed by discretising the learnt graphon into an $M\times M$ weighted adjacency matrix, or estimated using $2^{28}$ samples with a 95\% bootstrap confidence interval (shown in \textit{italic} font) when discretisation is infeasible. Across multiple training runs, we report the lowest-objective run; reported values should be read as best-found candidate upper bounds, and the bootstrap intervals quantify Monte Carlo estimation error rather than variability across runs. See \Cref{sec:experimentdetails} for details.
 
-\noindent{\bf Constrained homomorphism-density minimisation.}\
+\noindent{\bf Constrained homomorphism-density minimisation.}\ $\,$
 We apply our method to \textbf{(P1)} across three families of instances: clique densities ($H = K_n$, fully solved~\citep{razborov2008minimal,reiher2016clique}), odd-cycle densities ($H = C_5, C_7$, partly open), and a systematic sweep over 175 non-bipartite graphs with $v(H) \le 6$. The clique experiments validate the method against known optima; the latter two produce new candidate minimisers and, through the exhaustive sweep, a previously unreported family of extremal structures. We describe each in turn.
 
 
@@ -509,7 +509,7 @@ We apply our method to \textbf{(P1)} across three families of instances: clique 
 \end{figure}
 
 
-\noindent{\it Clique densities ($H = K_n$).}
+\noindent{\it Clique densities ($H = K_n$).}\ $\,$
 We begin with the case $n\,{=}\,3$. When $p \,{=}\, 1 \,{-}\, 1/k$ for some integer $k \ge 2$, the optimal graphon is the complete $k$-partite graphon or any of its measure-preserving permutations.  
 For $i \in [k]$, let $X_i = ((i-1)/k, i/k]$. The complete $k$-partite graphon $W_k$ is defined as follows:
 $W_k(x_1,x_2) =
@@ -621,14 +621,14 @@ For $p=5/7$, the learnt graphon (\Cref{fig:triangledensity-minimisers}f) does no
 
 Turning to larger cliques ($k > 3$), we ran $\min_W t(K_k, W)$ s.t.\ $t(K_2, W){=}1{-}1/k$ for $k\in\{4,5,6\}$. Even though the larger motif size increases the variance of our estimator and the optimal graphon involves more blocks, our method recovers the complete $k$-partite structure (\Cref{fig:clique}).
 
-\noindent{\it Open problems: $C_5$ and $C_7$.}
+\noindent{\it Open problems: $C_5$ and $C_7$.}\ $\,$
 We next apply our method to two graphon optimisation problems that, to the best of our knowledge, remain open in the tested regimes: minimising the homomorphism densities of $C_5$ and $C_7$, each under a fixed edge density~$p$. In \Cref{sec:addexperiments}, we also report results for the Petersen graph, for which no prior optima or conjectured optima are known to us.
 
 For $C_5$, \citet{bennett2020minimizing} characterised the minimisers when $p=1-1/k$ and conjectured them for other $p$. We applied our method for $p\in\{1/2, 2/3, 4/5, 4/7, 5/8, 5/7\}$ (\Cref{fig:5cycleminimisation}); the resulting values agree with the conjectured optima within $0.1\%$ (\Cref{tab:c5result}). When $p=1-1/k$, the learnt graphon recovers the complete $k$-partite structure (top row); for other $p$, it exhibits pronounced diagonal (banded) structure (bottom row), suggesting a qualitatively different extremal configuration away from the rational breakpoints.
 %
 For $C_7$, no prior results are known to us. Motivated by the $C_5$ results of \citet{bennett2020minimizing}, we propose a conjecture for the structure and optimum value of $C_7$-minimising graphons under a fixed edge density; see \Cref{sec:oddcycleconjecture}. Empirically, our learnt graphons match our conjectured optima within $0.1\%$ across all tested $p$ (\Cref{tab:c7result}). For $p\in\{1/2,2/3,4/5\}$ ($p=1-1/k$), they recover the complete $k$-partite structure (top row of \Cref{fig:7cycleminimisation}); for $p\in\{4/7,5/8\}$, they show diagonal patterns similar to $C_5$, suggesting that this is a common feature of odd-cycle minimisation; for $p=5/7$, the structure is qualitatively different, with block-like rather than diagonal patterns (bottom-right of \Cref{fig:7cycleminimisation}).
 
-\noindent{\it Exhaustive study over small graphs.}
+\noindent{\it Exhaustive study over small graphs.}\ $\,$
 We now describe a systematic study enabled by our method.
 We applied our method to the problem \textbf{(P1)} in \eqref{eqn:targetproblems} for non-bipartite graphs $H$ with $v(H) \le 6$ and $e(H) \le 9$, and with no isolated vertices, for a total of 175 graphs.
 For each $H$, we trained our network to minimise $t(H,W)$ subject to $t(K_2,W)=p$, for
@@ -648,7 +648,7 @@ We analysed the curve $x \mapsto \min_{W:t(K_2,W)=x} t(H,W)$ for each $H$, by in
 %
 Our experiments also suggest a novel family of extremal graphon structures. When $p \,{=}\, 1 \,{-}\, 1/k$, the minimisers for cliques and $C_5$ are known to be complete $k$-partite~\citep{reiher2016clique,bennett2020minimizing}, and we conjecture the same for $C_7$; in all three cases our method recovers this structure (\Cref{fig:triangledensity-minimisers,fig:5cycleminimisation,fig:7cycleminimisation}). This is not universal: for the graph $H_6$ in Fig.~\ref{fig:noveloptimum}a at the same $p$, our method finds a candidate minimiser that is neither complete $k$-partite nor constant (\Cref{fig:noveloptimum}); the learnt graphons exhibit a geometric pattern in which edge probabilities appear to depend on the circular distance when $[0,1]$ is interpreted as a circle.
 
-\noindent{\bf Variational problem from large deviation theory.}\
+\noindent{\bf Variational problem from large deviation theory.}\ $\,$
 We apply our framework to \textbf{(P2)}, the variational problem of \citet{chatterjee2011large}. 
 We test $(q, r) \in \{0.05, 0.1\} \times \{0.4, 0.5, 0.6\}$ for upper-tail variational problems with $H \in \{K_3, C_4, C_5, K_{1,3}\}$, and $(q, r) \in \{0.7, 0.8, 0.9\} \times \{0.05, 0.1\}$ for lower-tail variational problems with $H = K_3$; in all these regimes the structure of optimisers is, to our knowledge, not fully understood. As a reference for $H = K_3$, we use the tripartite construction $W_{\mathrm{LZ}}$ proposed by Lemma 3.4 of \citet{lubetzky2015replica}; \Cref{tab:largedeviation} compares $h_q(W_{\mathrm{LZ}})$ to $h_q(W_{\mathrm{ours}})$ at our learnt graphon $W_{\mathrm{ours}}$ in the upper-tail regime.
 Qualitatively, the learnt graphons consistently find two-block structures for all graphs and in both upper- and lower-tail regimes.
@@ -656,7 +656,7 @@ For the upper-tail problems, the 2-regular $K_3$, $C_4$, $C_5$ share close edge 
 For the lower-tail problems, we obtain a qualitatively different structure of nearly-bipartite graphons.
 Quantitatively, in the upper-tail problems for $H = K_3$, our method consistently finds graphons with lower relative entropy than the tripartite construction $W_{\mathrm{LZ}}$, showing that the latter is suboptimal in these regimes; see \Cref{sec:addexperiments} for details.
 
-\noindent{\bf Ablation study, baselines, and multi-task variant.}\ 
+\noindent{\bf Ablation study, baselines, and multi-task variant.}\  $\,$
 To verify that each architectural component is necessary and that the neural approach outperforms simpler alternatives, we ran an ablation study and four non-neural baselines on triangle-density minimisation under $t(K_2, W) = 7/9$. Removing the multi-scale sinusoidal encoding, the constraint solver, or the cosine-annealing schedule consistently degrades the recovered structure or its accuracy. The four non-neural baselines tailored to step graphons (a fixed-block SBM with $256$ blocks; SBMs with trainable block sizes; a decision tree; a tree ensemble) all yielded qualitatively poorer solutions than even the ablated variants. To explore whether a single model can handle multiple problem instances simultaneously, we also trained a FiLM-conditioned multi-task variant over $p \in [1/2, 2/3]$ for $H = K_3$ \citep{perez2018film}, which demonstrates that the architecture extends naturally to this setting. Full details are deferred to \Cref{sec:ablation}.
 
 \bibliography{references}
