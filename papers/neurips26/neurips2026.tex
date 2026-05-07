@@ -145,21 +145,20 @@ We view the framework as a flexible exploratory tool that complements rigorous l
 
 \section{Background} \label{sec:background}
 
-For a positive integer $n$, write $[n] \coloneqq \{1,2,\ldots,n\}$. Throughout the paper, a \emph{graph} is an undirected, finite, simple graph (no self-loops and no multiple edges). For a graph $G$, we write $V(G)$ and $E(G)$ for its vertex and edge sets, and let $v(G) \coloneqq |V(G)|$ and $e(G) \coloneqq |E(G)|$. We use standard notation for familiar graphs: $K_n$ denotes the complete graph on $n$ vertices (with vertex set $[n]$ and edge set $\{\{i,j\} : i, j \in [n],\, i \neq j\}$), $K_{1,n}$ denotes the complete bipartite graph with part sizes $1$ and $n$ (with vertex set $[n+1]$ and edge set $\{\{1,i\} : 2\le i\le n+1\}$), and $C_n$ denotes the cycle on $n$ vertices (with vertex set $[n]$ and edge set $\{\{i,i+1\} : 1\le i\le n-1\} \cup \{\{n,1\}\}$).
+For a positive integer $n$, write $[n] \coloneqq \{1,2,\ldots,n\}$. Throughout the paper, a \emph{graph} is an undirected, finite, simple graph (no self-loops and no multiple edges). For a graph $G$, we write $V(G)$ and $E(G)$ for its vertex and edge sets, and let $v(G) \coloneqq |V(G)|$ and $e(G) \coloneqq |E(G)|$. We use standard notation for familiar graphs: $K_n$ denotes the complete graph on $n$ vertices (i.e., $V(K_n) = [n]$ and $E(K_n) = \{\{i,j\} : i, j \in [n],\, i \neq j\}$), $K_{1,n}$ denotes the complete bipartite graph with part sizes $1$ and $n$ (i.e., $V(K_{1,n}) = [n+1]$ and $E(K_{1,n}) = \{\{1,i\} : 2\le i\le n+1\}$), and $C_n$ denotes the cycle on $n$ vertices (i.e., $V(C_n) = [n]$ and $E(C_n) = \{\{i,i+1\} : 1\le i\le n-1\} \cup \{\{n,1\}\}$).
 
-Let $H$ and $G$ be graphs. A \emph{homomorphism} from $H$ to $G$ is a map $\phi : V(H) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(H)$. The \emph{homomorphism density} from $H$ to $G$, denoted $t(H, G)$, is the probability that a uniformly random map $\phi : V(H) \to V(G)$ is a homomorphism. Equivalently,
+Let $F$ and $G$ be graphs. A \emph{homomorphism} from $F$ to $G$ is a map $\phi : V(F) \to V(G)$ that preserves adjacency, i.e., $\{\phi(u), \phi(v)\} \in E(G)$ for every $\{u,v\} \in E(F)$. The \emph{homomorphism density} from $F$ to $G$, denoted $t(F, G)$, is the probability that a uniformly random map $\phi : V(F) \to V(G)$ is a homomorphism. Equivalently,
 \begin{align}
-t(H, G) \,\coloneqq\, {}
+t(F, G) \,\coloneqq\, {}
 \label{eqn:homomorphismdensity}
-\frac{1}{v(G)^{v(H)}}
-\!\!
-\sum_{\phi : V(H) \to V(G)}
-\prod_{\{u,v\} \in E(H)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
+\frac{1}{v(G)^{v(F)}}
+\sum_{\phi : V(F) \to V(G)}
+\prod_{\{u,v\} \in E(F)} \mathbb{I}\bigl[\{\phi(u), \phi(v)\} \in E(G)\bigr],
 \end{align}
 where $\mathbb{I}[\cdot]$ is the indicator function.
 Homomorphism densities are a natural language for extremal graph problems: they are size-normalised statistics of fixed patterns, so objectives and constraints are comparable across graphs of different sizes, and they are central to dense graph limit theory, quasirandomness, and regularity-based approximation~\citep{lovasz2012large}.
 
-A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$, where
+A \emph{graphon} $W$ is a symmetric measurable function $W : [0,1]^2 \to [0,1]$. Intuitively, $W$ can be viewed as the (probabilistic) adjacency matrix of a continuum graph with vertex set $[0,1]$: $W(x,y)$ is the probability of an edge between $x$ and $y$. Graphons arise as limits of dense graphs: along any graph sequence $(G_n)_{n \in \mathbb{N}}$ whose homomorphism densities $t(F, G_n)$ converge for every fixed graph $F$ with vertex set $[v(F)]$, there is a graphon $W$ with $t(F, G_n) \to t(F, W)$ for every $F$ with vertex set $[v(F)]$, where
 $t(F,W)$ is the graphon homomorphism density of $F$ in $W$ defined by
 \begin{align}
 t(F, W) \,\coloneqq\, \mathbb{E}_{x_1, \ldots, x_{v(F)} \stackrel{\mathrm{iid}}{\sim} \mathrm{Unif}[0,1]}
