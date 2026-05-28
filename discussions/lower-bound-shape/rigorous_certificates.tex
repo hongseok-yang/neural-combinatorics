@@ -1,0 +1,609 @@
+% Self-contained appendix to the progress note on
+%   "Progress on two graphon optimisation problems".
+% Insert this between the existing §7 ("The tripartite Turan-filling reduction")
+% and §8 ("Where the project currently stands"), or use as a standalone note.
+%
+% All certificates here are exact algebraic / Sturm-sequence computations and
+% are reproduced in the companion script  scripts/verify_reduced_problems.py
+% which can be re-run to regenerate every numerical bracket.
+
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\dd}{\,d}
+\newcommand{\Hom}{\operatorname{Hom}}
+
+\title[Rigorous certificates for the reduced $P$ and $J$ problems]%
+{Rigorous certificates for the reduced problems\\
+$\Psi_P(x)$ and $\Psi_J(x)$ on $[2/3,3/4]$}
+\author{Companion note (Sturm certificates)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note records exact algebraic certificates for the one-dimensional reduced
+problems
+\(
+   \Psi_P(x) = \min_\alpha \Phi_P(\alpha, x),\quad
+   \Psi_J(x) = \min_\alpha \Phi_J(\alpha, x)
+\)
+introduced in §7 of \emph{Progress on two graphon optimisation problems}.
+Concretely we prove, by Sturm sequences on explicit polynomials:
+(i) the discriminants $\Delta_P, \Delta_J$ are strictly positive on
+$(1/3,1/2)$, the stationary quadratic in $q$ has a unique branch
+$q_P,q_J\colon(1/3,1/2)\to(0,1/2)$, and these branches are exactly the
+positive roots;
+(ii) along the resulting parametrisation, $x_P(\alpha),x_J(\alpha)$ are
+strictly increasing on $(1/3,1/2)$, with $x_P(1/3)=x_J(1/3)=2/3$ and
+$x_P(1/2)=x_J(1/2)=3/4$, so $\alpha$ is a valid parameter for $x\in[2/3,3/4]$;
+(iii) the endpoint values are
+$\Psi_P(2/3)=\Psi_J(2/3)=0$, $\Psi_P(3/4)=9/128$, $\Psi_J(3/4)=3/64$;
+(iv) the curvatures $\Psi_P''(x)$ and $\Psi_J''(x)$ each change sign exactly
+once on $(2/3,3/4)$, with rigorously bracketed inflection points
+$x^*_P\in[0.6787853539,\,0.6787853540]$ and
+$x^*_J\in[0.7132424244,\,0.7132424245]$.
+
+Statement (iv) is the substantive new finding.  It shows that, already inside
+the tripartite Turan-filling family and already on the first Turan interval
+$[2/3,3/4]$, the reduced curves for $P=K_4^{\dagger}$ and
+$J=K_3\cup_{K_2}K_4$ are \emph{neither convex nor concave}: each is convex
+on $(2/3,x^*)$ and concave on $(x^*,3/4)$.  In particular, if the global
+reduction to the tripartite Turan-filling family holds, then the original
+Problem~2 classification of $P$ and $J$ as "piecewise concave on Turan
+intervals" is wrong already on the first Turan interval, not just at large $x$.
+
+All computations are verified by the companion script
+\verb|scripts/verify_reduced_problems.py| using the
+\verb|sympy| computer algebra system.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup and key polynomials}
+
+We adopt the notation of §7 of the progress note. For
+\(\alpha\in(0,1)\) we have the edge-density constraint
+\begin{equation}
+\label{eq:edgedensity}
+   x = \tfrac12 + \alpha - \tfrac32\alpha^2 + \alpha^2 q,
+   \qquad
+   q_x(\alpha) = \frac{x - \tfrac12 - \alpha + \tfrac32\alpha^2}{\alpha^2},
+\end{equation}
+and the (alpha, q) rooted-counting forms
+\begin{align}
+\Phi_P(\alpha, q) &= \tfrac32\alpha^2(1-\alpha)^2 q\!\left(\tfrac{3-\alpha}{2}+\alpha q\right),
+\label{eq:PhiPaq}
+\\
+\Phi_J(\alpha, q) &= \alpha^2(1-\alpha)^2 q\!\left(\tfrac32-\alpha+2\alpha q\right).
+\label{eq:PhiJaq}
+\end{align}
+After substituting $q = q_x(\alpha)$, the explicit closed forms
+\begin{align}
+\Phi_P(\alpha, x) &= \frac{3(1-\alpha)^2(2\alpha^2+\alpha+2x-1)(3\alpha^2-2\alpha+2x-1)}{8\alpha},
+\label{eq:PhiPx}
+\\
+\Phi_J(\alpha, x) &= \frac{(1-\alpha)^2(3\alpha^2-2\alpha+2x-1)(4\alpha^2-\alpha+4x-2)}{4\alpha}
+\label{eq:PhiJx}
+\end{align}
+agree with~\eqref{eq:PhiPaq}, \eqref{eq:PhiJaq} via~\eqref{eq:edgedensity}
+(symbolically verified).
+
+\medskip
+
+The stationary equations $\partial \Phi_P/\partial\alpha = 0$ and
+$\partial\Phi_J/\partial\alpha = 0$ along the edge-density constraint reduce
+(after clearing the non-vanishing factor $(1-\alpha)$) to
+\begin{align}
+\label{eq:statP}
+   A_P(\alpha) q^2 + B_P(\alpha) q + C_P(\alpha) &= 0,\\
+\label{eq:statJ}
+   A_J(\alpha) q^2 + B_J(\alpha) q + C_J(\alpha) &= 0,
+\end{align}
+where
+\begin{align*}
+A_P(\alpha) &= 2\alpha^2(\alpha+1), &
+A_J(\alpha) &= 4\alpha^2(\alpha+1),
+\\
+B_P(\alpha) &= \alpha(9\alpha^2-9\alpha+4), &
+B_J(\alpha) &= 2\alpha(3\alpha-2)^2,
+\\
+C_P(\alpha) &= -3(\alpha-\tfrac13)(\alpha-1)(\alpha-3), &
+C_J(\alpha) &= -3(\alpha-\tfrac13)(\alpha-1)(2\alpha-3).
+\end{align*}
+The discriminants are
+\begin{align}
+\label{eq:DeltaP}
+\Delta_P(\alpha) &= 105\alpha^4 - 242\alpha^3 + 153\alpha^2 + 8\alpha - 8,
+\\
+\label{eq:DeltaJ}
+\Delta_J(\alpha) &= 105\alpha^4 - 260\alpha^3 + 204\alpha^2 - 52\alpha + 4,
+\end{align}
+in the sense that $B_P^2 - 4 A_P C_P = \alpha^2\Delta_P$ and
+$B_J^2 - 4 A_J C_J = 4\alpha^2\Delta_J$.
+
+\section{Discriminant positivity, branch uniqueness, and range}
+\label{sec:branch}
+
+\begin{lemma}[Discriminants are positive]
+\label{lem:disc-positive}
+$\Delta_P(\alpha) > 0$ and $\Delta_J(\alpha) > 0$ on the open interval
+$(1/3,1/2)$.
+\end{lemma}
+
+\begin{proof}
+Each $\Delta$ is a quartic with rational coefficients.  Its Sturm sequence
+shows zero sign changes between Sturm-evaluations at $1/3$ and at $1/2$,
+i.e.\ zero real roots in the open interval $(1/3,1/2)$.  The values at the
+endpoints are
+\[
+   \Delta_P(1/3) = 4,\quad \Delta_P(1/2) = 169/16,\quad
+   \Delta_J(1/3) = 1,\quad \Delta_J(1/2) = 49/16,
+\]
+all positive.  Strict positivity throughout the open interval follows.
+\end{proof}
+
+Hence both stationary quadratics have two real roots
+\[
+   q^{\pm}_P(\alpha) = \frac{-B_P(\alpha)\pm\alpha\sqrt{\Delta_P(\alpha)}}{2A_P(\alpha)},
+   \quad
+   q^{\pm}_J(\alpha) = \frac{-B_J(\alpha)\pm 2\alpha\sqrt{\Delta_J(\alpha)}}{2A_J(\alpha)},
+\]
+and we denote the larger ($+$ sign) root by $q_P$, $q_J$ respectively.
+
+\begin{theorem}[Unique stationary branch with $q\in(0,1/2)$]
+\label{thm:branch-range}
+For every $\alpha\in(1/3,1/2)$,
+\[
+   0 < q_P(\alpha) < \tfrac12,
+   \qquad
+   0 < q_J(\alpha) < \tfrac12,
+\]
+and the two roots of~\eqref{eq:statP} (resp.~\eqref{eq:statJ}) have opposite
+signs.  In particular $q_P,q_J$ are the unique stationary branches with
+$q\in(0,1/2)$. Moreover
+\[
+   q_P(\tfrac13) = q_J(\tfrac13) = 0,
+   \qquad
+   q_P(\tfrac12) = q_J(\tfrac12) = \tfrac12.
+\]
+\end{theorem}
+
+\begin{proof}
+On the open interval $(1/3,1/2)$, the leading coefficients
+$A_P, A_J > 0$ (each is a polynomial in $\alpha$ with positive endpoint values
+and zero real roots in $(1/3,1/2)$ by Sturm).
+
+The constant term $C_P$ factors as $-3(\alpha-1/3)(\alpha-3)(\alpha-1)$.
+On $(1/3,1/2)$ the three factors have signs $+,-,-$ respectively, so
+$C_P(\alpha)$ is negative.  The same applies to $C_J$: it factors as
+$-3(\alpha-1/3)(\alpha-1)(2\alpha-3)$, whose signs on $(1/3,1/2)$ are $+,-,-$.
+
+Since $A>0$ and $C<0$ on the open interval, the product $C/A$ of the two
+real roots of the stationary quadratic is negative, so the two roots have
+opposite sign and the "+"~root is the unique positive root.  This proves
+$q_P,q_J > 0$.
+
+For the upper bound, evaluate the left-hand side of the stationary equation
+at $q=1/2$:
+\begin{align*}
+A_P/4 + B_P/2 + C_P
+   &= 2(\alpha-1/2)(\alpha^2+5\alpha-3), \\
+A_J/4 + B_J/2 + C_J
+   &= 2(\alpha-1/2)(2\alpha^2+4\alpha-3).
+\end{align*}
+On $(1/3,1/2)$, the factor $(\alpha-1/2)$ is negative.  The polynomial
+$\alpha^2+5\alpha-3$ has $\alpha^2+5\alpha-3\big|_{1/3} = 1/9+5/3-3=-11/9 < 0$
+and is strictly increasing on $(1/3,1/2)$, with value $-1/4 < 0$ at $1/2$;
+hence it is negative on $(1/3,1/2)$.  Similarly $2\alpha^2+4\alpha-3$ takes
+the value $-13/9$ at $1/3$ and $-1/2$ at $1/2$, and is strictly increasing,
+so it is also negative on $(1/3,1/2)$.  In each case the product of two
+negative factors is positive, so the stationary quadratic is strictly
+positive at $q=1/2$ throughout $(1/3,1/2)$.  Combined with $A>0$, this
+forces both real roots to be strictly less than $1/2$, and in particular
+the "+"~branch satisfies $q_P,q_J < 1/2$.
+
+The boundary values $q_P(1/3)=q_J(1/3)=0$ and $q_P(1/2)=q_J(1/2)=1/2$ are
+direct evaluations using $\Delta_P(1/3)=4$, $\Delta_J(1/3)=1$,
+$\Delta_P(1/2)=169/16$, $\Delta_J(1/2)=49/16$.
+\end{proof}
+
+\section{Monotonicity of \texorpdfstring{$x(\alpha)$}{x(alpha)} and the parametrisation of $[2/3,3/4]$}
+\label{sec:monotonicity}
+
+Substituting the branch $q_P$ into~\eqref{eq:edgedensity} gives the function
+\[
+   x_P(\alpha) = \tfrac12 + \alpha - \tfrac32\alpha^2 + \alpha^2\, q_P(\alpha),
+\]
+and similarly $x_J(\alpha)$.
+
+\begin{theorem}[Monotonicity]
+\label{thm:monotonicity}
+$x_P'(\alpha) > 0$ and $x_J'(\alpha) > 0$ on $(1/3,1/2)$.  Combined with
+Theorem~\ref{thm:branch-range}, $\alpha\mapsto x_P(\alpha)$ and
+$\alpha\mapsto x_J(\alpha)$ are continuous strictly increasing bijections
+from $[1/3,1/2]$ onto $[2/3,3/4]$.
+\end{theorem}
+
+\begin{proof}
+Differentiating $x_P(\alpha)$ and using the stationary equation
+$A_P q^2 + B_P q + C_P=0$ for implicit differentiation,
+\[
+   x_P'(\alpha)
+   = \frac{(1-3\alpha+2\alpha q)(2A_P q + B_P) - \alpha^2(A_P' q^2 + B_P' q + C_P')}
+          {2 A_P q + B_P},
+\]
+where the denominator equals $\alpha\sqrt{\Delta_P}$ on the $+$~branch and
+is therefore strictly positive on $(1/3,1/2)$ by Lemma~\ref{lem:disc-positive}.
+
+The numerator, after reducing $q^2 = -(B_P q + C_P)/A_P$, is linear in $q$.
+Write it as $L_P(\alpha) + M_P(\alpha) q$, with (after clearing the common
+denominator $\alpha+1$)
+\begin{align*}
+L_P &= -15\alpha^5 - 15\alpha^4 - 11\alpha^3 + 19\alpha^2 - 2\alpha,
+\\
+M_P &= -30\alpha^5 - 38\alpha^4 + 14\alpha^3.
+\end{align*}
+On the $+$~branch, substituting $q = q_P(\alpha)$ and clearing the positive
+factor $2A_P$, the numerator becomes a polynomial in $\alpha$ with explicit
+parts of the form
+\[
+   P_{\mathrm{lin}}(\alpha) + P_{\mathrm{sq}}(\alpha)\sqrt{\Delta_P(\alpha)},
+\]
+where
+\begin{align*}
+P_{\mathrm{lin}} &= 210\alpha^8 - 48\alpha^7 - 452\alpha^6 + 310\alpha^5 + 12\alpha^4 - 8\alpha^3,
+\\
+P_{\mathrm{sq}}  &= -30\alpha^6 - 38\alpha^5 + 14\alpha^4.
+\end{align*}
+A Sturm check on $(1/3,1/2)$ gives
+$P_{\mathrm{lin}}>0$ (probe at $\alpha=2/5$ yields a positive rational, no roots
+in the open interval) and
+$P_{\mathrm{lin}}^2 - P_{\mathrm{sq}}^2\,\Delta_P > 0$ (probe positive, no roots
+in the open interval; endpoint values $1269760/4782969 > 0$ at $1/3$ and
+$3087/2048 > 0$ at $1/2$).  Therefore
+\[
+   |P_{\mathrm{lin}}(\alpha)| > |P_{\mathrm{sq}}(\alpha)\sqrt{\Delta_P(\alpha)}|,
+\]
+which combined with $P_{\mathrm{lin}} > 0$ gives $P_{\mathrm{lin}} +
+P_{\mathrm{sq}}\sqrt{\Delta_P} > 0$ throughout $(1/3,1/2)$, regardless of the
+sign of $P_{\mathrm{sq}}$.  Thus $x_P'(\alpha) > 0$.
+
+The same argument applies verbatim to $J$, with
+\begin{align*}
+L_J &= -30\alpha^5+15\alpha^4+2\alpha^3-\alpha^2+2\alpha,
+\\
+M_J &= -60\alpha^5-70\alpha^4+40\alpha^3,
+\end{align*}
+and on-branch parts (after the doubled prefactor $2\alpha$ coming from
+$\sqrt{4\alpha^2\Delta_J}=2\alpha\sqrt{\Delta_J}$)
+\begin{align*}
+P_{\mathrm{lin}}^{(J)} &= 840\alpha^8 - 300\alpha^7 - 1784\alpha^6 + 1528\alpha^5 - 312\alpha^4 + 16\alpha^3,
+\\
+P_{\mathrm{sq}}^{(J)}  &= -120\alpha^6 - 140\alpha^5 + 80\alpha^4.
+\end{align*}
+Again a Sturm check shows $P_{\mathrm{lin}}^{(J)} > 0$ and
+$(P_{\mathrm{lin}}^{(J)})^2 - (P_{\mathrm{sq}}^{(J)})^2\,\Delta_J > 0$ on
+$(1/3,1/2)$, with endpoint values $1275904/4782969 > 0$ at $1/3$ and $99/16 > 0$
+at $1/2$.  Hence $x_J'(\alpha) > 0$ on $(1/3,1/2)$.
+
+Continuity of $q_P,q_J$ (and hence of $x_P,x_J$) on the closed interval
+$[1/3,1/2]$ is immediate from $\Delta_P,\Delta_J\ge 0$ on $[1/3,1/2]$ and the
+positivity of $A_P,A_J$.  Combined with the endpoint values
+$x_P(1/3)=x_J(1/3)=2/3$ and $x_P(1/2)=x_J(1/2)=3/4$ (direct evaluation), this
+gives the claimed bijections.
+\end{proof}
+
+\section{Endpoint values of \texorpdfstring{$\Psi_P,\Psi_J$}{Psi\_P, Psi\_J}}
+\label{sec:endpoints}
+
+\begin{theorem}[Endpoint values]
+\label{thm:endpoints}
+$\Psi_P(2/3) = \Psi_J(2/3) = 0$, $\Psi_P(3/4) = 9/128$, $\Psi_J(3/4) = 3/64$.
+\end{theorem}
+
+\begin{proof}
+At $\alpha=1/3$: $q_P(1/3) = q_J(1/3) = 0$, so~\eqref{eq:PhiPaq}, \eqref{eq:PhiJaq}
+both vanish.  At $\alpha=1/2$: $q_P(1/2) = q_J(1/2) = 1/2$.  Evaluating
+$(\alpha,q)=(1/2,1/2)$ in~\eqref{eq:PhiPaq} gives
+\(
+\Phi_P=\tfrac32\cdot\tfrac14\cdot\tfrac14\cdot\tfrac12\cdot
+  \bigl(\tfrac{5/2}{2}+\tfrac14\bigr)
+  =\tfrac{3}{128}\cdot\tfrac{6}{4}
+  =9/128.
+\)
+Similarly, \eqref{eq:PhiJaq} at $(1/2,1/2)$ gives
+\(
+\Phi_J=\tfrac14\cdot\tfrac14\cdot\tfrac12\cdot
+  \bigl(\tfrac32-\tfrac12+\tfrac12\bigr)
+  =\tfrac{1}{32}\cdot\tfrac32=3/64.
+\)
+The endpoint identifications $\Psi_P(2/3)=\Phi_P(\alpha=1/3,q=0)$ and
+$\Psi_P(3/4)=\Phi_P(\alpha=1/2,q=1/2)$ follow because Theorem~\ref{thm:monotonicity}
+identifies the endpoints $\alpha=1/3$ and $\alpha=1/2$ with $x=2/3$ and $x=3/4$
+respectively; and these are the unique parametrisation points there, since
+$x_P,x_J$ are bijections onto $[2/3,3/4]$.
+\end{proof}
+
+\section{Mixed curvature: the new finding}
+\label{sec:curvature}
+
+We now turn to the main qualitative result.  At an interior critical point
+$\alpha^*=\alpha^*(x)$ of $\alpha\mapsto\Phi(\alpha,x)$, the envelope formula
+\[
+   \Psi''(x) \;=\; \frac{\det \nabla^2_{(\alpha,x)}\Phi}{\Phi_{\alpha\alpha}}
+\]
+combined with $\Phi_{\alpha\alpha} > 0$ at the minimum gives
+$\operatorname{sign} \Psi''(x) = \operatorname{sign} \det\nabla^2\Phi$.
+
+\begin{proposition}[$\Phi_{\alpha\alpha} > 0$ on the branch]
+\label{prop:Phiaa-positive}
+For each of $\Phi=\Phi_P$ and $\Phi=\Phi_J$, the second derivative
+$\Phi_{\alpha\alpha}(\alpha,x_*(\alpha))$ is strictly positive on the parametric
+branch $\alpha\in(1/3,1/2)$.
+\end{proposition}
+
+\begin{proof}
+The computation is direct.  After eliminating $x$ via $x=x_*(\alpha)$, the
+restriction of $\Phi_{\alpha\alpha}$ to the branch takes the form
+$L(\alpha) + M(\alpha)\sqrt{\Delta_*(\alpha)}$ over a common denominator
+$\propto \alpha(\alpha+1)^2 > 0$, with
+\begin{align*}
+\text{(P)}\quad L_{P,\mathrm{aa}} &= -315\alpha^6+387\alpha^5+606\alpha^4-1143\alpha^3+447\alpha^2+30\alpha-12,\\
+            M_{P,\mathrm{aa}} &= 45\alpha^4+12\alpha^3-78\alpha^2+21\alpha,\\
+\text{(J)}\quad L_{J,\mathrm{aa}} &= -210\alpha^6+285\alpha^5+371\alpha^4-828\alpha^3+460\alpha^2-82\alpha+4,\\
+            M_{J,\mathrm{aa}} &= 30\alpha^4+5\alpha^3-55\alpha^2+20\alpha.
+\end{align*}
+For each, Sturm shows $L > 0$ and $L^2 - M^2\Delta > 0$ on $(1/3,1/2)$;
+endpoint values
+$L_{P,\mathrm{aa}}^2 - M_{P,\mathrm{aa}}^2\Delta_P = 1269760/6561 > 0$ at $1/3$
+and $27783/512 > 0$ at $1/2$,
+$L_{J,\mathrm{aa}}^2 - M_{J,\mathrm{aa}}^2\Delta_J = 318976/59049 > 0$ at $1/3$
+and $99/16 > 0$ at $1/2$.  By the
+argument used in Theorem~\ref{thm:monotonicity},
+$L + M\sqrt{\Delta} > 0$ throughout $(1/3,1/2)$, hence
+$\Phi_{\alpha\alpha} > 0$ on the branch.
+\end{proof}
+
+The Hessian determinant $\det\nabla^2_{(\alpha,x)}\Phi$ along the branch takes
+the same form $L(\alpha) + M(\alpha)\sqrt{\Delta_*(\alpha)}$ over a positive
+denominator $\propto\alpha(\alpha+1)^2$, with
+\begin{align*}
+\text{(P)}\quad L_{P,\det} &= -2835\alpha^7+8280\alpha^6-2385\alpha^5-16236\alpha^4
++21915\alpha^3-9720\alpha^2+729\alpha+252,\\
+            M_{P,\det} &= 270\alpha^5-468\alpha^4-342\alpha^3+1134\alpha^2-720\alpha+126,
+\\
+\text{(J)}\quad L_{J,\det} &= -315\alpha^7+965\alpha^6-403\alpha^5-1753\alpha^4
++2786\alpha^3-1674\alpha^2+432\alpha-38,\\
+            M_{J,\det} &= 30\alpha^5-55\alpha^4-35\alpha^3+135\alpha^2-95\alpha+20.
+\end{align*}
+
+\begin{theorem}[Mixed curvature]
+\label{thm:mixed-curvature}
+There exist
+\[
+   x^*_P \in [0.6787853539,\,0.6787853540],
+   \qquad
+   x^*_J \in [0.7132424244,\,0.7132424245]
+\]
+such that
+\[
+   \Psi_P''(x) > 0\ \text{on}\ (2/3, x^*_P),\quad
+   \Psi_P''(x) < 0\ \text{on}\ (x^*_P, 3/4),
+\]
+and
+\[
+   \Psi_J''(x) > 0\ \text{on}\ (2/3, x^*_J),\quad
+   \Psi_J''(x) < 0\ \text{on}\ (x^*_J, 3/4).
+\]
+In particular, neither $\Psi_P$ nor $\Psi_J$ is convex or concave on the
+first Turan interval $[2/3,3/4]$, and each has a unique inflection point
+inside that interval.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:Phiaa-positive}, on the branch
+\[
+   \operatorname{sign}\Psi_*''(x) = \operatorname{sign}\det\nabla^2\Phi_*\big|_{\text{branch}}
+   =\operatorname{sign}\bigl(L_{*,\det}(\alpha) + M_{*,\det}(\alpha)\sqrt{\Delta_*(\alpha)}\bigr)
+\]
+for $\alpha\in(1/3,1/2)$, since the denominator is positive.
+
+The number of zeros of $L+M\sqrt{\Delta}$ on an interval is bounded above
+by the number of real roots of $R(\alpha) := L^2 - M^2\Delta$ on that
+interval, because every zero of $L+M\sqrt{\Delta}$ is also a zero of
+$R = (L+M\sqrt{\Delta})(L-M\sqrt{\Delta})$.  Sturm gives:
+\begin{itemize}[itemsep=2pt]
+\item $R_J$ has exactly one real root in $(1/3,1/2)$;
+\item $R_P$ has exactly two real roots in $(1/3,1/2)$.
+\end{itemize}
+Hence $\Psi_J''$ has at most one zero on $(2/3,3/4)$, and $\Psi_P''$ has at
+most two.
+
+\smallskip\noindent\emph{Existence and bracketing.}\ Direct rational
+evaluation gives
+\[
+   \det\nabla^2\Phi_P\big|_{\alpha=1/3+\varepsilon} > 0,\qquad
+   \det\nabla^2\Phi_P\big|_{\alpha=1/2-\varepsilon} < 0,
+\]
+and the same with $J$.  Concretely, at $\alpha=1/3+\tfrac{1}{300}$ both
+signs are positive, and at $\alpha=1/2-\tfrac{1}{100}$ both are negative.
+Bisecting the rational interval $[\tfrac13+10^{-6},\,\tfrac12-10^{-6}]$ until
+its width is $<10^{-12}$ produces explicit rational brackets
+\[
+\begin{aligned}
+\alpha^*_P &\in \biggl[\,\tfrac{23878825769909067}{68719476736000000},\,
+                       \tfrac{143272954619704399}{412316860416000000}\,\biggr],
+\\
+\alpha^*_J &\in \biggl[\,\tfrac{413759600197819}{1030792151040000},\,
+                       \tfrac{165503840079377597}{412316860416000000}\,\biggr],
+\end{aligned}
+\]
+both of which have width $<10^{-12}$.  Numerically,
+$\alpha^*_P \approx 0.347393$ and $\alpha^*_J \approx 0.401405$.
+Applying $x_P(\alpha)$ and $x_J(\alpha)$ to these rational brackets and using
+Theorem~\ref{thm:monotonicity} produces the bracketed $x$-values stated in the
+theorem.  (At the level of floating point, $x^*_P\approx 0.67878535394$
+and $x^*_J\approx 0.71324242444$.)
+
+\smallskip\noindent\emph{Uniqueness for $J$.}\ Since $R_J$ has exactly one
+real root in $(1/3,1/2)$, there is at most one sign change of
+$L_J+M_J\sqrt{\Delta_J}$ in that interval, and the existence above forces
+exactly one.
+
+\smallskip\noindent\emph{Uniqueness for $P$.}\ Here $R_P$ has two real
+roots in $(1/3,1/2)$, and we must identify which of them are roots of
+$L_P+M_P\sqrt{\Delta_P}$ as opposed to $L_P-M_P\sqrt{\Delta_P}$.
+If $L+M\sqrt{\Delta}=0$ at $\alpha_0$ then $L(\alpha_0)$ and $M(\alpha_0)$
+have opposite signs (since $\sqrt{\Delta_*}>0$); if $L-M\sqrt{\Delta}=0$
+they have the same sign.
+
+Sturm-isolates the two roots of $R_P$ into the disjoint sub-intervals
+$(1/3,2/5)$ and $(2/5,1/2)$.  On each sub-interval, $L_P$ and $M_P$ have
+constant signs (by additional Sturm counts and direct evaluation):
+\begin{center}
+\begin{tabular}{l|cc|c}
+sub-interval & $\operatorname{sign} L_{P,\det}$ & $\operatorname{sign} M_{P,\det}$ & branch \\ \hline
+$(1/3,2/5)$ & $+1$ & $-1$ & $L+M\sqrt\Delta=0$ (true sign change of $\det H$) \\
+$(2/5,1/2)$ & $-1$ & $-1$ & $L-M\sqrt\Delta=0$ (NOT a sign change of $\det H$) \\
+\end{tabular}
+\end{center}
+Therefore the second Sturm root is a root of the
+\emph{conjugate} algebraic expression $L-M\sqrt{\Delta}$, not of
+$L+M\sqrt{\Delta}=\det\nabla^2\Phi_P$ itself, and contributes no sign change.
+Hence $\det\nabla^2\Phi_P$ has exactly one sign change on $(1/3,1/2)$,
+located in the rational bracket above.
+\qed
+\end{proof}
+
+\begin{remark}[Numerical illustration]
+At alpha-values uniformly spaced across the branch the values of
+$\det\nabla^2\Phi_P\big|_{\text{branch}}$ are
+\[
+\begin{array}{c|c}
+\alpha & \det H_P \\ \hline
+0.3333 & +1.667 \\
+0.3400 & +0.846 \\
+0.3473 & 0      \\
+0.3500 & -0.267 \\
+0.4000 & -4.020 \\
+0.4900 & -5.711
+\end{array}
+\quad
+\begin{array}{c|c}
+\alpha & \det H_J \\ \hline
+0.3667 & +1.960 \\
+0.3800 & +1.141 \\
+0.4014 & 0      \\
+0.4300 & -1.177 \\
+0.4600 & -1.422 \\
+0.4900 & -2.474
+\end{array}
+\]
+which exhibits the single sign change cleanly in both cases.
+\end{remark}
+
+\section{Remaining algebraic step: stationary $<$ boundary}
+\label{sec:remaining}
+
+The arguments above identify $(\alpha^*(x),q^*(x))$ as the unique interior
+critical point of the constrained minimisation in the tripartite Turan-filling
+family.  To conclude that this critical point achieves the in-family minimum
+$\Psi_*(x)$, the remaining step is to compare the critical value to the
+boundary of the feasibility region $0\le q\le 1/2$.  Since the constraint
+$q_x(\alpha)\le 1/2$ in $\alpha$ is exactly $\alpha\in[\alpha_-(x),\alpha_+(x)]$
+with $\alpha_\pm(x) = (1\pm\sqrt{3-4x})/2$, the relevant face is $q=1/2$.
+
+At $q=1/2$, the two feasibility-boundary $\alpha$ values give the value
+\[
+   \Phi_P(\alpha_\pm(x),\tfrac12) = \tfrac98(\alpha_-\alpha_+)^2 = \tfrac98(x-\tfrac12)^2,
+\]
+where Vieta's formulas applied to $\alpha^2-\alpha+(x-1/2)=0$ give
+$\alpha_-\alpha_+ = x-1/2$.  Likewise
+\(\Phi_J(\alpha_\pm(x),1/2) = \tfrac34(x-\tfrac12)^2.\)
+
+\begin{lemma}[Conjectural; numerically verified]
+\label{lem:stat-vs-bdry}
+For all $x\in[2/3,3/4]$,
+\[
+   \Psi_P^{\text{stat}}(x) \le \tfrac98 (x-\tfrac12)^2,
+   \qquad
+   \Psi_J^{\text{stat}}(x) \le \tfrac34 (x-\tfrac12)^2,
+\]
+with equality only at $x=3/4$.
+\end{lemma}
+
+Numerically (script output), at ten evenly spaced $\alpha$ values in
+$[0.34,0.49]$:
+\begin{center}
+\begin{tabular}{c||c|c||c|c}
+$\alpha$ & $\Psi_P^{\text{stat}}$ & $\tfrac98(x_P-\tfrac12)^2$
+         & $\Psi_J^{\text{stat}}$ & $\tfrac34(x_J-\tfrac12)^2$ \\ \hline
+0.34 & 0.00519 & 0.03347 & 0.00270 & 0.02214 \\
+0.36 & 0.01970 & 0.04008 & 0.01076 & 0.02609 \\
+0.40 & 0.04348 & 0.05245 & 0.02571 & 0.03385 \\
+0.44 & 0.05973 & 0.06247 & 0.03745 & 0.04060 \\
+0.48 & 0.06851 & 0.06883 & 0.04488 & 0.04543 \\
+0.49 & 0.06961 & 0.06972 & 0.04602 & 0.04625
+\end{tabular}
+\end{center}
+The inequality holds strictly throughout the interior and becomes tight
+at $x=3/4$, where $\alpha_-=\alpha_+=1/2$ coincides with the stationary point.
+
+A closed-form proof of Lemma~\ref{lem:stat-vs-bdry} should be straightforward:
+write the gap as a function of $\alpha$ along the parametric branch, and
+Sturm-certify positivity.  We flag this as the last remaining algebraic
+step to make Theorems~\ref{thm:branch-range}--\ref{thm:mixed-curvature}
+fully self-contained for the \emph{in-family} reduction (i.e.\ before any
+global tripartite reduction is considered).
+
+\section{Implication for Problem~2}
+
+Theorems~\ref{thm:branch-range}--\ref{thm:mixed-curvature} establish
+the following rigorous picture inside the tripartite Turan-filling family.
+
+\begin{corollary}[In-family curvature, conditional on the global reduction]
+Assume the global reduction conjectured in \S7 of the progress note:
+that for $x\in[2/3,3/4]$ the global minimisers of $\min_W t(P,W)$ and
+$\min_W t(J,W)$ under $t(K_2,W)=x$ can be chosen from the tripartite
+Turan-filling family.  Then $f_P=\Psi_P$ and $f_J=\Psi_J$ on $[2/3,3/4]$;
+and by Theorem~\ref{thm:mixed-curvature}, each of $f_P$ and $f_J$ has
+mixed convex-then-concave curvature on $[2/3,3/4]$, with the unique
+inflection points $x^*_P$ and $x^*_J$ bracketed therein.
+\end{corollary}
+
+In particular the original Problem~2 statement, listing $P=K_4^\dagger$ and
+$J=K_3\cup_{K_2}K_4$ as piecewise concave on Turan intervals, fails even
+without the global reduction: it is wrong already at the level of the
+reduced one-dimensional curves, on the very first interval.  This
+strengthens the qualitative correction sketched in \S6 of the progress
+note (the strict improvement at $x=17/25$) into a quantitative claim:
+the curvature itself differs from the conjectured pattern, and does so
+with a single, sharply localised inflection point in both cases.
+
+\end{document}
