@@ -1,0 +1,365 @@
+% Research-direction note: strategies for proving the global tripartite
+% Turan-filling reduction for P = K_4^dagger and J = K_3 cup_{K_2} K_4.
+
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\graphon}{\mathcal W}
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb R}
+\newcommand{\dd}{\,d}
+\newcommand{\Hom}{\operatorname{Hom}}
+
+\title[Strategies for the global tripartite-filling reduction]%
+{Strategies for the global tripartite Turán-filling reduction:\\
+$f_P(x)=\Psi_P(x)$ and $f_J(x)=\Psi_J(x)$ on $[2/3, 3/4]$}
+\author{Companion strategy note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note records the research-level structure of the open global reduction
+\[
+   f_P(x) = \Psi_P(x),\qquad f_J(x) = \Psi_J(x)\qquad\text{on}\ [2/3,3/4],
+\]
+where $P = K_4^{\dagger}$, $J = K_3\cup_{K_2}K_4$, and $\Psi_P,\Psi_J$ are the
+explicit one-dimensional reduced curves of §7 of the progress note.  We
+formulate the key intermediate claims, identify the precise asymmetries that
+make this problem harder than the clique case, list three independent attack
+strategies, and isolate concrete lemmas to be proved or refuted next.
+
+The note is deliberately not a finished proof; it is a research roadmap.
+\end{abstract}
+
+\tableofcontents
+
+\section{The conjecture and a useful integral identity}
+
+For brevity write $P = K_4^{\dagger}$ ($K_4$ with one pendant edge attached to
+a fixed $K_4$-vertex) and $J = K_3\cup_{K_2}K_4$ ($K_3$ and $K_4$ glued
+along a common edge).
+
+\begin{conjecture}[Global tripartite-filling reduction]
+\label{conj:global-reduction}
+For every $x\in[2/3,3/4]$,
+\[
+   f_P(x) = \min\{t(P,W): t(K_2,W)=x\} = \Psi_P(x),
+\]
+where $\Psi_P$ is the closed-form reduced curve of §7.4 of the progress note,
+and the minimum is achieved by a graphon in the tripartite Turán-filling
+family
+\[
+   \mathcal T = \biggl\{\ W\ \biggm|\ \exists [0,1] = A\sqcup B\sqcup C, |B|=|C|,
+   \begin{aligned}
+   &W=1\ \text{on cross-block cells},\\
+   &W=0\ \text{on within-}B\text{ and within-}C,\\
+   &W|_{A\times A}\ \text{triangle-free}
+   \end{aligned}\ \biggr\}.
+\]
+The analogous statement holds for $J$ and $\Psi_J$.
+\end{conjecture}
+
+\subsection{A rooted-degree integral identity}
+
+Both $t(P,\cdot)$ and $t(J,\cdot)$ can be written as integrals of a "rooted
+weight" against a "local quantity" at a distinguished vertex.  This is the key
+reason their minimisers are not the pure clique-density minimisers, and it is
+the lever on which any structural reduction must act.
+
+For $P = K_4^{\dagger}$ with the pendant attached to vertex $4$ of the $K_4$,
+\begin{equation}
+\label{eq:P-integral}
+   t(P,W)
+   = \int_{[0,1]} d_W(x)\,\kappa_4(x)\dd x,
+\end{equation}
+where
+\[
+   d_W(x) := \int W(x,y)\dd y,\qquad
+   \kappa_4(x) := \int \prod_{ij\in E(K_4),\ i,j\ne 4}\hspace{-2em} W(x_i,x_j)\hspace{-0.5em}
+   \prod_{i\ne 4} W(x,x_i)\dd x_1\dots\widehat{\dd x_4}\dots\dd x_4
+\]
+is the \emph{rooted $K_4$-density at $x$} (the probability that three uniformly
+random partners of $x$ form a $K_3$ together with $x$).  Symmetrically
+$t(K_4,W) = \int\kappa_4(x)\dd x = \E[\kappa_4(X)]$.
+
+Likewise, $J$ can be written as an integral over the shared edge:
+\begin{equation}
+\label{eq:J-integral}
+   t(J,W) = \int_{[0,1]^2}\hspace{-1em} W(x,y)\,\tau_3(x,y)\,\tau_4(x,y)\dd x\dd y,
+\end{equation}
+where $\tau_3(x,y)$ is the rooted $K_3$-density at the edge $\{x,y\}$ (probability that a
+random third vertex closes a triangle with $x,y$) and $\tau_4(x,y)$ the rooted
+$K_4$-density at $\{x,y\}$ (probability that two random additional vertices
+form a $K_4$ with $x,y$).
+
+\subsection{Why \protect{$f_P\ne f_{K_4}$ in general}}
+
+Cauchy-Schwarz applied to~\eqref{eq:P-integral} at fixed
+$\E[d_W]=2x$ and fixed $\E[\kappa_4]=t(K_4,W)$ gives only an upper bound on
+$t(P,W)$.  The lower bound on $t(P,W)$ at fixed $t(K_2,W)$ is achieved when
+$d_W$ and $\kappa_4$ are \emph{anti-correlated} (high degree at low rooted
+clique density, and vice versa), and the magnitude of the correlation is what
+the tripartite-filling family exploits.
+
+In the Lovász--Simonovits clique template, $d_W$ and $\kappa_4$ are essentially
+constant across each part, and the few distinct values are positively
+correlated (the small "singleton" part has both highest $\kappa_4$ and highest
+$d_W$).  This is exactly the wrong correlation for minimising $t(P,W)$, which
+is why the LS template is not optimal for $P$.
+
+In the tripartite-filling family at our solution:
+\begin{itemize}[itemsep=2pt]
+\item Vertices in $A$ have degree $d = 1-\alpha+\alpha q$ and rooted-$K_4$
+density largely determined by their connection pattern in $A$.  Because $W|_{A\times A}$
+is triangle-free, rooted-$K_3$ counts inside $A$ vanish, suppressing the
+rooted $K_4$-density at $A$-vertices.
+\item Vertices in $B$ (and $C$) have degree $(1+\alpha)/2$ and rooted-$K_4$
+density given by all 4-cliques whose root sits in $B$.
+\end{itemize}
+The construction is the simplest way to lower $\kappa_4$ on the high-degree
+vertices and raise it on the low-degree ones.
+
+\section{Plan A: stability + symmetrisation}
+
+This route is the most natural one and is closest to the clique case
+(Reiher 2016).  The two non-trivial steps are:
+
+\begin{problem}[Step A1: stability of a 3-blowup skeleton]
+\label{prob:A1}
+Let $W$ be a graphon with $t(K_2,W)=x\in[2/3,3/4]$ minimising
+$t(P,W)$ (resp.\ $t(J,W)$).  Show that $W$ has a "3-blowup skeleton":
+$[0,1] = A\sqcup B\sqcup C$ measurable, with
+\begin{enumerate}[label=(\arabic*),itemsep=2pt]
+\item $W=1$ a.e.\ on the three cross-block products $A\times B, A\times C,
+B\times C$;
+\item $W=0$ a.e.\ on the within-block products $B\times B, C\times C$.
+\end{enumerate}
+The internal structure inside $A$ is unconstrained at this point.
+\end{problem}
+
+\begin{problem}[Step A2: symmetrisation to balanced parts]
+\label{prob:A2}
+With the skeleton above fixed, show that one may further assume $|B|=|C|$
+without increasing $t(P,W)$ (resp.\ $t(J,W)$), and that $W|_{A\times A}$ may
+be replaced by a $q$-regular triangle-free filling with the same edge density.
+\end{problem}
+
+If Steps A1 and A2 both hold, then $f_P(x) \le \Psi_P^{\text{filling-only}}(x)$
+where the right-hand side is the minimum over the tripartite-filling family.
+Combined with the lower bound $f_P\ge \Psi_P^{\text{filling-only}}$ inside the
+family (i.e.\ the reduced problem of §7), this gives $f_P=\Psi_P$ on $[2/3,3/4]$.
+
+\subsection{Step A1: clique-stability route}
+
+Step~A1 is closely related to clique-density supersaturation.  Define
+\[
+   d_+(W) := \mathrm{vol}\bigl(\{(x,y) : W(x,y)>0,\ \text{but $W$ is "far" from a 3-blowup}\}\bigr).
+\]
+A clique-stability statement of Pikhurko--Razborov type bounds $d_+$ by a
+function of the supersaturation gap $t(K_4,W) - g_{4,3}(s_*)$ where
+$g_{4,3}$ is the LS curve.  Concretely, the available tool is:
+
+\begin{lemma}[Stability for $K_4$ supersaturation on the first Turán interval, conjectural form]
+\label{lem:K4-stability}
+There is a constant $C(x)>0$ such that for every $W$ with $t(K_2,W)=x\in(2/3,3/4)$,
+\[
+   \delta_\square\bigl(W,\ \mathcal{T}_{3}^{1}(x)\bigr)
+   \le C(x)\cdot \bigl(t(K_4,W) - g_{4,3}(s_x)\bigr)^{1/2},
+\]
+where $\delta_\square$ is the cut metric, $\mathcal{T}_3^1(x)$ denotes the set of
+3-blowups (no constraint on the internal structure inside $A$) of total edge
+density $x$, and $g_{4,3}(s_x)$ is the LS $K_4$-density at $x$ with the 4-partite
+template (computed in §7 of the progress note).
+\end{lemma}
+
+\begin{remark}[Status of Lemma~\ref{lem:K4-stability}]
+A stability statement of this strength for the LS 4-partite template at
+$K_4$-density is not directly stated in the literature.  Pikhurko--Razborov
+type results cover the equality case at the
+clique-density level; the cut-metric stability above would require either
+adapting the standard regularity/decomposition argument used for triangle
+supersaturation to the 4-partite case, or invoking a more recent stability
+result for clique-density.  It is the most technical ingredient.
+\end{remark}
+
+\subsection{From skeleton to balanced parts}
+
+If $W$ has a 3-blowup skeleton, the contribution to $t(P,W)$ splits cleanly
+into "cross-edges only" (the LS-template-like contribution) plus a "filling
+inside $A$" contribution.  The filling-only contribution is the quantity that
+the §7 analysis controls.  Step A2 is then a "balancing the parts" lemma
+analogous to symmetric balancing in clique-density bounds:
+
+\begin{lemma}[Balancing $|B|=|C|$, plan]
+\label{lem:balancing}
+Let $W$ be a 3-blowup graphon with parts $A,B,C$ of measures $\alpha,\beta,\gamma$
+and a triangle-free filling $F$ inside $A$.  Then there exists another such
+graphon $W'$ with $|B'|=|C'|=(\beta+\gamma)/2$, the same $\alpha$, the same
+total edge density, and $t(P,W')\le t(P,W)$.
+\end{lemma}
+
+Sketch: at fixed $\alpha$, $|B|+|C|=1-\alpha$, the cross-edge counts that go
+into $t(P,W)$ depend on $|B|,|C|$ only through the product $|B|\cdot|C|$, which
+is maximised at $|B|=|C|$.  The "rooted $K_4$ at an $A$-vertex" count likewise
+depends symmetrically on $(|B|,|C|)$ in a way that favours balanced parts.
+A careful accounting needs to be done.
+
+\subsection{Replacing the filling by a regular one}
+
+For the filling inside $A$, Jensen's inequality (as in the lemma of §7.2 of the
+progress note) shows $D_2(F)=\int d_F(u)^2\dd u\ge q^2$ with equality iff $F$ is $q$-regular.
+Since $t(P,W)$ depends on the filling only through $q$ and $D_2(F)$, and
+positively on both, the minimum at fixed $\alpha$, fixed $q$ is achieved by
+$q$-regular fillings, hence by the standard 2-block construction within $A$.
+This is the only piece already fully rigorous.
+
+\section{Plan B: flag-algebra certificates}
+
+A direct flag-algebra computation produces certified lower bounds
+$t(P,W) \ge L(x)$ at a finite set of rational $x$.  The available tooling is:
+\begin{enumerate}[label=(\arabic*)]
+\item set up the SDP relaxation of the flag algebra at fixed degree $d$;
+\item solve the SDP numerically;
+\item round to a rational certificate, verified exactly.
+\end{enumerate}
+For Problem~1 the analogous program for $C_5$ at $p=1-1/k$ was carried out by
+Bennett--Dudek--Lidický--Pikhurko (2020).  For $C_5$ the construction is
+geometric and the certificate at $p=1-1/k$ is straightforward; for our
+six-vertex graph $H$ at $p=4/5$, the construction is also circular and the
+target $24349/187500$ is a small-denominator rational, so the SDP is likely
+tractable.
+
+\begin{problem}[Step B]
+\label{prob:B}
+Run a degree-7 (i.e.\ over $K_7$-flags) SDP to certify the lower bound
+$t(H, W) \ge 24349/187500$ for $W$ with $t(K_2,W) = 4/5$.
+\end{problem}
+
+For Problem~2 (the conjecture in this note), one would need certificates
+parametric in $x$, which is harder.  A practical hybrid is to compute SDP
+certificates at a fine mesh $x_1<\dots<x_n$ in $[2/3,3/4]$ and use a
+"convexity-style" interpolation argument.  The mixed curvature established
+in §5 of the rigorous certificates note breaks the simplest interpolation
+(a single convex certificate cannot work everywhere), so the interpolation
+needs to know about the inflection $x^*$.
+
+\section{Plan C: rooted clique-density inequalities}
+
+A more conceptual route is to develop sharp rooted clique-density inequalities
+directly, using the form~\eqref{eq:P-integral}.
+
+The quantity $t(P,W) = \int d_W \cdot \kappa_4$ is bounded below by:
+\begin{itemize}[itemsep=2pt]
+\item the Cauchy-Schwarz upper bound $t(P,W)\le (t(K_2,W)\cdot
+t(K_4,W))^{1/2}\cdot\bigl(\E[d_W^2]\bigr)^{1/2}\cdot(\E[\kappa_4^2])^{1/2}$;
+this is not useful directly;
+\item a rearrangement-inequality lower bound: at fixed marginals
+$\mu_d := \text{law of } d_W(X)$ and $\mu_\kappa := \text{law of } \kappa_4(X)$,
+$\int d_W \kappa_4$ is minimised by the negative-rearrangement coupling.
+\end{itemize}
+
+The substantive question is: what couplings $(d_W, \kappa_4)$ are achievable
+by actual graphons under $t(K_2,W)=x$?  The set of achievable couplings is
+a region in the $(\mu_d,\mu_\kappa)$ plane (or more generally on the
+2-dimensional joint distribution) constrained by both Cauchy-Schwarz and
+clique-density inequalities.
+
+\begin{problem}[Step C, qualitative]
+\label{prob:C}
+Identify the boundary curve of the achievable region in the
+$\bigl(\E[d_W^2], \E[\kappa_4]\bigr)$ plane (or a richer one) at fixed
+$t(K_2,W)=x$ on $[2/3,3/4]$.  Express $\Psi_P(x)$ as a value of an appropriate
+rearrangement-style functional restricted to this boundary.
+\end{problem}
+
+This plan is more speculative; it has the advantage that it would also explain
+the mixed-curvature phenomenon (the boundary curve itself has a kink, and
+$\Psi_P''(x)$ changes sign at that kink).
+
+\section{Concrete next steps}
+
+In order of decreasing tractability:
+
+\begin{enumerate}[label=\textbf{Task \arabic*.},itemsep=4pt]
+\item \emph{Pin down the Step A2 calculation} (Lemma~\ref{lem:balancing}):
+show that, given a 3-blowup with arbitrary parts, balancing $|B|=|C|$ never
+increases $t(P,W)$.  This is a purely algebraic check on a 4-variable
+expression and should fit into one page.
+\item \emph{Sample a flag-algebra SDP} at a fixed $x_0$ in $(2/3,3/4)$, e.g.\
+$x_0 = 17/25$.  The target value is the explicit $\Psi_P(17/25)$ we computed.
+Solve in CSDP or SDPA, round, and check.  Outcome: either a clean numerical
+SDP that rounds to a rational certificate, or evidence that the SDP at
+moderate degree is too loose.
+\item \emph{Survey the literature on $K_4$-supersaturation stability} to see
+whether Lemma~\ref{lem:K4-stability} (cut-metric stability) is available off
+the shelf for the LS 4-partite template.
+\item \emph{Treat the analogous $J$ problem in parallel.}  Step~A2 for $J$ is
+similar; the rooted-$K_3$-and-$K_4$ identity~\eqref{eq:J-integral} suggests
+the same blowup-then-balance argument.
+\end{enumerate}
+
+\section{What the mixed-curvature result tells us about the global problem}
+
+The rigorous mixed-curvature result (rigorous-certificates note,
+Theorem~5.x) constrains \emph{what kind} of global lower bound is achievable.
+In particular:
+
+\begin{itemize}[itemsep=2pt]
+\item A single convex/concave certificate cannot prove
+$t(P,W)\ge\Psi_P(x)$ uniformly on $[2/3,3/4]$; the certificate must
+distinguish $x<x^*_P$ from $x>x^*_P$.
+\item A flag-algebra style SDP at a single $x$ that interpolates linearly to
+nearby $x$ values would only be valid in a small neighbourhood; the radius of
+that neighbourhood is bounded by the distance to $x^*_P$, where the
+\emph{rate} of $\Psi_P''$ change is fastest.
+\item A symmetrisation-based proof must implicitly distinguish the two
+curvature regimes; the most natural way is that the optimal $\alpha=\alpha^*(x)$
+itself depends on $x$, and the bifurcation between "$A$ is the small part"
+($\alpha<1/3+\varepsilon$) and "$A$ is the larger part" ($\alpha\to 1/2$)
+matches the inflection.
+\end{itemize}
+
+This observation suggests that Plan A (stability+symmetrisation) is in fact
+most natural, because it respects the parametric structure of the minimiser
+across the interval.  Plans B and C are more rigid; they will likely need to
+be informed by the parametric structure.
+
+\section{Open question: does the global reduction extend beyond $[2/3,3/4]$?}
+
+The reduced curve $\Psi_P$ is defined for $x\in[2/3,3/4]$ by construction
+($q$-regular triangle-free filling inside one part of a 3-blowup).  For
+$x\in[3/4,4/5]$ (the second Turán interval) the natural analogue would be a
+4-blowup with a triangle-free filling inside one part; for $x\in[4/5,5/6]$
+a 5-blowup with $K_4$-free filling; etc.  We have not analysed these.
+
+The mixed-curvature result on $[2/3,3/4]$ leaves the structure on
+$[3/4,4/5]$ as the next open question.  If the analogous 4-blowup-with-filling
+family is the right model there, the analogous reduction analysis would
+produce another $\Psi$-function, with its own curvature signature.
+
+\end{document}

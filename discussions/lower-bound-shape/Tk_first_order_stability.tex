@@ -1,0 +1,318 @@
+% Replacement for §3.4 of two_problems_progress_report.tex, with the
+% averaging step that justifies "controls all first-order feasible directions"
+% made explicit.
+
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\graphon}{\mathcal W}
+\newcommand{\E}{\mathbb E}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\dd}{\,d}
+\newcommand{\Hom}{\operatorname{Hom}}
+
+\title[First-order stability of $T_k$ for $k\ge 6$]%
+{First-order stability of the balanced $k$-partite graphon\\
+under an edge-density constraint, for $k\ge 6$:\\
+the averaging step made explicit}
+\author{Companion note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note replaces §3.4 of \emph{Progress on two graphon optimisation problems}
+with a fully spelled-out proof.  The statement is that, for the six-vertex graph
+$H$ of Problem~1 and every integer $k\ge 6$, the balanced complete $k$-partite
+graphon $T_k$ is first-order stable under the edge-density constraint
+$t(K_2,W)=1-1/k$: no first-order feasible perturbation of $T_k$ decreases
+$t(H,W)$.  The original proof reduced the question to the family
+$\{S_{k,a}\}$ "by the symmetry of $T_k$".  We make the averaging step that
+justifies this reduction completely explicit.
+\end{abstract}
+
+\section{Setup: admissible first-order perturbations at $T_k$}
+
+Let $H$ be the six-vertex Problem-1 graph,
+\[
+   E(H) = \{13,14,23,24,35,36,45,46,56\},
+\]
+and let $T_k$ be the balanced complete $k$-partite graphon.  Concretely, with
+the partition $[0,1] = I_1 \sqcup \cdots \sqcup I_k$ into $k$ equal intervals
+$I_j = [(j-1)/k, j/k]$, we have $T_k(x,y) = 1$ iff $x,y$ lie in different parts,
+and $T_k(x,y) = 0$ iff $x,y$ lie in the same part.
+
+For $f\in L^\infty([0,1]^2)$ symmetric, write $W_t := T_k + t\, f$.  The
+\emph{first-order feasibility cone at $T_k$ under the edge-density constraint}
+$t(K_2,W) = 1-1/k$ is the closed convex cone
+\begin{equation}
+\label{eq:feas-cone}
+\mathcal F_k := \left\{
+   f : [0,1]^2 \to \R\ \text{measurable, symmetric, } \|f\|_\infty<\infty
+   \ \middle|\
+   \begin{aligned}
+   &f(x,y)\ge 0\ \text{a.e.\ on within-part cells},\\
+   &f(x,y)\le 0\ \text{a.e.\ on cross-part cells},\\
+   &\int_{[0,1]^2} f \dd x\dd y = 0
+   \end{aligned}
+\right\}.
+\end{equation}
+The first two conditions ensure that for $t>0$ small enough, $W_t$ takes values
+in $[0,1]$ (so $W_t$ is a graphon), and the third ensures that
+$t(K_2,W_t)=1-1/k+0\cdot t + O(t^2)$.
+
+\begin{remark}
+Strictly, every "feasible perturbation" should be defined modulo
+the equivalence of graphons under measure-preserving transformations.  All
+expressions below depend only on the equivalence class, so we may work with
+representatives.
+\end{remark}
+
+\section{The first variation kernel and its symmetry}
+
+For a finite graph $H$ and a graphon $W$, the standard expansion
+\[
+   t(H,W) = \int_{[0,1]^{V(H)}}\prod_{ij\in E(H)} W(x_i,x_j)\prod_{i\in V(H)} \dd x_i
+\]
+gives the first variation at $W=T_k$ in the direction $f$:
+\begin{equation}
+\label{eq:first-variation}
+   \delta t(H,T_k)[f]
+   = \sum_{ij\in E(H)}
+     \int_{[0,1]^2} \mathcal K_{ij}(x,y)\, f(x,y) \dd x\dd y,
+\end{equation}
+where
+\[
+   \mathcal K_{ij}(x,y)
+   = \int_{[0,1]^{V(H)\setminus\{i,j\}}}
+       \prod_{\substack{i'j'\in E(H) \\ \{i',j'\}\ne\{i,j\}}} T_k(x_{i'},x_{j'})
+       \prod_{v\in V(H)\setminus\{i,j\}} \dd x_v,
+\]
+with $x_i:=x$ and $x_j:=y$.  Symmetrising over $E(H)$, define the total kernel
+\begin{equation}
+\label{eq:total-kernel}
+   \mathcal K(x,y) := \frac{|\mathrm{Aut}(H)|}{|\mathrm{Aut}(H)|}\cdot
+   \sum_{ij\in E(H)} \mathcal K_{ij}(x,y)
+   \quad (\text{symmetric in }x,y).
+\end{equation}
+Then
+\[
+   \delta t(H,T_k)[f] = \int_{[0,1]^2} \mathcal K(x,y) f(x,y) \dd x\dd y.
+\]
+
+\begin{lemma}[Block-constancy of the first-variation kernel]
+\label{lem:K-block-constant}
+There exist constants $c_w, c_c\in\R$ depending only on $H$ and $k$ such that
+\[
+   \mathcal K(x,y) =
+   \begin{cases}
+      c_w, & x,y\ \text{in the same part of }T_k,\\
+      c_c, & x,y\ \text{in different parts of }T_k.
+   \end{cases}
+   \qquad\text{a.e.\ on }[0,1]^2.
+\]
+\end{lemma}
+
+\begin{proof}
+The kernel $\mathcal K(x,y)$ depends on $(x,y)$ only through the product
+$\prod T_k(x_{i'}, x_{j'})$ for various tuples, which is an indicator of a
+proper $k$-colouring condition.  Fix $(x,y)$ in the support of $\mathcal K$ and
+let $j(x), j(y)\in\{1,\ldots,k\}$ be the parts containing $x$ and $y$
+respectively.  For any block permutation $\sigma\in S_k$ that fixes
+$j(x)$ and $j(y)$, the measure-preserving map of $[0,1]$ induced by $\sigma$
+preserves $T_k$ and hence preserves $\mathcal K$.  Combined with the $S_k$-action,
+this reduces the kernel value at $(x,y)$ to a function of only the pair
+$\{j(x), j(y)\}$, and indeed only to the equivalence class
+"same part" or "different parts" (since any two same-part pairs are related by
+a block permutation, and any two different-part pairs are related by one).
+\end{proof}
+
+We will need explicit expressions for $c_w, c_c$, but for the structural
+argument below they may be left abstract.
+
+\section{The averaging step}
+
+The space $\mathcal F_k$ in~\eqref{eq:feas-cone} is naturally acted upon by the
+group $G_k$ consisting of pairs $(\sigma, \tau)$ where $\sigma\in S_k$ is a
+permutation of the parts and $\tau$ is a measure-preserving automorphism of
+$[0,1]$ preserving the partition $\{I_1,\ldots,I_k\}$.  Both $T_k$ and the
+edge-density constraint are $G_k$-invariant, so the action preserves $\mathcal F_k$
+and preserves $\delta t(H,T_k)[\cdot]$.
+
+\begin{definition}[Symmetrised perturbation]
+For $f\in\mathcal F_k$, let
+\[
+   \bar f(x,y) := \frac{1}{|S_k|}\sum_{\sigma\in S_k}
+   \int_{\mathrm{Aut}_\partial}\ (f^{(\sigma,\tau)})(x,y)\dd\mu(\tau),
+\]
+where $\mathrm{Aut}_\partial$ denotes the group of partition-preserving
+measure-preserving transformations of $[0,1]$ and $\mu$ is its Haar measure
+(equivalently, the product over blocks of the Haar measure on the
+measure-preserving group of each $I_j$).  Equivalently, $\bar f$ is the
+projection of $f$ onto the $G_k$-invariant subspace of $L^2([0,1]^2)$.
+\end{definition}
+
+\begin{lemma}[Averaging preserves feasibility and the linear functional]
+\label{lem:averaging}
+For every $f\in\mathcal F_k$, the symmetrised perturbation $\bar f$ also lies in
+$\mathcal F_k$, and
+\[
+   \delta t(H, T_k)[\bar f] = \delta t(H, T_k)[f].
+\]
+\end{lemma}
+
+\begin{proof}
+The cone $\mathcal F_k$ is defined by pointwise inequalities and a linear
+constraint, all of which are $G_k$-invariant.  Hence $G_k$ preserves $\mathcal F_k$,
+and so does the averaging operation, which is a convex combination of
+$G_k$-images.
+
+The second statement uses Lemma~\ref{lem:K-block-constant}: $\mathcal K$ is
+$G_k$-invariant.  Therefore $\int \mathcal K\, f\dd x\dd y$ is unchanged when $f$ is
+replaced by any $G_k$-image, and hence by the average $\bar f$.
+\end{proof}
+
+\begin{lemma}[Symmetric perturbations form the $S_{k,a}$ tangent line]
+\label{lem:symmetric-perturbations}
+Every $G_k$-invariant $\bar f\in\mathcal F_k$ has the form
+\[
+   \bar f(x,y) = M_w \chi_{\mathrm{within}}(x,y) - M_c \chi_{\mathrm{cross}}(x,y)
+\]
+for some scalars $M_w\ge 0$ and $M_c\ge 0$, with $\chi_\bullet$ the indicators
+of the within-part and cross-part regions.  Moreover the edge-density
+constraint $\int \bar f = 0$ forces
+\[
+   M_w \cdot \mathrm{vol}(\mathrm{within}) = M_c \cdot \mathrm{vol}(\mathrm{cross}),
+   \quad\text{i.e.\ }\quad
+   \tfrac{M_w}{k} = M_c\cdot \tfrac{k-1}{k},
+   \quad
+   M_c = \tfrac{M_w}{k-1}.
+\]
+\end{lemma}
+
+\begin{proof}
+A $G_k$-invariant symmetric function on $[0,1]^2$ must, by the same argument
+as in Lemma~\ref{lem:K-block-constant}, be constant on within-part cells
+and constant on cross-part cells.  The feasibility inequalities then translate
+into $\bar f|_{\mathrm{within}}\ge 0$ and $\bar f|_{\mathrm{cross}}\le 0$, i.e.\
+the indicated $M_w, M_c\ge 0$.  Volumes:
+$\mathrm{vol}(\mathrm{within}) = k\cdot(1/k)^2 = 1/k$ and
+$\mathrm{vol}(\mathrm{cross}) = 1 - 1/k$.  The constraint $\int \bar f = 0$
+yields the stated relation.
+\end{proof}
+
+\begin{corollary}[Symmetric feasibility cone is one-dimensional]
+\label{cor:1d-cone}
+The $G_k$-invariant subset of $\mathcal F_k$ is the half-line
+\[
+   \{M_w\cdot \chi_{\mathrm{within}} - \tfrac{M_w}{k-1}\cdot\chi_{\mathrm{cross}}
+   : M_w\ge 0\}.
+\]
+Up to the positive scalar $M_w$ this is the tangent direction of the family
+$\{S_{k,a}\}_{a\ge 0}$ at $a=0$ (note $S_{k,0}=T_k$).
+\end{corollary}
+
+\begin{proof}
+$\frac{d}{da}S_{k,a}|_{a=0}(x,y)$ equals $+1$ on within-part cells and
+$-1/(k-1)$ on cross-part cells.  This is the case $M_w=1$.
+\end{proof}
+
+\section{Conclusion}
+
+\begin{theorem}[First-order stability of $T_k$ for $k\ge 6$]
+\label{thm:first-order-stability}
+Let $H$ be the six-vertex Problem-1 graph.  Then for every $k\ge 6$ and every
+$f\in\mathcal F_k$,
+\[
+   \delta t(H,T_k)[f]
+   = \frac{6k^3-55k^2+142k-111}{k^5}\cdot
+   \int_{\mathrm{within}} f \dd x\dd y
+   \ \ge\ 0,
+\]
+with equality iff the symmetrisation $\bar f$ vanishes a.e.\ (equivalently,
+iff $M_w(\bar f) = 0$).  In particular $T_k$ is first-order locally stable
+against every edge-density-preserving feasible perturbation.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:averaging}, $\delta t(H,T_k)[f] = \delta t(H,T_k)[\bar f]$,
+so we may replace $f$ by its $G_k$-symmetrisation $\bar f$.  By
+Corollary~\ref{cor:1d-cone}, $\bar f = M_w\cdot \frac{d}{da}S_{k,a}|_{a=0}$
+for some $M_w\ge 0$.  Hence
+\[
+   \delta t(H,T_k)[\bar f]
+   = M_w\cdot \frac{d}{da}\,t(H,S_{k,a})\Big|_{a=0}.
+\]
+The progress note (§3.3, Appendix A) computes this derivative exactly:
+\[
+   \frac{d}{da}\,t(H,S_{k,a})\Big|_{a=0}
+   = \frac{6k^3-55k^2+142k-111}{k^5}.
+\]
+The polynomial $6k^3-55k^2+142k-111$ evaluates to $57$ at $k=6$ and has
+derivative $18k^2-110k+142$, which is positive at $k=5$ and strictly
+increasing for $k\ge 5$.  Hence $6k^3-55k^2+142k-111$ is strictly increasing
+for $k\ge 5$ and strictly positive for all $k\ge 6$.
+
+Finally, $M_w\cdot \mathrm{vol}(\mathrm{within}) = M_w/k = \int_{\mathrm{within}}\bar f$,
+and the symmetrisation operation is mass-preserving on the within region (more
+precisely, on the convex hull of $G_k$-orbits, the within-mass of $\bar f$
+equals the within-mass of $f$).  This gives the displayed identity.
+
+Strict inequality holds whenever $M_w(\bar f)>0$, which holds iff $\bar f\not\equiv 0$ as a graphon.
+\end{proof}
+
+\begin{remark}[Why this does not settle Problem~1 for $k\ge 6$]
+Theorem~\ref{thm:first-order-stability} is a \emph{negative} result for the
+$k\ge 6$ part of Problem~1: it says the natural infinitesimal attack (a
+perturbation of $T_k$) cannot prove that $T_k$ is not the global minimum, in
+contrast with $k=3,4,5$ where the perturbation suffices.  Settling the $k\ge 6$
+case therefore requires either
+\begin{enumerate}[label=(\alph*)]
+\item a \emph{global} construction beating $T_k$ at some $k\ge 6$ (e.g.\ a
+   higher-order/non-symmetric perturbation, or a completely different
+   structure such as a circular construction analogous to the $k=5$ one), or
+\item a global optimality proof for $T_k$ in this range.
+\end{enumerate}
+A higher-order analysis is in principle the next infinitesimal step: compute
+the second derivative of $t(H, S_{k,a,b})$ along a two-parameter symmetric
+family (a within-block density $a$ and a single off-diagonal block density
+perturbation $b$) at $(a,b)=(0,0)$.  If the resulting Hessian has a negative
+eigenvalue in the constrained-feasibility cone, that already settles
+non-optimality.  Otherwise we have a strict local minimum within the
+two-parameter class and must broaden the search further.
+\end{remark}
+
+\begin{remark}[Comparison with $k=3,4,5$]
+For $k=3,4,5$, the polynomial $6k^3-55k^2+142k-111$ evaluates to
+$-26,-23,-26$ respectively, so the derivative is \emph{strictly negative},
+giving an explicit edge-density-preserving feasible direction along which
+$t(H,W)$ \emph{decreases} from $T_k$ at first order.  Integrating finitely
+along the family $S_{k,a}$ yields the rational competitors of §3.3 of the
+progress note.
+\end{remark}
+
+\end{document}

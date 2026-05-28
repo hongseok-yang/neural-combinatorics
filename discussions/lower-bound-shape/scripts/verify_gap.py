@@ -65,7 +65,9 @@ def clear_common_denominator(L_, M_):
     fM = fraction(together(M_))
     g = gcd_list([fL[1], fM[1]])
     common = simplify(fL[1] * fM[1] / g)
-    return expand(L_ * common), expand(M_ * common), common
+    Lc = cancel(L_ * common)
+    Mc = cancel(M_ * common)
+    return expand(Lc), expand(Mc), common
 
 
 def root_count_open(p, a_val, b_val, var=alpha):

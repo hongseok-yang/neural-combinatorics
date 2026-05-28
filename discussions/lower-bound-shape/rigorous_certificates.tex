@@ -78,6 +78,11 @@ reduction to the tripartite Turan-filling family holds, then the original
 Problem~2 classification of $P$ and $J$ as "piecewise concave on Turan
 intervals" is wrong already on the first Turan interval, not just at large $x$.
 
+A further Sturm certificate (§6) verifies that the interior critical point
+strictly beats the feasibility-boundary value $q=1/2$ throughout
+$(2/3,3/4)$, with equality only at $x=3/4$.  This identifies $\Psi_*$ as
+the in-family minimum, not merely a stationary value.
+
 All computations are verified by the companion script
 \verb|scripts/verify_reduced_problems.py| using the
 \verb|sympy| computer algebra system.
@@ -528,38 +533,116 @@ $\det\nabla^2\Phi_P\big|_{\text{branch}}$ are
 which exhibits the single sign change cleanly in both cases.
 \end{remark}
 
-\section{Remaining algebraic step: stationary $<$ boundary}
-\label{sec:remaining}
+\section{Stationary minimum vs.\ feasibility boundary}
+\label{sec:stat-vs-bdry}
 
 The arguments above identify $(\alpha^*(x),q^*(x))$ as the unique interior
 critical point of the constrained minimisation in the tripartite Turan-filling
 family.  To conclude that this critical point achieves the in-family minimum
-$\Psi_*(x)$, the remaining step is to compare the critical value to the
-boundary of the feasibility region $0\le q\le 1/2$.  Since the constraint
-$q_x(\alpha)\le 1/2$ in $\alpha$ is exactly $\alpha\in[\alpha_-(x),\alpha_+(x)]$
-with $\alpha_\pm(x) = (1\pm\sqrt{3-4x})/2$, the relevant face is $q=1/2$.
+$\Psi_*(x)$, we must compare the critical value to the
+boundary of the feasibility region $0\le q\le 1/2$.
 
-At $q=1/2$, the two feasibility-boundary $\alpha$ values give the value
+At fixed $x\in(2/3,3/4)$, the in-family feasibility region for $\alpha$ is
+$[\alpha_-(x),\alpha_+(x)]$ with $\alpha_\pm(x) = (1\pm\sqrt{3-4x})/2$, and
+the only boundary face that can be attained is $q=1/2$.  (At $q=0$ the
+edge-density $x = \tfrac12+\alpha-\tfrac32\alpha^2$ is maximised at $2/3$
+and so does not contribute for $x>2/3$.)  At $q=1/2$, the values are
+constant in $x$ once $\alpha$ is fixed:
 \[
-   \Phi_P(\alpha_\pm(x),\tfrac12) = \tfrac98(\alpha_-\alpha_+)^2 = \tfrac98(x-\tfrac12)^2,
+   \Phi_P(\alpha,\tfrac12)
+   = \tfrac98 \alpha^2(1-\alpha)^2,
+   \qquad
+   \Phi_J(\alpha,\tfrac12) = \tfrac34 \alpha^2(1-\alpha)^2.
 \]
-where Vieta's formulas applied to $\alpha^2-\alpha+(x-1/2)=0$ give
-$\alpha_-\alpha_+ = x-1/2$.  Likewise
-\(\Phi_J(\alpha_\pm(x),1/2) = \tfrac34(x-\tfrac12)^2.\)
+Vieta's formulas applied to the feasibility-boundary equation
+$\alpha^2-\alpha+(x-1/2)=0$ give $\alpha_-\alpha_+ = x-1/2$ and
+$\alpha_-+\alpha_+=1$, so
+$\alpha_-^2(1-\alpha_-)^2 = \alpha_+^2(1-\alpha_+)^2 = (\alpha_-\alpha_+)^2 = (x-1/2)^2$.
+Consequently the $q=1/2$ boundary value, attained at either of the two
+$\alpha_\pm(x)$, is
+\[
+   \tfrac98 (x-\tfrac12)^2\ \text{for $P$,}\quad
+   \tfrac34 (x-\tfrac12)^2\ \text{for $J$.}
+\]
 
-\begin{lemma}[Conjectural; numerically verified]
-\label{lem:stat-vs-bdry}
+\begin{theorem}[Stationary value beats the boundary]
+\label{thm:stat-vs-bdry}
 For all $x\in[2/3,3/4]$,
 \[
    \Psi_P^{\text{stat}}(x) \le \tfrac98 (x-\tfrac12)^2,
    \qquad
    \Psi_J^{\text{stat}}(x) \le \tfrac34 (x-\tfrac12)^2,
 \]
-with equality only at $x=3/4$.
-\end{lemma}
+with equality only at $x=3/4$.  In particular, on the open interval
+$(2/3,3/4)$ the interior critical point on the parametric branch achieves
+the in-family minimum $\Psi_*(x)$, and the in-family minimum is attained
+uniquely there.
+\end{theorem}
 
-Numerically (script output), at ten evenly spaced $\alpha$ values in
-$[0.34,0.49]$:
+\begin{proof}
+Pull back to the alpha-parametrisation.  Substituting
+$x = x_*(\alpha) = \tfrac12+\alpha-\tfrac32\alpha^2+\alpha^2 q$ (with $q$ on the
+stationary branch), define the gap functions
+\begin{align*}
+G_P(\alpha,q) &:= \tfrac98 (x-\tfrac12)^2 - \Phi_P(\alpha, q) \\
+              &= \tfrac98 \bigl(\alpha-\tfrac32\alpha^2+\alpha^2 q\bigr)^2
+                 - \tfrac32\alpha^2(1-\alpha)^2 q\!\left(\tfrac{3-\alpha}{2}+\alpha q\right),
+\\
+G_J(\alpha,q) &:= \tfrac34 (x-\tfrac12)^2 - \Phi_J(\alpha, q) \\
+              &= \tfrac34 \bigl(\alpha-\tfrac32\alpha^2+\alpha^2 q\bigr)^2
+                 - \alpha^2(1-\alpha)^2 q\!\left(\tfrac32-\alpha+2\alpha q\right).
+\end{align*}
+We claim $G_*(\alpha, q_*(\alpha))>0$ on $(1/3,1/2)$ and $=0$ at $\alpha=1/2$.
+On the stationary branch we reduce $q^2 = -(B_*q+C_*)/A_*$ modulo the
+stationary quadratic; the result is linear in $q$, and after substituting the
+branch formula we get $L_*(\alpha) + M_*(\alpha)\sqrt{\Delta_*(\alpha)}$ over
+a positive common denominator $128\alpha^4+256\alpha^3+128\alpha^2$.
+Explicit polynomial forms (computer-algebra verified):
+\begin{align*}
+L_P^{\mathrm{gap}}(\alpha) &= -6\alpha^3(408\alpha^6 - 2227\alpha^5 + 3510\alpha^4 - 2455\alpha^3 + 652\alpha^2 + 24\alpha - 32),
+\\
+M_P^{\mathrm{gap}}(\alpha) &= 6\alpha^3(40\alpha^4 - 169\alpha^3 + 153\alpha^2 - 52\alpha + 4),
+\\
+L_J^{\mathrm{gap}}(\alpha) &= -4\alpha^3(816\alpha^6 - 4163\alpha^5 + 7380\alpha^4 - 6260\alpha^3 + 2690\alpha^2 - 534\alpha + 32),
+\\
+M_J^{\mathrm{gap}}(\alpha) &= 20\alpha^3(16\alpha^4 - 61\alpha^3 + 66\alpha^2 - 28\alpha + 4).
+\end{align*}
+On $(1/3,1/2)$, Sturm sequences give $L_P^{\mathrm{gap}},L_J^{\mathrm{gap}} > 0$
+(zero real roots in the open interval, positive at $\alpha=2/5$ probe) and
+\[
+   (L_P^{\mathrm{gap}})^2 - (M_P^{\mathrm{gap}})^2\,\Delta_P > 0,
+   \qquad
+   (L_J^{\mathrm{gap}})^2 - (M_J^{\mathrm{gap}})^2\,\Delta_J > 0
+\]
+on the same open interval (zero real roots, positive interior values; endpoint
+values $123904/59049 > 0$ at $\alpha=1/3$ and $0$ at $\alpha=1/2$ for $P$,
+$173056/531441 > 0$ at $1/3$ and $0$ at $1/2$ for $J$).
+Hence $|L_*^{\mathrm{gap}}| > |M_*^{\mathrm{gap}}\sqrt{\Delta_*}|$ on the
+open interval, and $L_*^{\mathrm{gap}} > 0$, so
+$L_*^{\mathrm{gap}} + M_*^{\mathrm{gap}}\sqrt{\Delta_*} > 0$ regardless of the
+sign of $M_*^{\mathrm{gap}}$.  This is the desired strict positivity of
+$G_*$ on $(1/3,1/2)$.
+
+Boundary values are immediate:
+\[
+   G_P(\tfrac13,0) = \tfrac98\bigl(\tfrac16\bigr)^2 = \tfrac1{32},\qquad
+   G_J(\tfrac13,0) = \tfrac34\bigl(\tfrac16\bigr)^2 = \tfrac1{48},
+\]
+and $G_P(1/2, 1/2) = G_J(1/2, 1/2) = 0$, the latter because at the right
+endpoint $\alpha^*=\alpha_-=\alpha_+=1/2$ and the stationary point coincides
+with the boundary point.
+
+Uniqueness of the in-family minimum on $(2/3,3/4)$: at fixed $x$, the
+function $\alpha\mapsto\Phi_P(\alpha,x)$ on the open feasibility interval is
+$C^2$ with $\Phi_{\alpha\alpha}>0$ on the branch by
+Proposition~\ref{prop:Phiaa-positive} and a single critical point by
+Theorem~\ref{thm:branch-range}; combined with the strict gap
+$G_P^{\mathrm{stat}}>0$, this gives a strict local-then-global minimum at
+$\alpha=\alpha^*(x)$.  The argument for $J$ is identical.
+\end{proof}
+
+\begin{remark}[Numerical illustration]
+At ten evenly spaced $\alpha$-values in $[0.34,0.49]$, the gap is:
 \begin{center}
 \begin{tabular}{c||c|c||c|c}
 $\alpha$ & $\Psi_P^{\text{stat}}$ & $\tfrac98(x_P-\tfrac12)^2$
@@ -572,15 +655,8 @@ $\alpha$ & $\Psi_P^{\text{stat}}$ & $\tfrac98(x_P-\tfrac12)^2$
 0.49 & 0.06961 & 0.06972 & 0.04602 & 0.04625
 \end{tabular}
 \end{center}
-The inequality holds strictly throughout the interior and becomes tight
-at $x=3/4$, where $\alpha_-=\alpha_+=1/2$ coincides with the stationary point.
-
-A closed-form proof of Lemma~\ref{lem:stat-vs-bdry} should be straightforward:
-write the gap as a function of $\alpha$ along the parametric branch, and
-Sturm-certify positivity.  We flag this as the last remaining algebraic
-step to make Theorems~\ref{thm:branch-range}--\ref{thm:mixed-curvature}
-fully self-contained for the \emph{in-family} reduction (i.e.\ before any
-global tripartite reduction is considered).
+The gap decreases monotonically to zero as $\alpha\to 1/2$ in both cases.
+\end{remark}
 
 \section{Implication for Problem~2}
 
