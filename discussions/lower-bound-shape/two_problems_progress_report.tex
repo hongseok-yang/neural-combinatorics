@@ -1,0 +1,1022 @@
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{status}[theorem]{Status}
+
+\newcommand{\graphon}{\mathcal W}
+\newcommand{\E}{\mathbb E}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\dd}{\,d}
+\newcommand{\tk}{T_k}
+\newcommand{\LS}{\mathrm{LS}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\ord}{\operatorname{ord}}
+
+\title[Progress on two graphon optimisation problems]{Progress on two graphon optimisation problems: counterexamples, corrected conjectures, and reduced variational targets}
+\author{Working research note}
+\date{\today}
+
+\begin{document}
+
+\begin{abstract}
+This note records the current state of two graphon optimisation problems.  The first asks whether, for a particular six-vertex graph $H$, the minimiser of $t(H,W)$ at edge density $1-1/k$ is never the balanced $k$-partite graphon nor the constant graphon, and asks for an exact solution at $k=5$.  We verify the balanced and constant benchmark values, prove the proposed $k=5$ circular construction has density $24349/187500$, and give explicit competitors beating both benchmark graphons for $k=3,4,5$.  We also explain why the all-$k$ statement is not accessible by a local perturbation: for $k\ge 6$ the balanced $k$-partite graphon is first-order locally stable against all edge-density-preserving feasible perturbations.
+
+The second problem asks for a convex/concave classification of the extremal curves
+\[
+   f_F(x)=\min\{t(F,W):t(K_2,W)=x\}.
+\]
+We show that the proposed extension to all larger graphs is false: $F=K_3\sqcup K_3$ already gives a curve that is neither convex nor concave on the interval $[1/2,2/3]$.  We formulate a repaired ``odd-prime'' direction that removes this product obstruction.  The clique subfamily is solved by Reiher's clique-density theorem and is piecewise concave.  However, two non-clique cases listed as concave in the original problem, namely $K_4$ with a pendant edge and $K_3\cup_{K_2}K_4$, do not have the usual Lovasz--Simonovits multipartite graphon as their minimiser.  We give explicit better graphons at edge density $17/25$, and then derive exact finite-dimensional variational formulae for the natural tripartite Turan-filling family.  The remaining main target is to prove, or refute, the global reduction to these filling families by flag algebras or symmetrisation.
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+\section{Notation and basic conventions}
+
+A \emph{graphon} is a symmetric measurable function
+\[
+   W:[0,1]^2\to[0,1].
+\]
+For a finite graph $F=(V(F),E(F))$, its homomorphism density in $W$ is
+\[
+   t(F,W)=\int_{[0,1]^{V(F)}}\prod_{ij\in E(F)} W(x_i,x_j)\prod_{i\in V(F)}\dd x_i.
+\]
+In particular,
+\[
+   t(K_2,W)=\int_{[0,1]^2}W(x,y)\dd x\dd y
+\]
+is the ordered-pair edge density.  For a fixed graph $F$, define
+\[
+   f_F(x)=\min\{t(F,W):t(K_2,W)=x\},\qquad x\in[0,1].
+\]
+Existence of a minimiser follows from standard graphon compactness and lower semicontinuity of homomorphism densities.
+
+The balanced complete $k$-partite graphon will be denoted by $T_k$.  It is obtained by partitioning $[0,1]$ into $k$ equal parts and putting value $0$ on each diagonal part and value $1$ between distinct parts.  Thus
+\[
+   t(K_2,T_k)=1-\frac1k.
+\]
+The constant graphon of edge density $p$ is denoted by $Q_p$; thus $Q_p(x,y)=p$ and
+\[
+   t(F,Q_p)=p^{e(F)}.
+\]
+
+We write
+\[
+   I_k=\left[1-\frac1k,\;1-\frac1{k+1}\right]
+\]
+for the usual Turan intervals.
+
+\section{Problem 1: the six-vertex graph}
+
+Let $H$ be the graph with vertex set $\{1,2,3,4,5,6\}$ and edge set
+\[
+\begin{split}
+E(H)=\{&13,14,23,24,35,36,45,46,56\}.
+\end{split}
+\]
+Thus $H$ has six vertices and nine edges.  The first problem asks about
+\[
+   \min\{t(H,W):t(K_2,W)=1-1/k\}.
+\]
+
+\subsection{The balanced $k$-partite and constant values}
+
+\begin{lemma}[Balanced $k$-partite value]
+For every integer $k\ge 1$,
+\[
+   t(H,T_k)=\frac{k(k-1)(k-2)(k^3-6k^2+14k-11)}{k^6}.
+\]
+\end{lemma}
+
+\begin{proof}
+A homomorphism from $H$ to $T_k$ is exactly a proper $k$-colouring of $H$.  First choose colours of vertices $5$ and $6$.  They must be distinct, giving $k(k-1)$ choices.  The vertices $3$ and $4$ must avoid both colours used on $5$ and $6$.
+
+There are two cases.  If $3$ and $4$ receive the same colour, there are $k-2$ choices for this colour; then vertices $1$ and $2$ may each use any colour except that colour, giving $(k-1)^2$ choices.  If $3$ and $4$ receive distinct colours, there are $(k-2)(k-3)$ choices; then vertices $1$ and $2$ may each use any colour except the two colours used on $3,4$, giving $(k-2)^2$ choices.  Hence
+\[
+\begin{split}
+\chi_H(k)&=k(k-1)\bigl((k-2)(k-1)^2+(k-2)(k-3)(k-2)^2\bigr)\\
+&=k(k-1)(k-2)(k^3-6k^2+14k-11).
+\end{split}
+\]
+Dividing by $k^6$ gives the stated homomorphism density.
+\end{proof}
+
+\begin{lemma}[Constant value]
+For $Q_{1-1/k}\equiv 1-1/k$,
+\[
+   t(H,Q_{1-1/k})=\left(1-\frac1k\right)^9.
+\]
+\end{lemma}
+
+\begin{proof}
+The graph $H$ has nine edges, and every edge contributes the constant factor $1-1/k$.
+\end{proof}
+
+For reference, the first few benchmark values are
+\[
+\begin{array}{c|c|c}
+ k & t(H,T_k) & t(H,Q_{1-1/k})\\ \hline
+ 3 & 8/243\approx 0.0329218 & (2/3)^9\approx 0.0260123\\
+ 4 & 39/512\approx 0.0761719 & (3/4)^9\approx 0.0750847\\
+ 5 & 2040/15625=0.13056 & (4/5)^9\approx 0.1342177.
+\end{array}
+\]
+
+\subsection{The proposed circular construction at $k=5$}
+
+Define
+\[
+   W_\circ(x,y)=\1\{0.1\le |x-y|\le 0.9\}.
+\]
+Equivalently, the zero set is the circular interval of radius $1/10$ around the diagonal.  Its measure is $1/5$, so
+\[
+   t(K_2,W_\circ)=\frac45.
+\]
+
+\begin{theorem}[Density of the circular construction]
+The circular graphon $W_\circ$ satisfies
+\[
+   t(H,W_\circ)=\frac{24349}{187500}\approx 0.129861333\ldots .
+\]
+Consequently
+\[
+   t(H,W_\circ)<t(H,T_5)<t(H,Q_{4/5}).
+\]
+\end{theorem}
+
+\begin{proof}
+We approximate $W_\circ$ by finite cyclic step graphons.  Let $d$ be odd and set $N=5d$.  Partition $[0,1]$ into $N$ equal intervals indexed by $\Z/N\Z$.  Let $W_d$ be the step graphon with matrix
+\[
+   W_d(i,j)=1\quad\Longleftrightarrow\quad
+   \dist_{C_N}(i,j)>\frac{d-1}{2}.
+\]
+For every row there are exactly $d$ zero entries, including the diagonal entry.  Hence
+\[
+   t(K_2,W_d)=1-\frac{d}{5d}=\frac45.
+\]
+Moreover $W_d\to W_\circ$ in $L^1$, and therefore $t(H,W_d)\to t(H,W_\circ)$.
+
+A direct cyclic count gives
+\[
+   \#\Hom(H,W_d)=\frac{24349d^6+140d^4-9d^2}{12}.
+\]
+Here $\Hom(H,W_d)$ means the number of maps $\phi:V(H)\to\Z/N\Z$ such that all nine required pairs are $W_d$-edges.  Dividing by $N^6=(5d)^6$ gives
+\[
+   t(H,W_d)=\frac{24349+140d^{-2}-9d^{-4}}{187500}.
+\]
+Letting $d\to\infty$ gives
+\[
+   t(H,W_\circ)=\frac{24349}{187500}.
+\]
+Finally,
+\[
+   \frac{24349}{187500}<\frac{2040}{15625}<\left(\frac45\right)^9.
+\]
+Indeed $2040/15625=24480/187500$, and $24480>24349$.
+\end{proof}
+
+\begin{remark}[What this proves and what it does not prove]
+The theorem proves that the balanced $5$-partite and constant graphons are not optimal at edge density $4/5$.  It does \emph{not} prove that $W_\circ$ is globally optimal.  The missing statement is the lower bound
+\[
+   t(H,W)\ge \frac{24349}{187500}\qquad
+   \text{whenever }t(K_2,W)=4/5.
+\]
+This lower bound is the hard part of the $k=5$ problem and is a natural flag-algebra target.
+\end{remark}
+
+\subsection{Explicit competitors for $k=3,4,5$}
+
+There is a simple one-parameter family that beats both the balanced and constant graphons for $k=3,4,5$.
+
+Partition $[0,1]$ into $k$ equal parts and define
+\[
+   S_{k,a}(x,y)=
+   \begin{cases}
+      a, & x,y\text{ in the same part},\\[1mm]
+      1-\dfrac{a}{k-1}, & x,y\text{ in different parts}.
+   \end{cases}
+\]
+Then
+\[
+   t(K_2,S_{k,a})=1-\frac1k
+\]
+for every $a\in[0,1]$ for which $1-a/(k-1)\in[0,1]$.
+
+For this family,
+\[
+   t(H,S_{k,a})=\frac1{k^6}\sum_{c_1,\ldots,c_6\in[k]}
+        \prod_{ij\in E(H)}w(c_i,c_j),
+\]
+where
+\[
+   w(c_i,c_j)=
+   \begin{cases}
+      a, & c_i=c_j,\\
+      1-a/(k-1), & c_i\ne c_j.
+   \end{cases}
+\]
+Exact rational evaluation gives:
+\[
+\begin{array}{c|c|c|c}
+ k & a & t(H,S_{k,a}) & \text{comparison}\\ \hline
+ 3 & 3/10 & \dfrac{792167976529}{31104000000000}\approx 0.02546836
+   & <(2/3)^9<t(H,T_3)\\[2mm]
+ 4 & 1/5 & \dfrac{38420325073}{524880000000}\approx 0.07319830
+   & <(3/4)^9<t(H,T_4)\\[2mm]
+ 5 & 1/20 & \dfrac{2186447178930623}{16777216000000000}\approx 0.13032241
+   & <t(H,T_5)<(4/5)^9.
+\end{array}
+\]
+Thus the statement ``neither balanced nor constant'' is rigorously verified for $k=3,4,5$.
+
+\subsection{Why the all-$k$ statement needs a global argument}
+
+The one-parameter perturbation above also explains why the problem changes at $k=6$.
+
+\begin{proposition}[First-order local stability of $T_k$ for $k\ge 6$]
+For the family $S_{k,a}$,
+\[
+   \left.\frac{d}{da}t(H,S_{k,a})\right|_{a=0}
+   =\frac{6k^3-55k^2+142k-111}{k^5}.
+\]
+This derivative is negative for $k=3,4,5$ and positive for every $k\ge 6$.  Consequently, for $k\ge 6$, the balanced $k$-partite graphon is first-order locally stable against every edge-density-preserving feasible perturbation.
+\end{proposition}
+
+\begin{proof}
+The displayed derivative follows by differentiating the finite sum for $t(H,S_{k,a})$ at $a=0$.  The polynomial
+\[
+   6k^3-55k^2+142k-111
+\]
+is negative at $k=3,4,5$ and positive at $k=6$.  Its derivative is
+\[
+   18k^2-110k+142,
+\]
+which is positive for $k\ge 5$, so the polynomial remains positive for all $k\ge 6$.
+
+It remains to explain why this one-parameter derivative controls all first-order feasible directions at $T_k$.  By the symmetry of $T_k$, the first variation of $t(H,\cdot)$ at $T_k$ has one coefficient on within-part cells and one coefficient on cross-part cells.  A feasible one-sided perturbation can only add mass on within-part cells, where $T_k=0$, and remove mass from cross-part cells, where $T_k=1$.  The edge-density constraint says that the total added mass equals the total removed mass.  Hence every first-order feasible derivative is a constant multiple of the difference between the within-cell and cross-cell first-variation coefficients.  The family $S_{k,a}$ is exactly one such edge-density-preserving direction, so its derivative determines the sign for all first-order feasible directions.
+\end{proof}
+
+\begin{status}[Status of Problem 1]
+The following points are solid.
+\begin{enumerate}[label=(\roman*)]
+\item The balanced and constant benchmark values are explicit.
+\item At $k=5$, the circular graphon has the proposed value $24349/187500$ and beats both benchmarks.
+\item For $k=3,4,5$, explicit rational competitors beat both benchmarks.
+\item For $k\ge 6$, non-optimality of $T_k$ cannot be proved by an infinitesimal edge-density-preserving perturbation, because $T_k$ is first-order locally stable.
+\end{enumerate}
+The missing results are global lower and upper-bound statements.  The two most important targets are:
+\begin{enumerate}[label=(\alph*)]
+\item prove or disprove global optimality of the circular $k=5$ graphon;
+\item find a genuinely global competitor, or a proof of optimality, for $k\ge 6$.
+\end{enumerate}
+\end{status}
+
+\begin{remark}[Normalisation of circular thresholds]
+To obtain edge density $1-1/k$ from a circular interval construction, the forbidden circular radius should be $1/(2k)$, not $1/k$.  Thus the literal analogue of the $k=5$ thresholds $0.1,0.9$ would use thresholds
+\[
+   \frac1{2k},\qquad 1-\frac1{2k}.
+\]
+For $k=3,4$, these would be $1/6,5/6$ and $1/8,7/8$, respectively.  This explains why replacing $0.1,0.9$ by $1/3,2/3$ or $1/4,3/4$ does not preserve the edge density.
+\end{remark}
+
+\section{Problem 2: the original extension is false}
+
+The second problem asks for a convex/concave classification of $f_F(x)$ for graphs $F$ with no isolated vertices, no isolated edges, and at least one odd cycle.  It then asks to extend the classification to all graphs with more than five vertices.
+
+The extension to all larger graphs is false.
+
+\subsection{A counterexample: two disjoint triangles}
+
+Let
+\[
+   F=K_3\sqcup K_3.
+\]
+This graph has six vertices, no isolated vertices, no isolated edges, and is non-bipartite.  For every graphon $W$,
+\[
+   t(F,W)=t(K_3,W)^2.
+\]
+Since $z\mapsto z^2$ is increasing on $[0,\infty)$,
+\[
+   f_F(x)=f_{K_3}(x)^2.
+\]
+
+On the Turan interval
+\[
+   I_2=\left[\frac12,\frac23\right],
+\]
+the triangle-density theorem gives the usual tripartite minimiser with part sizes
+\[
+   s,\qquad \frac{1-s}{2},\qquad \frac{1-s}{2},
+   \qquad 0\le s\le \frac13.
+\]
+The edge and triangle densities are
+\[
+   x=\frac12+s-\frac32s^2
+\]
+and
+\[
+   f_{K_3}(x)=\frac32s(1-s)^2.
+\]
+Therefore
+\[
+   f_{K_3\sqcup K_3}(x)=\left(\frac32s(1-s)^2\right)^2.
+\]
+A direct calculation gives
+\[
+   \frac{d^2}{dx^2}f_{K_3\sqcup K_3}(x)
+   =\frac{9(1-s)^2(4s-1)}{2(3s-1)}.
+\]
+For $0<s<1/4$, this is positive, while for $1/4<s<1/3$, it is negative.  Hence $f_{K_3\sqcup K_3}$ is neither convex nor concave on $I_2$.
+
+\subsection{A family of product obstructions}
+
+More generally, let
+\[
+   F_m=\underbrace{K_3\sqcup\cdots\sqcup K_3}_{m\text{ copies}},\qquad m\ge 2.
+\]
+Then
+\[
+   f_{F_m}(x)=f_{K_3}(x)^m.
+\]
+Using the same parameter $s$ on $I_2$,
+\[
+   f_{F_m}(x)=\left(\frac32s(1-s)^2\right)^m.
+\]
+A calculation gives
+\[
+   \frac{d^2}{dx^2}f_{F_m}(x)
+   =
+   \frac{m\left(\frac32s(1-s)^2\right)^m
+     \bigl((3m-2)s-(m-1)\bigr)}
+        {s^2(1-s)^2(3s-1)}.
+\]
+The sign changes at
+\[
+   s_0=\frac{m-1}{3m-2}\in\left(0,\frac13\right).
+\]
+Thus all $F_m$ with $m\ge 2$ have mixed curvature on a single Turan interval.
+
+\begin{status}[Consequence]
+Any correct extension of Problem 2 must exclude graphs with multiple independent non-bipartite pieces.  Merely requiring connectedness is probably not the right repair, because two odd blocks joined by a bridge should still exhibit a coupled product mechanism.
+\end{status}
+
+\section{A repaired structural direction: odd-prime graphs}
+
+The counterexample suggests that the obstruction is not simply disconnectedness but the presence of multiple odd pieces.
+
+\begin{definition}[Odd block and odd-prime graph]
+A block of a graph is a maximal $2$-connected subgraph, with bridges treated as $K_2$-blocks.  A block is \emph{odd} if it contains an odd cycle.  Let $b_{\rm odd}(F)$ be the number of odd blocks of $F$.  A graph $F$ is called \emph{odd-prime} if it is connected, non-bipartite, and
+\[
+   b_{\rm odd}(F)=1.
+\]
+\end{definition}
+
+The first repair of Problem 2 is therefore:
+
+\begin{conjecture}[Odd-prime reduction principle]
+Graphs with $b_{\rm odd}(F)\ge 2$ should not be expected to obey a pure convex/concave dichotomy.  For such graphs, the correct theory should decompose $f_F$ into products or coupled products of the extremal curves associated with the odd blocks.
+
+For odd-prime graphs, a convex/concave classification may still exist, but the extremal templates need not be the same as the clique-density templates.  The right task is to identify, for each odd-prime family, the correct Turan-type filling construction and then prove the corresponding lower bound.
+\end{conjecture}
+
+This conjecture is deliberately weaker than the original all-graphs extension.  It says that the clique cases are only one part of the story.  Non-clique odd-prime graphs may have different extremal mechanisms.
+
+\section{Clique cases: a solved concave subfamily}
+
+The clique cases are completely understood by the clique-density theorem of Reiher \cite{ReiherCliqueDensity}.  We record the graphon formulation and the curvature calculation.
+
+Fix $r\ge 3$.  On
+\[
+   I_k=\left[1-\frac1k,1-\frac1{k+1}\right],
+\]
+the Lovasz--Simonovits graphon has $k+1$ parts: one part of size $s$ and $k$ equal parts of size $(1-s)/k$, where
+\[
+   0\le s\le \frac1{k+1}.
+\]
+Its edge density is
+\[
+   x_k(s)=1-s^2-\frac{(1-s)^2}{k}.
+\]
+Its $K_r$-density is
+\[
+   g_{r,k}(s)=
+   \frac{(k)_{r-1}}{k^{r-1}}(1-s)^{r-1}
+   \left(
+      \frac{k-r+1}{k}+\frac{(r-1)(k+1)}{k}s
+   \right),
+\]
+where
+\[
+   (k)_{r-1}=k(k-1)\cdots(k-r+2).
+\]
+If $k+1<r$, then $g_{r,k}=0$.
+
+\begin{theorem}[Clique curves are piecewise concave]
+For every $r\ge 3$, $f_{K_r}$ is concave on every Turan interval $I_k$.
+\end{theorem}
+
+\begin{proof}
+The clique-density theorem identifies $f_{K_r}$ with the Lovasz--Simonovits curve $g_{r,k}(s)$ on $I_k$.  We compute curvature in the parameter $s$.
+
+First,
+\[
+   x_k'(s)=\frac{2}{k}\bigl(1-(k+1)s\bigr)>0
+\]
+in the interior of the interval.  Therefore the sign of $d^2g_{r,k}/dx^2$ is the sign of
+\[
+   g_{r,k}''(s)x_k'(s)-g_{r,k}'(s)x_k''(s).
+\]
+A direct calculation gives
+\[
+\begin{split}
+&g_{r,k}''(s)x_k'(s)-g_{r,k}'(s)x_k''(s)\\
+&\qquad =-
+\frac{2r(r-1)(r-2)}{k^2}
+\frac{(k)_{r-1}}{k^{r-1}}
+(1-s)^{r-3}\bigl(1-(k+1)s\bigr)^2.
+\end{split}
+\]
+This is non-positive.  Hence $f_{K_r}$ is concave on $I_k$.
+\end{proof}
+
+\begin{remark}
+The clique case should be viewed as the solved model problem.  It gives exact curves, exact extremisers, and the desired concavity.  The non-clique cases below show that one cannot simply attach rooted bipartite decorations to clique extremisers and expect the same templates to remain optimal.
+\end{remark}
+
+\section{Two non-clique cases: the usual clique template is not optimal}
+
+Let
+\[
+   P=K_4^\dagger
+\]
+denote $K_4$ with one pendant edge attached to one vertex of the $K_4$.  Let
+\[
+   J=K_3\cup_{K_2}K_4
+\]
+denote the graph obtained by gluing one edge of a triangle to one edge of a $K_4$.
+
+Both graphs appear in the original list of proposed concave cases.  The following calculation shows that the usual Lovasz--Simonovits $4$-partite clique template is not optimal for either graph at edge density $17/25$.
+
+\subsection{The Lovasz--Simonovits value at $x=17/25$}
+
+On $I_3=[2/3,3/4]$, the clique-density template is the complete $4$-partite graphon with part sizes
+\[
+   s,\qquad \frac{1-s}{3},\qquad \frac{1-s}{3},\qquad \frac{1-s}{3}.
+\]
+Its edge density is
+\[
+   x(s)=\frac23+\frac{2s}{3}-\frac{4s^2}{3}.
+\]
+Setting $x=17/25$ gives
+\[
+   s=\frac{5-\sqrt{21}}{20}.
+\]
+For this graphon,
+\[
+   t(P)=\frac23s(1-s)^3
+   =\frac{291}{10000}-\frac{7\sqrt{21}}{2000}
+   \approx 0.013060985,
+\]
+and
+\[
+   t(J)=\frac{97}{5000}-\frac{7\sqrt{21}}{3000}
+   \approx 0.008707323.
+\]
+
+\subsection{A better tripartite filling graphon}
+
+Partition $[0,1]$ into three parts
+\[
+   A\sqcup B\sqcup C
+\]
+with
+\[
+   |A|=\alpha=\frac7{20},
+   \qquad |B|=|C|=\frac{13}{40}.
+\]
+Put all cross-edges between distinct parts, put no edges inside $B$ or $C$, and inside $A$ put a $q$-regular triangle-free graphon with
+\[
+   q=\frac{11}{98}.
+\]
+For example, split $A$ into two equal subparts and put value $2q=11/49$ between the subparts and value $0$ inside each subpart.
+
+The edge density is
+\[
+   t(K_2,W)=\frac12+\alpha-\frac32\alpha^2+\alpha^2q.
+\]
+Substituting $\alpha=7/20$ and $q=11/98$ gives
+\[
+   t(K_2,W)=\frac{533}{800}+\frac{11}{800}=\frac{17}{25}.
+\]
+For $P$, a direct rooted count gives
+\[
+   t(P,W)=\frac32\alpha^2(1-\alpha)^2q
+          \left(\frac{3-\alpha}{2}+\alpha q\right).
+\]
+Thus
+\[
+   t(P,W)=\frac{1065207}{89600000}\approx 0.011888471,
+\]
+which is strictly smaller than the Lovasz--Simonovits value
+\[
+   \frac{291}{10000}-\frac{7\sqrt{21}}{2000}\approx 0.013060985.
+\]
+For $J$, the same graphon gives
+\[
+   t(J,W)=\alpha^2(1-\alpha)^2q
+          \left(\frac32-\alpha+2\alpha q\right)
+       =\frac{79937}{11200000}\approx 0.007137232,
+\]
+which is strictly smaller than
+\[
+   \frac{97}{5000}-\frac{7\sqrt{21}}{3000}\approx 0.008707323.
+\]
+
+\begin{status}[Consequence]
+The two non-clique cases $P$ and $J$ cannot be solved by simply importing the clique-density extremiser.  Their extremisers, if the natural candidates are correct, involve a complete tripartite skeleton with a triangle-free filling inside one part.
+\end{status}
+
+\section{The tripartite Turan-filling reduction}
+
+We now derive the exact variational formula inside the natural family suggested by the previous examples.  This part is rigorous as a reduction to a finite-dimensional optimisation problem.  The remaining global problem is to prove that every graphon minimiser can be chosen from this family.
+
+\subsection{The family}
+
+Let
+\[
+   [0,1]=A\sqcup B\sqcup C
+\]
+with
+\[
+   |A|=\alpha,
+   \qquad |B|=|C|=\beta=\frac{1-\alpha}{2}.
+\]
+Put all cross-edges between $A,B,C$, put no edges inside $B$ or $C$, and put a triangle-free graphon $F$ inside $A$.  Normalize $F$ on a probability space of measure $1$ and write
+\[
+   q=t(K_2,F),
+   \qquad d_F(u)=\int F(u,v)\dd v,
+   \qquad D_2(F)=\int d_F(u)^2\dd u.
+\]
+By the graphon form of Mantel's theorem,
+\[
+   0\le q\le \frac12.
+\]
+The edge density of the full graphon is
+\[
+   x=\frac12+\alpha-\frac32\alpha^2+\alpha^2q.
+\]
+For fixed $x$, this gives
+\[
+   q=q_x(\alpha)=\frac{x-\frac12-\alpha+\frac32\alpha^2}{\alpha^2}.
+\]
+The constraint $0\le q_x(\alpha)\le 1/2$ is, for $x\in[2/3,3/4]$, equivalent to
+\[
+   \alpha\in A_x:=\left[
+      \frac{1-\sqrt{3-4x}}2,
+      \frac{1+\sqrt{3-4x}}2
+   \right].
+\]
+
+\subsection{Counting $P=K_4^\dagger$}
+
+\begin{lemma}[Density of $P$ in the filling family]
+For the tripartite filling graphon above,
+\[
+   t(P,W)=\frac32\alpha^2(1-\alpha)^2
+          \left[
+             \frac{3-\alpha}{2}q+\alpha D_2(F)
+          \right].
+\]
+Consequently, for fixed $\alpha$ and $q$, the minimum over triangle-free fillings $F$ is attained by a $q$-regular filling and equals
+\[
+   \frac32\alpha^2(1-\alpha)^2q
+          \left(\frac{3-\alpha}{2}+\alpha q\right).
+\]
+\end{lemma}
+
+\begin{proof}
+Every $K_4$ in the full graphon must use two adjacent vertices inside $A$, one vertex in $B$, and one vertex in $C$.  The pendant edge may attach to the distinguished $K_4$ vertex.  If that distinguished vertex lies outside $A$, the pendant neighbour sees degree determined only by the complete cross-edges.  If it lies inside $A$, the contribution involves the $F$-degree of that vertex.  Summing over the four possible positions of the distinguished vertex gives the displayed formula.
+
+Finally, Jensen's inequality gives
+\[
+   D_2(F)=\int d_F(u)^2\dd u\ge \left(\int d_F(u)\dd u\right)^2=q^2.
+\]
+Equality holds exactly for $q$-regular fillings.  Such triangle-free $q$-regular graphons exist for every $q\in[0,1/2]$: split the space into two equal parts and put value $2q$ across the two parts and $0$ inside them.
+\end{proof}
+
+Therefore the reduced variational problem for $P$ is
+\[
+\boxed{
+   \Psi_P(x)=
+   \min_{\alpha\in A_x}
+   \frac32\alpha^2(1-\alpha)^2q_x(\alpha)
+   \left(\frac{3-\alpha}{2}+\alpha q_x(\alpha)\right).
+}
+\]
+After eliminating $q_x(\alpha)$,
+\[
+\boxed{
+   \Psi_P(x)=
+   \min_{\alpha\in A_x}
+   \frac{3(1-\alpha)^2
+     (2\alpha^2+\alpha+2x-1)
+     (3\alpha^2-2\alpha+2x-1)}{8\alpha}.
+}
+\]
+
+\subsection{Counting $J=K_3\cup_{K_2}K_4$}
+
+\begin{lemma}[Density of $J$ in the filling family]
+For the tripartite filling graphon above,
+\[
+   t(J,W)=\alpha^2(1-\alpha)^2
+          \left[
+             \left(\frac32-\alpha\right)q+2\alpha D_2(F)
+          \right].
+\]
+Consequently, for fixed $\alpha$ and $q$, the minimum over triangle-free fillings $F$ is attained by a $q$-regular filling and equals
+\[
+   \alpha^2(1-\alpha)^2q
+          \left(\frac32-\alpha+2\alpha q\right).
+\]
+\end{lemma}
+
+\begin{proof}
+Label the shared edge by $1,2$, the remaining triangle vertex by $3$, and the two remaining $K_4$ vertices by $4,5$.  The $K_4$ portion must again use two adjacent vertices in $A$, one vertex in $B$, and one vertex in $C$.  There are three cases according to whether the shared edge lies inside $A$, has exactly one endpoint in $A$, or lies outside $A$.  Summing these rooted contributions gives
+\[
+   \alpha^2(1-\alpha)^2
+          \left[
+             \left(\frac32-\alpha\right)q+2\alpha D_2(F)
+          \right].
+\]
+The Jensen step and the construction of regular triangle-free fillings are the same as in the previous lemma.
+\end{proof}
+
+Thus the reduced variational problem for $J$ is
+\[
+\boxed{
+   \Psi_J(x)=
+   \min_{\alpha\in A_x}
+   \alpha^2(1-\alpha)^2q_x(\alpha)
+   \left(\frac32-\alpha+2\alpha q_x(\alpha)\right).
+}
+\]
+After eliminating $q_x(\alpha)$,
+\[
+\boxed{
+   \Psi_J(x)=
+   \min_{\alpha\in A_x}
+   \frac{(1-\alpha)^2
+     (3\alpha^2-2\alpha+2x-1)
+     (4\alpha^2-\alpha+4x-2)}{4\alpha}.
+}
+\]
+
+\subsection{Stationary equations and algebraic branches}
+
+For $P$, an interior stationary point satisfies
+\[
+\begin{split}
+0={}&2\alpha^3q^2+9\alpha^3q-3\alpha^3
++2\alpha^2q^2-9\alpha^2q+13\alpha^2\\
+&+4\alpha q-13\alpha+3,
+\end{split}
+\]
+where
+\[
+   q=q_x(\alpha).
+\]
+Solving this quadratic equation for $q$ gives the relevant branch
+\[
+   q_P(\alpha)=
+   \frac{-9\alpha^2+9\alpha-4+
+   \sqrt{105\alpha^4-242\alpha^3+153\alpha^2+8\alpha-8}}
+   {4\alpha(\alpha+1)}.
+\]
+This branch satisfies
+\[
+   q_P(1/3)=0,
+   \qquad q_P(1/2)=1/2.
+\]
+It parametrises a candidate reduced optimum by
+\[
+   x_P(\alpha)=\frac12+\alpha-\frac32\alpha^2+
+      \alpha^2q_P(\alpha),
+   \qquad \alpha\in[1/3,1/2].
+\]
+The corresponding value is
+\[
+   \Psi_P(x_P(\alpha))=\frac32\alpha^2(1-\alpha)^2q_P(\alpha)
+   \left(\frac{3-\alpha}{2}+\alpha q_P(\alpha)\right).
+\]
+
+For $J$, the corresponding stationarity equation is
+\[
+\begin{split}
+0={}&4\alpha^3q^2+18\alpha^3q-6\alpha^3
++4\alpha^2q^2-24\alpha^2q+17\alpha^2\\
+&+8\alpha q-14\alpha+3.
+\end{split}
+\]
+The relevant branch is
+\[
+   q_J(\alpha)=
+   \frac{-(3\alpha-2)^2+
+   \sqrt{105\alpha^4-260\alpha^3+204\alpha^2-52\alpha+4}}
+   {4\alpha(\alpha+1)}.
+\]
+Again
+\[
+   q_J(1/3)=0,
+   \qquad q_J(1/2)=1/2.
+\]
+It parametrises the candidate reduced optimum by
+\[
+   x_J(\alpha)=\frac12+\alpha-\frac32\alpha^2+
+      \alpha^2q_J(\alpha),
+   \qquad \alpha\in[1/3,1/2],
+\]
+and
+\[
+   \Psi_J(x_J(\alpha))=
+   \alpha^2(1-\alpha)^2q_J(\alpha)
+   \left(\frac32-\alpha+2\alpha q_J(\alpha)\right).
+\]
+At the endpoints,
+\[
+   \Psi_P(2/3)=0,
+   \qquad \Psi_P(3/4)=\frac9{128},
+\]
+and
+\[
+   \Psi_J(2/3)=0,
+   \qquad \Psi_J(3/4)=\frac3{64}.
+\]
+
+\begin{remark}[Algebraic verification still to formalise]
+The counting and Jensen reductions above are fully rigorous.  The last one-dimensional minimisation is elementary but should be formalised with a Sturm-sequence certificate before being quoted as a publication-ready theorem.  Numerically and symbolically, the branches $q_P$ and $q_J$ give the unique minimising branch on $[2/3,3/4]$.  A useful next step is to add the explicit Sturm certificates to this note or to a computer-verifiable appendix.
+\end{remark}
+
+\subsection{Numerical example at $x=17/25$}
+
+Solving the reduced one-dimensional problems at
+\[
+   x=\frac{17}{25}
+\]
+gives
+\[
+   \alpha_P\approx 0.3489617543,
+   \qquad q_P\approx 0.1125007820,
+\]
+and
+\[
+   \Psi_P(17/25)\approx 0.01188713928.
+\]
+For $J$,
+\[
+   \alpha_J\approx 0.3509647872,
+   \qquad q_J\approx 0.1120315971,
+\]
+and
+\[
+   \Psi_J(17/25)\approx 0.007136528755.
+\]
+The hand-picked values $\alpha=7/20$ and $q=11/98$ used above are therefore very close to the reduced optima but not exactly optimal.
+
+\section{Where the project currently stands}
+
+\subsection{Solved or essentially settled pieces}
+
+\begin{enumerate}[label=(\arabic*)]
+\item For Problem 1, the balanced $k$-partite and constant values are explicit.
+\item The proposed $k=5$ circular graphon has density $24349/187500$ and beats both benchmark graphons.
+\item Explicit rational competitors beat both benchmark graphons for $k=3,4,5$.
+\item For $k\ge 6$, the balanced $k$-partite graphon is first-order locally stable.  Thus any all-$k$ non-optimality proof must be global.
+\item The original all-graphs extension in Problem 2 is false.  The counterexample $K_3\sqcup K_3$ has mixed curvature on $[1/2,2/3]$.
+\item All clique curves $f_{K_r}$ are piecewise concave by Reiher's clique-density theorem.
+\item The non-clique graphs $K_4^\dagger$ and $K_3\cup_{K_2}K_4$ are not minimised by the usual Lovasz--Simonovits $4$-partite clique template at edge density $17/25$.
+\item Inside the natural tripartite Turan-filling family, the variational problems for $K_4^\dagger$ and $K_3\cup_{K_2}K_4$ reduce to explicit one-dimensional algebraic minimisations.
+\end{enumerate}
+
+\subsection{Main open questions}
+
+\begin{problem}[Problem 1, $k=5$ lower bound]
+Prove or disprove that
+\[
+   t(H,W)\ge \frac{24349}{187500}
+   \qquad\text{whenever }t(K_2,W)=\frac45.
+\]
+If true, identify all minimising graphons up to weak isomorphism.  If false, find a better graphon.
+\end{problem}
+
+\begin{problem}[Problem 1, all $k$]
+For every $k>2$, decide whether the minimiser at edge density $1-1/k$ is neither $T_k$ nor the constant graphon.  For $k\ge 6$, this cannot be answered by first-order perturbation around $T_k$; either a global competitor or a global optimality proof is required.
+\end{problem}
+
+\begin{problem}[Odd-block decomposition]
+Develop a decomposition theory for $f_F$ when $F$ has multiple odd blocks.  The family $mK_3$ shows that products of odd pieces can destroy any simple convex/concave dichotomy.
+\end{problem}
+
+\begin{problem}[Global reduction for $P$ and $J$]
+Prove or refute the following reduction on $[2/3,3/4]$:
+\[
+   f_P(x)=\Psi_P(x),
+   \qquad f_J(x)=\Psi_J(x).
+\]
+Equivalently, show that every minimiser can be replaced by a complete tripartite graphon with a regular triangle-free filling inside one part, without increasing the $P$- or $J$-density.
+\end{problem}
+
+\begin{problem}[Curvature after the corrected reduction]
+Once the correct extremal curves are identified for $P$ and $J$, determine their actual curvature.  Preliminary numerical evidence for the reduced curves suggests that the original small-graph convex/concave classification may need revision even before considering graphs with more than five vertices.
+\end{problem}
+
+\section{Promising research directions}
+
+\subsection{Flag-algebra certificates}
+
+The most direct path to the missing lower bounds is a flag-algebra computation.  For Problem 1, the target certificate is
+\[
+   t(H,W)-\frac{24349}{187500}\ge 0
+   \quad\text{under }t(K_2,W)=4/5.
+\]
+For the non-clique Problem 2 cases, the target certificates are the inequalities
+\[
+   t(P,W)\ge \Psi_P(x),
+   \qquad t(J,W)\ge \Psi_J(x),
+   \qquad x=t(K_2,W),
+\]
+at least for $x\in[2/3,3/4]$.
+
+These are parameter-dependent inequalities.  One feasible approach is to choose several rational values of $x$, solve the SDP numerically, guess exact certificates, and then interpolate the parameter dependence.
+
+\subsection{Symmetrisation and stability}
+
+The tripartite filling construction suggests a symmetrisation theorem:
+
+\begin{quote}
+Among graphons of edge density $x\in[2/3,3/4]$, a minimiser for $P$ or $J$ can be chosen to have a complete tripartite skeleton, with all nontrivial structure inside one part.
+\end{quote}
+
+A proof might combine stability for the $K_4$ supersaturation problem with a Zykov-type symmetrisation that preserves or decreases the rooted decoration density.  This would be conceptually preferable to a purely computational flag-algebra certificate.
+
+\subsection{Rooted density inequalities}
+
+For clique-decorated graphs, unrooted clique density is not enough.  For instance,
+\[
+   t(K_4^\dagger,W)=\int \kappa_4(x) d_W(x)\dd x,
+\]
+where $\kappa_4(x)$ is the rooted density of $K_4$ at the pendant root and $d_W(x)$ is the degree.  The examples above exploit correlations between rooted clique density and degree.  A promising direction is therefore to develop sharp rooted clique-density inequalities under an edge-density constraint.
+
+\subsection{Formal algebraic verification}
+
+The reduced formulas for $\Psi_P$ and $\Psi_J$ are explicit enough to be certified by exact algebra.  A concrete next step is to produce a small companion file, in Sage, Mathematica, or Lean, that verifies:
+\begin{enumerate}[label=(\roman*)]
+\item the stationary equations;
+\item uniqueness of the minimising branch by Sturm sequences;
+\item monotonicity of $x_P(\alpha)$ and $x_J(\alpha)$ on $[1/3,1/2]$;
+\item the curvature signs of the reduced curves.
+\end{enumerate}
+This would make the finite-dimensional part robust and publication-ready.
+
+\subsection{Revisiting the small-graph classification}
+
+Because $K_4^\dagger$ and $K_3\cup_{K_2}K_4$ do not use the clique template, the original classification for graphs on at most five vertices should be rechecked.  A sensible workflow is:
+\begin{enumerate}[label=(\arabic*)]
+\item enumerate all non-bipartite graphs on at most five vertices with no isolated vertices and no isolated $K_2$ components;
+\item for each graph, generate candidate Turan-filling templates on the first relevant intervals;
+\item solve the reduced finite-dimensional problems exactly;
+\item use flag algebras to certify or refute the candidates.
+\end{enumerate}
+
+\section{A compact checklist for collaborators}
+
+Here is the shortest useful checklist for continuing the project.
+
+\begin{enumerate}[label=\textbf{Task \arabic*.}]
+\item Try to certify the $k=5$ circular value for Problem 1 by flag algebras.  The target constant is $24349/187500$ at edge density $4/5$.
+\item Search for global competitors to $T_k$ for Problem 1 when $k\ge 6$.  Local perturbations will not find them.
+\item Treat $K_3\sqcup K_3$ as the canonical obstruction to the original Problem 2 extension.
+\item Do not assume that clique-decorated graphs are minimised by clique-density templates.  The cases $K_4^\dagger$ and $K_3\cup_{K_2}K_4$ already disprove that strategy.
+\item For $K_4^\dagger$ and $K_3\cup_{K_2}K_4$, focus on proving or disproving the tripartite Turan-filling reduction.
+\item Add exact Sturm certificates for the one-dimensional reduced minimisations.
+\end{enumerate}
+
+\appendix
+
+\section{Exact finite-sum checker for the family $S_{k,a}$}
+
+The following formula is useful for independent verification:
+\[
+   t(H,S_{k,a})=\frac1{k^6}\sum_{c_1,\ldots,c_6\in[k]}
+        \prod_{ij\in E(H)}
+        \left(a\1\{c_i=c_j\}+\left(1-\frac{a}{k-1}\right)\1\{c_i\ne c_j\}\right).
+\]
+This finite sum is the source of the rational values in Section~2.3 and of the derivative
+\[
+   \left.\frac{d}{da}t(H,S_{k,a})\right|_{a=0}
+   =\frac{6k^3-55k^2+142k-111}{k^5}.
+\]
+
+\section{Derivative formulae for the reduced $P$ and $J$ problems}
+
+For $P$, after eliminating $q$, define
+\[
+   \Phi_P(\alpha,x)=
+   \frac{3(1-\alpha)^2
+     (2\alpha^2+\alpha+2x-1)
+     (3\alpha^2-2\alpha+2x-1)}{8\alpha}.
+\]
+Then
+\[
+\frac{\partial \Phi_P}{\partial \alpha}
+=\frac{3(\alpha-1)}{8\alpha^2}N_P(\alpha,x),
+\]
+where
+\[
+\begin{split}
+N_P(\alpha,x)={}&30\alpha^5-22\alpha^4+30\alpha^3x-19\alpha^3
+-14\alpha^2x+9\alpha^2\\
+&+4\alpha x^2-4\alpha x+\alpha+4x^2-4x+1.
+\end{split}
+\]
+Substituting
+\[
+   x=\frac12+\alpha-\frac32\alpha^2+\alpha^2q
+\]
+into $N_P$ gives the stationarity equation in Section~7.4.
+
+For $J$, define
+\[
+   \Phi_J(\alpha,x)=
+   \frac{(1-\alpha)^2
+     (3\alpha^2-2\alpha+2x-1)
+     (4\alpha^2-\alpha+4x-2)}{4\alpha}.
+\]
+Then
+\[
+\frac{\partial \Phi_J}{\partial \alpha}
+=\frac{(\alpha-1)}{2\alpha^2}N_J(\alpha,x),
+\]
+where
+\[
+\begin{split}
+N_J(\alpha,x)={}&30\alpha^5-40\alpha^4+30\alpha^3x-\alpha^3
+-20\alpha^2x+9\alpha^2\\
+&+4\alpha x^2-4\alpha x+\alpha+4x^2-4x+1.
+\end{split}
+\]
+Again substituting
+\[
+   x=\frac12+\alpha-\frac32\alpha^2+\alpha^2q
+\]
+gives the stationarity equation in Section~7.4.
+
+\begin{thebibliography}{9}
+
+\bibitem{ReiherCliqueDensity}
+C. Reiher,
+\emph{The clique density theorem},
+Annals of Mathematics \textbf{184} (2016), 683--707.
+Also available as arXiv:1212.2454.
+
+\bibitem{BennettDudekLidickyPikhurkoC5}
+P. Bennett, A. Dudek, B. Lidicky, and O. Pikhurko,
+\emph{Minimizing the number of 5-cycles in graphs with given edge-density},
+Combinatorics, Probability and Computing \textbf{29} (2020), 44--67.
+Also available as arXiv:1803.00165.
+
+\bibitem{LovaszBook}
+L. Lovasz,
+\emph{Large Networks and Graph Limits},
+American Mathematical Society, 2012.
+
+\end{thebibliography}
+
+\end{document}
