@@ -1,0 +1,856 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\eps}{\varepsilon}
+
+\title{A Goodman-Type Lower Bound for Odd Cycle Densities in Graphons\\
+\large Verified results for $C_3$, $C_5$, $C_7$, regular graphons, and a partial $C_9$ theorem}
+\author{Working note}
+\date{May 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $W:[0,1]^2\to[0,1]$ be a graphon and let $p=t(K_2,W)$ be its edge density.  We study the conjectural lower bound
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for every odd cycle when $W$ is $p$-regular, true for $C_5$, and true for $C_7$.  For $C_9$ the same path-certificate method proves the bound for
+\[
+        p\le \frac12 \quad\text{or}\quad p\ge \frac{1003}{2000}=0.5015.
+\]
+The remaining $C_9$ interval is therefore
+\[
+        \frac12<p<\frac{1003}{2000}.
+\]
+The $C_9$ statement in this note should be read as a computer-assisted exact certificate: all identities are polynomial identities over $\mathbb Q$, and the only positivity checks reduce to rational matrices whose leading principal minors become polynomials with positive coefficients after a rational change of variables.  A short exact-arithmetic checker accompanies this note.
+\end{abstract}
+
+\section{The conjecture and the audited status}
+
+For a graphon $W$ and a finite graph $H$, write $t(H,W)$ for the usual homomorphism density.  For the path with $j$ edges we write $P_j$, and for the cycle with $m$ edges we write $C_m$.
+
+\begin{conjecture}[Odd-cycle lower bound]\label{conj:main}
+Let $m=2k+1$ be odd.  For every graphon $W$ with edge density
+\[
+        p=t(K_2,W),
+\]
+one has
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{conjecture}
+
+Equivalently, putting $U=1-W$ and $q=t(K_2,U)=1-p$, the conjecture is
+\[
+        t(C_m,1-U)\ge (1-q)^m-(1-q)q^{m-1}.
+\]
+The case $p\le 1/2$ is trivial, because then
+\[
+        p^m-p(1-p)^{m-1}\le 0.
+\]
+Thus the nontrivial regime is $p>1/2$, or equivalently $0\le q<1/2$.
+
+\begin{theorem}[Audited results]\label{thm:status}
+The following statements are proved in this note.
+\begin{enumerate}[label=\textup{(\roman*)}]
+    \item Conjecture~\ref{conj:main} is sharp at balanced complete multipartite graphons.
+    \item Conjecture~\ref{conj:main} holds for $C_3$ for all graphons.
+    \item Conjecture~\ref{conj:main} holds for every odd cycle $C_{2k+1}$ when $W$ is $p$-regular.
+    \item Conjecture~\ref{conj:main} holds for $C_5$ for all graphons.
+    \item Conjecture~\ref{conj:main} holds for $C_7$ for all graphons.
+    \item For $C_9$, Conjecture~\ref{conj:main} holds for all graphons with
+    \[
+            p\le \frac12
+            \quad\text{or}\quad
+            p\ge \frac{1003}{2000}.
+    \]
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Important limitation]
+This note does \emph{not} prove the full conjecture for $C_9$, and does not prove the conjecture for all odd cycles.  The remaining $C_9$ gap is the narrow interval
+\[
+        \frac12<p<\frac{1003}{2000}.
+\]
+The obstruction is not a counterexample to the conjecture.  It is an obstruction to the particular proof method that replaces the complement cycle density $t(C_9,U)$ by the path density $t(P_8,U)$.
+\end{remark}
+
+\section{General tools}
+
+\subsection{Sharpness at Turan graphons}
+
+Let $T_r$ be the balanced complete $r$-partite graphon.  Then
+\[
+        t(K_2,T_r)=1-\frac1r.
+\]
+If $m$ is odd, then $t(C_m,T_r)$ is the probability that a uniformly random map from the vertices of $C_m$ to $[r]$ is a proper coloring.  Since
+\[
+        \chi(C_m,r)=(r-1)^m-(r-1)
+\]
+for an odd cycle, we get
+\[
+\begin{aligned}
+        t(C_m,T_r)
+        &=\frac{(r-1)^m-(r-1)}{r^m}  \\
+        &=\left(1-\frac1r\right)^m
+          -\left(1-\frac1r\right)\left(\frac1r\right)^{m-1}.
+\end{aligned}
+\]
+Thus equality holds in Conjecture~\ref{conj:main} at
+\[
+        p=1-\frac1r.
+\]
+
+\subsection{The complement expansion}
+
+Let $U=1-W$ and $q=t(K_2,U)$.  For a path $P_j$, write
+\[
+        x_j=t(P_j,U).
+\]
+For example, $x_1=q$.
+
+For $C_5$ and $C_7$, the inclusion-exclusion expansion of $t(C_m,1-U)$ over the edges of $C_m$ is small enough to write explicitly.  For $C_5$,
+\begin{equation}\label{eq:C5-expansion}
+\begin{aligned}
+    t(C_5,1-U)
+    ={}&1-5q+5x_2+5q^2-5x_3-5qx_2+5x_4-c_5,
+\end{aligned}
+\end{equation}
+where $c_5=t(C_5,U)$.  Since $0\le U\le 1$, deleting one edge from the integrand gives
+\[
+        c_5\le x_4.
+\]
+
+For $C_7$,
+\begin{equation}\label{eq:C7-expansion}
+\begin{aligned}
+    t(C_7,1-U)
+    ={}&1-7q \\
+    &+\bigl(7x_2+14q^2\bigr)\\
+    &-\bigl(7x_3+21qx_2+7q^3\bigr)\\
+    &+\bigl(7x_4+14qx_3+7x_2^2+7q^2x_2\bigr)\\
+    &-\bigl(7x_5+7qx_4+7x_2x_3\bigr)\\
+    &+7x_6-c_7,
+\end{aligned}
+\end{equation}
+where $c_7=t(C_7,U)$.  Again
+\[
+        c_7\le x_6.
+\]
+
+The $C_9$ expansion is given in Section~\ref{sec:C9}.
+
+\subsection{Operator notation and path moments}
+
+Let $T=T_U$ be the graphon operator
+\[
+        Tf(x)=\int_0^1 U(x,y)f(y)\,dy.
+\]
+Let
+\[
+        d=T\one
+\]
+be the degree function of $U$.  Then
+\[
+        \int_0^1 d(x)\,dx=q.
+\]
+Write
+\[
+        d=q\one+g,
+        \qquad
+        \ip{g}{\one}=0.
+\]
+Let $H_0=\one^\perp$, and let
+\[
+        A=P_{H_0}TP_{H_0}:H_0\to H_0
+\]
+be the compression of $T$ to the orthogonal complement of the constants.  For $j\ge0$, define
+\[
+        s_j=\ip{g}{A^jg}.
+\]
+In particular,
+\[
+        s_0=\norm{g}_2^2.
+\]
+Because $T$ is self-adjoint and $0\le U\le 1$, the operator $A$ is self-adjoint and has spectrum contained in $[-1,1]$.  By the spectral theorem, there is a positive finite measure $\mu$ on $[-1,1]$ such that
+\[
+        s_j=\int_{-1}^1 \lambda^j\,d\mu(\lambda).
+\]
+
+The path densities are
+\[
+        x_j=t(P_j,U)=\ip{\one}{T^j\one}.
+\]
+The following formulae will be used repeatedly.
+
+\begin{lemma}[Path-density formulae]\label{lem:path-formulae}
+With the notation above,
+\[
+        x_1=q,
+\]
+\[
+        x_2=q^2+s_0,
+\]
+\[
+        x_3=q^3+2qs_0+s_1,
+\]
+\[
+        x_4=q^4+3q^2s_0+2qs_1+s_0^2+s_2,
+\]
+\[
+        x_5=q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3,
+\]
+\[
+\begin{aligned}
+        x_6={}&q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2\\
+        &+6qs_0s_1+2qs_3+s_0^3+2s_0s_2+s_1^2+s_4,
+\end{aligned}
+\]
+\[
+\begin{aligned}
+        x_7={}&q^7+6q^5s_0+5q^4s_1+10q^3s_0^2+4q^3s_2\\
+        &+12q^2s_0s_1+3q^2s_3+4qs_0^3+6qs_0s_2\\
+        &+3qs_1^2+2qs_4+3s_0^2s_1+2s_0s_3+2s_1s_2+s_5,
+\end{aligned}
+\]
+and
+\[
+\begin{aligned}
+        x_8={}&q^8+7q^6s_0+6q^5s_1+15q^4s_0^2+5q^4s_2\\
+        &+20q^3s_0s_1+4q^3s_3+10q^2s_0^3+12q^2s_0s_2\\
+        &+6q^2s_1^2+3q^2s_4+12qs_0^2s_1+6qs_0s_3\\
+        &+6qs_1s_2+2qs_5+s_0^4+3s_0^2s_2+3s_0s_1^2\\
+        &+2s_0s_4+2s_1s_3+s_2^2+s_6.
+\end{aligned}
+\]
+\end{lemma}
+
+\begin{proof}
+Use the block decomposition of $T$ with respect to $\mathbb R\one\oplus H_0$:
+\[
+        T=\begin{pmatrix}
+            q & \ip{g}{\cdot}\\
+            g & A
+        \end{pmatrix}.
+\]
+If $T^n\one=a_n\one+h_n$ with $h_n\in H_0$, then
+\[
+        a_{n+1}=qa_n+\ip{g}{h_n},
+        \qquad
+        h_{n+1}=a_ng+Ah_n.
+\]
+Starting with $a_0=1$ and $h_0=0$, the displayed identities follow by induction.
+\end{proof}
+
+\section{The triangle case and regular graphons}
+
+\subsection{The $C_3$ case}
+
+\begin{theorem}[Goodman-type triangle bound]\label{thm:C3}
+For every graphon $W$ with $p=t(K_2,W)$,
+\[
+        t(C_3,W)=t(K_3,W)\ge p^3-p(1-p)^2.
+\]
+\end{theorem}
+
+\begin{proof}
+Since
+\[
+        p^3-p(1-p)^2=2p^2-p,
+\]
+it is enough to prove $t(K_3,W)\ge 2p^2-p$.
+Let
+\[
+        d_W(x)=\int_0^1 W(x,y)\,dy.
+\]
+For $a,b\in[0,1]$, $ab\ge a+b-1$.  Hence, for every $x,y$,
+\[
+\begin{aligned}
+    \int W(x,z)W(y,z)\,dz
+    &\ge \int\bigl(W(x,z)+W(y,z)-1\bigr)\,dz\\
+    &=d_W(x)+d_W(y)-1.
+\end{aligned}
+\]
+Therefore
+\[
+\begin{aligned}
+    t(K_3,W)
+    &\ge \int W(x,y)\bigl(d_W(x)+d_W(y)-1\bigr)\,dx\,dy\\
+    &=2\int d_W(x)^2\,dx-p\\
+    &\ge 2p^2-p,
+\end{aligned}
+\]
+where the last step is Cauchy--Schwarz.
+\end{proof}
+
+\subsection{All odd cycles for regular graphons}
+
+\begin{theorem}[Regular graphons]\label{thm:regular}
+Let $m=2k+1\ge3$ be odd.  If $W$ is $p$-regular, i.e.
+\[
+        \int_0^1 W(x,y)\,dy=p\quad\text{for a.e. }x,
+\]
+then
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $q=1-p$ and $U=1-W$.  Then $U$ is $q$-regular.  Let $T_W$ and $T_U$ be the associated self-adjoint graphon operators.  Since $W$ is $p$-regular, $\one$ is an eigenfunction of $T_W$ with eigenvalue $p$.  On $\one^\perp$,
+\[
+        T_U=-T_W,
+\]
+because $T_U=J-T_W$, where $Jf=\ip{f}{\one}\one$.
+
+Since $U\ge0$ is $q$-regular, Schur's test gives
+\[
+        \norm{T_U}_{2\to2}\le q.
+\]
+Thus every nonconstant eigenvalue $\lambda_i$ of $T_W$ satisfies
+\[
+        |\lambda_i|\le q.
+\]
+Moreover,
+\[
+        \sum_i \lambda_i^2
+        =\norm{W}_2^2-p^2
+        \le p-p^2=pq,
+\]
+where the sum is over the nonconstant eigenvalues and we used $0\le W\le1$.
+
+The trace formula gives
+\[
+        t(C_m,W)=p^m+\sum_i \lambda_i^m.
+\]
+Since $m\ge3$ is odd,
+\[
+\begin{aligned}
+        \sum_i\lambda_i^m
+        &\ge -\sum_i |\lambda_i|^m\\
+        &\ge -q^{m-2}\sum_i\lambda_i^2\\
+        &\ge -q^{m-2}pq=-pq^{m-1}.
+\end{aligned}
+\]
+Hence
+\[
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+\end{proof}
+
+\section{The $C_5$ theorem}
+
+\begin{theorem}\label{thm:C5}
+For every graphon $W$ with $p=t(K_2,W)$,
+\[
+        t(C_5,W)\ge p^5-p(1-p)^4.
+\]
+\end{theorem}
+
+\begin{proof}
+Put $U=1-W$ and $q=t(K_2,U)=1-p$.  If $q\ge1/2$, the desired lower bound is nonpositive, so there is nothing to prove.  Assume $0\le q\le1/2$.
+
+From \eqref{eq:C5-expansion} and $c_5\le x_4$,
+\[
+        t(C_5,1-U)
+        \ge 1-5q+5q^2+5(1-q)x_2-5x_3+4x_4.
+\]
+Subtracting
+\[
+        (1-q)^5-(1-q)q^4
+        =1-5q+10q^2-10q^3+4q^4
+\]
+shows that it is enough to prove
+\begin{equation}\label{eq:Phi5}
+        4x_4-5x_3+5(1-q)x_2-(4q^4-10q^3+5q^2)\ge0.
+\end{equation}
+
+Let $d=T\one=q\one+g$, as in Section~2.  A direct calculation gives
+\[
+        x_2=q^2+\norm{g}_2^2,
+\]
+\[
+        x_3=q^3+2q\norm{g}_2^2+\ip{g}{Tg},
+\]
+and
+\[
+        x_4=q^4+3q^2\norm{g}_2^2+2q\ip{g}{Tg}+\norm{Tg}_2^2.
+\]
+Therefore the left side of \eqref{eq:Phi5} equals
+\[
+        4\norm{Tg}_2^2+(8q-5)\ip{g}{Tg}+(12q^2-15q+5)\norm{g}_2^2.
+\]
+Completing the square,
+\[
+\begin{aligned}
+&4\norm{Tg}_2^2+(8q-5)\ip{g}{Tg}+(12q^2-15q+5)\norm{g}_2^2\\
+&\qquad =4\left\|Tg+\frac{8q-5}{8}g\right\|_2^2
++\left(8q^2-10q+\frac{55}{16}\right)\norm{g}_2^2.
+\end{aligned}
+\]
+The quadratic coefficient is strictly positive for all real $q$, because its discriminant is negative.  Thus \eqref{eq:Phi5} holds, and the theorem follows.
+\end{proof}
+
+\section{The $C_7$ theorem}
+
+\begin{theorem}\label{thm:C7}
+For every graphon $W$ with $p=t(K_2,W)$,
+\[
+        t(C_7,W)\ge p^7-p(1-p)^6.
+\]
+\end{theorem}
+
+\begin{proof}
+Set $U=1-W$ and $q=t(K_2,U)=1-p$.  The case $q\ge1/2$ is trivial, so assume $0\le q\le1/2$.
+
+From \eqref{eq:C7-expansion} and $c_7\le x_6$, it is enough to prove $\Phi_7\ge0$, where
+\begin{equation}\label{eq:Phi7-path}
+\begin{aligned}
+\Phi_7={}&
+6x_6-7x_5
++7(1-q)x_4
++7(2q-1)x_3 \\
+&+7(q^2-3q+1)x_2
++7x_2^2-7x_2x_3 \\
+&-6q^6+21q^5-35q^4+28q^3-7q^2.
+\end{aligned}
+\end{equation}
+Substituting the formulae from Lemma~\ref{lem:path-formulae} gives
+\begin{equation}\label{eq:Phi7-s}
+\begin{aligned}
+\Phi_7={}&
+6s_4+(12q-7)s_3+(18q^2-21q+7)s_2\\
+&+(24q^3-42q^2+28q-7)s_1\\
+&+(30q^4-70q^3+70q^2-35q+7)s_0\\
+&+12s_0s_2+(36q-21)s_0s_1\\
+&+(36q^2-42q+14)s_0^2+6s_0^3+6s_1^2.
+\end{aligned}
+\end{equation}
+Let $\mu$ be the spectral measure of $A$ with respect to $g$, so that
+\[
+        s_j=\int_{-1}^1\lambda^j\,d\mu(\lambda).
+\]
+Write
+\[
+        r=s_0=\mu([-1,1]).
+\]
+Then \eqref{eq:Phi7-s} can be written as
+\[
+        \Phi_7=6s_1^2+
+        \int_{-1}^1 R_{q,r}(\lambda)\,d\mu(\lambda),
+\]
+where
+\[
+        R_{q,r}(\lambda)=P_q(\lambda)+rB_q(\lambda)+6r^2,
+\]
+with
+\[
+\begin{aligned}
+P_q(\lambda)={}&
+6\lambda^4+(12q-7)\lambda^3+(18q^2-21q+7)\lambda^2\\
+&+(24q^3-42q^2+28q-7)\lambda\\
+&+30q^4-70q^3+70q^2-35q+7
+\end{aligned}
+\]
+and
+\[
+        B_q(\lambda)=12\lambda^2+(36q-21)\lambda+36q^2-42q+14.
+\]
+It remains to prove $R_{q,r}(\lambda)\ge0$ for $0\le q\le1/2$, $r\ge0$ and $-1\le\lambda\le1$.
+
+First, $B_q$ is uniformly positive.  Its minimum in $\lambda$ occurs at
+\[
+        \lambda_0=\frac{7-12q}{8}\in\left[\frac18,\frac78\right],
+\]
+and
+\[
+        B_q(\lambda_0)=\frac{144q^2-168q+77}{16}\ge \frac{29}{16}.
+\]
+Thus $R_{q,r}(\lambda)\ge P_q(\lambda)$.
+
+We now show $P_q(\lambda)\ge0$.  Let
+\[
+        D(q)=288q^2-336q+119,
+        \qquad
+        C(q)=24q^3-42q^2+28q-7.
+\]
+A direct identity is
+\begin{equation}\label{eq:C7-P-square}
+\begin{aligned}
+P_q(\lambda)={}&
+6\left(\lambda^2+\left(q-\frac{7}{12}\right)\lambda\right)^2\\
+&+\frac{D(q)}{24}
+\left(\lambda+\frac{12C(q)}{D(q)}\right)^2
++\frac{N(q)}{D(q)},
+\end{aligned}
+\end{equation}
+where
+\[
+\begin{aligned}
+N(q)={}&5184q^6-18144q^5+28602q^4-25802q^3\\
+&+13874q^2-4165q+539.
+\end{aligned}
+\]
+For $0\le q\le1/2$, write $y=1/2-q$.  Then
+\[
+        D(q)=288y^2+48y+23>0,
+\]
+and
+\[
+\begin{aligned}
+8N(q)={}&41472y^6+20736y^5+21456y^4+7984y^3\\
+&+2032y^2+316y+11>0.
+\end{aligned}
+\]
+Thus every term in \eqref{eq:C7-P-square} is nonnegative.  Hence $P_q\ge0$, and therefore $\Phi_7\ge0$.  This proves the theorem.
+\end{proof}
+
+\section{The partial $C_9$ theorem}\label{sec:C9}
+
+The $C_9$ argument follows the same strategy as the $C_5$ and $C_7$ arguments, but the final positivity certificate is larger.  The proof below has been audited symbolically with exact rational arithmetic.
+
+\begin{theorem}[Partial $C_9$ theorem]\label{thm:C9-partial}
+Let $W$ be a graphon with edge density $p=t(K_2,W)$.  If
+\[
+        p\le\frac12
+        \quad\text{or}\quad
+        p\ge\frac{1003}{2000},
+\]
+then
+\[
+        t(C_9,W)\ge p^9-p(1-p)^8.
+\]
+\end{theorem}
+
+\begin{proof}
+The case $p\le1/2$ is trivial.  Put $U=1-W$ and $q=1-p$.  It remains to prove the result for
+\[
+        0\le q\le \rho,
+        \qquad
+        \rho=\frac{997}{2000}.
+\]
+
+Let $x_j=t(P_j,U)$ and $c_9=t(C_9,U)$.  Inclusion-exclusion over the edge subsets of $C_9$, followed by $c_9\le x_8$, gives
+\[
+        t(C_9,1-U)-\bigl((1-q)^9-(1-q)q^8\bigr)\ge \Phi_9,
+\]
+where
+\begin{equation}\label{eq:Phi9-path}
+\begin{aligned}
+\Phi_9={}&
+8x_8-9x_7+9x_6-9x_5+9x_4-9x_3+9x_2\\
+&-9q x_6+18q x_5-27q x_4+36q x_3-45q x_2\\
+&-9q^2+54q^2x_2-27q^2x_3+9q^2x_4\\
+&+54q^3-9q^3x_2-117q^4+126q^5-84q^6+36q^7-8q^8\\
+&+3x_2^3+18x_2^2-27qx_2^2\\
+&-27x_2x_3+18qx_2x_3+18x_2x_4-9x_2x_5\\
+&+9x_3^2-9x_3x_4.
+\end{aligned}
+\end{equation}
+Thus it is enough to prove $\Phi_9\ge0$.
+
+Substituting the path formulae of Lemma~\ref{lem:path-formulae}, we decompose
+\[
+        \Phi_9=L+Q+H,
+\]
+where $L$ is linear in the moments $s_j$, $Q$ is homogeneous quadratic, and $H$ contains the cubic and quartic terms.
+
+\medskip
+\noindent\textbf{Step 1: the cubic and quartic part.}
+The high-degree part is
+\begin{equation}\label{eq:H9}
+\begin{aligned}
+H={}&8s_0^4
++10(8q^2-9q+3)s_0^3
++6(16q-9)s_0^2s_1\\
+&+24s_0^2s_2+24s_0s_1^2.
+\end{aligned}
+\end{equation}
+If $s_0=0$, then $H=0$.  Otherwise let
+\[
+        u=\frac{s_1}{s_0},
+        \qquad
+        v=\frac{s_2}{s_0}.
+\]
+Since $s_j/s_0$ are moments of a probability measure on $[-1,1]$, we have $v\ge u^2$.  Hence
+\[
+\begin{aligned}
+H\ge s_0^3\bigl[&8s_0+10(8q^2-9q+3)\\
+&+6(16q-9)u+48u^2\bigr].
+\end{aligned}
+\]
+The quadratic in $u$ has minimum
+\[
+        \frac{512q^2-576q+237}{16}>0
+\]
+for $0\le q\le1/2$.  Therefore $H\ge0$.
+
+\medskip
+\noindent\textbf{Step 2: the quadratic part.}
+Assume $s_0>0$ and set
+\[
+        m_j=\frac{s_j}{s_0}.
+\]
+Then $m_j$ are moments of a probability measure $\nu$ on $[-1,1]$.  We have
+\[
+        Q=s_0^2F_q(m_1,m_2,m_3,m_4),
+\]
+where
+\begin{equation}\label{eq:Fq}
+\begin{aligned}
+F_q={}&(48q^2-54q+18)m_1^2+(48q-27)m_1m_2\\
+&+16m_1m_3+8m_2^2\\
+&+(160q^3-270q^2+180q-45)m_1\\
+&+(96q^2-108q+36)m_2+(48q-27)m_3+16m_4\\
+&+120q^4-270q^3+270q^2-135q+27.
+\end{aligned}
+\end{equation}
+It is enough to show $F_q\ge0$ for every probability measure on $[-1,1]$.
+
+Define a symmetric kernel $K_q(\lambda,\mu)$ by
+\[
+        F_q=\iint K_q(\lambda,\mu)\,d\nu(\lambda)d\nu(\mu).
+\]
+In terms of
+\[
+        u=\lambda+\mu,
+        \qquad
+        v=\lambda\mu,
+\]
+this kernel is
+\begin{equation}\label{eq:Kq-uv}
+\begin{aligned}
+K_q={}&8v^2
++v\bigl(-48q^2-48qu+54q-24u^2+27u-18\bigr)\\
+&+8u^4+\left(24q-\frac{27}{2}\right)u^3
++(48q^2-54q+18)u^2\\
+&+\left(80q^3-135q^2+90q-\frac{45}{2}\right)u\\
+&+120q^4-270q^3+270q^2-135q+27.
+\end{aligned}
+\end{equation}
+For fixed $u$, this is a convex quadratic in $v$.  Its vertex $v_0$ satisfies
+\[
+        v_0-\frac{u^2}{4}
+        =\frac{48q^2+48qu-54q+20u^2-27u+18}{16}.
+\]
+The numerator, minimized over $u$, is
+\[
+        \frac{3(512q^2-576q+237)}{80}>0
+\]
+for $0\le q\le1/2$.  Thus $v_0\ge u^2/4$.  Since every pair $\lambda,\mu\in[-1,1]$ satisfies $v\le u^2/4$, the minimum of $K_q$ at fixed $u$ occurs when $v=u^2/4$, i.e. when $\lambda=\mu$.
+
+Therefore it is enough to prove $K_q(\lambda,\lambda)\ge0$.  A calculation gives
+\begin{equation}\label{eq:Kll}
+\begin{aligned}
+K_q(\lambda,\lambda)={}&40\lambda^4+(96q-54)\lambda^3
++(144q^2-162q+54)\lambda^2\\
+&+(160q^3-270q^2+180q-45)\lambda\\
+&+120q^4-270q^3+270q^2-135q+27.
+\end{aligned}
+\end{equation}
+This quartic has the Gram representation
+\[
+        K_q(\lambda,\lambda)
+        =\begin{pmatrix}\lambda^2&\lambda&1\end{pmatrix}
+        M_q
+        \begin{pmatrix}\lambda^2\\\lambda\\1\end{pmatrix},
+\]
+where
+\[
+M_q=
+\begin{pmatrix}
+40 & 48q-27 & 0\\
+48q-27 & 144q^2-162q+54 & \dfrac{160q^3-270q^2+180q-45}{2}\\
+0 & \dfrac{160q^3-270q^2+180q-45}{2}
+&120q^4-270q^3+270q^2-135q+27
+\end{pmatrix}.
+\]
+By Sylvester's criterion, $M_q$ is positive definite for $0\le q\le1/2$.  Indeed, writing $y=1/2-q\ge0$, its leading principal minors are
+\[
+        40,
+\]
+\[
+        27(128y^2+16y+13),
+\]
+and
+\[
+\begin{aligned}
+\frac14(&634880y^6+238080y^5+422400y^4+119560y^3\\
+&+44508y^2+5826y+803),
+\end{aligned}
+\]
+which are positive.  Hence $Q\ge0$.
+
+\medskip
+\noindent\textbf{Step 3: the linear part.}
+The linear part is
+\[
+        L=\int_{-1}^{1} P_q(\lambda)\,d\mu(\lambda),
+\]
+where
+\begin{equation}\label{eq:P9}
+\begin{aligned}
+P_q(\lambda)={}&8\lambda^6+(16q-9)\lambda^5
++3(8q^2-9q+3)\lambda^4\\
+&+(32q^3-54q^2+36q-9)\lambda^3\\
+&+(40q^4-90q^3+90q^2-45q+9)\lambda^2\\
+&+3(16q^5-45q^4+60q^3-45q^2+18q-3)\lambda\\
+&+56q^6-189q^5+315q^4-315q^3+189q^2-63q+9.
+\end{aligned}
+\end{equation}
+We prove $P_q(\lambda)\ge0$ for $0\le q\le\rho=997/2000$ by a global Gram representation.  Let
+\[
+        z(\lambda)=\begin{pmatrix}\lambda^3\\\lambda^2\\\lambda\\1\end{pmatrix}.
+\]
+Then
+\[
+        P_q(\lambda)=z(\lambda)^T N_q z(\lambda),
+\]
+where
+\begingroup
+\scriptsize
+\[
+N_q=\begin{pmatrix}
+8 & 8q-\frac92 & \frac{17}{250} & -\frac{71}{500}\\[1mm]
+8q-\frac92 & 24q^2-27q+9-\frac{34}{250}
+& \frac{32q^3-54q^2+36q-9}{2}+\frac{71}{500}
+&-\frac{3}{50}\\[1mm]
+\frac{17}{250}
+& \frac{32q^3-54q^2+36q-9}{2}+\frac{71}{500}
+&40q^4-90q^3+90q^2-45q+9+\frac{3}{25}
+&\frac{3(16q^5-45q^4+60q^3-45q^2+18q-3)}{2}\\[1mm]
+-\frac{71}{500}&-\frac{3}{50}
+&\frac{3(16q^5-45q^4+60q^3-45q^2+18q-3)}{2}
+&56q^6-189q^5+315q^4-315q^3+189q^2-63q+9
+\end{pmatrix}.
+\]
+\endgroup
+This identity is obtained by expanding $z^TN_qz$ and comparing coefficients with \eqref{eq:P9}.
+
+It remains to show $N_q\succeq0$ for $0\le q\le\rho$.  Write
+\[
+        y=\rho-q\ge0.
+\]
+The leading principal minors of $N_q$ become polynomials in $y$ with positive coefficients.  The first two are
+\[
+        8
+\]
+and
+\[
+        \frac{8000000y^2+1024000y+667893}{62500}.
+\]
+The third and fourth leading minors are recorded in Appendix~\ref{app:C9-minors}; their numerators also have only positive coefficients.  Sylvester's criterion therefore gives $N_q\succeq0$ for $0\le q\le\rho$.  Hence $P_q\ge0$ and $L\ge0$.
+
+Combining the three steps, $\Phi_9=L+Q+H\ge0$ for $0\le q\le997/2000$.  Therefore
+\[
+        t(C_9,W)\ge p^9-p(1-p)^8
+\]
+whenever $p=1-q\ge1003/2000$.  The case $p\le1/2$ was trivial, so the theorem follows.
+\end{proof}
+
+\section{What remains and why the next step is not just more algebra}
+
+The proofs for $C_5$ and $C_7$ use the crude estimate
+\[
+        t(C_{2\ell+1},U)\le t(P_{2\ell},U)
+\]
+obtained by deleting one factor $U\le1$ from the cycle integrand.  For $C_9$, this estimate still gives a strong result, but it loses too much information near $p=1/2$.
+
+The missing interval is
+\[
+        \frac12<p<\frac{1003}{2000}.
+\]
+The linear polynomial $P_q$ in \eqref{eq:P9} is not nonnegative all the way up to $q=1/2$.  Thus the present path-certificate method cannot prove the full $C_9$ theorem without using more information about the difference
+\[
+        t(P_8,U)-t(C_9,U).
+\]
+A promising next target is therefore a refined cycle-to-path inequality of the form
+\[
+        t(P_8,U)-t(C_9,U)
+        \ge \text{a positive correction depending on }d_U-q.
+\]
+Such a correction is exactly what the crude deletion bound discards.
+
+\section{Audit notes}
+
+The following points were checked explicitly while preparing this note.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+    \item The inclusion-exclusion counts for $C_5$, $C_7$, and $C_9$ were recomputed by enumerating edge subsets of the relevant cycle and classifying the resulting forest as a disjoint union of paths.
+    \item The path-density formulae in Lemma~\ref{lem:path-formulae} were recomputed from the block recurrence for $T$ on $\mathbb R\one\oplus\one^\perp$.
+    \item The $C_5$ defect reduces exactly to the square displayed in the proof of Theorem~\ref{thm:C5}.
+    \item The $C_7$ defect reduces exactly to \eqref{eq:Phi7-s}, and the quartic $P_q$ has the exact square decomposition \eqref{eq:C7-P-square}.
+    \item The $C_9$ defect reduces exactly to $L+Q+H$ as described above.  The nonnegativity of $H$ and $Q$ is analytic.  The nonnegativity of $L$ on $0\le q\le997/2000$ follows from the exact rational Gram matrix $N_q$.
+\end{enumerate}
+
+\appendix
+
+\section{Exact leading-minor certificate for the $C_9$ linear Gram matrix}\label{app:C9-minors}
+
+Let
+\[
+        \rho=\frac{997}{2000},
+        \qquad
+        y=\rho-q.
+\]
+For the matrix $N_q$ in the proof of Theorem~\ref{thm:C9-partial}, the third leading principal minor is
+\[
+\frac{D_3(y)}{125000000000000000},
+\]
+where
+\[
+\begin{aligned}
+D_3(y)={}&384000000000000000000y^6
++147456000000000000000y^5\\
+&+211578960000000000000y^4
++63681681920000000000y^3\\
+&+21966594200160000000y^2\\
+&+3527801783848496000y\\
+&+486825599694495749.
+\end{aligned}
+\]
+All coefficients are positive.
+
+The fourth leading principal minor is
+\[
+\frac{D_4(y)}{1000000000000000000000000000000000000},
+\]
+where
+\[
+\begin{aligned}
+D_4(y)={}&98304000000000000000000000000000000000000y^{12}\\
+&+75497472000000000000000000000000000000000y^{11}\\
+&+169739526144000000000000000000000000000000y^{10}\\
+&+111129847070720000000000000000000000000000y^9\\
+&+90151192448743680000000000000000000000000y^8\\
+&+45258724018743544832000000000000000000000y^7\\
+&+18593910030577681267456000000000000000000y^6\\
+&+6246128003354156939119872000000000000000y^5\\
+&+1530303842686994899342534880000000000000y^4\\
+&+308865975267924214649958809920000000000y^3\\
+&+41247760026863122500183003064464000000y^2\\
+&+3797741998587880715249064725034672000y\\
+&+378118421545213939105408911703209.
+\end{aligned}
+\]
+Again all coefficients are positive.  Hence the third and fourth leading principal minors are positive for every $y\ge0$.
+
+\end{document}
