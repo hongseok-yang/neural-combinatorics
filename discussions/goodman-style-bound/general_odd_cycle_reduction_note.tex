@@ -1,0 +1,684 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\R}{\mathbb R}
+\newcommand{\calH}{\mathcal H}
+
+\title{A General Reduction for an Odd-Cycle Graphon Inequality\\
+\large Working note on the case $C_{2k+1}$}
+\author{Working note prepared for collaboration}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study the conjectural graphon inequality
+\[
+  t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k},
+  \qquad p=t(K_2,W).
+\]
+The note records the current general-case reduction.  We do \emph{not} claim a proof of the full conjecture.  We prove an exact path-cycle inclusion-exclusion identity, an operator block decomposition, a universal mean-zero compression bound, and a ``hub-coupling positivity'' lemma.  These results imply the conjecture for every odd cycle under the spectral condition
+\[
+  \|P_{\one^\perp}T_{1-W}P_{\one^\perp}\|\le 1-p.
+\]
+This strictly extends the regular-graphon case.  The remaining general problem is reduced to a precise spectral-excess inequality: positive mean-zero spectral modes of $T_{1-W}$ above the complement edge density must be paid for by their coupling to the degree fluctuation.
+\end{abstract}
+
+\tableofcontents
+
+\section{The conjecture and the status}
+
+Let $W\colon [0,1]^2\to[0,1]$ be a graphon, i.e. a symmetric measurable function.  For a finite graph $H$, let $t(H,W)$ denote its homomorphism density in $W$.  In particular,
+\[
+  p=t(K_2,W)=\int_{[0,1]^2} W(x,y)\,dx\,dy.
+\]
+
+\begin{conjecture}[Odd-cycle lower bound]\label{conj:main}
+For every integer $k\ge1$ and every graphon $W$ with edge density $p=t(K_2,W)$,
+\[
+  t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{conjecture}
+
+The conjecture is trivial for $p\le1/2$, because then
+\[
+  p^{2k+1}-p(1-p)^{2k}=p\bigl(p^{2k}-(1-p)^{2k}\bigr)\le0.
+\]
+Thus the nontrivial range is $p>1/2$.
+
+The conjectured bound is sharp at the balanced complete multipartite graphons.  If $T_r$ is the balanced complete $r$-partite graphon, then
+\[
+  p=t(K_2,T_r)=1-\frac1r,
+\]
+while the chromatic polynomial of an odd cycle gives
+\[
+  t(C_{2k+1},T_r)
+  =\frac{(r-1)^{2k+1}-(r-1)}{r^{2k+1}}
+  =p^{2k+1}-p(1-p)^{2k}.
+\]
+
+The verified results obtained so far are as follows.
+\begin{itemize}[leftmargin=2em]
+  \item The conjecture holds for $C_3,C_5,C_7,C_9,C_{11}$ for all graphons.  These cases were handled separately by finite path-certificate and spectral/moment arguments.
+  \item The conjecture holds for all odd cycles when $W$ is $p$-regular, equivalently when $1-W$ is $(1-p)$-regular.
+  \item The present note proves a more general all-$k$ theorem: the conjecture holds for all odd cycles whenever
+  \[
+    \|P_{\one^\perp}T_{1-W}P_{\one^\perp}\|\le 1-p.
+  \]
+\end{itemize}
+The last item is the main new general structural result of this note.
+
+\section{Complement form and a master path-cycle identity}
+
+Throughout the nontrivial range, put
+\[
+  U=1-W,\qquad q=t(K_2,U)=1-p<\frac12.
+\]
+For $m=2k+1$ write
+\[
+  n=m-1=2k.
+\]
+Then Conjecture~\ref{conj:main} is equivalent to
+\begin{equation}\label{eq:complement-form}
+  t(C_m,1-U)\ge (1-q)^m-(1-q)q^{m-1}.
+\end{equation}
+
+Let $P_n$ be the path with $n$ edges.  For $0\le j\le n$, define
+\[
+  Z_{n,j}(U)
+  \defeq
+  \sum_{\substack{F\subseteq E(P_n)\\ |F|=j}} t(F,U),
+\]
+where a subgraph $F\subseteq E(P_n)$ is interpreted as the spanning subgraph of $P_n$ with edge set $F$; isolated vertices do not affect its homomorphism density.  Also put
+\[
+  x_n\defeq t(P_n,U),\qquad c_m\defeq t(C_m,U),
+\]
+so that $Z_{n,n}=x_n$.  Finally define the path-layer deviations
+\[
+  E_{n,j}(U)
+  \defeq
+  Z_{n,j}(U)-\binom{n}{j}q^j.
+\]
+
+\begin{theorem}[Exact path-cycle identity]\label{thm:path-cycle-identity}
+Let $m=n+1$ be odd and $n$ be even.  For every graphon $U$ with edge density $q$,
+\begin{equation}\label{eq:master-identity-expanded}
+\begin{aligned}
+& t(C_m,1-U)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr) \\
+&\quad =
+\sum_{j=0}^{n-1}(-1)^j
+\left[
+\frac{m}{m-j}Z_{n,j}(U)-\binom mj q^j
+\right]
++n\bigl(x_n-q^n\bigr)+(x_n-c_m).
+\end{aligned}
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:master-identity-E}
+\begin{aligned}
+& t(C_m,1-U)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr) \\
+&\quad =
+\sum_{j=0}^{n-1}(-1)^j\frac{m}{m-j}E_{n,j}(U)
++nE_{n,n}(U)+(x_n-c_m).
+\end{aligned}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Expand
+\[
+  t(C_m,1-U)=\sum_{S\subseteq E(C_m)}(-1)^{|S|}t(S,U).
+\]
+Fix $0\le j\le n$.  Every proper $j$-edge subset $S\subsetneq E(C_m)$ is contained in exactly $m-j$ of the paths $C_m-e$, where $e\in E(C_m)\setminus S$.  Since there are $m$ choices of the deleted edge and each $C_m-e$ is isomorphic to $P_n$, the total $j$-edge contribution from proper subsets of $C_m$ is
+\[
+  \frac{m}{m-j}Z_{n,j}(U).
+\]
+The full $m$-edge subset contributes $(-1)^m c_m=-c_m$.  Therefore
+\[
+  t(C_m,1-U)
+  =
+  \sum_{j=0}^{n}(-1)^j\frac{m}{m-j}Z_{n,j}(U)-c_m.
+\]
+For $j=n$, the coefficient is $m$ and $Z_{n,n}=x_n$.
+
+On the other hand, since $m=n+1$ and $n$ is even,
+\begin{align*}
+  (1-q)^m-(1-q)q^n
+  &=\sum_{j=0}^{m}(-1)^j\binom mj q^j-q^n+q^{n+1} \\
+  &=\sum_{j=0}^{n-1}(-1)^j\binom mj q^j+nq^n.
+\end{align*}
+Subtracting this expression from the expansion of $t(C_m,1-U)$ proves \eqref{eq:master-identity-expanded}.  Finally, the elementary identity
+\[
+  \frac{m}{m-j}\binom nj=\binom mj
+\]
+turns \eqref{eq:master-identity-expanded} into \eqref{eq:master-identity-E}.
+\end{proof}
+
+Thus the full conjecture is equivalent to the following path-cycle domination statement.
+
+\begin{problem}[Master path-cycle inequality]\label{prob:master-path-cycle}
+For every even $n$, every graphon $U$ with edge density $q\le1/2$, prove
+\begin{equation}\label{eq:master-path-cycle-problem}
+\begin{aligned}
+\sum_{\substack{0\le j<n\\ j\text{ odd}}}
+\frac{n+1}{n+1-j}E_{n,j}(U)
+\le{}&
+\sum_{\substack{0\le j<n\\ j\text{ even}}}
+\frac{n+1}{n+1-j}E_{n,j}(U) \\
+&\quad+nE_{n,n}(U)+\bigl(t(P_n,U)-t(C_{n+1},U)\bigr).
+\end{aligned}
+\end{equation}
+\end{problem}
+
+A theorem of Kim and Lee~\cite{KimLee} gives, among other consequences of their Schur-convexity method, the nonnegativity of the even path layers,
+\[
+  E_{n,2d}(U)\ge0.
+\]
+Their main theorem also proves the extended commonality inequality
+\[
+  t(H,V)+t(H,1-V)
+  \ge t(K_2,V)^{e(H)}+t(K_2,1-V)^{e(H)}
+\]
+for every path or cycle $H$ and every bounded symmetric measurable kernel $V$.  This two-sided commonality inequality is very close in spirit to Conjecture~\ref{conj:main}, but it does not by itself imply the one-sided inequality studied here.  Formula \eqref{eq:master-identity-E} identifies the missing one-sided content: one has to control the odd path layers using the even path layers and, crucially, the path-cycle gap $x_n-c_m$.
+
+\section{Operator formulation}
+
+Let $T_U$ be the Hilbert-Schmidt operator associated with $U$:
+\[
+  T_U f(x)=\int_0^1 U(x,y)f(y)\,dy.
+\]
+For $\ell\ge3$,
+\[
+  t(C_\ell,U)=\Tr(T_U^\ell).
+\]
+This is first immediate for step graphons and follows in general by approximation in Hilbert-Schmidt norm.
+
+Let
+\[
+  L^2_0\defeq \{f\in L^2[0,1]:\ip{f}{\one}=0\},
+\]
+and let $P_0$ be the orthogonal projection onto $L^2_0$.  Since $\|\one\|_2=1$, the rank-one averaging projection is
+\[
+  Jf=\ip{f}{\one}\one.
+\]
+Write
+\[
+  d_U=T_U\one,
+  \qquad
+  d_U=q\one+g,
+  \qquad
+  g\in L^2_0,
+\]
+and define
+\[
+  A=P_0T_UP_0\colon L^2_0\to L^2_0.
+\]
+With respect to the orthogonal decomposition
+\[
+  L^2[0,1]=\R\one\oplus L^2_0,
+\]
+we have
+\begin{equation}\label{eq:block-TU}
+  T_U=
+  \begin{pmatrix}
+    q & g^*\\
+    g & A
+  \end{pmatrix},
+\end{equation}
+where $g^*f=\ip{g}{f}$.  Since $T_W=T_{1-U}=J-T_U$, we also have
+\begin{equation}\label{eq:block-TW}
+  T_W=
+  \begin{pmatrix}
+    p & -g^*\\
+    -g & -A
+  \end{pmatrix},
+  \qquad p=1-q.
+\end{equation}
+Consequently,
+\[
+  t(C_m,W)=\Tr\left(
+  \begin{pmatrix}
+    p & -g^*\\
+    -g & -A
+  \end{pmatrix}^{m}\right).
+\]
+The regular case is precisely $g=0$.
+
+\section{A universal bound for the mean-zero compression}
+
+The following elementary lemma is useful because it shows that the compression $A$ is never too large in absolute operator norm.
+
+\begin{lemma}[Mean-zero compression bound]\label{lem:compression-half}
+For every graphon $U$ and every $f\in L^2_0$ with $\|f\|_2=1$,
+\[
+  \left|\ip{f}{T_Uf}\right|\le \frac12.
+\]
+Consequently,
+\[
+  \|P_0T_UP_0\|_{2\to2}\le \frac12.
+\]
+\end{lemma}
+
+\begin{proof}
+Write $f=f_+-f_-$, where $f_+,f_-\ge0$ have disjoint supports.  Since $\int f=0$,
+\[
+  \int f_+=\int f_-\defeq a.
+\]
+Also
+\[
+  2a=\|f\|_1\le \|f\|_2=1,
+\]
+so $a\le1/2$.
+
+Using $0\le U\le1$, we get
+\begin{align*}
+\ip{f}{T_Uf}
+&=\ip{f_+}{T_Uf_+}+\ip{f_-}{T_Uf_-}-2\ip{f_+}{T_Uf_-} \\
+&\le \left(\int f_+\right)^2+\left(\int f_-\right)^2
+=2a^2\le\frac12.
+\end{align*}
+Similarly,
+\[
+  \ip{f}{T_Uf}
+  \ge -2\ip{f_+}{T_Uf_-}
+  \ge -2a^2
+  \ge -\frac12.
+\]
+Since $P_0T_UP_0$ is self-adjoint, the quadratic-form bound implies the operator-norm bound.
+\end{proof}
+
+In the nontrivial range $p\ge1/2$, Lemma~\ref{lem:compression-half} implies
+\[
+  \|A\|\le\frac12\le p.
+\]
+This is the key input that makes the next positivity lemma applicable to every graphon.
+
+\section{Hub-coupling positivity}
+
+The next lemma is the main operator-theoretic observation.  It says that coupling a distinguished ``hub'' eigenvalue $a$ to an operator with spectrum in $[-a,a]$ can only increase odd traces, after subtracting the uncoupled odd trace.
+
+\begin{lemma}[Hub-coupling positivity]\label{lem:hub}
+Let $m\ge3$ be odd.  Let $a\ge0$, let $B$ be a self-adjoint Hilbert-Schmidt operator on a Hilbert space $\calH$ with
+\[
+  \|B\|\le a,
+\]
+and let $h\in\calH$.  Define
+\[
+  M=
+  \begin{pmatrix}
+    a & h^*\\
+    h & B
+  \end{pmatrix}
+  \quad\text{on }\R\oplus\calH.
+\]
+Then
+\[
+  \Tr(M^m)\ge a^m+\Tr(B^m).
+\]
+\end{lemma}
+
+\begin{proof}
+It suffices first to prove the result when $\calH$ is finite-dimensional.  Diagonalise $B$:
+\[
+  B e_i=\beta_i e_i,
+  \qquad |\beta_i|\le a,
+\]
+and write $h_i=\ip{h}{e_i}$.  Expanding $\Tr(M^m)$ as a sum over closed walks of length $m$ on the vertex set consisting of the hub $0$ and the eigenmode vertices $i$, the walks that use no off-diagonal edge contribute exactly
+\[
+  a^m+\sum_i\beta_i^m.
+\]
+Every remaining closed walk uses an even number $2r$ of off-diagonal hub-mode edges.  Fix the cyclic order of the $r$ mode excursions, say $i_1,\ldots,i_r$.  The associated contribution is a positive multiplicity times
+\[
+  \prod_{\nu=1}^r |h_{i_\nu}|^2
+  \,[z^{m-2r}]
+  \prod_{\nu=1}^r
+  \frac{1}{(1-az)(1-\beta_{i_\nu}z)}.
+\]
+Thus it remains to note that every coefficient in each factor
+\[
+  \frac{1}{(1-az)(1-\beta z)}
+  =\sum_{s\ge0} h_s(a,\beta)z^s
+\]
+is nonnegative whenever $\beta\in[-a,a]$.  Indeed,
+\[
+  h_s(a,\beta)=\sum_{r=0}^s a^{s-r}\beta^r.
+\]
+If $a=0$, this is immediate.  If $a>0$ and $t=\beta/a\in[-1,1]$, then
+\[
+  h_s(a,\beta)=a^s\sum_{r=0}^s t^r\ge0,
+\]
+with the usual limiting interpretation at $t=1$.  Products of power series with nonnegative coefficients again have nonnegative coefficients.  Hence every group of closed walks using at least one hub-mode coupling contributes nonnegatively.  This proves the finite-dimensional case.
+
+For the Hilbert-space case, approximate $B$ in Hilbert-Schmidt norm by its finite spectral truncations and approximate $h$ by its projection to the same finite-dimensional subspaces.  Since $m\ge3$, the map $X\mapsto \Tr(X^m)$ is continuous under Hilbert-Schmidt convergence on uniformly bounded sets.  Passing to the limit gives the claim.
+\end{proof}
+
+Applying Lemma~\ref{lem:hub} to \eqref{eq:block-TW}, with
+\[
+  a=p,
+  \qquad
+  B=-A,
+  \qquad
+  h=-g,
+\]
+gives the following general lower bound.
+
+\begin{corollary}[Basic odd-trace lower bound]\label{cor:basic-trace-bound}
+Let $m\ge3$ be odd and let $p\ge1/2$.  Then
+\begin{equation}\label{eq:basic-trace-bound}
+  t(C_m,W)\ge p^m-\Tr(A^m),
+\end{equation}
+where $A=P_0T_{1-W}P_0$.
+\end{corollary}
+
+\begin{proof}
+By Lemma~\ref{lem:compression-half}, $\|A\|\le1/2\le p$, so Lemma~\ref{lem:hub} applies to the block operator \eqref{eq:block-TW}.  Since $m$ is odd,
+\[
+  \Tr((-A)^m)=-\Tr(A^m),
+\]
+and \eqref{eq:basic-trace-bound} follows.
+\end{proof}
+
+\section{An all-$k$ theorem under a spectral norm condition}
+
+The previous corollary immediately proves the conjecture whenever the complement graphon has no mean-zero spectral mode larger than its edge density.
+
+\begin{theorem}[General theorem under the $q$-spectral condition]\label{thm:q-spectral}
+Let $W$ be a graphon with edge density $p\ge1/2$.  Put
+\[
+  U=1-W,
+  \qquad
+  q=t(K_2,U)=1-p,
+\]
+and
+\[
+  A=P_0T_UP_0.
+\]
+If
+\begin{equation}\label{eq:q-spectral-condition}
+  \|A\|\le q,
+\end{equation}
+then for every $k\ge1$,
+\[
+  t(C_{2k+1},W)
+  \ge
+  p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $m=2k+1$.  By Corollary~\ref{cor:basic-trace-bound},
+\[
+  t(C_m,W)\ge p^m-\Tr(A^m).
+\]
+Let $\alpha_i$ be the eigenvalues of the compact self-adjoint operator $A$, counted with multiplicity.  Since $m$ is odd,
+\[
+  \Tr(A^m)
+  =\sum_i \alpha_i^m
+  \le \sum_{\alpha_i>0}\alpha_i^m.
+\]
+Under \eqref{eq:q-spectral-condition}, every positive $\alpha_i$ satisfies $\alpha_i\le q$, so
+\[
+  \sum_{\alpha_i>0}\alpha_i^m
+  \le
+  q^{m-2}\sum_i\alpha_i^2
+  =q^{m-2}\Tr(A^2).
+\]
+Now compute the Hilbert-Schmidt norm of $T_U$ using the block decomposition \eqref{eq:block-TU}:
+\[
+  \|T_U\|_{\HS}^2
+  =q^2+2\|g\|_2^2+\Tr(A^2).
+\]
+Since $0\le U\le1$,
+\[
+  \|T_U\|_{\HS}^2
+  =\int_{[0,1]^2}U(x,y)^2\,dx\,dy
+  \le
+  \int_{[0,1]^2}U(x,y)\,dx\,dy
+  =q.
+\]
+Therefore
+\[
+  \Tr(A^2)\le q-q^2=pq.
+\]
+Combining these inequalities gives
+\[
+  \Tr(A^m)
+  \le q^{m-2}pq
+  =pq^{m-1}.
+\]
+Hence
+\[
+  t(C_m,W)\ge p^m-pq^{m-1}=p^m-p(1-p)^{m-1}.
+\]
+This proves the theorem.
+\end{proof}
+
+\begin{corollary}[Regular graphons]\label{cor:regular}
+If $W$ is $p$-regular, then Conjecture~\ref{conj:main} holds for every odd cycle.
+\end{corollary}
+
+\begin{proof}
+If $W$ is $p$-regular, then $U=1-W$ is $q$-regular.  Hence $g=0$ and $A=T_U|_{L^2_0}$.  Since $U$ is nonnegative with all row sums equal to $q$, Schur's test gives
+\[
+  \|A\|\le\|T_U\|_{2\to2}\le q.
+\]
+The result follows from Theorem~\ref{thm:q-spectral}.
+\end{proof}
+
+\section{The remaining spectral-excess problem}
+
+Theorem~\ref{thm:q-spectral} reduces the unresolved case to graphons for which
+\[
+  \|P_0T_{1-W}P_0\|>1-p.
+\]
+Equivalently, for $U=1-W$ with edge density $q$, the complement has a positive mean-zero spectral mode above $q$.
+
+Let
+\[
+  M(p,A,g)
+  \defeq
+  \begin{pmatrix}
+    p & -g^*\\
+    -g & -A
+  \end{pmatrix}.
+\]
+Define the coupling surplus
+\begin{equation}\label{eq:def-Psi}
+  \Psi_m(p,A,g)
+  \defeq
+  \Tr(M(p,A,g)^m)-\bigl(p^m-\Tr(A^m)\bigr).
+\end{equation}
+By Lemma~\ref{lem:hub},
+\[
+  \Psi_m(p,A,g)\ge0.
+\]
+The full conjecture for $m$ is equivalent to
+\begin{equation}\label{eq:equivalent-Psi}
+  \Psi_m(p,A,g)
+  \ge
+  \Tr(A^m)-pq^{m-1}.
+\end{equation}
+This is exact: adding $p^m-\Tr(A^m)$ to both sides of \eqref{eq:equivalent-Psi} gives
+\[
+  \Tr(M(p,A,g)^m)
+  \ge p^m-pq^{m-1}.
+\]
+
+Only positive eigenvalues of $A$ above $q$ can create an obstruction.  Indeed, if $\alpha_i$ are the eigenvalues of $A$, then
+\begin{align*}
+  \Tr(A^m)
+  &=\sum_i\alpha_i^m \\
+  &\le
+  q^{m-2}\sum_i\alpha_i^2
+  +
+  \sum_{\alpha_i>q}
+  \left(\alpha_i^m-q^{m-2}\alpha_i^2\right) \\
+  &\le
+  pq^{m-1}
+  +
+  \sum_{\alpha_i>q}
+  \left(\alpha_i^m-q^{m-2}\alpha_i^2\right),
+\end{align*}
+where we used $\Tr(A^2)\le pq$ as in the proof of Theorem~\ref{thm:q-spectral}.  Hence the following would imply the full conjecture.
+
+\begin{problem}[Spectral-excess domination]\label{prob:spectral-excess}
+Prove that, for all graphons $U=1-W$ with $q=1-p\le1/2$,
+\begin{equation}\label{eq:spectral-excess-target}
+  \Psi_m(p,A,g)
+  \ge
+  \sum_{\alpha_i>q}
+  \left(\alpha_i^m-q^{m-2}\alpha_i^2\right).
+\end{equation}
+\end{problem}
+
+This is the most compact version of the remaining obstruction: the positive spectral excess of $A$ above $q$ should be paid for by the hub-coupling surplus coming from the degree fluctuation $g=d_U-q\one$.
+
+\section{A quadratic sufficient target}
+
+The coupling surplus $\Psi_m$ is a sum of nonnegative contributions grouped by the number of hub-mode excursions.  Its quadratic part already has a simple form.
+
+Let
+\[
+  A\phi_i=\alpha_i\phi_i,
+  \qquad
+  b_i=\ip{g}{\phi_i}.
+\]
+For $s\ge0$, write
+\[
+  h_s(x,y)=\sum_{r=0}^s x^{s-r}y^r.
+\]
+Then the part of $\Psi_m$ using exactly two hub-mode couplings is
+\begin{equation}\label{eq:quadratic-coupling}
+  m\sum_i b_i^2 h_{m-2}(p,-\alpha_i).
+\end{equation}
+All higher coupling groups are nonnegative by the proof of Lemma~\ref{lem:hub}.  Hence
+\begin{equation}\label{eq:quadratic-lower-bound}
+  \Psi_m(p,A,g)
+  \ge
+  m\sum_i b_i^2 h_{m-2}(p,-\alpha_i).
+\end{equation}
+Since $m$ is odd, $m-1$ is even and
+\begin{equation}\label{eq:h-explicit}
+  h_{m-2}(p,-\alpha)
+  =
+  \frac{p^{m-1}-\alpha^{m-1}}{p+\alpha},
+\end{equation}
+with the continuous interpretation at $\alpha=-p$.  Because $|\alpha|\le1/2\le p$, this quantity is nonnegative.
+
+Therefore the following stronger, purely quadratic statement would also imply the full conjecture.
+
+\begin{problem}[Quadratic spectral-excess target]\label{prob:quadratic-target}
+For every graphon $U=1-W$ with $q=1-p\le1/2$, prove
+\begin{equation}\label{eq:quadratic-target}
+  m\sum_i b_i^2 h_{m-2}(p,-\alpha_i)
+  \ge
+  \sum_{\alpha_i>q}
+  \left(\alpha_i^m-q^{m-2}\alpha_i^2\right).
+\end{equation}
+\end{problem}
+
+Problem~\ref{prob:quadratic-target} is stronger than necessary, because it discards all coupling contributions of order four and higher.  However, it is very concrete: every positive mean-zero spectral mode $\alpha_i>q$ would have to be sufficiently coupled to the degree fluctuation $g$ through $b_i=\ip{g}{\phi_i}$.
+
+\section{Example: clique complement}
+
+The spectral condition \eqref{eq:q-spectral-condition} is not automatic.  Let $U=1_{A\times A}$, where $\mu(A)=s$.  Then
+\[
+  q=s^2,
+  \qquad
+  p=1-s^2.
+\]
+Let
+\[
+  \phi=\frac{1_A-s\one}{\sqrt{s(1-s)}}\in L^2_0.
+\]
+A direct computation gives
+\[
+  A\phi=s(1-s)\phi,
+\]
+so $A$ has a positive mean-zero eigenvalue
+\[
+  \alpha=s(1-s).
+\]
+For $s<1/2$,
+\[
+  \alpha=s(1-s)>s^2=q,
+\]
+so the $q$-spectral condition fails.  On the other hand,
+\[
+  g=d_U-q\one=s1_A-s^2\one=s(1_A-s\one),
+\]
+and hence
+\[
+  b=\ip{g}{\phi}=s\sqrt{s(1-s)}.
+\]
+Thus the excess eigenvalue is strongly coupled to the degree fluctuation.  This is the simplest model of the phenomenon that the remaining spectral-excess inequality needs to capture.
+
+\section{Roadmap for collaborators}
+
+The reductions above suggest the following concrete next steps.
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Attack the quadratic spectral-excess target.}  Try to prove \eqref{eq:quadratic-target} directly from the graphon constraints $0\le U\le1$.  The target is mode-by-mode in appearance, but the constraints relating $A$ and $g$ are global.
+
+  \item \textbf{Search for a universal eigenmode inequality.}  For an eigenpair $A\phi=\alpha\phi$ with $\alpha>q$, derive a lower bound on $|\ip{g}{\phi}|^2$ in terms of $\alpha,q$, possibly with correction terms involving other modes.  Such an inequality would directly feed into \eqref{eq:quadratic-target}.
+
+  \item \textbf{Use the full coupling surplus if the quadratic target is too strong.}  Problem~\ref{prob:spectral-excess} only asks for \eqref{eq:spectral-excess-target}.  The higher-order coupling terms in $\Psi_m$ are nonnegative and may be essential in the general case.
+
+  \item \textbf{Connect the spectral and path-cycle formulations.}  The path-cycle gap $t(P_n,U)-t(C_{n+1},U)$ in \eqref{eq:master-path-cycle-problem} should correspond, in operator language, to part of the coupling surplus $\Psi_m$.  Making this correspondence explicit may reveal a canonical sum-of-squares proof.
+
+  \item \textbf{Test finite-dimensional block graphons.}  The conjecture and the spectral-excess targets can be searched in finite weighted stochastic block models.  A counterexample to the stronger quadratic target might still leave the full spectral-excess target intact.
+\end{enumerate}
+
+\section{Summary}
+
+The full odd-cycle conjecture remains open in this note, but the general case has been reduced to a sharply formulated obstruction.  The main rigorous conclusions are:
+\begin{itemize}[leftmargin=2em]
+  \item the exact path-cycle identity \eqref{eq:master-identity-E};
+  \item the universal compression bound $\|P_0T_UP_0\|\le1/2$;
+  \item the hub-coupling positivity lemma;
+  \item the all-$k$ theorem under the condition $\|P_0T_{1-W}P_0\|\le1-p$;
+  \item the spectral-excess target \eqref{eq:spectral-excess-target}, which is sufficient for the full conjecture;
+  \item the quadratic sufficient target \eqref{eq:quadratic-target}, which is an especially concrete next lemma to attempt.
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{KimLee}
+Jang Soo Kim and Joonkyung Lee,
+\emph{Extended commonality of paths and cycles via Schur convexity},
+arXiv:2210.00977, 2022.
+
+\bibitem{Lovasz}
+L\'aszl\'o Lov\'asz,
+\emph{Large Networks and Graph Limits},
+American Mathematical Society Colloquium Publications, Vol. 60, 2012.
+
+\end{thebibliography}
+
+\end{document}
