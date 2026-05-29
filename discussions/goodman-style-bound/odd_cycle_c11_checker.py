@@ -274,9 +274,17 @@ def check_spectral_triangle_scalar_inequalities():
     # Final comparison:
     # alpha*(e+3e^2/2) >= 139e/100 + (9e/11)^(3/2), 0<=e<=3/200.
     # Put t=sqrt(e).  The difference divided by e is
-    # alpha*(1+3t^2/2)-139/100-(9/11)^(3/2)t.
-    # It is decreasing on [0,sqrt(E)], so it suffices to check t=sqrt(E), after squaring.
+    # f(t) = alpha*(1+3t^2/2) - 139/100 - (9/11)^(3/2)*t,
+    # a convex quadratic in t.  Two sub-checks:
+    #   (a) Critical point t* = (9/11)^(3/2)/(3*alpha) lies right of sqrt(E),
+    #       so f is decreasing on [0,sqrt(E)] and worst case is at t=sqrt(E).
+    #       Equivalent rational comparison: 200 * (9/11)^3 > 27 * alpha^2.
+    #   (b) At t=sqrt(E), both sides of f(t) >= 0 are positive; squaring,
+    #       the squared margin is positive.
     alpha = sp.Rational(3, 2) * sp.Rational(64, 65) ** 2
+    monotone_gap = sp.Rational(200) * sp.Rational(9, 11) ** 3 - 27 * alpha ** 2
+    assert_true(monotone_gap > 0,
+                "critical point of f(t) lies right of sqrt(3/200) (so f decreasing on [0, sqrt(3/200)])")
     left_endpoint = alpha * (1 + sp.Rational(3, 2) * E) - sp.Rational(139, 100)
     square_gap = sp.simplify(left_endpoint ** 2 - (sp.Rational(9, 11) ** 3) * E)
     assert_true(left_endpoint > 0 and square_gap > 0,

@@ -21,7 +21,7 @@
 \newcommand{\eps}{\varepsilon}
 
 \title{A Goodman-Type Lower Bound for Odd Cycle Densities in Graphons\\
-\large Verified results for $C_3$, $C_5$, $C_7$, $C_9$, and regular graphons}
+\large Verified results for $C_3$, $C_5$, $C_7$, $C_9$, $C_{11}$, and regular graphons}
 \author{Working note}
 \date{May 29--30, 2026}
 
@@ -33,9 +33,9 @@ Let $W:[0,1]^2\to[0,1]$ be a graphon and let $p=t(K_2,W)$ be its edge density.  
 \[
         t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
 \]
-This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for $C_5$, true for $C_7$, true for $C_9$, and true for every odd cycle when $W$ is $p$-regular.  The $C_9$ proof is a hybrid: a complement path-certificate handles $p\ge1003/2000=0.5015$, and the sharp triangle-density theorem combined with a short spectral moment argument closes the remaining interval $1/2<p\le1003/2000$.
+This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for $C_5$, true for $C_7$, true for $C_9$, true for $C_{11}$, and true for every odd cycle when $W$ is $p$-regular.  The $C_9$ and $C_{11}$ proofs are hybrids: a complement path-certificate handles $p$ above a cut-off ($1003/2000$ for $C_9$, $103/200$ for $C_{11}$), and the sharp triangle-density theorem combined with a spectral moment argument closes the remaining near-bipartite interval $(1/2,\,\text{cut-off}]$.
 
-The path-certificate statements should be read as computer-assisted exact certificates: all identities are polynomial identities over $\mathbb Q$, and the only positivity checks reduce to rational matrices whose leading principal minors become polynomials with positive coefficients after a rational change of variables.  Short exact-arithmetic checkers accompany this note.
+The path-certificate statements should be read as computer-assisted exact certificates: all identities are polynomial identities over $\mathbb Q$, and the positivity checks reduce either to rational matrices whose leading principal minors become polynomials with positive coefficients after a rational change of variables ($C_5$, $C_7$, $C_9$), or to a small number of exact rational Bernstein-subdivision boxes ($C_{11}$).  Short exact-arithmetic checkers accompany this note.
 \end{abstract}
 
 \section{The conjecture and the audited status}
@@ -72,11 +72,12 @@ The following statements are proved in this note.
     \item Conjecture~\ref{conj:main} holds for $C_5$ for all graphons.
     \item Conjecture~\ref{conj:main} holds for $C_7$ for all graphons.
     \item Conjecture~\ref{conj:main} holds for $C_9$ for all graphons.
+    \item Conjecture~\ref{conj:main} holds for $C_{11}$ for all graphons.
 \end{enumerate}
 \end{theorem}
 
 \begin{remark}[Scope]
-This note does \emph{not} prove the conjecture for $C_{2k+1}$ with $k\ge5$.  The $C_9$ proof is a hybrid: the complement path-certificate method, analogous to the proofs for $C_5$ and $C_7$, handles $p\ge1003/2000$, while the narrow remaining interval $1/2<p\le1003/2000$ is closed by a separate argument combining the sharp triangle-density theorem with a spectral moment inequality.  Both halves are given in Section~\ref{sec:C9}.  Neither half extends directly to $C_{11}$ and beyond; see Section~\ref{sec:remains}.
+This note does \emph{not} prove the conjecture for $C_{2k+1}$ with $k\ge6$.  The $C_9$ and $C_{11}$ proofs are hybrids: the complement path-certificate method handles $p\ge \rho_m$ (with $\rho_9=1003/2000$ and $\rho_{11}=103/200$), and the narrow remaining interval $1/2<p\le\rho_m$ is closed by a separate argument combining the sharp triangle-density theorem with a spectral moment inequality.  The two proofs are given in Sections~\ref{sec:C9} and~\ref{sec:C11}.  Neither half of either hybrid is known to extend to $C_{13}$ and beyond; see Section~\ref{sec:remains}.
 \end{remark}
 
 \section{General tools}
@@ -464,11 +465,11 @@ It remains to prove $R_{q,r}(\lambda)\ge0$ for $0\le q\le1/2$, $r\ge0$ and $-1\l
 
 First, $B_q$ is uniformly positive.  Its minimum in $\lambda$ occurs at
 \[
-        \lambda_0=\frac{7-12q}{8}\in\left[\frac18,\frac78\right],
+        \lambda_*=\frac{7-12q}{8}\in\left[\frac18,\frac78\right],
 \]
 and
 \[
-        B_q(\lambda_0)=\frac{144q^2-168q+77}{16}\ge \frac{29}{16}.
+        B_q(\lambda_*)=\frac{144q^2-168q+77}{16}\ge \frac{29}{16}.
 \]
 Thus $R_{q,r}(\lambda)\ge P_q(\lambda)$.
 
@@ -581,7 +582,11 @@ H\ge s_0^3\bigl[&8s_0+10(8q^2-9q+3)\\
 &+6(16q-9)u+48u^2\bigr].
 \end{aligned}
 \]
-The quadratic in $u$ has minimum
+Since $8s_0\ge0$, the bracket is at least the quadratic in $u$
+\[
+        48u^2+6(16q-9)u+10(8q^2-9q+3),
+\]
+whose minimum over $u\in\mathbb R$ is
 \[
         \frac{512q^2-576q+237}{16}>0
 \]
@@ -811,17 +816,17 @@ so it suffices to prove
 \end{equation}
 Define
 \[
-        A=A_\ell:=\bigl(\ell^9-p^9+pq^8\bigr)^{1/9}.
+        \alpha=\alpha_\ell:=\bigl(\ell^9-p^9+pq^8\bigr)^{1/9}.
 \]
-This is real and positive, and $A<\ell$ because $pq^8<p^9$ (as $q<p$ in our range).
+This is real and positive, and $\alpha<\ell$ because $pq^8<p^9$ (as $q<p$ in our range).
 
-Suppose for contradiction that $N_9>A^9$, and set $z=N_9^{1/9}>A$.  The monotonicity of $\ell^r$-norms on sequences (decreasing in $r$) applied to the negative non-principal eigenvalues gives
+Suppose for contradiction that $N_9>\alpha^9$, and set $z=N_9^{1/9}>\alpha$.  The monotonicity of $\ell^r$-norms on sequences (decreasing in $r$) applied to the negative non-principal eigenvalues gives
 \[
         \sum_{\lambda_i<0}|\lambda_i|^3\ge z^3,
         \qquad
         \sum_{\lambda_i<0}|\lambda_i|^2\ge z^2.
 \]
-The total non-principal square-mass bound $\sum_{i\ge1}\lambda_i^2\le S$ therefore forces $z^2\le S$.  In particular, the case $S<A^2$ would give $z^2\le S<A^2$, contradicting $z>A$, so $N_9>A^9$ is already impossible in that case.  Assume henceforth $S\ge A^2$.
+The total non-principal square-mass bound $\sum_{i\ge1}\lambda_i^2\le S$ therefore forces $z^2\le S$.  In particular, the case $S<\alpha^2$ would give $z^2\le S<\alpha^2$, contradicting $z>\alpha$, so $N_9>\alpha^9$ is already impossible in that case.  Assume henceforth $S\ge\alpha^2$.
 
 The positive non-principal eigenvalues now have total square at most $S-z^2$.  For non-negative reals $a_i$ with $\sum a_i^2\le M$,
 \[
@@ -834,10 +839,10 @@ Consequently
         \sum_{i\ge1}\lambda_i^3
         \le (S-z^2)^{3/2}-z^3.
 \end{equation}
-The right-hand side is strictly decreasing in $z\in[0,\sqrt S]$, so $z>A$ gives
+The right-hand side is strictly decreasing in $z\in[0,\sqrt S]$, so $z>\alpha$ gives
 \begin{equation}\label{eq:rest-cube-contradiction}
         \sum_{i\ge1}\lambda_i^3
-        < (S-A^2)^{3/2}-A^3.
+        < (S-\alpha^2)^{3/2}-\alpha^3.
 \end{equation}
 On the other hand, the triangle-density hypothesis gives
 \begin{equation}\label{eq:rest-cube-lower}
@@ -847,25 +852,25 @@ On the other hand, the triangle-density hypothesis gives
 \end{equation}
 Comparing \eqref{eq:rest-cube-contradiction} and \eqref{eq:rest-cube-lower}, the contradiction will follow once we prove
 \begin{equation}\label{eq:key-ell}
-        \Theta(p)-\ell^3\ge (S-A^2)^{3/2}-A^3.
+        \Theta(p)-\ell^3\ge (S-\alpha^2)^{3/2}-\alpha^3.
 \end{equation}
 
 \smallskip\noindent\emph{Reduction to $\ell=p$.}
 Define
 \[
-        G(\ell)=\Theta(p)-\ell^3+A^3-H^{3/2},
-        \qquad H=p-\ell^2-A^2.
+        G(\ell)=\Theta(p)-\ell^3+\alpha^3-\Delta^{3/2},
+        \qquad \Delta=p-\ell^2-\alpha^2.
 \]
-Inequality \eqref{eq:key-ell} is the assertion $G(\ell)\ge0$.  Differentiating $A^9=\ell^9-p^9+pq^8$ gives $A'=\ell^8/A^8$.  On $H\ge0$,
+Inequality \eqref{eq:key-ell} is the assertion $G(\ell)\ge0$.  Differentiating $\alpha^9=\ell^9-p^9+pq^8$ gives $\alpha'=\ell^8/\alpha^8$.  On $\Delta\ge0$,
 \[
 \begin{aligned}
         G'(\ell)
-        &=-3\ell^2+3A^2A'+3\sqrt H\,(\ell+AA') \\
-        &> -3\ell^2+3A^2A'
-        =3\ell^2\left(\left(\frac{\ell}{A}\right)^6-1\right)>0,
+        &=-3\ell^2+3\alpha^2\alpha'+3\sqrt{\Delta}\,(\ell+\alpha\alpha') \\
+        &> -3\ell^2+3\alpha^2\alpha'
+        =3\ell^2\left(\left(\frac{\ell}{\alpha}\right)^6-1\right)>0,
 \end{aligned}
 \]
-since $A<\ell$.  Hence it suffices to prove $G(p)\ge0$.
+since $\alpha<\ell$.  Hence it suffices to prove $G(p)\ge0$.
 
 \smallskip\noindent\emph{The one-variable estimate at $\ell=p$.}
 Set
@@ -876,12 +881,12 @@ Set
 \]
 and
 \[
-        A_0=A_p=(pq^8)^{1/9},
-        \qquad H_0=H|_{\ell=p}=pq-A_0^2.
+        \alpha_0=\alpha_p=(pq^8)^{1/9},
+        \qquad \Delta_0=\Delta|_{\ell=p}=pq-\alpha_0^2.
 \]
 The required inequality is
 \begin{equation}\label{eq:key-p}
-        \Theta(p)\ge p^3-A_0^3+H_0^{3/2}.
+        \Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}.
 \end{equation}
 Let $c$ be the triangle-density parameter, so that $\eps=c-3c^2/2$; this gives $c\ge\eps$, and $\eps\le3/2000$ implies $c\le1/500$.  Hence
 \begin{equation}\label{eq:theta-lower}
@@ -889,34 +894,34 @@ Let $c$ be the triangle-density parameter, so that $\eps=c-3c^2/2$; this gives $
         \ge \frac32\eps\left(1-\frac1{500}\right)^2
         >\frac{149}{100}\eps.
 \end{equation}
-For the right-hand side of \eqref{eq:key-p}, $A_0\le1/2$ on $p>1/2$ (because $A_0^9=pq^8$ is strictly decreasing in $p$ on $p>1/2$, with equality $A_0=1/2$ at $p=1/2$).  A direct computation gives
+For the right-hand side of \eqref{eq:key-p}, $\alpha_0\le1/2$ on $p>1/2$ (because $\alpha_0^9=pq^8$ is strictly decreasing in $p$ on $p>1/2$, with equality $\alpha_0=1/2$ at $p=1/2$).  A direct computation gives
 \[
 \begin{aligned}
-\frac{d}{d\eps}(p^3-A_0^3)
-&=3p^2+\frac{A_0^3}{3}\left(\frac8q-\frac1p\right),\\
-\frac{d}{d\eps}(pq-A_0^2)
-&=-2\eps+\frac{2A_0^2}{9}\left(\frac8q-\frac1p\right).
+\frac{d}{d\eps}(p^3-\alpha_0^3)
+&=3p^2+\frac{\alpha_0^3}{3}\left(\frac8q-\frac1p\right),\\
+\frac{d}{d\eps}(pq-\alpha_0^2)
+&=-2\eps+\frac{2\alpha_0^2}{9}\left(\frac8q-\frac1p\right).
 \end{aligned}
 \]
-On $1/2<p\le1003/2000$ and $997/2000\le q<1/2$, the first is bounded above by $27/20$ and the second by $4/5$; both bounds are checked in exact rational arithmetic in the script \texttt{odd\_cycle\_c9\_gap\_checker.py}.  Since $p^3-A_0^3$ and $H_0$ both vanish at $\eps=0$, integrating gives
+On $1/2<p\le1003/2000$ and $997/2000\le q<1/2$, the first is bounded above by $27/20$ and the second by $4/5$; both bounds are checked in exact rational arithmetic in the script \texttt{odd\_cycle\_c9\_gap\_checker.py}.  Since $p^3-\alpha_0^3$ and $\Delta_0$ both vanish at $\eps=0$, integrating gives
 \begin{equation}\label{eq:linear-upper}
-        p^3-A_0^3\le \frac{27}{20}\eps,
+        p^3-\alpha_0^3\le \frac{27}{20}\eps,
         \qquad
-        H_0\le \frac45\eps<\eps.
+        \Delta_0\le \frac45\eps<\eps.
 \end{equation}
 Since $\eps\le3/2000<1/400$, also
-\begin{equation}\label{eq:H-upper}
-        H_0^{3/2}\le \eps^{3/2}<\frac1{20}\eps.
+\begin{equation}\label{eq:Delta-upper}
+        \Delta_0^{3/2}\le \eps^{3/2}<\frac1{20}\eps.
 \end{equation}
-Combining \eqref{eq:linear-upper} and \eqref{eq:H-upper},
+Combining \eqref{eq:linear-upper} and \eqref{eq:Delta-upper},
 \[
-        p^3-A_0^3+H_0^{3/2}
+        p^3-\alpha_0^3+\Delta_0^{3/2}
         <\left(\frac{27}{20}+\frac1{20}\right)\eps
         =\frac75\eps
         <\frac{149}{100}\eps
         \le\Theta(p),
 \]
-which proves \eqref{eq:key-p}.  Therefore $G(p)\ge0$, and by the monotonicity above, $G(\ell)\ge0$ for every $\ell\ge p$ with $H\ge0$; this contradicts $N_9>A^9$.  The contradiction proves \eqref{eq:N9-target}, completing the proof.
+which proves \eqref{eq:key-p}.  Therefore $G(p)\ge0$, and by the monotonicity above, $G(\ell)\ge0$ for every $\ell\ge p$ with $\Delta\ge0$; this contradicts $N_9>\alpha^9$.  The contradiction proves \eqref{eq:N9-target}, completing the proof.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:C9} for $1/2<p\le1003/2000$]
@@ -925,16 +930,260 @@ For $p$ in this range, $p\le1003/2000<2/3$, so Theorem~\ref{thm:triangle-density
 
 The two ranges $p\ge1003/2000$ and $1/2<p\le1003/2000$, together with the trivial case $p\le1/2$, exhaust all $p\in[0,1]$.  This completes the proof of Theorem~\ref{thm:C9}.
 
+\section{The $C_{11}$ theorem}\label{sec:C11}
+
+The $C_{11}$ proof is a hybrid of the same shape as the $C_9$ proof.  The complement path-certificate method handles $p\ge103/200$, but its positivity certificate no longer fits into a single Sylvester decomposition; it splits into a univariate linear piece plus three multivariate nonlinear kernels, each certified by exact rational Bernstein subdivision.  The narrow remaining interval $1/2<p\le103/200$ is closed by the same triangle-density + spectral moment strategy as in \S\ref{subsec:C9-gap}, with the cut-off relaxed from $\eps\le3/2000$ to $\eps\le3/200$ and the constants adjusted; the final scalar comparison is more delicate and uses a substitution $t=\sqrt\eps$.  The case $p\le1/2$ is trivial.
+
+\begin{theorem}[$C_{11}$ case]\label{thm:C11}
+For every graphon $W$ with $p=t(K_2,W)$,
+\[
+        t(C_{11},W)\ge p^{11}-p(1-p)^{10}.
+\]
+\end{theorem}
+
+\subsection{The near-bipartite interval: $1/2<p\le103/200$}\label{subsec:C11-gap}
+
+The argument follows the structure of \S\ref{subsec:C9-gap} verbatim, with the cycle length and exponent replaced by their $C_{11}$ analogues.  The spectral setup of \S\ref{subsec:C9-gap} (Hilbert--Schmidt operator $T=T_W$ with eigenvalues $\lambda_0,\lambda_1,\ldots$ satisfying $\lambda_0\ge p$, $\sum_i\lambda_i^2\le p$, and $t(C_m,W)=\sum_i\lambda_i^m$ for $m\ge3$) carries over without change.
+
+\begin{lemma}[Spectral closure criterion for $C_{11}$]\label{lem:spectral-closure-C11}
+Let $1/2<p\le103/200$ and $q=1-p$.  Assume that $t(K_3,W)\ge\Theta(p)$, where $\Theta$ is as in Theorem~\ref{thm:triangle-density}.  Then
+\[
+        t(C_{11},W)\ge p^{11}-pq^{10}.
+\]
+\end{lemma}
+
+\begin{proof}
+Set $\ell=\lambda_0\ge p$ and $S=p-\ell^2$.  Let
+\[
+        N_{11}=\sum_{i\ge1:\,\lambda_i<0}|\lambda_i|^{11}.
+\]
+Then $t(C_{11},W)\ge\ell^{11}-N_{11}$, so it suffices to prove
+\begin{equation}\label{eq:N11-target}
+        N_{11}\le\ell^{11}-p^{11}+pq^{10}.
+\end{equation}
+Define
+\[
+        \alpha=\alpha_\ell:=\bigl(\ell^{11}-p^{11}+pq^{10}\bigr)^{1/11},
+\]
+which is real and positive with $\alpha<\ell$ (because $pq^{10}<p^{11}$ since $q<p$).
+
+Suppose for contradiction that $N_{11}>\alpha^{11}$ and set $z=N_{11}^{1/11}>\alpha$.  Monotonicity of $\ell^r$-norms on sequences (decreasing in $r$) applied to the negative non-principal eigenvalues gives
+\[
+        \sum_{\lambda_i<0}|\lambda_i|^3\ge z^3,
+        \qquad
+        \sum_{\lambda_i<0}|\lambda_i|^2\ge z^2.
+\]
+The total non-principal square mass $\sum_{i\ge1}\lambda_i^2\le S$ forces $z^2\le S$, so the case $S<\alpha^2$ is already a contradiction.  Assume $S\ge\alpha^2$.  The bound $\sum a_i^3\le M^{3/2}$ for non-negative $a_i$ with $\sum a_i^2\le M$ then gives
+\[
+        \sum_{i\ge1}\lambda_i^3
+        \le (S-z^2)^{3/2}-z^3
+        <(S-\alpha^2)^{3/2}-\alpha^3,
+\]
+since the right-hand side is strictly decreasing in $z\in[0,\sqrt S]$ and $z>\alpha$.  Combined with the triangle-density lower bound $\sum_{i\ge1}\lambda_i^3=t(K_3,W)-\ell^3\ge\Theta(p)-\ell^3$, the contradiction follows once we prove
+\begin{equation}\label{eq:key-ell-C11}
+        \Theta(p)-\ell^3\ge(S-\alpha^2)^{3/2}-\alpha^3.
+\end{equation}
+
+\smallskip\noindent\emph{Reduction to $\ell=p$.}
+Let $\Delta=p-\ell^2-\alpha^2$ and $G(\ell)=\Theta(p)-\ell^3+\alpha^3-\Delta^{3/2}$.  Differentiating $\alpha^{11}=\ell^{11}-p^{11}+pq^{10}$ gives $\alpha'=\ell^{10}/\alpha^{10}$.  On $\Delta\ge0$,
+\[
+\begin{aligned}
+        G'(\ell)
+        &=-3\ell^2+3\alpha^2\alpha'+3\sqrt{\Delta}\,(\ell+\alpha\alpha') \\
+        &>-3\ell^2+3\alpha^2\alpha'
+        =3\ell^2\left(\left(\frac{\ell}{\alpha}\right)^8-1\right)>0,
+\end{aligned}
+\]
+since $\alpha<\ell$.  Hence it suffices to prove $G(p)\ge0$.
+
+\smallskip\noindent\emph{The one-variable estimate at $\ell=p$.}
+Set
+\[
+        \eps=p-\tfrac12,
+        \qquad 0<\eps\le\tfrac{3}{200},
+        \qquad q=\tfrac12-\eps,
+\]
+and
+\[
+        \alpha_0=\alpha_p=(pq^{10})^{1/11},
+        \qquad \Delta_0=\Delta|_{\ell=p}=pq-\alpha_0^2.
+\]
+The required inequality is
+\begin{equation}\label{eq:key-p-C11}
+        \Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}.
+\end{equation}
+
+Let $c$ be the triangle-density parameter, so that $\eps=c-3c^2/2$.  Solving for $c$ as a power series in $\eps$ gives $c\ge\eps+3\eps^2/2$.  Also $\eps\le3/200$ implies $c\le1/65$, because $c\mapsto c-3c^2/2$ is increasing on $[0,1/3]$ and $1/65-3/(2\cdot65^2)=127/8450>3/200$.  Hence
+\begin{equation}\label{eq:theta-lower-C11}
+        \Theta(p)=\tfrac32 c(1-c)^2
+        \ge \tfrac32\left(\eps+\tfrac32\eps^2\right)\left(\tfrac{64}{65}\right)^2
+        =\alpha_*\left(\eps+\tfrac32\eps^2\right),
+\end{equation}
+where $\alpha_*=\tfrac32(64/65)^2$.
+
+For the right-hand side of \eqref{eq:key-p-C11}, the script \texttt{odd\_cycle\_c11\_checker.py} certifies, by an exact Sturm root count on $[0,3/200]$, the two scalar inequalities
+\begin{equation}\label{eq:scalar-bounds-C11}
+        p^3-\alpha_0^3\le \tfrac{139}{100}\eps,
+        \qquad
+        \Delta_0=pq-\alpha_0^2\le \tfrac{9}{11}\eps.
+\end{equation}
+Both quantities and their proposed upper bounds are positive on the interval, so raising both sides to the eleventh power and using $\alpha_0^{11}=pq^{10}$ gives the equivalent polynomial inequalities
+\[
+        (pq^{10})^3\ge\bigl(p^3-\tfrac{139}{100}\eps\bigr)^{11},
+        \qquad
+        (pq^{10})^2\ge\bigl(pq-\tfrac{9}{11}\eps\bigr)^{11}.
+\]
+The differences are polynomials in $\eps$ vanishing at $\eps=0$ to order $1$ and $2$ respectively; after dividing out these factors, the quotients are positive on $[0,3/200]$ by exact Sturm root counts.
+
+Combining \eqref{eq:theta-lower-C11} and \eqref{eq:scalar-bounds-C11}, inequality \eqref{eq:key-p-C11} reduces to
+\[
+        \alpha_*\left(\eps+\tfrac32\eps^2\right)
+        \ge \tfrac{139}{100}\eps+\left(\tfrac{9}{11}\eps\right)^{3/2}.
+\]
+Divide by $\eps$ and substitute $t=\sqrt\eps\in[0,\sqrt{3/200}]$:
+\begin{equation}\label{eq:t-form-C11}
+        \alpha_*\left(1+\tfrac32 t^2\right)-\tfrac{139}{100}
+        \ge \left(\tfrac{9}{11}\right)^{3/2}t.
+\end{equation}
+The left side minus the right is a convex quadratic in $t$ with critical point $t^*=(9/11)^{3/2}/(3\alpha_*)$.  The inequality $t^*>\sqrt{3/200}$ is equivalent to the rational comparison $200\cdot(9/11)^3>27\alpha_*^2$, which the checker verifies.  Hence the quadratic is strictly decreasing on $[0,\sqrt{3/200}]$, with minimum at the right endpoint $t=\sqrt{3/200}$.  At that endpoint, both sides of \eqref{eq:t-form-C11} are positive, so squaring gives the equivalent inequality
+\[
+        \left(\alpha_*\left(1+\tfrac32\cdot\tfrac{3}{200}\right)-\tfrac{139}{100}\right)^2
+        \ge \left(\tfrac{9}{11}\right)^3\cdot\tfrac{3}{200},
+\]
+which the checker certifies by computing the difference exactly as
+\[
+        \left(\alpha_*\left(1+\tfrac32\cdot\tfrac{3}{200}\right)-\tfrac{139}{100}\right)^2
+        -\left(\tfrac{9}{11}\right)^3\cdot\tfrac{3}{200}
+        =\tfrac{279882376181}{237591818750000}>0.
+\]
+This proves \eqref{eq:key-p-C11}, hence \eqref{eq:key-ell-C11}, and the contradiction proves \eqref{eq:N11-target}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:C11} for $1/2<p\le103/200$]
+Since $103/200<2/3$, Theorem~\ref{thm:triangle-density} gives $t(K_3,W)\ge\Theta(p)$, and Lemma~\ref{lem:spectral-closure-C11} then gives $t(C_{11},W)\ge p^{11}-pq^{10}$.
+\end{proof}
+
+\subsection{The path-certificate range: $p\ge103/200$}\label{subsec:C11-path}
+
+The complement-expansion argument of \S\ref{subsec:C9-path} extends to $C_{11}$, but the resulting positivity certificate is larger and its proof is computer-assisted via exact rational Bernstein subdivision rather than by a single Sylvester decomposition.
+
+Put $U=1-W$ and $q=1-p$.  We prove the result for $0\le q\le 97/200$.  Let $x_j=t(P_j,U)$ for $j\ge0$ and $c_{11}=t(C_{11},U)$.  Expanding $t(C_{11},1-U)$ by inclusion-exclusion over the eleven edges of $C_{11}$ and using the crude bound $c_{11}\le x_{10}$ gives
+\[
+        t(C_{11},1-U)-\bigl((1-q)^{11}-(1-q)q^{10}\bigr)\ge\Phi_{11},
+\]
+where
+\begin{equation}\label{eq:Phi11-path}
+\begin{aligned}
+\Phi_{11}={}&
+-10q^{10}+55q^9-165q^8+330q^7-462q^6+451q^5 \\
+&+11q^4x_2-275q^4 \\
+&-110q^3x_2+44q^3x_3-11q^3x_4+88q^3 \\
+&+66q^2x_2^2-33q^2x_2x_3+165q^2x_2-110q^2x_3+66q^2x_4 \\
+&\qquad -33q^2x_5+11q^2x_6-11q^2 \\
+&-11qx_2^3-110qx_2^2+132qx_2x_3-66qx_2x_4+22qx_2x_5-77qx_2 \\
+&\qquad -33qx_3^2+22qx_3x_4+66qx_3-55qx_4+44qx_5-33qx_6+22qx_7-11qx_8 \\
+&+10x_{10}+22x_2^3-33x_2^2x_3+11x_2^2x_4+33x_2^2+11x_2x_3^2 \\
+&\qquad -55x_2x_3+44x_2x_4-33x_2x_5+22x_2x_6-11x_2x_7+11x_2 \\
+&\qquad +22x_3^2-33x_3x_4+22x_3x_5-11x_3x_6-11x_3 \\
+&\qquad +11x_4^2-11x_4x_5+11x_4-11x_5+11x_6-11x_7+11x_8-11x_9.
+\end{aligned}
+\end{equation}
+Thus it suffices to prove $\Phi_{11}\ge0$ on $0\le q\le 97/200$.
+
+Substituting the path-density formulae of Lemma~\ref{lem:path-formulae} (extended to $x_9$ and $x_{10}$ by the same block recurrence) into $\Phi_{11}$ gives a homogeneous decomposition by total degree in the moments $s_0,s_1,\ldots,s_8$:
+\begin{equation}\label{eq:Phi11-decomp}
+        \Phi_{11}=L_1+L_2+L_3+L_4+10s_0^5,
+\end{equation}
+where $L_d$ is the homogeneous degree-$d$ part of $\Phi_{11}$.  The pure degree-$5$ term $10s_0^5\ge0$ is immediate.
+
+\medskip\noindent\textbf{Step 1: the linear part.}
+As in \S\ref{subsec:C9-path} Step 3, the degree-$1$ part has the form
+\[
+        L_1=\int_{-1}^{1}P_q(\lambda)\,d\mu(\lambda),
+\]
+where $\mu$ is the spectral measure of the compression $A$ with respect to $g$, and
+\begin{equation}\label{eq:Pq-C11}
+\begin{aligned}
+P_q(\lambda)={}&10\lambda^8+(20q-11)\lambda^7+(30q^2-33q+11)\lambda^6 \\
+&+(40q^3-66q^2+44q-11)\lambda^5 \\
+&+(50q^4-110q^3+110q^2-55q+11)\lambda^4 \\
+&+(60q^5-165q^4+220q^3-165q^2+66q-11)\lambda^3 \\
+&+(70q^6-231q^5+385q^4-385q^3+231q^2-77q+11)\lambda^2 \\
+&+(80q^7-308q^6+616q^5-770q^4+616q^3-308q^2+88q-11)\lambda \\
+&+90q^8-396q^7+924q^6-1386q^5+1386q^4-924q^3+396q^2-99q+11.
+\end{aligned}
+\end{equation}
+The accompanying script \texttt{odd\_cycle\_c11\_checker.py} certifies, by exact rational Bernstein subdivision (six boxes), that
+\begin{equation}\label{eq:Pq-positive}
+        P_q(\lambda)>0
+        \qquad
+        (0\le q\le 97/200,\ -1\le\lambda\le1).
+\end{equation}
+Hence $L_1\ge0$.
+
+\medskip\noindent\textbf{Step 2: the nonlinear parts.}
+If $s_0>0$, let $\nu=\mu/s_0$ be the normalised spectral measure and set $m_j=\int_{-1}^1\lambda^j\,d\nu(\lambda)$.  Then for $d=2,3,4$,
+\[
+        L_d=s_0^d\,F_d(q;m_1,\ldots,m_8),
+\]
+where
+\begin{align*}
+F_2={}&150m_1^2q^4-330m_1^2q^3+330m_1^2q^2-165m_1^2q+33m_1^2 \\
+&+200m_1m_2q^3-330m_1m_2q^2+220m_1m_2q-55m_1m_2 \\
+&+120m_1m_3q^2-132m_1m_3q+44m_1m_3+60m_1m_4q-33m_1m_4+20m_1m_5 \\
+&+420m_1q^5-1155m_1q^4+1540m_1q^3-1155m_1q^2+462m_1q-77m_1 \\
+&+60m_2^2q^2-66m_2^2q+22m_2^2+60m_2m_3q-33m_2m_3+20m_2m_4 \\
+&+300m_2q^4-660m_2q^3+660m_2q^2-330m_2q+66m_2 \\
+&+10m_3^2+200m_3q^3-330m_3q^2+220m_3q-55m_3 \\
+&+120m_4q^2-132m_4q+44m_4+60m_5q-33m_5+20m_6 \\
+&+280q^6-924q^5+1540q^4-1540q^3+924q^2-308q+44,
+\end{align*}
+\begin{align*}
+F_3={}&40m_1^3q-22m_1^3+30m_1^2m_2+300m_1^2q^2-330m_1^2q+110m_1^2 \\
+&+240m_1m_2q-132m_1m_2+60m_1m_3+600m_1q^3-990m_1q^2+660m_1q-165m_1 \\
+&+30m_2^2+300m_2q^2-330m_2q+110m_2+120m_3q-66m_3+30m_4 \\
+&+350q^4-770q^3+770q^2-385q+77,
+\end{align*}
+\[
+        F_4=5\bigl(12m_1^2+40m_1q-22m_1+8m_2+30q^2-33q+11\bigr).
+\]
+Each $F_d$ is the $d$-fold $\nu$-average of an explicit symmetric kernel $K_{d,q}$ on $[-1,1]^d$:
+\[
+        F_d=\int_{[-1,1]^d}K_{d,q}(\lambda_1,\ldots,\lambda_d)\,d\nu(\lambda_1)\cdots d\nu(\lambda_d).
+\]
+The kernel is obtained by replacing each monomial $m_{a_1}\cdots m_{a_t}$ in $F_d$ by the symmetrised product
+\[
+        \frac1{d!}\sum_{\sigma\in S_d}\lambda_{\sigma(1)}^{a_1}\cdots\lambda_{\sigma(t)}^{a_t},
+\]
+with the remaining $d-t$ exponents equal to $0$.  The checker certifies, by exact rational Bernstein subdivision, that
+\begin{equation}\label{eq:Kd-positive}
+        K_{d,q}(\lambda_1,\ldots,\lambda_d)>0
+        \qquad
+        (d=2,3,4;\ 0\le q\le1/2;\ -1\le\lambda_i\le1),
+\end{equation}
+using $5$, $8$, and $29$ boxes respectively.  Hence $L_2,L_3,L_4\ge0$.
+
+\medskip\noindent\textbf{Conclusion.}
+Combining the two steps with $10s_0^5\ge0$,
+\[
+        \Phi_{11}=L_1+L_2+L_3+L_4+10s_0^5\ge0
+\]
+on $0\le q\le 97/200$, which gives the inequality of Theorem~\ref{thm:C11} for $p=1-q\ge103/200$.
+
+\medskip
+
+The two ranges $p\ge103/200$ and $1/2<p\le103/200$, together with the trivial case $p\le1/2$, exhaust all $p\in[0,1]$.  This completes the proof of Theorem~\ref{thm:C11}.
+
 \section{What remains: general odd cycles}\label{sec:remains}
 
-The full conjecture for $C_{2k+1}$ with $k\ge5$ is still open.  The hybrid strategy used for $C_9$ has two halves, and neither extends to $C_{11}$ without new input.
+The full conjecture for $C_{2k+1}$ with $k\ge6$ remains open.  The hybrid strategy that closed $C_9$ and $C_{11}$ has two halves, and neither is known to extend to $C_{13}$ without new input.
 
 \medskip\noindent\emph{The path-certificate half.}
-The proofs for $C_5$, $C_7$, and the $p\ge1003/2000$ range of $C_9$ all use the crude estimate
+The proofs for $C_5$, $C_7$, the $p\ge1003/2000$ range of $C_9$, and the $p\ge103/200$ range of $C_{11}$ all use the crude estimate
 \[
         t(C_{2k+1},U)\le t(P_{2k},U),
 \]
-obtained by deleting one factor $U\le1$ from the cycle integrand.  For $C_9$, the linear polynomial $P_q$ in \eqref{eq:P9} fails to be nonnegative all the way up to $q=1/2$; this is exactly why the path-certificate range stops at $p=1003/2000$.  The same obstruction appears for longer cycles, and the missing interval is wider.  A natural next target is a refined cycle-to-path inequality
+obtained by deleting one factor $U\le1$ from the cycle integrand.  The resulting defect $\Phi_{2k+1}$ is positive on $0\le q\le 1-\rho_{2k+1}$ for some cut-off $\rho_{2k+1}<1$, but \emph{not} all the way to $q=1/2$.  The cut-offs have so far stayed close to $1/2$ ($\rho_9=1003/2000$, $\rho_{11}=103/200$) but with no qualitative bound forcing this, and for $C_{13}$ and beyond the cut-off may move appreciably further from $1/2$.  A natural next target is a refined cycle-to-path inequality of the form
 \[
         t(P_{2k},U)-t(C_{2k+1},U)
         \ge \text{a positive correction depending on }d_U-q,
@@ -942,18 +1191,23 @@ obtained by deleting one factor $U\le1$ from the cycle integrand.  For $C_9$, th
 tightening the crude deletion bound that the present method discards.
 
 \medskip\noindent\emph{The triangle-density half.}
-The argument in \S\ref{subsec:C9-gap} uses the sharp triangle-density theorem to bound the negative $9$-th-power mass $N_9=\sum_{\lambda_i<0}|\lambda_i|^9$ in terms of $\sum_{i\ge1}\lambda_i^3=t(K_3,W)-\lambda_0^3$.  For $C_9$, the comparison between the target slack $pq^8$ and the triangle-density input $\Theta(p)$ is just barely favourable on the narrow interval $\eps=p-1/2\in(0,3/2000]$, with margin $9/100$ per unit $\eps$ in \eqref{eq:theta-lower} versus the upper bound $7\eps/5$.  For $C_{11}$ the analogous calculation must be redone with $pq^{10}$ and $N_{11}$; the relevant external input may then be a colour-critical supersaturation theorem or a higher clique-density theorem rather than the triangle-density theorem alone.
+The closure arguments in \S\ref{subsec:C9-gap} and \S\ref{subsec:C11-gap} both use the sharp triangle-density theorem to bound the negative $(2k+1)$-th-power mass $N_{2k+1}=\sum_{\lambda_i<0}|\lambda_i|^{2k+1}$ in terms of $\sum_{i\ge1}\lambda_i^3=t(K_3,W)-\lambda_0^3$, reducing to the scalar inequality $\Theta(p)-\ell^3\ge(S-\alpha^2)^{3/2}-\alpha^3$.  Two countervailing trends are at play as $k$ grows: the target slack $pq^{2k}$ shrinks, and the interval that the spectral closure needs to cover widens (width $3/2000$ for $C_9$, width $3/200$ for $C_{11}$, since the path-certificate cut-off $\rho_{2k+1}$ has moved further from $1/2$).  Both put pressure on the comparison.  The final scalar comparison already required a non-linear analysis for $C_{11}$ (the $t=\sqrt\eps$ substitution); for $C_{13}$ the combination may be too tight for any triangle-density input alone to close, in which case a colour-critical supersaturation theorem tailored to odd cycles, or a higher clique-density input, will be needed.
+
+\medskip\noindent\emph{The overlap question.}
+The conjecture is established for $C_m$ exactly when the path-certificate range $p\ge\rho_m$ and the triangle-density range $1/2<p\le\rho_m$ meet at the cut-off $\rho_m$.  They do for $C_9$ and $C_{11}$.  Whether they continue to overlap for $C_{13}$ is the key open question.
 
 \section{Audit notes}
 
 The following points were checked explicitly while preparing this note.
 \begin{enumerate}[label=\textup{(\arabic*)}]
-    \item The inclusion-exclusion counts for $C_5$, $C_7$, and $C_9$ were recomputed by enumerating edge subsets of the relevant cycle and classifying the resulting forest as a disjoint union of paths.
-    \item The path-density formulae in Lemma~\ref{lem:path-formulae} were recomputed from the block recurrence for $T$ on $\mathbb R\one\oplus\one^\perp$.
+    \item The inclusion-exclusion counts for $C_5$, $C_7$, $C_9$, and $C_{11}$ were recomputed by enumerating edge subsets of the relevant cycle and classifying the resulting forest as a disjoint union of paths.
+    \item The path-density formulae in Lemma~\ref{lem:path-formulae} were recomputed from the block recurrence for $T$ on $\mathbb R\one\oplus\one^\perp$; the same recurrence is extended to $x_9$ and $x_{10}$ for the $C_{11}$ path-certificate proof in \S\ref{subsec:C11-path}.
     \item The $C_5$ defect reduces exactly to the square displayed in the proof of Theorem~\ref{thm:C5}.
     \item The $C_7$ defect reduces exactly to \eqref{eq:Phi7-s}, and the quartic $P_q$ has the exact square decomposition \eqref{eq:C7-P-square}.
     \item The $C_9$ defect on the path-certificate range $p\ge1003/2000$ reduces exactly to $L+Q+H$ as described in \S\ref{subsec:C9-path}.  The nonnegativity of $H$ and $Q$ is analytic.  The nonnegativity of $L$ on $0\le q\le997/2000$ follows from the exact rational Gram matrix $N_q$.
     \item The closure of the missing $C_9$ interval $1/2<p\le1003/2000$ in \S\ref{subsec:C9-gap} uses the sharp triangle-density theorem~\cite{RazborovTriangles,ReiherCliqueDensity} as an external input.  The spectral closure criterion (Lemma~\ref{lem:spectral-closure}) reduces the inequality to a check at $\ell=p$ via $G'(\ell)>0$; the resulting one-variable estimate is verified by four crude rational inequalities on $\eps=p-1/2\in(0,3/2000]$, checked in exact arithmetic by \texttt{odd\_cycle\_c9\_gap\_checker.py}.
+    \item The $C_{11}$ defect on the path-certificate range $p\ge103/200$ reduces to $L_1+L_2+L_3+L_4+10s_0^5$ as described in \S\ref{subsec:C11-path}.  The pure degree-$5$ piece $10s_0^5\ge0$ is immediate.  The linear positivity $P_q(\lambda)>0$ in \eqref{eq:Pq-C11} (degree $8$ in $\lambda$, on $0\le q\le 97/200$ and $-1\le\lambda\le1$) and the nonlinear kernel positivities $K_{d,q}>0$ in \eqref{eq:Kd-positive} (for $d=2,3,4$, on $0\le q\le1/2$ and $-1\le\lambda_i\le1$) are certified by exact rational Bernstein subdivision in \texttt{odd\_cycle\_c11\_checker.py}, using $6$, $5$, $8$, and $29$ boxes respectively.
+    \item The closure of the missing $C_{11}$ interval $1/2<p\le103/200$ in \S\ref{subsec:C11-gap} uses the same triangle-density + spectral argument as \S\ref{subsec:C9-gap}, with the cut-off relaxed to $\eps\le 3/200$ and the constants adjusted.  The two scalar inequalities $p^3-\alpha_0^3\le(139/100)\eps$ and $pq-\alpha_0^2\le(9/11)\eps$ are certified by Sturm root counts.  The final scalar comparison reduces to a convex quadratic in $t=\sqrt\eps$; the checker verifies both the monotonicity hypothesis $200\cdot(9/11)^3>27\alpha_*^2$ and the positive squared margin $\tfrac{279882376181}{237591818750000}$ at the right endpoint $\eps=3/200$.
 \end{enumerate}
 
 \appendix
