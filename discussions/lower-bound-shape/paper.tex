@@ -1,0 +1,2132 @@
+% paper.tex
+% ============================================================================
+% Unified working paper for the project on two graphon optimisation problems.
+%
+% This single file consolidates the entire current state of the project.  It
+% merges, with all mathematics preserved verbatim:
+%   * two_problems_progress_report.tex  (the overall progress report)
+%   * Tk_first_order_stability.tex      (rigorous first-order stability of T_k)
+%   * rigorous_certificates.tex         (Sturm certificates for Psi_P, Psi_J)
+%   * balancing_reduction.tex           (Step A2: in-family balancing, corrected)
+%   * global_reduction_strategy.tex     (research roadmap; Plans A/B/C)
+% and additionally records the direct step-graphon optimisation experiment
+% (scripts/optimize_graphon.py) that provides numerical evidence for Step A1.
+%
+% Every algebraic certificate is reproduced by the companion scripts in
+% scripts/ (run with /opt/miniconda3/bin/python3, which has sympy 1.14);
+% see Appendix C for the script index.
+%
+% The individual source .tex files are kept for now but this file is intended
+% to be the single point of reference for collaborators.
+% ============================================================================
+
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{status}[theorem]{Status}
+
+\newcommand{\graphon}{\mathcal W}
+\newcommand{\E}{\mathbb E}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\dd}{\,d}
+\newcommand{\tk}{T_k}
+\newcommand{\LS}{\mathrm{LS}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\ord}{\operatorname{ord}}
+\DeclareMathOperator{\Hess}{Hess}
+
+\title[Two graphon optimisation problems: a consolidated progress paper]%
+{Two graphon optimisation problems:\\
+counterexamples, corrected conjectures, reduced variational targets,\\
+and rigorous certificates}
+\author{Working research paper (consolidated)}
+\date{\today}
+
+\begin{document}
+
+\begin{abstract}
+This paper consolidates the current state of two graphon optimisation problems.
+The first asks whether, for a particular six-vertex graph $H$, the minimiser of
+$t(H,W)$ at edge density $1-1/k$ is never the balanced $k$-partite graphon nor
+the constant graphon, and asks for an exact solution at $k=5$.  We verify the
+balanced and constant benchmark values, prove the proposed $k=5$ circular
+construction has density $24349/187500$, and give explicit competitors beating
+both benchmark graphons for $k=3,4,5$.  We also prove --- with the averaging
+argument made fully explicit --- that for $k\ge 6$ the balanced $k$-partite
+graphon is first-order locally stable against all edge-density-preserving
+feasible perturbations, so the all-$k$ statement is not accessible by a local
+perturbation.
+
+The second problem asks for a convex/concave classification of the extremal
+curves $f_F(x)=\min\{t(F,W):t(K_2,W)=x\}$.  We show that the proposed extension
+to all larger graphs is false: $F=K_3\sqcup K_3$ already gives a curve that is
+neither convex nor concave on $[1/2,2/3]$, and we formulate a repaired
+``odd-prime'' direction.  The clique subfamily is solved by Reiher's
+clique-density theorem and is piecewise concave.  However, two non-clique
+cases listed as concave in the original problem, namely $P=K_4^\dagger$ ($K_4$
+with a pendant edge) and $J=K_3\cup_{K_2}K_4$, do not have the
+Lov\'asz--Simonovits multipartite graphon as their minimiser: we exhibit
+explicit better tripartite Tur\'an-filling graphons.  We derive the exact
+finite-dimensional reduced variational curves $\Psi_P,\Psi_J$ for the filling
+family, and prove a battery of \emph{rigorous Sturm-sequence certificates}:
+branch uniqueness, monotonicity of the parametrisation, endpoint values, the
+strict beating of the feasibility boundary, and --- the substantive new finding
+--- that $\Psi_P$ and $\Psi_J$ each have \emph{mixed convex-then-concave
+curvature} on the first Tur\'an interval $[2/3,3/4]$, with unique inflection
+points $x^*_P\approx 0.6788$ and $x^*_J\approx 0.7132$.
+
+We then close \emph{Step A2} of the global reduction --- the reduction of the
+unbalanced tripartite-filling family to balanced parts --- in its corrected
+global form (the natural per-$\alpha$ balancing statement is false, and we give
+an explicit counterexample).  We record the research roadmap for the remaining
+\emph{Step A1} (cut-metric stability forcing a $3$-blowup skeleton), and present
+a direct step-graphon optimisation experiment whose output supports both the
+global-min conjecture $f_P=\Psi_P$ and the Step~A1 stability mechanism.
+
+All algebraic certificates are reproduced by the companion \texttt{sympy}
+scripts indexed in Appendix~\ref{app:scripts}.
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+% ============================================================================
+\section{Introduction and reading guide}
+\label{sec:intro}
+
+This is a single-file consolidation of the project's progress notes.  It is
+intended as the one document a collaborator needs to read to know what has been
+achieved.  The logical structure is:
+
+\begin{itemize}[itemsep=3pt]
+\item \textbf{Problem 1} (the six-vertex graph $H$): \S\ref{sec:problem1} records
+the benchmark values, the circular $k=5$ construction, and explicit competitors;
+\S\ref{sec:tkstability} proves first-order stability of $T_k$ for $k\ge 6$.
+\item \textbf{Problem 2} (the convex/concave classification):
+\S\ref{sec:problem2false} disproves the all-graphs extension;
+\S\ref{sec:oddprime} proposes the odd-prime repair;
+\S\ref{sec:clique} records the solved clique subfamily;
+\S\ref{sec:nonclique} exhibits the two non-clique counterexamples
+$P=K_4^\dagger$ and $J=K_3\cup_{K_2}K_4$;
+\S\ref{sec:filling} derives the reduced curves $\Psi_P,\Psi_J$;
+\S\ref{sec:certificates} proves the rigorous Sturm certificates for them,
+including the mixed-curvature theorem;
+\S\ref{sec:global} lays out the global-reduction roadmap;
+\S\ref{sec:balancing} closes Step~A2;
+\S\ref{sec:numerics} reports the step-graphon optimisation experiment.
+\item \textbf{Status and directions}: \S\ref{sec:status}--\S\ref{sec:checklist}.
+\end{itemize}
+
+\paragraph{What is rigorous.}  The following are proved here (and machine-checked
+where indicated): the benchmark and competitor values for Problem~1
+(\S\ref{sec:problem1}); first-order stability of $T_k$ for $k\ge6$
+(Theorem~\ref{thm:first-order-stability}); the $K_3\sqcup K_3$ counterexample
+(\S\ref{sec:problem2false}); the clique-curve concavity
+(Theorem~\ref{thm:clique-concave}); strict improvement over the LS template at
+$x=17/25$ (\S\ref{sec:nonclique}); the in-family reduction to $\Psi_P,\Psi_J$
+(\S\ref{sec:filling}); branch uniqueness, monotonicity, endpoints, mixed
+curvature, and the stationary-vs-boundary gap
+(Theorems~\ref{thm:branch-range}--\ref{thm:stat-vs-bdry}); and the corrected
+in-family balancing reduction, i.e.\ Step~A2
+(Theorem~\ref{thm:balancing-main}), modulo a single Sturm endgame flagged in
+\S\ref{sec:balancing-status}.  The remaining genuinely open target for
+$f_P=\Psi_P$ globally is \emph{Step~A1}; \S\ref{sec:numerics} gives numerical
+evidence for it.
+
+% ============================================================================
+\section{Notation and basic conventions}
+\label{sec:notation}
+
+A \emph{graphon} is a symmetric measurable function
+\[
+   W:[0,1]^2\to[0,1].
+\]
+For a finite graph $F=(V(F),E(F))$, its homomorphism density in $W$ is
+\[
+   t(F,W)=\int_{[0,1]^{V(F)}}\prod_{ij\in E(F)} W(x_i,x_j)\prod_{i\in V(F)}\dd x_i.
+\]
+In particular,
+\[
+   t(K_2,W)=\int_{[0,1]^2}W(x,y)\dd x\dd y
+\]
+is the ordered-pair edge density.  For a fixed graph $F$, define
+\[
+   f_F(x)=\min\{t(F,W):t(K_2,W)=x\},\qquad x\in[0,1].
+\]
+Existence of a minimiser follows from standard graphon compactness and lower
+semicontinuity of homomorphism densities.
+
+The balanced complete $k$-partite graphon will be denoted by $T_k$.  It is
+obtained by partitioning $[0,1]$ into $k$ equal parts and putting value $0$ on
+each diagonal part and value $1$ between distinct parts.  Thus
+\[
+   t(K_2,T_k)=1-\frac1k.
+\]
+The constant graphon of edge density $p$ is denoted by $Q_p$; thus
+$Q_p(x,y)=p$ and
+\[
+   t(F,Q_p)=p^{e(F)}.
+\]
+
+We write
+\[
+   I_k=\left[1-\frac1k,\;1-\frac1{k+1}\right]
+\]
+for the usual Tur\'an intervals.
+
+% ============================================================================
+\section{Problem 1: the six-vertex graph}
+\label{sec:problem1}
+
+Let $H$ be the graph with vertex set $\{1,2,3,4,5,6\}$ and edge set
+\[
+\begin{split}
+E(H)=\{&13,14,23,24,35,36,45,46,56\}.
+\end{split}
+\]
+Thus $H$ has six vertices and nine edges.  The first problem asks about
+\[
+   \min\{t(H,W):t(K_2,W)=1-1/k\}.
+\]
+
+\subsection{The balanced $k$-partite and constant values}
+
+\begin{lemma}[Balanced $k$-partite value]
+For every integer $k\ge 1$,
+\[
+   t(H,T_k)=\frac{k(k-1)(k-2)(k^3-6k^2+14k-11)}{k^6}.
+\]
+\end{lemma}
+
+\begin{proof}
+A homomorphism from $H$ to $T_k$ is exactly a proper $k$-colouring of $H$.  First
+choose colours of vertices $5$ and $6$.  They must be distinct, giving $k(k-1)$
+choices.  The vertices $3$ and $4$ must avoid both colours used on $5$ and $6$.
+
+There are two cases.  If $3$ and $4$ receive the same colour, there are $k-2$
+choices for this colour; then vertices $1$ and $2$ may each use any colour
+except that colour, giving $(k-1)^2$ choices.  If $3$ and $4$ receive distinct
+colours, there are $(k-2)(k-3)$ choices; then vertices $1$ and $2$ may each use
+any colour except the two colours used on $3,4$, giving $(k-2)^2$ choices.
+Hence
+\[
+\begin{split}
+\chi_H(k)&=k(k-1)\bigl((k-2)(k-1)^2+(k-2)(k-3)(k-2)^2\bigr)\\
+&=k(k-1)(k-2)(k^3-6k^2+14k-11).
+\end{split}
+\]
+Dividing by $k^6$ gives the stated homomorphism density.
+\end{proof}
+
+\begin{lemma}[Constant value]
+For $Q_{1-1/k}\equiv 1-1/k$,
+\[
+   t(H,Q_{1-1/k})=\left(1-\frac1k\right)^9.
+\]
+\end{lemma}
+
+\begin{proof}
+The graph $H$ has nine edges, and every edge contributes the constant factor
+$1-1/k$.
+\end{proof}
+
+For reference, the first few benchmark values are
+\[
+\begin{array}{c|c|c}
+ k & t(H,T_k) & t(H,Q_{1-1/k})\\ \hline
+ 3 & 8/243\approx 0.0329218 & (2/3)^9\approx 0.0260123\\
+ 4 & 39/512\approx 0.0761719 & (3/4)^9\approx 0.0750847\\
+ 5 & 2040/15625=0.13056 & (4/5)^9\approx 0.1342177.
+\end{array}
+\]
+
+\subsection{The proposed circular construction at $k=5$}
+
+Define
+\[
+   W_\circ(x,y)=\1\{0.1\le |x-y|\le 0.9\}.
+\]
+Equivalently, the zero set is the circular interval of radius $1/10$ around the
+diagonal.  Its measure is $1/5$, so
+\[
+   t(K_2,W_\circ)=\frac45.
+\]
+
+\begin{theorem}[Density of the circular construction]
+The circular graphon $W_\circ$ satisfies
+\[
+   t(H,W_\circ)=\frac{24349}{187500}\approx 0.129861333\ldots .
+\]
+Consequently
+\[
+   t(H,W_\circ)<t(H,T_5)<t(H,Q_{4/5}).
+\]
+\end{theorem}
+
+\begin{proof}
+We approximate $W_\circ$ by finite cyclic step graphons.  Let $d$ be odd and set
+$N=5d$.  Partition $[0,1]$ into $N$ equal intervals indexed by $\Z/N\Z$.  Let
+$W_d$ be the step graphon with matrix
+\[
+   W_d(i,j)=1\quad\Longleftrightarrow\quad
+   \dist_{C_N}(i,j)>\frac{d-1}{2}.
+\]
+For every row there are exactly $d$ zero entries, including the diagonal entry.
+Hence
+\[
+   t(K_2,W_d)=1-\frac{d}{5d}=\frac45.
+\]
+Moreover $W_d\to W_\circ$ in $L^1$, and therefore $t(H,W_d)\to t(H,W_\circ)$.
+
+A direct cyclic count gives
+\[
+   \#\Hom(H,W_d)=\frac{24349d^6+140d^4-9d^2}{12}.
+\]
+Here $\Hom(H,W_d)$ means the number of maps $\phi:V(H)\to\Z/N\Z$ such that all
+nine required pairs are $W_d$-edges.  Dividing by $N^6=(5d)^6$ gives
+\[
+   t(H,W_d)=\frac{24349+140d^{-2}-9d^{-4}}{187500}.
+\]
+Letting $d\to\infty$ gives
+\[
+   t(H,W_\circ)=\frac{24349}{187500}.
+\]
+Finally,
+\[
+   \frac{24349}{187500}<\frac{2040}{15625}<\left(\frac45\right)^9.
+\]
+Indeed $2040/15625=24480/187500$, and $24480>24349$.
+\end{proof}
+
+\begin{remark}[What this proves and what it does not prove]
+The theorem proves that the balanced $5$-partite and constant graphons are not
+optimal at edge density $4/5$.  It does \emph{not} prove that $W_\circ$ is
+globally optimal.  The missing statement is the lower bound
+\[
+   t(H,W)\ge \frac{24349}{187500}\qquad
+   \text{whenever }t(K_2,W)=4/5.
+\]
+This lower bound is the hard part of the $k=5$ problem and is a natural
+flag-algebra target.
+\end{remark}
+
+\subsection{Explicit competitors for $k=3,4,5$}
+\label{ssec:Ska}
+
+There is a simple one-parameter family that beats both the balanced and constant
+graphons for $k=3,4,5$.
+
+Partition $[0,1]$ into $k$ equal parts and define
+\[
+   S_{k,a}(x,y)=
+   \begin{cases}
+      a, & x,y\text{ in the same part},\\[1mm]
+      1-\dfrac{a}{k-1}, & x,y\text{ in different parts}.
+   \end{cases}
+\]
+Then
+\[
+   t(K_2,S_{k,a})=1-\frac1k
+\]
+for every $a\in[0,1]$ for which $1-a/(k-1)\in[0,1]$.
+
+For this family,
+\[
+   t(H,S_{k,a})=\frac1{k^6}\sum_{c_1,\ldots,c_6\in[k]}
+        \prod_{ij\in E(H)}w(c_i,c_j),
+\]
+where
+\[
+   w(c_i,c_j)=
+   \begin{cases}
+      a, & c_i=c_j,\\
+      1-a/(k-1), & c_i\ne c_j.
+   \end{cases}
+\]
+Exact rational evaluation gives:
+\[
+\begin{array}{c|c|c|c}
+ k & a & t(H,S_{k,a}) & \text{comparison}\\ \hline
+ 3 & 3/10 & \dfrac{792167976529}{31104000000000}\approx 0.02546836
+   & <(2/3)^9<t(H,T_3)\\[2mm]
+ 4 & 1/5 & \dfrac{38420325073}{524880000000}\approx 0.07319830
+   & <(3/4)^9<t(H,T_4)\\[2mm]
+ 5 & 1/20 & \dfrac{2186447178930623}{16777216000000000}\approx 0.13032241
+   & <t(H,T_5)<(4/5)^9.
+\end{array}
+\]
+Thus the statement ``neither balanced nor constant'' is rigorously verified for
+$k=3,4,5$.
+
+\subsection{Why the all-$k$ statement needs a global argument}
+
+The one-parameter perturbation above also explains why the problem changes at
+$k=6$.
+
+\begin{proposition}[First-order local stability of $T_k$ for $k\ge 6$]
+\label{prop:tk-stability-short}
+For the family $S_{k,a}$,
+\[
+   \left.\frac{d}{da}t(H,S_{k,a})\right|_{a=0}
+   =\frac{6k^3-55k^2+142k-111}{k^5}.
+\]
+This derivative is negative for $k=3,4,5$ and positive for every $k\ge 6$.
+Consequently, for $k\ge 6$, the balanced $k$-partite graphon is first-order
+locally stable against every edge-density-preserving feasible perturbation.
+\end{proposition}
+
+\begin{proof}
+The displayed derivative follows by differentiating the finite sum for
+$t(H,S_{k,a})$ at $a=0$.  The polynomial $6k^3-55k^2+142k-111$ is negative at
+$k=3,4,5$ and positive at $k=6$; its derivative $18k^2-110k+142$ is positive for
+$k\ge 5$, so the polynomial remains positive for all $k\ge 6$.
+
+That this one-parameter derivative controls \emph{all} first-order feasible
+directions at $T_k$ is exactly the averaging statement proved in full in
+\S\ref{sec:tkstability} (Theorem~\ref{thm:first-order-stability}): by the
+symmetry of $T_k$, every edge-density-preserving feasible perturbation can be
+$G_k$-symmetrised without changing the first variation, and the symmetric
+feasibility cone is the single half-line tangent to $\{S_{k,a}\}_{a\ge0}$.
+\end{proof}
+
+\begin{status}[Status of Problem 1]
+The following points are solid.
+\begin{enumerate}[label=(\roman*)]
+\item The balanced and constant benchmark values are explicit.
+\item At $k=5$, the circular graphon has the proposed value $24349/187500$ and
+beats both benchmarks.
+\item For $k=3,4,5$, explicit rational competitors beat both benchmarks.
+\item For $k\ge 6$, non-optimality of $T_k$ cannot be proved by an infinitesimal
+edge-density-preserving perturbation, because $T_k$ is first-order locally
+stable (Theorem~\ref{thm:first-order-stability}).
+\end{enumerate}
+The missing results are global lower and upper-bound statements.  The two most
+important targets are:
+\begin{enumerate}[label=(\alph*)]
+\item prove or disprove global optimality of the circular $k=5$ graphon;
+\item find a genuinely global competitor, or a proof of optimality, for
+$k\ge 6$.
+\end{enumerate}
+\end{status}
+
+\begin{remark}[Normalisation of circular thresholds]
+To obtain edge density $1-1/k$ from a circular interval construction, the
+forbidden circular radius should be $1/(2k)$, not $1/k$.  Thus the literal
+analogue of the $k=5$ thresholds $0.1,0.9$ would use thresholds
+\[
+   \frac1{2k},\qquad 1-\frac1{2k}.
+\]
+For $k=3,4$, these would be $1/6,5/6$ and $1/8,7/8$, respectively.  This explains
+why replacing $0.1,0.9$ by $1/3,2/3$ or $1/4,3/4$ does not preserve the edge
+density.
+\end{remark}
+
+% ============================================================================
+\section{First-order stability of $T_k$ for $k\ge 6$: the averaging step}
+\label{sec:tkstability}
+
+This section proves Proposition~\ref{prop:tk-stability-short} in full, with the
+averaging argument that reduces all feasible directions to the family
+$\{S_{k,a}\}$ made completely explicit.  The statement is that, for the
+six-vertex graph $H$ and every integer $k\ge 6$, the balanced complete
+$k$-partite graphon $T_k$ is first-order stable under the edge-density
+constraint $t(K_2,W)=1-1/k$: no first-order feasible perturbation of $T_k$
+decreases $t(H,W)$.
+
+\subsection{Admissible first-order perturbations at $T_k$}
+
+With the partition $[0,1] = I_1 \sqcup \cdots \sqcup I_k$ into $k$ equal
+intervals $I_j = [(j-1)/k, j/k]$, we have $T_k(x,y) = 1$ iff $x,y$ lie in
+different parts, and $T_k(x,y) = 0$ iff $x,y$ lie in the same part.
+
+For $f\in L^\infty([0,1]^2)$ symmetric, write $W_t := T_k + t\, f$.  The
+\emph{first-order feasibility cone at $T_k$ under the edge-density constraint}
+$t(K_2,W) = 1-1/k$ is the closed convex cone
+\begin{equation}
+\label{eq:feas-cone}
+\mathcal F_k := \left\{
+   f : [0,1]^2 \to \R\ \text{measurable, symmetric, } \|f\|_\infty<\infty
+   \ \middle|\
+   \begin{aligned}
+   &f(x,y)\ge 0\ \text{a.e.\ on within-part cells},\\
+   &f(x,y)\le 0\ \text{a.e.\ on cross-part cells},\\
+   &\int_{[0,1]^2} f \dd x\dd y = 0
+   \end{aligned}
+\right\}.
+\end{equation}
+The first two conditions ensure that for $t>0$ small enough, $W_t$ takes values
+in $[0,1]$ (so $W_t$ is a graphon), and the third ensures that
+$t(K_2,W_t)=1-1/k+0\cdot t + O(t^2)$.
+
+\begin{remark}
+Strictly, every ``feasible perturbation'' should be defined modulo the
+equivalence of graphons under measure-preserving transformations.  All
+expressions below depend only on the equivalence class, so we may work with
+representatives.
+\end{remark}
+
+\subsection{The first variation kernel and its symmetry}
+
+For a finite graph $H$ and a graphon $W$, the standard expansion of $t(H,W)$
+gives the first variation at $W=T_k$ in the direction $f$:
+\begin{equation}
+\label{eq:first-variation}
+   \delta t(H,T_k)[f]
+   = \sum_{ij\in E(H)}
+     \int_{[0,1]^2} \mathcal K_{ij}(x,y)\, f(x,y) \dd x\dd y,
+\end{equation}
+where
+\[
+   \mathcal K_{ij}(x,y)
+   = \int_{[0,1]^{V(H)\setminus\{i,j\}}}
+       \prod_{\substack{i'j'\in E(H) \\ \{i',j'\}\ne\{i,j\}}} T_k(x_{i'},x_{j'})
+       \prod_{v\in V(H)\setminus\{i,j\}} \dd x_v,
+\]
+with $x_i:=x$ and $x_j:=y$.  Symmetrising over $E(H)$, define the total kernel
+$\mathcal K(x,y) := \sum_{ij\in E(H)} \mathcal K_{ij}(x,y)$ (symmetric in
+$x,y$).  Then
+\[
+   \delta t(H,T_k)[f] = \int_{[0,1]^2} \mathcal K(x,y) f(x,y) \dd x\dd y.
+\]
+
+\begin{lemma}[Block-constancy of the first-variation kernel]
+\label{lem:K-block-constant}
+There exist constants $c_w, c_c\in\R$ depending only on $H$ and $k$ such that
+\[
+   \mathcal K(x,y) =
+   \begin{cases}
+      c_w, & x,y\ \text{in the same part of }T_k,\\
+      c_c, & x,y\ \text{in different parts of }T_k,
+   \end{cases}
+   \qquad\text{a.e.\ on }[0,1]^2.
+\]
+\end{lemma}
+
+\begin{proof}
+The kernel $\mathcal K(x,y)$ depends on $(x,y)$ only through the product
+$\prod T_k(x_{i'}, x_{j'})$ for various tuples, which is an indicator of a
+proper $k$-colouring condition.  Fix $(x,y)$ in the support of $\mathcal K$ and
+let $j(x), j(y)\in\{1,\ldots,k\}$ be the parts containing $x$ and $y$
+respectively.  For any block permutation $\sigma\in S_k$ that fixes $j(x)$ and
+$j(y)$, the measure-preserving map of $[0,1]$ induced by $\sigma$ preserves
+$T_k$ and hence preserves $\mathcal K$.  Combined with the $S_k$-action, this
+reduces the kernel value at $(x,y)$ to a function of only the pair
+$\{j(x), j(y)\}$, and indeed only to the equivalence class ``same part'' or
+``different parts'' (since any two same-part pairs are related by a block
+permutation, and any two different-part pairs are related by one).
+\end{proof}
+
+\subsection{The averaging step}
+
+The space $\mathcal F_k$ in~\eqref{eq:feas-cone} is naturally acted upon by the
+group $G_k$ consisting of pairs $(\sigma, \tau)$ where $\sigma\in S_k$ is a
+permutation of the parts and $\tau$ is a measure-preserving automorphism of
+$[0,1]$ preserving the partition $\{I_1,\ldots,I_k\}$.  Both $T_k$ and the
+edge-density constraint are $G_k$-invariant, so the action preserves
+$\mathcal F_k$ and preserves $\delta t(H,T_k)[\cdot]$.
+
+\begin{definition}[Symmetrised perturbation]
+For $f\in\mathcal F_k$, let
+\[
+   \bar f(x,y) := \frac{1}{|S_k|}\sum_{\sigma\in S_k}
+   \int_{\mathrm{Aut}_\partial}\ (f^{(\sigma,\tau)})(x,y)\dd\mu(\tau),
+\]
+where $\mathrm{Aut}_\partial$ denotes the group of partition-preserving
+measure-preserving transformations of $[0,1]$ and $\mu$ is its Haar measure
+(equivalently, the product over blocks of the Haar measure on the
+measure-preserving group of each $I_j$).  Equivalently, $\bar f$ is the
+projection of $f$ onto the $G_k$-invariant subspace of $L^2([0,1]^2)$.
+\end{definition}
+
+\begin{lemma}[Averaging preserves feasibility and the linear functional]
+\label{lem:averaging}
+For every $f\in\mathcal F_k$, the symmetrised perturbation $\bar f$ also lies in
+$\mathcal F_k$, and
+\[
+   \delta t(H, T_k)[\bar f] = \delta t(H, T_k)[f].
+\]
+\end{lemma}
+
+\begin{proof}
+The cone $\mathcal F_k$ is defined by pointwise inequalities and a linear
+constraint, all of which are $G_k$-invariant.  Hence $G_k$ preserves
+$\mathcal F_k$, and so does the averaging operation, which is a convex
+combination of $G_k$-images.
+
+The second statement uses Lemma~\ref{lem:K-block-constant}: $\mathcal K$ is
+$G_k$-invariant.  Therefore $\int \mathcal K\, f\dd x\dd y$ is unchanged when $f$
+is replaced by any $G_k$-image, and hence by the average $\bar f$.
+\end{proof}
+
+\begin{lemma}[Symmetric perturbations form the $S_{k,a}$ tangent line]
+\label{lem:symmetric-perturbations}
+Every $G_k$-invariant $\bar f\in\mathcal F_k$ has the form
+\[
+   \bar f(x,y) = M_w \chi_{\mathrm{within}}(x,y) - M_c \chi_{\mathrm{cross}}(x,y)
+\]
+for some scalars $M_w\ge 0$ and $M_c\ge 0$, with $\chi_\bullet$ the indicators
+of the within-part and cross-part regions.  Moreover the edge-density
+constraint $\int \bar f = 0$ forces
+\[
+   M_w \cdot \mathrm{vol}(\mathrm{within}) = M_c \cdot \mathrm{vol}(\mathrm{cross}),
+   \quad\text{i.e.\ }\quad
+   \tfrac{M_w}{k} = M_c\cdot \tfrac{k-1}{k},
+   \quad
+   M_c = \tfrac{M_w}{k-1}.
+\]
+\end{lemma}
+
+\begin{proof}
+A $G_k$-invariant symmetric function on $[0,1]^2$ must, by the same argument as
+in Lemma~\ref{lem:K-block-constant}, be constant on within-part cells and
+constant on cross-part cells.  The feasibility inequalities then translate into
+$\bar f|_{\mathrm{within}}\ge 0$ and $\bar f|_{\mathrm{cross}}\le 0$, i.e.\ the
+indicated $M_w, M_c\ge 0$.  Volumes:
+$\mathrm{vol}(\mathrm{within}) = k\cdot(1/k)^2 = 1/k$ and
+$\mathrm{vol}(\mathrm{cross}) = 1 - 1/k$.  The constraint $\int \bar f = 0$
+yields the stated relation.
+\end{proof}
+
+\begin{corollary}[Symmetric feasibility cone is one-dimensional]
+\label{cor:1d-cone}
+The $G_k$-invariant subset of $\mathcal F_k$ is the half-line
+\[
+   \{M_w\cdot \chi_{\mathrm{within}} - \tfrac{M_w}{k-1}\cdot\chi_{\mathrm{cross}}
+   : M_w\ge 0\}.
+\]
+Up to the positive scalar $M_w$ this is the tangent direction of the family
+$\{S_{k,a}\}_{a\ge 0}$ at $a=0$ (note $S_{k,0}=T_k$).
+\end{corollary}
+
+\begin{proof}
+$\frac{d}{da}S_{k,a}|_{a=0}(x,y)$ equals $+1$ on within-part cells and
+$-1/(k-1)$ on cross-part cells.  This is the case $M_w=1$.
+\end{proof}
+
+\begin{theorem}[First-order stability of $T_k$ for $k\ge 6$]
+\label{thm:first-order-stability}
+Let $H$ be the six-vertex Problem-1 graph.  Then for every $k\ge 6$ and every
+$f\in\mathcal F_k$,
+\[
+   \delta t(H,T_k)[f]
+   = \frac{6k^3-55k^2+142k-111}{k^5}\cdot
+   \int_{\mathrm{within}} f \dd x\dd y
+   \ \ge\ 0,
+\]
+with equality iff the symmetrisation $\bar f$ vanishes a.e.\ (equivalently, iff
+$M_w(\bar f) = 0$).  In particular $T_k$ is first-order locally stable against
+every edge-density-preserving feasible perturbation.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:averaging}, $\delta t(H,T_k)[f] = \delta t(H,T_k)[\bar f]$, so
+we may replace $f$ by its $G_k$-symmetrisation $\bar f$.  By
+Corollary~\ref{cor:1d-cone}, $\bar f = M_w\cdot \frac{d}{da}S_{k,a}|_{a=0}$ for
+some $M_w\ge 0$.  Hence
+\[
+   \delta t(H,T_k)[\bar f]
+   = M_w\cdot \frac{d}{da}\,t(H,S_{k,a})\Big|_{a=0}
+   = M_w\cdot \frac{6k^3-55k^2+142k-111}{k^5},
+\]
+the derivative being the one computed in \S\ref{ssec:Ska} and
+Appendix~\ref{app:Ska}.  The polynomial $6k^3-55k^2+142k-111$ evaluates to $57$
+at $k=6$ and has derivative $18k^2-110k+142$, which is positive at $k=5$ and
+strictly increasing for $k\ge 5$.  Hence $6k^3-55k^2+142k-111$ is strictly
+increasing for $k\ge 5$ and strictly positive for all $k\ge 6$.
+
+Finally, $M_w\cdot \mathrm{vol}(\mathrm{within}) = M_w/k =
+\int_{\mathrm{within}}\bar f$, and the symmetrisation is mass-preserving on the
+within region, giving the displayed identity.  Strict inequality holds whenever
+$M_w(\bar f)>0$, i.e.\ iff $\bar f\not\equiv 0$ as a graphon.
+\end{proof}
+
+\begin{remark}[Why this does not settle Problem~1 for $k\ge 6$]
+Theorem~\ref{thm:first-order-stability} is a \emph{negative} result for the
+$k\ge 6$ part of Problem~1: it says the natural infinitesimal attack cannot
+prove that $T_k$ is not the global minimum, in contrast with $k=3,4,5$ where the
+perturbation suffices.  Settling the $k\ge 6$ case therefore requires either
+(a) a global construction beating $T_k$ at some $k\ge 6$ (e.g.\ a
+higher-order/non-symmetric perturbation, or a different structure such as a
+circular construction analogous to the $k=5$ one), or (b) a global optimality
+proof for $T_k$ in this range.  A higher-order analysis is the next infinitesimal
+step: compute the second derivative of $t(H, S_{k,a,b})$ along a two-parameter
+symmetric family (a within-block density $a$ and a single off-diagonal block
+density perturbation $b$) at $(a,b)=(0,0)$.  If the resulting Hessian has a
+negative eigenvalue in the constrained-feasibility cone, that already settles
+non-optimality; otherwise we have a strict local minimum within the
+two-parameter class and must broaden the search.
+\end{remark}
+
+\begin{remark}[Comparison with $k=3,4,5$]
+For $k=3,4,5$, the polynomial $6k^3-55k^2+142k-111$ evaluates to $-18,-39,-26$
+respectively, so the derivative is \emph{strictly negative}, giving an explicit
+edge-density-preserving feasible direction along which $t(H,W)$ \emph{decreases}
+from $T_k$ at first order.  Integrating finitely along $S_{k,a}$ yields the
+rational competitors of \S\ref{ssec:Ska}.
+\end{remark}
+
+% ============================================================================
+\section{Problem 2: the original extension is false}
+\label{sec:problem2false}
+
+The second problem asks for a convex/concave classification of $f_F(x)$ for
+graphs $F$ with no isolated vertices, no isolated edges, and at least one odd
+cycle.  It then asks to extend the classification to all graphs with more than
+five vertices.  The extension to all larger graphs is false.
+
+\subsection{A counterexample: two disjoint triangles}
+
+Let $F=K_3\sqcup K_3$.  This graph has six vertices, no isolated vertices, no
+isolated edges, and is non-bipartite.  For every graphon $W$,
+$t(F,W)=t(K_3,W)^2$, and since $z\mapsto z^2$ is increasing on $[0,\infty)$,
+$f_F(x)=f_{K_3}(x)^2$.
+
+On the Tur\'an interval $I_2=[\tfrac12,\tfrac23]$, the triangle-density theorem
+gives the usual tripartite minimiser with part sizes $s,\frac{1-s}{2},
+\frac{1-s}{2}$, $0\le s\le \frac13$.  The edge and triangle densities are
+\[
+   x=\frac12+s-\frac32s^2,
+   \qquad
+   f_{K_3}(x)=\frac32s(1-s)^2,
+\]
+so $f_{K_3\sqcup K_3}(x)=\left(\frac32s(1-s)^2\right)^2$.  A direct calculation
+gives
+\[
+   \frac{d^2}{dx^2}f_{K_3\sqcup K_3}(x)
+   =\frac{9(1-s)^2(4s-1)}{2(3s-1)}.
+\]
+For $0<s<1/4$, this is positive, while for $1/4<s<1/3$, it is negative.  Hence
+$f_{K_3\sqcup K_3}$ is neither convex nor concave on $I_2$.
+
+\subsection{A family of product obstructions}
+
+More generally, let $F_m=\underbrace{K_3\sqcup\cdots\sqcup K_3}_{m}$, $m\ge 2$.
+Then $f_{F_m}(x)=f_{K_3}(x)^m$, and using the same parameter $s$ on $I_2$,
+$f_{F_m}(x)=\left(\frac32s(1-s)^2\right)^m$.  A calculation gives
+\[
+   \frac{d^2}{dx^2}f_{F_m}(x)
+   =
+   \frac{m\left(\frac32s(1-s)^2\right)^m
+     \bigl((3m-2)s-(m-1)\bigr)}
+        {s^2(1-s)^2(3s-1)}.
+\]
+The sign changes at $s_0=\frac{m-1}{3m-2}\in\left(0,\frac13\right)$.  Thus all
+$F_m$ with $m\ge 2$ have mixed curvature on a single Tur\'an interval.
+
+\begin{status}[Consequence]
+Any correct extension of Problem 2 must exclude graphs with multiple independent
+non-bipartite pieces.  Merely requiring connectedness is probably not the right
+repair, because two odd blocks joined by a bridge should still exhibit a coupled
+product mechanism.
+\end{status}
+
+% ============================================================================
+\section{A repaired structural direction: odd-prime graphs}
+\label{sec:oddprime}
+
+The counterexample suggests that the obstruction is not simply disconnectedness
+but the presence of multiple odd pieces.
+
+\begin{definition}[Odd block and odd-prime graph]
+A block of a graph is a maximal $2$-connected subgraph, with bridges treated as
+$K_2$-blocks.  A block is \emph{odd} if it contains an odd cycle.  Let
+$b_{\rm odd}(F)$ be the number of odd blocks of $F$.  A graph $F$ is called
+\emph{odd-prime} if it is connected, non-bipartite, and $b_{\rm odd}(F)=1$.
+\end{definition}
+
+\begin{conjecture}[Odd-prime reduction principle]
+Graphs with $b_{\rm odd}(F)\ge 2$ should not be expected to obey a pure
+convex/concave dichotomy.  For such graphs, the correct theory should decompose
+$f_F$ into products or coupled products of the extremal curves associated with
+the odd blocks.  For odd-prime graphs, a convex/concave classification may still
+exist, but the extremal templates need not be the same as the clique-density
+templates.  The right task is to identify, for each odd-prime family, the
+correct Tur\'an-type filling construction and then prove the corresponding lower
+bound.
+\end{conjecture}
+
+This conjecture is deliberately weaker than the original all-graphs extension.
+It says that the clique cases are only one part of the story; non-clique
+odd-prime graphs may have different extremal mechanisms.
+
+% ============================================================================
+\section{Clique cases: a solved concave subfamily}
+\label{sec:clique}
+
+The clique cases are completely understood by the clique-density theorem of
+Reiher \cite{ReiherCliqueDensity}.  We record the graphon formulation and the
+curvature calculation.
+
+Fix $r\ge 3$.  On $I_k=\left[1-\frac1k,1-\frac1{k+1}\right]$, the
+Lov\'asz--Simonovits graphon has $k+1$ parts: one part of size $s$ and $k$ equal
+parts of size $(1-s)/k$, where $0\le s\le \frac1{k+1}$.  Its edge density is
+\[
+   x_k(s)=1-s^2-\frac{(1-s)^2}{k},
+\]
+and its $K_r$-density is
+\[
+   g_{r,k}(s)=
+   \frac{(k)_{r-1}}{k^{r-1}}(1-s)^{r-1}
+   \left(
+      \frac{k-r+1}{k}+\frac{(r-1)(k+1)}{k}s
+   \right),
+   \qquad (k)_{r-1}=k(k-1)\cdots(k-r+2).
+\]
+If $k+1<r$, then $g_{r,k}=0$.  On the first relevant interval for $K_4$,
+$r=4,k=3$, this simplifies to
+\begin{equation}
+\label{eq:g43}
+   g_{4,3}(s)=\tfrac89\,s(1-s)^3,
+   \qquad x_3(s)=1-s^2-\tfrac{(1-s)^2}{3},\quad s\in[0,\tfrac14],
+\end{equation}
+with $g_{4,3}=0$ at $x=2/3$ ($s=0$) and $g_{4,3}=3/32$ at $x=3/4$ ($s=1/4$,
+the balanced $4$-partite graphon).  Inverting $x_3$ on $[0,1/4]$ gives
+$s=\tfrac14\bigl(1-\sqrt{9-12x}\bigr)$; this closed form is used in
+\S\ref{sec:numerics}.
+
+\begin{theorem}[Clique curves are piecewise concave]
+\label{thm:clique-concave}
+For every $r\ge 3$, $f_{K_r}$ is concave on every Tur\'an interval $I_k$.
+\end{theorem}
+
+\begin{proof}
+The clique-density theorem identifies $f_{K_r}$ with the Lov\'asz--Simonovits
+curve $g_{r,k}(s)$ on $I_k$.  We compute curvature in the parameter $s$.  First,
+$x_k'(s)=\frac{2}{k}\bigl(1-(k+1)s\bigr)>0$ in the interior of the interval.
+Therefore the sign of $d^2g_{r,k}/dx^2$ is the sign of
+$g_{r,k}''(s)x_k'(s)-g_{r,k}'(s)x_k''(s)$.  A direct calculation gives
+\[
+\begin{split}
+&g_{r,k}''(s)x_k'(s)-g_{r,k}'(s)x_k''(s)
+ =-
+\frac{2r(r-1)(r-2)}{k^2}
+\frac{(k)_{r-1}}{k^{r-1}}
+(1-s)^{r-3}\bigl(1-(k+1)s\bigr)^2.
+\end{split}
+\]
+This is non-positive.  Hence $f_{K_r}$ is concave on $I_k$.
+\end{proof}
+
+\begin{remark}
+The clique case is the solved model problem: exact curves, exact extremisers,
+and the desired concavity.  The non-clique cases below show that one cannot
+simply attach rooted bipartite decorations to clique extremisers and expect the
+same templates to remain optimal.
+\end{remark}
+
+% ============================================================================
+\section{Two non-clique cases: the clique template is not optimal}
+\label{sec:nonclique}
+
+Let $P=K_4^\dagger$ denote $K_4$ with one pendant edge attached to one vertex of
+the $K_4$, and let $J=K_3\cup_{K_2}K_4$ denote the graph obtained by gluing one
+edge of a triangle to one edge of a $K_4$.  Both appear in the original list of
+proposed concave cases.  The following calculation shows that the usual
+Lov\'asz--Simonovits $4$-partite clique template is not optimal for either graph
+at edge density $17/25$.
+
+\subsection{The Lov\'asz--Simonovits value at $x=17/25$}
+
+On $I_3=[2/3,3/4]$, the clique-density template is the complete $4$-partite
+graphon with part sizes $s,\frac{1-s}{3},\frac{1-s}{3},\frac{1-s}{3}$.  Its edge
+density is $x(s)=\frac23+\frac{2s}{3}-\frac{4s^2}{3}$.  Setting $x=17/25$ gives
+$s=\frac{5-\sqrt{21}}{20}$.  For this graphon,
+\[
+   t(P)=\frac23s(1-s)^3
+   =\frac{291}{10000}-\frac{7\sqrt{21}}{2000}
+   \approx 0.013060985,
+   \qquad
+   t(J)=\frac{97}{5000}-\frac{7\sqrt{21}}{3000}
+   \approx 0.008707323.
+\]
+
+\subsection{A better tripartite filling graphon}
+
+Partition $[0,1]$ into three parts $A\sqcup B\sqcup C$ with
+$|A|=\alpha=\frac7{20}$, $|B|=|C|=\frac{13}{40}$.  Put all cross-edges between
+distinct parts, put no edges inside $B$ or $C$, and inside $A$ put a $q$-regular
+triangle-free graphon with $q=\frac{11}{98}$ (for example, split $A$ into two
+equal subparts and put value $2q=11/49$ between the subparts and $0$ inside
+each).  The edge density is
+\[
+   t(K_2,W)=\frac12+\alpha-\frac32\alpha^2+\alpha^2q
+   =\frac{533}{800}+\frac{11}{800}=\frac{17}{25}.
+\]
+For $P$, a direct rooted count gives
+\[
+   t(P,W)=\frac32\alpha^2(1-\alpha)^2q
+          \left(\frac{3-\alpha}{2}+\alpha q\right)
+   =\frac{1065207}{89600000}\approx 0.011888471,
+\]
+strictly smaller than the LS value $0.013060985$.  For $J$, the same graphon
+gives
+\[
+   t(J,W)=\alpha^2(1-\alpha)^2q
+          \left(\frac32-\alpha+2\alpha q\right)
+       =\frac{79937}{11200000}\approx 0.007137232,
+\]
+strictly smaller than the LS value $0.008707323$.
+
+\begin{status}[Consequence]
+The two non-clique cases $P$ and $J$ cannot be solved by importing the
+clique-density extremiser.  Their extremisers, if the natural candidates are
+correct, involve a complete tripartite skeleton with a triangle-free filling
+inside one part.
+\end{status}
+
+% ============================================================================
+\section{The tripartite Tur\'an-filling reduction}
+\label{sec:filling}
+
+We now derive the exact variational formula inside the natural family suggested
+by the previous examples.  This part is rigorous as a reduction to a
+finite-dimensional optimisation problem; the remaining global problem (every
+minimiser can be chosen from this family) is discussed in \S\ref{sec:global}.
+
+\subsection{The family}
+
+Let $[0,1]=A\sqcup B\sqcup C$ with $|A|=\alpha$, $|B|=|C|=\beta=\frac{1-\alpha}{2}$.
+Put all cross-edges between $A,B,C$, no edges inside $B$ or $C$, and a
+triangle-free graphon $F$ inside $A$.  Normalise $F$ on a probability space of
+measure $1$ and write
+\[
+   q=t(K_2,F),
+   \qquad d_F(u)=\int F(u,v)\dd v,
+   \qquad D_2(F)=\int d_F(u)^2\dd u.
+\]
+By the graphon form of Mantel's theorem, $0\le q\le \frac12$.  The edge density
+of the full graphon is $x=\frac12+\alpha-\frac32\alpha^2+\alpha^2q$, so for
+fixed $x$,
+\[
+   q=q_x(\alpha)=\frac{x-\frac12-\alpha+\frac32\alpha^2}{\alpha^2}.
+\]
+The constraint $0\le q_x(\alpha)\le 1/2$ is, for $x\in[2/3,3/4]$, equivalent to
+\[
+   \alpha\in A_x:=\left[
+      \frac{1-\sqrt{3-4x}}2,
+      \frac{1+\sqrt{3-4x}}2
+   \right].
+\]
+
+\subsection{Counting $P=K_4^\dagger$}
+
+\begin{lemma}[Density of $P$ in the filling family]
+For the tripartite filling graphon above,
+\[
+   t(P,W)=\frac32\alpha^2(1-\alpha)^2
+          \left[
+             \frac{3-\alpha}{2}q+\alpha D_2(F)
+          \right].
+\]
+Consequently, for fixed $\alpha$ and $q$, the minimum over triangle-free
+fillings $F$ is attained by a $q$-regular filling and equals
+$\frac32\alpha^2(1-\alpha)^2q\left(\frac{3-\alpha}{2}+\alpha q\right)$.
+\end{lemma}
+
+\begin{proof}
+Every $K_4$ in the full graphon must use two adjacent vertices inside $A$, one
+vertex in $B$, and one vertex in $C$.  The pendant edge may attach to the
+distinguished $K_4$ vertex; summing over the four possible positions of the
+distinguished vertex gives the displayed formula.  Jensen's inequality gives
+$D_2(F)\ge q^2$ with equality exactly for $q$-regular fillings, which exist for
+every $q\in[0,1/2]$ (split the space into two equal parts, value $2q$ across).
+\end{proof}
+
+Therefore the reduced variational problem for $P$ is
+\[
+\boxed{
+   \Psi_P(x)=
+   \min_{\alpha\in A_x}
+   \frac32\alpha^2(1-\alpha)^2q_x(\alpha)
+   \left(\frac{3-\alpha}{2}+\alpha q_x(\alpha)\right)
+   =
+   \min_{\alpha\in A_x}
+   \frac{3(1-\alpha)^2
+     (2\alpha^2+\alpha+2x-1)
+     (3\alpha^2-2\alpha+2x-1)}{8\alpha}.
+}
+\]
+
+\subsection{Counting $J=K_3\cup_{K_2}K_4$}
+
+\begin{lemma}[Density of $J$ in the filling family]
+For the tripartite filling graphon above,
+\[
+   t(J,W)=\alpha^2(1-\alpha)^2
+          \left[
+             \left(\frac32-\alpha\right)q+2\alpha D_2(F)
+          \right],
+\]
+with in-fill minimum (at a $q$-regular filling)
+$\alpha^2(1-\alpha)^2q\left(\frac32-\alpha+2\alpha q\right)$.
+\end{lemma}
+
+\begin{proof}
+Label the shared edge $1,2$, the remaining triangle vertex $3$, and the two
+remaining $K_4$ vertices $4,5$.  The $K_4$ portion uses two adjacent vertices in
+$A$, one in $B$, one in $C$.  Summing the rooted contributions over the three
+cases (shared edge inside $A$, with one endpoint in $A$, or outside $A$) gives
+the formula; the Jensen step is as before.
+\end{proof}
+
+Thus the reduced variational problem for $J$ is
+\[
+\boxed{
+   \Psi_J(x)=
+   \min_{\alpha\in A_x}
+   \alpha^2(1-\alpha)^2q_x(\alpha)
+   \left(\frac32-\alpha+2\alpha q_x(\alpha)\right)
+   =
+   \min_{\alpha\in A_x}
+   \frac{(1-\alpha)^2
+     (3\alpha^2-2\alpha+2x-1)
+     (4\alpha^2-\alpha+4x-2)}{4\alpha}.
+}
+\]
+
+\subsection{Stationary equations and algebraic branches}
+\label{ssec:branches}
+
+For $P$, an interior stationary point satisfies
+\[
+\begin{split}
+0={}&2\alpha^3q^2+9\alpha^3q-3\alpha^3
++2\alpha^2q^2-9\alpha^2q+13\alpha^2
++4\alpha q-13\alpha+3,
+\end{split}
+\]
+with $q=q_x(\alpha)$.  Solving this quadratic for $q$ gives the relevant branch
+\[
+   q_P(\alpha)=
+   \frac{-9\alpha^2+9\alpha-4+
+   \sqrt{105\alpha^4-242\alpha^3+153\alpha^2+8\alpha-8}}
+   {4\alpha(\alpha+1)},
+   \qquad
+   q_P(1/3)=0,\ q_P(1/2)=1/2.
+\]
+It parametrises a candidate reduced optimum by
+$x_P(\alpha)=\frac12+\alpha-\frac32\alpha^2+\alpha^2q_P(\alpha)$,
+$\alpha\in[1/3,1/2]$, with value
+$\Psi_P(x_P(\alpha))=\frac32\alpha^2(1-\alpha)^2q_P(\alpha)
+\left(\frac{3-\alpha}{2}+\alpha q_P(\alpha)\right)$.
+
+For $J$, the stationarity equation is
+\[
+\begin{split}
+0={}&4\alpha^3q^2+18\alpha^3q-6\alpha^3
++4\alpha^2q^2-24\alpha^2q+17\alpha^2
++8\alpha q-14\alpha+3,
+\end{split}
+\]
+with relevant branch
+\[
+   q_J(\alpha)=
+   \frac{-(3\alpha-2)^2+
+   \sqrt{105\alpha^4-260\alpha^3+204\alpha^2-52\alpha+4}}
+   {4\alpha(\alpha+1)},
+   \qquad
+   q_J(1/3)=0,\ q_J(1/2)=1/2.
+\]
+At the endpoints,
+\[
+   \Psi_P(2/3)=0,\quad \Psi_P(3/4)=\frac9{128},
+   \qquad
+   \Psi_J(2/3)=0,\quad \Psi_J(3/4)=\frac3{64}.
+\]
+
+\begin{remark}[Status of the algebraic verification --- now rigorous]
+The counting and Jensen reductions above are fully rigorous.  The remaining
+one-dimensional minimisation (branch uniqueness, the range
+$q_P,q_J\in(0,1/2)$, monotonicity of $x_P,x_J$, the endpoint values, the
+curvature, and the strict beating of the feasibility boundary) is certified by
+exact Sturm sequences in \S\ref{sec:certificates}, reproduced by
+\texttt{scripts/verify\_reduced\_problems.py} and \texttt{verify\_gap.py}.
+\end{remark}
+
+\subsection{Numerical example at $x=17/25$}
+
+Solving the reduced problems at $x=\frac{17}{25}$ gives
+\[
+   \alpha_P\approx 0.3489617543,\quad q_P\approx 0.1125007820,\quad
+   \Psi_P(17/25)\approx 0.01188713928,
+\]
+and
+\[
+   \alpha_J\approx 0.3509647872,\quad q_J\approx 0.1120315971,\quad
+   \Psi_J(17/25)\approx 0.007136528755.
+\]
+The hand-picked values $\alpha=7/20$ and $q=11/98$ of \S\ref{sec:nonclique} are
+therefore very close to the reduced optima but not exactly optimal.
+
+% ============================================================================
+\section{Rigorous certificates for $\Psi_P,\Psi_J$ on $[2/3,3/4]$}
+\label{sec:certificates}
+
+This section records exact algebraic certificates for the reduced problems
+$\Psi_P(x)=\min_\alpha\Phi_P(\alpha,x)$, $\Psi_J(x)=\min_\alpha\Phi_J(\alpha,x)$
+of \S\ref{sec:filling}.  Everything is verified by
+\texttt{scripts/verify\_reduced\_problems.py} (items in
+\S\ref{ssec:cert-branch}--\S\ref{ssec:cert-curvature}) and
+\texttt{verify\_gap.py} (\S\ref{ssec:cert-gap}) via \texttt{sympy}.  The
+substantive new finding is the mixed curvature
+(Theorem~\ref{thm:mixed-curvature}).
+
+\subsection{Setup and key polynomials}
+
+For $\alpha\in(0,1)$ we have the edge-density constraint
+\begin{equation}
+\label{eq:edgedensity}
+   x = \tfrac12 + \alpha - \tfrac32\alpha^2 + \alpha^2 q,
+   \qquad
+   q_x(\alpha) = \frac{x - \tfrac12 - \alpha + \tfrac32\alpha^2}{\alpha^2},
+\end{equation}
+and the $(\alpha,q)$ rooted-counting forms
+\begin{align}
+\Phi_P(\alpha, q) &= \tfrac32\alpha^2(1-\alpha)^2 q\!\left(\tfrac{3-\alpha}{2}+\alpha q\right),
+\label{eq:PhiPaq}
+\\
+\Phi_J(\alpha, q) &= \alpha^2(1-\alpha)^2 q\!\left(\tfrac32-\alpha+2\alpha q\right).
+\label{eq:PhiJaq}
+\end{align}
+After substituting $q = q_x(\alpha)$, the explicit closed forms
+\begin{align}
+\Phi_P(\alpha, x) &= \frac{3(1-\alpha)^2(2\alpha^2+\alpha+2x-1)(3\alpha^2-2\alpha+2x-1)}{8\alpha},
+\label{eq:PhiPx}
+\\
+\Phi_J(\alpha, x) &= \frac{(1-\alpha)^2(3\alpha^2-2\alpha+2x-1)(4\alpha^2-\alpha+4x-2)}{4\alpha}
+\label{eq:PhiJx}
+\end{align}
+agree with~\eqref{eq:PhiPaq}--\eqref{eq:PhiJaq} via~\eqref{eq:edgedensity}
+(symbolically verified).  The stationary equations
+$\partial_\alpha \Phi_P = \partial_\alpha\Phi_J = 0$ along the edge-density
+constraint reduce (after clearing $(1-\alpha)$) to
+\begin{equation}
+\label{eq:statPJ}
+   A_*(\alpha) q^2 + B_*(\alpha) q + C_*(\alpha) = 0,
+\end{equation}
+where
+\begin{align*}
+A_P &= 2\alpha^2(\alpha+1), &
+A_J &= 4\alpha^2(\alpha+1),
+\\
+B_P &= \alpha(9\alpha^2-9\alpha+4), &
+B_J &= 2\alpha(3\alpha-2)^2,
+\\
+C_P &= -3(\alpha-\tfrac13)(\alpha-1)(\alpha-3), &
+C_J &= -3(\alpha-\tfrac13)(\alpha-1)(2\alpha-3),
+\end{align*}
+with discriminants
+\begin{align}
+\label{eq:DeltaP}
+\Delta_P(\alpha) &= 105\alpha^4 - 242\alpha^3 + 153\alpha^2 + 8\alpha - 8,
+\\
+\label{eq:DeltaJ}
+\Delta_J(\alpha) &= 105\alpha^4 - 260\alpha^3 + 204\alpha^2 - 52\alpha + 4,
+\end{align}
+in the sense that $B_P^2 - 4 A_P C_P = \alpha^2\Delta_P$ and
+$B_J^2 - 4 A_J C_J = 4\alpha^2\Delta_J$.  (Note the doubled $\sqrt\Delta_J$
+prefactor for $J$.)
+
+\subsection{Discriminant positivity, branch uniqueness, and range}
+\label{ssec:cert-branch}
+
+\begin{lemma}[Discriminants are positive]
+\label{lem:disc-positive}
+$\Delta_P(\alpha) > 0$ and $\Delta_J(\alpha) > 0$ on $(1/3,1/2)$.
+\end{lemma}
+
+\begin{proof}
+Each $\Delta$ is a quartic with rational coefficients; its Sturm sequence shows
+zero real roots in $(1/3,1/2)$.  Endpoint values $\Delta_P(1/3)=4$,
+$\Delta_P(1/2)=169/16$, $\Delta_J(1/3)=1$, $\Delta_J(1/2)=49/16$ are positive.
+\end{proof}
+
+Hence both stationary quadratics have two real roots
+\[
+   q^{\pm}_P = \frac{-B_P\pm\alpha\sqrt{\Delta_P}}{2A_P},
+   \quad
+   q^{\pm}_J = \frac{-B_J\pm 2\alpha\sqrt{\Delta_J}}{2A_J},
+\]
+and we denote the larger ($+$ sign) root by $q_P$, $q_J$.
+
+\begin{theorem}[Unique stationary branch with $q\in(0,1/2)$]
+\label{thm:branch-range}
+For every $\alpha\in(1/3,1/2)$, $0 < q_P(\alpha) < \tfrac12$ and
+$0 < q_J(\alpha) < \tfrac12$, the two roots of~\eqref{eq:statPJ} have opposite
+signs, and $q_P,q_J$ are the unique stationary branches with $q\in(0,1/2)$.
+Moreover $q_P(\tfrac13)=q_J(\tfrac13)=0$ and $q_P(\tfrac12)=q_J(\tfrac12)=\tfrac12$.
+\end{theorem}
+
+\begin{proof}
+On $(1/3,1/2)$, $A_P,A_J>0$ (Sturm).  The constant term
+$C_P=-3(\alpha-1/3)(\alpha-3)(\alpha-1)$ has factor signs $+,-,-$, so $C_P<0$;
+similarly $C_J=-3(\alpha-1/3)(\alpha-1)(2\alpha-3)<0$.  Since $A>0$, $C<0$, the
+product of roots $C/A<0$, so the roots have opposite sign and the ``$+$'' root is
+the unique positive one.  For the upper bound, evaluate the stationary quadratic
+at $q=1/2$:
+\begin{align*}
+A_P/4 + B_P/2 + C_P &= 2(\alpha-1/2)(\alpha^2+5\alpha-3), \\
+A_J/4 + B_J/2 + C_J &= 2(\alpha-1/2)(2\alpha^2+4\alpha-3).
+\end{align*}
+On $(1/3,1/2)$, $(\alpha-1/2)<0$; and $\alpha^2+5\alpha-3$ (value $-11/9$ at
+$1/3$, $-1/4$ at $1/2$, increasing) and $2\alpha^2+4\alpha-3$ (value $-13/9$ at
+$1/3$, $-1/2$ at $1/2$, increasing) are both negative.  Hence each product is
+positive at $q=1/2$; with $A>0$ this forces both roots $<1/2$.  Boundary values
+are direct evaluations using the endpoint discriminants.
+\end{proof}
+
+\subsection{Monotonicity and the parametrisation of $[2/3,3/4]$}
+\label{ssec:cert-mono}
+
+\begin{theorem}[Monotonicity]
+\label{thm:monotonicity}
+$x_P'(\alpha) > 0$ and $x_J'(\alpha) > 0$ on $(1/3,1/2)$.  Combined with
+Theorem~\ref{thm:branch-range}, $\alpha\mapsto x_P(\alpha)$ and
+$\alpha\mapsto x_J(\alpha)$ are continuous strictly increasing bijections from
+$[1/3,1/2]$ onto $[2/3,3/4]$.
+\end{theorem}
+
+\begin{proof}
+Differentiating $x_P(\alpha)=\tfrac12+\alpha-\tfrac32\alpha^2+\alpha^2 q_P$ and
+using~\eqref{eq:statPJ} for implicit differentiation,
+\[
+   x_P'(\alpha)
+   = \frac{(1-3\alpha+2\alpha q)(2A_P q + B_P) - \alpha^2(A_P' q^2 + B_P' q + C_P')}
+          {2 A_P q + B_P},
+\]
+whose denominator equals $\alpha\sqrt{\Delta_P}>0$ on the $+$ branch
+(Lemma~\ref{lem:disc-positive}).  Reducing $q^2$ modulo the stationary quadratic,
+the numerator is linear in $q$, of the form $L_P(\alpha)+M_P(\alpha)q$ with (after
+clearing $\alpha+1$)
+\[
+L_P = -15\alpha^5 - 15\alpha^4 - 11\alpha^3 + 19\alpha^2 - 2\alpha,
+\quad
+M_P = -30\alpha^5 - 38\alpha^4 + 14\alpha^3.
+\]
+On the $+$ branch the numerator becomes
+$P_{\mathrm{lin}}(\alpha) + P_{\mathrm{sq}}(\alpha)\sqrt{\Delta_P}$ with
+\[
+P_{\mathrm{lin}} = 210\alpha^8 - 48\alpha^7 - 452\alpha^6 + 310\alpha^5 + 12\alpha^4 - 8\alpha^3,
+\quad
+P_{\mathrm{sq}}  = -30\alpha^6 - 38\alpha^5 + 14\alpha^4.
+\]
+A Sturm check gives $P_{\mathrm{lin}}>0$ and
+$P_{\mathrm{lin}}^2 - P_{\mathrm{sq}}^2\Delta_P>0$ on $(1/3,1/2)$ (endpoint
+values $1269760/4782969$ at $1/3$, $3087/2048$ at $1/2$).  Hence
+$|P_{\mathrm{lin}}|>|P_{\mathrm{sq}}\sqrt{\Delta_P}|$, and with
+$P_{\mathrm{lin}}>0$ this gives $P_{\mathrm{lin}}+P_{\mathrm{sq}}\sqrt{\Delta_P}>0$
+regardless of the sign of $P_{\mathrm{sq}}$.  Thus $x_P'>0$.  The same argument
+applies to $J$ with
+\begin{align*}
+L_J &= -30\alpha^5+15\alpha^4+2\alpha^3-\alpha^2+2\alpha,
+&
+M_J &= -60\alpha^5-70\alpha^4+40\alpha^3,
+\\
+P_{\mathrm{lin}}^{(J)} &= 840\alpha^8 - 300\alpha^7 - 1784\alpha^6 + 1528\alpha^5 - 312\alpha^4 + 16\alpha^3,
+&
+P_{\mathrm{sq}}^{(J)}  &= -120\alpha^6 - 140\alpha^5 + 80\alpha^4,
+\end{align*}
+with $P_{\mathrm{lin}}^{(J)}>0$ and
+$(P_{\mathrm{lin}}^{(J)})^2-(P_{\mathrm{sq}}^{(J)})^2\Delta_J>0$ (endpoints
+$1275904/4782969$ at $1/3$, $99/16$ at $1/2$).  Continuity on $[1/3,1/2]$ and the
+endpoint values $x_*(1/3)=2/3$, $x_*(1/2)=3/4$ give the bijections.
+\end{proof}
+
+\subsection{Endpoint values}
+
+\begin{theorem}[Endpoint values]
+\label{thm:endpoints}
+$\Psi_P(2/3) = \Psi_J(2/3) = 0$, $\Psi_P(3/4) = 9/128$, $\Psi_J(3/4) = 3/64$.
+\end{theorem}
+
+\begin{proof}
+At $\alpha=1/3$, $q_P=q_J=0$, so \eqref{eq:PhiPaq}--\eqref{eq:PhiJaq} vanish.  At
+$\alpha=1/2$, $q_P=q_J=1/2$:
+$\Phi_P(\tfrac12,\tfrac12)=\tfrac32\cdot\tfrac14\cdot\tfrac14\cdot\tfrac12\cdot
+(\tfrac{5/2}{2}+\tfrac14)=9/128$ and
+$\Phi_J(\tfrac12,\tfrac12)=\tfrac14\cdot\tfrac14\cdot\tfrac12\cdot
+(\tfrac32-\tfrac12+\tfrac12)=3/64$.  By Theorem~\ref{thm:monotonicity} these
+endpoints correspond to $x=2/3$ and $x=3/4$, and the parametrisation points are
+unique.
+\end{proof}
+
+\subsection{Mixed curvature: the new finding}
+\label{ssec:cert-curvature}
+
+At an interior critical point $\alpha^*=\alpha^*(x)$ of
+$\alpha\mapsto\Phi(\alpha,x)$, the envelope formula
+$\Psi''(x) = \det\nabla^2_{(\alpha,x)}\Phi/\Phi_{\alpha\alpha}$ combined with
+$\Phi_{\alpha\alpha}>0$ gives
+$\operatorname{sign}\Psi''(x)=\operatorname{sign}\det\nabla^2\Phi$.
+
+\begin{proposition}[$\Phi_{\alpha\alpha}>0$ on the branch]
+\label{prop:Phiaa-positive}
+For each of $\Phi=\Phi_P,\Phi_J$, the restriction
+$\Phi_{\alpha\alpha}(\alpha,x_*(\alpha))$ is strictly positive on
+$\alpha\in(1/3,1/2)$.
+\end{proposition}
+
+\begin{proof}
+After eliminating $x$, the restriction is $L(\alpha)+M(\alpha)\sqrt{\Delta_*}$
+over a common denominator $\propto\alpha(\alpha+1)^2>0$, with
+\begin{align*}
+\text{(P)}\quad L_{P,\mathrm{aa}} &= -315\alpha^6+387\alpha^5+606\alpha^4-1143\alpha^3+447\alpha^2+30\alpha-12,\\
+            M_{P,\mathrm{aa}} &= 45\alpha^4+12\alpha^3-78\alpha^2+21\alpha,\\
+\text{(J)}\quad L_{J,\mathrm{aa}} &= -210\alpha^6+285\alpha^5+371\alpha^4-828\alpha^3+460\alpha^2-82\alpha+4,\\
+            M_{J,\mathrm{aa}} &= 30\alpha^4+5\alpha^3-55\alpha^2+20\alpha.
+\end{align*}
+For each, Sturm shows $L>0$ and $L^2-M^2\Delta>0$ on $(1/3,1/2)$ (endpoints
+$L_{P,\mathrm{aa}}^2-M_{P,\mathrm{aa}}^2\Delta_P=1269760/6561$ at $1/3$, $27783/512$
+at $1/2$; $L_{J,\mathrm{aa}}^2-M_{J,\mathrm{aa}}^2\Delta_J=318976/59049$ at $1/3$,
+$99/16$ at $1/2$).  As in Theorem~\ref{thm:monotonicity}, $L+M\sqrt\Delta>0$.
+\end{proof}
+
+The Hessian determinant along the branch is likewise
+$L(\alpha)+M(\alpha)\sqrt{\Delta_*}$ over a positive denominator
+$\propto\alpha(\alpha+1)^2$, with
+\begin{align*}
+\text{(P)}\quad L_{P,\det} &= -2835\alpha^7+8280\alpha^6-2385\alpha^5-16236\alpha^4
++21915\alpha^3-9720\alpha^2+729\alpha+252,\\
+            M_{P,\det} &= 270\alpha^5-468\alpha^4-342\alpha^3+1134\alpha^2-720\alpha+126,
+\\
+\text{(J)}\quad L_{J,\det} &= -315\alpha^7+965\alpha^6-403\alpha^5-1753\alpha^4
++2786\alpha^3-1674\alpha^2+432\alpha-38,\\
+            M_{J,\det} &= 30\alpha^5-55\alpha^4-35\alpha^3+135\alpha^2-95\alpha+20.
+\end{align*}
+
+\begin{theorem}[Mixed curvature]
+\label{thm:mixed-curvature}
+There exist
+\[
+   x^*_P \in [0.6787853539,\,0.6787853540],
+   \qquad
+   x^*_J \in [0.7132424244,\,0.7132424245]
+\]
+such that $\Psi_P''>0$ on $(2/3,x^*_P)$, $\Psi_P''<0$ on $(x^*_P,3/4)$, and
+likewise for $J$ at $x^*_J$.  In particular neither $\Psi_P$ nor $\Psi_J$ is
+convex or concave on $[2/3,3/4]$, and each has a unique inflection point inside
+that interval.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:Phiaa-positive},
+$\operatorname{sign}\Psi_*''=\operatorname{sign}(L_{*,\det}+M_{*,\det}\sqrt{\Delta_*})$
+on the branch.  The number of zeros of $L+M\sqrt\Delta$ on an interval is at most
+the number of real roots of $R:=L^2-M^2\Delta$, since every such zero is a zero
+of $R=(L+M\sqrt\Delta)(L-M\sqrt\Delta)$.  Sturm gives: $R_J$ has exactly one real
+root in $(1/3,1/2)$; $R_P$ has exactly two.
+
+\emph{Existence and bracketing.}  Direct rational evaluation gives
+$\det\nabla^2\Phi_P>0$ at $\alpha=1/3+\tfrac1{300}$ and $<0$ at
+$\alpha=1/2-\tfrac1{100}$ (and the same for $J$).  Bisecting
+$[\tfrac13+10^{-6},\tfrac12-10^{-6}]$ to width $<10^{-12}$ yields explicit
+rational brackets with $\alpha^*_P\approx0.347393$, $\alpha^*_J\approx0.401405$;
+applying $x_P,x_J$ and Theorem~\ref{thm:monotonicity} gives the stated $x$-brackets
+($x^*_P\approx0.67878535394$, $x^*_J\approx0.71324242444$).
+
+\emph{Uniqueness for $J$.}  $R_J$ has exactly one root in $(1/3,1/2)$, so at most
+one sign change; existence forces exactly one.
+
+\emph{Uniqueness for $P$.}  $R_P$ has two roots in $(1/3,1/2)$; we must separate
+roots of $L_P+M_P\sqrt{\Delta_P}$ from those of the conjugate
+$L_P-M_P\sqrt{\Delta_P}$.  If $L+M\sqrt\Delta=0$ then $L,M$ have opposite signs;
+if $L-M\sqrt\Delta=0$ they have the same sign.  Sturm isolates the two roots into
+$(1/3,2/5)$ and $(2/5,1/2)$, on which:
+\begin{center}
+\begin{tabular}{l|cc|c}
+sub-interval & $\operatorname{sign} L_{P,\det}$ & $\operatorname{sign} M_{P,\det}$ & branch \\ \hline
+$(1/3,2/5)$ & $+1$ & $-1$ & $L+M\sqrt\Delta=0$ (true sign change of $\det H$) \\
+$(2/5,1/2)$ & $-1$ & $-1$ & $L-M\sqrt\Delta=0$ (NOT a sign change of $\det H$) \\
+\end{tabular}
+\end{center}
+Hence the second Sturm root belongs to the conjugate, and $\det\nabla^2\Phi_P$
+has exactly one sign change on $(1/3,1/2)$.
+\end{proof}
+
+\begin{remark}[Numerical illustration]
+At alpha-values spaced across the branch, $\det\nabla^2\Phi\big|_{\text{branch}}$ is
+\[
+\begin{array}{c|c}
+\alpha & \det H_P \\ \hline
+0.3333 & +1.667 \\
+0.3400 & +0.846 \\
+0.3473 & 0      \\
+0.3500 & -0.267 \\
+0.4000 & -4.020 \\
+0.4900 & -5.711
+\end{array}
+\quad
+\begin{array}{c|c}
+\alpha & \det H_J \\ \hline
+0.3667 & +1.960 \\
+0.3800 & +1.141 \\
+0.4014 & 0      \\
+0.4300 & -1.177 \\
+0.4600 & -1.422 \\
+0.4900 & -2.474
+\end{array}
+\]
+exhibiting the single sign change cleanly in both cases.
+\end{remark}
+
+\subsection{Stationary minimum vs.\ feasibility boundary}
+\label{ssec:cert-gap}
+
+The arguments above identify $(\alpha^*(x),q^*(x))$ as the unique interior
+critical point.  To conclude it achieves the in-family minimum $\Psi_*(x)$, we
+compare to the boundary $0\le q\le1/2$.  Only $q=1/2$ can be attained for
+$x>2/3$; there the values are constant in $x$ once $\alpha$ is fixed:
+$\Phi_P(\alpha,\tfrac12)=\tfrac98\alpha^2(1-\alpha)^2$,
+$\Phi_J(\alpha,\tfrac12)=\tfrac34\alpha^2(1-\alpha)^2$.  By Vieta on
+$\alpha^2-\alpha+(x-1/2)=0$, $\alpha_-\alpha_+=x-1/2$, so the $q=1/2$ boundary
+value is $\tfrac98(x-\tfrac12)^2$ for $P$ and $\tfrac34(x-\tfrac12)^2$ for $J$.
+
+\begin{theorem}[Stationary value beats the boundary]
+\label{thm:stat-vs-bdry}
+For all $x\in[2/3,3/4]$,
+\[
+   \Psi_P^{\text{stat}}(x) \le \tfrac98 (x-\tfrac12)^2,
+   \qquad
+   \Psi_J^{\text{stat}}(x) \le \tfrac34 (x-\tfrac12)^2,
+\]
+with equality only at $x=3/4$.  Hence on $(2/3,3/4)$ the interior critical point
+achieves the in-family minimum $\Psi_*(x)$, attained uniquely there.
+\end{theorem}
+
+\begin{proof}
+Pulling back to the $\alpha$-parametrisation, define the gaps
+$G_P=\tfrac98(x-\tfrac12)^2-\Phi_P$, $G_J=\tfrac34(x-\tfrac12)^2-\Phi_J$.  On the
+stationary branch, reducing $q^2$ modulo the stationary quadratic gives
+$G_*=L_*^{\mathrm{gap}}(\alpha)+M_*^{\mathrm{gap}}(\alpha)\sqrt{\Delta_*}$ over the
+positive denominator $128\alpha^4+256\alpha^3+128\alpha^2$, with
+\begin{align*}
+L_P^{\mathrm{gap}} &= -6\alpha^3(408\alpha^6 - 2227\alpha^5 + 3510\alpha^4 - 2455\alpha^3 + 652\alpha^2 + 24\alpha - 32),
+\\
+M_P^{\mathrm{gap}} &= 6\alpha^3(40\alpha^4 - 169\alpha^3 + 153\alpha^2 - 52\alpha + 4),
+\\
+L_J^{\mathrm{gap}} &= -4\alpha^3(816\alpha^6 - 4163\alpha^5 + 7380\alpha^4 - 6260\alpha^3 + 2690\alpha^2 - 534\alpha + 32),
+\\
+M_J^{\mathrm{gap}} &= 20\alpha^3(16\alpha^4 - 61\alpha^3 + 66\alpha^2 - 28\alpha + 4).
+\end{align*}
+Sturm gives $L_*^{\mathrm{gap}}>0$ and
+$(L_*^{\mathrm{gap}})^2-(M_*^{\mathrm{gap}})^2\Delta_*>0$ on $(1/3,1/2)$ (endpoint
+values $123904/59049$ at $1/3$ and $0$ at $1/2$ for $P$; $173056/531441$ at $1/3$
+and $0$ at $1/2$ for $J$), so $G_*>0$ on the open interval.  Boundary:
+$G_P(\tfrac13,0)=\tfrac1{32}$, $G_J(\tfrac13,0)=\tfrac1{48}$, and
+$G_P(\tfrac12,\tfrac12)=G_J(\tfrac12,\tfrac12)=0$.  Uniqueness on $(2/3,3/4)$
+follows from $\Phi_{\alpha\alpha}>0$ (Proposition~\ref{prop:Phiaa-positive}) plus
+the single critical point (Theorem~\ref{thm:branch-range}) and the strict gap.
+\end{proof}
+
+\begin{remark}[Numerical illustration]
+At ten evenly spaced $\alpha\in[0.34,0.49]$:
+\begin{center}
+\begin{tabular}{c||c|c||c|c}
+$\alpha$ & $\Psi_P^{\text{stat}}$ & $\tfrac98(x_P-\tfrac12)^2$
+         & $\Psi_J^{\text{stat}}$ & $\tfrac34(x_J-\tfrac12)^2$ \\ \hline
+0.34 & 0.00519 & 0.03347 & 0.00270 & 0.02214 \\
+0.36 & 0.01970 & 0.04008 & 0.01076 & 0.02609 \\
+0.40 & 0.04348 & 0.05245 & 0.02571 & 0.03385 \\
+0.44 & 0.05973 & 0.06247 & 0.03745 & 0.04060 \\
+0.48 & 0.06851 & 0.06883 & 0.04488 & 0.04543 \\
+0.49 & 0.06961 & 0.06972 & 0.04602 & 0.04625
+\end{tabular}
+\end{center}
+The gap decreases monotonically to zero as $\alpha\to 1/2$.
+\end{remark}
+
+\subsection{Implication for Problem~2}
+
+\begin{corollary}[In-family curvature, conditional on the global reduction]
+\label{cor:infamily-curvature}
+Assume the global reduction (Conjecture~\ref{conj:global-reduction}): for
+$x\in[2/3,3/4]$ the global minimisers of $\min_W t(P,W)$ and $\min_W t(J,W)$
+under $t(K_2,W)=x$ can be chosen from the tripartite Tur\'an-filling family.
+Then $f_P=\Psi_P$ and $f_J=\Psi_J$ on $[2/3,3/4]$, and by
+Theorem~\ref{thm:mixed-curvature} each has mixed convex-then-concave curvature
+there, with unique inflection points $x^*_P,x^*_J$.
+\end{corollary}
+
+In particular the original Problem~2 statement, listing $P$ and $J$ as piecewise
+concave on Tur\'an intervals, fails even \emph{without} the global reduction: it
+is wrong already at the level of the reduced one-dimensional curves, on the very
+first interval.  This strengthens the qualitative correction of
+\S\ref{sec:nonclique} (strict improvement at $x=17/25$) into a quantitative
+claim: the curvature itself differs from the conjectured pattern, with a single
+sharply localised inflection point in both cases.
+
+% ============================================================================
+\section{Toward the global reduction: strategy and structure}
+\label{sec:global}
+
+The reductions of \S\ref{sec:filling}--\S\ref{sec:certificates} are
+\emph{in-family} statements.  The remaining global problem is:
+
+\begin{conjecture}[Global tripartite-filling reduction]
+\label{conj:global-reduction}
+For every $x\in[2/3,3/4]$, $f_P(x)=\min\{t(P,W):t(K_2,W)=x\}=\Psi_P(x)$, with the
+minimum achieved by a graphon in the tripartite Tur\'an-filling family
+\[
+   \mathcal T = \biggl\{\ W\ \biggm|\ \exists [0,1] = A\sqcup B\sqcup C,\ |B|=|C|,
+   \begin{aligned}
+   &W=1\ \text{on cross-block cells},\\
+   &W=0\ \text{within }B,\ \text{within }C,\\
+   &W|_{A\times A}\ \text{triangle-free}
+   \end{aligned}\ \biggr\}.
+\]
+The analogous statement holds for $J$ and $\Psi_J$.
+\end{conjecture}
+
+\subsection{A rooted-degree integral identity}
+
+Both $t(P,\cdot)$ and $t(J,\cdot)$ are integrals of a ``rooted weight'' against a
+``local quantity'', which is why their minimisers are not the pure clique-density
+minimisers.  For $P=K_4^\dagger$ with the pendant attached to vertex $4$,
+\begin{equation}
+\label{eq:P-integral}
+   t(P,W) = \int_{[0,1]} d_W(x)\,\kappa_4(x)\dd x,
+   \qquad
+   d_W(x):=\int W(x,y)\dd y,
+\end{equation}
+where $\kappa_4(x)$ is the rooted $K_4$-density at $x$ (the probability that
+three uniformly random partners of $x$ form a $K_3$ with $x$), so
+$t(K_4,W)=\int\kappa_4=\E[\kappa_4(X)]$.  Likewise $J$ integrates over the shared
+edge:
+\begin{equation}
+\label{eq:J-integral}
+   t(J,W) = \int_{[0,1]^2} W(x,y)\,\tau_3(x,y)\,\tau_4(x,y)\dd x\dd y,
+\end{equation}
+with $\tau_3,\tau_4$ the rooted $K_3$- and $K_4$-densities at the edge $\{x,y\}$.
+
+\subsection{Why $f_P\ne f_{K_4}$ in general}
+
+The lower bound on $t(P,W)=\int d_W\kappa_4$ at fixed $t(K_2,W)$ is achieved when
+$d_W$ and $\kappa_4$ are \emph{anti-correlated}.  In the LS clique template, the
+small singleton part has both highest $\kappa_4$ and highest $d_W$ --- positive
+correlation, the wrong way for minimising $t(P,W)$.  In the tripartite-filling
+family, vertices in $A$ have degree $1-\alpha+\alpha q$ and (because
+$W|_{A\times A}$ is triangle-free) suppressed rooted-$K_4$ density, while $B,C$
+vertices have degree $(1+\alpha)/2$ and the cross-clique rooted density.  The
+construction is the simplest way to lower $\kappa_4$ on the high-degree vertices
+and raise it on the low-degree ones.
+
+\subsection{Plan A: stability + symmetrisation}
+
+This route is closest to the clique case (Reiher 2016) and splits into two steps.
+
+\begin{problem}[Step A1: stability of a $3$-blowup skeleton]
+\label{prob:A1}
+Let $W$ minimise $t(P,W)$ (resp.\ $t(J,W)$) at $t(K_2,W)=x\in[2/3,3/4]$.  Show
+$W$ has a ``$3$-blowup skeleton'': $[0,1]=A\sqcup B\sqcup C$ with $W=1$ a.e.\ on
+$A\times B, A\times C, B\times C$ and $W=0$ a.e.\ on $B\times B, C\times C$ (the
+internal structure inside $A$ unconstrained).
+\end{problem}
+
+\begin{problem}[Step A2: symmetrisation to balanced parts]
+\label{prob:A2}
+With the skeleton fixed, show one may assume $|B|=|C|$ without increasing
+$t(P,W)$ (resp.\ $t(J,W)$), and that $W|_{A\times A}$ may be replaced by a
+$q$-regular triangle-free filling of the same edge density.
+\end{problem}
+
+If A1 and A2 hold, then $f_P\le\Psi_P^{\text{filling-only}}$; combined with the
+in-family lower bound $f_P\ge\Psi_P^{\text{filling-only}}$ of
+\S\ref{sec:filling}, this gives $f_P=\Psi_P$ on $[2/3,3/4]$.
+
+\paragraph{Step A2 is now closed (corrected form).}  \S\ref{sec:balancing}
+proves Step~A2 in the form actually needed --- a \emph{global} (not per-$\alpha$)
+minimisation over unbalanced parts.  The naive per-$\alpha$ balancing statement
+(at fixed $|A|=\alpha$, balancing $|B|=|C|$ never increases $t(P,W)$) turns out to
+be \emph{false} (Proposition~\ref{prop:counter}); the correct global statement
+holds (Theorem~\ref{thm:balancing-main}).
+
+\paragraph{Step A1 is the bottleneck.}  It is a clique-density supersaturation
+stability statement:
+
+\begin{lemma}[$K_4$-supersaturation stability, conjectural form]
+\label{lem:K4-stability}
+There is $C(x)>0$ such that for every $W$ with $t(K_2,W)=x\in(2/3,3/4)$,
+\[
+   \delta_\square\bigl(W,\ \mathcal{T}_{3}^{1}(x)\bigr)
+   \le C(x)\cdot \bigl(t(K_4,W) - g_{4,3}(s_x)\bigr)^{1/2},
+\]
+where $\delta_\square$ is the cut metric, $\mathcal T_3^1(x)$ is the set of
+$3$-blowups of edge density $x$, and $g_{4,3}(s_x)$ is the LS $K_4$-density
+\eqref{eq:g43} at edge density $x$ (evaluated at $s_x=\tfrac14(1-\sqrt{9-12x})$).
+\end{lemma}
+
+\begin{remark}[Status of Lemma~\ref{lem:K4-stability}]
+A cut-metric stability statement of this strength for the LS $4$-partite template
+at $K_4$-density is not directly in the literature.  Pikhurko--Razborov-type
+results \cite{PikhurkoRazborov} cover the equality case at the clique-density
+level; the cut-metric version would require adapting the
+regularity/decomposition argument used for triangle supersaturation to the
+$4$-partite case, or invoking a more recent clique-density stability result.  It
+is the most technical ingredient.  \S\ref{sec:numerics} gives numerical evidence
+that the bound's mechanism holds.
+\end{remark}
+
+\subsection{Plan B: flag-algebra certificates}
+
+A direct flag-algebra SDP produces certified lower bounds $t(P,W)\ge L(x)$ at
+finitely many rational $x$.  For Problem~1 the analogous program for $C_5$ at
+$p=1-1/k$ was carried out by Bennett--Dudek--Lidick\'y--Pikhurko (2020)
+\cite{BennettDudekLidickyPikhurkoC5}; for our $H$ at $p=4/5$ the target
+$24349/187500$ is a small-denominator rational, so the SDP is likely tractable.
+
+\begin{problem}[Step B]
+\label{prob:B}
+Run a degree-$7$ (over $K_7$-flags) SDP to certify $t(H,W)\ge 24349/187500$ for
+$W$ with $t(K_2,W)=4/5$.
+\end{problem}
+
+For Problem~2 one needs certificates parametric in $x$.  The mixed curvature
+(Theorem~\ref{thm:mixed-curvature}) breaks the simplest interpolation: a single
+convex certificate cannot work everywhere, so the interpolation must know about
+the inflection $x^*$.
+
+\subsection{Plan C: rooted clique-density inequalities}
+
+A more conceptual route develops sharp rooted clique-density inequalities from
+\eqref{eq:P-integral}: at fixed marginals $\mu_d,\mu_\kappa$, the integral
+$\int d_W\kappa_4$ is minimised by the negative-rearrangement coupling.
+
+\begin{problem}[Step C, qualitative]
+\label{prob:C}
+Identify the boundary curve of the achievable region in the
+$(\E[d_W^2],\E[\kappa_4])$ plane at fixed $t(K_2,W)=x$ on $[2/3,3/4]$, and express
+$\Psi_P(x)$ as a rearrangement-style functional restricted to this boundary.
+\end{problem}
+
+This plan is more speculative but would also explain the mixed-curvature
+phenomenon: the boundary curve has a kink, and $\Psi_P''$ changes sign there.
+
+\subsection{What the mixed-curvature result tells us about the global problem}
+
+The rigorous mixed curvature (Theorem~\ref{thm:mixed-curvature}) constrains what
+kind of global lower bound is achievable: a single convex/concave certificate
+cannot prove $t(P,W)\ge\Psi_P(x)$ uniformly; a flag-algebra SDP at a single $x$
+interpolated linearly is valid only in a neighbourhood bounded by the distance to
+$x^*_P$; and a symmetrisation proof must implicitly distinguish the two curvature
+regimes (most naturally via the $x$-dependence of $\alpha^*(x)$, whose
+bifurcation between ``$A$ small'' and ``$A\to1/2$'' matches the inflection).  This
+suggests Plan A is the most natural, as it respects the parametric structure of
+the minimiser.
+
+\subsection{Does the global reduction extend beyond $[2/3,3/4]$?}
+
+For $x\in[3/4,4/5]$ the natural analogue is a $4$-blowup with a triangle-free
+filling inside one part; for $[4/5,5/6]$ a $5$-blowup with $K_4$-free filling;
+etc.  We have not analysed these.  The mixed-curvature result on $[2/3,3/4]$
+leaves the structure on $[3/4,4/5]$ as the next open question.
+
+% ============================================================================
+\section{Closing Step A2: the in-family reduction to balanced parts}
+\label{sec:balancing}
+
+We complete the in-family side of the reduction by dropping the constraint
+$|B|=|C|$ and showing the unbalanced freedom never beats the balanced reduced
+curve.  Every algebraic step is reproduced by
+\texttt{scripts/verify\_balancing\_reduction.py}.
+
+\subsection{Setup: the unbalanced family and its densities}
+
+Let $[0,1]=A\sqcup B\sqcup C$ with $|A|=\alpha,|B|=\beta,|C|=\gamma$,
+$\alpha+\beta+\gamma=1$; cross-edges between $A,B,C$; no edges inside $B$ or $C$;
+a triangle-free filling $F$ inside $A$ with $q=t(K_2,F)$, $D_2(F)=\int d_F^2$.
+Write $s=\beta+\gamma=1-\alpha$, $p=\beta\gamma$.
+
+\begin{lemma}[Densities, unbalanced]
+\label{lem:densities}
+For the family above,
+\begin{align}
+   t(K_2,W) &= 2(\alpha\beta+\alpha\gamma+\beta\gamma)+\alpha^2 q
+            = 2\alpha s+2p+\alpha^2 q,\\
+   t(P,W)   &= 3\alpha^2\beta\gamma\,\bigl[(2\alpha+3s)\,q+2\alpha D_2(F)\bigr],
+            \label{eq:tP}\\
+   t(J,W)   &= 2\alpha^2\beta\gamma\,\bigl[(\alpha+3s)\,q+4\alpha D_2(F)\bigr].
+            \label{eq:tJ}
+\end{align}
+Both depend on $F$ only through $q$ and $D_2(F)$, and setting $\beta=\gamma=s/2$
+recovers the \S\ref{sec:filling} formulas.
+\end{lemma}
+
+\begin{proof}
+Every $K_4$ uses two $F$-adjacent vertices in $A$, one in $B$, one in $C$ ($B,C$
+independent, so $\le1$ vertex each; three vertices in $A$ would be an
+$F$-triangle, excluded).  Summing rooted contributions over the position of the
+distinguished/shared vertices, keeping $\beta\ne\gamma$, gives
+\eqref{eq:tP}--\eqref{eq:tJ}; the Jensen step $D_2\ge q^2$ is unchanged.  The
+computation is reproduced symbolically (as a finite stochastic-block-model sum)
+in \texttt{verify\_balancing\_reduction.py}, Part~0.
+\end{proof}
+
+By Jensen and monotonicity in $D_2$, at fixed $(\alpha,\beta,\gamma,q)$ --- hence
+at fixed edge density --- the minimum over fillings is at $D_2=q^2$.  Henceforth
+take $D_2=q^2$ and study
+\begin{equation}
+\label{eq:Treg}
+   t(P,W)=3\alpha^2 p\,q\,(2\alpha q+2\alpha+3s),\qquad
+   t(J,W)=2\alpha^2 p\,q\,(4\alpha q+\alpha+3s).
+\end{equation}
+
+\subsection{The per-$\alpha$ balancing statement is false}
+
+Fix $\alpha,x$; then $s=1-\alpha$ is fixed and $2p+\alpha^2 q$ is fixed, so
+increasing $p$ toward its balanced maximum $s^2/4$ forces $q$ down.
+
+\begin{proposition}[Counterexample]
+\label{prop:counter}
+At $\alpha=\tfrac{11}{20}$, $x=\tfrac23$, balancing \emph{increases} $t(P,W)$:
+the balanced configuration ($p=\tfrac{81}{1600}$, $q=\tfrac{169}{726}$) has
+$t(P,W)=\tfrac{4074759}{140800000}\approx0.02894$, whereas the unbalanced
+configuration with $q=\tfrac12$ ($p=\tfrac{49}{4800}$) has
+$t(P,W)=\tfrac{17787}{1280000}\approx0.01390<0.02894$.
+\end{proposition}
+
+Thus the natural per-$\alpha$ balancing claim (the tempting form of Step~A2) is
+false.  The violation occurs because, for $\alpha>1/2$, the balanced filling
+density needed to reach $x$ is small, and shifting weight from the parts into the
+filling (toward the Mantel bound $q=1/2$) lowers $t(P,W)$.  Crucially
+$\alpha=\tfrac{11}{20}>\tfrac12$ lies outside the range $[\tfrac13,\tfrac12]$
+where the balanced optimum sits; such configurations never realise the
+\emph{global} in-family minimum, as we now show.
+
+\subsection{The reduction theorem}
+
+Substituting $p=\tfrac12(x-2\alpha s-\alpha^2 q)$ into \eqref{eq:Treg}, the
+in-family density at fixed $x$ is
+\begin{equation}
+\label{eq:T2}
+   T_P(\alpha,q)=\tfrac32\alpha^2\,(x-2\alpha s-\alpha^2 q)\,q\,(2\alpha q+3-\alpha),
+   \quad
+   T_J(\alpha,q)=\alpha^2\,(x-2\alpha s-\alpha^2 q)\,q\,(4\alpha q+3-2\alpha),
+\end{equation}
+on $R_x=\{(\alpha,q):\alpha\in(0,1),\ 0\le p\le s^2/4,\ 0\le q\le\tfrac12\}$.
+
+\begin{theorem}[In-family reduction to balanced parts]
+\label{thm:balancing-main}
+For every $x\in(2/3,3/4)$,
+$\min_{R_x}T_P=\Psi_P(x)$ and $\min_{R_x}T_J=\Psi_J(x)$, the balanced reduced
+values of \S\ref{sec:filling}, attained on the balanced arc $q=q_x(\alpha)$
+($\beta=\gamma$, regular filling).
+\end{theorem}
+
+\subsubsection*{The feasible region is the balanced--Mantel lens}
+
+In $(\alpha,q)$ coordinates the constraints read
+$q\le\bar q(\alpha)=\frac{x-2\alpha s}{\alpha^2}$,
+$q\ge\underline q(\alpha)=\frac{x-2\alpha s-s^2/2}{\alpha^2}$, $q\le\tfrac12$.
+
+\begin{lemma}[Tur\'an thresholds]
+\label{lem:turan}
+For $x>2/3$ and all $\alpha$, $\bar q(\alpha)>\tfrac12\Leftrightarrow
+x>2\alpha-\tfrac32\alpha^2$ and $\underline q(\alpha)>0\Leftrightarrow
+x>\tfrac12+\alpha-\tfrac32\alpha^2$, and both right-hand inequalities hold since
+\[
+   \tfrac23-\bigl(2\alpha-\tfrac32\alpha^2\bigr)=\tfrac16(3\alpha-2)^2\ge0,
+   \qquad
+   \tfrac23-\bigl(\tfrac12+\alpha-\tfrac32\alpha^2\bigr)=\tfrac16(3\alpha-1)^2\ge0.
+\]
+\end{lemma}
+
+Hence for $x\in(2/3,3/4)$ the constraints $p\ge0$, $q\ge0$ are slack; the active
+boundaries are the \emph{balanced arc} $q=\underline q(\alpha)$ and the
+\emph{Mantel arc} $q=\tfrac12$, and $R_x$ is the closed lens between them over
+$\alpha\in A_x$.  The two perfect squares are precisely why the first Tur\'an
+interval begins at $x=2/3$.
+
+\subsubsection*{No interior local minimum: the saddle certificate}
+
+\begin{lemma}[Interior critical points are saddles]
+\label{lem:saddle}
+For each $x\in(2/3,3/4)$, $T_P$ (resp.\ $T_J$) has $T_{qq}<0$ at every interior
+critical point of $R_x$.  Hence no interior critical point is a local minimum,
+and $\min_{R_x}T_P$ is attained on $\partial R_x$.
+\end{lemma}
+
+\begin{proof}
+For fixed $\alpha$, $T_P(\alpha,\cdot)$ is a cubic in $q$ with leading
+coefficient $-3\alpha^5<0$; $T_{qq}$ is affine in $q$ and vanishes on the
+rational inflection locus
+\[
+   q_{\mathrm{infl}}^{P}=\frac{5\alpha^2-7\alpha+2x}{6\alpha^2},
+   \qquad
+   q_{\mathrm{infl}}^{J}=\frac{10\alpha^2-11\alpha+4x}{12\alpha^2},
+\]
+with $T_{qq}<0$ iff $q>q_{\mathrm{infl}}$.  A critical point with $T_{qq}=0$ would
+lie on the inflection locus; substituting $q=q_{\mathrm{infl}}$ into
+$\partial_\alpha T,\partial_q T$ gives polynomials $S,U$ whose common zero forces
+$\operatorname{Res}_\alpha(S,U)(x)=0$.  An exact computation
+(\texttt{verify\_balancing\_reduction.py}, Part~3) shows this degree-$15$
+resultant has \emph{no root in $(2/3,3/4)$} for both $P,J$.  So $T_{qq}\ne0$ at
+every critical point, its sign is constant along each branch, and at
+$x=\tfrac7{10}$ the unique interior critical point has $T_{qq}<0$.  An indefinite
+Hessian is not a local minimum; by compactness the minimum is on $\partial R_x$.
+\end{proof}
+
+\subsubsection*{The boundary, and Mantel domination}
+
+On the balanced arc, $T(\alpha,q_x(\alpha))=\Phi_P(\alpha,x)$ of
+\eqref{eq:PhiPx}, with minimum $\Psi_P(x)$ over $A_x$
+(\S\ref{sec:filling}--\S\ref{sec:certificates}).  On the Mantel arc $q=\tfrac12$,
+\begin{equation}
+\label{eq:M}
+   M_P(\alpha):=T_P(\alpha,\tfrac12)=\tfrac94\alpha^2\bigl(x-2\alpha+\tfrac32\alpha^2\bigr),
+   \quad
+   M_J(\alpha):=T_J(\alpha,\tfrac12)=\tfrac32\alpha^2\bigl(x-2\alpha+\tfrac32\alpha^2\bigr).
+\end{equation}
+At $q=\tfrac12$ the filling is complete bipartite, so $W$ is the complete
+$4$-partite (Lov\'asz--Simonovits) graphon, and \eqref{eq:M} is its $P$- (resp.\
+$J$-) density.
+
+\begin{lemma}[Mantel domination]
+\label{lem:mantel}
+For $x\in(2/3,3/4)$, $\min_{\alpha\in A_x}M_P(\alpha)\ge\Psi_P(x)$, and likewise
+for $J$.
+\end{lemma}
+
+\begin{proof}[Proof (status)]
+$M_P$ is increasing--decreasing--increasing on $A_x$ with interior local minimum
+at $\alpha_M^{+}=\tfrac{3+\sqrt{9-12x}}6$; the left endpoint $\alpha_-$ of $A_x$
+is a lens corner where $M_P(\alpha_-)=\Phi_P(\alpha_-)\ge\Psi_P(x)$.  Hence it
+suffices that $M_P(\alpha_M^{+})\ge\Psi_P(x)$.  Along the Mantel-minimum locus,
+$x=3\mu(1-\mu)$ and $M_P(\alpha_M^{+})=\tfrac94\mu^3-\tfrac{27}8\mu^4$ with
+$\mu=\alpha_M^{+}$.  This one-dimensional comparison is verified \emph{exactly}
+at $98$ rational points dense in $(2/3,3/4)$
+(\texttt{verify\_balancing\_reduction.py}, Part~5), with strict margin
+$\ge9\cdot10^{-5}$; see \S\ref{sec:balancing-status} for the parametric Sturm
+certificate that upgrades this to all $x$.  Note the cheap pointwise bound
+$M_P\ge\Phi_P$ at $\alpha_M^{+}$ \emph{fails}, so the comparison genuinely uses
+the balanced \emph{minimum}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:balancing-main}]
+By Lemma~\ref{lem:saddle} the minimum is on $\partial R_x=$ (balanced arc)
+$\cup$ (Mantel arc).  The balanced arc has minimum $\Psi_P(x)$; the Mantel arc
+has minimum $\ge\Psi_P(x)$ by Lemma~\ref{lem:mantel}.  Hence
+$\min_{R_x}T_P=\Psi_P(x)$, attained on the balanced arc; same for $J$.
+\end{proof}
+
+\subsection{What this does and does not settle}
+\label{sec:balancing-status}
+
+Theorem~\ref{thm:balancing-main} closes \textbf{Step~A2} in its corrected form:
+within the tripartite-filling family, the unbalanced freedom never beats the
+balanced reduced curve, so the in-family minimum is exactly $\Psi_P,\Psi_J$.
+Combined with the mixed-curvature result, the in-family picture on the first
+Tur\'an interval is complete and rigorous, modulo the one Sturm formalisation
+below.  What remains for $f_P=\Psi_P$ globally is \textbf{Step~A1}.
+
+\paragraph{Rigour status.}  Lemma~\ref{lem:densities}, Proposition~\ref{prop:counter},
+Lemma~\ref{lem:turan}, and Lemma~\ref{lem:saddle} are exact and uniform in
+$x\in(2/3,3/4)$.  Lemma~\ref{lem:mantel} is proved at a dense rational grid; the
+remaining task is the parametric certificate that
+$M_P(\alpha_M^{+}(x))-\Psi_P(x)>0$ for all $x$, obtained by eliminating $\mu$
+(from $3\mu^2-3\mu+x=0$) and the balanced stationary parameter (from
+$\partial_\alpha\Phi_P=0$) and checking the resulting univariate polynomial has
+no root in $(2/3,3/4)$ --- the same Sturm endgame as the other certificates.  The
+resultant factors as $x^6(2x-1)^4(3x-2)^2(4x-3)^2\cdot D_{18}(x)$, whose only root
+of $D_{18}$ in $(2/3,3/4)$, at $x\approx0.74948$, is spurious (the true difference
+is $\approx4.2\cdot10^{-5}>0$ there); finishing requires isolating the correct
+algebraic branches so the certificate sees only the true difference.
+
+\paragraph{A conceptual reading.}  The Mantel arc is the complete $4$-partite LS
+template; Lemma~\ref{lem:mantel} says \emph{the filling construction strictly
+beats the clique template} on $(2/3,3/4)$ --- exactly the phenomenon
+\S\ref{sec:nonclique} discovered numerically.  Step~A2 thus has clean geometric
+content: the only two competitive ways to fill a $3$-blowup to edge density $x$
+are (i) balance the parts and put a regular triangle-free filling inside $A$ (the
+$\Psi$-construction), or (ii) saturate the filling to a $4$-partite graphon; and
+(i) always wins.
+
+% ============================================================================
+\section{Numerical evidence for Step A1: a direct step-graphon optimiser}
+\label{sec:numerics}
+
+Step~A1 (Problem~\ref{prob:A1}) --- that an \emph{arbitrary} minimiser collapses
+onto a $3$-blowup skeleton --- is the remaining bottleneck.  As direct evidence,
+\texttt{scripts/optimize\_graphon.py} minimises $t(P,W)$ and (separately)
+$t(K_4,W)$ over symmetric step graphons $W$ at fixed edge density $x$, by
+projected (Adam) gradient with random restarts.  Densities and gradients are
+exact (\texttt{einsum}); the gradient is finite-difference-checked to
+$\approx10^{-11}$.
+
+Two quantities are tracked at the achieved density $x'=t(K_2,W_{\mathrm{opt}})$
+(to remove the penalty-constraint confound):
+\begin{itemize}[itemsep=2pt]
+\item \texttt{conj-ok}: whether $t(P,W_{\mathrm{opt}})\ge\Psi_P(x')$, i.e.\
+whether the global-min conjecture (Conjecture~\ref{conj:global-reduction}) holds
+at the found minimiser;
+\item the $K_4$-gap $t(K_4,W_{\mathrm{opt}})-g_{4,3}(x')$, where $g_{4,3}$ is the
+LS $K_4$-curve \eqref{eq:g43}.  A small gap is exactly the supersaturation
+mechanism of Lemma~\ref{lem:K4-stability}: a near-minimal $K_4$-density forces
+$W$ close to a $3$-blowup.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c|c|c}
+$x$ & $x'$ & $\min t(P)$ & $\Psi_P(x')$ & \texttt{conj-ok} & $t(K_4)$@$P$-min & $g_{4,3}(x')$ & $K_4$-gap \\ \hline
+0.680 & 0.67864 & 0.011563 & 0.010669 & true & 0.017096 & 0.015667 & 0.00143 \\
+0.700 & 0.69882 & 0.033076 & 0.028612 & true & 0.047229 & 0.040680 & 0.00655 \\
+0.720 & 0.71872 & 0.050275 & 0.045854 & true & 0.069638 & 0.063409 & 0.00623 \\
+\end{tabular}
+\end{center}
+
+Two findings:
+\begin{enumerate}[label=(\arabic*),itemsep=3pt]
+\item \texttt{conj-ok} holds at all three densities: the numerically found
+$t(P)$-minimiser obeys $t(P,W_{\mathrm{opt}})\ge\Psi_P(x')$, consistent with
+$f_P=\Psi_P$.  (It exceeds $\Psi_P$ by a few $\times10^{-3}$, as expected for a
+finite step graphon with a penalised constraint.)
+\item The $K_4$-gap is small and positive ($\sim10^{-3}$): the $t(P)$-minimiser
+sits just above the $K_4$-minimum, the regime in which the Step~A1 stability
+mechanism would force proximity to a $3$-blowup.  Inspecting the sorted degree
+profile of $W_{\mathrm{opt}}$ shows a clean two-level structure --- a low-degree
+cluster (the $A$-part) and a high-degree cluster pinned near the cross-block
+value (e.g.\ six blocks at degree $0.75$ at $x=0.72$) --- i.e.\ exactly the
+$3$-blowup skeleton, with the nontrivial structure confined to the low-degree
+$A$-part.
+\end{enumerate}
+
+This is evidence, not proof: it does not establish the cut-metric stability of
+Lemma~\ref{lem:K4-stability}, but it confirms that the conjectured minimiser
+structure and the supersaturation mechanism behave as Plan~A predicts on the
+first Tur\'an interval.
+
+% ============================================================================
+\section{Where the project currently stands}
+\label{sec:status}
+
+\subsection{Solved or essentially settled}
+
+\begin{enumerate}[label=(\arabic*),itemsep=2pt]
+\item Problem 1: balanced $k$-partite and constant values are explicit.
+\item The $k=5$ circular graphon has density $24349/187500$ and beats both
+benchmarks; explicit rational competitors beat both benchmarks for $k=3,4,5$.
+\item For $k\ge 6$, $T_k$ is first-order locally stable
+(Theorem~\ref{thm:first-order-stability}, with the averaging step explicit), so
+any all-$k$ non-optimality proof must be global.
+\item The original all-graphs extension of Problem 2 is false; $K_3\sqcup K_3$
+has mixed curvature on $[1/2,2/3]$.
+\item All clique curves $f_{K_r}$ are piecewise concave
+(Theorem~\ref{thm:clique-concave}).
+\item $K_4^\dagger$ and $K_3\cup_{K_2}K_4$ are \emph{not} minimised by the LS
+$4$-partite clique template at $x=17/25$.
+\item Inside the tripartite Tur\'an-filling family, $P$ and $J$ reduce to the
+explicit one-dimensional curves $\Psi_P,\Psi_J$, which are now certified rigorously:
+unique stationary branch (Theorem~\ref{thm:branch-range}), monotone
+parametrisation (Theorem~\ref{thm:monotonicity}), endpoints
+(Theorem~\ref{thm:endpoints}), the in-family minimum beats the boundary
+(Theorem~\ref{thm:stat-vs-bdry}), and \textbf{mixed convex-then-concave
+curvature} (Theorem~\ref{thm:mixed-curvature}).
+\item \textbf{Step~A2} (in-family reduction to balanced parts) is closed in its
+corrected global form (Theorem~\ref{thm:balancing-main}), modulo one Sturm
+endgame (\S\ref{sec:balancing-status}).  The naive per-$\alpha$ version is false
+(Proposition~\ref{prop:counter}).
+\end{enumerate}
+
+\subsection{Main open questions}
+
+\begin{problem}[Problem 1, $k=5$ lower bound]
+Prove or disprove $t(H,W)\ge 24349/187500$ whenever $t(K_2,W)=4/5$, and identify
+all minimisers, or find a better graphon.
+\end{problem}
+
+\begin{problem}[Problem 1, all $k$]
+For every $k>2$ decide whether the minimiser at $1-1/k$ is neither $T_k$ nor
+constant.  For $k\ge6$ this needs a global construction or a global optimality
+proof.
+\end{problem}
+
+\begin{problem}[Odd-block decomposition]
+Develop a decomposition theory for $f_F$ when $F$ has multiple odd blocks; $mK_3$
+shows products of odd pieces destroy any simple dichotomy.
+\end{problem}
+
+\begin{problem}[Global reduction for $P$ and $J$ --- Step~A1]
+Prove the cut-metric stability of Lemma~\ref{lem:K4-stability} (or otherwise
+establish the $3$-blowup skeleton), which with Step~A2
+(Theorem~\ref{thm:balancing-main}) yields $f_P=\Psi_P$, $f_J=\Psi_J$ on
+$[2/3,3/4]$.  \S\ref{sec:numerics} gives supporting evidence.
+\end{problem}
+
+\begin{problem}[Curvature on later Tur\'an intervals]
+Determine the analogue of $\Psi_P,\Psi_J$ on $[3/4,4/5]$ ($4$-blowup with a
+triangle-free filling) and its curvature signature.
+\end{problem}
+
+% ============================================================================
+\section{Research directions}
+\label{sec:directions}
+
+\paragraph{Flag-algebra certificates.}  The most direct path to the missing lower
+bounds.  For Problem 1, certify $t(H,W)-24349/187500\ge0$ under $t(K_2,W)=4/5$
+(Problem~\ref{prob:B}).  For Problem 2, certify $t(P,W)\ge\Psi_P(x)$ and
+$t(J,W)\ge\Psi_J(x)$ on $[2/3,3/4]$; these are parameter-dependent, and the mixed
+curvature forces the interpolation to split at $x^*$.
+
+\paragraph{Symmetrisation and stability (Plan A).}  Prove the $3$-blowup skeleton
+(Step~A1, Lemma~\ref{lem:K4-stability}) by adapting $K_4$-supersaturation
+stability; Step~A2 is done.  This respects the parametric structure of the
+minimiser and is the most natural route.
+
+\paragraph{Rooted density inequalities (Plan C).}  Develop sharp rooted
+clique-density inequalities under an edge-density constraint, using
+\eqref{eq:P-integral}; this would also explain the mixed-curvature kink
+(Problem~\ref{prob:C}).
+
+\paragraph{Formal algebraic verification.}  The one-dimensional certificates of
+\S\ref{sec:certificates} are exact and already machine-checked in \texttt{sympy};
+a Lean/Sage port would make the finite-dimensional part fully publication-ready.
+
+\paragraph{Revisiting the small-graph classification.}  Because $K_4^\dagger$ and
+$K_3\cup_{K_2}K_4$ do not use the clique template, re-enumerate non-bipartite
+graphs on $\le5$ vertices, generate candidate Tur\'an-filling templates, solve the
+reduced problems exactly, and certify by flag algebras.
+
+% ============================================================================
+\section{A compact checklist for collaborators}
+\label{sec:checklist}
+
+\begin{enumerate}[label=\textbf{Task \arabic*.},itemsep=3pt]
+\item Certify the $k=5$ circular value $24349/187500$ at $4/5$ by flag algebras
+(Problem~\ref{prob:B}).
+\item Search for global competitors to $T_k$ for $k\ge6$ (local perturbations
+will not find them; Theorem~\ref{thm:first-order-stability}); the next
+infinitesimal step is the second-order analysis of $t(H,S_{k,a,b})$.
+\item Treat $K_3\sqcup K_3$ as the canonical obstruction to the original
+Problem 2 extension.
+\item Do not assume clique-decorated graphs are minimised by clique-density
+templates --- $K_4^\dagger$ and $K_3\cup_{K_2}K_4$ disprove that.
+\item Finish the all-$x$ Mantel-domination Sturm certificate
+(\S\ref{sec:balancing-status}) to fully close Step~A2.
+\item Prove Step~A1: the cut-metric stability of Lemma~\ref{lem:K4-stability}
+(literature survey of Pikhurko--Razborov-type results is the first move).
+\item Optionally, sample a flag-algebra SDP for $\Psi_P$ at $x=17/25$ to gauge
+tractability.
+\end{enumerate}
+
+% ============================================================================
+\appendix
+
+\section{Exact finite-sum checker for the family $S_{k,a}$}
+\label{app:Ska}
+
+\[
+   t(H,S_{k,a})=\frac1{k^6}\sum_{c_1,\ldots,c_6\in[k]}
+        \prod_{ij\in E(H)}
+        \left(a\1\{c_i=c_j\}+\left(1-\frac{a}{k-1}\right)\1\{c_i\ne c_j\}\right).
+\]
+This finite sum is the source of the rational values in \S\ref{ssec:Ska} and of
+\[
+   \left.\frac{d}{da}t(H,S_{k,a})\right|_{a=0}
+   =\frac{6k^3-55k^2+142k-111}{k^5}.
+\]
+
+\section{Derivative formulae for the reduced $P$ and $J$ problems}
+\label{app:derivatives}
+
+For $P$, with
+$\Phi_P(\alpha,x)=\frac{3(1-\alpha)^2(2\alpha^2+\alpha+2x-1)(3\alpha^2-2\alpha+2x-1)}{8\alpha}$,
+\[
+\frac{\partial \Phi_P}{\partial \alpha}
+=\frac{3(\alpha-1)}{8\alpha^2}N_P(\alpha,x),
+\quad
+\begin{aligned}
+N_P={}&30\alpha^5-22\alpha^4+30\alpha^3x-19\alpha^3
+-14\alpha^2x+9\alpha^2\\
+&+4\alpha x^2-4\alpha x+\alpha+4x^2-4x+1.
+\end{aligned}
+\]
+For $J$, with
+$\Phi_J(\alpha,x)=\frac{(1-\alpha)^2(3\alpha^2-2\alpha+2x-1)(4\alpha^2-\alpha+4x-2)}{4\alpha}$,
+\[
+\frac{\partial \Phi_J}{\partial \alpha}
+=\frac{(\alpha-1)}{2\alpha^2}N_J(\alpha,x),
+\quad
+\begin{aligned}
+N_J={}&30\alpha^5-40\alpha^4+30\alpha^3x-\alpha^3
+-20\alpha^2x+9\alpha^2\\
+&+4\alpha x^2-4\alpha x+\alpha+4x^2-4x+1.
+\end{aligned}
+\]
+Substituting $x=\frac12+\alpha-\frac32\alpha^2+\alpha^2q$ into $N_P,N_J$ gives the
+stationarity equations of \S\ref{ssec:branches}.
+
+\section{Companion verification scripts}
+\label{app:scripts}
+
+All scripts live in \texttt{scripts/} and are run with
+\texttt{/opt/miniconda3/bin/python3} (which has \texttt{sympy} 1.14; the system
+\texttt{/usr/bin/python3} does \emph{not}).  Each uses exact rational arithmetic;
+floating point appears only as a sanity print.
+
+\begin{center}
+\begin{tabular}{l|l}
+script & certifies \\ \hline
+\texttt{verify\_reduced\_problems.py} & branch uniqueness, monotonicity, endpoints, curvature (\S\ref{sec:certificates}) \\
+\texttt{verify\_gap.py} & stationary-vs-boundary gap, Theorem~\ref{thm:stat-vs-bdry} \\
+\texttt{verify\_balancing\_reduction.py} & Step~A2: densities, counterexample, saddle, Mantel (\S\ref{sec:balancing}) \\
+\texttt{derive\_unbalanced.py} & SBM cross-check of the unbalanced $t(P),t(J)$ \\
+\texttt{explore\_global\_infamily.py} & numpy scan: global in-family min $=$ balanced min \\
+\texttt{optimize\_graphon.py} & direct step-graphon optimiser, Step~A1 evidence (\S\ref{sec:numerics}) \\
+\end{tabular}
+\end{center}
+
+% ============================================================================
+\begin{thebibliography}{9}
+
+\bibitem{ReiherCliqueDensity}
+C. Reiher,
+\emph{The clique density theorem},
+Annals of Mathematics \textbf{184} (2016), 683--707.
+Also arXiv:1212.2454.
+
+\bibitem{BennettDudekLidickyPikhurkoC5}
+P. Bennett, A. Dudek, B. Lidick\'y, and O. Pikhurko,
+\emph{Minimizing the number of 5-cycles in graphs with given edge-density},
+Combinatorics, Probability and Computing \textbf{29} (2020), 44--67.
+Also arXiv:1803.00165.
+
+\bibitem{PikhurkoRazborov}
+O. Pikhurko and A. Razborov,
+\emph{Asymptotic structure of graphs with the minimum number of triangles},
+Combinatorics, Probability and Computing \textbf{26} (2017), 138--160.
+Also arXiv:1204.2846.
+
+\bibitem{LovaszBook}
+L. Lov\'asz,
+\emph{Large Networks and Graph Limits},
+American Mathematical Society, 2012.
+
+\end{thebibliography}
+
+\end{document}
