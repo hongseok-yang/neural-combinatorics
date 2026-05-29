@@ -1,0 +1,340 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\DeclareMathOperator{\Tr}{Tr}
+
+\title{Addendum: closing the remaining $C_9$ gap in the odd-cycle graphon bound}
+\author{Working note for the odd-cycle project}
+\date{May 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The previous verified note proved
+\[
+        t(C_9,W)\ge p^9-p(1-p)^8
+\]
+for all graphons with $p=t(K_2,W)\le1/2$ or $p\ge1003/2000$.  This addendum closes the only remaining interval
+\[
+        1/2<p<1003/2000.
+\]
+The new ingredient is not another complement path certificate.  Instead, we combine the sharp triangle-density theorem with a short spectral moment argument.  Consequently the $C_9$ case is now proved for all graphons.
+\end{abstract}
+
+\section{Status after this addendum}
+
+The project conjecture is the following.
+
+\begin{quote}
+For every integer $k\ge1$, every graphon $W\colon[0,1]^2\to[0,1]$, and
+\[
+        p=t(K_2,W),
+\]
+one has
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{quote}
+
+The previous note established this conjecture for $C_3$, $C_5$, $C_7$, for all odd cycles under the additional assumption that $W$ is $p$-regular, and for $C_9$ outside the narrow interval $1/2<p<1003/2000$.  The main theorem of this addendum is the missing interval.
+
+\begin{theorem}[The missing $C_9$ interval]\label{thm:gap}
+Let $W$ be a graphon and let $p=t(K_2,W)$.  If
+\[
+        \frac12<p\le \frac{1003}{2000},
+\]
+then
+\[
+        t(C_9,W)\ge p^9-p(1-p)^8.
+\]
+\end{theorem}
+
+Combining Theorem~\ref{thm:gap} with the previous path-certificate theorem gives the following complete statement.
+
+\begin{corollary}[The $C_9$ case is closed]\label{cor:C9}
+For every graphon $W$ and $p=t(K_2,W)$,
+\[
+        t(C_9,W)\ge p^9-p(1-p)^8.
+\]
+\end{corollary}
+
+\section{Triangle-density input}
+
+We use the sharp triangle-density theorem, in its graphon form.  This is the $K_3$ case of the clique density theorem; it was first proved asymptotically by Razborov via flag algebras and later became part of the general clique density theorem.
+
+\begin{theorem}[Sharp triangle-density bound]\label{thm:triangle-density}
+Let $W$ be a graphon with edge density $p=t(K_2,W)$.  Suppose
+\[
+        \frac12\le p\le\frac23.
+\]
+Let $c\in[0,1/3]$ be determined by
+\[
+        p=\frac12+c-\frac32c^2.
+\]
+Then
+\[
+        t(K_3,W)\ge \Theta(p):=\frac32 c(1-c)^2.
+\]
+\end{theorem}
+
+The extremal graphon for this range is the complete tripartite graphon with two equal large parts of measure $(1-c)/2$ and one small part of measure $c$.
+
+\section{A spectral moment lemma}
+
+The proof of the missing interval uses only three spectral facts.  Let $T=T_W$ be the self-adjoint Hilbert--Schmidt operator associated with $W$.  Its eigenvalues will be denoted
+\[
+        \lambda_0,\lambda_1,\lambda_2,\ldots,
+\]
+where $\lambda_0\ge0$ is the spectral radius.  Since $T$ is a positive compact operator and
+\[
+        \langle T\one,\one\rangle=p,
+\]
+we have
+\[
+        \lambda_0\ge p.
+\]
+Also
+\[
+        \sum_i \lambda_i^2=\Tr(T^2)=\int_{[0,1]^2} W(x,y)^2\,dx\,dy\le p.
+\]
+Finally,
+\[
+        t(C_m,W)=\Tr(T^m)=\sum_i\lambda_i^m
+\]
+for $m\ge3$.
+
+\begin{lemma}[Spectral closure criterion for the small $C_9$ interval]\label{lem:spectral-closure}
+Let
+\[
+        \frac12<p\le\frac{1003}{2000},
+        \qquad q=1-p.
+\]
+Assume that
+\[
+        t(K_3,W)\ge \Theta(p),
+\]
+where $\Theta$ is the function from Theorem~\ref{thm:triangle-density}.  Then
+\[
+        t(C_9,W)\ge p^9-pq^8.
+\]
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+        \ell=\lambda_0.
+\]
+Then $\ell\ge p$.  Put
+\[
+        S=p-\ell^2.
+\]
+The non-principal eigenvalues have total square at most $S$.
+
+Let $N_9$ denote the total ninth-power contribution of the negative non-principal eigenvalues:
+\[
+        N_9=\sum_{i\ge1:\,\lambda_i<0} |\lambda_i|^9.
+\]
+We will prove
+\begin{equation}\label{eq:N9-target}
+        N_9\le \ell^9-p^9+pq^8.
+\end{equation}
+Then
+\[
+\begin{aligned}
+        t(C_9,W)
+        &=\ell^9+
+          \sum_{i\ge1:\,\lambda_i>0}\lambda_i^9
+          -N_9 \\
+        &\ge \ell^9-N_9
+        \ge p^9-pq^8,
+\end{aligned}
+\]
+and the lemma follows.
+
+Define
+\[
+        A=A_\ell:=\bigl(\ell^9-p^9+pq^8\bigr)^{1/9}.
+\]
+Thus \eqref{eq:N9-target} is the assertion $N_9\le A^9$.
+Suppose, for contradiction, that $N_9>A^9$.  Let
+\[
+        z=N_9^{1/9}>A.
+\]
+For the negative non-principal eigenvalues, the monotonicity of $\ell^r$ norms gives
+\[
+        \sum_{\lambda_i<0}|\lambda_i|^3\ge z^3,
+        \qquad
+        \sum_{\lambda_i<0}|\lambda_i|^2\ge z^2.
+\]
+Therefore the positive non-principal eigenvalues have total square at most $S-z^2$, and hence their total cube is at most $(S-z^2)^{3/2}$.  Consequently
+\begin{equation}\label{eq:rest-cube-upper}
+        \sum_{i\ge1}\lambda_i^3
+        \le (S-z^2)^{3/2}-z^3.
+\end{equation}
+The function
+\[
+        z\mapsto (S-z^2)^{3/2}-z^3
+\]
+is strictly decreasing on its domain $0\le z\le\sqrt S$.  Hence \eqref{eq:rest-cube-upper} and $z>A$ imply
+\begin{equation}\label{eq:rest-cube-contradiction-upper}
+        \sum_{i\ge1}\lambda_i^3
+        < (S-A^2)^{3/2}-A^3,
+\end{equation}
+unless $S<A^2$, in which case $N_9>A^9$ is already impossible because the negative square mass is at least $z^2>A^2>S$.
+
+On the other hand, the triangle-density assumption gives
+\begin{equation}\label{eq:rest-cube-lower}
+        \sum_{i\ge1}\lambda_i^3
+        =t(K_3,W)-\ell^3
+        \ge \Theta(p)-\ell^3.
+\end{equation}
+Thus it remains to prove
+\begin{equation}\label{eq:key-ell}
+        \Theta(p)-\ell^3
+        \ge (S-A^2)^{3/2}-A^3
+\end{equation}
+whenever $S\ge A^2$.
+
+Let
+\[
+        H=p-\ell^2-A^2.
+\]
+The desired inequality is
+\[
+        G(\ell):=\Theta(p)-\ell^3+A^3-H^{3/2}\ge0.
+\]
+Since
+\[
+        A^9=\ell^9-p^9+pq^8
+\]
+and $pq^8<p^9$, we have $A<\ell$.  Moreover
+\[
+        A'=\frac{\ell^8}{A^8}.
+\]
+On the domain $H\ge0$,
+\[
+\begin{aligned}
+        G'(\ell)
+        &=-3\ell^2+3A^2A'
+          +3\sqrt H\, (\ell+AA') \\
+        &> -3\ell^2+3A^2A' \\
+        &=3\ell^2\left(\left(\frac{\ell}{A}\right)^6-1\right)>0.
+\end{aligned}
+\]
+Therefore it is enough to prove \eqref{eq:key-ell} at $\ell=p$.
+
+Set
+\[
+        \eps=p-\frac12,
+        \qquad 0<\eps\le\frac{3}{2000},
+        \qquad q=\frac12-\eps,
+\]
+and
+\[
+        A_0=(pq^8)^{1/9},
+        \qquad H_0=pq-A_0^2.
+\]
+We need
+\begin{equation}\label{eq:key-p}
+        \Theta(p)\ge p^3-A_0^3+H_0^{3/2}.
+\end{equation}
+We prove this by crude but explicit estimates.
+
+Let $c$ be the triangle-density parameter from Theorem~\ref{thm:triangle-density}.  Since
+\[
+        \eps=c-\frac32c^2,
+\]
+we have $c\ge\eps$.  Also $\eps\le3/2000$ implies $c\le1/500$.  Hence
+\begin{equation}\label{eq:theta-lower}
+        \Theta(p)=\frac32c(1-c)^2
+        \ge \frac32\eps\left(1-\frac1{500}\right)^2
+        >\frac{149}{100}\eps.
+\end{equation}
+Next, $A_0\le1/2$, and
+\[
+        \frac{d}{d\eps}(p^3-A_0^3)
+        =3p^2+\frac{A_0^3}{3}\left(\frac8q-\frac1p\right).
+\]
+For $1/2\le p\le1003/2000$ and $997/2000\le q\le1/2$, the right-hand side is less than $27/20$.  Since $p^3-A_0^3=0$ at $\eps=0$, we get
+\begin{equation}\label{eq:p3A3-upper}
+        p^3-A_0^3\le \frac{27}{20}\eps.
+\end{equation}
+Finally,
+\[
+        \frac{d}{d\eps}(pq-A_0^2)
+        =-2\eps+\frac{2A_0^2}{9}\left(\frac8q-\frac1p\right)<\frac45.
+\]
+Thus
+\[
+        H_0=pq-A_0^2\le\frac45\eps<\eps.
+\]
+Since $\eps\le3/2000<1/400$, we have
+\begin{equation}\label{eq:H-upper}
+        H_0^{3/2}\le \eps^{3/2}<\frac1{20}\eps.
+\end{equation}
+Combining \eqref{eq:p3A3-upper} and \eqref{eq:H-upper},
+\[
+        p^3-A_0^3+H_0^{3/2}
+        <\left(\frac{27}{20}+\frac1{20}\right)\eps
+        =\frac75\eps
+        <\frac{149}{100}\eps
+        \le\Theta(p),
+\]
+which proves \eqref{eq:key-p}.  Therefore \eqref{eq:key-ell} holds for every admissible $\ell$, and the contradiction proves $N_9\le A^9$.  This completes the proof.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:gap}]
+For $1/2<p\le1003/2000$, we have $p<2/3$, so Theorem~\ref{thm:triangle-density} applies and gives
+\[
+        t(K_3,W)\ge\Theta(p).
+\]
+Lemma~\ref{lem:spectral-closure} then gives
+\[
+        t(C_9,W)\ge p^9-p(1-p)^8.
+\]
+\end{proof}
+
+\section{What changed conceptually}
+
+The previous $C_9$ proof attempted to continue the $C_5$ and $C_7$ complement-expansion method.  That method replaced the complement cycle term $t(C_9,U)$ by the path density $t(P_8,U)$.  The replacement is valid but loses too much information near $p=1/2$.
+
+The proof above uses a different source of information.  Near $p=1/2$, the sharp triangle-density theorem forces enough positive triangle density.  Spectrally, this prevents the negative non-principal eigenvalues from contributing too much to $\Tr(T_W^9)$.  The argument shows that the possible negative ninth-power mass is at most exactly the amount allowed by the target inequality.
+
+Thus the $C_9$ case is now closed, but the proof is hybrid:
+\begin{itemize}[leftmargin=2em]
+    \item $p\le1/2$: trivial because the proposed right-hand side is nonpositive;
+    \item $1/2<p\le1003/2000$: sharp triangle-density theorem plus spectral moment argument;
+    \item $p\ge1003/2000$: complement path-certificate from the previous verified note.
+\end{itemize}
+
+The next research target is to decide whether this hybrid strategy can help with $C_{11}$ and beyond.  The path-certificate method may again prove the statement away from $p=1/2$, while color-critical supersaturation or clique-density inputs may close a neighbourhood of $p=1/2$.
+
+\begin{thebibliography}{9}
+
+\bibitem{RazborovTriangles}
+A.~A. Razborov.
+\newblock On the minimal density of triangles in graphs.
+\newblock \emph{Combinatorics, Probability and Computing} 17(4):603--618, 2008.
+
+\bibitem{ReiherCliqueDensity}
+C.~Reiher.
+\newblock The clique density theorem.
+\newblock \emph{Annals of Mathematics} 184(3):683--707, 2016.
+
+\end{thebibliography}
+
+\end{document}
