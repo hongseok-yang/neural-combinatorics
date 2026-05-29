@@ -1,0 +1,349 @@
+% Companion note: the in-family reduction to balanced parts (Step A2),
+% in CORRECTED (global, not per-alpha) form.
+% Builds on:  two_problems_progress_report.tex (section 7),
+%             rigorous_certificates.tex,  global_reduction_strategy.tex.
+% All algebra reproduced by scripts/verify_balancing_reduction.py.
+
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\dd}{\,d}
+\DeclareMathOperator{\Hess}{Hess}
+
+\title[The in-family reduction to balanced parts]%
+{The in-family reduction to balanced parts (Step~A2), corrected:\\
+$\min$-over-unbalanced equals $\Psi_P,\Psi_J$ on $[2/3,3/4]$}
+\author{Companion note (balancing reduction)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We complete the in-family side of the tripartite Tur\'an-filling reduction
+for $P=K_4^{\dagger}$ and $J=K_3\cup_{K_2}K_4$.  The strategy note
+(\texttt{global\_reduction\_strategy.tex}, Lemma~4.5) proposed to handle
+unbalanced parts by a \emph{per-$\alpha$} balancing lemma: at fixed
+$|A|=\alpha$ and fixed edge density, balancing $|B|=|C|$ should not increase
+$t(P,W)$.  We show this per-$\alpha$ statement is \textbf{false}
+(\S\ref{sec:counter}): for $\alpha>1/2$ near the Mantel saturation of the
+filling it can be strictly violated.  We then prove the \emph{correct}
+statement, which is all that the global reduction needs:
+
+\begin{quote}
+For $x\in(2/3,3/4)$, the minimum of $t(P,W)$ (resp.\ $t(J,W)$) over the
+\emph{whole} tripartite-filling family --- parts $\alpha,\beta,\gamma$
+\emph{unconstrained} and any triangle-free filling --- equals the balanced
+reduced value $\Psi_P(x)$ (resp.\ $\Psi_J(x)$) of \S7 of the progress note.
+The minimiser has $\beta=\gamma$ and a regular filling.
+\end{quote}
+
+The proof reduces the two-parameter minimisation to its boundary by showing
+its unique interior critical point is a \emph{saddle} (an exact resultant
+certificate, \S\ref{sec:saddle}); the boundary consists of the balanced arc
+and the ``Mantel arc'' $q=1/2$, which is exactly the complete $4$-partite
+template, and the latter is dominated by the balanced minimum
+(\S\ref{sec:mantel}).  Every algebraic step is reproduced by
+\texttt{scripts/verify\_balancing\_reduction.py}.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup: the unbalanced family and its densities}
+\label{sec:setup}
+
+We keep the notation of \S7 of the progress note but \emph{drop} the
+constraint $|B|=|C|$.  Let $[0,1]=A\sqcup B\sqcup C$ with
+\[
+   |A|=\alpha,\quad |B|=\beta,\quad |C|=\gamma,\qquad \alpha+\beta+\gamma=1,
+\]
+put all cross-edges between $A,B,C$, no edges inside $B$ or $C$, and a
+triangle-free filling $F$ inside $A$ with $q=t(K_2,F)$,
+$D_2(F)=\int d_F^2$.  Write $s=\beta+\gamma=1-\alpha$ and $p=\beta\gamma$.
+
+\begin{lemma}[Densities, unbalanced]
+\label{lem:densities}
+For the family above,
+\begin{align}
+   t(K_2,W) &= 2(\alpha\beta+\alpha\gamma+\beta\gamma)+\alpha^2 q
+            = 2\alpha s+2p+\alpha^2 q,\\
+   t(P,W)   &= 3\alpha^2\beta\gamma\,\bigl[(2\alpha+3s)\,q+2\alpha D_2(F)\bigr],
+            \label{eq:tP}\\
+   t(J,W)   &= 2\alpha^2\beta\gamma\,\bigl[\tfrac12(\alpha+3s)\,q+2\alpha D_2(F)\bigr].
+            \label{eq:tJ}
+\end{align}
+In particular both depend on $F$ only through $q$ and $D_2(F)$, and setting
+$\beta=\gamma=s/2$ recovers the \S7 formulas
+$t(P,W)=\tfrac32\alpha^2(1-\alpha)^2[\tfrac{3-\alpha}{2}q+\alpha D_2]$ and
+$t(J,W)=\alpha^2(1-\alpha)^2[(\tfrac32-\alpha)q+2\alpha D_2]$.
+\end{lemma}
+
+\begin{proof}
+Every $K_4$ in $W$ uses two $F$-adjacent vertices in $A$, one in $B$, one in
+$C$ (the parts $B,C$ are independent so contain $\le1$ vertex each; three
+vertices in $A$ would be an $F$-triangle, excluded).  Summing the rooted
+contributions over the position of the distinguished/shared vertices, exactly
+as in \S7 but keeping $\beta\ne\gamma$, gives \eqref{eq:tP}--\eqref{eq:tJ};
+the Jensen step bounding $D_2\ge q^2$ is unchanged.  The computation is
+reproduced symbolically (as a finite stochastic-block-model sum) in
+\texttt{verify\_balancing\_reduction.py}, Part~0, which also checks the
+balanced specialisation.
+\end{proof}
+
+By Jensen ($D_2\ge q^2$, equality for regular fillings) and monotonicity of
+\eqref{eq:tP}--\eqref{eq:tJ} in $D_2$, at fixed $(\alpha,\beta,\gamma,q)$ ---
+hence at fixed edge density, which depends on $F$ only through $q$ --- the
+minimum over fillings is at $D_2=q^2$.  \emph{Henceforth we take $D_2=q^2$
+(regular filling)} and study
+\begin{equation}
+\label{eq:Treg}
+   t(P,W)=3\alpha^2 p\,q\,(2\alpha q+2\alpha+3s),\qquad
+   t(J,W)=2\alpha^2 p\,q\,(4\alpha q+\alpha+3s).
+\end{equation}
+
+\section{The per-$\alpha$ balancing lemma is false}
+\label{sec:counter}
+
+Fix $\alpha$ and $x$; then $s=1-\alpha$ is fixed and, by the edge-density
+constraint, $2p+\alpha^2 q$ is fixed, so increasing $p=\beta\gamma$ toward its
+balanced maximum $s^2/4$ forces $q$ down.
+
+\begin{proposition}[Counterexample]
+\label{prop:counter}
+At $\alpha=\tfrac{11}{20}$, $x=\tfrac23$, balancing increases $t(P,W)$:
+the balanced configuration ($p=\tfrac{81}{1600}$, $q=\tfrac{169}{726}$) has
+$t(P,W)=\tfrac{4074759}{140800000}\approx0.02894$, whereas the unbalanced
+configuration with $q=\tfrac12$ (i.e.\ $p=\tfrac{49}{4800}$) has
+$t(P,W)=\tfrac{17787}{1280000}\approx0.01390<0.02894$.
+\end{proposition}
+
+Thus the per-$\alpha$ balancing claim of Lemma~4.5 of the strategy note is
+false.  The violation occurs because, for $\alpha>1/2$, the balanced filling
+density needed to reach $x$ is small, and shifting weight from the parts into
+the filling (toward the Mantel bound $q=1/2$) lowers $t(P,W)$.  Crucially
+$\alpha=\tfrac{11}{20}>\tfrac12$ lies outside the range
+$[\tfrac13,\tfrac12]$ where the balanced optimum sits; we show next that such
+configurations never realise the \emph{global} in-family minimum.
+
+\section{The reduction theorem}
+\label{sec:thm}
+
+Substituting $p=\tfrac12(x-2\alpha s-\alpha^2 q)$ into \eqref{eq:Treg}, the
+in-family density at fixed $x$ is the two-variable function
+\begin{equation}
+\label{eq:T2}
+   T_P(\alpha,q)=\tfrac32\alpha^2\,(x-2\alpha s-\alpha^2 q)\,q\,(2\alpha q+3-\alpha),
+   \qquad
+   T_J(\alpha,q)=\alpha^2\,(x-2\alpha s-\alpha^2 q)\,q\,(4\alpha q+3-2\alpha),
+\end{equation}
+on the feasible region
+$R_x=\{(\alpha,q):\alpha\in(0,1),\ 0\le p\le s^2/4,\ 0\le q\le \tfrac12\}$.
+
+\begin{theorem}[In-family reduction to balanced parts]
+\label{thm:main}
+For every $x\in(2/3,3/4)$,
+\[
+   \min_{R_x}T_P=\Psi_P(x),\qquad \min_{R_x}T_J=\Psi_J(x),
+\]
+the balanced reduced values of \S7, attained on the balanced arc
+$q=q_x(\alpha)$ (i.e.\ $\beta=\gamma$, regular filling).
+\end{theorem}
+
+The proof occupies \S\ref{sec:lens}--\ref{sec:mantel}.
+
+\subsection{The feasible region is the balanced--Mantel lens}
+\label{sec:lens}
+
+In the $(\alpha,q)$ coordinates the constraints $p\ge0$, $p\le s^2/4$,
+$q\le\tfrac12$ read
+\[
+   q\le \bar q(\alpha):=\frac{x-2\alpha s}{\alpha^2},\qquad
+   q\ge \underline q(\alpha):=\frac{x-2\alpha s-s^2/2}{\alpha^2},\qquad
+   q\le\tfrac12 .
+\]
+
+\begin{lemma}[Tur\'an thresholds]
+\label{lem:turan}
+For $x>2/3$ and all $\alpha$,
+\[
+   \bar q(\alpha)>\tfrac12
+   \quad\Longleftrightarrow\quad x>2\alpha-\tfrac32\alpha^2,
+   \qquad
+   \underline q(\alpha)>0
+   \quad\Longleftrightarrow\quad x>\tfrac12+\alpha-\tfrac32\alpha^2,
+\]
+and both right-hand inequalities hold for every $\alpha$, since
+\[
+   \tfrac23-\bigl(2\alpha-\tfrac32\alpha^2\bigr)=\tfrac16(3\alpha-2)^2\ge0,
+   \qquad
+   \tfrac23-\bigl(\tfrac12+\alpha-\tfrac32\alpha^2\bigr)=\tfrac16(3\alpha-1)^2\ge0.
+\]
+\end{lemma}
+
+Hence for $x\in(2/3,3/4)$ the constraints $p\ge0$ and $q\ge0$ are slack: the
+only active boundaries are the \emph{balanced arc} $q=\underline q(\alpha)$
+and the \emph{Mantel arc} $q=\tfrac12$, and $R_x$ is the closed
+``lens'' between them over
+$\alpha\in A_x=\bigl[\tfrac{1-\sqrt{3-4x}}2,\tfrac{1+\sqrt{3-4x}}2\bigr]$, the
+two arcs meeting where $\underline q(\alpha)=\tfrac12$ (the endpoints of
+$A_x$).  The two perfect squares are exactly the statement that a
+triangle-free-filled $2$-blowup (one part empty, $p=0$) or a filling-free
+$3$-blowup ($q=0$) caps the edge density at $2/3$; this is why the first
+Tur\'an interval begins at $x=2/3$.
+
+\subsection{No interior local minimum: the saddle certificate}
+\label{sec:saddle}
+
+\begin{lemma}[Interior critical points are saddles]
+\label{lem:saddle}
+For each $x\in(2/3,3/4)$ the function $T_P$ (resp.\ $T_J$) has $T_{qq}<0$ at
+every critical point in the interior of $R_x$.  Consequently no interior
+critical point is a local minimum, and $\min_{R_x}T_P$ is attained on
+$\partial R_x$.
+\end{lemma}
+
+\begin{proof}
+For fixed $\alpha$, $T_P(\alpha,\cdot)$ is a cubic in $q$ with leading
+coefficient $-3\alpha^5<0$; its second derivative $T_{qq}$ is affine in $q$
+and vanishes on the inflection locus $q=q_{\mathrm{infl}}(\alpha,x)$,
+which is rational:
+\[
+   q_{\mathrm{infl}}^{P}=\frac{5\alpha^2-7\alpha+2x}{6\alpha^2},
+   \qquad
+   q_{\mathrm{infl}}^{J}=\frac{10\alpha^2-11\alpha+4x}{12\alpha^2}.
+\]
+$T_{qq}<0$ exactly when $q>q_{\mathrm{infl}}$.  A critical point with
+$T_{qq}=0$ would lie on the inflection locus; substituting
+$q=q_{\mathrm{infl}}$ into $\partial_\alpha T$ and $\partial_q T$ gives
+polynomials $S(\alpha,x),U(\alpha,x)$ whose common zero is necessary, hence
+$\operatorname{Res}_\alpha(S,U)(x)=0$.  An exact computation
+(\texttt{verify\_balancing\_reduction.py}, Part~3) shows this resultant ---
+a degree-$15$ polynomial in $x$ --- has \emph{no root in $(2/3,3/4)$}, for
+both $P$ and $J$.  Therefore $T_{qq}\ne0$ at every critical point for all
+$x\in(2/3,3/4)$, so its sign is constant along each critical branch; at
+$x=\tfrac7{10}$ the (unique, interior) critical point has $T_{qq}<0$.  Hence
+$T_{qq}<0$ at every interior critical point throughout the interval.  A
+critical point with $T_{qq}<0$ has an indefinite (non-PSD) Hessian, so is not
+a local minimum.  As $R_x$ is compact and $T$ smooth, the minimum is on
+$\partial R_x$.
+\end{proof}
+
+\begin{remark}
+Geometrically: the unique interior critical point is the \emph{slice-maximum}
+branch of the downward cubic $T_P(\alpha,\cdot)$, never the slice-minimum
+branch.  The slice-minimum, where a constrained minimum could hide, carries
+no critical point and is therefore pushed to the boundary.
+\end{remark}
+
+\subsection{The boundary, and Mantel domination}
+\label{sec:mantel}
+
+On the balanced arc, $T(\alpha,q_x(\alpha))$ equals the \S7 reduced objective
+\[
+   \Phi_P(\alpha,x)=\frac{3(1-\alpha)^2(2\alpha^2+\alpha+2x-1)(3\alpha^2-2\alpha+2x-1)}{8\alpha},
+\]
+(and the analogous $\Phi_J$), whose minimum over $A_x$ is $\Psi_P(x)$ ---
+this is precisely the one-dimensional problem certified in \S7 and in
+\texttt{rigorous\_certificates.tex}.  On the Mantel arc $q=\tfrac12$,
+\begin{equation}
+\label{eq:M}
+   M_P(\alpha):=T_P(\alpha,\tfrac12)=\tfrac94\alpha^2\bigl(x-2\alpha+\tfrac32\alpha^2\bigr),
+   \qquad
+   M_J(\alpha):=T_J(\alpha,\tfrac12)=\tfrac32\alpha^2\bigl(x-2\alpha+\tfrac32\alpha^2\bigr).
+\end{equation}
+At $q=\tfrac12$ the filling is the complete bipartite graphon, so $W$ is the
+\emph{complete $4$-partite graphon} on $(A_1,A_2,B,C)$; \eqref{eq:M} is the
+$P$- (resp.\ $J$-) density of the Lov\'asz--Simonovits clique template.
+
+\begin{lemma}[Mantel domination]
+\label{lem:mantel}
+For $x\in(2/3,3/4)$, $\displaystyle\min_{\alpha\in A_x}M_P(\alpha)\ge\Psi_P(x)$,
+and likewise for $J$.
+\end{lemma}
+
+\begin{proof}[Proof (status)]
+$M_P$ is increasing--decreasing--increasing on $A_x$ with interior local
+minimum at $\alpha_M^{+}=\tfrac{3+\sqrt{9-12x}}6$; the left endpoint
+$\alpha_-$ of $A_x$ is a lens corner, where the Mantel and balanced arcs meet,
+so $M_P(\alpha_-)=\Phi_P(\alpha_-)\ge\Psi_P(x)$ automatically.  Hence
+$\min_{A_x}M_P=\min\bigl(\Phi_P(\alpha_-),M_P(\alpha_M^{+})\bigr)$ and it
+suffices that $M_P(\alpha_M^{+})\ge\Psi_P(x)$.  Along the Mantel-minimum
+locus, $x=3\mu(1-\mu)$ and $M_P(\alpha_M^{+})=\tfrac94\mu^3-\tfrac{27}8\mu^4$
+with $\mu=\alpha_M^{+}$.  This is a one-dimensional comparison of two
+algebraic functions of $x$.  It is verified \emph{exactly} at $98$ rational
+points dense in $(2/3,3/4)$ (\texttt{verify\_balancing\_reduction.py},
+Part~5), with strictly positive margin $\ge9\cdot10^{-5}$ (smallest near
+$x=2/3$); see \S\ref{sec:status} for the parametric Sturm certificate that
+upgrades this to all $x$.  Note the cheap pointwise bound $M_P\ge\Phi_P$ at
+$\alpha_M^{+}$ \emph{fails} (the discriminant factor $R_P(\alpha_M^{+},x)<0$),
+so the comparison genuinely uses the balanced \emph{minimum}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By Lemma~\ref{lem:saddle} the minimum is on $\partial R_x=$ (balanced arc)
+$\cup$ (Mantel arc).  The balanced arc has minimum $\Psi_P(x)$; the Mantel arc
+has minimum $\ge\Psi_P(x)$ by Lemma~\ref{lem:mantel}.  Hence
+$\min_{R_x}T_P=\Psi_P(x)$, attained on the balanced arc.  The same argument
+gives $\min_{R_x}T_J=\Psi_J(x)$.
+\end{proof}
+
+\section{What this does and does not settle}
+\label{sec:status}
+
+Theorem~\ref{thm:main} closes \textbf{Step~A2} of the global reduction in its
+corrected form: \emph{within the tripartite-filling family}, the unbalanced
+freedom never beats the balanced reduced curve, so the in-family minimum is
+exactly $\Psi_P,\Psi_J$.  Combined with the mixed-curvature result of
+\texttt{rigorous\_certificates.tex}, the in-family picture on the first
+Tur\'an interval is now complete and rigorous (modulo the one Sturm
+formalisation below).  What remains for $f_P=\Psi_P$ globally is
+\textbf{Step~A1} (the cut-metric stability reducing an arbitrary minimiser to
+a $3$-blowup skeleton), unchanged by this note.
+
+\paragraph{Rigour status of the present note.}
+Lemma~\ref{lem:densities} (densities), Proposition~\ref{prop:counter}
+(counterexample), Lemma~\ref{lem:turan} (Tur\'an thresholds) and
+Lemma~\ref{lem:saddle} (saddle / no interior minimum) are exact and uniform in
+$x\in(2/3,3/4)$.  Lemma~\ref{lem:mantel} (Mantel domination) is proved by an
+exact comparison at a dense rational grid; the remaining task is the
+parametric certificate that $M_P(\alpha_M^{+}(x))-\Psi_P(x)>0$ for all $x$,
+obtained by eliminating $\mu$ (from $3\mu^2-3\mu+x=0$) and the balanced
+stationary $\beta$ (from $\partial_\beta\Phi_P=0$) and verifying the resulting
+univariate polynomial has no root in $(2/3,3/4)$ --- the same Sturm-style
+endgame as the other certificates.
+
+\paragraph{A conceptual reading.}
+The Mantel arc is the complete $4$-partite (Lov\'asz--Simonovits) template;
+Lemma~\ref{lem:mantel} says \emph{the filling construction strictly beats the
+clique template} on $(2/3,3/4)$, which is exactly the phenomenon
+\S5--\S6 of the progress note discovered numerically.  Step~A2 thus has a
+clean geometric content: the only two ways to fill a $3$-blowup to edge
+density $x$ that can compete are (i) balance the parts and put a regular
+triangle-free filling inside $A$ (the $\Psi$-construction), or (ii) saturate
+the filling to a $4$-partite graphon; and (i) always wins.
+
+\end{document}

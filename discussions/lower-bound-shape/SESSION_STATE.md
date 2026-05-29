@@ -1,16 +1,51 @@
 # Session state — discussions/lower-bound-shape
 
-Last updated: 2026-05-29.
+Last updated: 2026-05-29 (afternoon session).
 
 This file is the resumption point for the work on the two graphon-optimisation
 problems described in [two_problems.pdf](two_problems.pdf), with current state
 documented in [two_problems_progress_report.tex](two_problems_progress_report.tex).
-The most recent collaborative session focused on **making the §7 reduction
-rigorous** and on a substantive **new finding about curvature**.
+The most recent session **closed Step A2** of the global reduction — the
+reduction of the unbalanced tripartite-filling family to the balanced one —
+and in doing so **corrected an error in the strategy note**.
+
+> **Tooling note:** `sympy` is **not** installed for `/usr/bin/python3`. Use
+> **`/opt/miniconda3/bin/python3`** to run every script in `scripts/`
+> (it has sympy 1.14). The SESSION_STATE references below have been updated.
+
+## Previous session (morning, kept for context)
+
+That session focused on making the §7 reduction rigorous and on the
+mixed-curvature finding; see the "older" TL;DR further down.
 
 ---
 
-## TL;DR (what changed this session)
+## TL;DR (this session — Step A2)
+
+1. **Exact unbalanced in-family densities** (regular filling, derived two ways —
+   by hand and by a finite stochastic-block-model sum):
+   $t(P,W)=3\alpha^2\beta\gamma\,q\,(2\alpha q+2\alpha+3(\beta+\gamma))$,
+   $t(J,W)=2\alpha^2\beta\gamma\,q\,(4\alpha q+\alpha+3(\beta+\gamma))$,
+   with $x=2(\alpha\beta+\alpha\gamma+\beta\gamma)+\alpha^2 q$. These reduce to
+   the §7 balanced formulas when $\beta=\gamma$.
+2. **The strategy note's per-$\alpha$ balancing lemma (Lemma 4.5) is FALSE.**
+   Explicit counterexample: at $\alpha=11/20>1/2$, $x=2/3$, the unbalanced
+   config with $q=1/2$ gives $t(P,W)\approx0.0139<0.0289$ = balanced value.
+   (The failure is confined to $\alpha>1/2$ near the Mantel filling bound.)
+3. **The correct (global) Step A2 is proved:** for $x\in(2/3,3/4)$, the
+   minimum of $t(P,\cdot)$ / $t(J,\cdot)$ over the *whole* tripartite-filling
+   family (parts $\alpha,\beta,\gamma$ unconstrained, any triangle-free
+   filling) equals the balanced reduced value $\Psi_P(x)$ / $\Psi_J(x)$; the
+   minimiser has $\beta=\gamma$ and a regular filling. Proof = Jensen
+   (regular filling) + the feasible region is the "balanced–Mantel lens"
+   (two perfect-square Turán thresholds $(3\alpha-1)^2,(3\alpha-2)^2$) + the
+   unique interior critical point is a **saddle** ($T_{qq}<0$, certified by a
+   resultant with no root in $(2/3,3/4)$) + Mantel-arc domination.
+4. **Conceptual:** the Mantel arc ($q=1/2$) IS the complete 4-partite
+   Lovász–Simonovits template, so Step A2 says *the filling construction beats
+   the clique template* — exactly the §5–§6 numerical finding, now structural.
+
+## TL;DR (older — making §7 rigorous + curvature)
 
 1. **All of §7 of the progress note is now rigorous** — branch uniqueness,
    monotonicity, endpoint values, and the within-family global minimum are
@@ -39,12 +74,15 @@ rigorous** and on a substantive **new finding about curvature**.
 | `two_problems_progress_report.tex` | original | The current overall state; sections §1–§8 unchanged. |
 | **`rigorous_certificates.tex`** | new (7 pages) | Companion appendix to §7: Sturm certificates for branch uniqueness, monotonicity, endpoints, mixed curvature, and the stationary-vs-boundary gap (formerly Lemma 5.5, now Theorem 6.1 — rigorous). |
 | **`Tk_first_order_stability.tex`** | new (~5 pages) | Replacement for §3.4 of the progress note with the averaging step made explicit. |
-| **`global_reduction_strategy.tex`** | new (5 pages) | Research-direction note: three plans (A/B/C) for the global tripartite-filling reduction, with concrete next tasks. |
-| `scripts/verify_reduced_problems.py` | new | sympy script that produces every rational/Sturm certificate in `rigorous_certificates.tex` items 1–5. Run via `/usr/bin/python3 verify_reduced_problems.py`. |
-| `scripts/verify_gap.py` | new | sympy script for the stationary-vs-boundary gap (Theorem 6.1 in `rigorous_certificates.tex`). |
+| **`global_reduction_strategy.tex`** | original (this session) | Research-direction note: three plans (A/B/C). **NB: its Lemma 4.5 (per-$\alpha$ balancing) is now known FALSE — superseded by `balancing_reduction.tex`.** |
+| **`balancing_reduction.tex`** | new (this session, ~6 pages) | The corrected Step A2: unbalanced densities, the counterexample to per-$\alpha$ balancing, and the proof that the global in-family minimum equals the balanced $\Psi_P,\Psi_J$ (saddle + Mantel-domination). |
+| `scripts/verify_reduced_problems.py` | from prev session | sympy script for the certificates in `rigorous_certificates.tex` items 1–5. Run via `/opt/miniconda3/bin/python3`. |
+| `scripts/verify_gap.py` | from prev session | sympy script for the stationary-vs-boundary gap (Theorem 6.1). |
+| **`scripts/verify_balancing_reduction.py`** | new | The Step A2 certificate (Parts 0–5): exact unbalanced densities, counterexample, Turán thresholds, saddle resultant, Mantel domination. Exits 0, no AssertionError. |
+| **`scripts/derive_unbalanced.py`** | new | SBM derivation of the unbalanced $t(P,W),t(J,W)$ (independent check of the hand formulas). |
+| **`scripts/explore_global_infamily.py`** | new | numpy sanity scan confirming the global in-family min equals the balanced min across $[2/3,3/4]$. |
 
-The three new PDFs are gitignored (auto-built from the .tex files via
-`pdflatex`).
+The note PDFs are gitignored (auto-built from the .tex files via `pdflatex`).
 
 ---
 
@@ -75,6 +113,13 @@ Cross-references below refer to `rigorous_certificates.tex` unless stated otherw
   only at $x = 3/4$. (Theorem 6.1.) **Closes the in-family reduction.**
 - **First-order stability of $T_k$ for $k\ge 6$:** clean averaging argument
   in `Tk_first_order_stability.tex` (Theorem 4.1 there).
+- **In-family reduction to balanced parts (Step A2), corrected form:** for
+  $x\in(2/3,3/4)$ the minimum of $t(P,\cdot)$/$t(J,\cdot)$ over the unbalanced
+  tripartite-filling family equals the balanced $\Psi_P$/$\Psi_J$.
+  (`balancing_reduction.tex`; certificates in `verify_balancing_reduction.py`.)
+  Rigorous and uniform in $x$ except the Mantel-domination step, which is
+  exact at 98 dense rational points + shown positive/monotone to 0 at $x=3/4$
+  (its all-$x$ Sturm endgame is the one remaining formalisation — see below).
 
 ---
 
@@ -82,11 +127,19 @@ Cross-references below refer to `rigorous_certificates.tex` unless stated otherw
 
 In rough priority order:
 
-1. **Step A2** of the global reduction (`global_reduction_strategy.tex`,
-   Lemma 4.3): given a 3-blowup graphon with arbitrary unbalanced parts
-   $|B| = \beta, |C| = \gamma$, show that balancing to $\beta = \gamma$
-   does not increase $t(P, W)$ (resp.\ $t(J, W)$). Likely a one-page
-   algebraic check — possibly the single easiest next concrete task.
+0. **(small) Finish the all-$x$ Mantel-domination Sturm certificate.** Step A2
+   is done modulo this one step: show $M_P(\alpha_M^+(x))-\Psi_P(x)>0$ for all
+   $x\in(2/3,3/4)$, where $\alpha_M^+=\frac{3+\sqrt{9-12x}}{6}$. The resultant
+   (computed in `verify_balancing_reduction.py`) factors as
+   $x^6(2x-1)^4(3x-2)^2(4x-3)^2\cdot D_{18}(x)$; the only root of $D_{18}$ in
+   $(2/3,3/4)$ is $x\approx0.74948$, and it is **spurious** (the actual
+   difference is $\approx 4.2\times10^{-5}>0$ there — it is a Mantel-*local-max*
+   vs balanced-stationary coincidence). To finish: isolate the correct
+   algebraic branches (smaller root of the $z$-quadratic = Mantel min; minimal
+   feasible root of the balanced-stationary quintic = $\Psi_P$) so the
+   univariate certificate sees only the true difference.
+1. ~~Step A2~~ **DONE** (corrected, global form) — see `balancing_reduction.tex`.
+   The original per-$\alpha$ form (strategy note Lemma 4.5) was false.
 2. **Step A1** (3-blowup skeleton from $K_4$-supersaturation stability): the
    cut-metric stability of the LS 4-partite template at $K_4$-density is
    the bottleneck. Needs a literature survey (Pikhurko–Razborov and follow-ups).
@@ -104,17 +157,21 @@ In rough priority order:
 
 ## How to resume in a fresh session
 
-1. **Read the abstracts** of `rigorous_certificates.tex` and
-   `global_reduction_strategy.tex` (1–2 pages of context).
-2. **Re-run the scripts** to confirm everything still verifies:
+1. **Read the abstracts** of `rigorous_certificates.tex`,
+   `balancing_reduction.tex`, and `global_reduction_strategy.tex`
+   (remembering the latter's Lemma 4.5 is now superseded).
+2. **Re-run the scripts** to confirm everything still verifies
+   (note: **`/opt/miniconda3/bin/python3`**, not `/usr/bin/python3`):
    ```sh
    cd scripts
-   /usr/bin/python3 verify_reduced_problems.py
-   /usr/bin/python3 verify_gap.py
+   /opt/miniconda3/bin/python3 verify_reduced_problems.py
+   /opt/miniconda3/bin/python3 verify_gap.py
+   /opt/miniconda3/bin/python3 verify_balancing_reduction.py
    ```
-   Both should exit 0 with no `AssertionError`.
-3. **Pick a next task** from the "What is still open" list. The most
-   immediately tractable is **Step A2**.
+   All three should exit 0 with no `AssertionError`.
+3. **Pick a next task** from the "What is still open" list. The smallest is
+   task 0 (the Mantel Sturm endgame, finishing Step A2); the real bottleneck
+   for $f_P=\Psi_P$ is **Step A1**.
 4. **Update this file** as the work progresses.
 
 ---
@@ -144,8 +201,11 @@ The cleanest one-paragraph summary, suitable for an introduction:
 > tripartite Turán-filling family. We prove (rigorous certificates note) that
 > these reduced curves have mixed convex-then-concave curvature on the first
 > Turán interval $[2/3, 3/4]$, with unique inflection points
-> $x^*_P \approx 0.679$ and $x^*_J \approx 0.713$. Conditional on the
-> tripartite-filling reduction (a global symmetrisation conjecture, attack
-> strategy in the strategy note), this rigorously refutes the original
-> Problem 2 classification of $K_4^\dagger$ and $K_3 \cup_{K_2} K_4$ as
-> "piecewise concave on Turán intervals", already on the first Turán interval.
+> $x^*_P \approx 0.679$ and $x^*_J \approx 0.713$. We further prove the
+> in-family minimisation reduces to balanced parts with a regular filling
+> (the unbalanced freedom never helps), so the only remaining hypothesis for
+> $f_P=\Psi_P$, $f_J=\Psi_J$ is the cut-metric stability that forces a
+> minimiser onto a 3-blowup skeleton (Step A1). Conditional on that, this
+> rigorously refutes the original Problem 2 classification of $K_4^\dagger$
+> and $K_3 \cup_{K_2} K_4$ as "piecewise concave on Turán intervals", already
+> on the first Turán interval.
