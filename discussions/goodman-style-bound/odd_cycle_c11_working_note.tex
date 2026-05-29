@@ -1,0 +1,530 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\supp}{supp}
+
+\title{The $C_{11}$ case of the odd-cycle graphon lower bound}
+\author{Working note for the odd-cycle project}
+\date{May 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove the $C_{11}$ instance of the conjectural odd-cycle graphon lower bound.  Namely, if $W\colon[0,1]^2\to[0,1]$ is a graphon and $p=t(K_2,W)$, then
+\[
+        t(C_{11},W)\ge p^{11}-p(1-p)^{10}.
+\]
+The proof is hybrid.  For $1/2<p\le 103/200$ we use the sharp triangle-density theorem together with a spectral moment argument.  For $p\ge 103/200$ we use the complement-expansion path certificate developed for $C_5,C_7,C_9$, now with an exact rational Bernstein certificate for the required polynomial positivity statements.  The case $p\le1/2$ is trivial because the proposed right-hand side is nonpositive.
+\end{abstract}
+
+\section{Statement and notation}
+
+For a graphon $W$, write
+\[
+        t(C_m,W)=\int_{[0,1]^m}\prod_{i=0}^{m-1}W(x_i,x_{i+1})\,dx_0\cdots dx_{m-1},
+        \qquad x_m=x_0.
+\]
+Let
+\[
+        p=t(K_2,W)=\int_{[0,1]^2}W(x,y)\,dx\,dy.
+\]
+The project conjecture is
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+This note proves the case $2k+1=11$.
+
+\begin{theorem}[The $C_{11}$ case]\label{thm:C11}
+For every graphon $W$ and $p=t(K_2,W)$,
+\[
+        t(C_{11},W)\ge p^{11}-p(1-p)^{10}.
+\]
+\end{theorem}
+
+If $p\le1/2$, then
+\[
+        p^{11}-p(1-p)^{10}=p\bigl(p^{10}-(1-p)^{10}\bigr)\le0,
+\]
+so Theorem~\ref{thm:C11} is immediate.  Hence throughout the proof we may assume $p>1/2$.
+
+We use two complementary arguments.  The first handles $1/2<p\le103/200$.  The second handles $p\ge103/200$.
+
+\section{The near-bipartite interval: triangle density plus spectral moments}
+
+We first prove Theorem~\ref{thm:C11} for
+\[
+        \frac12<p\le\frac{103}{200}.
+\]
+The input is the sharp triangle-density theorem, in the graphon form of the $K_3$ case of the clique density theorem.
+
+\begin{theorem}[Sharp triangle-density bound]\label{thm:triangle}
+Let $W$ be a graphon with edge density $p=t(K_2,W)$, where
+\[
+        \frac12\le p\le\frac23.
+\]
+Let $c\in[0,1/3]$ be determined by
+\[
+        p=\frac12+c-\frac32c^2.
+\]
+Then
+\[
+        t(K_3,W)\ge \Theta(p):=\frac32c(1-c)^2.
+\]
+\end{theorem}
+
+This is the triangle case of Razborov's theorem, and is also contained in Reiher's clique density theorem~\cite{RazborovTriangles,ReiherCliqueDensity}.
+
+Let $T=T_W$ be the self-adjoint Hilbert--Schmidt operator associated with $W$:
+\[
+        Tf(x)=\int_0^1 W(x,y)f(y)\,dy.
+\]
+Let its eigenvalues be
+\[
+        \lambda_0,\lambda_1,\lambda_2,\ldots,
+\]
+where $\lambda_0\ge0$ is the spectral radius.  Since $T$ is a positive compact operator and
+\[
+        \langle T\one,\one\rangle=p,
+\]
+we have
+\[
+        \lambda_0\ge p.
+\]
+Also
+\[
+        \sum_i\lambda_i^2=\Tr(T^2)=\int W(x,y)^2\,dx\,dy\le p,
+\]
+and
+\[
+        t(C_m,W)=\Tr(T^m)=\sum_i\lambda_i^m
+\]
+for $m\ge3$.
+
+\begin{lemma}[Spectral closure criterion for $C_{11}$]\label{lem:spectral-closure}
+Let
+\[
+        \frac12<p\le\frac{103}{200},
+        \qquad q=1-p.
+\]
+Assume that $t(K_3,W)\ge\Theta(p)$, with $\Theta$ as in Theorem~\ref{thm:triangle}.  Then
+\[
+        t(C_{11},W)\ge p^{11}-pq^{10}.
+\]
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+        \ell=\lambda_0.
+\]
+Then $\ell\ge p$.  Let
+\[
+        S=p-\ell^2.
+\]
+The total square mass of the non-principal eigenvalues is at most $S$.
+
+Let $N_{11}$ be the eleventh-power mass of the negative non-principal eigenvalues:
+\[
+        N_{11}=\sum_{i\ge1:\,\lambda_i<0}|\lambda_i|^{11}.
+\]
+We claim that
+\begin{equation}\label{eq:N11-bound}
+        N_{11}\le \ell^{11}-p^{11}+pq^{10}.
+\end{equation}
+If this holds, then
+\[
+\begin{aligned}
+        t(C_{11},W)
+        &=\ell^{11}+\sum_{i\ge1:\,\lambda_i>0}\lambda_i^{11}-N_{11} \\
+        &\ge \ell^{11}-N_{11}
+         \ge p^{11}-pq^{10}.
+\end{aligned}
+\]
+
+It remains to prove \eqref{eq:N11-bound}.  Define
+\[
+        A=\bigl(\ell^{11}-p^{11}+pq^{10}\bigr)^{1/11}.
+\]
+Suppose, for contradiction, that $N_{11}>A^{11}$.  Set
+\[
+        z=N_{11}^{1/11}>A.
+\]
+For the negative non-principal eigenvalues, monotonicity of $\ell^r$ norms gives
+\[
+        \sum_{\lambda_i<0}|\lambda_i|^3\ge z^3,
+        \qquad
+        \sum_{\lambda_i<0}|\lambda_i|^2\ge z^2.
+\]
+Therefore the positive non-principal eigenvalues have total square mass at most $S-z^2$, and hence total cube at most $(S-z^2)^{3/2}$.  Consequently
+\[
+        \sum_{i\ge1}\lambda_i^3
+        \le (S-z^2)^{3/2}-z^3.
+\]
+The function
+\[
+        z\mapsto (S-z^2)^{3/2}-z^3
+\]
+is decreasing on its domain.  Thus, unless $S<A^2$ already makes $N_{11}>A^{11}$ impossible, we get
+\[
+        \sum_{i\ge1}\lambda_i^3
+        < (S-A^2)^{3/2}-A^3.
+\]
+On the other hand, the triangle-density assumption gives
+\[
+        \sum_{i\ge1}\lambda_i^3=t(K_3,W)-\ell^3\ge \Theta(p)-\ell^3.
+\]
+Hence it is enough to show
+\begin{equation}\label{eq:key-ell-C11}
+        \Theta(p)-\ell^3
+        \ge (S-A^2)^{3/2}-A^3
+\end{equation}
+whenever $S\ge A^2$.
+
+Let
+\[
+        H=p-\ell^2-A^2.
+\]
+The desired inequality is
+\[
+        G(\ell):=\Theta(p)-\ell^3+A^3-H^{3/2}\ge0.
+\]
+Because $p>q$,
+\[
+        pq^{10}<p^{11}\le \ell^{11},
+\]
+so $A<\ell$.  Also
+\[
+        A'=\frac{\ell^{10}}{A^{10}}.
+\]
+On the domain $H\ge0$,
+\[
+\begin{aligned}
+        G'(\ell)
+        &=-3\ell^2+3A^2A'
+          +3\sqrt H\,\bigl(\ell+AA'\bigr) \\
+        &> -3\ell^2+3A^2A'
+         =3\ell^2\left(\left(\frac{\ell}{A}\right)^8-1\right)>0.
+\end{aligned}
+\]
+Therefore it suffices to prove \eqref{eq:key-ell-C11} at $\ell=p$.
+
+Set
+\[
+        \eps=p-\frac12,
+        \qquad 0<\eps\le\frac3{200},
+        \qquad q=\frac12-\eps,
+\]
+and
+\[
+        A_0=(pq^{10})^{1/11},
+        \qquad H_0=pq-A_0^2.
+\]
+The remaining scalar inequality is
+\begin{equation}\label{eq:key-p-C11}
+        \Theta(p)\ge p^3-A_0^3+H_0^{3/2}.
+\end{equation}
+
+We prove it by elementary estimates.  Since
+\[
+        \eps=c-\frac32c^2,
+\]
+we have
+\[
+        c\ge \eps+\frac32\eps^2.
+\]
+Also $\eps\le3/200$ implies $c\le1/65$, because the function $c\mapsto c-3c^2/2$ is increasing on $[0,1/3]$ and
+\[
+        \frac1{65}-\frac32\frac1{65^2}=\frac{127}{8450}>\frac3{200}.
+\]
+Thus
+\begin{equation}\label{eq:theta-lower-C11}
+        \Theta(p)=\frac32c(1-c)^2
+        \ge \frac32\left(\eps+\frac32\eps^2\right)\left(\frac{64}{65}\right)^2.
+\end{equation}
+
+Next we use two scalar inequalities:
+\begin{equation}\label{eq:B-upper-C11}
+        p^3-A_0^3\le \frac{139}{100}\eps,
+\end{equation}
+\begin{equation}\label{eq:H-upper-C11}
+        H_0=pq-A_0^2\le \frac9{11}\eps.
+\end{equation}
+For completeness we explain how these are certified.  Inequality \eqref{eq:B-upper-C11} is equivalent, after raising positive quantities to the eleventh power, to
+\[
+        (pq^{10})^3\ge \left(p^3-\frac{139}{100}\eps\right)^{11}.
+\]
+The difference is divisible by $\eps$, and the quotient has no real zero in $[0,3/200]$ and is positive at the endpoints.  Inequality \eqref{eq:H-upper-C11} is similarly equivalent to
+\[
+        (pq^{10})^2\ge \left(pq-\frac9{11}\eps\right)^{11};
+\]
+the difference is divisible by $\eps^2$, and the quotient has no real zero in $[0,3/200]$ and is positive at the endpoints.  The accompanying checker verifies these two univariate assertions exactly using Sturm root counts.
+
+Combining \eqref{eq:B-upper-C11} and \eqref{eq:H-upper-C11},
+\[
+        p^3-A_0^3+H_0^{3/2}
+        \le \frac{139}{100}\eps+\left(\frac9{11}\eps\right)^{3/2}.
+\]
+It remains to compare this with \eqref{eq:theta-lower-C11}.  Put
+\[
+        \alpha=\frac32\left(\frac{64}{65}\right)^2.
+\]
+We need
+\[
+        \alpha\left(\eps+\frac32\eps^2\right)
+        \ge \frac{139}{100}\eps+\left(\frac9{11}\eps\right)^{3/2}.
+\]
+For $\eps>0$, divide by $\eps$ and set $t=\sqrt\eps$.  The required inequality becomes
+\[
+        \alpha\left(1+\frac32t^2\right)-\frac{139}{100}
+        \ge \left(\frac9{11}\right)^{3/2}t,
+        \qquad 0\le t\le\sqrt{\frac3{200}}.
+\]
+The difference between the two sides is decreasing on this interval, and the endpoint check reduces to
+\[
+\left(\alpha\left(1+\frac32\cdot\frac3{200}\right)-\frac{139}{100}\right)^2
+        -\left(\frac9{11}\right)^3\frac3{200}
+        =\frac{279882376181}{237591818750000}>0.
+\]
+This proves \eqref{eq:key-p-C11}, hence \eqref{eq:key-ell-C11}, and therefore \eqref{eq:N11-bound}.
+\end{proof}
+
+\begin{corollary}\label{cor:near-bipartite}
+Theorem~\ref{thm:C11} holds for $1/2<p\le103/200$.
+\end{corollary}
+
+\begin{proof}
+Since $103/200<2/3$, Theorem~\ref{thm:triangle} applies.  Lemma~\ref{lem:spectral-closure} then gives the desired $C_{11}$ inequality.
+\end{proof}
+
+\section{The interval $p\ge103/200$: complement path certificate}
+
+It remains to prove Theorem~\ref{thm:C11} when
+\[
+        p\ge\frac{103}{200}.
+\]
+Put
+\[
+        U=1-W,
+        \qquad q=t(K_2,U)=1-p\le\frac{97}{200}.
+\]
+Let
+\[
+        x_j=t(P_j,U)
+\]
+be the $j$-edge path density of $U$, and let
+\[
+        c_{11}=t(C_{11},U).
+\]
+
+Expanding
+\[
+        t(C_{11},W)=t(C_{11},1-U)
+\]
+by inclusion-exclusion over the eleven edges of $C_{11}$, every proper edge-subset contributes a disjoint union of paths.  Since $0\le U\le1$,
+\[
+        c_{11}\le x_{10},
+\]
+obtained by deleting one factor from the $C_{11}$ integral.  Therefore
+\[
+        t(C_{11},W)-\bigl((1-q)^{11}-(1-q)q^{10}\bigr)
+        \ge \Phi_{11},
+\]
+where
+\begin{align*}
+\Phi_{11}={}&
+-10q^{10}+55q^9-165q^8+330q^7-462q^6+451q^5 \\
+&+11q^4x_2-275q^4 \\
+&-110q^3x_2+44q^3x_3-11q^3x_4+88q^3 \\
+&+66q^2x_2^2-33q^2x_2x_3+165q^2x_2-110q^2x_3+66q^2x_4 \\
+&\qquad -33q^2x_5+11q^2x_6-11q^2 \\
+&-11qx_2^3-110qx_2^2+132qx_2x_3-66qx_2x_4+22qx_2x_5-77qx_2 \\
+&\qquad -33qx_3^2+22qx_3x_4+66qx_3-55qx_4+44qx_5-33qx_6+22qx_7-11qx_8 \\
+&+10x_{10}+22x_2^3-33x_2^2x_3+11x_2^2x_4+33x_2^2+11x_2x_3^2 \\
+&\qquad -55x_2x_3+44x_2x_4-33x_2x_5+22x_2x_6-11x_2x_7+11x_2 \\
+&\qquad +22x_3^2-33x_3x_4+22x_3x_5-11x_3x_6-11x_3 \\
+&\qquad +11x_4^2-11x_4x_5+11x_4-11x_5+11x_6-11x_7+11x_8-11x_9.
+\end{align*}
+Thus the goal is to show
+\[
+        \Phi_{11}\ge0
+\]
+for $0\le q\le97/200$.
+
+\subsection{Moment form of the path densities}
+
+Let $T=T_U$.  Write
+\[
+        d=T\one=q\one+g,
+        \qquad \langle g,\one\rangle=0.
+\]
+Let
+\[
+        A=P_{\one^\perp}TP_{\one^\perp}
+\]
+be the compression of $T$ to $\one^\perp$, and define
+\[
+        s_j=\langle g,A^jg\rangle,
+        \qquad j\ge0.
+\]
+Then $s_0=\|g\|_2^2$.  The path densities $x_j=\langle \one,T^j\one\rangle$ are obtained from the recurrence
+\[
+        T(a\one+h)=(aq+\langle g,h\rangle)\one+(ag+Ah),
+        \qquad h\in\one^\perp.
+\]
+Substituting the resulting formulae for $x_2,\ldots,x_{10}$ into $\Phi_{11}$ gives a homogeneous decomposition
+\[
+        \Phi_{11}=L_1+L_2+L_3+L_4+10s_0^5,
+\]
+where $L_d$ is homogeneous of degree $d$ in the variables $s_0,s_1,\ldots,s_8$.
+
+For example, the linear part is
+\[
+        L_1=\int_{-1}^{1}P_q(\lambda)\,d\mu(\lambda),
+\]
+where $\mu$ is the spectral measure of $A$ with respect to $g$ and
+\begin{align*}
+P_q(\lambda)={}&10\lambda^8+(20q-11)\lambda^7+(30q^2-33q+11)\lambda^6 \\
+&+(40q^3-66q^2+44q-11)\lambda^5 \\
+&+(50q^4-110q^3+110q^2-55q+11)\lambda^4 \\
+&+(60q^5-165q^4+220q^3-165q^2+66q-11)\lambda^3 \\
+&+(70q^6-231q^5+385q^4-385q^3+231q^2-77q+11)\lambda^2 \\
+&+(80q^7-308q^6+616q^5-770q^4+616q^3-308q^2+88q-11)\lambda \\
+&+90q^8-396q^7+924q^6-1386q^5+1386q^4-924q^3+396q^2-99q+11.
+\end{align*}
+The accompanying checker verifies, by exact rational Bernstein subdivision, that
+\begin{equation}\label{eq:Pq-positive}
+        P_q(\lambda)>0
+        \qquad
+        (0\le q\le97/200,\\ -1\le\lambda\le1).
+\end{equation}
+
+If $s_0>0$, let $\nu=\mu/s_0$ be the normalized spectral measure and set
+\[
+        m_j=\int_{-1}^{1}\lambda^j\,d\nu(\lambda).
+\]
+Then
+\[
+        L_d=s_0^dF_d(q;m_1,\ldots,m_8)
+        \qquad (d=1,2,3,4),
+\]
+where $F_1=\int P_q\,d\nu$ and the nonlinear pieces are
+\begin{align*}
+F_2={}&150m_1^2q^4-330m_1^2q^3+330m_1^2q^2-165m_1^2q+33m_1^2 \\
+&+200m_1m_2q^3-330m_1m_2q^2+220m_1m_2q-55m_1m_2 \\
+&+120m_1m_3q^2-132m_1m_3q+44m_1m_3+60m_1m_4q-33m_1m_4+20m_1m_5 \\
+&+420m_1q^5-1155m_1q^4+1540m_1q^3-1155m_1q^2+462m_1q-77m_1 \\
+&+60m_2^2q^2-66m_2^2q+22m_2^2+60m_2m_3q-33m_2m_3+20m_2m_4 \\
+&+300m_2q^4-660m_2q^3+660m_2q^2-330m_2q+66m_2 \\
+&+10m_3^2+200m_3q^3-330m_3q^2+220m_3q-55m_3 \\
+&+120m_4q^2-132m_4q+44m_4+60m_5q-33m_5+20m_6 \\
+&+280q^6-924q^5+1540q^4-1540q^3+924q^2-308q+44,
+\end{align*}
+\begin{align*}
+F_3={}&40m_1^3q-22m_1^3+30m_1^2m_2+300m_1^2q^2-330m_1^2q+110m_1^2 \\
+&+240m_1m_2q-132m_1m_2+60m_1m_3+600m_1q^3-990m_1q^2+660m_1q-165m_1 \\
+&+30m_2^2+300m_2q^2-330m_2q+110m_2+120m_3q-66m_3+30m_4 \\
+&+350q^4-770q^3+770q^2-385q+77,
+\end{align*}
+\[
+        F_4=5\bigl(12m_1^2+40m_1q-22m_1+8m_2+30q^2-33q+11\bigr).
+\]
+Each $F_d$ is represented as a $d$-fold average of an explicit symmetric kernel $K_{d,q}$ on $[-1,1]^d$:
+\[
+        F_d=\int_{[-1,1]^d}K_{d,q}(\lambda_1,\ldots,\lambda_d)
+        \,d\nu(\lambda_1)\cdots d\nu(\lambda_d).
+\]
+The kernel is obtained by replacing each monomial $m_{a_1}\cdots m_{a_t}$ in $F_d$ by the symmetrized product
+\[
+        \frac1{d!}\sum_{\sigma\in S_d}
+        \lambda_{\sigma(1)}^{a_1}\cdots\lambda_{\sigma(t)}^{a_t},
+\]
+with the remaining $d-t$ exponents equal to $0$.
+
+The exact checker proves the following positivity assertions by rational Bernstein subdivision:
+\begin{equation}\label{eq:Kd-positive}
+        K_{d,q}(\lambda_1,
+        \ldots,\lambda_d)>0
+        \qquad
+        (d=2,3,4;\\ 0\le q\le1/2;\\ -1\le\lambda_i\le1).
+\end{equation}
+The subdivision certificates are small: $5$ boxes for $K_2$, $8$ boxes for $K_3$, and $29$ boxes for $K_4$.
+
+It follows from \eqref{eq:Pq-positive} and \eqref{eq:Kd-positive} that
+\[
+        L_1,L_2,L_3,L_4\ge0
+\]
+for $0\le q\le97/200$.  Since the remaining term is $10s_0^5\ge0$, we get
+\[
+        \Phi_{11}\ge0.
+\]
+Therefore
+\[
+        t(C_{11},W)
+        \ge (1-q)^{11}-(1-q)q^{10}.
+\]
+Since $p=1-q$, this is exactly
+\[
+        t(C_{11},W)
+        \ge p^{11}-p(1-p)^{10}.
+\]
+
+\begin{corollary}\label{cor:path-interval}
+Theorem~\ref{thm:C11} holds for $p\ge103/200$.
+\end{corollary}
+
+\section{Completion of the proof and current project status}
+
+Theorem~\ref{thm:C11} follows from three pieces:
+\begin{itemize}[leftmargin=2em]
+    \item if $p\le1/2$, the proposed right-hand side is nonpositive;
+    \item if $1/2<p\le103/200$, Corollary~\ref{cor:near-bipartite} applies;
+    \item if $p\ge103/200$, Corollary~\ref{cor:path-interval} applies.
+\end{itemize}
+
+Thus
+\[
+        t(C_{11},W)\ge p^{11}-p(1-p)^{10}
+\]
+for every graphon $W$.
+
+The project status is now:
+\[
+        C_3,C_5,C_7,C_9,C_{11}
+        \quad\text{are proved for all graphons,}
+\]
+while the general $C_{2k+1}$ case remains open.  The $C_{11}$ proof is useful because it confirms the hybrid pattern already suggested by $C_9$: the complement path certificate proves the result away from $p=1/2$, and the sharp triangle-density theorem plus spectral moment control closes a near-bipartite interval.
+
+\begin{remark}[Next target]
+The natural next case is $C_{13}$.  The spectral-triangle argument should still close a small interval above $p=1/2$, but the complement path certificate will become larger and its positivity threshold will likely move further away from $1/2$.  The key research question is whether the two intervals continue to overlap, or whether one needs a stronger near-bipartite input, such as a color-critical supersaturation theorem tailored to odd cycles.
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem{RazborovTriangles}
+A.~A. Razborov.
+\newblock On the minimal density of triangles in graphs.
+\newblock \emph{Combinatorics, Probability and Computing} 17(4):603--618, 2008.
+
+\bibitem{ReiherCliqueDensity}
+C.~Reiher.
+\newblock The clique density theorem.
+\newblock \emph{Annals of Mathematics} 184(3):683--707, 2016.
+
+\end{thebibliography}
+
+\end{document}
