@@ -21,7 +21,7 @@
 \newcommand{\eps}{\varepsilon}
 
 \title{A Goodman-Type Lower Bound for Odd Cycle Densities in Graphons\\
-\large Verified results for $C_3$, $C_5$, $C_7$, $C_9$, $C_{11}$, and regular graphons}
+\large Verified results for $C_3,\dots,C_{11}$, a partial $C_{13}$, and general structural criteria}
 \author{Working note}
 \date{May 29--30, 2026}
 
@@ -33,9 +33,11 @@ Let $W:[0,1]^2\to[0,1]$ be a graphon and let $p=t(K_2,W)$ be its edge density.  
 \[
         t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
 \]
-This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for $C_5$, true for $C_7$, true for $C_9$, true for $C_{11}$, and true for every odd cycle when $W$ is $p$-regular.  The $C_9$ and $C_{11}$ proofs are hybrids: a complement path-certificate handles $p$ above a cut-off ($1003/2000$ for $C_9$, $103/200$ for $C_{11}$), and the sharp triangle-density theorem combined with a spectral moment argument closes the remaining near-bipartite interval $(1/2,\,\text{cut-off}]$.
+This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for $C_5$, true for $C_7$, true for $C_9$, true for $C_{11}$, and true for every odd cycle when $W$ is $p$-regular.  The $C_9$ and $C_{11}$ proofs are hybrids: a complement path-certificate handles $p$ above a cut-off ($1003/2000$ for $C_9$, $103/200$ for $C_{11}$), and the sharp triangle-density theorem combined with a spectral moment argument closes the remaining near-bipartite interval $(1/2,\,\text{cut-off}]$.  For $C_{13}$ the path-certificate range $p\ge519/1000$ is established, leaving an explicit residual interval of width $\approx0.0034$ uncovered by the hybrid.
 
-The path-certificate statements should be read as computer-assisted exact certificates: all identities are polynomial identities over $\mathbb Q$, and the positivity checks reduce either to rational matrices whose leading principal minors become polynomials with positive coefficients after a rational change of variables ($C_5$, $C_7$, $C_9$), or to a small number of exact rational Bernstein-subdivision boxes ($C_{11}$).  Short exact-arithmetic checkers accompany this note.
+We also record a complementary line of \emph{general} structural results, valid for every odd cycle at once.  Writing $A$ for the compression of $T_{1-W}$ to the mean-zero subspace, a hub-coupling positivity lemma yields the universal lower bound $t(C_m,W)\ge p^m-\Tr(A^m)$, hence the conjecture whenever $\|A\|\le1-p$ (the \emph{norm-safe} criterion, which subsumes all $p$-regular graphons).  Beyond the norm-safe regime we prove the conjecture for two genuinely hard all-$k$ families: rank-one complements $1-W=u\otimes u$, and equal disjoint clique complements.
+
+The path-certificate statements should be read as computer-assisted exact certificates: all identities are polynomial identities over $\mathbb Q$, and the positivity checks reduce either to rational matrices whose leading principal minors become polynomials with positive coefficients after a rational change of variables ($C_5$, $C_7$, $C_9$), or to a small number of exact rational Bernstein-subdivision boxes ($C_{11}$, $C_{13}$).  Short exact-arithmetic checkers accompany this note.
 \end{abstract}
 
 \section{The conjecture and the audited status}
@@ -68,16 +70,15 @@ The following statements are proved in this note.
 \begin{enumerate}[label=\textup{(\roman*)}]
     \item Conjecture~\ref{conj:main} is sharp at balanced complete multipartite graphons.
     \item Conjecture~\ref{conj:main} holds for $C_3$ for all graphons.
-    \item Conjecture~\ref{conj:main} holds for every odd cycle $C_{2k+1}$ when $W$ is $p$-regular.
-    \item Conjecture~\ref{conj:main} holds for $C_5$ for all graphons.
-    \item Conjecture~\ref{conj:main} holds for $C_7$ for all graphons.
-    \item Conjecture~\ref{conj:main} holds for $C_9$ for all graphons.
-    \item Conjecture~\ref{conj:main} holds for $C_{11}$ for all graphons.
+    \item Conjecture~\ref{conj:main} holds for $C_5$, $C_7$, $C_9$, and $C_{11}$ for all graphons.
+    \item For $C_{13}$, Conjecture~\ref{conj:main} holds for all graphons with $p\ge519/1000$ (and trivially for $p\le1/2$); the residual interval $1/2+\delta_{13}<p<519/1000$, of width $\approx0.0034$, is open.  See Section~\ref{sec:C13}.
+    \item \textup{(General criteria, every odd $m$.)}  Writing $A=P_{\one^\perp}T_{1-W}P_{\one^\perp}$, one has the universal bound $t(C_m,W)\ge p^m-\Tr(A^m)$; in particular Conjecture~\ref{conj:main} holds whenever $\|A\|\le1-p$.  This \emph{norm-safe} criterion holds for every $p$-regular graphon, giving a second proof of the regular case.  See Section~\ref{sec:general}.
+    \item \textup{(All-$k$ families.)}  Conjecture~\ref{conj:main} holds for every odd cycle when $1-W=u\otimes u$ is rank one, and when $1-W$ is an equal disjoint union of clique blocks.  See \S\ref{subsec:rank-one} and \S\ref{subsec:equal-clique}.
 \end{enumerate}
 \end{theorem}
 
 \begin{remark}[Scope]
-This note does \emph{not} prove the conjecture for $C_{2k+1}$ with $k\ge6$.  The $C_9$ and $C_{11}$ proofs are hybrids: the complement path-certificate method handles $p\ge \rho_m$ (with $\rho_9=1003/2000$ and $\rho_{11}=103/200$), and the narrow remaining interval $1/2<p\le\rho_m$ is closed by a separate argument combining the sharp triangle-density theorem with a spectral moment inequality.  The two proofs are given in Sections~\ref{sec:C9} and~\ref{sec:C11}.  Neither half of either hybrid is known to extend to $C_{13}$ and beyond; see Section~\ref{sec:remains}.
+This note does \emph{not} prove the conjecture in full for any $C_{2k+1}$ with $k\ge6$.  Two complementary strategies are pursued.  The first (Sections~\ref{sec:C5}--\ref{sec:C13}) is the per-cycle hybrid: a complement path-certificate handles $p\ge \rho_m$ (with $\rho_9=1003/2000$, $\rho_{11}=103/200$, $\rho_{13}=519/1000$), and for $m\le11$ a triangle-density spectral argument closes the narrow remaining interval $1/2<p\le\rho_m$; for $m=13$ a residual gap remains.  The second (Section~\ref{sec:general}) is uniform in $m$: an operator-theoretic framework proves the conjecture under structural hypotheses on the complement and isolates the precise remaining spectral obstruction.  The two strategies are independent; the general framework subsumes the regular-graphon case of \S\ref{subsec:regular}.
 \end{remark}
 
 \section{General tools}
@@ -145,7 +146,7 @@ where $c_7=t(C_7,U)$.  Again
 
 The $C_9$ expansion is given in Section~\ref{sec:C9}.
 
-\subsection{Operator notation and path moments}
+\subsection{Operator notation and path moments}\label{subsec:operator}
 
 Let $T=T_U$ be the graphon operator
 \[
@@ -288,7 +289,7 @@ Therefore
 where the last step is Cauchy--Schwarz.
 \end{proof}
 
-\subsection{All odd cycles for regular graphons}
+\subsection{All odd cycles for regular graphons}\label{subsec:regular}
 
 \begin{theorem}[Regular graphons]\label{thm:regular}
 Let $m=2k+1\ge3$ be odd.  If $W$ is $p$-regular, i.e.
@@ -343,7 +344,7 @@ Hence
 \]
 \end{proof}
 
-\section{The $C_5$ theorem}
+\section{The $C_5$ theorem}\label{sec:C5}
 
 \begin{theorem}\label{thm:C5}
 For every graphon $W$ with $p=t(K_2,W)$,
@@ -396,7 +397,7 @@ Completing the square,
 The quadratic coefficient is strictly positive for all real $q$, because its discriminant is negative.  Thus \eqref{eq:Phi5} holds, and the theorem follows.
 \end{proof}
 
-\section{The $C_7$ theorem}
+\section{The $C_7$ theorem}\label{sec:C7}
 
 \begin{theorem}\label{thm:C7}
 For every graphon $W$ with $p=t(K_2,W)$,
@@ -1174,27 +1175,280 @@ on $0\le q\le 97/200$, which gives the inequality of Theorem~\ref{thm:C11} for $
 
 The two ranges $p\ge103/200$ and $1/2<p\le103/200$, together with the trivial case $p\le1/2$, exhaust all $p\in[0,1]$.  This completes the proof of Theorem~\ref{thm:C11}.
 
-\section{What remains: general odd cycles}\label{sec:remains}
+\section{The $C_{13}$ case (partial)}\label{sec:C13}
 
-The full conjecture for $C_{2k+1}$ with $k\ge6$ remains open.  The hybrid strategy that closed $C_9$ and $C_{11}$ has two halves, and neither is known to extend to $C_{13}$ without new input.
+For $C_{13}$ the path-certificate half of the hybrid still goes through and yields a rigorous, Bernstein-certified theorem on $p\ge519/1000$.  The triangle-density spectral half, however, only closes a window $1/2<p\le1/2+\delta_{13}$ with $\delta_{13}\approx0.01559$, which falls short of the path-certificate cut-off.  A short residual interval is therefore left open.  This is the first cycle length at which the two halves of the hybrid fail to meet.  Along the way we record a closed-form formula for the linear-part polynomial $P_q^{(m)}$ that holds for every odd $m\ge5$.
 
-\medskip\noindent\emph{The path-certificate half.}
-The proofs for $C_5$, $C_7$, the $p\ge1003/2000$ range of $C_9$, and the $p\ge103/200$ range of $C_{11}$ all use the crude estimate
+\subsection{The path-certificate range: $p\ge519/1000$}\label{subsec:C13-path}
+
+\begin{theorem}[Path-certificate range for $C_{13}$]\label{thm:C13-path}
+For every graphon $W$ with $p=t(K_2,W)\ge519/1000$,
 \[
-        t(C_{2k+1},U)\le t(P_{2k},U),
+        t(C_{13},W)\ge p^{13}-p(1-p)^{12}.
 \]
-obtained by deleting one factor $U\le1$ from the cycle integrand.  The resulting defect $\Phi_{2k+1}$ is positive on $0\le q\le 1-\rho_{2k+1}$ for some cut-off $\rho_{2k+1}<1$, but \emph{not} all the way to $q=1/2$.  The cut-offs have so far stayed close to $1/2$ ($\rho_9=1003/2000$, $\rho_{11}=103/200$) but with no qualitative bound forcing this, and for $C_{13}$ and beyond the cut-off may move appreciably further from $1/2$.  A natural next target is a refined cycle-to-path inequality of the form
+\end{theorem}
+
+\begin{proof}
+The argument is identical in structure to \S\ref{subsec:C11-path}.  Put $U=1-W$ and $q=1-p\le 481/1000$.  Expanding $t(C_{13},1-U)$ by inclusion-exclusion over the thirteen edges of $C_{13}$ and using the deletion bound $c_{13}\le x_{12}$ gives
 \[
-        t(P_{2k},U)-t(C_{2k+1},U)
-        \ge \text{a positive correction depending on }d_U-q,
+        t(C_{13},1-U)-\bigl((1-q)^{13}-(1-q)q^{12}\bigr)\ge\Phi_{13},
 \]
-tightening the crude deletion bound that the present method discards.
+where $\Phi_{13}$ is an explicit polynomial in $q,x_2,\ldots,x_{12}$ with $259$ monomials (produced by the accompanying checker; too large to display).  Substituting the path-density formulae of Lemma~\ref{lem:path-formulae}, extended through $x_{12}$ by the same block recurrence, yields the homogeneous decomposition by total degree in the moments $s_0,\ldots,s_{10}$,
+\begin{equation}\label{eq:Phi13-decomp}
+        \Phi_{13}=L_1+L_2+L_3+L_4+L_5+12\,s_0^6,
+\end{equation}
+with $L_d$ the degree-$d$ part.  The pure degree-$6$ term $12s_0^6\ge0$ is immediate.  As in \S\ref{subsec:C11-path}, the linear part is $L_1=\int_{-1}^1 P_q^{(13)}(\lambda)\,d\mu(\lambda)$ with $P_q^{(13)}$ of degree $m-3=10$ in $\lambda$ (given by Proposition~\ref{prop:Pq-closed} below), and for $d=2,3,4,5$ one has $L_d=s_0^d F_d(q;m_1,\ldots,m_{10})$ where each $F_d$ is the $d$-fold $\nu$-average of an explicit symmetric kernel $K_{d,q}$.  The accompanying script \texttt{odd\_cycle\_c13\_checker.py} certifies, by exact rational Bernstein subdivision,
+\begin{align*}
+P_q^{(13)}(\lambda)>0 &\quad\text{on }q\in[0,481/1000],\ \lambda\in[-1,1] \quad(6\text{ boxes}),\\
+K_{2,q}>0 &\quad\text{on }q\in[0,481/1000],\ \lambda_i\in[-1,1] \quad(6\text{ boxes}),\\
+K_{d,q}>0 &\quad\text{on }q\in[0,1/2],\ \lambda_i\in[-1,1],\ d=3,4,5 \quad(8,16,42\text{ boxes}).
+\end{align*}
+Hence $L_1,\ldots,L_5\ge0$ on $0\le q\le481/1000$, so $\Phi_{13}\ge0$ there, giving the theorem for $p=1-q\ge519/1000$.
+\end{proof}
 
-\medskip\noindent\emph{The triangle-density half.}
-The closure arguments in \S\ref{subsec:C9-gap} and \S\ref{subsec:C11-gap} both use the sharp triangle-density theorem to bound the negative $(2k+1)$-th-power mass $N_{2k+1}=\sum_{\lambda_i<0}|\lambda_i|^{2k+1}$ in terms of $\sum_{i\ge1}\lambda_i^3=t(K_3,W)-\lambda_0^3$, reducing to the scalar inequality $\Theta(p)-\ell^3\ge(S-\alpha^2)^{3/2}-\alpha^3$.  Two countervailing trends are at play as $k$ grows: the target slack $pq^{2k}$ shrinks, and the interval that the spectral closure needs to cover widens (width $3/2000$ for $C_9$, width $3/200$ for $C_{11}$, since the path-certificate cut-off $\rho_{2k+1}$ has moved further from $1/2$).  Both put pressure on the comparison.  The final scalar comparison already required a non-linear analysis for $C_{11}$ (the $t=\sqrt\eps$ substitution); for $C_{13}$ the combination may be too tight for any triangle-density input alone to close, in which case a colour-critical supersaturation theorem tailored to odd cycles, or a higher clique-density input, will be needed.
+\begin{remark}[Tightness of the cut-off]
+At $q=482/1000$ the linear polynomial $P_q^{(13)}(\lambda)$ already takes negative values near $\lambda\approx0.355$, so $q=481/1000$ is tight up to the denominator $1000$.  The quadratic kernel $K_{2,q}$ likewise dips negative near $q=1/2$ for $C_{13}$, in contrast to $C_{11}$ where $K_2$ is positive on all of $q\in[0,1/2]$; this is why $K_2$ is certified only on $q\le481/1000$.
+\end{remark}
 
-\medskip\noindent\emph{The overlap question.}
-The conjecture is established for $C_m$ exactly when the path-certificate range $p\ge\rho_m$ and the triangle-density range $1/2<p\le\rho_m$ meet at the cut-off $\rho_m$.  They do for $C_9$ and $C_{11}$.  Whether they continue to overlap for $C_{13}$ is the key open question.
+\subsection{A closed form for the linear-part polynomial}
+
+The linear polynomials $P_q^{(m)}$ appearing in the path-certificate (the quartic of \S\ref{sec:C7}, the sextic of \S\ref{subsec:C9-path}, the degree-$8$ polynomial of \S\ref{subsec:C11-path}, and $P_q^{(13)}$ above) all share a uniform closed form.
+
+\begin{proposition}[Closed form for $P_q^{(m)}$]\label{prop:Pq-closed}
+For every odd $m\ge5$, the linear-part polynomial in the moment decomposition of $\Phi_m$ is
+\[
+        P_q^{(m)}(\lambda)=\sum_{j=0}^{m-3}a_j^{(m)}(q)\,\lambda^j,
+        \qquad
+        a_j^{(m)}(q)=(-1)^j m(1-q)^{m-2-j}+mq^{m-2-j}-(m-2-j)q^{m-3-j}.
+\]
+In particular the leading coefficient is $a_{m-3}^{(m)}(q)=m-1$, and the high-degree pure term of $\Phi_m$ is $(m-1)s_0^{(m-1)/2}$.
+\end{proposition}
+
+The formula is verified by the accompanying checker against the explicit $P_q^{(m)}$ for $m=9,11$ and against the inclusion-exclusion-derived $P_q^{(13)}$.  (Specialising at $m=13$ gives a degree-$10$ polynomial whose positivity on $q\le481/1000$ is the linear certificate above.)
+
+\subsection{The near-bipartite window and the residual gap}\label{subsec:C13-gap}
+
+The \emph{reduction} of \S\ref{subsec:C11-gap} carries over to $C_{13}$ unchanged: with $\ell=\lambda_0$, $\alpha=(\ell^{13}-p^{13}+pq^{12})^{1/13}$, $\Delta=p-\ell^2-\alpha^2$, the monotonicity $G'(\ell)>0$ holds because $\alpha'=\ell^{12}/\alpha^{12}$ gives $G'(\ell)>3\ell^2((\ell/\alpha)^{10}-1)>0$, so the problem reduces to the scalar inequality
+\[
+        \Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}
+        \qquad\text{at }\ell=p,\quad \alpha_0=(pq^{12})^{1/13},\ \Delta_0=pq-\alpha_0^2,
+\]
+where $\Theta$ is the triangle-density function of Theorem~\ref{thm:triangle-density}.  (That the $G'(\ell)>0$ step works for \emph{every} odd $m\ge5$ is part of the general framework; see Corollary~\ref{cor:basic-lower} and the discussion after it.)  What does \emph{not} carry over is the clean rational chain that closed $C_{11}$ on $\eps\le3/200$: for $C_{13}$ the slack is narrower, and we resort to solving the scalar inequality numerically by bisection in $50$-digit arithmetic (see the synthesis file \texttt{general\_odd\_cycle\_progress.md}), which gives the maximal window
+\[
+        \delta_{13}=0.015592935\ldots,
+        \qquad\text{so the spectral half covers } 1/2<p\le1/2+\delta_{13}\approx0.51559.
+\]
+Since $1/2+\delta_{13}<519/1000$, the trivial case, the spectral window, and the path-certificate range leave the residual interval
+\[
+        p\in\bigl(1/2+\delta_{13},\,519/1000\bigr)=(0.51559\ldots,\,0.519),
+        \qquad\text{width }\approx0.00341,
+\]
+uncovered.  Closing it would complete $C_{13}$; the obstruction is quantitative, not structural (see \S\ref{sec:remains}).
+
+\section{General structural results for all odd cycles}\label{sec:general}
+
+We now turn to results that hold uniformly in $m=2k+1$.  In place of per-cycle polynomial certificates, the inputs are operator-theoretic: a hub-coupling trace inequality, a universal bound on the mean-zero compression, and two exact spectral computations.  Throughout, $U=1-W$, $q=t(K_2,U)=1-p$, and we work in the block decomposition of \S\ref{subsec:operator}.
+
+\subsection{The complement operator and a universal compression bound}
+
+Recall from \S\ref{subsec:operator} the block form of $T_U$ with respect to $\mathbb R\one\oplus\one^\perp$, with degree fluctuation $g=T_U\one-q\one$ and compression $A=P_{\one^\perp}T_UP_{\one^\perp}$.  Writing $Jf=\ip{f}{\one}\one$ for the averaging projection, $T_W=J-T_U$, so
+\begin{equation}\label{eq:block-TW}
+        T_U=\begin{pmatrix} q & g^*\\ g & A\end{pmatrix},
+        \qquad
+        T_W=\begin{pmatrix} p & -g^*\\ -g & -A\end{pmatrix},
+\end{equation}
+where $g^*f=\ip{g}{f}$.  Since $t(C_m,F)=\Tr(T_F^m)$ for every $m\ge3$, the conjecture is a statement about $\Tr(T_W^m)$.  The regular case is exactly $g=0$.
+
+\begin{lemma}[Mean-zero compression bound]\label{lem:compression}
+For every graphon $U$, $\norm{P_{\one^\perp}T_UP_{\one^\perp}}_{2\to2}\le\tfrac12$.
+\end{lemma}
+
+\begin{proof}
+Let $f\in\one^\perp$ with $\norm f_2=1$, and write $f=f_+-f_-$ with $f_+,f_-\ge0$ of disjoint support.  Since $\int f=0$, $\int f_+=\int f_-=:a$, and $2a=\norm f_1\le\norm f_2=1$, so $a\le1/2$.  As $0\le U\le1$,
+\[
+        \ip{f}{T_Uf}=\ip{f_+}{T_Uf_+}+\ip{f_-}{T_Uf_-}-2\ip{f_+}{T_Uf_-}
+        \le\Bigl(\int f_+\Bigr)^2+\Bigl(\int f_-\Bigr)^2=2a^2\le\tfrac12,
+\]
+and likewise $\ip{f}{T_Uf}\ge-2\ip{f_+}{T_Uf_-}\ge-2a^2\ge-\tfrac12$.  As $A$ is self-adjoint, $\norm A=\sup_{\norm f_2=1}|\ip{f}{Af}|\le\tfrac12$.
+\end{proof}
+
+In the nontrivial range $p\ge1/2$ this gives the crucial inequality $\norm A\le\tfrac12\le p$.
+
+\subsection{Hub-coupling positivity and the basic lower bound}
+
+The next lemma is the central operator-theoretic observation: coupling a dominant ``hub'' eigenvalue $a$ to a leaf operator with spectrum in $[-a,a]$ can only increase an odd trace.
+
+\begin{lemma}[Hub-coupling positivity]\label{lem:hub}
+Let $m\ge3$ be odd, $a\ge0$, let $B$ be a self-adjoint Hilbert--Schmidt operator with $\norm B\le a$, and let $h$ be a vector.  Then
+\[
+        \Tr\begin{pmatrix} a & h^*\\ h & B\end{pmatrix}^m\ge a^m+\Tr(B^m).
+\]
+\end{lemma}
+
+\begin{proof}
+By Hilbert--Schmidt approximation it suffices to treat finite dimensions.  Diagonalise $B$ with eigenvalues $\beta_i\in[-a,a]$ and set $h_i=\ip{h}{e_i}$.  Expand $\Tr(M^m)$ as a sum over closed length-$m$ walks on the vertex set $\{\text{hub}\}\cup\{i\}$.  Walks using no hub--leaf edge contribute exactly $a^m+\sum_i\beta_i^m$.  Any other walk uses an even number $2r\ge2$ of hub--leaf edges, i.e.\ $r$ excursions to leaves $i_1,\ldots,i_r$; such a walk contributes a positive multiplicity times
+\[
+        \prod_{\nu=1}^r h_{i_\nu}^2\cdot[z^{m-2r}]\prod_{\nu=1}^r\frac1{(1-az)(1-\beta_{i_\nu}z)}.
+\]
+Each factor $\frac1{(1-az)(1-\beta z)}=\sum_{s\ge0}h_s(a,\beta)z^s$ has nonnegative coefficients, because for $\beta\in[-a,a]$,
+\[
+        h_s(a,\beta)=\sum_{\ell=0}^s a^{s-\ell}\beta^\ell=a^s\sum_{\ell=0}^s(\beta/a)^\ell\ge0
+\]
+(with the limiting reading at $\beta=a$).  Products of power series with nonnegative coefficients have nonnegative coefficients, so every coupling group contributes $\ge0$, proving the claim.
+\end{proof}
+
+\begin{corollary}[Basic spectral lower bound]\label{cor:basic-lower}
+Let $m=2k+1$ and $p\ge1/2$.  Then $t(C_m,W)\ge p^m-\Tr(A^m)$.
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:hub} to \eqref{eq:block-TW} with $a=p$, $B=-A$, $h=-g$.  By Lemma~\ref{lem:compression}, $\norm{-A}\le\tfrac12\le p$, so the hypothesis holds.  Since $m$ is odd, $\Tr((-A)^m)=-\Tr(A^m)$, giving $\Tr(T_W^m)\ge p^m-\Tr(A^m)$.
+\end{proof}
+
+The same hub-coupling identity underlies the $G'(\ell)>0$ reductions of \S\ref{subsec:C9-gap}, \S\ref{subsec:C11-gap}, and \S\ref{subsec:C13-gap}: the principal eigenvalue plays the role of the hub for \emph{every} odd $m\ge5$, which is why that step is uniform in $m$.
+
+\subsection{Trace-safe and norm-safe criteria}
+
+\begin{theorem}[Trace-safe criterion]\label{thm:trace-safe}
+Let $m=2k+1$.  If $\Tr(A^m)\le pq^{m-1}$, then $t(C_m,W)\ge p^m-pq^{m-1}$.
+\end{theorem}
+
+\begin{proof}
+Immediate from Corollary~\ref{cor:basic-lower}.
+\end{proof}
+
+\begin{corollary}[Norm-safe criterion]\label{cor:norm-safe}
+If $\norm A\le q$, then Conjecture~\ref{conj:main} holds for $W$ for every odd $m$.
+\end{corollary}
+
+\begin{proof}
+For each eigenvalue $\alpha$ of $A$ and odd $m$, $\alpha^m\le|\alpha|^m\le q^{m-2}\alpha^2$, so $\Tr(A^m)\le q^{m-2}\Tr(A^2)$.  From \eqref{eq:block-TW}, $\norm{T_U}_{\mathrm{HS}}^2=q^2+2\norm g_2^2+\Tr(A^2)$, while $0\le U\le1$ gives $\norm{T_U}_{\mathrm{HS}}^2=\int U^2\le\int U=q$.  Hence $\Tr(A^2)\le q-q^2=pq$, so $\Tr(A^m)\le q^{m-2}\cdot pq=pq^{m-1}$, and Theorem~\ref{thm:trace-safe} applies.
+\end{proof}
+
+\begin{corollary}[Regular graphons, second proof]\label{cor:regular-general}
+If $W$ is $p$-regular then $U=1-W$ is $q$-regular, so $g=0$ and $A=T_U|_{\one^\perp}$; Schur's test gives $\norm A\le q$ and Corollary~\ref{cor:norm-safe} applies.
+\end{corollary}
+
+This recovers Theorem~\ref{thm:regular} as a special case, now within a framework that also covers genuinely irregular graphons.  The interesting regime is $\norm A>q$, i.e.\ the complement has a positive mean-zero eigenvalue above its edge density.  The simplest such example is the clique complement $U=\mathbf 1_{S\times S}$ with $\mu(S)=s<1/2$: there $q=s^2$ but $A$ has eigenvalue $s(1-s)>q$.  The next two subsections settle two such families for all $k$.
+
+\subsection{Rank-one complements}\label{subsec:rank-one}
+
+\begin{theorem}[Rank-one complements]\label{thm:rank-one}
+Let $U(x,y)=u(x)u(y)$ for measurable $u:[0,1]\to[0,1]$, and $W=1-U$.  Then for every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m\ \ge\ p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $a=\int u$, $b=\int u^2$, $\alpha=b-a^2$.  Then $q=a^2$, $p=1-a^2$, and $0\le U\le1$ gives $b\le a$, so $0\le\alpha\le a-a^2=a(1-a)$.  If $\alpha=0$ then $u\equiv a$ and $t(C_m,W)=p^m$.  Otherwise set $\phi=(u-a)/\sqrt\alpha$, a unit vector in $\one^\perp$.  In the basis $(\one,\phi)$ the nonzero part of $T_W=J-T_U$ is
+\[
+        M_\alpha=\begin{pmatrix} p & -a\sqrt\alpha\\ -a\sqrt\alpha & -\alpha\end{pmatrix},
+\]
+with eigenvalues $\lambda>0$ and $-s\le0$ satisfying $\lambda s=\alpha$ and $\lambda-s=p-\alpha$.  Thus $\lambda=(p+s)/(1+s)$ and $t(C_m,W)=\lambda^m-s^m=:\Theta_m(s)$.  Since $\lambda'(s)=a^2/(1+s)^2$,
+\[
+        \Theta_m'(s)=m\Bigl(\tfrac{a^2\lambda^{m-1}}{(1+s)^2}-s^{m-1}\Bigr).
+\]
+We show $\Theta_m'\ge0$ via $\lambda\ge s$ and $a\lambda/(1+s)\ge s$.  For the first, $\lambda-s=p-\alpha\ge1-a^2-(a-a^2)=1-a\ge0$.  For the second, $\alpha=\lambda s=s(p+s)/(1+s)$, and the admissibility $\alpha\le a(1-a)$ reads $a(1-a)(1+s)-s(p+s)\ge0$; the identity (verified in the checker)
+\[
+        a(p+s)-s(1+s)^2=(1+a+s)\bigl(a(1-a)(1+s)-s(p+s)\bigr)
+\]
+then gives $a(p+s)\ge s(1+s)^2$, i.e.\ $a\lambda/(1+s)\ge s$.  Multiplying the squared second inequality by $\lambda^{m-3}\ge s^{m-3}$ yields $a^2\lambda^{m-1}/(1+s)^2\ge s^{m-1}$, so $\Theta_m'\ge0$ and $t(C_m,W)\ge\Theta_m(0)=p^m$.
+\end{proof}
+
+\subsection{Equal disjoint clique complements}\label{subsec:equal-clique}
+
+\begin{theorem}[Equal disjoint clique complements]\label{thm:equal-clique}
+Let $r\ge1$, $0\le a\le1/r$, and $A_1,\ldots,A_r$ disjoint with $\mu(A_i)=a$.  Put $U=\sum_{i=1}^r\mathbf 1_{A_i}\otimes\mathbf 1_{A_i}$ and $W=1-U$, so $p=t(K_2,W)=1-ra^2$.  Then for every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+The case $r=1$ is Theorem~\ref{thm:rank-one}; assume $r\ge2$.  Set $q=ra^2$, $b=1-ra$.  The spectrum of $T_W$ consists of $-a$ with multiplicity $r-1$ (the internal modes, supported on the $A_i$ and orthogonal to $\sum_i\mathbf 1_{A_i}$), together with the two eigenvalues of $\begin{psmallmatrix} a(r-1) & \sqrt{rab}\\ \sqrt{rab} & b\end{psmallmatrix}$ (acting on the span of the aggregate $A$-mode and the leftover block).  This matrix has trace $1-a$ and determinant $-ab\le0$, so its eigenvalues have opposite signs; write them $\lambda>0$ and $-\eta\le0$, so that
+\[
+        \lambda-\eta=1-a,\qquad \lambda\eta=ab.
+\]
+Hence $t(C_m,W)=\lambda^m-\eta^m-(r-1)a^m$, and it suffices to prove $D_m:=\lambda^m-\eta^m-(r-1)a^m-p^m+pq^{m-1}\ge0$.  A direct computation gives the base case
+\[
+        D_3=2ra^3(1-ra)\ge0.
+\]
+For the induction, the identity
+\[
+        D_{m+2}-a^2D_m=\lambda^m(\lambda^2-a^2)-\eta^m(\eta^2-a^2)-p^m(p^2-a^2)+pq^{m-1}(q^2-a^2)
+\]
+holds.  Now $\eta\le a$ (from $\lambda\eta=ab$ and $\lambda\ge1-a$, since $b\le1-a$), so $-\eta^m(\eta^2-a^2)\ge0$; and $p\ge a$, $\lambda\ge p$ (writing $\eta=ay$, $y\in[0,1]$, one gets $q=a(1-y\lambda)$ and $\lambda-p=ay(1-\lambda)\ge0$).  Since $x\mapsto x^m(x^2-a^2)$ is increasing for $x\ge a$,
+\[
+        D_{m+2}-a^2D_m\ge p^m(\lambda^2-p^2)-pq^{m-1}(a^2-q^2).
+\]
+The compensation inequality
+\begin{equation}\label{eq:finite-compensation}
+        p^2(\lambda^2-p^2)\ge q^2(a^2-q^2)
+\end{equation}
+together with $p\ge q$ then gives $D_{m+2}\ge a^2D_m$, and induction from $D_3\ge0$ finishes the proof.  Finally \eqref{eq:finite-compensation} reduces, via $\eta=ay$ and $q=a(1-y\lambda)$, to the identity
+\[
+        p^2(\lambda^2-p^2)-q^2(a^2-q^2)=a^2y(1-y)K_a(y),
+\]
+where $K_a$ is an explicit quartic in $y$.  Writing $K_a$ in the degree-$4$ Bernstein basis, its coefficients
+\[
+        c_0=2(1-a)(1-2a),\quad c_1=\tfrac{3a^3+a^2-9a+4}{2},\quad c_2=\tfrac{a^4+2a^3-4a^2-9a+6}{3},
+\]
+\[
+        c_3=\tfrac{8-a^4-2a^3-6a^2-6a}{4},\quad c_4=2,
+\]
+are all nonnegative on $0\le a\le1/2$ (the middle three are decreasing with $c_1(\tfrac12)=\tfrac1{16}$, $c_2(\tfrac12)=\tfrac{13}{48}$, $c_3(\tfrac12)=\tfrac{51}{64}$), so $K_a\ge0$.  All displayed identities and coefficients are verified in \texttt{general\_odd\_cycle\_progress\_checker.py}.
+\end{proof}
+
+\begin{remark}[A collective compensation]
+This is the first case where the conjecture survives despite a large positive spectral excess that is \emph{not} paid for mode by mode.  The $r-1$ internal modes $-a$ of $T_W$ correspond to mean-zero modes $a\gg q=ra^2$ of $T_U$ and do not couple to $g$ directly; it is the aggregate two-dimensional mode $(\lambda,-\eta)$ that compensates collectively.  A modewise spectral-excess estimate would fail here, as the next subsection makes precise.
+\end{remark}
+
+\subsection{The corrected spectral bottleneck}
+
+Define the hub-coupling surplus $\Psi_m=\Tr(T_W^m)-(p^m-\Tr(A^m))\ge0$ (nonnegative by Lemma~\ref{lem:hub}).  The exact defect in Conjecture~\ref{conj:main} is
+\[
+        t(C_m,W)-(p^m-pq^{m-1})=\Psi_m+pq^{m-1}-\Tr(A^m),
+\]
+so the conjecture for $W$ is equivalent to the spectral-excess inequality
+\begin{equation}\label{eq:spectral-bottleneck}
+        \Psi_m\ge\Tr(A^m)-pq^{m-1}.
+\end{equation}
+Indeed, expanding $\Tr(A^m)=\sum_i\alpha_i^m$ and using $\Tr(A^2)\le pq$ as in Corollary~\ref{cor:norm-safe} gives $\Tr(A^m)-pq^{m-1}\le\sum_{\alpha_i>q}(\alpha_i^m-q^{m-2}\alpha_i^2)$, so \eqref{eq:spectral-bottleneck} would follow from the \emph{modewise} target in which each positive eigenvalue $\alpha_i>q$ of $A$ pays for its own excess $\alpha_i^m-q^{m-2}\alpha_i^2$ out of the leading (single-excursion) part of the surplus, namely $m\,b_i^2\,h_{m-2}(p,-\alpha_i)$ with $b_i=\ip{g}{\phi_i}$ and $h_s$ the complete homogeneous polynomial of Lemma~\ref{lem:hub}.  This modewise target is \emph{false}.  Take the two-block complement with $\mu(B_1)=21/50$, $\mu(B_2)=29/50$, $U_{11}=1$, $U_{12}=0$, $U_{22}=2/3$: then $q=601/1500$, and the compression $A$ is rank one, with eigenvalue $\alpha=203/500>q$, eigenvector $\phi$, and coupling $\beta=\ip{g}{\phi}$ satisfying $\beta^2=203/750000$.  For $m=5$, with $h_3(p,-\alpha)=p^3-p^2\alpha+p\alpha^2-\alpha^3$,
+\[
+        5\beta^2h_3(p,-\alpha)-(\alpha^5-q^3\alpha^2)=-\tfrac{184741695439}{632812500000000}<0,
+\]
+and indeed even the full surplus fails the modewise excess, $\Psi_5-(\alpha^5-q^3\alpha^2)<0$.  Yet the conjecture is safe here: $t(C_5,W)-(p^5-pq^4)=17280600997/3796875000000>0$ (all values verified in the checker).  Thus only the aggregate inequality \eqref{eq:spectral-bottleneck}, not a mode-by-mode estimate, can be the right general target.
+
+\section{What remains}\label{sec:remains}
+
+The full conjecture for $C_{2k+1}$ with $k\ge6$ remains open.  The obstruction can be stated either per-cycle (the hybrid of \S\ref{sec:C5}--\S\ref{sec:C13}) or uniformly in $m$ (the spectral bottleneck of \S\ref{sec:general}).  We collect what each viewpoint says.
+
+\medskip\noindent\emph{The immediate gap: $C_{13}$.}
+Only the residual interval $(1/2+\delta_{13},\,519/1000)$ of width $\approx0.0034$ separates the proved cases from $C_{13}$ (\S\ref{subsec:C13-gap}).  The obstruction is quantitative.  Two concrete routes would close it: \textup{(a)} sharpen the path-certificate, replacing the Bernstein bound on $K_{2,q}$ and $P_q^{(13)}$ near $q=1/2$ by a tighter certificate (the negative dip of $P_q^{(13)}$ at $q=482/1000$ is shallow and localised near $\lambda\approx0.355$, so an SOS or SDP certificate may push $\rho_{13}$ down to $1/2+\delta_{13}$); or \textup{(b)} refine the spectral window, tracking the $O(\eps^2)$ corrections dropped in the leading-order estimate of $\delta_{13}$, which could enlarge it by a few tens of percent.
+
+\medskip\noindent\emph{The asymptotic obstruction to the hybrid.}
+The triangle-density spectral closure has a hard ceiling.  Expanding the scalar inequality $\Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}$ at $p=1/2+\eps$ shows the slack opens linearly with coefficient $3/(2m)\to0$ while the deficit $\Delta_0^{3/2}$ opens like $\eps^{3/2}$ with coefficient $((m-2)/m)^{3/2}\to1$.  Balancing forces the window width
+\[
+        \delta_m\le\frac{9m}{4(m-2)^3}\sim\frac{9}{4m^2}
+        \qquad(m\to\infty),
+\]
+intrinsic to triangle density plus the $L^2$-to-$L^3$ comparison: no manipulation within these inputs changes the $1/m^2$ scaling.  The path-certificate cut-offs, meanwhile, have grown ($\rho_9-\tfrac12=3/2000$, $\rho_{11}-\tfrac12=3/200$, $\rho_{13}-\tfrac12=19/1000$) and numerically appear to stabilise near a constant $\approx0.02$.  The two windows already fail to meet at $m=13$, and diverge thereafter.  Closing the hybrid for all $m$ would require a stronger near-bipartite input; the highest-payoff candidate is a sharp Tur\'an-type lower bound for $t(C_5,W)$ at fixed edge density $p\in[1/2,2/3]$ (the $C_5$ analogue of the triangle-density theorem), which numerics suggest would give a window of constant width $\delta_m\gtrsim0.12$ uniformly and close every odd cycle at once (whenever $\rho_m\le0.62$).
+
+\medskip\noindent\emph{The uniform spectral bottleneck.}
+The general framework of \S\ref{sec:general} reduces the conjecture, for every $m$ at once, to the spectral-excess inequality \eqref{eq:spectral-bottleneck},
+\[
+        \Psi_m\ge\Tr(A^m)-pq^{m-1},
+\]
+where only positive eigenvalues of $A$ above $q$ can create an obstruction.  Theorem~\ref{thm:rank-one} and Theorem~\ref{thm:equal-clique} settle this for the rank-one and equal-clique families.  The most natural finite-dimensional next target is the \emph{unequal} disjoint clique complement $U=\sum_i\mathbf 1_{A_i}\otimes\mathbf 1_{A_i}$ with arbitrary block sizes $a_i$: there the conjecture becomes the explicit matrix inequality $\Tr(M^{2k+1})\ge p^{2k+1}-pq^{2k}$ for $M=vv^{\mathsf T}-\operatorname{diag}(a_1,\ldots,a_r,0)$, $v=(\sqrt{a_1},\ldots,\sqrt{a_r},\sqrt{1-\sum a_i})$.  A proof for arbitrary $a_i$ would clarify the collective-compensation mechanism that the equal case already exhibits.
+
+\medskip\noindent\emph{The combinatorial counterpart.}
+The same defect has an exact path-cycle form.  For $m=n+1$ with $n=2k$ even, inclusion-exclusion over the edges of $C_m$ gives
+\[
+        t(C_m,1-U)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr)
+        =\sum_{j=0}^{n-1}(-1)^j\frac{m}{m-j}E_{n,j}(U)+nE_{n,n}(U)+(x_n-c_m),
+\]
+where $x_n=t(P_n,U)$, $c_m=t(C_m,U)$, the layer $Z_{n,j}(U)=\sum_{F\subseteq P_n,\,e(F)=j}t(F,U)$ sums path-forest densities over the $j$-edge subgraphs of $P_n$, the deviation $E_{n,j}(U)=Z_{n,j}(U)-\binom nj q^j$ measures its departure from the product value, and the coefficient identity $\frac{m}{m-j}\binom nj=\binom mj$ is used.  Kim and Lee~\cite{KimLee2022} proved the even path layers satisfy $E_{n,2d}(U)\ge0$ via Schur convexity; the missing one-sided content is the control of the odd layers together with the path-cycle gap $x_n-c_m$.  Matching this combinatorial gap to the operator surplus $\Psi_m$ may reveal a canonical sum-of-squares proof.
 
 \section{Audit notes}
 
@@ -1208,6 +1462,8 @@ The following points were checked explicitly while preparing this note.
     \item The closure of the missing $C_9$ interval $1/2<p\le1003/2000$ in \S\ref{subsec:C9-gap} uses the sharp triangle-density theorem~\cite{RazborovTriangles,ReiherCliqueDensity} as an external input.  The spectral closure criterion (Lemma~\ref{lem:spectral-closure}) reduces the inequality to a check at $\ell=p$ via $G'(\ell)>0$; the resulting one-variable estimate is verified by four crude rational inequalities on $\eps=p-1/2\in(0,3/2000]$, checked in exact arithmetic by \texttt{odd\_cycle\_c9\_gap\_checker.py}.
     \item The $C_{11}$ defect on the path-certificate range $p\ge103/200$ reduces to $L_1+L_2+L_3+L_4+10s_0^5$ as described in \S\ref{subsec:C11-path}.  The pure degree-$5$ piece $10s_0^5\ge0$ is immediate.  The linear positivity $P_q(\lambda)>0$ in \eqref{eq:Pq-C11} (degree $8$ in $\lambda$, on $0\le q\le 97/200$ and $-1\le\lambda\le1$) and the nonlinear kernel positivities $K_{d,q}>0$ in \eqref{eq:Kd-positive} (for $d=2,3,4$, on $0\le q\le1/2$ and $-1\le\lambda_i\le1$) are certified by exact rational Bernstein subdivision in \texttt{odd\_cycle\_c11\_checker.py}, using $6$, $5$, $8$, and $29$ boxes respectively.
     \item The closure of the missing $C_{11}$ interval $1/2<p\le103/200$ in \S\ref{subsec:C11-gap} uses the same triangle-density + spectral argument as \S\ref{subsec:C9-gap}, with the cut-off relaxed to $\eps\le 3/200$ and the constants adjusted.  The two scalar inequalities $p^3-\alpha_0^3\le(139/100)\eps$ and $pq-\alpha_0^2\le(9/11)\eps$ are certified by Sturm root counts.  The final scalar comparison reduces to a convex quadratic in $t=\sqrt\eps$; the checker verifies both the monotonicity hypothesis $200\cdot(9/11)^3>27\alpha_*^2$ and the positive squared margin $\tfrac{279882376181}{237591818750000}$ at the right endpoint $\eps=3/200$.
+    \item The $C_{13}$ path-certificate of \S\ref{subsec:C13-path} reduces to $\Phi_{13}=L_1+\cdots+L_5+12s_0^6$.  The pure degree-$6$ piece is immediate, and the positivity of $P_q^{(13)}$ and of the kernels $K_{2,q}$ (on $q\le481/1000$) and $K_{3,q},K_{4,q},K_{5,q}$ (on $q\le1/2$) is certified by exact rational Bernstein subdivision in \texttt{odd\_cycle\_c13\_checker.py} ($6,6,8,16,42$ boxes).  The same script verifies the closed form of Proposition~\ref{prop:Pq-closed} against the recurrence-derived $P_q^{(m)}$ at $m=11$ and $m=13$.
+    \item The general-case algebraic claims of \S\ref{sec:general} were checked in \texttt{general\_odd\_cycle\_progress\_checker.py}: the rank-one factorisation identity $a(p+s)-s(1+s)^2=(1+a+s)(\cdots)$ of Theorem~\ref{thm:rank-one}; the equal-clique compensation identity $p^2(\lambda^2-p^2)-q^2(a^2-q^2)=a^2y(1-y)K_a(y)$ and the Bernstein coefficients $c_0,\ldots,c_4$ of \eqref{eq:finite-compensation}; and all rational values in the false-target example of \S\ref{sec:general}.  Independently, the hub-coupling inequality (Lemma~\ref{lem:hub}), the basic bound $t(C_m,W)\ge p^m-\Tr(A^m)$ (Corollary~\ref{cor:basic-lower}), the rank-one and equal-clique theorems, and the mean-zero compression bound $\norm A\le\tfrac12$ were re-verified numerically on random block graphons for $m=3,\ldots,13$, with no violations.
 \end{enumerate}
 
 \appendix
@@ -1273,6 +1529,11 @@ A.~A. Razborov.
 C.~Reiher.
 \newblock The clique density theorem.
 \newblock \emph{Annals of Mathematics} 184(3):683--707, 2016.
+
+\bibitem{KimLee2022}
+J.~S. Kim and J.~Lee.
+\newblock Extended commonality of paths and cycles via Schur convexity.
+\newblock arXiv:2210.00977, 2022.
 
 \end{thebibliography}
 
