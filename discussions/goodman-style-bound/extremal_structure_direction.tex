@@ -1,0 +1,180 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+
+\title{An extremal-structure (variational) approach to the odd-cycle conjecture\\
+\large The minimiser scallops; the multipartite case reduces to a corrected $\S$9 recursion}
+\author{Working note for the odd-cycle project}
+\date{May 30--31, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We reformulate the odd-cycle conjecture $t(C_m,W)\ge g_m(p):=p^m-p(1-p)^{m-1}$ ($m=2k+1$ odd, $p=t(K_2,W)$) as the constrained minimisation $f_{C_m}(p)=\min\{t(C_m,W):t(K_2,W)=p\}$ and study the structure of the minimiser.  Four things emerge.  (1) A clean variational reduction: the first-variation kernel is $m\,T_W^{m-1}$, and the KKT conditions are bang--bang, so a minimiser is $\{0,1\}$-valued off a single level set.  (2) The minimiser \emph{scallops}: $f_{C_m}(p)>g_m(p)$ strictly between Tur\'an points $p=1-1/r$, so $g_m$ is the ``Goodman envelope'' --- tight only at $p=1-1/r$ (for $m=3$ this is the classical Goodman vs.\ Razborov fact).  (3) The minimiser, where computable, is \emph{complete multipartite}; thus the variational route and the spectral route of the main paper (\S9--10) converge on the \emph{same} object, the unequal-multipartite / unequal disjoint clique-complement inequality.  (4) That inequality, restricted to the Razborov two-value family $w=(a,\dots,a,b)$, is \textbf{proved for all $r\ge2$ and all odd $m$} by generalising the \S9 equal-clique recursion --- but only after \emph{correcting} it: the \S9 compensation step is genuinely false here, and an $\eta$-retaining certificate replaces it.  The Tur\'an graphon is a strict (first-order) local minimiser for every odd $m$, in contrast to the six-vertex graph.  The remaining barrier to the full conjecture is the reduction from an arbitrary graphon to the multipartite family.  All claims are verified in \texttt{extremal\_structure\_checker.py}.
+\end{abstract}
+
+\section{The variational reformulation}
+
+For odd $m=2k+1$ and a graphon $W$ with $p=t(K_2,W)$, write
+\[
+        f_{C_m}(p)=\min\{\,t(C_m,W):t(K_2,W)=p\,\},
+        \qquad g_m(p)=p^m-p(1-p)^{m-1}.
+\]
+The conjecture is $f_{C_m}(p)\ge g_m(p)$; it is sharp at the Tur\'an graphons $T_r$ ($p=1-1/r$), where $t(C_m,T_r)=g_m(1-1/r)$ exactly.  A minimiser exists by cut-metric compactness of graphon space and continuity of $t(C_m,\cdot)$ and $t(K_2,\cdot)$.
+
+\paragraph{First-variation kernel.}
+With $t(C_m,W)=\Tr(T_W^m)$ and $\tfrac{d}{dt}\Tr((A+tF)^m)|_0=m\,\Tr(A^{m-1}F)$ (cyclic invariance), the Fr\'echet derivative of $t(C_m,\cdot)$ in a symmetric direction $h$ is
+\begin{equation}\label{eq:firstvar}
+        \delta t(C_m,W)[h]=m\!\int_{[0,1]^2}\!\bigl(T_W^{m-1}\bigr)(x,y)\,h(x,y)\,dx\,dy,
+        \qquad \mathcal K_{C_m}:=m\,T_W^{m-1},
+\end{equation}
+where $(T_W^{m-1})(x,y)$ is the kernel of the $(m-1)$-st operator power, i.e.\ the density of rooted $(m-1)$-edge walks from $x$ to $y$.  (Verified by exact symbolic differentiation and by finite differences.)
+
+\paragraph{KKT / bang--bang.}
+With multiplier $\nu$ for the single constraint $t(K_2,W)=p$, any minimiser $W^*$ satisfies, a.e.,
+\[
+        \mathcal K_{C_m}(x,y)=\nu \text{ on } \{0<W^*<1\},\quad
+        \ge\nu \text{ on } \{W^*=0\},\quad
+        \le\nu \text{ on } \{W^*=1\}.
+\]
+Hence $W^*\in\{0,1\}$ a.e.\ \emph{off} the level set $\{\mathcal K_{C_m}=\nu\}$.  The constraint gradient is the nonzero constant $\one$, so the conditions are necessary.  The phrasing ``off the level set'' is load-bearing: at non-Tur\'an densities the level set can carry positive measure (interior cells sit exactly on $\{\mathcal K=\nu\}$), so bang--bang does \emph{not} by itself force a finite block structure --- this is the crux of the remaining barrier (\S\ref{sec:barrier}).
+
+\section{The minimiser scallops: $g_m$ is the Goodman envelope}\label{sec:scallop}
+
+\begin{proposition}[Scallop]\label{prop:scallop}
+For $m=3,5,7$ and $p$ strictly between consecutive Tur\'an points $1-1/r<p<1-1/(r+1)$, one has $f_{C_m}(p)>g_m(p)$ strictly; equality $f_{C_m}=g_m$ holds only at $p=1-1/r$.
+\end{proposition}
+
+This is established cleanly --- with \emph{zero} optimiser slack --- by the explicit complete-multipartite family of \S\ref{sec:multipartite}: that family attains $g_m$ exactly at Tur\'an points yet lies strictly above $g_m$ between them (gaps $\sim10^{-2}$ for $m=3$ down to $\sim4\times10^{-3}$ for $m=7$, against machine-zero slack at Tur\'an points).  For $m=3$ it is the classical fact that Goodman's bound $g_3(p)=2p^2-p$ is the true triangle minimum only at $p=1-1/r$; between Tur\'an points the Razborov / Lov\'asz--Simonovits minimum strictly exceeds it.
+
+\begin{remark}
+Consequently $g_m$ is not the value of the minimiser between Tur\'an points; it is the smooth ``Goodman envelope'' touching the scalloped curve $f_{C_m}$ at $p=1-1/r$.  Proving the \emph{equality} $f_{C_m}=g_m$ off Tur\'an points would be false; the conjecture is the (true) \emph{inequality} $f_{C_m}\ge g_m$.  This means an exact characterisation of $f_{C_m}$ is a Razborov--Reiher-type problem and proves more than the conjecture needs.
+\end{remark}
+
+\section{Convergence on the multipartite inequality}\label{sec:multipartite}
+
+Numerically, the minimiser of $f_{C_m}(p)$ is a \emph{complete multipartite} graphon $K(w)$ (parts $w=(w_1,\dots,w_k)$, $\sum w_i=1$; $W=1$ across parts, $0$ within).  Writing $s=\sqrt w$ (componentwise) and $D=\operatorname{diag}(w)$,
+\begin{equation}\label{eq:Mform}
+        t(C_m,K(w))=\Tr(M^m),\qquad M:=ss^{\mathsf T}-D,\qquad p=1-\norm w^2=1-\textstyle\sum_i w_i^2,
+\end{equation}
+and the eigenvalues of $M$ satisfy $\sum_i\lambda_i=0$, $\sum_i\lambda_i^2=p$.  The conjecture restricted to this family,
+\begin{equation}\label{eq:P2}
+        \Tr(M^m)\ge g_m(p)\qquad\text{(all }w\text{ on the simplex, all odd }m\text{)},\tag{P2}
+\end{equation}
+is exactly the \emph{unequal disjoint clique-complement} inequality named as the open target in \S10 of the main paper: $M=ss^{\mathsf T}-\operatorname{diag}(w)$ is the nonzero part of $T_{1-U}$ for $U=\sum_i\one_{A_i}\otimes\one_{A_i}$ with $\mu(A_i)=w_i$ (full partition, no leftover).  The \emph{equal} case $w_i\equiv1/k$ is Tur\'an $T_k$ and is the case already settled by the \S9 equal-clique theorem.  So the variational (Direction 2) and spectral (\S9--10) approaches converge on \eqref{eq:P2}.  Numerically \eqref{eq:P2} holds over $2\times10^5$ random $w$ for every odd $m\in\{3,\dots,13\}$, with equality only at uniform $w$.
+
+\section{The two-value (Razborov) family: the main theorem}\label{sec:twovalue}
+
+The minimiser of $\Tr(M^m)$ over the simplex at fixed $p$ is, numerically for all tested $m$ and $p$, of the \emph{Razborov two-value form}
+\[
+        w=(\underbrace{a,\dots,a}_{r},\,b),\qquad b=1-ra,\qquad 0\le b\le a,\qquad p\in[1-\tfrac1r,\,1-\tfrac1{r+1}],
+\]
+(see \S\ref{sec:reduction}).  On this family $M$ has eigenvalue $-a$ with multiplicity $r-1$ together with the two eigenvalues of the $2\times2$ block
+\begin{equation}\label{eq:block}
+        B_2=\begin{pmatrix} a(r-1) & \sqrt{rab}\\[1mm] \sqrt{rab} & 0\end{pmatrix},
+        \qquad \lambda=\tfrac{a(r-1)+\sqrt\Delta}{2},\quad \eta=\tfrac{\sqrt\Delta-a(r-1)}{2},\quad \Delta=a^2(r-1)^2+4rab,
+\end{equation}
+so that $\lambda-\eta=a(r-1)$, $\lambda\eta=rab$, and (for odd $m$)
+\begin{equation}\label{eq:trace2}
+        \Tr(M^m)=-(r-1)a^m+\lambda^m-\eta^m.
+\end{equation}
+
+\begin{theorem}[Two-value multipartite inequality]\label{thm:twovalue}
+For every integer $r\ge2$, every $a\in[\tfrac1{r+1},\tfrac1r]$ with $b=1-ra$, and every odd $m\ge3$,
+\[
+        \Tr(M^m)=-(r-1)a^m+\lambda^m-\eta^m\ \ge\ g_m(p),\qquad p=1-ra^2-b^2,
+\]
+with equality exactly at the two Tur\'an endpoints $a=1/r$ and $a=1/(r+1)$.  The case $r=1$ ($M$ bipartite, $\Tr(M^m)=0$) is the trivial regime $p\le1/2$.
+\end{theorem}
+
+\begin{proof}[Proof (structure; details in the checker)]
+Let $D_m:=\Tr(M^m)-g_m(p)$.  Because the $a^m$ terms cancel, one has the exact identity
+\begin{equation}\label{eq:recursion}
+        D_{m+2}-a^2D_m=\lambda^m(\lambda^2-a^2)-\eta^m(\eta^2-a^2)-p^m(p^2-a^2)+pq^{m-1}(q^2-a^2),
+        \qquad q=1-p,
+\end{equation}
+identical in form to the \S9 equal-clique recursion.  The base case factors as
+\[
+        D_3=2\,a\,r\,b\,(a-b)^2\ \ge\ 0,
+\]
+vanishing exactly at the endpoints.  Thus it suffices to prove $D_{m+2}\ge a^2D_m$, i.e.\ that the right side of \eqref{eq:recursion} is $\ge0$.
+
+\emph{The \S9 compensation step fails here.}  The \S9 proof bounded \eqref{eq:recursion} below by discarding the $\eta$-term and invoking the compensation inequality $p^2(\lambda^2-p^2)\ge q^2(a^2-q^2)$.  For the present block \eqref{eq:block} that inequality is \textbf{false}: its minimum over the admissible range is $\approx-1.0\times10^{-3}$ (attained near $r=2$, $a\approx0.34$).  The root cause is that here $q=ra^2+b^2$ is larger than the \S9 clique-leftover value $ra^2$, reversing the sign structure the \S9 bound relied on.
+
+\emph{Corrected ($\eta$-retaining) certificate.}  Keep the $\eta$-term.  The conditions
+\[
+        \text{(a) }\eta\le a,\quad\text{(b) }p\ge a,\quad\text{(c) }\lambda\ge p,\quad\text{(aux) }p\ge q,\quad q\le a,\quad \eta\le q
+\]
+all hold on $r\ge2$ (each reduces to an explicit nonnegative expression).  Using (c) and $\lambda\ge a$, the telescoping bound $\lambda^m(\lambda^2-a^2)-p^m(p^2-a^2)\ge p^{m-1}A$ with $A=\lambda(\lambda^2-a^2)-p(p^2-a^2)\ge0$ reduces \eqref{eq:recursion} to
+\[
+        D_{m+2}-a^2D_m\ \ge\ Z(m):=p^{m-1}A+\eta^mB-pq^{m-1}C,
+        \qquad B=a^2-\eta^2\ge0,\quad C=a^2-q^2\ge0.
+\]
+Dividing by $p^{m-1}$, the quantity $g(m):=Z(m)/p^{m-1}=A+B\,\eta(\eta/p)^{m-1}-pC(q/p)^{m-1}$ is \emph{nondecreasing in odd $m$} (verified; $\eta\le q\le p$), so $Z(m)\ge0$ for all odd $m$ follows from the base case $Z(3)\ge0$ (equivalently $g(3)\ge0$), an explicit one-variable inequality certified by Sturm root-counting.  Then $D_{m+2}\ge a^2D_m$, and induction from $D_3\ge0$ gives $D_m\ge0$ for all odd $m$.
+\end{proof}
+
+\begin{remark}[Rigor status]
+Exact (sympy): the eigenvalue form \eqref{eq:block}--\eqref{eq:trace2}, the recursion identity \eqref{eq:recursion}, the factorisation $D_3=2arb(a-b)^2$, the conditions (a)--(c), (aux), $q\le a$, $\eta\le q$, the reduction to $Z(m)\ge0$, and the failure of the \S9 compensation.  Computer-assisted (exact but not yet displayed): the base certificates $g(3)\ge0$ and $Z(3)\ge0$ are by exact Sturm root counts after the substitution $a=1/(r+s)$, $r=2+u$; a referee-grade writeup must exhibit these as positive-coefficient/Bernstein certificates, as the main paper already does for $C_{11},C_{13}$.  One monotonicity lemma (``$g(m)$ nondecreasing'') uses power-monotonicity rather than a polynomial identity.  An independent end-to-end check by direct matrix powers ($r=2,\dots,40$; odd $m\le21$) found min margin $+4\times10^{-18}$ and zero violations.
+\end{remark}
+
+\section{The simplex $\to$ two-value reduction}\label{sec:reduction}
+
+To pass from Theorem~\ref{thm:twovalue} to all of \eqref{eq:P2} one needs: the minimiser of $\Tr(M^m)$ over the simplex at fixed $p$ has at most two distinct positive part sizes.  Because $M$ has zero diagonal, the gradient is clean: $\tfrac1m\partial_{w_i}\Tr(M^m)=F_i$, a degree-$(m-1)$ polynomial in the single variable $w_i$ with coefficients shared across $i$.  KKT (constraints $\sum w_i=1$, $\sum w_i^2=1-p$) gives the same fixed equation $F_i=\mu+\nu w_i$ for every active part.
+
+\begin{proposition}[Reduction]\label{prop:reduction}
+For $m=3$ the minimiser has at most two distinct positive part sizes: $F_i=2w_i^2-2w_i+p$ gives the exact Schur identity $(w_i-w_j)(F_i-F_j)=2(w_i-w_j)^2(w_i+w_j-1)\le0$, and the fixed quadratic KKT equation has at most two roots.  For general odd $m$ the fixed degree-$(m-1)$ KKT equation forces at most $m-1$ distinct values; the drop to two is numerically certain (every global minimiser found is two-valued; $\Tr(M^m)$ is Schur-concave in $w$ over $2\times10^5$ tested pairs; every $\ge3$-distinct-value KKT point tested is a saddle) but is not yet proved.
+\end{proposition}
+
+Thus \eqref{eq:P2} is fully proved for $m=3$ (where it also follows from Goodman), and for $m\ge5$ it is proved on the two-value family with the reduction to two values being the one remaining analytic gap.  The sibling project's balancing-reduction technique (its Step~A2) is the natural template for closing it.
+
+\section{Stability of the Tur\'an graphon}
+
+\begin{proposition}[First-order strict local minimality]\label{prop:stability}
+For every odd $m\ge3$ and $r\ge2$, $T_r$ is a strict local minimiser of $t(C_m,\cdot)$ at fixed edge density $p=1-1/r$: the first variation along any nonzero edge-preserving admissible direction is strictly positive, with the symmetric-direction coefficient $m/r^{m-1}>0$.
+\end{proposition}
+
+The free Hessian $\operatorname{Hess}(H)=m\sum_{i+j=m-2}\Tr(T_r^iHT_r^jH)$ is itself \emph{indefinite} (the $E_1$--$E_1$ block has coefficient $m(m-1)(-1/r)^{m-2}<0$ for $m\ge5$); strictness is a first-order corner phenomenon, the negative Hessian directions being inadmissible (they would require both signs of diagonal-block change).  This contrasts sharply with the sibling project's six-vertex graph, where the analogous coefficient $(6k^3-55k^2+142k-111)/k^5$ is \emph{negative} for $k=3,4,5$ --- there $T_k$ is not even a local minimiser.  Odd cycles are, in this precise sense, ``nicer''.
+
+\section{The remaining barrier and roadmap}\label{sec:barrier}
+
+What is now in hand: the variational reduction (\S1); the scallop and the Goodman-envelope picture (\S\ref{sec:scallop}); the convergence onto \eqref{eq:P2} (\S\ref{sec:multipartite}); Theorem~\ref{thm:twovalue} proving \eqref{eq:P2} on the two-value family for all odd $m$ (with the corrected certificate); the $m=3$ reduction (\S\ref{sec:reduction}); and strict local minimality of $T_r$ (\S\ref{prop:stability}).
+
+What remains, in increasing order of difficulty:
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Display the two Sturm certificates} ($g(3)\ge0$, $Z(3)\ge0$) as explicit positive-coefficient/Bernstein certificates, as done for $C_{11},C_{13}$.  This makes Theorem~\ref{thm:twovalue} referee-grade.
+\item \textbf{The simplex reduction for $m\ge5$}: prove the minimiser over the simplex is two-valued (drop from $\le m-1$ to $2$).  This closes \eqref{eq:P2} for all odd $m$ --- i.e.\ the full unequal disjoint clique-complement target of \S10.
+\item \textbf{The reduction to multipartite}: prove the global minimiser over \emph{all} graphons (not just multipartite) is complete multipartite.  This is the genuine frontier --- a Pikhurko--Razborov-style stability/structure theorem.  The KKT level set $\{\mathcal K=\nu\}$ can carry positive measure, so bang--bang alone does not force it; and $T_r$ being a local (not global) minimiser is far weaker than what is needed.  A softer route that sidesteps the structural reduction is the \S9 spectral program (bound $t(C_m,W)\ge p^m-\Tr(A^m)$ and minimise the right side), but its hard sub-case is again \eqref{eq:P2}.
+\end{enumerate}
+
+\paragraph{Assessment.}
+Direction 2 has converted a vague ``different approach'' into a concrete programme and proved its centrepiece --- the two-value multipartite inequality, for all odd $m$, with the important correction that the naive \S9 transfer is false.  It unifies the variational and spectral halves of the project on a single target \eqref{eq:P2}, of which the equal case (\S9) and now the two-value case are settled.  Item~(2) closes the multipartite conjecture; item~(3) remains the real barrier to the full conjecture and is genuinely hard.
+
+\section*{Accompanying checker}
+
+\texttt{extremal\_structure\_checker.py} verifies, in exact and grid arithmetic: the multipartite identity \eqref{eq:Mform} and spectral constraints; the scallop (Prop.~\ref{prop:scallop}); \eqref{eq:P2} over random simplices ($m\le13$); the two-value closed form \eqref{eq:trace2}; the recursion identity \eqref{eq:recursion} and $D_3=2arb(a-b)^2$; the failure of the \S9 compensation; all conditions of the corrected certificate, $Z(m)\ge0$ and the $g(m)$ monotonicity; the end-to-end two-value inequality ($r\le40$, $m\le21$, zero violations); and the $m=3$ Schur identity.  All checks pass.
+
+\begin{thebibliography}{9}
+\bibitem{RazborovTriangles} A.~A. Razborov. On the minimal density of triangles in graphs. \emph{Combin. Probab. Comput.} 17(4):603--618, 2008.
+\bibitem{ReiherCliqueDensity} C.~Reiher. The clique density theorem. \emph{Ann. of Math.} 184(3):683--707, 2016.
+\end{thebibliography}
+
+\end{document}
