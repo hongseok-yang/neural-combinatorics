@@ -1,0 +1,276 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\DeclareMathOperator{\Tr}{Tr}
+
+\title{Partial $C_{13}$ progress: \\
+\large path-certificate range, a closed-form linear polynomial, and the marginal gap}
+\author{Working note for the odd-cycle project}
+\date{May 30, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We extend the complement-expansion path-certificate of the $C_9$ and $C_{11}$ proofs to $C_{13}$, establishing
+\[
+        t(C_{13}, W) \ge p^{13} - p(1-p)^{12}
+\]
+for every graphon $W$ with edge density $p \ge 519/1000$, by an exact rational Bernstein-subdivision certificate.  As a byproduct we identify a closed-form formula for the linear-part polynomial $P_q^{(m)}(\lambda)$ valid uniformly for all odd $m \ge 5$:
+\[
+        P_q^{(m)}(\lambda) = \sum_{j=0}^{m-3} a_j^{(m)}(q)\, \lambda^j,
+        \qquad
+        a_j^{(m)}(q) = (-1)^j m (1-q)^{m-2-j} + m q^{m-2-j} - (m-2-j) q^{m-3-j}.
+\]
+The full $C_{13}$ case is \emph{not} closed by the hybrid strategy of $C_9$ and $C_{11}$: the spectral-triangle near-bipartite argument generalises to $C_{13}$ but only covers $\eps = p - 1/2 \in (0, \delta_{13}]$ with $\delta_{13} = 0.01559\ldots$, strictly less than $\rho_{13} - 1/2 = 19/1000$.  A residual uncovered window $p \in (1/2 + \delta_{13},\, 519/1000)$ of width $\approx 0.0034$ remains.  This note documents the rigorous path-certificate portion and the closed-form formula, both of which appear new, and locates precisely where the hybrid strategy first fails.
+\end{abstract}
+
+\section{Statement and partial result}
+
+The project conjecture is
+\begin{equation}\label{eq:conj}
+        t(C_{2k+1}, W) \ge p^{2k+1} - p(1-p)^{2k}
+\end{equation}
+for every graphon $W$ with $p = t(K_2, W)$.  The cases $C_3, C_5, C_7, C_9, C_{11}$ are settled by the main paper.  This note establishes:
+
+\begin{theorem}[Path-certificate range for $C_{13}$]\label{thm:C13-path}
+For every graphon $W$ with $p = t(K_2, W) \ge 519/1000$,
+\[
+        t(C_{13}, W) \ge p^{13} - p(1-p)^{12}.
+\]
+\end{theorem}
+
+For $p \le 1/2$ the proposed right-hand side is non-positive, so \eqref{eq:conj} is trivial.  Theorem~\ref{thm:C13-path} therefore reduces the open range to $1/2 < p < 519/1000$; the spectral-triangle argument of \S\ref{sec:spectral} covers $p \le 1/2 + \delta_{13} \approx 0.5156$, leaving the narrow residual $p \in (0.5156, 0.519)$ open.
+
+\section{The complement-expansion path certificate for $C_{13}$}\label{sec:path}
+
+We follow the framework of \S 6 (for $C_9$) and \S 7 (for $C_{11}$) in the main paper.  Put $U = 1 - W$ and $q = t(K_2, U) = 1 - p$.  For the path with $j$ edges write $x_j = t(P_j, U)$, and let $c_{13} = t(C_{13}, U)$.  Expanding $t(C_{13}, 1-U)$ by inclusion-exclusion over the thirteen edges of $C_{13}$ and using the deletion bound $c_{13} \le x_{12}$ gives
+\begin{equation}\label{eq:Phi13-defn}
+        t(C_{13}, 1-U) - \bigl((1-q)^{13} - (1-q) q^{12}\bigr) \ge \Phi_{13},
+\end{equation}
+where $\Phi_{13}$ is an explicit polynomial in $q, x_2, \ldots, x_{12}$ with $259$ monomials.  The accompanying script \texttt{odd\_cycle\_c13\_checker.py} produces $\Phi_{13}$ by inclusion-exclusion in $<1$ s.  The polynomial is too large to display in print, but the next subsection's moment decomposition is compact and self-contained.
+
+\subsection{Moment decomposition}
+
+Let $T = T_U$.  Write $d = T\one = q\one + g$ with $\langle g, \one \rangle = 0$, and let
+\[
+        A = P_{\one^\perp} T P_{\one^\perp}
+\]
+be the compression of $T$ to $\one^\perp$.  Define
+\[
+        s_j = \langle g, A^j g \rangle, \qquad j \ge 0,
+\]
+so $s_0 = \|g\|_2^2 \ge 0$.  The path densities $x_j = \langle \one, T^j \one\rangle$ are obtained from the block recurrence
+\[
+        T(a\one + h) = (aq + \langle g, h\rangle)\one + (ag + Ah), \qquad h \in \one^\perp,
+\]
+extended to $j = 12$.  Substituting the resulting formulae into $\Phi_{13}$ gives the homogeneous decomposition
+\begin{equation}\label{eq:Phi13-decomp}
+        \Phi_{13} = L_1 + L_2 + L_3 + L_4 + L_5 + 12\, s_0^6,
+\end{equation}
+where $L_d$ is homogeneous of degree $d$ in $s_0, s_1, \ldots, s_{10}$.  The pure degree-$6$ term $12 s_0^6 \ge 0$ is immediate.
+
+\begin{remark}[Pattern in the top term]
+The high-degree pure term in $\Phi_m$ for odd $m$ is $(m-1)\, s_0^{(m-1)/2}$: for $m = 11$ this is $10 s_0^5$ (\S 7.2 of the main paper), and for $m = 13$ it is $12 s_0^6$.  The pattern is verified by the checker for $m = 13$ and is consistent with the closed-form leading coefficient $a_{m-3}^{(m)}(q) \equiv m - 1$ established in Proposition~\ref{prop:Pq-closed} below.
+\end{remark}
+
+\subsection{The linear part and the closed-form $P_q^{(m)}$}
+
+The degree-$1$ part is
+\[
+        L_1 = \int_{-1}^{1} P_q^{(13)}(\lambda)\, d\mu(\lambda),
+\]
+where $\mu$ is the spectral measure of $A$ with respect to $g$ and $P_q^{(13)}$ is a polynomial of degree $m - 3 = 10$ in $\lambda$.
+
+A central observation, verified symbolically by the accompanying script, is that the polynomial $P_q^{(m)}(\lambda)$ produced in this way admits a uniform closed-form expression for every odd $m \ge 5$.
+
+\begin{proposition}[Closed form for $P_q^{(m)}$]\label{prop:Pq-closed}
+For every odd integer $m \ge 5$, the linear-part polynomial in the moment decomposition of $\Phi_m$ is
+\begin{equation}\label{eq:Pq-closed}
+        P_q^{(m)}(\lambda) = \sum_{j=0}^{m-3} a_j^{(m)}(q)\, \lambda^j,
+\end{equation}
+with coefficients
+\begin{equation}\label{eq:a-coeffs}
+        a_j^{(m)}(q)
+        = (-1)^j\, m\, (1-q)^{m-2-j}
+        + m\, q^{m-2-j}
+        - (m-2-j)\, q^{m-3-j}
+\end{equation}
+for $0 \le j \le m - 3$.  In particular the leading coefficient $a_{m-3}^{(m)}(q) = m - 1$.
+\end{proposition}
+
+The proposition is verified by the checker at $m = 11$ (matching the explicit $P_q^{(11)}$ of \S 7.2 in the main paper) and at $m = 13$ (matching the inclusion-exclusion-derived $P_q^{(13)}$).  Specialising \eqref{eq:Pq-closed}--\eqref{eq:a-coeffs} at $m = 13$:
+\begin{align*}
+P_q^{(13)}(\lambda)
+={}& 12\lambda^{10} + (24q - 13)\lambda^9 + (36q^2 - 39q + 13)\lambda^8 \\
+&{}+ (48q^3 - 78q^2 + 52q - 13)\lambda^7 + (60q^4 - 130q^3 + 130q^2 - 65q + 13)\lambda^6 \\
+&{}+ (72q^5 - 195q^4 + 260q^3 - 195q^2 + 78q - 13)\lambda^5 \\
+&{}+ (84q^6 - 273q^5 + 455q^4 - 455q^3 + 273q^2 - 91q + 13)\lambda^4 \\
+&{}+ (96q^7 - 364q^6 + 728q^5 - 910q^4 + 728q^3 - 364q^2 + 104q - 13)\lambda^3 \\
+&{}+ (108q^8 - 468q^7 + 1092q^6 - 1638q^5 + 1638q^4 - 1092q^3 + 468q^2 - 117q + 13)\lambda^2 \\
+&{}+ (120q^9 - 585q^8 + 1560q^7 - 2730q^6 + 3276q^5 - 2730q^4 + 1560q^3 - 585q^2 + 130q - 13)\lambda \\
+&{}+ 132q^{10} - 715q^9 + 2145q^8 - 4290q^7 + 6006q^6 - 6006q^5 + 4290q^4 - 2145q^3 + 715q^2 - 143q + 13.
+\end{align*}
+
+\begin{remark}[Specialisations to $m = 9, 11$]
+At $m = 9$ formula~\eqref{eq:a-coeffs} reproduces the $P_q^{(9)}$ from \S 6.1 of the main paper (cf.\ eq.~(6.7) there); at $m = 11$ it reproduces the $P_q^{(11)}$ from \S 7.2 (cf.\ eq.~(7.5) there).  The checker cross-verifies both specialisations.
+\end{remark}
+
+\subsection{Nonlinear kernels}
+
+If $s_0 > 0$, let $\nu = \mu/s_0$ be the normalised spectral measure on $[-1, 1]$ and set $m_j = \int_{-1}^1 \lambda^j\, d\nu(\lambda)$.  Then for $d = 1, 2, 3, 4, 5$,
+\[
+        L_d = s_0^d\, F_d(q;\, m_1, \ldots, m_{10}),
+\]
+and each $F_d$ is the $d$-fold $\nu$-average of an explicit symmetric kernel $K_{d, q}$ on $[-1, 1]^d$:
+\[
+        F_d = \int_{[-1, 1]^d} K_{d, q}(\lambda_1, \ldots, \lambda_d)\, d\nu(\lambda_1) \cdots d\nu(\lambda_d).
+\]
+The kernel is obtained by replacing each monomial $m_{a_1} \cdots m_{a_t}$ in $F_d$ by the symmetrised product
+\[
+        \frac{1}{d!} \sum_{\sigma \in S_d} \lambda_{\sigma(1)}^{a_1} \cdots \lambda_{\sigma(t)}^{a_t}
+\]
+with the remaining $d - t$ exponents equal to $0$, as in \S 7.2 of the main paper.
+
+\subsection{Bernstein-certified positivity}
+
+The accompanying script certifies, by exact rational Bernstein subdivision, the following positivity statements:
+\begin{align}
+P_q^{(13)}(\lambda) > 0 & \quad \text{on } q \in [0, 481/1000],\ \lambda \in [-1, 1], \label{eq:Pq-positive-C13} \\
+K_{2, q}(\lambda_1, \lambda_2) > 0 & \quad \text{on } q \in [0, 481/1000],\ \lambda_i \in [-1, 1], \label{eq:K2-positive-C13} \\
+K_{d, q}(\lambda_1, \ldots, \lambda_d) > 0 & \quad \text{on } q \in [0, 1/2],\ \lambda_i \in [-1, 1], \quad d = 3, 4, 5. \label{eq:Kd-positive-C13}
+\end{align}
+The subdivision certificates are small: $6$ boxes for $P_q^{(13)}$, $6$ for $K_2$, $8$ for $K_3$, $16$ for $K_4$, and $42$ for $K_5$; the full set runs in $\approx 60$ s in sympy.
+
+\begin{remark}[Tightness of $q \le 481/1000$]\label{rmk:tight}
+At $q = 482/1000$ the linear polynomial $P_q^{(13)}(\lambda)$ attains negative values near $\lambda \approx 0.355$ (a numerical sweep confirms a local minimum below zero), so the threshold $q = 481/1000$ for \eqref{eq:Pq-positive-C13} is tight up to the rational denominator $1000$.  The nonlinear kernel $K_2$ likewise dips slightly negative near $q = 1/2$ for $C_{13}$, requiring the same $q \le 481/1000$ cap.  This is in contrast to $C_{11}$, where $K_2$ is positive on the full $q \in [0, 1/2]$.
+\end{remark}
+
+\subsection{Conclusion of the path-certificate range}
+
+Combining the decomposition \eqref{eq:Phi13-decomp} with the positivity statements \eqref{eq:Pq-positive-C13}, \eqref{eq:K2-positive-C13}, \eqref{eq:Kd-positive-C13} gives
+\[
+        \Phi_{13} = L_1 + L_2 + L_3 + L_4 + L_5 + 12\, s_0^6 \ge 0
+        \qquad \text{on } 0 \le q \le 481/1000.
+\]
+By \eqref{eq:Phi13-defn} this yields Theorem~\ref{thm:C13-path}, with $\rho_{13} = 519/1000$.
+
+\section{The spectral-triangle near-bipartite window}\label{sec:spectral}
+
+The spectral closure of \S 7.1 in the main paper (originally $C_{11}$ on $1/2 < p \le 103/200$) generalises verbatim to every odd $m \ge 5$.  We sketch the $C_{13}$ specialisation and the size of the resulting window.
+
+Let $T = T_W$ be the self-adjoint Hilbert--Schmidt operator with kernel $W$, with eigenvalues $\lambda_0 \ge 0, \lambda_1, \lambda_2, \ldots$ satisfying $\lambda_0 \ge p$, $\sum_i \lambda_i^2 \le p$, and $t(C_m, W) = \sum_i \lambda_i^m$ for $m \ge 3$.
+
+\begin{lemma}[Spectral closure criterion for $C_{13}$]\label{lem:spectral-C13}
+Let $1/2 < p \le 1/2 + \delta_{13}$ and $q = 1 - p$.  Assume that $t(K_3, W) \ge \Theta(p)$, where $\Theta(p) = \tfrac32 c(1-c)^2$ is the Razborov--Reiher sharp triangle bound with $p = \tfrac12 + c - \tfrac32 c^2$.  Then
+\[
+        t(C_{13}, W) \ge p^{13} - pq^{12}.
+\]
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+The structure is identical to \S 7.1 of the main paper, with the cycle length, exponent, and cut-off relaxed to their $C_{13}$ analogues.  Set $\ell = \lambda_0 \ge p$, $S = p - \ell^2$, $N_{13} = \sum_{i \ge 1,\, \lambda_i < 0} |\lambda_i|^{13}$, and
+\[
+        \alpha = \alpha_\ell := (\ell^{13} - p^{13} + p q^{12})^{1/13}.
+\]
+The reduction $G'(\ell) > 0$ on $\Delta = p - \ell^2 - \alpha^2 \ge 0$ goes through because differentiating $\alpha^{13} = \ell^{13} - p^{13} + p q^{12}$ gives $\alpha' = \ell^{12}/\alpha^{12}$ and (dropping the non-negative $\sqrt{\Delta}$ term)
+\[
+        G'(\ell) > -3\ell^2 + 3 \alpha^2 \alpha' = 3 \ell^2 \Bigl(\bigl(\tfrac{\ell}{\alpha}\bigr)^{10} - 1\Bigr) > 0
+\]
+whenever $\alpha < \ell$, which holds in our range.  At $\ell = p$ the inequality \eqref{eq:scalar-C13} below is the binding scalar comparison.
+\end{proof}
+
+The scalar comparison at $\ell = p$ is
+\begin{equation}\label{eq:scalar-C13}
+        \Theta(p) \ge p^3 - \alpha_0^3 + \Delta_0^{3/2},
+        \qquad \alpha_0 = (p q^{12})^{1/13},\quad \Delta_0 = pq - \alpha_0^2.
+\end{equation}
+
+\begin{proposition}[Maximal spectral window]\label{prop:delta13}
+The maximal $\delta > 0$ such that \eqref{eq:scalar-C13} holds on $\eps = p - 1/2 \in (0, \delta]$ is
+\[
+        \delta_{13} = 0.015592935063\ldots,
+\]
+computed by bisection in $50$-digit arithmetic.  In particular $\delta_{13} < 19/1000 = \rho_{13} - 1/2$.
+\end{proposition}
+
+The bisection is documented in the synthesis report \texttt{general\_odd\_cycle\_progress.md} accompanying this directory.  An asymptotic Taylor analysis there shows $m^2 \delta_m \to 9/4$ as $m \to \infty$; for $m = 13$ this gives the leading-order estimate $9 \cdot 13 / (4 \cdot 11^3) \approx 0.0266$, with the actual $\delta_{13} = 0.01559$ being smaller due to $\eps^2$ and higher corrections.
+
+\section{The marginal gap and what remains}\label{sec:remains}
+
+\subsection{The uncovered residual interval}
+
+Combining the trivial case, Lemma~\ref{lem:spectral-C13}/Proposition~\ref{prop:delta13}, and Theorem~\ref{thm:C13-path}, the $C_{13}$ conjecture is established for
+\[
+        p \le 1/2 \quad \text{(trivially)}, \qquad 1/2 < p \le 1/2 + \delta_{13} \approx 0.5156 \quad \text{(spectral)}, \qquad p \ge 519/1000 \quad \text{(path-certificate)}.
+\]
+The residual uncovered interval is
+\[
+        p \in \bigl(1/2 + \delta_{13},\ 519/1000\bigr) = (0.51559\ldots,\ 0.519),
+\]
+of width $\approx 0.00341$.  This is the first cycle length at which the hybrid strategy of \S 6 and \S 7 fails to close the conjecture.
+
+\subsection{Plausible routes to closing the gap}
+
+\begin{enumerate}[leftmargin=2em]
+\item \emph{Tighten the path-certificate by a $\sim 25\%$ improvement.}  Either of the following would close the residual:
+\begin{itemize}
+\item A sharper Bernstein certificate for $K_{2, q}$ that pushes the $q$-ceiling from $481/1000$ down to $\approx 1/2 - \delta_{13}$.
+\item A refined positivity certificate for $P_q^{(13)}(\lambda)$ that extends $\rho_{13}$ further toward $1/2$.
+\end{itemize}
+Both seem feasible: the binding constraint at $q = 482/1000$ is local (near $\lambda \approx 0.355$) and the negative dip is shallow.  A non-Bernstein certificate (e.g.\ an SDP, or a tighter sum-of-squares) may close it.
+
+\item \emph{Refine the spectral closure to $O(\eps^2)$.}  The $\eps^2$ corrections to \eqref{eq:scalar-C13} were dropped in the leading-order analysis behind Proposition~\ref{prop:delta13}; including them adds a positive correction of order $1/m$ to the slack, potentially raising $\delta_{13}$ by a few tens of percent.
+
+\item \emph{Stronger near-bipartite input.}  A sharp $t(C_5, W) \ge t(C_5, T_{2;c})$ Tur\'an-type bound on $p \in [1/2, 2/3]$ (currently open) would replace the triangle-density input in Lemma~\ref{lem:spectral-C13} by a substantially stronger one, giving $\delta_m \ge 0.122$ \emph{uniformly in $m$} and closing every odd cycle simultaneously, provided the path-certificate cut-off satisfies $\rho_m \le 1/2 + 0.122$.
+\end{enumerate}
+
+\subsection{Asymptotic obstruction}
+
+Independent of $C_{13}$ specifically, Taylor analysis of \eqref{eq:scalar-C13} shows the present spectral-triangle window has a hard ceiling
+\[
+        \delta_m \le \frac{9 m}{4 (m-2)^3} \sim \frac{9}{4 m^2}
+        \qquad (m \to \infty).
+\]
+This is intrinsic to using triangle density together with the $L^2$-to-$L^3$ comparison underlying \eqref{eq:scalar-C13}: no manipulation within these inputs can change the $1/m^2$ scaling.  Meanwhile the path-certificate cut-offs $\rho_m - 1/2$ have grown rapidly ($3/2000$ at $C_9$, $3/200$ at $C_{11}$, $19/1000$ at $C_{13}$), and numerical experiments (in the synthesis report) suggest they may stabilise around a constant $\approx 0.02$ for large $m$ rather than shrinking.  In particular, the two windows divergently miss each other from $C_{13}$ onward unless one of the strengthenings in \S\ref{sec:remains}.2 is achieved.
+
+\section*{Accompanying artefacts}
+
+The accompanying script \texttt{odd\_cycle\_c13\_checker.py} in the same directory verifies, in exact rational arithmetic:
+\begin{itemize}[leftmargin=2em]
+\item the degree-$0$ and degree-$6$ structural parts of $\Phi_{13}$;
+\item the closed-form Proposition~\ref{prop:Pq-closed} at $m = 11$ (cross-check) and $m = 13$;
+\item the positivity statements \eqref{eq:Pq-positive-C13}--\eqref{eq:Kd-positive-C13} by exact rational Bernstein subdivision.
+\end{itemize}
+The script completes in $\approx 60$ s.
+
+The spectral-window value $\delta_{13} = 0.015592935063\ldots$ in Proposition~\ref{prop:delta13} is not verified by this checker; it is documented in the synthesis report \texttt{general\_odd\_cycle\_progress.md}, produced by a separate $50$-digit-precision bisection in mpmath.
+
+\begin{thebibliography}{9}
+
+\bibitem{RazborovTriangles}
+A.~A. Razborov.
+\newblock On the minimal density of triangles in graphs.
+\newblock \emph{Combinatorics, Probability and Computing} 17(4):603--618, 2008.
+
+\bibitem{ReiherCliqueDensity}
+C.~Reiher.
+\newblock The clique density theorem.
+\newblock \emph{Annals of Mathematics} 184(3):683--707, 2016.
+
+\end{thebibliography}
+
+\end{document}
