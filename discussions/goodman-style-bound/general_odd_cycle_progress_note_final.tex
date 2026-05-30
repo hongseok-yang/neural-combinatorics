@@ -1,0 +1,942 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\0}{\mathbf 0}
+
+\title{Progress on a One-Sided Odd-Cycle Density Conjecture}
+\author{Working note prepared for collaborators}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $W:[0,1]^2\to[0,1]$ be a graphon and let $p=t(K_2,W)$.  We study the conjectural one-sided odd-cycle inequality
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+This note records the general reductions and all-$k$ partial results obtained so far.  The full conjecture is not claimed here.  The results proved in this note include: an exact complement path-cycle identity; an operator block decomposition; the universal compression bound $\|P_{\one^\perp}T_{1-W}P_{\one^\perp}\|\le 1/2$; a hub-coupling positivity lemma; the proof of the conjecture under the trace-safe condition $\Tr(A^{2k+1})\le p(1-p)^{2k}$, in particular under $\|A\|\le 1-p$; the rank-one complement theorem $1-W=u\otimes u$; and the equal disjoint clique-complement theorem.  The note also explains a false stronger spectral target and formulates the corrected remaining bottleneck.
+\end{abstract}
+
+\tableofcontents
+
+\section{The conjecture and basic notation}
+
+A \emph{graphon} is a symmetric measurable function
+\[
+        W:[0,1]^2\to[0,1].
+\]
+For a finite graph $H=(V,E)$, its homomorphism density in $W$ is
+\[
+        t(H,W)=\int_{[0,1]^V}\prod_{ij\in E} W(x_i,x_j)\prod_{i\in V}\dd x_i.
+\]
+In particular,
+\[
+        p=t(K_2,W)=\int_{[0,1]^2} W(x,y)\dd x\dd y
+\]
+is the edge density of $W$.
+
+\begin{conjecture}[One-sided odd-cycle inequality]\label{conj:main}
+For every graphon $W$, every integer $k\ge1$, and $p=t(K_2,W)$,
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{conjecture}
+
+We usually write
+\[
+        m=2k+1,
+        \qquad
+        U=1-W,
+        \qquad
+        q=t(K_2,U)=1-p.
+\]
+Then the conjecture is equivalent to
+\begin{equation}\label{eq:complement-form}
+        t(C_m,1-U)\ge (1-q)^m-(1-q)q^{m-1}.
+\end{equation}
+The case $p\le 1/2$ is immediate: then
+\[
+        p^m-p(1-p)^{m-1}
+        =p\bigl(p^{m-1}-(1-p)^{m-1}\bigr)\le0,
+\]
+while $t(C_m,W)\ge0$.  Therefore the nontrivial range is
+\[
+        p>1/2,
+        \qquad\text{equivalently}\qquad
+        q<1/2.
+\]
+
+\begin{remark}[Sharpness at balanced Turan graphons]
+Let $T_r$ be the complete balanced $r$-partite graphon.  Then $p=t(K_2,T_r)=1-1/r$.  Since the chromatic polynomial of an odd cycle $C_m$ is
+\[
+        \chi(C_m,r)=(r-1)^m-(r-1),
+\]
+we get
+\[
+        t(C_m,T_r)=\frac{(r-1)^m-(r-1)}{r^m}
+        =p^m-p(1-p)^{m-1}.
+\]
+Thus Conjecture~\ref{conj:main}, if true, is sharp at every Turan density $p=1-1/r$.
+\end{remark}
+
+\section{The exact complement path-cycle identity}
+
+The first general reduction is purely combinatorial.  It expands $t(C_m,1-U)$ by inclusion-exclusion and separates the path-layer deviations from the final path-cycle correction.
+
+Let $P_n$ denote the path with $n$ edges.  For a graphon $U$ and integers $0\le j\le n$, define
+\[
+        Z_{n,j}(U)
+        =
+        \sum_{\substack{F\subseteq P_n\\ e(F)=j}} t(F,U),
+\]
+where the sum is over all $j$-edge subgraphs of the path $P_n$.  Isolated vertices do not affect the density.  We also write
+\[
+        x_n=t(P_n,U),
+        \qquad
+        c_m=t(C_m,U).
+\]
+
+\begin{proposition}[Complement path-cycle identity]\label{prop:path-cycle-identity}
+Let $m=n+1$ be odd, so $n=2k$ is even.  Then
+\begin{align}
+& t(C_m,1-U)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr) \notag\\
+={}&
+\sum_{j=0}^{n-1}(-1)^j
+\left[
+        \frac{m}{m-j}Z_{n,j}(U)-\binom mj q^j
+\right]
++n\bigl(x_n-q^n\bigr)
++\bigl(x_n-c_m\bigr).\label{eq:path-cycle-main}
+\end{align}
+Equivalently, if
+\[
+        E_{n,j}(U)=Z_{n,j}(U)-\binom nj q^j,
+\]
+then the defect in Conjecture~\ref{conj:main} is
+\begin{align}
+\Delta_m(U)
+={}&
+\sum_{\substack{0\le j<n\\ j\text{ even}}}
+        \frac{m}{m-j}E_{n,j}(U)
+-
+\sum_{\substack{0\le j<n\\ j\text{ odd}}}
+        \frac{m}{m-j}E_{n,j}(U)     \notag\\
+&\qquad
++nE_{n,n}(U)
++\bigl(x_n-c_m\bigr).\label{eq:master-defect}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+By inclusion-exclusion,
+\[
+        t(C_m,1-U)=\sum_{S\subseteq E(C_m)}(-1)^{|S|}t(S,U).
+\]
+Fix $j<n$.  A $j$-edge subset $S\subseteq E(C_m)$ is proper and is contained in exactly $m-j$ deleted-edge paths $C_m-e$, because one may delete any edge outside $S$.  On the other hand, there are $m$ choices of $e$, and $C_m-e$ is a copy of $P_n$.  Therefore the total contribution of all $j$-edge subsets of $C_m$ is
+\[
+        \frac{m}{m-j}Z_{n,j}(U).
+\]
+For $j=n=m-1$ this gives $mZ_{n,n}(U)=mx_n$.  The full $m$-edge subset contributes $-c_m$, since $m$ is odd.  Hence
+\[
+        t(C_m,1-U)
+        =
+        \sum_{j=0}^{n-1}(-1)^j\frac{m}{m-j}Z_{n,j}(U)
+        +mx_n-c_m.
+\]
+Also,
+\begin{align*}
+(1-q)^m-(1-q)q^{m-1}
+&=
+\sum_{j=0}^{m}(-1)^j\binom mj q^j-q^{m-1}+q^m\\
+&=
+\sum_{j=0}^{n-1}(-1)^j\binom mj q^j+nq^n,
+\end{align*}
+since $m=n+1$ is odd.  Subtracting gives \eqref{eq:path-cycle-main}.
+
+For the second form, use
+\[
+        \frac{m}{m-j}\binom nj=\binom mj
+        \qquad(0\le j<n),
+\]
+and note that $x_n=Z_{n,n}$.
+\end{proof}
+
+The identity shows that the full conjecture would follow from the following path-cycle domination inequality.
+
+\begin{conjecture}[Master path-cycle inequality]\label{conj:master-path-cycle}
+For every even $n=2k$, every graphon $U$ with $q=t(K_2,U)\le1/2$, one has
+\begin{align*}
+\sum_{\substack{j<n\\ j\text{ odd}}}
+        \frac{n+1}{n+1-j}E_{n,j}(U)
+\le{}&
+\sum_{\substack{j<n\\ j\text{ even}}}
+        \frac{n+1}{n+1-j}E_{n,j}(U) \\
+&\qquad
++nE_{n,n}(U)+\bigl(t(P_n,U)-t(C_{n+1},U)\bigr).
+\end{align*}
+\end{conjecture}
+
+The even path layers are already controlled by known technology.  Kim and Lee proved, via Schur convexity of complete homogeneous symmetric functions, that for every bounded symmetric kernel $U$ and every path $P_n$,
+\begin{equation}\label{eq:kim-lee-even}
+        Z_{n,2d}(U)\ge \binom n{2d}t(K_2,U)^{2d}
+        \qquad(1\le d\le n/2).
+\end{equation}
+Equivalently, $E_{n,2d}(U)\ge0$.  Their result also implies the extended commonality inequality
+\[
+        t(H,W)+t(H,1-W)
+        \ge
+        t(K_2,W)^{e(H)}+t(K_2,1-W)^{e(H)}
+\]
+for every path or cycle $H$ and every bounded symmetric kernel $W$ \cite{KimLee2022}.  However, this two-sided inequality does not by itself imply Conjecture~\ref{conj:main}; the missing one-sided information is exactly the control of the odd path layers together with the path-cycle gap in \eqref{eq:master-defect}.
+
+\section{Operator framework}
+
+For a graphon or bounded symmetric kernel $F$, let
+\[
+        T_F f(x)=\int_0^1 F(x,y)f(y)\dd y
+\]
+be the associated self-adjoint Hilbert-Schmidt operator on $L^2[0,1]$.  For every cycle $C_m$ with $m\ge3$,
+\[
+        t(C_m,F)=\Tr(T_F^m),
+\]
+because $T_F^m$ is trace class.
+
+Let $U=1-W$, $q=t(K_2,U)$, and $p=1-q$.  Decompose
+\[
+        L^2[0,1]=\R\one\oplus L^2_0,
+        \qquad
+        L^2_0=\{f\in L^2[0,1]:\ip{f}{\one}=0\}.
+\]
+Here $\norm{\one}_2=1$.  Let $P_0$ be the orthogonal projection onto $L^2_0$.  Put
+\[
+        d_U=T_U\one,
+        \qquad
+        g=d_U-q\one\in L^2_0,
+        \qquad
+        A=P_0T_UP_0|_{L^2_0}.
+\]
+Then, in block form,
+\begin{equation}\label{eq:block-TU}
+        T_U=\begin{pmatrix}
+        q & g^*\\
+        g & A
+        \end{pmatrix}.
+\end{equation}
+Since $T_W=T_{1-U}=J-T_U$, where $Jf=\ip{f}{\one}\one$, we have
+\begin{equation}\label{eq:block-TW}
+        T_W=\begin{pmatrix}
+        p & -g^*\\
+        -g & -A
+        \end{pmatrix}.
+\end{equation}
+
+\subsection{A universal compression bound}
+
+\begin{lemma}[Mean-zero compression bound]\label{lem:compression-half}
+For every graphon $U$,
+\[
+        \norm{P_0T_UP_0}_{2\to2}\le \frac12.
+\]
+\end{lemma}
+
+\begin{proof}
+Let $f\in L^2_0$ with $\norm f_2=1$.  Write $f=f_+-f_-$, where $f_+,f_-\ge0$ have disjoint supports.  Since $\int f=0$,
+\[
+        \int f_+=\int f_-=:a.
+\]
+Moreover $2a=\norm f_1\le \norm f_2=1$, so $a\le1/2$.  Since $0\le U\le1$,
+\begin{align*}
+\ip{f}{T_Uf}
+&=\ip{f_+}{T_Uf_+}+\ip{f_-}{T_Uf_-}-2\ip{f_+}{T_Uf_-}\\
+&\le \left(\int f_+\right)^2+\left(\int f_-\right)^2
+=2a^2\le\frac12.
+\end{align*}
+Similarly,
+\[
+        \ip{f}{T_Uf}\ge -2\ip{f_+}{T_Uf_-}\ge -2a^2\ge-\frac12.
+\]
+Since $P_0T_UP_0$ is self-adjoint, its operator norm is the supremum of the absolute value of its Rayleigh quotient.  Hence the norm is at most $1/2$.
+\end{proof}
+
+\subsection{Hub-coupling positivity}
+
+The next lemma says that the off-diagonal coupling to the one-dimensional ``hub'' $\R\one$ cannot decrease an odd trace, provided the leaf operator has spectrum in $[-a,a]$.
+
+\begin{lemma}[Hub-coupling positivity]\label{lem:hub-coupling}
+Let $a\ge0$, let $B$ be a self-adjoint Hilbert-Schmidt operator with $\norm B\le a$, and let $h$ be a vector in the Hilbert space of $B$.  For every odd $m\ge3$,
+\begin{equation}\label{eq:hub-coupling}
+        \Tr
+        \begin{pmatrix}
+        a & h^*\\
+        h & B
+        \end{pmatrix}^m
+        \ge
+        a^m+\Tr(B^m).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+We first prove the finite-dimensional case.  Diagonalize $B$ and write its eigenvalues as $\beta_i\in[-a,a]$; write the coordinates of $h$ as $h_i$.  Let
+\[
+        M(t)=
+        \begin{pmatrix}
+        a & t h^*\\
+        t h & B
+        \end{pmatrix}.
+\]
+Then $\Tr(M(t)^m)$ is a polynomial in $t$ involving only even powers of $t$.  The coefficient of $t^0$ is $a^m+\sum_i\beta_i^m$.  We show that every coefficient of $t^{2r}$, $r\ge1$, is nonnegative.
+
+Expand the trace as a sum over closed words of length $m$ in the states consisting of the hub $0$ and the eigenmodes $i$.  A word using the hub-leaf coupling $2r$ times consists of $r$ excursions from the hub to leaves and back.  For a fixed cyclic sequence of visited leaves $i_1,\ldots,i_r$, the coupling contributes the nonnegative factor
+\[
+        h_{i_1}^2h_{i_2}^2\cdots h_{i_r}^2.
+\]
+The remaining $m-2r$ steps are loops at either the hub or at the currently visited leaf.  Summing over all possible distributions of these loop steps gives a positive integer multiple of
+\[
+        h_{m-2r}(a,\beta_{i_1},a,\beta_{i_2},\ldots,a,\beta_{i_r}),
+\]
+where $h_s$ denotes the complete homogeneous symmetric polynomial of degree $s$.
+
+It remains to note that this complete homogeneous polynomial is nonnegative.  Indeed,
+\[
+        \sum_{s\ge0}h_s(a,\beta)t^s
+        =\frac1{(1-at)(1-\beta t)},
+\]
+and
+\[
+        h_s(a,\beta)=\sum_{\ell=0}^s a^{s-\ell}\beta^\ell\ge0
+        \qquad\text{whenever }\beta\in[-a,a].
+\]
+For $\beta\ge0$ this is clear; for $\beta<0$, pair consecutive terms, or use
+\[
+        h_s(a,\beta)=\frac{a^{s+1}-\beta^{s+1}}{a-\beta}
+\]
+with the continuous interpretation when $a=\beta$.  Therefore each factor in the product generating function
+\[
+        \prod_{\ell=1}^r \frac1{(1-at)(1-\beta_{i_\ell}t)}
+\]
+has nonnegative coefficients, and so the coefficient of $t^{m-2r}$ is nonnegative.  Hence every coefficient of $\Tr(M(t)^m)-\Tr(M(0)^m)$ is nonnegative, proving \eqref{eq:hub-coupling} in finite dimension.
+
+For the Hilbert-space case, approximate $B$ by its finite spectral truncations and $h$ by its projection to the same finite-dimensional subspaces.  Since $B$ is Hilbert-Schmidt and $m\ge3$, the powers involved are trace class and the traces converge under these truncations.  Passing to the limit gives the result.
+\end{proof}
+
+\begin{corollary}[Basic spectral lower bound]\label{cor:basic-spectral-lower}
+Let $m=2k+1$ be odd.  In the block decomposition \eqref{eq:block-TW},
+\begin{equation}\label{eq:basic-spectral-lower}
+        t(C_m,W)=\Tr(T_W^m)
+        \ge
+        p^m-\Tr(A^m).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:hub-coupling} with
+\[
+        a=p,
+        \qquad
+        B=-A,
+        \qquad
+        h=-g.
+\]
+By Lemma~\ref{lem:compression-half}, $\norm A\le1/2$.  In the nontrivial range $p\ge1/2$, we have $\norm{-A}\le p$.  Therefore
+\[
+        \Tr(T_W^m)
+        \ge p^m+\Tr((-A)^m)
+        =p^m-\Tr(A^m),
+\]
+since $m$ is odd.  If $p<1/2$, Conjecture~\ref{conj:main} is already trivial.
+\end{proof}
+
+\section{Trace-safe regimes and all-$k$ consequences}
+
+The preceding corollary gives a useful sufficient criterion.
+
+\begin{theorem}[Trace-safe criterion]\label{thm:trace-safe}
+Let $m=2k+1$ be odd, let $U=1-W$, let $q=t(K_2,U)$, $p=1-q$, and let $A=P_0T_UP_0|_{L^2_0}$.  If
+\begin{equation}\label{eq:trace-safe-condition}
+        \Tr(A^m)\le p q^{m-1},
+\end{equation}
+then
+\[
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+By Corollary~\ref{cor:basic-spectral-lower},
+\[
+        t(C_m,W)\ge p^m-\Tr(A^m).
+\]
+Using \eqref{eq:trace-safe-condition} gives the result.
+\end{proof}
+
+\begin{corollary}[Norm-safe criterion]\label{cor:norm-safe}
+If
+\[
+        \norm A\le q,
+\]
+then Conjecture~\ref{conj:main} holds for every odd $m=2k+1$.
+\end{corollary}
+
+\begin{proof}
+For each eigenvalue $\alpha$ of $A$ and odd $m$,
+\[
+        \alpha^m\le |\alpha|^m\le q^{m-2}\alpha^2.
+\]
+Thus
+\[
+        \Tr(A^m)\le q^{m-2}\Tr(A^2).
+\]
+Moreover, from the block decomposition \eqref{eq:block-TU},
+\[
+        \norm{T_U}_{\mathrm{HS}}^2
+        =q^2+2\norm g_2^2+\Tr(A^2).
+\]
+Since $0\le U\le1$, we have $U^2\le U$, hence
+\[
+        \norm{T_U}_{\mathrm{HS}}^2=\int U^2\le \int U=q.
+\]
+Therefore
+\[
+        \Tr(A^2)\le q-q^2=pq.
+\]
+Combining the last two estimates gives
+\[
+        \Tr(A^m)\le q^{m-2}pq=pq^{m-1},
+\]
+and Theorem~\ref{thm:trace-safe} applies.
+\end{proof}
+
+\begin{corollary}[A slightly sharper checkable criterion]\label{cor:sharp-checkable}
+For fixed odd $m$, Conjecture~\ref{conj:main} holds whenever
+\[
+        \norm A^{m-2}\Tr(A^2)\le p q^{m-1}.
+\]
+In particular, it holds whenever
+\[
+        \norm A^{m-2}\bigl(pq-2\norm g_2^2\bigr)\le p q^{m-1}.
+\]
+\end{corollary}
+
+\begin{proof}
+As above,
+\[
+        \Tr(A^m)\le \norm A^{m-2}\Tr(A^2).
+\]
+The second condition follows from
+\[
+        \Tr(A^2)\le pq-2\norm g_2^2,
+\]
+which is obtained by rewriting
+\[
+        q^2+2\norm g_2^2+\Tr(A^2)\le q.
+\]
+Then apply Theorem~\ref{thm:trace-safe}.
+\end{proof}
+
+\begin{corollary}[Regular graphons]\label{cor:regular}
+If $W$ is $p$-regular, i.e.
+\[
+        \int_0^1 W(x,y)\dd y=p
+        \qquad\text{for a.e. }x,
+\]
+then Conjecture~\ref{conj:main} holds for every odd cycle.
+\end{corollary}
+
+\begin{proof}
+Then $U=1-W$ is $q$-regular.  Hence $g=0$ and $A=T_U|_{L^2_0}$.  By Schur's test, $\norm{T_U}\le q$, so $\norm A\le q$.  Corollary~\ref{cor:norm-safe} applies.
+\end{proof}
+
+\section{The corrected spectral bottleneck}
+
+The hub-coupling lemma gives a clean lower bound, but it does not by itself prove the full conjecture.  Define the nonnegative coupling contribution
+\begin{equation}\label{eq:Psi-def}
+        \Psi_m
+        =
+        \Tr(T_W^m)-\bigl(p^m-\Tr(A^m)\bigr).
+\end{equation}
+By Corollary~\ref{cor:basic-spectral-lower}, $\Psi_m\ge0$.  The exact defect in Conjecture~\ref{conj:main} is
+\begin{equation}\label{eq:corrected-defect}
+        t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+        =
+        \Psi_m+pq^{m-1}-\Tr(A^m).
+\end{equation}
+Thus the corrected remaining target is
+\begin{equation}\label{eq:corrected-target}
+        \Psi_m\ge \bigl(\Tr(A^m)-pq^{m-1}\bigr)_+.
+\end{equation}
+This is weaker and more accurate than a mode-by-mode spectral excess inequality.  The next example records why the stronger modewise target should not be pursued.
+
+\begin{example}[A false stronger spectral target]\label{ex:false-target}
+Consider the two-block graphon $U=1-W$ with block measures
+\[
+        \mu(B_1)=\frac{21}{50},
+        \qquad
+        \mu(B_2)=\frac{29}{50},
+\]
+and values
+\[
+        U_{11}=1,
+        \qquad
+        U_{12}=0,
+        \qquad
+        U_{22}=\frac23.
+\]
+Then
+\[
+        q=t(K_2,U)=\frac{601}{1500},
+        \qquad
+        p=\frac{899}{1500}.
+\]
+The compression $A=P_0T_UP_0$ has rank one, with eigenvalue
+\[
+        \alpha=\frac{203}{500}>q,
+\]
+and if $g=\beta\phi$ in the corresponding unit eigenvector direction, then
+\[
+        \beta^2=\frac{203}{750000}.
+\]
+For $m=5$, the tempting quadratic modewise excess estimate would require
+\[
+        5\beta^2 h_3(p,-\alpha)
+        \ge
+        \alpha^5-q^3\alpha^2,
+\]
+where
+\[
+        h_3(p,-\alpha)=p^3-p^2\alpha+p\alpha^2-\alpha^3.
+\]
+But exact arithmetic gives
+\[
+        5\beta^2 h_3(p,-\alpha)
+        -\bigl(\alpha^5-q^3\alpha^2\bigr)
+        =
+        -\frac{184741695439}{632812500000000}<0.
+\]
+Even the full coupling contribution fails to pay this modewise excess:
+\[
+        \Psi_5-\bigl(\alpha^5-q^3\alpha^2\bigr)
+        =
+        -\frac{369393761303}{1265625000000000}<0.
+\]
+Nevertheless the original conjectural inequality is safe in this example.  Indeed
+\[
+        t(C_5,W)=\frac{5044889039}{75937500000},
+\]
+while
+\[
+        p^5-pq^4=\frac{78321283651}{1265625000000},
+\]
+and hence
+\[
+        t(C_5,W)-(p^5-pq^4)
+        =
+        \frac{17280600997}{3796875000000}>0.
+\]
+What saves the inequality is the whole expression in \eqref{eq:corrected-defect}, not a mode-by-mode coupling estimate.
+\end{example}
+
+\section{Rank-one complement graphons}
+
+We next prove an all-$k$ theorem in a genuinely hard regime.  It covers complement graphons $U=1-W$ with a positive eigenvalue much larger than $q=t(K_2,U)$.
+
+\begin{theorem}[Rank-one complements]\label{thm:rank-one}
+Let
+\[
+        U(x,y)=u(x)u(y)
+\]
+for some measurable $u:[0,1]\to[0,1]$, and let $W=1-U$.  Put $p=t(K_2,W)$.  Then for every odd $m=2k+1\ge3$,
+\[
+        t(C_m,W)\ge p^m.
+\]
+Consequently,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+        a=\int_0^1 u(x)\dd x,
+        \qquad
+        b=\int_0^1 u(x)^2\dd x,
+        \qquad
+        \alpha=b-a^2.
+\]
+Then
+\[
+        q=t(K_2,U)=a^2,
+        \qquad
+        p=1-a^2.
+\]
+Since $0\le u\le1$, we have $u^2\le u$, hence $b\le a$ and
+\begin{equation}\label{eq:alpha-admissible}
+        0\le \alpha\le a-a^2=a(1-a).
+\end{equation}
+If $\alpha=0$, then $u=a$ a.e., so $W\equiv p$ and $t(C_m,W)=p^m$.  Assume $\alpha>0$ and set
+\[
+        \phi=\frac{u-a}{\sqrt\alpha}.
+\]
+Then $\ip{\phi}{\one}=0$ and $\norm\phi_2=1$.  In the basis $(\one,\phi)$, the nonzero part of $T_U$ is
+\[
+        \begin{pmatrix}
+        a^2 & a\sqrt\alpha\\
+        a\sqrt\alpha & \alpha
+        \end{pmatrix},
+\]
+and therefore the nonzero part of $T_W=J-T_U$ is
+\[
+        M_\alpha=
+        \begin{pmatrix}
+        p & -a\sqrt\alpha\\
+        -a\sqrt\alpha & -\alpha
+        \end{pmatrix}.
+\]
+Let its two eigenvalues be $\lambda>0$ and $-s\le0$.  Then
+\[
+        \lambda s=\alpha,
+        \qquad
+        \lambda-s=p-\alpha.
+\]
+Therefore
+\[
+        p=\lambda-s+\lambda s,
+        \qquad
+        \lambda=\frac{p+s}{1+s}.
+\]
+Hence
+\[
+        t(C_m,W)=\lambda^m-s^m
+        =\Theta_m(s),
+\]
+where
+\[
+        \Theta_m(s)=\left(\frac{p+s}{1+s}\right)^m-s^m.
+\]
+We prove that $\Theta_m$ is increasing on the admissible range.  Since
+\[
+        \lambda(s)=\frac{p+s}{1+s},
+        \qquad
+        \lambda'(s)=\frac{1-p}{(1+s)^2}=\frac{a^2}{(1+s)^2},
+\]
+we have
+\[
+        \Theta_m'(s)
+        =m\left(\frac{a^2\lambda^{m-1}}{(1+s)^2}-s^{m-1}\right).
+\]
+It is enough to prove
+\begin{equation}\label{eq:rank-one-derivative-conditions}
+        \lambda\ge s,
+        \qquad
+        \frac{a\lambda}{1+s}\ge s.
+\end{equation}
+Indeed, multiplying the second inequality squared by $\lambda^{m-3}\ge s^{m-3}$ gives
+\[
+        \frac{a^2\lambda^{m-1}}{(1+s)^2}\ge s^{m-1}.
+\]
+For the first inequality, use
+\[
+        \lambda-s=p-\alpha
+        \ge 1-a^2-(a-a^2)=1-a\ge0,
+\]
+where \eqref{eq:alpha-admissible} was used.  For the second inequality, note that
+\[
+        \alpha=\lambda s=\frac{s(p+s)}{1+s}.
+\]
+The admissibility condition \eqref{eq:alpha-admissible} gives
+\[
+        a(1-a)(1+s)-s(p+s)\ge0.
+\]
+A direct identity, using $p=1-a^2$, is
+\[
+        a(p+s)-s(1+s)^2
+        =(1+a+s)\bigl(a(1-a)(1+s)-s(p+s)\bigr).
+\]
+Therefore $a(p+s)\ge s(1+s)^2$, which is equivalent to $a\lambda/(1+s)\ge s$.  Thus $\Theta_m'(s)\ge0$ throughout the admissible range, and so
+\[
+        t(C_m,W)=\Theta_m(s)\ge\Theta_m(0)=p^m.
+\]
+This proves the theorem.
+\end{proof}
+
+\begin{remark}
+The rank-one result covers the clique-hole graphons $U=1_{A\times A}$.  If $\mu(A)=a$, then $q=a^2$ but the mean-zero compression has eigenvalue $a-a^2$, which is much larger than $q$ when $a$ is small.  Thus this family is not covered by the norm-safe condition $\|A\|\le q$.
+\end{remark}
+
+\section{Equal disjoint clique complements}
+
+The next all-$k$ theorem handles the first genuinely collective compensation example.  Let
+\[
+        U(x,y)=\sum_{i=1}^r 1_{A_i}(x)1_{A_i}(y),
+\]
+where the sets $A_i$ are disjoint and have a common measure $a$.  There may be a leftover set
+\[
+        B=[0,1]\setminus\bigcup_{i=1}^r A_i
+\]
+of measure $b=1-ra$.  The graphon $W=1-U$ is complete except that each $A_i\times A_i$ is removed.
+
+\begin{theorem}[Equal disjoint clique complements]\label{thm:equal-clique-complements}
+Let $r\ge1$, let $0\le a\le1/r$, and let $A_1,\ldots,A_r$ be disjoint measurable sets with $\mu(A_i)=a$.  Define
+\[
+        U(x,y)=\sum_{i=1}^r1_{A_i}(x)1_{A_i}(y),
+        \qquad
+        W=1-U.
+\]
+Then for every odd $m=2k+1\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1},
+\]
+where
+\[
+        p=t(K_2,W)=1-ra^2.
+\]
+\end{theorem}
+
+\begin{proof}
+The case $r=1$ is contained in Theorem~\ref{thm:rank-one}, so assume $r\ge2$.  Put
+\[
+        q=1-p=ra^2,
+        \qquad
+        b=1-ra.
+\]
+Then $a\le1/r\le1/2$, $q\le a\le1/2$, and $p\ge1/2$.
+
+We first compute the spectrum of $T_W$.  Let $e_i=1_{A_i}/\sqrt a$ and, if $b>0$, let $e_B=1_B/\sqrt b$.  On the span of $e_1,\ldots,e_r,e_B$, the operator $J$ is the rank-one matrix $vv^{\mathsf T}$ with
+\[
+        v=(\sqrt a,\ldots,\sqrt a,\sqrt b),
+\]
+and $T_U$ is diagonal with entries $a,\ldots,a,0$.  Thus
+\[
+        T_W=J-T_U.
+\]
+The $r-1$ internal vectors supported on the $A_i$'s and orthogonal to $\sum_i e_i$ have eigenvalue $-a$.  On the two-dimensional space spanned by
+\[
+        e_A=\frac1{\sqrt r}\sum_{i=1}^r e_i
+        \quad\text{and}\quad
+        e_B,
+\]
+the matrix is
+\[
+        \begin{pmatrix}
+        a(r-1) & \sqrt{rab}\\
+        \sqrt{rab} & b
+        \end{pmatrix}.
+\]
+Its eigenvalues are $\lambda>0$ and $-\eta\le0$, where
+\begin{equation}\label{eq:lambda-eta-equal}
+        \lambda-\eta=1-a,
+        \qquad
+        \lambda\eta=ab.
+\end{equation}
+Therefore, for odd $m$,
+\[
+        t(C_m,W)=\lambda^m-\eta^m-(r-1)a^m.
+\]
+It remains to prove
+\begin{equation}\label{eq:Dm-nonnegative}
+        D_m:=\lambda^m-\eta^m-(r-1)a^m-p^m+pq^{m-1}\ge0.
+\end{equation}
+
+For $m=3$, a direct calculation using \eqref{eq:lambda-eta-equal} gives
+\begin{equation}\label{eq:D3}
+        D_3=2ra^3(1-ra)\ge0.
+\end{equation}
+Now suppose $m\ge3$ is odd.  From the definition of $D_m$,
+\begin{align}
+D_{m+2}-a^2D_m
+={}&
+\lambda^m(\lambda^2-a^2)
+-\eta^m(\eta^2-a^2)       \notag\\
+&
+-p^m(p^2-a^2)
++pq^{m-1}(q^2-a^2).\label{eq:D-recursion}
+\end{align}
+We shall show that the right-hand side is nonnegative.
+
+First, $\eta\le a$.  Indeed, from $\lambda\eta=ab$ and $\lambda=1-a+\eta\ge1-a$, we get
+\[
+        \eta\le \frac{ab}{1-a}\le a,
+\]
+because $b=1-ra\le1-a$.  Thus
+\[
+        -\eta^m(\eta^2-a^2)\ge0.
+\]
+Second, $p\ge a$ and $\lambda\ge p$.  The inequality $p\ge a$ follows from $p=1-ra^2\ge1-a\ge a$.  To see $\lambda\ge p$, write $\eta=ay$ with $0\le y\le1$.  Then $\lambda=1-a+ay\le1$.  The identity $q=ra^2=a(1-y\lambda)$, derived below, gives $p=1-a+a y\lambda$, so
+\[
+        \lambda-p=ay(1-\lambda)\ge0.
+\]
+Since the function $x\mapsto x^m(x^2-a^2)$ is increasing for $x\ge a$, we have
+\[
+        \lambda^m(\lambda^2-a^2)-p^m(p^2-a^2)
+        \ge
+        p^m(\lambda^2-p^2).
+\]
+Therefore \eqref{eq:D-recursion} gives
+\begin{equation}\label{eq:D-lower-pre-comp}
+        D_{m+2}-a^2D_m
+        \ge
+        p^m(\lambda^2-p^2)-pq^{m-1}(a^2-q^2).
+\end{equation}
+The key finite-dimensional compensation inequality is
+\begin{equation}\label{eq:finite-compensation}
+        p^2(\lambda^2-p^2)\ge q^2(a^2-q^2).
+\end{equation}
+Assuming \eqref{eq:finite-compensation}, and using $p\ge q$, we get
+\[
+        p^m(\lambda^2-p^2)
+        \ge
+        p q^{m-1}(a^2-q^2).
+\]
+Thus $D_{m+2}\ge a^2D_m$.  Together with \eqref{eq:D3}, induction proves $D_m\ge0$ for all odd $m\ge3$.
+
+It remains to prove \eqref{eq:finite-compensation}.  Put
+\[
+        y=\frac{\eta}{a}\in[0,1].
+\]
+Then
+\[
+        \lambda=1-a+ay.
+\]
+The identity $\lambda\eta=ab=a(1-ra)$ becomes
+\[
+        ay(1-a+ay)=a(1-ra),
+\]
+so
+\[
+        ra=1-y(1-a+ay)=1-y\lambda.
+\]
+Consequently
+\begin{equation}\label{eq:q-p-y}
+        q=ra^2=a(1-y\lambda),
+        \qquad
+        p=1-q.
+\end{equation}
+A direct simplification gives
+\begin{equation}\label{eq:comp-K}
+        p^2(\lambda^2-p^2)-q^2(a^2-q^2)
+        =a^2y(1-y)K_a(y),
+\end{equation}
+where
+\begin{align*}
+K_a(y)={}&
+3a^4y^4-5a^4y^3+2a^4y^2
++8a^3y^3-14a^3y^2+6a^3y\\
+&+10a^2y^2-14a^2y+4a^2+6ay-6a+2.
+\end{align*}
+We prove $K_a(y)\ge0$ for $0\le a\le1/2$ and $0\le y\le1$.  Write $K_a$ in the Bernstein basis of degree $4$ in $y$:
+\[
+        K_a(y)=\sum_{i=0}^4 c_i(a)\binom4i y^i(1-y)^{4-i},
+\]
+where
+\begin{align*}
+        c_0(a)&=2(1-a)(1-2a),\\
+        c_1(a)&=\frac{3a^3+a^2-9a+4}{2},\\
+        c_2(a)&=\frac{a^4+2a^3-4a^2-9a+6}{3},\\
+        c_3(a)&=\frac{8-a^4-2a^3-6a^2-6a}{4},\\
+        c_4(a)&=2.
+\end{align*}
+For $0\le a\le1/2$, all these coefficients are nonnegative.  This is immediate for $c_0$ and $c_4$.  The functions $c_1,c_2,c_3$ are decreasing on $[0,1/2]$, and
+\[
+        c_1(1/2)=\frac1{16},
+        \qquad
+        c_2(1/2)=\frac{13}{48},
+        \qquad
+        c_3(1/2)=\frac{51}{64}.
+\]
+Therefore $K_a(y)\ge0$, and \eqref{eq:comp-K} proves \eqref{eq:finite-compensation}.  The proof is complete.
+\end{proof}
+
+\begin{remark}[Why this case is genuinely collective]
+The internal modes $-a$ of $T_W$ correspond to positive mean-zero modes $a$ of $T_U$.  Since $q=ra^2$, these modes satisfy $a\gg q$ when $a$ is small.  Moreover, the $r-1$ internal modes do not directly couple to the degree-fluctuation vector $g$.  The proof above shows that the aggregate two-dimensional mode $(\lambda,-\eta)$ compensates collectively for all internal modes.  This is exactly the phenomenon missed by modewise spectral-excess estimates.
+\end{remark}
+
+\section{Next finite-dimensional target: unequal clique complements}
+
+The most natural next target is the unequal disjoint clique-complement case:
+\[
+        U(x,y)=\sum_{i=1}^r1_{A_i}(x)1_{A_i}(y),
+        \qquad
+        \mu(A_i)=a_i,
+\]
+with arbitrary $a_i\ge0$ and $\sum_i a_i\le1$.  Let
+\[
+        q=\sum_{i=1}^r a_i^2,
+        \qquad
+        p=1-q.
+\]
+In the orthonormal basis $e_i=1_{A_i}/\sqrt{a_i}$, together with the leftover block if present, the nonzero part of $T_W$ has the form
+\[
+        M=vv^{\mathsf T}-\operatorname{diag}(a_1,\ldots,a_r,0),
+        \qquad
+        v=(\sqrt{a_1},\ldots,\sqrt{a_r},\sqrt{1-\sum_i a_i}).
+\]
+Thus the target becomes the finite-dimensional inequality
+\begin{equation}\label{eq:unequal-target}
+        \Tr(M^{2k+1})
+        \ge
+        p^{2k+1}-p q^{2k}.
+\end{equation}
+Theorem~\ref{thm:equal-clique-complements} proves \eqref{eq:unequal-target} when all nonzero $a_i$ are equal.  A proof of \eqref{eq:unequal-target} for arbitrary $a_i$ would give a substantial new class of all-$k$ examples and would likely clarify the collective compensation mechanism needed for the full graphon conjecture.
+
+\section{Summary of current status}
+
+The following statements are proved in this note.
+\begin{enumerate}[label=(\roman*)]
+\item The exact complement path-cycle identity, Proposition~\ref{prop:path-cycle-identity}.
+\item The universal mean-zero compression bound $\|P_0T_UP_0\|\le1/2$, Lemma~\ref{lem:compression-half}.
+\item The hub-coupling positivity lemma, Lemma~\ref{lem:hub-coupling}.
+\item The trace-safe criterion $\Tr(A^{2k+1})\le p(1-p)^{2k}$, Theorem~\ref{thm:trace-safe}.
+\item The norm-safe all-$k$ criterion $\|A\|\le1-p$, Corollary~\ref{cor:norm-safe}; this includes all $p$-regular graphons.
+\item The rank-one complement theorem $1-W=u\otimes u$, Theorem~\ref{thm:rank-one}.
+\item The equal disjoint clique-complement theorem, Theorem~\ref{thm:equal-clique-complements}.
+\end{enumerate}
+
+The full Conjecture~\ref{conj:main} remains open in this note.  The corrected spectral bottleneck is the inequality
+\[
+        \Psi_m\ge\bigl(\Tr(A^m)-p(1-p)^{m-1}\bigr)_+,
+\]
+where $\Psi_m$ is defined in \eqref{eq:Psi-def}.  The path-combinatorial counterpart is the master path-cycle inequality, Conjecture~\ref{conj:master-path-cycle}.  The unequal clique-complement finite-dimensional problem \eqref{eq:unequal-target} appears to be the next concrete test case.
+
+\begin{thebibliography}{9}
+
+\bibitem{KimLee2022}
+Jang Soo Kim and Joonkyung Lee,
+\emph{Extended commonality of paths and cycles via Schur convexity},
+arXiv:2210.00977, 2022.
+
+\end{thebibliography}
+
+\end{document}
