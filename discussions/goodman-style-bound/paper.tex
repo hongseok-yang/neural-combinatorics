@@ -1666,7 +1666,73 @@ Two consequences.  First, near $p=1/2$ the numerical odd-cycle minimiser is gove
 The full conjecture for $C_{2k+1}$ with $k\ge7$ remains open.  The obstruction can be stated either per-cycle (the hybrid of \S\ref{sec:C5}--\S\ref{sec:C13}) or uniformly in $m$ (the spectral bottleneck of \S\ref{sec:general}, or equivalently the extremal-structure problem of \S\ref{sec:variational}).  We collect what each viewpoint says.
 
 \medskip\noindent\emph{After $C_{13}$: the next open cycle.}
-The $C_{13}$ proof is a useful warning for $C_{15}$ and beyond.  The two classical halves of the hybrid --- the path certificate and the triangle-density spectral window --- already fail to meet for $C_{13}$, and neither half can simply be sharpened: the spectral window has the ceiling $\delta_{13}=0.0155929\ldots<0.019$, while the path polynomial $\Phi_{13}$ is negative on a realisable positive-spectrum-safe graphon.  The successful extra ingredient is the split of \S\ref{subsec:C13-frontier}: the no-frontier case is handled by Corollary~\ref{cor:norm-safe}, and the one-frontier case forces the rest of the positive spectrum into a much smaller interval.  For longer cycles the analogous routes are now concrete: seek restricted-domain path certificates after the same frontier split, or prove a near-bipartite reduction for the minimiser and check the resulting low-dimensional inequality.  Retaining the deletion gap $x_{m-1}-c_m$ may still be needed once the restricted-domain path kernels cease to be positive.
+The $C_{13}$ proof is a useful warning for the general case.  The two classical halves of the hybrid --- the path certificate and the triangle-density spectral window --- already fail to meet for $C_{13}$, and neither half can simply be sharpened: the spectral window has the ceiling $\delta_{13}=0.0155929\ldots<0.019$, while the path polynomial $\Phi_{13}$ is negative on a realisable positive-spectrum-safe graphon.  The successful extra ingredient is the split of \S\ref{subsec:C13-frontier}: the no-frontier case is handled by Corollary~\ref{cor:norm-safe}, and the one-frontier case forces the rest of the positive spectrum into a much smaller interval.  A first general scan shows that this split does not iterate verbatim: the linear path polynomial remains positive in the tested one-frontier ranges, but the restricted quadratic kernel is already negative for $m=21$ at the frontier-safe boundary.  Thus the spectral route for longer cycles must either retain the deletion gap $x_{m-1}-c_m$ (or an equivalent coupling term) or use additional structure not visible from the marginal spectral box alone.
+
+\medskip\noindent\emph{A retained-deletion frontier reduction.}
+The first finite-dimensional laboratory for this missing information is the arrowhead model
+\[
+        T_U=
+        \begin{pmatrix}
+        q&b_1&\cdots&b_r\\
+        b_1&\lambda_1&&0\\
+        \vdots&&\ddots&\\
+        b_r&0&&\lambda_r
+        \end{pmatrix},
+        \qquad
+        -\frac12\le\lambda_i\le\frac12,\qquad b_i\ge0,
+\]
+where one positive mode may be a frontier mode $\lambda_i>q$ and the others are safe.  Put
+\[
+        D_m=t(C_m,1-U)-\bigl(p^m-pq^{m-1}\bigr),
+        \qquad
+        \Gamma_m=x_{m-1}-c_m,
+        \qquad
+        \Phi_m=D_m-\Gamma_m .
+\]
+The graphon deletion inequality says $\Gamma_m\ge0$; the path certificate alone only controls $\Phi_m$.
+
+\begin{proposition}[Coupling monotonicity for the retained defect]\label{prop:retained-monotone}
+For every odd $m$, the retained defect $D_m$ in the arrowhead model above is coordinatewise nondecreasing in the coupling weights $u_i=b_i^2$.  Consequently, under any additional constraints preserved by decreasing the $u_i$'s (for example the square budget $\sum_i\lambda_i^2+2\sum_i u_i\le pq$), a negative minimum of $D_m$ subject to $\Gamma_m\ge0$ must occur either with all couplings zero or on the deletion frontier $\Gamma_m=0$.  The all-zero coupling case is harmless, since then
+\[
+        D_m=\Gamma_m=pq^{m-1}-\sum_i\lambda_i^m .
+\]
+\end{proposition}
+
+\begin{proof}
+Conjugating the complement matrix by the diagonal sign flip on the leaves does not change its trace powers and gives
+\[
+        N=
+        \begin{pmatrix}
+        p&b_1&\cdots&b_r\\
+        b_1&-\lambda_1&&0\\
+        \vdots&&\ddots&\\
+        b_r&0&&-\lambda_r
+        \end{pmatrix}.
+\]
+Since $p\ge1/2\ge\lambda_i$, the matrix $N^2$ is entrywise nonnegative: the only point to check is the hub--leaf entry $b_i(p-\lambda_i)$.  Hence, for odd $m$, the matrix $N^{m-1}=(N^2)^{(m-1)/2}$ is entrywise nonnegative.  Differentiating the trace power with respect to $u_i=b_i^2$ gives, for $b_i>0$,
+\[
+        \frac{\partial D_m}{\partial u_i}
+        =\frac{m}{b_i}(N^{m-1})_{0i}\ge0,
+\]
+and the boundary case follows by continuity.  If a feasible point has $\Gamma_m>0$ and some positive coupling, decreasing that coupling a little preserves the square budget and the strict deletion inequality while not increasing $D_m$.  Iterating proves the reduction to zero coupling or to $\Gamma_m=0$.
+\end{proof}
+
+Thus the deletion term is genuinely essential, not just an artefact of the proof.  In fact the stronger statement $\Phi_m\ge0$ is false in the long-cycle regime: two-mode square-budget examples have
+\[
+\begin{array}{c|c|c|c}
+m&\Phi_m&\Gamma_m&D_m\\ \hline
+301&-4.01\cdot10^{-88}&5.22\cdot10^{-88}&1.21\cdot10^{-88}\\
+501&-1.76\cdot10^{-141}&1.76\cdot10^{-141}&4.08\cdot10^{-145}.
+\end{array}
+\]
+The precise next algebraic target is therefore the deletion-frontier implication
+\[
+        \lambda_1>q,\qquad \sum_i\lambda_i^2+2\sum_i u_i\le pq,\qquad
+        \Gamma_m=0
+        \quad\Longrightarrow\quad
+        \Phi_m=D_m\ge0.
+\]
+Numerical boundary scans in the two-mode model found no violation at $m=21,101,301$, but this last implication remains open.
 
 \medskip\noindent\emph{The asymptotic obstruction to the hybrid.}
 The triangle-density spectral closure has a hard ceiling.  Expanding the scalar inequality $\Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}$ at $p=1/2+\eps$ shows the slack opens linearly with coefficient $3/(2m)\to0$ while the deficit $\Delta_0^{3/2}$ opens like $\eps^{3/2}$ with coefficient $((m-2)/m)^{3/2}\to1$.  Balancing forces the window width
@@ -1674,7 +1740,14 @@ The triangle-density spectral closure has a hard ceiling.  Expanding the scalar 
         \delta_m\le\frac{9m}{4(m-2)^3}\sim\frac{9}{4m^2}
         \qquad(m\to\infty),
 \]
-intrinsic to triangle density plus the $L^2$-to-$L^3$ comparison: no manipulation within these inputs changes the $1/m^2$ scaling.  The path-certificate cut-offs, meanwhile, have grown ($\rho_9-\tfrac12=3/2000$, $\rho_{11}-\tfrac12=3/200$, $\rho_{13}-\tfrac12=19/1000$) and numerically appear to stabilise near a constant $\approx0.02$.  The two windows already fail to meet at $m=13$, even though the frontier split closes that cycle, and they diverge thereafter.  Closing the hybrid for all $m$ would require a stronger near-bipartite input; the highest-payoff candidate is a sharp Tur\'an-type lower bound for $t(C_5,W)$ at fixed edge density $p\in[1/2,2/3]$ (the $C_5$ analogue of the triangle-density theorem), which numerics suggest would give a window of constant width $\delta_m\gtrsim0.12$ uniformly and close every odd cycle at once (whenever $\rho_m\le0.62$).
+intrinsic to triangle density plus the $L^2$-to-$L^3$ comparison: no manipulation within these inputs changes the $1/m^2$ scaling.  The path-certificate cut-offs, meanwhile, have grown ($\rho_9-\tfrac12=3/2000$, $\rho_{11}-\tfrac12=3/200$, $\rho_{13}-\tfrac12=19/1000$) and numerically appear to stabilise near a constant $\approx0.02$.  The two windows already fail to meet at $m=13$, even though the frontier split closes that cycle, and they diverge thereafter.  Closing the hybrid for all $m$ would require a stronger near-bipartite input.  The highest-payoff candidate is a sharp Tur\'an-type lower bound for $t(C_5,W)$ at fixed edge density $p\in[1/2,2/3]$ (the $C_5$ analogue of the triangle-density theorem), but this is best viewed as a structural route rather than a black-box uniform spectral closure.  For the equal-halves near-bipartite two-block model with $p=1/2+\eps$, the $C_5$ density is
+\[
+        B_5(\eps)=\frac58\eps+10\eps^3+32\eps^5,
+        \qquad
+        B_5(\eps)-\bigl((1/2+\eps)^5-(1/2-\eps)^5\bigr)
+        =5\eps^3(1+6\eps^2).
+\]
+If this $C_5$ lower bound is inserted into the same spectral-closure mechanism, the near-zero window eventually scales like $m^{-2/3}$ rather than remaining uniformly wide.  Thus a $C_5$ theorem would be extremely useful for fixed lengths and for identifying the correct near-bipartite geometry, but an all-$m$ proof still seems to need a near-bipartite reduction/minimiser theorem followed by a direct low-dimensional inequality.
 
 \medskip\noindent\emph{The uniform spectral bottleneck.}
 The general framework of \S\ref{sec:general} reduces the conjecture, for every $m$ at once, to the spectral-excess inequality \eqref{eq:spectral-bottleneck},
@@ -1707,6 +1780,7 @@ The following points were checked explicitly while preparing this note.
     \item The general-case algebraic claims of \S\ref{sec:general} were checked in \texttt{general\_odd\_cycle\_progress\_checker.py}: the rank-one factorisation identity $a(p+s)-s(1+s)^2=(1+a+s)(\cdots)$ of Theorem~\ref{thm:rank-one}; the equal-clique compensation identity $p^2(\lambda^2-p^2)-q^2(a^2-q^2)=a^2y(1-y)K_a(y)$ and the Bernstein coefficients $c_0,\ldots,c_4$ of \eqref{eq:finite-compensation}; and all rational values in the false-target example of \S\ref{sec:general}.  Independently, the hub-coupling inequality (Lemma~\ref{lem:hub}), the basic bound $t(C_m,W)\ge p^m-\Tr(A^m)$ (Corollary~\ref{cor:basic-lower}), the rank-one and equal-clique theorems, and the mean-zero compression bound $\norm A\le\tfrac12$ were re-verified numerically on random block graphons for $m=3,\ldots,13$, with no violations.
     \item The variational results of \S\ref{sec:variational} are checked in \texttt{extremal\_structure\_checker.py}: the multipartite identity \eqref{eq:multipartite-trace} and the spectral constraints $\sum\lambda_i=0$, $\sum\lambda_i^2=p$; the scallop (Proposition~\ref{prop:scallop}; zero slack at Tur\'an points, strictly positive gaps between); \eqref{eq:P2} over $2\times10^5$ random multipartite $w$ for odd $m\le13$; the two-value closed form, the recursion identity, $D_3=2arb(a-b)^2$, the failure of \eqref{eq:finite-compensation} for the $(2,2)=0$ block, the corrected $\eta$-retaining certificate ($Z(m)\ge0$ and the $g(m)$ monotonicity), and the end-to-end two-value inequality for $r\le40$, odd $m\le21$ (zero violations).
     \item The $C_{13}$-specific results were checked as follows: the triangle-extremal factorisation of Theorem~\ref{thm:C13-tripartite} and the positive Bernstein coefficients of $R$ in \texttt{c13\_triangle\_extremal\_checker.py}; the clean rational near-bipartite theorem (Remark~\ref{rmk:C13-rational}) in \texttt{c13\_near\_bipartite\_checker.py}; the path-certificate range $p\ge519/1000$ in \texttt{c13\_colleague\_path\_checker.py} and \texttt{odd\_cycle\_c13\_checker.py}; the frontier split of Theorem~\ref{thm:C13-frontier} in \texttt{c13\_frontier\_\allowbreak certificate\_\allowbreak search.py}; the closure-attempt facts of \S\ref{subsec:C13-attempt} (the unequal-weight witness with $\Phi_{13}<0$, the one-frontier-mode lemma, and $\lambda_{\min}(T_W)\ge-\tfrac12$) in \texttt{odd\_cycle\_c13\_closure\_checker.py}, with numerical split diagnostics in \texttt{c13\_deletion\_\allowbreak frontier\_\allowbreak experiment.py}; and the non-stationarity of the triangle-extremal family together with the near-bipartite minimiser (Propositions~\ref{prop:tri-not-stationary} and \S\ref{subsec:C13-minimiser}) in \texttt{c13\_extremal\_structure\_checker.py}, the latter validated at $c=1/3$ against the Tur\'an value $13/3^{11}$.
+    \item The exploratory general-cycle claims in \S\ref{sec:remains} are checked in \texttt{general\_odd\_cycle\_attack.py}: the restricted one-frontier path scan for $m=13,15,\ldots,23$, including the negative $K_{2,q}$ samples at $m=21$ and $m=23$; the conditional near-bipartite $C_5$ spectral windows, with high-precision large-$m$ roots; the two-block $C_5$ formula $B_5(\eps)=\frac58\eps+10\eps^3+32\eps^5$; and the nonnegative sampled Goodman margin for the near-bipartite two-block family.  The retained-deletion finite-dimensional target is checked in \texttt{general\_frontier\_\allowbreak deletion\_\allowbreak retaining.py}, \texttt{general\_frontier\_\allowbreak finite\_\allowbreak dimensional\_\allowbreak search.py}, and \texttt{general\_frontier\_\allowbreak retained\_\allowbreak boundary.py}: these scripts reproduce the sharp square-budget $K_2$ obstruction, the positive retained-defect searches, the long-cycle counterexamples to global $\Phi_m\ge0$, the monotonicity derivative check behind Proposition~\ref{prop:retained-monotone}, and the deletion-frontier boundary scans.
 \end{enumerate}
 
 \appendix
