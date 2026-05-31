@@ -2,7 +2,7 @@
 Exact-arithmetic checker for odd_cycle_c13_working_note.tex.
 
 The checker verifies the algebraic identities and the finite certificates used
-in the C_13 partial result:
+in the C_13 path-certificate range:
   * inclusion-exclusion formula for the crude C_13 path certificate;
   * path-density moment recurrence up to P_12;
   * decomposition of the certificate into homogeneous moment pieces
@@ -15,9 +15,9 @@ in the C_13 partial result:
     K_3, K_4, K_5 on q in [0, 1/2] by exact rational Bernstein subdivision.
 
 The path-certificate cut-off rho_13 = 519/1000 follows.  This checker does
-NOT cover the spectral-triangle near-bipartite argument for C_13, because
-the hybrid strategy is known to leave a marginal residual gap of width
-~0.0034 in p (see the accompanying working note for details).
+not cover the spectral-triangle near-bipartite argument or the later frontier
+split; those are checked in c13_near_bipartite_checker.py and
+c13_frontier_certificate_search.py.
 
 All computations are over rational numbers, except for printing optional
 decimal summaries.

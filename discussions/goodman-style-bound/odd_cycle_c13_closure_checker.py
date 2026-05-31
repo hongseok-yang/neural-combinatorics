@@ -1,7 +1,7 @@
 """
-Checker for the "Closure attempt (negative)" addendum of odd_cycle_c13_working_note.tex.
+Checker for the diagnostic "Closure attempt (negative)" addendum of odd_cycle_c13_working_note.tex.
 
-Verifies the load-bearing facts of the (failed) attempt to close the residual C_13 band
+Verifies the load-bearing facts from the pre-frontier-split attempt to close the C_13 band
 q in (0.481, 0.48441):
 
   C1. PATH CERTIFICATE FAILS IN THE GAP (exact rational witness, UNEQUAL weights).
@@ -21,10 +21,61 @@ on the witness via the UNEQUAL-weight moment recursion (the equal-weight version
 misses this witness -- that was the diagnostic error the addendum corrects).
 """
 from __future__ import annotations
-import numpy as np
 import sympy as sp
 from collections import Counter, defaultdict
 from itertools import combinations
+from math import sqrt
+import random
+
+
+def _matmul(A, B):
+    n, m, p = len(A), len(B), len(B[0])
+    out = [[0.0] * p for _ in range(n)]
+    for i in range(n):
+        for k in range(m):
+            aik = A[i][k]
+            if aik:
+                for j in range(p):
+                    out[i][j] += aik * B[k][j]
+    return out
+
+
+def _trace_power(A, power):
+    n = len(A)
+    P = [[float(i == j) for j in range(n)] for i in range(n)]
+    for _ in range(power):
+        P = _matmul(P, A)
+    return sum(P[i][i] for i in range(n))
+
+
+def _jacobi_eigvals(A, max_iter=200, tol=1e-13):
+    n = len(A)
+    A = [row[:] for row in A]
+    for _ in range(max_iter):
+        p, q = 0, 1
+        best = 0.0
+        for i in range(n):
+            for j in range(i + 1, n):
+                val = abs(A[i][j])
+                if val > best:
+                    best = val
+                    p, q = i, j
+        if best < tol:
+            break
+        app, aqq, apq = A[p][p], A[q][q], A[p][q]
+        tau = (aqq - app) / (2 * apq)
+        t = (1 if tau >= 0 else -1) / (abs(tau) + sqrt(1 + tau * tau))
+        c = 1 / sqrt(1 + t * t)
+        s = t * c
+        for k in range(n):
+            if k != p and k != q:
+                akp, akq = A[k][p], A[k][q]
+                A[k][p] = A[p][k] = c * akp - s * akq
+                A[k][q] = A[q][k] = s * akp + c * akq
+        A[p][p] = c * c * app - 2 * s * c * apq + s * s * aqq
+        A[q][q] = s * s * app + 2 * s * c * apq + c * c * aqq
+        A[p][q] = A[q][p] = 0.0
+    return sorted([A[i][i] for i in range(n)])
 
 
 def _path_components(n, subset):
@@ -92,9 +143,10 @@ def check_C1_path_fails():
     assert 0.481 < float(qv) < 0.48441, float(qv)
     assert float(Phi_val) < 0, float(Phi_val)
     # true defect > 0
-    wf = np.array([0.39, 0.61]); Bf = np.array([[0.86, 0.10], [0.10, 0.82]])
-    TW = (1 - Bf) @ np.diag(wf)
-    tc13 = np.trace(np.linalg.matrix_power(TW, 13))
+    wf = [0.39, 0.61]
+    Bf = [[0.86, 0.10], [0.10, 0.82]]
+    TW = [[(1 - Bf[i][j]) * wf[j] for j in range(2)] for i in range(2)]
+    tc13 = _trace_power(TW, 13)
     p = 1 - float(qv); g13 = p ** 13 - p * (1 - p) ** 12
     assert tc13 - g13 > 0, tc13 - g13
     print(f"OK C1: witness q={float(qv):.6f} (in gap), Phi_13={float(Phi_val):.3e}<0, "
@@ -102,20 +154,28 @@ def check_C1_path_fails():
 
 
 def check_C2_one_excess():
-    rng = np.random.default_rng(0); bad = 0; tested = 0
+    rng = random.Random(0); bad = 0; tested = 0
     for _ in range(20000):
-        k = rng.integers(2, 8); w = rng.random(k); w /= w.sum()
-        B = rng.random((k, k)); B = (B + B.T) / 2
-        qv = w @ B @ w
+        k = rng.randrange(2, 8)
+        raw = [rng.random() for _ in range(k)]
+        total = sum(raw)
+        w = [x / total for x in raw]
+        B = [[0.0] * k for _ in range(k)]
+        for i in range(k):
+            for j in range(i, k):
+                val = rng.random()
+                B[i][j] = B[j][i] = val
+        qv = sum(w[i] * B[i][j] * w[j] for i in range(k) for j in range(k))
         if not (1/3 < qv < 0.5):
             continue
         tested += 1
-        Dw = np.diag(w); one = np.ones(k)
-        P0 = np.eye(k) - np.outer(one, w)
-        A = P0 @ (B @ Dw) @ P0
-        Dh = np.diag(np.sqrt(w)); Dhi = np.diag(1/np.sqrt(w))
-        As = Dh @ A @ Dhi; ev = np.linalg.eigvalsh((As + As.T) / 2)
-        if np.sum(ev > qv + 1e-9) > 1:
+        T = [[B[i][j] * w[j] for j in range(k)] for i in range(k)]
+        P0 = [[(1.0 if i == j else 0.0) - w[j] for j in range(k)] for i in range(k)]
+        A = _matmul(_matmul(P0, T), P0)
+        As = [[sqrt(w[i]) * A[i][j] / sqrt(w[j]) for j in range(k)] for i in range(k)]
+        As = [[0.5 * (As[i][j] + As[j][i]) for j in range(k)] for i in range(k)]
+        ev = _jacobi_eigvals(As)
+        if sum(val > qv + 1e-9 for val in ev) > 1:
             bad += 1
     assert bad == 0, bad
     print(f"OK C2: at most one eigenvalue of A exceeds q over {tested} band graphons "
@@ -124,13 +184,19 @@ def check_C2_one_excess():
 
 def check_C3_lambda_min():
     # lambda_min(T_W) >= -1/2 for random step graphons W (T_W = (1/2)(J + T_S), S=2W-1)
-    rng = np.random.default_rng(1); worst = np.inf
+    rng = random.Random(1); worst = float("inf")
     for _ in range(20000):
-        k = rng.integers(2, 9); w = rng.random(k); w /= w.sum()
-        W = rng.random((k, k)); W = (W + W.T) / 2
-        Dh = np.diag(np.sqrt(w))
-        TWsym = Dh @ W @ Dh           # symmetric similarity of T_W = W Dw
-        worst = min(worst, float(np.min(np.linalg.eigvalsh(TWsym))))
+        k = rng.randrange(2, 9)
+        raw = [rng.random() for _ in range(k)]
+        total = sum(raw)
+        w = [x / total for x in raw]
+        W = [[0.0] * k for _ in range(k)]
+        for i in range(k):
+            for j in range(i, k):
+                val = rng.random()
+                W[i][j] = W[j][i] = val
+        TWsym = [[sqrt(w[i]) * W[i][j] * sqrt(w[j]) for j in range(k)] for i in range(k)]
+        worst = min(worst, min(_jacobi_eigvals(TWsym)))
     assert worst >= -0.5 - 1e-9, worst
     print(f"OK C3: min eigenvalue of T_W over random graphons = {worst:.4f} >= -1/2")
 
@@ -139,8 +205,8 @@ def main():
     check_C1_path_fails()
     check_C2_one_excess()
     check_C3_lambda_min()
-    print("\nAll C13-closure-attempt checks passed (the gap remains OPEN; these verify the "
-          "obstruction facts, not a closure).")
+    print("\nAll C13 closure-attempt diagnostics passed (these verify obstruction facts; "
+          "the band is closed separately by the frontier split).")
 
 
 if __name__ == "__main__":
