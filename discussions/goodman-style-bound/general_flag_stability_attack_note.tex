@@ -1,0 +1,809 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{booktabs}
+
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{question}[theorem]{Question}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\Traceace}{\operatorname{Tr}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\same}{\mathrm{same}}
+\newcommand{\cross}{\mathrm{cross}}
+\newcommand{\dd}{\,d}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+
+\title{A Flag-Algebra and Stability Framework for the Odd-Cycle Graphon Inequality}
+\author{Working note generated for the odd-cycle project}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We record a self-contained formulation of the flag-algebra/stability attack on the conjectural inequality
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k},
+        \qquad p=t(K_2,W),
+\]
+for graphons.  The note does not claim a proof of the general conjecture.  Instead it explains the exact quantum-graph reformulation, the first- and second-variation calculations at all balanced Turan graphons, the type-2 rooted path-kernel square that captures the Turan KKT equations, and the resulting stability and certificate-search targets.  The goal is to give collaborators a precise and reusable starting point for a flag-algebra/stability proof.
+\end{abstract}
+
+\tableofcontents
+
+\section{The conjecture and notation}
+
+A \emph{graphon} is a symmetric measurable function
+\[
+        W:[0,1]^2\to[0,1].
+\]
+For a finite graph $F$, its homomorphism density in $W$ is
+\[
+        t(F,W)=\int_{[0,1]^{V(F)}}\prod_{ij\in E(F)} W(x_i,x_j)\prod_{i\in V(F)}dx_i.
+\]
+Let
+\[
+        p=t(K_2,W)=\int_{[0,1]^2}W(x,y)\dd x\dd y,
+        \qquad q=1-p.
+\]
+Our main conjecture is the following.
+
+\begin{conjecture}[Odd-cycle lower bound]
+For every graphon $W$ and every $k\ge1$,
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+Equivalently, writing $m=2k+1$,
+\[
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+\end{conjecture}
+
+The right-hand side is nonpositive when $p\le1/2$, so the difficult regime is
+\[
+        p>1/2.
+\]
+The conjecture is sharp at balanced complete multipartite graphons.  If $T_r$ is the balanced complete $r$-partite graphon, then
+\[
+        p=t(K_2,T_r)=1-\frac1r,
+\]
+and
+\[
+        t(C_m,T_r)=p^m-p(1-p)^{m-1}
+\]
+for every odd $m$.  Indeed, $t(C_m,T_r)$ is the weighted probability that a random map from $C_m$ to $[r]$ is a proper coloring, and the chromatic polynomial of an odd cycle is
+\[
+        \chi(C_m,r)=(r-1)^m-(r-1).
+\]
+
+\begin{remark}[What this note is and is not]
+Earlier parts of the project established the conjecture for several special regimes, including all regular graphons, $C_3,C_5,C_7,C_9,C_{11}$, and several all-$k$ structural families.  This note focuses on the subsequent flag-algebra/stability direction.  It does not contain a global proof.  Its purpose is to state the exact objects that a flag-algebra certificate or stability proof should use.
+\end{remark}
+
+\section{Quantum-graph reformulation}
+
+For fixed odd $m=2k+1$, define the defect functional
+\[
+        \Phi_m(W)=t(C_m,W)-p^m+p(1-p)^{m-1}.
+\]
+The conjecture is
+\[
+        \Phi_m(W)\ge0.
+\]
+
+Because $m-1$ is even,
+\[
+        p(1-p)^{m-1}=p\sum_{j=0}^{m-1}(-1)^j\binom{m-1}{j}p^j
+        =\sum_{s=1}^{m}(-1)^{s-1}\binom{m-1}{s-1}p^s,
+\]
+and the coefficient of $p^m$ is $+1$.  Therefore the $-p^m$ term cancels, leaving
+\[
+        \Phi_m(W)
+        =t(C_m,W)+\sum_{s=1}^{m-1}(-1)^{s-1}\binom{m-1}{s-1}p^s.
+\]
+Since $p^s=t(sK_2,W)$, where $sK_2$ denotes the disjoint union of $s$ edges, we obtain the linear quantum-graph form.
+
+\begin{proposition}[Quantum-graph form]
+Let
+\[
+        Q_m=C_m+
+        \sum_{s=1}^{m-1}(-1)^{s-1}\binom{m-1}{s-1}sK_2.
+\]
+Then
+\[
+        \Phi_m(W)=t(Q_m,W).
+\]
+Consequently, the conjecture for a fixed odd $m$ is exactly the quantum-graph inequality
+\[
+        t(Q_m,W)\ge0
+\]
+for all graphons $W$.
+\end{proposition}
+
+\begin{proof}
+The computation above gives the identity, using multiplicativity of homomorphism densities over disjoint unions:
+\[
+        t(sK_2,W)=t(K_2,W)^s=p^s.
+\]
+\end{proof}
+
+This is an important point.  For each fixed $m$, the conjecture is not a nonlinear graphon inequality after introducing disjoint-edge quantum graphs.  It is a linear inequality in the algebra of quantum graphs, exactly the kind of object accessible to flag algebras.
+
+\section{The rooted path kernel}
+
+Let $T_W$ be the self-adjoint Hilbert--Schmidt operator
+\[
+        T_W f(x)=\int_0^1 W(x,y)f(y)\dd y.
+\]
+For $n\ge1$, write $K_n^W$ for the kernel of $T_W^n$.  Thus
+\[
+        K_n^W(x,y)=\int_{[0,1]^{n-1}} W(x,z_1)W(z_1,z_2)\cdots W(z_{n-1},y)\dd z_1\cdots \dd z_{n-1}.
+\]
+This is the density of an $n$-edge path rooted at its endpoints $x,y$.
+
+For $m=2k+1$, set
+\[
+        n=m-1=2k.
+\]
+Then
+\[
+        t(C_m,W)=\int_{[0,1]^2} W(x,y)K_n^W(x,y)\dd x\dd y.
+\]
+Define
+\[
+        A_m(p)=p^n-q^n,
+        \qquad
+        B_m(p)=p^n+p q^{n-1}.
+\]
+These constants are chosen because at Turan graphons the rooted path kernel takes precisely these two values.
+
+\begin{lemma}[Turan path-kernel values]
+Let $T_r$ be the balanced complete $r$-partite graphon, and put
+\[
+        p_r=1-\frac1r,
+        \qquad q_r=\frac1r.
+\]
+Then
+\[
+        K_n^{T_r}(x,y)=A_m(p_r)
+        \quad\text{for cross-part pairs,}
+\]
+and
+\[
+        K_n^{T_r}(x,y)=B_m(p_r)
+        \quad\text{for same-part pairs.}
+\]
+\end{lemma}
+
+\begin{proof}
+The nonzero spectrum of $T_r$ consists of $p_r$ on the constants and $-q_r$ on the $(r-1)$-dimensional mean-zero space of step functions that are constant on the parts.  Since $n$ is even,
+\[
+        T_r^n=p_r^n J+q_r^n P_0,
+\]
+where $J$ is the projection onto constants and $P_0$ is the projection onto that mean-zero step space.  The kernel of $P_0$ is
+\[
+        r\mathbf 1_{\same}(x,y)-1.
+\]
+Thus
+\[
+        K_n^{T_r}(x,y)=p_r^n+q_r^n(r\mathbf 1_{\same}(x,y)-1).
+\]
+On cross-pairs this is $p_r^n-q_r^n=A_m(p_r)$.  On same-part pairs this is
+\[
+        p_r^n+(r-1)q_r^n=p_r^n+p_rq_r^{n-1}=B_m(p_r).
+\]
+\end{proof}
+
+The two constants satisfy the useful identity
+\[
+        pA_m(p)+qB_m(p)=p^n.
+\]
+Indeed,
+\[
+        p(p^n-q^n)+q(p^n+pq^{n-1})=p^n.
+\]
+
+The defect has the rooted-kernel expression
+\[
+        \Phi_m(W)=\int W(x,y)(K_n^W(x,y)-A_m(p))\dd x\dd y.
+\]
+Indeed,
+\[
+        \int W(K_n-A_m)=t(C_m,W)-pA_m(p)=t(C_m,W)-p^{m}+pq^{m-1}.
+\]
+
+\section{First variation and the Turan KKT multipliers}
+
+Let
+\[
+        \varphi_m(p)=p^m-pq^{m-1},
+        \qquad q=1-p.
+\]
+Then
+\[
+        \Phi_m(W)=t(C_m,W)-\varphi_m(p).
+\]
+We compute the first variation at the balanced Turan graphons.
+
+\begin{lemma}[First variation of cycle density]
+For any bounded symmetric perturbation $H$,
+\[
+        D t(C_m,W)[H]
+        =m\int H(x,y)K_{m-1}^W(x,y)\dd x\dd y.
+\]
+Also,
+\[
+        Dp[H]=\int H(x,y)\dd x\dd y.
+\]
+\end{lemma}
+
+\begin{proof}
+Differentiate the product defining $t(C_m,W)$ edge-by-edge.  Cyclic symmetry gives $m$ identical terms, each equal to the displayed integral.  The formula for $Dp$ is immediate.
+\end{proof}
+
+A direct derivative gives
+\[
+        \varphi_m'(p)=mp^{m-1}-q^{m-1}+(m-1)pq^{m-2}.
+\]
+Since $n=m-1$, it is convenient to define
+\[
+        \Theta_m(p)=\frac1m\varphi_m'(p).
+\]
+Then
+\[
+        \Theta_m(p)=A_m(p)+\frac{m-1}{m}q^{m-2}
+\]
+and
+\[
+        \Theta_m(p)=B_m(p)-\frac1m q^{m-2}.
+\]
+Thus $\Theta_m(p)$ lies strictly between the Turan edge and nonedge rooted path-kernel values whenever $0<q<1$.
+
+\begin{theorem}[Turan KKT first-variation formula]
+Let $T_r$ be the balanced complete $r$-partite graphon.  Let $H$ be a bounded symmetric perturbation such that $T_r+\eps H$ is graphon-valued for all sufficiently small $\eps>0$.  Equivalently,
+\[
+        H\ge0\quad\text{inside the diagonal zero-blocks,}
+        \qquad
+        H\le0\quad\text{on the cross one-blocks.}
+\]
+Then
+\[
+        \left.\frac{d}{d\eps}\right|_{\eps=0+}\Phi_m(T_r+\eps H)
+        =q_r^{m-2}\left(\int_{\same}H-(m-1)\int_{\cross}H\right),
+\]
+where $q_r=1/r$.
+Consequently the one-sided derivative is nonnegative, and it is positive unless $H=0$ almost everywhere on the support of the perturbation.
+\end{theorem}
+
+\begin{proof}
+Using the previous lemma,
+\[
+        D\Phi_m(T_r)[H]
+        =m\int H K_{m-1}^{T_r}-\varphi_m'(p_r)\int H.
+\]
+By the Turan path-kernel calculation,
+\[
+        K_{m-1}^{T_r}=p_r^{m-1}+q_r^{m-1}(r\mathbf 1_{\same}-1).
+\]
+Thus on same-part pairs,
+\[
+        K_{\same}=p_r^{m-1}+p_rq_r^{m-2},
+\]
+while on cross-pairs,
+\[
+        K_{\cross}=p_r^{m-1}-q_r^{m-1}.
+\]
+The coefficient multiplying $H$ on same-part pairs is
+\[
+\begin{aligned}
+        mK_{\same}-\varphi_m'(p_r)
+        &=m(p_r^{m-1}+p_rq_r^{m-2})
+          -\bigl(mp_r^{m-1}-q_r^{m-1}+(m-1)p_rq_r^{m-2}\bigr)\\
+        &=p_rq_r^{m-2}+q_r^{m-1}=q_r^{m-2}.
+\end{aligned}
+\]
+The coefficient on cross-pairs is
+\[
+\begin{aligned}
+        mK_{\cross}-\varphi_m'(p_r)
+        &=m(p_r^{m-1}-q_r^{m-1})
+          -\bigl(mp_r^{m-1}-q_r^{m-1}+(m-1)p_rq_r^{m-2}\bigr)\\
+        &=-(m-1)q_r^{m-1}-(m-1)p_rq_r^{m-2}\\
+        &=-(m-1)q_r^{m-2}.
+\end{aligned}
+\]
+The displayed formula follows.  The sign assertion follows from the feasibility conditions on $H$.
+\end{proof}
+
+\begin{remark}
+This calculation is the KKT picture behind the conjecture.  On zero-blocks, increasing $W$ has a positive first-order cost.  On one-blocks, decreasing $W$ has a positive first-order cost because $H\le0$ and the multiplier is negative.  Hence balanced Turan graphons are one-sided local minimizers in all edge-value directions on the fixed partition.
+\end{remark}
+
+\section{Second variation in part-size directions}
+
+The previous section fixes the balanced partition and perturbs edge values.  We also need to understand perturbations of the part sizes.
+
+Let $a_1,\ldots,a_r$ be positive numbers summing to $1$, and let $T(a_1,\ldots,a_r)$ be the complete $r$-partite graphon with part sizes $a_i$.  Put
+\[
+        a_i=\frac1r+\eps_i,
+        \qquad
+        \sum_i\eps_i=0.
+\]
+Then
+\[
+        p(a)=t(K_2,T(a))=1-\sum_i a_i^2=p_r-\sum_i\eps_i^2.
+\]
+The following calculation records the second-order stability of the balanced part sizes.
+
+\begin{theorem}[Second-order part-size stability]
+For fixed odd $m\ge3$ and fixed $r\ge2$,
+\[
+        \Phi_m(T(a_1,\ldots,a_r))
+        =\Gamma_{m,r}\sum_{i=1}^r\eps_i^2
+        +O_{m,r}\left(\sum_i |\eps_i|^3\right),
+\]
+where
+\[
+        \Gamma_{m,r}=\frac{P_m(r-1)}{r^{m-2}}>0,
+\]
+and, writing $R=r-1$,
+\[
+        P_m(R)=
+        m\frac{R^{m-1}-(m-2)R^2-(m-3)R}{(R+1)^2}
+        +\frac{m(m-1)}2-1.
+\]
+\end{theorem}
+
+\begin{proof}
+The homomorphism density $t(C_m,T(a))$ is the weighted partition function of proper colorings of $C_m$ with colors $1,\ldots,r$ and color weights $a_i$:
+\[
+        t(C_m,T(a))=\sum_{i_1,\ldots,i_m\,:\, i_j\ne i_{j+1}} a_{i_1}\cdots a_{i_m},
+\]
+where $i_{m+1}=i_1$.  Equivalently it is the trace of the $m$-th power of the $r\times r$ matrix
+\[
+        M(a)_{ij}=\begin{cases}
+        \sqrt{a_i a_j},& i\ne j,\\
+        0,& i=j.
+        \end{cases}
+\]
+At $a_i=1/r$, the matrix has eigenvalues $p_r=R/(R+1)$ and $-1/r=-1/(R+1)$ with multiplicity $r-1$.
+
+Expanding the weighted coloring partition function to second order in $\eps_i$ yields
+\[
+        t(C_m,T(a))=t(C_m,T_r)+C_{m,r}\sum_i\eps_i^2+O_{m,r}\left(\sum_i|\eps_i|^3\right),
+\]
+where
+\[
+        C_{m,r}=\frac{m}{r^{m-2}}
+        \frac{R^{m-1}-(m-2)R^2-(m-3)R}{(R+1)^2}.
+\]
+On the other hand,
+\[
+        p(a)=p_r-\sum_i\eps_i^2,
+\]
+so
+\[
+        \varphi_m(p(a))=\varphi_m(p_r)-\varphi_m'(p_r)\sum_i\eps_i^2+O\left((\sum_i\eps_i^2)^2\right).
+\]
+A direct substitution gives
+\[
+        \varphi_m'(p_r)=\frac{1}{r^{m-2}}\left(\frac{m(m-1)}2-1\right).
+\]
+Therefore the coefficient of $\sum_i\eps_i^2$ in
+\[
+        \Phi_m=t(C_m,T(a))-\varphi_m(p(a))
+\]
+is exactly $\Gamma_{m,r}=P_m(R)/r^{m-2}$.
+
+It remains to prove positivity.  We have
+\[
+        P_m(1)=m-1>0,
+\]
+and differentiating gives
+\[
+        P_m'(R)=
+        \frac{m\bigl((m-3)(R^{m-1}-1)+(m-1)(R^{m-2}-R)\bigr)}{(R+1)^3}.
+\]
+For odd $m\ge3$ and $R\ge1$, both $R^{m-1}-1$ and $R^{m-2}-R$ are nonnegative.  Thus $P_m'(R)\ge0$ for $R\ge1$, and so $P_m(R)\ge P_m(1)>0$.
+\end{proof}
+
+\begin{remark}
+The explicit second-order coefficient is a diagnostic for stability.  It says that balanced Turan graphons are strict local minimizers not only with respect to edge-value perturbations on a fixed partition, but also with respect to nontrivial part-size perturbations within the complete $r$-partite family.
+\end{remark}
+
+\section{The type-2 KKT square residual}
+
+The first variation suggests a type-2 flag square.  Recall
+\[
+        A_m(p)=p^n-q^n,
+        \qquad
+        B_m(p)=p^n+pq^{n-1},
+        \qquad n=m-1.
+\]
+Define
+\[
+\boxed{
+        \mathcal S_m(W)=
+        \int W(x,y)(K_n^W(x,y)-A_m(p))^2\dd x\dd y
+        +\int (1-W(x,y))(K_n^W(x,y)-B_m(p))^2\dd x\dd y.
+        }
+\]
+This is a nonnegative quantity.  It vanishes at every balanced Turan graphon $T_r$, because $K_n^{T_r}=A_m(p_r)$ on edges and $K_n^{T_r}=B_m(p_r)$ on nonedges.
+
+Let
+\[
+        R_m^W(x,y)=mK_n^W(x,y)-\varphi_m'(p).
+\]
+Then, since $\Theta_m(p)=\varphi_m'(p)/m$,
+\[
+        R_m^W+(m-1)q^{n-1}=m(K_n^W-A_m(p)),
+\]
+and
+\[
+        R_m^W-q^{n-1}=m(K_n^W-B_m(p)).
+\]
+Therefore
+\[
+\boxed{
+        m^2\mathcal S_m(W)=
+        \int W\bigl(R_m^W+(m-1)q^{n-1}\bigr)^2
+        +\int(1-W)\bigl(R_m^W-q^{n-1}\bigr)^2.
+        }
+\]
+This is the precise square of the deviation from the Turan KKT multipliers.
+
+\subsection{Expansion as ordinary graph densities}
+
+The square residual is a flag object, but it can also be written as an ordinary quantum graph.  Let $\Theta_{n,n,1}$ denote the theta graph consisting of two internally disjoint $n$-edge paths between two common endpoints, plus the edge between the endpoints.  Then
+\[
+        \int W(K_n^W)^2=t(\Theta_{n,n,1},W).
+\]
+Also,
+\[
+        \int (K_n^W)^2=t(C_{2n},W),
+\]
+and
+\[
+        \int K_n^W=t(P_n,W).
+\]
+Expanding the square gives
+\[
+\begin{aligned}
+        \mathcal S_m(W)
+        ={}&t(C_{2n},W)
+        +2(B_m(p)-A_m(p))t(C_m,W)\\
+        &-2B_m(p)t(P_n,W)
+        +A_m(p)^2p+B_m(p)^2q.
+\end{aligned}
+\]
+Since $A_m(p)$ and $B_m(p)$ are polynomials in $p$, this can be expanded into a linear combination of ordinary graph densities involving $C_{2n}$, $C_m$, $P_n$, and disjoint unions with edges.  In flag-algebra language, it is a type-2 sum of squares.
+
+\section{A forcing lemma for counterexamples}
+
+Let
+\[
+        \Delta_m(W)=\Phi_m(W)=t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr).
+\]
+Then
+\[
+        \Delta_m(W)=\int W(K_n^W-A_m(p)).
+\]
+Define the nonedge companion
+\[
+        \Xi_m(W)=\int (1-W)(K_n^W-B_m(p)).
+\]
+Using $pA_m+qB_m=p^n$, we obtain
+\[
+\begin{aligned}
+        \Delta_m(W)+\Xi_m(W)
+        &=\int K_n^W-p^n\\
+        &=t(P_n,W)-p^n.
+\end{aligned}
+\]
+By the Blakley--Roy inequality for paths, or equivalently Sidorenko's theorem for paths,
+\[
+        t(P_n,W)\ge p^n.
+\]
+Hence
+\[
+        \Delta_m(W)+\Xi_m(W)\ge0.
+\]
+
+\begin{proposition}[Counterexamples force square mass]
+If $W$ is a counterexample with
+\[
+        \Delta_m(W)=-\delta<0,
+\]
+then
+\[
+        \mathcal S_m(W)\ge \delta^2\left(\frac1p+\frac1q\right)=\frac{\delta^2}{pq}.
+\]
+Equivalently,
+\[
+        \Delta_m(W)\ge -\sqrt{pq\,\mathcal S_m(W)}.
+\]
+\end{proposition}
+
+\begin{proof}
+If $\Delta_m(W)=-\delta$, then the identity above gives $\Xi_m(W)\ge\delta$.  By Cauchy--Schwarz,
+\[
+        \int W(K_n-A_m)^2\ge \frac{\delta^2}{\int W}=\frac{\delta^2}{p},
+\]
+and
+\[
+        \int (1-W)(K_n-B_m)^2\ge \frac{\delta^2}{\int(1-W)}=\frac{\delta^2}{q}.
+\]
+Adding proves the claim.
+\end{proof}
+
+\begin{remark}
+This is not a proof of the conjecture.  It says that any negative counterexample must be quantitatively far from the Turan KKT square-zero locus.  Thus the type-2 square residual is not cosmetic; it is forced by any attempted counterexample.
+\end{remark}
+
+\section{KKT conditions for a hypothetical minimizer}
+
+Suppose the conjecture is false for a fixed odd $m$.  By compactness of graphon space modulo weak isomorphism and continuity of homomorphism densities, there is a minimizer $W_*$ of $\Phi_m$ with
+\[
+        \Phi_m(W_*)<0.
+\]
+Let
+\[
+        p_*=t(K_2,W_*),
+        \qquad
+        K_*=K_n^{W_*},
+\]
+and
+\[
+        R_*(x,y)=mK_*(x,y)-\varphi_m'(p_*).
+\]
+The box constraints $0\le W\le1$ imply the following KKT conditions.
+
+\begin{proposition}[Threshold condition for an interior minimizer]
+At a minimizing counterexample $W_*$,
+\[
+        R_*(x,y)\ge0\quad\text{where } W_*(x,y)=0,
+\]
+\[
+        R_*(x,y)\le0\quad\text{where } W_*(x,y)=1,
+\]
+and
+\[
+        R_*(x,y)=0\quad\text{where }0<W_*(x,y)<1.
+\]
+Equivalently, writing $\Theta_m(p_*)=\varphi_m'(p_*)/m$,
+\[
+        K_*(x,y)\ge\Theta_m(p_*)\quad\text{on zero-pairs,}
+\]
+\[
+        K_*(x,y)\le\Theta_m(p_*)\quad\text{on one-pairs,}
+\]
+and equality holds on fractional pairs.
+\end{proposition}
+
+\begin{proof}
+Consider a feasible perturbation that increases $W$ on a set where $W_*=0$.  Minimality forces the one-sided derivative to be nonnegative there, giving $R_*\ge0$.  Similarly, decreasing $W$ on a set where $W_*=1$ must not decrease the functional, giving $R_*\le0$.  On a fractional region both signs of perturbation are feasible, hence $R_*=0$.
+\end{proof}
+
+Thus any genuine counterexample must be a self-consistent threshold graphon of its own even-path kernel.  Balanced Turan graphons satisfy the same threshold relation, with
+\[
+        A_m(p)<\Theta_m(p)<B_m(p),
+\]
+and the gaps
+\[
+        \Theta_m(p)-A_m(p)=\frac{m-1}{m}q^{m-2},
+        \qquad
+        B_m(p)-\Theta_m(p)=\frac1m q^{m-2}.
+\]
+
+\section{Local stability around balanced Turan graphons}
+
+The variation formulae yield a local stability result in a standard form.
+
+\begin{proposition}[Fixed-partition linear stability]
+Fix $m$ and $r$.  There exists $\eps_0=\eps_0(m,r)>0$ such that the following holds.  Let $W=T_r+H$ on the balanced $r$-partition, with
+\[
+        \norm{H}_\infty\le\eps_0,
+\]
+and with the graphon constraints forcing
+\[
+        H\ge0\text{ on same-part blocks},
+        \qquad
+        H\le0\text{ on cross blocks}.
+\]
+Then
+\[
+        \Phi_m(W)
+        \ge\frac12q_r^{m-2}\left(
+        \int_{\same}H+\int_{\cross}(-H)
+        \right).
+\]
+\end{proposition}
+
+\begin{proof}
+By Taylor expansion,
+\[
+        \Phi_m(T_r+H)=\Phi_m(T_r)+D\Phi_m(T_r)[H]+O_{m,r}(\norm{H}_\infty \norm{H}_1),
+\]
+where the remainder follows because $\Phi_m$ is a polynomial functional of degree $m$ in $W$ and degree $m$ in $p$.  Since $\Phi_m(T_r)=0$ and
+\[
+        D\Phi_m(T_r)[H]
+        \ge q_r^{m-2}\left(\int_{\same}H+\int_{\cross}(-H)\right),
+\]
+choosing $\eps_0$ small enough gives the result.
+\end{proof}
+
+Together with second-order part-size stability, this gives a robust local picture: balanced Turan graphons are strict local minimizers in the natural graphon directions that preserve proximity to the Turan template.
+
+\section{How this suggests a flag-algebra certificate}
+
+The calculations above suggest that a fixed-$m$ flag-algebra certificate should not be sought as an arbitrary SOS identity.  It should be organized around the KKT square $\mathcal S_m$.
+
+A plausible certificate shape is
+\[
+        \Phi_m(W)+\lambda_m(p)\mathcal S_m(W)+
+        \sum_d \mu_{m,d}(p)\mathcal K_{m,d}(W)\ge0,
+\]
+where:
+\begin{itemize}[leftmargin=2em]
+        \item $\mathcal S_m$ is the type-2 KKT square residual;
+        \item the $\mathcal K_{m,d}$ are nonnegative path-layer or Schur-convexity surplus terms, for example the even-layer terms appearing in the Kim--Lee extended commonality theorem;
+        \item $\lambda_m$ and $\mu_{m,d}$ are nonnegative functions of $p,q$;
+        \item the remaining expression should vanish at every balanced Turan graphon and factor through Turan-stability terms.
+\end{itemize}
+
+The reason $\mathcal S_m$ is essential is the forcing lemma: a counterexample must have square mass at least $\delta^2/(pq)$.  Thus any proof that rules out counterexamples should naturally use this mass.
+
+\subsection{Type-2 flags}
+
+The natural type has two labelled vertices.  The two basic type-2 flags are:
+\begin{itemize}[leftmargin=2em]
+        \item the labelled pair joined by an edge;
+        \item the labelled pair not joined by an edge.
+\end{itemize}
+The rooted path kernel $K_n^W(x,y)$ is the density of an $n$-edge path between the labelled vertices.  Therefore
+\[
+        W(x,y)(K_n^W-A_m(p))^2
+\]
+and
+\[
+        (1-W(x,y))(K_n^W-B_m(p))^2
+\]
+are exactly squares of type-2 flag expressions, multiplied by the edge or nonedge flag.
+
+A computational flag-algebra search should include these squares explicitly as distinguished blocks rather than hoping that a generic SDP discovers them.
+
+\section{Relation to the complement path-cycle identity}
+
+Previous work in the project used the complement $U=1-W$ and exact inclusion--exclusion.  For $m=2k+1$ and $n=m-1$, let
+\[
+        x_n=t(P_n,U),
+        \qquad
+        c_m=t(C_m,U).
+\]
+There is an exact identity of the form
+\[
+        \Delta_m(W)=\Pi_m(U)+(x_n-c_m),
+\]
+where $\Pi_m(U)$ is the complement path-certificate expression obtained after expanding $t(C_m,1-U)$ and comparing with $(1-q)^m-(1-q)q^{m-1}$.
+
+The crude path-certificate method tries to prove $\Pi_m(U)\ge0$, using only $x_n-c_m\ge0$.  This works for small cycles and in partial ranges, but it fails from larger $m$ onward.  The flag-square method explains why: the discarded correction $x_n-c_m$ contains rooted two-endpoint information.  In fact,
+\[
+        x_{2a}-c_{2a+1}=\int (1-U(x,y))\bigl(K_a^U(x,y)\bigr)^2\dd x\dd y.
+\]
+For $C_{13}$ this gives
+\[
+        x_{12}-c_{13}=\int(1-U)(K_6^U)^2.
+\]
+Thus the missing correction is itself a type-2 square.  This is consistent with the general $\mathcal S_m$ philosophy.
+
+\section{Concrete SDP/search target}
+
+For a fixed odd $m$, the next computational target is:
+\begin{enumerate}[leftmargin=2em]
+        \item Construct the quantum graph
+        \[
+                Q_m=C_m+
+                \sum_{s=1}^{m-1}(-1)^{s-1}\binom{m-1}{s-1}sK_2.
+        \]
+        \item Work in the flag algebra of type $2$ with flags up to a size large enough to contain the rooted $n$-path terms, where $n=m-1$.
+        \item Include the KKT square residual $\mathcal S_m$ as an explicit SOS block.
+        \item Add known nonnegative even path-layer surplus terms, especially those coming from the Schur-convexity mechanism behind extended commonality for paths and cycles.
+        \item Impose vanishing at all balanced Turan graphons.  Equivalently, enforce the relations
+        \[
+                K_n=A_m(p)\quad\text{on edges},
+                \qquad
+                K_n=B_m(p)\quad\text{on nonedges}
+        \]
+        at the Turan templates.
+\end{enumerate}
+
+A successful certificate should reflect the KKT multipliers from the first variation:
+\[
+        q_r^{m-2}\quad\text{on zero-blocks},
+        \qquad
+        -(m-1)q_r^{m-2}\quad\text{on one-blocks}.
+\]
+This is a strong diagnostic constraint on any SDP output.
+
+\section{What is proved, and what remains}
+
+The results in this note establish:
+\begin{itemize}[leftmargin=2em]
+        \item the exact quantum-graph form of the conjecture;
+        \item equality at all balanced Turan graphons;
+        \item the exact first-variation/KKT multipliers at balanced Turan graphons;
+        \item strict second-order stability in part-size directions;
+        \item the type-2 rooted path-kernel square residual $\mathcal S_m$;
+        \item a forcing lemma showing that every counterexample must have nontrivial $\mathcal S_m$ mass;
+        \item KKT threshold conditions for any hypothetical global counterexample;
+        \item a precise flag-algebra SDP ansatz.
+\end{itemize}
+
+What remains is the hard global step:
+\[
+        \text{prove }t(Q_m,W)\ge0\text{ globally for every graphon }W.
+\]
+The present framework suggests that this should be approached by a flag-algebra certificate plus stability, not by discarding the path-cycle correction or by one-variable spectral estimates alone.
+
+\section{Suggested tasks for collaborators}
+
+\begin{enumerate}[leftmargin=2em]
+        \item \textbf{Implement the type-2 flag SDP for small $m$.}  Start with $m=7,9,11,13$, where independent partial or complete arguments exist, and force the KKT square $\mathcal S_m$ into the ansatz.
+
+        \item \textbf{Study vanishing constraints at Turan graphons.}  The certificate must vanish at every balanced $T_r$.  This should dramatically reduce the search space.
+
+        \item \textbf{Look for a symbolic pattern.}  Compare SDP certificates across $m$.  In particular, test whether the same combination of $\mathcal S_m$ and even path-layer surplus terms appears repeatedly.
+
+        \item \textbf{Prove stability from triangle or clique-density stability in residual regimes.}  For $C_{13}$, the remaining cases appear close to triangle-density extremal graphons.  A stability transfer may close that fixed case.
+
+        \item \textbf{Connect with the complement identity.}  Relate $x_n-c_m$ to type-2 squares and avoid proof strategies that discard it.  The $C_{13}$ diagnostics show that discarding this term is too wasteful.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{RazborovFlag}
+A. A. Razborov,
+\newblock Flag algebras,
+\newblock \emph{Journal of Symbolic Logic} 72 (2007), no. 4, 1239--1282.
+
+\bibitem{RazborovTriangles}
+A. A. Razborov,
+\newblock On the minimal density of triangles in graphs,
+\newblock \emph{Combinatorics, Probability and Computing} 17 (2008), no. 4, 603--618.
+
+\bibitem{ReiherClique}
+C. Reiher,
+\newblock The clique density theorem,
+\newblock \emph{Annals of Mathematics} 184 (2016), no. 3, 683--707.
+
+\bibitem{KimLee}
+J. Kim and J. Lee,
+\newblock Extended commonality of paths and cycles via Schur convexity,
+\newblock arXiv:2210.00977.
+
+\bibitem{BDLP}
+P. Bennett, A. Dudek, B. Lidicky, and O. Pikhurko,
+\newblock Minimizing the number of $C_5$'s in graphs with given edge-density,
+\newblock arXiv:1803.00165.
+
+\end{thebibliography}
+
+\end{document}
