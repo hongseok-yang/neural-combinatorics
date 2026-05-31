@@ -33,11 +33,11 @@ Let $W:[0,1]^2\to[0,1]$ be a graphon and let $p=t(K_2,W)$ be its edge density.  
 \[
         t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
 \]
-This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for $C_5$, true for $C_7$, true for $C_9$, true for $C_{11}$, and true for every odd cycle when $W$ is $p$-regular.  The $C_9$ and $C_{11}$ proofs are hybrids: a complement path-certificate handles $p$ above a cut-off ($1003/2000$ for $C_9$, $103/200$ for $C_{11}$), and the sharp triangle-density theorem combined with a spectral moment argument closes the remaining near-bipartite interval $(1/2,\,\text{cut-off}]$.  For $C_{13}$ the path-certificate range $p\ge519/1000$ is established, leaving an explicit residual interval of width $\approx0.0034$ uncovered by the hybrid.
+This note records the results that have survived a detailed algebraic audit.  The bound is sharp at balanced complete multipartite graphons.  It is trivial when $p\le 1/2$, true for $C_3$, true for $C_5$, true for $C_7$, true for $C_9$, true for $C_{11}$, and true for every odd cycle when $W$ is $p$-regular.  The $C_9$ and $C_{11}$ proofs are hybrids: a complement path-certificate handles $p$ above a cut-off ($1003/2000$ for $C_9$, $103/200$ for $C_{11}$), and the sharp triangle-density theorem combined with a spectral moment argument closes the remaining near-bipartite interval $(1/2,\,\text{cut-off}]$.  For $C_{13}$ the path-certificate range $p\ge519/1000$ and the exact spectral range $p\le51/100$ are established; a high-precision scalar calculation indicates that the same spectral method reaches $p=1/2+0.015592935\ldots$, leaving a numerically indicated residual interval of width $\approx0.0034$.
 
-We also record two complementary lines of \emph{general} results, valid for every odd cycle at once.  The first is operator-theoretic: writing $A$ for the compression of $T_{1-W}$ to the mean-zero subspace, a hub-coupling positivity lemma yields the universal lower bound $t(C_m,W)\ge p^m-\Tr(A^m)$, hence the conjecture whenever $\lambda_{\max}(A)\le1-p$ (the \emph{positive-spectrum-safe} criterion, which subsumes all $p$-regular graphons).  Beyond this regime we prove the conjecture for three families of complements: rank-one $1-W=u\otimes u$, equal disjoint clique unions, and the two-value (Razborov) complete multipartite family.  The second is variational: reframing the bound as a constrained minimisation $f_{C_m}(p)=\min\{t(C_m,W):t(K_2,W)=p\}$, we show $g_m$ is the ``Goodman envelope'' (the minimiser scallops strictly above it between Tur\'an points), the Tur\'an graphon is a strict local minimiser, and --- correcting a natural guess --- near $p=1/2$ the minimiser is near-bipartite rather than multipartite, which is why the residual $C_{13}$ interval resists the triangle-density methods.
+We also record two complementary lines of \emph{general} results, valid for every odd cycle at once.  The first is operator-theoretic: writing $A$ for the compression of $T_{1-W}$ to the mean-zero subspace, a hub-coupling positivity lemma yields the universal lower bound $t(C_m,W)\ge p^m-\Tr(A^m)$, hence the conjecture whenever $\lambda_{\max}(A)\le1-p$ (the \emph{positive-spectrum-safe} criterion, which subsumes all $p$-regular graphons).  Beyond this regime we prove the conjecture for three families of complements: rank-one $1-W=u\otimes u$, equal disjoint clique unions, and the two-value (Razborov) complete multipartite family.  The second is variational: reframing the bound as a constrained minimisation $f_{C_m}(p)=\min\{t(C_m,W):t(K_2,W)=p\}$, we show $g_m$ is the ``Goodman envelope'' (the minimiser scallops strictly above it between Tur\'an points), the Tur\'an graphon is a strict local minimiser, and --- correcting a natural guess --- numerical minimisers near $p=1/2$ are near-bipartite rather than multipartite, which explains why the residual $C_{13}$ interval resists the triangle-density methods.
 
-The path-certificate statements should be read as computer-assisted exact certificates: all identities are polynomial identities over $\mathbb Q$, and the positivity checks reduce either to rational matrices whose leading principal minors become polynomials with positive coefficients after a rational change of variables ($C_5$, $C_7$, $C_9$), or to a small number of exact rational Bernstein-subdivision boxes ($C_{11}$, $C_{13}$).  Short exact-arithmetic checkers accompany this note.
+The path-certificate statements should be read as computer-assisted exact certificates: all identities are polynomial identities over $\mathbb Q$, and the positivity checks reduce either to elementary square/Gram-matrix certificates ($C_5$, $C_7$, $C_9$), or to a small number of exact rational Bernstein-subdivision boxes ($C_{11}$, $C_{13}$).  Short exact-arithmetic checkers accompany this note.
 \end{abstract}
 
 \section{The conjecture and the audited status}
@@ -59,6 +59,11 @@ Equivalently, putting $U=1-W$ and $q=t(K_2,U)=1-p$, the conjecture is
 \[
         t(C_m,1-U)\ge (1-q)^m-(1-q)q^{m-1}.
 \]
+We write
+\[
+        g_m(p)=p^m-p(1-p)^{m-1}
+\]
+for this target lower bound.
 The case $p\le 1/2$ is trivial, because then
 \[
         p^m-p(1-p)^{m-1}\le 0.
@@ -66,14 +71,14 @@ The case $p\le 1/2$ is trivial, because then
 Thus the nontrivial regime is $p>1/2$, or equivalently $0\le q<1/2$.
 
 \begin{theorem}[Audited results]\label{thm:status}
-The following statements are established in this note; all are rigorous (computer-assisted where noted) except the explicitly numerical observations in \textup{(viii)}.
+The following statements are established in this note; all are rigorous (computer-assisted where noted) except the explicitly marked numerical observations.
 \begin{enumerate}[label=\textup{(\roman*)}]
     \item Conjecture~\ref{conj:main} is sharp at balanced complete multipartite graphons.
     \item Conjecture~\ref{conj:main} holds for $C_3$ for all graphons.
     \item Conjecture~\ref{conj:main} holds for $C_5$, $C_7$, $C_9$, and $C_{11}$ for all graphons.
-    \item For $C_{13}$, Conjecture~\ref{conj:main} holds for all graphons with $p\ge519/1000$ (path-certificate), for $1/2<p\le1/2+\delta_{13}$ with $\delta_{13}=0.0155929\ldots$ (spectral; a clean rational version covers $p\le51/100$), and trivially for $p\le1/2$; the residual interval $(1/2+\delta_{13},\,519/1000)$, of width $\approx0.0034$, is open.  A four-route closure attempt (\S\ref{subsec:C13-attempt}) provably falls short on this interval, and locates the minimiser there as near-bipartite (\S\ref{subsec:C13-minimiser}).  See Section~\ref{sec:C13}.
+    \item For $C_{13}$, Conjecture~\ref{conj:main} holds for all graphons with $p\ge519/1000$ (path-certificate), for $1/2<p\le51/100$ by a fully rational spectral certificate, and trivially for $p\le1/2$.  Numerically, the same spectral inequality appears to hold up to $1/2+\delta_{13}$ with $\delta_{13}=0.0155929\ldots$, leaving the narrower interval $(1/2+\delta_{13},\,519/1000)$, of width $\approx0.0034$, as the observed residual target.  A four-route closure attempt (\S\ref{subsec:C13-attempt}) falls short on this interval, and numerical optimisation locates the minimiser there as near-bipartite (\S\ref{subsec:C13-minimiser}).  See Section~\ref{sec:C13}.
     \item \textup{(General criteria, every odd $m$.)}  Writing $A=P_{\one^\perp}T_{1-W}P_{\one^\perp}$, one has the universal bound $t(C_m,W)\ge p^m-\Tr(A^m)$; in particular Conjecture~\ref{conj:main} holds whenever $\lambda_{\max}(A)\le1-p$ (the positive-spectrum-safe criterion).  This holds for every $p$-regular graphon, giving a second proof of the regular case.  See Section~\ref{sec:general}.
-    \item \textup{(All-$k$ families.)}  Conjecture~\ref{conj:main} holds for every odd cycle when $1-W=u\otimes u$ is rank one (\S\ref{subsec:rank-one}), when $1-W$ is an \emph{equal} disjoint union of clique blocks (\S\ref{subsec:equal-clique}), and on the \emph{two-value} (Razborov) complete multipartite family --- two equal parts and one different part --- by Theorem~\ref{thm:two-value} (\S\ref{subsec:multipartite}).
+    \item \textup{(All-$k$ families.)}  Conjecture~\ref{conj:main} holds for every odd cycle when $1-W=u\otimes u$ is rank one (\S\ref{subsec:rank-one}), when $1-W$ is an \emph{equal} disjoint union of clique blocks (\S\ref{subsec:equal-clique}), and on the \emph{two-value} (Razborov) complete multipartite family --- one part size repeated and one exceptional part --- by Theorem~\ref{thm:two-value} (\S\ref{subsec:multipartite}).
     \item \textup{(Extremal structure, \S\ref{sec:variational}.)}  The Tur\'an graphon is a strict local minimiser of $t(C_m,\cdot)$ at fixed $p$ (Proposition~\ref{prop:stability}, rigorous).  Reframing as $f_{C_m}(p)=\min\{t(C_m,W):t(K_2,W)=p\}$, the target $g_m$ is the ``Goodman envelope'': tight only at Tur\'an densities --- rigorously for $m=3$, numerically for $m=5,7$ --- and near $p=1/2$ the numerically determined minimiser is near-bipartite, not multipartite.
 \end{enumerate}
 \end{theorem}
@@ -84,7 +89,7 @@ This note does \emph{not} prove the conjecture in full for any $C_{2k+1}$ with $
 
 \section{General tools}
 
-\subsection{Sharpness at Turan graphons}
+\subsection{Sharpness at Tur\'an graphons}
 
 Let $T_r$ be the balanced complete $r$-partite graphon.  Then
 \[
@@ -1178,7 +1183,7 @@ The two ranges $p\ge103/200$ and $1/2<p\le103/200$, together with the trivial ca
 
 \section{The $C_{13}$ case (partial)}\label{sec:C13}
 
-For $C_{13}$ the path-certificate half of the hybrid still goes through and yields a rigorous, Bernstein-certified theorem on $p\ge519/1000$.  The triangle-density spectral half, however, only closes a window $1/2<p\le1/2+\delta_{13}$ with $\delta_{13}\approx0.01559$, which falls short of the path-certificate cut-off.  A short residual interval is therefore left open.  This is the first cycle length at which the two halves of the hybrid fail to meet.  Along the way we record a closed-form formula for the linear-part polynomial $P_q^{(m)}$ that holds for every odd $m\ge5$.
+For $C_{13}$ the path-certificate half of the hybrid still goes through and yields a rigorous, Bernstein-certified theorem on $p\ge519/1000$.  The triangle-density spectral half has a clean exact certificate on $1/2<p\le51/100$; a high-precision scalar computation indicates that the same argument should extend to $1/2<p\le1/2+\delta_{13}$ with $\delta_{13}\approx0.01559$, still short of the path-certificate cut-off.  Thus the fully certified arguments leave the interval $(51/100,519/1000)$, and the numerically indicated frontier leaves a much shorter residual interval.  This is the first cycle length at which the two halves of the hybrid fail to meet.  Along the way we prove a closed-form formula for the linear-part polynomial $P_q^{(m)}$ that holds for every odd $m\ge5$.
 
 \subsection{The path-certificate range: $p\ge519/1000$}\label{subsec:C13-path}
 
@@ -1225,7 +1230,30 @@ For every odd $m\ge5$, the linear-part polynomial in the moment decomposition of
 In particular the leading coefficient is $a_{m-3}^{(m)}(q)=m-1$, and the high-degree pure term of $\Phi_m$ is $(m-1)s_0^{(m-1)/2}$.
 \end{proposition}
 
-The formula is verified by the accompanying checker against the explicit $P_q^{(m)}$ for $m=9,11$ and against the inclusion-exclusion-derived $P_q^{(13)}$.  (Specialising at $m=13$ gives a degree-$10$ polynomial whose positivity on $q\le481/1000$ is the linear certificate above.)
+\begin{proof}
+Let $n=m-1$.  The linear part of the path density $x_\ell=t(P_\ell,U)$ is
+\[
+        \sum_{i=0}^{\ell-2}(\ell-1-i)q^{\ell-2-i}s_i,
+\]
+as follows immediately from the block recurrence in Lemma~\ref{lem:path-formulae}.  In the inclusion-exclusion certificate for $C_m$, after deleting the nonnegative path-cycle gap, the coefficient of the path layer with $j<n$ selected complement edges is $(-1)^j m/(m-j)$, while the full path layer has coefficient $n$.
+
+Fix $i$ and put $r=m-3-i$.  In a $j$-edge subgraph of the $n$-edge path, the total coefficient of $s_i$ is obtained by choosing a consecutive subpath of length $i+2$ inside one selected component; hence it is
+\[
+        (r+1)\binom{r}{j-i-2}q^{j-i-2}
+\]
+for $i+2\le j\le n$.  Therefore the coefficient of $s_i$ in the linear part of $\Phi_m$ is
+\[
+\begin{aligned}
+&(r+1)\sum_{h=0}^{r-1}(-1)^{i+h} \frac{m}{r+1-h}\binom rh q^h
+        +(m-1)(r+1)q^r\\
+&\qquad
+=m(-1)^i(1-q)^{r+1}+mq^{r+1}-(r+1)q^r,
+\end{aligned}
+\]
+using $\frac{r+1}{r+1-h}\binom rh=\binom{r+1}{h}$ and the fact that $i\equiv r\pmod 2$.  This is exactly the displayed formula with $j=i$.  The top homogeneous term comes from the full path layer $x_{m-1}$ and is $(m-1)s_0^{(m-1)/2}$.
+\end{proof}
+
+The accompanying checker also verifies this formula against the explicit $P_q^{(m)}$ for $m=9,11$ and against the inclusion-exclusion-derived $P_q^{(13)}$.  Specialising at $m=13$ gives a degree-$10$ polynomial whose positivity on $q\le481/1000$ is the linear certificate above.
 
 \subsection{The near-bipartite window and the residual gap}\label{subsec:C13-gap}
 
@@ -1234,17 +1262,17 @@ The \emph{reduction} of \S\ref{subsec:C11-gap} carries over to $C_{13}$ unchange
         \Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}
         \qquad\text{at }\ell=p,\quad \alpha_0=(pq^{12})^{1/13},\ \Delta_0=pq-\alpha_0^2,
 \]
-where $\Theta$ is the triangle-density function of Theorem~\ref{thm:triangle-density}.  (That the $G'(\ell)>0$ step works for \emph{every} odd $m\ge5$ is part of the general framework; see Corollary~\ref{cor:basic-lower} and the discussion after it.)  What does \emph{not} carry over is the clean rational chain that closed $C_{11}$ on $\eps\le3/200$: for $C_{13}$ the slack is narrower, and we resort to solving the scalar inequality numerically by bisection in $50$-digit arithmetic (see the synthesis file \texttt{general\_odd\_cycle\_progress.md}), which gives the maximal window
+where $\Theta$ is the triangle-density function of Theorem~\ref{thm:triangle-density}.  (That the $G'(\ell)>0$ step works for \emph{every} odd $m\ge5$ is part of the general framework; see Corollary~\ref{cor:basic-lower} and the discussion after it.)  What does \emph{not} carry over is the clean rational chain that closed $C_{11}$ on $\eps\le3/200$: for $C_{13}$ the slack is narrower.  Solving the scalar inequality numerically by bisection in $50$-digit arithmetic (see the synthesis file \texttt{general\_odd\_cycle\_progress.md}) indicates the maximal window
 \[
-        \delta_{13}=0.015592935\ldots,
-        \qquad\text{so the spectral half covers } 1/2<p\le1/2+\delta_{13}\approx0.51559.
+        \delta_{13}=0.015592935\ldots .
 \]
-Since $1/2+\delta_{13}<519/1000$, the trivial case, the spectral window, and the path-certificate range leave the residual interval
+Thus the same spectral mechanism should cover $1/2<p\le1/2+\delta_{13}\approx0.51559$.
+The exact rational version in Remark~\ref{rmk:C13-rational} below rigorously covers $1/2<p\le51/100$.  Since $1/2+\delta_{13}<519/1000$, the numerically indicated spectral frontier and the path-certificate range leave the residual interval
 \begin{equation}\label{eq:C13-residual}
         p\in\bigl(1/2+\delta_{13},\,519/1000\bigr)=(0.51559\ldots,\,0.519),
         \qquad\text{width }\approx0.00341,
 \end{equation}
-uncovered.
+as the narrow target not reached by the present hybrid.  Without the numerical endpoint, the rigorously certified gap is the larger interval $(51/100,519/1000)$.
 
 \begin{remark}[A clean rational near-bipartite theorem]\label{rmk:C13-rational}
 The numerical window $\delta_{13}$ can be replaced by a fully rational theorem at the cost of a slightly smaller endpoint: for $1/2<p\le 51/100$ the same triangle-density argument closes $C_{13}$, with the scalar chain certified by exact Sturm root counts ($p^3-\alpha_0^3\le\tfrac75\eps$, $pq-\alpha_0^2\le\tfrac{11}{13}\eps$ on $\eps\le1/100$, and a positive endpoint square gap $\tfrac{1541708097893}{661695623680000}$).  The numerical frontier of the \emph{same} argument is exactly $p_*=1/2+\delta_{13}=0.5155929\ldots$; the rational $51/100$ is the clean under-approximation.
@@ -1272,7 +1300,7 @@ This is exactly the $r=2$, $m=13$ instance of the two-value multipartite Theorem
 
 A dedicated attempt to close \eqref{eq:C13-residual} by four independent rigorous routes did \emph{not} succeed; each provably falls short, and the failure pins down the obstruction.  We record it because several byproducts are sharp and reusable.  (All claims below are checked in \texttt{odd\_cycle\_c13\_closure\_checker.py}.)
 
-\emph{(a) The spectral window has a hard ceiling.}  The window of the triangle-density spectral method is exactly $\delta_{13}=0.0155929\ldots$, even after adjoining the support bound $\lambda_i\in[-\tfrac12,\tfrac12]$ (Lemma~\ref{lem:lambda-min} below) and the Sidorenko bound $t(C_4,W)\ge p^4$: at the binding configuration the relevant atom sits at $-\alpha_0$ with $\alpha_0=(pq^{12})^{1/13}$ strictly inside $(-\tfrac12,\tfrac12)$, so the support bound is slack.  The deficit at the path cut-off is genuine ($\Theta(p)-(p^3-\alpha_0^3+\Delta_0^{3/2})\approx-2.6\times10^{-4}$ at $\eps=0.019$).
+\emph{(a) The spectral window has a hard ceiling.}  Numerically, the window of the triangle-density spectral method stops at $\delta_{13}=0.0155929\ldots$, even after adjoining the support bound $\lambda_i\in[-\tfrac12,\tfrac12]$ (Lemma~\ref{lem:lambda-min} below) and the Sidorenko bound $t(C_4,W)\ge p^4$: at the binding configuration the relevant atom sits at $-\alpha_0$ with $\alpha_0=(pq^{12})^{1/13}$ strictly inside $(-\tfrac12,\tfrac12)$, so the support bound is slack.  The deficit at the path cut-off is genuine ($\Theta(p)-(p^3-\alpha_0^3+\Delta_0^{3/2})\approx-2.6\times10^{-4}$ at $\eps=0.019$).
 
 \emph{(b) The path certificate provably fails inside the interval.}  The defect polynomial $\Phi_{13}$ of \S\ref{subsec:C13-path} is not nonnegative on the realisable region: the exact rational two-block witness with \emph{unequal} part measures $(39/100,\,61/100)$ and complement values $U=\bigl(\begin{smallmatrix}43/50&1/10\\1/10&41/50\end{smallmatrix}\bigr)$ has $q=120877/250000=0.483508$ (inside the interval) and $\Phi_{13}=-2.0758\times10^{-7}<0$, while the true defect $t(C_{13},W)-g_{13}=+1.105\times10^{-4}>0$ lives entirely in the discarded deletion term $x_{12}-c_{13}$.  Hence the path range cannot be pushed below $\rho_{13}=519/1000$ \emph{without retaining} the deletion gap.
 
@@ -1282,14 +1310,23 @@ A dedicated attempt to close \eqref{eq:C13-residual} by four independent rigorou
 \]
 This localises the entire excess to one frontier eigenvalue.  But the surplus $\Psi_{13}$ \eqref{eq:spectral-bottleneck} cannot pay for it modewise: the coupling obeys $b_1^2\le p(\tfrac12-\alpha_1)$, so the single-excursion surplus vanishes as $\alpha_1\to\tfrac12$ exactly where the excess is largest, and a rational witness exhibits a frontier mode $\alpha_1=0.4885>q$ that is fully decoupled ($b_1=0$ by a swap symmetry) while the true defect remains positive.  The surplus must come from the aggregate, not the frontier mode.
 
-\emph{(d) The minimiser is not the triangle-extremal family.}  As shown in \S\ref{subsec:C13-minimiser}, the actual $C_{13}$ minimiser in the residual interval is \emph{near-bipartite}, not the tripartite $W_c$; in particular $W_c$ is not even a stationary point of $t(C_{13},\cdot)$ there.  So a stability transfer anchored at the triangle-extremal family is geometrically misaimed.
+\emph{(d) The minimiser is not the triangle-extremal family.}  As shown in \S\ref{subsec:C13-minimiser}, numerical optimisation in the residual interval finds a \emph{near-bipartite} minimiser, not the tripartite $W_c$; in particular $W_c$ is not even a stationary point of $t(C_{13},\cdot)$ there.  So a stability transfer anchored at the triangle-extremal family is geometrically misaimed.
 
 \begin{lemma}[Spectral support bound]\label{lem:lambda-min}
 For every graphon $W$, the operator $T_W$ has $\lambda_{\min}(T_W)\ge-\tfrac12$; moreover every non-principal eigenvalue lies in $[-\tfrac12,\tfrac12]$.
 \end{lemma}
 
 \begin{proof}
-Write $S=2W-1$, so $T_W=\tfrac12(J+T_S)$ with $J$ the rank-one averaging projection.  Since $|S|\le1$, Schur's test gives $\norm{T_S}\le1$, hence $T_W\succeq\tfrac12(J-I)\succeq-\tfrac12 I$.  The non-principal eigenvalues are eigenvalues of the compression $-A$ of $T_W$ to $\one^\perp$, and $\norm A\le\tfrac12$ by Lemma~\ref{lem:compression}.
+Write $S=2W-1$, so $T_W=\tfrac12(J+T_S)$ with $J$ the rank-one averaging projection.  Since $|S|\le1$, Schur's test gives $\norm{T_S}\le1$, hence $T_W\succeq\tfrac12(J-I)\succeq-\tfrac12 I$.  This proves the lower spectral bound.
+
+For the upper bound on non-principal eigenvalues, apply the min--max principle with the one-dimensional test space $\mathbb R\one$.  If $\lambda_2$ denotes the second largest eigenvalue of $T_W$, then
+\[
+        \lambda_2
+        \le \sup_{\substack{f\perp\one\\ \norm f_2=1}}\ip{f}{T_Wf}
+        = \sup_{\substack{f\perp\one\\ \norm f_2=1}}-\ip{f}{T_{1-W}f}
+        \le \tfrac12
+\]
+by Lemma~\ref{lem:compression} applied to $U=1-W$.  Thus every eigenvalue other than the largest lies in $[-\tfrac12,\tfrac12]$.
 \end{proof}
 
 The common thread of \textup{(a)--(d)} is the \emph{aggregate-not-modewise} bottleneck of \S\ref{subsec:bottleneck}: every certificate built from marginal moments of the spectral measure of $A$ (plus the deletion bound) is defeated by an unrealisable spectral configuration that the $g$--$A$ coupling forbids but no marginal-moment constraint excludes.  The residual $C_{13}$ interval is thus a faithful, narrow instance of the general obstruction, and the most promising route is a \emph{deletion-retaining} certificate (lower-bound $x_{12}-c_{13}$ in the moment variables and add it back to $\Phi_{13}$, using the one-frontier-mode reduction).
@@ -1502,7 +1539,7 @@ The complete multipartite family of \S\ref{subsec:multipartite} already exhibits
 
 \subsection{The complete multipartite family and the two-value theorem}\label{subsec:multipartite}
 
-The complete multipartite graphons $K(w)$ (parts $w=(w_1,\dots,w_k)$, $\sum w_i=1$; $W=1$ across parts, $0$ within) form the natural candidate family for $p$ bounded away from $1/2$, and contain the Tur\'an graphons.  (Near $p=1/2$ the true minimiser is instead near-bipartite, not multipartite; see \S\ref{subsec:C13-minimiser}.  The results of this subsection are statements about the multipartite \emph{family}, independent of whether it contains the global minimiser.)  Writing $s=\sqrt w$ and $D=\operatorname{diag}(w)$,
+The complete multipartite graphons $K(w)$ (parts $w=(w_1,\dots,w_k)$, $\sum w_i=1$; $W=1$ across parts, $0$ within) form the natural candidate family for $p$ bounded away from $1/2$, and contain the Tur\'an graphons.  (Near $p=1/2$ numerical optimisation instead points to a near-bipartite, non-multipartite minimiser; see \S\ref{subsec:C13-minimiser}.  The results of this subsection are statements about the multipartite \emph{family}, independent of whether it contains the global minimiser.)  Writing $s=\sqrt w$ and $D=\operatorname{diag}(w)$,
 \begin{equation}\label{eq:multipartite-trace}
         t(C_m,K(w))=\Tr(M^m),\qquad M=ss^{\mathsf T}-D,\qquad p=1-\norm w^2,
 \end{equation}
@@ -1529,29 +1566,51 @@ identical in form to the equal-clique recursion of \S\ref{subsec:equal-clique}, 
 \subsection{First-order stability of the Tur\'an graphon}
 
 \begin{proposition}[Strict local minimality of $T_r$]\label{prop:stability}
-For every odd $m\ge3$ and $r\ge2$, the Tur\'an graphon $T_r$ is a strict local minimiser of $t(C_m,\cdot)$ at fixed $p=1-1/r$: the first variation along any nonzero edge-preserving admissible direction is strictly positive, with symmetric-direction coefficient $m/r^{m-1}>0$.
+For every odd $m\ge3$ and $r\ge2$, the Tur\'an graphon $T_r$ is a strict local minimiser of $t(C_m,\cdot)$ at fixed $p=1-1/r$: the first variation along any nonzero edge-preserving admissible direction is strictly positive, with coefficient $m/r^{m-2}>0$ multiplying the total within-part perturbation.
 \end{proposition}
+
+\begin{proof}
+Let the balanced parts be $V_1,\ldots,V_r$.  Since $T_r$ is $\{0,1\}$-valued, any admissible first-order perturbation $H$ satisfies $H\ge0$ on the within-part blocks and $H\le0$ on the cross-part blocks.  The edge constraint gives $\int H=0$, so if
+\[
+        A_{\mathrm{in}}=\sum_i\int_{V_i^2}H,
+        \qquad
+        A_{\mathrm{out}}=\sum_{i\ne j}\int_{V_i\times V_j}H,
+\]
+then $A_{\mathrm{out}}=-A_{\mathrm{in}}$ and $A_{\mathrm{in}}>0$ unless $H=0$ a.e.
+
+The operator $T_{T_r}$ has eigenvalue $1-1/r$ on constants, eigenvalue $-1/r$ on the $(r-1)$-dimensional block-constant mean-zero space, and eigenvalue $0$ on functions with mean zero on each part.  Since $m-1$ is even, the kernel of $T_{T_r}^{m-1}$ is constant on within-part and cross-part blocks, with difference
+\[
+        K_{\mathrm{in}}-K_{\mathrm{out}}=\frac1{r^{m-2}}.
+\]
+Using the first-variation formula \eqref{eq:first-variation-Cm},
+\[
+        \delta t(C_m,T_r)[H]
+        =m(K_{\mathrm{in}}A_{\mathrm{in}}+K_{\mathrm{out}}A_{\mathrm{out}})
+        =\frac{m}{r^{m-2}}A_{\mathrm{in}}>0
+\]
+for every nonzero admissible edge-preserving direction.
+\end{proof}
 
 Strictness is a first-order \emph{corner} phenomenon: $T_r$ is bang--bang ($\{0,1\}$-valued), so admissible perturbations are one-sided on each block, and the strictly separated kernel values force $\delta t>0$.  The free Hessian of $t(C_m,\cdot)$ is itself indefinite (its $E_1$--$E_1$ block has coefficient $m(m-1)(-1/r)^{m-2}<0$ for $m\ge5$), but the negative directions are inadmissible.  This contrasts sharply with the six-vertex graph of the companion project, where the analogous first-order coefficient $(6k^3-55k^2+142k-111)/k^5$ is \emph{negative} for $k=3,4,5$ --- there $T_k$ is not even a local minimiser.
 
-\subsection{The minimiser is not always multipartite: near $p=1/2$ it is near-bipartite}\label{subsec:C13-minimiser}
+\subsection{The minimiser is not always multipartite: numerical evidence near $p=1/2$}\label{subsec:C13-minimiser}
 
-The complete multipartite picture of \S\ref{subsec:multipartite} is the high-density story.  Near $p=1/2$ it \emph{fails}: the global minimiser is near-bipartite, not multipartite, and in particular the triangle-extremal family is not stationary.
+The complete multipartite picture of \S\ref{subsec:multipartite} is the high-density story.  Near $p=1/2$ it \emph{fails} as a stationary candidate for $C_{13}$: the triangle-extremal family is not stationary, and numerical optimisation points instead to a near-bipartite, non-multipartite minimiser.
 
 \begin{proposition}[Triangle-extremal family is not $C_{13}$-stationary]\label{prop:tri-not-stationary}
 For the tripartite $W_c=(c,b,b)$, $b=\tfrac{1-c}2$, the first-variation kernel $\mathcal K=13\,T_{W_c}^{12}$ takes block-constant values $K_{cc},K_{bb}$ (within parts, $W_c=0$) and $K_{cb},K_{bb'}$ (across parts, $W_c=1$).  For $c\in(0,\,0.3328)$ one has $K_{cb}>K_{bb}$, so no multiplier $\nu$ can satisfy the KKT conditions: $W_c$ is not a stationary point of $\min t(C_{13})$ at fixed $p$.  Stationarity holds only for $c\gtrsim0.3328$, i.e.\ essentially only at the balanced Tur\'an point $c=1/3$ ($p=2/3$), where the gap $K_{\mathrm{within}}-K_{\mathrm{across}}=13/3^{11}>0$ recovers Proposition~\ref{prop:stability}.
 \end{proposition}
 
-This is an exact computation (\texttt{c13\_extremal\_structure\_checker.py}); the KKT-violating direction ``add $b$--$b$ within-part edges, remove $c$--$b$ cross edges'' strictly decreases $t(C_{13})$.  Tracking it down, the actual minimiser in the residual interval \eqref{eq:C13-residual} is, to high accuracy and stably across $4,5,6$ blocks, a \emph{near-bipartite two-block graphon}: two parts of measure $\approx\tfrac12$, cross density $1$, one part carrying a small internal fill $\approx0.06$--$0.07$ and the other $\approx0$.  Its margin $t(C_{13})-g_{13}\approx4.7\times10^{-6}$ lies \emph{below} the triangle-extremal margin $\approx1.9\times10^{-5}$ of Theorem~\ref{thm:C13-tripartite}.
+This is an exact computation (\texttt{c13\_extremal\_structure\_checker.py}); the KKT-violating direction ``add $b$--$b$ within-part edges, remove $c$--$b$ cross edges'' strictly decreases $t(C_{13})$.  Tracking it down numerically, the best minimiser found in the residual interval \eqref{eq:C13-residual} is, to high accuracy and stably across $4,5,6$ blocks, a \emph{near-bipartite two-block graphon}: two parts of measure $\approx\tfrac12$, cross density $1$, one part carrying a small internal fill $\approx0.06$--$0.07$ and the other $\approx0$.  Its margin $t(C_{13})-g_{13}\approx4.7\times10^{-6}$ lies \emph{below} the triangle-extremal margin $\approx1.9\times10^{-5}$ of Theorem~\ref{thm:C13-tripartite}.
 
-Two consequences.  First, near $p=1/2$ the odd-cycle minimiser is governed by the \emph{bipartite} extremal structure (complete bipartite has no odd cycles), not the tripartite triangle-extremal one --- so a stability transfer for $C_{13}$ anchored at the triangle-density extremal family is geometrically misaimed.  Second, the numerical claim that the $C_m$ minimiser is complete multipartite is \emph{false} near $p=1/2$: the true minimiser has fractional within-block structure.  Theorem~\ref{thm:two-value} remains valid as a statement about the multipartite \emph{family}, but it does not bound the (non-multipartite) global minimiser there.  The right local object near $p=1/2$ is the near-bipartite two-block family, anchored by Lemma~\ref{lem:lambda-min} ($\lambda_{\min}(T_W)\ge-\tfrac12$, with near-equality forcing near-bipartiteness); reducing the residual interval to this two-block family is the concrete next step.
+Two consequences.  First, near $p=1/2$ the numerical odd-cycle minimiser is governed by the \emph{bipartite} extremal structure (complete bipartite has no odd cycles), not the tripartite triangle-extremal one --- so a stability transfer for $C_{13}$ anchored at the triangle-density extremal family is geometrically misaimed.  Second, the numerical claim that the $C_m$ minimiser is complete multipartite is \emph{false} near $p=1/2$: the best minimiser found has fractional within-block structure.  Theorem~\ref{thm:two-value} remains valid as a statement about the multipartite \emph{family}, but it does not bound a non-multipartite global minimiser there.  The right local object near $p=1/2$ appears to be the near-bipartite two-block family, anchored by Lemma~\ref{lem:lambda-min} ($\lambda_{\min}(T_W)\ge-\tfrac12$, with near-equality forcing near-bipartiteness); reducing the residual interval to this two-block family is the concrete next step.
 
 \section{What remains}\label{sec:remains}
 
 The full conjecture for $C_{2k+1}$ with $k\ge6$ remains open.  The obstruction can be stated either per-cycle (the hybrid of \S\ref{sec:C5}--\S\ref{sec:C13}) or uniformly in $m$ (the spectral bottleneck of \S\ref{sec:general}, or equivalently the extremal-structure problem of \S\ref{sec:variational}).  We collect what each viewpoint says.
 
 \medskip\noindent\emph{The immediate gap: $C_{13}$.}
-Only the residual interval $(1/2+\delta_{13},\,519/1000)$ of width $\approx0.0034$ separates the proved cases from $C_{13}$ (\S\ref{subsec:C13-gap}).  The obstruction is quantitative, but it is \emph{not} closed by sharpening either half of the hybrid: the closure attempt of \S\ref{subsec:C13-attempt} shows the spectral window has the hard ceiling $\delta_{13}=0.0155929<0.019$, and the path certificate provably fails inside the interval (an exact rational witness with $\Phi_{13}<0$).  The minimiser there is near-bipartite, not multipartite (\S\ref{subsec:C13-minimiser}), and the obstruction is the same coupling bottleneck as the general case, localised to a single frontier eigenvalue.  The two concrete routes that survive are: \textup{(a)} a \emph{deletion-retaining} certificate --- lower-bound the discarded gap $x_{12}-c_{13}$ in the moment variables $s_0,\dots,s_{10}$ and add it back to $\Phi_{13}$, then seek a sum-of-squares certificate using the one-frontier-mode reduction of \S\ref{subsec:C13-attempt}\textup{(c)}; or \textup{(b)} a near-bipartite reduction --- prove the residual-interval minimiser is the two-block near-bipartite family of \S\ref{subsec:C13-minimiser} (anchored by $\lambda_{\min}(T_W)\ge-\tfrac12$), reducing the interval to a low-dimensional inequality.
+The exact certificates in this note leave the interval $(51/100,\,519/1000)$; the sharper numerical frontier of the same spectral method leaves the shorter target interval $(1/2+\delta_{13},\,519/1000)$ of width $\approx0.0034$ (\S\ref{subsec:C13-gap}).  The obstruction is quantitative, but it is \emph{not} closed by sharpening either half of the hybrid: the closure attempt of \S\ref{subsec:C13-attempt} indicates the spectral window has a ceiling at $\delta_{13}=0.0155929<0.019$, and the path certificate provably fails inside the interval (an exact rational witness with $\Phi_{13}<0$).  The best numerical minimiser there is near-bipartite, not multipartite (\S\ref{subsec:C13-minimiser}), and the obstruction is the same coupling bottleneck as the general case, localised to a single frontier eigenvalue.  The two concrete routes that survive are: \textup{(a)} a \emph{deletion-retaining} certificate --- lower-bound the discarded gap $x_{12}-c_{13}$ in the moment variables $s_0,\dots,s_{10}$ and add it back to $\Phi_{13}$, then seek a sum-of-squares certificate using the one-frontier-mode reduction of \S\ref{subsec:C13-attempt}\textup{(c)}; or \textup{(b)} a near-bipartite reduction --- prove the residual-interval minimiser is the two-block near-bipartite family of \S\ref{subsec:C13-minimiser} (anchored by $\lambda_{\min}(T_W)\ge-\tfrac12$), reducing the interval to a low-dimensional inequality.
 
 \medskip\noindent\emph{The asymptotic obstruction to the hybrid.}
 The triangle-density spectral closure has a hard ceiling.  Expanding the scalar inequality $\Theta(p)\ge p^3-\alpha_0^3+\Delta_0^{3/2}$ at $p=1/2+\eps$ shows the slack opens linearly with coefficient $3/(2m)\to0$ while the deficit $\Delta_0^{3/2}$ opens like $\eps^{3/2}$ with coefficient $((m-2)/m)^{3/2}\to1$.  Balancing forces the window width
@@ -1566,7 +1625,7 @@ The general framework of \S\ref{sec:general} reduces the conjecture, for every $
 \[
         \Psi_m\ge\Tr(A^m)-pq^{m-1},
 \]
-where only positive eigenvalues of $A$ above $q$ can create an obstruction (and by \S\ref{subsec:C13-attempt}\textup{(c)} at most one does, for $q>1/3$).  Theorem~\ref{thm:rank-one}, Theorem~\ref{thm:equal-clique}, and the two-value Theorem~\ref{thm:two-value} settle this for the rank-one, equal-clique, and two-value multipartite families.  The natural finite-dimensional next target is the fully \emph{unequal} disjoint clique complement $U=\sum_i\mathbf 1_{A_i}\otimes\mathbf 1_{A_i}$ with arbitrary block sizes $a_i$ (equivalently \eqref{eq:P2} for arbitrary $w$): the matrix inequality $\Tr(M^{2k+1})\ge p^{2k+1}-pq^{2k}$ for $M=ss^{\mathsf T}-\operatorname{diag}(w)$.  By Theorem~\ref{thm:two-value} this is already settled \emph{on the two-value family}; what remains is the simplex-to-two-value reduction for $m\ge5$ (\S\ref{subsec:multipartite}), i.e.\ proving the multipartite minimiser has at most two distinct part sizes.  This would close \eqref{eq:P2}.  It does \emph{not}, however, close the conjecture, since near $p=1/2$ the global minimiser is not multipartite (\S\ref{subsec:C13-minimiser}).
+where only positive eigenvalues of $A$ above $q$ can create an obstruction (and by \S\ref{subsec:C13-attempt}\textup{(c)} at most one does, for $q>1/3$).  Theorem~\ref{thm:rank-one}, Theorem~\ref{thm:equal-clique}, and the two-value Theorem~\ref{thm:two-value} settle this for the rank-one, equal-clique, and two-value multipartite families.  The natural finite-dimensional next target is the fully \emph{unequal} disjoint clique complement $U=\sum_i\mathbf 1_{A_i}\otimes\mathbf 1_{A_i}$ with arbitrary block sizes $a_i$ (equivalently \eqref{eq:P2} for arbitrary $w$): the matrix inequality $\Tr(M^{2k+1})\ge p^{2k+1}-pq^{2k}$ for $M=ss^{\mathsf T}-\operatorname{diag}(w)$.  By Theorem~\ref{thm:two-value} this is already settled \emph{on the two-value family}; what remains is the simplex-to-two-value reduction for $m\ge5$ (\S\ref{subsec:multipartite}), i.e.\ proving the multipartite minimiser has at most two distinct part sizes.  This would close \eqref{eq:P2}.  It does \emph{not}, however, close the conjecture, since the numerical near-$p=1/2$ minimiser is not multipartite (\S\ref{subsec:C13-minimiser}).
 
 \medskip\noindent\emph{The combinatorial counterpart.}
 The same defect has an exact path-cycle form.  For $m=n+1$ with $n=2k$ even, inclusion-exclusion over the edges of $C_m$ gives
