@@ -1,0 +1,600 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{booktabs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\spec}{spec}
+
+\title{The $C_{13}$ Case of the Odd-Cycle Graphon Inequality:\\
+\large technical details, certified ranges, and the remaining gap}
+\author{Working note for the odd-cycle project}
+\date{May 31, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note collects, in a self-contained form, the current technical work on the
+$C_{13}$ instance of the conjectural inequality
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k},\qquad p=t(K_2,W).
+\]
+The full $C_{13}$ case is not yet closed.  The note proves and records the
+following rigorous regions.  First, the inequality is trivial for $p\le 1/2$.
+Second, a spectral--triangle argument proves it for
+$1/2<p\le 51/100$.  Third, a complement path-certificate, due to the attached
+partial-result note and checker, proves it for $p\ge 519/1000$.  Fourth, an
+all-odd-cycle spectral-safe theorem proves it whenever the positive mean-zero
+spectrum of the complement satisfies
+\[
+        \lambda_{\max}\bigl(P_{\one^\perp}T_{1-W}P_{\one^\perp}\bigr)\le 1-p.
+\]
+We also prove that the triangle-density extremal complete tripartite family in
+$p\in[1/2,2/3]$ satisfies the $C_{13}$ inequality, and we isolate the remaining
+unresolved strip
+\[
+        0.51<p<0.519
+\]
+more sharply as a narrow stability problem around the triangle-density extremal
+family, outside the spectral-safe regime.  Companion scripts check the bulky
+polynomial identities and positivity certificates.
+\end{abstract}
+
+\tableofcontents
+
+\section{The conjecture and the current $C_{13}$ status}
+
+Let $W:[0,1]^2\to[0,1]$ be a symmetric measurable graphon.  We write
+\[
+        p=t(K_2,W)=\int_{[0,1]^2} W(x,y)\,dx\,dy.
+\]
+The project conjecture is the following.
+
+\begin{conjecture}[Odd-cycle lower bound]\label{conj:odd-cycle}
+For every $k\ge1$ and every graphon $W$,
+\[
+        t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k},
+        \qquad p=t(K_2,W).
+\]
+\end{conjecture}
+
+The case considered here is
+\begin{equation}\label{eq:C13-main}
+        t(C_{13},W)\ge p^{13}-p(1-p)^{12}.
+\end{equation}
+It is convenient to put
+\[
+        U=1-W,\qquad q=t(K_2,U)=1-p.
+\]
+For $p\le1/2$ the right-hand side of \eqref{eq:C13-main} is non-positive, so
+\eqref{eq:C13-main} is trivial.  Therefore the nontrivial regime is $p>1/2$, or
+equivalently $q<1/2$.
+
+The current rigorous status is as follows.
+
+\begin{theorem}[Current proved $C_{13}$ ranges]\label{thm:status}
+The $C_{13}$ inequality \eqref{eq:C13-main} is proved in each of the following
+regimes.
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item $p\le1/2$.
+\item $1/2<p\le 51/100$.
+\item $p\ge 519/1000$.
+\item $\lambda_{\max}(P_{\one^\perp}T_{1-W}P_{\one^\perp})\le 1-p$.
+\item The complement $1-W$ is rank one, $1-W=u(x)u(y)$, $0\le u\le1$.
+\item The complement is an equal disjoint clique complement,
+\[
+        1-W=\sum_{i=1}^r 1_{A_i\times A_i},\qquad \mu(A_i)=a.
+\]
+\item $W$ lies in the triangle-density extremal complete tripartite family in
+$p\in[1/2,2/3]$.
+\end{enumerate}
+\end{theorem}
+
+The rest of this note proves these statements or points to the exact certificate
+where a proof is computational.  The remaining general case is contained in
+\begin{equation}\label{eq:remaining-strip}
+        0.51<p<0.519,
+        \qquad
+        \lambda_{\max}(P_{\one^\perp}T_{1-W}P_{\one^\perp})>1-p,
+\end{equation}
+excluding the structural families in items (v)--(vii).  A sharper numerical
+analysis of the triangle argument reduces the lower endpoint $0.51$ to
+approximately $0.515592935\ldots$, but the clean exact theorem proved here uses
+$51/100$.
+
+\section{The exact complement identity for $C_{13}$}
+
+Let
+\[
+        x_j=t(P_j,U),\qquad c_{13}=t(C_{13},U).
+\]
+For the path $P_{12}$ with $12$ edges, define
+\[
+        Z_{12,j}(U)=\sum_{\substack{F\subseteq P_{12}\\ e(F)=j}}t(F,U).
+\]
+The following identity is a special case of the general complement path-cycle
+identity.
+
+\begin{lemma}[Exact $C_{13}$ path-cycle identity]\label{lem:exact-identity}
+Let
+\[
+        \Delta_{13}(W)=t(C_{13},W)-\bigl((1-q)^{13}-(1-q)q^{12}\bigr).
+\]
+Then
+\begin{equation}\label{eq:delta-Pi-correction}
+        \Delta_{13}(W)=\Pi_{13}(U)+\bigl(x_{12}-c_{13}\bigr),
+\end{equation}
+where
+\begin{equation}\label{eq:Pi13-def}
+        \Pi_{13}(U)=
+        \sum_{j=0}^{11}(-1)^j
+        \left[
+        \frac{13}{13-j}Z_{12,j}(U)-\binom{13}{j}q^j
+        \right]
+        +12\bigl(x_{12}-q^{12}\bigr).
+\end{equation}
+Moreover $x_{12}-c_{13}\ge0$.
+\end{lemma}
+
+\begin{proof}
+Expand
+\[
+        t(C_{13},1-U)=\sum_{S\subseteq E(C_{13})}(-1)^{|S|}t(S,U).
+\]
+For $j<13$, every $j$-edge subset of $C_{13}$ is a forest and is contained in
+exactly $13-j$ deleted-edge paths $C_{13}-e\cong P_{12}$.  Since there are $13$
+choices of the deleted edge, the total $j$-edge contribution from proper subsets
+is
+\[
+        \frac{13}{13-j}Z_{12,j}(U).
+\]
+The full edge-set contributes $-c_{13}$.  On the other hand,
+\[
+        (1-q)^{13}-(1-q)q^{12}
+        =\sum_{j=0}^{11}(-1)^j\binom{13}{j}q^j+12q^{12}.
+\]
+Subtracting gives \eqref{eq:delta-Pi-correction}.  Finally,
+$c_{13}\le x_{12}$ follows by deleting one factor $U\le1$ from the integral for
+$t(C_{13},U)$.
+\end{proof}
+
+The crude complement path-certificate attempts to prove $\Pi_{13}(U)\ge0$.
+This is sufficient for $C_{13}$, but not necessary.  The identity
+\eqref{eq:delta-Pi-correction} shows that a full proof may use the correction
+term $x_{12}-c_{13}$.
+
+\section{Moment decomposition of the crude certificate}
+
+Let $T=T_U$ be the Hilbert--Schmidt operator associated with $U$.  Write
+\[
+        d=T\one=q\one+g,
+        \qquad \ip{g}{\one}=0,
+\]
+and let
+\[
+        A=P_{\one^\perp}TP_{\one^\perp}.
+\]
+For $j\ge0$ set
+\[
+        s_j=\ip{g}{A^j g}.
+\]
+The path densities are generated by the recurrence
+\begin{equation}\label{eq:block-rec}
+        T(a\one+h)=\bigl(aq+\ip{g}{h}\bigr)\one+ag+Ah,
+        \qquad h\in\one^\perp.
+\end{equation}
+Starting with $\one$, repeated application of \eqref{eq:block-rec} gives
+$x_j=\ip{\one}{T^j\one}$ as a polynomial in $q,s_0,s_1,\ldots,s_{j-2}$.
+
+Substituting these formulae into the crude certificate $\Pi_{13}$ gives a
+homogeneous decomposition
+\begin{equation}\label{eq:Phi-decomp}
+        \Pi_{13}=L_1+L_2+L_3+L_4+L_5+12s_0^6,
+\end{equation}
+where $L_d$ is homogeneous of degree $d$ in $s_0,\ldots,s_{10}$.
+The attached checker verifies the inclusion-exclusion construction, the path
+recurrence up to $P_{12}$, the decomposition
+\eqref{eq:Phi-decomp}, and the top term $12s_0^6$.
+
+\subsection{The linear spectral polynomial}
+
+Let $\mu$ be the spectral measure of $A$ with respect to $g$.  Then
+\[
+        L_1=\int P_q^{(13)}(\lambda)\,d\mu(\lambda).
+\]
+The polynomial is most compactly written using the following coefficient
+formula.  For odd $m\ge5$, define
+\begin{equation}\label{eq:Pqm-general}
+        P_q^{(m)}(\lambda)=\sum_{j=0}^{m-3}a_j^{(m)}(q)\lambda^j,
+\end{equation}
+where
+\begin{equation}\label{eq:aj-general}
+        a_j^{(m)}(q)=(-1)^j m(1-q)^{m-2-j}
+        +m q^{m-2-j}-(m-2-j)q^{m-3-j}.
+\end{equation}
+For $m=13$, the linear part of \eqref{eq:Phi-decomp} is exactly
+$\int P_q^{(13)}\,d\mu$.  The companion checker verifies this identity by
+comparing the closed form against the recurrence-derived linear part.  It also
+cross-checks the same formula at $m=11$.
+
+\begin{proposition}[Certified crude certificate for large $p$]\label{prop:path-large-p}
+For every graphon $W$ with $p\ge519/1000$, the $C_{13}$ inequality holds.
+\end{proposition}
+
+\begin{proof}
+Equivalently $q\le481/1000$.  By the spectral theorem and the moment-kernel
+construction, each $L_d$ with $1\le d\le5$ can be represented as an average of a
+symmetric polynomial kernel $K_{d,q}$ over $[-1,1]^d$.  The exact checker
+certifies, by rational Bernstein subdivision, that
+\[
+        P_q^{(13)}(\lambda)>0\quad
+        (0\le q\le481/1000,\\ -1\le\lambda\le1),
+\]
+that $K_{2,q}>0$ on $q\le481/1000$, and that $K_{d,q}>0$ on the full interval
+$q\le1/2$ for $d=3,4,5$.  Since $12s_0^6\ge0$, \eqref{eq:Phi-decomp} gives
+$\Pi_{13}(U)\ge0$ for $q\le481/1000$.  Lemma~\ref{lem:exact-identity} then gives
+$\Delta_{13}(W)\ge0$.
+\end{proof}
+
+\begin{remark}[About the computational certificate]
+The polynomial kernels $K_{d,q}$ are too large to print usefully.  They are,
+however, obtained deterministically from \eqref{eq:block-rec},
+\eqref{eq:Pi13-def}, and symmetrisation of moment monomials.  The checker uses
+only exact rational arithmetic.  In the current session I did not re-run the
+full heavy checker to completion because the nonlinear Bernstein subdivision is
+slow in the container, but the file itself records all claims that it verifies.
+The lighter checkers in Sections~\ref{sec:near-bipartite} and
+\ref{sec:triangle-extremal} were run successfully.
+\end{remark}
+
+\section{An improved all-odd-cycle spectral-safe theorem}\label{sec:spectral-safe}
+
+The earlier norm-safe condition can be sharpened: only positive mean-zero modes
+of the complement are dangerous.
+
+\begin{theorem}[Positive-spectrum safe theorem]\label{thm:pos-spec-safe}
+Let $m=2k+1$ be odd and let $W$ be a graphon with edge density $p\ge1/2$.
+Put $q=1-p$ and
+\[
+        A=P_{\one^\perp}T_{1-W}P_{\one^\perp}.
+\]
+If
+\[
+        \lambda_{\max}(A)\le q,
+\]
+then
+\[
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+In particular, this proves the $C_{13}$ inequality under the same condition.
+\end{theorem}
+
+\begin{proof}
+Decompose $L^2=\R\one\oplus\one^\perp$ and write
+\[
+        T_W=\begin{pmatrix}p&h^*\\ h&B\end{pmatrix}.
+\]
+On $\one^\perp$, $T_{1-W}=J-T_W$ equals $-B$, hence $A=-B$.  The assumption
+$\lambda_{\max}(A)\le q$ is equivalent to $B\ge -qI$.
+
+We use the hub-coupling positivity lemma: if $a\ge\|B\|$ and $m$ is odd, then
+\[
+        \Tr\begin{pmatrix}a&h^*\\h&B\end{pmatrix}^{m}
+        \ge a^m+\Tr(B^m).
+\]
+Here $a=p$, and the universal mean-zero compression bound for kernels
+$0\le W\le1$ gives $\|B\|\le1/2\le p$.  Thus
+\[
+        t(C_m,W)\ge p^m+\Tr(B^m).
+\]
+If $\beta_i$ are the eigenvalues of $B$, then the negative eigenvalues satisfy
+$|\beta_i|\le q$.  Hence
+\[
+        \Tr(B^m)\ge -q^{m-2}\Tr(B^2).
+\]
+Finally,
+\[
+        p^2+2\|h\|_2^2+\Tr(B^2)=\|T_W\|_{\mathrm{HS}}^2
+        =\int W^2\le\int W=p,
+\]
+so $\Tr(B^2)\le p-p^2=pq$.  Therefore
+\[
+        \Tr(B^m)\ge -pq^{m-1},
+\]
+which proves the result.
+\end{proof}
+
+\section{Near-bipartite spectral-triangle theorem}\label{sec:near-bipartite}
+
+This section gives a rigorous exact-rational near-bipartite result for
+$C_{13}$.
+
+\begin{theorem}[Exact near-bipartite $C_{13}$ range]\label{thm:near-bipartite}
+If $1/2<p\le51/100$, then
+\[
+        t(C_{13},W)\ge p^{13}-p(1-p)^{12}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $T=T_W$ have eigenvalues $\lambda_0=\ell\ge p,\lambda_1,\lambda_2,\ldots$.
+Let
+\[
+        N_{13}=\sum_{\lambda_i<0}|\lambda_i|^{13}.
+\]
+It is enough to show
+\[
+        N_{13}\le \ell^{13}-p^{13}+pq^{12}.
+\]
+Let
+\[
+        A_\ell=(\ell^{13}-p^{13}+pq^{12})^{1/13}.
+\]
+If $N_{13}>A_\ell^{13}$, monotonicity of $\ell^r$ norms implies that the
+negative eigenvalues have square mass at least $A_\ell^2$ and cube mass at least
+$A_\ell^3$.  Since the total nonprincipal square mass is at most $p-\ell^2$,
+the positive nonprincipal eigenvalues have total cube at most
+\[
+        (p-\ell^2-A_\ell^2)^{3/2}.
+\]
+Therefore a failure of the desired bound would force
+\[
+        t(K_3,W)-\ell^3 < (p-\ell^2-A_\ell^2)^{3/2}-A_\ell^3.
+\]
+Equivalently, it is enough to prove
+\begin{equation}\label{eq:triangle-criterion-l}
+        t(K_3,W)\ge \ell^3-A_\ell^3+(p-\ell^2-A_\ell^2)^{3/2}.
+\end{equation}
+The right-hand side is maximised at $\ell=p$ in the present range, so it
+suffices to prove
+\begin{equation}\label{eq:triangle-criterion-p}
+        t(K_3,W)\ge p^3-A_0^3+H_0^{3/2},
+        \qquad
+        A_0=(pq^{12})^{1/13},\quad H_0=pq-A_0^2.
+\end{equation}
+The sharp triangle-density theorem gives, for $p\in[1/2,2/3]$,
+\[
+        t(K_3,W)\ge \Theta(p)=\frac32 c(1-c)^2,
+        \qquad p=\frac12+c-\frac32c^2,
+        \quad 0\le c\le\frac13.
+\]
+Write $p=1/2+\eps$, $0<\eps\le1/100$.  Then
+\[
+        c\ge \eps+\frac32\eps^2,
+        \qquad c\le\frac1{98},
+\]
+and hence
+\[
+        \Theta(p)\ge
+        \frac32\left(\frac{97}{98}\right)^2
+        \left(\eps+\frac32\eps^2\right).
+\]
+The exact checker verifies, by rational Sturm/root-count arguments, that
+\[
+        p^3-A_0^3\le \frac75\eps,
+        \qquad
+        H_0\le \frac{11}{13}\eps
+\]
+for $0\le\eps\le1/100$.  Hence it remains to check
+\[
+        \frac32\left(\frac{97}{98}\right)^2
+        \left(\eps+\frac32\eps^2\right)
+        \ge
+        \frac75\eps+\left(\frac{11}{13}\eps\right)^{3/2}.
+\]
+Putting $t=\sqrt{\eps}\le1/10$ and dividing by $\eps$, the left-minus-right is
+decreasing on $[0,1/10]$, so the endpoint suffices.  The exact endpoint square
+check is
+\[
+\left[
+\frac32\left(\frac{97}{98}\right)^2\left(1+\frac{3}{200}\right)-\frac75
+\right]^2
+-
+\left(\frac{11}{13}\right)^3\frac1{100}
+=
+\frac{1541708097893}{661695623680000}>0.
+\]
+Thus \eqref{eq:triangle-criterion-p}, and hence the theorem, follows.
+\end{proof}
+
+\begin{remark}[Numerical frontier of the same argument]
+Solving
+\[
+        \Theta(p)=p^3-(pq^{12})^{3/13}+\bigl(pq-(pq^{12})^{2/13}\bigr)^{3/2}
+\]
+numerically gives
+\[
+        p_*\approx0.5155929350576426.
+\]
+The exact theorem above uses the cleaner rational endpoint $51/100=0.51$.
+A rigorous interval proof up to $p_*$ should be possible but is not included in
+this note.
+\end{remark}
+
+\section{The triangle-extremal complete tripartite family}\label{sec:triangle-extremal}
+
+The remaining interval after the spectral-triangle and path-certificate methods
+is close to the triangle-density extremal problem.  It is therefore important to
+check the exact triangle extremal family.
+
+For $p\in[1/2,2/3]$, the triangle-density extremal graphon is the complete
+tripartite graphon with part sizes
+\[
+        c,
+        \qquad b=\frac{1-c}{2},
+        \qquad b=\frac{1-c}{2},
+\]
+where
+\[
+        p=\frac12+c-\frac32c^2.
+\]
+
+\begin{theorem}[Triangle-extremal family is safe]\label{thm:tripartite-safe}
+For every $0\le c\le1/3$, the above complete tripartite graphon satisfies the
+$C_{13}$ inequality.
+\end{theorem}
+
+\begin{proof}
+The nonzero spectrum consists of
+\[
+        \lambda,
+        \qquad -\eta,
+        \qquad -b,
+\]
+where $\lambda$ and $-\eta$ are the roots of
+\[
+        x^2-bx-2bc=0.
+\]
+Let $S_0=2$, $S_1=b$, and
+\[
+        S_n=bS_{n-1}+2bcS_{n-2}.
+\]
+Then $\lambda^n+(-\eta)^n=S_n$ and
+\[
+        t(C_{13},W)=S_{13}-b^{13}.
+\]
+A symbolic calculation gives
+\[
+        t(C_{13},W)-\bigl(p^{13}-p(1-p)^{12}\bigr)
+        =\frac{c(1-c)(1-3c)^2(3c+1)R(c)}{2048},
+\]
+where
+\begin{align*}
+R(c)={}&118098c^{19}-787320c^{18}+2348838c^{17}-4120308c^{16}
++4930956c^{15}\\
+&-4883328c^{14}+4835700c^{13}-4502088c^{12}+3305376c^{11}
+-1905888c^{10}\\
+&+1056880c^9-589835c^8+250176c^7-77380c^6+30704c^5
+-11778c^4\\
+&+1250c^3+100c^2+102c+1.
+\end{align*}
+The exact checker substitutes $c=z/3$ and verifies that all Bernstein
+coefficients of $R(z/3)$ on $0\le z\le1$ are positive.  Hence $R(c)>0$ on
+$[0,1/3]$, and the displayed factorisation proves the theorem.
+\end{proof}
+
+\section{Diagnostic examples}
+
+\subsection{A crude-certificate failure near $q=0.4925$}
+
+There is a two-block complement graphon with equal block sizes and values
+\[
+        U=\begin{pmatrix}1&1/4\\1/4&47/100\end{pmatrix}
+\]
+for which
+\[
+        q=197/400=0.4925,
+        \qquad p=203/400=0.5075.
+\]
+Exact arithmetic gives $\Pi_{13}(U)<0$, approximately
+$-6.2176\cdot10^{-6}$.  However
+\[
+        x_{12}-c_{13}\approx2.23173\cdot10^{-4},
+\]
+and therefore
+\[
+        \Delta_{13}(W)=\Pi_{13}(U)+x_{12}-c_{13}>0.
+\]
+This example demonstrates that the correction term in
+\eqref{eq:delta-Pi-correction} is genuinely needed.
+
+\subsection{A crude-certificate failure below $q=0.49$}
+
+A second two-block complement example has block measures $8/25,17/25$ and
+values
+\[
+        U_{AA}=23/25,
+        \qquad U_{AB}=2/25,
+        \qquad U_{BB}=77/100.
+\]
+Then
+\[
+        q=30317/62500\approx0.485072,
+        \qquad p\approx0.514928.
+\]
+Again $\Pi_{13}(U)<0$, but the full defect is positive.  In fact this example
+is handled by Theorem~\ref{thm:pos-spec-safe}: its complement compression has
+positive eigenvalue about $0.332928<q$.
+
+\section{What remains}
+
+The strongest formulation of the remaining $C_{13}$ problem is now the
+following.
+
+\begin{problem}[Residual $C_{13}$ target]
+Prove \eqref{eq:C13-main} for graphons satisfying
+\[
+        0.51<p<0.519,
+        \qquad
+        \lambda_{\max}\bigl(P_{\one^\perp}T_{1-W}P_{\one^\perp}\bigr)>1-p,
+\]
+outside the rank-one and equal disjoint clique-complement families.
+A sharper numerical formulation replaces $0.51$ by
+$0.515592935\ldots$ once the spectral-triangle scalar endpoint is certified.
+\end{problem}
+
+The evidence suggests that the remaining case is a stability problem around the
+triangle-density extremal complete tripartite family.  Indeed, any counterexample
+in the numerical residual interval must have triangle density within a small
+excess of the Razborov--Reiher triangle-density minimum, while
+Theorem~\ref{thm:tripartite-safe} proves that the exact extremal family is safe.
+Thus the next serious step is a quantitative stability transfer: triangle-density
+near extremality should force closeness to the complete tripartite family, and
+one then needs to transfer the explicit positive $C_{13}$ margin from
+Theorem~\ref{thm:tripartite-safe}.
+
+\section*{Companion checkers}
+
+The following scripts accompany this note.
+\begin{itemize}[leftmargin=2em]
+\item \texttt{c13\_colleague\_path\_checker.py}: the exact rational checker from
+the attached partial result.  It verifies the path-certificate range
+$p\ge519/1000$.
+\item \texttt{c13\_near\_bipartite\_checker.py}: exact Sturm/rational checks for
+Theorem~\ref{thm:near-bipartite}.
+\item \texttt{c13\_triangle\_extremal\_checker.py}: symbolic factorisation and
+Bernstein positivity for Theorem~\ref{thm:tripartite-safe}.
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{RazborovTriangles}
+A.~A. Razborov.
+\newblock On the minimal density of triangles in graphs.
+\newblock \emph{Combinatorics, Probability and Computing} 17(4):603--618, 2008.
+
+\bibitem{ReiherCliqueDensity}
+C.~Reiher.
+\newblock The clique density theorem.
+\newblock \emph{Annals of Mathematics} 184(3):683--707, 2016.
+
+\bibitem{KimLeeCommon}
+J.~Kim and H.~Lee.
+\newblock Extended commonality of paths and cycles.
+\newblock arXiv:2210.00977.
+
+\bibitem{BDLP}
+P.~Bennett, A.~Dudek, B.~Lidick\'y, and O.~Pikhurko.
+\newblock Minimizing the number of pentagons in graphs of given order and size.
+\newblock arXiv:1803.00165.
+
+\end{thebibliography}
+
+\end{document}
