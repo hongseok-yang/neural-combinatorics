@@ -1,0 +1,274 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\E}{\mathbb E}
+
+\title{A lower bound for odd-cycle densities at edge density at least \texorpdfstring{$2/3$}{2/3}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $C_m$ be the cycle of length $m$.  We prove, conditionally on the
+Schur--convex path comparison stated in Lemma~\ref{lem:path-comparison},
+that if $m=2k+1$ is odd and $W$ is a graphon with edge density
+$p=t(K_2,W)\ge 2/3$, then
+\[
+    t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{abstract}
+
+\section{Preliminaries}
+
+A \emph{graphon} is a symmetric measurable function
+$W:[0,1]^2\to[0,1]$.  If $H$ is a finite graph, its homomorphism density
+in $W$ is
+\[
+    t(H,W)
+    :=
+    \int_{[0,1]^{V(H)}}
+    \prod_{ij\in E(H)} W(x_i,x_j)
+    \prod_{v\in V(H)} \dd x_v .
+\]
+In particular,
+\[
+    t(K_2,W)=\int_{[0,1]^2}W(x,y)\dd x\dd y.
+\]
+
+For a bounded symmetric kernel $U$, let $T_U$ denote the corresponding
+Hilbert--Schmidt operator on $L^2[0,1]$:
+\[
+    (T_U f)(x)=\int_0^1 U(x,y)f(y)\dd y.
+\]
+We write $J$ for the rank-one operator with kernel identically equal to
+$1$; thus
+\[
+    Jf=\langle f,\one\rangle\one.
+\]
+For $\ell\ge 0$, define the $\ell$-edge path density of $U$ by
+\[
+    r_\ell:=t(P_\ell,U)=\langle \one,T_U^\ell\one\rangle,
+\]
+where $P_\ell$ denotes the path with $\ell$ edges.  Thus
+\[
+    r_0=1,
+    \qquad
+    r_1=t(K_2,U).
+\]
+
+\section{The Schur--convex path input}
+
+The proof uses the following path comparison inequality.  It is the point
+at which Schur convexity enters the argument.
+
+\begin{lemma}[Schur--convex path comparison]
+\label{lem:path-comparison}
+Let $m=2k+1$ be odd.  Let $U:[0,1]^2\to[0,1]$ be a graphon with
+edge density
+\[
+    q:=t(K_2,U)\le \frac13,
+\]
+and let $r_\ell=t(P_\ell,U)$.  Define
+\[
+    A_m(U)
+    :=
+    \sum_{s=1}^{m}(-1)^{m-s}\frac{m}{s}
+    \sum_{\substack{a_1,\dots,a_s\ge 0\\ a_1+\cdots+a_s=m-s}}
+    \prod_{i=1}^{s} r_{a_i}.
+\]
+Then
+\[
+    A_m(U)-r_{m-1}
+    \ge
+    (1-q)^m-(1-q)q^{m-1}.
+\]
+\end{lemma}
+
+\begin{remark}
+Lemma~\ref{lem:path-comparison} is the specialised form needed here of
+the Schur--convex path inequalities of Kim and Lee.  In their notation,
+the key ingredient is that complete homogeneous symmetric functions of
+even degree are Schur-convex; after expanding the relevant cyclic word
+expression, the difference between the two sides above becomes a
+nonnegative linear combination, for $q\le 1/3$, of the even-path deviations
+\[
+    \sum_{F\in E^+_{2d}(P_n)}t(F,U)-\binom{n}{2d}q^{2d},
+\]
+which are nonnegative by that Schur--convexity argument.
+\end{remark}
+
+\section{Main argument}
+
+\begin{theorem}
+Let $m=2k+1$ be odd, and let $W$ be a graphon with edge density
+\[
+    p:=t(K_2,W)\ge \frac23.
+\]
+Then
+\[
+    t(C_m,W)
+    \ge
+    p^m-p(1-p)^{m-1}.
+\]
+Equivalently,
+\[
+    t(C_{2k+1},W)
+    \ge
+    p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+    U:=1-W,
+    \qquad
+    q:=t(K_2,U)=1-p.
+\]
+Since $p\ge 2/3$, we have $q\le 1/3$.  We shall prove
+\[
+    t(C_m,1-U)
+    \ge
+    (1-q)^m-(1-q)q^{m-1}.
+\]
+
+Let $T_U$ be the integral operator associated with $U$.  Since
+$T_W=J-T_U$, and since $m\ge 3$, the usual trace formula for cycle
+densities gives
+\[
+    t(C_m,W)=\Tr(T_W^m)=\Tr(J-T_U)^m.
+\]
+We expand $(J-T_U)^m$ as a sum of noncommutative words in $J$ and $T_U$.
+
+First, the unique word containing no copy of $J$ contributes
+\[
+    (-1)^m\Tr(T_U^m)=-t(C_m,U),
+\]
+because $m$ is odd.
+
+Now consider a word containing exactly $s\ge 1$ copies of $J$.  Up to cyclic
+rotation inside the trace, such a word has the form
+\[
+    JT_U^{a_1}JT_U^{a_2}\cdots JT_U^{a_s},
+    \qquad
+    a_1,\dots,a_s\ge 0,
+    \qquad
+    a_1+\cdots+a_s=m-s.
+\]
+Because $Jf=\langle f,\one\rangle\one$, we have
+\begin{align*}
+    \Tr\bigl(JT_U^{a_1}JT_U^{a_2}\cdots JT_U^{a_s}\bigr)
+    &=
+    \prod_{i=1}^{s}\langle\one,T_U^{a_i}\one\rangle \\
+    &=
+    \prod_{i=1}^{s}r_{a_i}.
+\end{align*}
+For a fixed ordered $s$-tuple $(a_1,\dots,a_s)$, the corresponding cyclic
+word has $m/s$ representatives in the linear word expansion.  Therefore
+all words containing at least one copy of $J$ contribute exactly
+\[
+    A_m(U)
+    =
+    \sum_{s=1}^{m}(-1)^{m-s}\frac{m}{s}
+    \sum_{\substack{a_1,\dots,a_s\ge 0\\ a_1+\cdots+a_s=m-s}}
+    \prod_{i=1}^{s} r_{a_i}.
+\]
+Consequently,
+\[
+    t(C_m,W)=A_m(U)-t(C_m,U).
+\]
+
+It remains to replace $t(C_m,U)$ by a path density.  Since $0\le U\le 1$,
+deleting one edge from the product defining the cycle density can only
+increase the integral.  Hence
+\begin{align*}
+    t(C_m,U)
+    &=
+    \int_{[0,1]^m}
+    \prod_{i=1}^{m}U(x_i,x_{i+1})
+    \prod_{i=1}^{m}\dd x_i \\
+    &\le
+    \int_{[0,1]^m}
+    \prod_{i=1}^{m-1}U(x_i,x_{i+1})
+    \prod_{i=1}^{m}\dd x_i \\
+    &=
+    t(P_{m-1},U)
+    =
+    r_{m-1},
+\end{align*}
+where $x_{m+1}=x_1$.  Therefore
+\[
+    t(C_m,W)
+    =A_m(U)-t(C_m,U)
+    \ge
+    A_m(U)-r_{m-1}.
+\]
+By Lemma~\ref{lem:path-comparison},
+\[
+    A_m(U)-r_{m-1}
+    \ge
+    (1-q)^m-(1-q)q^{m-1}.
+\]
+Thus
+\[
+    t(C_m,W)
+    \ge
+    (1-q)^m-(1-q)q^{m-1}.
+\]
+Finally, since $q=1-p$, this becomes
+\[
+    t(C_m,W)
+    \ge
+    p^m-p(1-p)^{m-1}.
+\]
+Taking $m=2k+1$ gives
+\[
+    t(C_{2k+1},W)
+    \ge
+    p^{2k+1}-p(1-p)^{2k},
+\]
+as claimed.
+\end{proof}
+
+\begin{remark}[Sharpness at Tur\'an densities]
+At the Tur\'an densities $p=1-1/r$, $r\ge 3$, equality is attained by the
+balanced complete $r$-partite graphon.  Indeed, for this graphon the
+nonzero eigenvalues of $T_W$ are
+\[
+    p=1-\frac1r
+    \quad\text{and}\quad
+    -\frac1r
+    \quad\text{with multiplicity }r-1.
+\]
+Thus, for odd $m$,
+\[
+    t(C_m,W)
+    =p^m+(r-1)\left(-\frac1r\right)^m
+    =p^m-p(1-p)^{m-1}.
+\]
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem{KimLee}
+Jang Soo Kim and Joonkyung Lee,
+\emph{Extended commonality of paths and cycles via Schur convexity},
+Journal of Combinatorial Theory, Series B \textbf{166} (2024), 109--122.
+Preprint: \href{https://arxiv.org/abs/2210.00977}{arXiv:2210.00977}.
+
+\end{thebibliography}
+
+\end{document}
