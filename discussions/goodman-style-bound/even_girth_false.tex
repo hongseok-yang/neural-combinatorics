@@ -1,0 +1,435 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\DeclareMathOperator{\homdens}{t}
+
+\begin{document}
+
+\section*{Even girth implies infinitely many tensor-product counterexamples}
+
+Throughout, graphs are finite and simple.  For a graph \(H\), write
+\[
+    v(H)=|V(H)|,\qquad e(H)=|E(H)|.
+\]
+Let \(P_H(q)\) denote the chromatic polynomial of \(H\).
+
+\begin{definition}[Turán graphon]
+For an integer \(q\geq 2\), let \(T_q\) denote the balanced complete
+\(q\)-partite graphon.  Equivalently, partition \([0,1]\) into \(q\)
+equal intervals \(I_1,\dots,I_q\), and define
+\[
+    T_q(x,y)=
+    \begin{cases}
+        0, & x,y\in I_i \text{ for some } i,\\
+        1, & x\in I_i,\ y\in I_j,\ i\neq j.
+    \end{cases}
+\]
+Then
+\[
+    e(T_q)=1-\frac1q.
+\]
+\end{definition}
+
+For a graphon \(W\), write \(t(H,W)\) for the homomorphism density of
+\(H\) in \(W\).  For \(T_q\), the homomorphism density of \(H\) is
+\[
+    t(H,T_q)=\frac{P_H(q)}{q^{v(H)}}.
+\]
+Indeed, a random map \(V(H)\to [q]\) contributes exactly when it is a
+proper \(q\)-colouring of \(H\).
+
+Define the normalised ratio
+\[
+    F_H(q)
+    :=
+    \frac{t(H,T_q)}{e(T_q)^{e(H)}}
+    =
+    \frac{P_H(q)}{q^{v(H)}}
+    \left(1-\frac1q\right)^{-e(H)}.
+\]
+Equivalently,
+\[
+    t(H,T_q)
+    =
+    \left(1-\frac1q\right)^{e(H)} F_H(q).
+\]
+The value \(F_H(q)\) compares the \(H\)-density in the Turán graphon
+\(T_q\) with the \(H\)-density in an Erdős--Rényi graphon of the same
+edge density \(1-1/q\).
+
+\begin{lemma}[First correction term of \(F_H(q)\)]
+Let \(H\) have finite girth \(g\), and let \(c_g(H)\) be the number of
+cycles of length \(g\) in \(H\).  Then, as \(q\to\infty\),
+\[
+    F_H(q)
+    =
+    1
+    +
+    (-1)^g \frac{c_g(H)}{(q-1)^{g-1}}
+    +
+    O_H\!\left((q-1)^{-g}\right).
+\]
+In particular, if \(g\) is even, then
+\[
+    F_H(q)>1
+\]
+for all sufficiently large \(q\).
+\end{lemma}
+
+\begin{proof}
+We use the Whitney expansion of the chromatic polynomial:
+\[
+    P_H(q)
+    =
+    \sum_{A\subseteq E(H)}
+    (-1)^{|A|} q^{c(A)},
+\]
+where \(c(A)\) is the number of connected components of the spanning
+subgraph \((V(H),A)\).  Let
+\[
+    r(A):=v(H)-c(A)
+\]
+be the rank of \(A\).  Then
+\[
+    P_H(q)
+    =
+    \sum_{A\subseteq E(H)}
+    (-1)^{|A|} q^{v(H)-r(A)}.
+\]
+
+We determine the first coefficients of \(P_H(q)\).  Since \(H\) has
+girth \(g\), every set of fewer than \(g\) edges is acyclic.  Hence, for
+\(0\leq j\leq g-2\), the sets \(A\subseteq E(H)\) with rank \(j\) are
+precisely the \(j\)-edge forests, and there are \(\binom{e(H)}{j}\) of
+them.  Therefore the coefficient of \(q^{v(H)-j}\) is
+\[
+    (-1)^j \binom{e(H)}{j},
+    \qquad 0\leq j\leq g-2.
+\]
+
+Now consider rank \(g-1\).  Every \((g-1)\)-edge subset is still a
+forest, so these contribute
+\[
+    (-1)^{g-1}\binom{e(H)}{g-1}.
+\]
+The only cyclic edge sets of rank \(g-1\) are the \(g\)-cycles
+themselves.  Indeed, a cyclic connected component of rank \(g-1\) has
+exactly \(g\) vertices.  Since the girth is \(g\), it must contain a
+cycle using all \(g\) vertices.  Any additional edge would be a chord and
+would create a shorter cycle, which is impossible.  Hence the cyclic
+rank-\((g-1)\) sets are exactly the \(c_g(H)\) cycles of length \(g\),
+and they contribute
+\[
+    (-1)^g c_g(H).
+\]
+Thus the coefficient of \(q^{v(H)-g+1}\) is
+\[
+    (-1)^{g-1}\binom{e(H)}{g-1}
+    +
+    (-1)^g c_g(H).
+\]
+
+On the other hand,
+\[
+    q^{v(H)}
+    \left(1-\frac1q\right)^{e(H)}
+    =
+    q^{v(H)}
+    \sum_{j=0}^{e(H)}
+    (-1)^j \binom{e(H)}{j} q^{-j}.
+\]
+Comparing the two expansions gives
+\[
+    P_H(q)
+    =
+    q^{v(H)}
+    \left(1-\frac1q\right)^{e(H)}
+    +
+    (-1)^g c_g(H) q^{v(H)-g+1}
+    +
+    O_H(q^{v(H)-g}).
+\]
+Dividing by
+\[
+    q^{v(H)}
+    \left(1-\frac1q\right)^{e(H)}
+\]
+yields
+\[
+    F_H(q)
+    =
+    1
+    +
+    (-1)^g c_g(H) q^{-(g-1)}
+    \left(1-\frac1q\right)^{-e(H)}
+    +
+    O_H(q^{-g}).
+\]
+Since
+\[
+    \left(1-\frac1q\right)^{-e(H)}
+    =
+    1+O_H(q^{-1}),
+\]
+we obtain
+\[
+    F_H(q)
+    =
+    1
+    +
+    (-1)^g c_g(H) q^{-(g-1)}
+    +
+    O_H(q^{-g}).
+\]
+Finally,
+\[
+    q^{-(g-1)}
+    =
+    (q-1)^{-(g-1)}
+    +
+    O_g\!\left((q-1)^{-g}\right),
+\]
+so
+\[
+    F_H(q)
+    =
+    1
+    +
+    (-1)^g \frac{c_g(H)}{(q-1)^{g-1}}
+    +
+    O_H\!\left((q-1)^{-g}\right).
+\]
+If \(g\) is even, then \(c_g(H)>0\) and the leading correction term is
+positive.  Hence \(F_H(q)>1\) for all sufficiently large \(q\).
+\end{proof}
+
+We shall use the tensor product of graphons.  If \(U\) and \(W\) are
+graphons, their tensor product is the graphon
+\[
+    (U\otimes W)((x_1,x_2),(y_1,y_2))
+    :=
+    U(x_1,y_1)W(x_2,y_2)
+\]
+on the product probability space.  It satisfies
+\[
+    e(U\otimes W)=e(U)e(W),
+\]
+and, for every finite graph \(H\),
+\[
+    t(H,U\otimes W)=t(H,U)t(H,W).
+\]
+Iterating, if \(W=\bigotimes_i W_i\), then
+\[
+    e(W)=\prod_i e(W_i),
+    \qquad
+    t(H,W)=\prod_i t(H,W_i).
+\]
+
+\begin{lemma}[Telescoping tensor products]
+Fix \(k\geq 2\).  For each integer \(Q\geq 1\), define
+\[
+    W_{k,Q}
+    :=
+    \bigotimes_{j=1}^{Q}
+    T_{Q(k-1)+j}.
+\]
+Then
+\[
+    e(W_{k,Q})=1-\frac1k.
+\]
+Moreover,
+\[
+    \lim_{Q\to\infty} t(H,W_{k,Q})
+    =
+    \left(1-\frac1k\right)^{e(H)}.
+\]
+\end{lemma}
+
+\begin{proof}
+First, by multiplicativity of edge density under tensor products,
+\[
+    e(W_{k,Q})
+    =
+    \prod_{j=1}^{Q}
+    \left(1-\frac{1}{Q(k-1)+j}\right).
+\]
+The product telescopes:
+\[
+    \prod_{j=1}^{Q}
+    \left(1-\frac{1}{Q(k-1)+j}\right)
+    =
+    \prod_{n=Q(k-1)+1}^{Qk}
+    \frac{n-1}{n}
+    =
+    \frac{Q(k-1)}{Qk}
+    =
+    1-\frac1k.
+\]
+
+Next, using
+\[
+    t(H,T_m)
+    =
+    \left(1-\frac1m\right)^{e(H)}F_H(m),
+\]
+we get
+\[
+\begin{aligned}
+    t(H,W_{k,Q})
+    &=
+    \prod_{j=1}^{Q}
+    t\!\left(H,T_{Q(k-1)+j}\right)\\
+    &=
+    \prod_{j=1}^{Q}
+    \left[
+        \left(
+            1-\frac{1}{Q(k-1)+j}
+        \right)^{e(H)}
+        F_H(Q(k-1)+j)
+    \right]\\
+    &=
+    \left[
+        \prod_{j=1}^{Q}
+        \left(
+            1-\frac{1}{Q(k-1)+j}
+        \right)
+    \right]^{e(H)}
+    \prod_{j=1}^{Q} F_H(Q(k-1)+j)\\
+    &=
+    \left(1-\frac1k\right)^{e(H)}
+    \prod_{j=1}^{Q} F_H(Q(k-1)+j).
+\end{aligned}
+\]
+
+It remains to show that
+\[
+    \prod_{j=1}^{Q} F_H(Q(k-1)+j)\to 1.
+\]
+Since \(H\) has even girth, \(g\geq 4\).  From the previous lemma,
+\[
+    F_H(m)=1+O_H(m^{-(g-1)}).
+\]
+Therefore, for fixed \(k\),
+\[
+    \sum_{j=1}^{Q}
+    \left|
+        F_H(Q(k-1)+j)-1
+    \right|
+    \leq
+    C_H
+    \sum_{j=1}^{Q}
+    (Q(k-1)+j)^{-(g-1)}
+    \leq
+    C_{H,k} Q^{2-g}.
+\]
+Because \(g\geq 4\), we have \(Q^{2-g}\to 0\).  Hence
+\[
+    \sum_{j=1}^{Q}
+    \left|
+        F_H(Q(k-1)+j)-1
+    \right|
+    \to 0.
+\]
+This implies
+\[
+    \prod_{j=1}^{Q} F_H(Q(k-1)+j)\to 1.
+\]
+Consequently,
+\[
+    \lim_{Q\to\infty} t(H,W_{k,Q})
+    =
+    \left(1-\frac1k\right)^{e(H)}.
+\]
+\end{proof}
+
+\begin{theorem}[Even girth gives infinitely many tensor counterexamples]
+Let \(H\) be a finite simple graph of even girth \(g\).  Then there
+exists \(k_0=k_0(H)\) such that, for every integer \(k\geq k_0\), the
+Turán graphon \(T_k\) is not optimal among tensor products of Turán
+graphons at edge density \(1-1/k\).
+
+More precisely, for every \(k\geq k_0\), there exists \(Q\geq 1\) such
+that
+\[
+    e(W_{k,Q})=e(T_k)=1-\frac1k
+\]
+and
+\[
+    t(H,W_{k,Q})<t(H,T_k),
+\]
+where
+\[
+    W_{k,Q}
+    =
+    \bigotimes_{j=1}^{Q}
+    T_{Q(k-1)+j}.
+\]
+In particular, \(T_k\) is beaten at infinitely many densities of the
+form \(1-1/k\).
+\end{theorem}
+
+\begin{proof}
+By the first lemma, since \(g\) is even,
+\[
+    F_H(k)>1
+\]
+for all sufficiently large \(k\).  Choose \(k_0\) such that this holds
+for all \(k\geq k_0\).
+
+Fix \(k\geq k_0\).  Then
+\[
+    t(H,T_k)
+    =
+    \left(1-\frac1k\right)^{e(H)}F_H(k)
+    >
+    \left(1-\frac1k\right)^{e(H)}.
+\]
+On the other hand, by the telescoping tensor-product lemma,
+\[
+    e(W_{k,Q})=1-\frac1k
+\]
+for every \(Q\), and
+\[
+    t(H,W_{k,Q})
+    \to
+    \left(1-\frac1k\right)^{e(H)}
+    \qquad
+    \text{as } Q\to\infty.
+\]
+Since
+\[
+    \left(1-\frac1k\right)^{e(H)}
+    <
+    t(H,T_k),
+\]
+we may choose \(Q\) large enough that
+\[
+    t(H,W_{k,Q})<t(H,T_k).
+\]
+Thus \(W_{k,Q}\) is a tensor product of Turán graphons with the same edge
+density as \(T_k\), but with strictly smaller \(H\)-density.
+
+Since this argument works for every \(k\geq k_0\), there are infinitely
+many such counterexamples.
+\end{proof}
+
+\begin{corollary}
+If \(H\) is non-bipartite and has even girth, then \(H\) gives
+infinitely many counterexamples to the optimality of Turán graphons
+under the edge-density constraints
+\[
+    e(W)=1-\frac1k.
+\]
+Indeed, the previous theorem applies directly.  The non-bipartite
+assumption is not needed for the proof itself; it only ensures that the
+example belongs to the class of non-bipartite graphs.
+\end{corollary}
+
+\end{document}
