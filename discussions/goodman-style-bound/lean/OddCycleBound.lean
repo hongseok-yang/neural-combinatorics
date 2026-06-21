@@ -1,4 +1,8 @@
 import OddCycleBound.Main
+import OddCycleBound.NecklaceGen
+import OddCycleBound.PathMoment
+import OddCycleBound.MomentSOS
+import OddCycleBound.C9
 
 /-!
 # OddCycleBound — the odd-cycle Goodman-type bound, integral-grounded
