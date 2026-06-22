@@ -22,6 +22,33 @@ lake env lean CheckGraphon.lean   # prints the axiom trail of the main results
 
 Toolchain: Lean `v4.31.0`, Mathlib `v4.31.0` (pinned in `lean-toolchain` / `lakefile.toml`).
 
+## Build performance
+
+A clean rebuild of *only* the project modules (Mathlib oleans already fetched via
+`lake exe cache get`, so Mathlib itself is not recompiled) takes about **7m15s wall**.
+The build is essentially serial: `Graphon` gates everything, then a mostly linear chain.
+
+Per-module times (dependency order):
+
+| Module | Time | | Module | Time |
+|--------|-----:|-|--------|-----:|
+| `Graphon` | **194 s** | | `General.PathRecurrence` | 12 s |
+| `C9` | **70 s** | | `PathDensity` | 11 s |
+| `Kernel` | 16 s | | `Necklace` | 11 s |
+| `General.SumOfSquares` | 16 s | | `General.Necklace` | 11 s |
+| `Certificate` | 13 s | | `Main` | 11 s |
+| `BoundsC5C7` | 12 s | | `Cycle` | 10 s |
+| | | | `OddCycleBound` (root) | 10 s |
+
+Notes:
+* `Graphon` (the integral/measure-theory foundations), **not** `C9`, dominates a clean build;
+  in incremental rebuilds `Graphon` is cached, which is why `C9` appears heaviest there.
+* `C9` is kernel-checking-bound on the large Φ₉ SOS certificate; its time varies with machine load
+  (≈ 70 s here, up to ≈ 150 s under concurrent load in isolated rebuilds).
+
+**Benchmark machine:** Intel Core i5-14600K (14C/20T), 64 GB RAM, Windows 11 Pro (build 26200),
+Lean/Mathlib `v4.31.0`. Times are wall-clock and will scale with single-thread performance.
+
 ## Headline results
 
 The paper-facing statements live in `OddCycleBound/Main.lean`, namespace `OddCycleBound`, for a
