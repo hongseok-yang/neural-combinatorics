@@ -23,8 +23,6 @@ namespace OddCycleBound
 variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
 variable {U : Ω → Ω → ℝ}
 
-/-- `x₀ = mean 1 = 1`. -/
-lemma pathDensity_zero : pathDensity U μ 0 = 1 := by rw [pathDensity]; exact mean_one
 
 /-- **(A)** `x_{n+1} = q·xₙ + ⟨h₀, kernelOpⁿ1⟩` (`h₀ = g`), via self-adjointness of `kernelOp`. -/
 lemma pathDensity_succ_aux (hU : IsGraphon U μ) (n : ℕ) :

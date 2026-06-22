@@ -147,19 +147,6 @@ lemma cert9_specMoment (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q 
   have hQ := cert9_Q hU q hq0 hq1
   linarith [hL, hH, hQ]
 
-/-- The `C₉` necklace identity, unrolled from `complTrace_necklace 7`. -/
-lemma complTrace9_necklace (hU : IsGraphon U μ) :
-    trace μ (compPow μ (compl U) 8)
-      = mean μ (complIter U μ 8) - pairing μ (pathIter U μ 1) (complIter U μ 7)
-        + pairing μ (pathIter U μ 2) (complIter U μ 6) - pairing μ (pathIter U μ 3) (complIter U μ 5)
-        + pairing μ (pathIter U μ 4) (complIter U μ 4) - pairing μ (pathIter U μ 5) (complIter U μ 3)
-        + pairing μ (pathIter U μ 6) (complIter U μ 2) - pairing μ (pathIter U μ 7) (complIter U μ 1)
-        + pathDensity U μ 8 - trace μ (compPow μ U 8) := by
-  have h := complTrace_necklace hU 7
-  simp only [Finset.sum_range_succ, Finset.sum_range_zero, pairing_pathIter_zero] at h
-  norm_num at h
-  rw [h]; ring
-
 set_option maxHeartbeats 1600000 in
 set_option maxRecDepth 8000 in
 /-- **`C₉` path-certificate range** (complement form): for `q = ∫∫U ≤ 997/2000`,
@@ -181,10 +168,10 @@ theorem C9_path_integral (hU : IsGraphon U μ) (hq : edgeDensity U μ ≤ 997/20
       = ((1 - edgeDensity U μ) ^ 9 - (1 - edgeDensity U μ) * edgeDensity U μ ^ 8)
         + ((56*(edgeDensity U μ)^6*specMoment U μ 0 - 189*(edgeDensity U μ)^5*specMoment U μ 0 + 48*(edgeDensity U μ)^5*specMoment U μ 1 + 315*(edgeDensity U μ)^4*specMoment U μ 0 - 135*(edgeDensity U μ)^4*specMoment U μ 1 + 40*(edgeDensity U μ)^4*specMoment U μ 2 - 315*(edgeDensity U μ)^3*specMoment U μ 0 + 180*(edgeDensity U μ)^3*specMoment U μ 1 - 90*(edgeDensity U μ)^3*specMoment U μ 2 + 32*(edgeDensity U μ)^3*specMoment U μ 3 + 189*(edgeDensity U μ)^2*specMoment U μ 0 - 135*(edgeDensity U μ)^2*specMoment U μ 1 + 90*(edgeDensity U μ)^2*specMoment U μ 2 - 54*(edgeDensity U μ)^2*specMoment U μ 3 + 24*(edgeDensity U μ)^2*specMoment U μ 4 - 63*(edgeDensity U μ)*specMoment U μ 0 + 54*(edgeDensity U μ)*specMoment U μ 1 - 45*(edgeDensity U μ)*specMoment U μ 2 + 36*(edgeDensity U μ)*specMoment U μ 3 - 27*(edgeDensity U μ)*specMoment U μ 4 + 16*(edgeDensity U μ)*specMoment U μ 5 + 9*specMoment U μ 0 - 9*specMoment U μ 1 + 9*specMoment U μ 2 - 9*specMoment U μ 3 + 9*specMoment U μ 4 - 9*specMoment U μ 5 + 8*specMoment U μ 6) + (120*(edgeDensity U μ)^4*specMoment U μ 0^2 - 270*(edgeDensity U μ)^3*specMoment U μ 0^2 + 160*(edgeDensity U μ)^3*specMoment U μ 0*specMoment U μ 1 + 270*(edgeDensity U μ)^2*specMoment U μ 0^2 - 270*(edgeDensity U μ)^2*specMoment U μ 0*specMoment U μ 1 + 96*(edgeDensity U μ)^2*specMoment U μ 0*specMoment U μ 2 + 48*(edgeDensity U μ)^2*specMoment U μ 1^2 - 135*(edgeDensity U μ)*specMoment U μ 0^2 + 180*(edgeDensity U μ)*specMoment U μ 0*specMoment U μ 1 - 108*(edgeDensity U μ)*specMoment U μ 0*specMoment U μ 2 + 48*(edgeDensity U μ)*specMoment U μ 0*specMoment U μ 3 - 54*(edgeDensity U μ)*specMoment U μ 1^2 + 48*(edgeDensity U μ)*specMoment U μ 1*specMoment U μ 2 + 27*specMoment U μ 0^2 - 45*specMoment U μ 0*specMoment U μ 1 + 36*specMoment U μ 0*specMoment U μ 2 - 27*specMoment U μ 0*specMoment U μ 3 + 16*specMoment U μ 0*specMoment U μ 4 + 18*specMoment U μ 1^2 - 27*specMoment U μ 1*specMoment U μ 2 + 16*specMoment U μ 1*specMoment U μ 3 + 8*specMoment U μ 2^2) + (80*(edgeDensity U μ)^2*specMoment U μ 0^3 - 90*(edgeDensity U μ)*specMoment U μ 0^3 + 96*(edgeDensity U μ)*specMoment U μ 0^2*specMoment U μ 1 + 8*specMoment U μ 0^4 + 30*specMoment U μ 0^3 - 54*specMoment U μ 0^2*specMoment U μ 1 + 24*specMoment U μ 0^2*specMoment U μ 2 + 24*specMoment U μ 0*specMoment U μ 1^2))
         + (pathDensity U μ 8 - trace μ (compPow μ U 8)) := by
-    rw [complTrace9_necklace hU]
+    rw [complTrace_necklace hU 7]
     -- The necklace pairings and complement means reduce to path densities by the general
     -- closed form `pairing_pathIter_complIter_closed` plus the mean recursion `complMean_succ`.
-    simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero,
+    simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero, pathDensity_zero, pairing_pathIter_zero,
       Finset.sum_range_succ, Finset.sum_range_zero, pow_zero, pow_succ,
       Nat.reduceSub, Nat.reduceAdd, mul_one, one_mul, mul_neg, neg_neg, zero_add, add_zero]
     rw [hx1, hx2, hx3, hx4, hx5, hx6, hx7, hx8]

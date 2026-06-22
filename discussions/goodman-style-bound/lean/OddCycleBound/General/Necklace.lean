@@ -1,21 +1,12 @@
 import OddCycleBound.Necklace
 
 /-!
-# The general-`m` necklace identity
+# Regression: the general necklace identity specialises to the explicit `C₅`/`C₇` forms
 
-`Necklace.lean` proves the cyclic-complement-trace identity only for the hand-unrolled cases
-`complTrace5_necklace` / `complTrace7_necklace`.  Here we prove it once and for all, for every cycle
-length, by telescoping the general recursion `mixedTrace_succ` / `mixedTrace_zero` already established there.
-
-The core is `mixedTrace_telescope`, a closed form for `mixedTrace a b` as an alternating sum of the
-inner products `pairing (pathIter j) (complIter k)` plus the boundary term `mixedTrace (a+b) 0`.  Specialising
-`a = 0`, `b = n` and feeding the peel `complTrace_peel` / `doubleMean_complPow` gives `complTrace_necklace`:
-
-  `trace (complᵒ⁽ⁿ⁺¹⁾) = Σ_{j=0}^{n} (−1)ʲ ⟨pathIter j, complIter (n+1−j)⟩
-                     + (−1)ⁿ⁺¹ (x_{n+1} − c_{n+1})`,
-
-with `x_{n+1} = pathDensity (n+1)` the path density and `c_{n+1} = trace (Uᵒ⁽ⁿ⁺¹⁾)` the cycle density.
-The hand-unrolled `complTrace5/7_necklace` are recovered as corollaries (regression check).
+The general-`m` necklace identity `complTrace_necklace` (and its supporting `mixedTrace_telescope`,
+`pairing_pathIter_zero`) now live in `Necklace.lean`.  This file keeps two regression `example`s
+checking that `complTrace_necklace` specialises, by `simp`/`norm_num`, to the hand-unrolled
+four-term (`C₅`) and six-term (`C₇`) inner-product forms.
 -/
 
 open MeasureTheory
@@ -24,63 +15,6 @@ namespace OddCycleBound
 
 variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
 variable {U : Ω → Ω → ℝ}
-
-omit [IsProbabilityMeasure μ] in
-/-- The `j = 0` inner product is just the mean: `⟨pathIter 0, v⟩ = ⟨1, v⟩ = mean v`. -/
-lemma pairing_pathIter_zero (v : Ω → ℝ) : pairing μ (pathIter U μ 0) v = mean μ v := by
-  simp only [pairing, pathIter, one_mul, mean]
-
-/-- **Telescoping of `mixedTrace`.**  For all `b a`,
-`mixedTrace a b = Σ_{i<b} (−1)ⁱ ⟨pathIter (a+1+i), complIter (b−i)⟩ + (−1)ᵇ mixedTrace (a+b) 0`. -/
-lemma mixedTrace_telescope (hU : IsGraphon U μ) : ∀ (b a : ℕ),
-    mixedTrace U μ a b
-      = (∑ i ∈ Finset.range b,
-          (-1 : ℝ) ^ i * pairing μ (pathIter U μ (a + 1 + i)) (complIter U μ (b - i)))
-        + (-1 : ℝ) ^ b * mixedTrace U μ (a + b) 0 := by
-  intro b
-  induction b with
-  | zero => intro a; simp
-  | succ b ih =>
-      intro a
-      have hsum : ∀ i ∈ Finset.range b,
-          (-1 : ℝ) ^ (i + 1) * pairing μ (pathIter U μ (a + 1 + (i + 1))) (complIter U μ (b + 1 - (i + 1)))
-            = -((-1 : ℝ) ^ i * pairing μ (pathIter U μ (a + 1 + 1 + i)) (complIter U μ (b - i))) := by
-        intro i _
-        have e1 : a + 1 + (i + 1) = a + 1 + 1 + i := by omega
-        have e2 : b + 1 - (i + 1) = b - i := Nat.succ_sub_succ b i
-        rw [e1, e2, pow_succ]; ring
-      rw [mixedTrace_succ hU a b, ih (a + 1),
-        Finset.sum_range_succ' (fun i =>
-          (-1 : ℝ) ^ i * pairing μ (pathIter U μ (a + 1 + i)) (complIter U μ (b + 1 - i))) b,
-        Finset.sum_congr rfl hsum, Finset.sum_neg_distrib]
-      have eb : a + 1 + b = a + (b + 1) := by omega
-      rw [eb, pow_succ]
-      simp only [pow_zero, one_mul, Nat.sub_zero, zero_add, Nat.add_zero]
-      ring
-
-/-- **The general-`m` necklace identity.**  For every `n`,
-`trace (complᵒ⁽ⁿ⁺¹⁾) = Σ_{j=0}^{n} (−1)ʲ ⟨pathIter j, complIter (n+1−j)⟩ + (−1)ⁿ⁺¹ (x_{n+1} − c_{n+1})`. -/
-lemma complTrace_necklace (hU : IsGraphon U μ) (n : ℕ) :
-    trace μ (compPow μ (compl U) (n + 1))
-      = (∑ j ∈ Finset.range (n + 1),
-          (-1 : ℝ) ^ j * pairing μ (pathIter U μ j) (complIter U μ (n + 1 - j)))
-        + (-1 : ℝ) ^ (n + 1) * (pathDensity U μ (n + 1) - trace μ (compPow μ U (n + 1))) := by
-  rw [complTrace_peel hU n, doubleMean_complPow hU n, mixedTrace_telescope hU n 0]
-  simp only [Nat.zero_add]
-  rw [mixedTrace_zero hU n,
-    Finset.sum_range_succ' (fun j =>
-      (-1 : ℝ) ^ j * pairing μ (pathIter U μ j) (complIter U μ (n + 1 - j))) n,
-    pairing_pathIter_zero]
-  have hsum : ∀ i ∈ Finset.range n,
-      (-1 : ℝ) ^ (i + 1) * pairing μ (pathIter U μ (i + 1)) (complIter U μ (n + 1 - (i + 1)))
-        = -((-1 : ℝ) ^ i * pairing μ (pathIter U μ (1 + i)) (complIter U μ (n - i))) := by
-    intro i _
-    have e1 : (1 : ℕ) + i = i + 1 := by omega
-    have e2 : n + 1 - (i + 1) = n - i := Nat.succ_sub_succ n i
-    rw [e1, e2, pow_succ]; ring
-  rw [Finset.sum_congr rfl hsum, Finset.sum_neg_distrib, pow_succ]
-  simp only [Nat.sub_zero]
-  ring
 
 /-! ### Regression: the hand-unrolled `ccomp5/7_necklace` are special cases -/
 

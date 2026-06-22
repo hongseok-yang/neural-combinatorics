@@ -36,8 +36,8 @@ theorem C5_integral (hU : IsGraphon U μ) :
       + 2 * edgeDensity U μ * specMoment U μ 1 + specMoment U μ 0 ^ 2 + specMoment U μ 2 := pathDensity_four hU
   have hed : trace μ (compPow μ U 4) ≤ pathDensity U μ 4 := edge_deletion_general hU 3
   have hcert := cert5_specMoment hU (edgeDensity U μ)
-  rw [complTrace5_necklace hU]
-  simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero,
+  rw [complTrace_necklace hU 3]
+  simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero, pathDensity_zero, pairing_pathIter_zero,
     Finset.sum_range_succ, Finset.sum_range_zero, pow_zero, pow_succ, Nat.reduceSub, Nat.reduceAdd,
     mul_one, one_mul, mul_neg, neg_neg, zero_add, add_zero]
   rw [hx1, hx2, hx3, hx4]
@@ -64,8 +64,8 @@ theorem C7_integral (hU : IsGraphon U μ) (hq : edgeDensity U μ ≤ 1 / 2) :
             + (36 * edgeDensity U μ ^ 2 - 42 * edgeDensity U μ + 14) * (specMoment U μ 0) ^ 2 + 6 * (specMoment U μ 0) ^ 3
             + 6 * (specMoment U μ 1) ^ 2)
         + (pathDensity U μ 6 - trace μ (compPow μ U 6)) := by
-    rw [complTrace7_necklace hU]
-    simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero,
+    rw [complTrace_necklace hU 5]
+    simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero, pathDensity_zero, pairing_pathIter_zero,
       Finset.sum_range_succ, Finset.sum_range_zero, pow_zero, pow_succ, Nat.reduceSub, Nat.reduceAdd,
       mul_one, one_mul, mul_neg, neg_neg, zero_add, add_zero]
     rw [hx1, hx2, hx3, hx4, hx5, hx6]
