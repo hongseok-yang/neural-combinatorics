@@ -1,45 +1,45 @@
 import OddCycleBound.Graphon
 import OddCycleBound.PathDensity
-import OddCycleBound.IntegralCert
+import OddCycleBound.Certificate
 import OddCycleBound.Kernel
 import OddCycleBound.Cycle
 import OddCycleBound.Necklace
 import OddCycleBound.Main
 
-open OddCycleBound.Graphon
+open OddCycleBound
 
 -- Stage 1-2 (integral foundations)
-#print axioms T_symm
-#print axioms A_symm
+#print axioms kernelOp_symm
+#print axioms compress_symm
 #print axioms moment
 #print axioms sos1
 #print axioms edge_deletion
 
 -- Stage 3 (Lemma 2.4, integral form)
-#print axioms xden_two
-#print axioms xden_three
-#print axioms xden_four
-#print axioms xden_five
-#print axioms xden_six
+#print axioms pathDensity_two
+#print axioms pathDensity_three
+#print axioms pathDensity_four
+#print axioms pathDensity_five
+#print axioms pathDensity_six
 
 -- Certificate side, integral form
 #print axioms sos2
-#print axioms cert5_smom
-#print axioms cert7_smom
+#print axioms cert5_specMoment
+#print axioms cert7_specMoment
 
 -- Stage 4 core: kernel-composition algebra (arc-factorization foundation)
 #print axioms goodK_comp
 #print axioms cut
 #print axioms comp_assoc
-#print axioms Kpow_Jk
-#print axioms dmean_Kpow
+#print axioms compPow_onesKernel
+#print axioms doubleMean_compPow
 #print axioms edge_deletion_general
-#print axioms tr_comp_comm
-#print axioms rowsum_Wpow
-#print axioms tr_comp_rowBroadcast
-#print axioms Htr_succ
-#print axioms Htr_zero
-#print axioms ccomp_peel
+#print axioms trace_comp_comm
+#print axioms rowsum_complPow
+#print axioms trace_comp_rowBroadcast
+#print axioms mixedTrace_succ
+#print axioms mixedTrace_zero
+#print axioms complTrace_peel
 
 -- Complement-form results (fully integral-grounded)
 #print axioms C5_integral

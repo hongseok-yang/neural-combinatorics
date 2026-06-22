@@ -1,64 +1,64 @@
 import OddCycleBound.Cycle
 
 /-!
-# The necklace identity for the cyclic complement trace — Stage 4c (general tool)
+# The necklace identity for the cyclic complement trace
 
-The cyclic complement density `cc_m = tr (Kpow (1−U) (m−1))` telescopes (verified numerically in
+The cyclic complement density `cc_m = trace (compPow (1−U) (m−1))` telescopes (verified numerically in
 `verify_necklace.py`) into an **O(m)-term** identity
 
-  `cc_m = pc_{m-1} + Σ_{j=1}^{m-1} (−1)ʲ ⟨Tʲ1, B^{m-1-j}1⟩ + (−1)ᵐ c_m`,
+  `cc_m = pc_{m-1} + Σ_{j=1}^{m-1} (−1)ʲ ⟨kernelOpʲ1, B^{m-1-j}1⟩ + (−1)ᵐ c_m`,
 
 with `B = J − T_U` the complement operator, `pc` the path-complement density, `c_m` the cycle
-density.  This file builds the foundations (complement kernel `Wk`, its symmetry, `U` commuting
+density.  This file builds the foundations (complement kernel `compl`, its symmetry, `U` commuting
 with its powers, the rank-one row-broadcast trace), on the way to that identity.
 -/
 
 open MeasureTheory
 
-namespace OddCycleBound.Graphon
+namespace OddCycleBound
 
 variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
 variable {U : Ω → Ω → ℝ}
 
-/-- The bilinear form `ip f g = ∫ f·g`. -/
-noncomputable def ip (μ : Measure Ω) (f g : Ω → ℝ) : ℝ := ∫ x, f x * g x ∂μ
+/-- The bilinear form `pairing f g = ∫ f·g`. -/
+noncomputable def pairing (μ : Measure Ω) (f g : Ω → ℝ) : ℝ := ∫ x, f x * g x ∂μ
 
-/-- The path iterates `pathFun n = Tⁿ 1` are `Good`. -/
-lemma good_pathFun (hU : IsGraphon U μ) : ∀ n, Good (pathFun U μ n)
+/-- The path iterates `pathIter n = kernelOpⁿ 1` are `Good`. -/
+lemma good_pathIter (hU : IsGraphon U μ) : ∀ n, Good (pathIter U μ n)
   | 0 => good_one
-  | (n + 1) => good_T hU (good_pathFun hU n)
+  | (n + 1) => good_kernelOp hU (good_pathIter hU n)
 
-/-- The complement kernel `Wk = 1 − U`. -/
-def Wk (U : Ω → Ω → ℝ) : Ω → Ω → ℝ := fun x y => 1 - U x y
+/-- The complement kernel `compl = 1 − U`. -/
+def compl (U : Ω → Ω → ℝ) : Ω → Ω → ℝ := fun x y => 1 - U x y
 
-lemma Wk_eq_Jk_sub (x y : Ω) : Wk U x y = Jk x y - U x y := by simp [Wk, Jk]
+lemma compl_eq_onesKernel_sub (x y : Ω) : compl U x y = onesKernel x y - U x y := by simp [compl, onesKernel]
 
-lemma goodK_Wk (hU : IsGraphon U μ) : GoodK (Wk U) := by
+lemma goodK_compl (hU : IsGraphon U μ) : GoodK (compl U) := by
   refine ⟨measurable_const.sub hU.meas, ⟨1, zero_le_one, fun x y => ?_⟩⟩
-  rw [Wk, abs_le]; constructor <;> nlinarith [hU.nonneg x y, hU.le_one x y]
+  rw [compl, abs_le]; constructor <;> nlinarith [hU.nonneg x y, hU.le_one x y]
 
-lemma Wk_symm (hU : IsGraphon U μ) (x y : Ω) : Wk U x y = Wk U y x := by
-  simp only [Wk, hU.symm x y]
+lemma compl_symm (hU : IsGraphon U μ) (x y : Ω) : compl U x y = compl U y x := by
+  simp only [compl, hU.symm x y]
 
 /-- `U` commutes with its own composition powers: `Uᵒⁿ ∘ U = U ∘ Uᵒⁿ`. -/
-lemma Kpow_comm_U (hU : IsGraphon U μ) : ∀ n,
-    comp μ (Kpow μ U n) U = comp μ U (Kpow μ U n) := by
+lemma compPow_comm_U (hU : IsGraphon U μ) : ∀ n,
+    comp μ (compPow μ U n) U = comp μ U (compPow μ U n) := by
   have hGU : GoodK U := goodK_of_isGraphon hU
   intro n
   induction n with
   | zero => rfl
   | succ k ih =>
-      show comp μ (comp μ U (Kpow μ U k)) U = comp μ U (comp μ U (Kpow μ U k))
-      rw [comp_assoc hGU (goodK_Kpow hGU k) hGU, ih]
+      show comp μ (comp μ U (compPow μ U k)) U = comp μ U (comp μ U (compPow μ U k))
+      rw [comp_assoc hGU (goodK_compPow hGU k) hGU, ih]
 
 /-- Hence `Uᵒⁿ ∘ U = Uᵒ⁽ⁿ⁺¹⁾`. -/
-lemma comp_Kpow_U (hU : IsGraphon U μ) (n : ℕ) :
-    comp μ (Kpow μ U n) U = Kpow μ U (n + 1) := by
-  rw [Kpow_comm_U hU]; rfl
+lemma comp_compPow_U (hU : IsGraphon U μ) (n : ℕ) :
+    comp μ (compPow μ U n) U = compPow μ U (n + 1) := by
+  rw [compPow_comm_U hU]; rfl
 
-/-- **Step B** (rank-one row-broadcast trace): `tr ((f ⊗ 1) ∘ R) = ∫ x, f x · (∫ z, R z x)`. -/
-lemma tr_comp_rowBroadcast (f : Ω → ℝ) (R : Ω → Ω → ℝ) :
-    tr μ (comp μ (fun x _ => f x) R) = ∫ x, f x * (∫ z, R z x ∂μ) ∂μ := by
+/-- **Step B** (rank-one row-broadcast trace): `trace ((f ⊗ 1) ∘ R) = ∫ x, f x · (∫ z, R z x)`. -/
+lemma trace_comp_rowBroadcast (f : Ω → ℝ) (R : Ω → Ω → ℝ) :
+    trace μ (comp μ (fun x _ => f x) R) = ∫ x, f x * (∫ z, R z x ∂μ) ∂μ := by
   show ∫ x, comp μ (fun x _ => f x) R x x ∂μ = ∫ x, f x * (∫ z, R z x ∂μ) ∂μ
   refine integral_congr_ae (ae_of_all _ fun x => ?_)
   show (∫ z, f x * R z x ∂μ) = f x * ∫ z, R z x ∂μ
@@ -67,69 +67,69 @@ lemma tr_comp_rowBroadcast (f : Ω → ℝ) (R : Ω → Ω → ℝ) :
 private lemma abs_sub_le'' (a b : ℝ) : |a - b| ≤ |a| + |b| := by
   rw [sub_eq_add_neg]; exact (abs_add_le a (-b)).trans (le_of_eq (by rw [abs_neg]))
 
-/-- The complement iterate `vcomp n = Bⁿ 1` where `B f = (∫f)·1 − T f`. -/
-noncomputable def vcomp (U : Ω → Ω → ℝ) (μ : Measure Ω) : ℕ → (Ω → ℝ)
+/-- The complement iterate `complIter n = Bⁿ 1` where `B f = (∫f)·1 − kernelOp f`. -/
+noncomputable def complIter (U : Ω → Ω → ℝ) (μ : Measure Ω) : ℕ → (Ω → ℝ)
   | 0 => fun _ => 1
-  | (n + 1) => fun x => mean μ (vcomp U μ n) - T U μ (vcomp U μ n) x
+  | (n + 1) => fun x => mean μ (complIter U μ n) - kernelOp U μ (complIter U μ n) x
 
-lemma good_vcomp (hU : IsGraphon U μ) : ∀ n, Good (vcomp U μ n)
+lemma good_complIter (hU : IsGraphon U μ) : ∀ n, Good (complIter U μ n)
   | 0 => good_one
   | (n + 1) => by
-      obtain ⟨C, hC0, hC⟩ := (good_T hU (good_vcomp hU n)).bdd
-      refine ⟨stronglyMeasurable_const.sub (good_T hU (good_vcomp hU n)).meas,
-        ⟨|mean μ (vcomp U μ n)| + C, by positivity, fun x => ?_⟩⟩
-      show |mean μ (vcomp U μ n) - T U μ (vcomp U μ n) x| ≤ |mean μ (vcomp U μ n)| + C
+      obtain ⟨C, hC0, hC⟩ := (good_kernelOp hU (good_complIter hU n)).bdd
+      refine ⟨stronglyMeasurable_const.sub (good_kernelOp hU (good_complIter hU n)).meas,
+        ⟨|mean μ (complIter U μ n)| + C, by positivity, fun x => ?_⟩⟩
+      show |mean μ (complIter U μ n) - kernelOp U μ (complIter U μ n) x| ≤ |mean μ (complIter U μ n)| + C
       exact (abs_sub_le'' _ _).trans (by linarith [hC x])
 
-private lemma abs_Wk_le_one (hU : IsGraphon U μ) (x z : Ω) : |Wk U x z| ≤ 1 := by
-  rw [Wk, abs_le]; constructor <;> nlinarith [hU.nonneg x z, hU.le_one x z]
+private lemma abs_compl_le_one (hU : IsGraphon U μ) (x z : Ω) : |compl U x z| ≤ 1 := by
+  rw [compl, abs_le]; constructor <;> nlinarith [hU.nonneg x z, hU.le_one x z]
 
-/-- The `Wk` row-sum: `∫ y, Wkᵒ⁽ⁿ⁺¹⁾(x,y) = (B^{n+1} 1)(x)` (complement analogue of `rowsum_Kpow`). -/
-lemma rowsum_Wpow (hU : IsGraphon U μ) : ∀ n,
-    (fun x => ∫ y, Kpow μ (Wk U) n x y ∂μ) = vcomp U μ (n + 1) := by
-  have hGW : GoodK (Wk U) := goodK_Wk hU
+/-- The `compl` row-sum: `∫ y, complᵒ⁽ⁿ⁺¹⁾(x,y) = (B^{n+1} 1)(x)` (complement analogue of `rowsum_compPow`). -/
+lemma rowsum_complPow (hU : IsGraphon U μ) : ∀ n,
+    (fun x => ∫ y, compPow μ (compl U) n x y ∂μ) = complIter U μ (n + 1) := by
+  have hGW : GoodK (compl U) := goodK_compl hU
   intro n
   induction n with
   | zero =>
       funext x
-      show ∫ y, Wk U x y ∂μ = mean μ (vcomp U μ 0) - T U μ (vcomp U μ 0) x
-      rw [show vcomp U μ 0 = (fun _ => (1:ℝ)) from rfl, mean_const, T_one hU]
-      simp only [Wk]
+      show ∫ y, compl U x y ∂μ = mean μ (complIter U μ 0) - kernelOp U μ (complIter U μ 0) x
+      rw [show complIter U μ 0 = (fun _ => (1:ℝ)) from rfl, mean_const, kernelOp_one hU]
+      simp only [compl]
       rw [integral_sub (integrable_const 1) ((goodK_of_isGraphon hU).integrable_row x)]
-      have h2 : ∫ y, U x y ∂μ = deg U μ x := rfl
+      have h2 : ∫ y, U x y ∂μ = degree U μ x := rfl
       rw [h2]; simp
   | succ k ih =>
       funext x
-      show ∫ y, comp μ (Wk U) (Kpow μ (Wk U) k) x y ∂μ
-          = mean μ (vcomp U μ (k + 1)) - T U μ (vcomp U μ (k + 1)) x
-      obtain ⟨Ck, _, hCk⟩ := (goodK_Kpow (μ := μ) hGW k).bdd
-      have hint : Integrable (Function.uncurry fun y z => Wk U x z * Kpow μ (Wk U) k z y) (μ.prod μ) := by
-        have hSM : StronglyMeasurable (Function.uncurry fun y z => Wk U x z * Kpow μ (Wk U) k z y) := by
-          have h1 : Measurable (fun p : Ω × Ω => Wk U x p.2) :=
+      show ∫ y, comp μ (compl U) (compPow μ (compl U) k) x y ∂μ
+          = mean μ (complIter U μ (k + 1)) - kernelOp U μ (complIter U μ (k + 1)) x
+      obtain ⟨Ck, _, hCk⟩ := (goodK_compPow (μ := μ) hGW k).bdd
+      have hint : Integrable (Function.uncurry fun y z => compl U x z * compPow μ (compl U) k z y) (μ.prod μ) := by
+        have hSM : StronglyMeasurable (Function.uncurry fun y z => compl U x z * compPow μ (compl U) k z y) := by
+          have h1 : Measurable (fun p : Ω × Ω => compl U x p.2) :=
             hGW.meas.comp (measurable_const.prodMk measurable_snd)
-          have h2 : Measurable (fun p : Ω × Ω => Kpow μ (Wk U) k p.2 p.1) :=
-            (goodK_Kpow (μ := μ) hGW k).meas.comp (measurable_snd.prodMk measurable_fst)
+          have h2 : Measurable (fun p : Ω × Ω => compPow μ (compl U) k p.2 p.1) :=
+            (goodK_compPow (μ := μ) hGW k).meas.comp (measurable_snd.prodMk measurable_fst)
           exact (h1.mul h2).stronglyMeasurable
         refine (integrable_const (1 * Ck)).mono' hSM.aestronglyMeasurable (ae_of_all _ ?_)
         rintro ⟨y, z⟩
         simp only [Function.uncurry, Real.norm_eq_abs, abs_mul]
-        exact mul_le_mul (abs_Wk_le_one hU x z) (hCk z y) (abs_nonneg _) (by norm_num)
-      calc ∫ y, comp μ (Wk U) (Kpow μ (Wk U) k) x y ∂μ
-          = ∫ y, ∫ z, Wk U x z * Kpow μ (Wk U) k z y ∂μ ∂μ := by simp only [comp]
-        _ = ∫ z, ∫ y, Wk U x z * Kpow μ (Wk U) k z y ∂μ ∂μ := integral_integral_swap hint
-        _ = ∫ z, Wk U x z * (∫ y, Kpow μ (Wk U) k z y ∂μ) ∂μ := by
+        exact mul_le_mul (abs_compl_le_one hU x z) (hCk z y) (abs_nonneg _) (by norm_num)
+      calc ∫ y, comp μ (compl U) (compPow μ (compl U) k) x y ∂μ
+          = ∫ y, ∫ z, compl U x z * compPow μ (compl U) k z y ∂μ ∂μ := by simp only [comp]
+        _ = ∫ z, ∫ y, compl U x z * compPow μ (compl U) k z y ∂μ ∂μ := integral_integral_swap hint
+        _ = ∫ z, compl U x z * (∫ y, compPow μ (compl U) k z y ∂μ) ∂μ := by
               refine integral_congr_ae (ae_of_all _ fun z => ?_)
-              show ∫ y, Wk U x z * Kpow μ (Wk U) k z y ∂μ = Wk U x z * ∫ y, Kpow μ (Wk U) k z y ∂μ
+              show ∫ y, compl U x z * compPow μ (compl U) k z y ∂μ = compl U x z * ∫ y, compPow μ (compl U) k z y ∂μ
               rw [integral_const_mul]
-        _ = ∫ z, Wk U x z * vcomp U μ (k + 1) z ∂μ := by
+        _ = ∫ z, compl U x z * complIter U μ (k + 1) z ∂μ := by
               refine integral_congr_ae (ae_of_all _ fun z => ?_)
-              have ihz : ∫ y, Kpow μ (Wk U) k z y ∂μ = vcomp U μ (k + 1) z := congrFun ih z
-              show Wk U x z * (∫ y, Kpow μ (Wk U) k z y ∂μ) = Wk U x z * vcomp U μ (k + 1) z
+              have ihz : ∫ y, compPow μ (compl U) k z y ∂μ = complIter U μ (k + 1) z := congrFun ih z
+              show compl U x z * (∫ y, compPow μ (compl U) k z y ∂μ) = compl U x z * complIter U μ (k + 1) z
               rw [ihz]
-        _ = mean μ (vcomp U μ (k + 1)) - T U μ (vcomp U μ (k + 1)) x := by
-              simp only [Wk, sub_mul, one_mul]
-              rw [integral_sub (good_vcomp hU (k + 1)).integrable
-                (integrable_Uf hU (good_vcomp hU (k + 1)) x)]
+        _ = mean μ (complIter U μ (k + 1)) - kernelOp U μ (complIter U μ (k + 1)) x := by
+              simp only [compl, sub_mul, one_mul]
+              rw [integral_sub (good_complIter hU (k + 1)).integrable
+                (integrable_Uf hU (good_complIter hU (k + 1)) x)]
               rfl
 
 /-- Transpose-swap for symmetric kernels: `(K ∘ L)(y,x) = (L ∘ K)(x,y)`. -/
@@ -141,111 +141,111 @@ lemma comp_symm_swap {K L : Ω → Ω → ℝ} (hsK : ∀ x y, K x y = K y x)
   rw [hsK y z, hsL z x]; ring
 
 /-- `K` commutes with its own powers: `Kᵒⁿ ∘ K = K ∘ Kᵒⁿ`. -/
-lemma Kpow_comm {K : Ω → Ω → ℝ} (hK : GoodK K) : ∀ n,
-    comp μ (Kpow μ K n) K = comp μ K (Kpow μ K n)
+lemma compPow_comm {K : Ω → Ω → ℝ} (hK : GoodK K) : ∀ n,
+    comp μ (compPow μ K n) K = comp μ K (compPow μ K n)
   | 0 => rfl
   | (n + 1) => by
-      show comp μ (comp μ K (Kpow μ K n)) K = comp μ K (comp μ K (Kpow μ K n))
-      rw [comp_assoc hK (goodK_Kpow hK n) hK, Kpow_comm hK n]
+      show comp μ (comp μ K (compPow μ K n)) K = comp μ K (comp μ K (compPow μ K n))
+      rw [comp_assoc hK (goodK_compPow hK n) hK, compPow_comm hK n]
 
 /-- Powers of a symmetric kernel are symmetric. -/
-lemma Kpow_symm {K : Ω → Ω → ℝ} (hK : GoodK K) (hsymm : ∀ x y, K x y = K y x) :
-    ∀ (n) (x y : Ω), Kpow μ K n x y = Kpow μ K n y x
+lemma compPow_symm {K : Ω → Ω → ℝ} (hK : GoodK K) (hsymm : ∀ x y, K x y = K y x) :
+    ∀ (n) (x y : Ω), compPow μ K n x y = compPow μ K n y x
   | 0, x, y => hsymm x y
   | (n + 1), x, y => by
-      have ih : ∀ a b, Kpow μ K n a b = Kpow μ K n b a := fun a b => Kpow_symm hK hsymm n a b
-      show comp μ K (Kpow μ K n) x y = comp μ K (Kpow μ K n) y x
-      rw [comp_symm_swap hsymm ih x y, Kpow_comm hK n]
+      have ih : ∀ a b, compPow μ K n a b = compPow μ K n b a := fun a b => compPow_symm hK hsymm n a b
+      show comp μ K (compPow μ K n) x y = comp μ K (compPow μ K n) y x
+      rw [comp_symm_swap hsymm ih x y, compPow_comm hK n]
 
-/-- `Uᵒᵃ ∘ Wk = (pathFun_{a+1} ⊗ 1) − Uᵒ⁽ᵃ⁺¹⁾`. -/
-lemma comp_Kpow_Wk (hU : IsGraphon U μ) (a : ℕ) :
-    comp μ (Kpow μ U a) (Wk U) = fun x y => pathFun U μ (a + 1) x - Kpow μ U (a + 1) x y := by
+/-- `Uᵒᵃ ∘ compl = (pathFun_{a+1} ⊗ 1) − Uᵒ⁽ᵃ⁺¹⁾`. -/
+lemma comp_compPow_compl (hU : IsGraphon U μ) (a : ℕ) :
+    comp μ (compPow μ U a) (compl U) = fun x y => pathIter U μ (a + 1) x - compPow μ U (a + 1) x y := by
   have hGU := goodK_of_isGraphon hU
-  have e : comp μ (Kpow μ U a) (Wk U)
-      = fun x y => comp μ (Kpow μ U a) Jk x y - comp μ (Kpow μ U a) U x y := by
-    rw [show (Wk U) = (fun x y => Jk x y - U x y) from by funext x y; rw [Wk_eq_Jk_sub]]
-    exact comp_sub_right (goodK_Kpow hGU a) goodK_Jk hGU
-  rw [e, comp_Kpow_U hU, comp_Jk_right]
+  have e : comp μ (compPow μ U a) (compl U)
+      = fun x y => comp μ (compPow μ U a) onesKernel x y - comp μ (compPow μ U a) U x y := by
+    rw [show (compl U) = (fun x y => onesKernel x y - U x y) from by funext x y; rw [compl_eq_onesKernel_sub]]
+    exact comp_sub_right (goodK_compPow hGU a) goodK_onesKernel hGU
+  rw [e, comp_compPow_U hU, comp_onesKernel_right]
   funext x y
-  show (∫ z, Kpow μ U a x z ∂μ) - Kpow μ U (a + 1) x y
-      = pathFun U μ (a + 1) x - Kpow μ U (a + 1) x y
-  rw [congrFun (rowsum_Kpow hU a) x]
+  show (∫ z, compPow μ U a x z ∂μ) - compPow μ U (a + 1) x y
+      = pathIter U μ (a + 1) x - compPow μ U (a + 1) x y
+  rw [congrFun (rowsum_compPow hU a) x]
 
-/-- The column-sum of `Wkᵒᵇ` equals the complement iterate `B^{b+1} 1`. -/
-lemma colsum_Kpow_Wk (hU : IsGraphon U μ) (b : ℕ) :
-    (fun x => ∫ z, Kpow μ (Wk U) b z x ∂μ) = vcomp U μ (b + 1) := by
-  have h : (fun x => ∫ z, Kpow μ (Wk U) b z x ∂μ)
-      = (fun x => ∫ z, Kpow μ (Wk U) b x z ∂μ) := by
+/-- The column-sum of `complᵒᵇ` equals the complement iterate `B^{b+1} 1`. -/
+lemma colsum_compPow_compl (hU : IsGraphon U μ) (b : ℕ) :
+    (fun x => ∫ z, compPow μ (compl U) b z x ∂μ) = complIter U μ (b + 1) := by
+  have h : (fun x => ∫ z, compPow μ (compl U) b z x ∂μ)
+      = (fun x => ∫ z, compPow μ (compl U) b x z ∂μ) := by
     funext x
     exact integral_congr_ae (ae_of_all _ fun z =>
-      Kpow_symm (goodK_Wk hU) (Wk_symm hU) b z x)
-  rw [h, rowsum_Wpow hU b]
+      compPow_symm (goodK_compl hU) (compl_symm hU) b z x)
+  rw [h, rowsum_complPow hU b]
 
-/-- `Htr a b = tr(Uᵒ⁽ᵃ⁺¹⁾ ∘ Wkᵒ⁽ᵇ⁺¹⁾)`. -/
-noncomputable def Htr (U : Ω → Ω → ℝ) (μ : Measure Ω) (a b : ℕ) : ℝ :=
-  tr μ (comp μ (Kpow μ U a) (Kpow μ (Wk U) b))
+/-- `mixedTrace a b = trace(Uᵒ⁽ᵃ⁺¹⁾ ∘ complᵒ⁽ᵇ⁺¹⁾)`. -/
+noncomputable def mixedTrace (U : Ω → Ω → ℝ) (μ : Measure Ω) (a b : ℕ) : ℝ :=
+  trace μ (comp μ (compPow μ U a) (compPow μ (compl U) b))
 
 /-- **The telescoping recursion.** -/
-lemma Htr_succ (hU : IsGraphon U μ) (a b : ℕ) :
-    Htr U μ a (b + 1)
-      = ip μ (pathFun U μ (a + 1)) (vcomp U μ (b + 1)) - Htr U μ (a + 1) b := by
+lemma mixedTrace_succ (hU : IsGraphon U μ) (a b : ℕ) :
+    mixedTrace U μ a (b + 1)
+      = pairing μ (pathIter U μ (a + 1)) (complIter U μ (b + 1)) - mixedTrace U μ (a + 1) b := by
   have hGU := goodK_of_isGraphon hU
-  have hGW := goodK_Wk hU
-  have hrow : GoodK (fun _x _y => pathFun U μ (a + 1) _x) :=
-    goodK_rowBroadcast (good_pathFun hU (a + 1))
-  show tr μ (comp μ (Kpow μ U a) (Kpow μ (Wk U) (b + 1))) = _
-  rw [show Kpow μ (Wk U) (b + 1) = comp μ (Wk U) (Kpow μ (Wk U) b) from rfl,
-    ← comp_assoc (goodK_Kpow hGU a) hGW (goodK_Kpow hGW b), comp_Kpow_Wk hU a,
-    comp_sub_left hrow (goodK_Kpow hGU (a + 1)) (goodK_Kpow hGW b),
-    tr_sub (goodK_comp hrow (goodK_Kpow hGW b)) (goodK_comp (goodK_Kpow hGU (a + 1)) (goodK_Kpow hGW b)),
-    tr_comp_rowBroadcast]
-  show (∫ x, pathFun U μ (a + 1) x * (∫ z, Kpow μ (Wk U) b z x ∂μ) ∂μ) - Htr U μ (a + 1) b
-      = ip μ (pathFun U μ (a + 1)) (vcomp U μ (b + 1)) - Htr U μ (a + 1) b
+  have hGW := goodK_compl hU
+  have hrow : GoodK (fun _x _y => pathIter U μ (a + 1) _x) :=
+    goodK_rowBroadcast (good_pathIter hU (a + 1))
+  show trace μ (comp μ (compPow μ U a) (compPow μ (compl U) (b + 1))) = _
+  rw [show compPow μ (compl U) (b + 1) = comp μ (compl U) (compPow μ (compl U) b) from rfl,
+    ← comp_assoc (goodK_compPow hGU a) hGW (goodK_compPow hGW b), comp_compPow_compl hU a,
+    comp_sub_left hrow (goodK_compPow hGU (a + 1)) (goodK_compPow hGW b),
+    trace_sub (goodK_comp hrow (goodK_compPow hGW b)) (goodK_comp (goodK_compPow hGU (a + 1)) (goodK_compPow hGW b)),
+    trace_comp_rowBroadcast]
+  show (∫ x, pathIter U μ (a + 1) x * (∫ z, compPow μ (compl U) b z x ∂μ) ∂μ) - mixedTrace U μ (a + 1) b
+      = pairing μ (pathIter U μ (a + 1)) (complIter U μ (b + 1)) - mixedTrace U μ (a + 1) b
   congr 1
-  show (∫ x, pathFun U μ (a + 1) x * (∫ z, Kpow μ (Wk U) b z x ∂μ) ∂μ)
-      = ∫ x, pathFun U μ (a + 1) x * vcomp U μ (b + 1) x ∂μ
+  show (∫ x, pathIter U μ (a + 1) x * (∫ z, compPow μ (compl U) b z x ∂μ) ∂μ)
+      = ∫ x, pathIter U μ (a + 1) x * complIter U μ (b + 1) x ∂μ
   refine integral_congr_ae (ae_of_all _ fun x => ?_)
-  show pathFun U μ (a + 1) x * (∫ z, Kpow μ (Wk U) b z x ∂μ)
-      = pathFun U μ (a + 1) x * vcomp U μ (b + 1) x
-  rw [congrFun (colsum_Kpow_Wk hU b) x]
+  show pathIter U μ (a + 1) x * (∫ z, compPow μ (compl U) b z x ∂μ)
+      = pathIter U μ (a + 1) x * complIter U μ (b + 1) x
+  rw [congrFun (colsum_compPow_compl hU b) x]
 
-/-- The base case: `Htr a 0 = x_{a+1} − c_{a+1}` (with `c` the cycle density `tr (Uᵒ⁽ᵃ⁺¹⁾)`). -/
-lemma Htr_zero (hU : IsGraphon U μ) (a : ℕ) :
-    Htr U μ a 0 = xden U μ (a + 1) - tr μ (Kpow μ U (a + 1)) := by
+/-- The base case: `mixedTrace a 0 = x_{a+1} − c_{a+1}` (with `c` the cycle density `trace (Uᵒ⁽ᵃ⁺¹⁾)`). -/
+lemma mixedTrace_zero (hU : IsGraphon U μ) (a : ℕ) :
+    mixedTrace U μ a 0 = pathDensity U μ (a + 1) - trace μ (compPow μ U (a + 1)) := by
   have hGU := goodK_of_isGraphon hU
-  show tr μ (comp μ (Kpow μ U a) (Wk U)) = _
-  rw [show (Wk U) = (fun x y => Jk x y - U x y) from by funext x y; rw [Wk_eq_Jk_sub],
-    comp_sub_right (goodK_Kpow hGU a) goodK_Jk hGU,
-    tr_sub (goodK_comp (goodK_Kpow hGU a) goodK_Jk) (goodK_comp (goodK_Kpow hGU a) hGU),
-    tr_comp_Jk_right, dmean_Kpow hU a, comp_Kpow_U hU]
+  show trace μ (comp μ (compPow μ U a) (compl U)) = _
+  rw [show (compl U) = (fun x y => onesKernel x y - U x y) from by funext x y; rw [compl_eq_onesKernel_sub],
+    comp_sub_right (goodK_compPow hGU a) goodK_onesKernel hGU,
+    trace_sub (goodK_comp (goodK_compPow hGU a) goodK_onesKernel) (goodK_comp (goodK_compPow hGU a) hGU),
+    trace_comp_onesKernel_right, doubleMean_compPow hU a, comp_compPow_U hU]
 
-/-- Splitting `Wk = Jk − U` on the left of a composition (with `L` abstract, so the rewrite
+/-- Splitting `compl = onesKernel − U` on the left of a composition (with `L` abstract, so the rewrite
 does not touch `L`'s internals). -/
-lemma comp_Wk_left (hU : IsGraphon U μ) {L : Ω → Ω → ℝ} (hL : GoodK L) :
-    comp μ (Wk U) L = fun x y => comp μ Jk L x y - comp μ U L x y := by
-  have hWeq : Wk U = fun x y => Jk x y - U x y := by funext x y; rw [Wk_eq_Jk_sub]
-  rw [hWeq]; exact comp_sub_left goodK_Jk (goodK_of_isGraphon hU) hL
+lemma comp_compl_left (hU : IsGraphon U μ) {L : Ω → Ω → ℝ} (hL : GoodK L) :
+    comp μ (compl U) L = fun x y => comp μ onesKernel L x y - comp μ U L x y := by
+  have hWeq : compl U = fun x y => onesKernel x y - U x y := by funext x y; rw [compl_eq_onesKernel_sub]
+  rw [hWeq]; exact comp_sub_left goodK_onesKernel (goodK_of_isGraphon hU) hL
 
-/-- The peeling step: `tr (Wkᵒ⁽ᵐ⁺¹⁾) = ∫∫ Wkᵒᵐ − Htr 0 m`. -/
-lemma ccomp_peel (hU : IsGraphon U μ) (m : ℕ) :
-    tr μ (Kpow μ (Wk U) (m + 1)) = dmean μ (Kpow μ (Wk U) m) - Htr U μ 0 m := by
+/-- The peeling step: `trace (complᵒ⁽ᵐ⁺¹⁾) = ∫∫ complᵒᵐ − mixedTrace 0 m`. -/
+lemma complTrace_peel (hU : IsGraphon U μ) (m : ℕ) :
+    trace μ (compPow μ (compl U) (m + 1)) = doubleMean μ (compPow μ (compl U) m) - mixedTrace U μ 0 m := by
   have hGU := goodK_of_isGraphon hU
-  have hGW := goodK_Wk hU
-  show tr μ (comp μ (Wk U) (Kpow μ (Wk U) m)) = _
-  rw [comp_Wk_left hU (goodK_Kpow hGW m),
-    tr_sub (goodK_comp goodK_Jk (goodK_Kpow hGW m)) (goodK_comp hGU (goodK_Kpow hGW m)),
-    tr_comp_Jk (goodK_Kpow hGW m)]
+  have hGW := goodK_compl hU
+  show trace μ (comp μ (compl U) (compPow μ (compl U) m)) = _
+  rw [comp_compl_left hU (goodK_compPow hGW m),
+    trace_sub (goodK_comp goodK_onesKernel (goodK_compPow hGW m)) (goodK_comp hGU (goodK_compPow hGW m)),
+    trace_comp_onesKernel (goodK_compPow hGW m)]
   rfl
 
-/-- `∫∫ Wkᵒⁿ = mean (B^{n+1} 1)` (the path complement density). -/
-lemma dmean_Wpow (hU : IsGraphon U μ) (n : ℕ) :
-    dmean μ (Kpow μ (Wk U) n) = mean μ (vcomp U μ (n + 1)) := by
-  rw [dmean, show (fun x => ∫ y, Kpow μ (Wk U) n x y ∂μ) = vcomp U μ (n + 1) from rowsum_Wpow hU n]
+/-- `∫∫ complᵒⁿ = mean (B^{n+1} 1)` (the path complement density). -/
+lemma doubleMean_complPow (hU : IsGraphon U μ) (n : ℕ) :
+    doubleMean μ (compPow μ (compl U) n) = mean μ (complIter U μ (n + 1)) := by
+  rw [doubleMean, show (fun x => ∫ y, compPow μ (compl U) n x y ∂μ) = complIter U μ (n + 1) from rowsum_complPow hU n]
   rfl
 
-/-- `T` is self-adjoint as a form on `Good` functions: `∫ (T f)·g = ∫ f·(T g)`. -/
-lemma T_selfadj (hU : IsGraphon U μ) {f g : Ω → ℝ} (hf : Good f) (hg : Good g) :
-    ∫ x, T U μ f x * g x ∂μ = ∫ x, f x * T U μ g x ∂μ := by
+/-- `kernelOp` is self-adjoint as a form on `Good` functions: `∫ (kernelOp f)·g = ∫ f·(kernelOp g)`. -/
+lemma kernelOp_selfadj (hU : IsGraphon U μ) {f g : Ω → ℝ} (hf : Good f) (hg : Good g) :
+    ∫ x, kernelOp U μ f x * g x ∂μ = ∫ x, f x * kernelOp U μ g x ∂μ := by
   have hGU := goodK_of_isGraphon hU
   obtain ⟨Cf, _, hCf⟩ := hf.bdd
   obtain ⟨Cg, _, hCg⟩ := hg.bdd
@@ -259,135 +259,95 @@ lemma T_selfadj (hU : IsGraphon U μ) {f g : Ω → ℝ} (hf : Good f) (hg : Goo
     refine mul_le_mul (mul_le_mul ?_ (hCf y) (abs_nonneg _) (by norm_num)) (hCg x) (abs_nonneg _)
       (by positivity)
     rw [abs_of_nonneg (hU.nonneg x y)]; exact hU.le_one x y
-  calc ∫ x, T U μ f x * g x ∂μ
+  calc ∫ x, kernelOp U μ f x * g x ∂μ
       = ∫ x, ∫ y, U x y * f y * g x ∂μ ∂μ := by
         refine integral_congr_ae (ae_of_all _ fun x => ?_)
-        show T U μ f x * g x = ∫ y, U x y * f y * g x ∂μ
-        rw [T, integral_mul_const]
+        show kernelOp U μ f x * g x = ∫ y, U x y * f y * g x ∂μ
+        rw [kernelOp, integral_mul_const]
     _ = ∫ y, ∫ x, U x y * f y * g x ∂μ ∂μ := integral_integral_swap hint
-    _ = ∫ y, f y * T U μ g y ∂μ := by
+    _ = ∫ y, f y * kernelOp U μ g y ∂μ := by
         refine integral_congr_ae (ae_of_all _ fun y => ?_)
-        show (∫ x, U x y * f y * g x ∂μ) = f y * T U μ g y
-        rw [T, ← integral_const_mul]
+        show (∫ x, U x y * f y * g x ∂μ) = f y * kernelOp U μ g y
+        rw [kernelOp, ← integral_const_mul]
         refine integral_congr_ae (ae_of_all _ fun x => ?_)
         show U x y * f y * g x = f y * (U y x * g x)
         rw [hU.symm x y]; ring
 
-lemma pathFun_one (hU : IsGraphon U μ) : pathFun U μ 1 = deg U μ := by
-  show T U μ (fun _ => 1) = deg U μ; exact T_one hU
+lemma pathIter_one (hU : IsGraphon U μ) : pathIter U μ 1 = degree U μ := by
+  show kernelOp U μ (fun _ => 1) = degree U μ; exact kernelOp_one hU
 
-lemma xden_one (hU : IsGraphon U μ) : xden U μ 1 = qval U μ := by
-  rw [xden, pathFun_one hU]; rfl
+lemma pathDensity_one (hU : IsGraphon U μ) : pathDensity U μ 1 = edgeDensity U μ := by
+  rw [pathDensity, pathIter_one hU]; rfl
 
-lemma pcomp_zero : mean μ (vcomp U μ 0) = 1 := mean_const 1
+lemma complMean_zero : mean μ (complIter U μ 0) = 1 := mean_const 1
 
-lemma ip_vcomp_zero (hU : IsGraphon U μ) (j : ℕ) :
-    ip μ (pathFun U μ j) (vcomp U μ 0) = xden U μ j := by
-  simp only [ip, vcomp, mul_one]; rfl
+lemma pairing_complIter_zero (hU : IsGraphon U μ) (j : ℕ) :
+    pairing μ (pathIter U μ j) (complIter U μ 0) = pathDensity U μ j := by
+  simp only [pairing, complIter, mul_one]; rfl
 
-/-- `mean (T f) = ⟨T1, f⟩ = ⟨pathFun 1, f⟩`. -/
-lemma mean_T_eq (hU : IsGraphon U μ) {f : Ω → ℝ} (hf : Good f) :
-    mean μ (T U μ f) = ip μ (pathFun U μ 1) f := by
-  have h1 : mean μ (T U μ f) = ∫ x, T U μ f x * 1 ∂μ := by simp [mean]
-  rw [h1, T_selfadj hU hf good_one]
-  simp only [ip, pathFun_one hU]
+/-- `mean (kernelOp f) = ⟨T1, f⟩ = ⟨pathIter 1, f⟩`. -/
+lemma mean_kernelOp_eq (hU : IsGraphon U μ) {f : Ω → ℝ} (hf : Good f) :
+    mean μ (kernelOp U μ f) = pairing μ (pathIter U μ 1) f := by
+  have h1 : mean μ (kernelOp U μ f) = ∫ x, kernelOp U μ f x * 1 ∂μ := by simp [mean]
+  rw [h1, kernelOp_selfadj hU hf good_one]
+  simp only [pairing, pathIter_one hU]
   refine integral_congr_ae (ae_of_all _ fun x => ?_)
-  show f x * T U μ (fun _ => 1) x = deg U μ x * f x
-  rw [T_one hU]; ring
+  show f x * kernelOp U μ (fun _ => 1) x = degree U μ x * f x
+  rw [kernelOp_one hU]; ring
 
-/-- The inner-product recursion (uses `T` self-adjointness). -/
-lemma ip_vcomp_succ (hU : IsGraphon U μ) (j k : ℕ) :
-    ip μ (pathFun U μ j) (vcomp U μ (k + 1))
-      = mean μ (vcomp U μ k) * xden U μ j - ip μ (pathFun U μ (j + 1)) (vcomp U μ k) := by
-  have hpj := good_pathFun hU j
-  have hvk := good_vcomp hU k
-  have key : ∀ x, pathFun U μ j x * vcomp U μ (k + 1) x
-      = mean μ (vcomp U μ k) * pathFun U μ j x - pathFun U μ j x * T U μ (vcomp U μ k) x := by
+/-- The inner-product recursion (uses `kernelOp` self-adjointness). -/
+lemma pairing_complIter_succ (hU : IsGraphon U μ) (j k : ℕ) :
+    pairing μ (pathIter U μ j) (complIter U μ (k + 1))
+      = mean μ (complIter U μ k) * pathDensity U μ j - pairing μ (pathIter U μ (j + 1)) (complIter U μ k) := by
+  have hpj := good_pathIter hU j
+  have hvk := good_complIter hU k
+  have key : ∀ x, pathIter U μ j x * complIter U μ (k + 1) x
+      = mean μ (complIter U μ k) * pathIter U μ j x - pathIter U μ j x * kernelOp U μ (complIter U μ k) x := by
     intro x
-    show pathFun U μ j x * (mean μ (vcomp U μ k) - T U μ (vcomp U μ k) x) = _
+    show pathIter U μ j x * (mean μ (complIter U μ k) - kernelOp U μ (complIter U μ k) x) = _
     ring
-  simp only [ip]
+  simp only [pairing]
   rw [integral_congr_ae (ae_of_all _ key),
-    integral_sub (hpj.integrable.const_mul _) ((hpj.mul (good_T hU hvk)).integrable),
+    integral_sub (hpj.integrable.const_mul _) ((hpj.mul (good_kernelOp hU hvk)).integrable),
     integral_const_mul]
   congr 1
-  rw [← T_selfadj hU hpj hvk]
+  rw [← kernelOp_selfadj hU hpj hvk]
   rfl
 
 /-- The path-complement recursion. -/
-lemma pcomp_succ (hU : IsGraphon U μ) (k : ℕ) :
-    mean μ (vcomp U μ (k + 1)) = mean μ (vcomp U μ k) - ip μ (pathFun U μ 1) (vcomp U μ k) := by
-  have hvk := good_vcomp hU k
-  have key : ∀ x, vcomp U μ (k + 1) x = mean μ (vcomp U μ k) - T U μ (vcomp U μ k) x := fun x => rfl
-  show ∫ x, vcomp U μ (k + 1) x ∂μ = mean μ (vcomp U μ k) - ip μ (pathFun U μ 1) (vcomp U μ k)
+lemma complMean_succ (hU : IsGraphon U μ) (k : ℕ) :
+    mean μ (complIter U μ (k + 1)) = mean μ (complIter U μ k) - pairing μ (pathIter U μ 1) (complIter U μ k) := by
+  have hvk := good_complIter hU k
+  have key : ∀ x, complIter U μ (k + 1) x = mean μ (complIter U μ k) - kernelOp U μ (complIter U μ k) x := fun x => rfl
+  show ∫ x, complIter U μ (k + 1) x ∂μ = mean μ (complIter U μ k) - pairing μ (pathIter U μ 1) (complIter U μ k)
   rw [integral_congr_ae (ae_of_all _ key),
-    integral_sub (integrable_const _) (good_T hU hvk).integrable]
-  rw [show (∫ _x : Ω, mean μ (vcomp U μ k) ∂μ) = mean μ (vcomp U μ k) from by simp,
-    show (∫ x, T U μ (vcomp U μ k) x ∂μ) = mean μ (T U μ (vcomp U μ k)) from rfl,
-    mean_T_eq hU hvk]
+    integral_sub (integrable_const _) (good_kernelOp hU hvk).integrable]
+  rw [show (∫ _x : Ω, mean μ (complIter U μ k) ∂μ) = mean μ (complIter U μ k) from by simp,
+    show (∫ x, kernelOp U μ (complIter U μ k) x ∂μ) = mean μ (kernelOp U μ (complIter U μ k)) from rfl,
+    mean_kernelOp_eq hU hvk]
 
 /-- **The C₅ necklace identity** (`cc₅` in path-complement / inner-product form). -/
-lemma ccomp5_necklace (hU : IsGraphon U μ) :
-    tr μ (Kpow μ (Wk U) 4)
-      = mean μ (vcomp U μ 4) - ip μ (pathFun U μ 1) (vcomp U μ 3)
-        + ip μ (pathFun U μ 2) (vcomp U μ 2) - ip μ (pathFun U μ 3) (vcomp U μ 1)
-        + xden U μ 4 - tr μ (Kpow μ U 4) := by
-  rw [show (4 : ℕ) = 3 + 1 from rfl, ccomp_peel hU 3, dmean_Wpow hU 3,
-    Htr_succ hU 0 2, Htr_succ hU 1 1, Htr_succ hU 2 0, Htr_zero hU 3]
+lemma complTrace5_necklace (hU : IsGraphon U μ) :
+    trace μ (compPow μ (compl U) 4)
+      = mean μ (complIter U μ 4) - pairing μ (pathIter U μ 1) (complIter U μ 3)
+        + pairing μ (pathIter U μ 2) (complIter U μ 2) - pairing μ (pathIter U μ 3) (complIter U μ 1)
+        + pathDensity U μ 4 - trace μ (compPow μ U 4) := by
+  rw [show (4 : ℕ) = 3 + 1 from rfl, complTrace_peel hU 3, doubleMean_complPow hU 3,
+    mixedTrace_succ hU 0 2, mixedTrace_succ hU 1 1, mixedTrace_succ hU 2 0, mixedTrace_zero hU 3]
   ring
-
-/-- **`C₅` for all edge densities, fully integral-grounded.**  `t(C₅, 1−U) ≥ p⁵ − p(1−p)⁴`
-(`p = 1 − q`, `q = ∫∫U`), with *only the integral definition of homomorphism density trusted*. -/
-theorem C5_integral (hU : IsGraphon U μ) :
-    tr μ (Kpow μ (Wk U) 4) ≥ (1 - qval U μ) ^ 5 - (1 - qval U μ) * qval U μ ^ 4 := by
-  -- shorthand
-  have hx1 : xden U μ 1 = qval U μ := xden_one hU
-  have hx2 : xden U μ 2 = qval U μ ^ 2 + smom U μ 0 := xden_two hU
-  have hx3 : xden U μ 3 = qval U μ ^ 3 + 2 * qval U μ * smom U μ 0 + smom U μ 1 := xden_three hU
-  have hx4 : xden U μ 4 = qval U μ ^ 4 + 3 * qval U μ ^ 2 * smom U μ 0
-      + 2 * qval U μ * smom U μ 1 + smom U μ 0 ^ 2 + smom U μ 2 := xden_four hU
-  -- mean(vcomp k) and inner products, reduced to xden via the recursions
-  have v1 : mean μ (vcomp U μ 1) = 1 - xden U μ 1 := by
-    have h := pcomp_succ hU 0; rw [pcomp_zero, ip_vcomp_zero hU 1] at h; simpa using h
-  have ip11 : ip μ (pathFun U μ 1) (vcomp U μ 1) = xden U μ 1 - xden U μ 2 := by
-    have h := ip_vcomp_succ hU 1 0; rw [pcomp_zero, ip_vcomp_zero hU 2] at h; simpa using h
-  have ip21 : ip μ (pathFun U μ 2) (vcomp U μ 1) = xden U μ 2 - xden U μ 3 := by
-    have h := ip_vcomp_succ hU 2 0; rw [pcomp_zero, ip_vcomp_zero hU 3] at h; simpa using h
-  have ip31 : ip μ (pathFun U μ 3) (vcomp U μ 1) = xden U μ 3 - xden U μ 4 := by
-    have h := ip_vcomp_succ hU 3 0; rw [pcomp_zero, ip_vcomp_zero hU 4] at h; simpa using h
-  have v2 : mean μ (vcomp U μ 2) = (1 - xden U μ 1) - (xden U μ 1 - xden U μ 2) := by
-    have h := pcomp_succ hU 1; rw [v1, ip11] at h; simpa using h
-  have ip12 : ip μ (pathFun U μ 1) (vcomp U μ 2)
-      = mean μ (vcomp U μ 1) * xden U μ 1 - (xden U μ 2 - xden U μ 3) := by
-    have h := ip_vcomp_succ hU 1 1; rw [ip21] at h; simpa using h
-  have ip22 : ip μ (pathFun U μ 2) (vcomp U μ 2)
-      = mean μ (vcomp U μ 1) * xden U μ 2 - (xden U μ 3 - xden U μ 4) := by
-    have h := ip_vcomp_succ hU 2 1; rw [ip31] at h; simpa using h
-  have v3 : mean μ (vcomp U μ 3) = mean μ (vcomp U μ 2) - ip μ (pathFun U μ 1) (vcomp U μ 2) := by
-    have h := pcomp_succ hU 2; simpa using h
-  have ip13 : ip μ (pathFun U μ 1) (vcomp U μ 3)
-      = mean μ (vcomp U μ 2) * xden U μ 1 - ip μ (pathFun U μ 2) (vcomp U μ 2) := by
-    have h := ip_vcomp_succ hU 1 2; simpa using h
-  have v4 : mean μ (vcomp U μ 4) = mean μ (vcomp U μ 3) - ip μ (pathFun U μ 1) (vcomp U μ 3) := by
-    have h := pcomp_succ hU 3; simpa using h
-  have hed : tr μ (Kpow μ U 4) ≤ xden U μ 4 := edge_deletion_general hU 3
-  have hcert := cert5_smom hU (qval U μ)
-  rw [ccomp5_necklace hU, v4, v3, ip13, ip12, ip22, v2, ip31, v1, hx1, hx2, hx3, hx4]
-  rw [hx4] at hed
-  nlinarith [hcert, hed]
 
 /-! ### C₇ -/
 
-lemma qval_nonneg (hU : IsGraphon U μ) : 0 ≤ qval U μ :=
+lemma edgeDensity_nonneg (hU : IsGraphon U μ) : 0 ≤ edgeDensity U μ :=
   integral_nonneg fun x => integral_nonneg fun y => hU.nonneg x y
 
-lemma qval_le_one (hU : IsGraphon U μ) : qval U μ ≤ 1 := by
-  rw [qval, mean]
-  calc ∫ x, deg U μ x ∂μ ≤ ∫ _x, (1:ℝ) ∂μ := by
+lemma edgeDensity_le_one (hU : IsGraphon U μ) : edgeDensity U μ ≤ 1 := by
+  rw [edgeDensity, mean]
+  calc ∫ x, degree U μ x ∂μ ≤ ∫ _x, (1:ℝ) ∂μ := by
         refine integral_mono ((goodK_of_isGraphon hU).colsum_integrable.congr
-          (ae_of_all _ fun x => by rw [deg]; exact integral_congr_ae (ae_of_all _ fun y => hU.symm y x)))
+          (ae_of_all _ fun x => by rw [degree]; exact integral_congr_ae (ae_of_all _ fun y => hU.symm y x)))
           (integrable_const 1) (fun x => ?_)
-        rw [deg]
+        rw [degree]
         calc ∫ y, U x y ∂μ ≤ ∫ _y, (1:ℝ) ∂μ :=
               integral_mono ((goodK_of_isGraphon hU).integrable_row x) (integrable_const 1)
                 (fun y => hU.le_one x y)
@@ -395,124 +355,24 @@ lemma qval_le_one (hU : IsGraphon U μ) : qval U μ ≤ 1 := by
     _ = 1 := by simp
 
 /-- **The C₇ necklace identity.** -/
-lemma ccomp7_necklace (hU : IsGraphon U μ) :
-    tr μ (Kpow μ (Wk U) 6)
-      = mean μ (vcomp U μ 6) - ip μ (pathFun U μ 1) (vcomp U μ 5)
-        + ip μ (pathFun U μ 2) (vcomp U μ 4) - ip μ (pathFun U μ 3) (vcomp U μ 3)
-        + ip μ (pathFun U μ 4) (vcomp U μ 2) - ip μ (pathFun U μ 5) (vcomp U μ 1)
-        + xden U μ 6 - tr μ (Kpow μ U 6) := by
-  rw [show (6 : ℕ) = 5 + 1 from rfl, ccomp_peel hU 5, dmean_Wpow hU 5,
-    Htr_succ hU 0 4, Htr_succ hU 1 3, Htr_succ hU 2 2, Htr_succ hU 3 1, Htr_succ hU 4 0,
-    Htr_zero hU 5]
+lemma complTrace7_necklace (hU : IsGraphon U μ) :
+    trace μ (compPow μ (compl U) 6)
+      = mean μ (complIter U μ 6) - pairing μ (pathIter U μ 1) (complIter U μ 5)
+        + pairing μ (pathIter U μ 2) (complIter U μ 4) - pairing μ (pathIter U μ 3) (complIter U μ 3)
+        + pairing μ (pathIter U μ 4) (complIter U μ 2) - pairing μ (pathIter U μ 5) (complIter U μ 1)
+        + pathDensity U μ 6 - trace μ (compPow μ U 6) := by
+  rw [show (6 : ℕ) = 5 + 1 from rfl, complTrace_peel hU 5, doubleMean_complPow hU 5,
+    mixedTrace_succ hU 0 4, mixedTrace_succ hU 1 3, mixedTrace_succ hU 2 2, mixedTrace_succ hU 3 1, mixedTrace_succ hU 4 0,
+    mixedTrace_zero hU 5]
   ring
 
-/-- **`C₇`, nontrivial regime `q ≤ ½`, fully integral-grounded.** -/
-theorem C7_integral (hU : IsGraphon U μ) (hq : qval U μ ≤ 1 / 2) :
-    tr μ (Kpow μ (Wk U) 6) ≥ (1 - qval U μ) ^ 7 - (1 - qval U μ) * qval U μ ^ 6 := by
-  have hx1 : xden U μ 1 = qval U μ := xden_one hU
-  have hx2 := xden_two hU; have hx3 := xden_three hU; have hx4 := xden_four hU
-  have hx5 := xden_five hU; have hx6 := xden_six hU
-  -- k = 1 inner products
-  have ip11 : ip μ (pathFun U μ 1) (vcomp U μ 1) = xden U μ 1 - xden U μ 2 := by
-    have h := ip_vcomp_succ hU 1 0; rw [pcomp_zero, ip_vcomp_zero hU 2] at h; simpa using h
-  have ip21 : ip μ (pathFun U μ 2) (vcomp U μ 1) = xden U μ 2 - xden U μ 3 := by
-    have h := ip_vcomp_succ hU 2 0; rw [pcomp_zero, ip_vcomp_zero hU 3] at h; simpa using h
-  have ip31 : ip μ (pathFun U μ 3) (vcomp U μ 1) = xden U μ 3 - xden U μ 4 := by
-    have h := ip_vcomp_succ hU 3 0; rw [pcomp_zero, ip_vcomp_zero hU 4] at h; simpa using h
-  have ip41 : ip μ (pathFun U μ 4) (vcomp U μ 1) = xden U μ 4 - xden U μ 5 := by
-    have h := ip_vcomp_succ hU 4 0; rw [pcomp_zero, ip_vcomp_zero hU 5] at h; simpa using h
-  have ip51 : ip μ (pathFun U μ 5) (vcomp U μ 1) = xden U μ 5 - xden U μ 6 := by
-    have h := ip_vcomp_succ hU 5 0; rw [pcomp_zero, ip_vcomp_zero hU 6] at h; simpa using h
-  have v1 : mean μ (vcomp U μ 1) = 1 - xden U μ 1 := by
-    have h := pcomp_succ hU 0; rw [pcomp_zero, ip_vcomp_zero hU 1] at h; simpa using h
-  -- k = 2
-  have ip12 : ip μ (pathFun U μ 1) (vcomp U μ 2)
-      = mean μ (vcomp U μ 1) * xden U μ 1 - ip μ (pathFun U μ 2) (vcomp U μ 1) := by
-    have h := ip_vcomp_succ hU 1 1; simpa using h
-  have ip22 : ip μ (pathFun U μ 2) (vcomp U μ 2)
-      = mean μ (vcomp U μ 1) * xden U μ 2 - ip μ (pathFun U μ 3) (vcomp U μ 1) := by
-    have h := ip_vcomp_succ hU 2 1; simpa using h
-  have ip32 : ip μ (pathFun U μ 3) (vcomp U μ 2)
-      = mean μ (vcomp U μ 1) * xden U μ 3 - ip μ (pathFun U μ 4) (vcomp U μ 1) := by
-    have h := ip_vcomp_succ hU 3 1; simpa using h
-  have ip42 : ip μ (pathFun U μ 4) (vcomp U μ 2)
-      = mean μ (vcomp U μ 1) * xden U μ 4 - ip μ (pathFun U μ 5) (vcomp U μ 1) := by
-    have h := ip_vcomp_succ hU 4 1; simpa using h
-  have v2 : mean μ (vcomp U μ 2) = mean μ (vcomp U μ 1) - ip μ (pathFun U μ 1) (vcomp U μ 1) := by
-    have h := pcomp_succ hU 1; simpa using h
-  -- k = 3
-  have ip13 : ip μ (pathFun U μ 1) (vcomp U μ 3)
-      = mean μ (vcomp U μ 2) * xden U μ 1 - ip μ (pathFun U μ 2) (vcomp U μ 2) := by
-    have h := ip_vcomp_succ hU 1 2; simpa using h
-  have ip23 : ip μ (pathFun U μ 2) (vcomp U μ 3)
-      = mean μ (vcomp U μ 2) * xden U μ 2 - ip μ (pathFun U μ 3) (vcomp U μ 2) := by
-    have h := ip_vcomp_succ hU 2 2; simpa using h
-  have ip33 : ip μ (pathFun U μ 3) (vcomp U μ 3)
-      = mean μ (vcomp U μ 2) * xden U μ 3 - ip μ (pathFun U μ 4) (vcomp U μ 2) := by
-    have h := ip_vcomp_succ hU 3 2; simpa using h
-  have v3 : mean μ (vcomp U μ 3) = mean μ (vcomp U μ 2) - ip μ (pathFun U μ 1) (vcomp U μ 2) := by
-    have h := pcomp_succ hU 2; simpa using h
-  -- k = 4
-  have ip14 : ip μ (pathFun U μ 1) (vcomp U μ 4)
-      = mean μ (vcomp U μ 3) * xden U μ 1 - ip μ (pathFun U μ 2) (vcomp U μ 3) := by
-    have h := ip_vcomp_succ hU 1 3; simpa using h
-  have ip24 : ip μ (pathFun U μ 2) (vcomp U μ 4)
-      = mean μ (vcomp U μ 3) * xden U μ 2 - ip μ (pathFun U μ 3) (vcomp U μ 3) := by
-    have h := ip_vcomp_succ hU 2 3; simpa using h
-  have v4 : mean μ (vcomp U μ 4) = mean μ (vcomp U μ 3) - ip μ (pathFun U μ 1) (vcomp U μ 3) := by
-    have h := pcomp_succ hU 3; simpa using h
-  -- k = 5
-  have ip15 : ip μ (pathFun U μ 1) (vcomp U μ 5)
-      = mean μ (vcomp U μ 4) * xden U μ 1 - ip μ (pathFun U μ 2) (vcomp U μ 4) := by
-    have h := ip_vcomp_succ hU 1 4; simpa using h
-  have v5 : mean μ (vcomp U μ 5) = mean μ (vcomp U μ 4) - ip μ (pathFun U μ 1) (vcomp U μ 4) := by
-    have h := pcomp_succ hU 4; simpa using h
-  have v6 : mean μ (vcomp U μ 6) = mean μ (vcomp U μ 5) - ip μ (pathFun U μ 1) (vcomp U μ 5) := by
-    have h := pcomp_succ hU 5; simpa using h
-  have hed : tr μ (Kpow μ U 6) ≤ xden U μ 6 := edge_deletion_general hU 5
-  have hcert := cert7_smom hU (qval U μ) (qval_nonneg hU) hq
-  -- The necklace expands to `g₇ + Φ₇ + (x₆ − c₆)` as a pure polynomial identity (`ring`);
-  -- `Φ₇ ≥ 0` (`hcert`) and `x₆ − c₆ ≥ 0` (`hed`) then finish by linear arithmetic.
-  have key : tr μ (Kpow μ (Wk U) 6)
-      = ((1 - qval U μ) ^ 7 - (1 - qval U μ) * qval U μ ^ 6)
-        + (6 * smom U μ 4 + (12 * qval U μ - 7) * smom U μ 3
-            + (18 * qval U μ ^ 2 - 21 * qval U μ + 7) * smom U μ 2
-            + (24 * qval U μ ^ 3 - 42 * qval U μ ^ 2 + 28 * qval U μ - 7) * smom U μ 1
-            + (30 * qval U μ ^ 4 - 70 * qval U μ ^ 3 + 70 * qval U μ ^ 2 - 35 * qval U μ + 7) * smom U μ 0
-            + 12 * smom U μ 0 * smom U μ 2 + (36 * qval U μ - 21) * smom U μ 0 * smom U μ 1
-            + (36 * qval U μ ^ 2 - 42 * qval U μ + 14) * (smom U μ 0) ^ 2 + 6 * (smom U μ 0) ^ 3
-            + 6 * (smom U μ 1) ^ 2)
-        + (xden U μ 6 - tr μ (Kpow μ U 6)) := by
-    rw [ccomp7_necklace hU]
-    simp only [v6, v5, v4, v3, v2, v1, ip15, ip24, ip14, ip33, ip23, ip13,
-      ip42, ip32, ip22, ip12, ip51, ip41, ip31, ip21, ip11]
-    rw [hx1, hx2, hx3, hx4, hx5, hx6]
-    ring
-  rw [key]
-  linarith [hcert, hed]
-
-/-- The complement kernel `Wk U = 1 − U` is itself a graphon. -/
-lemma isGraphon_Wk (hU : IsGraphon U μ) : IsGraphon (Wk U) μ where
+/-- The complement kernel `compl U = 1 − U` is itself a graphon. -/
+lemma isGraphon_compl (hU : IsGraphon U μ) : IsGraphon (compl U) μ where
   meas := by
-    have h : Function.uncurry (Wk U) = fun p : Ω × Ω => 1 - U p.1 p.2 := rfl
+    have h : Function.uncurry (compl U) = fun p : Ω × Ω => 1 - U p.1 p.2 := rfl
     rw [h]; exact measurable_const.sub hU.meas
-  nonneg := fun x y => by rw [Wk]; linarith [hU.le_one x y]
-  le_one := fun x y => by rw [Wk]; linarith [hU.nonneg x y]
-  symm := fun x y => by rw [Wk, Wk, hU.symm x y]
+  nonneg := fun x y => by rw [compl]; linarith [hU.le_one x y]
+  le_one := fun x y => by rw [compl]; linarith [hU.nonneg x y]
+  symm := fun x y => by rw [compl, compl, hU.symm x y]
 
-/-- **`C₇` for all edge densities, fully integral-grounded.**  In the regime `q > ½` the bound
-is trivial: `g₇ = (1−q)((1−q)⁶ − q⁶) ≤ 0 ≤ t(C₇, 1−U)`. -/
-theorem C7_integral_all (hU : IsGraphon U μ) :
-    tr μ (Kpow μ (Wk U) 6) ≥ (1 - qval U μ) ^ 7 - (1 - qval U μ) * qval U μ ^ 6 := by
-  rcases le_total (qval U μ) (1 / 2) with hq | hq
-  · exact C7_integral hU hq
-  · have hcc : 0 ≤ tr μ (Kpow μ (Wk U) 6) := by
-      rw [tr]; exact integral_nonneg fun x => Kpow_nonneg (isGraphon_Wk hU) 6 x x
-    have h1 : 0 ≤ 1 - qval U μ := by linarith [qval_le_one hU]
-    have hpow : (1 - qval U μ) ^ 6 ≤ qval U μ ^ 6 :=
-      pow_le_pow_left₀ h1 (by linarith) 6
-    have hg7 : (1 - qval U μ) ^ 7 - (1 - qval U μ) * qval U μ ^ 6 ≤ 0 := by
-      nlinarith [mul_nonneg h1 (sub_nonneg.mpr hpow)]
-    linarith [hcc, hg7]
-
-end OddCycleBound.Graphon
+end OddCycleBound
