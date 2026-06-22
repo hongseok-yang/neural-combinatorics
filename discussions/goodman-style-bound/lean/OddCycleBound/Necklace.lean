@@ -326,6 +326,41 @@ lemma complMean_succ (hU : IsGraphon U μ) (k : ℕ) :
     show (∫ x, kernelOp U μ (complIter U μ k) x ∂μ) = mean μ (kernelOp U μ (complIter U μ k)) from rfl,
     mean_kernelOp_eq hU hvk]
 
+/-- **Closed form for the necklace pairings.**  Every inner product `⟨pathIter j, complIter k⟩`
+reduces, by the recursion `pairing_complIter_succ`, to the path densities `x_{j+i}` weighted by the
+lower complement means `mean (complIter (k−1−i))`:
+
+  `⟨pathIter j, complIter k⟩ = Σ_{i<k} (−1)ⁱ · mean(complIter (k−1−i)) · x_{j+i} + (−1)ᵏ · x_{j+k}`.
+
+This is the general replacement for the `O(m²)` hand-unrolled `ip_{j,k}` facts in the per-cycle
+assemblies (`BoundsC5C7.lean`, `C9.lean`): only the `O(m)` complement means remain to be expanded. -/
+lemma pairing_pathIter_complIter_closed (hU : IsGraphon U μ) : ∀ (k j : ℕ),
+    pairing μ (pathIter U μ j) (complIter U μ k)
+      = (∑ i ∈ Finset.range k,
+          (-1 : ℝ) ^ i * (mean μ (complIter U μ (k - 1 - i)) * pathDensity U μ (j + i)))
+        + (-1 : ℝ) ^ k * pathDensity U μ (j + k) := by
+  intro k
+  induction k with
+  | zero => intro j; simp [pairing_complIter_zero hU j]
+  | succ k ih =>
+      intro j
+      rw [pairing_complIter_succ hU j k, ih (j + 1),
+        Finset.sum_range_succ' (fun i =>
+          (-1 : ℝ) ^ i * (mean μ (complIter U μ (k + 1 - 1 - i)) * pathDensity U μ (j + i))) k]
+      have hsum : ∀ i ∈ Finset.range k,
+          (-1 : ℝ) ^ (i + 1) * (mean μ (complIter U μ (k + 1 - 1 - (i + 1))) * pathDensity U μ (j + (i + 1)))
+            = -((-1 : ℝ) ^ i * (mean μ (complIter U μ (k - 1 - i)) * pathDensity U μ ((j + 1) + i))) := by
+        intro i _
+        have e1 : k + 1 - 1 - (i + 1) = k - 1 - i := by omega
+        have e2 : j + (i + 1) = (j + 1) + i := by omega
+        rw [e1, e2, pow_succ]; ring
+      rw [Finset.sum_congr rfl hsum, Finset.sum_neg_distrib]
+      have e3 : k + 1 - 1 - 0 = k := by omega
+      have e4 : j + 0 = j := by omega
+      have e5 : j + (k + 1) = j + 1 + k := by omega
+      rw [e3, e4, e5]
+      ring
+
 /-- **The C₅ necklace identity** (`cc₅` in path-complement / inner-product form). -/
 lemma complTrace5_necklace (hU : IsGraphon U μ) :
     trace μ (compPow μ (compl U) 4)
