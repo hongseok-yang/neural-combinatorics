@@ -22,11 +22,13 @@ lake env lean CheckGraphon.lean   # prints the axiom trail of the main results
 
 Toolchain: Lean `v4.31.0`, Mathlib `v4.31.0` (pinned in `lean-toolchain` / `lakefile.toml`).
 
-## Build performance
+## Build performance and memory
 
 A clean rebuild of *only* the project modules (Mathlib oleans already fetched via
 `lake exe cache get`, so Mathlib itself is not recompiled) takes about **7m15s wall**.
-The build is essentially serial: `Graphon` gates everything, then a mostly linear chain.
+The dependency chain is mostly linear (`Graphon` gates everything), but `lake build`
+fans **independent** files out across all cores — by default up to the core count
+(20 on the benchmark machine).
 
 Per-module times (dependency order):
 
@@ -37,14 +39,24 @@ Per-module times (dependency order):
 | `Kernel` | 16 s | | `Necklace` | 11 s |
 | `General.SumOfSquares` | 16 s | | `General.Necklace` | 11 s |
 | `Certificate` | 13 s | | `Main` | 11 s |
-| `BoundsC5C7` | 12 s | | `Cycle` | 10 s |
-| | | | `OddCycleBound` (root) | 10 s |
+| `C11` (group) | ~39 s | | `BoundsC5C7` | 12 s |
+| | | | `Cycle` / root | 10 s |
 
 Notes:
 * `Graphon` (the integral/measure-theory foundations), **not** `C9`, dominates a clean build;
   in incremental rebuilds `Graphon` is cached, which is why `C9` appears heaviest there.
-* `C9` is kernel-checking-bound on the large Φ₉ SOS certificate; its time varies with machine load
-  (≈ 70 s here, up to ≈ 150 s under concurrent load in isolated rebuilds).
+* The `C9`/`C11` certificate files are dominated by **elaboration of giant proof-term `Expr`
+  trees** (300-digit rational coefficients), *not* by parsing or kernel typechecking — measured:
+  isolating a heavy block, parsing+statement-elaboration ≈ 2 s, kernel checking ≈ 0
+  (`skipKernelTC` made no difference), proof elaboration ≈ 62 s. `count_heartbeats` reports tiny
+  counts here because it counts `whnf`/`isDefEq` steps, not `Expr` construction — so it *under*counts
+  this regime.
+* **Memory:** the largest spikes come from building **many heavy files concurrently** (each `lean.exe`
+  loads Mathlib plus its own large terms). To bound peak memory, throttle the build's concurrency
+  via the Lean task pool, e.g. `LEAN_NUM_THREADS=4 lake build` (slower wall-clock, far smaller peak).
+  The `C11` certificate is **split into per-block files** (`C11/Linear`, `C11/Bivar`, `C11/Trivar` +
+  the `C11` assembly) so each is a separate ~120–580 KB compilation unit instead of one 1.2 MB file —
+  this caps per-file peak memory and lets the editor elaborate one block at a time.
 
 **Benchmark machine:** Intel Core i5-14600K (14C/20T), 64 GB RAM, Windows 11 Pro (build 26200),
 Lean/Mathlib `v4.31.0`. Times are wall-clock and will scale with single-thread performance.
@@ -85,6 +97,8 @@ These are the `W`-facing restatements of the complement-form lemmas (phrased for
 ```
 Graphon → PathDensity → { Kernel, Certificate } → Cycle → Necklace → BoundsC5C7 → Main
                                                                    ↘ General/* → C9
+                                                                              ↘ C11
+C11 (assembly) ← { C11/Linear, C11/Bivar, C11/Trivar }
 ```
 
 | Module | Content |
@@ -97,7 +111,10 @@ Graphon → PathDensity → { Kernel, Certificate } → Cycle → Necklace → B
 | `Necklace` | All necklace machinery (see below): the recursions `mixedTrace_succ`/`_zero`, `pairing_complIter_succ`, `complMean_succ`; the telescoped **general necklace identity** `complTrace_necklace`; the **closed form for the pairings** `pairing_pathIter_complIter_closed`; and `pathDensity_zero`/`_one`. |
 | `BoundsC5C7` | Assembles the necklace + certificate + edge deletion into `C5_integral` / `C7_integral` / `C7_integral_all`. |
 | `C9` | The Φ₉ certificate (`cert9_specMoment`, via the degree-3 and bivariate SOS engines on the path-certificate range `q ≤ 997/2000`) and the assembled `C9_path_integral`. |
-| `C11` | The Φ₁₁ certificate on `q ≤ 1/3` (`cert11_L1 … L5`, `cert11_specMoment`) via the joint `(q,λ,…)` Positivstellensatz, and the assembled `C11_path_integral`. |
+| `C11` | **Assembly** for the Φ₁₁ bound: `cert11_L4`/`L5` (Hankel `nlinarith`), `cert11_specMoment` (combines `L1 … L5`), and `C11_path_integral`. Imports the three block files below. Split out of a former 1.2 MB monolith to bound per-file memory. |
+| `C11/Linear` | The Φ₁₁ `L₁` block — linear in the moments, certified by `sos4` (`cert11_L10 … L13`, `cert11_L1`). |
+| `C11/Bivar` | The Φ₁₁ `L₂` block — bivariate, certified by `sos2var4` (`cert11_L20 … L23` chunks, `cert11_L2`). |
+| `C11/Trivar` | The Φ₁₁ `L₃` block — trivariate, certified by `sos3var3` (`cert11_L30 … L33` chunks, `cert11_L3`). |
 | `Main` | The `W`-facing headline theorems `C5_bound`, `C7_bound`, `C9_path_bound`, `C11_path_bound` and the complement translation. |
 | `General/PathRecurrence` | The **general path-density recurrence** `pathDensity_succ : x_{n+1} = q·xₙ + Σ sᵢ·x_{n−1−i}`, and `pathDensity_seven`/`_eight`. |
 | `General/SumOfSquares` | The general Hankel sum-of-squares engine: `sos_sq_expand`, `sos_sq_expand_2var`, and the fixed-degree `sos2var3`/`sos3`. |
@@ -169,8 +186,14 @@ Lean's three standard axioms `propext, Classical.choice, Quot.sound` (no extra a
   `pathDensity_nine … _twelve`.
 * **`C₁₃`.** Its decomposition `Φ₁₃ = L₁ + … + L₅ + 12 s₀⁶` is computed and `L₁` (degree-10 `P_q`,
   `sos5`) is certified, but the higher pieces need degree-8/6 kernels (`sos2var5`, a degree-3
-  `sos3var`) whose expanded SOS forms × the full-rank square count overflow Lean's `ring` budget;
-  completing it needs a **low-rank (kernel-preserving) rationalization** to cut the square count.
+  `sos3var`) whose expanded SOS forms × the square count overflow Lean's `ring` budget. **Low-rank
+  rationalization is a confirmed dead end** (`cert_scripts/LOWRANK_FINDINGS.md`): rank-minimizing
+  solves cut `C₁₃ L₂` from 95 to 14 squares *numerically*, but the low-rank face is on the PSD-cone
+  boundary and fails rational rounding at every denominator (the Peyrl–Parrilo obstruction), so the
+  rational certificate stays ~95 squares. The productive levers are **smaller coefficients**
+  (kernel-aware rounding — the 300-digit integers are an artifact of LDL denominator accumulation +
+  integer-clearing, not of the inequality's tightness) and **bespoke Hankel certificates** (few
+  squares, tiny coefficients, like `cert11_L4`/`L5`).
 * The all-densities versions (closing `1/2 < p < 2/3` for `C₁₁`, the analogous band for `C₁₃`, and
   the `C₉` middle band) additionally need the spectral/Razborov-triangle closure of the paper.
 * The conditional results (regularity, the operator-theoretic universal bound, the variational
