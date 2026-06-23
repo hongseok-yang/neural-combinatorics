@@ -4,6 +4,7 @@ import OddCycleBound.General.Necklace
 import OddCycleBound.General.PathRecurrence
 import OddCycleBound.General.SumOfSquares
 import OddCycleBound.C9
+import OddCycleBound.C11
 
 /-!
 # OddCycleBound — the odd-cycle Goodman-type bound, integral-grounded

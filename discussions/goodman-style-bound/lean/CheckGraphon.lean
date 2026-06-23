@@ -49,3 +49,5 @@ open OddCycleBound
 -- Headline W-form results (the paper's statement)
 #print axioms C5_bound
 #print axioms C7_bound
+#print axioms C9_path_bound
+#print axioms C11_path_bound

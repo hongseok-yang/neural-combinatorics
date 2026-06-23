@@ -60,6 +60,11 @@ graphon `W` with the single hypothesis `hW : IsGraphon W μ` and edge density
 | `C5_bound` | `t(C₅, W) ≥ p⁵ − p(1−p)⁴` | all densities |
 | `C7_bound` | `t(C₇, W) ≥ p⁷ − p(1−p)⁶` | all densities |
 | `C9_path_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | `p ≥ 1003/2000` (path-certificate range) |
+| `C11_path_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | `p ≥ 2/3` (high-density range) |
+
+The `C₁₁` bound is proved on `p ≥ 2/3` (complement density `q = 1−p ≤ 1/3`), the natural
+meeting point with Razborov's triangle-density theorem (valid on `[1/2, 2/3]`), which a future
+spectral-closure development can use to cover the remaining band `1/2 < p < 2/3`.
 
 Here `t(C_m, W)` is `trace μ (compPow μ W (m−1))` — the cyclic trace of the powers of the kernel
 `W` — written out purely as nested integrals.
@@ -92,7 +97,8 @@ Graphon → PathDensity → { Kernel, Certificate } → Cycle → Necklace → B
 | `Necklace` | All necklace machinery (see below): the recursions `mixedTrace_succ`/`_zero`, `pairing_complIter_succ`, `complMean_succ`; the telescoped **general necklace identity** `complTrace_necklace`; the **closed form for the pairings** `pairing_pathIter_complIter_closed`; and `pathDensity_zero`/`_one`. |
 | `BoundsC5C7` | Assembles the necklace + certificate + edge deletion into `C5_integral` / `C7_integral` / `C7_integral_all`. |
 | `C9` | The Φ₉ certificate (`cert9_specMoment`, via the degree-3 and bivariate SOS engines on the path-certificate range `q ≤ 997/2000`) and the assembled `C9_path_integral`. |
-| `Main` | The `W`-facing headline theorems `C5_bound`, `C7_bound`, `C9_path_bound` and the complement translation. |
+| `C11` | The Φ₁₁ certificate on `q ≤ 1/3` (`cert11_L1 … L5`, `cert11_specMoment`) via the joint `(q,λ,…)` Positivstellensatz, and the assembled `C11_path_integral`. |
+| `Main` | The `W`-facing headline theorems `C5_bound`, `C7_bound`, `C9_path_bound`, `C11_path_bound` and the complement translation. |
 | `General/PathRecurrence` | The **general path-density recurrence** `pathDensity_succ : x_{n+1} = q·xₙ + Σ sᵢ·x_{n−1−i}`, and `pathDensity_seven`/`_eight`. |
 | `General/SumOfSquares` | The general Hankel sum-of-squares engine: `sos_sq_expand`, `sos_sq_expand_2var`, and the fixed-degree `sos2var3`/`sos3`. |
 | `General/Necklace` | Regression `example`s checking that `complTrace_necklace` specialises to the explicit four-term (`C₅`) and six-term (`C₇`) inner-product forms. |
@@ -153,10 +159,19 @@ Lean's three standard axioms `propext, Classical.choice, Quot.sound` (no extra a
   `t(Cₘ,W) = Σ λᵢᵐ`). The latter requires an operator/Hilbert–Schmidt layer — Mathlib has the
   compact self-adjoint spectral theorem but not the trace/moment identity — and is out of scope of
   the current integral-only design.
-* **`C₁₁, C₁₃`.** Their **path-certificate ranges** are analogous (larger Gram-matrix SOS checks)
-  and would reuse this infrastructure verbatim: the general necklace identity, the closed-form
-  pairing lemma, the path-density recurrence (extended with `pathDensity_nine … _twelve`), and the
-  SOS engine — only the certificate polynomials are new. The all-densities versions additionally
-  need the gap closures (spectral / frontier-split arguments of the paper).
+* **`C₁₁` is done on the high-density range `p ≥ 2/3`** (`OddCycleBound/C11.lean`): the complement
+  defect `Φ₁₁ = L₁ + L₂ + L₃ + L₄ + 10 s₀⁵` is certified piecewise via the joint `(q, λ, …)`
+  **Positivstellensatz** `K = σ₀ + q σ₁ + (1−3q)/3·… ` with `{1, q, 1/3−q, q(1/3−q)}` multipliers —
+  `L₁` linear (`sos4`), `L₂` bivariate (`sos2var4`), `L₃` trivariate (`sos3var3` /
+  `sos_sq_expand_3var`), `L₄`/`L₅` by Hankel `nlinarith`. The certificates are machine-generated
+  by the exact-rational pipeline in `cert_scripts/` (CLARABEL SDP → rational LDL → `ring`-verified
+  Lean), chunked to fit Lean's `ring`. The path-density recurrence is extended with
+  `pathDensity_nine … _twelve`.
+* **`C₁₃`.** Its decomposition `Φ₁₃ = L₁ + … + L₅ + 12 s₀⁶` is computed and `L₁` (degree-10 `P_q`,
+  `sos5`) is certified, but the higher pieces need degree-8/6 kernels (`sos2var5`, a degree-3
+  `sos3var`) whose expanded SOS forms × the full-rank square count overflow Lean's `ring` budget;
+  completing it needs a **low-rank (kernel-preserving) rationalization** to cut the square count.
+* The all-densities versions (closing `1/2 < p < 2/3` for `C₁₁`, the analogous band for `C₁₃`, and
+  the `C₉` middle band) additionally need the spectral/Razborov-triangle closure of the paper.
 * The conditional results (regularity, the operator-theoretic universal bound, the variational
   structure) — explicitly out of scope.
