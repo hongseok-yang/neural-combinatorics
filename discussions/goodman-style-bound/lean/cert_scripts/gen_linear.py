@@ -52,7 +52,7 @@ def ldl_squares(M, b, maxp):
                 R[i][j]=R[i][j]-rki*R[k][j]/piv
     return sq
 
-def gen(a, RHO, name, jl=4, out=None):
+def gen(a, RHO, name, jl=4, out=None, CHUNK=5):
     P=sp.expand(sum(a[d]*lam**d for d in range(len(a))))
     deg=len(a)-1; hd=deg//2
     b0=monos_td(hd, jl); b1=monos_td(max(hd-1,0), jl)
@@ -148,7 +148,7 @@ def gen(a, RHO, name, jl=4, out=None):
             for pp in range(jl+1):
                 d=p+pp; acc[d]=acc.get(d,sp.Integer(0))+w[p]*w[pp]
         return {k:sp.expand(v) for k,v in acc.items() if sp.expand(v)!=0}
-    bb=[b0,b1,b1,b1]; L=[]; gmforms=[]; CHUNK=5
+    bb=[b0,b1,b1,b1]; L=[]; gmforms=[]
     for gi,(G,b) in enumerate(zip(Gs,bb)):
         gm=gram_moment(G,b); gmform=momform(gm); gmforms.append(gmform)
         sqs=ldl_squares(G,b,jl)
