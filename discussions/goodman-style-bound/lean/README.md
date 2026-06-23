@@ -24,27 +24,30 @@ Toolchain: Lean `v4.31.0`, Mathlib `v4.31.0` (pinned in `lean-toolchain` / `lake
 
 ## Build performance and memory
 
-A clean rebuild of *only* the project modules (Mathlib oleans already fetched via
-`lake exe cache get`, so Mathlib itself is not recompiled) takes about **7m15s wall**.
-The dependency chain is mostly linear (`Graphon` gates everything), but `lake build`
-fans **independent** files out across all cores — by default up to the core count
-(20 on the benchmark machine).
+A clean rebuild of *only* the project modules (`lake clean OddCycleBound; lake build`, with
+Mathlib oleans already fetched via `lake exe cache get`, so Mathlib itself is not recompiled)
+took **293 s wall** in the run below. `lake build` fans **independent** files out across all
+cores (up to the core count — 20 here), so the wall time is far below the sum of per-module
+times; the **SOS certificate files dominate**.
 
-Per-module times (dependency order):
+Per-module times (this clean run, parallel; descending):
 
 | Module | Time | | Module | Time |
 |--------|-----:|-|--------|-----:|
-| `Graphon` | **194 s** | | `General.PathRecurrence` | 12 s |
-| `C9` | **70 s** | | `PathDensity` | 11 s |
-| `Kernel` | 16 s | | `Necklace` | 11 s |
-| `General.SumOfSquares` | 16 s | | `General.Necklace` | 11 s |
-| `Certificate` | 13 s | | `Main` | 11 s |
-| `C11` (group) | ~39 s | | `BoundsC5C7` | 12 s |
-| | | | `Cycle` / root | 10 s |
+| `C11/Bivar` | **145 s** | | `General.PathRecurrence` | 20 s |
+| `C9` | **115 s** | | `Certificate` / `BoundsC5C7` / `General.Necklace` | 13 s |
+| `C11/Trivar` | **115 s** | | `Graphon` / `Kernel` / `PathDensity` | 12 s |
+| `C11/Linear` | **95 s** | | `Main` / `Necklace` / `Cycle` | 11 s |
+| `General.SumOfSquares` | 58 s | | `OddCycleBound` (root) | 10 s |
+| `C11` (assembly) | 38 s | | **total wall** | **293 s** |
 
 Notes:
-* `Graphon` (the integral/measure-theory foundations), **not** `C9`, dominates a clean build;
-  in incremental rebuilds `Graphon` is cached, which is why `C9` appears heaviest there.
+* The four heavy files — `C11/Bivar`, `C11/Trivar`, `C11/Linear`, `C9` — are the SOS certificates
+  and run **concurrently**, which is why the total wall (293 s) is well under their sum (~470 s).
+* These per-module times are wall-clock under 20-way contention, so they vary with machine load.
+  Also, the **first** clean build after boot can inflate the earliest modules by tens of seconds
+  while Mathlib's oleans are read cold from disk (warm OS file cache → the ~12 s seen here);
+  an older benchmark recorded `Graphon` at 194 s for exactly this cold-cache reason.
 * The `C9`/`C11` certificate files are dominated by **elaboration of giant proof-term `Expr`
   trees** (300-digit rational coefficients), *not* by parsing or kernel typechecking — measured:
   isolating a heavy block, parsing+statement-elaboration ≈ 2 s, kernel checking ≈ 0
