@@ -1,0 +1,656 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1.08in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[nameinlink,capitalize]{cleveref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Spec}{Spec}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\cutdist}{\delta_{\square}}
+\newcommand{\M}{\mathcal M}
+\newcommand{\bip}{\operatorname{Bip}}
+
+\title{Qualitative stability at the Tur\'an density points for odd cycles}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove a qualitative graphon stability statement at the Tur\'an density points
+\(p_r=1-1/r\) for the cycle densities \(t(C_m,\cdot)\), where
+\(m\in\{7,9,11,13\}\).  The proof has two parts.  First, equality in the
+Goodman-type lower bound at \(p_r\) forces the graphon to be the balanced
+complete \(r\)-partite graphon.  Second, compactness of the graphon space in cut
+distance upgrades this equality-rigidity statement to stability.  The proof uses
+as input the exact path-certificate positivity statements for
+\(C_7,C_9,C_{11},C_{13}\).
+\end{abstract}
+
+\section{Statement}
+
+A graphon is a symmetric measurable function
+\[
+        W:[0,1]^2\to[0,1].
+\]
+For a finite graph \(H\), its homomorphism density in \(W\) is
+\[
+        t(H,W)
+        = \int_{[0,1]^{V(H)}} \prod_{ij\in E(H)} W(x_i,x_j)
+          \prod_{i\in V(H)} \dd x_i .
+\]
+In particular, \(t(K_2,W)=\int_{[0,1]^2}W\) is the edge density of \(W\).
+For an odd integer \(m\), write
+\[
+        g_m(p):=p^m-p(1-p)^{m-1}.
+\]
+Let \(T_r\) denote the balanced complete \(r\)-partite graphon: partition
+\([0,1]\) into sets \(V_1,\ldots,V_r\) of measure \(1/r\), set
+\(T_r=0\) on \(V_i\times V_i\), and set \(T_r=1\) on
+\(V_i\times V_j\) for \(i\ne j\).  Then
+\[
+        t(K_2,T_r)=1-\frac1r=:p_r,
+\]
+and, for odd \(m\),
+\[
+        t(C_m,T_r)
+        = \frac{(r-1)^m-(r-1)}{r^m}
+        = \left(1-\frac1r\right)^m
+          -\left(1-\frac1r\right)\left(\frac1r\right)^{m-1}
+        = g_m(p_r).
+\]
+
+\begin{theorem}[Stability at Tur\'an points]
+\label{thm:main-stability}
+Let
+\[
+        \M=\{7,9,11,13\}.
+\]
+Fix \(m\in\M\) and \(r\ge 2\).  For every \(\varepsilon>0\) there exists
+\(\delta>0\) such that, whenever \(W\) is a graphon satisfying
+\[
+        t(K_2,W)=p_r=1-\frac1r
+\]
+and
+\[
+        t(C_m,W)\le g_m(p_r)+\delta,
+\]
+one has
+\[
+        \cutdist(W,T_r)<\varepsilon.
+\]
+Here \(\cutdist\) is the usual cut distance, with graphons identified up to
+measure-preserving relabelling.
+\end{theorem}
+
+\begin{theorem}[Stability with a small density error]
+\label{thm:density-error}
+Fix \(m\in\M\) and \(r\ge 2\).  For every \(\varepsilon>0\) there exists
+\(\delta>0\) such that, whenever \(W\) is a graphon satisfying
+\[
+        \left|t(K_2,W)-p_r\right|\le \delta
+\]
+and
+\[
+        t(C_m,W)\le g_m(t(K_2,W))+\delta,
+\]
+one has
+\[
+        \cutdist(W,T_r)<\varepsilon.
+\]
+\end{theorem}
+
+The proof of \Cref{thm:main-stability,thm:density-error} is compactness-based;
+it gives a qualitative modulus but not an explicit numerical dependence
+\(\delta=\delta(\varepsilon,m,r)\).
+
+\section{Operator notation and the certificate input}
+
+Let
+\[
+        U:=1-W, \qquad q:=t(K_2,U)=1-t(K_2,W).
+\]
+Let \(T_U\) be the Hilbert--Schmidt graphon operator
+\[
+        T_U f(x)=\int_0^1 U(x,y)f(y)\dd y .
+\]
+Set
+\[
+        d_U:=T_U\one,
+        \qquad d_U=q\one+g,
+        \qquad \langle g,\one\rangle=0.
+\]
+Let \(H_0=\one^\perp\), and define the mean-zero compression
+\[
+        A:=P_{H_0}T_U P_{H_0}:H_0\to H_0.
+\]
+For \(j\ge0\), define
+\[
+        s_j:=\langle g,A^j g\rangle.
+\]
+By the spectral theorem, there is a finite positive measure \(\mu\) on a compact
+interval containing the spectrum of \(A\) such that
+\[
+        s_j=\int \lambda^j\dd\mu(\lambda),
+        \qquad s_0=\mu(\mathbb R)=\|g\|_2^2.
+\]
+The following lemma packages the exact path-certificate input needed below.
+
+\begin{lemma}[Strict path-certificate rigidity]
+\label{lem:path-rigidity}
+Let \(m\in\{7,9,11,13\}\).  Suppose \(0\le q\le1/3\), and let \(W=1-U\).
+For each such \(m\), the certified path expansion gives a functional
+\(\Phi_m(q,\mu)\) such that
+\[
+        t(C_m,W)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr)
+        \ge \Phi_m(q,\mu)\ge0.
+\]
+Moreover,
+\[
+        \Phi_m(q,\mu)=0 \quad\Longrightarrow\quad \mu=0.
+\]
+Equivalently, equality in the lower bound at such a value of \(q\) forces
+\(g=0\), i.e. the complement \(U\) is \(q\)-regular.
+\end{lemma}
+
+\begin{proof}
+We recall the relevant certificate structure for each of the four cycles.
+
+For \(C_7\), the certificate is explicit.  One obtains
+\[
+\begin{aligned}
+\Phi_7={}&6s_4+(12q-7)s_3+(18q^2-21q+7)s_2  \\
+&+(24q^3-42q^2+28q-7)s_1
+ +(30q^4-70q^3+70q^2-35q+7)s_0 \\
+&+12s_0s_2+(36q-21)s_0s_1
+ +(36q^2-42q+14)s_0^2+6s_0^3+6s_1^2 .
+\end{aligned}
+\]
+Writing \(r_0=s_0=\mu(\mathbb R)\), this becomes
+\[
+        \Phi_7=6s_1^2+
+        \int \bigl(P_q(\lambda)+r_0B_q(\lambda)+6r_0^2\bigr)\dd\mu(\lambda),
+\]
+where
+\[
+\begin{aligned}
+P_q(\lambda)={}&6\lambda^4+(12q-7)\lambda^3+(18q^2-21q+7)\lambda^2\\
+&+(24q^3-42q^2+28q-7)\lambda
+ +30q^4-70q^3+70q^2-35q+7,
+\end{aligned}
+\]
+and
+\[
+        B_q(\lambda)=12\lambda^2+(36q-21)\lambda+36q^2-42q+14.
+\]
+The quadratic \(B_q\) is uniformly positive on \(0\le q\le1/2\).  Also,
+with
+\[
+        D(q)=288q^2-336q+119,
+        \qquad C(q)=24q^3-42q^2+28q-7,
+\]
+one has the exact square decomposition
+\[
+        P_q(\lambda)
+        =6\left(\lambda^2+\left(q-\frac7{12}\right)\lambda\right)^2
+        +\frac{D(q)}{24}\left(\lambda+\frac{12C(q)}{D(q)}\right)^2
+        +\frac{N(q)}{D(q)},
+\]
+where
+\[
+\begin{aligned}
+N(q)={}&5184q^6-18144q^5+28602q^4-25802q^3\\
+&+13874q^2-4165q+539.
+\end{aligned}
+\]
+For \(0\le q\le1/2\), \(D(q)>0\) and \(N(q)>0\).  Hence
+\(P_q(\lambda)>0\) for all \(\lambda\), and therefore \(\Phi_7=0\) implies
+\(\mu=0\).
+
+For \(C_9\), the certified defect on the path-certificate range
+\(0\le q\le 997/2000\) decomposes as
+\[
+        \Phi_9=L+Q+H,
+\]
+where \(Q\ge0\), \(H\ge0\), and
+\[
+        L=\int P_q(\lambda)\dd\mu(\lambda).
+\]
+The linear polynomial is
+\[
+\begin{aligned}
+P_q(\lambda)={}&8\lambda^6+(16q-9)\lambda^5
++3(8q^2-9q+3)\lambda^4\\
+&+(32q^3-54q^2+36q-9)\lambda^3\\
+&+(40q^4-90q^3+90q^2-45q+9)\lambda^2\\
+&+3(16q^5-45q^4+60q^3-45q^2+18q-3)\lambda\\
+&+56q^6-189q^5+315q^4-315q^3+189q^2-63q+9.
+\end{aligned}
+\]
+It has a Gram representation
+\[
+        P_q(\lambda)=z(\lambda)^\top N_q z(\lambda),
+        \qquad z(\lambda)=(\lambda^3,\lambda^2,\lambda,1)^\top,
+\]
+where the exact rational leading-principal-minor certificate shows that
+\(N_q\) is positive definite for \(0\le q\le997/2000\).  Thus
+\(P_q(\lambda)>0\) for every \(\lambda\), since \(z(\lambda)\ne0\).  Hence
+\(\Phi_9=0\) implies \(L=0\), and consequently \(
+\mu=0\).
+
+For \(C_{11}\), the certified path defect on
+\(0\le q\le97/200\) has the homogeneous decomposition
+\[
+        \Phi_{11}=L_1+L_2+L_3+L_4+10s_0^5.
+\]
+Here
+\[
+        L_1=\int P_q^{(11)}(\lambda)\dd\mu(\lambda),
+\]
+where the degree-eight polynomial \(P_q^{(11)}\) is strictly positive on
+\(0\le q\le97/200\), \(-1\le\lambda\le1\), by an exact rational Bernstein
+subdivision certificate.  The nonlinear pieces \(L_2,L_3,L_4\) are represented
+as averages of symmetric kernels \(K_{d,q}\), and the same certificate gives
+\(K_{d,q}>0\) on the full relevant boxes for \(d=2,3,4\).  Therefore
+\(\Phi_{11}=0\) again forces \(L_1=0\), hence \(\mu=0\).
+
+For \(C_{13}\), on the path-certificate range \(0\le q\le481/1000\), the
+certified decomposition is
+\[
+        \Phi_{13}=L_1+L_2+L_3+L_4+L_5+12s_0^6.
+\]
+Again
+\[
+        L_1=\int P_q^{(13)}(\lambda)\dd\mu(\lambda),
+\]
+where \(P_q^{(13)}\) is strictly positive on
+\(0\le q\le481/1000\), \(-1\le\lambda\le1\), by exact rational Bernstein
+subdivision.  The kernels representing \(L_2,L_3,L_4,L_5\) are nonnegative on
+the relevant domains, with strict positivity in the certified boxes.  Hence
+\(\Phi_{13}=0\) implies \(\mu=0\).
+
+Since
+\[
+        \frac13<\frac{97}{200},\qquad
+        \frac13<\frac{481}{1000},\qquad
+        \frac13<\frac{997}{2000},
+\]
+all four certificate ranges contain \(0\le q\le1/3\).  This proves the lemma.
+\end{proof}
+
+\section{Equality in the regular case}
+
+\begin{lemma}[Regular equality rigidity]
+\label{lem:regular-rigidity}
+Let \(m\ge3\) be odd and let \(r\ge2\).  Put
+\[
+        p=1-\frac1r,
+        \qquad q=\frac1r.
+\]
+Suppose \(W\) is \(p\)-regular, i.e.
+\[
+        \int_0^1 W(x,y)\dd y=p
+        \qquad\text{for a.e. }x,
+\]
+and suppose
+\[
+        t(C_m,W)=p^m-pq^{m-1}.
+\]
+Then \(W\) is weakly isomorphic to \(T_r\).
+\end{lemma}
+
+\begin{proof}
+Let \(T_W\) be the graphon operator of \(W\).  Since \(W\) is \(p\)-regular,
+\(\one\) is an eigenfunction of \(T_W\) with eigenvalue \(p\).  On
+\(\one^\perp\), write the remaining eigenvalues as
+\[
+        \lambda_1,\lambda_2,\ldots .
+\]
+Let \(U=1-W\).  Then \(U\) is \(q\)-regular and, on \(\one^\perp\),
+\[
+        T_U=-T_W.
+\]
+By Schur's test, \(\|T_U\|_{2\to2}\le q\).  Therefore
+\[
+        |\lambda_i|\le q
+        \qquad\text{for all }i.
+\]
+Moreover,
+\[
+        \sum_i\lambda_i^2
+        =\|W\|_{L^2([0,1]^2)}^2-p^2
+        \le p-p^2=pq,
+\]
+because \(0\le W\le1\).  The trace formula gives
+\[
+        t(C_m,W)=p^m+\sum_i\lambda_i^m.
+\]
+Since \(m\) is odd,
+\[
+        \sum_i\lambda_i^m
+        \ge -\sum_i |\lambda_i|^m
+        \ge -q^{m-2}\sum_i\lambda_i^2
+        \ge -pq^{m-1}.
+\]
+By the assumed equality, equality holds throughout this chain.  Hence:
+\begin{enumerate}[label=(\roman*)]
+\item \(\|W\|_2^2=p\), so \(W^2=W\) a.e.; thus \(W\) is \(\{0,1\}\)-valued.
+\item Every nonzero nonconstant eigenvalue of \(T_W\) is negative and has
+absolute value \(q\).  Hence every such eigenvalue is exactly \(-q\).
+\item The number of nonzero nonconstant eigenvalues is
+\[
+        \frac{pq}{q^2}=\frac pq=r-1.
+\]
+\end{enumerate}
+Thus the spectrum of \(T_W\) is
+\[
+        p,\quad \underbrace{-q,\ldots,-q}_{r-1\text{ times}},\quad 0,0,\ldots .
+\]
+Equivalently, the spectrum of \(T_U=J-T_W\) is
+\[
+        \underbrace{q,\ldots,q}_{r\text{ times}},\quad 0,0,\ldots,
+\]
+where \(Jf=\langle f,\one\rangle\one\).  Hence
+\[
+        T_U^2=qT_U.
+\]
+Since \(U=1-W\) is also \(\{0,1\}\)-valued and \(q\)-regular, this identity has
+a direct structural meaning.  For a.e. \(x\), set
+\[
+        N(x):=\{y\in[0,1]: U(x,y)=1\}.
+\]
+Then \(\mu(N(x))=q\).  The kernel identity \(T_U^2=qT_U\) says that, for a.e.
+\((x,y)\),
+\[
+        \mu(N(x)\cap N(y))=qU(x,y).
+\]
+If \(U(x,y)=1\), then \(N(x)\cap N(y)\) has measure \(q\), so
+\(N(x)=N(y)\) modulo null sets.  If \(U(x,y)=0\), then
+\(N(x)\cap N(y)\) has measure zero.  Therefore the non-null neighbourhoods
+\(N(x)\) form pairwise disjoint equivalence classes, each of measure
+\(q=1/r\), and
+\[
+        U=1 \text{ inside each class},
+        \qquad U=0 \text{ between distinct classes}.
+\]
+There must be exactly \(r\) such classes.  Hence \(U\) is the balanced disjoint
+union of \(r\) clique graphons, and therefore \(W=1-U\) is the balanced complete
+\(r\)-partite graphon \(T_r\), up to relabelling.
+\end{proof}
+
+\section{The bipartite Tur\'an point}
+
+At \(r=2\), one has \(p=1/2\) and \(g_m(1/2)=0\).  The preceding
+path-certificate rigidity is not available, because \(q=1/2\) lies outside the
+strict high-density window needed for the argument above.  We use instead a
+spectral argument.
+
+\begin{lemma}[Spectral support bound]
+\label{lem:support}
+For every graphon \(W\), the graphon operator \(T_W\) satisfies
+\[
+        \lambda_{\min}(T_W)\ge -\frac12.
+\]
+Moreover every eigenvalue except the largest one lies in the interval
+\([-1/2,1/2]\).
+\end{lemma}
+
+\begin{proof}
+Put \(S=2W-1\).  Then
+\[
+        T_W=\frac12(J+T_S),
+        \qquad Jf=\langle f,\one\rangle\one.
+\]
+Since \(|S|\le1\), Schur's test gives \(\|T_S\|\le1\).  Therefore
+\[
+        T_W\succeq \frac12(J-I)\succeq -\frac12 I.
+\]
+This proves the lower spectral bound.
+
+For the upper bound on the non-principal eigenvalues, apply the min--max
+principle.  On \(\one^\perp\), writing \(U=1-W\), we have
+\[
+        T_W=-T_U.
+\]
+The lower spectral bound just proved, applied to \(U\), gives
+\(T_U\succeq -\frac12 I\).  Hence, for every unit vector
+\(f\perp\one\),
+\[
+        \langle f,T_Wf\rangle=-\langle f,T_Uf\rangle\le\frac12.
+\]
+Thus the second largest eigenvalue of \(T_W\) is at most \(1/2\), and all
+non-principal eigenvalues lie in \([-1/2,1/2]\).
+\end{proof}
+
+\begin{lemma}[Rigidity at \(p=1/2\)]
+\label{lem:bipartite-rigidity}
+Let \(m\ge3\) be odd.  Suppose \(W\) is a graphon such that
+\[
+        t(K_2,W)=\frac12,
+        \qquad t(C_m,W)=0.
+\]
+Then \(W\) is weakly isomorphic to \(T_2\).
+\end{lemma}
+
+\begin{proof}
+Let the eigenvalues of \(T_W\) be
+\[
+        \ell,\lambda_1,\lambda_2,\ldots,
+\]
+where \(\ell\) is the largest eigenvalue.  By the Rayleigh principle,
+\[
+        \ell\ge \langle T_W\one,\one\rangle=t(K_2,W)=\frac12.
+\]
+By \Cref{lem:support}, every \(\lambda_i\) lies in \([-1/2,1/2]\).  Therefore,
+for odd \(m\),
+\[
+        \lambda_i^m\ge -2^{2-m}\lambda_i^2.
+\]
+The trace formula and \(0\le W\le1\) give
+\[
+        \ell^2+\sum_i\lambda_i^2
+        =\Tr(T_W^2)
+        =\int W^2
+        \le \int W
+        =\frac12.
+\]
+Consequently,
+\[
+\begin{aligned}
+0=t(C_m,W)
+&=\ell^m+\sum_i\lambda_i^m\\
+&\ge \ell^m-2^{2-m}\sum_i\lambda_i^2\\
+&\ge \ell^m-2^{2-m}\left(\frac12-\ell^2\right).
+\end{aligned}
+\]
+Define
+\[
+        h(x)=x^m-2^{2-m}\left(\frac12-x^2\right).
+\]
+Then \(h(1/2)=0\), and
+\[
+        h'(x)=mx^{m-1}+2^{3-m}x>0
+        \qquad (x>0).
+\]
+Since \(\ell\ge1/2\), the inequality \(0\ge h(\ell)\) forces
+\(\ell=1/2\).
+
+Equality must now hold in all inequalities above.  In particular,
+\[
+        \int W^2=\int W,
+\]
+so \(W\) is \(\{0,1\}\)-valued.  Also, since
+\(\ell=\langle T_W\one,\one\rangle=1/2\) equals the largest Rayleigh quotient,
+\(\one\) is an eigenfunction of \(T_W\).  Hence \(W\) is \(1/2\)-regular.
+Applying \Cref{lem:regular-rigidity} with \(r=2\) gives
+\(W\cong T_2\).
+\end{proof}
+
+\section{Equality rigidity at all Tur\'an points}
+
+\begin{proposition}[Equality rigidity]
+\label{prop:equality-rigidity}
+Let \(m\in\{7,9,11,13\}\) and \(r\ge2\).  If a graphon \(W\) satisfies
+\[
+        t(K_2,W)=1-\frac1r
+\]
+and
+\[
+        t(C_m,W)=g_m\left(1-\frac1r\right),
+\]
+then \(W\) is weakly isomorphic to \(T_r\).
+\end{proposition}
+
+\begin{proof}
+If \(r=2\), then \(p_r=1/2\) and \(g_m(1/2)=0\).  The conclusion follows from
+\Cref{lem:bipartite-rigidity}.
+
+Assume now that \(r\ge3\).  Put
+\[
+        q=\frac1r\le\frac13,
+        \qquad U=1-W.
+\]
+Since \(t(K_2,U)=q\), the certificate rigidity lemma applies.  The assumed
+equality gives
+\[
+        t(C_m,W)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr)=0.
+\]
+By \Cref{lem:path-rigidity},
+\[
+        0\ge \Phi_m(q,\mu)\ge0,
+\]
+so \(\Phi_m(q,\mu)=0\).  Hence \(\mu=0\), and since
+\[
+        \mu(\mathbb R)=s_0=\|g\|_2^2,
+\]
+we get \(g=0\).  Thus
+\[
+        T_U\one=q\one,
+\]
+so \(U\) is \(q\)-regular and \(W=1-U\) is \(p_r\)-regular.  Now
+\Cref{lem:regular-rigidity} applies and yields \(W\cong T_r\).
+\end{proof}
+
+\section{Compactness upgrade to stability}
+
+We use two standard facts from graphon theory:
+\begin{enumerate}[label=(\alph*)]
+\item The space of graphons modulo measure-preserving relabelling is compact in
+cut distance.
+\item For every finite graph \(H\), the map \(W\mapsto t(H,W)\) is continuous
+with respect to cut distance.
+\end{enumerate}
+
+\begin{proof}[Proof of \Cref{thm:main-stability}]
+Suppose the theorem is false.  Then there exists \(\varepsilon_0>0\) and a
+sequence of graphons \((W_n)\) such that
+\[
+        t(K_2,W_n)=p_r,
+\]
+\[
+        t(C_m,W_n)\le g_m(p_r)+\frac1n,
+\]
+but
+\[
+        \cutdist(W_n,T_r)\ge\varepsilon_0
+        \qquad\text{for every }n.
+\]
+By compactness, after passing to a subsequence and relabelling if necessary,
+there is a graphon \(W\) such that
+\[
+        W_n\to W
+        \qquad\text{in cut distance}.
+\]
+By continuity of homomorphism densities,
+\[
+        t(K_2,W)=p_r
+\]
+and
+\[
+        t(C_m,W)\le g_m(p_r).
+\]
+The Goodman-type lower bound for \(C_m\), valid for
+\(m\in\{7,9,11,13\}\), gives the reverse inequality
+\[
+        t(C_m,W)\ge g_m(p_r).
+\]
+Therefore
+\[
+        t(C_m,W)=g_m(p_r).
+\]
+By \Cref{prop:equality-rigidity}, \(W\cong T_r\).  Hence
+\[
+        \cutdist(W_n,T_r)\to0,
+\]
+contradicting \(\cutdist(W_n,T_r)\ge\varepsilon_0\).  This proves the theorem.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:density-error}]
+Suppose the statement is false.  Then there is \(\varepsilon_0>0\) and a
+sequence \((W_n)\) such that, writing \(p_n=t(K_2,W_n)\),
+\[
+        |p_n-p_r|\to0,
+\]
+\[
+        t(C_m,W_n)\le g_m(p_n)+o(1),
+\]
+but
+\[
+        \cutdist(W_n,T_r)\ge\varepsilon_0.
+\]
+By compactness, pass to a cut-convergent subsequence
+\[
+        W_n\to W.
+\]
+Then
+\[
+        t(K_2,W)=\lim_{n\to\infty}p_n=p_r.
+\]
+Since \(g_m\) is continuous and homomorphism densities are cut-continuous,
+\[
+        t(C_m,W)\le \lim_{n\to\infty}g_m(p_n)=g_m(p_r).
+\]
+The lower bound gives \(t(C_m,W)\ge g_m(p_r)\), so equality holds.  By
+\Cref{prop:equality-rigidity}, \(W\cong T_r\), and hence
+\(\cutdist(W_n,T_r)\to0\), contradicting the choice of the sequence.  This
+proves the density-error version.
+\end{proof}
+
+\begin{remark}[Local first-order stability]
+The same Tur\'an graphon also has a local one-sided variational stability
+property.  If \(H\) is an admissible edge-preserving first-order perturbation of
+\(T_r\), then \(H\ge0\) on within-part blocks, \(H\le0\) on cross-part blocks,
+and \(\int H=0\).  If
+\[
+        A_{\mathrm{in}}=
+        \sum_{i=1}^r\int_{V_i\times V_i} H,
+        \qquad
+        A_{\mathrm{out}}=
+        \sum_{i\ne j}\int_{V_i\times V_j} H,
+\]
+then \(A_{\mathrm{out}}=-A_{\mathrm{in}}\), and \(A_{\mathrm{in}}>0\) unless
+\(H=0\) a.e.  The first-variation kernel for \(t(C_m,\cdot)\) at \(T_r\) is
+\(mT_{T_r}^{m-1}\).  Since \(m-1\) is even, the values of this kernel on the
+within-part and cross-part blocks differ by \(1/r^{m-2}\).  Therefore
+\[
+        \delta t(C_m,T_r)[H]
+        =\frac{m}{r^{m-2}}A_{\mathrm{in}}>0
+\]
+for every nonzero admissible edge-preserving direction.  This explains why the
+compactness stability above is anchored at the correct local minimiser.
+\end{remark}
+
+\end{document}
