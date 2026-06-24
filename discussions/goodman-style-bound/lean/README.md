@@ -112,7 +112,9 @@ the full SDP margin and so rationalises the near-marginal certificate where the 
 scheme failed — while keeping the Gram at a controlled denominator, so the integer-cleared
 coefficients stay *smaller* than the former `2/3` certificate. Below `103/200` the path certificate
 cannot reach (the SDP is infeasible); the thin remaining band `1/2 < p < 103/200` is exactly the
-range the spectral / Razborov-triangle closure must cover.
+range the spectral / Razborov-triangle closure must cover. The rounding methods (and why the naive
+one fails near the frontier) are written up in `cert_scripts/RATIONAL_ROUNDING.md`, with a minimal
+self-contained runnable example in `cert_scripts/rational_rounding_demo.py`.
 
 Here `t(C_m, W)` is `trace μ (compPow μ W (m−1))` — the cyclic trace of the powers of the kernel
 `W` — written out purely as nested integrals.
