@@ -24,45 +24,60 @@ Toolchain: Lean `v4.31.0`, Mathlib `v4.31.0` (pinned in `lean-toolchain` / `lake
 
 ## Build performance and memory
 
-A clean rebuild of *only* the project modules (`lake clean OddCycleBound; lake build`, with
-Mathlib oleans already fetched via `lake exe cache get`, so Mathlib itself is not recompiled)
-took **293 s wall** in the run below. `lake build` fans **independent** files out across all
-cores (up to the core count — 20 here), so the wall time is far below the sum of per-module
-times; the **SOS certificate files dominate**.
+The table below is a per-module **isolated** profile: each row is a single `lean <module>` run — a
+one-threaded elaboration of that module against already-built dependency oleans — so the rows are
+reproducible and do **not** overlap (unlike a parallel `lake build`, where independent files run
+concurrently and the wall time is far below the column sum). A clean parallel `lake build` of the
+whole project (Mathlib oleans already fetched, so Mathlib is not recompiled) takes **PARALLEL_WALL s
+wall**, bounded from below by the longest single non-splittable file (`C13/Bivar`).
 
-Per-module times (this clean run, parallel; descending):
+* **Wall** = single-thread elaboration time. **Peak memory** = process peak working set. 
 
-| Module | Time | | Module | Time |
-|--------|-----:|-|--------|-----:|
-| `C11/Bivar` | **145 s** | | `General.PathRecurrence` | 20 s |
-| `C9` | **115 s** | | `Certificate` / `BoundsC5C7` / `General.Necklace` | 13 s |
-| `C11/Trivar` | **115 s** | | `Graphon` / `Kernel` / `PathDensity` | 12 s |
-| `C11/Linear` | **95 s** | | `Main` / `Necklace` / `Cycle` | 11 s |
-| `General.SumOfSquares` | 58 s | | `OddCycleBound` (root) | 10 s |
-| `C11` (assembly) | 38 s | | **total wall** | **293 s** |
+| Module | Wall | Peak memory |
+|--------|-----:|------------:|
+| `C13/Bivar` | 741 s | 18.7 GB |
+| `C13/Trivar` | 562 s | 11.8 GB |
+| `C13` (assembly) | 169 s | 6.9 GB |
+| `C11/Bivar` | 112 s | 6.0 GB |
+| `C13/Linear` | 83 s | 5.7 GB |
+| `C11/Trivar` | 75 s | 5.9 GB |
+| `C9` | 71 s | 4.3 GB |
+| `C13/Quad` | 60 s | 4.7 GB |
+| `General.SumOfSquares` | 56 s | 3.3 GB |
+| `C11/Linear` | 51 s | 4.0 GB |
+| `C11` (assembly) | 39 s | 4.0 GB |
+| `C13/Engine4` | 31 s | 3.5 GB |
+| `C13/Engine` | 25 s | 3.5 GB |
+| `General.PathRecurrence` | 19 s | 3.3 GB |
+| `Certificate` | 14 s | 3.2 GB |
+| `PathDensity` | 13 s | 3.1 GB |
+| `BoundsC5C7` | 13 s | 3.2 GB |
+| `Necklace` | 13 s | 3.2 GB |
+| `Graphon` | 13 s | 3.1 GB |
+| `C13/Hankel` | 13 s | 3.1 GB |
+| `Kernel` | 13 s | 3.1 GB |
+| `Cycle` | 12 s | 3.1 GB |
+| `General.Necklace` | 13 s | 3.1 GB |
+| `Main` | 13 s | 3.1 GB |
 
 Notes:
-* The four heavy files — `C11/Bivar`, `C11/Trivar`, `C11/Linear`, `C9` — are the SOS certificates
-  and run **concurrently**, which is why the total wall (293 s) is well under their sum (~470 s).
-* These per-module times are wall-clock under 20-way contention, so they vary with machine load.
-  Also, the **first** clean build after boot can inflate the earliest modules by tens of seconds
-  while Mathlib's oleans are read cold from disk (warm OS file cache → the ~12 s seen here);
-  an older benchmark recorded `Graphon` at 194 s for exactly this cold-cache reason.
-* The `C9`/`C11` certificate files are dominated by **elaboration of giant proof-term `Expr`
-  trees** (300-digit rational coefficients), *not* by parsing or kernel typechecking — measured:
-  isolating a heavy block, parsing+statement-elaboration ≈ 2 s, kernel checking ≈ 0
-  (`skipKernelTC` made no difference), proof elaboration ≈ 62 s. `count_heartbeats` reports tiny
-  counts here because it counts `whnf`/`isDefEq` steps, not `Expr` construction — so it *under*counts
-  this regime.
-* **Memory:** the largest spikes come from building **many heavy files concurrently** (each `lean.exe`
-  loads Mathlib plus its own large terms). To bound peak memory, throttle the build's concurrency
-  via the Lean task pool, e.g. `LEAN_NUM_THREADS=4 lake build` (slower wall-clock, far smaller peak).
-  The `C11` certificate is **split into per-block files** (`C11/Linear`, `C11/Bivar`, `C11/Trivar` +
-  the `C11` assembly) so each is a separate ~120–580 KB compilation unit instead of one 1.2 MB file —
-  this caps per-file peak memory and lets the editor elaborate one block at a time.
+* The **~3.1 GB floor** on every row is the Mathlib import baseline — each `lean.exe` memory-maps
+  Mathlib's oleans before doing any work; a module's real cost is the *excess* above that floor (and
+  its wall time above the ~13 s cold-import baseline).
+* The **SOS certificate files dominate** both axes. `C13/Bivar` (the 95-square `sos2var5` block) and
+  `C13/Trivar` (80-square `sos3var4`) peak at ~19 GB / ~12 GB — this is **elaboration of giant
+  proof-term `Expr` trees**, *not* parsing or kernel typechecking (isolating a heavy block:
+  parsing+statement-elaboration ≈ 2 s, kernel checking ≈ 0 with `skipKernelTC`, proof elaboration
+  dominates).
+* **Memory in a parallel build:** the worst spikes come from several heavy files elaborating at once.
+  To cap peak memory, throttle the Lean task pool, e.g. `LEAN_NUM_THREADS=4 lake build` (slower wall,
+  far smaller peak). The `C11`/`C13` certificates are **split into per-block files** so each is a
+  separate compilation unit (the editor and the build elaborate one block at a time), which is what
+  keeps any single module's footprint to the ~5–19 GB range rather than one monolith.
 
 **Benchmark machine:** Intel Core i5-14600K (14C/20T), 64 GB RAM, Windows 11 Pro (build 26200),
-Lean/Mathlib `v4.31.0`. Times are wall-clock and will scale with single-thread performance.
+Lean/Mathlib `v4.31.0`. Wall times are single-thread and scale with single-thread performance; peak
+memory is largely machine-independent (term sizes, not cores).
 
 ## Headline results
 
@@ -76,6 +91,7 @@ graphon `W` with the single hypothesis `hW : IsGraphon W μ` and edge density
 | `C7_bound` | `t(C₇, W) ≥ p⁷ − p(1−p)⁶` | all densities |
 | `C9_path_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | `p ≥ 1003/2000` (path-certificate range) |
 | `C11_path_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | `p ≥ 2/3` (high-density range) |
+| `C13_path_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≥ 2/3` (high-density range) |
 
 The `C₁₁` bound is proved on `p ≥ 2/3` (complement density `q = 1−p ≤ 1/3`), the natural
 meeting point with Razborov's triangle-density theorem (valid on `[1/2, 2/3]`), which a future
@@ -118,6 +134,14 @@ C11 (assembly) ← { C11/Linear, C11/Bivar, C11/Trivar }
 | `C11/Linear` | The Φ₁₁ `L₁` block — linear in the moments, certified by `sos4` (`cert11_L10 … L13`, `cert11_L1`). |
 | `C11/Bivar` | The Φ₁₁ `L₂` block — bivariate, certified by `sos2var4` (`cert11_L20 … L23` chunks, `cert11_L2`). |
 | `C11/Trivar` | The Φ₁₁ `L₃` block — trivariate, certified by `sos3var3` (`cert11_L30 … L33` chunks, `cert11_L3`). |
+| `C13` | **Assembly** for the Φ₁₃ bound: `cert13_specMoment` (combines `L₁ … L₆`) and `C13_path_integral`. Imports the block files below. The path-density recurrence reaches `pathDensity_twelve`. |
+| `C13/Engine` | The `sos2var5` (degree-(4,4)) and `sos3var4` (Newton maxdeg-3) Hankel SOS engine lemmas for `L₂`/`L₃`. |
+| `C13/Engine4` | The **four-fold** moment engine `sos_sq_expand_4var` (`0 ≤ ∫⁴(Σ C·h h h h)²`) and its Newton wrapper `sos4var3`, for the quartic `L₄`. |
+| `C13/Linear` | The Φ₁₃ `L₁` block — linear, certified by `sos5`. |
+| `C13/Bivar` | The Φ₁₃ `L₂` block — bivariate, `sos2var5`, 95 squares (CHUNK=1). |
+| `C13/Trivar` | The Φ₁₃ `L₃` block — trivariate, `sos3var4`, 80 squares (CHUNK=1). |
+| `C13/Quad` | The Φ₁₃ `L₄` block — quartic, `sos4var3`, 39 squares (CHUNK=1). |
+| `C13/Hankel` | The Φ₁₃ `L₅` (`s₀³·B₅` via the `momcs` minor) and `L₆` (`12 s₀⁶`) blocks. |
 | `Main` | The `W`-facing headline theorems `C5_bound`, `C7_bound`, `C9_path_bound`, `C11_path_bound` and the complement translation. |
 | `General/PathRecurrence` | The **general path-density recurrence** `pathDensity_succ : x_{n+1} = q·xₙ + Σ sᵢ·x_{n−1−i}`, and `pathDensity_seven`/`_eight`. |
 | `General/SumOfSquares` | The general Hankel sum-of-squares engine: `sos_sq_expand`, `sos_sq_expand_2var`, and the fixed-degree `sos2var3`/`sos3`. |
@@ -187,16 +211,34 @@ Lean's three standard axioms `propext, Classical.choice, Quot.sound` (no extra a
   by the exact-rational pipeline in `cert_scripts/` (CLARABEL SDP → rational LDL → `ring`-verified
   Lean), chunked to fit Lean's `ring`. The path-density recurrence is extended with
   `pathDensity_nine … _twelve`.
-* **`C₁₃`.** Its decomposition `Φ₁₃ = L₁ + … + L₅ + 12 s₀⁶` is computed and `L₁` (degree-10 `P_q`,
-  `sos5`) is certified, but the higher pieces need degree-8/6 kernels (`sos2var5`, a degree-3
-  `sos3var`) whose expanded SOS forms × the square count overflow Lean's `ring` budget. **Low-rank
-  rationalization is a confirmed dead end** (`cert_scripts/LOWRANK_FINDINGS.md`): rank-minimizing
-  solves cut `C₁₃ L₂` from 95 to 14 squares *numerically*, but the low-rank face is on the PSD-cone
-  boundary and fails rational rounding at every denominator (the Peyrl–Parrilo obstruction), so the
-  rational certificate stays ~95 squares. The productive levers are **smaller coefficients**
-  (kernel-aware rounding — the 300-digit integers are an artifact of LDL denominator accumulation +
-  integer-clearing, not of the inequality's tightness) and **bespoke Hankel certificates** (few
-  squares, tiny coefficients, like `cert11_L4`/`L5`).
+* **`C₁₃` is fully formalized on `p ≥ 2/3`** (`OddCycleBound/C13.lean` + `OddCycleBound/C13/*`),
+  axiom-clean (`propext, Classical.choice, Quot.sound`, zero `sorry`). The complement defect
+  `Φ₁₃ = L₁ + L₂ + L₃ + L₄ + L₅ + 12 s₀⁶` is certified piecewise and assembled (`cert13_specMoment`)
+  into `C13_path_integral` via the same necklace identity as `C₉`/`C₁₁`; `Main.lean` exposes the
+  `W`-facing `C13_path_bound`:
+
+  | block | form | engine | module | squares |
+  |-------|------|--------|--------|--------:|
+  | `L₁` | linear | `sos5` | `C13/Linear.lean` | 66 |
+  | `L₂` | bivariate | `sos2var5` | `C13/Bivar.lean` | 95 |
+  | `L₃` | trivariate (Newton maxdeg-3) | `sos3var4` | `C13/Trivar.lean` | 80 |
+  | `L₄` | **quartic** (Newton maxdeg-2) | **`sos4var3`** | `C13/Quad.lean` | 39 |
+  | `L₅` | `s₀³·B₅` (Hankel-minor + square) | `momcs` + `nlinarith` | `C13/Hankel.lean` | — |
+  | `L₆` | `12 s₀⁶` | `pow_nonneg` | `C13/Hankel.lean` | — |
+
+  The pieces once believed to overflow Lean's `ring`/heartbeat budget all build (the **low-rank dead
+  end** is irrelevant — `cert_scripts/LOWRANK_FINDINGS.md`). What unstuck them, none touching the
+  math: (1) the `sos2var5`/`sos3var4`/`sos4var3` engine lemmas **never existed** — generated by
+  `cert_scripts/gen_engine.py` and proved `simp; norm_num at h; exact le_of_le_of_eq h (by ring)`
+  (the old `nlinarith` closing times out at `whnf` at these arities), plus `maxRecDepth 8000` and, for
+  the 4-fold engine, a raised `simp` `maxSteps`; (2) **CHUNK=1** emission (one square per `ring`)
+  so each per-square `ring` fits; (3) **8 M** heartbeat ceilings on the block-combiner/assembly
+  lemmas. `L₄` is the genuinely new piece — a degree-4 moment form is not a real-SOS nor a 2-/3-fold
+  SOS, so it needed the **four-fold engine `sos_sq_expand_4var`** (`0 ≤ ∫⁴(Σ C·h h h h)²`, the
+  degree-4 analog of the 2-/3-var engines, in `C13/Engine4.lean`) and a 4-variable symmetric-kernel
+  SDP (`cert_scripts/gen_4var.py`); `L₅` factors as `s₀³·B₅` with `B₅ ≥ 0` by the `momcs` Hankel
+  minor plus a square. Per-file build times (cached Mathlib): `C13/Bivar` ≈ 760 s, `C13/Trivar`
+  ≈ 520 s, `C13/Quad` ≈ 62 s, `C13.lean` assembly ≈ 217 s.
 * The all-densities versions (closing `1/2 < p < 2/3` for `C₁₁`, the analogous band for `C₁₃`, and
   the `C₉` middle band) additionally need the spectral/Razborov-triangle closure of the paper.
 * The conditional results (regularity, the operator-theoretic universal bound, the variational

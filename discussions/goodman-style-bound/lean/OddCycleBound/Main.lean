@@ -1,6 +1,7 @@
 import OddCycleBound.BoundsC5C7
 import OddCycleBound.C9
 import OddCycleBound.C11
+import OddCycleBound.C13
 
 /-!
 # Main results: the odd-cycle Goodman-type bound for a graphon `W`
@@ -88,6 +89,19 @@ theorem C11_path_bound (hW : IsGraphon W μ) (hp : 2 / 3 ≤ edgeDensity W μ) :
     trace μ (compPow μ W 10) ≥ edgeDensity W μ ^ 11 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 10 := by
   have hq : edgeDensity (compl W) μ ≤ 1 / 3 := by rw [edgeDensity_compl hW]; linarith
   have h := C11_path_integral (isGraphon_compl hW) hq
+  rw [compl_compl, edgeDensity_compl hW] at h
+  have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
+  rw [e] at h
+  exact h
+
+/-- **`C₁₃` high-density bound.**  `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²`, with `p = ∫∫W`, for every
+graphon `W` with edge density `p ≥ 2/3`.  (The complement edge density is then `q = 1 − p ≤ 1/3`,
+the range on which the joint-Positivstellensatz SOS certificate `cert13_specMoment` is valid —
+`Φ₁₃ = L₁ + … + L₆`, with `L₄` certified by the four-fold moment engine `sos4var3`.) -/
+theorem C13_path_bound (hW : IsGraphon W μ) (hp : 2 / 3 ≤ edgeDensity W μ) :
+    trace μ (compPow μ W 12) ≥ edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12 := by
+  have hq : edgeDensity (compl W) μ ≤ 1 / 3 := by rw [edgeDensity_compl hW]; linarith
+  have h := C13_path_integral (isGraphon_compl hW) hq
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
   rw [e] at h
