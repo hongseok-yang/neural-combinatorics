@@ -5,7 +5,7 @@ import OddCycleBound.General.Necklace
 import OddCycleBound.General.PathRecurrence
 import OddCycleBound.Certificate
 
-/-! # The `C₁₁` path-certificate range (`p ≥ 2/3`).
+/-! # The `C₁₁` path-certificate range (`p ≥ 103/200`).
 
 The per-degree certificate blocks `cert11_L1`/`L2`/`L3` live in `C11/Linear.lean`,
 `C11/Bivar.lean`, `C11/Trivar.lean` (split out to keep per-file elaboration memory
@@ -16,11 +16,11 @@ namespace OddCycleBound
 variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
 variable {U : Ω → Ω → ℝ}
 
-lemma cert11_L4 (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1/3) :
+lemma cert11_L4 (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 97/200) :
     0 ≤ 150*q^2*specMoment U μ 0^4 - 165*q*specMoment U μ 0^4 + 200*q*specMoment U μ 0^3*specMoment U μ 1
       + 55*specMoment U μ 0^4 - 110*specMoment U μ 0^3*specMoment U μ 1 + 40*specMoment U μ 0^3*specMoment U μ 2
       + 60*specMoment U μ 0^2*specMoment U μ 1^2 := by
-  have hy : (0:ℝ) ≤ 1/3 - q := by linarith
+  have hy : (0:ℝ) ≤ 97/200 - q := by linarith
   have hs0 := specMoment_zero_nonneg hU
   have hs2 : (0:ℝ) ≤ specMoment U μ 2 := by
     have h := sos_sq_expand hU (fun i => if i = 1 then (1:ℝ) else 0) 2
@@ -35,7 +35,7 @@ lemma cert11_L5 (hU : IsGraphon U μ) : 0 ≤ 10 * specMoment U μ 0^5 :=
 
 
 set_option maxHeartbeats 1600000 in
-lemma cert11_specMoment (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1/3) :
+lemma cert11_specMoment (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 97/200) :
     0 ≤ 90 * q ^ 8 * specMoment U μ 0 + 280 * q ^ 6 * specMoment U μ 0 ^ 2 + 80 * q ^ 7 * specMoment U μ 1 - 396 * q ^ 7 * specMoment U μ 0 + 350 * q ^ 4 * specMoment U μ 0 ^ 3 + 420 * q ^ 5 * specMoment U μ 0 * specMoment U μ 1 - 924 * q ^ 5 * specMoment U μ 0 ^ 2 + 70 * q ^ 6 * specMoment U μ 2 - 308 * q ^ 6 * specMoment U μ 1 + 924 * q ^ 6 * specMoment U μ 0 + 150 * q ^ 2 * specMoment U μ 0 ^ 4 + 600 * q ^ 3 * specMoment U μ 0 ^ 2 * specMoment U μ 1 - 770 * q ^ 3 * specMoment U μ 0 ^ 3 + 150 * q ^ 4 * specMoment U μ 1 ^ 2 + 300 * q ^ 4 * specMoment U μ 0 * specMoment U μ 2 - 1155 * q ^ 4 * specMoment U μ 0 * specMoment U μ 1 + 1540 * q ^ 4 * specMoment U μ 0 ^ 2 + 60 * q ^ 5 * specMoment U μ 3 - 231 * q ^ 5 * specMoment U μ 2 + 616 * q ^ 5 * specMoment U μ 1 - 1386 * q ^ 5 * specMoment U μ 0 + 10 * specMoment U μ 0 ^ 5 + 200 * q * specMoment U μ 0 ^ 3 * specMoment U μ 1 - 165 * q * specMoment U μ 0 ^ 4 + 300 * q ^ 2 * specMoment U μ 0 * specMoment U μ 1 ^ 2 + 300 * q ^ 2 * specMoment U μ 0 ^ 2 * specMoment U μ 2 - 990 * q ^ 2 * specMoment U μ 0 ^ 2 * specMoment U μ 1 + 770 * q ^ 2 * specMoment U μ 0 ^ 3 + 200 * q ^ 3 * specMoment U μ 1 * specMoment U μ 2 - 330 * q ^ 3 * specMoment U μ 1 ^ 2 + 200 * q ^ 3 * specMoment U μ 0 * specMoment U μ 3 - 660 * q ^ 3 * specMoment U μ 0 * specMoment U μ 2 + 1540 * q ^ 3 * specMoment U μ 0 * specMoment U μ 1 - 1540 * q ^ 3 * specMoment U μ 0 ^ 2 + 50 * q ^ 4 * specMoment U μ 4 - 165 * q ^ 4 * specMoment U μ 3 + 385 * q ^ 4 * specMoment U μ 2 - 770 * q ^ 4 * specMoment U μ 1 + 1386 * q ^ 4 * specMoment U μ 0 + 60 * specMoment U μ 0 ^ 2 * specMoment U μ 1 ^ 2 + 40 * specMoment U μ 0 ^ 3 * specMoment U μ 2 - 110 * specMoment U μ 0 ^ 3 * specMoment U μ 1 + 55 * specMoment U μ 0 ^ 4 + 40 * q * specMoment U μ 1 ^ 3 + 240 * q * specMoment U μ 0 * specMoment U μ 1 * specMoment U μ 2 - 330 * q * specMoment U μ 0 * specMoment U μ 1 ^ 2 + 120 * q * specMoment U μ 0 ^ 2 * specMoment U μ 3 - 330 * q * specMoment U μ 0 ^ 2 * specMoment U μ 2 + 660 * q * specMoment U μ 0 ^ 2 * specMoment U μ 1 - 385 * q * specMoment U μ 0 ^ 3 + 60 * q ^ 2 * specMoment U μ 2 ^ 2 + 120 * q ^ 2 * specMoment U μ 1 * specMoment U μ 3 - 330 * q ^ 2 * specMoment U μ 1 * specMoment U μ 2 + 330 * q ^ 2 * specMoment U μ 1 ^ 2 + 120 * q ^ 2 * specMoment U μ 0 * specMoment U μ 4 - 330 * q ^ 2 * specMoment U μ 0 * specMoment U μ 3 + 660 * q ^ 2 * specMoment U μ 0 * specMoment U μ 2 - 1155 * q ^ 2 * specMoment U μ 0 * specMoment U μ 1 + 924 * q ^ 2 * specMoment U μ 0 ^ 2 + 40 * q ^ 3 * specMoment U μ 5 - 110 * q ^ 3 * specMoment U μ 4 + 220 * q ^ 3 * specMoment U μ 3 - 385 * q ^ 3 * specMoment U μ 2 + 616 * q ^ 3 * specMoment U μ 1 - 924 * q ^ 3 * specMoment U μ 0 + 30 * specMoment U μ 1 ^ 2 * specMoment U μ 2 - 22 * specMoment U μ 1 ^ 3 + 30 * specMoment U μ 0 * specMoment U μ 2 ^ 2 + 60 * specMoment U μ 0 * specMoment U μ 1 * specMoment U μ 3 - 132 * specMoment U μ 0 * specMoment U μ 1 * specMoment U μ 2 + 110 * specMoment U μ 0 * specMoment U μ 1 ^ 2 + 30 * specMoment U μ 0 ^ 2 * specMoment U μ 4 - 66 * specMoment U μ 0 ^ 2 * specMoment U μ 3 + 110 * specMoment U μ 0 ^ 2 * specMoment U μ 2 - 165 * specMoment U μ 0 ^ 2 * specMoment U μ 1 + 77 * specMoment U μ 0 ^ 3 + 60 * q * specMoment U μ 2 * specMoment U μ 3 - 66 * q * specMoment U μ 2 ^ 2 + 60 * q * specMoment U μ 1 * specMoment U μ 4 - 132 * q * specMoment U μ 1 * specMoment U μ 3 + 220 * q * specMoment U μ 1 * specMoment U μ 2 - 165 * q * specMoment U μ 1 ^ 2 + 60 * q * specMoment U μ 0 * specMoment U μ 5 - 132 * q * specMoment U μ 0 * specMoment U μ 4 + 220 * q * specMoment U μ 0 * specMoment U μ 3 - 330 * q * specMoment U μ 0 * specMoment U μ 2 + 462 * q * specMoment U μ 0 * specMoment U μ 1 - 308 * q * specMoment U μ 0 ^ 2 + 30 * q ^ 2 * specMoment U μ 6 - 66 * q ^ 2 * specMoment U μ 5 + 110 * q ^ 2 * specMoment U μ 4 - 165 * q ^ 2 * specMoment U μ 3 + 231 * q ^ 2 * specMoment U μ 2 - 308 * q ^ 2 * specMoment U μ 1 + 396 * q ^ 2 * specMoment U μ 0 + 10 * specMoment U μ 3 ^ 2 + 20 * specMoment U μ 2 * specMoment U μ 4 - 33 * specMoment U μ 2 * specMoment U μ 3 + 22 * specMoment U μ 2 ^ 2 + 20 * specMoment U μ 1 * specMoment U μ 5 - 33 * specMoment U μ 1 * specMoment U μ 4 + 44 * specMoment U μ 1 * specMoment U μ 3 - 55 * specMoment U μ 1 * specMoment U μ 2 + 33 * specMoment U μ 1 ^ 2 + 20 * specMoment U μ 0 * specMoment U μ 6 - 33 * specMoment U μ 0 * specMoment U μ 5 + 44 * specMoment U μ 0 * specMoment U μ 4 - 55 * specMoment U μ 0 * specMoment U μ 3 + 66 * specMoment U μ 0 * specMoment U μ 2 - 77 * specMoment U μ 0 * specMoment U μ 1 + 44 * specMoment U μ 0 ^ 2 + 20 * q * specMoment U μ 7 - 33 * q * specMoment U μ 6 + 44 * q * specMoment U μ 5 - 55 * q * specMoment U μ 4 + 66 * q * specMoment U μ 3 - 77 * q * specMoment U μ 2 + 88 * q * specMoment U μ 1 - 99 * q * specMoment U μ 0 + 10 * specMoment U μ 8 - 11 * specMoment U μ 7 + 11 * specMoment U μ 6 - 11 * specMoment U μ 5 + 11 * specMoment U μ 4 - 11 * specMoment U μ 3 + 11 * specMoment U μ 2 - 11 * specMoment U μ 1 + 11 * specMoment U μ 0 := by
   have h1 := cert11_L1 hU q hq0 hq1
   have h2 := cert11_L2 hU q hq0 hq1
@@ -47,7 +47,7 @@ lemma cert11_specMoment (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q
 
 set_option maxHeartbeats 1600000 in
 set_option maxRecDepth 8000 in
-theorem C11_path_integral (hU : IsGraphon U μ) (hq : edgeDensity U μ ≤ 1/3) :
+theorem C11_path_integral (hU : IsGraphon U μ) (hq : edgeDensity U μ ≤ 97/200) :
     trace μ (compPow μ (compl U) 10) ≥ (1 - edgeDensity U μ) ^ 11 - (1 - edgeDensity U μ) * edgeDensity U μ ^ 10 := by
   have hq0 : 0 ≤ edgeDensity U μ := edgeDensity_nonneg hU
   have hx1 : pathDensity U μ 1 = edgeDensity U μ := pathDensity_one hU

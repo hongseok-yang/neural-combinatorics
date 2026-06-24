@@ -35,16 +35,16 @@ wall**, bounded from below by the longest single non-splittable file (`C13/Bivar
 
 | Module | Wall | Peak memory |
 |--------|-----:|------------:|
-| `C13/Bivar` | 741 s | 18.7 GB |
-| `C13/Trivar` | 562 s | 11.8 GB |
-| `C13` (assembly) | 169 s | 6.9 GB |
-| `C11/Bivar` | 112 s | 6.0 GB |
-| `C13/Linear` | 83 s | 5.7 GB |
-| `C11/Trivar` | 75 s | 5.9 GB |
+| `C13/Bivar` | 835 s | 18.3 GB |
+| `C13/Trivar` | 586 s | ≤ 11.8 GB |
+| `C11/Trivar` | 275 s | ≤ 5.9 GB |
+| `C13` (assembly) | 180 s | 6.9 GB |
+| `C11/Bivar` | 97 s | ≤ 6.0 GB |
+| `C13/Linear` | 114 s | ≤ 5.7 GB |
 | `C9` | 71 s | 4.3 GB |
-| `C13/Quad` | 60 s | 4.7 GB |
+| `C13/Quad` | 84 s | ≤ 4.7 GB |
 | `General.SumOfSquares` | 56 s | 3.3 GB |
-| `C11/Linear` | 51 s | 4.0 GB |
+| `C11/Linear` | 40 s | ≤ 4.0 GB |
 | `C11` (assembly) | 39 s | 4.0 GB |
 | `C13/Engine4` | 31 s | 3.5 GB |
 | `C13/Engine` | 25 s | 3.5 GB |
@@ -61,6 +61,15 @@ wall**, bounded from below by the longest single non-splittable file (`C13/Bivar
 | `Main` | 13 s | 3.1 GB |
 
 Notes:
+* The **`C11/*` rows are the `p ≥ 103/200` frontier certificates** and the **`C13/*` rows the
+  `p ≥ 519/1000` frontier certificates** (both Peyrl–Parrilo rounded). Their integer-cleared
+  coefficients are smaller-magnitude than the former `2/3` certs, so the memory figures above
+  (several carried over from the `2/3` build, marked `≤`) are upper bounds — `C13/Bivar`'s measured
+  frontier peak was 18.3 GB, *below* the old 18.7 GB. `C11/Linear`/`Bivar` are slightly *faster*;
+  `C11/Trivar` is slower (≈ 275 s vs the old 75 s) because the PP projection distributes the rounding
+  correction over the whole null space, giving denser SOS squares and heavier `ring` normalisation at
+  the same square count. All are still bounded by `C13/Bivar`, so the **parallel-build wall is
+  essentially unchanged**.
 * The **~3.1 GB floor** on every row is the Mathlib import baseline — each `lean.exe` memory-maps
   Mathlib's oleans before doing any work; a module's real cost is the *excess* above that floor (and
   its wall time above the ~13 s cold-import baseline).
@@ -90,12 +99,20 @@ graphon `W` with the single hypothesis `hW : IsGraphon W μ` and edge density
 | `C5_bound` | `t(C₅, W) ≥ p⁵ − p(1−p)⁴` | all densities |
 | `C7_bound` | `t(C₇, W) ≥ p⁷ − p(1−p)⁶` | all densities |
 | `C9_path_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | `p ≥ 1003/2000` (path-certificate range) |
-| `C11_path_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | `p ≥ 2/3` (high-density range) |
-| `C13_path_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≥ 2/3` (high-density range) |
+| `C11_path_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | `p ≥ 103/200` (path-certificate frontier `ρ₁₁`) |
+| `C13_path_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≥ 519/1000` (path-certificate frontier `ρ₁₃`) |
 
-The `C₁₁` bound is proved on `p ≥ 2/3` (complement density `q = 1−p ≤ 1/3`), the natural
-meeting point with Razborov's triangle-density theorem (valid on `[1/2, 2/3]`), which a future
-spectral-closure development can use to cover the remaining band `1/2 < p < 2/3`.
+The `C₁₁` bound is proved on `p ≥ 103/200` (complement density `q = 1−p ≤ 97/200`), the
+**path-certificate frontier `ρ₁₁`** — the lowest `p` at which the joint-Positivstellensatz SOS
+certificate is feasible (the SDP goes infeasible just below). This was pushed down from the former
+`2/3` by replacing the certificate rationaliser with a **Peyrl–Parrilo rational rounding**
+(`cert_scripts/pp_round.py`): the SDP interior point is projected into the exact coefficient-matching
+affine subspace by rounding in a QR-orthogonalised null-space basis (Babai nearest-plane), which uses
+the full SDP margin and so rationalises the near-marginal certificate where the old "round-then-poke"
+scheme failed — while keeping the Gram at a controlled denominator, so the integer-cleared
+coefficients stay *smaller* than the former `2/3` certificate. Below `103/200` the path certificate
+cannot reach (the SDP is infeasible); the thin remaining band `1/2 < p < 103/200` is exactly the
+range the spectral / Razborov-triangle closure must cover.
 
 Here `t(C_m, W)` is `trace μ (compPow μ W (m−1))` — the cyclic trace of the powers of the kernel
 `W` — written out purely as nested integrals.
@@ -203,16 +220,22 @@ Lean's three standard axioms `propext, Classical.choice, Quot.sound` (no extra a
   `t(Cₘ,W) = Σ λᵢᵐ`). The latter requires an operator/Hilbert–Schmidt layer — Mathlib has the
   compact self-adjoint spectral theorem but not the trace/moment identity — and is out of scope of
   the current integral-only design.
-* **`C₁₁` is done on the high-density range `p ≥ 2/3`** (`OddCycleBound/C11.lean`): the complement
-  defect `Φ₁₁ = L₁ + L₂ + L₃ + L₄ + 10 s₀⁵` is certified piecewise via the joint `(q, λ, …)`
-  **Positivstellensatz** `K = σ₀ + q σ₁ + (1−3q)/3·… ` with `{1, q, 1/3−q, q(1/3−q)}` multipliers —
-  `L₁` linear (`sos4`), `L₂` bivariate (`sos2var4`), `L₃` trivariate (`sos3var3` /
-  `sos_sq_expand_3var`), `L₄`/`L₅` by Hankel `nlinarith`. The certificates are machine-generated
-  by the exact-rational pipeline in `cert_scripts/` (CLARABEL SDP → rational LDL → `ring`-verified
+* **`C₁₁` is done on the path-certificate frontier `p ≥ 103/200`** (`OddCycleBound/C11.lean`): the
+  complement defect `Φ₁₁ = L₁ + L₂ + L₃ + L₄ + 10 s₀⁵` is certified piecewise via the joint `(q, λ, …)`
+  **Positivstellensatz** with `{1, q, 97/200−q, q(97/200−q)}` multipliers — `L₁` linear (`sos4`),
+  `L₂` bivariate (`sos2var4`), `L₃` trivariate (`sos3var3` / `sos_sq_expand_3var`), `L₄`/`L₅` by
+  Hankel `nlinarith`. The certificates are machine-generated by the exact-rational pipeline in
+  `cert_scripts/` (CLARABEL SDP → **Peyrl–Parrilo rational rounding** (`pp_round.py`) → `ring`-verified
   Lean), chunked to fit Lean's `ring`. The path-density recurrence is extended with
-  `pathDensity_nine … _twelve`.
-* **`C₁₃` is fully formalized on `p ≥ 2/3`** (`OddCycleBound/C13.lean` + `OddCycleBound/C13/*`),
-  axiom-clean (`propext, Classical.choice, Quot.sound`, zero `sorry`). The complement defect
+  `pathDensity_nine … _twelve`. The range was pushed from the former `2/3` down to `ρ₁₁ = 103/200`
+  (where the SDP first goes infeasible) purely by upgrading the rationaliser — same SDP, same square
+  counts, same `Φ₁₁` split, only the `RHO = 97/200` multiplier and the bound hypotheses changed.
+* **`C₁₃` is fully formalized on the path-certificate frontier `p ≥ 519/1000`** (`OddCycleBound/
+  C13.lean` + `OddCycleBound/C13/*`), axiom-clean (`propext, Classical.choice, Quot.sound`, zero
+  `sorry`). Pushed from the former `2/3` to `ρ₁₃ = 519/1000` by the same Peyrl–Parrilo rationaliser
+  (`cert_scripts/pp_round.py`) at `RHO = 481/1000`, where the binding linear block `L₁` first goes
+  marginal (SDP margin → 0); the four blocks rationalise at `D = 16384 / 8192 / 512 / 64`
+  (`L₁/L₂/L₃/L₄`). The complement defect
   `Φ₁₃ = L₁ + L₂ + L₃ + L₄ + L₅ + 12 s₀⁶` is certified piecewise and assembled (`cert13_specMoment`)
   into `C13_path_integral` via the same necklace identity as `C₉`/`C₁₁`; `Main.lean` exposes the
   `W`-facing `C13_path_bound`:
@@ -237,9 +260,12 @@ Lean's three standard axioms `propext, Classical.choice, Quot.sound` (no extra a
   SOS, so it needed the **four-fold engine `sos_sq_expand_4var`** (`0 ≤ ∫⁴(Σ C·h h h h)²`, the
   degree-4 analog of the 2-/3-var engines, in `C13/Engine4.lean`) and a 4-variable symmetric-kernel
   SDP (`cert_scripts/gen_4var.py`); `L₅` factors as `s₀³·B₅` with `B₅ ≥ 0` by the `momcs` Hankel
-  minor plus a square. Per-file build times (cached Mathlib): `C13/Bivar` ≈ 760 s, `C13/Trivar`
-  ≈ 520 s, `C13/Quad` ≈ 62 s, `C13.lean` assembly ≈ 217 s.
-* The all-densities versions (closing `1/2 < p < 2/3` for `C₁₁`, the analogous band for `C₁₃`, and
-  the `C₉` middle band) additionally need the spectral/Razborov-triangle closure of the paper.
+  minor plus a square. Per-file build times at the `519/1000` frontier (cached Mathlib): `C13/Bivar`
+  ≈ 835 s (peak 18.3 GB), `C13/Trivar` ≈ 586 s, `C13/Linear` ≈ 114 s, `C13/Quad` ≈ 84 s, `C13.lean`
+  assembly ≈ 180 s — essentially unchanged from the `2/3` build (the PP certs are slightly denser but
+  smaller-magnitude, so wall and peak memory both stay put; same square counts).
+* The all-densities versions (closing the thin remaining bands `1/2 < p < 103/200` for `C₁₁` and
+  `1/2 < p < 519/1000` for `C₁₃` — the path certificate cannot go lower, the SDP is infeasible there —
+  and the `C₉` middle band) additionally need the spectral/Razborov-triangle closure of the paper.
 * The conditional results (regularity, the operator-theoretic universal bound, the variational
   structure) — explicitly out of scope.

@@ -83,11 +83,13 @@ theorem C9_path_bound (hW : IsGraphon W μ) (hp : 1003 / 2000 ≤ edgeDensity W 
   exact h
 
 /-- **`C₁₁` high-density bound.**  `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰`, with `p = ∫∫W`, for every
-graphon `W` with edge density `p ≥ 2/3`.  (The complement edge density is then `q = 1 − p ≤ 1/3`,
-the range on which the joint-Positivstellensatz SOS certificate `cert11_specMoment` is valid.) -/
-theorem C11_path_bound (hW : IsGraphon W μ) (hp : 2 / 3 ≤ edgeDensity W μ) :
+graphon `W` with edge density `p ≥ 103/200`.  (The complement edge density is then `q = 1 − p ≤
+97/200`, the range on which the joint-Positivstellensatz SOS certificate `cert11_specMoment` is
+valid — pushed down from the former `2/3` by the Peyrl–Parrilo rational rounding of the SOS Grams,
+to the path-certificate frontier `ρ₁₁ = 103/200` where the spectral closure takes over.) -/
+theorem C11_path_bound (hW : IsGraphon W μ) (hp : 103 / 200 ≤ edgeDensity W μ) :
     trace μ (compPow μ W 10) ≥ edgeDensity W μ ^ 11 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 10 := by
-  have hq : edgeDensity (compl W) μ ≤ 1 / 3 := by rw [edgeDensity_compl hW]; linarith
+  have hq : edgeDensity (compl W) μ ≤ 97 / 200 := by rw [edgeDensity_compl hW]; linarith
   have h := C11_path_integral (isGraphon_compl hW) hq
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
@@ -95,12 +97,14 @@ theorem C11_path_bound (hW : IsGraphon W μ) (hp : 2 / 3 ≤ edgeDensity W μ) :
   exact h
 
 /-- **`C₁₃` high-density bound.**  `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²`, with `p = ∫∫W`, for every
-graphon `W` with edge density `p ≥ 2/3`.  (The complement edge density is then `q = 1 − p ≤ 1/3`,
-the range on which the joint-Positivstellensatz SOS certificate `cert13_specMoment` is valid —
-`Φ₁₃ = L₁ + … + L₆`, with `L₄` certified by the four-fold moment engine `sos4var3`.) -/
-theorem C13_path_bound (hW : IsGraphon W μ) (hp : 2 / 3 ≤ edgeDensity W μ) :
+graphon `W` with edge density `p ≥ 519/1000`.  (The complement edge density is then `q = 1 − p ≤
+481/1000`, the **path-certificate frontier `ρ₁₃`** on which the joint-Positivstellensatz SOS
+certificate `cert13_specMoment` is valid — `Φ₁₃ = L₁ + … + L₆`, with `L₄` certified by the four-fold
+moment engine `sos4var3`; pushed down from the former `2/3` by the Peyrl–Parrilo rational rounding,
+to where the binding linear block `L₁` first goes marginal.) -/
+theorem C13_path_bound (hW : IsGraphon W μ) (hp : 519 / 1000 ≤ edgeDensity W μ) :
     trace μ (compPow μ W 12) ≥ edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12 := by
-  have hq : edgeDensity (compl W) μ ≤ 1 / 3 := by rw [edgeDensity_compl hW]; linarith
+  have hq : edgeDensity (compl W) μ ≤ 481 / 1000 := by rw [edgeDensity_compl hW]; linarith
   have h := C13_path_integral (isGraphon_compl hW) hq
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
