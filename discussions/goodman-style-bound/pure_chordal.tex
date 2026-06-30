@@ -1,0 +1,492 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\K}{K}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cT}{\mathcal{T}}
+
+\title{A Chromatic-Polynomial Lower Bound for Pure Chordal Graphs}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Motivation}
+
+Let \(H\) be a finite graph and let \(W\colon [0,1]^2\to[0,1]\) be a graphon.
+We write
+\[
+t(H,W)
+=
+\int_{[0,1]^{V(H)}}
+\prod_{ij\in E(H)} W(x_i,x_j)\,
+\prod_{i\in V(H)} dx_i
+\]
+for the homomorphism density of \(H\) in \(W\). Let
+\[
+p=t(\K_2,W)
+\]
+be the edge density of \(W\).
+
+For the balanced complete \(k\)-partite graphon \(W_k\), a random map
+\[
+\phi\colon V(H)\to [k]
+\]
+is a homomorphism into \(W_k\) precisely when it is a proper \(k\)-colouring of
+\(H\). Hence
+\[
+t(H,W_k)=\frac{\chi_H(k)}{k^{v(H)}}.
+\]
+Since
+\[
+t(\K_2,W_k)=1-\frac1k,
+\]
+if \(p_k=1-1/k\), then \(k=1/(1-p_k)\), and therefore
+\[
+t(H,W_k)
+=
+(1-p_k)^{v(H)}
+\chi_H\!\left(\frac1{1-p_k}\right).
+\]
+This motivates the polynomial
+\[
+\Phi_H(p)
+:=
+(1-p)^{v(H)}
+\chi_H\!\left(\frac1{1-p}\right).
+\]
+
+\begin{remark}[Normalisation]
+The factor \((1-p)^{v(H)}\), rather than \(p^{-v(H)}\), is forced by the identity
+\(t(H,W_k)=\chi_H(k)/k^{v(H)}\). Thus the natural conjectural inequality is
+\[
+t(H,W)\ge \Phi_H(p).
+\]
+\end{remark}
+
+The clique density theorem of Reiher proves the analogous optimal lower bound
+for cliques. This suggests that balanced multipartite graphons should also be
+relevant for other non-bipartite graphs in suitable Turán-type edge-density
+ranges. The purpose of this note is to prove such an inequality for a large class:
+pure chordal graphs.
+
+\section{Pure chordal graphs and the polynomial \(\Phi_H\)}
+
+\begin{definition}
+A graph \(H\) is \emph{chordal} if every cycle of length at least \(4\) has a
+chord. Equivalently, its maximal cliques admit a \emph{clique tree}: a tree \(T\)
+whose vertices are the maximal cliques \(C_1,\dots,C_m\) of \(H\), such that for
+every vertex \(x\in V(H)\), the set of cliques \(C_i\) containing \(x\) induces a
+connected subtree of \(T\).
+\end{definition}
+
+\begin{definition}
+A connected chordal graph \(H\) is called \emph{\(r\)-pure chordal} if every
+maximal clique of \(H\) has size \(r\). We assume \(r\ge 3\).
+\end{definition}
+
+Let \(H\) be connected \(r\)-pure chordal. Let
+\[
+C_1,\dots,C_m
+\]
+be its maximal cliques, and let \(T\) be a clique tree on these cliques. For
+\(e=ij\in E(T)\), define the separator
+\[
+S_e=C_i\cap C_j,
+\qquad
+s_e=|S_e|.
+\]
+For \(s\ge 0\), define the polynomial
+\[
+A_s(p)
+:=
+\prod_{a=0}^{s-1}\bigl(1-a(1-p)\bigr),
+\]
+with the convention \(A_0(p)=A_1(p)=1\). Equivalently,
+\[
+A_s(p)
+=
+(1-p)^s\left(\frac1{1-p}\right)_s,
+\]
+where
+\[
+(x)_s=x(x-1)\cdots(x-s+1).
+\]
+
+\begin{lemma}[Chromatic polynomial of a pure chordal graph]
+Let \(H\) be connected \(r\)-pure chordal with clique tree \(T\). Then
+\[
+\chi_H(x)
+=
+\frac{(x)_r^m}{\prod_{e\in E(T)}(x)_{s_e}}.
+\]
+Consequently,
+\[
+\Phi_H(p)
+=
+(1-p)^{v(H)}
+\chi_H\!\left(\frac1{1-p}\right)
+=
+\frac{A_r(p)^m}{\prod_{e\in E(T)}A_{s_e}(p)}.
+\]
+\end{lemma}
+
+\begin{proof}
+Root the clique tree \(T\). The root clique can be coloured in \((x)_r\) ways.
+Whenever a new maximal clique \(C_j\) is attached to its parent clique \(C_i\),
+the colours on the separator
+\[
+S_e=C_i\cap C_j
+\]
+have already been chosen and are pairwise distinct. The remaining
+\(r-s_e\) vertices of \(C_j\) may therefore be coloured in
+\[
+(x-s_e)_{r-s_e}
+=
+\frac{(x)_r}{(x)_{s_e}}
+\]
+ways. Multiplying over the clique tree gives
+\[
+\chi_H(x)
+=
+(x)_r
+\prod_{e\in E(T)}
+\frac{(x)_r}{(x)_{s_e}}
+=
+\frac{(x)_r^m}{\prod_{e\in E(T)}(x)_{s_e}}.
+\]
+Also, the clique-tree inclusion-exclusion identity gives
+\[
+v(H)=mr-\sum_{e\in E(T)}s_e.
+\]
+Substituting \(x=1/(1-p)\) and multiplying by \((1-p)^{v(H)}\) yields
+\[
+\Phi_H(p)
+=
+\frac{A_r(p)^m}{\prod_{e\in E(T)}A_{s_e}(p)}.
+\]
+\end{proof}
+
+\section{The main inequality}
+
+\begin{theorem}[Chromatic-polynomial lower bound for pure chordal graphs]
+Let \(H\) be a connected \(r\)-pure chordal graph with \(r\ge 3\). Let \(W\) be
+a graphon with edge density
+\[
+p=t(\K_2,W).
+\]
+If
+\[
+p\ge 1-\frac1{r-1},
+\]
+then
+\[
+\boxed{
+t(H,W)
+\ge
+\Phi_H(p)
+=
+(1-p)^{v(H)}
+\chi_H\!\left(\frac1{1-p}\right).
+}
+\]
+Equivalently, if \(C_1,\dots,C_m\) are the maximal \(r\)-cliques of \(H\) and
+\(s_e=|C_i\cap C_j|\) are the separator sizes in a clique tree, then
+\[
+t(H,W)
+\ge
+\frac{A_r(p)^m}{\prod_{e\in E(T)}A_{s_e}(p)}.
+\]
+\end{theorem}
+
+\begin{proof}
+Write
+\[
+t_s:=t(\K_s,W).
+\]
+
+The proof has two ingredients.
+
+First, we use the Moon--Moser clique-ratio inequality. In graphon form, it says
+that for \(2\le j\le r\),
+\[
+\frac{t_j}{t_{j-1}}
+\ge
+1-(j-1)(1-p),
+\]
+whenever the right-hand side is non-negative. Under the assumption
+\[
+p\ge 1-\frac1{r-1},
+\]
+this is non-negative for every \(2\le j\le r\). Therefore, for \(0\le s\le r\),
+\[
+\frac{t_r}{t_s}
+=
+\prod_{j=s+1}^{r}\frac{t_j}{t_{j-1}}
+\ge
+\prod_{j=s+1}^{r}\bigl(1-(j-1)(1-p)\bigr)
+=
+\frac{A_r(p)}{A_s(p)}.
+\]
+In particular,
+\[
+t_r\ge A_r(p).
+\]
+
+Second, we prove a clique-tree gluing inequality. For every graphon \(W\),
+\[
+t(H,W)
+\ge
+\frac{t_r^m}{\prod_{e\in E(T)}t_{s_e}}.
+\]
+It is enough to prove this first for finite graphs and then pass to graphons by
+the usual approximation argument.
+
+Let \(G\) be a finite graph on \(n\) vertices. Put
+\[
+h_s:=\hom(\K_s,G).
+\]
+We claim that
+\[
+\hom(H,G)
+\ge
+\frac{h_r^m}{\prod_{e\in E(T)}h_{s_e}}.
+\]
+Root the clique tree \(T\). We construct a random homomorphism from \(H\) to
+\(G\). First choose the image of the root \(r\)-clique uniformly from all
+homomorphisms \(\K_r\to G\). Then proceed away from the root. Suppose a clique
+\(C_j\) is attached to its parent \(C_i\) along the separator
+\[
+S_e=C_i\cap C_j.
+\]
+Once the image of \(S_e\) is known, choose the remaining vertices of \(C_j\)
+according to the conditional distribution induced by a uniformly random
+homomorphism \(\K_r\to G\), conditioned on its restriction to \(S_e\).
+
+The running-intersection property of the clique tree guarantees that the choices
+are consistent and produce a homomorphism \(H\to G\). Let \(X\) be the resulting
+random homomorphism. Since \(X\) is supported on \(\Hom(H,G)\),
+\[
+H(X)\le \log \hom(H,G),
+\]
+where \(H(\cdot)\) denotes Shannon entropy.
+
+For the root clique, the entropy contribution is \(\log h_r\). For every
+oriented clique-tree edge \(e\), the conditional entropy of the newly added
+vertices is
+\[
+\log h_r - H(Y_{S_e}),
+\]
+where \(Y\) is a uniformly random homomorphism \(\K_r\to G\), restricted to
+\(S_e\). Since \(Y_{S_e}\) is supported on \(\Hom(\K_{s_e},G)\),
+\[
+H(Y_{S_e})\le \log h_{s_e}.
+\]
+Hence
+\[
+\log \hom(H,G)
+\ge
+H(X)
+\ge
+m\log h_r-\sum_{e\in E(T)}\log h_{s_e}.
+\]
+Exponentiating gives
+\[
+\hom(H,G)
+\ge
+\frac{h_r^m}{\prod_{e\in E(T)}h_{s_e}}.
+\]
+Since
+\[
+h_s=n^s t(\K_s,G)
+\]
+and
+\[
+v(H)=mr-\sum_{e\in E(T)}s_e,
+\]
+normalising by \(n^{v(H)}\) gives
+\[
+t(H,G)
+\ge
+\frac{t_r^m}{\prod_{e\in E(T)}t_{s_e}}.
+\]
+Passing to graphon limits yields the same inequality for \(W\).
+
+Combining the two ingredients,
+\[
+t(H,W)
+\ge
+\frac{t_r^m}{\prod_{e\in E(T)}t_{s_e}}
+=
+t_r\prod_{e\in E(T)}\frac{t_r}{t_{s_e}}.
+\]
+Using the Moon--Moser ratio bound,
+\[
+t_r\prod_{e\in E(T)}\frac{t_r}{t_{s_e}}
+\ge
+A_r(p)\prod_{e\in E(T)}\frac{A_r(p)}{A_{s_e}(p)}
+=
+\frac{A_r(p)^m}{\prod_{e\in E(T)}A_{s_e}(p)}.
+\]
+By the chromatic-polynomial factorisation above, this is exactly
+\[
+(1-p)^{v(H)}
+\chi_H\!\left(\frac1{1-p}\right).
+\]
+This completes the proof.
+\end{proof}
+
+\section{Concrete graph families}
+
+\begin{corollary}[\((r-1)\)-trees]
+Let \(H\) be obtained from one \(\K_r\) by repeatedly gluing a new \(\K_r\) along
+an existing \(\K_{r-1}\). Suppose \(H\) has \(m\) maximal \(r\)-cliques. Then,
+for every graphon \(W\) with
+\[
+p=t(\K_2,W)\ge 1-\frac1{r-1},
+\]
+one has
+\[
+t(H,W)
+\ge
+A_r(p)\bigl(1-(r-1)(1-p)\bigr)^{m-1}.
+\]
+\end{corollary}
+
+\begin{proof}
+Every separator has size \(r-1\), so
+\[
+\Phi_H(p)
+=
+\frac{A_r(p)^m}{A_{r-1}(p)^{m-1}}
+=
+A_r(p)
+\left(\frac{A_r(p)}{A_{r-1}(p)}\right)^{m-1}.
+\]
+Since
+\[
+\frac{A_r(p)}{A_{r-1}(p)}
+=
+1-(r-1)(1-p),
+\]
+the result follows.
+\end{proof}
+
+\begin{corollary}[Generalised books]
+Let
+\[
+B_{r,m}:=\K_{r-1}\vee \overline{\K_m},
+\]
+namely \(m\) copies of \(\K_r\) sharing a common \(\K_{r-1}\). Then
+\[
+t(B_{r,m},W)
+\ge
+A_{r-1}(p)\bigl(1-(r-1)(1-p)\bigr)^m
+\]
+for every graphon \(W\) with
+\[
+p\ge 1-\frac1{r-1}.
+\]
+In particular, for the usual book of \(m\) triangles,
+\[
+t(B_{3,m},W)\ge p(2p-1)^m,
+\qquad p\ge \frac12.
+\]
+\end{corollary}
+
+\begin{corollary}[Clique windmills]
+Let \(F_{r,s,m}\) be the graph formed from \(m\) copies of \(\K_r\), all sharing
+the same \(\K_s\), with no other overlap. Then
+\[
+t(F_{r,s,m},W)
+\ge
+A_s(p)\left(\frac{A_r(p)}{A_s(p)}\right)^m
+\]
+whenever
+\[
+p\ge 1-\frac1{r-1}.
+\]
+For \(r=3\) and \(s=1\), this gives the friendship graph bound
+\[
+t(F_{3,1,m},W)
+\ge
+\bigl[p(2p-1)\bigr]^m,
+\qquad p\ge \frac12.
+\]
+\end{corollary}
+
+\begin{corollary}[Pure triangle-trees]
+Let \(H\) be a connected chordal graph whose maximal cliques are all triangles.
+Suppose \(H\) has \(m\) triangles and that, in a clique tree, exactly \(a\) of the
+separators are edges. Then
+\[
+t(H,W)
+\ge
+p^{m-a}(2p-1)^m,
+\qquad p\ge \frac12.
+\]
+\end{corollary}
+
+\begin{proof}
+Here \(r=3\),
+\[
+A_3(p)=p(2p-1),
+\qquad
+A_2(p)=p,
+\qquad
+A_1(p)=1.
+\]
+Thus
+\[
+\Phi_H(p)
+=
+\frac{A_3(p)^m}{A_2(p)^a}
+=
+p^{m-a}(2p-1)^m.
+\]
+\end{proof}
+
+\section{References}
+
+The proof uses the following external ingredients.
+
+\begin{thebibliography}{9}
+
+\bibitem{Reiher}
+C. Reiher,
+\emph{The clique density theorem},
+Annals of Mathematics \textbf{184} (2016), 683--707.
+
+\bibitem{MoonMoser}
+J. W. Moon and L. Moser,
+\emph{On a problem of Turán},
+Magyar Tud. Akad. Mat. Kutató Int. Közl. \textbf{7} (1962), 283--286.
+
+\bibitem{Agnarsson}
+G. Agnarsson,
+\emph{On chordal graphs and their chromatic polynomials},
+Mathematica Scandinavica \textbf{93} (2003), 240--246.
+
+\bibitem{Zhao}
+Y. Zhao,
+\emph{Graph Theory and Additive Combinatorics: Exploring Structure and Randomness},
+Cambridge University Press, 2023.
+See especially the chapter on graph homomorphism inequalities and entropy methods.
+
+\end{thebibliography}
+
+\end{document}
