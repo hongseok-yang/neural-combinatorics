@@ -6,16 +6,17 @@ import OddCycleBound.LowBand.C9Scalar
 import OddCycleBound.LowBand.C11Scalar
 import OddCycleBound.LowBand.C13Scalar
 import OddCycleBound.LowBand.C9Spectral
+import OddCycleBound.LowBand.C11Spectral
+import OddCycleBound.LowBand.C13Spectral
 
 /-!
 # Conditional all-density assembly for C9, C11, and C13
 
 The path-certificate theorems in `Main.lean` prove the high-density ranges.
 This file records the exact remaining Lean interfaces needed to turn those
-path certificates into all-density theorems.  C9 is complete modulo the named
-Razborov/Reiher triangle-density theorem and the graphon spectral package in
-`LowBand.C9Spectral`; C11 and C13 still expose their low-band/frontier gaps as
-ordinary hypotheses.
+path certificates into conditional theorems.  C9 and C11 are complete modulo
+the Razborov/Reiher triangle-density input; C13 currently exposes the rational
+near-bipartite band from the same input.
 -/
 
 open MeasureTheory
@@ -221,22 +222,15 @@ theorem C9_bound_of_razborov_theorem
       (LowBand.InfiniteSpectral.c9GraphonBudgetTraceSpectralData_lowBand
         hW hgt hle)).toC9SpectralData hW
 
-/-- Conditional all-density C11 assembly from the spectral negative-mass
-estimate on the low band.
+/-- All-density C11 from the Razborov/Reiher triangle theorem on the low band.
 
-The low-band hypothesis is the analytic output expected from the
-Razborov/Reiher triangle-density theorem plus the Hilbert--Schmidt spectral
-layer: a principal value `ell`, a negative eleventh-power mass `N11`, and the
-two inequalities `trace >= ell^11 - N11` and
-`N11 <= ell^11 - p^11 + p*q^10`. -/
-theorem C11_bound_of_negative_mass_gap
+The graphon spectral data and the scalar capacity exclusion are proved in
+`LowBand.C11Spectral`; the only mathematical input here is the parameterized
+triangle-density lower bound on `1 / 2 < p <= 103 / 200`. -/
+theorem C11_bound_of_razborov_theorem
     (hW : IsGraphon W mu)
-    (hgap : 1 / 2 < edgeDensity W mu -> edgeDensity W mu <= 103 / 200 ->
-      ∃ ell N11 q : Real,
-        q = 1 - edgeDensity W mu ∧
-        ell ^ 11 - N11 <= trace mu (compPow mu W 10) ∧
-        N11 <= ell ^ 11 - edgeDensity W mu ^ 11 +
-          edgeDensity W mu * q ^ 10) :
+    (htri : 1 / 2 < edgeDensity W mu -> edgeDensity W mu <= 103 / 200 ->
+      LowBand.InfiniteSpectral.RazborovTriangleLower W mu) :
     CycleBound 10 W mu := by
   by_cases hlow : edgeDensity W mu <= 1 / 2
   · have htr := trace_compPow_nonneg (W := W) hW 10
@@ -246,39 +240,32 @@ theorem C11_bound_of_negative_mass_gap
     by_cases hpath : 103 / 200 <= edgeDensity W mu
     · exact c11_path_bound_for_conditional hW hpath
     · have hle : edgeDensity W mu <= 103 / 200 := by linarith
-      rcases hgap hgt hle with ⟨ell, N11, q, hq, htrace, hN11⟩
-      exact LowBand.C11.cycle_bound_of_negative_mass_bound hq htrace hN11
+      let S :=
+        (Classical.choice
+          (LowBand.InfiniteSpectral.c11GraphonBudgetTraceSpectralData_lowBand
+            hW hgt hle)).toC11SpectralData hW
+      exact S.c11_cycle_bound_of_razborov (htri hgt hle) hgt hle
 
-/-- Conditional all-density C13 assembly from the near-bipartite spectral
-negative-mass estimate and a frontier-band input.
+/-- C13 on the rational near-bipartite band from the Razborov/Reiher triangle
+density input.
 
-The near-bipartite hypothesis is the rational Razborov/spectral interval
-`1 / 2 < p <= 51 / 100`, phrased as the corresponding negative
-thirteenth-power mass estimate.  The frontier interval remains an explicit
-condition for now. -/
-theorem C13_bound_of_nearbipartite_negative_mass_and_frontier
+This intentionally proves only the range `p <= 51 / 100`.  The middle band up
+to the path-certificate cutoff is not part of this theorem. -/
+theorem C13_nearbipartite_bound_of_razborov_theorem
     (hW : IsGraphon W mu)
-    (hnearbip : 1 / 2 < edgeDensity W mu -> edgeDensity W mu <= 51 / 100 ->
-      ∃ ell N13 q : Real,
-        q = 1 - edgeDensity W mu ∧
-        ell ^ 13 - N13 <= trace mu (compPow mu W 12) ∧
-        N13 <= ell ^ 13 - edgeDensity W mu ^ 13 +
-          edgeDensity W mu * q ^ 12)
-    (hfrontier : 51 / 100 <= edgeDensity W mu -> edgeDensity W mu <= 519 / 1000 ->
-      CycleBound 12 W mu) :
+    (htri : 1 / 2 < edgeDensity W mu -> edgeDensity W mu <= 51 / 100 ->
+      LowBand.InfiniteSpectral.RazborovTriangleLower W mu)
+    (hnear : edgeDensity W mu <= 51 / 100) :
     CycleBound 12 W mu := by
   by_cases hlow : edgeDensity W mu <= 1 / 2
   · have htr := trace_compPow_nonneg (W := W) hW 12
     have hrhs := rhs13_nonpos_of_le_half (W := W) hW hlow
     exact le_trans hrhs htr
   · have hgt : 1 / 2 < edgeDensity W mu := by linarith
-    by_cases hpath : 519 / 1000 <= edgeDensity W mu
-    · exact c13_path_bound_for_conditional hW hpath
-    · have hbelowPath : edgeDensity W mu <= 519 / 1000 := by linarith
-      by_cases hnear : edgeDensity W mu <= 51 / 100
-      · rcases hnearbip hgt hnear with ⟨ell, N13, q, hq, htrace, hN13⟩
-        exact LowBand.C13.cycle_bound_of_negative_mass_bound hq htrace hN13
-      · have hfrontLow : 51 / 100 <= edgeDensity W mu := by linarith
-        exact hfrontier hfrontLow hbelowPath
+    let S :=
+      (Classical.choice
+        (LowBand.InfiniteSpectral.c13GraphonBudgetTraceSpectralData_lowBand
+          hW hgt hnear)).toC13SpectralData hW
+    exact S.c13_cycle_bound_of_razborov (htri hgt hnear) hgt hnear
 
 end OddCycleBound

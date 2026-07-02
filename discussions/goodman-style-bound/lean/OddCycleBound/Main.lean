@@ -138,47 +138,86 @@ theorem C9_conditional_bound
           htriDirect hW hgt hle
       exact S.c9_cycle_bound_of_razborov htriParam hgt hle
 
-/-- **Conditional all-density `C11` bound.**
-
-The high-density path range is formalized unconditionally.  The remaining
-low-band hypothesis is the negative-mass estimate supplied by the
-Razborov/Reiher triangle-density input together with the spectral layer. -/
+/-- **Conditional all-density `C11` bound from the direct Razborov/Reiher
+triangle-density branch.** -/
 theorem C11_conditional_bound
     (hW : IsGraphon W μ)
-    (hgap :
-      1 / 2 < edgeDensity W μ ->
-      edgeDensity W μ <= 103 / 200 ->
-      Exists fun ell : Real => Exists fun N11 : Real => Exists fun q : Real =>
-        And (q = 1 - edgeDensity W μ)
-          (And (ell ^ 11 - N11 <= trace μ (compPow μ W 10))
-            (N11 <= ell ^ 11 - edgeDensity W μ ^ 11 +
-              edgeDensity W μ * q ^ 10))) :
+    (htri : TriangleDensityLowerBoundUpTo.{u} (103 / 200)) :
     trace μ (compPow μ W 10) >=
       edgeDensity W μ ^ 11 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 10 := by
-  exact C11_bound_of_negative_mass_gap hW hgap
+  have htriParam :
+      1 / 2 < edgeDensity W μ -> edgeDensity W μ <= 103 / 200 ->
+        LowBand.InfiniteSpectral.RazborovTriangleLower W μ := by
+    intro hgt hle
+    let p := edgeDensity W μ
+    let c := (1 - Real.sqrt (4 - 6 * p)) / 3
+    refine ⟨c, ?_, ?_, ?_, ?_⟩
+    · have harg0 : 0 <= 4 - 6 * p := by
+        nlinarith [hle, (show (103 : Real) / 200 < 2 / 3 by norm_num)]
+      have hs_sq : (Real.sqrt (4 - 6 * p)) ^ 2 = 4 - 6 * p :=
+        Real.sq_sqrt harg0
+      have hs_sq_le_one : (Real.sqrt (4 - 6 * p)) ^ 2 <= (1 : Real) ^ 2 := by
+        rw [hs_sq]
+        nlinarith
+      have hs_le_one : Real.sqrt (4 - 6 * p) <= 1 := by
+        nlinarith [Real.sqrt_nonneg (4 - 6 * p),
+          sq_nonneg (Real.sqrt (4 - 6 * p) - 1)]
+      dsimp [c]
+      nlinarith
+    · have hs0 : 0 <= Real.sqrt (4 - 6 * p) := Real.sqrt_nonneg _
+      dsimp [c]
+      nlinarith
+    · have harg0 : 0 <= 4 - 6 * p := by
+        nlinarith [hle, (show (103 : Real) / 200 < 2 / 3 by norm_num)]
+      have hs_sq : (Real.sqrt (4 - 6 * p)) ^ 2 = 4 - 6 * p :=
+        Real.sq_sqrt harg0
+      dsimp [c, p]
+      nlinarith
+    · dsimp [c, p]
+      exact htri hW hgt hle
+  exact C11_bound_of_razborov_theorem hW htriParam
 
-/-- **Conditional all-density `C13` bound.**
+/-- **Conditional near-bipartite `C13` bound from the direct Razborov/Reiher
+triangle-density branch.**
 
-The path range is formalized unconditionally.  The non-path inputs are the
-Razborov/spectral negative-mass estimate on `1 / 2 < p <= 51 / 100` and the
-frontier-band certificate on `51 / 100 <= p <= 519 / 1000`. -/
+The extra hypothesis is the visible edge-density range `p <= 51 / 100`; no
+spectral, frontier, or negative-mass assumptions are exposed. -/
 theorem C13_conditional_bound
     (hW : IsGraphon W μ)
-    (hnearbip :
-      1 / 2 < edgeDensity W μ ->
-      edgeDensity W μ <= 51 / 100 ->
-      Exists fun ell : Real => Exists fun N13 : Real => Exists fun q : Real =>
-        And (q = 1 - edgeDensity W μ)
-          (And (ell ^ 13 - N13 <= trace μ (compPow μ W 12))
-            (N13 <= ell ^ 13 - edgeDensity W μ ^ 13 +
-              edgeDensity W μ * q ^ 12)))
-    (hfrontier :
-      51 / 100 <= edgeDensity W μ ->
-      edgeDensity W μ <= 519 / 1000 ->
-      trace μ (compPow μ W 12) >=
-        edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12) :
+    (htri : TriangleDensityLowerBoundUpTo.{u} (51 / 100))
+    (hnear : edgeDensity W μ <= 51 / 100) :
     trace μ (compPow μ W 12) >=
       edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12 := by
-  exact C13_bound_of_nearbipartite_negative_mass_and_frontier hW hnearbip hfrontier
+  have htriParam :
+      1 / 2 < edgeDensity W μ -> edgeDensity W μ <= 51 / 100 ->
+        LowBand.InfiniteSpectral.RazborovTriangleLower W μ := by
+    intro hgt hle
+    let p := edgeDensity W μ
+    let c := (1 - Real.sqrt (4 - 6 * p)) / 3
+    refine ⟨c, ?_, ?_, ?_, ?_⟩
+    · have harg0 : 0 <= 4 - 6 * p := by
+        nlinarith [hle, (show (51 : Real) / 100 < 2 / 3 by norm_num)]
+      have hs_sq : (Real.sqrt (4 - 6 * p)) ^ 2 = 4 - 6 * p :=
+        Real.sq_sqrt harg0
+      have hs_sq_le_one : (Real.sqrt (4 - 6 * p)) ^ 2 <= (1 : Real) ^ 2 := by
+        rw [hs_sq]
+        nlinarith
+      have hs_le_one : Real.sqrt (4 - 6 * p) <= 1 := by
+        nlinarith [Real.sqrt_nonneg (4 - 6 * p),
+          sq_nonneg (Real.sqrt (4 - 6 * p) - 1)]
+      dsimp [c]
+      nlinarith
+    · have hs0 : 0 <= Real.sqrt (4 - 6 * p) := Real.sqrt_nonneg _
+      dsimp [c]
+      nlinarith
+    · have harg0 : 0 <= 4 - 6 * p := by
+        nlinarith [hle, (show (51 : Real) / 100 < 2 / 3 by norm_num)]
+      have hs_sq : (Real.sqrt (4 - 6 * p)) ^ 2 = 4 - 6 * p :=
+        Real.sq_sqrt harg0
+      dsimp [c, p]
+      nlinarith
+    · dsimp [c, p]
+      exact htri hW hgt hle
+  exact C13_nearbipartite_bound_of_razborov_theorem hW htriParam hnear
 
 end OddCycleBound

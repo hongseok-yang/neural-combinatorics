@@ -8,6 +8,8 @@ import OddCycleBound.Main
 import OddCycleBound.LowBand.CompactGraphonOperator
 import OddCycleBound.LowBand.GraphonL2Operator
 import OddCycleBound.LowBand.C9Spectral
+import OddCycleBound.LowBand.C11Spectral
+import OddCycleBound.LowBand.C13Spectral
 import OddCycleBound.LowBand.C9Scalar
 import OddCycleBound.Conditional
 
@@ -71,9 +73,8 @@ open OddCycleBound
 #print axioms C9_bound_of_razborov_and_scalar_capacity_exclusion
 #print axioms C9_bound_of_razborov_and_countable_spectral_data
 #print axioms C9_bound_of_razborov_theorem
+#print axioms C13_nearbipartite_bound_of_razborov_theorem
 #print axioms OddCycleBound.LowBand.InfiniteSpectral.c9GraphonBudgetTraceSpectralData_lowBand
-#print axioms C11_bound_of_negative_mass_gap
-#print axioms C13_bound_of_nearbipartite_negative_mass_and_frontier
 
 -- C9 low-band scalar arithmetic.
 #print axioms OddCycleBound.LowBand.C9.scalar_final
@@ -85,6 +86,30 @@ open OddCycleBound
 #print axioms OddCycleBound.LowBand.C9.cubic_capacity_strict_decreases
 #print axioms OddCycleBound.LowBand.C9.cubic_capacity_strict_decreases_of_ninth
 #print axioms OddCycleBound.LowBand.C9.cycle_bound_of_negative_mass_bound
+
+-- C11 low-band scalar arithmetic checkpoints.
+#print axioms OddCycleBound.LowBand.C11.scalar_final
+#print axioms OddCycleBound.LowBand.C11.theta_quadratic_lower_of_razborov
+#print axioms OddCycleBound.LowBand.C11.endpoint_F_bound
+#print axioms OddCycleBound.LowBand.C11.endpoint_Delta_upper
+#print axioms OddCycleBound.LowBand.C11.endpoint_Delta_nonneg
+#print axioms OddCycleBound.LowBand.C11.endpoint_scalar_bound
+#print axioms OddCycleBound.LowBand.C11.ell_reduction_bound
+#print axioms OddCycleBound.LowBand.C11.cubic_capacity_strict_decreases
+#print axioms OddCycleBound.LowBand.C11.cubic_capacity_strict_decreases_of_eleventh
+#print axioms OddCycleBound.LowBand.C11.cycle_bound_of_negative_mass_bound
+
+-- C13 near-bipartite scalar arithmetic checkpoints.
+#print axioms OddCycleBound.LowBand.C13.scalar_final
+#print axioms OddCycleBound.LowBand.C13.theta_quadratic_lower_of_razborov
+#print axioms OddCycleBound.LowBand.C13.endpoint_F_bound
+#print axioms OddCycleBound.LowBand.C13.endpoint_Delta_upper
+#print axioms OddCycleBound.LowBand.C13.endpoint_Delta_nonneg
+#print axioms OddCycleBound.LowBand.C13.endpoint_scalar_bound
+#print axioms OddCycleBound.LowBand.C13.ell_reduction_bound
+#print axioms OddCycleBound.LowBand.C13.cubic_capacity_strict_decreases
+#print axioms OddCycleBound.LowBand.C13.cubic_capacity_strict_decreases_of_thirteenth
+#print axioms OddCycleBound.LowBand.C13.cycle_bound_of_negative_mass_bound
 
 -- Compact self-adjoint Hilbert-space spectral skeleton.
 #print axioms OddCycleBound.LowBand.CompactSpectral.CompactSelfAdjointSkeleton
@@ -445,3 +470,33 @@ open OddCycleBound
 #print axioms OddCycleBound.LowBand.InfiniteSpectral.C9SpectralData.negativeTailCubeMass_lower_of_negativeMass_lower
 #print axioms OddCycleBound.LowBand.InfiniteSpectral.C9SpectralData.negativeTailSquareMass_lower_of_negativeMass_lower
 #print axioms OddCycleBound.LowBand.InfiniteSpectral.C9SpectralData.linear_triangle_le_capacity_of_negativeMass
+
+-- C11 eleventh-trace spectral bridge checkpoint.
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11BudgetTraceSpectralData
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11BudgetTraceSpectralData.toC11SpectralData
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.c11GraphonBudgetTraceSpectralData_lowBand
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralExpansion.principal_pow_sub_negativeMass_le_trace
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.c11_cycle_bound_of_mass_bound
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.tailSquareMass_le_edge_sub_principal_sq
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.triangle_le_cubic_capacity
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.negativeTailCubeMass_lower_of_negativeMass_lower
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.negativeTailSquareMass_lower_of_negativeMass_lower
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.scalarCapacityExclusion
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.closureEstimate
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.c11_cycle_bound_of_closure
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C11SpectralData.c11_cycle_bound_of_razborov
+
+-- C13 thirteenth-trace spectral bridge checkpoint.
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13BudgetTraceSpectralData
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13BudgetTraceSpectralData.toC13SpectralData
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.c13GraphonBudgetTraceSpectralData_lowBand
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralExpansion.principal_pow_sub_negativeMass_le_trace
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.c13_cycle_bound_of_mass_bound
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.tailSquareMass_le_edge_sub_principal_sq
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.triangle_le_cubic_capacity
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.negativeTailCubeMass_lower_of_negativeMass_lower
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.negativeTailSquareMass_lower_of_negativeMass_lower
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.scalarCapacityExclusion
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.closureEstimate
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.c13_cycle_bound_of_closure
+#print axioms OddCycleBound.LowBand.InfiniteSpectral.C13SpectralData.c13_cycle_bound_of_razborov
