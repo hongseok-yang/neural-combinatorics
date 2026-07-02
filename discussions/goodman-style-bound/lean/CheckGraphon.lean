@@ -59,6 +59,8 @@ open OddCycleBound
 #print axioms C11_path_bound
 #print axioms C13_path_bound
 #print axioms C9_conditional_bound
+#print axioms C11_conditional_bound
+#print axioms C13_conditional_bound
 
 -- Conditional all-density assembly from explicit low-band hypotheses.
 #print axioms C9_bound_of_gap
@@ -70,8 +72,8 @@ open OddCycleBound
 #print axioms C9_bound_of_razborov_and_countable_spectral_data
 #print axioms C9_bound_of_razborov_theorem
 #print axioms OddCycleBound.LowBand.InfiniteSpectral.c9GraphonBudgetTraceSpectralData_lowBand
-#print axioms C11_bound_of_gap
-#print axioms C13_bound_of_gap
+#print axioms C11_bound_of_negative_mass_gap
+#print axioms C13_bound_of_nearbipartite_negative_mass_and_frontier
 
 -- C9 low-band scalar arithmetic.
 #print axioms OddCycleBound.LowBand.C9.scalar_final

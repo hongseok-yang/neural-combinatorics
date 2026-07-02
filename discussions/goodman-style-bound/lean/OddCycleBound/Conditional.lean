@@ -3,6 +3,8 @@ import OddCycleBound.C9
 import OddCycleBound.C11
 import OddCycleBound.C13
 import OddCycleBound.LowBand.C9Scalar
+import OddCycleBound.LowBand.C11Scalar
+import OddCycleBound.LowBand.C13Scalar
 import OddCycleBound.LowBand.C9Spectral
 
 /-!
@@ -219,14 +221,22 @@ theorem C9_bound_of_razborov_theorem
       (LowBand.InfiniteSpectral.c9GraphonBudgetTraceSpectralData_lowBand
         hW hgt hle)).toC9SpectralData hW
 
-/-- Conditional all-density C11 assembly.
+/-- Conditional all-density C11 assembly from the spectral negative-mass
+estimate on the low band.
 
-The only non-path input is the spectral/triangle band
-`1 / 2 < p <= 103 / 200`. -/
-theorem C11_bound_of_gap
+The low-band hypothesis is the analytic output expected from the
+Razborov/Reiher triangle-density theorem plus the Hilbert--Schmidt spectral
+layer: a principal value `ell`, a negative eleventh-power mass `N11`, and the
+two inequalities `trace >= ell^11 - N11` and
+`N11 <= ell^11 - p^11 + p*q^10`. -/
+theorem C11_bound_of_negative_mass_gap
     (hW : IsGraphon W mu)
     (hgap : 1 / 2 < edgeDensity W mu -> edgeDensity W mu <= 103 / 200 ->
-      CycleBound 10 W mu) :
+      ∃ ell N11 q : Real,
+        q = 1 - edgeDensity W mu ∧
+        ell ^ 11 - N11 <= trace mu (compPow mu W 10) ∧
+        N11 <= ell ^ 11 - edgeDensity W mu ^ 11 +
+          edgeDensity W mu * q ^ 10) :
     CycleBound 10 W mu := by
   by_cases hlow : edgeDensity W mu <= 1 / 2
   · have htr := trace_compPow_nonneg (W := W) hW 10
@@ -236,17 +246,24 @@ theorem C11_bound_of_gap
     by_cases hpath : 103 / 200 <= edgeDensity W mu
     · exact c11_path_bound_for_conditional hW hpath
     · have hle : edgeDensity W mu <= 103 / 200 := by linarith
-      exact hgap hgt hle
+      rcases hgap hgt hle with ⟨ell, N11, q, hq, htrace, hN11⟩
+      exact LowBand.C11.cycle_bound_of_negative_mass_bound hq htrace hN11
 
-/-- Conditional all-density C13 assembly.
+/-- Conditional all-density C13 assembly from the near-bipartite spectral
+negative-mass estimate and a frontier-band input.
 
-The hypotheses match the paper's two non-path pieces: the rational
-near-bipartite spectral interval `1 / 2 < p <= 51 / 100`, and the frontier
-split interval `51 / 100 <= p <= 519 / 1000`. -/
-theorem C13_bound_of_gap
+The near-bipartite hypothesis is the rational Razborov/spectral interval
+`1 / 2 < p <= 51 / 100`, phrased as the corresponding negative
+thirteenth-power mass estimate.  The frontier interval remains an explicit
+condition for now. -/
+theorem C13_bound_of_nearbipartite_negative_mass_and_frontier
     (hW : IsGraphon W mu)
     (hnearbip : 1 / 2 < edgeDensity W mu -> edgeDensity W mu <= 51 / 100 ->
-      CycleBound 12 W mu)
+      ∃ ell N13 q : Real,
+        q = 1 - edgeDensity W mu ∧
+        ell ^ 13 - N13 <= trace mu (compPow mu W 12) ∧
+        N13 <= ell ^ 13 - edgeDensity W mu ^ 13 +
+          edgeDensity W mu * q ^ 12)
     (hfrontier : 51 / 100 <= edgeDensity W mu -> edgeDensity W mu <= 519 / 1000 ->
       CycleBound 12 W mu) :
     CycleBound 12 W mu := by
@@ -259,7 +276,8 @@ theorem C13_bound_of_gap
     · exact c13_path_bound_for_conditional hW hpath
     · have hbelowPath : edgeDensity W mu <= 519 / 1000 := by linarith
       by_cases hnear : edgeDensity W mu <= 51 / 100
-      · exact hnearbip hgt hnear
+      · rcases hnearbip hgt hnear with ⟨ell, N13, q, hq, htrace, hN13⟩
+        exact LowBand.C13.cycle_bound_of_negative_mass_bound hq htrace hN13
       · have hfrontLow : 51 / 100 <= edgeDensity W mu := by linarith
         exact hfrontier hfrontLow hbelowPath
 

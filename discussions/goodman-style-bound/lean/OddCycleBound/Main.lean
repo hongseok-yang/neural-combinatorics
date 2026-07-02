@@ -4,6 +4,7 @@ import OddCycleBound.C9
 import OddCycleBound.C11
 import OddCycleBound.C13
 import OddCycleBound.LowBand.C9Spectral
+import OddCycleBound.Conditional
 
 /-!
 # Main graphon-facing results
@@ -136,5 +137,48 @@ theorem C9_conditional_bound
         LowBand.InfiniteSpectral.C9RazborovTriangleDensityTheorem.of_direct
           htriDirect hW hgt hle
       exact S.c9_cycle_bound_of_razborov htriParam hgt hle
+
+/-- **Conditional all-density `C11` bound.**
+
+The high-density path range is formalized unconditionally.  The remaining
+low-band hypothesis is the negative-mass estimate supplied by the
+Razborov/Reiher triangle-density input together with the spectral layer. -/
+theorem C11_conditional_bound
+    (hW : IsGraphon W μ)
+    (hgap :
+      1 / 2 < edgeDensity W μ ->
+      edgeDensity W μ <= 103 / 200 ->
+      Exists fun ell : Real => Exists fun N11 : Real => Exists fun q : Real =>
+        And (q = 1 - edgeDensity W μ)
+          (And (ell ^ 11 - N11 <= trace μ (compPow μ W 10))
+            (N11 <= ell ^ 11 - edgeDensity W μ ^ 11 +
+              edgeDensity W μ * q ^ 10))) :
+    trace μ (compPow μ W 10) >=
+      edgeDensity W μ ^ 11 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 10 := by
+  exact C11_bound_of_negative_mass_gap hW hgap
+
+/-- **Conditional all-density `C13` bound.**
+
+The path range is formalized unconditionally.  The non-path inputs are the
+Razborov/spectral negative-mass estimate on `1 / 2 < p <= 51 / 100` and the
+frontier-band certificate on `51 / 100 <= p <= 519 / 1000`. -/
+theorem C13_conditional_bound
+    (hW : IsGraphon W μ)
+    (hnearbip :
+      1 / 2 < edgeDensity W μ ->
+      edgeDensity W μ <= 51 / 100 ->
+      Exists fun ell : Real => Exists fun N13 : Real => Exists fun q : Real =>
+        And (q = 1 - edgeDensity W μ)
+          (And (ell ^ 13 - N13 <= trace μ (compPow μ W 12))
+            (N13 <= ell ^ 13 - edgeDensity W μ ^ 13 +
+              edgeDensity W μ * q ^ 12)))
+    (hfrontier :
+      51 / 100 <= edgeDensity W μ ->
+      edgeDensity W μ <= 519 / 1000 ->
+      trace μ (compPow μ W 12) >=
+        edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12) :
+    trace μ (compPow μ W 12) >=
+      edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12 := by
+  exact C13_bound_of_nearbipartite_negative_mass_and_frontier hW hnearbip hfrontier
 
 end OddCycleBound

@@ -1,4 +1,3 @@
-import OddCycleBound.Main
 import OddCycleBound.BoundsC5C7
 import OddCycleBound.General.Necklace
 import OddCycleBound.General.PathRecurrence
@@ -10,6 +9,8 @@ import OddCycleBound.LowBand.CompactGraphonOperator
 import OddCycleBound.LowBand.GraphonL2Operator
 import OddCycleBound.LowBand.C9Spectral
 import OddCycleBound.LowBand.C9Scalar
+import OddCycleBound.LowBand.C11Scalar
+import OddCycleBound.LowBand.C13Scalar
 import OddCycleBound.Conditional
 
 /-!
