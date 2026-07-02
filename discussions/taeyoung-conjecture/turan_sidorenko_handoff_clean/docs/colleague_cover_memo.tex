@@ -1,0 +1,107 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\title{Cover Memo for Colleague Review: Turan--Sidorenko Chromatic-Polynomial Inequality}
+\author{Working handoff memo}
+\date{June 30, 2026}
+\begin{document}
+\maketitle
+
+\section*{Purpose of this handoff}
+We are studying the inequality
+\[
+        t(H,W)\ge (1-p)^{v(H)}\chi_H\!\left(\frac1{1-p}\right),
+        \qquad p=t(K_2,W),
+\]
+for non-bipartite graphs $H$, on the top Turan branch.  The right-hand side is the value obtained from the Turan/equivalence-relation graphon.  Thus the guiding question is: \emph{when is class-based anticorrelation the strongest possible way to reduce the density of $H$?}
+
+The attached detailed note explains the programme, the evidence, the current conjectural framework, and the computational checks.  This memo is meant to tell you where your advice would be most useful.
+
+\section*{Current conceptual picture}
+The first structural conjecture was that graphs whose clique-cutset atoms are only cliques and odd cycles should satisfy the inequality.  We now view this as a good \emph{positive-core} conjecture, but not quite the primitive principle.  The main lesson so far is that clique gluing requires rooted information: unrooted lower bounds for atoms do not compose automatically, because rooted extension densities over a clique separator can have negative covariance.
+
+The revised framework is a rooted anticorrelation calculus.  The desired structural theorem would be:
+\[
+\begin{array}{c}
+\text{rooted product inequalities for odd cycles}\
++\ \text{rooted product inequalities for cliques}\
++\ \text{clique-cutset induction}\
+\Longrightarrow\ \text{odd-atomic Turan--Sidorenko inequality.}
+\end{array}
+\]
+This seems to be the right Sidorenko-style formulation: Sidorenko compares against independent-edge randomness; here the comparison object is equivalence-relation anticorrelation.
+
+\section*{Most important technical target}
+The smallest unresolved rooted gluing inequality is
+\[
+        t(C_3\cup_{K_2}C_5,W)
+        \ge (2p-1)t(C_5,W),
+        \qquad p\ge\frac12.
+\]
+Let $T_W$ be the graphon operator and define the Goodman defect kernel
+\[
+        K_W(x,y)=W(x,y)\bigl(T_W^2(x,y)-(2p-1)\bigr).
+\]
+The target is equivalently
+\[
+        \Tr(T_W^2K_WT_W^2)\ge0.
+\]
+This is the first place where mixed odd-cycle gluing, nonregularity, and rooted covariance all interact.
+
+\section*{What is already proved for this target}
+The inequality above is proved for the following families:
+\[
+\begin{array}{l|l}
+\toprule
+\text{Graphon class} & \text{Status}\\
+\midrule
+p\text{-regular graphons} & \text{proved}\\
+\text{complete multipartite graphons} & \text{proved}\\
+\text{equal-weight bipodal graphons} & \text{proved}\\
+\text{rank-one graphons }W=f\otimes f & \text{proved}\\
+\text{one-sided threshold bipodal graphons} & \text{proved by exact symbolic computation}\\
+\text{Boolean bipodal graphons} & \text{proved by exact case analysis}\\
+\text{general bipodal graphons} & \text{exact reduction plus partial exact Bernstein certificate}\\
+\text{arbitrary graphons} & \text{open}\\
+\bottomrule
+\end{array}
+\]
+For general bipodal graphons, the target is a four-variable polynomial inequality in the part mass $s$ and matrix entries $a,b,c$.  The accompanying script verifies an exact rank-two identity
+\[
+        \Delta_2=(\tau^2-\eta)D_1-\tau\eta R,
+\]
+where $D_1\ge0$ by Goodman plus Jensen.  A Bernstein-subdivision search found no counterexample; exact rational Bernstein arithmetic certifies all but a small boundary layer near complete/vanishing-block degeneracies.
+
+\section*{Obstacles already identified}
+Several tempting proof routes are false.
+\begin{enumerate}[leftmargin=*]
+\item Positive covariance of rooted path densities is false.  The correct mechanism is ``Goodman slack dominates negative covariance.''
+\item The Goodman defect kernel $K_W$ is not copositive; the special smoothing by $T_W^2$ is essential.
+\item A simpler vertex-degree bias inequality for $C_5$-rooted vertices is false; the full cycle-neighbourhood covering expression is needed.
+\item Pure Bernstein subdivision stalls at the boundary because the quadratic form near the complete graphon is positive semidefinite but degenerate.
+\end{enumerate}
+
+\section*{Where advice would help most}
+\begin{enumerate}[label=\textbf{Q\arabic*.},leftmargin=*]
+\item Can the inequality $\Tr(T_W^2K_WT_W^2)\ge0$ be proved directly, perhaps through a known flag-algebra/SOS pattern?
+\item Can the remaining bipodal boundary layer be handled analytically?  This would give a complete bipodal theorem.
+\item Is there a plausible variational or compression argument reducing an extremal counterexample to a bipodal or threshold-bipodal graphon?
+\item What is the correct rooted analogue of clique density needed for clique atoms?
+\item Which boundary graph atoms should we test next: odd wheels, thetas, pyramids, prisms, or even-hole-free non-odd-atomic atoms?
+\end{enumerate}
+
+\section*{Files in the handoff package}
+\begin{itemize}[leftmargin=*]
+\item \texttt{turan\_sidorenko\_detailed\_handoff.pdf}: detailed self-contained technical report.
+\item \texttt{colleague\_cover\_memo.pdf}: this summary memo.
+\item \texttt{README.md}: package overview and suggested reading order.
+\item \texttt{scripts/bipodal\_delta2\_reduction.py}: symbolic reduction and exact checks for important bipodal subfamilies.
+\item \texttt{scripts/bipodal\_delta2\_formalization.py}: exact/numerical Bernstein formalization attempt for the full bipodal target.
+\end{itemize}
+
+\end{document}

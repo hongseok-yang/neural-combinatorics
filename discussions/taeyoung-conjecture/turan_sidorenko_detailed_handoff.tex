@@ -1,0 +1,1219 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{question}[theorem]{Question}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\PhiH}{\Phi_H}
+\newcommand{\PhiG}{\Phi_G}
+\newcommand{\Phii}[1]{\Phi_{#1}}
+\newcommand{\tw}{T_W}
+\newcommand{\tu}{T_U}
+\newcommand{\kw}{K_W}
+
+\title{Detailed Handoff Note: A Turan--Sidorenko Programme for Chromatic-Polynomial Lower Bounds}\author{Prepared for colleague review}\date{June 30, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note summarizes the current status of a programme around the inequality
+\[
+  t(H,W)\ge (1-p)^{v(H)}\chi_H\!\left(\frac1{1-p}\right),
+  \qquad p=t(K_2,W),
+\]
+for non-bipartite graphs $H$ and graphons $W$.  The guiding philosophy is that the right-hand side is the value obtained by equivalence-relation, or Turan, anticorrelation.  Thus the problem asks when class-based anticorrelation is the strongest possible mechanism for suppressing $H$-density.  The note records the proposed odd-atomic positive core, the revised rooted-anticorrelation formulation, several proved partial results, and a plan for the next stage.  Statements labelled as conjectures or questions are open; statements labelled as theorems, propositions, or lemmas are the proved findings from the present investigation.
+\end{abstract}
+
+
+
+\section*{Executive summary for colleague}
+\addcontentsline{toc}{section}{Executive summary for colleague}
+This document summarizes a research programme around the lower bound
+\[
+        t(H,W)\ge (1-p)^{v(H)}\chi_H\!\left(\frac1{1-p}\right),
+        \qquad p=t(K_2,W),
+\]
+on the top Turan branch.  The central interpretation is that the right-hand side is the density predicted by an equivalence-relation graphon: vertices receive latent classes and edges appear exactly between distinct classes.  Thus the problem asks when \emph{class-based anticorrelation} is the strongest possible mechanism for suppressing the density of a non-bipartite graph $H$.
+
+The original structural proposal was the \emph{odd-atomic} positive-core conjecture: graphs obtained by clique-gluing atoms that are cliques or odd cycles should satisfy the inequality.  The work so far supports this direction, but it also shows that the primitive conjecture should be revised.  The right induction invariant is not merely the unrooted inequality for each atom; it is a family of \emph{rooted product inequalities} controlling the covariance of rooted extension densities across clique separators.  This is the main conceptual development.
+
+The most important current technical target is the first mixed gluing inequality
+\[
+        t(C_3\cup_{K_2}C_5,W)\ge (2p-1)t(C_5,W), \qquad p\ge \frac12.
+\]
+Equivalently, with $T_W$ the graphon operator and
+\[
+        K_W(x,y)=W(x,y)\bigl(T_W^2(x,y)-(2p-1)\bigr),
+\]
+the target is the smoothed Goodman trace inequality
+\[
+        \operatorname{Tr}(T_W^2K_WT_W^2)\ge0.
+\]
+This has been proved for several nontrivial graphon families: regular graphons, complete multipartite graphons, equal-weight bipodal graphons, rank-one graphons, one-sided threshold bipodal graphons, and Boolean bipodal graphons.  The full bipodal case has been reduced to a concrete four-variable polynomial inequality with an exact rank-two identity and a partial exact Bernstein certificate; the remaining gap lies in a very small boundary layer near complete/vanishing-block degeneracies.
+
+The places where advice would be most valuable are: (i) prove or refute the smoothed Goodman trace inequality; (ii) complete the bipodal proof, especially the boundary-layer lemma; (iii) find a flag-algebra/SOS certificate for the $C_3$--$C_5$ target; (iv) assess whether a variational reduction to bipodal or threshold-bipodal extremizers is plausible; and (v) test whether odd wheels, thetas, pyramids, prisms, or even-hole-free non-odd-atomic atoms lie inside or outside the positive class.
+
+\tableofcontents
+
+\section{The inequality and the correct range}
+
+Let $W:[0,1]^2\to[0,1]$ be a symmetric graphon.  For a finite graph $F$, write
+\[
+  t(F,W)=\int_{[0,1]^{V(F)}}\prod_{ij\in E(F)}W(x_i,x_j)\prod_{i\in V(F)}dx_i
+\]
+for its homomorphism density in $W$.  The edge density is
+\[
+  p=t(K_2,W)=\int_{[0,1]^2}W(x,y)\,dx\,dy,
+\]
+and we set
+\[
+  q:=1-p.
+\]
+For a graph $H$, define the Turan interpolation polynomial
+\[
+  \Phi_H(p):=q^{v(H)}\chi_H(1/q),
+  \qquad q=1-p,
+\]
+where $\chi_H$ is the chromatic polynomial of $H$.
+
+The target inequality is
+\begin{equation}\label{eq:main-ineq}
+  t(H,W)\ge \Phi_H(p).
+\end{equation}
+At the special densities $p=1-1/k$, the balanced complete $k$-partite graphon $W_k$ has
+\[
+  t(H,W_k)=\frac{\chi_H(k)}{k^{v(H)}}
+  =\left(1-\frac1k\right)^{0}\left(\frac1k\right)^{v(H)}\chi_H(k)
+  =\Phi_H(1-1/k).
+\]
+Thus $\Phi_H$ interpolates the densities obtained from the balanced complete multipartite graphons.
+
+There is an important range issue.  The inequality cannot hold for all $p\in[0,1]$ even for cliques: if $W$ is bipartite and has edge density $p>0$, then $t(K_r,W)=0$ for $r\ge3$, while $\Phi_{K_r}(p)$ may be positive.  Therefore the natural range is the top Turan branch
+\begin{equation}\label{eq:top-branch}
+  p\ge p_{\rm Tur}(H):=1-\frac1{\chi(H)-1}.
+\end{equation}
+For $\chi(H)=3$, this is $p\ge1/2$.  This note mostly focuses on the $3$-chromatic part of the programme, especially odd cycles and their clique-sums, so the standing density assumption is often $p\ge1/2$.
+
+\begin{definition}[Turan--Sidorenko property, top branch]
+A non-bipartite graph $H$ is called \emph{Turan--Sidorenko} if \eqref{eq:main-ineq} holds for every graphon $W$ whose edge density $p$ lies on the top Turan branch \eqref{eq:top-branch}.
+\end{definition}
+
+The name is meant to emphasize the analogy with Sidorenko's conjecture.  Sidorenko's conjecture says that for bipartite $H$, independent-edge randomness is the minimizer of $t(H,W)$ at fixed edge density.  The present problem asks when the Turan, or equivalence-relation, construction is the minimizer for non-bipartite $H$ on the high-density branch.
+
+\section{The anticorrelation interpretation}
+
+The key identity is that the right-hand side is not an arbitrary polynomial.  It is precisely the value predicted by a random equivalence relation.
+
+Let $A\subseteq E(H)$ and write
+\[
+  H[A]:=(V(H),A)
+\]
+for the spanning subgraph using the same vertex set as $H$ and edge set $A$.  Let
+\[
+  c(H[A])
+\]
+be the number of connected components of $H[A]$, including isolated vertices, and define
+\[
+  r(A):=v(H)-c(H[A]).
+\]
+This is the rank of $A$ in the graphic matroid of $H$; equivalently it is the size of a maximal forest in $H[A]$.
+
+Put
+\[
+  U:=1-W.
+\]
+By inclusion--exclusion,
+\begin{equation}\label{eq:IE-density}
+  t(H,W)=\sum_{A\subseteq E(H)}(-1)^{|A|}t(H[A],U).
+\end{equation}
+By Whitney's expansion of the chromatic polynomial,
+\begin{equation}\label{eq:Whitney}
+  \chi_H(z)=\sum_{A\subseteq E(H)}(-1)^{|A|}z^{c(H[A])}.
+\end{equation}
+Substituting $z=1/q$ and multiplying by $q^{v(H)}$ gives
+\begin{equation}\label{eq:Phi-expansion}
+  \Phi_H(p)=\sum_{A\subseteq E(H)}(-1)^{|A|}q^{r(A)}.
+\end{equation}
+Therefore \eqref{eq:main-ineq} is equivalent to
+\begin{equation}\label{eq:signed-deviation}
+  \sum_{A\subseteq E(H)}(-1)^{|A|}\bigl(t(H[A],U)-q^{r(A)}\bigr)\ge0.
+\end{equation}
+
+Now suppose $q=1/k$ and $U$ is the equivalence-relation graphon with $k$ equal classes, namely $U(x,y)=1$ if $x,y$ lie in the same class and $0$ otherwise.  Then for every $A\subseteq E(H)$,
+\[
+  t(H[A],U)=k^{-r(A)}=q^{r(A)}.
+\]
+Thus the Turan graphon makes every term in \eqref{eq:signed-deviation} vanish separately.  In probabilistic language, sample independent labels $Z_v\in[k]$ for the vertices of $H$ and declare $uv$ to be an edge of $W$ precisely when $Z_u\ne Z_v$.  Then
+\[
+  \Pr[Z_u\ne Z_v\text{ for all }uv\in E(H)]
+  =\frac{\chi_H(k)}{k^{v(H)}}.
+\]
+
+This gives the central interpretation:
+
+\begin{quote}
+The problem asks when the strongest possible way to reduce the density of $H$ is to create class-based anticorrelation, i.e. an equivalence relation on the sampled vertices.
+\end{quote}
+
+\section{From the original odd-atomic conjecture to rooted anticorrelation}
+
+\subsection{Why parity alone is insufficient}
+
+A first-order diagnostic near $p=1$ comes from comparing the constant graphon $W\equiv p$ with the Turan interpolation polynomial.  If the girth of $H$ is $g$ and $N_g(H)$ is the number of $g$-cycles, then
+\begin{equation}\label{eq:girth-expansion}
+  p^{e(H)}-\Phi_H(p)=(-1)^{g+1}N_g(H)q^{g-1}+O(q^g)
+  \qquad(q\to0).
+\end{equation}
+Thus even girth immediately gives counterexamples near $p=1$, while odd girth makes the constant graphon lie on the correct side near $p=1$.
+
+However, ordinary even cycles cannot be the whole obstruction.  Cliques contain many even cycles, and chordal graphs can contain many even cycles, yet clique-density and chordal-positive results suggest that these even cycles do not necessarily create stronger anticorrelation than the Turan equivalence relation.  What matters is not merely whether an even closed walk exists, but whether several cyclic constraints interact outside clique separators.  Typical dangerous configurations include even holes, thetas, wheels, pyramids, prisms, and other atoms in which frustration can be redistributed among several cycles.
+
+\subsection{Clique cutsets and atoms}
+
+\begin{definition}[Clique cutset and atom]
+A \emph{clique cutset} of a graph $G$ is a clique $K\subseteq V(G)$ such that $G-K$ is disconnected.  A graph with no clique cutset is called an \emph{atom}.  A clique-cutset decomposition recursively splits $G$ into induced subgraphs $G[K\cup C_i]$, where $C_i$ ranges over the connected components of $G-K$, until all terminal pieces are atoms.
+\end{definition}
+
+Clique cutsets are natural here because the benchmark factorizes exactly across clique-sums.  If
+\[
+  H=H_1\cup_K H_2
+\]
+is obtained by gluing $H_1$ and $H_2$ along a common clique $K$, then
+\begin{equation}\label{eq:chi-clique-sum}
+  \chi_H(z)=\frac{\chi_{H_1}(z)\chi_{H_2}(z)}{\chi_K(z)}.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:Phi-clique-sum}
+  \Phi_H(p)=\frac{\Phi_{H_1}(p)\Phi_{H_2}(p)}{\Phi_K(p)}.
+\end{equation}
+This identity strongly suggests an induction over clique-cutset decompositions.
+
+\subsection{The odd-atomic positive core}
+
+The first structural conjecture proposed was the following.
+
+\begin{definition}[Odd-atomic graph]
+A graph $H$ is \emph{odd-atomic} if every atom in a clique-cutset decomposition of $H$ is either a clique or an odd cycle.
+\end{definition}
+
+\begin{conjecture}[Odd-atomic Turan--Sidorenko conjecture]\label{conj:odd-atomic}
+Every connected non-bipartite odd-atomic graph is Turan--Sidorenko.
+\end{conjecture}
+
+This conjecture unifies several positive data points: cliques are covered by clique density, chordal graphs decompose into clique atoms, and odd cycles are the primitive non-chordal atoms.  It also excludes the known even-girth counterexamples.
+
+The work below suggests that Conjecture \ref{conj:odd-atomic} is a good \emph{positive-core conjecture}, but not the final conceptual formulation.  The reason is that unrooted inequalities for atoms do not automatically compose under clique-sums.  The correct induction invariant must be rooted and must control covariance across the separator.
+
+\section{Regular graphons: odd cycles and rooted lower bounds}
+
+This section records a clean theorem for regular graphons.  It is the most transparent evidence for the anticorrelation picture.
+
+Let $T_W$ be the graphon operator associated with $W$:
+\[
+  (T_Wf)(x)=\int_0^1 W(x,y)f(y)\,dy.
+\]
+The kernel of $T_W^r$ is denoted $T_W^r(x,y)$; for example
+\[
+  T_W^2(x,y)=\int_0^1 W(x,z)W(z,y)\,dz.
+\]
+This is the graphon analogue of common-neighbour density.  For cycles,
+\[
+  t(C_m,W)=\Tr(T_W^m)=\int_0^1 T_W^m(x,x)\,dx.
+\]
+
+\begin{definition}
+A graphon $W$ is $p$-regular if
+\[
+  \int_0^1 W(x,y)\,dy=p
+  \qquad\text{for a.e. }x.
+\]
+\end{definition}
+
+\begin{theorem}[Odd cycles for regular graphons]\label{thm:regular-odd-cycles}
+Let $W$ be a $p$-regular graphon with $p\ge1/2$, and put $q=1-p$.  Then for every $\ell\ge1$,
+\begin{equation}\label{eq:odd-cycle-ineq}
+  t(C_{2\ell+1},W)\ge p^{2\ell+1}-p q^{2\ell}.
+\end{equation}
+Equivalently,
+\[
+  t(C_{2\ell+1},W)\ge \Phi_{C_{2\ell+1}}(p).
+\]
+\end{theorem}
+
+\begin{proof}
+Put $U=1-W$.  Since $W$ is $p$-regular, $U$ is $q$-regular.  Let $J$ be the rank-one projection with kernel $1$:
+\[
+  (Jf)(x)=\int_0^1 f(y)\,dy.
+\]
+Then
+\[
+  T_W=J-T_U.
+\]
+Because $U$ is $q$-regular, $T_UJ=JT_U=qJ$.  Hence $J$ and $T_U$ commute.  On the constants, $T_W$ has eigenvalue $p$; on the orthogonal complement of the constants, $T_W=-T_U$.  Therefore
+\begin{align}
+  T_W^{2\ell} &= T_U^{2\ell}+(p^{2\ell}-q^{2\ell})J, \label{eq:even-power}\\
+  T_W^{2\ell+1} &= -T_U^{2\ell+1}+(p^{2\ell+1}+q^{2\ell+1})J. \label{eq:odd-power}
+\end{align}
+
+We also have the pointwise bound
+\begin{equation}\label{eq:TU-bound}
+  T_U^r(x,y)\le q^{r-1}\qquad(r\ge1).
+\end{equation}
+Indeed, for $r=1$ this follows from $U\le1$.  If it holds for $r$, then
+\[
+  T_U^{r+1}(x,y)=\int T_U^r(x,z)U(z,y)\,dz
+  \le q^{r-1}\int U(z,y)\,dz=q^r,
+\]
+using symmetry and $q$-regularity of $U$.
+
+Taking the diagonal in \eqref{eq:odd-power} and using \eqref{eq:TU-bound} with $r=2\ell+1$, we get
+\[
+  T_W^{2\ell+1}(x,x)
+  \ge p^{2\ell+1}+q^{2\ell+1}-q^{2\ell}
+  =p^{2\ell+1}-p q^{2\ell}.
+\]
+Integrating over $x$ proves \eqref{eq:odd-cycle-ineq}.
+\end{proof}
+
+The proof gives rooted forms that are more important for clique gluing than the unrooted inequality itself.
+
+\begin{corollary}[Rooted odd-cycle bounds for regular graphons]\label{cor:rooted-regular-odd-cycles}
+Let $W$ be $p$-regular with $p\ge1/2$ and $q=1-p$.  Then:
+\begin{enumerate}[label=(\roman*)]
+\item for every $x,y$,
+\begin{equation}\label{eq:edge-rooted-regular}
+  T_W^{2\ell}(x,y)\ge p^{2\ell}-q^{2\ell};
+\end{equation}
+\item for every $x$,
+\begin{equation}\label{eq:vertex-rooted-regular}
+  T_W^{2\ell+1}(x,x)\ge p^{2\ell+1}-p q^{2\ell}.
+\end{equation}
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Equation \eqref{eq:edge-rooted-regular} follows directly from \eqref{eq:even-power} because $T_U^{2\ell}$ has a nonnegative kernel.  Equation \eqref{eq:vertex-rooted-regular} is the pointwise diagonal estimate proved in Theorem \ref{thm:regular-odd-cycles}.
+\end{proof}
+
+\section{Cycle-atomic graphs in the regular case}
+
+\begin{definition}[Cycle-atomic graph]
+A graph $H$ is \emph{cycle-atomic} if it can be built from edges and odd cycles by repeated clique-sums along $K_1$'s and $K_2$'s.  Equivalently, every atom in the relevant clique-cutset decomposition is an edge or an odd cycle, and all separators are vertices or edges.
+\end{definition}
+
+\begin{theorem}[Cycle-atomic graphs against regular graphons]\label{thm:cycle-atomic-regular}
+Let $H$ be a non-bipartite cycle-atomic graph.  If $W$ is $p$-regular with $p\ge1/2$, then
+\[
+  t(H,W)\ge \Phi_H(p).
+\]
+\end{theorem}
+
+\begin{proof}
+The proof uses rooted extension densities.  Let $G$ be rooted at a clique $K$, where $K$ is either $K_1$ or $K_2$.  For fixed root variables, let $f_{G|K}$ be the density of extending the root to a homomorphic copy of $G$, excluding the edge factors internal to $K$.  The desired rooted lower bound is
+\begin{equation}\label{eq:rooted-induction-bound}
+  f_{G|K}\ge \frac{\Phi_G(p)}{\Phi_K(p)}
+\end{equation}
+pointwise.
+
+For the atomic pieces, \eqref{eq:rooted-induction-bound} follows as follows.  For $K_2$ rooted over $K_1$, $f_{K_2|K_1}(x)=p$, because $W$ is $p$-regular, and $\Phi_{K_2}(p)/\Phi_{K_1}(p)=p$.  For $K_2$ rooted over itself, both sides equal $1$.  For an odd cycle rooted at an edge, \eqref{eq:rooted-induction-bound} is exactly \eqref{eq:edge-rooted-regular}.  For an odd cycle rooted at a vertex, it is exactly \eqref{eq:vertex-rooted-regular}.
+
+Now suppose $G=G_1\cup_K G_2$ is a clique-sum along $K=K_1$ or $K_2$.  For fixed root variables on $K$, the extension density multiplies:
+\[
+  f_{G|K}=f_{G_1|K}f_{G_2|K}.
+\]
+The benchmark also multiplies by \eqref{eq:Phi-clique-sum}:
+\[
+  \frac{\Phi_G(p)}{\Phi_K(p)}
+  =\frac{\Phi_{G_1}(p)}{\Phi_K(p)}
+   \frac{\Phi_{G_2}(p)}{\Phi_K(p)}.
+\]
+Thus the rooted bound is preserved by clique-sums.  Induction over the construction of $H$ proves the unrooted inequality by taking the empty root.
+\end{proof}
+
+This theorem is an important partial confirmation of the programme: once degree irregularity is absent, odd-cycle frustration gives pointwise rooted slack, and clique gluing becomes straightforward.
+
+\section{Why unrooted atom inequalities are not enough}
+
+A direct induction from unrooted atom inequalities fails because rooted extension densities can be negatively correlated over the separator.
+
+Suppose $H=H_1\cup_K H_2$ and root both $H_1,H_2$ at $K$.  Let $f_1,f_2$ be the rooted extension densities.  With respect to the root-biased measure
+\[
+  d\mu_K(\mathbf x)=\frac{\prod_{ij\in E(K)}W(x_i,x_j)}{t(K,W)}\,d\mathbf x,
+\]
+we have
+\[
+  t(H_i,W)=t(K,W)\E_{\mu_K}f_i,
+  \qquad
+  t(H,W)=t(K,W)\E_{\mu_K}(f_1f_2).
+\]
+A naive gluing argument would require
+\[
+  \E_{\mu_K}(f_1f_2)
+  \ge \E_{\mu_K}f_1\,\E_{\mu_K}f_2,
+\]
+but such positive covariance is false in general.  Therefore the final induction invariant must be rooted and must include a statement saying that the slack in the atomic inequalities dominates possible negative covariance across clique separators.
+
+This is the main reason to revise the original graph-class conjecture into a rooted anticorrelation calculus.
+
+\section{Identical rooted books for arbitrary graphons}
+
+Although arbitrary gluing is hard, identical rooted books are easy and useful.
+
+\begin{theorem}[Identical rooted books]\label{thm:identical-books}
+Let $F$ be a graph rooted at $K$, where $K$ is either $K_1$ or $K_2$.  Let $B_m(F,K)$ be the graph obtained by gluing $m$ identical copies of $F$ along the same root $K$.  Suppose that $F$ satisfies
+\[
+  t(F,W)\ge \Phi_F(p)
+\]
+for every graphon $W$ of edge density $p$ in the relevant range.  Then $B_m(F,K)$ satisfies
+\[
+  t(B_m(F,K),W)\ge \Phi_{B_m(F,K)}(p)
+\]
+for every such $W$.
+\end{theorem}
+
+\begin{proof}
+Let $f$ be the rooted extension density of $F$ over $K$.  If $K=K_1$, use $d\mu(x)=dx$.  If $K=K_2$, use the edge-biased probability measure
+\[
+  d\mu(x,y)=\frac{W(x,y)}{p}\,dx\,dy.
+\]
+In both cases,
+\[
+  t(F,W)=t(K,W)\E_\mu f.
+\]
+Since $t(K,W)=\Phi_K(p)$ for $K=K_1,K_2$, the assumed inequality gives
+\[
+  \E_\mu f\ge \frac{\Phi_F(p)}{\Phi_K(p)}.
+\]
+The book density is
+\[
+  t(B_m(F,K),W)=t(K,W)\E_\mu f^m.
+\]
+By Jensen's inequality,
+\[
+  \E_\mu f^m\ge (\E_\mu f)^m.
+\]
+Therefore
+\[
+  t(B_m(F,K),W)
+  \ge \Phi_K(p)\left(\frac{\Phi_F(p)}{\Phi_K(p)}\right)^m
+  =\frac{\Phi_F(p)^m}{\Phi_K(p)^{m-1}}.
+\]
+The chromatic polynomial factorization for repeated clique-sums gives
+\[
+  \Phi_{B_m(F,K)}(p)=\frac{\Phi_F(p)^m}{\Phi_K(p)^{m-1}},
+\]
+which completes the proof.
+\end{proof}
+
+In particular, if the odd-cycle inequality is known for $C_{2\ell+1}$, then any book of identical copies of $C_{2\ell+1}$ sharing a vertex or an edge satisfies the desired inequality.
+
+\section{The first mixed gluing target: $C_3\cup_{K_2}C_5$}
+
+The first genuinely nontrivial mixed gluing case is the graph
+\[
+  H_{3,5}:=C_3\cup_{K_2}C_5,
+\]
+obtained by gluing a triangle and a $5$-cycle along one common edge.  Equivalently, this is the theta graph with three internally disjoint paths of lengths $1,2,4$ between the same two endpoints.
+
+Let $T=T_W$.  Then
+\[
+  t(H_{3,5},W)=\int W(x,y)T^2(x,y)T^4(x,y)\,dx\,dy.
+\]
+The Turan lower bound for $H_{3,5}$ is
+\[
+  \Phi_{H_{3,5}}(p)
+  =p(2p-1)(p^4-q^4).
+\]
+Thus it would follow from the two inequalities
+\begin{align}
+  \int W T^2T^4 &\ge (2p-1)\int W T^4, \label{eq:local-goodman-C5}\\
+  t(C_5,W)=\int W T^4 &\ge p(p^4-q^4). \label{eq:C5-ineq}
+\end{align}
+The second inequality is the $C_5$ case of the odd-cycle inequality.  The new gluing statement is \eqref{eq:local-goodman-C5}.
+
+Define
+\begin{equation}\label{eq:K-def}
+  K_W(x,y):=W(x,y)\bigl(T_W^2(x,y)-(2p-1)\bigr).
+\end{equation}
+We call $K_W$ the \emph{Goodman defect kernel}.  The usual Goodman triangle inequality is
+\[
+  \int K_W(x,y)\,dx\,dy\ge0.
+\]
+The mixed $C_3$--$C_5$ gluing target is
+\begin{equation}\label{eq:SG2}
+  \Delta_2(W):=
+  \int W(x,y)\bigl(T_W^2(x,y)-(2p-1)\bigr)T_W^4(x,y)\,dx\,dy\ge0.
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:trace-SG2}
+  \Delta_2(W)=\Tr(T_W^2K_WT_W^2)\ge0,
+\end{equation}
+where $K_W$ is also viewed as an integral operator with kernel \eqref{eq:K-def}.
+
+This trace formulation is the first concrete rooted anticorrelation inequality beyond Jensen.
+
+\section{Known cases of the smoothed Goodman trace inequality}
+
+\subsection{Regular graphons}
+
+If $W$ is $p$-regular and $p\ge1/2$, then by \eqref{eq:even-power} with $\ell=1$,
+\[
+  T_W^2(x,y)=T_U^2(x,y)+(p^2-q^2)
+  \ge 2p-1.
+\]
+Multiplying by the nonnegative kernel $W(x,y)T_W^4(x,y)$ proves \eqref{eq:SG2}.  In fact, the same argument proves
+\[
+  \int W(x,y)T_W^2(x,y)T_W^{2\ell}(x,y)\,dx\,dy
+  \ge (2p-1)t(C_{2\ell+1},W)
+\]
+for every $\ell\ge1$ and every $p$-regular graphon.
+
+\subsection{The case $\ell=1$ by Goodman and Jensen}
+
+The first member of the family
+\[
+  \Tr(T_W^\ell K_WT_W^\ell)\ge0
+\]
+is $\ell=1$:
+\[
+  \int W(T_W^2)^2\ge (2p-1)\int WT_W^2.
+\]
+Under the edge-biased measure $d\mu(x,y)=W(x,y)\,dx\,dy/p$, this says
+\[
+  \E_\mu[A^2]\ge (2p-1)\E_\mu[A],
+  \qquad A=T_W^2(x,y).
+\]
+Goodman's inequality gives $\E_\mu A\ge2p-1$, and Jensen gives $\E_\mu A^2\ge(\E_\mu A)^2$.  Hence the $\ell=1$ case follows.
+
+\subsection{Complete multipartite graphons}
+
+\begin{theorem}[Complete multipartite graphons]\label{thm:multipartite-SG2}
+Let $W$ be a complete multipartite graphon, possibly with unbalanced parts.  That is,
+\[
+  W(x,y)=1_{\sigma(x)\ne\sigma(y)},
+\]
+where the parts have masses $s_1,\dots,s_m$ with $\sum_i s_i=1$.  If $p\ge1/2$, then $\Delta_2(W)\ge0$.
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+  Q:=\sum_i s_i^2.
+\]
+Then $p=1-Q$ and $2p-1=1-2Q$.  A homomorphism from $C_5$ into $W$ is a weighted proper coloring of $C_5$ by the parts.  Let the colors around the cycle be
+\[
+  I_0,I_1,I_2,I_3,I_4,
+\]
+with $I_r\ne I_{r+1}$ cyclically, and weight $\prod_r s_{I_r}$.  For a marked edge $I_0I_1$, the rooted triangle extension density is
+\[
+  T_W^2(x_0,x_1)=1-s_{I_0}-s_{I_1}.
+\]
+Thus the desired local inequality is equivalent to
+\[
+  \E[1-s_{I_0}-s_{I_1}]\ge 1-2Q.
+\]
+By symmetry, this is equivalent to
+\begin{equation}\label{eq:multipartite-goal}
+  \E[s_{I_0}]\le Q.
+\end{equation}
+
+Let $Z_i$ be the weighted partition function of the remaining path after fixing $I_0=i$.  Then
+\[
+  \Pr[I_0=i]=\frac{s_iZ_i}{\sum_j s_jZ_j}.
+\]
+The key monotonicity is
+\begin{equation}\label{eq:Zi-antitone}
+  s_i\ge s_j\quad\Longrightarrow\quad Z_i\le Z_j.
+\end{equation}
+Intuitively, a larger root color blocks more weighted choices at the two neighboring vertices of the cycle.  One direct verification is as follows.  If $a=s_i$, $b=s_j$, and the remaining masses are $r_1,r_2,\dots$ with $R=1-a-b$, then
+\[
+  Z_i-Z_j=(b-a)B_{ij},
+\]
+where
+\[
+  B_{ij}=2R\{a(1-a)+b(1-b)\}
+  +(1+3R)\left(R^2-\sum_\ell r_\ell^2\right)
+  -2\left(R^3-\sum_\ell r_\ell^3\right).
+\]
+The last two terms are nonnegative in combination because
+\[
+  R^3-\sum_\ell r_\ell^3
+  \le \frac{3R}{2}\left(R^2-\sum_\ell r_\ell^2\right)
+  \le \frac{1+3R}{2}\left(R^2-\sum_\ell r_\ell^2\right).
+\]
+Hence $B_{ij}\ge0$, proving \eqref{eq:Zi-antitone}.
+
+Now
+\[
+  \E[s_{I_0}]=\frac{\sum_i s_i^2Z_i}{\sum_i s_iZ_i}.
+\]
+Using the antitonicity of $Z_i$ as a function of $s_i$,
+\[
+  \sum_i s_i^2Z_i-Q\sum_i s_iZ_i
+  =\frac12\sum_{i,j}s_is_j(s_i-s_j)(Z_i-Z_j)\le0.
+\]
+This proves \eqref{eq:multipartite-goal}, and hence $\Delta_2(W)\ge0$.
+\end{proof}
+
+Thus irregular class sizes do not break the $C_3$--$C_5$ gluing inequality inside the class-based anticorrelation family.
+
+\subsection{Equal-weight bipodal graphons}
+
+\begin{theorem}[Equal-weight bipodal graphons]\label{thm:bipodal-SG2}
+Let $W$ be a two-step graphon with two parts of measure $1/2$ and matrix
+\[
+  M=\begin{pmatrix}x&y\\ y&z\end{pmatrix},
+  \qquad 0\le x,y,z\le1.
+\]
+If $p=(x+2y+z)/4\ge1/2$, then $\Delta_2(W)\ge0$.
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+  m:=\frac{x+z}{2},\qquad b:=\frac{x-z}{2},\qquad c:=b^2.
+\]
+Then $x=m+b$, $z=m-b$, and
+\[
+  p=\frac{m+y}{2}.
+\]
+Thus $p\ge1/2$ is equivalent to $m+y\ge1$.
+
+An exact symbolic computation gives
+\[
+  \Delta_2(W)=\frac{m}{32}P(m,y,c),
+\]
+where $P$ is a polynomial in $m,y,c$.  The relevant fact is that
+\begin{equation}\label{eq:bipodal-derivative}
+  \frac{\partial P}{\partial c}
+  =21c^2+\bigl(70m^2-20m+30y^2-20y+20\bigr)c+D_0(m,y),
+\end{equation}
+where
+\begin{align*}
+D_0(m,y)={}&21m^4-20m^3+42m^2y^2-20m^2y+20m^2 \\
+&+8my^3-20my^2+9y^4-20y^3+20y^2.
+\end{align*}
+The coefficient of $c$ in \eqref{eq:bipodal-derivative} is positive on $[0,1]^2$.  It remains to see that $D_0(m,y)\ge0$ on the triangle
+\[
+  0\le m,y\le1,
+  \qquad m+y\ge1.
+\]
+Put
+\[
+  r=1-m,
+  \qquad s=1-y,
+  \qquad u=m+y-1.
+\]
+Then $r,s,u\ge0$ and $r+s+u=1$.  In the degree-$4$ Bernstein basis
+\[
+  B_{ijk}(r,s,u)=\frac{4!}{i!j!k!}r^is^ju^k,
+  \qquad i+j+k=4,
+\]
+the polynomial $D_0$ has the following coefficients:
+\[
+\begin{array}{c|ccccccccccccccc}
+(i,j,k)&004&013&022&031&040&103&112&121&130&202&211&220&301&310&400\\
+\hline
+\text{coeff.}&40&24&18&16&21&16&28/3&16/3&0&10&22/3&7&6&2&9.
+\end{array}
+\]
+All coefficients are nonnegative, so $D_0\ge0$.  Hence $\partial P/\partial c\ge0$ throughout the feasible domain.
+
+For fixed $m,y$, the defect is therefore minimized at $c=0$, i.e. at $x=z=m$.  In that case the graphon is $p$-regular, because both parts have degree $(m+y)/2=p$.  The regular-graphon argument above gives $\Delta_2(W)\ge0$ at $c=0$, and monotonicity in $c$ gives the result for all equal-weight bipodal graphons.
+\end{proof}
+
+This theorem is important because it tests the first nonregular deformation away from the regular case.  The conclusion is that, in this two-block family, degree irregularity only increases the smoothed Goodman defect.
+
+\subsection{Rank-one graphons}
+
+\begin{theorem}[Rank-one graphons]\label{thm:rank-one-SG2}
+Let $W(x,y)=f(x)f(y)$ with $0\le f\le1$.  If $p=t(K_2,W)\ge1/2$, then $\Delta_2(W)\ge0$.
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+  m_r:=\int_0^1 f(x)^r\,dx.
+\]
+Then $p=m_1^2$.  Since $W$ is rank one,
+\[
+  T_W^2(x,y)=m_2 f(x)f(y),
+  \qquad
+  T_W^4(x,y)=m_2^3 f(x)f(y).
+\]
+Therefore
+\[
+  \int WT_W^2T_W^4=m_2^4m_3^2,
+  \qquad
+  \int WT_W^4=m_2^5,
+\]
+and hence
+\[
+  \Delta_2(W)=m_2^4\bigl(m_3^2-(2m_1^2-1)m_2\bigr).
+\]
+It remains to prove
+\[
+  m_3^2\ge (2m_1^2-1)m_2.
+\]
+By Cauchy--Schwarz,
+\[
+  m_2^2=\left(\int f^{3/2}f^{1/2}\right)^2\le m_3m_1,
+\]
+so, if $m_1>0$,
+\[
+  m_3^2\ge \frac{m_2^4}{m_1^2}.
+\]
+If $m_1=0$, then $W=0$ a.e. and the claim is trivial, so assume $m_1>0$.
+
+It remains to compare $m_2^4/m_1^2$ with $(2m_1^2-1)m_2$.  If $2m_1^2-1\le0$, the comparison is immediate.  If $2m_1^2-1\ge0$, then it is enough to prove
+\[
+  \frac{m_2^3}{m_1^2}\ge 2m_1^2-1.
+\]
+Since $m_2\ge m_1^2$, the left side is at least $m_1^4$.  Finally
+\[
+  m_1^4\ge 2m_1^2-1
+\]
+is equivalent to $(1-m_1^2)^2\ge0$.  Hence
+\[
+  m_3^2\ge (2m_1^2-1)m_2,
+\]
+and therefore $\Delta_2(W)\ge0$.
+\end{proof}
+
+
+\section{Further progress on the $C_3$--$C_5$ target}
+\label{sec:further-SG2}
+
+This section records progress obtained after the initial formulation of the smoothed Goodman trace inequality.  The results here are the most relevant for the next stage of the project.
+
+\subsection{Equivalent finite and probabilistic forms}
+
+The inequality
+\begin{equation}\label{eq:SG2-updated}
+  \Delta_2(W):=t(C_3\cup_{K_2}C_5,W)-(2p-1)t(C_5,W)\ge0
+\end{equation}
+is a linear quantum-graph inequality:
+\[
+  t(C_3\cup_{K_2}C_5,W)+t(C_5,W)
+  \ge 2t(K_2,W)t(C_5,W).
+\]
+Since random-free graphons are dense for fixed finite homomorphism densities, a strict graphon counterexample would yield an arbitrarily close $0/1$ graphon counterexample.  Thus \eqref{eq:SG2-updated} can be attacked as a dense finite graph problem.
+
+There is also a useful $C_5$-biased formulation.  Sample an ordered homomorphic $5$-cycle
+\[
+  X_0,X_1,X_2,X_3,X_4
+\]
+with probability proportional to
+\[
+  \prod_{i=0}^4 W(X_i,X_{i+1}),
+\]
+with indices modulo $5$, and then sample an independent $Z\in[0,1]$.  By symmetry over the five cycle edges, \eqref{eq:SG2-updated} is equivalent to
+\begin{equation}\label{eq:C5-biased-Goodman}
+  \mathbb E\left[\frac15\sum_{i=0}^4
+  W(Z,X_i)W(Z,X_{i+1})\right]
+  \ge 2p-1.
+\end{equation}
+For a $0/1$ graphon, let
+\[
+  S_Z:=\{i\in\mathbb Z/5\mathbb Z: Z\not\sim X_i\}.
+\]
+Let $e_{C_5}(S_Z)$ be the number of consecutive pairs inside $S_Z$ along the sampled cycle.  Then \eqref{eq:C5-biased-Goodman} is equivalent to
+\begin{equation}\label{eq:covering-form}
+  \mathbb E\bigl[2|S_Z|-e_{C_5}(S_Z)\bigr]\le 10(1-p).
+\end{equation}
+Thus the target says: in a $C_5$-biased cycle, the non-neighbourhood of a random outside vertex covers at most the globally expected fraction of cycle edges.  This is one of the cleanest combinatorial forms of the desired rooted anticorrelation principle.
+
+\subsection{Slack-dominates-covariance decomposition}
+
+Let
+\[
+  A(x,y):=T_W^2(x,y),\qquad B(x,y):=T_W^4(x,y),
+\]
+and use the edge-biased probability measure
+\[
+  d\mu_E(x,y)=\frac{W(x,y)}p\,dx\,dy.
+\]
+Then
+\[
+  \frac{t(K_3,W)}p=\mathbb E_{\mu_E}A,
+  \qquad
+  \frac{t(C_5,W)}p=\mathbb E_{\mu_E}B,
+\]
+and
+\[
+  \frac{t(C_3\cup_{K_2}C_5,W)}p=\mathbb E_{\mu_E}(AB).
+\]
+Therefore
+\begin{equation}\label{eq:covariance-decomp}
+  \Delta_2(W)=
+  \frac{t(C_5,W)}p\Bigl(t(K_3,W)-p(2p-1)\Bigr)
+  +p\,\operatorname{Cov}_{\mu_E}(A,B).
+\end{equation}
+The first term is the Goodman slack and is nonnegative.  The second term can be negative.  Hence the correct mechanism is not positive correlation, but
+\[
+        \text{Goodman slack dominates possible negative rooted covariance.}
+\]
+This is precisely the phenomenon expected in clique-separator gluing.
+
+Positive covariance is false even for a simple bipodal graphon.  Take two parts of masses $3/4$ and $1/4$ and matrix
+\[
+  \begin{pmatrix}3/7&1\\1&0\end{pmatrix}.
+\]
+Then $p=69/112$ and exact calculation gives
+\[
+  \operatorname{Cov}_{\mu_E}(T_W^2,T_W^4)
+  =-\frac{306423}{3373232128}<0,
+\]
+while
+\[
+  \Delta_2(W)=\frac{69804909}{6746464256}>0.
+\]
+This example is useful because it rules out any proof based only on rooted positive association.
+
+\subsection{False stronger routes}
+
+Several tempting strengthenings are false.
+
+First, the Goodman defect kernel
+\[
+  K_W(x,y)=W(x,y)\bigl(T_W^2(x,y)-(2p-1)\bigr)
+\]
+is not copositive.  There is an equal-five-block $0/1$ graphon with adjacency matrix
+\[
+A=
+\begin{pmatrix}
+0&1&1&1&1\\
+1&0&0&1&1\\
+1&0&0&1&1\\
+1&1&1&0&0\\
+1&1&1&0&0
+\end{pmatrix}
+\]
+for which $p=16/25$ and a nonnegative test function $f$ gives
+\[
+  \int K_W(x,y)f(x)f(y)\,dx\,dy=-\frac{16}{625}<0.
+\]
+For the same graphon, however,
+\[
+  \operatorname{Tr}(T_W^2K_WT_W^2)=\frac{64}{15625}>0.
+\]
+Thus the special smoothing by $T_W^2$ is essential.
+
+Second, one might try to prove only that a $C_5$-rooted vertex is degree-biased in the favourable direction:
+\[
+  \int d(x)T_W^5(x,x)\,dx\ge p\,t(C_5,W),
+  \qquad d(x)=\int W(x,y)\,dy.
+\]
+This is false.  A random-free tripodal example with masses
+\[
+  17/50,\quad 17/50,\quad 8/25
+\]
+and matrix
+\[
+M=
+\begin{pmatrix}
+1&0&1\\
+0&1&1\\
+1&1&0
+\end{pmatrix}
+\]
+has $p=833/1250$ and violates this vertex-bias inequality.  Hence the full correction term $e_{C_5}(S_Z)$ in \eqref{eq:covering-form} is essential.
+
+\subsection{Additional proved families for $\Delta_2\ge0$}
+
+Beyond the classes in Section~8, the following families have also been settled.
+
+\begin{theorem}[One-sided threshold bipodal graphons]
+Let $W_{s,a}$ be the two-block graphon with part masses $s,1-s$ and matrix
+\[
+  M_{s,a}=\begin{pmatrix}a&1\\1&0\end{pmatrix},
+  \qquad 0\le s,a\le1.
+\]
+Then
+\[
+  \Delta_2(W_{s,a})\ge0.
+\]
+\end{theorem}
+
+\begin{proof}[Proof status]
+This is an exact computational proof.  One computes
+\[
+  p=s^2a+2s(1-s),
+\]
+and
+\[
+  \Delta_2(W_{s,a})=s^3aP(s,a)
+\]
+for an explicit polynomial $P$.  The boundary values are
+\[
+  P(0,a)=6,
+\]
+\[
+  P(1,a)=a^4(1-a)^2,
+\]
+\[
+  P(s,0)=(1-s)^2(20s^2-21s+6),
+\]
+and
+\[
+  P(s,1)=2(3-s)(1-s)^3,
+\]
+which are nonnegative on the square.  The resultant of $P$ and $\partial P/\partial s$ factors as
+\[
+  2a^4(a-2)(a-1)^4(a^4-5a^2+5)L(a),
+\]
+where $L$ is a degree-$16$ polynomial.  A Sturm check shows that $L$ has no real root in $[0,1]$, while $a^4-5a^2+5>0$ on $[0,1]$.  Hence the number of roots of $P(\cdot,a)$ in $s\in(0,1)$ is constant for $a\in(0,1)$.  Checking one sample value, for instance $a=1/2$, proves that no interior root exists.  Therefore $P\ge0$, and hence $\Delta_2\ge0$.  The accompanying script reproduces these symbolic checks.
+\end{proof}
+
+\begin{theorem}[Boolean bipodal graphons]
+Let $W$ be bipodal with arbitrary part masses $s,1-s$ and matrix entries $a,b,c\in\{0,1\}$.  Then $\Delta_2(W)\ge0$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+All Boolean two-block cases can be checked exactly.  The main case not already covered by earlier families is the disjoint union of two cliques,
+\[
+  M=\begin{pmatrix}1&0\\0&1\end{pmatrix}.
+\]
+Writing $u=s(1-s)$, exact calculation gives
+\[
+  \Delta_2(W)=s(1-s)(18u^2-16u+3).
+\]
+Since $0\le u\le1/4$ and
+\[
+  18u^2-16u+3\ge 18\left(\frac14\right)^2-16\left(\frac14\right)+3=\frac18,
+\]
+this case is nonnegative.  The other Boolean cases reduce to formulas such as
+\[
+  M=\begin{pmatrix}1&0\\0&0\end{pmatrix}
+  \quad\Longrightarrow\quad
+  \Delta_2=s^5(1-s)(2s+1)\ge0,
+\]
+\[
+  M=\begin{pmatrix}1&1\\1&0\end{pmatrix}
+  \quad\Longrightarrow\quad
+  \Delta_2=2s^3(3-s)(1-s)^3\ge0,
+\]
+and the symmetric counterparts.
+\end{proof}
+
+\subsection{Full bipodal reduction and current gap}
+
+For a general bipodal graphon with masses $s,1-s$ and matrix
+\[
+  M=\begin{pmatrix}a&b\\b&c\end{pmatrix},
+\]
+the defect $\Delta_2$ is an explicit polynomial
+\[
+  \Delta_2(s,a,b,c)
+\]
+of individual degrees
+\[
+  \deg_s=7,
+  \qquad \deg_a=7,
+  \qquad \deg_b=6,
+  \qquad \deg_c=7.
+\]
+The two-dimensional graphon operator satisfies a rank-two Cayley--Hamilton identity.  Put
+\[
+  \tau:=sa+(1-s)c,
+  \qquad
+  \eta:=s(1-s)(ac-b^2).
+\]
+Then
+\[
+  T_W^4=(\tau^2-\eta)T_W^2-\tau\eta T_W,
+\]
+and hence
+\begin{equation}\label{eq:rank-two-updated}
+  \boxed{
+  \Delta_2=(\tau^2-\eta)D_1-\tau\eta R,
+  }
+\end{equation}
+where
+\[
+  D_1:=\int WT_W^2\bigl(T_W^2-(2p-1)\bigr),
+\]
+and
+\[
+  R:=\int W^2\bigl(T_W^2-(2p-1)\bigr).
+\]
+The term $D_1$ is nonnegative for every graphon by Goodman plus Jensen.  Thus any bipodal counterexample would have to use the second term in \eqref{eq:rank-two-updated}.  This is a sharp localization of the algebraic difficulty.
+
+A numerical Bernstein-subdivision search over the entire cube $[0,1]^4$ found no counterexample and terminated on a tree with $1423$ nodes and $712$ terminal boxes.  Rechecking those boxes with exact integer Bernstein arithmetic certifies $688$ of the $712$ leaves.  The remaining $24$ are not counterexamples; they are boundary-layer boxes where $\Delta_2$ vanishes on lower-dimensional faces and Bernstein coefficients remain slightly negative.  The unresolved boxes lie near the degeneracies
+\[
+  \{s=0,c=1\},
+  \qquad
+  \{s=1,a=1\},
+  \qquad
+  \{a=b=c=1\},
+\]
+and their symmetric variants.  For example,
+\[
+  \Delta_2(0,a,b,c)=c^5(1-c)^2\ge0,
+\]
+and symmetrically
+\[
+  \Delta_2(1,a,b,c)=a^5(1-a)^2\ge0.
+\]
+Near the complete graphon $a=b=c=1$, the quadratic part in the deficits
+\[
+  X=1-a,
+  \qquad Y=1-b,
+  \qquad Z=1-c
+\]
+is positive semidefinite but degenerate.  This explains why pure Bernstein subdivision stalls.  The current precise subtarget is therefore:
+\begin{quote}
+Prove a local boundary lemma for $\Delta_2$ near the complete-graphon and vanishing-block degeneracies.  Combining that lemma with the exact Bernstein certificate would prove the bipodal smoothed Goodman conjecture.
+\end{quote}
+
+\subsection{Updated status table for the smoothed Goodman target}
+
+\[
+\begin{array}{l|l}
+\toprule
+\text{Graphon class} & \text{Status for }\Delta_2(W)\ge0\\
+\midrule
+p\text{-regular graphons} & \text{proved}\\
+\text{complete multipartite graphons} & \text{proved}\\
+\text{equal-weight bipodal graphons} & \text{proved}\\
+\text{rank-one graphons }W=f\otimes f & \text{proved}\\
+\text{one-sided threshold bipodal graphons} & \text{proved by exact symbolic computation}\\
+\text{Boolean bipodal graphons} & \text{proved by exact case analysis}\\
+\text{general bipodal graphons} & \text{strong evidence; exact reduction; partial exact Bernstein certificate}\\
+\text{arbitrary graphons} & \text{open}\\
+\bottomrule
+\end{array}
+\]
+
+\subsection{Supporting scripts}
+
+The handoff package includes two main scripts.
+\begin{enumerate}[label=(\roman*)]
+\item \texttt{bipodal\_delta2\_reduction.py}: derives $\Delta_2$ symbolically, verifies the rank-two identity, checks Boolean bipodal boundary cases, and checks the one-sided threshold family using the resultant/Sturm argument.
+\item \texttt{bipodal\_delta2\_formalization.py}: derives $\Delta_2$, verifies the rank-two identity, builds the floating-point Bernstein subdivision tree, and rechecks the accepted boxes with exact integer/rational Bernstein arithmetic.  It reports the certified and unresolved boxes.
+\end{enumerate}
+These scripts are not a substitute for a polished proof, but they make the computational claims precise and reproducible.  The exact Bernstein part certifies only the boxes whose exact Bernstein coefficients are nonnegative; the remaining boundary-layer boxes are explicitly reported and remain the current formal gap.
+
+
+\section{The revised conjectural programme}
+
+The present evidence suggests that the original odd-atomic conjecture should be retained as a structural positive-core conjecture, but the primitive objects should be rooted product inequalities.
+
+\subsection{Rooted odd-cycle product inequalities}
+
+\begin{conjecture}[Edge-rooted odd-cycle product inequalities]\label{conj:edge-rooted-products}
+Let $W$ be a graphon with edge density $p\ge1/2$, and let $q=1-p$.  For every finite sequence $\ell_1,\dots,\ell_m\ge1$,
+\begin{equation}\label{eq:edge-rooted-product-conj}
+  \int W(x,y)\prod_{j=1}^m T_W^{2\ell_j}(x,y)\,dx\,dy
+  \ge
+  p\prod_{j=1}^m\bigl(p^{2\ell_j}-q^{2\ell_j}\bigr).
+\end{equation}
+\end{conjecture}
+
+For $m=1$, this is exactly the odd-cycle inequality.  When all $\ell_j$ are equal, it follows from the $m=1$ case by Jensen, as in Theorem \ref{thm:identical-books}.  The first genuinely mixed case is $(\ell_1,\ell_2)=(1,2)$, namely $C_3\cup_{K_2}C_5$.
+
+\begin{conjecture}[Vertex-rooted odd-cycle product inequalities]\label{conj:vertex-rooted-products}
+Let $W$ be a graphon with edge density $p\ge1/2$, and let $q=1-p$.  For every finite sequence $\ell_1,\dots,\ell_m\ge1$,
+\begin{equation}\label{eq:vertex-rooted-product-conj}
+  \int \prod_{j=1}^m T_W^{2\ell_j+1}(x,x)\,dx
+  \ge
+  \prod_{j=1}^m\bigl(p^{2\ell_j+1}-p q^{2\ell_j}\bigr).
+\end{equation}
+\end{conjecture}
+
+Together, these two conjectures would prove the Turan interpolation inequality for large families built from odd cycles by clique-sums along vertices and edges.
+
+\subsection{Smoothed Goodman trace inequalities}
+
+A particularly useful subfamily is obtained by gluing a triangle along an edge to an odd cycle.
+
+\begin{conjecture}[Smoothed Goodman trace inequalities]\label{conj:SG}
+Let $W$ be a graphon with edge density $p\ge1/2$, and define $K_W$ by \eqref{eq:K-def}.  Then for every $\ell\ge1$,
+\begin{equation}\label{eq:SG-ell}
+  \Tr(T_W^\ell K_WT_W^\ell)\ge0.
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:local-goodman-ell}
+  \int W(x,y)T_W^2(x,y)T_W^{2\ell}(x,y)\,dx\,dy
+  \ge
+  (2p-1)t(C_{2\ell+1},W).
+\end{equation}
+\end{conjecture}
+
+The case $\ell=1$ follows from Goodman and Jensen.  The case $\ell=2$ is the first serious unresolved case for arbitrary graphons and is exactly the $C_3\cup_{K_2}C_5$ mixed book.
+
+\subsection{Rooted clique-density inequalities}
+
+Clique atoms require an analogous rooted strengthening of clique density.  Reiher's clique-density theorem gives the unrooted inequality for cliques, but clique-cutset induction needs inequalities for rooted clique-extension densities and products of such extensions under separator-biased measures.
+
+A schematic version is as follows.  For $r\ge s$, let $F_{r|s}$ denote the density of completing a rooted $K_s$ to a $K_r$.  One expects product lower bounds of the form
+\[
+  \E_{K_s\text{-biased}}\prod_j F_{r_j|s}
+  \ge
+  \prod_j \frac{\Phi_{K_{r_j}}(p)}{\Phi_{K_s}(p)}
+\]
+under appropriate top-branch assumptions.  The exact statement may need the same slack-versus-covariance refinement that appears for odd-cycle gluing.
+
+\subsection{Odd-atomic sufficiency as a consequence}
+
+The revised programme is:
+\[
+\boxed{
+\begin{array}{c}
+\text{rooted product inequalities for odd-cycle atoms}\\[2mm]
++\\[-1mm]
+\text{rooted product inequalities for clique atoms}\\[2mm]
++\\[-1mm]
+\text{clique-cutset induction}\\[2mm]
+\Longrightarrow\\[2mm]
+\text{odd-atomic Turan--Sidorenko inequality.}
+\end{array}}
+\]
+Thus Conjecture \ref{conj:odd-atomic} remains valuable, but now as a structural theorem to be derived from a rooted anticorrelation calculus rather than as the primitive formulation.
+
+\section{Ultimate goal and plan}
+
+\subsection{Ultimate goal}
+
+The ultimate goal is to develop a Sidorenko-style theory for non-bipartite graphs in which the benchmark is not independent-edge randomness but Turan equivalence-relation anticorrelation.  The desired final picture would explain:
+\begin{enumerate}[label=(\roman*)]
+\item which graphs $H$ satisfy
+\[
+  t(H,W)\ge\Phi_H(p)
+\]
+on the top Turan branch;
+\item why the Turan graphons are the extremizers when the inequality is true;
+\item which local structures allow stronger non-class-based anticorrelation when the inequality is false;
+\item how the chromatic-polynomial factorization across clique cutsets is reflected analytically by rooted density inequalities.
+\end{enumerate}
+
+The classification may be larger than odd-atomic graphs.  Odd wheels, pyramids, prisms, and even-hole-free but non-odd-atomic atoms should be treated as boundary tests rather than assumed counterexamples.  The conceptual goal is not merely to prove one conjecture, but to identify the correct calculus of anticorrelation.
+
+\subsection{Recommended next target}
+
+The best next target is the smoothed Goodman trace inequality
+\begin{equation}\label{eq:next-target}
+  \Tr(T_W^2K_WT_W^2)
+  =t(C_3\cup_{K_2}C_5,W)-(2p-1)t(C_5,W)
+  \ge0.
+\end{equation}
+This is the smallest unresolved case where all important phenomena meet: clique gluing, nonregularity, mixed odd-cycle frustration, and the need for a rooted statement stronger than the unrooted graph inequality.
+
+The known positive cases of \eqref{eq:next-target} are summarized below.
+\[
+\begin{array}{l|l}
+\toprule
+\text{Graphon class} & \text{Status for }\Tr(T_W^2K_WT_W^2)\ge0\\
+\midrule
+p\text{-regular graphons} & \text{proved by the complement-operator identity}\\
+\text{complete multipartite graphons} & \text{proved by weighted-coloring monotonicity}\\
+\text{equal-weight bipodal graphons} & \text{proved by exact monotonicity in irregularity}\\
+\text{rank-one graphons }W=f\otimes f & \text{proved by moment inequalities}\\
+\text{arbitrary graphons} & \text{open}\\
+\bottomrule
+\end{array}
+\]
+
+\subsection{Analytic strategy}
+
+The most promising analytic route is a regularization principle:
+\begin{quote}
+Degree irregularity should not decrease the smoothed Goodman defect.
+\end{quote}
+For regular graphons, $T_W^2\ge2p-1$ pointwise, so the trace inequality is immediate.  The equal-weight bipodal theorem gives evidence that the regular case is the extremal case in a nontrivial two-block family.  A general proof might proceed by a two-point balancing or compression operation that preserves edge density while decreasing degree irregularity and not increasing the defect.
+
+A possible technical target is:
+\begin{quote}
+Find a local averaging operation on two equal-measure pieces of a graphon that moves their degrees closer together and does not increase $\Delta_2(W)$.
+\end{quote}
+If such an operation exists and can be iterated to a regular graphon, then \eqref{eq:next-target} follows.
+
+\subsection{Flag-algebra/SOS strategy}
+
+In parallel, one should search for a flag-algebra or sum-of-squares certificate for the quantum graph inequality
+\begin{equation}\label{eq:quantum-graph-SG2}
+  t(C_3\cup_{K_2}C_5,W)+t(C_5,W)
+  \ge 2p\,t(C_5,W).
+\end{equation}
+A certificate would be valuable even before it is human-readable: it would tell us that the smoothed Goodman principle is true and reveal the algebraic identities responsible.  If no certificate appears at moderate levels, this may signal that the inequality is false or requires extra hypotheses.
+
+\subsection{Experimental boundary tests}
+
+The following graph families should be tested numerically and, if possible, by finite-dimensional optimization over step graphons:
+\begin{enumerate}[label=(\roman*)]
+\item odd wheels, especially $K_1\vee C_5$;
+\item theta graphs with three odd/even path combinations;
+\item pyramids and prisms;
+\item even-hole-free but non-odd-atomic atoms;
+\item mixed clique-cycle atoms.
+\end{enumerate}
+These tests will determine whether odd-atomicity is the right positive boundary or merely the first clean subclass.
+
+\subsection{A concise roadmap}
+
+\begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=*]
+\item Prove or refute the trace inequality \eqref{eq:next-target} for arbitrary graphons.
+\item If true, generalize to $\Tr(T_W^\ell K_WT_W^\ell)\ge0$ for all $\ell\ge1$.
+\item Use these inequalities to prove edge-rooted mixed odd-cycle book inequalities.
+\item Prove the vertex-rooted analogues.
+\item Develop rooted clique-density inequalities for clique atoms.
+\item Combine rooted product inequalities with clique-cutset induction to prove odd-atomic sufficiency.
+\item Use numerical and flag-algebra experiments on wheels, thetas, prisms, and pyramids to refine the eventual classification.
+\end{enumerate}
+
+
+\section{Specific questions for colleague review}
+\label{sec:questions-for-colleague}
+
+Here are the questions for which outside advice would be most helpful.
+
+\begin{enumerate}[label=\textbf{Q\arabic*.},leftmargin=*]
+\item \textbf{Is the smoothed Goodman trace inequality true?}  The target is
+\[
+  t(C_3\cup_{K_2}C_5,W)\ge(2p-1)t(C_5,W).
+\]
+It has survived many tests, but we do not yet have an arbitrary-graphon proof.
+
+\item \textbf{Can one find a flag-algebra/SOS certificate?}  The equivalent quantum-graph inequality is
+\[
+  t(C_3\cup_{K_2}C_5,W)+t(C_5,W)
+  \ge 2t(K_2,W)t(C_5,W).
+\]
+A certificate, even if initially machine-generated, would be extremely informative.
+
+\item \textbf{Can the bipodal proof be completed?}  The full bipodal problem is now a four-variable polynomial inequality with an exact rank-two reduction and a partial exact Bernstein certificate.  The remaining gap is a local boundary lemma near complete and vanishing-block degeneracies.
+
+\item \textbf{Is a variational reduction to bipodal or threshold-bipodal graphons plausible?}  If any counterexample to $\Delta_2\ge0$ can be compressed to a bipodal or one-sided threshold-bipodal counterexample, then the current bipodal evidence may be close to a full proof.
+
+\item \textbf{What is the right rooted clique-density statement?}  For clique atoms, the unrooted clique-density theorem is insufficient for clique-cut induction.  We need rooted product inequalities for completing a rooted clique to larger cliques.
+
+\item \textbf{What are the right boundary atoms?}  We need numerical and theoretical tests for odd wheels, theta graphs, pyramids, prisms, and even-hole-free but non-odd-atomic atoms.  These examples will determine whether odd-atomicity is the final boundary or only a clean positive core.
+\end{enumerate}
+
+
+\section{Summary}
+
+The current evidence supports the overall direction but suggests a revised main conjectural framework.  The problem is not just to classify unrooted graphs $H$; it is to understand rooted anticorrelation under clique gluing.  The Turan interpolation polynomial is the signature of equivalence-relation anticorrelation, and the central question is when no more efficient anticorrelation mechanism exists.
+
+The odd-atomic conjecture remains a compelling positive-core conjecture.  However, the immediate technical goal should be the rooted product calculus, beginning with the smoothed Goodman trace inequality for $C_3\cup_{K_2}C_5$.  This target is small enough to attack directly, strong enough to test the gluing mechanism, and conceptually rich enough to reveal whether the programme is on the right track.
+
+\end{document}

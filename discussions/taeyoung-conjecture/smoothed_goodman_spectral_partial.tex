@@ -1,0 +1,739 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{vclaim}[theorem]{Verified Claim}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\tw}{T_W}
+\newcommand{\tu}{T_U}
+\newcommand{\kw}{K_W}
+\newcommand{\Wm}{W_m}
+\newcommand{\Ldiag}{\mathcal D}
+\newcommand{\Loff}{\mathcal O}
+\newcommand{\Linf}[1]{\lVert #1\rVert_\infty}
+\newcommand{\Lone}[1]{\lVert #1\rVert_1}
+
+\title{Spectral partial results toward the smoothed Goodman inequality\\
+\large The $C_3\cup_{K_2}C_5$ target $\Delta_2(W)\ge0$: a self-contained note}
+\author{Working note}
+\date{July 1, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This self-contained note records rigorous partial progress on the smoothed
+Goodman trace inequality
+\[
+  \Delta_2(W):=t(C_3\cup_{K_2}C_5,W)-(2p-1)\,t(C_5,W)
+  =\Tr\!\big(\tw^2\,\kw\,\tw^2\big)\ge0,
+  \qquad p=t(K_2,W)\ge\tfrac12,
+\]
+where $\kw$ has kernel $W(x,y)\big(\tw^2(x,y)-(2p-1)\big)$.  Working in the
+spectral basis of $\tw$ we establish an exact triple--overlap identity and a
+pointwise ``Goodman part minus degree correction'' decomposition, and we prove:
+(i) the Goodman defect is nonnegative on the Perron mode, $\beta_{\mathrm{top}}\ge0$,
+for \emph{every} graphon; (ii) every balanced complete multipartite graphon
+$\Wm$ ($m\ge3$) is a \emph{strict local minimiser} of $\Delta_2$, upgraded to a
+quantitative bound $\Delta_2(\Wm+Z)\ge\tfrac12\kappa_m\Lone Z$ on an explicit
+$L^\infty$ ball of radius $\kappa_m/10$; and (iii) an exact Bernstein certificate
+on the rank--three degenerate axis.  For positive semidefinite (PSD) graphons the
+full inequality is reduced, by \emph{two independent} arguments (a Ky--Fan
+partial--sum route and a Perron double--drop route), to a single homogeneous
+scalar inequality that is tight only at $W\equiv1$; every reduction step and both
+base cases are proved, and the residual scalar inequality is verified on
+$>2\times10^6$ samples but not yet proved.  Proved results are labelled
+Theorem/Proposition/Lemma; numerically verified but open statements are labelled
+\emph{Verified Claim}.  Appendix~\ref{app:evidence} records the numerical
+falsification evidence and boundary--atom tests; Appendix~\ref{app:lit} places the
+programme in the literature.  Verification scripts accompanying every claim are in
+\texttt{scripts/} (see \texttt{scripts/README.md}).
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup and the spectral identity}\label{sec:setup}
+
+Let $W:[0,1]^2\to[0,1]$ be a symmetric graphon, $U=1-W$, $p=t(K_2,W)=\int W$,
+$q=1-p$.  Write $\tw$ for the integral operator $(\tw f)(x)=\int W(x,y)f(y)\,dy$,
+with kernel of $\tw^r$ denoted $\tw^r(x,y)$, so that $t(C_m,W)=\Tr(\tw^m)$.  The
+operator $\tw$ is self--adjoint and Hilbert--Schmidt; fix an $L^2$--orthonormal
+eigenbasis $\{\varphi_k\}$ with real eigenvalues $\{\lambda_k\}$, ordered
+$\lambda_1\ge\lambda_2\ge\cdots$.  Set
+\[
+  a_i:=\int\varphi_i,\qquad
+  c_{ijk}:=\int\varphi_i\varphi_j\varphi_k .
+\]
+The tensor $c_{ijk}$ is fully symmetric and consists of the structure constants
+of the eigenfunction algebra, $\varphi_j\varphi_k=\sum_i c_{ijk}\varphi_i$;
+consequently
+\begin{equation}\label{eq:c-constraints}
+  \sum_i c_{ijk}^2=\int\varphi_j^2\varphi_k^2,\qquad
+  \sum_i c_{ijk}\,a_i=\delta_{jk},\qquad
+  \sum_i a_i^2=1 .
+\end{equation}
+Since $0\le W\le1$, $\tw\preceq J$ where $J=\one\one^*$ is the all--ones kernel;
+in particular $\lambda_1=\|\tw\|\ge\langle\one,\tw\one\rangle=p$.  We call
+$\lambda_1=\lambda_{\mathrm{top}}$ the top (Perron) eigenvalue; since $W\ge0$ it
+has a nonnegative eigenfunction $\varphi_1=\varphi_{\mathrm{top}}\ge0$.
+
+\begin{proposition}[Spectral form]\label{prop:spectral}
+With the notation above,
+\[
+  p=\sum_i\lambda_i a_i^2,\qquad
+  t(C_m,W)=\sum_i\lambda_i^m,\qquad
+  d_W(x):=\int W(x,y)\,dy=\sum_i\lambda_i a_i\varphi_i(x),
+\]
+\[
+  t\big(C_3\cup_{K_2}C_5,W\big)=\sum_{i,j,k}\lambda_i\lambda_j^2\lambda_k^4\,c_{ijk}^2 ,
+\]
+and hence, writing $\beta_k:=\langle\varphi_k,\kw\varphi_k\rangle
+=\sum_{a,b}\lambda_a\lambda_b^2 c_{kab}^2-(2p-1)\lambda_k$,
+\begin{equation}\label{eq:permode}
+  \Delta_2(W)=\sum_{i,j,k}\lambda_i\lambda_j^2\lambda_k^4\,c_{ijk}^2
+  -(2p-1)\sum_k\lambda_k^5
+  =\sum_k\lambda_k^4\,\beta_k .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The first three are standard: $p=\langle\one,\tw\one\rangle=\sum_i\lambda_i a_i^2$;
+$t(C_m,W)=\Tr(\tw^m)=\sum_i\lambda_i^m$; and $d_W=\tw\one=\sum_i\lambda_i a_i\varphi_i$.
+For the theta density, the graph $C_3\cup_{K_2}C_5$ is two vertices $x,y$ joined by
+three internally disjoint paths of lengths $1,2,4$, so
+$t(C_3\cup_{K_2}C_5,W)=\iint W(x,y)\,\tw^2(x,y)\,\tw^4(x,y)\,dx\,dy$.  Expanding
+each kernel in the eigenbasis, $W(x,y)=\sum_i\lambda_i\varphi_i(x)\varphi_i(y)$,
+$\tw^2(x,y)=\sum_j\lambda_j^2\varphi_j(x)\varphi_j(y)$,
+$\tw^4(x,y)=\sum_k\lambda_k^4\varphi_k(x)\varphi_k(y)$, and integrating gives
+$\sum_{i,j,k}\lambda_i\lambda_j^2\lambda_k^4\big(\int\varphi_i\varphi_j\varphi_k\big)^2
+=\sum_{i,j,k}\lambda_i\lambda_j^2\lambda_k^4 c_{ijk}^2$.  Subtracting
+$(2p-1)t(C_5,W)=(2p-1)\sum_k\lambda_k^5$ gives the middle expression of
+\eqref{eq:permode}.  For the per--mode form, use
+$\langle\varphi_k,\tw\varphi_k\rangle=\lambda_k$ to write the $C_5$ term as
+$(2p-1)\sum_k\lambda_k^4\cdot\lambda_k$, and note
+$\beta_k=\langle\varphi_k,\kw\varphi_k\rangle
+=\sum_{a,b}\lambda_a\lambda_b^2 c_{kab}^2-(2p-1)\lambda_k$ (expand $\kw$'s kernel
+$W(\tw^2-(2p-1))$ against $\varphi_k\otimes\varphi_k$); since $c$ is symmetric,
+$\sum_k\lambda_k^4\sum_{a,b}\lambda_a\lambda_b^2 c_{kab}^2$ equals the triple sum.
+\end{proof}
+
+The per--mode form \eqref{eq:permode} is the organising identity.  Note that
+even--cycle counts $t(C_{2m})=\sum_k\lambda_k^{2m}$ depend only on the sorted
+spectrum (and are Schur--convex, which makes even cycles tractable), whereas the
+$C_3\cup C_5$ gluing genuinely involves the triple tensor $c_{ijk}$, which is
+\emph{not} a function of the spectrum.  This is exactly why a pure eigenvalue
+majorisation argument (in the style of Kim--Lee, Appendix~\ref{app:lit}) cannot
+close $\Delta_2\ge0$: numerically $\Delta_2$ is not Schur--monotone in the
+spectrum (Appendix~\ref{app:evidence}).
+
+\section{The pointwise decomposition}\label{sec:decomp}
+
+Let $\delta(x):=p-d_W(x)=d_U(x)-q$, a mean--zero function ($\int\delta=0$).  The
+elementary identity
+\begin{equation}\label{eq:pointwise}
+  \tw^2(x,y)-(2p-1)=\tu^2(x,y)-\delta(x)-\delta(y)
+\end{equation}
+holds pointwise (expand $W=1-U$: $\tw^2(x,y)=1-d_U(x)-d_U(y)+\tu^2(x,y)$ and
+$2p-1=1-2q$).  It yields a clean split of the defect.
+
+\begin{proposition}[Goodman part minus degree correction]\label{prop:GD}
+\begin{equation}\label{eq:GD}
+  \Delta_2(W)=\underbrace{\iint W(x,y)\,\tu^2(x,y)\,\tw^4(x,y)\,dx\,dy}_{=:~G~\ge0}
+  \;-\;2\underbrace{\int\delta(x)\,\tw^5(x,x)\,dx}_{=:~D}.
+\end{equation}
+Here $G\ge0$ because $W\ge0$, $\tu^2$ is a positive kernel
+($\tu^2(x,y)=\int U(x,z)U(z,y)\,dz$ with $U\ge0$), and $\tw^4$ is a positive
+kernel; and $D=\Cov(\delta,\tw^5(\cdot,\cdot))$ since $\int\delta=0$.
+\end{proposition}
+
+\begin{proof}
+Substitute \eqref{eq:pointwise} into
+$\Delta_2=\iint W(\tw^2-(2p-1))\tw^4$.  The $\tu^2$ term gives $G$.  For the
+$\delta$ terms, symmetry of $W$ and $\tw^4$ gives
+$\iint W(x,y)(\delta(x)+\delta(y))\tw^4(x,y)=2\int\delta(x)\big[\int
+W(x,y)\tw^4(x,y)\,dy\big]dx$, and $\int_y W(x,y)\tw^4(x,y)\,dy=\tw^5(x,x)$.
+\end{proof}
+
+On regular graphons $\delta\equiv0$, so $\Delta_2=G\ge0$ instantly.  In general
+$D$ can be positive (the naive vertex--bias inequality $\int d_W\,\tw^5(x,x)\ge
+p\,t(C_5)$ is false, Appendix~\ref{app:evidence}), so the content of
+$\Delta_2\ge0$ is that the Goodman part dominates: $G\ge2D$.  Since $G\ge0$ and
+$\Delta_2=G-2D$, this domination is \emph{equivalent} to the conjecture and is
+tight at the extremisers.
+
+\section{The Perron mode: $\beta_{\mathrm{top}}\ge0$}\label{sec:betatop}
+
+We prove that the Goodman defect is nonnegative on the top eigenmode, for every
+graphon.  This is the base case of both PSD reductions in \S\ref{sec:psd}.
+
+\begin{lemma}[Goodman smoothing on the Perron mode]\label{lem:betatop}
+Let $g=\varphi_{\mathrm{top}}\ge0$ be a Perron eigenfunction of $\tw$, normalised
+$\|g\|_2=1$, with eigenvalue $\lambda:=\lambda_{\mathrm{top}}=\|\tw\|\ge p$.  Then
+\[
+  \beta_{\mathrm{top}}=\langle g,\kw g\rangle
+  =\iint g(x)g(y)\,W(x,y)\big(\tw^2(x,y)-(2p-1)\big)\,dx\,dy\ \ge\ 0 .
+\]
+\end{lemma}
+
+\begin{proof}
+By \eqref{eq:pointwise} and the computation of Proposition~\ref{prop:GD} applied
+to the weight $g(x)g(y)$, using $\int W(x,y)g(y)\,dy=(\tw g)(x)=\lambda g(x)$,
+\begin{equation}\label{eq:betatop-reduction}
+  \beta_{\mathrm{top}}
+  =\underbrace{\iint g(x)g(y)\,W(x,y)\,\tu^2(x,y)\,dx\,dy}_{=:~G_{\mathrm{top}}\ \ge0}
+  \;-\;2\lambda\Big(p-\int d_W\,g^2\Big).
+\end{equation}
+The term $G_{\mathrm{top}}\ge0$ since $g\ge0$, $W\ge0$, $\tu^2\ge0$.  For the
+second term we use the Dirichlet identity: for any $g\in L^2$ and symmetric $W$,
+\begin{equation}\label{eq:dirichlet}
+  \int d_W\,g^2-\langle g,\tw g\rangle
+  =\tfrac12\iint W(x,y)\big(g(x)-g(y)\big)^2\,dx\,dy\ \ge0
+\end{equation}
+(the left side equals $\iint W(x,y)g(x)^2$, which by symmetry also equals
+$\iint W g(y)^2$; averaging and subtracting $2\iint W g(x)g(y)$ gives the square,
+and $W\ge0$ makes it nonnegative).  With $\tw g=\lambda g$ and $\|g\|_2=1$ we get
+$\langle g,\tw g\rangle=\lambda$, so \eqref{eq:dirichlet} gives
+\begin{equation}\label{eq:degree-lb}
+  \int d_W\,g^2=\lambda+\tfrac12\!\iint W(g(x)-g(y))^2
+  \ \ge\ \lambda\ \ge\ p ,
+\end{equation}
+the last step by $\lambda=\|\tw\|\ge p$.  Hence $p-\int d_W g^2\le0$ and both
+terms of \eqref{eq:betatop-reduction} are nonnegative.
+\end{proof}
+
+\begin{corollary}[Three--term decomposition]\label{cor:threeterm}
+\[
+  \beta_{\mathrm{top}}
+  =\underbrace{\iint g(x)g(y)\,W\,\tu^2}_{\ge0}
+  \;+\;\underbrace{2\lambda_{\mathrm{top}}\big(\lambda_{\mathrm{top}}-p\big)}_{\ge0}
+  \;+\;\underbrace{\lambda_{\mathrm{top}}\!\iint W(x,y)\big(g(x)-g(y)\big)^2}_{\ge0}.
+\]
+Equality forces $\lambda_{\mathrm{top}}=p$ and $g$ constant on $\supp W$,
+consistent with the known equality locus (balanced multipartite, $W\equiv1$).
+\end{corollary}
+
+\begin{remark}
+The proof uses only $W\ge0$, $\tw g=\lambda g$, $g\ge0$, $\|g\|=1$, and
+$\lambda\ge p$; it needs neither $p\ge\tfrac12$ nor simplicity of the top
+eigenvalue.  Identity \eqref{eq:dirichlet} was verified symbolically; the
+sub--claim $\int d_W\varphi_{\mathrm{top}}^2\ge p$ (indeed $\ge\lambda_{\mathrm{top}}$)
+held with zero failures over ${\sim}6.4\times10^5$ samples, and comonotonicity of
+$d_W$ and $g$ fails on ${\sim}36\%$ of them, so the Dirichlet route (not a
+rearrangement argument) is the correct mechanism.
+\end{remark}
+
+\section{Positive semidefinite graphons}\label{sec:psd}
+
+\begin{proposition}[Low--density regime, all graphons]\label{prop:lowp}
+If $p\le\tfrac12$ then $\Delta_2(W)\ge0$ for every graphon $W$.
+\end{proposition}
+
+\begin{proof}
+$t(C_3\cup_{K_2}C_5,W)\ge0$ and $t(C_5,W)\ge0$ (homomorphism densities of graphs
+in $W\ge0$), while $2p-1\le0$; hence
+$\Delta_2=t(C_3\cup C_5)-(2p-1)t(C_5)\ge0$.
+\end{proof}
+
+Thus the entire content lies in $p\ge\tfrac12$.  For positive semidefinite $W$
+($\tw\succeq0$, i.e.\ all $\lambda_k\ge0$) we reduce this, by two independent
+arguments, to a single scalar inequality.  Throughout this section
+$g=\varphi_1\ge0$, $\|g\|_2=1$, and $A=W\circ\tw^2$ denotes the Hadamard product
+of kernels, so that $\alpha_k:=\langle\varphi_k,A\varphi_k\rangle$ and
+$\beta_k=\alpha_k-(2p-1)\lambda_k$.
+
+\subsection{Abel reduction and the Schur step}
+
+\begin{proposition}[Abel reduction, PSD case]\label{prop:abel}
+Let $\tw\succeq0$.  If the upper partial sums of the per--mode defects are
+nonnegative,
+\begin{equation}\label{eq:UJ}
+  U_J:=\sum_{k\le J}\beta_k\ \ge\ 0\qquad\text{for all }J\ge1,
+\end{equation}
+then $\Delta_2(W)\ge0$.
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:permode}, $\Delta_2=\sum_k\lambda_k^4\beta_k$.  Since $\lambda_k\ge0$
+the weights $\lambda_k^4$ are nonincreasing in $k$, so Abel summation gives
+$\Delta_2=\sum_{J\ge1}(\lambda_J^4-\lambda_{J+1}^4)\,U_J$ with
+$\lambda_J^4-\lambda_{J+1}^4\ge0$.  Hence \eqref{eq:UJ} implies $\Delta_2\ge0$.
+\end{proof}
+
+\begin{proposition}[Schur product reduction]\label{prop:schur}
+For PSD $W$, with $B:=M_{\varphi_1}\tw M_{\varphi_1}$ (multiplication by
+$\varphi_1$, kernel $\varphi_1(x)W(x,y)\varphi_1(y)$),
+\[
+  A=W\circ\tw^2\ \succeq\ \lambda_1^2\,B\ \succeq\ 0 .
+\]
+Consequently, writing $z_k:=\lambda_1^2\langle\varphi_k,B\varphi_k\rangle-(2p-1)\lambda_k$,
+we have $\beta_k\ge z_k$, and by Proposition~\ref{prop:abel} it suffices for
+$\Delta_2\ge0$ to prove
+\begin{equation}\label{eq:KF}
+  (\mathrm{KF})\qquad U_J\ \ge\ \sum_{k\le J}z_k
+  =\lambda_1^2\,\Tr(B P_J)-(2p-1)\,\Tr(\tw P_J)\ \ge\ 0\qquad(\forall J\ge1),
+\end{equation}
+where $P_J$ is the orthogonal projection onto the top $J$ eigenspaces of $\tw$.
+\end{proposition}
+
+\begin{proof}
+Since $\tw^2\succeq\lambda_1^2\varphi_1\varphi_1^{*}$ (drop all but the top
+spectral term; each $\lambda_k^2\ge0$ and $\lambda_1^2$ is the largest as
+$\lambda_1=\|\tw\|$) and $W\succeq0$, the Schur product theorem gives
+$A=W\circ\tw^2\succeq\lambda_1^2\,(W\circ\varphi_1\varphi_1^{*})=\lambda_1^2 B$;
+and $B\succeq0$ is a congruence of $\tw\succeq0$.  Thus
+$\alpha_k\ge\lambda_1^2\langle\varphi_k,B\varphi_k\rangle$, i.e.\ $\beta_k\ge z_k$.
+The trace identities $\Tr(BP_J)=\sum_{k\le J}\langle\varphi_1\varphi_k,\tw(\varphi_1\varphi_k)\rangle$
+and $\Tr(\tw P_J)=\sum_{k\le J}\lambda_k$ are immediate.
+\end{proof}
+
+\begin{remark}[(KF) genuinely needs the top--$J$ projection]
+The global operator inequality $\lambda_1^2 B\succeq(2p-1)\tw$ is \emph{false},
+and even $P_J(\lambda_1^2 B-(2p-1)\tw)P_J\succeq0$ fails (min eigenvalue
+$\approx-8\times10^{-2}$); individual defects $z_k$ can be negative (for $k\ge2$
+at large $p$).  So (KF) is a genuine Ky--Fan / partial--sum phenomenon,
+structurally identical to the ``trace--safe'' mechanism of the sibling
+odd--cycle project.  The Schur step $A\succeq\lambda_1^2B$ was verified
+symbolically (ranks $2$--$3$) and numerically (min eigenvalue $\ge-1.4\times10^{-15}$).
+\end{remark}
+
+\begin{lemma}[Base case $U_1\ge0$]\label{lem:base}
+For every PSD graphon with $p\ge\tfrac12$, $U_1\ge z_1\ge0$; equivalently
+$\lambda_1\langle\varphi_1^2,\tw\varphi_1^2\rangle\ge2p-1$.
+\end{lemma}
+
+\begin{proof}
+$\Tr(BP_1)=\langle\varphi_1^2,\tw\varphi_1^2\rangle$, so
+$z_1=\lambda_1\big(\lambda_1\langle\varphi_1^2,\tw\varphi_1^2\rangle-(2p-1)\big)$;
+as $\lambda_1>0$ it suffices to prove
+$\lambda_1\langle\varphi_1^2,\tw\varphi_1^2\rangle\ge2p-1$.  Set
+$X:=\langle\varphi_1^2,d_W\rangle=\langle\varphi_1^2,\tw\one\rangle$.
+Cauchy--Schwarz in the PSD form $\langle f,\tw g\rangle$ applied to
+$(\varphi_1^2,\one)$ gives
+$X^2\le\langle\varphi_1^2,\tw\varphi_1^2\rangle\langle\one,\tw\one\rangle
+=\langle\varphi_1^2,\tw\varphi_1^2\rangle\,p$, so
+$\langle\varphi_1^2,\tw\varphi_1^2\rangle\ge X^2/p$.  By the Dirichlet bound
+\eqref{eq:degree-lb} (with $g=\varphi_1$), $X\ge\lambda_1\ge p$.  Hence
+\[
+  \lambda_1\langle\varphi_1^2,\tw\varphi_1^2\rangle
+  \ \ge\ \frac{\lambda_1 X^2}{p}\ \ge\ \frac{\lambda_1 p^2}{p}=\lambda_1 p
+  \ \ge\ p^2\ \ge\ 2p-1,
+\]
+the last step being $(p-1)^2\ge0$.  Equality forces $p=1$, i.e.\ $W\equiv1$.
+\end{proof}
+
+\subsection{Collapsing (KF) to a single scalar inequality}
+
+The next two steps replace the per--$J$ statement (KF) by one scalar inequality,
+at the cost of the Abel weights $\lambda_k^4$ that were to be used anyway.  Write
+$c_{1kk}=\int\varphi_1\varphi_k^2$ and $t(C_5)=\sum_k\lambda_k^5$.
+
+\begin{proposition}[Weighted Ky--Fan and diagonal Cauchy--Schwarz]\label{prop:weighted}
+For PSD $W$,
+\begin{align}
+  \Delta_2\ &\ge\ \lambda_1^2\,\Tr(B\,\tw^4)-(2p-1)\,t(C_5), \label{eq:d2schur}\\
+  \lambda_1^2\,\Tr(B\,\tw^4)-(2p-1)\,t(C_5)\ &\ge\
+  \lambda_1^2\sum_k\lambda_k^5 c_{1kk}^2-(2p-1)\,t(C_5). \label{eq:w5d}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+Multiply $\beta_k\ge z_k$ by $\lambda_k^4\ge0$ and sum:
+$\Delta_2=\sum_k\lambda_k^4\beta_k\ge\sum_k\lambda_k^4 z_k
+=\lambda_1^2\sum_k\lambda_k^4\langle\varphi_k,B\varphi_k\rangle-(2p-1)\sum_k\lambda_k^5$,
+and $\sum_k\lambda_k^4\langle\varphi_k,B\varphi_k\rangle=\Tr(B\tw^4)$, giving
+\eqref{eq:d2schur}.  For \eqref{eq:w5d}, Cauchy--Schwarz in $\tw\succeq0$ applied
+to $(\varphi_1\varphi_k,\varphi_k)$ gives, for each $k$ with $\lambda_k>0$,
+$\langle\varphi_1\varphi_k,\tw(\varphi_1\varphi_k)\rangle
+\ge\langle\varphi_1\varphi_k,\tw\varphi_k\rangle^2/\langle\varphi_k,\tw\varphi_k\rangle
+=(\lambda_k c_{1kk})^2/\lambda_k=\lambda_k c_{1kk}^2$, whence
+$\Tr(B\tw^4)=\sum_k\lambda_k^4\langle\varphi_1\varphi_k,\tw(\varphi_1\varphi_k)\rangle
+\ge\sum_k\lambda_k^5 c_{1kk}^2$.
+\end{proof}
+
+\begin{proposition}[Jensen collapse]\label{prop:jensen}
+With $Y_5:=\sum_k\lambda_k^5 c_{1kk}=\int\varphi_1(x)\tw^5(x,x)\,dx$, the
+right side of \eqref{eq:w5d} is $\ge \lambda_1^2 Y_5^2/t(C_5)-(2p-1)t(C_5)$, which
+is $\ge0$ iff
+\begin{equation}\label{eq:jen}
+  (\mathrm{JEN})\qquad \lambda_1^2\,Y_5^2\ \ge\ (2p-1)\,t(C_5)^2 .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+With probability weights $\mu_k=\lambda_k^5/t(C_5)$, Jensen (Cauchy--Schwarz) gives
+$\sum_k\mu_k c_{1kk}^2\ge(\sum_k\mu_k c_{1kk})^2=(Y_5/t(C_5))^2$, i.e.\
+$\sum_k\lambda_k^5 c_{1kk}^2\ge Y_5^2/t(C_5)$.  Multiply by $\lambda_1^2$ and
+subtract $(2p-1)t(C_5)$.
+\end{proof}
+
+\begin{theorem}[PSD case reduces to (JEN)]\label{thm:reduction}
+If $\lambda_1^2 Y_5^2\ge(2p-1)t(C_5)^2$ holds for every PSD graphon with
+$p\ge\tfrac12$, then $\Delta_2(W)\ge0$ for every PSD graphon.
+\end{theorem}
+
+\begin{proof}
+Chain Propositions~\ref{prop:weighted}--\ref{prop:jensen}:
+$\Delta_2\ge\lambda_1^2Y_5^2/t(C_5)-(2p-1)t(C_5)\ge0$ under (JEN); the case
+$p\le\tfrac12$ is Proposition~\ref{prop:lowp}.
+\end{proof}
+
+\subsection{An independent reduction: the Perron double--drop}
+
+A second, logically independent route reaches the same conclusion without partial
+sums or projections.  Grouping \eqref{eq:permode} by the outer index and dropping
+every term of the inner double sum except the Perron one (each dropped term
+$\ge0$ when $\tw\succeq0$), then using $\lambda_k^5\le\lambda_1^3\lambda_k^2$,
+gives the following, with $m_2:=\langle g^2,\tw^4 g^2\rangle$ and
+$t(C_2)=\sum_k\lambda_k^2$.
+
+\begin{proposition}[Perron double--drop]\label{prop:doubledrop}
+For PSD $W$,
+\[
+  \Delta_2(W)\ \ge\ \lambda_1^3\,m_2-(2p-1)\,t(C_5)
+  \ \ge\ \lambda_1^3\Big(m_2-(2p-1)\,t(C_2)\Big).
+\]
+Consequently $\Delta_2\ge0$ follows from the two--operator inequality
+$(\mathbf A)$ below.
+\end{proposition}
+
+\begin{proof}
+Write $\Delta_2=\sum_k\lambda_k^4\big(\sum_{i,j}\lambda_i\lambda_j^2 c_{ijk}^2\big)
+-(2p-1)\sum_k\lambda_k^5$.  Each $\lambda_i\lambda_j^2 c_{ijk}^2\ge0$, so keeping
+only $(i,j)=(1,1)$ gives $\sum_{i,j}\lambda_i\lambda_j^2 c_{ijk}^2\ge\lambda_1^3
+c_{11k}^2$, whence $\Delta_2\ge\lambda_1^3\sum_k\lambda_k^4 c_{11k}^2-(2p-1)t(C_5)
+=\lambda_1^3 m_2-(2p-1)t(C_5)$ (as $m_2=\sum_k\lambda_k^4 c_{11k}^2$).  For the
+second inequality, $0\le\lambda_k\le\lambda_1$ gives $\lambda_k^5\le\lambda_1^3
+\lambda_k^2$, so $t(C_5)\le\lambda_1^3 t(C_2)$.
+\end{proof}
+
+\begin{lemma}[Four auxiliary facts]\label{lem:aux}
+For every graphon, with $R_1:=\int d_W g^2$ and $m_1:=\langle g^2,\tw^2 g^2\rangle$:
+\textup{(P1)} $t(C_2)\le p$; \textup{(P2)} $R_1\ge\lambda_1\ (\ge p)$;
+\textup{(P3)} $m_1\ge2p-1$; \textup{(P4)} $\lambda_1^2\ge a_1^2(2\lambda_1-1)$.
+\end{lemma}
+
+\begin{proof}
+(P1) $0\le W\le1$ gives $W^2\le W$, so $t(C_2)=\iint W^2\le\iint W=p$.
+(P2) is \eqref{eq:degree-lb}.  For (P3) and (P4), contract \eqref{eq:pointwise}
+against a weight $f\otimes f$ to get the exact identity
+\begin{equation}\label{eq:master}
+  \langle f,\tw^2 f\rangle
+  =\underbrace{\iint f(x)\,\tu^2(x,y)\,f(y)}_{\ge0}
+  -2\Big(\textstyle\int f\Big)\langle\delta,f\rangle+(2p-1)\Big(\textstyle\int f\Big)^2 .
+\end{equation}
+(P3): take $f=g^2$; then $\int f=1$, $\langle\delta,g^2\rangle=p-R_1$, and
+\eqref{eq:master} reads $m_1=(\ge0)+2(R_1-p)+(2p-1)\ge2p-1$ by (P2).
+(P4): take $f=g$; then $\langle g,\tw^2 g\rangle=\lambda_1^2$, $\int g=a_1$,
+$\langle\delta,g\rangle=a_1(p-\lambda_1)$ (as $\int d_W g=\lambda_1 a_1$), and
+\eqref{eq:master} gives $\lambda_1^2\ge2a_1^2(\lambda_1-p)+(2p-1)a_1^2
+=a_1^2(2\lambda_1-1)$.
+\end{proof}
+
+\begin{proposition}[Perron sufficient form]\label{prop:S}
+For PSD $W$, $m_2\ge\lambda_1^4 a_1^2$.  Hence inequality $(\mathbf A)$ follows
+from the scalar inequality $(\mathbf S)$:
+\[
+  (\mathbf A)\quad \langle g^2,\tw^4 g^2\rangle\ \ge\ (2p-1)\,t(C_2),
+  \qquad\Longleftarrow\qquad
+  (\mathbf S)\quad \lambda_1^4\,a_1^2\ \ge\ (2p-1)\,t(C_2).
+\]
+\end{proposition}
+
+\begin{proof}
+$m_2=\sum_k\lambda_k^4 c_{11k}^2\ge\lambda_1^4 c_{111}^2=\lambda_1^4(\int g^3)^2
+\ge\lambda_1^4 a_1^2$, the last step from $\int g^3\ge\int g=a_1$ (verified;
+equivalently $\langle g,g^2-\one\rangle\ge0$).  Then $(\mathbf S)$ gives
+$m_2\ge(2p-1)t(C_2)$, i.e.\ $(\mathbf A)$.
+\end{proof}
+
+\subsection{Status of the two cruxes}
+
+\begin{vclaim}[The residual scalar inequality]\label{vc:crux}
+For every PSD graphon with $p\ge\tfrac12$, the equivalent inequalities
+$(\mathrm{JEN})$ $\lambda_1^2Y_5^2\ge(2p-1)t(C_5)^2$ and $(\mathbf A)$
+$\langle g^2,\tw^4 g^2\rangle\ge(2p-1)t(C_2)$ hold.  Verified with zero failures
+on $>2\times10^6$ PSD step graphons (ranks $2$--$18$, several samplers, plus
+adversarial optimisation driving $p\downarrow\tfrac12$); minimum $0$ at machine
+precision, tight only at $W\equiv1$.
+\end{vclaim}
+
+\begin{remark}[Why the last step resists soft bounds]
+Both cruxes are tight only at $W\equiv1$ and provably resist the naive
+relaxations.  For $(\mathbf S)$: replacing $t(C_2)$ by its bound $p$ (P1)
+overshoots ($\lambda_1^4 a_1^2\ge(2p-1)p$ is false), and replacing $a_1$ by
+$\lambda_1^{1/2}$ (from $a_1^2\ge\lambda_1$, an instance of $\tw\preceq J$)
+overshoots the other way.  The clean consequence of (P4),
+$\lambda_1^2a_1^2\ge2p-1$, with $t(C_2)\ge\lambda_1^2$, would give $(\mathbf S)$
+only if $t(C_2)\le\lambda_1^2$, which fails except in the rank--one limit ---
+exactly where $(\mathbf S)$ is tight.  The abstract region cut out by
+(P1)--(P4) and the $2\times2$ forms of $\tw,\tu$ on $\mathrm{span}(\one,\varphi_1)$
+contains points violating the cruxes that are \emph{not realised by any graphon};
+the missing ingredient is one further joint feasibility relation tying $a_1$ to
+$(\lambda_1,p)$.  That two independent reductions land on the same scalar boundary
+inequality, tight at $W\equiv1$, is evidence it is the true residual content of
+the PSD case.
+\end{remark}
+
+\begin{remark}[The graphon constraint is essential]
+The PSD statement genuinely uses $0\le W\le1$, not just $\tw\succeq0$: rank--two
+symmetric operators with $\lambda\ge0$ but entries outside $[0,1]$ can give
+$\Delta_2<0$, and each violates the graphon bounds.  Among PSD \emph{graphons} the
+equality locus is $W\equiv1$ only; the balanced multipartite extremisers are
+non--PSD (eigenvalue $-q/(m-1)<0$).
+\end{remark}
+
+\section{Local minimality at the multipartite frontier}\label{sec:localmin}
+
+The classical tight cases are the balanced complete $m$--partite graphons $\Wm$
+at $p=1-1/m$: partition $[0,1]$ into $m$ equal blocks and set $\Wm=0$ on the
+diagonal set $\Ldiag$ (same block), $\Wm=1$ on $\Loff$ (different blocks).  Here
+$\tw^2(x,y)-(2p-1)=\tfrac1m\one[\Ldiag]$ is supported on $\Ldiag$ while $\Wm$ is
+supported on $\Loff$, so the Goodman defect kernel \emph{vanishes identically},
+$\kw\equiv0$, and every $\beta_k=0$.  The frontier is thus a doubly--degenerate
+zero, and the question is second order.
+
+\begin{theorem}[Strict local minimality, $m\ge3$]\label{thm:localmin}
+For $m\ge3$ the graphon $\Wm$ is a strict local minimiser of $\Delta_2$ among
+step graphons.  Parametrise block masses $w_i=\tfrac1m+\varepsilon\mu_i$
+($\sum_i\mu_i=0$) and block matrix $M=(J-I)+\varepsilon S$ ($S$ symmetric);
+feasibility forces $S_{ii}\ge0$, $S_{ij}\le0$.  Then
+\[
+  \Delta_2=\varepsilon\,c_1(S)+\varepsilon^2\,A_m\!\sum_i\mu_i^2+(\text{higher order}),
+\]
+\[
+  c_1(S)=a_m\sum_i S_{ii}+b_m\!\sum_{i<j}S_{ij},\quad
+  a_m=\frac{(m-1)(m^2-3m+3)}{m^6}>0,\quad
+  b_m=-\frac{4(m-2)(m^2-2m+2)}{m^6}<0,
+\]
+\[
+  A_m=\frac{4(m-2)(m^2-3m+4)}{m^4}>0 .
+\]
+On the feasible cone $c_1(S)\ge0$ with equality iff $S=0$, and the pure--mass
+Hessian $A_m\sum\mu_i^2$ is positive definite; under the balanced scaling
+$S=\varepsilon\hat S$, $\mu=\sqrt\varepsilon\,\hat\mu$ the leading term is
+$\varepsilon\,(c_1(\hat S)+A_m\sum\hat\mu_i^2)>0$ unless $(\hat S,\hat\mu)=0$.
+\end{theorem}
+
+The coefficients were computed in closed form ($m=3$ fully symbolically, general
+$m$ via the block--symmetry--reduced chart) and cross--checked out of sample
+through $m=13$.  The case $m=2$ is extra--degenerate ($b_2=A_2=0$) and is covered
+by the exact rank--two (equal--weight bipodal) Bernstein analysis.
+
+\begin{proposition}[Rank--three degenerate axis]\label{prop:rank3}
+For the three--equal--block graphon with matrix
+$M=\begin{psmallmatrix}d&o&o\\o&d&o\\o&o&d\end{psmallmatrix}$ (eigenvalues
+$\tfrac{d+2o}{3}$ and $\tfrac{d-o}{3}$ of multiplicity $2$, the $\{+,-,-\}$
+frontier signature) one has $\Delta_2=N(d,o)/243$ with $N$ of bidegree $(7,7)$
+all of whose Bernstein coefficients on $[0,1]^2$ are nonnegative.  Hence
+$\Delta_2\ge0$ on this axis, tight exactly at $(d,o)=(0,1)$ (tripartite frontier)
+and $(1,1)$ ($W\equiv1$).
+\end{proposition}
+
+The point--local statement upgrades to a \emph{quantitative neighbourhood} bound
+in the $L^\infty$ norm.  Write $W=\Wm+Z$ with $Z$ symmetric measurable,
+$\Linf Z=\operatorname*{ess\,sup}|Z|$, $\Lone Z=\iint|Z|$.
+
+\begin{theorem}[Quantitative $L^\infty$ neighbourhood, $m\ge3$]\label{thm:nbhd}
+Set $\kappa_m:=\dfrac{(m-1)(m^2-3m+3)}{m^4}>0$ and $r_m:=\kappa_m/10$.  Every
+graphon $W=\Wm+Z$ with $0<\Linf Z\le r_m$ satisfies
+$\Delta_2(W)\ge\tfrac12\kappa_m\Lone Z>0$; in particular $\Wm$ is the unique
+minimiser of $\Delta_2$ in that $L^\infty$ ball.
+\end{theorem}
+
+\begin{proof}
+\emph{(1) Block--constant gradient.}  Since $t(C_3\cup C_5,\cdot)$, $t(C_5,\cdot)$,
+$p$ are multi--affine in the edge weights, $\Delta_2$ is, with Fr\'echet
+derivative $L(Z)=\langle g_0,Z\rangle$ at $\Wm$ for a symmetric kernel $g_0$.  By
+invariance of $\Delta_2$ under measure--preserving maps and the symmetry group of
+$\Wm$ (block permutations and within--block rearrangements), $g_0$ is constant on
+the two orbits $\Ldiag,\Loff$; the edge--deletion rule evaluates the two values to
+\[
+  g_0|_{\Ldiag}=\frac{(m-1)(m^2-3m+3)}{m^4}=\kappa_m>0,\qquad
+  g_0|_{\Loff}=-\frac{2(m-2)(m^2-2m+2)}{m^4}<0 .
+\]
+\emph{(2) First--order lower bound.}  Feasibility $0\le\Wm+Z\le1$ forces $Z\ge0$
+on $\Ldiag$ and $Z\le0$ on $\Loff$, aligned with the signs of $g_0$, so
+$L(Z)=\kappa_m\int_{\Ldiag}|Z|+|g_0|_{\Loff}|\int_{\Loff}|Z|\ge\kappa_m\Lone Z$
+(using $\kappa_m\le|g_0|_{\Loff}|$, i.e.\ $m^3-4m^2+6m-5>0$ for $m\ge3$).
+\emph{(3) Remainder bound.}  By Lemma~\ref{lem:threeform} below,
+$\Delta_2=t(\Theta)+t(C_5)-2t(K_2\sqcup C_5)$ with edge counts $7,5,6$.  For a
+$k$--edge subset $S$ of any of these, the multilinear term $t_S$ satisfies
+$|t_S(Z)|\le\Lone Z\,\Linf Z^{\,k-1}$ (bound $k-1$ copies of $Z$ by $\Linf Z$, the
+untouched $\Wm$--edges by $1$, and integrate the last $Z$).  Summing over subsets,
+$|R(Z)|=|\Delta_2-L(Z)|\le\Lone Z\,\Linf Z\sum_{k\ge2}\gamma_k\Linf Z^{\,k-2}$ with
+$\gamma_k=\binom7k+\binom5k+2\binom6k$; in particular $\gamma_2=61$ and the tail
+constant $C_{\mathrm{tail}}(r)=\sum_{k\ge3}\gamma_k r^{k-3}$ satisfies
+$C_{\mathrm{tail}}(0)=85$.  \emph{(4) Combination.}  For $r:=\Linf Z\le r_m$,
+$\Delta_2\ge\Lone Z(\kappa_m-\gamma_2 r-r^2C_{\mathrm{tail}}(r))$; since
+$\kappa_m\le\kappa_5<0.084$ and $r\le\kappa_m/10$, the subtracted terms are
+$\le\tfrac12\kappa_m$, giving $\Delta_2\ge\tfrac12\kappa_m\Lone Z$.
+\end{proof}
+
+\begin{lemma}[Three--density form]\label{lem:threeform}
+As multi--affine functionals of $W$,
+$\Delta_2(W)=t(C_3\cup_{K_2}C_5,W)+t(C_5,W)-2\,t(K_2\sqcup C_5,W)$,
+where $K_2\sqcup C_5$ is the disjoint union of an edge and a pentagon.
+\end{lemma}
+\begin{proof}
+$p\cdot t(C_5,W)=t(K_2\sqcup C_5,W)$, so
+$-(2p-1)t(C_5)=t(C_5)-2t(K_2\sqcup C_5)$.
+\end{proof}
+
+\begin{remark}[Sharper constant and scope]
+Replacing $\gamma_2=61$ by the exact Hessian mixed norm
+$C_2(m)=\tfrac12\sup_{a,b}\iint|H(a,b;\cdot)|$ (an exact rational, e.g.\
+$C_2(3)=242/243$, $C_2(4)=761/512$, increasing to $4$) enlarges $r_m$; the bound
+$C_2(m)<4$ is verified through $m=20$, and per fixed $m$ the theorem is
+unconditional with the exact $C_2(m)$.  The $L^\infty$ ball excludes
+\emph{part--resizing} (an $L^\infty$--distance--$1$ move); those pure--mass
+directions are handled at second order by $A_m>0$ in Theorem~\ref{thm:localmin},
+so the two statements are complementary.  Radii are non--vacuous:
+$r_3\approx7.4\times10^{-3}$, peaking near $m=5$, with $r_m\sim1/(10m)$.
+\end{remark}
+
+\section{Status and the remaining crux}\label{sec:status}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Statement & Regime & Status\\
+\midrule
+$\Delta_2\ge0$ & $p\le\tfrac12$, all graphons & \textbf{proved} (Prop.~\ref{prop:lowp})\\
+$\Delta_2=G-2D$, $G\ge0$ & all graphons & \textbf{proved} (Prop.~\ref{prop:GD})\\
+$\beta_{\mathrm{top}}\ge0$ & all graphons & \textbf{proved} (Lem.~\ref{lem:betatop})\\
+Schur reduction $A\succeq\lambda_1^2B$; (KF) base case $U_1\ge0$ & PSD & \textbf{proved} (Props.~\ref{prop:schur},~\ref{lem:base})\\
+$\Delta_2\ge0$ reduces to (JEN); to $(\mathbf A)/(\mathbf S)$ & PSD & \textbf{proved} (Thm.~\ref{thm:reduction}, Prop.~\ref{prop:S})\\
+auxiliary facts (P1)--(P4) & all/PSD & \textbf{proved} (Lem.~\ref{lem:aux})\\
+strict local min at $\Wm$ & $m\ge3$ & \textbf{proved} (Thm.~\ref{thm:localmin})\\
+quantitative $L^\infty$ neighbourhood of $\Wm$ & $m\ge3$ & \textbf{proved} (Thm.~\ref{thm:nbhd})\\
+$\Delta_2\ge0$ on rank--3 degenerate axis & --- & \textbf{proved} (Prop.~\ref{prop:rank3})\\
+(JEN) $=$ $(\mathbf A)$ scalar crux & PSD, $p\ge\tfrac12$ & \emph{Verified} (Ver.\ Claim~\ref{vc:crux}); open\\
+$\Delta_2\ge0$, PSD graphons & $p\ge\tfrac12$ & reduced to Ver.\ Claim~\ref{vc:crux}\\
+$\Delta_2\ge0$, arbitrary graphons & $p\ge\tfrac12$ & open\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two structural conclusions.  First, the spectral linearisation localises the
+whole difficulty to the negative part of the spectrum: on the PSD side it
+collapses (by two independent routes) to a single scalar inequality tight only at
+$W\equiv1$, and $\beta_{\mathrm{top}}\ge0$ shows the top mode is always safe, with
+negative per--mode defects $\beta_k<0$ occurring only at small eigenvalues
+($\lambda_k/\lambda_1\lesssim0.28$) where the weight $\lambda_k^4$ is small.  This
+is exactly the shape of the sibling odd--cycle project's positive--spectrum--safe
+criterion.
+
+Second, the general obstruction is the multipartite frontier, and the \emph{local}
+half of a two--region strategy is now proved: Theorem~\ref{thm:nbhd} gives an
+explicit $L^\infty$ ball around each $\Wm$ on which $\Delta_2>0$, by a first--order
+(not merely Hessian) mechanism.  What remains for an unconditional general proof is
+(i) the PSD scalar crux and (ii) gluing the neighbourhood bound to a global lower
+bound on the complement.  The decomposition $\Delta_2=G-2D$ shows the residual is
+that $G\ge2D$ is \emph{frontier--tight} ($2D/G\to1$ as $W\to\Wm$, both vanishing to
+the same order), so the global piece must degenerate to zero at the frontier at
+the matching rate controlled by Theorems~\ref{thm:localmin}--\ref{thm:nbhd}.
+
+\begin{remark}[Beyond $p\ge\tfrac12$]
+Unconstrained search over step graphons (including adversarial $p<\tfrac12$)
+returns $\min\Delta_2\approx0$, suggesting $\Delta_2\ge0$ may hold for all $p$;
+only the $p\le\tfrac12$ half is proved (Prop.~\ref{prop:lowp}).
+\end{remark}
+
+\appendix
+
+\section{Numerical evidence}\label{app:evidence}
+
+All computations use the validated engine \texttt{scripts/spectral.py} (which
+reproduces the independent bipodal checker to machine precision) and the direct
+homomorphism--density evaluation of $C_3\cup_{K_2}C_5$; scripts are named per
+claim in \texttt{scripts/README.md}.
+
+\paragraph{Falsification search.}  Over ${\sim}4\times10^6$ random step graphons
+($n=2,\dots,8$ blocks), fixed--$p$ constrained minimisation across the top branch,
+full enumeration of small $0/1$ block matrices, multipartite perturbations, and
+high--precision/exact recomputation at the tight points, no counterexample to
+$\Delta_2\ge0$ was found.  The minimum is exactly $0$, attained \emph{only} at the
+balanced complete multipartite graphons (verified symbolically for $K_2,\dots,K_6$
+partite at $p=\tfrac12,\tfrac23,\tfrac34,\tfrac45,\tfrac56$) and at $W\equiv1$
+($p=1$); the interior of the top branch is strictly positive (e.g.\
+$\min\Delta_2\approx5.8\times10^{-3}$ at $p=0.8$).  The naive vertex--bias
+inequality $\int d_W\,\tw^5(x,x)\ge p\,t(C_5)$ is false (a random--free tripodal
+example violates it), confirming that the correction $D$ in \eqref{eq:GD} can be
+positive.  $\Delta_2$ is not Schur--monotone in the spectrum: among graphons
+matched on $(p,\sum\lambda,\sum\lambda^2)$ a more--spread spectrum can give a
+smaller $\Delta_2$.
+
+\paragraph{Boundary--atom tests (odd--atomic conjecture).}  For the broader
+programme $t(H,W)\ge\Phi_H(p)=q^{v(H)}\chi_H(1/q)$ on the top branch, step--graphon
+search found no counterexample among odd atoms tested: the theta $\theta_{1,4,4}$
+(odd girth $5$), the odd wheel $W_5=K_1\vee C_5$ ($\chi=4$, branch $p\ge\tfrac23$),
+the triangular prism $C_3\times K_2$, a pyramid, and $K_4-e=\theta_{1,2,2}$ all
+hold.  The one violation found, $\theta_{2,2,3}$ (defect $\approx-1.5\times10^{-3}$
+near $p=0.82$), is \emph{not} a counterexample to the odd--atomic conjecture: it
+contains an induced $C_4$ (even girth $4$), so it is outside the hypothesis, and
+its violation is already exhibited by the constant graphon $W\equiv p$, matching
+the near--density--$1$ girth diagnostic $p^{e(H)}-\Phi_H(p)\sim-N_g(H)\,q^{g-1}$ for
+even girth $g$.  This is the canonical even--girth non--example and confirms
+odd girth is the right dividing line.
+
+\section{Placement in the literature}\label{app:lit}
+
+The one--sided, high--density, equivalence--relation--benchmark inequality
+$t(H,W)\ge\Phi_H(p)$ does not appear stated as such; ``Turán--Sidorenko'' is our
+working name.  The programme sits inside the well--developed
+common\,/\,locally--common\,/\,locally--Sidorenko circle.
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Even--girth dichotomy.}  Cs\'oka--Hubai--Lov\'asz (\emph{Locally
+common graphs}, J.\ Graph Theory 2023, arXiv:1912.02926) prove a graph is locally
+Sidorenko iff it is a forest or has even girth --- exactly the even--girth
+diagnostic rediscovered here.  Their Prop.\ 4.3 (the vertex--glued
+$C_3\cup_{K_1}C_5$ is not weakly locally common) is a precise warning that the
+\emph{vertex}--rooted gluing is where the benchmark is most likely to break; the
+vertex--rooted product conjecture should be stress--tested there first.
+\item \textbf{Clique atoms are done.}  Reiher's clique density theorem (Annals
+2016, arXiv:1212.2454) and Razborov (CPC 2008) give the \emph{sharp} minimum of
+$t(K_r,W)$ at every $p$; $\Phi_{K_r}(p)$ is only the balanced lower envelope,
+strictly below the true (unbalanced--multipartite) minimum off $p=1-1/k$.  Clique
+atoms can be cited rather than reproved.
+\item \textbf{The $C_5$ piece.}  Bennett--Dudek--Lidick\'y--Pikhurko (CPC 2020,
+arXiv:1803.00165) prove $t(C_5,W)\ge\Phi_{C_5}(p)$ only at the discrete
+$p=1-1/k$ via flag algebras; general continuous $p$ is left open, so the
+continuous--$p$ $C_5$ bound used here is beyond the published result.
+\item \textbf{Why flag algebras stall.}  Blekherman--Raymond--Singh--Thomas
+(\emph{Simple graph density inequalities with no sum of squares proofs},
+Combinatorica 2021, arXiv:1812.08820) show that signed density inequalities whose
+lowest--degree negative term is a ``trivial square'' --- the shape of $\Delta_2$
+with its $-(2p-1)t(C_5)$ term --- admit no SOS / Cauchy--Schwarz / flag
+certificate; and Hatami--Norine (arXiv:1005.2382) prove undecidability of linear
+homomorphism--density inequalities via copositivity.  This directs the effort to
+non--flag, structure--specific routes, of which the present spectral reduction is
+one.
+\item \textbf{Closest machinery.}  Kim--Lee (\emph{Extended commonality of paths
+and cycles via Schur convexity}, JCTB 2024, arXiv:2210.00977) prove odd--cycle
+one--sided lower bounds tight at quasirandom using the spectral measure
+($t(C_m)=\Tr\tw^m$), a $U=1-W$ even--subgraph linearisation, and Schur convexity
+of complete homogeneous symmetric functions --- the machinery underlying this
+note.  The obstruction here is the odd trace $\tw^5(x,x)$ (odd cycles are not
+norming), which is exactly why the pure majorisation step does not close and a new
+ingredient is needed.
+\end{itemize}
+
+\end{document}
