@@ -1,114 +1,133 @@
 import OddCycleBound.BoundsC5C7
+import OddCycleBound.BasicBounds
 import OddCycleBound.C9
 import OddCycleBound.C11
 import OddCycleBound.C13
+import OddCycleBound.LowBand.C9Spectral
 
 /-!
-# Main results: the odd-cycle Goodman-type bound for a graphon `W`
+# Main graphon-facing results
 
-For a graphon `W` over a probability space `(Ω, μ)` with edge density `p = ∫∫ W`,
-
-* `C5_bound` : `t(C₅, W) ≥ p⁵ − p(1−p)⁴`,
-* `C7_bound` : `t(C₇, W) ≥ p⁷ − p(1−p)⁶`,
-
-both for **all** edge densities `p`, and
-
-* `C9_path_bound` : `t(C₉, W) ≥ p⁹ − p(1−p)⁸` for `p ≥ 1003/2000` (the path-certificate range).
-
-Here the homomorphism density `t(C_m, W)` is the cyclic trace `trace μ (compPow μ W (m−1))` and
-`p = edgeDensity W μ = ∫∫ W`, all defined as plain integrals.
-
-These are the `W`-facing restatements of `C5_integral` / `C7_integral_all` / `C9_path_integral`
-(which are phrased for the complement `U = 1 − W`).  The only trusted input remains the integral
-definition of the homomorphism density.  The `C₉` proof additionally goes through the bivariate
-sum-of-squares certificate `cert9_Q`; it is still axiom-clean (only `propext`,
-`Classical.choice`, `Quot.sound`).
+This file is the public facade for the main odd-cycle bounds.  It intentionally
+contains only headline graphon statements, phrased directly with
+`edgeDensity`, `trace`, and `compPow`.
 -/
 
 open MeasureTheory
 
 namespace OddCycleBound
 
-variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
-variable {W : Ω → Ω → ℝ}
+universe u
 
-omit [MeasurableSpace Ω] in
-/-- The complement of the complement is the original kernel. -/
-private lemma compl_compl (W : Ω → Ω → ℝ) : compl (compl W) = W := by
-  funext x y; simp only [compl]; ring
+variable {Ω : Type u} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
+variable {W : Ω -> Ω -> Real}
 
-/-- Edge density of the complement: `∫∫(1−W) = 1 − ∫∫W`. -/
-private lemma edgeDensity_compl (hW : IsGraphon W μ) : edgeDensity (compl W) μ = 1 - edgeDensity W μ := by
-  have hGW : GoodK W := goodK_of_isGraphon hW
-  have hdegint : Integrable (degree W μ) μ :=
-    hGW.colsum_integrable.congr (ae_of_all _ fun x => by
-      rw [degree]; exact integral_congr_ae (ae_of_all _ fun y => hW.symm y x))
-  have hone : (∫ _x : Ω, (1 : ℝ) ∂μ) = 1 := by simp
-  have hdeg : ∀ x, degree (compl W) μ x = 1 - degree W μ x := fun x => by
-    show (∫ y, compl W x y ∂μ) = 1 - degree W μ x
-    have hwk : (fun y => compl W x y) = fun y => (1 : ℝ) - W x y := rfl
-    rw [hwk, integral_sub (integrable_const 1) (hGW.integrable_row x), hone, degree]
-  show (∫ x, degree (compl W) μ x ∂μ) = 1 - edgeDensity W μ
-  rw [integral_congr_ae (ae_of_all _ hdeg), integral_sub (integrable_const 1) hdegint, hone]
-  rfl
-
-/-- **`C₅` Goodman-type bound.**  `t(C₅, W) ≥ p⁵ − p(1−p)⁴`, with `p = ∫∫W`, for all densities. -/
+/-- **`C₅` Goodman-type bound.**  For every graphon `W` with edge density `p`,
+`t(C₅,W) ≥ p⁵ - p(1-p)⁴`. -/
 theorem C5_bound (hW : IsGraphon W μ) :
-    trace μ (compPow μ W 4) ≥ edgeDensity W μ ^ 5 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 4 := by
+    trace μ (compPow μ W 4) >=
+      edgeDensity W μ ^ 5 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 4 := by
   have h := C5_integral (isGraphon_compl hW)
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
   rw [e] at h
   exact h
 
-/-- **`C₇` Goodman-type bound.**  `t(C₇, W) ≥ p⁷ − p(1−p)⁶`, with `p = ∫∫W`, for all densities. -/
+/-- **`C₇` Goodman-type bound.**  For every graphon `W` with edge density `p`,
+`t(C₇,W) ≥ p⁷ - p(1-p)⁶`. -/
 theorem C7_bound (hW : IsGraphon W μ) :
-    trace μ (compPow μ W 6) ≥ edgeDensity W μ ^ 7 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 6 := by
+    trace μ (compPow μ W 6) >=
+      edgeDensity W μ ^ 7 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 6 := by
   have h := C7_integral_all (isGraphon_compl hW)
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
   rw [e] at h
   exact h
 
-/-- **`C₉` path-certificate bound.**  `t(C₉, W) ≥ p⁹ − p(1−p)⁸`, with `p = ∫∫W`, for every
-graphon `W` with edge density `p ≥ 1003/2000`.  (The complement edge density is then
-`q = 1 − p ≤ 997/2000`, the path-certificate range of §6.1.) -/
-theorem C9_path_bound (hW : IsGraphon W μ) (hp : 1003 / 2000 ≤ edgeDensity W μ) :
-    trace μ (compPow μ W 8) ≥ edgeDensity W μ ^ 9 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 8 := by
-  have hq : edgeDensity (compl W) μ ≤ 997 / 2000 := by rw [edgeDensity_compl hW]; linarith
+/-- **Path-range `C9` bound.**  If `p >= 1003 / 2000`, then
+`t(C9,W) >= p^9 - p(1-p)^8`. -/
+theorem C9_path_bound (hW : IsGraphon W μ)
+    (hp : 1003 / 2000 <= edgeDensity W μ) :
+    trace μ (compPow μ W 8) >=
+      edgeDensity W μ ^ 9 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 8 := by
+  have hq : edgeDensity (compl W) μ <= 997 / 2000 := by
+    rw [edgeDensity_compl hW]
+    linarith
   have h := C9_path_integral (isGraphon_compl hW) hq
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
   rw [e] at h
   exact h
 
-/-- **`C₁₁` high-density bound.**  `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰`, with `p = ∫∫W`, for every
-graphon `W` with edge density `p ≥ 103/200`.  (The complement edge density is then `q = 1 − p ≤
-97/200`, the range on which the joint-Positivstellensatz SOS certificate `cert11_specMoment` is
-valid — pushed down from the former `2/3` by the Peyrl–Parrilo rational rounding of the SOS Grams,
-to the path-certificate frontier `ρ₁₁ = 103/200` where the spectral closure takes over.) -/
-theorem C11_path_bound (hW : IsGraphon W μ) (hp : 103 / 200 ≤ edgeDensity W μ) :
-    trace μ (compPow μ W 10) ≥ edgeDensity W μ ^ 11 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 10 := by
-  have hq : edgeDensity (compl W) μ ≤ 97 / 200 := by rw [edgeDensity_compl hW]; linarith
+/-- **Path-range `C11` bound.**  If `p >= 103 / 200`, then
+`t(C11,W) >= p^11 - p(1-p)^10`. -/
+theorem C11_path_bound (hW : IsGraphon W μ)
+    (hp : 103 / 200 <= edgeDensity W μ) :
+    trace μ (compPow μ W 10) >=
+      edgeDensity W μ ^ 11 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 10 := by
+  have hq : edgeDensity (compl W) μ <= 97 / 200 := by
+    rw [edgeDensity_compl hW]
+    linarith
   have h := C11_path_integral (isGraphon_compl hW) hq
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
   rw [e] at h
   exact h
 
-/-- **`C₁₃` high-density bound.**  `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²`, with `p = ∫∫W`, for every
-graphon `W` with edge density `p ≥ 519/1000`.  (The complement edge density is then `q = 1 − p ≤
-481/1000`, the **path-certificate frontier `ρ₁₃`** on which the joint-Positivstellensatz SOS
-certificate `cert13_specMoment` is valid — `Φ₁₃ = L₁ + … + L₆`, with `L₄` certified by the four-fold
-moment engine `sos4var3`; pushed down from the former `2/3` by the Peyrl–Parrilo rational rounding,
-to where the binding linear block `L₁` first goes marginal.) -/
-theorem C13_path_bound (hW : IsGraphon W μ) (hp : 519 / 1000 ≤ edgeDensity W μ) :
-    trace μ (compPow μ W 12) ≥ edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12 := by
-  have hq : edgeDensity (compl W) μ ≤ 481 / 1000 := by rw [edgeDensity_compl hW]; linarith
+/-- **Path-range `C13` bound.**  If `p >= 519 / 1000`, then
+`t(C13,W) >= p^13 - p(1-p)^12`. -/
+theorem C13_path_bound (hW : IsGraphon W μ)
+    (hp : 519 / 1000 <= edgeDensity W μ) :
+    trace μ (compPow μ W 12) >=
+      edgeDensity W μ ^ 13 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 12 := by
+  have hq : edgeDensity (compl W) μ <= 481 / 1000 := by
+    rw [edgeDensity_compl hW]
+    linarith
   have h := C13_path_integral (isGraphon_compl hW) hq
   rw [compl_compl, edgeDensity_compl hW] at h
   have e : 1 - (1 - edgeDensity W μ) = edgeDensity W μ := by ring
   rw [e] at h
   exact h
+
+/-- **Conditional all-density `C9` bound from the direct Razborov/Reiher
+triangle-density branch.**
+
+The hypothesis is stated directly in graphon terms: on the C9 low band it gives
+the triangle lower bound as an inequality involving only `edgeDensity` and
+`trace μ (compPow μ W 2)`. -/
+theorem C9_conditional_bound
+    (hW : IsGraphon W μ)
+    (htri :
+      ∀ {Ω' : Type u} [MeasurableSpace Ω']
+        {μ' : Measure Ω'} [IsProbabilityMeasure μ']
+        {W' : Ω' -> Ω' -> Real},
+        IsGraphon W' μ' ->
+        1 / 2 < edgeDensity W' μ' ->
+        edgeDensity W' μ' <= 1003 / 2000 ->
+        let c := (1 - Real.sqrt (4 - 6 * edgeDensity W' μ')) / 3
+        (3 / 2) * c * (1 - c) ^ 2 <= trace μ' (compPow μ' W' 2)) :
+    trace μ (compPow μ W 8) >=
+      edgeDensity W μ ^ 9 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 8 := by
+  have htriDirect :
+      LowBand.InfiniteSpectral.C9RazborovTriangleDensityDirectTheorem.{u} := by
+    intro Ω' _ μ' _ W' hW' hgt' hle'
+    exact htri hW' hgt' hle'
+  by_cases hlow : edgeDensity W μ <= 1 / 2
+  · have htr := trace_compPow_nonneg (W := W) hW 8
+    have hrhs := rhs9_nonpos_of_le_half (W := W) hW hlow
+    exact le_trans hrhs htr
+  · have hgt : 1 / 2 < edgeDensity W μ := by linarith
+    by_cases hpath : 1003 / 2000 <= edgeDensity W μ
+    · exact C9_path_bound hW hpath
+    · have hle : edgeDensity W μ <= 1003 / 2000 := by linarith
+      let S :=
+        (Classical.choice
+          (LowBand.InfiniteSpectral.c9GraphonBudgetTraceSpectralData_lowBand
+            hW hgt hle)).toC9SpectralData hW
+      have htriParam :
+          LowBand.InfiniteSpectral.RazborovTriangleLower W μ :=
+        LowBand.InfiniteSpectral.C9RazborovTriangleDensityTheorem.of_direct
+          htriDirect hW hgt hle
+      exact S.c9_cycle_bound_of_razborov htriParam hgt hle
 
 end OddCycleBound

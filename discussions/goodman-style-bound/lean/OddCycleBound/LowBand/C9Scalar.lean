@@ -1,4 +1,4 @@
-import OddCycleBound.Main
+import OddCycleBound.Kernel
 
 /-!
 # C9 low-band analytic arithmetic

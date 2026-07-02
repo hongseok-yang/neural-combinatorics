@@ -1,4 +1,4 @@
-import OddCycleBound.LowBand.L2Kernel
+import OddCycleBound.LowBand.GraphonL2Operator
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.Analysis.Normed.Module.FiniteDimension
@@ -12,7 +12,7 @@ available from Mathlib's Hilbert-space operator theory.
 It does not prove the trace-class/Lidskii identities needed for C9 graphons.
 Instead, it cleanly separates the basic compact self-adjoint spectral theorem
 from the remaining trace/eigenvalue-enumeration bridge used in
-`OddCycleBound.LowBand.InfiniteSpectral`.
+`OddCycleBound.LowBand.C9Spectral`.
 -/
 
 noncomputable section

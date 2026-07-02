@@ -1,6 +1,7 @@
-import OddCycleBound.LowBand.C9
-import OddCycleBound.LowBand.CompactSpectral
-import OddCycleBound.LowBand.L2Kernel
+import OddCycleBound.Necklace
+import OddCycleBound.LowBand.C9Scalar
+import OddCycleBound.LowBand.CompactGraphonOperator
+import OddCycleBound.LowBand.GraphonL2Operator
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
@@ -143,6 +144,51 @@ def RazborovTriangleLower
     edgeDensity W mu = 1 / 2 + c - (3 / 2) * c ^ 2 ∧
     (3 / 2) * c * (1 - c) ^ 2 <= trace mu (compPow mu W 2)
 
+/-- Direct low-band Razborov/Reiher triangle-density statement for C9.
+
+This is the graphon-facing form: it states the lower bound as a function of
+the edge density alone, using the standard parameter
+`c(p) = (1 - sqrt (4 - 6p)) / 3` on the branch `1 / 2 <= p <= 2 / 3`. -/
+def C9RazborovTriangleDensityDirectTheorem : Prop :=
+  ∀ {Omega : Type*} [MeasurableSpace Omega]
+    {mu : Measure Omega} [IsProbabilityMeasure mu]
+    {W : Omega -> Omega -> Real},
+    IsGraphon W mu ->
+    1 / 2 < edgeDensity W mu ->
+    edgeDensity W mu <= 1003 / 2000 ->
+    let c := (1 - Real.sqrt (4 - 6 * edgeDensity W mu)) / 3
+    (3 / 2) * c * (1 - c) ^ 2 <= trace mu (compPow mu W 2)
+
+private lemma razborov_direct_param_nonneg {p : Real}
+    (hgt : 1 / 2 < p)
+    (hle : p <= 1003 / 2000) :
+    0 <= (1 - Real.sqrt (4 - 6 * p)) / 3 := by
+  have harg0 : 0 <= 4 - 6 * p := by
+    nlinarith [hle, (show (1003 : Real) / 2000 < 2 / 3 by norm_num)]
+  have hs_sq : (Real.sqrt (4 - 6 * p)) ^ 2 = 4 - 6 * p := by
+    exact Real.sq_sqrt harg0
+  have hs_sq_le_one : (Real.sqrt (4 - 6 * p)) ^ 2 <= (1 : Real) ^ 2 := by
+    rw [hs_sq]
+    nlinarith
+  have hs_le_one : Real.sqrt (4 - 6 * p) <= 1 :=
+    (sq_le_sq₀ (Real.sqrt_nonneg _) (by norm_num : (0 : Real) <= 1)).mp hs_sq_le_one
+  nlinarith
+
+private lemma razborov_direct_param_le_third {p : Real} :
+    (1 - Real.sqrt (4 - 6 * p)) / 3 <= 1 / 3 := by
+  have hs0 : 0 <= Real.sqrt (4 - 6 * p) := Real.sqrt_nonneg _
+  nlinarith
+
+private lemma razborov_direct_param_edge_eq {p : Real}
+    (hle : p <= 1003 / 2000) :
+    p = 1 / 2 + (1 - Real.sqrt (4 - 6 * p)) / 3 -
+        (3 / 2) * ((1 - Real.sqrt (4 - 6 * p)) / 3) ^ 2 := by
+  have harg0 : 0 <= 4 - 6 * p := by
+    nlinarith [hle, (show (1003 : Real) / 2000 < 2 / 3 by norm_num)]
+  have hs_sq : (Real.sqrt (4 - 6 * p)) ^ 2 = 4 - 6 * p := by
+    exact Real.sq_sqrt harg0
+  nlinarith
+
 /-- The low-band instance of Razborov/Reiher needed by the C9 proof.
 
 This is deliberately a named `Prop`, not an axiom.  A final C9 theorem may
@@ -155,6 +201,22 @@ def C9RazborovTriangleDensityTheorem : Prop :=
     1 / 2 < edgeDensity W mu ->
     edgeDensity W mu <= 1003 / 2000 ->
     RazborovTriangleLower W mu
+
+/-- The direct edge-density form of the low-band Razborov/Reiher statement
+implies the parameterized form consumed by the C9 spectral closure argument. -/
+theorem C9RazborovTriangleDensityTheorem.of_direct
+    (htri : C9RazborovTriangleDensityDirectTheorem.{u}) :
+    C9RazborovTriangleDensityTheorem.{u} := by
+  intro Omega _ mu _ W hW hgt hle
+  let p := edgeDensity W mu
+  let c := (1 - Real.sqrt (4 - 6 * p)) / 3
+  refine ⟨c, ?_, ?_, ?_, ?_⟩
+  · exact razborov_direct_param_nonneg hgt hle
+  · exact razborov_direct_param_le_third
+  · dsimp [c, p]
+    exact razborov_direct_param_edge_eq hle
+  · dsimp [c, p]
+    exact htri hW hgt hle
 
 /-- The C9 low-band Razborov/Reiher input for one fixed graphon. -/
 def C9RazborovTriangleDensityFor
@@ -6484,6 +6546,16 @@ def toC9TraceSpectralData
 
 end C9RawTraceSpectralData
 
+/-!
+## Legacy graphon wrapper interfaces
+
+The preferred C9 assembly path now uses pointwise graphon statements such as
+`c9GraphonBudgetTraceSpectralData_lowBand`.  The following `For`/`Theorem`
+propositions are retained as legacy adapters for exploratory spectral routes
+inside this file; they should not be the public interface used by
+`Conditional.lean`.
+-/
+
 /-- The standard graphon Hilbert-Schmidt spectral package needed for C9.
 
 This packages the missing operator-theoretic construction: for every graphon,
@@ -7785,12 +7857,29 @@ theorem C9GraphonBudgetTraceSpectralDataLowBandTheorem.of_padded_core_principal_
   exact
     ⟨(Classical.choice (hspec hW hgt hle)).toBudgetTraceSpectralData⟩
 
-/-- The low-band budget trace theorem follows from the proved compact graphon
-operator spectral expansion. -/
+/-- Pointwise low-band budget trace data for a graphon.
+
+This is the preferred graphon-facing spectral package for C9: it avoids the
+extra global theorem wrapper and states exactly the data needed by the final
+low-band assembly. -/
+theorem c9GraphonBudgetTraceSpectralData_lowBand
+    [IsProbabilityMeasure mu]
+    (hW : IsGraphon W mu)
+    (hgt : 1 / 2 < edgeDensity W mu)
+    (hle : edgeDensity W mu <= 1003 / 2000) :
+    Nonempty (C9BudgetTraceSpectralData W mu) := by
+  exact
+    ⟨(Classical.choice
+      (C9GraphonCanonicalL2CompactActionPaddedCorePrincipalBoundSpectralDataNoDiagLowBandTheorem.proved
+        hW hgt hle)).toBudgetTraceSpectralData⟩
+
+/-- Legacy theorem-shaped wrapper for the pointwise low-band budget trace
+data.  New assembly code should use `c9GraphonBudgetTraceSpectralData_lowBand`
+directly. -/
 theorem C9GraphonBudgetTraceSpectralDataLowBandTheorem.proved :
-    C9GraphonBudgetTraceSpectralDataLowBandTheorem.{u} :=
-  C9GraphonBudgetTraceSpectralDataLowBandTheorem.of_padded_core_principal_bound_no_trace
-    C9GraphonCanonicalL2CompactActionPaddedCorePrincipalBoundSpectralDataNoDiagLowBandTheorem.proved
+    C9GraphonBudgetTraceSpectralDataLowBandTheorem.{u} := by
+  intro Omega _ mu _ W hW hgt hle
+  exact c9GraphonBudgetTraceSpectralData_lowBand hW hgt hle
 
 /-- Pure compact-action spectral data imply row-energy no-trace data. -/
 theorem C9GraphonCanonicalL2CompactActionRowEnergySpectralDataNoDiagForLowBand.of_core_no_trace
