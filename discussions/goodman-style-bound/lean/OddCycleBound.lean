@@ -5,6 +5,12 @@ import OddCycleBound.General.PathRecurrence
 import OddCycleBound.General.SumOfSquares
 import OddCycleBound.C9
 import OddCycleBound.C11
+import OddCycleBound.C13
+import OddCycleBound.LowBand.CompactSpectral
+import OddCycleBound.LowBand.L2Kernel
+import OddCycleBound.LowBand.InfiniteSpectral
+import OddCycleBound.LowBand.C9
+import OddCycleBound.Conditional
 
 /-!
 # OddCycleBound — the odd-cycle Goodman-type bound, integral-grounded
@@ -47,4 +53,9 @@ General-`m` machinery (reused for `C₉` and future cases), under `General/`:
 * `General.SumOfSquares`  — the general Hankel sum-of-squares engine.
 
 `C9` then builds the Φ₉ certificate and `C9_path_integral` on top of these.
+
+The file `LowBand.FiniteSpectral` is deliberately not imported here.  It is a
+finite-dimensional sanity check for spectral algebra only; the graphon-facing
+low-band C9 interface in `LowBand.InfiniteSpectral` is countable/compact-action
+based and does not assume finitely many non-zero eigenvalues.
 -/
