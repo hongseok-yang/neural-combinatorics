@@ -89,6 +89,21 @@ theorem C13_path_bound (hW : IsGraphon W μ)
   rw [e] at h
   exact h
 
+/-- Direct triangle-density lower bound up to an edge-density cutoff.
+
+For an upper endpoint `rho`, this is the Razborov/Reiher branch needed on
+`1 / 2 < edgeDensity W μ <= rho`, stated only with `edgeDensity`, `trace`,
+and `compPow`. -/
+def TriangleDensityLowerBoundUpTo (rho : Real) : Prop :=
+  ∀ {Ω' : Type u} [MeasurableSpace Ω']
+    {μ' : Measure Ω'} [IsProbabilityMeasure μ']
+    {W' : Ω' -> Ω' -> Real},
+    IsGraphon W' μ' ->
+    1 / 2 < edgeDensity W' μ' ->
+    edgeDensity W' μ' <= rho ->
+    let c := (1 - Real.sqrt (4 - 6 * edgeDensity W' μ')) / 3
+    (3 / 2) * c * (1 - c) ^ 2 <= trace μ' (compPow μ' W' 2)
+
 /-- **Conditional all-density `C9` bound from the direct Razborov/Reiher
 triangle-density branch.**
 
@@ -97,15 +112,7 @@ the triangle lower bound as an inequality involving only `edgeDensity` and
 `trace μ (compPow μ W 2)`. -/
 theorem C9_conditional_bound
     (hW : IsGraphon W μ)
-    (htri :
-      ∀ {Ω' : Type u} [MeasurableSpace Ω']
-        {μ' : Measure Ω'} [IsProbabilityMeasure μ']
-        {W' : Ω' -> Ω' -> Real},
-        IsGraphon W' μ' ->
-        1 / 2 < edgeDensity W' μ' ->
-        edgeDensity W' μ' <= 1003 / 2000 ->
-        let c := (1 - Real.sqrt (4 - 6 * edgeDensity W' μ')) / 3
-        (3 / 2) * c * (1 - c) ^ 2 <= trace μ' (compPow μ' W' 2)) :
+    (htri : TriangleDensityLowerBoundUpTo.{u} (1003 / 2000)) :
     trace μ (compPow μ W 8) >=
       edgeDensity W μ ^ 9 - edgeDensity W μ * (1 - edgeDensity W μ) ^ 8 := by
   have htriDirect :

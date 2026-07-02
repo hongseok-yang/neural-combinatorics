@@ -52,6 +52,7 @@ open OddCycleBound
 #print axioms C7_integral_all
 
 -- Headline W-form results (the paper's statement)
+#print axioms TriangleDensityLowerBoundUpTo
 #print axioms C5_bound
 #print axioms C7_bound
 #print axioms C9_path_bound
