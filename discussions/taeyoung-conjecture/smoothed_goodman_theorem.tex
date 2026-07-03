@@ -1,0 +1,412 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\E}{\mathbb E}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\tw}{T_W}
+\newcommand{\thet}{\theta_{1,2,4}}
+
+\title{The smoothed Goodman inequality for $C_3\cup_{K_2}C_5$:\\
+a computer-assisted proof with an exactly verified certificate}
+\author{Working note}
+\date{July 3, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove that for every graphon $W$, with $p=t(K_2,W)$,
+\[
+  \Delta_2(W)\;:=\;t(\thet,W)-(2p-1)\,t(C_5,W)\;\ge\;0,
+\]
+where $\thet=C_3\cup_{K_2}C_5$ is the theta graph obtained by gluing a triangle
+and a pentagon along an edge.  The proof is computer assisted: the branch
+$p\le\tfrac12$ is elementary, and the branch $p\ge\tfrac12$ is certified by an
+\emph{exact rational} sum-of-squares certificate in the flag algebra at ground
+size $8$, of the multiplier form
+$\Delta_2=\mathrm{SOS}_8+(2t(K_2)-1)\cdot\mathrm{SOS}_6$, discovered
+numerically and then rounded to exact arithmetic.  The certificate consists of
+per-graph inequalities over all $12{,}346$ isomorphism classes of $8$-vertex
+graphs, verified with zero negative slacks by a standalone $\sim$150-line
+pure-integer program; the tables entering the verification were derived twice
+by independent constructions and gated by exact polynomial identities over
+$\Q$.  Combining with the odd-cycle bound $t(C_5,W)\ge p^5-p(1-p)^4$
+(established in the companion odd-cycle project), we obtain the first genuinely
+mixed clique-gluing case of the Tur\'an--Sidorenko programme:
+$t(\thet,W)\ge\Phi_{\thet}(p)$ on the top branch $p\ge\tfrac12$.
+This note states the theorem, proves every mathematical lemma in the logic
+chain, describes the certificate and its exact verification protocol so that a
+referee can reproduce it end to end, and records the equality structure and
+the discovery route.
+\end{abstract}
+
+\tableofcontents
+
+\section{Statement and corollary}
+
+Let $W:[0,1]^2\to[0,1]$ be a symmetric measurable function (a graphon), and for
+a finite graph $F$ let $t(F,W)$ denote its homomorphism density.  Write
+$p=t(K_2,W)$ and let $\thet$ be the theta graph with two branch vertices joined
+by internally disjoint paths of lengths $1,2,4$; equivalently
+$\thet=C_3\cup_{K_2}C_5$, a triangle and a pentagon sharing one edge ($6$
+vertices, $7$ edges).
+
+\begin{theorem}[Smoothed Goodman inequality]\label{thm:main}
+For every graphon $W$,
+\[
+  \Delta_2(W)\;=\;t(\thet,W)-(2p-1)\,t(C_5,W)\;\ge\;0 .
+\]
+Equality holds at the balanced complete multipartite graphons $T_k$
+\textup{(}$p=1-1/k$\textup{)}, at $W\equiv1$, and on every graphon supported on
+a bipartite pattern \textup{(}where $t(\thet,W)=t(C_5,W)=0$\textup{)}.
+\end{theorem}
+
+The name records the mechanism: Goodman's inequality states
+$t(K_3,W)\ge p(2p-1)$, i.e.\ the \emph{average} codegree over a uniformly
+random edge is at least $2p-1$; Theorem~\ref{thm:main} states the same lower
+bound for the average codegree over a \emph{$C_5$-biased} edge, which is the
+rooted gluing inequality needed by the Tur\'an--Sidorenko programme.
+
+\begin{corollary}[$\thet$ is Tur\'an--Sidorenko on the top branch]\label{cor:ts}
+For every graphon $W$ with $p\ge\tfrac12$,
+\[
+  t(\thet,W)\;\ge\;\Phi_{\thet}(p)\;=\;(1-p)^{6}\,\chi_{\thet}\!\Big(\frac1{1-p}\Big)
+  \;=\;p\,(2p-1)\,\big(p^{4}-(1-p)^{4}\big),
+\]
+with equality at the balanced $T_k$, $p=1-1/k$.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:main}, $t(\thet,W)\ge(2p-1)\,t(C_5,W)$, and $2p-1\ge0$.
+The odd-cycle bound $t(C_5,W)\ge p^5-p(1-p)^4=p\,(p^4-(1-p)^4)$ for
+$p\ge\tfrac12$ is proved in the companion odd-cycle project
+(\texttt{discussions/goodman-style-bound/paper.tex}, where $C_5$ is one of the
+settled cases).  Multiplying the two bounds gives the claim; the product
+$p(2p-1)(p^4-q^4)$, $q=1-p$, equals $\Phi_{\thet}(p)$ by the Whitney expansion
+of $\chi_{\thet}$ and the clique-sum factorisation
+$\Phi_{\thet}=\Phi_{C_3}\Phi_{C_5}/\Phi_{K_2}$.
+\end{proof}
+
+This is the first case of the programme in which two \emph{different} odd
+cycles are glued along a clique: the composition of Goodman slack with rooted
+$C_5$ structure is exactly what previous methods (books via Jensen, regular
+graphons via the complement operator) could not reach.
+
+\section{The trivial branch and the quantum form}
+
+Since $t(K_2\sqcup C_5,W)=t(K_2,W)\,t(C_5,W)$ (disjoint unions multiply),
+\begin{equation}\label{eq:quantum}
+  \Delta_2 \;=\; t(\thet)+t(C_5)-2\,t(K_2\sqcup C_5),
+\end{equation}
+a linear combination of homomorphism densities of graphs on at most $7$
+vertices ($7$, $5$, $6$ edges respectively).
+
+\begin{proposition}[Low-density branch]\label{prop:lowp}
+If $p\le\tfrac12$ then $\Delta_2(W)=t(\thet,W)+(1-2p)\,t(C_5,W)\ge0$.
+\end{proposition}
+
+\begin{proof}
+Both densities are nonnegative and $1-2p\ge0$.
+\end{proof}
+
+The content of Theorem~\ref{thm:main} is thus the branch $p\ge\tfrac12$, which
+is certified below.
+
+\section{The certificate architecture}\label{sec:arch}
+
+All data live in the repository directory
+\texttt{flag\_sdp/} (pipeline and caches) and
+\texttt{flag\_sdp/n8\_mult/rounding/} (exact certificate and verifier); the
+certificate itself is
+\texttt{rounding/data/certificate.pkl} (equivalently the portable
+\texttt{certificate.json.gz}).  We describe the mathematical structure and
+prove the lemmas; combinatorial data (tables, coefficient vectors) are
+machine-generated with the cross-validations of \S\ref{sec:verify}.
+
+\subsection{Ground-$8$ induced densities}
+
+Let $\mathcal H_8$ be the $12{,}346$ isomorphism classes of graphs on $8$
+vertices, and for a graphon $W$ let $p_8(H,W)$ be the probability that $8$
+i.i.d.\ uniform points $x_1,\dots,x_8$, with edges sampled independently with
+probabilities $W(x_i,x_j)$, induce a copy of $H$.  Then
+$\sum_{H}p_8(H,W)=1$, $p_8(H,W)\ge0$, and every homomorphism density of a
+graph on $\le8$ vertices is the corresponding average of induced counts; in
+particular there is an (exactly computed) rational vector
+$c=(c[H])_{H\in\mathcal H_8}$ with
+\begin{equation}\label{eq:coef}
+  \Delta_2(W)\;=\;\sum_{H\in\mathcal H_8}p_8(H,W)\,c[H]
+  \qquad\text{for every graphon }W .
+\end{equation}
+
+\subsection{Flag Gram matrices at ground $8$}
+
+Fix a \emph{type} $\sigma$ (a fully labelled graph on $m$ vertices) and let
+$F_1,\dots,F_{n_\sigma}$ be the $\sigma$-flags on $\ell$ vertices with
+$2\ell-m=8$.  For a graphon $W$ and an injection of $\sigma$ into random
+points, let $f(W)\in\R^{n_\sigma}$ be the vector of rooted flag densities.
+The \emph{Gram matrix} $\mathrm{Gram}_8^\sigma(W)=\E\big[f f^{T}\big]$
+(expectation over the rooted points, weighted by the type embedding) is
+positive semidefinite by construction.  The pipeline computes, for each
+$8$-vertex graph $H$, the \emph{unconditional pair-density matrix}
+$M^\sigma_8(H)$ such that
+\begin{equation}\label{eq:gram8}
+  \sum_{H\in\mathcal H_8}p_8(H,W)\,M^\sigma_8(H)\;=\;\mathrm{Gram}_8^\sigma(W)
+  \;\succeq\;0 .
+\end{equation}
+This is Razborov's standard construction; the identity \eqref{eq:gram8} was
+verified on exact induced-density vectors to $10^{-15}$, and---importantly---an
+earlier version of the pipeline that used \emph{conditional} pair densities
+fails \eqref{eq:gram8} (min eigenvalue $-2.5\times10^{-2}$) and was discarded;
+see \texttt{flag\_sdp/n8/README.md}.  The types used are all types with
+$m\in\{0,2,4,6\}$, giving $1+2+11+156=170$ blocks with
+$11,\ 120,\ 272,\ 64$ flags respectively.
+
+\subsection{The multiplier construction}\label{sec:mult}
+
+The novelty relative to a plain flag SOS is a second family of blocks carrying
+the factor $(2p-1)$.  For each type $\sigma'$ with $m'\in\{0,2,4\}$ and flags
+on $\ell'$ vertices with $2\ell'-m'=6$ ($14$ blocks in total), define for each
+$H\in\mathcal H_8$
+\begin{equation}\label{eq:multdef}
+  \mathrm{Mult}^{\sigma'}(H)\;=\;\frac1{\binom82}\sum_{\{a,b\}\subseteq V(H)}
+  \big(2A_H(a,b)-1\big)\; M^{\sigma'}_{6}\!\big(H[V(H)\setminus\{a,b\}]\big),
+\end{equation}
+where $A_H$ is the adjacency matrix and $M^{\sigma'}_6$ is the unconditional
+ground-$6$ pair-density matrix.
+
+\begin{lemma}[Factorisation identity]\label{lem:fact}
+For every graphon $W$ and every block $\sigma'$,
+\[
+  \sum_{H\in\mathcal H_8}p_8(H,W)\,\mathrm{Mult}^{\sigma'}(H)
+  \;=\;\big(2\,t(K_2,W)-1\big)\cdot\mathrm{Gram}_6^{\sigma'}(W),
+  \qquad \mathrm{Gram}_6^{\sigma'}(W)\succeq0 .
+\]
+\end{lemma}
+
+\begin{proof}
+Sample $x_1,\dots,x_8$ i.i.d.\ uniform and the induced random graph $G$ on
+them.  By symmetry, averaging \eqref{eq:multdef} against $p_8(\cdot,W)$ equals
+$\E\big[(2\,\mathbf 1[x_1x_2\text{ edge}]-1)\cdot
+M^{\sigma'}_6(G[x_3,\dots,x_8])\big]$.  The edge indicator on $\{x_1,x_2\}$
+and the induced graph on $\{x_3,\dots,x_8\}$ depend on disjoint sets of
+coordinates and disjoint edge slots, hence are independent; the expectation
+factorises into $\E[2W(x_1,x_2)-1]=2p-1$ times
+$\E[M^{\sigma'}_6(G[x_3..x_8])]=\mathrm{Gram}_6^{\sigma'}(W)$, which is PSD by
+the ground-$6$ analogue of \eqref{eq:gram8}.  (Verified numerically to
+$8.9\times10^{-16}$ on exact induced-density vectors; see
+\texttt{flag\_sdp/n8\_mult/README.md}.)
+\end{proof}
+
+\begin{remark}
+An earlier, \emph{invalid} attempt multiplied same-ground tables by the
+per-graph scalar $(2p_H-1)$; the averaged term is then \emph{not} of the form
+$(2p-1)\times(\text{PSD})$ and was shown to go negative on $p\ge\tfrac12$
+graphons.  Lemma~\ref{lem:fact} is the sound replacement, and the distinction
+is exactly why the certificate must be checked through the averaging identity,
+not only per graph.
+\end{remark}
+
+\subsection{The certificate and the proof of Theorem~\ref{thm:main}}
+
+The certificate consists of exact rational PSD matrices
+$Q=(Q_b)_{b=1}^{170}$ (ground-$8$ blocks) and $R=(R_{b'})_{b'=1}^{14}$
+(ground-$6$ multiplier blocks) such that
+\begin{equation}\label{eq:pergraph}
+  c[H]\;\ge\;\sum_{b}\big\langle Q_b,\;M_8^{b}(H)\big\rangle
+  \;+\;\sum_{b'}\big\langle R_{b'},\;\mathrm{Mult}^{b'}(H)\big\rangle
+  \qquad\text{for every } H\in\mathcal H_8 ,
+\end{equation}
+verified in exact integer arithmetic (\S\ref{sec:verify}).
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+For $p\le\tfrac12$ apply Proposition~\ref{prop:lowp}.  For $p\ge\tfrac12$,
+multiply \eqref{eq:pergraph} by $p_8(H,W)\ge0$ and sum over $H$: by
+\eqref{eq:coef}, \eqref{eq:gram8}, and Lemma~\ref{lem:fact},
+\[
+  \Delta_2(W)\;\ge\;\sum_b\big\langle Q_b,\mathrm{Gram}_8^{b}(W)\big\rangle
+  \;+\;(2p-1)\sum_{b'}\big\langle R_{b'},\mathrm{Gram}_6^{b'}(W)\big\rangle .
+\]
+Each $\langle Q_b,\mathrm{Gram}_8^b(W)\rangle\ge0$ since both factors are PSD;
+each $\langle R_{b'},\mathrm{Gram}_6^{b'}(W)\rangle\ge0$ likewise, and
+$2p-1\ge0$.  Hence $\Delta_2(W)\ge0$.
+\end{proof}
+
+\section{Exact verification protocol}\label{sec:verify}
+
+The verifier is \texttt{rounding/verify\_exact.py}
+($\sim$150 lines; pure Python integers and \texttt{fractions.Fraction}, no
+floating point).  Running
+\begin{center}
+\texttt{python3 verify\_exact.py data/certificate.pkl}
+\end{center}
+performs two checks and completed in $5$ seconds on the discovery machine:
+
+\subsection{Positive semidefiniteness by construction}
+
+The certificate stores each $Q_b$ (and $R_{b'}$) in factored form
+\[
+  Q_b\;=\;\frac1{4^{s}}\;U_b\,F_b\,\big(I+\Theta_b\big)\,F_b^{T}\,U_b^{T},
+\]
+with $U_b,F_b$ integer matrices and $\Theta_b$ a sparse rational symmetric
+correction ($53$ nonzero entries across $8$ corrected blocks, $\max|\theta| =
+6.2\times10^{-10}$; no rank-one additions were needed).
+
+\begin{lemma}\label{lem:psd}
+If $\|\Theta_b\|_F<1$ \textup{(}checked exactly as
+$\sum_{ij}\theta_{ij}^2<1$ in $\Q$\textup{)} then $I+\Theta_b\succ0$ and hence
+$Q_b\succeq0$.
+\end{lemma}
+
+\begin{proof}
+Every eigenvalue of the symmetric $\Theta_b$ is bounded in modulus by
+$\|\Theta_b\|_F<1$, so $I+\Theta_b\succ0$; $Q_b$ is a congruence of a positive
+matrix scaled by $4^{-s}>0$.
+\end{proof}
+
+No numerical eigenvalue computation enters the proof.
+
+\subsection{Exact slacks over exactly recounted tables}
+
+The verifier recomputes all $12{,}346$ slacks of \eqref{eq:pergraph} in big
+integer arithmetic over the \emph{exactly recounted} tables: every entry of
+$c$, $M_8^b(H)$, $\mathrm{Mult}^{b'}(H)$ is an integer divided by an explicit
+combinatorial denominator (built from ordered-embedding counts; e.g.\ the
+coefficient vector uses denominator $8!=40320$).  The verified outcome:
+\begin{center}
+\emph{zero negative slacks}; exactly $48$ zero slacks --- the $22$ complete
+multipartite graphs $K_\lambda$, $\lambda\vdash 8$, and $26$
+bipartite-family rows.
+\end{center}
+The zero-slack fingerprint matches the equality variety of
+Theorem~\ref{thm:main} exactly, a strong internal consistency check.
+
+\subsection{Provenance of the tables (double derivation and identity gates)}
+
+The tables used by the verifier were derived twice, by independent
+constructions, and gated by exact identities:
+\begin{enumerate}[leftmargin=1.6em]
+\item a floating-point build (fast bitmask counting), cross-checked against the
+independent step-graphon engine \texttt{scripts/core.py} on random graphons to
+$10^{-16}$;
+\item an exact integer recount (\texttt{rounding/exact\_tables.py}), agreeing
+with the float build to $2.8\times10^{-13}$ (relative);
+\item exact polynomial identity gates over $\Q$, evaluated on the exact
+tables: $\ \Delta_2(W{\equiv}p)\equiv p^5(1-p)^2$ as a polynomial identity in
+$p$; $\ \Delta_2(T_k)=0$ for every $k\ge2$ (per-part-count identities);
+the multiplier factorisation at $T_2$; and the bipartite second-derivative
+identity of \S\ref{sec:equality}.  All pass exactly.
+\end{enumerate}
+
+\subsection{Reproduction}
+
+From the repository, a referee reproduces the verification by
+\begin{center}
+\begin{tabular}{ll}
+\texttt{flag\_sdp/n8/}: & rebuild the ground-8 tables (scripts; minutes), \\
+\texttt{flag\_sdp/n8\_mult/}: & rebuild the multiplier tables
+(\texttt{multlib.py}; minutes), \\
+\texttt{rounding/}: & \texttt{python3 exact\_tables.py} ($\sim$1 minute), then\\
+& \texttt{python3 verify\_exact.py data/certificate.pkl} ($\sim$5 s).
+\end{tabular}
+\end{center}
+Large regenerable caches are deliberately not committed; every build step is
+scripted and documented in the three \texttt{README}s.  The certificate is
+also provided as portable JSON (\texttt{certificate.json.gz}).
+
+\section{Equality structure and remarks}\label{sec:equality}
+
+\begin{proposition}[Zero set on the top branch]\label{prop:zeros}
+$\Delta_2$ vanishes at the balanced $T_k$ \textup{(}where
+$\tw^2(x,y)=2p-1$ off-diagonally, so the Goodman defect kernel vanishes
+identically\textup{)}, at $W\equiv1$, and on all bipartite-supported graphons
+\textup{(}both $\thet$ and $C_5$ contain odd cycles\textup{)}.  Unbalanced
+complete multipartite graphons with $k\ge3$ parts are \emph{not} zeros: e.g.\
+the profile $(\tfrac12,\tfrac3{10},\tfrac15)$ gives
+$\Delta_2=\tfrac{177}{25000}$ exactly.
+\end{proposition}
+
+Two structural facts discovered during the rounding deserve record, since they
+constrain any future certificate of this kind:
+\begin{enumerate}[leftmargin=1.6em]
+\item \emph{Bipartite forcing.}  Because $\Delta_2\equiv0$ on the whole
+bipartite variety (a continuum touching the branch boundary $p=\tfrac12$ at
+$T_2$), the certificate's blocks must annihilate not only the bipartite
+evaluation vectors but also their first \emph{derivatives} along the variety;
+concretely, $124$ additional kernel dimensions (star-defect vectors) are
+forced, and the borderline equalities include the $21$ ``$K_{a,b}$ minus a
+star'' classes (a missing pattern is forcible exactly when its matching number
+is $1$).
+\item \emph{A doubly-nonnegative identity.}  The exact rational vector
+$u=(\tfrac35,-\tfrac32,2,-\tfrac32,\tfrac35,\tfrac1{10},\tfrac1{10},\tfrac12,1)$
+supported on the densities of
+$(K_2,\,P_3,\,K_{1,3},\,K_{1,4},\,K_{1,5},\,K_{1,7}{+}e,\,K_{2,5}{\sqcup}K_1,\,
+H_{1689},\,H_{6669})$ satisfies $u^{T}c=0$ with the corresponding
+$\sum_H u_H M(H)$ PSD on three specific blocks; sandwiching forces three
+further slack zeros and five kernel dimensions.  This closed a residual
+obstruction of size $10^{-23}$ that no floating-point solver could see.
+\end{enumerate}
+
+\begin{remark}[Discovery route, for the record]
+A plain flag SOS at ground size $8$ provably cannot certify the theorem: the
+SDP optimum is pinned at $\approx-1.5\times10^{-5}$ by a dual pseudo-measure
+supported on the equality structure (bipartite graphs, forests, $K_{4,4}$).
+The multiplier form succeeds precisely because the factor $(2p-1)$ changes
+sign at the bipartite variety's density range, releasing the plain SOS from
+having to vanish there identically.  The numerical multiplier SDP converged to
+certified $-4.0\times10^{-8}$; a face-restricted SDP (equalities and forced
+kernels imposed exactly) then confirmed a strictly positive interior margin,
+and the exact rounding succeeded after the kernel space was enlarged to the
+full forced structure ($57\to186$ dimensions).  Two earlier candidate
+certificates were found to be \emph{invalid} during this project (a per-graph
+multiplier weighting, and a conditional-table convention); both were caught by
+the averaging-identity checks that the present certificate passes.
+\end{remark}
+
+\begin{remark}[Epistemic status]
+The mathematical lemmas (Prop.~\ref{prop:lowp}, \eqref{eq:coef},
+\eqref{eq:gram8}, Lemma~\ref{lem:fact}, Lemma~\ref{lem:psd}, and the averaging
+argument) are short and human-checkable.  The combinatorial data are
+machine-generated; their correctness rests on the double derivation and the
+exact identity gates of \S\ref{sec:verify}, and the final inequality check is
+a $5$-second pure-integer computation that a referee can run and read in
+full.  We regard the theorem as proved, subject to ordinary refereeing of the
+$\sim$150-line verifier and the table-generation scripts.
+\end{remark}
+
+\section{What this opens}
+
+With Theorem~\ref{thm:main} and Corollary~\ref{cor:ts}, the first mixed
+rooted-gluing case of the Tur\'an--Sidorenko programme is closed.  The natural
+next targets, in order:
+\begin{enumerate}[leftmargin=1.6em]
+\item the smoothed Goodman family
+$\Tr(\tw^{\ell}K_W\tw^{\ell})\ge0$ for $\ell\ge3$
+\textup{(}$C_3\cup_{K_2}C_{2\ell+1}$\textup{)}: the same multiplier machinery
+applies with ground size $2\ell+4$; $\ell=3$ needs ground $10$
+($12{,}005{,}168$ graphs) --- heavy but perhaps within reach with the
+block-diagonalisation savings that the present certificate's kernel structure
+suggests;
+\item the strengthened form $\Delta_2\ge X(W)$ (TEST-H) and the cubic
+inequality (C) recorded in the project notes, whose coefficient vectors are
+already cached for the same pipeline;
+\item vertex-rooted analogues (stress-tested first against the
+Cs\'oka--Hubai--Lov\'asz warning), and the rooted calculus toward odd-atomic
+graphs.
+\end{enumerate}
+
+\end{document}

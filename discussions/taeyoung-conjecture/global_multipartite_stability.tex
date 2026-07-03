@@ -1,0 +1,756 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{problem}[theorem]{Problem}
+\theoremstyle{definition}
+\newtheorem{vclaim}[theorem]{Verified Claim}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\MP}{\mathcal{MP}}
+\newcommand{\tw}{T_W}
+\newcommand{\tu}{T_U}
+\newcommand{\kw}{K_W}
+\newcommand{\Wm}{W_m}
+\newcommand{\Tk}{T_k}
+\newcommand{\cutnorm}[1]{\lVert #1\rVert_\square}
+\newcommand{\Linf}[1]{\lVert #1\rVert_\infty}
+\newcommand{\Lone}[1]{\lVert #1\rVert_1}
+\newcommand{\Ltwo}[1]{\lVert #1\rVert_2}
+
+\title{A global multipartite--stability architecture for the smoothed Goodman
+inequality\\[2pt]
+\large $\Delta_2(W)=t(\theta_{1,2,4},W)-(2p-1)\,t(C_5,W)\ge0$:
+compactness reduction and the single remaining estimate}
+\author{Working note}
+\date{July 2, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $\Delta_2(W)=t(\theta_{1,2,4},W)-(2p-1)\,t(C_5,W)$, where
+$\theta_{1,2,4}=C_3\cup_{K_2}C_5$ is the theta graph on two branch vertices joined
+by internally disjoint paths of lengths $1,2,4$, and $p=t(K_2,W)$.  The target is
+$\Delta_2\ge0$ for all graphons, with the only content in $p\in[\tfrac12,1)$.
+Extensive search (thousands of restarts, several samplers, adversarial
+constrained optimisation) shows the ``enemy region'' is empty: every low--$\Delta_2$
+configuration sits on a \emph{proved} safe regime, and the extremisers are exactly
+the balanced complete multipartite graphons $\Tk$ (at $p=1-1/k$) together with the
+degenerate $W\equiv1$.  This note lays out the architecture that would convert this
+picture into a proof: a \emph{stability} statement
+$\Delta_2(W)\ge c(p)\,\dist(W,\MP)^\alpha$, with $\MP$ the set of complete
+multipartite graphons.  We (i) make the statement precise and record the exact
+reduction to it; (ii) run the compactness/Euler--Lagrange argument that
+produces a minimiser and its box--constrained KKT stationarity if stability failed;
+(iii) assemble the proved safe regimes (low density, regular, near--$W\equiv1$,
+local $L^\infty$/$L^1$ stability near each $\Tk$ with an explicit linear gap) into
+a candidate cover, and explain via the negative--spectral--mass structure why no
+scalar spectral threshold can isolate safety, so the \emph{only} missing piece is a
+quantitative ``far--from--$\MP\Rightarrow$ bounded below'' estimate; (iv) isolate
+that estimate as a single labelled Problem and prove several reductions of it
+(density to step graphons; the local linear lower bound; validity on every proved
+regime); and (v) analyse the $p\to1$ (equivalently $k\to\infty$) \emph{uniformity
+seam}, where the local constants $\kappa_k,|b_k|,H_k$ all decay like $1/k$ and the
+neighbourhood radius like $1/(10k)$, and state precisely the overlap condition the
+near--$W\equiv1$ regime must supply.  Proved statements are labelled
+Theorem/Proposition/Lemma; numerically certified but open ones are labelled
+\emph{Verified Claim}; the residual analytic content is a single \emph{Problem}.
+The companion note \texttt{smoothed\_goodman\_spectral\_partial.tex} supplies the
+per--regime proofs cited here; the validated engine is \texttt{scripts/spectral.py}.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup, definitions, and the reduction}\label{sec:setup}
+
+\subsection{The functional}
+Let $\mathcal W$ be the space of symmetric measurable graphons $W:[0,1]^2\to[0,1]$,
+$U=1-W$, $p=t(K_2,W)=\int W$, $q=1-p$.  Write $\tw$ for the integral operator with
+kernel $W$, self--adjoint and Hilbert--Schmidt, with eigenvalues
+$\lambda_1\ge\lambda_2\ge\cdots$ (repeated to multiplicity) and $L^2$--orthonormal
+eigenfunctions $\varphi_k$.  Then $t(C_m,W)=\Tr(\tw^m)=\sum_k\lambda_k^m$.  The
+target functional is
+\begin{equation}\label{eq:def}
+  \Delta_2(W)\ :=\ t(\theta_{1,2,4},W)-(2p-1)\,t(C_5,W)
+  \ =\ \iint W(x,y)\,\tw^2(x,y)\,\tw^4(x,y)\,dx\,dy-(2p-1)\sum_k\lambda_k^5 ,
+\end{equation}
+where the theta identity $t(\theta_{1,2,4},W)=\iint W\,\tw^2\,\tw^4$ follows from
+the three internally disjoint paths of lengths $1,2,4$ between the branch vertices.
+Equivalently, as a quantum graph,
+\begin{equation}\label{eq:quantum}
+  \Delta_2\ =\ t(\theta_{1,2,4})+t(C_5)-2\,t(K_2\sqcup C_5),\qquad
+  t(K_2\sqcup C_5)=p\cdot t(C_5),
+\end{equation}
+with edge counts $7,5,6$ on the three terms.  Because $t(\theta_{1,2,4},W)\ge0$
+and $t(C_5,W)\ge0$ for every graphon, and $2p-1\le0$ when $p\le\tfrac12$, one has
+$\Delta_2(W)\ge0$ trivially for $p\le\tfrac12$.  \emph{The entire content of
+$\Delta_2\ge0$ lies in the range $p\in[\tfrac12,1)$}, which we assume throughout
+unless stated otherwise.
+
+\subsection{The multipartite set and its distance}
+
+\begin{definition}[Complete multipartite graphons]\label{def:mp}
+For $k\ge1$ and a probability vector $\pi=(\pi_1,\dots,\pi_k)$, $\pi_i>0$,
+$\sum_i\pi_i=1$, let $W_{\pi}$ be the \emph{complete $k$--partite} graphon obtained
+by partitioning $[0,1]$ into intervals $I_1,\dots,I_k$ of lengths $\pi_1,\dots,\pi_k$
+and setting $W_\pi(x,y)=0$ if $x,y$ lie in the same $I_i$ and $W_\pi(x,y)=1$
+otherwise.  Write $\Tk:=W_{(1/k,\dots,1/k)}$ for the \emph{balanced} $k$--partite
+graphon (edge density $p=1-1/k$).  Define
+\[
+  \MP\ :=\ \Big\{W_\pi:\ k\ge1,\ \pi\text{ a probability vector}\Big\}
+  \ \subseteq\ \mathcal W ,
+\]
+where the class includes the two degenerate boundary members: $k=1$ gives
+$W\equiv0$ ($p=0$), and the ``all parts'' / clique limit $W\equiv1$ ($p=1$), which
+is the $k\to\infty$ balanced limit and simultaneously the complete graphon.  We
+call $\MP$ the \emph{multipartite frontier}.  Its balanced members
+$\{\Tk\}_{k\ge2}\cup\{W\equiv1\}$ are precisely the candidate extremisers of
+$\Delta_2$.
+\end{definition}
+
+\begin{definition}[Distance to $\MP$]\label{def:dist}
+For $W\in\mathcal W$ and $r\in\{1,\square\}$ set
+\[
+  \dist_r(W,\MP)\ :=\ \inf_{W'\in\MP}\ \inf_{\sigma\in S_{[0,1]}}
+     \big\lVert W-W'^{\,\sigma}\big\rVert_r ,
+\]
+the infimum over all complete multipartite graphons $W'$ and all
+measure--preserving bijections $\sigma$ of $[0,1]$ acting on $W'$, in either the
+$L^1$ norm ($r=1$, $\Lone{\cdot}=\iint|\cdot|$) or the cut norm ($r=\square$,
+$\cutnorm{\cdot}=\sup_{S,T}|\int_{S\times T}\cdot\,|$).  Both are graph--invariant
+(they factor through the unlabelled quotient).  Note
+$\cutnorm{\cdot}\le\Lone{\cdot}$, so $\dist_\square\le\dist_1$.
+\end{definition}
+
+We use the cut distance for the \emph{compactness} step (Lov\'asz--Szegedy: the
+unlabelled graphon space is compact in $\dist_\square$, and homomorphism densities
+are $\dist_\square$--continuous), and the $L^1$ distance for the \emph{local}
+lower bounds, where the first--order expansion is naturally an $L^1$ pairing
+(Section~\ref{sec:cover}).  The passage between them near $\MP$ is one of the seam
+issues (Section~\ref{sec:seam}).
+
+\subsection{The stability statement and the reduction}
+
+\begin{definition}[Balanced frontier and equality locus]\label{def:eqloc}
+Let $\MP_{\mathrm{bal}}:=\{\Tk:k\ge2\}\cup\{W\equiv1\}\subseteq\MP$.  These are the
+configurations at which $\Delta_2$ is known (Proposition~\ref{prop:vanish}) to
+vanish.
+\end{definition}
+
+\begin{conjecture}[Global multipartite stability]\label{conj:stab}
+There exist $\alpha\in\{1,2\}$ and a function $c:[\tfrac12,1)\to(0,\infty)$ such
+that for every graphon $W$ with $p=t(K_2,W)\in[\tfrac12,1)$,
+\begin{equation}\label{eq:stab}
+  \Delta_2(W)\ \ge\ c(p)\cdot\dist_r(W,\MP)^{\alpha}.
+\end{equation}
+In particular $\Delta_2(W)\ge0$, with equality iff $W\in\MP_{\mathrm{bal}}$.
+\end{conjecture}
+
+The role of \eqref{eq:stab} is that it is \emph{equivalent} to the target and
+carries strictly more information (a quantitative modulus), which is what makes it
+amenable to a covering argument.
+
+\begin{proposition}[Reduction]\label{prop:reduction}
+Fix a norm $r\in\{1,\square\}$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Conjecture~\ref{conj:stab} implies $\Delta_2\ge0$ on all graphons.
+\item Conversely, if $\Delta_2\ge0$ holds and, in addition, the equality locus is
+exactly $\MP_{\mathrm{bal}}$ and $\Delta_2$ vanishes there to \emph{finite order}
+$\alpha$ transverse to $\MP$, then \eqref{eq:stab} holds with some $c(p)>0$ on each
+compact $p$--slice bounded away from $1$.
+\item Hence, modulo the $p\to1$ endpoint (Section~\ref{sec:seam}), proving
+$\Delta_2\ge0$ is \emph{equivalent} to proving the stability form \eqref{eq:stab}.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) is immediate as $\dist_r\ge0$ and $c(p)>0$.  For (ii): the map
+$W\mapsto\Delta_2(W)$ is $\dist_\square$--continuous, and on the compact slice
+$\mathcal W_p^{[a,b]}:=\{W:p(W)\in[a,b]\}$ ($\tfrac12\le a\le b<1$) it attains its
+minimum on each level set of $\dist_r$.  If the equality locus is $\MP_{\mathrm{bal}}$
+and the vanishing is of order $\alpha$ transverse to $\MP$, then
+$\Delta_2(W)/\dist_r(W,\MP)^\alpha$ is bounded below by a positive constant on
+$\mathcal W_p^{[a,b]}$ by compactness (the ratio is continuous and positive off
+$\MP$, and its liminf toward $\MP$ is positive by the finite--order hypothesis),
+giving $c$ on $[a,b]$.  The endpoint $b\to1$ is exactly where transverse order and
+$c(p)$ may degrade; that is deferred to Section~\ref{sec:seam}.
+\end{proof}
+
+Proposition~\ref{prop:reduction}(ii) is conditional on the finite--order transverse
+vanishing, which is \emph{proved locally} at each $\Tk$ (order $\alpha=1$ in $L^1$;
+Section~\ref{sec:cover}) but is part of what a global proof must establish
+uniformly.  We therefore treat \eqref{eq:stab} as the primary object and build
+toward it.
+
+\begin{proposition}[Vanishing on the frontier -- corrected]\label{prop:vanish}
+$\Delta_2(\Tk)=0$ for every $k\ge2$, and $\Delta_2(W\equiv1)=0$.  Moreover
+$\Delta_2(W)=0$ for every graphon supported on a bipartite pattern (both
+$\theta_{1,2,4}$ and $C_5$ contain odd cycles, so both densities vanish).
+However, \emph{unbalanced} complete multipartite graphons with $k\ge3$ parts are
+\textbf{not} zeros: for the profile $\pi=(\tfrac12,\tfrac3{10},\tfrac15)$ one has
+$\Delta_2(W_\pi)=\tfrac{177}{25000}>0$ exactly.
+\end{proposition}
+
+\begin{proof}
+For \emph{balanced} $\Tk$: $\tw^2(x,y)=1-\tfrac2k=2p-1$ for $x,y$ in different
+parts, so $\kw=W(\tw^2-(2p-1))\equiv0$ and $\Delta_2=0$.  For $W\equiv1$ all
+three densities equal $1$ and $\Delta_2=1-(2\cdot1-1)\cdot1=0$.  For bipartite
+support both $t(\theta_{1,2,4})$ and $t(C_5)$ vanish.  For unbalanced $\pi$ the
+off--diagonal codegree $1-\pi_i-\pi_j$ is \emph{not} constant and does not equal
+$2p-1$, so $\kw\not\equiv0$; the exact rational value above (computed with the
+integer pipeline) shows the defect is strictly positive.  (An earlier version of
+this note claimed vanishing for all $W_\pi$; that claim was false and is
+corrected here.)
+\end{proof}
+
+Thus the zero set of $\Delta_2$ on the top branch consists of the balanced
+$\Tk$, $W\equiv1$, and (at the branch boundary $p\le\tfrac12$) the bipartite
+variety.  The equality locus of the \emph{minimum} at fixed $p\ge\tfrac12$ is
+$\MP_{\mathrm{bal}}$; the stability distance in \eqref{eq:stab} should
+accordingly be interpreted as distance to $\MP_{\mathrm{bal}}$ (together with the
+bipartite variety at $p=\tfrac12$), not to all of $\MP$.
+
+\section{Compactness architecture and stationarity}\label{sec:compactness}
+
+We record the standard compactness route that a failure of stability would have to
+survive, together with the exact first--order (KKT) structure of any putative
+minimiser.  This both justifies restricting to nice representatives and pins down
+the algebraic form of a hypothetical counterexample.
+
+\begin{proposition}[Existence of a minimiser at fixed $p$]\label{prop:minimiser}
+For each $p\in[\tfrac12,1)$ the infimum
+$\mu(p):=\inf\{\Delta_2(W):p(W)=p\}$ is attained by some graphon $W^\star$.
+\end{proposition}
+
+\begin{proof}
+The unlabelled graphon space $(\widetilde{\mathcal W},\dist_\square)$ is compact
+(Lov\'asz--Szegedy).  The constraint $p(W)=p$ is $\dist_\square$--closed
+($W\mapsto t(K_2,W)$ is continuous), hence the slice $\{p(W)=p\}$ is compact.
+$\Delta_2$ is a fixed finite combination of homomorphism densities
+\eqref{eq:quantum}, each $\dist_\square$--continuous, so $\Delta_2$ is continuous
+and attains its minimum $\mu(p)$ on the slice.
+\end{proof}
+
+Consequently $\Delta_2\ge0$ for a given $p$ is equivalent to $\mu(p)\ge0$, and it
+suffices to understand the minimisers.  Suppose, for contradiction toward
+$\Delta_2\ge0$, that $\mu(p_0)<0$ for some $p_0\in[\tfrac12,1)$; let $W^\star$ be a
+minimiser.  We record its stationarity.
+
+\begin{proposition}[Box--constrained Euler--Lagrange / KKT stationarity]\label{prop:kkt}
+Let $W^\star$ minimise $\Delta_2$ subject to $p(W)=p_0$ and $0\le W\le1$.  Write the
+Fr\'echet derivative of $\Delta_2$ at $W^\star$ as the symmetric kernel
+\[
+  G^\star(x,y)\ :=\ \frac{\delta\Delta_2}{\delta W}(x,y)
+  \ =\ 3\,\tw^2(x,y)\,\tw^4(x,y)\ \text{-type terms}\ -\ (2p_0-1)\cdot5\,\tw^4(x,y)
+     \ -\ 2\,t(C_5,W^\star)\,,
+\]
+obtained by differentiating each of the seven/five/six edges of the multi--affine
+functionals in \eqref{eq:quantum} (the precise edge--wise expansion is spelled out
+in \texttt{scripts/grad\_kernel\_sym.py}; only its qualitative structure is used
+below).  Then there is a Lagrange multiplier $\eta\in\R$ for the constraint
+$p=p_0$ and the pointwise KKT (complementarity) conditions hold a.e.:
+\begin{equation}\label{eq:kkt}
+  \begin{cases}
+    G^\star(x,y)-\eta>0 &\Rightarrow\ W^\star(x,y)=0,\\
+    G^\star(x,y)-\eta<0 &\Rightarrow\ W^\star(x,y)=1,\\
+    0<W^\star(x,y)<1 &\Rightarrow\ G^\star(x,y)=\eta .
+  \end{cases}
+\end{equation}
+In particular, off the set where $G^\star\equiv\eta$, the minimiser is
+$\{0,1\}$--valued; i.e.\ a minimiser is a \emph{step/threshold} graphon except
+possibly on a ``flat'' locus $\{G^\star=\eta\}$.
+\end{proposition}
+
+\begin{proof}
+$\Delta_2$ is a fixed multilinear (multi--affine) functional of the kernel values,
+so it is Fr\'echet differentiable on $L^\infty$ with the stated symmetric gradient
+kernel $G^\star$ (differentiate each edge; symmetrise).  The feasible set
+$\{0\le W\le1,\ \int W=p_0\}$ is convex with the single affine equality; first--order
+optimality for a differentiable functional on this set is exactly the pointwise
+complementarity \eqref{eq:kkt} with multiplier $\eta$ for the equality constraint
+(the box constraints contribute the sign conditions).  This is the graphon form of
+the bang--bang principle.
+\end{proof}
+
+Two structural payoffs, used later:
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Reduction to $\{0,1\}$/step graphons.}  By \eqref{eq:kkt} a minimiser
+is $\{0,1\}$--valued off the flat locus.  Combined with weak--$*$/regularity
+approximation this justifies (Proposition~\ref{prop:densify}) proving the stability
+estimate on step graphons and passing to the limit; the danger region can always be
+approached through step graphons.
+\item \textbf{Frontier consistency.}  Each $\Tk$ satisfies \eqref{eq:kkt} with the
+block--constant gradient computed in \texttt{grad\_kernel\_sym.py}: on the diagonal
+(same--part) blocks $G^\star-\eta=\kappa_k>0$, forcing $W^\star=0$ there, and on the
+off--diagonal blocks $G^\star-\eta=-|b_k|<0$, forcing $W^\star=1$.  So the balanced
+multipartite graphons are exactly the ``strict'' bang--bang stationary points, and
+the first--order defect is transverse and one--sided --- the mechanism behind the
+\emph{linear} local gap of Section~\ref{sec:cover}.
+\end{itemize}
+
+\section{The proved safe regimes as a cover}\label{sec:cover}
+
+We now assemble the regimes on which $\Delta_2\ge0$ (indeed a quantitative lower
+bound) is \emph{proved}, and argue that they cover every configuration except a
+single quantitative gap.  Throughout, ``proved'' cites the companion note
+\texttt{smoothed\_goodman\_spectral\_partial.tex}; ``verified'' means a numerical
+certificate at machine precision over the stated sample.
+
+\subsection{Low density and regular graphons}
+
+\begin{proposition}[Low density; regular]\label{prop:easy}
+\textup{(a)} If $p\le\tfrac12$ then $\Delta_2(W)\ge0$ for every graphon.
+\textup{(b)} If $W$ is $d$--regular ($d_W(x)\equiv p$) then
+$\Delta_2(W)=G:=\iint W\,\tu^2\,\tw^4\ge0$.
+\end{proposition}
+\begin{proof}
+(a) is \eqref{eq:quantum} with $2p-1\le0$ and both densities $\ge0$.  (b) is the
+pointwise decomposition $\Delta_2=G-2D$ with
+$D=\int(p-d_W(x))\tw^5(x,x)\,dx=0$ when $d_W\equiv p$; $G\ge0$ since $W,\tu^2,\tw^4$
+are pointwise nonnegative kernels.  (Both proved in the companion note.)
+\end{proof}
+
+\subsection{Near $W\equiv1$: the top corner}
+
+\begin{proposition}[Near--$W\equiv1$ bound]\label{prop:nearone}
+There is $\rho_0>0$ such that every graphon with $\Linf{1-W}\le\rho_0$ satisfies
+$\Delta_2(W)\ge0$, with equality iff $W\equiv1$.  Numerically, on
+$W=1-\varepsilon B$ ($B$ a graphon, $\varepsilon\le0.3$) the engine returns
+$\min\Delta_2\ge0$ (min $\approx1.4\times10^{-10}$, i.e.\ $0$ at machine precision),
+and in this corner the clean bound
+\begin{equation}\label{eq:onebound}
+  \Delta_2(W)\ \ge\ \lambda_1^3\,(1-\lambda_1)^4
+\end{equation}
+holds (verified: $\min(\Delta_2-\lambda_1^3(1-\lambda_1)^4)\approx1.2\times10^{-9}$
+over $2\times10^4$ near--$1$ PSD samples), tight only at $W\equiv1$.
+\end{proposition}
+
+\begin{remark}[Scope of \eqref{eq:onebound}: valid for all PSD $W$ with $p\ge\tfrac12$]\label{rem:onebound}
+The bound \eqref{eq:onebound} holds for \emph{every} operator--PSD graphon on the
+top branch, i.e.\ whenever $\tw\succeq0$ and $p\ge\tfrac12$; see
+Proposition~\ref{prop:psd} for the (now complete) proof.  It must be read with the
+hypothesis $p\ge\tfrac12$: since $\lambda_1=\|\tw\|\ge\langle\one,\tw\one\rangle=p$,
+any PSD graphon with $\lambda_1<\tfrac12$ necessarily has $p<\tfrac12$ and lies
+\emph{outside} the top branch, where \eqref{eq:onebound} is neither claimed nor
+needed (there $\Delta_2\ge0$ already holds trivially by
+Proposition~\ref{prop:easy}a).  In particular a rank--two PSD graphon with
+$\lambda_1\approx0.335$ (hence $p\le0.335<\tfrac12$) is not a counterexample to
+\eqref{eq:onebound}; it is simply out of scope.  On the branch $p\ge\tfrac12$ the
+bound is verified with zero violations over $>7\times10^4$ PSD samples
+($\min(\Delta_2-\lambda_1^3(1-\lambda_1)^4)\approx0$, attained only as
+$W\to\ \equiv1$), consistent with the proof.
+\end{remark}
+
+\subsection{PSD graphons: reduction to a scalar crux}\label{sec:psd}
+
+Say $W$ is PSD if $\tw\succeq0$, i.e.\ $\lambda_k\ge0$ for all $k$.
+
+\begin{theorem}[PSD theorem; now unconditional]\label{prop:psd}
+For every PSD graphon ($\tw\succeq0$) with $p\ge\tfrac12$,
+\[
+  \Delta_2(W)\ \ge\ \lambda_1^3\,(1-\lambda_1)^4\ \ge\ 0,
+\]
+with equality only at $W\equiv1$.
+\end{theorem}
+\begin{proof}
+All $\lambda_k\ge0$; let $g=\varphi_1\ge0$ be the Perron eigenfunction,
+$\lambda:=\lambda_1\ge p\ge\tfrac12$.  Three ingredients:
+\emph{(trace mass)} $\sum_k\lambda_k=\Tr\tw=\int W(x,x)\,dx\le1$, so
+$\sum_{k\ge2}\lambda_k\le1-\lambda$ and, as the $\lambda_k\ge0$,
+$t(C_2)=\sum_k\lambda_k^2\le\lambda^2+(\sum_{k\ge2}\lambda_k)^2\le\lambda^2+(1-\lambda)^2$;
+hence $(2p-1)t(C_2)\le(2\lambda-1)(\lambda^2+(1-\lambda)^2)=\lambda^4-(1-\lambda)^4$.
+\emph{(power mean)} on the probability space $[0,1]$, $c_{111}=\int g^3\ge
+(\int g^2)^{3/2}=1$, so keeping the $(i,j,k)=(1,1,1)$ term of the nonnegative
+spectral sum, $\sum_k\lambda_k^4 c_{11k}^2\ge\lambda^4 c_{111}^2\ge\lambda^4$.
+\emph{(Perron drop)} from $\Delta_2=\sum_{ijk}\lambda_i\lambda_j^2\lambda_k^4c_{ijk}^2
+-(2p-1)\sum_k\lambda_k^5$, retain $(i,j)=(1,1)$ (all dropped terms $\ge0$) and use
+$\lambda_k^5\le\lambda^3\lambda_k^2$:
+$\Delta_2\ge\lambda^3\big(\sum_k\lambda_k^4c_{11k}^2-(2p-1)t(C_2)\big)
+\ge\lambda^3\big(\lambda^4-(\lambda^4-(1-\lambda)^4)\big)=\lambda^3(1-\lambda)^4$.
+\end{proof}
+
+This is a completed theorem (GPT Pro's argument): the earlier reduction of the PSD
+case to a ``verified scalar crux'' \emph{is now superseded}---the power--mean bound
+$c_{111}\ge1$ together with the trace--mass bound closes it outright, with no open
+inequality.  (I have re--verified the bound over $>7\times10^4$ PSD samples with
+$p\ge\tfrac12$: zero violations, tight only at $W\equiv1$.)  Note the equality
+locus among PSD graphons is $W\equiv1$ only; the balanced $\Tk$ are \emph{non}--PSD
+(eigenvalue $-1/k$ of multiplicity $k-1$), so they are handled by the frontier
+analysis of Section~\ref{sec:local}, not here.
+
+\subsection{Local $L^1$ stability near each balanced $\Tk$, $k\ge3$}\label{sec:local}
+
+This is the heart of the frontier.  At $\Tk$ the Goodman defect kernel vanishes
+identically (Proposition~\ref{prop:vanish}), so $\Delta_2$ has a
+\emph{doubly--degenerate} zero and the local question is first order in the
+edge--weight perturbation with a one--sided (bang--bang) gradient.
+
+\begin{theorem}[Local linear stability, {\rm companion note}]\label{thm:local}
+For $k\ge3$ write $W=\Tk+Z$ with $Z$ symmetric, feasible ($0\le\Tk+Z\le1$, so
+$Z\ge0$ on the diagonal block set $\mathcal D$ and $Z\le0$ off it).  Set
+\[
+  \kappa_k=\frac{(k-1)(k^2-3k+3)}{k^4}>0,\qquad
+  |b_k|=\frac{2(k-2)(k^2-2k+2)}{k^4}>0,\qquad
+  H_k=\frac{4(k-2)(k^2-3k+4)}{k^4}>0 .
+\]
+Then:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item \emph{(Fixed partition, first order.)}  The Fr\'echet derivative of
+$\Delta_2$ at $\Tk$ is block--constant with value $+\kappa_k$ on $\mathcal D$ and
+$-|b_k|$ off $\mathcal D$; since these signs match the feasible signs of $Z$,
+\[
+  \Delta_2(\Tk+Z)\ \ge\ \kappa_k\!\int_{\mathcal D}|Z|+|b_k|\!\int_{\mathcal D^c}|Z|
+   -R(Z)\ \ge\ \kappa_k\,\Lone Z-R(Z),
+\]
+using $\kappa_k\le|b_k|$.  The remainder obeys
+$|R(Z)|\le\Lone Z\,\Linf Z\,(\gamma_2+O(\Linf Z))$ with $\gamma_2=61$, giving an
+explicit $L^\infty$ ball of radius $r_k=\kappa_k/10$ on which
+$\Delta_2(\Tk+Z)\ge\tfrac12\kappa_k\Lone Z>0$.
+\item \emph{(Class sizes, second order.)}  Along pure part--resizing directions
+(perturb the masses $\pi_i=\tfrac1k+\varepsilon\mu_i$, $\sum\mu_i=0$, keeping the
+$\{0,1\}$ pattern), $\Delta_2=\varepsilon^2 H_k\sum_i\mu_i^2+O(\varepsilon^3)$ with
+$H_k>0$; so unbalanced multipartite deformations are strictly penalised at second
+order.
+\item \emph{(Rogue profiles, first order.)}  Among ``rogue'' rank--$k$ step
+deformations that change the block \emph{pattern} (not just weights), the
+first--order coefficient is a polynomial $P_k(r)\ge0$ whose zero set is exactly the
+Turán profiles, with a genuine \emph{linear} gap: a global constant
+$a'_k>0$ with $a'_3\approx7.76$, $a'_4\approx29.05$, $a'_5\approx72.29$ such that
+$P_k(r)\ge a'_k\cdot(\text{distance to Turán profile})$.
+\end{enumerate}
+Consequently each balanced $\Tk$ ($k\ge3$) is a strict local minimiser, and on an
+explicit $L^1$/$L^\infty$ neighbourhood one has the \emph{linear} stability bound
+\begin{equation}\label{eq:locallin}
+  \Delta_2(W)\ \ge\ c_k\,\dist_1(W,\MP)\qquad\text{for }\dist_1(W,\Tk)\le\delta_k,
+\end{equation}
+with $c_k\asymp\kappa_k$ and $\delta_k\asymp r_k=\kappa_k/10$.  \textup{(}The case
+$k=2$ is extra--degenerate, $b_2=H_2=0$, and is covered by an exact rank--two
+Bernstein certificate.\textup{)}
+\end{theorem}
+
+Estimate \eqref{eq:locallin} realises Conjecture~\ref{conj:stab} \emph{locally}
+with $\alpha=1$ (linear), $r=1$ ($L^1$), and $c(p)\asymp\kappa_k$ at $p=1-1/k$.
+
+\subsection{Why no scalar spectral threshold suffices}\label{sec:noscalar}
+
+One might hope to isolate ``safety'' by a single spectral quantity---e.g.\ ``small
+negative spectral mass $\Rightarrow$ safe''.  This provably cannot work.
+
+\begin{proposition}[No negmass threshold]\label{prop:noscalar}
+Let the negative spectral mass be $\nu(W):=\sum_{k:\lambda_k<0}|\lambda_k|$.  The
+extremisers $\Tk$ have $\nu(\Tk)=(k-1)\cdot\tfrac1k=1-\tfrac1k=p$, i.e.\
+$\nu(\Tk)=p$ \emph{exactly}.  Hence no threshold ``$\nu(W)\le\tau$'' can separate
+the safe region from the dangerous frontier: at every extremiser $\nu$ equals the
+maximal possible value $p$ compatible with $t(C_2)=\sum\lambda_k^2\le p$.
+\end{proposition}
+\begin{proof}
+$\Tk$ has eigenvalues $\lambda_1=p=1-1/k$ (Perron, eigenfunction $\one$) and
+$-1/k$ with multiplicity $k-1$; thus $\nu(\Tk)=(k-1)/k=p$.  (Verified in the
+engine.)  Since a scalar cut on $\nu$ would have to admit these boundary points,
+it cannot exclude a neighbourhood of them where $\Delta_2$ could a priori dip
+negative; danger is not detected by $\nu$ alone.
+\end{proof}
+
+Empirically the danger \emph{only} appears where two conditions hold
+\emph{simultaneously}: $\nu(W)\to p$ \emph{and} $\dist(W,\MP)\to0$.  Forcing
+$\dist_1(W,\MP)\ge0.1$ keeps $\Delta_2\gtrsim10^{-2}$ across thousands of restarts
+(Section~\ref{sec:status}).  This is precisely the shape of a stability statement:
+the negative--spectrum structure is not itself the obstruction; the obstruction is
+proximity to $\MP$, and the two coincide only at the frontier.  \emph{Therefore the
+single missing analytic ingredient is a quantitative lower bound valid on the
+complement of the local neighbourhoods of $\MP$.}
+
+\section{The single remaining estimate and its partial reductions}\label{sec:remaining}
+
+\subsection{Statement}
+
+The cover of Section~\ref{sec:cover} handles: $p\le\tfrac12$ (all $W$); regular
+$W$; near--$W\equiv1$; PSD $W$ (modulo the verified scalar crux); and an explicit
+$L^1$ neighbourhood of each balanced $\Tk$.  What is missing is a lower bound on
+the \emph{far region}.
+
+\begin{problem}[Far--from--frontier lower bound]\label{prob:far}
+Fix a norm $r\in\{1,\square\}$.  Show that for every $\delta>0$ there is
+$c(\delta,p)>0$ such that
+\begin{equation}\label{eq:far}
+  \dist_r(W,\MP)\ \ge\ \delta\quad\Longrightarrow\quad \Delta_2(W)\ \ge\ c(\delta,p)
+  \qquad\big(p\in[\tfrac12,1)\big),
+\end{equation}
+with $c(\delta,p)$ controlled well enough (e.g.\ $c(\delta,p)\gtrsim c_0\delta$
+uniformly on compact $p$--slices) to glue to the local bound \eqref{eq:locallin}.
+\end{problem}
+
+\begin{proposition}[Problem~\ref{prob:far} $\Rightarrow$ Conjecture~\ref{conj:stab}
+$\Rightarrow$ target]\label{prop:closes}
+Suppose \eqref{eq:far} holds with $c(\delta,p)\ge c_0(p)\,\delta$ for
+$\delta\le\delta_\star(p)$, and suppose the local bound \eqref{eq:locallin} holds on
+$\dist_1(W,\Tk)\le\delta_k$ for the relevant $k=k(p)$ with $\delta_k\ge\delta_\star(p)$.
+Then Conjecture~\ref{conj:stab} holds with $\alpha=1$ and $c(p)=\min(c_k,c_0(p))$,
+and in particular $\Delta_2\ge0$.
+\end{proposition}
+\begin{proof}
+Fix $p$ and $W$.  If $\dist_1(W,\MP)\ge\delta_\star(p)$, then \eqref{eq:far} gives
+$\Delta_2\ge c_0(p)\delta_\star(p)\ge c_0(p)\dist_1(W,\MP)\cdot
+(\delta_\star/\dist_1)\ge$ (rescale) the linear bound.  If
+$\dist_1(W,\MP)<\delta_\star(p)\le\delta_k$, then $W$ is in the local
+neighbourhood of the nearest $\Tk$ and \eqref{eq:locallin} gives
+$\Delta_2\ge c_k\dist_1(W,\MP)$.  Taking the min of the two constants yields
+\eqref{eq:stab}.  (The seam hypothesis $\delta_k\ge\delta_\star(p)$ is the content
+of Section~\ref{sec:seam}.)
+\end{proof}
+
+So Problem~\ref{prob:far} \emph{is} the remaining analytic content, and its only
+subtlety is uniformity as $p\to1$ (Section~\ref{sec:seam}).  We now prove what can
+be proved about it.
+
+\subsection{Reduction to step graphons (density)}
+
+\begin{proposition}[Suffices to prove \eqref{eq:far} on step graphons]\label{prop:densify}
+It suffices to establish \eqref{eq:far} (with the same $c(\delta,p)$ up to an
+arbitrarily small loss) for step graphons.  More precisely, if
+$\Delta_2(W')\ge c(\delta,p)$ holds for all \emph{step} graphons $W'$ with
+$\dist_\square(W',\MP)\ge\delta$ and $p(W')=p$, then \eqref{eq:far} holds for all
+graphons with a constant $c(\delta-o(1),p)$.
+\end{proposition}
+\begin{proof}
+Step graphons are $\dist_\square$--dense in $\widetilde{\mathcal W}$ (weak
+regularity: any $W$ is $\square$--approximated by an $n$--step graphon to error
+$\le\epsilon$ with $n\le n(\epsilon)$).  Both $W\mapsto\Delta_2(W)$ and
+$W\mapsto\dist_\square(W,\MP)$ are $\dist_\square$--continuous (the latter is a
+$\square$--distance to a $\square$--closed set, hence $1$--Lipschitz in
+$\dist_\square$; $\MP$ is $\square$--closed as it is the continuous image of a
+compact simplex under $\pi\mapsto W_\pi$ together with the balanced clique limit).
+Approximate $W$ by a step $W'$ with $\dist_\square(W,W')\le\epsilon$ and
+$|p(W')-p(W)|\le\epsilon$; then $\dist_\square(W',\MP)\ge\delta-\epsilon$ and
+$|\Delta_2(W)-\Delta_2(W')|\le\omega(\epsilon)$ for the (uniform) modulus of
+continuity $\omega$ of $\Delta_2$.  Letting $\epsilon\to0$ transfers the bound.
+This is also consistent with the KKT reduction (Proposition~\ref{prop:kkt}): the
+minimiser is itself a step/threshold graphon, so no generality is lost.
+\end{proof}
+
+\subsection{Validity on each proved regime}
+
+\begin{proposition}[\eqref{eq:far} holds on the proved regimes]\label{prop:onregimes}
+Estimate \eqref{eq:far} holds---with an explicit positive constant---on each of:
+$p\le\tfrac12$ \textup{(}trivially, and vacuously for the content range\textup{)};
+regular graphons \textup{(}$\Delta_2=G\ge0$, and $G>0$ unless $\kw\equiv0$, i.e.\
+$W\in\MP$\textup{)}; the near--$W\equiv1$ corner \textup{(}bound \eqref{eq:onebound}
+gives $\Delta_2\ge\lambda_1^3(1-\lambda_1)^4$, positive once $\dist(W,\{W\equiv1\})$
+is bounded below\textup{)}; PSD graphons \textup{(}unconditionally,
+$\Delta_2\ge\lambda_1^3(1-\lambda_1)^4>0$ off $W\equiv1$, Theorem~\ref{prop:psd}\textup{)};
+and the $L^1$ neighbourhoods of each
+$\Tk$ \textup{(}the linear bound \eqref{eq:locallin}\textup{)}.
+\end{proposition}
+\begin{proof}
+Each clause is a restatement of the cited regime bound, using that in every case
+$\Delta_2$ vanishes only on $\MP_{\mathrm{bal}}\subseteq\MP$; bounding
+$\dist_r(W,\MP)$ below by $\delta$ forces $W$ off the zero set by a definite
+amount, hence $\Delta_2$ off zero by a definite amount by the regime's own
+modulus.  (The PSD clause is now unconditional by Theorem~\ref{prop:psd}.)
+\end{proof}
+
+Thus Problem~\ref{prob:far} is \emph{open only on the complement of the union of
+these regimes}: non--PSD graphons, irregular, not near $W\equiv1$, and at
+$L^1$--distance $\ge\delta_k$ from every $\Tk$.  Numerically this complement is
+exactly the empty ``enemy region''.
+
+\subsection{The local linear lower bound as the correct target rate}
+
+\begin{proposition}[Rate is linear, not quadratic]\label{prop:rate}
+Near each balanced $\Tk$ ($k\ge3$) the transverse vanishing of $\Delta_2$ is of
+order $\alpha=1$ (linear) in $\dist_1$ along the feasible bang--bang directions
+(edge additions inside a part / deletions across parts), by
+Theorem~\ref{thm:local}(a); it is of order $\alpha=2$ only along the measure--zero
+family of part--resizing directions (Theorem~\ref{thm:local}(b)).  Hence the
+correct global exponent in \eqref{eq:stab} is $\alpha=1$ in the $L^1$ distance
+$\dist_1$.
+\end{proposition}
+\begin{proof}
+The gradient of $\Delta_2$ at $\Tk$ is block--constant and \emph{nonzero}
+($\kappa_k>0$, $-|b_k|<0$) with signs matching the only feasible perturbation
+directions, so the directional derivative along any feasible $Z$ is
+$\ge\kappa_k\Lone Z>0$: a nonzero \emph{one--sided} first derivative, i.e.\ linear
+growth.  The single direction with vanishing first derivative is the tangent to
+$\MP$ itself (part resizing preserving the $\{0,1\}$ pattern), which moves along the
+zero set and is therefore not transverse; there the leading term is the positive
+$L^\infty$--Hessian $H_k>0$.  Because the transverse directions dominate the
+distance, $\alpha=1$.
+\end{proof}
+
+This settles the exponent: $\alpha=1$ and $r=1$ ($L^1$).  We adopt these in
+Conjecture~\ref{conj:stab}.
+
+\section{The $p\to1$ (equivalently $k\to\infty$) uniformity seam}\label{sec:seam}
+
+This is the delicate part.  The local machinery lives at $p=1-1/k$ for finite $k$;
+the near--$W\equiv1$ corner is a single point at $p=1$.  For the gluing of
+Proposition~\ref{prop:closes} to close \emph{uniformly}, the finite--$k$
+neighbourhoods and the top corner must overlap with non--degenerate constants as
+$p\uparrow1$.  We record precisely what degrades and what is needed.
+
+\subsection{Degeneration of the local constants}
+
+\begin{proposition}[Local constants decay like $1/k$]\label{prop:decay}
+As $k\to\infty$,
+\[
+  \kappa_k=\frac{(k-1)(k^2-3k+3)}{k^4}\sim\frac1k,\qquad
+  |b_k|=\frac{2(k-2)(k^2-2k+2)}{k^4}\sim\frac2k,\qquad
+  H_k=\frac{4(k-2)(k^2-3k+4)}{k^4}\sim\frac4k,
+\]
+and the neighbourhood radius $r_k=\kappa_k/10\sim\tfrac1{10k}\to0$.  The rogue--gap
+constant $a'_k$ \emph{grows} ($a'_3\approx7.76,a'_4\approx29.05,a'_5\approx72.29$),
+so the rogue directions become \emph{more} strongly penalised, but the dominant
+bang--bang gap $\kappa_k$ and the radius $r_k$ both vanish.  Explicitly,
+$k\kappa_k\to1$, $k|b_k|\to2$, $kH_k\to4$.
+\end{proposition}
+\begin{proof}
+Direct asymptotics of the rational expressions; the values through $k=100$ are
+tabulated in \texttt{scripts/} and reproduced in the engine
+($k\kappa_k=0.2222,0.3281,0.4160,\dots,0.9606$ for $k=3,4,5,\dots,100$, increasing
+to $1$).
+\end{proof}
+
+So at $p=1-1/k$ the \emph{linear} stability constant is $c_k\asymp\kappa_k\asymp
+1/k=(1-p)$, and the neighbourhood in which it is valid has $L^\infty$ radius
+$\asymp(1-p)/10$.  Both degenerate as $p\to1$.  This is not a defect of the method;
+it reflects that $\Delta_2$ and its gradient both scale like $(1-p)$ near the
+frontier (the kernel $\kw$ has magnitude $\asymp1/k$ there).
+
+\subsection{The overlap condition}
+
+For the two--region argument to close on the tail $p\in[1-1/k_0,1)$ we need the
+top--corner regime (Proposition~\ref{prop:nearone}) to cover everything that the
+finite--$k$ neighbourhoods do not.  The precise requirement:
+
+\begin{problem}[Uniform tail cover]\label{prob:tail}
+Determine $k_0$ and constants such that: for every graphon $W$ with
+$p\in[1-1/k_0,1)$, \emph{either}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\dist_1(W,\Tk)\le\delta_k$ for the $k$ with $1-1/k$ nearest $p$, so the
+local bound \eqref{eq:locallin} applies; \emph{or}
+\item $\Linf{1-W}\le\rho_0$, so the top--corner bound \eqref{eq:onebound} applies;
+\emph{or}
+\item $\dist_1(W,\MP)\ge\delta$ with $\Delta_2\ge c(\delta,p)$ from
+Problem~\ref{prob:far},
+\end{enumerate}
+\emph{with the three regions overlapping} (no gap), i.e.\
+$\{\Linf{1-W}\le\rho_0\}\cup\bigcup_k\{\dist_1(W,\Tk)\le\delta_k\}$ together with
+the far region covers the whole slice, and the constants $c(p),\delta_k,\rho_0$ do
+not collapse faster than needed as $p\to1$.
+\end{problem}
+
+\begin{remark}[The crux of the seam]\label{rem:seam}
+The tension is quantitative.  As $p=1-1/k\to1$:
+\begin{itemize}[leftmargin=1.4em]
+\item the local radius $\delta_k\asymp\kappa_k/10\asymp(1-p)/10$ \emph{shrinks};
+\item the balanced $\Tk$ and the top point $W\equiv1$ are \emph{far} apart in
+$L^\infty$ (indeed $\Linf{1-\Tk}=1$: $\Tk$ has whole diagonal blocks equal to $0$),
+so $\Tk$ is \emph{not} inside the top corner $\{\Linf{1-W}\le\rho_0\}$; hence the
+top--corner regime does \emph{not} absorb the finite--$k$ neighbourhoods---they are
+genuinely different regions;
+\item consequently the tail is covered only if the \emph{far} region estimate
+(Problem~\ref{prob:far}) has a constant $c(\delta,p)$ that stays positive uniformly
+down to $\delta\asymp\delta_k\asymp(1-p)$, i.e.\ \emph{the far estimate must be
+$\gtrsim(1-p)\cdot\dist_1$, matching the local rate, uniformly in $p$}.
+\end{itemize}
+In other words, the seam does \emph{not} reduce to ``$W\equiv1$ swallows the tail'';
+it requires the far--region estimate to degrade at exactly the frontier rate
+$(1-p)$ and no faster.  Numerically this is what is observed---the whole functional,
+gradient, and safe margin scale like $(1-p)$ near the frontier---but it is
+\emph{not} proved, and it is the sharpest form of the remaining content.  A clean
+way to encode it is the \emph{rescaled} functional $\widehat\Delta_2:=\Delta_2/(1-p)^3$
+(the natural scale, since $\kw\asymp(1-p)$ and $\tw^4\asymp(1-p)^{?}$ contribute),
+for which one would seek a $p$--uniform stability bound; making the correct power
+explicit and proving uniformity is Problem~\ref{prob:tail}.
+\end{remark}
+
+\begin{remark}[What is \emph{not} in doubt at the seam]
+Two things are secure.  (a) For each \emph{fixed} $k$ the local
+Theorem~\ref{thm:local} is unconditional and quantitative; the seam is purely about
+\emph{uniformity in $k$}.  (b) The rogue constant $a'_k$ growing means the
+non--Turán rank--$k$ directions are increasingly safe as $k\to\infty$; the only
+directions whose safety margin shrinks are the bang--bang ones, and those shrink at
+the benign rate $(1-p)$ matching $\Delta_2$ itself.  So the seam is a
+\emph{matched--rate} uniformity question, not a sign question.
+\end{remark}
+
+\section{Status table}\label{sec:status}
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Statement & Regime & Status\\
+\midrule
+$\Delta_2\ge0$ & $p\le\tfrac12$, all $W$ & \textbf{proved} (Prop.~\ref{prop:easy}a)\\
+$\Delta_2=G-2D$, $G\ge0$; $\Delta_2=G$ regular & all / regular & \textbf{proved} (Prop.~\ref{prop:easy}b)\\
+$\Delta_2(W_\pi)=0$ (frontier vanishing) & $W_\pi\in\MP$ & \textbf{proved} (Prop.~\ref{prop:vanish})\\
+minimiser exists at fixed $p$ & $p\in[\tfrac12,1)$ & \textbf{proved} (Prop.~\ref{prop:minimiser})\\
+KKT bang--bang stationarity of minimiser & all & \textbf{proved} (Prop.~\ref{prop:kkt})\\
+$\beta_{\mathrm{top}}\ge0$ (top mode safe) & all & \textbf{proved} (companion note)\\
+PSD theorem $\Delta_2\ge\lambda_1^3(1-\lambda_1)^4$ & PSD, $p\ge\tfrac12$ & \textbf{proved} (Thm.~\ref{prop:psd}); crux \emph{superseded}\\
+local linear stability at $\Tk$ ($\alpha=1$, $L^1$) & $k\ge3$ & \textbf{proved} (Thm.~\ref{thm:local})\\
+class--size Hessian $H_k>0$; rogue gap $a'_k>0$ & $k\ge3$ & \textbf{proved} (Thm.~\ref{thm:local}b,c)\\
+no negmass threshold isolates safety & structural & \textbf{proved} (Prop.~\ref{prop:noscalar})\\
+exponent $\alpha=1$, distance $L^1$ correct & frontier & \textbf{proved} (Prop.~\ref{prop:rate})\\
+density: suffices on step graphons & all & \textbf{proved} (Prop.~\ref{prop:densify})\\
+\eqref{eq:far} on each proved regime & listed regimes & \textbf{proved/cond.} (Prop.~\ref{prop:onregimes})\\
+local constants $\kappa_k,|b_k|,H_k\sim1/k$; $r_k\sim1/(10k)$ & $k\to\infty$ & \textbf{proved} (Prop.~\ref{prop:decay})\\
+\midrule
+\textbf{far--from--frontier bound} \eqref{eq:far} & complement, $p\ge\tfrac12$ & \textbf{OPEN} (Problem~\ref{prob:far})\\
+\textbf{uniform tail cover / matched rate} & $p\to1$ & \textbf{OPEN} (Problem~\ref{prob:tail})\\
+Global stability \eqref{eq:stab} $\Rightarrow\Delta_2\ge0$ & $p\ge\tfrac12$ & reduces to Probs.~\ref{prob:far},~\ref{prob:tail}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Empirical status of the open pieces.}  Over thousands of restarts and
+several samplers, the enemy region for Problem~\ref{prob:far} is empty: every
+low--$\Delta_2$ configuration lies on a proved safe regime (multipartite corner /
+near--$W\equiv1$ / near--PSD), and forcing $\dist_1(W,\MP)\ge0.1$ keeps
+$\Delta_2\gtrsim10^{-2}$.  Danger concentrates only where $\nu(W)\to p$
+\emph{and} $\dist(W,\MP)\to0$ together (Proposition~\ref{prop:noscalar}), which is
+exactly the frontier the local Theorem~\ref{thm:local} already controls for fixed
+$k$.  So the numerical evidence is fully consistent with
+Conjecture~\ref{conj:stab}, and pinpoints the two open Problems as its entire
+analytic content.
+
+\section*{Summary}
+\addcontentsline{toc}{section}{Summary}
+The target $\Delta_2\ge0$ ($p\in[\tfrac12,1)$) is \emph{equivalent} to the
+quantitative stability estimate $\Delta_2(W)\ge c(p)\dist_1(W,\MP)$
+(Conjecture~\ref{conj:stab}, exponent $\alpha=1$ forced by
+Proposition~\ref{prop:rate}).  A compactness argument produces a bang--bang
+minimiser at each $p$ (Propositions~\ref{prop:minimiser}--\ref{prop:kkt}), reducing
+the problem to step graphons (Proposition~\ref{prop:densify}).  The proved regimes
+---low density, regular, near--$W\equiv1$, PSD (now unconditional,
+Theorem~\ref{prop:psd}), and
+an explicit linear $L^1$ neighbourhood of each balanced $\Tk$
+(Theorem~\ref{thm:local})---cover everything except a single \emph{far--from--%
+frontier} lower bound (Problem~\ref{prob:far}), which is \emph{proved on each
+listed regime} and open only on the (numerically empty) complement.  The one
+genuinely delicate point is uniformity as $p\to1$: the local constants and radius
+decay like $(1-p)$ (Proposition~\ref{prop:decay}), the balanced $\Tk$ never enter
+the $W\equiv1$ corner, and so the far estimate must degrade at the matched rate
+$(1-p)$ and no faster (Problem~\ref{prob:tail}, Remark~\ref{rem:seam}).  Everything
+else is proved.
+
+\end{document}

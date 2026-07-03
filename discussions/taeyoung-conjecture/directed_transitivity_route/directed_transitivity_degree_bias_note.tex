@@ -1,0 +1,304 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\newtheorem{question}{Question}
+
+\newcommand{\dd}{\,d}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\T}{T_W}
+\newcommand{\U}{U}
+\newcommand{\DeltaTwo}{\Delta_2}
+
+\title{The directed weighted transitivity route for the smoothed Goodman inequality}
+\author{Working note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Purpose of this note}
+
+This note records a focused attempt to prove the smoothed Goodman inequality by the
+``directed weighted transitivity / degree-bias'' route.  The target inequality is
+\begin{equation}
+\DeltaTwo(W)
+:=t(\theta_{1,2,4},W)-(2p-1)t(C_5,W)\ge 0,
+\qquad p=t(K_2,W),
+\tag{SG2}
+\end{equation}
+where \(\theta_{1,2,4}=C_3\cup_{K_2}C_5\) is the theta graph with three internally
+vertex-disjoint paths of lengths \(1,2,4\) between the same two endpoints.
+Equivalently,
+\begin{equation}
+\DeltaTwo(W)
+=\iint W(x,y)T_W^2(x,y)T_W^4(x,y)\dd x\dd y
+ -(2p-1)\iint W(x,y)T_W^4(x,y)\dd x\dd y .
+\end{equation}
+For \(p\le 1/2\) the inequality is trivial.  The real case is \(p>1/2\).
+
+The main outcome of this note is not a complete proof.  It is a cleaner global
+reformulation:
+\begin{quote}
+\emph{The inequality \((\mathrm{SG2})\) is exactly an averaged weighted
+transitivity inequality for the complement-neighbourhoods of vertices, where the
+edge weight is the \(C_5\)-edge kernel \(B_W(x,y)=W(x,y)T_W^4(x,y)\).}
+\end{quote}
+This identifies the precise compensation mechanism.  A tempting pointwise
+version is false, so any proof must exploit averaging over all complement rows
+or use a flag/SOS certificate.
+
+\section{The degree-bias decomposition}
+
+Let
+\[
+U:=1-W,\qquad q:=1-p,
+\qquad d(x):=\int W(x,y)\dd y,
+\qquad u(x):=\int U(x,y)\dd y=1-d(x).
+\]
+Define
+\begin{align}
+G(W)&:=\iint W(x,y)T_U^2(x,y)T_W^4(x,y)\dd x\dd y,\label{eq:G}\\
+D(W)&:=\int (p-d(x))T_W^5(x,x)\dd x
+      =\int (u(x)-q)T_W^5(x,x)\dd x.\label{eq:D}
+\end{align}
+The elementary identity
+\begin{equation}
+T_W^2(x,y)-(2p-1)
+=T_U^2(x,y)-(p-d(x))-(p-d(y))
+\label{eq:basic-identity}
+\end{equation}
+gives
+\begin{equation}
+\boxed{\DeltaTwo(W)=G(W)-2D(W).}
+\label{eq:Gminus2D}
+\end{equation}
+Thus the global theorem is equivalent to
+\begin{equation}
+\boxed{G(W)\ge 2D(W).}
+\tag{TD}
+\end{equation}
+The interpretation is as follows.  The term \(D(W)\) is positive precisely when
+rooted \(C_5\)-mass is biased toward vertices of below-average degree.  The term
+\(G(W)\) counts, with the same \(C_5\)-edge weight, edges whose two endpoints have
+a common non-neighbour.  Thus \((\mathrm{TD})\) says that every possible
+low-degree bias of rooted \(C_5\)'s is compensated by a weighted transitivity
+defect in the complement relation.
+
+\section{The \(C_5\)-edge kernel and the averaged transitivity formula}
+
+Define the \(C_5\)-edge kernel
+\begin{equation}
+B_W(x,y):=W(x,y)T_W^4(x,y).
+\end{equation}
+Let
+\begin{equation}
+Z_W:=\iint B_W(x,y)\dd x\dd y=t(C_5,W),
+\qquad
+R_W(x):=\int B_W(x,y)\dd y=T_W^5(x,x).
+\end{equation}
+For each vertex \(z\), let
+\begin{equation}
+f_z(x):=U(z,x),
+\qquad
+u(z):=\int f_z(x)\dd x=u(z).
+\end{equation}
+Think of \(f_z\) as the complement-neighbourhood profile of \(z\).
+Now define the one-vertex weighted transitivity defect
+\begin{equation}
+\mathcal F_W(z):=
+\iint B_W(x,y)f_z(x)f_z(y)\dd x\dd y
+-2\int R_W(x)f_z(x)\dd x
++2\nu(z)Z_W.
+\label{eq:Fz}
+\end{equation}
+
+\begin{proposition}[Averaged directed transitivity identity]
+For every graphon \(W\),
+\begin{equation}
+\boxed{\DeltaTwo(W)=\int_0^1 \mathcal F_W(z)\dd z.}
+\label{eq:avgF}
+\end{equation}
+Consequently, \((\mathrm{SG2})\) is equivalent to
+\begin{equation}
+\boxed{\int_0^1 \mathcal F_W(z)\dd z\ge0.}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The first term in \(\int\mathcal F_W(z)\dd z\) is
+\[
+\iiint B_W(x,y)U(z,x)U(z,y)\dd x\dd y\dd z
+=\iint B_W(x,y)T_U^2(x,y)\dd x\dd y=G(W).
+\]
+The second term is
+\[
+-2\iint R_W(x)U(z,x)\dd x\dd z
+=-2\int R_W(x)u(x)\dd x.
+\]
+The third term is
+\[
+2Z_W\int u(z)\dd z=2qZ_W.
+\]
+Therefore
+\[
+\int \mathcal F_W(z)\dd z
+=G(W)-2\int (u(x)-q)R_W(x)\dd x
+=G(W)-2D(W)=\DeltaTwo(W).
+\]
+\end{proof}
+
+\section{The coverage interpretation in the random-free case}
+
+Assume for this paragraph that \(W\) is random-free, so \(W\in\{0,1\}\).  For a
+fixed \(z\), let
+\[
+S_z:=\{x:U(z,x)=1\}
+\]
+be the non-neighbourhood of \(z\).  Sample an edge \((X,Y)\) from the \(C_5\)-edge kernel \(B_W\), i.e. with density proportional to
+\(B_W(x,y)\).  Then
+\[
+\frac{1}{Z_W}\iint B_W(x,y)f_z(x)f_z(y)\dd x\dd y
+=\mathbb P(X,Y\in S_z),
+\]
+and
+\[
+\frac{1}{Z_W}\int R_W(x)f_z(x)\dd x
+=\mathbb P(X\in S_z).
+\]
+Hence
+\begin{equation}
+\frac{\mathcal F_W(z)}{Z_W}
+=2\mu(S_z)-\mathbb P(\{X,Y\}\cap S_z\ne\varnothing),
+\label{eq:coverage}
+\end{equation}
+where \(\mu(S_z)=u(z)\) is the ordinary Lebesgue mass of the non-neighbourhood.
+Thus the global inequality says
+\begin{equation}
+\boxed{
+\mathbb E_{z}\,\mathbb P_{(X,Y)\sim B_W}\bigl(\{X,Y\}\cap S_z\ne\varnothing\bigr)
+\le 2q.}
+\label{eq:coverage-global}
+\end{equation}
+This is the directed weighted transitivity form: under the \(C_5\)-edge-biased
+measure, complement-neighbourhoods should not cover more edge mass than twice
+the global complement density, once averaged over \(z\).
+
+\section{A tempting pointwise strengthening is false}
+
+The most tempting route would be to prove
+\begin{equation}
+\mathcal F_W(z)\ge0\qquad\text{for a.e. }z.
+\tag{false-pointwise}
+\end{equation}
+Equivalently, in the random-free case, every individual non-neighbourhood
+\(S_z\) would cover at most \(2\mu(S_z)\) of the \(C_5\)-edge-biased edge mass.
+This is false, even on the top branch.
+
+Consider the equal four-block random-free graphon with kernel-value matrix
+\begin{equation}
+A=
+\begin{pmatrix}
+0&1&1&1\\
+1&1&1&0\\
+1&1&0&0\\
+1&0&0&0
+\end{pmatrix}.
+\end{equation}
+Here
+\[
+p=\frac{9}{16},\qquad Z_W=t(C_5,W)=\frac{3}{32}.
+\]
+A direct exact calculation gives
+\[
+\DeltaTwo(W)=\frac{33}{1024}>0,
+\]
+but the four values of \(\mathcal F_W(z)\) are
+\[
+-\frac1{256},\qquad \frac{21}{512},\qquad \frac{23}{512},
+\qquad \frac3{64}.
+\]
+Thus one vertex has negative pointwise transitivity defect, while the averaged
+defect is positive.  The proof must therefore use a genuinely global averaging
+mechanism.  The accompanying script \texttt{verify\_directed\_transitivity.py}
+checks these identities exactly.
+
+\section{What this route has achieved, and what remains}
+
+The directed transitivity route has not yet produced the full theorem, but it
+has replaced the previous somewhat opaque inequality \(G\ge2D\) by the following
+precise problem.
+
+\begin{question}[Averaged weighted transitivity]
+For every graphon \(W\), with \(B_W=W T_W^4\), is it true that
+\begin{equation}
+\int_0^1
+\left[
+\iint B_W(x,y)f_z(x)f_z(y)\dd x\dd y
+-2\int R_W(x)f_z(x)\dd x
++2u(z)Z_W
+\right]
+\dd z\ge0?
+\end{equation}
+Equivalently, in the random-free case, does the average \(C_5\)-edge coverage
+of non-neighbourhoods satisfy \eqref{eq:coverage-global}?
+\end{question}
+
+This is exactly equivalent to \((\mathrm{SG2})\), but it is more informative than
+the raw quantum graph expression.  It says that the only possible obstruction is
+not merely low degree bias, but low degree bias that is not accompanied by enough
+\(C_5\)-weighted complement transitivity defect.
+
+The pointwise counterexample above also clarifies the next proof choices:
+\begin{enumerate}[label=(\roman*)]
+\item A purely pointwise set-isoperimetric proof cannot work.
+\item A successful human proof must exploit cancellation between different
+vertices \(z\), or a structural property of the family of complement rows
+\(f_z=U(z,\cdot)\).
+\item A flag/SOS certificate is very natural here: the expression
+\(\int\mathcal F_W(z)\dd z\) is a fixed seven-vertex quantum graph inequality,
+while \(\mathcal F_W(z)\) itself is a one-vertex flagged expression over a
+\(C_5\)-edge-biased type.
+\end{enumerate}
+
+\section{Recommended next move}
+
+The directed transitivity formulation suggests that the next high-value attack
+should be one of the following.
+
+\begin{enumerate}[label=\textbf{Route \arabic*.},leftmargin=*]
+\item \textbf{Averaging/cancellation proof.}  Try to prove directly that negative
+values of \(\mathcal F_W(z)\) are compensated by positive values of
+\(\mathcal F_W(z')\) along complement edges or along common complement
+neighbourhoods.  The four-block example above is the smallest test case for any
+such cancellation lemma.
+
+\item \textbf{Flag/SOS proof in the flagged language.}  Encode
+\(\int\mathcal F_W(z)\dd z\ge0\) as a flag-algebra inequality with one labelled
+outside vertex and a \(C_5\)-edge-biased structure.  Since the pointwise flag is
+not nonnegative, the certificate must combine several flags or use an
+8-vertex lift/disconnected term to express the averaging over \(z\).
+
+\item \textbf{Weighted transitivity theorem for complement rows.}  Search for a
+statement of the form
+\[
+\int \mathcal F_W(z)\dd z
+\ge c\,\mathcal T(W)
+\]
+where \(\mathcal T(W)\) is a nonnegative measure of failure of the complement
+relation to be an equivalence relation.  Equality should occur exactly at
+balanced complete multipartite graphons and at \(W\equiv1\).
+\end{enumerate}
+
+At the current stage, this route has clarified the mechanism but has not yet
+closed the theorem.  The key lesson is that the desired inequality is an
+\emph{averaged} directed transitivity statement, not a pointwise one.
+
+\end{document}

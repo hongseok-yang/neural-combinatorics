@@ -1,0 +1,149 @@
+=== harvesting kernel vectors (exact rationals) ===
+Q blocks with nonempty kernel: 19 / 170
+R blocks with nonempty kernel: 8 / 14
+total forced kernel dims: Q 49 R 19
+
+=== validation: Gram8_b(T_k) == q * v v^T (exact pvec, k=2,3,4) ===
+  k=2: worst Gram8 rank-1 residual so far 1.094e-15
+  k=3: worst Gram8 rank-1 residual so far 1.094e-15
+  k=4: worst Gram8 rank-1 residual so far 1.094e-15
+  k=2: worst Gram6 rank-1 residual so far 6.261e-17
+  k=3: worst Gram6 rank-1 residual so far 7.494e-16
+  k=4: worst Gram6 rank-1 residual so far 7.494e-16
+  k=5: worst Gram6 rank-1 residual so far 1.901e-15
+
+=== residuals ||Q_b v||_inf on the projected iterate ===
+worst 10 Q blocks (residual, block, dimK):
+  block   1 (m=2): resid 9.674e-04, dimK 4
+  block   0 (m=0): resid 1.800e-04, dimK 4
+  block  13 (m=4): resid 1.691e-04, dimK 3
+  block   2 (m=2): resid 1.387e-04, dimK 4
+  block   3 (m=4): resid 1.829e-05, dimK 3
+  block   6 (m=4): resid 7.960e-06, dimK 3
+  block  11 (m=4): resid 3.264e-06, dimK 3
+  block 130 (m=6): resid 2.345e-06, dimK 2
+  block  12 (m=4): resid 5.544e-07, dimK 3
+  block 131 (m=6): resid 4.456e-07, dimK 2
+worst R blocks:
+  block   1 (m'=2): resid 1.650e-03, dimK 3
+  block   3 (m'=4): resid 2.131e-06, dimK 2
+  block   0 (m'=0): resid 1.255e-06, dimK 3
+  block   2 (m'=2): resid 8.677e-07, dimK 3
+  block   6 (m'=4): resid 2.866e-07, dimK 2
+
+=== eigenspectra: near-zero eigs vs forced dim ===
+threshold 1e-05; total EXTRA near-zero dims over Q blocks: 3411
+top 15 blocks by extra near-zero dims:
+  block   3 (m=4, nf=272): nearzero 49, forced 3, EXTRA 46; smallest eigs [-0. -0. -0. -0.]
+  block  14 (m=6, nf=64): nearzero 47, forced 2, EXTRA 45; smallest eigs [-0. -0. -0. -0.]
+  block 169 (m=6, nf=64): nearzero 33, forced 2, EXTRA 31; smallest eigs [0.e+00 0.e+00 0.e+00 1.e-08]
+  block  68 (m=6, nf=64): nearzero 31, forced 0, EXTRA 31; smallest eigs [5.0e-08 9.0e-08 1.0e-07 1.6e-07]
+  block  19 (m=6, nf=64): nearzero 33, forced 2, EXTRA 31; smallest eigs [-0. -0. -0. -0.]
+  block  69 (m=6, nf=64): nearzero 30, forced 0, EXTRA 30; smallest eigs [7.0e-08 9.0e-08 9.0e-08 1.9e-07]
+  block 118 (m=6, nf=64): nearzero 28, forced 0, EXTRA 28; smallest eigs [0. 0. 0. 0.]
+  block  54 (m=6, nf=64): nearzero 28, forced 0, EXTRA 28; smallest eigs [6.0e-08 2.2e-07 2.2e-07 4.9e-07]
+  block  53 (m=6, nf=64): nearzero 28, forced 0, EXTRA 28; smallest eigs [0.0e+00 2.0e-08 1.1e-07 1.1e-07]
+  block  78 (m=6, nf=64): nearzero 27, forced 0, EXTRA 27; smallest eigs [1.0e-08 1.0e-08 2.0e-07 3.8e-07]
+  block  67 (m=6, nf=64): nearzero 27, forced 0, EXTRA 27; smallest eigs [6.0e-08 1.6e-07 2.6e-07 3.1e-07]
+  block  13 (m=4, nf=272): nearzero 30, forced 3, EXTRA 27; smallest eigs [-0. -0.  0.  0.]
+  block  11 (m=4, nf=272): nearzero 30, forced 3, EXTRA 27; smallest eigs [-0. -0. -0. -0.]
+  block   6 (m=4, nf=272): nearzero 30, forced 3, EXTRA 27; smallest eigs [-0. -0. -0. -0.]
+  block  84 (m=6, nf=64): nearzero 26, forced 0, EXTRA 26; smallest eigs [0.0e+00 2.0e-08 1.0e-07 1.1e-07]
+R blocks:
+  R block  0 (m'=0): nearzero 3, forced 3, eigs<1e-3: [0. 0. 0.]
+  R block  1 (m'=2): nearzero 3, forced 3, eigs<1e-3: [-0.  0.  0.]
+  R block  2 (m'=2): nearzero 4, forced 3, eigs<1e-3: [0.        0.        0.        0.        0.0001524]
+  R block  3 (m'=4): nearzero 5, forced 2, eigs<1e-3: [-0. -0.  0.  0.  0.]
+  R block  4 (m'=4): nearzero 2, forced 0, eigs<1e-3: [-0.         0.         0.0004933]
+  R block  5 (m'=4): nearzero 1, forced 0, eigs<1e-3: [0.        0.0003041 0.0003778 0.0008024]
+  R block  6 (m'=4): nearzero 2, forced 2, eigs<1e-3: [-0.         0.         0.0001837  0.0001837]
+  R block  7 (m'=4): nearzero 1, forced 0, eigs<1e-3: [5.000e-07 2.760e-04 2.869e-04 2.869e-04 8.235e-04 8.235e-04]
+  R block  8 (m'=4): nearzero 2, forced 0, eigs<1e-3: [7.000e-07 1.100e-06 4.630e-05 4.731e-04]
+  R block  9 (m'=4): nearzero 0, forced 0, eigs<1e-3: [7.310e-05 8.536e-04]
+  R block 10 (m'=4): nearzero 2, forced 0, eigs<1e-3: [-0.000e+00  4.000e-07  1.729e-04  7.315e-04]
+  R block 11 (m'=4): nearzero 4, forced 2, eigs<1e-3: [-0.         0.         0.         0.         0.0008988]
+  R block 12 (m'=4): nearzero 3, forced 2, eigs<1e-3: [-0.000e+00  0.000e+00  0.000e+00  2.190e-05  1.317e-04  2.213e-04
+  6.209e-04]
+  R block 13 (m'=4): nearzero 2, forced 2, eigs<1e-3: [0.        0.        0.0006106 0.0006528 0.0006528 0.0006528 0.0006832
+ 0.0006832 0.0008205]
+
+=== the 22 complete multipartite graphs and the active set ===
+  K_(8,): H=    0, slack=-1.375e-08
+  K_(7, 1): H=    7, slack=6.621e-09
+  K_(6, 2): H= 1685, slack=6.646e-11
+  K_(6, 1, 1): H= 1686, slack=-1.245e-08
+  K_(5, 3): H= 8774, slack=-2.425e-08
+  K_(5, 2, 1): H= 8776, slack=-5.074e-09
+  K_(5, 1, 1, 1): H=10014, slack=-9.857e-09
+  K_(4, 4): H=11554, slack=-3.076e-08
+  K_(4, 3, 1): H=11558, slack=-1.951e-10
+  K_(4, 2, 2): H=12088, slack=-1.591e-09
+  K_(4, 2, 1, 1): H=12089, slack=-1.493e-08
+  K_(4, 1, 1, 1, 1): H=12222, slack=-4.651e-09
+  K_(3, 3, 2): H=12273, slack=-2.012e-09
+  K_(3, 3, 1, 1): H=12274, slack=-1.518e-08
+  K_(3, 2, 2, 1): H=12322, slack=-2.341e-08
+  K_(3, 2, 1, 1, 1): H=12330, slack=1.034e-08
+  K_(3, 1, 1, 1, 1, 1): H=12337, slack=-9.119e-09
+  K_(2, 2, 2, 2): H=12340, slack=-1.443e-08
+  K_(2, 2, 2, 1, 1): H=12341, slack=3.001e-09
+  K_(2, 2, 1, 1, 1, 1): H=12343, slack=-1.690e-08
+  K_(2, 1, 1, 1, 1, 1, 1): H=12344, slack=-4.571e-08
+  K_(1, 1, 1, 1, 1, 1, 1, 1): H=12345, slack=-3.433e-08
+
+near-active (<1e-6): 76; of which multipartite: 22
+non-multipartite near-active graphs (idx, #edges, slack):
+  H=    1 e= 1 slack=-1.061e-08
+  H=    2 e= 2 slack=-9.602e-09
+  H=    3 e= 3 slack=-9.650e-09
+  H=    4 e= 4 slack=-8.909e-09
+  H=    5 e= 5 slack=-9.313e-09
+  H=    6 e= 6 slack=-9.305e-09
+  H=    8 e= 2 slack=-9.739e-09
+  H=   12 e= 6 slack=-9.446e-09
+  H=   17 e= 7 slack=-8.981e-09
+  H=   23 e= 8 slack=-8.624e-09
+  H=   44 e= 7 slack=-9.096e-09
+  H=   46 e= 8 slack=-1.014e-08
+  H=   83 e=10 slack=-9.818e-09
+  H=   96 e= 6 slack=-9.306e-09
+  H=  102 e= 9 slack=-1.094e-08
+  H=  249 e=10 slack=-1.271e-08
+  H=  498 e=10 slack=-9.497e-09
+  H=  656 e=10 slack=-8.820e-09
+  H=  658 e=10 slack=-1.085e-08
+  H=  659 e=11 slack=-2.101e-08
+  H=  932 e= 9 slack=-9.255e-09
+  H= 1087 e=10 slack=-9.172e-09
+  H= 1216 e=11 slack=1.442e-08
+  H= 1688 e=11 slack=-1.104e-08
+  H= 1689 e=12 slack=-1.100e-08
+  H= 2635 e=11 slack=-1.052e-08
+  H= 2823 e=12 slack=-1.339e-08
+  H= 3518 e=10 slack=-9.456e-09
+  H= 4018 e=12 slack=-6.768e-09
+  H= 4022 e=13 slack=-1.795e-08
+  H= 4258 e=13 slack=-1.002e-08
+  H= 4372 e=13 slack=-1.780e-08
+  H= 4431 e=13 slack=-9.051e-09
+  H= 6006 e=13 slack=-1.350e-08
+  H= 6355 e=13 slack=-9.685e-09
+  H= 6365 e=14 slack=-9.149e-09
+  H= 6417 e=14 slack=-3.347e-08
+  H= 6637 e=13 slack=4.439e-07
+  H= 6669 e=14 slack=-1.083e-08
+  H= 7305 e=14 slack=-1.145e-08
+  H= 7417 e=15 slack=-9.925e-09
+  H= 7423 e=16 slack=3.710e-07
+  H= 7693 e=12 slack=-9.074e-09
+  H= 7698 e=13 slack=-9.293e-09
+  H= 8007 e=15 slack=2.617e-07
+  H= 8763 e=14 slack=-2.129e-08
+  H= 8814 e=15 slack=-1.235e-08
+  H= 9364 e=16 slack=-9.978e-09
+  H= 9576 e=16 slack=-9.671e-09
+  H=10713 e=15 slack=-2.763e-08
+  H=11184 e=18 slack=-9.027e-09
+  H=11888 e=18 slack=-1.120e-08
+  H=11889 e=19 slack=-9.032e-09
+  H=12269 e=21 slack=-9.186e-09

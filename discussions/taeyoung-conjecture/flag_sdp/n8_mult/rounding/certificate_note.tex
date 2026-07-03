@@ -1,0 +1,172 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb}
+\newtheorem{theorem}{Theorem}
+\newcommand{\thet}{\theta_{1,2,4}}
+\newcommand{\Wone}{W\!\equiv\!1}
+\title[An exact certificate for the smoothed Goodman inequality]{An exact
+rational flag--SOS certificate with edge multiplier for the smoothed Goodman
+inequality $t(\thet,W)\ge (2p-1)\,t(C_5,W)$}
+\begin{document}
+\maketitle
+
+\section{Statement}
+
+For a graphon $W$ write $p=t(K_2,W)$ and
+\[
+\Delta_2(W) \;=\; t(\thet,W)\;-\;\bigl(2p-1\bigr)\,t(C_5,W),
+\]
+where $\thet$ is the theta graph consisting of two vertices joined by
+internally disjoint paths of lengths $1,2,4$ (equivalently $C_3$ and $C_5$
+glued along an edge; $6$ vertices, $7$ edges).
+
+\begin{theorem}\label{thm:main}
+$\Delta_2(W)\ge 0$ for every graphon $W$.  Equality holds for the balanced
+complete multipartite graphons $T_k$ ($p=1-1/k$, $k\ge2$), for $\Wone$, and
+for every graphon with $t(\thet,W)=t(C_5,W)=0$ --- in particular for
+\emph{every bipartite-supported} $W$ (both $\thet$ and $C_5$ contain odd
+cycles) and every $W$ of odd girth $\ge 7$.
+\end{theorem}
+
+The bipartite part of the equality variety is what makes an exact
+certificate delicate: it touches the boundary $p=1/2$ of the certificate
+branch at $T_2$ with positive-dimensional tangency, and expanding the
+averaging identity along star-deletion deformations of $T_2$ forces, for
+any exact certificate, (i) $22$ additional slack equalities at the
+$8$-vertex graphs $K_{a,b}-\mathrm{star}$ (plus the pinned
+$K_{2,4}\cup K_2$), and (ii) $124$ additional kernel dimensions on the
+$Q$-blocks (the star-defect evaluation vectors).  Deleted bipartite
+patterns of matching number $\ge2$ (e.g.\ $K_{4,4}$ minus a $2$-matching)
+are \emph{not} forced and indeed carry positive slack.
+
+\emph{Status of the proof: \textbf{COMPLETE}.}  The proof is a numerically
+discovered, exactly verified rational certificate
+(\texttt{data/certificate.pkl}); every claim below that is marked
+[EXACT] has been verified in exact integer/rational arithmetic by the
+scripts in \texttt{flag\_sdp/n8\_mult/rounding/}.  The standalone verifier
+\texttt{verify\_exact.py} confirms, in pure integer arithmetic: all $12346$
+slacks are $\ge 0$ with equality at exactly $48$ graphs ($22$ complete
+multipartite $+\,26$ bipartite-family), and every $\|\Theta_b\|_F<1$
+($53$ correction entries, $\max|\theta|=6.2\cdot10^{-10}$, no rank-one
+additions), so all $Q_b,R_{b'}$ are PSD by construction.
+
+\section{The certificate and its verification}
+
+\subsection{Trivial branch $p\le 1/2$}
+$\Delta_2 = t(\thet,W) + (1-2p)\,t(C_5,W)\ge 0$, since homomorphism
+densities are nonnegative.
+
+\subsection{Certificate branch $p\ge 1/2$}
+Let $\mathcal H$ be the $12346$ isomorphism classes of $8$-vertex graphs and
+$p_8(H,W)$ the induced-subgraph distribution.  Then
+$\Delta_2(W)=\sum_H p_8(H,W)\,\mathrm{coef}[H]$ where
+$\mathrm{coef}[H]$ is the exact rational vector with common denominator
+$8!=40320$ obtained from injective homomorphism counts of $\thet$, $C_5$ and
+$K_2\cup C_5$ in $H$ [EXACT; validated further by the polynomial identity
+$\Delta_2(W\equiv p)=p^5(1-p)^2$ over $\mathbb{Q}$].
+
+The certificate provides symmetric PSD rational matrices: $Q_b$ for the
+$170$ unconditional ground-$8$ flag blocks (types of size $m=0,2,4,6$) and
+$R_{b'}$ for the $14$ ground-$6$ blocks ($m'=0,2,4$), such that for
+\emph{every} $H\in\mathcal H$,
+\begin{equation}\label{eq:slack}
+\mathrm{slack}[H]\;=\;\mathrm{coef}[H]\;-\;\sum_b \langle Q_b, M_b(H)\rangle
+\;-\;\sum_{b'} \langle R_{b'}, \mathrm{Mult}_{b'}(H)\rangle \;\ge\;0
+\qquad\text{[EXACT]},
+\end{equation}
+where $M_b(H)$ are the unconditional (Razborov) flag pair-density tables and
+\[
+\mathrm{Mult}_{b'}(H)\;=\;\tfrac1{28}\sum_{\{a,c\}\subseteq V(H)}
+\bigl(2A_H(a,c)-1\bigr)\,M^{(6)}_{b'}\!\bigl(H[V\setminus\{a,c\}]\bigr)
+\]
+is the edge-multiplier table.  All tables are exact rationals with
+denominators dividing $8!$ [EXACT: rebuilt by pure integer counting].
+
+Averaging \eqref{eq:slack} against $p_8(\cdot,W)\ge0$ and using
+(i) $\sum_H p_8(H,W)M_b(H)=\mathrm{Gram}^{(8)}_b(W)\succeq 0$ (a true flag
+Gram matrix), and (ii) the factorization identity
+\[
+\sum_H p_8(H,W)\,\mathrm{Mult}_{b'}(H) \;=\;(2p-1)\,
+\mathrm{Gram}^{(6)}_{b'}(W)\qquad(\mathrm{Gram}^{(6)}\succeq0),
+\]
+which holds because the two coordinates $x_1,x_2$ of the multiplier pair are
+independent of the six coordinates of the $6$-set (both sides are
+evaluations of quantum graphs; the identity was additionally verified
+numerically to $9\cdot10^{-16}$ on exact induced-density vectors), yields
+\[
+\Delta_2(W)\;\ge\;\sum_b\langle Q_b,\mathrm{Gram}^{(8)}_b(W)\rangle
++(2p-1)\sum_{b'}\langle R_{b'},\mathrm{Gram}^{(6)}_{b'}(W)\rangle\;\ge\;0
+\qquad\text{for } p\ge\tfrac12 .
+\]
+
+\subsection{Format of the rational matrices; PSD for free}
+Each block is stored as
+\[
+Q_b \;=\; U_b\,F_b\,(I+\Theta_b)\,F_b^{\mathsf T}U_b^{\mathsf T}\,/\,4^{s},
+\qquad s=48,
+\]
+with $U_b$ an \emph{integer} basis of the orthogonal complement of the
+forced kernel: the flag evaluation vectors of $T_2,\dots,T_8,\Wone$ (their
+span provably contains the vectors of \emph{all} $T_k$), the bipartite
+first-derivative vectors $\phi'(1/2)$, and the star-defect evaluation
+vectors of the bipartite variety ($181$ dimensions across the $170$
+$Q$-blocks), $F_b$ an integer matrix, and $\Theta_b$ a symmetric rational
+matrix with
+$\|\Theta_b\|_F<1$ [EXACT].  Hence $I+\Theta_b\succ0$ and $Q_b\succeq0$ by
+construction; no numerical eigenvalue computation enters the proof.
+
+\subsection{Equality structure}
+$\mathrm{slack}[H]=0$ exactly at the $22$ complete multipartite $8$-vertex
+graphs and at the $22$ bipartite near-complete graphs
+($K_{a,b}-\mathrm{star}$ and $K_{2,4}\cup K_2$) [EXACT], as forced by the
+theorem's equality cases: the averaging identities
+$\sum_H p_8(H,T_k)\,\mathrm{slack}[H]=0$ ($k\ge2$) hold exactly for any
+kernel-exact $Q,R$, because $\Delta_2(T_k)=0$ exactly (the part-count
+identities $\sum_{\ell(\lambda)=\ell}S_\lambda\,
+\mathrm{coef}[K_\lambda]=0$, $\ell=1,\dots,8$ [EXACT]) and
+$\mathrm{Gram}^{(8)}_b(T_k)$ is exactly rank one on the forced kernel;
+the star-deletion identities at $T_2$ tie the $K_{a,b}-\mathrm{star}$
+rows analogously through the star-defect kernel conditions.
+
+\section{Verification protocol}
+\texttt{verify\_exact.py} re-derives \eqref{eq:slack} for all $12346$
+classes in pure integer arithmetic (limb-split exact contractions), checks
+the $22$ equalities, and checks $\|\Theta_b\|_F<1$; the integer tables are
+themselves recounted from scratch by \texttt{exact\_tables.py}.
+
+\section{Result}
+
+The certificate was produced on 2026-07-03 from the face-restricted SDP
+\texttt{face4} (zero cone: the $44$ forced rows and the $186$-dimensional
+forced kernel; SCS converged to equality/kernel residuals
+$\sim5\cdot10^{-14}/5\cdot10^{-13}$), rounded at dyadic scale $s=48$ and
+corrected by a single exact minimum-norm solve on the $48$ equality rows.
+Verification (\texttt{verify\_exact.py}, pure integer, standalone):
+
+\begin{verbatim}
+1. PSD certified: ||Theta_b||_F < 1 for every block (8 corrected blocks)
+   and all 0 rank-1 additions have tau >= 0; Q_b = U F (I+Theta) F^T U^T
+   / 4^s + sum tau v v^T / 4^sv is PSD by construction.
+2. exact slacks: negatives = 0 (must be 0); equalities at the 22
+   multipartite graphs: 22/22
+CERTIFICATE VERIFIED EXACTLY
+\end{verbatim}
+
+The $26$ bipartite-family equality rows are exactly $0$ as well
+(auxiliary exact check: $48$ zeros total, $0$ negatives).
+
+Two structural inputs were decisive.  First, the star-defect kernel:
+the deleted bipartite patterns of matching number one exhaust the forcible
+patterns, giving the $21$ $K_{a,b}-\mathrm{star}$ equality rows and $124$
+kernel dimensions.  Second, a homogeneous ``doubly nonnegative'' identity
+of the triangle family: with
+$u = (\tfrac35,-\tfrac32,2,-\tfrac32,\tfrac35,\tfrac1{10},\tfrac1{10},
+\tfrac12,1)$ on the graphs $(K_2,\,P_3,\,K_{1,3},\,K_{1,4},\,K_{1,5}$ (each
+plus isolated vertices)$,\,K_{1,7}{+}e,\,K_{2,5}\cup K_1,\,H_{1689},\,
+H_{6669})$ one has $u^{\mathsf T}\mathrm{coef}=0$ exactly and
+$D_b=\sum_h u_h M_b(h)$ is PSD on the kernel-complement of exactly three
+blocks; nonnegativity of slacks then forces the three triangle-family
+slacks to vanish and $Q_b D_b=0$ (five further kernel dimensions), which
+closed the last $10^{-23}$-scale obstruction --- invisible to any floating
+point solver.
+
+\end{document}
