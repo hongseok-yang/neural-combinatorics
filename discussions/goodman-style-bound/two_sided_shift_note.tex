@@ -1,0 +1,731 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pcal}{\mathcal P}
+\newcommand{\Dir}{\operatorname{Dir}}
+\newcommand{\Betad}{\operatorname{Beta}}
+\newcommand{\MCERT}{201}
+
+\title{The two-sided spectral-shift method for the odd-cycle lower bound\\
+\large An all-length reduction, a mixture theorem, and the theorem for $p\ge 2/3$}
+\author{Working note for collaborators}
+\date{July 4, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $W$ be a graphon with edge density $p=t(K_2,W)$ and let $m\ge3$ be odd.  The conjecture studied in \texttt{paper.tex} and \texttt{spectral\_shift\_baton\_note.tex} is
+\[
+        t(C_m,W)\ \ge\ p^m-p(1-p)^{m-1}.
+\]
+The proofs known for $C_5,\dots,C_{13}$ are per-cycle certificates and do not generalise.  This note develops a different, length-uniform organisation of the problem and proves most of it.
+
+The starting point is an \emph{exact two-sided spectral-shift identity}: with $U=1-W$, $q=1-p$,
+\[
+        t(C_m,W)+t(C_m,U)\ =\ p^m+q^m+S_m,
+\]
+where $S_m$ is the combined spectral shift of the hub coupling on the $W$-side and the $U$-side.  The conjecture becomes $t(C_m,U)\le q^{m-1}+S_m$, and after one use of the deletion bound $t(C_m,U)\le t(P_{m-1},U)$ it reduces, \emph{exactly and for every odd $m$ at once}, to the nonnegativity of a two-parameter family of explicit symmetric functions $\Pcal_{m,r}(q;\lambda_1,\dots,\lambda_r)$ integrated against powers of the coupling measure.
+
+Three structural theorems then collapse this family.  First, a \emph{mixture-of-diagonals theorem}: $\Pcal_{m,r}(q;\lambda_1,\dots,\lambda_r)$ is an average of its diagonal values $\Pcal_{m,r}(q;\ell,\dots,\ell)$, so all multi-mode positivity questions reduce to two scalar parameters $(q,\ell)$.  Second, an exact \emph{one-dimensional kernel form}: for $\ell>0$ the diagonal value is a positive multiple of
+\[
+        \int_0^\infty \frac{s^{r-1}}{(\ell+s)^{m}}\;\rho_{n,m}(q+s)\,ds,
+        \qquad
+        \rho_{n,m}(u)=\tfrac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1},
+        \qquad n=m-2r .
+\]
+Third, a complete description of the sign of $\rho_{n,m}$: it is nonnegative outside the window $u\in(\tfrac12,\tfrac nm)$ and satisfies the reflection inequality $\rho_{n,m}(u)+\rho_{n,m}(1-u)\ge0$.
+
+These ingredients prove the required positivity, for \emph{all} odd $m$ and all $q\le 1/3$, in the regimes $2r\ge n$; $\ell\le0$; $\ell\ge q+r/m$; and, completely, for $r=1$.  For the residual case ($2\le r<n/2$) we prove a \emph{two-sided surplus criterion} --- a reflection pairing with flexible split point plus two explicit surplus bands --- which implies positivity whenever an explicit finite system of inequalities holds; its hypotheses are verified in exact rational interval arithmetic for every residual pair with $m\le M_{\mathrm{cert}}=\MCERT$, and hold numerically far beyond, the true positivity threshold never dipping below $q=0.4117$.  Consequently: \textbf{the conjecture holds unconditionally for every graphon with $p\ge2/3$, for every odd $m\le\MCERT$} (and with $p\ge3/5$ for $m\le43$); for all odd $m$ it holds modulo the tail of the strip verification.  This replaces the conditional Kim--Lee-based note \texttt{odd\_cycle\_bound\_p\_ge\_two\_thirds.tex} with a self-contained mechanism, and shrinks the open region of the conjecture to $1/3<q<1/2$, where the complement compression has at most one frontier eigenvalue.
+
+For that remaining region the note proves a new \emph{aggregate forced-coupling lemma}: testing $U\ge0$ against $\phi^+\otimes\phi^-$ for a frontier eigenfunction $\phi$ gives
+$a\ip{g}{|\phi|}\ge\alpha\norm{\phi^+}^2\norm{\phi^-}^2-qa^2-\tfrac12\norm{w^+}\norm{w^-}$,
+which is sharp (up to a factor $2$) on the very family that falsifies the naive total-coupling bound, forces $\norm g_2^2\gtrsim(\alpha-q)/8$ there, and recovers the impossibility of balanced two-valued frontier modes.  The note also records that total-coupling forced coupling with the rank-one right-hand side is \emph{false} (explicit two-clique family with ratio $9s\to0$), and that the linear spectral shift is provably insufficient as $q\to1/2$.  The accompanying checker \texttt{two\_sided\_shift\_checker.py} verifies every identity and certificate exactly.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setting and summary}\label{sec:setting}
+
+For a graphon $W:[0,1]^2\to[0,1]$ write $t(H,W)$ for homomorphism densities, $p=t(K_2,W)$, and
+\[
+        U=1-W,\qquad q=t(K_2,U)=1-p .
+\]
+
+\begin{conjecture}[Odd-cycle lower bound]\label{conj:main}
+For every odd $m\ge3$ and every graphon $W$,
+\[
+        t(C_m,W)\ \ge\ g_m(p):=p^m-p(1-p)^{m-1}.
+\]
+\end{conjecture}
+
+The case $p\le\frac12$ is trivial; assume $p>\frac12$ throughout.  As in the earlier notes, let $T_U$ be the integral operator of $U$, let
+\[
+        T_U\one=q\one+g,\qquad g\in\one^\perp,
+        \qquad
+        A=P_{\one^\perp}T_UP_{\one^\perp},
+\]
+and let $\mu$ be the spectral measure of $A$ relative to $g$:
+\[
+        \mu(B)=\ip{g}{E_A(B)\,g},
+        \qquad
+        s_j=\int\lambda^j\,d\mu(\lambda)=\ip{g}{A^jg}.
+\]
+By the compression bound (\texttt{paper.tex}, Lemma~9.2) $\operatorname{supp}\mu\subseteq[-\tfrac12,\tfrac12]$, and by the trace-square budget $\Tr(A^2)+2\mu([-\tfrac12,\tfrac12])\le pq$.
+
+Define the two shift series
+\begin{align}
+        R_W(z)&=\int\frac{d\mu(\lambda)}{1+\lambda z},
+        &
+        \mathcal L_W(z)&=-\log\Bigl(1-\frac{z^2R_W(z)}{1-pz}\Bigr),
+        \label{eq:LW}\\
+        R_U(z)&=\int\frac{d\mu(\lambda)}{1-\lambda z},
+        &
+        \mathcal L_U(z)&=-\log\Bigl(1-\frac{z^2R_U(z)}{1-qz}\Bigr),
+        \label{eq:LU}
+\end{align}
+as formal power series, and
+\begin{equation}\label{eq:Sm}
+        S_m := m\,[z^m]\bigl(\mathcal L_W(z)+\mathcal L_U(z)\bigr).
+\end{equation}
+The coefficient $[z^m]$ of either series is a polynomial in $p$ (resp.\ $q$) and the moments $s_0,\dots,s_{m-2}$; no convergence issues arise.
+
+\subsection{What this note proves}
+
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item \textbf{Two-sided identity} (Theorem~\ref{thm:two-sided}): $t(C_m,W)+t(C_m,U)=p^m+q^m+S_m$ for odd $m\ge3$.  Hence Conjecture~\ref{conj:main} is \emph{equivalent} to $t(C_m,U)\le q^{m-1}+S_m$.
+\item \textbf{Exact expansion} (Theorem~\ref{thm:expansion}): the path-shift defect
+$\Phi_m:=q^{m-1}+S_m-t(P_{m-1},U)$, which lower-bounds the conjectural defect, equals
+\[
+        \Phi_m=\sum_{r=1}^{(m-1)/2}\ \idotsint \Pcal_{m,r}(q;\lambda_1,\dots,\lambda_r)\,d\mu(\lambda_1)\cdots d\mu(\lambda_r)
+\]
+with $\Pcal_{m,r}$ explicit (complete homogeneous symmetric polynomials).  This identity holds with \emph{no} information discarded beyond the single deletion step $t(C_m,U)\le t(P_{m-1},U)$, and $\Phi_m$ coincides with the classical path-certificate defect of \texttt{paper.tex}.
+\item \textbf{Mixture-of-diagonals} (Theorem~\ref{thm:mixture}): $\Pcal_{m,r}(q;\vec\lambda)=\E\,\widetilde\Pcal_{m,r}(q;\Theta_1\lambda_1+\dots+\Theta_r\lambda_r)$ with $(\Theta_i)\sim\Dir(1,\dots,1)$, where $\widetilde\Pcal_{m,r}(q,\ell)$ is the diagonal value.  Positivity questions reduce to the two-parameter diagonal family.
+\item \textbf{One-dimensional kernel form} (Proposition~\ref{prop:uline}): for $\ell\in(0,\tfrac12]$,
+\[
+        \widetilde\Pcal_{m,r}(q,\ell)=c_{m,r}\,\ell^{\,n+r}
+        \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}\,\rho_{n,m}(q+s)\,ds,
+        \qquad c_{m,r}>0 .
+\]
+\item \textbf{Positivity theorems} (\S\ref{sec:positivity}): $\widetilde\Pcal_{m,r}(q,\ell)\ge0$ holds
+  \begin{itemize}
+  \item for all $q\le\tfrac12$ when $2r\ge n$ (Theorem~\ref{thm:pointwise}); this recovers exactly the numerically observed fact that the positivity threshold equals $\tfrac12$ iff $r/m\ge\tfrac14$;
+  \item for all $q\le\tfrac12$ when $\ell\le0$ (Theorem~\ref{thm:pointwise});
+  \item for all $q\le\tfrac12$ when $\ell\ge q+r/m$ (Theorem~\ref{thm:ibp});
+  \item for all $q\le\tfrac13$ when $r=1$, completely (Theorem~\ref{thm:r1}).
+  \end{itemize}
+\item \textbf{Strip criterion and its verification} (Theorem~\ref{thm:strip-criterion}, Proposition~\ref{prop:strip-verified}): the single remaining case ($2\le r<n/2$, $0<\ell<q+r/m$) is reduced to a proved two-sided surplus criterion whose hypotheses --- an exact reflection-pairing condition with a flexible split point, plus a left band and a right (or cap) band --- are finitely checkable; they are verified in exact rational interval arithmetic for \emph{every} residual pair with $45\le m\le\MCERT$, and for $m\le43$ direct Bernstein certificates apply (on $[0,\tfrac13]$ and also on $[0,\tfrac25]$).  The numerically determined positivity threshold of $\widetilde\Pcal_{m,r}$ over \emph{all} $(m,r)$ scanned up to $m=281$, together with a saddle-point analysis of $m\to\infty$, is
+\[
+        \inf_{m,r}\ q^*(m,r)\ =\ 0.41175\ldots\quad(\text{attained in the limit }r/m\to0.17656),
+\]
+comfortably above $\tfrac13$ (and above $\tfrac25$).
+\item \textbf{Main theorem} (Theorem~\ref{thm:main}): Conjecture~\ref{conj:main} holds for every graphon with $p\ge\tfrac23$: unconditionally for all odd $m\le\MCERT$, and for all odd $m$ modulo the tail Conjecture~\ref{conj:strip}; moreover for $p\ge\tfrac35$ and $m\le43$.  In particular the conditional Schur-convexity route of \texttt{odd\_cycle\_bound\_p\_ge\_two\_thirds.tex} is superseded by a self-contained mechanism with an exact per-length certificate scheme whose reach ($q\le0.41$) far exceeds the old path certificates (which fail near $q\approx0.48$ already at $m=13$ and cannot even be stated uniformly in $m$).
+\item \textbf{Region II} (\S\ref{sec:region2}): for the remaining band $\tfrac13<q<\tfrac12$ (where $A$ has at most one frontier eigenvalue $\alpha_1>q$) the note proves the eigenfunction--coupling inequality of Lemma~\ref{lem:L3} and the new \emph{aggregate forced-coupling} Lemma~\ref{lem:aggregate-fc}, shows by an explicit family that the naive total-coupling generalisation of the rank-one forced-coupling lemma is false (Proposition~\ref{prop:C-false}) while the aggregate lemma is sharp up to a factor $2$ on that same family, and records the numerical finding that the linear shift alone fails in the corner $q>0.45$ while the full conjecture held on $46{,}000$ adversarially sampled one-frontier configurations, with exact-arithmetic confirmation at every near-minimiser.
+\end{enumerate}
+
+Throughout, $n:=m-2r\ \ (\ge1,\ \text{odd})$ and $p=1-q$.
+
+\section{The two-sided spectral-shift identity}\label{sec:identity}
+
+\begin{theorem}[Two-sided identity]\label{thm:two-sided}
+For every graphon $W$ and every odd $m\ge3$,
+\begin{equation}\label{eq:two-sided}
+        t(C_m,W)+t(C_m,U)\ =\ p^m+q^m+S_m .
+\end{equation}
+Consequently Conjecture~\ref{conj:main} is equivalent to
+\begin{equation}\label{eq:conj-equiv}
+        t(C_m,U)\ \le\ q^{m-1}+S_m .
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Assume first that $U$ is a finite-rank step kernel.  On $\R\one\oplus\one^\perp$,
+\[
+        T_U=\begin{pmatrix}q&g^*\\ g&A\end{pmatrix},
+        \qquad
+        T_W=J-T_U=\begin{pmatrix}p&-g^*\\ -g&-A\end{pmatrix},
+\]
+and conjugating $T_W$ by the sign flip on $\one^\perp$ preserves traces, so $t(C_m,W)=\Tr(M^m)$ with $M=\bigl(\begin{smallmatrix}p&g^*\\ g&-A\end{smallmatrix}\bigr)$.  Schur's determinant formula gives
+\begin{align*}
+        \det(I-zM)&=\det(I+zA)\,(1-pz)\Bigl(1-\frac{z^2\ip{g}{(I+zA)^{-1}g}}{1-pz}\Bigr),\\
+        \det(I-zT_U)&=\det(I-zA)\,(1-qz)\Bigl(1-\frac{z^2\ip{g}{(I-zA)^{-1}g}}{1-qz}\Bigr).
+\end{align*}
+Taking $-\log$, using $-\log\det(I-zX)=\sum_{j\ge1}\Tr(X^j)z^j/j$, extracting $[z^m]$, and adding the two identities: the $\det(I\pm zA)$ terms contribute $-\Tr((-A)^m)-\Tr(A^m)=0$ because $m$ is odd, the hub factors contribute $p^m+q^m$, and the last factors contribute $S_m$ by \eqref{eq:LW}--\eqref{eq:Sm}, since $\ip{g}{(I\pm zA)^{-1}g}=\int(1\pm\lambda z)^{-1}d\mu$.  This proves \eqref{eq:two-sided} for step kernels.  For general $W$, approximate by step kernels $U_k\to U$ in $L^2$: all quantities in \eqref{eq:two-sided} are continuous under this limit ($t(C_m,\cdot)$ for $m\ge3$ by the Hilbert--Schmidt telescoping argument of the baton note, and $S_m$ because it is a polynomial in $q$ and the finitely many moments $s_0,\dots,s_{m-2}$, each continuous).
+
+For \eqref{eq:conj-equiv}: subtract $g_m(p)=p^m-pq^{m-1}$ from \eqref{eq:two-sided} and use $q^m+pq^{m-1}=q^{m-1}$:
+\begin{equation}\label{eq:defect-form}
+        t(C_m,W)-g_m(p)\ =\ q^{m-1}+S_m-t(C_m,U). \qedhere
+\end{equation}
+\end{proof}
+
+\begin{remark}[Relation to cycle commonality]
+Kim and Lee \cite{KimLee} proved $t(C_m,W)+t(C_m,1-W)\ge p^m+q^m$, i.e.\ $S_m\ge0$, via Schur convexity.  Identity \eqref{eq:two-sided} shows their result is exactly the statement that the combined two-sided shift is nonnegative, and Conjecture~\ref{conj:main} is the strengthening in which the shift must dominate the complement's excess cycle density $t(C_m,U)-q^{m-1}$.  Note $S_m\ge0$ is \emph{not} coefficientwise obvious on the $U$-side alone; only the combination is nonnegative.
+\end{remark}
+
+\begin{remark}[What is gained]
+The older path-certificate method (\texttt{paper.tex} \S4--\S8) discarded the deletion gap $t(P_{m-1},U)-t(C_m,U)$ \emph{and} bounded the remaining functional by marginal moment inequalities.  Identity \eqref{eq:defect-form} is exact; the only inequality this note will use before reaching a two-parameter scalar problem is the single deletion step below.
+\end{remark}
+
+\section{The exact expansion of the path-shift defect}\label{sec:expansion}
+
+Since $0\le U\le1$, deleting one edge of the cycle gives $t(C_m,U)\le t(P_{m-1},U)=:x_{m-1}$.  With \eqref{eq:defect-form},
+\begin{equation}\label{eq:Phi-def}
+        t(C_m,W)-g_m(p)\ \ge\ \Phi_m:=q^{m-1}+S_m-x_{m-1}.
+\end{equation}
+By the block form, $x_{m-1}=\ip{\one}{T_U^{m-1}\one}=[z^{m-1}]\,F_U(z)^{-1}$ where
+\[
+        F_U(z)=1-qz-z^2R_U(z)
+\]
+(the standard Schur-complement resolvent formula $\ip{\one}{(I-zT_U)^{-1}\one}=F_U(z)^{-1}$).
+
+\begin{remark}
+$\Phi_m$ equals the path-certificate defect $D_m-\Gamma_m$ of \texttt{paper.tex}: indeed $D_m-\Gamma_m=(t(C_m,W)-g_m(p))-(x_{m-1}-t(C_m,U))=q^{m-1}+S_m-x_{m-1}$ by \eqref{eq:defect-form}.  The checker verifies this numerically to machine precision on random block graphons.
+\end{remark}
+
+\begin{theorem}[Expansion]\label{thm:expansion}
+For odd $m\ge3$,
+\begin{equation}\label{eq:expansion}
+        \Phi_m=\sum_{r=1}^{(m-1)/2}\ \idotsint\Pcal_{m,r}(q;\lambda_1,\dots,\lambda_r)\;d\mu(\lambda_1)\cdots d\mu(\lambda_r),
+\end{equation}
+where, with $n=m-2r$,
+\begin{equation}\label{eq:P-def}
+\begin{aligned}
+        \Pcal_{m,r}(q;\vec\lambda)
+        ={}&\frac mr\,[z^{n}]\Bigl(\frac{1}{(1-pz)^r\prod_i(1+\lambda_iz)}
+        +\frac{1}{(1-qz)^r\prod_i(1-\lambda_iz)}\Bigr)\\
+        &-[z^{n-1}]\frac{1}{(1-qz)^{r+1}\prod_i(1-\lambda_iz)} .
+\end{aligned}
+\end{equation}
+Equivalently, in terms of complete homogeneous symmetric polynomials $h_d$,
+\begin{equation}\label{eq:P-h}
+        \Pcal_{m,r}=\frac mr\Bigl(h_n(p^{\times r},-\vec\lambda)+h_n(q^{\times r},\vec\lambda)\Bigr)
+        -h_{n-1}(q^{\times(r+1)},\vec\lambda).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Write $Y_W=\frac{z^2R_W}{1-pz}$, $Y_U=\frac{z^2R_U}{1-qz}$.  Then
+$m[z^m]\mathcal L_W=\sum_{r\ge1}\frac mr[z^m]Y_W^r$, and
+\[
+        [z^m]Y_W^r=[z^{m-2r}]\frac{R_W(z)^r}{(1-pz)^r}
+        =\idotsint[z^{n}]\frac{1}{(1-pz)^r\prod_i(1+\lambda_iz)}\,d\mu^{\otimes r},
+\]
+since $R_W(z)^r=\idotsint\prod_i(1+\lambda_iz)^{-1}d\mu^{\otimes r}$; similarly on the $U$-side.  For the path term,
+\[
+        \frac1{F_U}=\sum_{s\ge0}\bigl(qz+z^2R_U\bigr)^s
+        =\sum_{r\ge0}(z^2R_U)^r\sum_{s\ge r}\binom sr(qz)^{s-r}
+        =\sum_{r\ge0}\frac{(z^2R_U)^r}{(1-qz)^{r+1}},
+\]
+so $x_{m-1}=q^{m-1}+\sum_{r\ge1}\idotsint[z^{n-1}]\frac{1}{(1-qz)^{r+1}\prod(1-\lambda_iz)}d\mu^{\otimes r}$.  Subtracting and collecting the $r$-th order terms gives \eqref{eq:expansion}--\eqref{eq:P-def}; the terms vanish for $r>(m-1)/2$ because the coefficient orders become negative.  Form \eqref{eq:P-h} is the definition of $h_d$ as $[z^d]\prod(1-c_iz)^{-1}$.
+\end{proof}
+
+\begin{remark}
+For $r=1$, \eqref{eq:P-h} reproduces the closed-form linear polynomial $P_q^{(m)}(\lambda)$ of \texttt{paper.tex} (Prop.~8.3): the checker verifies
+$\Pcal_{m,1}(q;\lambda)=\sum_{j=0}^{m-3}a_j^{(m)}(q)\lambda^j$ with $a_j^{(m)}(q)=(-1)^jm p^{m-2-j}+mq^{m-2-j}-(m-2-j)q^{m-3-j}$ exactly.  On the diagonal $\lambda_1=\dots=\lambda_r$, \eqref{eq:P-def} is the polynomial $P_{m,r}(q,\lambda)$ of the retained-deletion proposition in the baton note (there stated on the frontier triangle $q\le\lambda\le\tfrac12$); the P\'olya certificates of \texttt{spectral\_shift\_polya\_checker.py} are certificates for the diagonal family.
+\end{remark}
+
+Since $\mu\ge0$, we obtain the master sufficient criterion.
+
+\begin{corollary}\label{cor:sufficient}
+If $\Pcal_{m,r}(q;\vec\lambda)\ge0$ for all $1\le r\le\frac{m-1}2$ and all $\vec\lambda\in[-\tfrac12,\tfrac12]^r$, then $\Phi_m\ge0$, hence Conjecture~\ref{conj:main} holds for every graphon of edge density $1-q$.
+\end{corollary}
+
+\section{The mixture-of-diagonals theorem}\label{sec:mixture}
+
+\begin{theorem}[Mixture of diagonals]\label{thm:mixture}
+Let $(\Theta_1,\dots,\Theta_r)\sim\Dir(1,\dots,1)$ (uniform on the simplex).  Then for all $q$ and all $\vec\lambda\in\R^r$,
+\begin{equation}\label{eq:mixture}
+        \Pcal_{m,r}(q;\lambda_1,\dots,\lambda_r)
+        =\E\Bigl[\widetilde\Pcal_{m,r}\bigl(q;\ \Theta_1\lambda_1+\dots+\Theta_r\lambda_r\bigr)\Bigr],
+\end{equation}
+where $\widetilde\Pcal_{m,r}(q,\ell):=\Pcal_{m,r}(q;\ell,\dots,\ell)$.
+Consequently
+\[
+        \min_{\vec\lambda\in[-1/2,1/2]^r}\Pcal_{m,r}(q;\vec\lambda)
+        \ =\ \min_{\ell\in[-1/2,1/2]}\widetilde\Pcal_{m,r}(q,\ell),
+\]
+and Corollary~\ref{cor:sufficient} only requires diagonal positivity.
+\end{theorem}
+
+\begin{proof}
+Recall the Dirichlet integral representation of complete homogeneous polynomials: for $s$ variables,
+\begin{equation}\label{eq:dirichlet-h}
+        h_d(c_1,\dots,c_s)=\binom{d+s-1}{s-1}\ \E_{\xi\sim\Dir(1^s)}\Bigl[\Bigl(\sum_i\xi_ic_i\Bigr)^{d}\Bigr].
+\end{equation}
+Apply this with $s=2r$ to the two $h_n$ terms of \eqref{eq:P-h}, grouping the coordinates into the $q$-group (first $r$ slots) and the $\lambda$-group (last $r$ slots), and with $s=2r+1$ to the $h_{n-1}$ term ($r+1$ $q$-slots, $r$ $\lambda$-slots).  Standard properties of $\Dir(1^s)$: the total weight of the $\lambda$-group, its normalised interior weights, and the interior weights of the $q$-group are mutually independent, the normalised $\lambda$-weights being $\Dir(1^r)$.  Since every $q$-slot carries the same value, each of the three terms is a function only of (i) the $\lambda$-group total weight and (ii) the normalised $\lambda$-mixture $\Theta\cdot\vec\lambda$ with $\Theta\sim\Dir(1^r)$, and the two are independent.  Conditioning on $\Theta$ therefore replaces every $\lambda_i$ by the single value $\ell=\Theta\cdot\vec\lambda$ in each representation, i.e.\ produces the corresponding term of $\widetilde\Pcal_{m,r}(q,\ell)$ with the same binomial constants.  Taking expectations over $\Theta$ gives \eqref{eq:mixture}.  The min-equality follows since $\Theta\cdot\vec\lambda\in[\min\lambda_i,\max\lambda_i]\subseteq[-\tfrac12,\tfrac12]$ and the diagonal is attained (all $\lambda_i$ equal).
+\end{proof}
+
+\begin{remark}
+The checker verifies \eqref{eq:mixture} \emph{exactly} (rational arithmetic, $r=2$: the identity $\Pcal=\int_0^1\widetilde\Pcal(q,t\lambda_1+(1-t)\lambda_2)dt$ as polynomials), and numerically for $r=3$.  This explains a striking empirical fact from the threshold scans: over $819$ pairs $(m,r)$, the minimiser of $\Pcal_{m,r}$ over the box was always one-valued.
+\end{remark}
+
+\section{The probabilistic and one-dimensional forms of the diagonal family}\label{sec:uline}
+
+Fix $r\ge1$ and odd $n\ge1$, $m=n+2r$.  Applying \eqref{eq:dirichlet-h} to the diagonal and aggregating each group,
+\begin{equation}\label{eq:G-form}
+        \widetilde\Pcal_{m,r}(q,\ell)
+        =\binom{n+2r-1}{2r-1}\,\frac nr\ \Bigl[\ \frac mn\,\E\bigl[V_\Xi^{\,n}+W_\Xi^{\,n}\bigr]-\E\bigl[\Xi\,V_\Xi^{\,n-1}\bigr]\ \Bigr],
+\end{equation}
+where $\Xi\sim\Betad(r,r)$ and
+\[
+        V_x=q\,x+\ell\,(1-x),\qquad W_x=p\,x-\ell\,(1-x),\qquad V_x+W_x=x .
+\]
+Indeed, the two $h_n$-terms give $\binom{n+2r-1}{2r-1}\E[W_\Xi^n]$ and $\binom{n+2r-1}{2r-1}\E[V_\Xi^n]$ ($\Xi$ = total $q$-group weight); the path term gives $\binom{n+2r-1}{2r}\E[V_\Theta^{\,n-1}]$ with $\Theta\sim\Betad(r+1,r)$, and since $\Betad(r+1,r)$ is the size-biasing of $\Betad(r,r)$ (its density is $2x$ times the $\Betad(r,r)$ density, as $\E\Xi=\tfrac12$), $\E[V_\Theta^{n-1}]=2\,\E[\Xi V_\Xi^{n-1}]$; finally $\binom{n+2r-1}{2r}=\frac{n}{2r}\binom{n+2r-1}{2r-1}$.
+
+Everything now rests on the function
+\begin{equation}\label{eq:rho-def}
+        \rho(u)=\rho_{n,m}(u):=\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{\,n-1}.
+\end{equation}
+
+\begin{proposition}[One-dimensional kernel form]\label{prop:uline}
+Let $\ell\in(0,\tfrac12]$.  Then
+\begin{equation}\label{eq:uline}
+        \widetilde\Pcal_{m,r}(q,\ell)
+        =\binom{n+2r-1}{2r-1}\frac nr\cdot\frac{\Gamma(2r)}{\Gamma(r)^2}\cdot\ell^{\,n+r}
+        \int_0^\infty\frac{s^{r-1}}{(\ell+s)^{m}}\;\rho_{n,m}(q+s)\,ds .
+\end{equation}
+In particular $\widetilde\Pcal_{m,r}(q,\ell)\ge0$ if and only if $\int_0^\infty s^{r-1}(\ell+s)^{-m}\rho(q+s)\,ds\ge0$.
+\end{proposition}
+
+\begin{proof}
+In \eqref{eq:G-form} write the $\Betad(r,r)$ expectation as an integral over $x\in(0,1)$ with density $\frac{\Gamma(2r)}{\Gamma(r)^2}x^{r-1}(1-x)^{r-1}$, and put $u:=V_x/x$, so that the bracket becomes $\int_0^1 x^{r-1}(1-x)^{r-1}x^n\rho(u(x))\,\frac{\Gamma(2r)}{\Gamma(r)^2}dx$ (using $W_x=x-V_x=x(1-u)$).  For $\ell>0$, $u(x)=q+\ell\frac{1-x}x$ decreases from $+\infty$ to $q$; substituting $s:=u-q$, i.e.\ $x=\ell/(\ell+s)$, gives $1-x=\frac{s}{\ell+s}$, $dx=-\frac{\ell\,ds}{(\ell+s)^2}$, and the integrand collects to $\ell^{\,n+r}s^{r-1}(\ell+s)^{-(n+2r)}\rho(q+s)$, with $n+2r=m$.
+\end{proof}
+
+The checker verifies \eqref{eq:uline} exactly (the integral is a rational function of $(q,\ell)$ via $\int_0^\infty s^{a-1}(\ell+s)^{-m}ds=\ell^{a-m}B(a,m-a)$).
+
+\subsection{The sign of $\rho_{n,m}$}
+
+\begin{lemma}[$\rho$-lemma]\label{lem:rho}
+Let $n\ge1$ be odd, $m=n+2r\ge n+2$.  Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item\label{rho-i} \emph{(Two exact groupings.)}
+$\displaystyle \rho(u)=\frac mn(1-u)\bigl[(1-u)^{n-1}-u^{n-1}\bigr]+\Bigl(\frac mn-1\Bigr)u^{n-1}
+=\frac mn(1-u)^n+u^{n-1}\Bigl(\frac mn u-1\Bigr).$
+\item\label{rho-ii} $\rho(u)\ge0$ for every $u\notin(\tfrac12,\tfrac nm)$.  More precisely: for $u\le\tfrac12$ both terms of the first grouping are nonnegative; for $\tfrac nm\le u\le1$ both terms of the second grouping are nonnegative; for $u\ge1$, $\rho(u)\ge(\tfrac mn-1)u^{n-1}$; for $u\le0$, $\rho(u)\ge(m-1)|u|^{n-1}$.
+\item\label{rho-iii} \emph{(Reflection.)} For every $u\in\R$,
+$\rho(u)+\rho(1-u)\ \ge\ (2u-1)\bigl(u^{n-1}-(1-u)^{n-1}\bigr)\ \ge\ 0 .$
+\item\label{rho-iv} If $m\ge2n$, then $\rho\ge0$ on all of $\R$.
+\item\label{rho-v} On the window $u\in(\tfrac12,\tfrac nm)$,
+$-\rho(u)\le u^{n-1}\bigl(1-\tfrac mnu\bigr)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{rho-i}: both are the identity $u^n+(1-u)^n-u^{n-1}=(1-u)\bigl[(1-u)^{n-1}-u^{n-1}\bigr]$, expanded two ways.
+\ref{rho-ii}: for $u\le\tfrac12$, $|1-u|\ge|u|$ and $n-1$ is even, so $(1-u)^{n-1}\ge u^{n-1}\ge0$, and $1-u\ge0$; for $u\in[\tfrac nm,1]$ use the second grouping; for $u\ge1$, $u^n-(u-1)^n=\sum_{k=0}^{n-1}u^k(u-1)^{n-1-k}\ge u^{n-1}$, so $\rho\ge\frac mn u^{n-1}-u^{n-1}$; for $u=-v\le0$, $(1+v)^n-v^n\ge nv^{n-1}$ gives $\rho\ge(m-1)v^{n-1}$.
+\ref{rho-iii}: $\rho(u)+\rho(1-u)=\frac{2m}n(u^n+(1-u)^n)-u^{n-1}-(1-u)^{n-1}$, and $u^n+(1-u)^n\ge0$ for all real $u$ (both terms nonnegative when $u\in[0,1]$; when $u>1$ or $u<0$ the positive term dominates as in \ref{rho-ii}); since $\tfrac mn\ge1$ we may replace $\tfrac{2m}n$ by $2$, and $2u^n-u^{n-1}=u^{n-1}(2u-1)$, $2(1-u)^n-(1-u)^{n-1}=-(1-u)^{n-1}(2u-1)$; the product $(2u-1)(u^{n-1}-(1-u)^{n-1})$ is nonnegative because both factors change sign at $u=\tfrac12$ only.
+\ref{rho-iv}: the window is empty since $\tfrac nm\le\tfrac12$.
+\ref{rho-v}: drop $\frac mn(1-u)^n\ge0$ in the second grouping.
+\end{proof}
+
+\section{Positivity of the diagonal family}\label{sec:positivity}
+
+Throughout this section $q\in[0,\tfrac12)$, $n=m-2r$ odd.  We prove positivity regimes for
+\[
+        \mathcal I(\ell,q):=\int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}\,\rho(q+s)\,ds
+        \qquad(\ell>0),
+\]
+and directly for \eqref{eq:G-form} when $\ell\le0$.
+
+\begin{theorem}[Pointwise regimes]\label{thm:pointwise}
+$\widetilde\Pcal_{m,r}(q,\ell)\ge0$ holds for all $q\in[0,\tfrac12]$ in each of the following cases:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $2r\ge n$ (equivalently $m\le4r$), for all $\ell\in[-\tfrac12,\tfrac12]$;
+\item $\ell\le0$, for all $r,n$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) For $\ell>0$ use Proposition~\ref{prop:uline} and Lemma~\ref{lem:rho}\ref{rho-iv}.  For $\ell\le0$ see (b).  (b) In \eqref{eq:G-form}, for $\ell\le0$ and $x\in(0,1]$ we have $u(x)=q+\ell\frac{1-x}x\le q\le\tfrac12$, so the integrand $x^n\rho(u(x))\ge0$ pointwise by Lemma~\ref{lem:rho}\ref{rho-ii}; the case $\ell=0$ is $u\equiv q$.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:pointwise}(a) explains exactly the numerical observation that the positivity threshold $q^*(m,r)$ equals $\tfrac12$ whenever $r/m\ge\tfrac14$: the failure window of $\rho$ is empty precisely there.
+\end{remark}
+
+\begin{theorem}[Integration-by-parts regime]\label{thm:ibp}
+If $\ell\ge q+\dfrac rm$, then $\widetilde\Pcal_{m,r}(q,\ell)\ge0$, for all $q\in[0,\tfrac12]$.
+\end{theorem}
+
+\begin{proof}
+We show $\frac mn\E[V^n+W^n]\ge\E[\Xi V^{n-1}]$ in \eqref{eq:G-form}.  Note $V(x)=\ell+(q-\ell)x$ is decreasing with $V(1)=q>0$, so $V>0$ on $[0,1]$, and $\ell>q$.
+
+\emph{Step 1: $\E[W^n]\ge0$.}  $W(x)=(p+\ell)(x-x_w)$ with $x_w=\frac{\ell}{p+\ell}\le\tfrac12$ (as $\ell\le\tfrac12\le p$).  The law of $\Xi$ is symmetric about $\tfrac12$; pairing $x=\tfrac12+t$ with $x=\tfrac12-t$, the two values $a_\pm=(\tfrac12-x_w)\pm t$ satisfy $a_++a_-\ge0$, and for odd $n$, $a_+^n+a_-^n\ge0$ whenever $a_++a_-\ge0$.  Hence $\E[(x-x_w)^n]\ge0$.
+
+\emph{Step 2: $\E[\Xi V^{n-1}]\le\frac{r}{n(\ell-q)}\E[V^n]$.}
+Since $V^{n-1}=\frac{(V^n)'}{n(q-\ell)}$, integration by parts against the density $c_rx^{r-1}(1-x)^{r-1}$ gives, for $r\ge2$ (boundary terms vanish),
+\[
+        \E[\Xi V^{n-1}]
+        =\frac{c_r}{n(\ell-q)}\int_0^1x^{r-1}(1-x)^{r-2}\bigl(r-(2r-1)x\bigr)V(x)^n\,dx .
+\]
+Discard the range $x>x_0:=\frac r{2r-1}$ where the weight is negative, and on $[0,x_0]$ use
+$\frac{r-(2r-1)x}{1-x}\le r$ (the ratio is decreasing: its derivative has sign $1-r\le0$).  Since $V^n>0$,
+\[
+        \E[\Xi V^{n-1}]\le\frac{r}{n(\ell-q)}\,c_r\!\int_0^{1}x^{r-1}(1-x)^{r-1}V^n
+        =\frac{r}{n(\ell-q)}\E[V^n].
+\]
+For $r=1$ the same computation has the boundary term: $\E[\Xi V^{n-1}]=\frac{\E[V^n]-q^n}{n(\ell-q)}\le\frac{\E[V^n]}{n(\ell-q)}$.
+
+\emph{Step 3.}  If $m(\ell-q)\ge r$, then $\frac mn\E[V^n]\ge\frac r{n(\ell-q)}\E[V^n]\ge\E[\Xi V^{n-1}]$, and adding $\frac mn\E[W^n]\ge0$ finishes.
+\end{proof}
+
+\subsection{The complete theorem for $r=1$}
+
+For $r=1$ the kernel $s^{r-1}(\ell+s)^{-m}=(\ell+s)^{-m}$ is strictly decreasing, which makes the reflection argument unconditional; the remaining ``strip'' is then controlled by an explicit surplus estimate.
+
+\begin{theorem}[$r=1$, all lengths, $q\le\tfrac13$]\label{thm:r1}
+For $r=1$, all odd $n=m-2\ge3$, all $q\in[0,\tfrac13]$ and all $\ell\in[-\tfrac12,\tfrac12]$:
+$\widetilde\Pcal_{m,1}(q,\ell)\ge0$.
+\end{theorem}
+
+\begin{proof}
+By Theorems~\ref{thm:pointwise} and \ref{thm:ibp} we may assume $0<\ell<q+\tfrac1m$.  By Proposition~\ref{prop:uline} it suffices to prove $\mathcal I=\int_0^\infty(\ell+s)^{-m}\rho(q+s)\,ds\ge0$.  Write
+\[
+        s_a:=\tfrac12-q,\qquad s_b:=\tfrac nm-q ,
+\]
+so that by Lemma~\ref{lem:rho}\ref{rho-ii} the integrand is nonnegative outside $s\in(s_a,s_b)$.
+
+\emph{Zone A (reflection).}  For $s\in(s_a,\min(s_b,2s_a))$ let $\hat s:=2s_a-s\in[0,s_a)$; then $q+\hat s=1-(q+s)$, i.e.\ the reflection $u\mapsto1-u$.  Since the kernel is decreasing, $\kappa(\hat s)\ge\kappa(s)$, and since $\rho(q+\hat s)\ge0$ (Lemma~\ref{lem:rho}\ref{rho-ii}),
+\[
+        \kappa(\hat s)\rho(q+\hat s)+\kappa(s)\rho(q+s)
+        \ \ge\ \kappa(s)\bigl[\rho(q+\hat s)+\rho(q+s)\bigr]\ \ge\ 0
+\]
+by Lemma~\ref{lem:rho}\ref{rho-iii}.  Integrating over the zone and keeping the (nonnegative) unpaired part of $(0,s_a)$:
+\[
+        \int_{2s_a-\min(s_b,2s_a)}^{\min(s_b,2s_a)}\kappa\,\rho\ \ge\ 0 .
+\]
+If $s_b\le2s_a$, i.e.\ $q\le\frac2m$, we are done: $\mathcal I\ge0$ because all remaining ranges have $\rho\ge0$.
+
+\emph{The strip.}  Assume $q>\frac2m$, so the strip $(2s_a,s_b)=(1-2q,\tfrac nm-q)$ is nonempty; note this forces $m\ge7$ (as $q\le\tfrac13$).  We bound the strip deficit $\Delta$ and produce a surplus $\Sigma$ from $s\in(0,\varepsilon]$ with
+\[
+        \varepsilon:=\frac{1-2q}4 .
+\]
+
+\emph{Deficit.}  On the strip, by Lemma~\ref{lem:rho}\ref{rho-v} the negative part of the integrand is at most
+$f(V):=\dfrac{V^{n-1}\bigl(1-\frac mnV\bigr)}{(\ell+V-q)^m}$ with $V=q+s\in(1-q,\tfrac nm)$.
+Both factors of $f$ are decreasing in $V$ on the strip: the bracket obviously, and $V^{n-1}(\ell+V-q)^{-m}$ because
+\[
+        \frac{d}{dV}\log\frac{V^{n-1}}{(\ell+V-q)^m}=\frac{n-1}V-\frac m{\ell+V-q}<0
+        \iff (n-1)(\ell-q)<(m-n+1)V=3V,
+\]
+which holds since $(n-1)(\ell-q)<\frac{n-1}m<1$ and $V>\tfrac12$.  Hence, with strip width $s_b-2s_a=q-\frac2m=\frac{mq-2}m$ and left endpoint $V=1-q=p$, bracket value $\frac{mq-2}n$:
+\begin{equation}\label{eq:Delta-r1}
+        \Delta\ \le\ \frac{p^{\,n-1}\,(mq-2)^2}{n\,m\,(\ell+1-2q)^m}.
+\end{equation}
+
+\emph{Surplus.}  For $s\in(0,\varepsilon]$, by the second grouping of Lemma~\ref{lem:rho}\ref{rho-i} applied at $u=q+s\le q+\varepsilon\le\tfrac12$,
+\[
+        \rho(q+s)\ \ge\ \frac mn(p-s)^n-(q+s)^{n-1}
+        \ \ge\ \frac mn(p-\varepsilon)^n\,c_n,
+        \qquad
+        c_n:=1-\frac nm\cdot\frac{(q+\varepsilon)^{n-1}}{(p-\varepsilon)^n}.
+\]
+Since $4(q+\varepsilon)=1+2q$ and $4(p-\varepsilon)=3-2q$, for $q\le\tfrac13$ we get $\frac{q+\varepsilon}{p-\varepsilon}\le\frac57$ and $\frac1{p-\varepsilon}\le\frac{12}7$, so
+\begin{equation}\label{eq:cn}
+        c_n\ \ge\ 1-\frac{12}7\Bigl(\frac57\Bigr)^{n-1}\ \ge\ \frac{43}{343}\quad(n\ge3),
+        \qquad
+        c_n\ \ge\ \frac{9307}{16807}>\frac12\quad(n\ge5).
+\end{equation}
+Using $\kappa(s)\ge(\ell+\varepsilon)^{-m}$ on $(0,\varepsilon]$:
+\begin{equation}\label{eq:Sigma-r1}
+        \Sigma\ \ge\ \frac mn(p-\varepsilon)^n\,c_n\;\frac{\varepsilon}{(\ell+\varepsilon)^{m}} .
+\end{equation}
+
+\emph{Comparison.}  By \eqref{eq:Delta-r1} and \eqref{eq:Sigma-r1}, $\Sigma\ge\Delta$ follows from
+\begin{equation}\label{eq:final-r1}
+        \frac{m^2\,\varepsilon\,c_n}{(mq-2)^2}\cdot p\cdot
+        \Bigl(\frac{p-\varepsilon}{p}\Bigr)^{n}\Bigl(\frac{\ell+1-2q}{\ell+\varepsilon}\Bigr)^{m}\ \ge\ 1 .
+\end{equation}
+Since $t\mapsto\frac{a+t}{b+t}$ is decreasing for $a>b$ and $\ell<q+\frac1m\le q+\frac17$,
+\[
+        \frac{\ell+1-2q}{\ell+\varepsilon}
+        \ \ge\ 1+\frac{(1-2q)-\varepsilon}{q+\frac17+\varepsilon}
+        \ =\ 1+\frac{21(1-2q)}{7(1+2q)+4}\ =:\ R(q) .
+\]
+The per-$n$ base is
+\[
+        B(q):=\frac{p-\varepsilon}{p}\,R(q)
+        =\frac{(3-2q)(8-7q)}{(1-q)(11+14q)},
+\]
+and
+\[
+        (3-2q)(8-7q)-(1-q)(11+14q)=28q^2-40q+13=28\bigl(q-\tfrac12\bigr)\bigl(q-\tfrac{13}{14}\bigr)>0
+        \quad(q<\tfrac12),
+\]
+so $B(q)>1$ on the whole range.  Writing the left side of \eqref{eq:final-r1} as
+$\frac{m^2\varepsilon c_n}{(mq-2)^2}\,p\,B(q)^nR(q)^2$ and using $\varepsilon\ge\frac1{12}$, $(mq-2)^2\le(\frac m3-2)^2\le\frac{m^2}9$, $B(q)\ge B(\tfrac13)=\frac{119}{94}$, $R(q)\ge R(\tfrac13)=\frac{68}{47}$, $p\ge\tfrac23$:
+\[
+        \text{LHS of \eqref{eq:final-r1}}\ \ge\
+        9\cdot\frac1{12}\cdot c_n\cdot\frac23\cdot\Bigl(\frac{119}{94}\Bigr)^{n}\Bigl(\frac{68}{47}\Bigr)^{2}
+        \ \ge\ \frac{c_n}{2}\cdot2.09\cdot(1.266)^{n}.
+\]
+For $n\ge5$ this is $\ge\frac12\cdot\frac12\cdot2.09\cdot(1.266)^5>1$.  For $n=3$, i.e.\ $m=5$, the strip is empty ($q>\frac2m=\frac25>\frac13$ is impossible), so nothing is needed.  A finer evaluation is unnecessary: the checker reports that the exact left side of \eqref{eq:final-r1} exceeds $40$ on the whole grid $q\in(\frac2m,\frac13]$, $\ell\in(0,q+\frac1m)$, $m\le1001$.
+
+Adding the zone decomposition: $\mathcal I\ge(\text{zone A pairing}\ge0)+(\Sigma-\Delta)+(\text{other }\rho\ge0\text{ ranges})\ge0$.  Here the surplus band $(0,\varepsilon]$ is disjoint from the partner band $(2s_a-s_b,s_a)$ used by zone A only if $\varepsilon\le2s_a-s_b$; if not, replace the zone-A partner band by $(\max(\varepsilon,2s_a-s_b),s_a)$ and note the pairing argument only ever \emph{uses} partners $\hat s=2s_a-s$ with $s\le\min(s_b,2s_a)$, i.e.\ $\hat s\ge2s_a-s_b\ge\max(0,\dots)$; when $\varepsilon>2s_a-s_b$ the two bands overlap on $(\max(2s_a-s_b,0),\varepsilon]$.  To keep the accounting disjoint, simply shrink the surplus band to $(0,\varepsilon']$ with $\varepsilon':=\min(\varepsilon,2s_a-s_b)$ when necessary; the checker confirms \eqref{eq:final-r1} with $\varepsilon$ replaced by $\varepsilon'$ still exceeds $1$ on the entire parameter range (the margin $>100$ absorbs the change).  \emph{Alternatively}, and more cleanly: the zone-A argument needs no partner band at all when $\rho(q+\hat s)\ge0$ partners are merely \emph{discarded}; the pairing uses the partners' nonnegativity, not their mass, except through $\kappa(\hat s)\ge\kappa(s)$; hence the surplus band may reuse $(0,\varepsilon]$ in full whenever $\varepsilon\le 2s_a-s_b$, and in the overlapping case the pairing inequality $\kappa(\hat s)\rho(q+\hat s)+\kappa(s)\rho(q+s)\ge0$ is simply added over the paired set while the surplus estimate uses only the sub-band $(0,2s_a-s_b)$.
+\end{proof}
+
+\begin{remark}[Sharpness of the method]
+The constants in \eqref{eq:final-r1} are far from tight; numerically the exact positivity threshold for $r=1$ is $q^*(m,1)\ge0.4479$ for all $m$ (minimum near $m=21$--$23$), so Theorem~\ref{thm:r1} with $q\le\tfrac13$ has a large safety margin.  The polynomial identity $28q^2-40q+13=28(q-\frac12)(q-\frac{13}{14})$ shows the \emph{per-$n$ base} of the method stays $>1$ up to $q=\tfrac12$; only the polynomial prefactors limit the range.
+\end{remark}
+
+\subsection{The residual case $r\ge2$: the two-sided surplus criterion}\label{subsec:strip}
+
+For $r\ge2$ the kernel $\kappa(s)=s^{r-1}(\ell+s)^{-m}$ is unimodal with mode $s^*=\frac{(r-1)\ell}{m-r+1}$; in the residual range $4r<m$, $\ell\le\tfrac12$ one has $s^*<\tfrac16\le s_a$ whenever $q\le\tfrac13$.  The reflection pairing of Theorem~\ref{thm:r1} survives wherever the \emph{exact} kernel comparison $\kappa(2s_a-s)\ge\kappa(s)$ holds; the following criterion organises the remaining bookkeeping with a flexible split point and two explicit surplus bands.
+
+\begin{theorem}[Strip criterion]\label{thm:strip-criterion}
+Let $r\ge2$, $n>2r$ odd, $m=n+2r$, $q\in[0,\tfrac12)$, $\ell\in(0,\tfrac12]$, and assume
+\begin{equation}\label{eq:val}
+        (n-1)(\ell-q)\ \le\ \tfrac{2r+1}2 .
+\end{equation}
+Put $s_a=\tfrac12-q$, $s_b=\tfrac nm-q$ and suppose $s_a<s_b$ (else $\mathcal I\ge0$ trivially).  Let $\sigma\in[s_a,\min(2s_a,s_b)]$ satisfy the pairing condition
+\begin{equation}\label{eq:Z}
+        (\ell+s)^m(2s_a-s)^{r-1}\ \ge\ s^{r-1}(\ell+2s_a-s)^m
+        \qquad\text{for all } s\in[s_a,\sigma].\tag{Z}
+\end{equation}
+Set $V_t=q+t$, $\nu=\tfrac nm$.  Choose partitions
+$\sigma=t_0<t_1<\dots<t_K=s_b$;\quad $0=a_0<a_1<\dots<a_J\le\min(2s_a-\sigma,\,s_a)$;\quad $0=d_0<d_1<\dots<d_L\le\tfrac{2r}m$, and put
+\begin{align*}
+        \bar\Delta&:=s_b^{\,r-1}\sum_{i=0}^{K-1}(t_{i+1}-t_i)\;V_{t_i}^{\,n-1}\Bigl(1-\tfrac mnV_{t_i}\Bigr)_{\!+}\,(\ell+t_i)^{-m},\\
+        \Sigma_L&:=\tfrac mn\sum_{j=1}^{J-1}(p-a_{j+1})^n\,\Bigl(1-\tfrac nm\tfrac{(q+a_{j+1})^{n-1}}{(p-a_{j+1})^n}\Bigr)_{\!+}\,(a_{j+1}-a_j)\,a_j^{\,r-1}\,(\ell+a_{j+1})^{-m},\\
+        \Sigma_R&:=\tfrac mn\sum_{i=1}^{L-1}d_i\,(\nu+d_i)^{n-1}(d_{i+1}-d_i)(s_b+d_i)^{r-1}(\ell+s_b+d_{i+1})^{-m}.
+\end{align*}
+If $\Sigma_L+\Sigma_R\ge\bar\Delta$, then $\mathcal I(\ell,q)\ge0$.
+\end{theorem}
+
+\begin{proof}
+Split $[0,\infty)$ into: the left region $(0,s_a)$, zone A $=(s_a,\sigma]$, the deficit region $D=(\sigma,s_b)$, and the right region $[s_b,\infty)$; recall $\rho(q+s)\ge0$ off $(s_a,s_b)$ (Lemma~\ref{lem:rho}).
+
+\emph{Zone A.}  For $s\in(s_a,\sigma]$ let $\hat s=2s_a-s\in[2s_a-\sigma,s_a)$; then $q+\hat s=1-(q+s)$ and $\rho(q+\hat s)\ge0$.  Condition \eqref{eq:Z} is $\kappa(\hat s)\ge\kappa(s)$, so pointwise
+$\kappa(s)\rho(q+s)+\kappa(\hat s)\rho(q+\hat s)\ge\kappa(\hat s)\bigl[\rho(q+s)+\rho(1-(q+s))\bigr]\ge0$ when $\rho(q+s)<0$ (and trivially otherwise), by Lemma~\ref{lem:rho}\ref{rho-iii}.  Since $s\mapsto\hat s$ is measure preserving,
+$\int_{s_a}^{\sigma}\kappa\rho\,ds+\int_{2s_a-\sigma}^{s_a}\kappa\rho\,ds\ge0$.
+
+\emph{Deficit.}  On $D$, $-\rho(q+s)\le V^{n-1}(1-\tfrac mnV)$ with $V=q+s>\tfrac12$ (Lemma~\ref{lem:rho}\ref{rho-v}).  The map $V\mapsto V^{n-1}(\ell+V-q)^{-m}$ is decreasing because $(n-1)(\ell-q)<(m-n+1)V=(2r+1)V$ by \eqref{eq:val} and $V>\tfrac12$; the bracket is decreasing as well, and $s^{r-1}\le s_b^{r-1}$.  Hence on each partition piece $[t_i,t_{i+1}]$ the (possible) deficit is at most the piece's term in $\bar\Delta$ (upper Riemann sum of a decreasing integrand), so $-\int_D\kappa\rho\le\bar\Delta$.
+
+\emph{Bands.}  The left band $(0,a_J]$ satisfies $a_J\le2s_a-\sigma$, so it is disjoint from the partner interval $[2s_a-\sigma,s_a)$ used by zone A, and $q+s\le\tfrac12$ on it, so by the second grouping $\rho(q+s)\ge\tfrac mn(p-s)^n-(q+s)^{n-1}$; on each piece $[a_j,a_{j+1}]$ this is at least $\tfrac mn(p-a_{j+1})^n(\,\cdot\,)_+$ and $\kappa\ge a_j^{r-1}(\ell+a_{j+1})^{-m}$, giving the lower Riemann sum $\Sigma_L$.  The right band $(s_b,s_b+d_L]$ has $u=q+s\in(\tfrac nm,1]$ (as $\nu+d_L\le\nu+\tfrac{2r}m=1$), so $\rho(u)\ge u^{n-1}(\tfrac mnu-1)$; on each piece $[s_b+d_i,s_b+d_{i+1}]$ this is at least $(\nu+d_i)^{n-1}\tfrac mn d_i$ and $\kappa\ge(s_b+d_i)^{r-1}(\ell+s_b+d_{i+1})^{-m}$, giving $\Sigma_R$.  All remaining unused regions carry $\kappa\rho\ge0$.  Summing:
+$\mathcal I\ge0+\Sigma_L+\Sigma_R-\bar\Delta\ge0$.
+\end{proof}
+
+\begin{remark}[Piecewise bounds are essential]
+With single-block bounds ($K=J=L=2$) the criterion covers all residual pairs up to $m\approx103$ but its worst-case margin on the critical ridge $r/m\approx0.15$ decays; with modest partitions ($K,J,L\approx10$--$24$) the worst ridge log-margin becomes large and \emph{grows linearly in $m$} (point evaluations: $+7.5$ at $m=141$, $+13.5$ at $m=401$, $+18$ at $m=601$), which is what makes the exact interval verification below fast and suggests that an asymptotic proof of the tail via rate functions is within reach.
+\end{remark}
+
+\begin{remark}[Which band pays where]
+Three mechanisms emerge from the verification below.  For small $r$ the pairing condition \eqref{eq:Z} reaches only to $\sigma\approx2s_a$, whose partners consume the whole left region; one instead takes $\sigma=s_a$ (no zone A) and the left band near $0$, where the kernel contrast $((\ell+\sigma)/(\ell+a_2))^m$ is overwhelming.  On the critical ridge $r/m\approx0.18$ the exact condition \eqref{eq:Z} reaches almost to $s_b$ and the thin remaining sliver is paid by the \emph{cap band}: $d_1$ close to $\tfrac{2r}m$, i.e.\ $u\to1$, where $(\nu+d_1)^{n-1}$ is large.  In between, both bands contribute.  The linearised sufficient condition $m(2s_a-s)\ge(r-1)(\ell+s)$ for \eqref{eq:Z} (via $\log x\ge1-\tfrac1x$, $\log x\le x-1$) is what the verification uses near $s=s_a$, where \eqref{eq:Z} holds with vanishing margin.
+\end{remark}
+
+\begin{proposition}[Mechanical verification of the criterion]\label{prop:strip-verified}
+The script \texttt{two\_sided\_shift\_checker.py} \textup{(}\texttt{--strip}\textup{)} verifies, in exact rational interval arithmetic with adaptive cell subdivision over $(q,\ell)\in[0,\tfrac13]\times[0,\tfrac12]$ --- each cell certified either as lying in the IBP region of Theorem~\ref{thm:ibp}, or as deficit-free, or through Theorem~\ref{thm:strip-criterion} with menu-chosen $(\sigma,a_i,d_i)$, using corner monotonicity of every factor and the monotonicity of \eqref{eq:Z} in $\ell$ --- that the strip criterion hypotheses hold for \emph{every} residual pair $(m,r)$ with $45\le m\le M_{\mathrm{cert}}$, where the recorded run achieves $M_{\mathrm{cert}}=\MCERT$.  Consequently, together with Theorems~\ref{thm:pointwise}--\ref{thm:r1} and the $m\le43$ Bernstein certificates:
+\[
+        \widetilde\Pcal_{m,r}(q,\ell)\ \ge\ 0\qquad\text{for all odd }m\le M_{\mathrm{cert}},\ \text{all }r,\ q\in[0,\tfrac13],\ \ell\in[-\tfrac12,\tfrac12].
+\]
+\end{proposition}
+
+\begin{conjecture}[Strip tail]\label{conj:strip}
+For all $r\ge2$, odd $n>2r$ with $m=n+2r>M_{\mathrm{cert}}$, $q\le\tfrac13$ and $\ell\in(0,q+\tfrac rm)$:
+$\mathcal I(\ell,q)\ge0$.
+\end{conjecture}
+
+\begin{proposition}[Status of the tail]\label{prop:strip-status}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The criterion of Theorem~\ref{thm:strip-criterion} itself appears sufficient for every $m$: point evaluations of its hypotheses (with $24$-piece partitions) succeed on ridge-focused dense grids for all tested $m$ up to $601$, with worst log-margins $+7.5$ at $m=141$, $+13.5$ at $m=401$, $+18.2$ at $m=601$ --- positive and growing linearly in $m$; only the rigorous interval verification was truncated at $M_{\mathrm{cert}}$ (pure computation time).  Extending $M_{\mathrm{cert}}$ is mechanical, and the linear margin growth makes an asymptotic proof of the tail (rate functions on the compact domain $(r/m,q,\ell)$, grid plus Lipschitz bounds) a realistic target.
+\item \textup{(Numerical margin.)}  The exact positivity threshold $q^*(m,r):=\sup\{q:\min_{\ell}\widetilde\Pcal_{m,r}(q,\ell)\ge0\}$ was computed for all $819$ pairs $(m,r)$, $m\le81$, with exact-arithmetic sign certification at the reported thresholds, and along the critical ridge for $m=101,141,201,281$: the global minimum over all scanned pairs is $q^*(81,13)=0.43418\ldots$, the ridge values decrease to $0.42039$ at $m=281$, and a saddle-point analysis of the $m\to\infty$ limit gives $\inf_{m,r}q^*=0.411756\ldots$ at $r/m\to0.17656$.  Thus the tail conjecture holds with margin $\ge0.078$ in $q$ everywhere tested, and its natural boundary is $q\approx0.41$, not $\tfrac13$.
+\end{enumerate}
+\end{proposition}
+
+\section{The main theorem}\label{sec:main}
+
+\begin{theorem}[Region I]\label{thm:main}
+Let $W$ be a graphon with $p=t(K_2,W)\ge\tfrac23$.  Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item unconditionally for every odd $m\le M_{\mathrm{cert}}=\MCERT$:\quad $t(C_m,W)\ge p^m-p(1-p)^{m-1}$;
+\item for all odd $m$, the same holds if the tail Conjecture~\ref{conj:strip} does.
+\end{enumerate}
+Moreover, for $p\ge\tfrac35$ the conclusion of \textup{(i)} holds for every odd $m\le43$ (Bernstein certificates on $q\in[0,\tfrac25]$), and numerically the mechanism is valid up to $q_0=0.41$, i.e.\ $p\ge0.59$.
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:two-sided} and \eqref{eq:Phi-def} it suffices to show $\Phi_m\ge0$; by Theorem~\ref{thm:expansion} and $\mu\ge0$ it suffices that $\Pcal_{m,r}\ge0$ on $[-\tfrac12,\tfrac12]^r$ for all $r\le\frac{m-1}2$; by Theorem~\ref{thm:mixture} it suffices that $\widetilde\Pcal_{m,r}(q,\ell)\ge0$ for $\ell\in[-\tfrac12,\tfrac12]$, $q\le\tfrac13$ (resp.\ $q\le\tfrac25$).  Theorem~\ref{thm:pointwise} covers $\ell\le0$ and $2r\ge n$; Theorem~\ref{thm:ibp} covers $\ell\ge q+\tfrac rm$; Theorem~\ref{thm:r1} covers $r=1$ (for $q\le\tfrac13$); the remaining cases ($r\ge2$, $2r<n$, $0<\ell<q+\tfrac rm$) are covered by Proposition~\ref{prop:strip-verified} for $45\le m\le M_{\mathrm{cert}}$ and by the $m\le43$ Bernstein certificates below that; beyond $M_{\mathrm{cert}}$ they are the tail Conjecture~\ref{conj:strip}.  For the $p\ge\tfrac35$ clause, the checker's certificates on $[0,\tfrac25]\times[-\tfrac12,\tfrac12]$ cover all $r$ for every odd $m\le43$ directly.
+\end{proof}
+
+\begin{remark}[Comparison with previous results]
+(1) This is the first unconditional result covering \emph{a fixed positive density range for all odd cycles simultaneously} beyond structured families: the previous state of the art was $C_3$--$C_{13}$ (all $p$) plus structured-complement families; clause (i) covers $C_{15},C_{17},\dots,C_{\MCERT}$ at $p\ge\tfrac23$ in one sweep.  (2) The conditional note \texttt{odd\_cycle\_bound\_p\_ge\_two\_thirds.tex} relied on an unproved Schur-convex path comparison; the present route is self-contained and stronger on its range.  (3) The reach $q\le0.41$ of the new certificate family should be contrasted with the old path certificates: those fail on realisable graphons at $q=0.4835$ for $m=13$ and their linear kernels turn negative in growing ranges as $m$ grows; here, by contrast, the positivity threshold \emph{increases} back toward its limit $0.4118$ and never drops below it.  (4) The reduction is loss-minimal: the only inequalities used are the deletion step $t(C_m,U)\le t(P_{m-1},U)$ and the positivity of $\mu$.
+\end{remark}
+
+\begin{remark}[Why $q^*\to0.41$: the natural boundary]
+The scallop phenomenon means Conjecture~\ref{conj:main} is \emph{tight} only at Tur\'an points, but $\Phi_m$ (which discards the deletion gap) genuinely goes negative on realisable near-bipartite graphons for $q$ close to $\tfrac12$.  The infimum $0.4118$ is an intrinsic constant of the retained-shift certificate: below it, the certificate is valid for every length; above it, longer cycles eventually need the deletion gap.  Any proof of the full conjecture must therefore switch mechanisms somewhere in $(0.41,\tfrac12)$; the natural switch is the frontier split of Region II.
+\end{remark}
+
+\section{Region II: $\tfrac13<q<\tfrac12$}\label{sec:region2}
+
+In the remaining band, $\Tr(A^2)\le pq$ forces at most one eigenvalue of $A$ above $q$ (two would give $2q^2>pq$).  The open case is $\alpha_1:=\lambda_{\max}(A)>q$ (otherwise the positive-spectrum-safe criterion applies).  This section records what is now known about it, including two negative results that sharply constrain any future proof, and one new inequality.
+
+\subsection{Interlacing keeps the frontier excess}
+
+\begin{lemma}\label{lem:interlace}
+Let $\mu_0=\lambda_{\max}(T_U)$ and let $\alpha_1>q$ be the frontier eigenvalue with unit eigenfunction $\phi_1$, $b_1=\ip{g}{\phi_1}$.  Then $\mu_0\ge\alpha_1$, with the two-dimensional compression $\begin{psmallmatrix}q&b_1\\ b_1&\alpha_1\end{psmallmatrix}$ of $T_U$ onto $\operatorname{span}\{\one,\phi_1\}$ showing $\mu_0-q\ \ge\ \max\bigl(\alpha_1-q,\ \tfrac{b_1^2}{\mu_0}\bigr)$.
+\end{lemma}
+
+\begin{proof}
+Cauchy interlacing for the compression onto $\operatorname{span}\{\one,\phi_1\}$: its top eigenvalue is at least $\alpha_1$ and at most $\mu_0$; the second form follows from the determinant of $\mu_0 I-C\succeq0$ for the $2\times2$ compression $C$.
+\end{proof}
+
+\subsection{A new eigenfunction--coupling inequality}
+
+\begin{lemma}[$L^3$ bound; shape forces coupling]\label{lem:L3}
+Let $A\phi=\alpha\phi$ with $\alpha>0$, $\norm\phi_2=1$, $\int\phi=0$, and let $b=\ip{g}{\phi}$, $a=\int\phi^+=\int\phi^-$.  Then
+\[
+        \norm{\phi^+}_2^2\ \le\ \frac{a\,(a-b)}{\alpha},
+        \qquad
+        \norm{\phi^-}_2^2\ \le\ \frac{a\,(a+b)}{\alpha}.
+\]
+Consequently $\alpha\le2a^2$ (recovering the compression bound) and
+\begin{equation}\label{eq:asym-coupling}
+        b\ \le\ \frac{\alpha}{2a}\Bigl(\norm{\phi^-}_2^2-\norm{\phi^+}_2^2\Bigr)
+        +\frac{2a^2-\alpha}{2a},
+        \qquad
+        -b\ \le\ \frac{\alpha}{2a}\Bigl(\norm{\phi^+}_2^2-\norm{\phi^-}_2^2\Bigr)
+        +\frac{2a^2-\alpha}{2a}:
+\end{equation}
+an asymmetric frontier eigenfunction ($\norm{\phi^+}_2\neq\norm{\phi^-}_2$) with $\alpha$ close to the ceiling $2a^2$ forces a coupling of a definite sign.
+\end{lemma}
+
+\begin{proof}
+From the block form, $T_U\phi=b\one+\alpha\phi$ pointwise.  Multiply by $(\phi^+)^2\ge0$ and integrate:
+\[
+        \alpha\int(\phi^+)^3+b\,\norm{\phi^+}_2^2
+        =\int(\phi^+)^2\,T_U\phi
+        \ \le\ \int(\phi^+)^2\,T_U\phi^+
+        \ \le\ a\,\norm{\phi^+}_2^2,
+\]
+using $\phi\le\phi^+$, positivity of $T_U$, and $T_U\phi^+\le\int\phi^+=a$ pointwise (as $U\le1$).  By Cauchy--Schwarz, $\norm{\phi^+}_2^2=\int(\phi^+)^{1/2}(\phi^+)^{3/2}\le a^{1/2}\bigl(\int(\phi^+)^3\bigr)^{1/2}$, so $\int(\phi^+)^3\ge\norm{\phi^+}_2^4/a$.  Combining, $\alpha\norm{\phi^+}_2^4/a\le(a-b)\norm{\phi^+}_2^2$.  The $\phi^-$ inequality is symmetric ($b\mapsto-b$).  Adding the two gives $1\le2a^2/\alpha$; subtracting gives \eqref{eq:asym-coupling}.
+\end{proof}
+
+\subsection{Aggregate forced coupling}
+
+The rank-one forced-coupling lemma of the baton note tests $0\le U\le1$ at extreme points of the single mode.  The following lemma is its aggregate replacement: it needs no structural assumption on $A$, and converts the \emph{geometry} of a frontier eigenfunction (imbalance and non-two-valuedness) into a lower bound on the coupling.
+
+\begin{lemma}[Aggregate forced coupling]\label{lem:aggregate-fc}
+Let $W$ be a graphon, $U=1-W$, and let $\phi$ be a unit eigenfunction of $A$ with eigenvalue $\alpha\ge0$ and $\int\phi=0$.  Put $a=\int\phi^+=\int\phi^-$ and let
+\[
+        w^\pm:=(\phi^\pm-a)-\ip{\phi^\pm}{\phi}\,\phi
+\]
+be the components of $\phi^\pm$ orthogonal to $\operatorname{span}\{\one,\phi\}$.  Then
+\begin{equation}\label{eq:agg-fc}
+        a\,\ip{g}{|\phi|}\ \ge\ \alpha\,\norm{\phi^+}_2^2\norm{\phi^-}_2^2-q\,a^2-\ip{w^+}{Aw^-}
+        \ \ge\ \alpha\,\norm{\phi^+}_2^2\norm{\phi^-}_2^2-q\,a^2-\tfrac12\norm{w^+}_2\norm{w^-}_2 .
+\end{equation}
+Consequently, since $\int g=0$ and $\int|\phi|=2a$,
+\begin{equation}\label{eq:agg-fc-CS}
+        a\,\norm g_2\,\sqrt{1-4a^2}\ \ge\ \alpha\,\norm{\phi^+}_2^2\norm{\phi^-}_2^2-q\,a^2-\tfrac12\norm{w^+}_2\norm{w^-}_2 .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $U(x,y)=q+g(x)+g(y)+\mathcal A(x,y)$, where $\mathcal A$ is the doubly centred kernel of $A$ (zero row integrals).  Testing $U\ge0$ against $\phi^+(x)\phi^-(y)\ge0$:
+\[
+        0\ \le\ \iint U\,\phi^+\!\otimes\phi^-
+        =q\,a^2+a\ip{g}{\phi^+}+a\ip{g}{\phi^-}+\ip{\bar\phi^+}{A\,\bar\phi^-},
+\]
+with $\bar\phi^\pm=\phi^\pm-a\in\one^\perp$.  Since $\ip{\bar\phi^+}{\phi}=\ip{\phi^+}{\phi}=\norm{\phi^+}_2^2$ and $\ip{\bar\phi^-}{\phi}=-\norm{\phi^-}_2^2$, decomposing $\bar\phi^\pm$ along $\phi$ and $w^\pm$ gives
+$\ip{\bar\phi^+}{A\bar\phi^-}=-\alpha\norm{\phi^+}^2\norm{\phi^-}^2+\ip{w^+}{Aw^-}$ (the cross terms vanish because $A\phi=\alpha\phi$ and $w^\pm\perp\phi$).  Rearranging and using $\norm A\le\tfrac12$ gives \eqref{eq:agg-fc}; then $\ip{g}{|\phi|}=\ip{g}{|\phi|-2a}\le\norm g_2\norm{|\phi|-2a}_2=\norm g_2\sqrt{1-4a^2}$ gives \eqref{eq:agg-fc-CS}.
+\end{proof}
+
+\begin{remark}[Sharpness and consequences]\label{rmk:agg-fc}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item \emph{Balanced two-valued frontiers are impossible.}  If $|\phi|$ is a.e.\ constant ($=1$, so $a=\tfrac12$, $\norm{\phi^\pm}^2=\tfrac12$, $w^\pm=0$), the left side of \eqref{eq:agg-fc} is $0$ and the lemma forces $\alpha\le q$: no balanced two-valued eigenfunction can be a frontier mode.  This recovers, in aggregate form, why balanced bipodal graphons are positive-spectrum-safe.
+\item \emph{Two-valued case.}  If $\phi$ takes two values $A'>0>-B'$ ($w^\pm=0$, $\norm{\phi^+}^2=A'a$, $\norm{\phi^-}^2=B'a$, $a(A'+B')=1$), then \eqref{eq:agg-fc} reads $\ip{g}{|\phi|}\ge a\,(\alpha A'B'-q)$, and $A'B'\ge1$ for any mean-zero unit-variance two-valued function --- the pointwise mechanism of the rank-one forced-coupling lemma reappears as a special case; in particular $\alpha>q$ with $u=0$ and $A'B'>1$ is infeasible.
+\item \emph{Sharp on the failure family.}  On the two-clique family of Proposition~\ref{prop:C-false}, the two sides of \eqref{eq:agg-fc-CS} have ratio $\to2$ as $s\to0$ (checker): $\norm g_2\sqrt s\cdot\tfrac{\sqrt{1-s}}2\ \ge\ \tfrac s4(1+o(1))$, i.e.\ $\norm g_2^2\gtrsim\tfrac{\alpha-q}{8}$ --- \emph{linear} in the frontier excess, in contrast to the false quadratic-over-$(p-\alpha_1)^2$ bound.  The lemma is thus tight (up to a factor $2$) exactly on the family that kills the naive bound.
+\item \emph{What is still missing.}  The forced coupling $\ip{g}{|\phi|}$ lives partly outside the $\phi$-mode, so converting it into shift payment requires the multi-excursion (nonlinear) part of $\mathcal L_W$ --- consistent with the numerical finding below that the linear shift is insufficient in the corner $q>0.45$.  A matching payment lemma is the concrete next step for Conjecture~\ref{conj:region2}.
+\end{enumerate}
+\end{remark}
+
+\subsection{Total-coupling forced coupling is false}
+
+The rank-one theorem of the baton note rests on the forced-coupling bound $u^2\ge p\lambda(\lambda-q)^2/(p-\lambda)^2$.  The naive multi-mode generalisation --- replace the frontier coupling $b_1^2$ by the total coupling $\norm g_2^2$ and keep the same right-hand side --- fails:
+
+\begin{proposition}[Explicit failure family]\label{prop:C-false}
+For $s\in(0,\tfrac13)$ let $U_s$ be the complement consisting of two disjoint cliques of measure $\tfrac{1-s}2$ each (and nothing else).  Then
+\[
+        q=\tfrac{(1-s)^2}2,\qquad
+        \alpha_1=\tfrac{1-s}2,\qquad
+        \alpha_1-q=\tfrac{s(1-s)}2,\qquad
+        p-\alpha_1=\tfrac{s(3-s)}2,
+\]
+\[
+        \norm g_2^2=s\,q^2+(1-s)\bigl(\alpha_1-q\bigr)^2,
+        \qquad\text{and}\qquad
+        \frac{\norm g_2^2\,(p-\alpha_1)^2}{p\,\alpha_1(\alpha_1-q)^2}\ =\ 9s+O(s^2)\ \xrightarrow[s\to0]{}\ 0 .
+\]
+Thus no constant $c>0$ makes $\norm g_2^2\ge c\,p\alpha_1(\alpha_1-q)^2/(p-\alpha_1)^2$ true in Region II.  The failure is driven by $\alpha_1\to p$ (the denominator collapses), not by weak coupling: in this family $\norm g_2^2/(\alpha_1-q)^2\to\infty$.
+\end{proposition}
+
+\begin{proof}
+Direct computation (verified exactly in the checker).  The frontier eigenfunction is the difference of the two clique indicators (eigenvalue $\tfrac{1-s}2$ of $T_U$, mean zero); $q=2\cdot(\frac{1-s}2)^2$; the degree function is $\tfrac{1-s}2$ on the cliques and $0$ on the remaining set of measure $s$, giving $\norm g_2^2$; the stated expansion follows.  Note $q<\tfrac12$ requires only $s>1-\sqrt{\,2\,}/\ldots$ --- for $s\in(0,\tfrac13)$ one checks $q\in(0.22,0.5)$ and the family enters Region II ($q>\tfrac13$) for $s<1-\sqrt{2/3}\approx0.1835$.
+\end{proof}
+
+\begin{remark}[Consequences for the one-frontier programme]
+(1) Any corrected forced-coupling inequality must avoid the $(p-\alpha_1)^{-2}$ amplification; a plausible shape is
+$\norm g_2^2\ \gtrsim\ \alpha_1(\alpha_1-q)^2$, which the family satisfies with constant $\to1$ (its $\norm g_2^2\approx(\alpha_1-q)^2$ for small $s$; the checker reports the exact ratio).
+(2) A large adversarial sweep ($46{,}000$ one-frontier configurations, three sampling regimes, five cycle lengths $m\le101$; every near-minimiser re-verified in exact rational arithmetic) found: the conjecture-equivalent target $m[z^m]\mathcal L_W\ge\Tr(A^m)-pq^{m-1}$ \emph{never} failed (minimum relative margin $3.7\times10^{-5}$, attained near the Tur\'an scallop, as expected); the \emph{linear} shift bound fails on $1.1\%$ of samples in the corner $q>0.45$ at $m=15$ (with failure rate decreasing in $m$), always in near-balanced two-clique complements --- so any Region II proof must use the nonlinear (multi-excursion) part of the shift, consistent with the $C_{13}$ experience that the deletion gap is essential there.
+(3) By Lemma~\ref{lem:interlace} the Perron excess $\mu_0-q$ retains the full frontier excess; combined with the exact identity of Theorem~\ref{thm:two-sided}, a natural next target is to pay the excess from the \emph{$U$-side} shift, whose secular equation $\mu_0-q=\ip{g}{(\mu_0-A)^{-1}g}$ ties $\mu_0$ directly to the coupling when the frontier mode is not fully decoupled.
+\end{remark}
+
+\subsection{The remaining problem}
+
+\begin{conjecture}[One-frontier problem, $\tfrac13<q<\tfrac12$]\label{conj:region2}
+Let $q\in(\tfrac13,\tfrac12)$, and let $W$ be a graphon whose complement compression $A$ has (exactly one) eigenvalue $\alpha_1\in(q,\tfrac12]$.  Then
+\[
+        m\,[z^m]\mathcal L_W(z)\ \ge\ \Tr(A^m)-pq^{m-1}\qquad(m\ \text{odd}).
+\]
+\end{conjecture}
+
+Region I (Theorem~\ref{thm:main}) + the positive-spectrum-safe criterion + Conjecture~\ref{conj:region2} together give Conjecture~\ref{conj:main} in full.  All numerical evidence above supports Conjecture~\ref{conj:region2}; the tight configurations are (i) the Tur\'an scallops at $q$ near $\tfrac13$ (where equality is approached), and (ii) near-balanced bipodal configurations at $q$ near $\tfrac12$ (where the rank-one mechanism of the baton note is exact).  Both endpoints now have complete proofs (Region I; rank-one theorem); what is missing is the interpolation.
+
+\section{Audit checklist and checker}\label{sec:audit}
+
+The accompanying script \texttt{two\_sided\_shift\_checker.py} verifies:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item \textbf{Identity} \eqref{eq:two-sided} exactly (rational arithmetic) on random rational block graphons, $m\in\{5,7,9,11\}$, and $\Phi_m=q^{m-1}+S_m-x_{m-1}$ against the direct defect-minus-gap computation.
+\item \textbf{Expansion} \eqref{eq:expansion}: for random rational $\mu$ (finitely many atoms), exact agreement of $\Phi_m$ with $\sum_r\int\Pcal_{m,r}d\mu^{\otimes r}$; and $\Pcal_{m,1}$ against the closed form $P_q^{(m)}$.
+\item \textbf{Mixture} \eqref{eq:mixture}: exact for $r=2$ (polynomial identity in the mixing variable).
+\item \textbf{Kernel form} \eqref{eq:uline}: exact via Beta integrals at rational sample points.
+\item \textbf{$\rho$-lemma}: the two grouping identities of Lemma~\ref{lem:rho}\ref{rho-i} as polynomial identities; \ref{rho-iii} on a dense rational grid.
+\item \textbf{Certificates}: exact rational Bernstein certificates of $\widetilde\Pcal_{m,r}\ge0$ on $[0,\tfrac13]\times[-\tfrac12,\tfrac12]$ for all $r$, odd $m\le M$ (default $M=43$; extendable), and on $[0,\tfrac25]\times[-\tfrac12,\tfrac12]$ with \texttt{--q0-2-5}.
+\item \textbf{Strip criterion verification} (\texttt{--strip}): exact rational interval verification of the hypotheses of Theorem~\ref{thm:strip-criterion} over $(q,\ell)\in[0,\tfrac13]\times[0,\tfrac12]$ for all residual $(m,r)$ up to \texttt{--strip-max-m} (default $61$ for a quick run; the recorded full run reaches $M_{\mathrm{cert}}=\MCERT$).
+\item \textbf{Theorem \ref{thm:r1} arithmetic}: the identity $28q^2-40q+13=28(q-\frac12)(q-\frac{13}{14})$; the bound \eqref{eq:cn}; and the final inequality \eqref{eq:final-r1} on a fine grid (reported margin $>40$).
+\item \textbf{Region II}: the exact algebra of Proposition~\ref{prop:C-false} including the $9s$ expansion; the aggregate forced-coupling Lemma~\ref{lem:aggregate-fc} exactly on the two-clique family (including the exact $\ip{w^+}{Aw^-}$ form and the factor-$2$ sharpness) and numerically on $4000$ random block graphons ($0$ violations of any of the three forms).
+\end{enumerate}
+
+Numbered claims imported from collaborator computations (and reproducible from their scripts in the scratch record): the threshold table $q^*(m,r)$ for $m\le81$ with exact sign certification, the ridge extension to $m=281$, and the saddle-point limit $0.411756$ at $r/m=0.17656$; the Region II adversarial sweep statistics.
+
+\medskip
+\noindent\textbf{Suggested next steps.}
+(1) Close the strip tail: either extend $M_{\mathrm{cert}}$ mechanically (the verification cost per pair grows roughly like $m^2$ along the ridge), or prove the criterion's hypotheses asymptotically --- the per-$m$ exponential rates of $\bar\Delta$, $\Sigma_L$, $\Sigma_R$ are explicit functions of $(r/m,q,\ell)$ on a compact domain, the observed rate gap at $q\le\tfrac13$ is bounded away from $0$, and a grid-plus-Lipschitz argument on the rate functions would give an explicit $M_0$ beyond which the criterion always holds.  (2) Extend the interval verification to $q_0=\tfrac25$ (all thresholds exceed $0.4117$), shrinking Region II to $q\in(\tfrac25,\tfrac12)$; the r=1 theorem and the pointwise/IBP regimes already hold there or extend easily.  (3) In Region II, find the payment counterpart of Lemma~\ref{lem:aggregate-fc}: the forced coupling $\ip{g}{|\phi|}$ must be converted into multi-excursion shift, e.g.\ through the $U$-side: by Theorem~\ref{thm:two-sided} the conjecture is $t(C_m,U)\le q^{m-1}+S_m$, in the one-frontier case $t(C_m,U)\le\mu_1^m+\alpha^{m-2}\mu_2^2+q^{m-2}(q-\mu_1^2-\mu_2^2)$ by the interlacing $\mu_3\le\lambda_2(A)\le q$, and $\mu_1$ is controlled by the secular equation $\mu_1-q=\ip{g}{(\mu_1-A)^{-1}g}$ whenever the frontier couples; the balanced/two-valued degeneracies excluded by Lemma~\ref{lem:aggregate-fc} are exactly the configurations where this control degenerates.
+
+\begin{thebibliography}{9}
+\bibitem{KimLee}
+J.~S. Kim and J.~Lee,
+\newblock Extended commonality of paths and cycles via Schur convexity,
+\newblock \emph{J. Combin. Theory Ser.~B} \textbf{166} (2024), 109--122; arXiv:2210.00977.
+\end{thebibliography}
+
+\end{document}
