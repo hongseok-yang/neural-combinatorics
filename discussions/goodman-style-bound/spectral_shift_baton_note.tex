@@ -1,0 +1,961 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\esssup}{\operatorname*{ess\,sup}}
+\newcommand{\essinf}{\operatorname*{ess\,inf}}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\R}{\mathbb R}
+
+\title{Spectral-shift notes for the odd-cycle lower-bound conjecture\\
+\large Consolidated baton document after \texttt{paper.tex}}
+\author{Working note for collaborators}
+\date{July 4, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $W$ be a graphon of edge density $p=t(K_2,W)$.  The conjecture studied in \texttt{paper.tex} is
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}\qquad(m\ge3\text{ odd}).
+\]
+The earlier note proves the conjecture for $C_3,C_5,C_7,C_9,C_{11},C_{13}$ and gives several all-length structural criteria, but the path-certificate method loses essential information for longer cycles.  This document records a different reorganisation of the problem.
+
+Put $U=1-W$, $q=1-p$, and decompose the complement operator as
+\[
+        T_U=\begin{pmatrix}q&g^*\\ g&A\end{pmatrix}
+        \quad\text{on }\R\one\oplus\one^\perp .
+\]
+After a sign flip on $\one^\perp$, $T_W$ is isospectral to
+\[
+        M=\begin{pmatrix}p&g^*\\ g&-A\end{pmatrix}.
+\]
+The central identity is the exact spectral-shift formula
+\[
+        t(C_m,W)=p^m-\Tr(A^m)+m[z^m]\mathcal L(z),
+\]
+where
+\[
+        \mathcal L(z)=
+        -\log\left(1-
+        \frac{z^2\ip{g}{(I+zA)^{-1}g}}{1-pz}
+        \right).
+\]
+Thus the conjecture is equivalent to the coefficient domination
+\[
+        m[z^m]\mathcal L(z)\ge \Tr(A^m)-pq^{m-1}.
+\]
+The right side is the positive spectral excess of the complement compression $A$; the left side is the spectral shift forced by coupling the degree-fluctuation vector $g$ to the constant direction.  This is the main conceptual replacement for the old marginal path-moment target.
+
+The main new theorem proved here is that the conjecture holds for every graphon whose complement has one-dimensional mean-zero compression,
+\[
+        1-W(x,y)=q+u(\psi(x)+\psi(y))+\lambda\psi(x)\psi(y),
+        \qquad \int\psi=0,
+        \quad \int\psi^2=1.
+\]
+Equivalently, the complement has range contained in $\operatorname{span}\{\one,\psi\}$.  This includes every bipodal graphon, with arbitrary block sizes and arbitrary block values.  The proof identifies a new mechanism: if the single complement-compression eigenvalue enters the dangerous region $\lambda>q$, then the pointwise constraint $0\le1-W\le1$ forces
+\[
+        u^2\ge \frac{p\lambda(\lambda-q)^2}{(p-\lambda)^2}.
+\]
+The linear term of the spectral-shift expansion then dominates the whole frontier excess for every odd cycle length.
+
+The document also records the finite rank-one frontier coefficient target from the previous attempt, together with the accompanying exact integer P\'olya checker \texttt{spectral\_shift\_polya\_checker.py}.  That checker is no longer needed for bipodal graphons, which are now handled for all odd $m$, but it remains a useful reproducible certificate for the retained-deletion arrowhead relaxation through $C_{43}$.
+\end{abstract}
+
+\tableofcontents
+
+\section{The conjecture and what changed}
+
+For a graphon $W:[0,1]^2\to[0,1]$ and a finite graph $H$, write $t(H,W)$ for the homomorphism density.  The conjecture is the following.
+
+\begin{conjecture}[Odd-cycle lower bound]\label{conj:main}
+Let $m\ge3$ be odd and let $W$ be a graphon with edge density
+\[
+        p=t(K_2,W).
+\]
+Then
+\begin{equation}\label{eq:main-conj}
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\end{equation}
+\end{conjecture}
+
+The case $p\le1/2$ is immediate, because the right hand side of \eqref{eq:main-conj} is nonpositive while $t(C_m,W)\ge0$.  Hence all nontrivial arguments below assume
+\[
+        p>\frac12,
+        \qquad q:=1-p<\frac12.
+\]
+
+The note \texttt{paper.tex} proves Conjecture~\ref{conj:main} for $C_3,C_5,C_7,C_9,C_{11},C_{13}$ and develops two general mechanisms:
+\begin{enumerate}[label=\textup{(\roman*)}]
+    \item a path-certificate method, often combined with exact polynomial positivity checks;
+    \item a general operator method based on the compression of $T_{1-W}$ to the mean-zero subspace.
+\end{enumerate}
+The obstruction discovered there is that the path-certificate lower bound discards the deletion gap
+\[
+        t(P_{m-1},1-W)-t(C_m,1-W)\ge0.
+\]
+For $C_{13}$ this discarded term is already essential: the path-certificate polynomial can be negative on realisable bipodal graphons even when the true conjectural defect is positive.  Therefore pushing global positivity of the old path certificate is unlikely to prove the all-length conjecture.
+
+The new approach below keeps the degree-coupling information exactly.  It turns the problem into a spectral-shift domination inequality.  In this language, the failed modewise strategy becomes transparent: a positive eigenvalue of the complement compression $A$ need not be paid by its own coupling to $g$; several modes may be compensated collectively by the spectral shift of the coupled hub system.
+
+\section{The exact spectral-shift identity}
+
+Put
+\[
+        U=1-W,
+        \qquad q=t(K_2,U)=1-p.
+\]
+Let $T_U$ be the integral operator with kernel $U$.  Since $\norm{\one}_2=1$, write
+\[
+        T_U\one=q\one+g,
+        \qquad g\in\one^\perp,
+\]
+where $\one^\perp=\{f:\int f=0\}$.  Let
+\[
+        A=P_{\one^\perp}T_UP_{\one^\perp}:\one^\perp\to\one^\perp
+\]
+be the mean-zero compression.  Then, on $\R\one\oplus\one^\perp$,
+\begin{equation}\label{eq:block-TU-TW}
+        T_U=\begin{pmatrix}q&g^*\\ g&A\end{pmatrix},
+        \qquad
+        T_W=\begin{pmatrix}p&-g^*\\ -g&-A\end{pmatrix}.
+\end{equation}
+Conjugating $T_W$ by the unitary sign flip $\one\oplus f\mapsto\one\oplus(-f)$ does not change trace powers.  Thus for odd cycles we may work with
+\begin{equation}\label{eq:M-general}
+        M=\begin{pmatrix}p&g^*\\ g&-A\end{pmatrix}.
+\end{equation}
+For $m\ge3$,
+\[
+        t(C_m,W)=\Tr(T_W^m)=\Tr(M^m).
+\]
+
+\begin{theorem}[Exact spectral-shift identity]\label{thm:spectral-shift}
+Let $m\ge3$ be odd.  Define the formal power series
+\begin{equation}\label{eq:R-L-def}
+        R(z)=\ip{g}{(I+zA)^{-1}g}
+        =\sum_{j\ge0}(-1)^j\ip{g}{A^j g}z^j
+\end{equation}
+and
+\begin{equation}\label{eq:L-def}
+        \mathcal L(z)=
+        -\log\left(1-
+        \frac{z^2R(z)}{1-pz}
+        \right).
+\end{equation}
+Then
+\begin{equation}\label{eq:spectral-shift}
+        t(C_m,W)=p^m-\Tr(A^m)+m[z^m]\mathcal L(z).
+\end{equation}
+Consequently Conjecture~\ref{conj:main} is equivalent to
+\begin{equation}\label{eq:spectral-shift-target}
+        m[z^m]\mathcal L(z)\ge \Tr(A^m)-pq^{m-1}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+First assume finite rank.  Put $B=-A$.  Schur's determinant formula applied to $I-zM$ gives
+\[
+\begin{aligned}
+        \det(I-zM)
+        &=\det(I-zB)
+          \left(1-pz-z^2\ip{g}{(I-zB)^{-1}g}\right)       \\
+        &=\det(I+zA)(1-pz)
+          \left(1-
+          \frac{z^2\ip{g}{(I+zA)^{-1}g}}{1-pz}
+          \right).
+\end{aligned}
+\]
+Taking $-\log$ and extracting coefficients from
+\[
+        -\log\det(I-zM)=\sum_{j\ge1}\frac{\Tr(M^j)}{j}z^j
+\]
+gives
+\[
+        \Tr(M^m)=\Tr((-A)^m)+p^m+m[z^m]\mathcal L(z).
+\]
+Since $m$ is odd, $\Tr((-A)^m)=-\Tr(A^m)$, proving \eqref{eq:spectral-shift}.
+
+For a general graphon, approximate $U$ in $L^2$ by finite-rank symmetric kernels $U_n$ with the same discussion applied to $U_n$.  The coefficient of $z^m$ in \eqref{eq:L-def} depends only on finitely many mixed moments $\ip{g}{A^j g}$, $0\le j\le m-2$, and these moments are continuous under $L^2$ convergence of the kernels.  Also $\Tr(T^m)$ is continuous for Hilbert--Schmidt kernels when $m\ge3$; this follows by telescoping the difference of $m$th powers and using that a product with two Hilbert--Schmidt factors and the remaining factors bounded is trace class.  Passing to the limit proves the graphon statement.
+\end{proof}
+
+\begin{remark}[Interpretation]
+The old hub-coupling positivity lemma is the weak consequence
+\[
+        m[z^m]\mathcal L(z)\ge0.
+\]
+The conjecture asks for the stronger domination \eqref{eq:spectral-shift-target}.  Thus the problem is not merely to control the spectrum of $A$; one must control the pair $(A,g)$.
+\end{remark}
+
+\section{Recovered general facts from the spectral-shift viewpoint}
+
+This section records two useful consequences already present in spirit in \texttt{paper.tex}, now expressed in the spectral-shift language.
+
+\begin{lemma}[Non-principal eigenvalue bound]\label{lem:half-bound}
+Let $K:[0,1]^2\to[0,1]$ be a symmetric measurable kernel.  If $f\in L^2$ satisfies $\int f=0$ and $\norm f_2=1$, then
+\[
+        -\frac12\le \ip{f}{T_K f}\le\frac12.
+\]
+Consequently every eigenvalue of $A=P_{\one^\perp}T_UP_{\one^\perp}$ lies in $[-1/2,1/2]$.
+\end{lemma}
+
+\begin{proof}
+Write $f=f_+-f_-$, where $f_+,f_-\ge0$ have disjoint supports.  Since $\int f=0$,
+\[
+        a:=\int f_+=\int f_-.
+\]
+Also $\norm f_1=2a\le\norm f_2=1$, so $a\le1/2$.  Using $0\le K\le1$,
+\[
+\begin{aligned}
+        \iint K(x,y)f(x)f(y)\,dx\,dy
+        &\le \iint (f_+(x)f_+(y)+f_-(x)f_-(y))\,dx\,dy \\
+        &=2a^2\le\frac12.
+\end{aligned}
+\]
+Similarly the same quadratic form is at least
+\[
+        -\iint(f_+(x)f_-(y)+f_-(x)f_+(y))\,dx\,dy=-2a^2\ge-\frac12.
+\]
+\end{proof}
+
+\begin{lemma}[Trace-square budget]\label{lem:trace-square-budget}
+With $U=1-W$ and $q=\int U$, one has
+\begin{equation}\label{eq:trace-square-budget}
+        \Tr(A^2)+2\norm g_2^2\le pq.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The Hilbert--Schmidt square of $T_U$ is
+\[
+        \Tr(T_U^2)=\iint U(x,y)^2\,dx\,dy.
+\]
+Since $0\le U\le1$, this is at most $\int U=q$.  On the other hand, the block decomposition gives
+\[
+        \Tr(T_U^2)=q^2+2\norm g_2^2+\Tr(A^2).
+\]
+Subtracting $q^2$ gives \eqref{eq:trace-square-budget}.
+\end{proof}
+
+\begin{proposition}[Hub-coupling positivity]\label{prop:hub-positivity}
+Assume $p\ge1/2$ and $m\ge3$ is odd.  Then
+\begin{equation}\label{eq:basic-spectral-lower}
+        t(C_m,W)\ge p^m-\Tr(A^m).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Diagonalise $A$ spectrally.  Formally,
+\[
+        R(z)=\sum_i \frac{b_i^2}{1+\alpha_i z},
+\]
+where $\alpha_i\in[-1/2,1/2]$ and $b_i$ are the coordinates of $g$ in the spectral representation.  Since $p\ge1/2$, we have $|\alpha_i|\le p$.  The coefficient of $z^n$ in
+\[
+        \frac{1}{(1-pz)(1+\alpha_i z)}
+\]
+is
+\[
+        \frac{p^{n+1}-(-\alpha_i)^{n+1}}{p+\alpha_i},
+\]
+with the evident limiting interpretation, and is nonnegative for every $n\ge0$.  Hence
+\[
+        \frac{z^2R(z)}{1-pz}
+\]
+has nonnegative coefficients.  Since $-\log(1-X)=\sum_{r\ge1}X^r/r$, the series $\mathcal L(z)$ has nonnegative coefficients.  Theorem~\ref{thm:spectral-shift} gives \eqref{eq:basic-spectral-lower}.
+\end{proof}
+
+\begin{corollary}[Positive-spectrum-safe criterion]\label{cor:positive-spectrum-safe}
+Assume $p\ge1/2$ and $\lambda_{\max}(A)\le q=1-p$.  Then Conjecture~\ref{conj:main} holds for every odd $m\ge3$.
+\end{corollary}
+
+\begin{proof}
+Let $\alpha_i$ be the eigenvalues of $A$.  Negative eigenvalues contribute nonpositively to $\Tr(A^m)$ because $m$ is odd.  For positive eigenvalues, $0<\alpha_i\le q$, so
+\[
+        \sum_{\alpha_i>0}\alpha_i^m
+        \le q^{m-2}\sum_{\alpha_i>0}\alpha_i^2
+        \le q^{m-2}\Tr(A^2)
+        \le p q^{m-1}
+\]
+by Lemma~\ref{lem:trace-square-budget}.  Hence $\Tr(A^m)\le pq^{m-1}$.  Combining this with Proposition~\ref{prop:hub-positivity} proves
+\[
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+\end{proof}
+
+\section{A warm-up: balanced bipodal graphons}
+
+This section is not needed for the final bipodal theorem, but it is a useful sanity check and explains why the numerically observed balanced near-bipartite family is safe.
+
+\begin{theorem}[Balanced bipodal graphons]\label{thm:balanced-bipodal}
+Let $W$ be a two-block graphon with two parts of measure $1/2$ and block matrix
+\[
+        \begin{pmatrix}a&c\\ c&b\end{pmatrix},
+        \qquad 0\le a,b,c\le1.
+\]
+Then for every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1},
+        \qquad p=\frac{a+b+2c}{4}.
+\]
+\end{theorem}
+
+\begin{proof}
+The nonzero part of $T_W$ is the matrix
+\[
+        K=\frac12\begin{pmatrix}a&c\\ c&b\end{pmatrix}.
+\]
+Set
+\[
+        \alpha=\frac{a+b}{4},
+        \qquad \gamma=\frac c2,
+        \qquad \delta=\frac{a-b}{4},
+        \qquad r=\sqrt{\gamma^2+\delta^2}.
+\]
+The two nonzero eigenvalues are $\alpha+r$ and $\alpha-r$, and $p=\alpha+\gamma$.  Since $r\ge\gamma$, and since
+\[
+        F(r)=(\alpha+r)^m+(\alpha-r)^m
+\]
+is increasing for $r\ge0$ when $m$ is odd, we get
+\[
+\begin{aligned}
+        t(C_m,W)
+        &=(\alpha+r)^m+(\alpha-r)^m       \\
+        &\ge (\alpha+\gamma)^m+(\alpha-\gamma)^m
+        =p^m+(\alpha-\gamma)^m.
+\end{aligned}
+\]
+If $\alpha\ge\gamma$, then $t(C_m,W)\ge p^m$, which is stronger than needed.  If $\alpha<\gamma$, then
+\[
+        (\alpha-\gamma)^m=-(\gamma-\alpha)^m.
+\]
+Because $q=1-p=1-\alpha-\gamma$ and $\gamma\le1/2$, we have
+\[
+        \gamma-\alpha\le1-\alpha-\gamma=q.
+\]
+Thus
+\[
+        t(C_m,W)\ge p^m-q^m.
+\]
+When $p\ge1/2$, $q\le p$, so $q^m\le pq^{m-1}$.  When $p<1/2$, the target lower bound is nonpositive.  This proves the theorem.
+\end{proof}
+
+\section{The main new theorem: rank-one complement compression}
+
+The balanced proof above does not use the full pointwise geometry available in the unbalanced case.  The next theorem handles the entire bipodal class, and in fact a larger non-step class.
+
+\begin{definition}[Rank-one complement-compression form]\label{def:rank-one-form}
+A graphon $W$ has rank-one complement-compression form if, for $U=1-W$, there exist real numbers $q,u,\lambda$ and a measurable function $\psi$ such that
+\begin{equation}\label{eq:rank-one-form}
+        U(x,y)=q+u(\psi(x)+\psi(y))+\lambda\psi(x)\psi(y)
+\end{equation}
+for almost every $(x,y)$, where
+\[
+        \int_0^1\psi=0,
+        \qquad
+        \int_0^1\psi^2=1,
+        \qquad
+        0\le U\le1.
+\]
+Then $q=t(K_2,U)$ and $p:=t(K_2,W)=1-q$.
+\end{definition}
+
+Equivalently, $T_U$ has range contained in $\operatorname{span}\{\one,\psi\}$, and its mean-zero compression has rank at most one.
+
+\begin{theorem}[Rank-one complement-compression graphons are safe]\label{thm:rank-one-safe}
+Let $W$ have rank-one complement-compression form.  Then for every odd $m\ge3$,
+\begin{equation}\label{eq:rank-one-conclusion}
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\end{equation}
+\end{theorem}
+
+\begin{corollary}[Arbitrary bipodal graphons]\label{cor:arbitrary-bipodal}
+Let $W$ be a two-block graphon, with arbitrary block sizes and arbitrary three block values in $[0,1]$.  Then Conjecture~\ref{conj:main} holds for every odd $m\ge3$.
+\end{corollary}
+
+\begin{proof}
+Let the block sizes be $\sigma$ and $1-\sigma$.  The cases $\sigma=0,1$ are constant graphons.  For $0<\sigma<1$, set
+\[
+        \psi=\sqrt{\frac{1-\sigma}{\sigma}}
+        \quad\text{on the first block},
+        \qquad
+        \psi=-\sqrt{\frac{\sigma}{1-\sigma}}
+        \quad\text{on the second block}.
+\]
+Then $\int\psi=0$ and $\int\psi^2=1$.  The three functions
+\[
+        1,
+        \qquad \psi(x)+\psi(y),
+        \qquad \psi(x)\psi(y)
+\]
+span the three-dimensional space of symmetric two-block kernels.  Thus $U=1-W$ has the form \eqref{eq:rank-one-form}.  Theorem~\ref{thm:rank-one-safe} applies.
+\end{proof}
+
+The rest of this section proves Theorem~\ref{thm:rank-one-safe}.
+
+\subsection{The two-dimensional reduction}
+
+On the basis $(\one,\psi)$, the nonzero part of $T_U$ is
+\[
+        C=\begin{pmatrix}q&u\\ u&\lambda\end{pmatrix}.
+\]
+The corresponding nonzero part of $T_W=J-T_U$ is
+\[
+        \begin{pmatrix}p&-u\\ -u&-\lambda\end{pmatrix}.
+\]
+After conjugating by $\operatorname{diag}(1,-1)$, trace powers are those of
+\begin{equation}\label{eq:M-rank-one}
+        M=\begin{pmatrix}p&u\\ u&-\lambda\end{pmatrix}.
+\end{equation}
+Thus
+\begin{equation}\label{eq:tCm-rank-one-trace}
+        t(C_m,W)=\Tr(M^m).
+\end{equation}
+By Lemma~\ref{lem:half-bound}, $|\lambda|\le1/2$.  In the nontrivial range $p>1/2$, this implies $|\lambda|<p$.
+
+\begin{lemma}[Linear spectral-shift lower bound]\label{lem:linear-shift}
+Let $m\ge3$ be odd.  Assume $p\ge1/2$ and $|\lambda|\le p$.  Then
+\begin{equation}\label{eq:linear-shift}
+        \Tr\begin{pmatrix}p&u\\ u&-\lambda\end{pmatrix}^m
+        \ge
+        p^m-\lambda^m
+        +m u^2\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+\end{equation}
+The quotient is interpreted by continuity if $p+\lambda=0$.
+\end{lemma}
+
+\begin{proof}
+For $M$ as in \eqref{eq:M-rank-one},
+\[
+        \det(I-zM)=(1-pz)(1+\lambda z)-u^2z^2.
+\]
+Therefore
+\[
+\begin{aligned}
+        -\log\det(I-zM)
+        &=-\log(1-pz)-\log(1+\lambda z) \\
+        &\quad
+        -\log\left(1-
+        \frac{u^2z^2}{(1-pz)(1+\lambda z)}
+        \right).
+\end{aligned}
+\]
+The coefficient of $z^n$ in $((1-pz)(1+\lambda z))^{-1}$ is
+\[
+        \frac{p^{n+1}-(-\lambda)^{n+1}}{p+\lambda},
+\]
+which is nonnegative when $|\lambda|\le p$.  Hence every term in the logarithmic expansion is coefficientwise nonnegative.  Keeping only the term linear in $u^2$ gives
+\[
+        \Tr(M^m)
+        \ge p^m-\lambda^m
+        +m u^2[z^{m-2}]\frac{1}{(1-pz)(1+\lambda z)}.
+\]
+Since $m-2$ is odd, the displayed coefficient is
+\[
+        \frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+\]
+\end{proof}
+
+\begin{lemma}[The safe side]\label{lem:rank-one-safe-side}
+Assume $p\ge1/2$, $|\lambda|\le p$, and $\lambda\le q=1-p$.  Then
+\[
+        \Tr(M^m)\ge p^m-pq^{m-1}
+\]
+for every odd $m\ge3$.
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:linear-shift}, $\Tr(M^m)\ge p^m-\lambda^m$.  If $\lambda<0$, then $p^m-\lambda^m\ge p^m$.  If $0\le\lambda\le q$, then
+\[
+        p^m-\lambda^m\ge p^m-q^m\ge p^m-pq^{m-1},
+\]
+because $q\le p$.  This proves the claim.
+\end{proof}
+
+Only the frontier case remains:
+\begin{equation}\label{eq:frontier-case}
+        p>\frac12,
+        \qquad
+        \lambda>q=1-p.
+\end{equation}
+
+\subsection{Pointwise boundedness forces coupling}
+
+The next lemma is the main new ingredient.  It is the mechanism that was invisible in the path-certificate framework.
+
+\begin{lemma}[Forced coupling in the frontier case]\label{lem:forced-coupling}
+Assume the rank-one form \eqref{eq:rank-one-form}, $0\le U\le1$, $p=1-q>1/2$, and $\lambda>q$.  Then
+\begin{equation}\label{eq:forced-coupling}
+        u^2\ge
+        \frac{p\lambda(\lambda-q)^2}{(p-\lambda)^2}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Since $\lambda>q\ge0$, we have $\lambda>0$.  The upper bound $U\le1$, applied on pairs of points where $\psi$ has the same large sign, implies that $\psi$ is essentially bounded.  Put
+\[
+        a=\esssup\psi,
+        \qquad
+        b=-\essinf\psi.
+\]
+Then $a,b>0$.  Since $\psi$ has mean zero and variance one,
+\begin{equation}\label{eq:ab-ge-one}
+        ab\ge1.
+\end{equation}
+Indeed, for almost every value $t=\psi(x)\in[-b,a]$,
+\[
+        (a-t)(t+b)\ge0,
+\]
+so $t^2\le(a-b)t+ab$.  Integrating gives $1=\int\psi^2\le ab$.
+
+The following inequalities are written using the essential extrema.  Rigorously, one applies them to sets on which $\psi>a-\varepsilon$ and $\psi<-b+\varepsilon$, or on which both values are $>a-\varepsilon$, and then lets $\varepsilon\downarrow0$.
+
+From $U\ge0$ at opposite extremes, we obtain
+\begin{equation}\label{eq:cross-bound}
+        q+u(a-b)-\lambda ab\ge0.
+\end{equation}
+Since $\lambda ab-q\ge\lambda-q>0$, \eqref{eq:cross-bound} implies $u(a-b)>0$.  Replacing $\psi$ by $-\psi$ if necessary, we may assume
+\begin{equation}\label{eq:orientation}
+        a>b,
+        \qquad u>0.
+\end{equation}
+
+From $U\le1$ at the positive extreme, we get
+\begin{equation}\label{eq:upper-aa}
+        q+2ua+\lambda a^2\le1.
+\end{equation}
+Since $u>0$, this implies
+\begin{equation}\label{eq:a-upper}
+        \lambda a^2\le p.
+\end{equation}
+Because $a>b$ and $ab\ge1$, we have $a^2>1$, so \eqref{eq:a-upper} also gives $\lambda<p$.
+
+Now \eqref{eq:cross-bound} yields
+\[
+        u\ge\frac{\lambda ab-q}{a-b}.
+\]
+For fixed $a$, the function
+\[
+        b\mapsto \frac{\lambda ab-q}{a-b}
+\]
+is increasing on $[1/a,a)$, because its derivative is
+\[
+        \frac{\lambda a^2-q}{(a-b)^2}>0.
+\]
+Using $b\ge1/a$, we get
+\[
+        u\ge\frac{\lambda-q}{a-1/a}.
+\]
+The function $a\mapsto a-1/a$ is increasing for $a>0$, and \eqref{eq:a-upper} gives $a\le\sqrt{p/\lambda}$.  Hence
+\[
+        a-\frac1a
+        \le
+        \sqrt{\frac p\lambda}-\sqrt{\frac\lambda p}
+        =\frac{p-\lambda}{\sqrt{p\lambda}}.
+\]
+Therefore
+\[
+        u\ge
+        \frac{(\lambda-q)\sqrt{p\lambda}}{p-\lambda},
+\]
+which is equivalent to \eqref{eq:forced-coupling}.
+\end{proof}
+
+\subsection{The scalar domination inequality}
+
+\begin{lemma}[Scalar domination]\label{lem:scalar-domination}
+Let $m\ge3$ be odd.  For every $0\le s\le x<1$,
+\begin{equation}\label{eq:scalar-domination}
+        s^{m-1}-x^m
+        +m x\frac{(x-s)^2}{(1-x)^2}\frac{1-x^{m-1}}{1+x}
+        \ge0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put $n=m-1$, so $n$ is even.  The claim is equivalent to
+\begin{equation}\label{eq:scalar-n-form}
+        s^n+A_n(x)(x-s)^2\ge x^{n+1},
+        \qquad
+        A_n(x)=\frac{(n+1)x(1-x^n)}{(1-x)^2(1+x)}.
+\end{equation}
+The case $x=0$ is trivial.  Assume $0<x<1$ and write $s=x(1-z)$ with $0\le z\le1$.  Dividing \eqref{eq:scalar-n-form} by $x^n$, it suffices to prove
+\begin{equation}\label{eq:B-form}
+        (1-z)^n+B_n(x)z^2\ge x,
+        \qquad
+        B_n(x)=\frac{(n+1)x^{3-n}(1-x^n)}{(1-x)^2(1+x)}.
+\end{equation}
+
+For $n=2$, the left hand side of \eqref{eq:B-form} is
+\[
+        (1-z)^2+\frac{3x}{1-x}z^2.
+\]
+Its minimum over $0\le z\le1$ is $3x/(1+2x)$, which is at least $x$.
+
+Now assume $n\ge4$.  Bernoulli's inequality gives $(1-z)^n\ge1-nz$ on $0\le z\le1$.  Thus it is enough to prove
+\[
+        1-x-nz+B_n(x)z^2\ge0
+\]
+for all $z\in[0,1]$.  This quadratic is nonnegative for all real $z$ once
+\[
+        B_n(x)\ge\frac{n^2}{4(1-x)}.
+\]
+The latter inequality is equivalent to
+\begin{equation}\label{eq:Bn-sufficient}
+        4(n+1)x^{3-n}\frac{1-x^n}{1-x^2}\ge n^2.
+\end{equation}
+Write $n=2k$.  Then
+\[
+        x^{3-n}\frac{1-x^n}{1-x^2}
+        =x^{3-n}+x^{5-n}+\cdots+x.
+\]
+There are $k$ terms.  The first $k-1$ terms are at least $1$ because their exponents are nonpositive and $0<x<1$.  Therefore the sum is at least
+\[
+        k-1=\frac n2-1.
+\]
+Consequently
+\[
+        4(n+1)x^{3-n}\frac{1-x^n}{1-x^2}
+        \ge4(n+1)\left(\frac n2-1\right)
+        =2(n+1)(n-2)\ge n^2
+\]
+for every even $n\ge4$.  This proves \eqref{eq:Bn-sufficient} and hence the lemma.
+\end{proof}
+
+\subsection{Completion of the rank-one proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:rank-one-safe}]
+If $p\le1/2$, the target lower bound is nonpositive.  Assume $p>1/2$.  By Lemma~\ref{lem:half-bound}, $|\lambda|\le1/2<p$.
+
+If $\lambda\le q$, Lemma~\ref{lem:rank-one-safe-side} and \eqref{eq:tCm-rank-one-trace} prove the theorem.  Thus assume $\lambda>q$.  Combining Lemma~\ref{lem:linear-shift} with Lemma~\ref{lem:forced-coupling}, we obtain
+\[
+\begin{aligned}
+\Tr(M^m)-\bigl(p^m-pq^{m-1}\bigr)
+&\ge pq^{m-1}-\lambda^m \\
+&\quad
+ +m\frac{p\lambda(\lambda-q)^2}{(p-\lambda)^2}
+      \frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+\end{aligned}
+\]
+Set
+\[
+        s=\frac qp,
+        \qquad
+        x=\frac\lambda p.
+\]
+Because $q\le\lambda<p$, we have $0\le s\le x<1$.  Dividing the preceding lower bound by $p^m$ gives exactly the left hand side of \eqref{eq:scalar-domination}.  Lemma~\ref{lem:scalar-domination} therefore implies
+\[
+        \Tr(M^m)\ge p^m-pq^{m-1}.
+\]
+Using \eqref{eq:tCm-rank-one-trace}, this is \eqref{eq:rank-one-conclusion}.
+\end{proof}
+
+\begin{remark}[Why this proves the unbalanced bipodal case]
+In an unbalanced two-block graphon, the mean-zero block direction has unequal essential maximum and minimum.  The old path certificate could become negative because it discarded the deletion gap.  The proof above shows that this asymmetry is not dangerous: if the compression eigenvalue $\lambda$ is above $q$, then the same range asymmetry forces a large coupling $u$, and the resulting spectral shift pays for the excess $\lambda^m-pq^{m-1}$.
+\end{remark}
+
+\section{The retained-deletion rank-one frontier target}
+
+The analytic rank-one theorem above settles actual bipodal graphons for all odd lengths.  There remains a useful finite-dimensional calculation from the earlier spectral-shift attempt.  It is not needed for Corollary~\ref{cor:arbitrary-bipodal}, but it gives a clean algebraic target for future higher-rank work and explains exactly where the discarded deletion term enters.
+
+Consider the rank-one arrowhead matrices
+\begin{equation}\label{eq:rank-one-arrowhead}
+        C=\begin{pmatrix}q&b\\ b&\lambda\end{pmatrix},
+        \qquad
+        M=\begin{pmatrix}p&b\\ b&-\lambda\end{pmatrix},
+        \qquad
+        u=b^2,
+        \qquad p=1-q.
+\end{equation}
+Here $C$ models the nonzero complement operator $T_U$, and $M$ models the sign-conjugated $T_W$.  Define
+\[
+        x_{m-1}=e_0^*C^{m-1}e_0,
+        \qquad
+        c_m=\Tr(C^m),
+\]
+where $e_0$ is the hub direction.  For a genuine graphon, $x_{m-1}=t(P_{m-1},U)$ and $c_m=t(C_m,U)$, so the deletion inequality gives
+\begin{equation}\label{eq:Gamma-nonnegative}
+        \Gamma_m:=x_{m-1}-c_m\ge0.
+\end{equation}
+The true conjectural defect in this two-dimensional model is
+\[
+        D_m:=\Tr(M^m)-\bigl(p^m-pq^{m-1}\bigr).
+\]
+Set
+\[
+        \Phi_m:=D_m-\Gamma_m.
+\]
+Then $D_m=\Gamma_m+\Phi_m$.  The old path-certificate method tried to prove $\Phi_m\ge0$ globally.  The $C_{13}$ witness in \texttt{paper.tex} shows that this is false on the full realisable region.  Nevertheless, in the frontier region $\lambda\ge q$ the following expansion gives a sharp coefficient target.
+
+\begin{proposition}[Retained-deletion expansion]\label{prop:retained-deletion-expansion}
+Let $m=2k+1\ge5$ and assume $\lambda\ge q$.  Then
+\begin{equation}\label{eq:Phi-expansion}
+        \Phi_m=\sum_{r=1}^k u^r P_{m,r}(q,\lambda),
+\end{equation}
+where
+\begin{equation}\label{eq:Pmr-definition}
+\boxed{
+\begin{aligned}
+P_{m,r}(q,\lambda)
+={}&\frac{m}{r}[z^{m-2r}]
+        \left(
+        \frac{1}{(1-pz)^r(1+\lambda z)^r}
+        +
+        \frac{1}{(1-qz)^r(1-\lambda z)^r}
+        \right) \\
+&\quad
+        -[z^{m-1-2r}]
+        \frac{1}{(1-qz)^{r+1}(1-\lambda z)^r}.
+\end{aligned}}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+A closed walk of length $m$ in $M$ that uses no hub--leaf edge contributes $p^m-\lambda^m$.  A closed walk that uses $2r$ hub--leaf edges consists of $r$ cyclic leaf excursions, giving the standard cyclic-excursion contribution
+\[
+        \frac{m}{r}u^r[z^{m-2r}]
+        \frac{1}{(1-pz)^r(1+\lambda z)^r}.
+\]
+Hence
+\[
+        \Tr(M^m)=p^m-\lambda^m
+        +\sum_{r=1}^k\frac{m}{r}u^r[z^{m-2r}]
+        \frac{1}{(1-pz)^r(1+\lambda z)^r}.
+\]
+Similarly,
+\[
+        \Tr(C^m)=q^m+\lambda^m
+        +\sum_{r=1}^k\frac{m}{r}u^r[z^{m-2r}]
+        \frac{1}{(1-qz)^r(1-\lambda z)^r}.
+\]
+A hub-to-hub path of length $m-1$ with $2r$ hub--leaf edges has $r+1$ hub runs and $r$ leaf runs, so
+\[
+        x_{m-1}=q^{m-1}
+        +\sum_{r=1}^k u^r[z^{m-1-2r}]
+        \frac{1}{(1-qz)^{r+1}(1-\lambda z)^r}.
+\]
+Substituting these three formulae into
+\[
+        \Phi_m=\Tr(M^m)-p^m+pq^{m-1}-x_{m-1}+\Tr(C^m)
+\]
+cancels the zero-coupling terms and gives \eqref{eq:Phi-expansion}--\eqref{eq:Pmr-definition}.
+\end{proof}
+
+\begin{conjecture}[Rank-one frontier coefficient positivity]\label{conj:Pmr}
+For every odd $m=2k+1\ge5$, every $1\le r\le k$, and every
+\[
+        0\le q\le\lambda\le\frac12,
+\]
+one has
+\[
+        P_{m,r}(q,\lambda)\ge0.
+\]
+\end{conjecture}
+
+A proof of Conjecture~\ref{conj:Pmr} would settle the retained-deletion rank-one frontier relaxation for all odd cycles.  It would also be useful as a model calculation for higher-rank frontier splittings.  The accompanying checker verifies it through $C_{43}$.
+
+\begin{theorem}[Exact P\'olya certificates through $C_{43}$]\label{thm:polya-C43}
+The script \texttt{spectral\_shift\_polya\_checker.py} verifies Conjecture~\ref{conj:Pmr} for every odd $m\le43$ by exact integer arithmetic.
+\end{theorem}
+
+\begin{proof}[Certificate description]
+The triangle $0\le q\le\lambda\le1/2$ is parametrised by barycentric coordinates
+\[
+        x=2q,
+        \qquad
+        y=2(\lambda-q),
+        \qquad
+        z=1-2\lambda.
+\]
+Thus $x,y,z\ge0$ and $x+y+z=1$, while
+\[
+        q=\frac{x}{2},
+        \qquad
+        \lambda=\frac{x+y}{2},
+        \qquad
+        p=1-q=\frac{x+2y+2z}{2}.
+\]
+For each $P_{m,r}$, the script constructs a homogeneous barycentric form $H_{m,r}(x,y,z)$, after clearing denominators by a positive integer factor.  It then checks that, for a stored exponent $N$, every coefficient of
+\[
+        (x+y+z)^N H_{m,r}(x,y,z)
+\]
+is nonnegative.  By P\'olya's theorem, this proves $H_{m,r}\ge0$ on the simplex, hence $P_{m,r}\ge0$ on the original triangle.  The stored sufficient exponents are
+\[
+\begin{array}{c|cccccccccccccccccccc}
+ m&5&7&9&11&13&15&17&19&21&23&25&27&29&31&33&35&37&39&41&43\\
+ \hline
+ N&0&0&1&1&2&2&3&4&5&6&7&8&9&11&13&14&16&17&19&20.
+\end{array}
+\]
+The arithmetic is purely integral: the script represents a positive integer multiple of $H_{m,r}$ as a dictionary of monomial coefficients and multiplies by the multinomial expansion of $(x+y+z)^N$.
+\end{proof}
+
+\begin{remark}[Status after the rank-one theorem]
+The P\'olya certificate should now be viewed as evidence for the arrowhead retained-deletion mechanism, not as the main proof of the bipodal case.  The analytic forced-coupling theorem proves all actual rank-one complement-compression graphons for every odd $m$, whereas Conjecture~\ref{conj:Pmr} concerns a coefficientwise positivity phenomenon in the relaxation.
+\end{remark}
+
+\section{Where the full conjecture now stands}
+
+The results above change the remaining target in a useful way.
+
+\subsection{What is now ruled out as an obstruction}
+
+A counterexample to Conjecture~\ref{conj:main}, if one exists, cannot be any of the following:
+\begin{enumerate}[label=\textup{(\roman*)}]
+    \item a graphon with $p\le1/2$;
+    \item a graphon with $\lambda_{\max}(A)\le q$;
+    \item a $p$-regular graphon, since then $g=0$ and the positive-spectrum-safe criterion applies;
+    \item a balanced bipodal graphon;
+    \item an arbitrary bipodal graphon;
+    \item more generally, any graphon whose complement has rank-one mean-zero compression, i.e. whose complement range is contained in $\operatorname{span}\{\one,\psi\}$.
+\end{enumerate}
+Thus the first possible obstruction must involve at least two independent mean-zero directions in the complement compression
+\[
+        A=P_{\one^\perp}T_{1-W}P_{\one^\perp}.
+\]
+
+\subsection{The two-measure obstruction}
+
+The spectral-shift target \eqref{eq:spectral-shift-target} compares two different spectral measures of $A$:
+\begin{enumerate}[label=\textup{(\alph*)}]
+    \item the counting spectral measure, which controls $\Tr(A^m)$;
+    \item the $g$-weighted spectral measure, which controls
+    \[
+        R(z)=\ip{g}{(I+zA)^{-1}g}.
+    \]
+\end{enumerate}
+The graphon constraints must force enough coupling in the $g$-weighted measure to pay for the positive tail of the counting measure.  The equal-clique examples in \texttt{paper.tex} already show why a modewise payment cannot be right: some dangerous positive complement modes are almost invisible to $g$, but the aggregate coupled component still compensates them.
+
+\subsection{A concrete next target: two frontier directions}
+
+A natural next finite-dimensional model is the diagonal arrowhead system
+\begin{equation}\label{eq:two-frontier-arrowhead}
+        T_U\sim
+        \begin{pmatrix}
+        q&b_1&\cdots&b_r\\
+        b_1&\lambda_1&&0\\
+        \vdots&&\ddots&\\
+        b_r&0&&\lambda_r
+        \end{pmatrix},
+        \qquad
+        M\sim
+        \begin{pmatrix}
+        p&b_1&\cdots&b_r\\
+        b_1&-\lambda_1&&0\\
+        \vdots&&\ddots&\\
+        b_r&0&&-\lambda_r
+        \end{pmatrix}.
+\end{equation}
+Then
+\[
+        \mathcal L(z)=
+        -\log\left(1-
+        \frac{z^2\sum_i b_i^2/(1+\lambda_i z)}{1-pz}
+        \right).
+\]
+The exact target is
+\begin{equation}\label{eq:arrowhead-target}
+        m[z^m]\mathcal L(z)
+        \ge
+        \sum_i\lambda_i^m-pq^{m-1}.
+\end{equation}
+Safe positive eigenvalues $\lambda_i\le q$ can be paid from the trace-square budget.  The new difficulty begins when at least two eigenvalues satisfy $\lambda_i>q$.
+
+For actual graphons, the diagonal arrowhead model comes from an expansion
+\begin{equation}\label{eq:multi-mode-U}
+        U(x,y)=q+
+        \sum_i b_i(\psi_i(x)+\psi_i(y))+
+        \sum_i\lambda_i\psi_i(x)\psi_i(y),
+\end{equation}
+with orthonormal mean-zero $\psi_i$, after diagonalising the compression.  The rank-one proof shows that when there is only one frontier direction, $0\le U\le1$ forces the lower bound \eqref{eq:forced-coupling}.  The next problem is to find the multidimensional analogue.
+
+One plausible sufficient target is the following.
+
+\begin{conjecture}[Two-frontier forced spectral shift, provisional]\label{conj:two-frontier}
+Assume $p>1/2$ and $U$ has the finite-rank form \eqref{eq:multi-mode-U}, with $0\le U\le1$ and $\lambda_i\in[-1/2,1/2]$.  Let $F=\{i:\lambda_i>q\}$.  Then the pointwise constraints force
+\begin{equation}\label{eq:linear-two-frontier-target}
+        p q^{m-1}-\sum_{i\in F}\lambda_i^m
+        +m\sum_i b_i^2
+        \frac{p^{m-1}-\lambda_i^{m-1}}{p+\lambda_i}
+        \ge0
+\end{equation}
+for every odd $m\ge3$, after the safe part $\lambda_i\le q$ is paid by the trace-square budget.
+\end{conjecture}
+
+This provisional conjecture uses only the linear term of the spectral shift.  The full spectral shift has additional nonnegative higher-order terms, so \eqref{eq:linear-two-frontier-target} is stronger than necessary.  It may be false as stated, but it is a concrete stress test.  If it fails, the counterexample should indicate exactly which higher-order spectral-shift terms or which retained-deletion terms are essential.
+
+\subsection{Range-geometry formulation}
+
+The rank-one forced-coupling lemma used only the interval $[\essinf\psi,\esssup\psi]$.  In the multi-mode case, the corresponding object is the essential range
+\[
+        \mathcal R=\operatorname{essran}(\psi_1,\dots,\psi_r)\subset\R^r.
+\]
+The kernel bound $0\le U\le1$ says that for almost every pair $x,y$,
+\[
+        0\le
+        q+b\cdot(\Psi(x)+\Psi(y))+\Psi(x)^T\Lambda\Psi(y)
+        \le1,
+\]
+where $b=(b_i)$, $\Lambda=\operatorname{diag}(\lambda_i)$, and $\Psi=(\psi_i)$.  The moment constraints say
+\[
+        \int \Psi=0,
+        \qquad
+        \int \Psi\Psi^T=I.
+\]
+Thus the missing theorem should be a convex/range-geometry statement: a probability measure on $\R^r$ with mean $0$ and covariance $I$, whose pairwise bilinear form above lies in $[-q,p]$, must have enough linear coefficient $b$ in the directions where $\Lambda$ exceeds $qI$.  The rank-one lemma is exactly the $r=1$ case of this statement.
+
+\section{Audit checklist for collaborators}
+
+The most important points to check are these.
+
+\begin{enumerate}[label=\textup{(\arabic*)}]
+    \item \textbf{Signs in the spectral-shift identity.}  The complement compression appears as $A$ in $T_U$ but as $-A$ in the sign-conjugated $T_W$.  This is why the identity contains $p^m-\Tr(A^m)$ for odd $m$.
+
+    \item \textbf{Coefficient positivity of the hub shift.}  The only input is $|\alpha_i|\le1/2\le p$.  This makes the coefficients of $((1-pz)(1+\alpha_i z))^{-1}$ nonnegative.
+
+    \item \textbf{The forced-coupling lemma.}  This is the new analytic step.  The inequalities to verify are
+    \[
+        ab\ge1,
+        \qquad
+        q+u(a-b)-\lambda ab\ge0,
+        \qquad
+        q+2ua+\lambda a^2\le1,
+    \]
+    after orienting $\psi$ so that $a>b$ and $u>0$.
+
+    \item \textbf{The scalar inequality.}  The proof is elementary but slightly coarse.  It proves a stronger quadratic domination using Bernoulli's inequality and the estimate
+    \[
+        x^{3-n}\frac{1-x^n}{1-x^2}\ge\frac n2-1
+        \qquad(n\ge4\text{ even}).
+    \]
+
+    \item \textbf{The P\'olya checker.}  The checker is independent of the analytic rank-one theorem.  It verifies the coefficient target \eqref{eq:Pmr-definition} through $C_{43}$ by exact integer arithmetic.
+\end{enumerate}
+
+\section{Summary of deliverables and suggested next steps}
+
+This document establishes the following new all-length result beyond \texttt{paper.tex}:
+\[
+\boxed{\begin{minipage}{0.86\linewidth}
+Conjecture~\ref{conj:main} holds for every odd cycle and every graphon whose complement has rank-one mean-zero compression.
+\end{minipage}}
+\]
+In particular, every bipodal graphon, balanced or unbalanced, is safe.
+
+The full conjecture remains open.  The spectral-shift identity reduces the remaining problem to a precise domination inequality between the counting spectral measure of $A$ and the $g$-weighted spectral-shift measure.  The next serious target is the two-frontier case: prove a multidimensional forced-coupling theorem for kernels of the form \eqref{eq:multi-mode-U} with two eigenvalues $\lambda_i>q$, or find an exact counterexample to the provisional linear target \eqref{eq:linear-two-frontier-target} and then identify which higher-order shift terms repair it.
+
+\end{document}
