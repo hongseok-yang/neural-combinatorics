@@ -116,7 +116,7 @@ Variational analysis (\S\ref{sec:variational}) & May note & analytic + numerical
 
 \begin{enumerate}[label=\textup{(\arabic*)}]
 \item \S\ref{sec:tools}--\S\ref{sec:C13} are independent of everything later and match the May 2026 note verbatim; their scripts are listed in \S\ref{sec:audit}.
-\item The high-density theorem depends only on \S\ref{sec:setup2}--\S\ref{sec:high-density-theorem} and Appendix~\ref{app:constants}.  Suggested order: the identity (\S\ref{sec:two-sided}), the expansion (\S\ref{sec:expansion2}), the mixture theorem (\S\ref{sec:mixture}), the kernel form (\S\ref{sec:kernel}), the $\rho$-lemma, then the four positivity regimes, then the strip.  Run \texttt{two\_sided\_shift\_checker.py} (Claude) and \texttt{gptpro\_jul5/clean\_two\_sided\_shift\_checker.py} + \texttt{regionI\_constant\_certifier\_exact.py} (GPT~Pro); every certified statement says which script certifies it.
+\item The high-density theorem depends only on \S\ref{sec:setup2}--\S\ref{sec:high-density-theorem} and Appendix~\ref{app:constants}.  Suggested order: the identity (\S\ref{sec:two-sided}), the expansion (\S\ref{sec:expansion2}), the mixture theorem (\S\ref{sec:mixture}), the kernel form (\S\ref{sec:kernel}), the $\rho$-lemma, then the four positivity regimes, then the strip.  Run \texttt{two\_sided\_shift\_checker.py} (Claude) and \texttt{gptpro\_jul5/clean\_two\_sided\_shift\_checker.py} + \texttt{gptpro\_jul5/regionI\_constant\_certifier\_exact.py} (GPT~Pro); every certified statement says which script certifies it.
 \item The rank-two/bipodal theorem (\S\ref{sec:ranktwo}) is self-contained and analytic; it can be read independently.
 \item \S\ref{sec:regionII} states exactly what remains open and why the obvious approaches fail; \S\ref{sec:remains-old} preserves the May 2026 obstruction analysis (partly superseded, still relevant to Region II), and \S\ref{sec:remains-new} is the current outlook.
 \end{enumerate}
@@ -1955,7 +1955,7 @@ It is enough to prove
 \[
         \wtP_{m,r}(q,\ell)\ge0
         \qquad
-        (1\le r\le(m-1)/2,\\ -1/2\le\ell\le1/2).
+        (1\le r\le(m-1)/2,\quad -1/2\le\ell\le1/2).
 \]
 \end{corollary}
 
@@ -2432,9 +2432,9 @@ For $\rho=\rho_{n,m}$ and $\nu=n/m$,
         -\rho(u)&\le \frac{\nu-u}{\nu}u^{n-1}
         &&\text{for }1/2<u<\nu,\label{eq:rho-neg-tail}\\
         \rho(u)&\ge \frac{u-\nu}{\nu}u^{n-1}
-        &&\text{for }u>\nu,\label{eq:rho-pos-tail}\\
+        &&\text{for }\nu<u\le1,\label{eq:rho-pos-tail}\\
         \rho(u)&\ge \frac mn(1-u)^n-u^{n-1}
-        &&\text{for all }u.\label{eq:rho-left-surplus}
+        &&\text{for }u\ge0.\label{eq:rho-left-surplus}
 \end{align}
 \end{lemma}
 
@@ -2447,11 +2447,11 @@ we have, for $u<\nu$,
 \[
         -\nu\rho(u)=(\nu-u)u^{n-1}-(1-u)^n\le(\nu-u)u^{n-1},
 \]
-and, for $u>\nu$,
+and, for $\nu<u\le1$,
 \[
-        \nu\rho(u)=(u-\nu)u^{n-1}+(1-u)^n\ge(u-\nu)u^{n-1}.
+        \nu\rho(u)=(u-\nu)u^{n-1}+(1-u)^n\ge(u-\nu)u^{n-1},
 \]
-The final inequality is obtained from the definition of $\rho$ by discarding the nonnegative term $(m/n)u^n$.
+where the last step drops $(1-u)^n\ge0$, which is nonnegative precisely because $u\le1$ and $n$ is odd.  Finally, \eqref{eq:rho-left-surplus} holds for $u\ge0$: it is obtained from the definition of $\rho$ by discarding the term $(m/n)u^n$, which is nonnegative exactly when $u\ge0$ (again as $n$ is odd).  In the residual strip both bounds are applied only where they are valid: \eqref{eq:rho-pos-tail} at $u=\nu+e\le2\nu-\tfrac12\le\tfrac56<1$ in Lemma~\ref{lem:upper-reflection-tail}, and \eqref{eq:rho-left-surplus} at $u=q+s\ge0$ in Lemma~\ref{lem:left-surplus-tail}.
 \end{proof}
 
 \begin{lemma}[Left-surplus estimate]\label{lem:left-surplus-tail}
