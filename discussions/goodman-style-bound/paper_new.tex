@@ -12,6 +12,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
 \newcommand{\one}{\mathbf 1}
@@ -21,7 +22,7 @@
 \newcommand{\eps}{\varepsilon}
 
 
-% --- extra macros for Parts II--IV (July 2026) ---
+% --- extra macros for the July 2026 sections (Layers 2--3) ---
 \newcommand{\R}{\mathbb R}
 \newcommand{\E}{\mathbb E}
 \newcommand{\Pcal}{\mathcal P}
@@ -49,7 +50,7 @@ It consolidates three layers of work, in one place and with full proofs, so that
 
 \emph{Layer 1 (May 2026, \S\ref{sec:tools}--\S\ref{sec:variational}).}  The bound is sharp exactly at balanced complete multipartite graphons.  It holds for $C_3$ (a Goodman-type argument), for $C_5,C_7$ (exact algebraic certificates), for $C_9,C_{11},C_{13}$ (hybrid computer-assisted certificates), for every odd cycle when $W$ is $p$-regular, when the complement compression has no eigenvalue above $q=1-p$ (positive-spectrum-safe), for rank-one and equal-clique complements, and on the two-value multipartite family.  A variational analysis shows the minimiser scallops between Tur\'an points and is near-bipartite, not multipartite, near $p=1/2$.
 
-\emph{Layer 2 (July 4, 2026, \S\ref{sec:setup2}--\S\ref{sec:strip}, \S\ref{sec:regionII}).}  The two-sided spectral-shift identity $t(C_m,W)+t(C_m,1-W)=p^m+q^m+S_m$ reorganises the problem exactly; after a single edge-deletion step it reduces, for every odd $m$ at once, to the nonnegativity of an explicit two-parameter family of diagonal kernels $\wtP_{m,r}(q,\ell)$ (via a mixture-of-diagonals theorem and a one-dimensional kernel representation).  Positivity is proved analytically in several regimes and verified by exact rational certificates in the rest, and the machinery yields new Region-II tools (an aggregate forced-coupling lemma; the failure of the naive total-coupling bound).
+\emph{Layer 2 (July 4, 2026, \S\ref{sec:setup2}--\S\ref{sec:general-pos}, \S\ref{sec:regionII}).}  The two-sided spectral-shift identity $t(C_m,W)+t(C_m,1-W)=p^m+q^m+S_m$ reorganises the problem exactly; after a single edge-deletion step it reduces, for every odd $m$ at once, to the nonnegativity of an explicit two-parameter family of diagonal kernels $\wtP_{m,r}(q,\ell)$ (via a mixture-of-diagonals theorem and a one-dimensional kernel representation).  Positivity is proved analytically in several regimes (the residual cases are completed in Layer~3 below), and the machinery yields new Region-II tools (an aggregate forced-coupling lemma; the failure of the naive total-coupling bound).
 
 \emph{Layer 3 (July 5, 2026, \S\ref{sec:r1}--\S\ref{sec:high-density-theorem}, \S\ref{sec:ranktwo}).}  A repaired disjoint-band proof of the $r=1$ case and a new analytic closure of the residual strip for all $m\ge63$ (left-surplus estimates plus an upper-end reflection) complete the proof of the \textbf{high-density theorem}: \emph{for every graphon with $p\ge2/3$ and every odd $m\ge3$, the conjectured bound holds.}  Only the finite range $m\le61$ of the residual strip and a short list of rational constant inequalities are computer-checked (exact arithmetic; two independent verifications).  A separate all-density theorem covers every rank-two complement, hence every bipodal graphon.
 
@@ -1619,7 +1620,7 @@ where $(T_W^{m-1})(x,y)$ is the density of rooted $(m-1)$-edge walks from $x$ to
         \mathcal K\ge\nu \text{ on } \{W^*=0\},\quad
         \mathcal K\le\nu \text{ on } \{W^*=1\}.
 \]
-Thus $W^*\in\{0,1\}$ off the level set $\{\mathcal K=\nu\}$.  The same identity underlies the $G'(\ell)>0$ reductions of \S\ref{subsec:C9-gap}--\S\ref{subsec:C13-gap}: the principal eigenvalue plays the role of the hub for every odd $m\ge5$, which is why that step is uniform in $m$.
+Thus $W^*\in\{0,1\}$ off the level set $\{\mathcal K=\nu\}$.
 
 \subsection{The minimiser scallops; $g_m$ is the Goodman envelope}\label{subsec:scallop}
 
@@ -1699,16 +1700,17 @@ Two consequences.  First, near $p=1/2$ the numerical odd-cycle minimiser is gove
 
 
 %======================================================================
-%  PART II: THE TWO-SIDED SPECTRAL-SHIFT METHOD AND THE HIGH-DENSITY
-%  THEOREM  (Claude, July 4, 2026; completed by GPT Pro, July 5, 2026)
+%  THE JULY 2026 DEVELOPMENT: THE TWO-SIDED SPECTRAL-SHIFT METHOD, THE
+%  HIGH-DENSITY THEOREM, THE RANK-TWO THEOREM, AND REGION II
+%  (Claude, July 4, 2026; completed by GPT Pro, July 5, 2026)
 %======================================================================
 
 \bigskip
 \begin{center}\rule{0.6\linewidth}{0.4pt}\end{center}
-\paragraph{About Part II (\S\ref{sec:setup2}--\S\ref{sec:high-density-theorem}).}
+\paragraph{About the July 2026 development (\S\ref{sec:setup2} onward, i.e.\ Layers 2--3 of the abstract).}
 The sections up to this point are the May 2026 state of the project.  The
-remainder of the document is the July 2026 development.  Its outcome is the
-\emph{high-density theorem}: Conjecture~\ref{conj:main} holds for every odd
+remainder of the document is the July 2026 development, whose central outcome is the
+\emph{high-density theorem} (\S\ref{sec:high-density-theorem}): Conjecture~\ref{conj:main} holds for every odd
 $m\ge3$ whenever $p\ge2/3$.  The architecture was introduced in Claude's note
 of July 4 (the two-sided identity, the kernel expansion, the
 mixture-of-diagonals reduction, the one-dimensional kernel form, the sign
@@ -1740,7 +1742,7 @@ Let $\mu$ denote the spectral measure of $A$ weighted by $g$:
         \qquad
         s_j:=\int \lambda^j\,d\mu(\lambda)=\ip{g}{A^jg}.
 \]
-Part I (Lemma~\ref{lem:compression} and Corollary~\ref{cor:norm-safe}) establishes the compression bound $\sigma(A)\subseteq[-1/2,1/2]$ and the trace-square budget
+The May 2026 sections (Lemma~\ref{lem:compression} and Corollary~\ref{cor:norm-safe}) establish the compression bound $\sigma(A)\subseteq[-1/2,1/2]$ and the trace-square budget
 \[
         \Tr(A^2)+2\norm g_2^2\le pq.
 \]
@@ -2091,7 +2093,7 @@ then $\wtP_{m,r}(q,\ell)\ge0$.
 \end{theorem}
 
 \begin{proof}
-It is enough to prove the bracket in~\eqref{eq:G-form} is nonnegative.  Assume $\ell>q$, since otherwise this theorem is contained in Theorem~\ref{thm:pointwise}.  The function $V(x)=\ell+(q-\ell)x$ is positive on $[0,1]$.
+It is enough to prove the bracket in~\eqref{eq:G-form} is nonnegative.  The hypothesis gives $\ell\ge q+r/m>q$ (as $r/m>0$); in particular $\ell-q>0$, and the function $V(x)=\ell+(q-\ell)x$ is positive on $[0,1]$.  (For $\ell\le0$ the statement is already part of Theorem~\ref{thm:pointwise}.)
 
 First, $\E W_\Xi^n\ge0$.  Indeed, $W(x)=(p+\ell)(x-x_w)$ with $x_w=\ell/(p+\ell)\le1/2$, and the $\Beta(r,r)$ law is symmetric about $1/2$.  Pairing $x=1/2+t$ with $x=1/2-t$, the two values of $x-x_w$ have nonnegative sum and the larger absolute value is the positive one, so their odd $n$th powers sum to a nonnegative number.
 
@@ -2142,7 +2144,7 @@ the surplus estimate then reused part of the partner mass.  (The July-4 note
 flagged the overlap and patched it by shrinking the surplus band, delegating
 the shrunken inequality to a checker; one of its suggested repairs --- that
 the pairing uses only the partners' nonnegativity --- was incorrect, since the
-pairing genuinely consumes partner mass.)  The proof given above, due to
+pairing genuinely consumes partner mass.)  The proof given below, due to
 GPT~Pro, avoids the issue outright by pairing only
 $(2\varepsilon,3\varepsilon)$ with $(\varepsilon,2\varepsilon)$ and reserving
 $(0,\varepsilon)$ for the surplus; the constants have been re-verified in
@@ -2408,8 +2410,8 @@ Put
 \[
         \theta=\frac rm,
         \qquad \nu=\frac nm=1-2\theta,
-        \qquad a=\frac12-q,
-        \qquad b=\nu-q,
+        \qquad a=s_a=\frac12-q,
+        \qquad b=s_b=\nu-q,
         \qquad L=b-a=\nu-\frac12=\frac12-2\theta,
 \]
 and
@@ -3235,7 +3237,7 @@ The triangle-density spectral closure has a hard ceiling.  Expanding the scalar 
         \delta_m\le\frac{9m}{4(m-2)^3}\sim\frac{9}{4m^2}
         \qquad(m\to\infty),
 \]
-intrinsic to triangle density plus the $L^2$-to-$L^3$ comparison: no manipulation within these inputs changes the $1/m^2$ scaling.  The path-certificate cut-offs, meanwhile, have grown ($\rho_9-\tfrac12=3/2000$, $\rho_{11}-\tfrac12=3/200$, $\rho_{13}-\tfrac12=19/1000$) and numerically appear to stabilise near a constant $\approx0.02$.  The two windows already fail to meet at $m=13$, even though the frontier split closes that cycle, and they diverge thereafter.  Closing the hybrid for all $m$ would require a stronger near-bipartite input.  The highest-payoff candidate is a sharp Tur\'an-type lower bound for $t(C_5,W)$ at fixed edge density $p\in[1/2,2/3]$ (the $C_5$ analogue of the triangle-density theorem), but this is best viewed as a structural route rather than a black-box uniform spectral closure.  For the equal-halves near-bipartite two-block model with $p=1/2+\eps$, the $C_5$ density is
+intrinsic to triangle density plus the $L^2$-to-$L^3$ comparison: no manipulation within these inputs changes the $1/m^2$ scaling.  The path-certificate cut-off densities $\rho_m$ (single subscript --- distinct from the kernel sign function $\rho_{n,m}$ of \S\ref{sec:kernel}), meanwhile, have grown ($\rho_9-\tfrac12=3/2000$, $\rho_{11}-\tfrac12=3/200$, $\rho_{13}-\tfrac12=19/1000$) and numerically appear to stabilise near a constant $\approx0.02$.  The two windows already fail to meet at $m=13$, even though the frontier split closes that cycle, and they diverge thereafter.  Closing the hybrid for all $m$ would require a stronger near-bipartite input.  The highest-payoff candidate is a sharp Tur\'an-type lower bound for $t(C_5,W)$ at fixed edge density $p\in[1/2,2/3]$ (the $C_5$ analogue of the triangle-density theorem), but this is best viewed as a structural route rather than a black-box uniform spectral closure.  For the equal-halves near-bipartite two-block model with $p=1/2+\eps$, the $C_5$ density is
 \[
         B_5(\eps)=\frac58\eps+10\eps^3+32\eps^5,
         \qquad
@@ -3252,12 +3254,12 @@ The general framework of \S\ref{sec:general} reduces the conjecture, for every $
 where only positive eigenvalues of $A$ above $q$ can create an obstruction (and by \S\ref{subsec:C13-attempt}\textup{(c)} at most one does, for $q>1/3$).  Theorem~\ref{thm:rank-one}, Theorem~\ref{thm:equal-clique}, and the two-value Theorem~\ref{thm:two-value} settle this for the rank-one, equal-clique, and two-value multipartite families.  The natural finite-dimensional next target is the fully \emph{unequal} disjoint clique complement $U=\sum_i\mathbf 1_{A_i}\otimes\mathbf 1_{A_i}$ with arbitrary block sizes $a_i$ (equivalently \eqref{eq:P2} for arbitrary $w$): the matrix inequality $\Tr(M^{2k+1})\ge p^{2k+1}-pq^{2k}$ for $M=ss^{\mathsf T}-\operatorname{diag}(w)$.  By Theorem~\ref{thm:two-value} this is already settled \emph{on the two-value family}; what remains is the simplex-to-two-value reduction for $m\ge5$ (\S\ref{subsec:multipartite}), i.e.\ proving the multipartite minimiser has at most two distinct part sizes.  This would close \eqref{eq:P2}.  It does \emph{not}, however, close the conjecture, since the numerical near-$p=1/2$ minimiser is not multipartite (\S\ref{subsec:C13-minimiser}).
 
 \medskip\noindent\emph{The combinatorial counterpart.}
-The same defect has an exact path-cycle form.  For $m=n+1$ with $n=2k$ even, inclusion-exclusion over the edges of $C_m$ gives
+The same defect has an exact path-cycle form.  For $m=n+1$ with $n=2k$ even (here, exceptionally, $n=m-1$ is even, in contrast to the odd $n=m-2r$ used in the spectral-shift sections~\ref{sec:setup2}--\ref{sec:high-density-theorem}), inclusion-exclusion over the edges of $C_m$ gives
 \[
         t(C_m,1-U)-\bigl((1-q)^m-(1-q)q^{m-1}\bigr)
         =\sum_{j=0}^{n-1}(-1)^j\frac{m}{m-j}E_{n,j}(U)+nE_{n,n}(U)+(x_n-c_m),
 \]
-where $x_n=t(P_n,U)$, $c_m=t(C_m,U)$, the layer $Z_{n,j}(U)=\sum_{F\subseteq P_n,\,e(F)=j}t(F,U)$ sums path-forest densities over the $j$-edge subgraphs of $P_n$, the deviation $E_{n,j}(U)=Z_{n,j}(U)-\binom nj q^j$ measures its departure from the product value, and the coefficient identity $\frac{m}{m-j}\binom nj=\binom mj$ is used.  Kim and Lee~\cite{KimLee2022} proved the even path layers satisfy $E_{n,2d}(U)\ge0$ via Schur convexity; the missing one-sided content is the control of the odd layers together with the path-cycle gap $x_n-c_m$.  Matching this combinatorial gap to the operator surplus $\Psi_m$ may reveal a canonical sum-of-squares proof.
+where $x_n=t(P_n,U)$, $c_m=t(C_m,U)$, the layer $Z_{n,j}(U)=\sum_{F\subseteq P_n,\,e(F)=j}t(F,U)$ sums path-forest densities over the $j$-edge subgraphs of $P_n$, the deviation $E_{n,j}(U)=Z_{n,j}(U)-\binom nj q^j$ measures its departure from the product value, and the coefficient identity $\frac{m}{m-j}\binom nj=\binom mj$ is used.  Kim and Lee~\cite{KimLee} proved the even path layers satisfy $E_{n,2d}(U)\ge0$ via Schur convexity; the missing one-sided content is the control of the odd layers together with the path-cycle gap $x_n-c_m$.  Matching this combinatorial gap to the operator surplus $\Psi_m$ may reveal a canonical sum-of-squares proof.
 
 \section{What remains now (July 2026)}\label{sec:remains-new}
 
@@ -3274,7 +3276,7 @@ Conjecture~\ref{conj:region2}.  We summarise the current state.
 (\S\ref{sec:ranktwo}), including the near-bipartite structures that dominate
 the numerical minimisers near $p=1/2$ (\S\ref{subsec:C13-minimiser}).
 (iii) $C_3$--$C_{13}$: done at all densities (\S\ref{sec:C5}--\S\ref{sec:C13}).
-(iv) The certificate family of Part II extends numerically to $q\le0.4117$
+(iv) The certificate family of the high-density method (\S\ref{sec:setup2}--\S\ref{sec:high-density-theorem}) extends numerically to $q\le0.4117$
 (Remark~\ref{rmk:thresholds}), so the ``hard core'' of Region II is
 effectively $q\in(0.41,\tfrac12)$ together with the tightening at the Tur\'an
 scallop $q\downarrow\tfrac13$.
@@ -3339,7 +3341,7 @@ The following points were checked explicitly while preparing the May 2026 note (
 
 \subsection*{Additions of July 4--5, 2026}
 
-The following checks accompany Parts II--IV.  All ``exact'' items use
+The following checks accompany the July 2026 sections (\S\ref{sec:setup2}--\S\ref{sec:regionII}).  All ``exact'' items use
 rational arithmetic only.
 
 \begin{enumerate}[label=\textup{(\arabic*)},resume]
@@ -3569,11 +3571,6 @@ A.~A. Razborov.
 C.~Reiher.
 \newblock The clique density theorem.
 \newblock \emph{Annals of Mathematics} 184(3):683--707, 2016.
-
-\bibitem{KimLee2022}
-J.~S. Kim and J.~Lee.
-\newblock Extended commonality of paths and cycles via Schur convexity.
-\newblock arXiv:2210.00977, 2022.
 
 \bibitem{LovaszSimonovits}
 L.~Lov\'asz and M.~Simonovits.
