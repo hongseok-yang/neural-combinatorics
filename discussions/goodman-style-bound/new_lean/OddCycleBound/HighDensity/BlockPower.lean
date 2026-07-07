@@ -21,6 +21,7 @@ Notation, writing `P = blockOp q g A`:
 
 import OddCycleBound.HighDensity.FiniteRank
 import Mathlib.Tactic.Abel
+import Mathlib.LinearAlgebra.Matrix.Symmetric
 
 namespace OddCycleBound.HighDensity
 
@@ -195,5 +196,68 @@ lemma two_sided_trace_eq {m : ℕ} (hm : Odd m) (q : ℝ) (g : ι → ℝ) (A : 
                trace (vecMulVec (hubCol (1 - q) g (-A) t) g * (-A) ^ (m - 1 - t))) := by
   rw [trace_blockOp_pow_eq, trace_blockOp_pow_eq, trace_neg_pow_odd hm]
   abel
+
+/-! ### The hub return `α_m` (symmetric compression)
+
+In the paper's setting the compression `A` is symmetric, which makes `blockOp q g A` symmetric; then the
+hub↔body *row* of `P^m` equals the body↔hub column `γ_m`, and the hub return
+`α_m = (P^m)_{none,none}` obeys the clean scalar recursion `α_{m+1} = q α_m + ⟨γ_m, g⟩`.  Unrolling it
+gives the last of the three block sequences in closed form. -/
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- `blockOp` is symmetric exactly when its compression `A` is (`g` sits symmetrically). -/
+lemma blockOp_isSymm (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ} (hA : A.IsSymm) :
+    (blockOp q g A).IsSymm := by
+  apply Matrix.IsSymm.ext
+  intro a b
+  cases a <;> cases b <;>
+    simp only [blockOp_none_none, blockOp_none_some, blockOp_some_none, blockOp_some_some]
+  exact hA.apply _ _
+
+/-- Powers of a symmetric `blockOp` are symmetric. -/
+lemma blockOp_pow_isSymm (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ} (hA : A.IsSymm) (m : ℕ) :
+    (blockOp q g A ^ m).IsSymm := by
+  unfold Matrix.IsSymm
+  rw [Matrix.transpose_pow, (blockOp_isSymm q g hA).eq]
+
+/-- Under symmetry, the hub↔body row of `P^m` coincides with the body↔hub column `γ_m`. -/
+lemma blockOp_pow_none_some (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ} (hA : A.IsSymm) (m : ℕ) (j : ι) :
+    (blockOp q g A ^ m) none (some j) = hubCol q g A m j := by
+  simpa only [hubCol] using ((blockOp_pow_isSymm q g hA m).apply none (some j)).symm
+
+/-- The hub return `α_m = (P^m)_{none,none}`. -/
+noncomputable def hubEntry (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) : ℝ :=
+  (blockOp q g A ^ m) none none
+
+@[simp] lemma hubEntry_zero (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) :
+    hubEntry q g A 0 = 1 := by
+  simp [hubEntry, pow_zero]
+
+/-- Hub-return recursion (symmetric compression): `α_{m+1} = q α_m + ⟨γ_m, g⟩`. -/
+lemma hubEntry_succ (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ} (hA : A.IsSymm) (m : ℕ) :
+    hubEntry q g A (m + 1) = q * hubEntry q g A m + hubCol q g A m ⬝ᵥ g := by
+  simp only [hubEntry, blockOp_pow_succ_none_none, dotProduct, blockOp_pow_none_some q g hA]
+  ring
+
+/-- **Unrolled hub return.**  `α_m = q^m + Σ_{t<m} q^{m-1-t} ⟨γ_t, g⟩`.  With `bodyBlock_eq` and
+`hubCol_eq`, all three block sequences of `P^m` are now in closed form. -/
+lemma hubEntry_eq (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ} (hA : A.IsSymm) (m : ℕ) :
+    hubEntry q g A m
+      = q ^ m + ∑ t ∈ Finset.range m, q ^ (m - 1 - t) * (hubCol q g A t ⬝ᵥ g) := by
+  induction m with
+  | zero => simp [hubEntry]
+  | succ m ih =>
+    have hsum : q * (∑ t ∈ Finset.range m, q ^ (m - 1 - t) * (hubCol q g A t ⬝ᵥ g))
+        = ∑ t ∈ Finset.range m, q ^ (m - t) * (hubCol q g A t ⬝ᵥ g) := by
+      rw [Finset.mul_sum]
+      refine Finset.sum_congr rfl fun t ht => ?_
+      rw [Finset.mem_range] at ht
+      rw [← mul_assoc, ← pow_succ']
+      have : m - 1 - t + 1 = m - t := by omega
+      rw [this]
+    rw [hubEntry_succ q g hA, ih, mul_add, hsum, Finset.sum_range_succ]
+    simp only [Nat.succ_sub_one, Nat.sub_self, pow_zero, one_mul]
+    rw [← pow_succ' q m]
+    ring
 
 end OddCycleBound.HighDensity

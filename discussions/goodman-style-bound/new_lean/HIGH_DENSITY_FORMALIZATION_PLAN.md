@@ -266,6 +266,10 @@ Work in this order; each milestone is independently checkpointable.
      - `hubCol_eq` (induction on `m`) — `γ_m = Σ_{u<m} q^{m-1-u} (δ_u g)`: the companion unrolling of the
        body↔hub column. Together with `bodyBlock_eq` **both mutually-coupled sequences `γ`,`δ` are now in
        closed form** over powers of `A` and `q` — this pair *is* the continued-fraction/necklace structure;
+     - `hubEntry_eq` (induction on `m`, needs `A.IsSymm`) — `α_m = q^m + Σ_{t<m} q^{m-1-t} ⟨γ_t, g⟩`: the
+       hub return. Supported by `blockOp_isSymm` / `blockOp_pow_isSymm` / `blockOp_pow_none_some` (under
+       symmetry the hub↔body row = `γ_m`). **All three block sequences `α_m, γ_m, δ_m` of `P^m` are now
+       in closed form** (symmetric `A` = the paper's compression setting);
      - `trace_blockOp_pow_eq` — `Tr(P^m) = α_m + Tr(A^m) + Σ_{t<m} Tr((γ_t gᵀ)A^{m-1-t})`;
      - `two_sided_trace_eq` — **for every odd `m` at once**, applying pillar 1 (`trace_neg_pow_odd`) the
        `Tr(A^m)` term cancels in `Tr(P^m)+Tr(M^m)`, leaving hub returns + moment couplings. This is the
