@@ -76,6 +76,14 @@ lemma trace_pow3_eq (X : Matrix (Option ι) (Option ι) ℝ) :
   rw [hx]
   simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Finset.sum_mul]
 
+/-- Trace of a fifth power, as an explicit five-fold sum (the shape used for the length-5 identity). -/
+lemma trace_pow5_eq (X : Matrix (Option ι) (Option ι) ℝ) :
+    trace (X ^ 5) = ∑ a, ∑ e, ∑ d, ∑ c, ∑ b, X a b * X b c * X c d * X d e * X e a := by
+  have hx : X ^ 5 = X * X * X * X * X := by
+    rw [pow_succ, pow_succ, pow_succ, pow_succ, pow_one]
+  rw [hx]
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Finset.sum_mul]
+
 /-- **Milestone M0a (length 3).**  The finite-rank two-sided spectral-shift identity at `m = 3`
 (`paper_new.tex` Thm `thm:two-sided`, `S_3 = 3 s_0`).  Every `A`-dependent term carries an odd number
 of `A`-factors and hence cancels between the two block operators (`M` flips the sign of `A`), leaving

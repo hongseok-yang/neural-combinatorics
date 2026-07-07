@@ -252,6 +252,18 @@ Work in this order; each milestone is independently checkpointable.
      identity's `A`-terms cancel (odd moments + `Tr(A^m)` antisymmetric; even moments survive into
      `S_m`). What remains for a length-`m` identity is the **structural necklace decomposition** of
      `Tr(blockOp^m)` into (q-necklace)·(moment-product) terms — the reindexing-heavy piece.
+   - **Trace-power expansions ready:** `trace_pow3_eq` and `trace_pow5_eq` express `Tr(X^m)` as the
+     explicit `m`-fold sum (via `Fintype.sum_option`-friendly `mul_apply` expansion). `trace_pow3_eq`
+     powers the finished M0a proof; `trace_pow5_eq` is the foundation stone for the length-5 identity.
+   - **Why length-5 is deferred (cost analysis, 2026-07-07):** brute `sum_option` on `trace_pow5_eq`
+     yields 32 index-patterns; the surviving moments (`s₀, s₁, s₀², s₂`) each appear as ~5 rotational
+     copies that are equal only up to *cyclic reindexing + in-binder commutativity* (invisible to
+     `ring`/`linear_combination`), needing ~15–20 `Finset.sum_comm`/reindex helper lemmas. The
+     `A`-cancellations (`T` vs `M`) work automatically via the parity pillars, but the copy-folding does
+     not. **Recommended:** build the general necklace decomposition (matrix `complTrace_necklace`
+     analogue) which produces the moment terms already folded — then length-5 and all odd lengths fall
+     out without per-length reindexing. The two parity pillars + `frMoment` bridges are its prerequisites
+     and are done.
    - **`S₅` hand-verified** (necklace/run count): `Tr(T_U⁵)+Tr(M⁵) = q⁵+p⁵ + 5s₂ + 5s₁(q−p) +
      5s₀(q³+p³) + 5s₀²`, matching `S₅ = 5[s₂+s₁(q−p)+s₀(q³+p³)+s₀²]` (uses `q²−p²=q−p`); the odd `s₃`,
      the `s₀s₁` cross term, and `Tr(A⁵)` all cancel. **Length-5 identity NOT yet formalized** — the
