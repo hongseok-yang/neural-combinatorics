@@ -127,6 +127,39 @@ lemma bodyBlock_eq (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
     rw [pow_succ A m]
     abel
 
+@[simp] lemma hubCol_zero (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) :
+    hubCol q g A 0 = 0 := by
+  ext i
+  simp [hubCol, pow_zero]
+
+/-- Recursion for the body↔hub column: `γ_{m+1} = q γ_m + δ_m g`. -/
+lemma hubCol_succ (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
+    hubCol q g A (m + 1) = q • hubCol q g A m + bodyBlock q g A m *ᵥ g := by
+  ext i
+  simp only [hubCol, blockOp_pow_succ_some_none, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
+    Matrix.mulVec, dotProduct, bodyBlock]
+  ring
+
+/-- **Unrolled body↔hub column.**  `γ_m = Σ_{u<m} q^{m-1-u} (δ_u g)` — the continued-fraction closure
+of the coupled `γ`/`δ` recursion.  Together with `bodyBlock_eq` this puts both coupled sequences in
+closed form over powers of `A` and `q`. -/
+lemma hubCol_eq (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
+    hubCol q g A m
+      = ∑ u ∈ Finset.range m, q ^ (m - 1 - u) • (bodyBlock q g A u *ᵥ g) := by
+  induction m with
+  | zero => simp
+  | succ m ih =>
+    have hsum : q • (∑ u ∈ Finset.range m, q ^ (m - 1 - u) • (bodyBlock q g A u *ᵥ g))
+        = ∑ u ∈ Finset.range m, q ^ (m - u) • (bodyBlock q g A u *ᵥ g) := by
+      rw [Finset.smul_sum]
+      refine Finset.sum_congr rfl fun u hu => ?_
+      rw [Finset.mem_range] at hu
+      rw [smul_smul, ← pow_succ']
+      have : m - 1 - u + 1 = m - u := by omega
+      rw [this]
+    rw [hubCol_succ, ih, hsum, Finset.sum_range_succ]
+    simp only [Nat.succ_sub_one, Nat.sub_self, pow_zero, one_smul]
+
 /-- Trace of the unrolled body block: `Tr(δ_m) = Tr(A^m) + Σ_{t<m} Tr((γ_t gᵀ) A^{m-1-t})`.
 Isolates the pure compression trace `Tr(A^m)`. -/
 lemma trace_bodyBlock (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
