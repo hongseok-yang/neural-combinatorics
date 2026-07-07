@@ -39,3 +39,5 @@ import OddCycleBound.LowBand.CompactGraphonOperator
 
 -- High-density theorem (milestones M0–M7). M0a: finite-rank two-sided identity (length 3) — done.
 import OddCycleBound.HighDensity.FiniteRank
+-- General-`m` block-power recursion (toward the necklace decomposition of Tr(blockOp^m)).
+import OddCycleBound.HighDensity.BlockPower
