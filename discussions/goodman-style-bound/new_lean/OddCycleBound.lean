@@ -1,0 +1,41 @@
+/-
+# OddCycleBound (high-density project) — root aggregator
+
+This is the **high-density-only** formalization project: the target is the single theorem
+
+> for every graphon `W` with `p = t(K₂,W) ≥ 2/3` and every odd `m ≥ 3`,
+> `t(C_m, W) ≥ p^m − p(1−p)^{m-1}`     (`paper_new.tex` §`sec:high-density-theorem`).
+
+It deliberately does **not** carry the per-cycle certificate machinery (`C9`/`C11`/`C13`,
+`BoundsC5C7`, the `LowBand` spectral closures, `Conditional`, `Main`) from the sibling `../lean`
+project: at `p ≥ 2/3` the high-density theorem subsumes `C5`–`C13` as instances, so that whole
+certificate zoo is dead weight here.
+
+What is imported below is the **reusable foundation only** (see `HIGH_DENSITY_FORMALIZATION_PLAN.md`
+§2): the integral graphon definitions, the kernel/trace algebra, path densities and their general
+recurrence, the necklace identity (the general-`m` cyclic-trace *precedent* for the from-scratch
+two-sided identity), and the compact self-adjoint `L²` operator layer that the moment route builds on.
+
+The high-density argument itself (milestones M0–M7 in the plan) is **not yet written** — that is the
+work. Add it under a new `OddCycleBound/HighDensity/` subtree and extend the imports here.
+-/
+
+-- Integral foundations and kernel/trace algebra.
+import OddCycleBound.Graphon
+import OddCycleBound.PathDensity
+import OddCycleBound.Kernel
+import OddCycleBound.Certificate
+import OddCycleBound.Cycle
+import OddCycleBound.Necklace
+
+-- General-`m` machinery: path recurrence, necklace identity, moment SOS engine.
+import OddCycleBound.General.Necklace
+import OddCycleBound.General.PathRecurrence
+import OddCycleBound.General.SumOfSquares
+
+-- Compact self-adjoint graphon `L²` operator + eigen-expansion (moment-route base).
+import OddCycleBound.LowBand.GraphonL2Operator
+import OddCycleBound.LowBand.CompactGraphonOperator
+
+-- High-density theorem (milestones M0–M7). M0a: finite-rank two-sided identity (length 3) — done.
+import OddCycleBound.HighDensity.FiniteRank
