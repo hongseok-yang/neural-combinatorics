@@ -255,6 +255,22 @@ Work in this order; each milestone is independently checkpointable.
    - **Trace-power expansions ready:** `trace_pow3_eq` and `trace_pow5_eq` express `Tr(X^m)` as the
      explicit `m`-fold sum (via `Fintype.sum_option`-friendly `mul_apply` expansion). `trace_pow3_eq`
      powers the finished M0a proof; `trace_pow5_eq` is the foundation stone for the length-5 identity.
+   - ✅ **General-`m` necklace SKELETON landed (2026-07-07): `HighDensity/BlockPower.lean`** (compiles,
+     wired into root). This is the *universal* (all-odd-`m`) machinery — everything symbolic in `m`,
+     proved by induction, **not** per length:
+     - `blockOp_pow_succ_apply` — the `P^{m+1}=P^m·P` recursion resolved over the hub(`none`)/body(`some`)
+       split of `Option ι`; four component recursions (hub-hub, hub-body, body-hub, body-body);
+     - `trace_blockOp_pow` — `Tr(P^m) = α_m + Tr(δ_m)` (hub entry + body diagonal);
+     - `bodyBlock_eq` (induction on `m`) — `δ_m = A^m + Σ_{t<m} (γ_t gᵀ) A^{m-1-t}`: **isolates the pure
+       compression power `A^m`** from the rank-one moment-coupling terms;
+     - `trace_blockOp_pow_eq` — `Tr(P^m) = α_m + Tr(A^m) + Σ_{t<m} Tr((γ_t gᵀ)A^{m-1-t})`;
+     - `two_sided_trace_eq` — **for every odd `m` at once**, applying pillar 1 (`trace_neg_pow_odd`) the
+       `Tr(A^m)` term cancels in `Tr(P^m)+Tr(M^m)`, leaving hub returns + moment couplings. This is the
+       general-`m` realisation of the paper's `det(I±zA)` cancellation.
+     **Remaining for the full identity:** analyse the hub return `α_m` and the coupling terms
+     `Σ Tr((γ_t gᵀ)A^{m-1-t})` (the `γ_t` are themselves coupled — the continued-fraction/necklace
+     structure) and show `α_m(P)+α_m(M) + Σ couplings = q^m+p^m+S_m` with `S_m` in the even moments.
+     The `frMoment` bridges + parity pillars feed this; `Tr((γ_t gᵀ)A^s)` is a moment-type bilinear form.
    - **Why length-5 is deferred (cost analysis, 2026-07-07):** brute `sum_option` on `trace_pow5_eq`
      yields 32 index-patterns; the surviving moments (`s₀, s₁, s₀², s₂`) each appear as ~5 rotational
      copies that are equal only up to *cyclic reindexing + in-binder commutativity* (invisible to

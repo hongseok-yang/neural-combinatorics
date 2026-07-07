@@ -20,6 +20,7 @@ Notation, writing `P = blockOp q g A`:
 -/
 
 import OddCycleBound.HighDensity.FiniteRank
+import Mathlib.Tactic.Abel
 
 namespace OddCycleBound.HighDensity
 
@@ -76,5 +77,90 @@ lemma trace_blockOp_pow (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : �
       = (blockOp q g A ^ m) none none
         + ∑ i, (blockOp q g A ^ m) (some i) (some i) := by
   simp only [Matrix.trace, Matrix.diag_apply, Fintype.sum_option]
+
+/-! ### Unrolling the body block: isolating `A^m`
+
+The body↔hub column `γ_m` and the body block `δ_m` as first-class objects, and the unrolled form of
+`δ_m` that separates the pure compression power `A^m` from the moment-coupling rank-one terms.  Taking
+the trace, `Tr(A^m)` cancels for odd `m` (via `trace_neg_pow`), and the coupling terms carry the
+moments. -/
+
+/-- Body↔hub column `γ_m` of `P^m`: `γ_m(i) = (P^m)_{(some i), none}`. -/
+noncomputable def hubCol (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) : ι → ℝ :=
+  fun i => (blockOp q g A ^ m) (some i) none
+
+/-- Body↔body block `δ_m` of `P^m` as an `ι×ι` matrix: `δ_m(i,j) = (P^m)_{(some i),(some j)}`. -/
+noncomputable def bodyBlock (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) : Matrix ι ι ℝ :=
+  fun i j => (blockOp q g A ^ m) (some i) (some j)
+
+@[simp] lemma bodyBlock_zero (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) :
+    bodyBlock q g A 0 = 1 := by
+  ext i j
+  simp only [bodyBlock, pow_zero, Matrix.one_apply, Option.some.injEq]
+
+/-- Transfer step for the body block: `δ_{m+1} = γ_m gᵀ + δ_m A`. -/
+lemma bodyBlock_succ (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
+    bodyBlock q g A (m + 1) = vecMulVec (hubCol q g A m) g + bodyBlock q g A m * A := by
+  ext i j
+  simp only [bodyBlock, blockOp_pow_succ_some_some, Matrix.add_apply, Matrix.vecMulVec_apply,
+    hubCol, Matrix.mul_apply]
+
+/-- **Unrolled body block.**  `δ_m = A^m + Σ_{t<m} (γ_t gᵀ) A^{m-1-t}` — the pure compression power
+`A^m` plus rank-one moment-coupling terms.  This is the matrix-level heart of the necklace
+decomposition. -/
+lemma bodyBlock_eq (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
+    bodyBlock q g A m
+      = A ^ m + ∑ t ∈ Finset.range m, vecMulVec (hubCol q g A t) g * A ^ (m - 1 - t) := by
+  induction m with
+  | zero => simp
+  | succ m ih =>
+    have hsum : (∑ t ∈ Finset.range m, vecMulVec (hubCol q g A t) g * A ^ (m - 1 - t)) * A
+        = ∑ t ∈ Finset.range m, vecMulVec (hubCol q g A t) g * A ^ (m - t) := by
+      rw [Finset.sum_mul]
+      refine Finset.sum_congr rfl fun t ht => ?_
+      rw [Finset.mem_range] at ht
+      rw [Matrix.mul_assoc, ← pow_succ]
+      have : m - 1 - t + 1 = m - t := by omega
+      rw [this]
+    rw [bodyBlock_succ, ih, add_mul, hsum, Finset.sum_range_succ]
+    simp only [Nat.succ_sub_one, Nat.sub_self, pow_zero, Matrix.mul_one]
+    rw [pow_succ A m]
+    abel
+
+/-- Trace of the unrolled body block: `Tr(δ_m) = Tr(A^m) + Σ_{t<m} Tr((γ_t gᵀ) A^{m-1-t})`.
+Isolates the pure compression trace `Tr(A^m)`. -/
+lemma trace_bodyBlock (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
+    trace (bodyBlock q g A m)
+      = trace (A ^ m)
+        + ∑ t ∈ Finset.range m, trace (vecMulVec (hubCol q g A t) g * A ^ (m - 1 - t)) := by
+  rw [bodyBlock_eq, trace_add, trace_sum]
+
+/-- **`Tr(P^m)` with `A^m` isolated.**  `Tr(blockOp q g A ^ m) = α_m + Tr(A^m) + Σ_{t<m} (coupling_t)`,
+where `α_m = (P^m)_{none,none}` is the hub return and each coupling term is
+`Tr((γ_t gᵀ) A^{m-1-t})` (a moment-product).  Under the two-sided move `A ↦ −A` (`P ↦ M`), the
+`Tr(A^m)` term cancels for odd `m` by `trace_neg_pow`; the coupling terms carry the surviving even
+moments.  This is the structural skeleton of the necklace decomposition. -/
+lemma trace_blockOp_pow_eq (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) :
+    trace (blockOp q g A ^ m)
+      = (blockOp q g A ^ m) none none + trace (A ^ m)
+        + ∑ t ∈ Finset.range m, trace (vecMulVec (hubCol q g A t) g * A ^ (m - 1 - t)) := by
+  rw [trace_blockOp_pow]
+  have hbody : (∑ i, (blockOp q g A ^ m) (some i) (some i)) = trace (bodyBlock q g A m) := by
+    simp only [bodyBlock, Matrix.trace, Matrix.diag_apply]
+  rw [hbody, trace_bodyBlock, ← add_assoc]
+
+/-- **Two-sided trace, `Tr(A^m)` cancelled (odd `m`).**  Applying the skeleton to `P = blockOp q g A`
+and `M = blockOp (1−q) g (−A)` and using pillar 1 (`trace_neg_pow_odd`: `Tr((−A)^m) = −Tr(A^m)` for odd
+`m`), the pure compression trace drops out of the two-sided sum, leaving only the hub returns and the
+moment-coupling terms.  This is the general-`m` realisation of the `det(I±zA)`-cancellation of
+`paper_new.tex` §`sec:two-sided`, valid for *every* odd `m` at once. -/
+lemma two_sided_trace_eq {m : ℕ} (hm : Odd m) (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) :
+    trace (blockOp q g A ^ m) + trace (blockOp (1 - q) g (-A) ^ m)
+      = ((blockOp q g A ^ m) none none + (blockOp (1 - q) g (-A) ^ m) none none)
+        + (∑ t ∈ Finset.range m, trace (vecMulVec (hubCol q g A t) g * A ^ (m - 1 - t))
+           + ∑ t ∈ Finset.range m,
+               trace (vecMulVec (hubCol (1 - q) g (-A) t) g * (-A) ^ (m - 1 - t))) := by
+  rw [trace_blockOp_pow_eq, trace_blockOp_pow_eq, trace_neg_pow_odd hm]
+  abel
 
 end OddCycleBound.HighDensity
