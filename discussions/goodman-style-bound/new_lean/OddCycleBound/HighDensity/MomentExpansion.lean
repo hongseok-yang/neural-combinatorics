@@ -353,6 +353,21 @@ lemma neckSum_moment (hW : IsGraphon W μ) (m : ℕ) :
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [pairing_pathIter_compl_moment hW j (m - 1 - j)]
 
+/-- **Complement path-density recurrence in `W`-quantities.**  `pathDensity_succ` at `compl W`, folded
+through `edgeDensity_compl` and `specMoment_compl`, expresses the `(1-W)`-path densities via `q = 1−p`
+and the `W`-moments (with the parity sign `(−1)ⁱ`):
+`y_{n+1} = (1−p)·yₙ + Σ_{i<n} (−1)ⁱ sᵢ · y_{n-1-i}`.  Iterating puts every `y_j` (hence all of
+`neckSum`) in `p, q, s`. -/
+lemma pathDensity_compl_succ (hW : IsGraphon W μ) (n : ℕ) :
+    pathDensity (compl W) μ (n + 1)
+      = (1 - edgeDensity W μ) * pathDensity (compl W) μ n
+        + ∑ i ∈ Finset.range n,
+            (-1 : ℝ) ^ i * specMoment W μ i * pathDensity (compl W) μ (n - 1 - i) := by
+  rw [pathDensity_succ (isGraphon_compl hW) n, edgeDensity_compl hW]
+  congr 1
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [specMoment_compl hW i]
+
 /-! ### End-to-end validation at `m = 3` (the graphon triangle bound, all densities)
 
 A concrete check that the whole chain (M0c reduction + the moment expansion) yields correct bounds.
