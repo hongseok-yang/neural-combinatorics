@@ -47,3 +47,5 @@ import OddCycleBound.HighDensity.GraphonReduction
 import OddCycleBound.HighDensity.MomentExpansion
 -- M1 foundation: complete homogeneous symmetric polynomial layer (h_d, convolution identity).
 import OddCycleBound.HighDensity.SymmetricPoly
+-- M3 foundation: sign structure of ρ (reflection nonnegativity, left window).
+import OddCycleBound.HighDensity.RhoLemma
