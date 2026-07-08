@@ -359,6 +359,15 @@ Work in this order; each milestone is independently checkpointable.
      expansion of `Tr(blockOp^m)`) — that is the scalable M0b core and avoids per-length reindexing.
 2. 📝 🟡–🟠 **M1 — Symmetric-function + mixture layer.** Build `h_d` convolution identity, the Dirichlet
    moment formula, and `Thm mixture`; reduce to the diagonal `P̃_{m,r}(q,ℓ) ≥ 0`.
+   - **Step 0 done (2026-07-08): moment-friendly rewrite of `neckSum`.**
+     `OddCycleBound/HighDensity/MomentExpansion.lean` (builds clean, wired into root). `kernelOp_compl`
+     (`T_{1-U} f = (∫f)·1 − T_U f`) ⇒ `complIter_compl_eq_pathIter` (`B_{1-W} = T_W`, so the complement
+     `B`-iterate is just the `W`-path iterate) ⇒ `neckSum_eq`:
+     `neckSum W μ m = Σ_{j<m-1} (−1)ʲ ⟨ pathIter (compl W) j, pathIter W (m-1-j) ⟩`. This is only the
+     structural rewrite into the two-sided path-generating-function shape (`𝓛_W`,`𝓛_U`); NO positivity.
+     **Next (the large step):** expand each `pathIter` in the compression basis `{1,h_0,h_1,…}` via
+     `kernelOp_compressIter` (`T_W hₖ = sₖ·1 + h_{k+1}`) and collapse `⟨h_i,h_j⟩ = s_{i+j}`, giving `S_m`
+     / `Φ_m` in the pure moments `s_j` — then the `𝓟_{m,r}` expansion + case positivity (M3–M6).
 3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
 4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).

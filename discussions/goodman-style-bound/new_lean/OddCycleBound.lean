@@ -43,3 +43,5 @@ import OddCycleBound.HighDensity.FiniteRank
 import OddCycleBound.HighDensity.BlockPower
 -- M0c (direct): graphon reduction of the target to `Φ_m ≥ 0` (necklace-sum positivity).
 import OddCycleBound.HighDensity.GraphonReduction
+-- M1 (Thm expansion), step 0: moment-friendly rewrite of neckSum (B_{1-W}=T_W).
+import OddCycleBound.HighDensity.MomentExpansion
