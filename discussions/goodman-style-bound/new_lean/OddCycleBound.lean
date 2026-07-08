@@ -45,3 +45,5 @@ import OddCycleBound.HighDensity.BlockPower
 import OddCycleBound.HighDensity.GraphonReduction
 -- M1 (Thm expansion), step 0: moment-friendly rewrite of neckSum (B_{1-W}=T_W).
 import OddCycleBound.HighDensity.MomentExpansion
+-- M1 foundation: complete homogeneous symmetric polynomial layer (h_d, convolution identity).
+import OddCycleBound.HighDensity.SymmetricPoly

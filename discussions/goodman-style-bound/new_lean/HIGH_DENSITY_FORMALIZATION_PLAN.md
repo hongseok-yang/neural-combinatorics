@@ -359,6 +359,16 @@ Work in this order; each milestone is independently checkpointable.
      expansion of `Tr(blockOp^m)`) — that is the scalable M0b core and avoids per-length reindexing.
 2. 📝 🟡–🟠 **M1 — Symmetric-function + mixture layer.** Build `h_d` convolution identity, the Dirichlet
    moment formula, and `Thm mixture`; reduce to the diagonal `P̃_{m,r}(q,ℓ) ≥ 0`.
+   - **Foundation done (2026-07-09): `HighDensity/SymmetricPoly.lean`** (pure algebra, builds clean,
+     wired into root). `hsym : List ℝ → ℕ → ℝ` = the complete homogeneous symmetric polynomial `h_d`
+     evaluated at a list; `hsym_append` (concatenation/convolution `h_d(xs++ys)=Σ_j h_j(xs)h_{d-j}(ys)`,
+     via `Finset.sum_sigma'`+`sum_nbij'` reindex); `hsym_replicate` (single value `h_d(a^{×(k+1)})=
+     C(d+k,k)a^d`, via a `sum_choose_hockey` hockey-stick induction); and the paper's **line-1928
+     convolution identity** `hsym_replicate_append`: `h_d(a^{×(k+1)},ys)=Σ_j C(d-j+k,k)a^{d-j}h_j(ys)`.
+     These are the building blocks for `𝓟_{m,r}` (eq:P-def) and the diagonal evaluation used in the
+     mixture theorem (thm:mixture, eq:1928). **Next:** define `𝓟_{m,r}`/diagonal `P̃_{m,r}(q,ℓ)` via
+     `hsym`, the Dirichlet moment formula (eq:dir-moment), and `thm:mixture` (reduce to diagonal); then
+     connect to `neckSum_moment` (thm:expansion) and the diagonal positivity (M3–M6).
    - **Step 0 done (2026-07-08): moment-friendly rewrite of `neckSum`.**
      `OddCycleBound/HighDensity/MomentExpansion.lean` (builds clean, wired into root). `kernelOp_compl`
      (`T_{1-U} f = (∫f)·1 − T_U f`) ⇒ `complIter_compl_eq_pathIter` (`B_{1-W} = T_W`, so the complement
