@@ -133,4 +133,30 @@ lemma hsym_replicate_append (a : ℝ) (ys : List ℝ) (k d : ℕ) :
   simp only [Finset.mem_range] at hj
   rw [hsym_replicate a k, show d - (d - j) = j from by omega]
 
+@[simp] lemma hsym_singleton (a : ℝ) (d : ℕ) : hsym [a] d = a ^ d := by
+  simpa using hsym_replicate a 0 d
+
+/-! ### The diagonal kernel `P̃_{m,r}(q,ℓ)`
+
+The diagonal of `𝓟_{m,r}` (paper eq:P-def evaluated at `λ₁=⋯=λ_r=ℓ`), which by the
+mixture-of-diagonals theorem (thm:mixture) is what the whole positivity reduces to (cor:diagonal).
+With `n = m-2r`, `p = 1-q`:
+`P̃_{m,r} = (m/r)[h_n(p^{×r},(-ℓ)^{×r}) + h_n(q^{×r},ℓ^{×r})] − h_{n-1}(q^{×(r+1)},ℓ^{×r})`. -/
+noncomputable def diagKernel (m r : ℕ) (q ℓ : ℝ) : ℝ :=
+  (m / r : ℝ)
+      * (hsym (List.replicate r (1 - q) ++ List.replicate r (-ℓ)) (m - 2 * r)
+        + hsym (List.replicate r q ++ List.replicate r ℓ) (m - 2 * r))
+    - hsym (List.replicate (r + 1) q ++ List.replicate r ℓ) (m - 2 * r - 1)
+
+/-- **Validation against the paper (line 2174):** `P̃_{5,1}(q,ℓ) = 4ℓ² + (8q−5)ℓ + 12q² − 15q + 5`. -/
+lemma diagKernel_five_one (q ℓ : ℝ) :
+    diagKernel 5 1 q ℓ = 4 * ℓ ^ 2 + (8 * q - 5) * ℓ + 12 * q ^ 2 - 15 * q + 5 := by
+  unfold diagKernel
+  simp only [show (5 : ℕ) - 2 * 1 = 3 from rfl, show (5 : ℕ) - 2 * 1 - 1 = 2 from rfl,
+    show (1 : ℕ) + 1 = 2 from rfl, List.replicate_succ, List.replicate_zero,
+    List.cons_append, List.nil_append, hsym_cons, hsym_nil, Finset.sum_range_succ,
+    Finset.sum_range_zero]
+  push_cast
+  ring
+
 end OddCycleBound.HighDensity

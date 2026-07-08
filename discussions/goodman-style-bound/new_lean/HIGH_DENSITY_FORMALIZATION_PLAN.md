@@ -369,6 +369,13 @@ Work in this order; each milestone is independently checkpointable.
      mixture theorem (thm:mixture, eq:1928). **Next:** define `𝓟_{m,r}`/diagonal `P̃_{m,r}(q,ℓ)` via
      `hsym`, the Dirichlet moment formula (eq:dir-moment), and `thm:mixture` (reduce to diagonal); then
      connect to `neckSum_moment` (thm:expansion) and the diagonal positivity (M3–M6).
+   - **Diagonal kernel defined + VALIDATED (2026-07-09).** `diagKernel m r q ℓ` = `P̃_{m,r}(q,ℓ)` =
+     `(m/r)[hsym(p^{×r}++(−ℓ)^{×r}) n + hsym(q^{×r}++ℓ^{×r}) n] − hsym(q^{×(r+1)}++ℓ^{×r}) (n-1)`,
+     `n=m-2r`, `p=1-q` (`SymmetricPoly.lean`). `diagKernel_five_one` proves it equals the paper's
+     explicit `P̃_{5,1}(q,ℓ) = 4ℓ²+(8q−5)ℓ+12q²−15q+5` (line 2174) — the definition matches the paper.
+     Also `hsym_singleton` (`hsym [a] d = a^d`). **Next:** the pointwise positivity regimes
+     (thm:pointwise: `ℓ≤0` or `2r≥n`) on `diagKernel`, the ρ-lemma, then `thm:r1`/strip; and the
+     mixture + expansion to connect `diagKernel ≥ 0` back to `Φ_m = neckSum_moment`.
    - **Step 0 done (2026-07-08): moment-friendly rewrite of `neckSum`.**
      `OddCycleBound/HighDensity/MomentExpansion.lean` (builds clean, wired into root). `kernelOp_compl`
      (`T_{1-U} f = (∫f)·1 − T_U f`) ⇒ `complIter_compl_eq_pathIter` (`B_{1-W} = T_W`, so the complement
