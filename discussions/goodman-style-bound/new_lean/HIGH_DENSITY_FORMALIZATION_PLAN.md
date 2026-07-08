@@ -395,6 +395,13 @@ Work in this order; each milestone is independently checkpointable.
      **Next:** expand `y_j = pathDensity (compl W) j` via `pathDensity_succ` at `compl W` (= `q` and
      `(−1)ⁱ sᵢ`) so everything is in `p,q,s`; then the `𝓟_{m,r}` Dirichlet/Beta kernel form (M1/M2) and
      the case positivity (M3–M6 — the real analytic crux, still entirely ahead: NO positivity proved).
+   - **Step 4 done (2026-07-09): END-TO-END VALIDATION at `m=3` (real theorem).** `neckSum_three`:
+     `neckSum W μ 3 = p² − p(1−p) + 2 s₀` (proved from `neckSum_eq` + `pairing_pathIter_compl_moment`
+     at `(0,2),(1,1)` + `pathDensity_succ`); since the target `p³ − p(1−p)² = p² − p(1−p)`, the whole
+     inequality collapses to `s₀ ≥ 0` (`specMoment_zero_nonneg`). `cycle_bound_three`:
+     `t(C₃,W) = cycleDensity μ W 3 ≥ p³ − p(1−p)²`, ANY density — the graphon triangle bound via the new
+     machinery. This confirms every sign/index in the M0c+expansion chain is correct. (First positivity
+     result, but `m=3` is degenerate — `S₃=3s₀` is `A`-independent; `m≥5` needs the real `𝓟_{m,r}` work.)
 3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
 4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).

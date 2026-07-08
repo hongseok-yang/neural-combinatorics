@@ -353,4 +353,34 @@ lemma neckSum_moment (hW : IsGraphon W μ) (m : ℕ) :
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [pairing_pathIter_compl_moment hW j (m - 1 - j)]
 
+/-! ### End-to-end validation at `m = 3` (the graphon triangle bound, all densities)
+
+A concrete check that the whole chain (M0c reduction + the moment expansion) yields correct bounds.
+At `m = 3`, `neckSum W μ 3 = p² − p(1−p) + 2 s₀`, and the target `p³ − p(1−p)²` equals `p² − p(1−p)`,
+so the entire inequality collapses to `s₀ = specMoment W μ 0 ≥ 0` (`specMoment_zero_nonneg`).  This
+validates every sign and index in the pipeline and is itself the graphon triangle lower bound
+`t(C₃,W) ≥ p³ − p(1−p)²`, at **any** density. -/
+
+/-- `neckSum W μ 3 = p² − p(1−p) + 2 s₀` (`p = edgeDensity W μ`, `s₀ = specMoment W μ 0`). -/
+lemma neckSum_three (hW : IsGraphon W μ) :
+    neckSum W μ 3
+      = edgeDensity W μ ^ 2 - edgeDensity W μ * (1 - edgeDensity W μ) + 2 * specMoment W μ 0 := by
+  have hx2 : pathDensity W μ 2 = edgeDensity W μ ^ 2 + specMoment W μ 0 := by
+    rw [pathDensity_succ hW 1, Finset.sum_range_one, pathDensity_one hW, pathDensity_zero]; ring
+  rw [neckSum_eq hW, Finset.sum_range_succ, Finset.sum_range_one,
+    pairing_pathIter_compl_moment hW 0 (3 - 1 - 0), pairing_pathIter_compl_moment hW 1 (3 - 1 - 1)]
+  norm_num [Finset.sum_range_succ, Finset.sum_range_one, pathDensity_zero,
+    pathDensity_one hW, pathDensity_one (isGraphon_compl hW), edgeDensity_compl hW, hx2]
+  ring
+
+/-- **The graphon triangle bound (all densities), via the necklace machinery.**
+`t(C₃,W) = cycleDensity μ W 3 ≥ p³ − p(1−p)²`. -/
+theorem cycle_bound_three (hW : IsGraphon W μ) :
+    edgeDensity W μ ^ 3 - edgeDensity W μ * (1 - edgeDensity W μ) ^ (3 - 1) ≤ cycleDensity μ W 3 := by
+  refine cycle_bound_of_neckSum hW ⟨1, rfl⟩ (by norm_num) ?_
+  have hid : edgeDensity W μ ^ 3 - edgeDensity W μ * (1 - edgeDensity W μ) ^ (3 - 1)
+      = edgeDensity W μ ^ 2 - edgeDensity W μ * (1 - edgeDensity W μ) := by ring
+  rw [hid, neckSum_three hW]
+  linarith [specMoment_zero_nonneg hW]
+
 end OddCycleBound.HighDensity
