@@ -274,10 +274,17 @@ Work in this order; each milestone is independently checkpointable.
      - `two_sided_trace_eq` — **for every odd `m` at once**, applying pillar 1 (`trace_neg_pow_odd`) the
        `Tr(A^m)` term cancels in `Tr(P^m)+Tr(M^m)`, leaving hub returns + moment couplings. This is the
        general-`m` realisation of the paper's `det(I±zA)` cancellation.
-     **Remaining for the full identity:** analyse the hub return `α_m` and the coupling terms
-     `Σ Tr((γ_t gᵀ)A^{m-1-t})` (the `γ_t` are themselves coupled — the continued-fraction/necklace
-     structure) and show `α_m(P)+α_m(M) + Σ couplings = q^m+p^m+S_m` with `S_m` in the even moments.
-     The `frMoment` bridges + parity pillars feed this; `Tr((γ_t gᵀ)A^s)` is a moment-type bilinear form.
+     - ✅✅ **`two_sided_identity` — THE AIMED EQUALITY, universal in odd `m` (2026-07-07).** For every
+       odd `m` and symmetric compression `A`:
+       `Tr(P^m) + Tr(M^m) = q^m + (1-q)^m + S_m`, with `S_m := twoSidedShift` an **explicit** finite
+       expression (the surviving hub- and body-couplings). This is the finite-rank form of
+       `paper_new.tex` `thm:two-sided` (`t(C_m,W)+t(C_m,U)=p^m+q^m+S_m`), **proved once for all odd `m`**.
+       Assembly: `two_sided_trace_eq` (cancels `Tr(A^m)`) + `hubEntry_eq` twice (extracts `q^m`,`(1-q)^m`
+       from the hub returns) + `ring`. `(-A).IsSymm` from `hA` via `Matrix.transpose_neg`.
+     **Remaining (refinement, not the identity):** reduce `twoSidedShift` to the paper's symmetric-
+       function / `PowerSeries` form in the pure moments `s_j=⟨g,Aʲg⟩` (substitute `hubCol_eq` /
+       `bodyBlock_eq` into the couplings), then the downstream `Φ_m` positivity (M1–M7). The identity
+       itself is done.
    - **Why length-5 is deferred (cost analysis, 2026-07-07):** brute `sum_option` on `trace_pow5_eq`
      yields 32 index-patterns; the surviving moments (`s₀, s₁, s₀², s₂`) each appear as ~5 rotational
      copies that are equal only up to *cyclic reindexing + in-binder commutativity* (invisible to

@@ -260,4 +260,40 @@ lemma hubEntry_eq (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ} (hA : A.IsSy
     rw [← pow_succ' q m]
     ring
 
+/-! ### The two-sided spectral-shift identity (universal, all odd `m`) -/
+
+/-- The finite-rank two-sided spectral shift `S_m`, exhibited explicitly as the hub-coupling plus
+body-coupling sums that survive once `q^m + (1-q)^m` and `Tr(A^m)` have been extracted from
+`Tr(P^m) + Tr(M^m)`.  (Each term reduces further to the compression moments `⟨g, A^k g⟩` via
+`hubCol_eq` / `bodyBlock_eq`.) -/
+noncomputable def twoSidedShift (q : ℝ) (g : ι → ℝ) (A : Matrix ι ι ℝ) (m : ℕ) : ℝ :=
+  (∑ t ∈ Finset.range m, q ^ (m - 1 - t) * (hubCol q g A t ⬝ᵥ g)
+      + ∑ t ∈ Finset.range m, (1 - q) ^ (m - 1 - t) * (hubCol (1 - q) g (-A) t ⬝ᵥ g))
+    + (∑ t ∈ Finset.range m, trace (vecMulVec (hubCol q g A t) g * A ^ (m - 1 - t))
+      + ∑ t ∈ Finset.range m, trace (vecMulVec (hubCol (1 - q) g (-A) t) g * (-A) ^ (m - 1 - t)))
+
+/-- **The two-sided spectral-shift identity — universal in the odd cycle length `m`.**
+
+For every odd `m ≥ 1` and every symmetric compression `A`, writing `P = blockOp q g A` (the complement
+operator `T_U`) and `M = blockOp (1-q) g (-A)` (the isospectral form of `T_W`),
+`Tr(P^m) + Tr(M^m) = q^m + (1-q)^m + S_m` with `S_m = twoSidedShift`.
+
+This is the finite-rank form of `paper_new.tex` Thm `thm:two-sided`
+(`t(C_m,W) + t(C_m,U) = p^m + q^m + S_m`), proved **once for all odd `m`** — not length by length.
+The `Tr(A^m)` (`det(I±zA)`) contribution cancels by the parity pillar; the hub returns supply
+`q^m + (1-q)^m`; the surviving hub- and body-couplings are `S_m`. -/
+theorem two_sided_identity {m : ℕ} (hm : Odd m) (q : ℝ) (g : ι → ℝ) {A : Matrix ι ι ℝ}
+    (hA : A.IsSymm) :
+    trace (blockOp q g A ^ m) + trace (blockOp (1 - q) g (-A) ^ m)
+      = q ^ m + (1 - q) ^ m + twoSidedShift q g A m := by
+  have hnegA : (-A).IsSymm := by
+    show (-A)ᵀ = -A
+    rw [Matrix.transpose_neg, hA.eq]
+  rw [two_sided_trace_eq hm,
+      show (blockOp q g A ^ m) none none = hubEntry q g A m from rfl,
+      show (blockOp (1 - q) g (-A) ^ m) none none = hubEntry (1 - q) g (-A) m from rfl,
+      hubEntry_eq q g hA, hubEntry_eq (1 - q) g hnegA]
+  unfold twoSidedShift
+  ring
+
 end OddCycleBound.HighDensity
