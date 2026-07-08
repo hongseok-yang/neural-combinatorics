@@ -18,6 +18,7 @@ each `pathIter` in the compression basis `{1, h_0, h_1, …}` via `kernelOp_comp
 -/
 
 import OddCycleBound.HighDensity.GraphonReduction
+import OddCycleBound.General.PathRecurrence
 
 open MeasureTheory
 open scoped BigOperators
@@ -204,5 +205,152 @@ lemma neckSum_pathDensity (hW : IsGraphon W μ) (m : ℕ) :
   unfold neckSum
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [pairing_compl_closed hW j (m - 1 - j)]
+
+/-! ### The compression-basis expansion of a path iterate
+
+`pathIter U a = kernelOpᵃ 1` expands in the basis `{1, h_0, h_1, …}` (`h_k = compressIter U k`) with
+path-density coefficients:
+
+  `pathIter U a = pathDensity U a · 1 + Σ_{k<a} pathDensity U (a-1-k) · h_k`,
+
+the graphon `blockOp^a·e_hub` unroll.  Proof by induction: `kernelOp U 1 = p·1 + h_0`,
+`kernelOp U h_k = s_k·1 + h_{k+1}` (`kernelOp_compressIter`) shift the basis; the `h`-coefficients
+telescope by reindexing and the constant is the path-density recurrence `pathDensity_succ`. -/
+
+/-- **Compression-basis expansion of `pathIter`.**  `pathIter U a = x_a·1 + Σ_{k<a} x_{a-1-k}·hₖ`
+(`x = pathDensity U`, `hₖ = compressIter U k`). -/
+lemma pathIter_expansion (hU : IsGraphon U μ) (a : ℕ) :
+    pathIter U μ a
+      = fun z => pathDensity U μ a
+          + ∑ k ∈ Finset.range a, pathDensity U μ (a - 1 - k) * compressIter U μ k z := by
+  induction a with
+  | zero =>
+    funext z
+    show (1 : ℝ)
+        = pathDensity U μ 0 + ∑ k ∈ Finset.range 0, pathDensity U μ (0 - 1 - k) * compressIter U μ k z
+    have h0 : pathDensity U μ 0 = 1 := mean_one
+    rw [Finset.range_zero, Finset.sum_empty, add_zero, h0]
+  | succ a ih =>
+    funext z
+    show (∫ y, U z y * pathIter U μ a y ∂μ)
+        = pathDensity U μ (a + 1)
+          + ∑ k ∈ Finset.range (a + 1), pathDensity U μ (a + 1 - 1 - k) * compressIter U μ k z
+    -- expand the integrand via `ih`
+    have hib : ∀ y, U z y * pathIter U μ a y
+        = pathDensity U μ a * U z y
+          + ∑ k ∈ Finset.range a, pathDensity U μ (a - 1 - k) * (U z y * compressIter U μ k y) := by
+      intro y
+      have ihy : pathIter U μ a y
+          = pathDensity U μ a + ∑ k ∈ Finset.range a, pathDensity U μ (a - 1 - k) * compressIter U μ k y :=
+        congrFun ih y
+      rw [ihy, mul_add, Finset.mul_sum]
+      congr 1
+      · ring
+      · exact Finset.sum_congr rfl fun k _ => by ring
+    rw [integral_congr_ae (ae_of_all _ hib)]
+    have hInt1 : Integrable (fun y => pathDensity U μ a * U z y) μ :=
+      ((goodK_of_isGraphon hU).integrable_row z).const_mul _
+    have hInt2 : Integrable
+        (fun y => ∑ k ∈ Finset.range a,
+          pathDensity U μ (a - 1 - k) * (U z y * compressIter U μ k y)) μ :=
+      integrable_finsetSum _ fun k _ => (integrable_Uf hU (good_compressIter hU k) z).const_mul _
+    rw [integral_add hInt1 hInt2, integral_const_mul,
+      integral_finsetSum _ fun k _ => (integrable_Uf hU (good_compressIter hU k) z).const_mul _]
+    have hterm : ∀ k, (∫ y, pathDensity U μ (a - 1 - k) * (U z y * compressIter U μ k y) ∂μ)
+        = pathDensity U μ (a - 1 - k) * kernelOp U μ (compressIter U μ k) z := by
+      intro k; rw [integral_const_mul]; rfl
+    rw [Finset.sum_congr rfl fun k _ => hterm k,
+      show (∫ y, U z y ∂μ) = degree U μ z from rfl, degree_eq' z]
+    simp only [kernelOp_compressIter' hU, mul_add, Finset.sum_add_distrib]
+    -- LHS = x_a(p + h_0 z) + Σ x_{a-1-k} s_k + Σ x_{a-1-k} h_{k+1} z; match RHS
+    rw [pathDensity_succ hU a, Finset.sum_range_succ' (fun k =>
+      pathDensity U μ (a + 1 - 1 - k) * compressIter U μ k z) a]
+    have eMom : ∑ i ∈ Finset.range a, specMoment U μ i * pathDensity U μ (a - 1 - i)
+        = ∑ k ∈ Finset.range a, pathDensity U μ (a - 1 - k) * specMoment U μ k :=
+      Finset.sum_congr rfl fun k _ => by ring
+    have eShift : ∑ k ∈ Finset.range a,
+          pathDensity U μ (a + 1 - 1 - (k + 1)) * compressIter U μ (k + 1) z
+        = ∑ k ∈ Finset.range a, pathDensity U μ (a - 1 - k) * compressIter U μ (k + 1) z :=
+      Finset.sum_congr rfl fun k _ => by
+        rw [show a + 1 - 1 - (k + 1) = a - 1 - k from by omega]
+    rw [eMom, eShift, show a + 1 - 1 - 0 = a from by omega]
+    ring
+
+/-! ### The necklace pairing in moments
+
+Expanding `pathIter (compl W) j` in its own compression basis (`pathIter_expansion`), pairing against
+`pathIter W k`, and collapsing via the parity `compressIter_compl` and the moment closed form
+`pairing_compressIter_pathIter_closed` gives the cross pairing purely in `W`-path-densities `x`,
+`(1-W)`-path-densities `y`, and `W`-moments `s`:
+
+  `⟨pathIter(compl W) j, pathIter W k⟩ = y_j x_k
+      + Σ_{a<j} y_{j-1-a} · (−1)^{a+1} · Σ_{i<k} s_{a+i} x_{k-1-i}`. -/
+
+/-- **Cross path-iterate pairing in moments.** -/
+lemma pairing_pathIter_compl_moment (hW : IsGraphon W μ) (j k : ℕ) :
+    pairing μ (pathIter (compl W) μ j) (pathIter W μ k)
+      = pathDensity (compl W) μ j * pathDensity W μ k
+        + ∑ a ∈ Finset.range j,
+            pathDensity (compl W) μ (j - 1 - a)
+              * ((-1 : ℝ) ^ (a + 1)
+                  * ∑ i ∈ Finset.range k, specMoment W μ (a + i) * pathDensity W μ (k - 1 - i)) := by
+  show (∫ z, pathIter (compl W) μ j z * pathIter W μ k z ∂μ) = _
+  have hexp : ∀ z, pathIter (compl W) μ j z * pathIter W μ k z
+      = pathDensity (compl W) μ j * pathIter W μ k z
+        + ∑ a ∈ Finset.range j,
+            pathDensity (compl W) μ (j - 1 - a)
+              * (compressIter (compl W) μ a z * pathIter W μ k z) := by
+    intro z
+    have hz : pathIter (compl W) μ j z
+        = pathDensity (compl W) μ j
+          + ∑ a ∈ Finset.range j, pathDensity (compl W) μ (j - 1 - a) * compressIter (compl W) μ a z :=
+      congrFun (pathIter_expansion (isGraphon_compl hW) j) z
+    rw [hz, add_mul, Finset.sum_mul]
+    congr 1
+    exact Finset.sum_congr rfl fun a _ => by ring
+  rw [integral_congr_ae (ae_of_all _ hexp)]
+  have hInt1 : Integrable (fun z => pathDensity (compl W) μ j * pathIter W μ k z) μ :=
+    (good_pathIter hW k).integrable.const_mul _
+  have hInt2 : Integrable (fun z => ∑ a ∈ Finset.range j,
+      pathDensity (compl W) μ (j - 1 - a) * (compressIter (compl W) μ a z * pathIter W μ k z)) μ :=
+    integrable_finsetSum _ fun a _ =>
+      (((good_compressIter (isGraphon_compl hW) a).mul (good_pathIter hW k)).integrable).const_mul _
+  rw [integral_add hInt1 hInt2, integral_const_mul,
+    integral_finsetSum _ fun a _ =>
+      (((good_compressIter (isGraphon_compl hW) a).mul (good_pathIter hW k)).integrable).const_mul _,
+    show (∫ z, pathIter W μ k z ∂μ) = pathDensity W μ k from rfl]
+  congr 1
+  refine Finset.sum_congr rfl fun a _ => ?_
+  rw [integral_const_mul]
+  congr 1
+  have hparity : pairing μ (compressIter (compl W) μ a) (pathIter W μ k)
+      = (-1 : ℝ) ^ (a + 1) * pairing μ (compressIter W μ a) (pathIter W μ k) := by
+    show (∫ z, compressIter (compl W) μ a z * pathIter W μ k z ∂μ)
+        = (-1 : ℝ) ^ (a + 1) * ∫ z, compressIter W μ a z * pathIter W μ k z ∂μ
+    rw [← integral_const_mul]
+    refine integral_congr_ae (ae_of_all _ fun z => ?_)
+    show compressIter (compl W) μ a z * pathIter W μ k z
+        = (-1 : ℝ) ^ (a + 1) * (compressIter W μ a z * pathIter W μ k z)
+    rw [congrFun (compressIter_compl hW a) z]; ring
+  show pairing μ (compressIter (compl W) μ a) (pathIter W μ k) = _
+  rw [hparity, pairing_compressIter_pathIter_closed hW k a]
+
+/-- **`neckSum` in path densities and moments.**  Substituting the cross-pairing moment form into
+`neckSum_eq`, `neckSum` becomes an explicit operator-free expression in the `W`-path densities `x`,
+the `(1-W)`-path densities `y`, and the `W`-moments `s` — the object the `𝓟_{m,r}` positivity
+argument works on (still to expand `y` via `pathDensity_succ` at `compl W`, then the positivity). -/
+lemma neckSum_moment (hW : IsGraphon W μ) (m : ℕ) :
+    neckSum W μ m
+      = ∑ j ∈ Finset.range (m - 1),
+          (-1 : ℝ) ^ j
+            * (pathDensity (compl W) μ j * pathDensity W μ (m - 1 - j)
+              + ∑ a ∈ Finset.range j,
+                  pathDensity (compl W) μ (j - 1 - a)
+                    * ((-1 : ℝ) ^ (a + 1)
+                        * ∑ i ∈ Finset.range (m - 1 - j),
+                            specMoment W μ (a + i) * pathDensity W μ (m - 1 - j - 1 - i))) := by
+  rw [neckSum_eq hW]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [pairing_pathIter_compl_moment hW j (m - 1 - j)]
 
 end OddCycleBound.HighDensity

@@ -382,10 +382,19 @@ Work in this order; each milestone is independently checkpointable.
      (−1)ⁱ x_{k-1-i} y_{j+i} + (−1)ᵏ y_{j+k}` (`x=pathDensity W`, `y=pathDensity (compl W)`), and
      `neckSum_pathDensity` puts all of `neckSum` as an explicit double sum of path-density products —
      no operators. This reuses the necklace machinery instead of re-deriving the `blockOp^n` unroll.
-     **Next fork (needs a design choice):** to reach the `𝓟_{m,r}`-in-moments positivity, substitute
-     path densities `x_j → Σ (moment terms)` — either (a) expand `pathIter` in the compression basis
-     `{1,h_0,…}` via `kernelOp_compressIter` and pair with `moment`+parity (direct moment route), or
-     (b) an `x_j`/`y_j` recurrence in `p,q,s_k`. Then `𝓟_{m,r}` expansion + case positivity (M3–M6).
+   - **Step 3 done (2026-07-08): compression-basis expansion ⇒ neckSum in path-densities+moments**
+     (route (a), user-chosen). `pathIter_expansion` (the KEY lemma, ~70-line Pi-sum induction):
+     `pathIter U a = pathDensity U a·1 + Σ_{k<a} pathDensity U (a-1-k)·hₖ` (the graphon `blockOp^a·e_hub`
+     unroll; constant = `pathDensity_succ`, h-coeffs telescope). Pairing `pathIter(compl W) j` against
+     `pathIter W k`, collapsing via `compressIter_compl` (parity) + the EXISTING
+     `pairing_compressIter_pathIter_closed` (`⟨h_a, pathIter k⟩ = Σ_i s_{a+i} x_{k-1-i}`), gives
+     `pairing_pathIter_compl_moment`: `⟨pathIter(compl W) j, pathIter W k⟩ = y_j x_k + Σ_{a<j} y_{j-1-a}
+     (−1)^{a+1} Σ_{i<k} s_{a+i} x_{k-1-i}` (`x=pathDensity W`, `y=pathDensity (compl W)`, `s=specMoment
+     W`). Substituted into `neckSum_eq` ⇒ `neckSum_moment`: `neckSum` as an explicit OPERATOR-FREE
+     expression in `x, y, s`. Builds clean.
+     **Next:** expand `y_j = pathDensity (compl W) j` via `pathDensity_succ` at `compl W` (= `q` and
+     `(−1)ⁱ sᵢ`) so everything is in `p,q,s`; then the `𝓟_{m,r}` Dirichlet/Beta kernel form (M1/M2) and
+     the case positivity (M3–M6 — the real analytic crux, still entirely ahead: NO positivity proved).
 3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
 4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).
