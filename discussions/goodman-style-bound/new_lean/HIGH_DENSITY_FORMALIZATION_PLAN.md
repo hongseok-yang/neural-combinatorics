@@ -365,9 +365,20 @@ Work in this order; each milestone is independently checkpointable.
      `B`-iterate is just the `W`-path iterate) ⇒ `neckSum_eq`:
      `neckSum W μ m = Σ_{j<m-1} (−1)ʲ ⟨ pathIter (compl W) j, pathIter W (m-1-j) ⟩`. This is only the
      structural rewrite into the two-sided path-generating-function shape (`𝓛_W`,`𝓛_U`); NO positivity.
+   - **Step 1 done (2026-07-08): complement parity of the compression** (graphon pillars, in
+     `MomentExpansion.lean`, builds clean). `compress_compl` (`compress (compl W) = − compress W`) ⇒
+     `compressIter_compl` (`compressIter (compl W) k = (−1)^{k+1} hₖ`) ⇒ `specMoment_compl`
+     (`specMoment (compl W) j = (−1)ʲ sⱼ`); plus `edgeDensity_compl`/`degCentered_compl`/`degree_compl`
+     and helpers `kernelOp_compl`, `kernelOp_const_mul`, `compress_const_mul`. These are the graphon
+     analogues of the finite-rank `frMoment_neg`/`trace_neg_pow` pillars, and reduce every
+     cross-compression pairing `⟨h^{(compl W)}_a, h^{(W)}_b⟩ = (−1)^{a+1} s_{a+b}` to pure `W`-moments.
+     The moment-collapse `⟨h_i,h_j⟩ = s_{i+j}` (`moment`) and self-adjointness (`compress_symm`) already
+     existed in `Graphon.lean`.
      **Next (the large step):** expand each `pathIter` in the compression basis `{1,h_0,h_1,…}` via
-     `kernelOp_compressIter` (`T_W hₖ = sₖ·1 + h_{k+1}`) and collapse `⟨h_i,h_j⟩ = s_{i+j}`, giving `S_m`
-     / `Φ_m` in the pure moments `s_j` — then the `𝓟_{m,r}` expansion + case positivity (M3–M6).
+     `kernelOp_compressIter` (`T_W hₖ = sₖ·1 + h_{k+1}`) — this is the graphon `blockOp^n·(hub)`
+     unrolling, the infinite-dim mirror of `BlockPower.lean` — then take the pairing, collapse via
+     `moment` + parity, giving `S_m`/`Φ_m` in pure moments `s_j`; then the `𝓟_{m,r}` expansion + case
+     positivity (M3–M6).
 3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
 4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).

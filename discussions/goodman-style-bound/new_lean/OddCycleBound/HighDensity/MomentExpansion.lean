@@ -59,4 +59,109 @@ lemma neckSum_eq (hW : IsGraphon W μ) (m : ℕ) :
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [complIter_compl_eq_pathIter hW (m - 1 - j)]
 
+/-! ### Complement parity of the compression (graphon `frMoment_neg` / `trace_neg_pow` pillars)
+
+The compression of the complement is the *negative* of the compression of `W`
+(`compress (compl W) = − compress W`), because the constant direction (the hub) absorbs the `1 − ·`.
+Iterating gives `compressIter (compl W) k = (−1)^{k+1} hₖ` and hence `specMoment (compl W) j =
+(−1)ʲ sⱼ` — the graphon incarnation of the finite-rank parity pillars, and exactly what reduces the
+cross-compression pairings in `neckSum` to pure `W`-moments. -/
+
+private lemma integral_const_prob (c : ℝ) : (∫ (_ : Ω), c ∂μ) = c := by simp
+
+/-- Scalar homogeneity of `kernelOp` (pointwise, unconditional). -/
+lemma kernelOp_const_mul (c : ℝ) (f : Ω → ℝ) (x : Ω) :
+    kernelOp U μ (fun y => c * f y) x = c * kernelOp U μ f x := by
+  show (∫ y, U x y * (c * f y) ∂μ) = c * ∫ y, U x y * f y ∂μ
+  rw [← integral_const_mul]
+  exact integral_congr_ae (ae_of_all _ fun y => by ring)
+
+/-- Scalar homogeneity of the compression. -/
+lemma compress_const_mul (c : ℝ) (f : Ω → ℝ) :
+    compress W μ (fun y => c * f y) = fun x => c * compress W μ f x := by
+  funext x
+  show kernelOp W μ (fun y => c * f y) x - mean μ (kernelOp W μ (fun y => c * f y))
+      = c * (kernelOp W μ f x - mean μ (kernelOp W μ f))
+  rw [kernelOp_const_mul]
+  have hmean : mean μ (kernelOp W μ (fun y => c * f y)) = c * mean μ (kernelOp W μ f) := by
+    show (∫ x, kernelOp W μ (fun y => c * f y) x ∂μ) = c * mean μ (kernelOp W μ f)
+    rw [integral_congr_ae (ae_of_all _ fun x => kernelOp_const_mul c f x), integral_const_mul]
+    rfl
+  rw [hmean]; ring
+
+/-- Row-degree of the complement: `degree (1-W) = 1 − degree W`. -/
+lemma degree_compl (hW : IsGraphon W μ) (x : Ω) :
+    degree (compl W) μ x = 1 - degree W μ x := by
+  show ∫ y, compl W x y ∂μ = 1 - degree W μ x
+  have hc : (fun y => compl W x y) = (fun y => (1 : ℝ) - W x y) := by funext y; rw [compl]
+  rw [hc, integral_sub (integrable_const 1) ((goodK_of_isGraphon hW).integrable_row x),
+    integral_const_prob]
+  rfl
+
+/-- Edge density of the complement: `edgeDensity (1-W) = 1 − edgeDensity W`. -/
+lemma edgeDensity_compl (hW : IsGraphon W μ) :
+    edgeDensity (compl W) μ = 1 - edgeDensity W μ := by
+  show mean μ (degree (compl W) μ) = 1 - edgeDensity W μ
+  have hdeg : degree (compl W) μ = fun x => 1 - degree W μ x := funext (degree_compl hW)
+  rw [hdeg]
+  show (∫ x, (1 - degree W μ x) ∂μ) = 1 - edgeDensity W μ
+  rw [integral_sub (integrable_const 1) (good_degree hW).integrable, integral_const_prob]
+  rfl
+
+/-- Centered degree of the complement: `degCentered (1-W) = − degCentered W`. -/
+lemma degCentered_compl (hW : IsGraphon W μ) :
+    degCentered (compl W) μ = fun x => - degCentered W μ x := by
+  funext x
+  show degree (compl W) μ x - edgeDensity (compl W) μ = -(degree W μ x - edgeDensity W μ)
+  rw [degree_compl hW x, edgeDensity_compl hW]; ring
+
+/-- **`compress (compl W) = − compress W`** — the compression flips sign on the complement. -/
+lemma compress_compl (hW : IsGraphon W μ) {f : Ω → ℝ} (hf : Good f) :
+    compress (compl W) μ f = fun x => - compress W μ f x := by
+  funext x
+  show kernelOp (compl W) μ f x - mean μ (kernelOp (compl W) μ f)
+      = -(kernelOp W μ f x - mean μ (kernelOp W μ f))
+  have hk : ∀ y, kernelOp (compl W) μ f y = mean μ f - kernelOp W μ f y :=
+    fun y => kernelOp_compl hW hf y
+  have hmean : mean μ (kernelOp (compl W) μ f) = mean μ f - mean μ (kernelOp W μ f) := by
+    show (∫ y, kernelOp (compl W) μ f y ∂μ) = mean μ f - mean μ (kernelOp W μ f)
+    rw [integral_congr_ae (ae_of_all _ hk),
+      integral_sub (integrable_const _) (good_kernelOp hW hf).integrable, integral_const_prob]
+    rfl
+  rw [hk x, hmean]; ring
+
+/-- **`compressIter (compl W) k = (−1)^{k+1} hₖ`** — the complement compression iterate is the `W`
+iterate with an alternating sign (graphon `frMoment_neg`). -/
+lemma compressIter_compl (hW : IsGraphon W μ) (k : ℕ) :
+    compressIter (compl W) μ k = fun x => (-1 : ℝ) ^ (k + 1) * compressIter W μ k x := by
+  induction k with
+  | zero =>
+    funext x
+    show degCentered (compl W) μ x = (-1 : ℝ) ^ (0 + 1) * compressIter W μ 0 x
+    rw [compressIter_zero, congrFun (degCentered_compl hW) x]; ring
+  | succ k ih =>
+    have step : compressIter (compl W) μ (k + 1)
+        = compress (compl W) μ (compressIter (compl W) μ k) := rfl
+    rw [step, compress_compl hW (good_compressIter (isGraphon_compl hW) k), ih,
+      compress_const_mul ((-1 : ℝ) ^ (k + 1)) (compressIter W μ k)]
+    funext x
+    show -((-1 : ℝ) ^ (k + 1) * compress W μ (compressIter W μ k) x)
+        = (-1 : ℝ) ^ (k + 1 + 1) * compressIter W μ (k + 1) x
+    have hdef : compress W μ (compressIter W μ k) = compressIter W μ (k + 1) := rfl
+    rw [hdef, pow_succ]; ring
+
+/-- **`specMoment (compl W) j = (−1)ʲ sⱼ`** — moment parity of the complement (graphon
+`frMoment_neg` at the level of moments). -/
+lemma specMoment_compl (hW : IsGraphon W μ) (j : ℕ) :
+    specMoment (compl W) μ j = (-1 : ℝ) ^ j * specMoment W μ j := by
+  show (∫ x, degCentered (compl W) μ x * compressIter (compl W) μ j x ∂μ)
+      = (-1 : ℝ) ^ j * specMoment W μ j
+  have hint : ∀ x, degCentered (compl W) μ x * compressIter (compl W) μ j x
+      = (-1 : ℝ) ^ j * (degCentered W μ x * compressIter W μ j x) := by
+    intro x
+    rw [congrFun (degCentered_compl hW) x, congrFun (compressIter_compl hW j) x, pow_succ]
+    ring
+  rw [integral_congr_ae (ae_of_all _ hint), integral_const_mul]
+  rfl
+
 end OddCycleBound.HighDensity
