@@ -1,0 +1,750 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{program}[theorem]{Program}
+\newtheorem{target}[theorem]{Target Lemma}
+
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\R}{\mathbb{R}}
+
+\title{New Strategies Toward the Odd-Cycle Goodman Bound in Graphons\\
+\large A companion note: one reformulation, two uniform criteria, and two programs}
+\author{Working note}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note accompanies the audited working note proving the odd-cycle lower bound
+$t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}$ for $C_3,\dots,C_{13}$ and under various
+structural hypotheses. We pursue strategies aimed at \emph{all} odd cycles
+simultaneously, and aimed at statements of independent interest rather than
+merely re-deriving the regular case.
+
+We contribute three rigorous results and set up two programs.
+\textbf{(R1)} A generating-function reformulation: the conjecture for all odd $m$
+is equivalent to the coefficientwise nonnegativity of a single resolvent
+difference $\Phi_W(w)$, with the Perron term separating off as a coefficientwise
+nonnegative summand; the residual positivity is \emph{tight at bipartite},
+which both explains why the Perron/non-principal coupling is unavoidable and
+recasts the problem as a Markov-moment (Hankel) domination.
+\textbf{(R2)} A uniform spectral criterion phrased intrinsically on $T_W$:
+if $T_W\succeq-(1-p)I$ (equivalently $\lambda_{\min}(T_W)\ge-q$) then the
+conjecture holds for every odd $m$; the proof is four lines and does not invoke
+the hub-coupling lemma. For irregular graphons this is a genuinely different
+sufficient condition than the positive-spectrum-safe criterion, with which it
+coincides in the regular case.
+\textbf{(R3)} For $p\ge 2/3$ the trace-square budget forces at most one
+eigenvalue of $T_W$ below $-q$, reducing the entire regime to a two-parameter
+scalar family and a single inequality $(\star)$; this isolates the precise
+missing ingredient as a lower bound on the Perron surplus in terms of the deep
+mode depth.
+Finally we set up \textbf{(P1)} a reflection-positivity / transfer-operator
+symmetrization program and \textbf{(P2)} a Markov--Krein resolvent-domination
+program, the two routes that can in principle be uniform in $m$.
+
+We are explicit about status throughout: R1--R3 are proved; the obstruction
+discussion and the two programs are clearly marked as conjectural.
+\end{abstract}
+
+\section{Setup and notation}\label{sec:setup}
+
+Throughout $W:[0,1]^2\to[0,1]$ is a graphon, $p=t(K_2,W)$ is its edge density,
+$q=1-p$, and $T=T_W$ is the associated self-adjoint Hilbert--Schmidt operator
+$T_Wf(x)=\int_0^1 W(x,y)f(y)\,dy$. We work in the nontrivial regime $p>1/2$,
+i.e.\ $0\le q<1/2$, since $g_m(p):=p^m-p\,q^{m-1}\le 0$ for $p\le 1/2$. Set
+$m=2k+1$.
+
+We use the spectral facts established in the companion note; for completeness we
+restate them.
+\begin{enumerate}[label=(S\arabic*)]
+\item For $m\ge 2$, $t(C_m,W)=\Tr(T_W^m)=\sum_i\lambda_i^m$, where
+$\lambda_0\ge\lambda_1\ge\cdots$ are the eigenvalues of $T_W$ with multiplicity.
+\item (Perron / Rayleigh.) The top eigenvalue $\lambda_0=:\ell$ is nonnegative
+and $\ell\ge\langle T_W\1,\1\rangle=p$.
+\item (Second-moment budget.) $\sum_i\lambda_i^2=\Tr(T_W^2)=\|W\|_2^2\le p$, hence
+$\ell\le\sqrt p$ and, using $\ell\ge p$,
+\[
+\sum_{i\ge1}\lambda_i^2=\|W\|_2^2-\ell^2\le p-\ell^2\le p-p^2=pq.
+\]
+\item (Spectral support; companion Lemma~8.7.) Every non-principal eigenvalue of
+$T_W$ lies in $[-\tfrac12,\tfrac12]$; in particular $\lambda_{\min}(T_W)\ge-\tfrac12$.
+\item (Triangle density; Razborov--Reiher, used only in
+\S\ref{sec:reduction}.) For $\tfrac12\le p\le\tfrac23$, with $c\in[0,\tfrac13]$
+defined by $p=\tfrac12+c-\tfrac32c^2$, one has $t(K_3,W)\ge\Theta(p):=\tfrac32c(1-c)^2$.
+\end{enumerate}
+
+We also use the block decomposition of the complement $U=1-W$, $T_U=J-T_W$ where
+$Jf=\langle f,\1\rangle\1$, with degree fluctuation $g=T_U\1-q\1\in\1^\perp$ and
+mean-zero compression $A=P_{\1^\perp}T_UP_{\1^\perp}$; thus
+\[
+T_U=\begin{pmatrix} q & g^*\\ g & A\end{pmatrix},
+\qquad
+T_W=\begin{pmatrix} p & -g^*\\ -g & -A\end{pmatrix}
+\quad\text{on }\R\1\oplus\1^\perp .
+\]
+The graphon is regular iff $g=0$.
+
+\section{A generating-function reformulation}\label{sec:genfun}
+
+We package all odd cycles into a single analytic object. For $\lambda\in[-1,1]$,
+\[
+\sum_{k\ge0}\lambda^{2k+1}w^k=\frac{\lambda}{1-\lambda^2w}\qquad(|w|<\lambda^{-2}),
+\]
+and the target sequence has the closed form
+\[
+\sum_{k\ge0}g_{2k+1}(p)\,w^k
+=\sum_{k\ge0}\bigl(p^{2k+1}-p\,q^{2k}\bigr)w^k
+=\frac{p}{1-p^2w}-\frac{p}{1-q^2w}.
+\]
+
+\begin{theorem}[Resolvent reformulation]\label{thm:reform}
+Define, for $|w|<4$,
+\[
+\Phi_W(w)\;:=\;\sum_i\frac{\lambda_i}{1-\lambda_i^2w}
+-\frac{p}{1-p^2w}+\frac{p}{1-q^2w}.
+\]
+Then $\Phi_W$ is analytic near $0$ and
+\[
+[w^k]\,\Phi_W \;=\; t(C_{2k+1},W)-g_{2k+1}(p)\qquad(k\ge0).
+\]
+Consequently Conjecture~1.1 holds for $W$ for all odd $m\ge3$ if and only if
+$\Phi_W$ has nonnegative Taylor coefficients at $w=0$.
+\end{theorem}
+
+\begin{proof}
+By (S1)--(S4) the eigenvalues satisfy $|\lambda_i|\le 1$ and
+$\sum_i\lambda_i^2\le p<\infty$, so $\sum_i\frac{\lambda_i}{1-\lambda_i^2w}$
+converges locally uniformly for $|w|<1$ (indeed $|w|<4$ off the principal mode),
+and $\Phi_W$ is analytic near $0$. Expanding each summand,
+\[
+[w^k]\sum_i\frac{\lambda_i}{1-\lambda_i^2w}=\sum_i\lambda_i^{2k+1}=t(C_{2k+1},W),
+\]
+using (S1) for $2k+1\ge3$ (and $k=0$ gives $\sum_i\lambda_i=\Tr T_W=p=t(K_2,W)$,
+matching $g_1=p$). Subtracting the closed forms above gives the claimed
+coefficient identity, and the equivalence is immediate.
+\end{proof}
+
+\paragraph{The Perron split.}
+Separate the principal mode $\ell=\lambda_0\ge p$:
+\begin{equation}\label{eq:split}
+\Phi_W(w)=\underbrace{\Bigl(\frac{\ell}{1-\ell^2w}-\frac{p}{1-p^2w}\Bigr)}_{=:P(w)}
+\;+\;\underbrace{\sum_{i\ge1}\frac{\lambda_i}{1-\lambda_i^2w}+\frac{p}{1-q^2w}}_{=:R(w)} .
+\end{equation}
+Since $\ell\ge p$, $[w^k]P=\ell^{2k+1}-p^{2k+1}\ge0$: \emph{the Perron term is
+coefficientwise nonnegative}. It is tempting to conclude that it suffices to
+prove $R$ coefficientwise nonnegative, i.e.\
+$\sum_{i\ge1}\lambda_i^{2k+1}\ge -p\,q^{2k}$. We record why this lossy split
+\emph{cannot} be the whole story, as it is instructive.
+
+\begin{remark}[Tightness at bipartite; the split is lossy]\label{rem:tight}
+At a balanced complete bipartite graphon ($p=\tfrac12$, $\ell=\tfrac12$, one
+non-principal eigenvalue $-\tfrac12$, rest $0$) one has, for every $k$,
+\[
+\sum_{i\ge1}\lambda_i^{2k+1}=-(\tfrac12)^{2k+1}=-p\,q^{2k},
+\]
+so $R$ has \emph{zero} $w^k$-coefficient: the residual inequality is exactly
+tight, with the Perron surplus $[w^k]P=0$. Perturbing $p$ slightly above
+$\tfrac12$ while keeping a deep mode near $-\tfrac12$ would make
+$\sum_{i\ge1}\lambda_i^{2k+1}\approx-(\tfrac12)^{2k+1}<-pq^{2k}$, violating the
+residual inequality; such spectra are forbidden by $0\le W\le1$ (they are not
+graphon-realizable), but only the Perron surplus $[w^k]P>0$ in the genuine
+graphon redeems them. Thus \eqref{eq:split} cannot be decoupled: the Perron and
+non-principal parts must be used \emph{together}. This is the
+generating-function incarnation of the ``aggregate, not modewise'' obstruction
+identified in companion \S9.6.
+\end{remark}
+
+\begin{remark}[Even cycles are free]\label{rem:even}
+Replacing $\frac{\lambda}{1-\lambda^2w}$ by $\frac{\lambda^2 w}{1-\lambda^2 w}$
+gives the even part, whose coefficients are $\sum_i\lambda_i^{2k}=t(C_{2k},W)\ge
+p^{2k}\ge g_{2k}(p)$ by bipartite Sidorenko. Hence \emph{all} the content of the
+even-and-odd statement is carried by the odd part $\Phi_W$; the reformulation
+loses nothing.
+\end{remark}
+
+The value of Theorem~\ref{thm:reform} is methodological: it turns the problem
+into coefficientwise (Hankel/total-positivity) domination of one Stieltjes-type
+function by a two-pole rational function, which is the natural input for
+Markov--Krein theory (\S\ref{sec:markov}).
+
+\section{A uniform criterion: \texorpdfstring{$T_W\succeq-(1-p)I$}{TW >= -(1-p)I}}
+\label{sec:negsafe}
+
+We give a clean sufficient condition, phrased intrinsically on the least
+eigenvalue of $T_W$, valid for every odd cycle at once.
+
+\begin{theorem}[Negative-spectrum-safe criterion]\label{thm:negsafe}
+Let $p>\tfrac12$. If
+\[
+\lambda_{\min}(T_W)\ \ge\ -q\qquad\text{(equivalently }T_W+qI\succeq0\text{)},
+\]
+then for every odd $m\ge3$,
+\[
+t(C_m,W)\ \ge\ p^m-p\,q^{m-1}=g_m(p).
+\]
+\end{theorem}
+
+\begin{proof}
+By (S1), splitting the spectrum into the Perron mode $\ell=\lambda_0$, the
+positive non-principal eigenvalues, and the negative ones (write
+$\mu_j=-\lambda_j>0$ for $\lambda_j<0$),
+\[
+t(C_m,W)=\ell^m+\!\!\sum_{i\ge1,\,\lambda_i>0}\!\!\lambda_i^m-\sum_j\mu_j^m
+\ \ge\ \ell^m-\sum_j\mu_j^m,
+\]
+since $m$ is odd and the positive terms are nonnegative. By hypothesis every
+$\mu_j\le q$, so $\mu_j^m\le q^{m-2}\mu_j^2$ (as $m-2\ge1$), whence
+\[
+\sum_j\mu_j^m\ \le\ q^{m-2}\sum_j\mu_j^2\ \le\ q^{m-2}\sum_{i\ge1}\lambda_i^2
+\ \le\ q^{m-2}\,pq\ =\ p\,q^{m-1},
+\]
+using the budget (S3). Therefore $t(C_m,W)\ge\ell^m-pq^{m-1}\ge p^m-pq^{m-1}$,
+the last step from $\ell\ge p$ (S2).
+\end{proof}
+
+\begin{remark}[Comparison with known criteria]\label{rem:compare}
+For a \emph{regular} graphon $g=0$, so $T_W$ block-diagonalizes and on $\1^\perp$
+one has $T_W=-A$; then $\lambda_{\min}(T_W)\ge-q\iff\lambda_{\max}(A)\le q$, the
+positive-spectrum-safe criterion. Thus Theorem~\ref{thm:negsafe} contains the
+regular case, recovering companion Corollary~9.6. For an \emph{irregular}
+graphon ($g\ne0$) the two criteria differ: $\lambda_{\min}(T_W)$ feels the
+coupling $g$ between the Perron mode and $\1^\perp$ through the off-diagonal
+block in $T_W$, whereas $\lambda_{\max}(A)$ is a property of the compressed
+complement alone. Neither implies the other in general; they are complementary
+sufficient conditions. The advantage of Theorem~\ref{thm:negsafe} is that it is
+a single positive-semidefiniteness statement about $T_W$ with a four-line proof.
+\end{remark}
+
+\begin{remark}[Sharpness and scope]\label{rem:scope}
+The constant $-q$ cannot be relaxed to $-\tfrac12$: at $p$ slightly above
+$\tfrac12$ a near-bipartite graphon has $\lambda_{\min}(T_W)$ near $-\tfrac12<-q$
+and is exactly the hard case. Thus the criterion covers all graphons whose
+spectrum is ``not too negative'' (a strict superset of regular graphons,
+uniform in $m$), and fails precisely on the near-bipartite family that the
+companion note also identifies as the genuine obstruction near $p=\tfrac12$.
+\end{remark}
+
+\section{The regime \texorpdfstring{$p\ge 2/3$}{p>=2/3}: reduction to a scalar
+inequality}\label{sec:reduction}
+
+We now show that for $p\ge 2/3$ the whole problem reduces to a two-parameter
+scalar family, and we identify the single missing ingredient.
+
+\begin{lemma}[At most one deep mode]\label{lem:onedeep}
+Let $p\ge 2/3$, so $q\le\tfrac13$. Then $T_W$ has at most one eigenvalue strictly
+below $-q$.
+\end{lemma}
+
+\begin{proof}
+An eigenvalue below $-q$ has square exceeding $q^2$. Two of them would contribute
+more than $2q^2$ to $\sum_{i\ge1}\lambda_i^2$, but the budget (S3) gives
+$\sum_{i\ge1}\lambda_i^2\le pq$. Since $p\ge2/3$ means $2q\le p$, i.e.\
+$2q^2\le pq$, two deep modes are impossible.
+\end{proof}
+
+\begin{proposition}[One-deep-mode reduction]\label{prop:onedeep}
+Let $p\ge 2/3$. Write $\ell=\lambda_0\ge p$ for the Perron eigenvalue and, if
+$T_W$ has an eigenvalue below $-q$, let $-\eta$ be that (unique, by
+Lemma~\ref{lem:onedeep}) eigenvalue, with $\eta\in(q,\tfrac12]$ by (S4);
+otherwise the hypothesis of Theorem~\ref{thm:negsafe} holds and we are done.
+If, for every odd $m\ge3$,
+\begin{equation}\label{eq:star}
+\bigl(\ell^m-p^m\bigr)+q^{m-2}\bigl(\ell^2-p^2\bigr)
+\ \ge\ \eta^2\bigl(\eta^{m-2}-q^{m-2}\bigr),
+\tag{$\star$}
+\end{equation}
+then $t(C_m,W)\ge g_m(p)$ for all odd $m\ge3$.
+\end{proposition}
+
+\begin{proof}
+As in Theorem~\ref{thm:negsafe}, drop the positive non-principal eigenvalues:
+\[
+t(C_m,W)\ \ge\ \ell^m-\eta^m-\sum_{\text{other neg.}}\mu_j^m.
+\]
+The negative eigenvalues other than $-\eta$ have magnitude $\le q$ and, by the
+budget (S3), total square at most $\;p-\ell^2-\eta^2$. Hence
+$\sum_{\text{other}}\mu_j^m\le q^{m-2}\bigl(p-\ell^2-\eta^2\bigr)$, so
+\[
+t(C_m,W)\ \ge\ \ell^m-\eta^m-q^{m-2}\bigl(p-\ell^2-\eta^2\bigr).
+\]
+Using $p\,q^{m-1}=q^{m-2}(p-p^2)$, the desired bound $t(C_m,W)\ge p^m-pq^{m-1}$
+rearranges exactly to \eqref{eq:star}.
+\end{proof}
+
+\begin{remark}[What \eqref{eq:star} reduces to]\label{rem:starsmallm}
+When $\eta\le q$ the right side of \eqref{eq:star} is $\le0$ and the inequality
+holds trivially: this recovers Theorem~\ref{thm:negsafe}. Since $p\ge2/3>1/2\ge
+\eta$, we have $\ell\ge p>\eta$, so $\ell^m-\eta^m$ grows and the left side
+dominates for large $m$; the binding constraints are the smallest odd $m$. Thus
+\eqref{eq:star} for all odd $m$ is, in practice, a check at $m=3,5$. The full
+$p\ge2/3$ region is therefore reduced to a two-dimensional scalar question in
+$(\ell,\eta)$ subject to the realizability constraints $\ell\ge p$,
+$\eta\le\tfrac12$, and $\ell^2+\eta^2\le p$.
+\end{remark}
+
+\begin{remark}[The residual obstruction, made precise]\label{rem:obstruction}
+Proposition~\ref{prop:onedeep} is \emph{not} unconditional, and the gap is
+exactly the coupling obstruction. The worst case for \eqref{eq:star} is
+$\ell=p$ (no Perron surplus) with $\eta$ as large as the budget allows
+($\eta=\sqrt{pq}$), where the left side vanishes but the right side is strictly
+positive. However, $\ell=p$ forces $g=0$ (regularity), and a regular graphon has
+\emph{all} non-principal eigenvalues bounded by $q$ in modulus, so it has no deep
+mode at all: the configuration that defeats \eqref{eq:star} is not
+graphon-realizable. Realizing a deep mode $-\eta$ with $\eta>q$ requires
+irregularity ($g\ne0$), which in turn raises $\ell$ above $p$ through the
+off-diagonal block of $T_W$. The missing quantitative content is precisely a
+graphon lower bound on the Perron surplus in terms of the deep-mode depth:
+\end{remark}
+
+\begin{target}[Perron surplus vs.\ deep mode]\label{tgt:surplus}
+There is a function $\sigma(\eta;p)$ with $\sigma(\eta;p)\ge 0$ and
+$\sigma(q;p)=0$ such that every graphon $W$ with $p\ge 2/3$ and a deep mode
+$-\eta$ of $T_W$ ($\eta\in(q,\tfrac12]$) satisfies
+\[
+\bigl(\ell^2-p^2\bigr)\;+\!\!\sum_{i\ge1,\,\lambda_i>0}\!\!\lambda_i^2
+\ \ge\ \sigma(\eta;p),
+\]
+with $\sigma$ large enough that \eqref{eq:star} holds for all odd $m\ge3$.
+\end{target}
+
+Target Lemma~\ref{tgt:surplus} would close $p\ge 2/3$ uniformly in $m$ via
+Proposition~\ref{prop:onedeep}. It is a statement purely about the second-order
+geometry of $T_W$ (no high cycle powers), and it is exactly the
+``aggregate-not-modewise'' content of companion \S9.6: when the deep mode
+decouples from $g$ (so $\ell$ gets no help from it), the depth $\eta$ must itself
+be constrained by $0\le W\le1$ through the orthogonality of its eigenvector to
+the constants. Quantifying that constraint is, in our view, the cleanest
+finite-dimensional open problem in this circle of ideas.
+
+\section{Program P1: reflection positivity / transfer-operator symmetrization}
+\label{sec:rp}
+
+The quantity $t(C_m,W)=\Tr(T_W^m)$ is the periodic partition function of the
+one-dimensional transfer operator $T_W$ on $m$ sites, and the cyclic/reflection
+symmetry of $C_m$ is \emph{the same for every $m$}. This is the one symmetry that
+is intrinsically uniform in $m$, which is why reflection positivity (RP) is the
+natural tool for a uniform structural theorem. We set up what one would need.
+
+\paragraph{The cut and the gluing form.}
+Fix $m=2k+1$. Cut $C_m$ at one vertex into a path $P_{m-1}$ with two marked
+endpoints, and consider the bilinear pairing on $L^2([0,1])$,
+\[
+\langle f,g\rangle_{T^{\,m-1}}:=\int_{[0,1]^2}(T_W^{\,m-1})(x,y)\,f(x)g(y)\,dx\,dy
+=\bigl\langle f,\,T_W^{\,m-1}g\bigr\rangle .
+\]
+Because $m-1$ is even, $T_W^{\,m-1}\succeq0$, so this pairing is positive
+semidefinite: it is a Gram form. Taking $f=g=\1$ recovers
+$t(P_{m-1},W)=\langle\1,T_W^{m-1}\1\rangle$, and gluing the two endpoints back
+(integrating against $W$) recovers $t(C_m,W)$. The RP content is that the
+even-length ``half-cycle'' folds positively.
+
+\paragraph{The symmetrization conjecture.}
+Let $\mathcal{W}(p,\tau)=\{W:t(K_2,W)=p,\ \Tr(T_W^2)=\tau\}$. The program is to
+prove a one-step symmetrization inequality: there is an involution-based
+operation $W\mapsto W^{\mathrm{sym}}$ (folding $W$ across the spectral
+reflection $\lambda\mapsto$ its RP-conjugate) that preserves $(p,\tau)$ and does
+not increase $\Tr(T_W^m)$ for any odd $m$, with fixed points exactly the
+reflection-symmetric (near-bipartite) graphons.
+
+\begin{program}[RP symmetrization]\label{prog:rp}
+Establish that on $\mathcal{W}(p,\tau)$ the minimizer of $t(C_m,\cdot)$ may be
+taken reflection-symmetric for every odd $m$ simultaneously; equivalently, that
+the negative part of the spectral measure of $T_W$ may be concentrated at a
+single reflected atom without increasing any odd trace power. Then close the
+reduced (symmetric) family by the low-dimensional inequality of
+\S\ref{sec:reduction}.
+\end{program}
+
+\paragraph{Why it can be uniform, and where it is delicate.}
+The folding operation and the PSD form above are defined identically for all
+$m$, so a successful symmetrization step is automatically uniform; this is the
+structural analogue of ``the minimizer near $p=\tfrac12$ is near-bipartite,''
+which the companion note observes numerically (\S10.5) but does not prove. The
+delicacy is genuine: odd cycles are \emph{not} bipartite, so the naive single
+cut does not fold cleanly, and RP for odd cycles typically yields PSD
+\emph{constraints} (Cauchy--Schwarz inequalities between path overlaps) that
+still require assembly into a monotonicity statement. The first concrete
+sub-target is the odd-cut inequality
+\[
+t(C_{2k+1},W)^2\ \le\ t(C_{2k},W)\cdot t(C_{2k+2},W)\quad(?),
+\]
+a log-convexity of the cycle sequence that would follow from a single RP fold and
+would, with the even-cycle Sidorenko tower (Remark~\ref{rem:even}), constrain the
+odd cycles from the (known) even ones.
+
+\section{Program P2: Markov--Krein resolvent domination}\label{sec:markov}
+
+Theorem~\ref{thm:reform} recasts the conjecture as coefficientwise domination of
+the Stieltjes-type function $\sum_i\frac{\lambda_i}{1-\lambda_i^2w}$ by the
+two-pole function $\frac{p}{1-p^2w}-\frac{p}{1-q^2w}$. Coefficientwise (rather
+than pointwise) domination is a moment problem, and Markov--Krein / canonical
+moment theory is built to reduce such problems to finitely many atoms.
+
+\paragraph{The moment body.}
+Regard the spectrum as a positive measure $\rho=\sum_i\delta_{\lambda_i}$ on
+$[-\tfrac12,\tfrac12]$ (after separating the Perron atom $\ell$). The genuine
+graphon constraints translate to moment constraints on $\rho$:
+\[
+\textstyle\int 1\,d\rho_{\ge1}=:M_0,\quad \int\lambda^2\,d\rho_{\ge1}=M_2\le pq,
+\quad \int\lambda^3\,d\rho_{\ge1}=t(K_3,W)-\ell^3\ge\Theta(p)-\ell^3,
+\]
+together with the even Sidorenko bounds
+$\int\lambda^{2j}\,d\rho_{\ge1}=t(C_{2j},W)-\ell^{2j}\ge p^{2j}-\ell^{2j}$.
+Minimizing $\int\lambda^{m}\,d\rho_{\ge1}$ subject to a \emph{fixed finite} set
+of these constraints, the Markov--Krein theorem returns a canonical
+representation with atom count controlled by the number of binding constraints,
+\emph{not} by $m$. That is the rigorous form of ``reduce to a low-dimensional
+family,'' and it is uniform in $m$ by construction.
+
+\begin{program}[Matrix Markov--Krein on $(g,A)$]\label{prog:mk}
+Carry out the canonical-moment reduction, but on the \emph{joint} moments
+$s_j=\langle g,A^jg\rangle$ of the pair $(g,A)$ rather than on the marginal
+spectral moments of $\rho$. The marginal-moment problem is provably defeatable
+(companion \S9.6: a decoupled deep mode satisfies all marginal-moment
+constraints yet the conjecture survives via the coupling), so the correct object
+is the operator/matrix moment problem in which $g$ and $A$ appear jointly. The
+deliverable is: among graphon-admissible $(g,A)$ with bounded $s_0,s_1,s_2$, the
+minimizer of $\Tr(T_W^m)$ is a low-rank (arrowhead) configuration for all odd $m$.
+\end{program}
+
+\paragraph{Status.}
+The reduction to finitely many atoms is rigorous \emph{given} which constraints
+bind; the open content is (i) identifying the binding set and (ii) lifting from
+marginal to joint moments so that the coupling $g$ is captured. We emphasize the
+honest ceiling established in the companion note: \emph{any} argument using a
+\emph{fixed} finite set of marginal moments has a window in $p$ shrinking like
+$m^{-2/(r-2)}$ for an $r$-th moment input, hence cannot be uniform; Program P2
+escapes this only through the joint-moment lift, which is where the real
+difficulty migrates.
+
+\section{Program P3: a uniform telescoping recurrence}\label{sec:telescope}
+
+The solved structural families (rank-one \S9.4, equal cliques \S9.5, two-value
+multipartite \S10.3 of the companion note) all close \emph{for all odd $m$ at
+once} by the same device: a two-step recurrence inequality with a nonnegative
+increment, seeded by a base case. We abstract this and identify exactly the
+general obstruction it meets. The point is that the recurrence parameter $a=q$ is
+canonical, because it annihilates the target's correction term.
+
+\begin{lemma}[Canonical telescoping identity]\label{lem:tele}
+Let $D_m:=t(C_m,W)-g_m(p)$. For every $m\ge3$,
+\begin{equation}\label{eq:tele}
+D_{m+2}-q^2D_m=\sum_i\lambda_i^m\bigl(\lambda_i^2-q^2\bigr)-p^m\bigl(p^2-q^2\bigr).
+\end{equation}
+Moreover the Perron term covers the right-hand subtrahend:
+$\ell^m(\ell^2-q^2)\ge p^m(p^2-q^2)$ (since $\ell\ge p>q$), so
+\begin{equation}\label{eq:tele2}
+D_{m+2}-q^2D_m\ \ge\ \sum_{i\ge1}\lambda_i^m\bigl(\lambda_i^2-q^2\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $D_m=\sum_i\lambda_i^m-p^m+pq^{m-1}$. Then
+$D_{m+2}-q^2D_m=\sum_i\lambda_i^m(\lambda_i^2-q^2)-(p^{m+2}-q^2p^m)
++(pq^{m+1}-q^2pq^{m-1})$. The last bracket is $pq^{m+1}-pq^{m+1}=0$, and
+$p^{m+2}-q^2p^m=p^m(p^2-q^2)$, giving \eqref{eq:tele}. For \eqref{eq:tele2}, the
+$i=0$ term is $\ell^m(\ell^2-q^2)$ with $\ell\ge p$ and $\ell^2-q^2\ge p^2-q^2>0$
+(as $p>1/2>q$ implies $p>q$), so $\ell^m(\ell^2-q^2)\ge p^m(p^2-q^2)$.
+\end{proof}
+
+\begin{proposition}[Telescoping criterion]\label{prop:tele}
+Suppose $D_3\ge0$ and, for every odd $m\ge3$,
+\begin{equation}\label{eq:teleincr}
+\sum_{i\ge1}\lambda_i^m\bigl(\lambda_i^2-q^2\bigr)\ \ge\ 0 .
+\end{equation}
+Then $D_m\ge0$ for all odd $m\ge3$, i.e.\ the conjecture holds for $W$.
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:tele2} and \eqref{eq:teleincr}, $D_{m+2}\ge q^2D_m\ge0$ whenever
+$D_m\ge0$; induction from $D_3\ge0$ gives all odd $m$.
+\end{proof}
+
+\paragraph{What \eqref{eq:teleincr} sees.}
+The summand $\lambda^m(\lambda^2-q^2)$ is nonnegative exactly when $\lambda\ge q$
+or $-q\le\lambda\le0$, and negative for $\lambda\in(0,q)$ (small positive modes)
+and for $\lambda<-q$ (deep negative modes). Thus the telescoping increment is
+governed by the \emph{same} two enemies that appear everywhere in this circle of
+ideas: small positive non-principal eigenvalues and deep negative modes. In the
+solved families these are absent or cancel in aggregate (this is precisely the
+``collective compensation'' of companion Remark~9.9), which is why the recurrence
+runs. The criterion \eqref{eq:teleincr} is strictly weaker to verify than the
+full conjecture --- it is a single moment-type inequality with no $g_m$ on the
+right --- and it is a clean target for an SOS certificate in the spectral
+variables. We record the cleanest sufficient form.
+
+\begin{corollary}[A spectral-gap telescoping criterion]\label{cor:telegap}
+If the non-principal spectrum of $T_W$ avoids the open band
+$(0,q)\cup(-\tfrac12,-q)$ --- i.e.\ every non-principal eigenvalue lies in
+$[-q,0]\cup[q,\tfrac12]$ --- then \eqref{eq:teleincr} holds and the conjecture
+holds for $W$ for all odd $m$ (given $D_3\ge0$, which is Goodman's bound,
+companion Theorem~3.1).
+\end{corollary}
+
+\begin{proof}
+Under the hypothesis every summand of \eqref{eq:teleincr} is nonnegative, and
+$D_3\ge0$ by the triangle case.
+\end{proof}
+
+This is a uniform sufficient condition complementary to
+Theorem~\ref{thm:negsafe}: it tolerates eigenvalues in $[q,\tfrac12]$ and in
+$[-q,0]$, but forbids the two bands $(0,q)$ and $(-\tfrac12,-q)$. The open
+problem is to drop these bands by paying with the principal surplus, i.e.\ to
+prove \eqref{eq:teleincr} ``on average over $m$'' rather than termwise --- the
+same aggregate target as \eqref{eq:star} and the spectral-excess inequality of
+companion \S9.6.
+
+\section{Program P4: Schur convexity and the moment-sequence structure of path
+layers}\label{sec:schur}
+
+This sharpens the combinatorial route of companion \S11 by exposing a rigid
+structural fact: the path-density sequence is a Hamburger moment sequence, so the
+layers are symmetric functions of a totally positive (Hankel) object.
+
+\paragraph{The moment-sequence fact.}
+Let $U=1-W$, $x_j=t(P_j,U)=\langle\1,T_U^{\,j}\1\rangle$. Let $\sigma$ be the
+scalar spectral measure of the self-adjoint operator $T_U$ at the unit vector
+$\1$, supported in $[-1,1]$.
+
+\begin{lemma}[Path densities form a moment sequence]\label{lem:moment}
+$x_j=\int_{-1}^{1}t^{\,j}\,d\sigma(t)$ for all $j\ge0$, with
+$\int d\sigma=x_0=1$ and $\int t\,d\sigma=x_1=q$. Consequently $(x_j)_{j\ge0}$ is
+a Hamburger moment sequence: all Hankel matrices $[x_{i+j}]_{i,j=0}^{N}$ are
+positive semidefinite. In particular it is log-convex,
+\begin{equation}\label{eq:logconvex}
+x_{j-1}\,x_{j+1}\ \ge\ x_j^2\qquad(j\ge1).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The spectral theorem applied to $T_U$ and the vector $\1$ gives the integral
+representation; $x_0=\|\1\|^2=1$ and $x_1=\langle\1,T_U\1\rangle=q$. Positive
+semidefiniteness of the Hankel forms is the defining property of a moment
+sequence (for any polynomial $r$, $\sum_{i,j}c_ic_j x_{i+j}=\int |r(t)|^2\,
+d\sigma\ge0$ with $r=\sum c_it^i$); \eqref{eq:logconvex} is the $2\times2$ minor,
+equivalently Cauchy--Schwarz for $\int t^{j-1}\cdot t^{j+1}d\sigma$.
+\end{proof}
+
+\paragraph{Layers as symmetric functions.}
+With $n=m-1$, the companion expansion writes
+$t(C_m,1-U)-g_m=\sum_{j=0}^{n-1}(-1)^j\tfrac{m}{m-j}E_{n,j}(U)+nE_{n,n}(U)
++(x_n-c_m)$, where the layer is a positive combination of monomials in the
+$x_\ell$,
+\[
+Z_{n,j}(U)=\!\!\sum_{\substack{F\subseteq P_n\\ e(F)=j}}\!\!t(F,U)
+=\!\!\sum_{\substack{\text{placements of }j\text{ edges}\\ \text{in }P_n\text{ as disjoint subpaths}}}\!\!\prod_{c}x_{\ell_c},\qquad
+E_{n,j}=Z_{n,j}-\binom nj q^{\,j},
+\]
+the reference value $\binom nj q^j$ being the rank-one specialization
+$x_\ell\mapsto q^\ell$. Kim--Lee proved $E_{n,2d}(U)\ge0$ (even layers) by Schur
+convexity of $Z_{n,2d}$ in the moment data. The open content is the odd layers
+together with the path--cycle gap $x_n-c_m$.
+
+\begin{program}[Master Hankel identity]\label{prog:schur}
+Prove a single identity expressing the full alternating sum
+$\sum_j(-1)^j\frac{m}{m-j}E_{n,j}+nE_{n,n}+(x_n-c_m)$ as a manifestly
+nonnegative combination of (i) Hankel minors of $(x_j)$ (nonnegative by
+Lemma~\ref{lem:moment}) and (ii) the deletion gap $x_n-c_m\ge0$. The concrete
+lever is to pair each unsigned odd layer $E_{n,2d+1}$ against its even neighbors
+using \eqref{eq:logconvex}: log-convexity gives
+$x_{2d+1}\le\sqrt{x_{2d}x_{2d+2}}$, which dominates the leading monomial of the
+odd layer by a geometric mean of even-layer monomials. The target is a
+termwise majorization $|{\rm odd\ layer}|\le\tfrac12({\rm adjacent\ even\
+layers})$ making the alternating sum telescope.
+\end{program}
+
+\paragraph{Why it could be uniform, and the obstruction.}
+The layer recurrence and the moment structure are $m$-independent, so a master
+identity is uniform by construction; this is the most ``elementary'' route in the
+sense of using only Hankel positivity and one deletion inequality. The risk,
+identical to companion \S9.6 in combinatorial dress, is that the odd layers carry
+sign information not captured by adjacent even layers --- i.e.\ the pairing is
+\emph{not} termwise dominated and only the global sum is controlled, which is the
+aggregate phenomenon again. A useful intermediate result, of independent
+interest and possibly provable now, is the odd-layer bound
+$|E_{n,2d+1}(U)|\le E_{n,2d}(U)^{1/2}E_{n,2d+2}(U)^{1/2}$ as a consequence of
+\eqref{eq:logconvex}, which would already control all but the boundary layers.
+
+\section{Program P5: entropy / probabilistic corrected-Sidorenko}\label{sec:entropy}
+
+We set up the route honestly, including the reason it is the longest shot. The
+defect to control is $p^m-t(C_m,W)$, and the conjecture asks it to be at most
+$p\,q^{m-1}$: a \emph{corrected} Sidorenko bound. (Plain Sidorenko
+$t(C_m,W)\ge p^m$ is false for odd $m$, which is the whole difficulty: any
+entropy argument must \emph{produce} the negative correction term, not merely
+recover $p^m$.)
+
+\paragraph{Homomorphism-measure entropy.}
+Let $\nu$ be the probability measure on $[0,1]^{V(C_m)}$ with density
+proportional to $\prod_{e=(i,i')}W(x_i,x_{i'})$, normalized by $t(C_m,W)$. The
+Gibbs variational principle gives, for any reference product measure $\pi$ with
+the correct edge marginals,
+\[
+\log t(C_m,W)\ \ge\ \mathbb{E}_\pi\!\sum_{e}\log W(x_i,x_{i'})\ -\ \mathrm{KL}(\pi\,\|\,\mathrm{unif}),
+\]
+and the program is to engineer $\pi$ (a Markov field along the cycle, built from
+the transfer operator) so that the right side equals $\log g_m(p)$ up to the
+single correction. For \emph{bipartite} $H$ the Conlon--Lee/Szegedy choice of
+$\pi$ matches all edge marginals and yields exactly $e(H)\log p$; for odd cycles
+the odd girth obstructs a consistent two-colouring of the marginals, leaving an
+irreducible mismatch around the cycle --- and that mismatch is precisely the
+correction $p\,q^{m-1}$ we must capture rather than discard.
+
+\paragraph{The complement reading and a one-term coupling target.}
+The clean structural hint is that $p\,q^{m-1}$ has the exact form ``one edge
+present, all $m-1$ complement-edges along the cycle on,'' a \emph{single}
+inclusion--exclusion event. This suggests a coupling that produces the defect
+from one bad excursion. Equivalently, the slack lost in the companion proofs is
+entirely in the crude step $c_m=t(C_m,U)\le x_{m-1}$; an entropy/coupling bound
+on the complement cycle density $t(C_m,U)$ directly --- using that $U$ has
+density $q<\tfrac12$ and is itself a graphon --- would recover it.
+
+\begin{program}[Entropy control of the complement cycle]\label{prog:entropy}
+Produce a probabilistic upper bound $t(C_m,U)\le x_{m-1}-\Delta_m$ with
+$\Delta_m\ge0$ large enough that the companion inclusion--exclusion certificate
+$\Phi_m$, no longer forced to discard $x_{m-1}-c_m$, becomes nonnegative for all
+odd $m$. By companion Proposition~11.1 this retained deletion term is provably
+essential, so any successful entropy argument must target $\Delta_m$, not the
+leading $p^m$.
+\end{program}
+
+\paragraph{Status and a related lever.}
+This is the route we are least optimistic about, precisely because odd cycles
+fail Sidorenko, so the entropy machine runs against its grain. The one encouraging
+fact is that odd cycles are \emph{common} graphs (Sidorenko/folklore): for all
+$W$, $t(C_m,W)+t(C_m,1-W)\ge 2^{1-m}$, proved by convexity/Schur arguments akin
+to Kim--Lee. Commonality is a different inequality, but it shows the relevant
+convexity is available for odd cycles; adapting its proof to the asymmetric,
+density-pinned defect $p^m-t(C_m,W)$ is the concrete bridge to attempt.
+
+\section{Program P6: flag algebras / SDP with exact rational rounding}
+\label{sec:flag}
+
+A computational route with direct precedent. The constrained minimum
+$f_{C_m}(p)=\min\{t(C_m,W):t(K_2,W)=p\}$ is an extremal density problem of exactly
+the type flag algebras solve: one writes $t(C_m,\cdot)-g_m(p)$ as a conical
+combination of squares of flags plus a nonnegative multiple of the edge-density
+constraint, certified by a semidefinite program, and rounds the floating-point
+SDP solution to an exact rational certificate in the Pikhurko style. The note's
+reference on minimizing pentagons at fixed order and size is precisely this
+method applied to $C_5$, and is the natural template.
+
+\begin{program}[Density-uniform flag certificate]\label{prog:flag}
+Compute, for each odd $m$ of interest, an exact rational flag-algebra SOS
+certificate for $t(C_m,W)\ge g_m(p)$ valid on $p\in[\tfrac12,\tfrac23]$, either by
+(i) solving on a fine rational grid in $p$ and proving the certificate
+coefficients are sign-definite polynomials in $p$ between grid points (a finite
+exact check, compatible with the note's Bernstein/Sturm philosophy), or (ii) a
+single ``variable-density'' flag SDP carrying $p$ as a parameter.
+\end{program}
+
+\paragraph{Why it can reach where hand certificates cannot, and its ceiling.}
+Flag algebras automatically search a far larger space of squares than the
+hand-built Gram/Bernstein certificates of the companion note, so they may close
+individual cycles (e.g.\ $C_{15},C_{17}$) that defeat the per-cycle hybrid. The
+genuine ceiling is \emph{uniformity in $m$}: an SDP is solved at a fixed $m$, so
+this route, like the per-cycle hybrid, produces one cycle at a time unless paired
+with a structural $m$-induction (Program~P3) or a reduction theorem
+(Programs~P1, P2). Its highest value is therefore twofold: as a finisher for
+finitely many further cycles, and as an \emph{oracle} --- the exact extremizers it
+returns near $p=\tfrac12$ would confirm or refute the near-bipartite structure
+that Programs P1--P2 must assume.
+
+\section{Further routes, briefly}\label{sec:further}
+
+For completeness we list routes we judge weaker but not obviously dead.
+
+\begin{enumerate}[leftmargin=2em,label=\textbf{(F\arabic*)}]
+\item \textbf{Gradient flow / {\L}ojasiewicz on graphon space.} Run the
+$L^2$-gradient flow of $t(C_m,\cdot)$ at fixed $p$; combine the bang--bang
+first-order conditions (companion \S10.1) with a {\L}ojasiewicz inequality to
+show the flow converges to a low-complexity stationary point, then classify
+stationary points. Obstruction: the free Hessian is indefinite (companion
+Proposition~10.3), so convergence to the \emph{global} minimum is not automatic;
+this is a route to the \emph{structure} of minimizers, feeding P1.
+\item \textbf{Tensor-power amplification.} Since $t(C_m,W^{\otimes t})=
+t(C_m,W)^t$ while $g_m$ is not multiplicative, a weak per-instance bound does not
+tensor up to a strong one directly; the only hope is a self-improving inequality
+(if $D_m\ge -\epsilon$ pointwise implies $D_m\ge -\epsilon^2$ via tensoring) which
+we have not been able to set up. Listed for completeness; we are pessimistic.
+\item \textbf{Interlacing / Cauchy from a rank-one update.} Write
+$T_W=T_{W_0}+\text{(rank one)}$ relative to a regular reference $W_0$ of the same
+density; Weyl/Cauchy interlacing then bounds how far the spectrum, hence
+$\sum\lambda_i^m$, can move. This is a concrete way to attempt
+Target~Lemma~\ref{tgt:surplus} (the Perron surplus is the rank-one update's
+effect on $\lambda_0$), and is the route we would try first toward
+\eqref{eq:star}.
+\item \textbf{Real-rootedness / hyperbolic polynomials.} The characteristic
+polynomial of the finite truncations of $T_W$ is real-rooted; if the defect
+$D_m$ could be written as a coefficient of a hyperbolic polynomial in $(p,q)$ and
+the spectral data, then Garding/Br\"and\'en stability theory would give
+nonnegativity. Speculative; the difficulty is that $g_m$ mixes $p$ and $q$
+nonhomogeneously.
+\end{enumerate}
+
+\section{Summary of status}\label{sec:status}
+
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Proved, uniform in $m$.}
+Theorem~\ref{thm:reform} (resolvent reformulation);
+Theorem~\ref{thm:negsafe} (the $T_W\succeq-(1-p)I$ criterion);
+Lemma~\ref{lem:onedeep} and Proposition~\ref{prop:onedeep} (one-deep-mode
+reduction for $p\ge2/3$);
+Lemma~\ref{lem:tele} and Proposition~\ref{prop:tele} with
+Corollary~\ref{cor:telegap} (canonical telescoping and the spectral-band
+criterion);
+Lemma~\ref{lem:moment} (path densities are a Hamburger moment sequence, hence
+log-convex). These are independent sufficient conditions and reductions, each
+covering a region strictly larger than the regular case.
+\item \textbf{Isolated open lemma.} Target Lemma~\ref{tgt:surplus}: a
+second-order (no high cycle-power) lower bound on the Perron surplus by the
+deep-mode depth. This alone closes $p\ge2/3$ for all odd $m$ via
+Proposition~\ref{prop:onedeep}; route (F3) is how we would attack it.
+\item \textbf{Six programs, two of which can be uniform in $m$ by their
+structure.}
+P1 (reflection-positivity symmetrization, \S\ref{sec:rp}) and
+P2 (matrix Markov--Krein, \S\ref{sec:markov}) reduce the conjecture to a
+low-dimensional family and are uniform by construction;
+P3 (telescoping recurrence, \S\ref{sec:telescope}) is uniform via induction and
+reduces everything to the single moment inequality \eqref{eq:teleincr};
+P4 (Schur convexity / master Hankel identity, \S\ref{sec:schur}) is uniform via
+the $m$-independent layer recurrence;
+P5 (entropy / corrected Sidorenko, \S\ref{sec:entropy}) is the longest shot,
+fighting the failure of Sidorenko for odd cycles;
+P6 (flag algebras with exact rounding, \S\ref{sec:flag}) is a per-cycle finisher
+and a structural oracle, not uniform on its own.
+Routes (F1)--(F4) are listed as weaker but live; (F3) feeds
+Target~Lemma~\ref{tgt:surplus} directly.
+\item \textbf{Recurring obstruction.} Every clean approach terminates at the same
+place: the Perron/non-principal coupling carried by $g$, equivalently the
+``aggregate, not modewise'' phenomenon of companion \S9.6. It surfaces as the
+lossy Perron split (Remark~\ref{rem:tight}), the unprovable termwise increment
+\eqref{eq:teleincr}, the non-termwise odd-vs-even layer pairing
+(\S\ref{sec:schur}), and the conditional hypothesis of
+Proposition~\ref{prop:onedeep}. We have tried throughout to make this obstruction
+quantitative (Target~Lemma~\ref{tgt:surplus}) rather than treat it as folklore.
+\item \textbf{Map of dependencies.} A complete uniform proof would most plausibly
+combine a \emph{structure} input (P1 or P2, establishing the minimizer is
+near-bipartite / few-atom) with a \emph{closing} input on that reduced family
+(the low-dimensional inequality of \S\ref{sec:reduction}, or P3/P4 run on the
+reduced spectrum). P6 supplies the oracle that tells us which structure to aim
+for; (F3) is the most concrete single lemma whose resolution would unlock
+$p\ge2/3$.
+\end{itemize}
+
+\end{document}

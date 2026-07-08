@@ -1,0 +1,8 @@
+/-- **`C₉` defect positivity, unconditional.**  Φ₉ = L + Q + H ≥ 0 in moments, from
+`cert9_L_smom` (L), `cert9_Q` (Q, the bivariate-SOS quadratic part), `cert9_H_smom` (H). -/
+lemma cert9_smom (hU : IsGraphon U μ) (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 997/2000) :
+    0 ≤ (56*q^6*smom U μ 0 - 189*q^5*smom U μ 0 + 48*q^5*smom U μ 1 + 315*q^4*smom U μ 0 - 135*q^4*smom U μ 1 + 40*q^4*smom U μ 2 - 315*q^3*smom U μ 0 + 180*q^3*smom U μ 1 - 90*q^3*smom U μ 2 + 32*q^3*smom U μ 3 + 189*q^2*smom U μ 0 - 135*q^2*smom U μ 1 + 90*q^2*smom U μ 2 - 54*q^2*smom U μ 3 + 24*q^2*smom U μ 4 - 63*q*smom U μ 0 + 54*q*smom U μ 1 - 45*q*smom U μ 2 + 36*q*smom U μ 3 - 27*q*smom U μ 4 + 16*q*smom U μ 5 + 9*smom U μ 0 - 9*smom U μ 1 + 9*smom U μ 2 - 9*smom U μ 3 + 9*smom U μ 4 - 9*smom U μ 5 + 8*smom U μ 6) + (120*q^4*smom U μ 0^2 - 270*q^3*smom U μ 0^2 + 160*q^3*smom U μ 0*smom U μ 1 + 270*q^2*smom U μ 0^2 - 270*q^2*smom U μ 0*smom U μ 1 + 96*q^2*smom U μ 0*smom U μ 2 + 48*q^2*smom U μ 1^2 - 135*q*smom U μ 0^2 + 180*q*smom U μ 0*smom U μ 1 - 108*q*smom U μ 0*smom U μ 2 + 48*q*smom U μ 0*smom U μ 3 - 54*q*smom U μ 1^2 + 48*q*smom U μ 1*smom U μ 2 + 27*smom U μ 0^2 - 45*smom U μ 0*smom U μ 1 + 36*smom U μ 0*smom U μ 2 - 27*smom U μ 0*smom U μ 3 + 16*smom U μ 0*smom U μ 4 + 18*smom U μ 1^2 - 27*smom U μ 1*smom U μ 2 + 16*smom U μ 1*smom U μ 3 + 8*smom U μ 2^2) + (80*q^2*smom U μ 0^3 - 90*q*smom U μ 0^3 + 96*q*smom U μ 0^2*smom U μ 1 + 8*smom U μ 0^4 + 30*smom U μ 0^3 - 54*smom U μ 0^2*smom U μ 1 + 24*smom U μ 0^2*smom U μ 2 + 24*smom U μ 0*smom U μ 1^2) := by
+  have hL := cert9_L_smom hU q hq0 hq1
+  have hH := cert9_H_smom hU q
+  have hQ := cert9_Q hU q hq0 hq1
+  linarith [hL, hH, hQ]

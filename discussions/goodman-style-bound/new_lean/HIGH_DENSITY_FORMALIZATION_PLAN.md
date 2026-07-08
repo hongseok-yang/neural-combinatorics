@@ -37,14 +37,23 @@ then approximate-and-limit), chosen to avoid the 🔴 Fredholm/operator machiner
 graphon result.
 
 **Where the real remaining work is (spend effort here):**
-1. **M0c — the graphon bridge** (turns the matrix identity into a graphon statement): connect
-   `blockOp`/`Tr(P^m)` → foundation `cycleDensity`; step graphon = finite matrix; hub⊕compression split
-   = the `LowBand/` operator layer; then the L² step-kernel limit. (finite `ι` ⇒ even `A` is finite;
-   the true compression is an infinite compact operator — part of M0c.)
-2. **`Φ_m ≥ 0` positivity — the genuine crux** (route-independent): the analytic case analysis,
-   especially `thm:r1` and the analytic-strip tail (M3/M5/M6). NONE of this is finite-rank bookkeeping.
-3. Optional refinement: reduce `twoSidedShift` to the paper's symmetric-function/`PowerSeries` `S_m` in
-   pure moments — only if step 1 needs it.
+1. ✅ **M0c — the graphon bridge — DONE (2026-07-08, direct route, NO matrix limit).**
+   `OddCycleBound/HighDensity/GraphonReduction.lean` (builds clean; wired into root). It turned out the
+   graphon two-sided identity is *already* `complTrace_necklace` in `Necklace.lean` — no finite-rank
+   approximation, no L² step-kernel limit, no `blockOp`→`cycleDensity` bridge needed (the matrix
+   `two_sided_identity` was the go/no-go validation only). Applying `complTrace_necklace` to `compl W`
+   (a graphon by `isGraphon_compl`), for odd `m` the sign `(−1)^{m-1}=1`, and `edge_deletion_general`
+   cancels the path-density term `x_{m-1}` **exactly**, giving `cycle_ge_neckSum`:
+   `t(C_m,W) = cycleDensity μ W m ≥ neckSum W μ m` for every odd `m ≥ 3`, any density. Capstone
+   `cycle_bound_of_neckSum`: the full target `t(C_m,W) ≥ p^m − p(1−p)^{m-1}` now reduces to the SINGLE
+   inequality `neckSum W μ m ≥ p^m − p(1−p)^{m-1}` (the graphon `Φ_m ≥ 0`). `neckSum` is the explicit
+   necklace pairing sum `Σ_{j<m-1} (−1)ʲ ⟨pathIter (compl W) j, complIter (compl W) (m-1-j)⟩`.
+   **→ Everything downstream (M1–M7) is now the ONE obligation `neckSum ≥ p^m − p(1−p)^{m-1}`.**
+2. **`Φ_m ≥ 0` positivity — the genuine crux** (route-independent, = the neckSum inequality above): the
+   analytic case analysis, especially `thm:r1` and the analytic-strip tail (M3/M5/M6). NONE of this is
+   finite-rank bookkeeping. This is now the sole remaining mathematical content.
+3. Optional refinement: expand `neckSum` into the paper's symmetric-function/`PowerSeries` `S_m` in the
+   pure moments `s_j = specMoment` (= `⟨g, Aʲg⟩`), the form M1's `𝓟_{m,r}` expansion consumes.
 
 **Build:** `new_lean` is separate — `lake exe cache get` first; never run concurrent `lake`; single-file
 build `lake build OddCycleBound.HighDensity.BlockPower`.
@@ -244,7 +253,7 @@ certificate workflow, only swapping the SOS engine for Bernstein-on-a-box.
 
 Work in this order; each milestone is independently checkpointable.
 
-1. 📝 🟠 **M0 — Go/No-Go (moment-route identity).** *From scratch — no instance-precedent in the
+1. 🔶→✅ **M0 — Go/No-Go (moment-route identity).** *From scratch — no instance-precedent in the
    existing Lean* (see §2). Define `S_m` as a `PowerSeries` coefficient in `s_j`; prove the two-sided
    identity `Thm two-sided` and the expansion `Thm expansion` as **finite polynomial identities in the
    eigenvalues/moments of `A`**, reusing only the `LowBand/` eigen-expansion *infrastructure*.
@@ -318,6 +327,19 @@ Work in this order; each milestone is independently checkpointable.
        function / `PowerSeries` form in the pure moments `s_j=⟨g,Aʲg⟩` (substitute `hubCol_eq` /
        `bodyBlock_eq` into the couplings), then the downstream `Φ_m` positivity (M1–M7). The identity
        itself is done.
+   - ✅✅ **M0c — GRAPHON reduction DONE (2026-07-08), direct route, no matrix limit.**
+     `OddCycleBound/HighDensity/GraphonReduction.lean` (builds clean; wired into root). **Key
+     realisation:** the graphon two-sided identity is *already* `complTrace_necklace` — the finite-rank
+     `two_sided_identity` was the go/no-go validation only, and the planned finite→graphon L² limit is
+     UNNECESSARY. `cycle_ge_neckSum` (odd `m ≥ 3`, any density): `cycleDensity μ W m ≥ neckSum W μ m`,
+     from `complTrace_necklace hV (m-2)` at `V = compl W` (graphon via `isGraphon_compl`; `compl(compl
+     W)=W`), odd-`m` sign `Even.neg_one_pow` (`(−1)^{m-1}=1`), and `edge_deletion_general hV (m-2)`
+     cancelling `pathDensity (compl W) (m-1)` exactly. `neckSum W μ m := Σ_{j<m-1} (−1)ʲ · pairing
+     (pathIter (compl W) j) (complIter (compl W) (m-1-j))`. Capstone `cycle_bound_of_neckSum`: the whole
+     `thm:regionI-full` target reduces to `p^m − p(1−p)^{m-1} ≤ neckSum W μ m` — the graphon `Φ_m ≥ 0`.
+     Lean assembly was tiny: `have hid : cycleDensity μ W m = neckSum … := key` (all by defeq, `neckSum`
+     and `cycleDensity` δ-reduce to the necklace expression) then `linarith [hid, hdel]`.
+     **⇒ The single remaining obligation for the entire theorem is the neckSum inequality (M1–M7).**
    - **Why length-5 is deferred (cost analysis, 2026-07-07):** brute `sum_option` on `trace_pow5_eq`
      yields 32 index-patterns; the surviving moments (`s₀, s₁, s₀², s₂`) each appear as ~5 rotational
      copies that are equal only up to *cyclic reindexing + in-binder commutativity* (invisible to

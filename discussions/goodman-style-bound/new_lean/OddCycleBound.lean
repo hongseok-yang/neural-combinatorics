@@ -41,3 +41,5 @@ import OddCycleBound.LowBand.CompactGraphonOperator
 import OddCycleBound.HighDensity.FiniteRank
 -- General-`m` block-power recursion (toward the necklace decomposition of Tr(blockOp^m)).
 import OddCycleBound.HighDensity.BlockPower
+-- M0c (direct): graphon reduction of the target to `Φ_m ≥ 0` (necklace-sum positivity).
+import OddCycleBound.HighDensity.GraphonReduction
