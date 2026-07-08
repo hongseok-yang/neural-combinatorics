@@ -164,4 +164,45 @@ lemma specMoment_compl (hW : IsGraphon W μ) (j : ℕ) :
   rw [integral_congr_ae (ae_of_all _ hint), integral_const_mul]
   rfl
 
+/-! ### Necklace pairings in closed path-density form
+
+`neckSum` pairs `pathIter (compl W)` against `complIter (compl W)` — the *same* kernel `compl W` —
+so the existing telescoping `pairing_pathIter_complIter_closed` (`Necklace.lean`) applies directly.
+Its "complement means still to expand" are `mean (complIter (compl W) t) = pathDensity W t` (via
+`B_{1-W}=T_W`), so every necklace pairing becomes an explicit finite sum of products of `W`- and
+`(1-W)`-path densities — no operators, ready for the moment substitution `x_j → Σ sₖ`. -/
+
+/-- The complement means are `W`-path densities: `mean (complIter (compl W) t) = pathDensity W t`. -/
+lemma mean_complIter_compl (hW : IsGraphon W μ) (t : ℕ) :
+    mean μ (complIter (compl W) μ t) = pathDensity W μ t := by
+  rw [complIter_compl_eq_pathIter hW t]; rfl
+
+/-- **Necklace pairing in path densities.**  `⟨pathIter (compl W) j, complIter (compl W) k⟩ =
+Σ_{i<k} (−1)ⁱ · x_{k-1-i} · y_{j+i} + (−1)ᵏ · y_{j+k}`, with `x = pathDensity W`, `y = pathDensity
+(compl W)`.  (Specialisation of `pairing_pathIter_complIter_closed` to `compl W`, folding
+`mean(complIter (compl W)) = pathDensity W`.) -/
+lemma pairing_compl_closed (hW : IsGraphon W μ) (j k : ℕ) :
+    pairing μ (pathIter (compl W) μ j) (complIter (compl W) μ k)
+      = (∑ i ∈ Finset.range k,
+          (-1 : ℝ) ^ i * (pathDensity W μ (k - 1 - i) * pathDensity (compl W) μ (j + i)))
+        + (-1 : ℝ) ^ k * pathDensity (compl W) μ (j + k) := by
+  rw [pairing_pathIter_complIter_closed (isGraphon_compl hW) k j]
+  congr 1
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [mean_complIter_compl hW (k - 1 - i)]
+
+/-- **`neckSum` fully in path densities.**  Each necklace pairing replaced by its closed form; the
+object is now an explicit double sum over products of `W`- and `(1-W)`-path densities. -/
+lemma neckSum_pathDensity (hW : IsGraphon W μ) (m : ℕ) :
+    neckSum W μ m
+      = ∑ j ∈ Finset.range (m - 1),
+          (-1 : ℝ) ^ j
+            * ((∑ i ∈ Finset.range (m - 1 - j),
+                  (-1 : ℝ) ^ i
+                    * (pathDensity W μ (m - 1 - j - 1 - i) * pathDensity (compl W) μ (j + i)))
+              + (-1 : ℝ) ^ (m - 1 - j) * pathDensity (compl W) μ (j + (m - 1 - j))) := by
+  unfold neckSum
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [pairing_compl_closed hW j (m - 1 - j)]
+
 end OddCycleBound.HighDensity

@@ -374,11 +374,18 @@ Work in this order; each milestone is independently checkpointable.
      cross-compression pairing `⟨h^{(compl W)}_a, h^{(W)}_b⟩ = (−1)^{a+1} s_{a+b}` to pure `W`-moments.
      The moment-collapse `⟨h_i,h_j⟩ = s_{i+j}` (`moment`) and self-adjointness (`compress_symm`) already
      existed in `Graphon.lean`.
-     **Next (the large step):** expand each `pathIter` in the compression basis `{1,h_0,h_1,…}` via
-     `kernelOp_compressIter` (`T_W hₖ = sₖ·1 + h_{k+1}`) — this is the graphon `blockOp^n·(hub)`
-     unrolling, the infinite-dim mirror of `BlockPower.lean` — then take the pairing, collapse via
-     `moment` + parity, giving `S_m`/`Φ_m` in pure moments `s_j`; then the `𝓟_{m,r}` expansion + case
-     positivity (M3–M6).
+   - **Step 2 done (2026-07-08): necklace pairings in closed path-density form.** In `neckSum` BOTH
+     iterates are of `compl W` (same kernel), so the existing `pairing_pathIter_complIter_closed`
+     (`Necklace.lean`) applies directly; `mean_complIter_compl` (`mean(complIter (compl W) t) =
+     pathDensity W t`, via `B_{1-W}=T_W`) folds the "complement means still to expand" into `W`-path
+     densities. Result `pairing_compl_closed`: `⟨pathIter(compl W) j, complIter(compl W) k⟩ = Σ_{i<k}
+     (−1)ⁱ x_{k-1-i} y_{j+i} + (−1)ᵏ y_{j+k}` (`x=pathDensity W`, `y=pathDensity (compl W)`), and
+     `neckSum_pathDensity` puts all of `neckSum` as an explicit double sum of path-density products —
+     no operators. This reuses the necklace machinery instead of re-deriving the `blockOp^n` unroll.
+     **Next fork (needs a design choice):** to reach the `𝓟_{m,r}`-in-moments positivity, substitute
+     path densities `x_j → Σ (moment terms)` — either (a) expand `pathIter` in the compression basis
+     `{1,h_0,…}` via `kernelOp_compressIter` and pair with `moment`+parity (direct moment route), or
+     (b) an `x_j`/`y_j` recurrence in `p,q,s_k`. Then `𝓟_{m,r}` expansion + case positivity (M3–M6).
 3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
 4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).
