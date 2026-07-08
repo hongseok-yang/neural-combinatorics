@@ -18,6 +18,39 @@ Companion documents: `FORMALIZATION_NOTES.md` (the C9-band / operator-layer tria
 
 ---
 
+## ⭐ SESSION HANDOFF (2026-07-07) — read before starting
+
+**Ultimate goal:** the GRAPHON theorem above (all odd `m`, `p≥2/3`). The user cares about the *actual
+result* — **do not spend effort on easy finite-rank lemmas that don't advance the graphon goal.**
+
+**Done:** the **finite-rank** two-sided identity, proved once for all odd `m` (branch
+`goodman-high-density-m0`, whole `new_lean` builds clean). Capstone `two_sided_identity` in
+`OddCycleBound/HighDensity/BlockPower.lean`:
+`Tr(blockOp q g A ^m) + Tr(blockOp (1−q) g (−A) ^m) = q^m + (1−q)^m + twoSidedShift`, for odd `m`,
+symmetric `A`. See M0 status in §4 for the full lemma inventory (block recursion, `bodyBlock_eq`,
+`hubCol_eq`, `hubEntry_eq`, parity pillars, moments).
+
+**⚠️ This is a THEOREM ON MATRICES, not graphons.** `blockOp` is a finite matrix; `Tr(P^m)` is a matrix
+trace, not yet linked to the graphon `cycleDensity`/`t(C_m,U)`, and there is no limit. It is the
+deliberate *first stage* (M0a finite-rank → M0c limit), the paper's own route (Schur in finite rank,
+then approximate-and-limit), chosen to avoid the 🔴 Fredholm/operator machinery — but it is **not** the
+graphon result.
+
+**Where the real remaining work is (spend effort here):**
+1. **M0c — the graphon bridge** (turns the matrix identity into a graphon statement): connect
+   `blockOp`/`Tr(P^m)` → foundation `cycleDensity`; step graphon = finite matrix; hub⊕compression split
+   = the `LowBand/` operator layer; then the L² step-kernel limit. (finite `ι` ⇒ even `A` is finite;
+   the true compression is an infinite compact operator — part of M0c.)
+2. **`Φ_m ≥ 0` positivity — the genuine crux** (route-independent): the analytic case analysis,
+   especially `thm:r1` and the analytic-strip tail (M3/M5/M6). NONE of this is finite-rank bookkeeping.
+3. Optional refinement: reduce `twoSidedShift` to the paper's symmetric-function/`PowerSeries` `S_m` in
+   pure moments — only if step 1 needs it.
+
+**Build:** `new_lean` is separate — `lake exe cache get` first; never run concurrent `lake`; single-file
+build `lake build OddCycleBound.HighDensity.BlockPower`.
+
+---
+
 ## Status legend
 
 Every lemma/step below carries a **hardness colour** and a **status emoji**.
