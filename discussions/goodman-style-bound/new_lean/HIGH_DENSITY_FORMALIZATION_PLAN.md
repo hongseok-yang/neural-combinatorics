@@ -389,11 +389,25 @@ Work in this order; each milestone is independently checkpointable.
      **`multiKernel_expand`** `𝓟_{m,r}(q;L)=Σ_{j≤n} kerB_j·h_j(L)` and **`diagKernel_expand`**
      `P̃_{m,r}(q,ℓ)=Σ_{j≤n} kerB_j·C(j+r−1,r−1)·ℓʲ` (both need `r≥1, n=m−2r≥1`). This is the coefficient-level
      `thm:mixture`: it exhibits `multiKernel` as the image of `diagKernel` under the substitution
-     `ℓʲ ↦ h_j(L)/C(j+r−1,r−1)`. **STILL OPEN (Stage 2, the positivity transfer `cor:diagonal`):** that
-     `diagKernel≥0` on `[−½,½]` ⇒ `multiKernel≥0` on `[−½,½]ʳ`. This is where the genuinely-analytic
-     Dirichlet moment formula `eq:dir-moment` (`E[(Σθᵢλᵢ)ʲ]=h_j(λ⃗)/C(j+r−1,r−1)`) enters — the fact that
-     `h_j(L)/C(j+r−1,r−1)` is the `j`-th moment of a probability measure on `[min λᵢ, max λᵢ]` (R3;
-     route TBD: interval-integral induction vs. building the simplex measure).
+     `ℓʲ ↦ h_j(L)/C(j+r−1,r−1)`.
+   - **✅ Stage 2 (positivity transfer `cor:diagonal`) — IN PROGRESS, interval-integral route (user-chosen,
+     2026-07-09). `MixtureIntegral.lean` (builds clean, wired into root).**
+     - **Stage 2a ✅ `beta_nat`**: `∫₀¹ tⁱ(1−t)ᵏ dt = i!·k!/(i+k+1)!` (induction on `k`, one IBP
+       `integral_mul_deriv_eq_deriv_mul`; boundary terms vanish). The single special-function fact
+       under `eq:dir-moment`.
+     - **Stage 2b ✅ `dirExp` + `dirExp_nonneg` (P1, UNCONDITIONAL)**: `dirExp L f = E_{Θ~Dir(1^{|L|})}
+       [f(Σ Θᵢ Lᵢ)]` as an iterated 1-D integral (peel `Θ₁~Beta(1,|L|−1)`); `dirExp_nonneg` — `f≥0` on
+       `[a,b]` and `L⊆[a,b]` ⇒ `dirExp L f ≥0` (`intervalIntegral.integral_nonneg` + convexity of the
+       Dirichlet mean). Capstone **`multiKernel_nonneg_of_diag`**: `cor:diagonal` reduced to the single
+       **mixture bridge** `multiKernel = dirExp L (diagKernel ·)` — an honest conditional theorem (no
+       `sorry`); given the bridge, diagonal positivity on `[−½,½]` transfers to the box.
+     - **STILL OPEN = the bridge `multiKernel m r q L = dirExp L (diagKernel m r q ·)`.** Two pieces, both
+       integrability-carrying inductions on `L`: (i) **`dirExp` linearity** over finite sums of monomials
+       (to commute with `diagKernel_expand`'s `Σⱼ`), which needs a **parametric-continuity lemma** (`t ↦
+       dirExp T (F t ·)` continuous for jointly-continuous `F`, so the recursion's integrand is
+       integrable — Mathlib parametric-interval-integral continuity); (ii) the **Dirichlet moment**
+       `dirExp L (·ʲ) = h_j(L)/C(j+|L|−1,|L|−1)` (`eq:dir-moment`) by induction on `L` via `beta_nat` +
+       the binomial expansion of `(tc+(1−t)x)ʲ`. This is the next Stage-2 target (R3).
    - **Step 0 done (2026-07-08): moment-friendly rewrite of `neckSum`.**
      `OddCycleBound/HighDensity/MomentExpansion.lean` (builds clean, wired into root). `kernelOp_compl`
      (`T_{1-U} f = (∫f)·1 − T_U f`) ⇒ `complIter_compl_eq_pathIter` (`B_{1-W} = T_W`, so the complement
