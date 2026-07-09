@@ -136,4 +136,94 @@ theorem multiKernel_nonneg_of_diag {m r : ℕ} (q : ℝ) (L : List ℝ)
   rw [hbridge]
   exact dirExp_nonneg L _ (-(1:ℝ) / 2) (1 / 2) (by norm_num) hdiag hL
 
+/-! ### Linearity of `dirExp` (the mixture bridge, part 1)
+
+`dirExp L` is linear in its function argument; the only obstacle is integrability at each recursion
+step, which we discharge via a parametric-continuity lemma: `w ↦ dirExp L (F w ·)` is continuous
+whenever `F` is jointly continuous.  The recursion grows the parameter space by `×ℝ`, so the lemma is
+stated for an arbitrary parameter type. -/
+
+/-- **Parametric continuity of `dirExp`.**  For jointly-continuous `F : X → ℝ → ℝ`, the map
+`w ↦ dirExp L (F w ·)` is continuous.  (Supplies interval-integrability in the linearity induction.) -/
+lemma dirExp_param_continuous : ∀ (L : List ℝ) {X : Type} [TopologicalSpace X] (F : X → ℝ → ℝ),
+    Continuous (Function.uncurry F) → Continuous (fun w => dirExp L (fun x => F w x))
+  | [], _, _, _, _ => by simp only [dirExp]; exact continuous_const
+  | [c], X, _, F, hF => by
+      simp only [dirExp]
+      exact hF.comp (show Continuous (fun w : X => (w, c)) from by fun_prop)
+  | (c :: d :: L), X, _, F, hF => by
+      simp only [dirExp]
+      have hG : Continuous (Function.uncurry
+          (fun (p : X × ℝ) (x : ℝ) => F p.1 (p.2 * c + (1 - p.2) * x))) :=
+        hF.comp (show Continuous (fun q : (X × ℝ) × ℝ =>
+          (q.1.1, q.1.2 * c + (1 - q.1.2) * q.2)) from by fun_prop)
+      have hrec := dirExp_param_continuous (d :: L)
+        (fun (p : X × ℝ) (x : ℝ) => F p.1 (p.2 * c + (1 - p.2) * x)) hG
+      apply intervalIntegral.continuous_parametric_intervalIntegral_of_continuous' _ 0 1
+      have hρ : Continuous (fun p : X × ℝ =>
+          ((d :: L).length : ℝ) * (1 - p.2) ^ ((d :: L).length - 1)) := by fun_prop
+      exact hρ.mul hrec
+
+/-- Controlled one-step unfolding of `dirExp` at a `≥2` list. -/
+lemma dirExp_cons_cons (c d : ℝ) (L : List ℝ) (f : ℝ → ℝ) :
+    dirExp (c :: d :: L) f
+      = ∫ t in (0:ℝ)..1, ((d :: L).length : ℝ) * (1 - t) ^ ((d :: L).length - 1)
+          * dirExp (d :: L) (fun x => f (t * c + (1 - t) * x)) := rfl
+
+/-- Interval-integrability of the `dirExp` recursion integrand for continuous `f`. -/
+lemma dirExp_intervalIntegrable (T : List ℝ) (c : ℝ) (f : ℝ → ℝ) (hf : Continuous f) :
+    IntervalIntegrable
+      (fun t => (T.length : ℝ) * (1 - t) ^ (T.length - 1) * dirExp T (fun x => f (t * c + (1 - t) * x)))
+      volume 0 1 := by
+  have hpc : Continuous (fun t => dirExp T (fun x => f (t * c + (1 - t) * x))) :=
+    dirExp_param_continuous T (fun (t : ℝ) (x : ℝ) => f (t * c + (1 - t) * x)) (hf.comp (by fun_prop))
+  exact Continuous.intervalIntegrable
+    ((by fun_prop : Continuous (fun t : ℝ => (T.length : ℝ) * (1 - t) ^ (T.length - 1))).mul hpc) _ _
+
+/-- `dirExp L 0 = 0`. -/
+lemma dirExp_zero : ∀ (L : List ℝ), dirExp L (fun _ => 0) = 0
+  | [] => rfl
+  | [_] => rfl
+  | (c :: d :: L) => by
+      rw [dirExp_cons_cons]
+      simp only [dirExp_zero (d :: L), mul_zero, intervalIntegral.integral_zero]
+
+/-- `dirExp` is homogeneous in its function argument. -/
+lemma dirExp_smul : ∀ (L : List ℝ) (a : ℝ) (f : ℝ → ℝ),
+    dirExp L (fun x => a * f x) = a * dirExp L f
+  | [], a, f => by simp [dirExp]
+  | [c], a, f => by simp [dirExp]
+  | (c :: d :: L), a, f => by
+      rw [dirExp_cons_cons, dirExp_cons_cons, ← intervalIntegral.integral_const_mul]
+      refine integral_congr fun t _ => ?_
+      rw [dirExp_smul (d :: L) a (fun x => f (t * c + (1 - t) * x))]
+      ring
+
+/-- `dirExp` is additive in its (continuous) function argument. -/
+lemma dirExp_add : ∀ (L : List ℝ) (f g : ℝ → ℝ), Continuous f → Continuous g →
+    dirExp L (fun x => f x + g x) = dirExp L f + dirExp L g
+  | [], f, g, _, _ => by simp [dirExp]
+  | [c], f, g, _, _ => by simp [dirExp]
+  | (c :: d :: L), f, g, hf, hg => by
+      rw [dirExp_cons_cons, dirExp_cons_cons, dirExp_cons_cons,
+        ← intervalIntegral.integral_add
+          (dirExp_intervalIntegrable (d :: L) c f hf) (dirExp_intervalIntegrable (d :: L) c g hg)]
+      refine integral_congr fun t _ => ?_
+      rw [dirExp_add (d :: L) (fun x => f (t * c + (1 - t) * x)) (fun x => g (t * c + (1 - t) * x))
+        (by fun_prop) (by fun_prop)]
+      ring
+
+/-- `dirExp` commutes with finite sums of continuous functions. -/
+lemma dirExp_finset_sum {ι : Type*} (L : List ℝ) (s : Finset ι) (F : ι → ℝ → ℝ)
+    (hF : ∀ i, Continuous (F i)) :
+    dirExp L (fun x => ∑ i ∈ s, F i x) = ∑ i ∈ s, dirExp L (F i) := by
+  classical
+  induction s using Finset.induction with
+  | empty => simp [Finset.sum_empty, dirExp_zero]
+  | @insert a s ha ih =>
+      have hcs : Continuous (fun x => ∑ i ∈ s, F i x) := continuous_finset_sum s fun i _ => hF i
+      rw [show (fun x => ∑ i ∈ insert a s, F i x) = (fun x => F a x + ∑ i ∈ s, F i x) from by
+            funext x; rw [Finset.sum_insert ha],
+        dirExp_add L (F a) (fun x => ∑ i ∈ s, F i x) (hF a) hcs, ih, Finset.sum_insert ha]
+
 end OddCycleBound.HighDensity
