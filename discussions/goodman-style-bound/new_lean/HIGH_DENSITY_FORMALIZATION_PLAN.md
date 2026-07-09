@@ -459,8 +459,27 @@ Work in this order; each milestone is independently checkpointable.
      `t(C₃,W) = cycleDensity μ W 3 ≥ p³ − p(1−p)²`, ANY density — the graphon triangle bound via the new
      machinery. This confirms every sign/index in the M0c+expansion chain is correct. (First positivity
      result, but `m=3` is degenerate — `S₃=3s₀` is `A`-independent; `m≥5` needs the real `𝓟_{m,r}` work.)
-3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
-4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
+3. 🔶→✅ **M2 — Kernel form (FINITE part done).** `eq:G-form` DONE; improper `∫₀^∞` `prop:kernel` deferred.
+   - **✅ `eq:G-form` DONE (2026-07-10): `HighDensity/KernelForm.lean`** (builds clean, wired into root).
+     The diagonal kernel as a FINITE Beta(r,r) integral (NO improper ∫), the gateway from ρ≥0 to
+     diagKernel≥0. Chain: `beta_binom_pow` (binomial × `beta_nat`, termwise) → **`beta_hsym`**
+     (`∫₀¹ xᵃ(1-x)ᵇ(cx+d(1-x))ᵏ = a!b!k!/(a+b+k+1)!·h_k(c^{×(a+1)},d^{×(b+1)})`; the finite analogue of
+     `dirExp_pow`, per-term factorial core `C(k,i)(a+i)!(b+(k-i))! = a!b!k!C(i+a,a)C((k-i)+b,b)`) →
+     `Cmr` (= `C(m-1,2r-1)·(n/r)·(2r-1)!/((r-1)!)²`) + `Cmr_pos` + scalar identities `Cmr_K_eq`
+     (`Cmr·(m/n)·K = m/r`) / `Cmr_K3_eq` (`Cmr·K₃ = 1`) via `choose_fact_cancel` → **`gform_eq`**:
+     `diagKernel m r q ℓ = Cmr·∫₀¹ x^{r-1}(1-x)^{r-1}[(m/n)(Vₓⁿ+Wₓⁿ)−x·Vₓⁿ⁻¹]dx` (the three integrals
+     fold into diagKernel's three hsym blocks; scalar constants collapse). KEY: the hsym terms are carried
+     SYMBOLICALLY so only two scalar factorial identities are needed — no per-ℓ-coefficient matching.
+   - **✅ `bracket_eq_rho`**: for x≠0, the integrand bracket `= xⁿ·ρ(Vₓ/x)` (`Vₓ/x = q+ℓ(1-x)/x`,
+     `1−Vₓ/x = Wₓ/x`) — carries the whole ρ sign structure onto the finite integral.
+4. 🔶→✅ **M3 — Easy regimes (pointwise DONE).** `Thm pointwise` BOTH regimes DONE; `Thm ibp` still TODO.
+   - **✅ `thm:pointwise` DONE (2026-07-10, `KernelForm.lean`)** — the FIRST genuine `diagKernel≥0` results:
+     `diagKernel_nonneg_of_rho` (reduce `0≤diagKernel` to pointwise ρ(Vₓ/x)≥0 on (0,1] via `gform_eq`+
+     `bracket_eq_rho`; x=0 endpoint = 0 by n odd) ⇒ **`diagKernel_nonneg_two_r_ge`** (regime (a) 2r≥n ⇒
+     m≥2n ⇒ `rho_empty`, any q,ℓ) and **`diagKernel_nonneg_le_zero`** (regime (b) ℓ≤0, q≤1/2 ⇒ Vₓ/x≤q≤1/2
+     ⇒ `rho_window_left`). Both need n=2t+1 odd (`ht : m-2r = 2t+1`), r≥1. No improper ∫ used.
+   - **Still TODO for M3:** `thm:ibp` (`ℓ ≥ q+r/m`, integration by parts vs Beta density) — 🟠, needs the
+     improper `∫₀^∞` `prop:kernel` (`eq:kernel`), deferred with M5/M6.
    - **✅ ρ-lemma (`lem:rho`) FULLY DONE (2026-07-10): `HighDensity/RhoLemma.lean`** (pure real-analysis,
      no integrals, builds clean, wired into root). `rho n m u = (m/n)(uⁿ+(1-u)ⁿ)−u^{n-1}`. All five parts
      of `lem:rho` proved:

@@ -51,3 +51,5 @@ import OddCycleBound.HighDensity.SymmetricPoly
 import OddCycleBound.HighDensity.RhoLemma
 -- M1 Stage 2a: the natural Beta integral (foundation for the Dirichlet mixture positivity transfer).
 import OddCycleBound.HighDensity.MixtureIntegral
+-- M2/M3: eq:G-form (finite Beta(r,r) form of diagKernel) + thm:pointwise (regimes 2r≥n and ℓ≤0).
+import OddCycleBound.HighDensity.KernelForm
