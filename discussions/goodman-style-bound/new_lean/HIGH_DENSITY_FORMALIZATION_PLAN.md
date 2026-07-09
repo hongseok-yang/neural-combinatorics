@@ -401,13 +401,21 @@ Work in this order; each milestone is independently checkpointable.
        Dirichlet mean). Capstone **`multiKernel_nonneg_of_diag`**: `cor:diagonal` reduced to the single
        **mixture bridge** `multiKernel = dirExp L (diagKernel ·)` — an honest conditional theorem (no
        `sorry`); given the bridge, diagonal positivity on `[−½,½]` transfers to the box.
-     - **STILL OPEN = the bridge `multiKernel m r q L = dirExp L (diagKernel m r q ·)`.** Two pieces, both
-       integrability-carrying inductions on `L`: (i) **`dirExp` linearity** over finite sums of monomials
-       (to commute with `diagKernel_expand`'s `Σⱼ`), which needs a **parametric-continuity lemma** (`t ↦
-       dirExp T (F t ·)` continuous for jointly-continuous `F`, so the recursion's integrand is
-       integrable — Mathlib parametric-interval-integral continuity); (ii) the **Dirichlet moment**
-       `dirExp L (·ʲ) = h_j(L)/C(j+|L|−1,|L|−1)` (`eq:dir-moment`) by induction on `L` via `beta_nat` +
-       the binomial expansion of `(tc+(1−t)x)ʲ`. This is the next Stage-2 target (R3).
+     - **Stage 2c ✅ the BRIDGE + unconditional cor:diagonal (2026-07-09) — thm:mixture FULLY DONE.**
+       Linearity layer: `dirExp_param_continuous` (`w ↦ dirExp L (F w ·)` continuous for jointly-cont `F`,
+       parameter space grows by `×ℝ` per recursion, via `continuous_parametric_intervalIntegral_of_continuous'`),
+       `dirExp_cons_cons`/`dirExp_intervalIntegrable` (controlled unfold + integrability),
+       `dirExp_zero`/`dirExp_smul`/`dirExp_add`/`dirExp_finset_sum` (dirExp linear in its fn arg).
+       **`dirExp_pow`** (`eq:dir-moment`): `dirExp L (·ʲ) = h_j(L)/C(j+|L|−1,|L|−1)` — induction on `L`:
+       binomial-expand `(tc+(1−t)x)ʲ`, linearise, IH collapses inner moments, each `t`-integral is a
+       `beta_nat` value, `Nat.choose_mul_factorial_mul_factorial` folds the coefficient into
+       `h_j(c::T)=Σcⁱh_{j-i}(T)`. **`multiKernel_eq_dirExp`** (the bridge): `multiKernel = dirExp L (diagKernel ·)`
+       from the two expansions + linearity + `dirExp_pow`. **`multiKernel_nonneg`** (cor:diagonal, UNCONDITIONAL):
+       `diagKernel≥0` on `[−½,½]` & `L⊆[−½,½]` ⇒ `multiKernel≥0`. **⇒ thm:mixture is fully formalised:
+       multivariate `𝓟_{m,r}` positivity on the box reduces to the 1-parameter `diagKernel` positivity on
+       `[−½,½]`.** Remaining for `Φ_m≥0`: the diagonal positivity itself (M2/M3–M6: prop:kernel + case
+       analysis) and the expansion `thm:expansion` linking `Σ_r ∫𝓟 dμʳ` to `neckSum` (needs the compression
+       spectral measure for the positivity direction).
    - **Step 0 done (2026-07-08): moment-friendly rewrite of `neckSum`.**
      `OddCycleBound/HighDensity/MomentExpansion.lean` (builds clean, wired into root). `kernelOp_compl`
      (`T_{1-U} f = (∫f)·1 − T_U f`) ⇒ `complIter_compl_eq_pathIter` (`B_{1-W} = T_W`, so the complement
