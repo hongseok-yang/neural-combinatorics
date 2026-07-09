@@ -461,15 +461,22 @@ Work in this order; each milestone is independently checkpointable.
      result, but `m=3` is degenerate — `S₃=3s₀` is `A`-independent; `m≥5` needs the real `𝓟_{m,r}` work.)
 3. 📝 🟡 **M2 — Kernel form.** `Prop kernel` (Beta change of variables) + the ρ-lemma.
 4. 📝 🟡–🟠 **M3 — Easy regimes.** `Thm pointwise` + `Thm ibp`.
-   - **ρ-lemma foundation started (2026-07-09): `HighDensity/RhoLemma.lean`** (pure real-analysis, no
-     integrals, builds clean, wired into root). `rho n m u = (m/n)(uⁿ+(1-u)ⁿ)−u^{n-1}`. Proved:
-     `odd_add_pow_nonneg` (`aⁿ+bⁿ≥0` for odd n, `a+b≥0`); `sign_prod` (`(2u-1)(u^{2t}−(1-u)^{2t})≥0` via
-     `geom_sum₂_mul` factoring out `(2u-1)²`); `rho_rearrange1` (grouping formula lem:rho(i));
-     **`rho_reflect`** (lem:rho(iii): `ρ(u)+ρ(1-u)≥0` for `n=2t+1≤m`) and **`rho_window_left`**
-     (lem:rho(ii): `ρ(u)≥0` for `u≤1/2`). Sign inputs `thm:pointwise`/`thm:ibp`/tails consume.
-     **Still needed for M3:** remaining lem:rho parts (window right, `m≥2n` empty, neg bound) and the
-     harder gap — the 1-D **kernel representation** `prop:kernel` (improper `∫₀^∞`, Beta change-of-vars)
-     turning `ρ≥0` into `diagKernel≥0`.
+   - **✅ ρ-lemma (`lem:rho`) FULLY DONE (2026-07-10): `HighDensity/RhoLemma.lean`** (pure real-analysis,
+     no integrals, builds clean, wired into root). `rho n m u = (m/n)(uⁿ+(1-u)ⁿ)−u^{n-1}`. All five parts
+     of `lem:rho` proved:
+     - `odd_add_pow_nonneg` (`aⁿ+bⁿ≥0` for odd n, `a+b≥0`); `sign_prod` (`(2u-1)(u^{2t}−(1-u)^{2t})≥0` via
+       `geom_sum₂_mul` factoring out `(2u-1)²`);
+     - `rho_rearrange1` (grouping (i) form 1) + **`rho_rearrange2`** (grouping (i) form 2:
+       `ρ=(m/n)(1-u)ⁿ+u^{n-1}((m/n)u−1)`);
+     - **`rho_reflect`** (lem:rho(iii): `ρ(u)+ρ(1-u)≥0` for `n=2t+1≤m`);
+     - **`rho_window_left`** (ii, `u≤1/2`) + **`rho_window_right`** (ii, `n≤m·u` i.e. `u≥n/m`; splits at
+       `u=1`, `u≥1` uses `geom_sum₂_mul` giving `uⁿ−(u−1)ⁿ≥u^{n-1}` via `Finset.single_le_sum`);
+     - **`rho_empty`** (iv, THE key input for `thm:pointwise`(a): `m≥2n ⇒ ρ≥0` on all of ℝ, since the
+       window `(1/2,n/m)` is empty — combines the two windows at `1/2`);
+     - **`rho_neg`** (v: `u≤1 ⇒ −ρ(u) ≤ u^{n-1}(1−(m/n)u)`, drop `(m/n)(1-u)ⁿ≥0` from form 2).
+     **Still needed for M3:** the harder gap — the 1-D **kernel representation** turning `ρ≥0` into
+     `diagKernel≥0`: the FINITE Beta(r,r) form `eq:G-form` (gateway, no improper ∫; reuses `beta_nat`),
+     then `thm:pointwise` both regimes; the improper `∫₀^∞` `prop:kernel` (`eq:kernel`) is deferred to M5/M6.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).
    *Can be done in parallel with M1–M3 — it only needs the statement of `P̃_{m,r}`.*
 6. 📝 🟠–🔴 **M5 — `r=1` all lengths.** `Thm r1`. High risk; budget generously.
