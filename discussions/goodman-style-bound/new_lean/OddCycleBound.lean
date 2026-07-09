@@ -49,3 +49,5 @@ import OddCycleBound.HighDensity.MomentExpansion
 import OddCycleBound.HighDensity.SymmetricPoly
 -- M3 foundation: sign structure of ρ (reflection nonnegativity, left window).
 import OddCycleBound.HighDensity.RhoLemma
+-- M1 Stage 2a: the natural Beta integral (foundation for the Dirichlet mixture positivity transfer).
+import OddCycleBound.HighDensity.MixtureIntegral
