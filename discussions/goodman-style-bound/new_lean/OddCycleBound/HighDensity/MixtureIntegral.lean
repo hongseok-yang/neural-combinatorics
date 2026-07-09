@@ -79,4 +79,61 @@ lemma beta_nat : ∀ (i k : ℕ),
       field_simp
       ring
 
+/-! ### The Dirichlet-mean expectation `dirExp`
+
+`dirExp L f = E_{Θ~Dir(1^{|L|})}[f(Σ Θᵢ·Lᵢ)]`, realised as an iterated 1-D integral by peeling the
+first Dirichlet coordinate `Θ₁ ~ Beta(1, |L|−1)` (density `(|L|−1)(1−t)^{|L|−2}`) and conditioning:
+`Σ Θᵢ Lᵢ = t·L₀ + (1−t)·Σ Θ'ⱼ L'ⱼ`.  Used only on polynomials `f`; `dirExp [] := 0` is never reached
+(the mixture uses lists of length `r ≥ 1`). -/
+noncomputable def dirExp : List ℝ → (ℝ → ℝ) → ℝ
+  | [], _ => 0
+  | [a], f => f a
+  | (a :: b :: L), f =>
+      ∫ t in (0:ℝ)..1,
+        ((b :: L).length : ℝ) * (1 - t) ^ ((b :: L).length - 1)
+          * dirExp (b :: L) (fun x => f (t * a + (1 - t) * x))
+
+/-- **Positivity of `dirExp` (P1).**  If `f ≥ 0` on `[a,b]` and every entry of `L` lies in `[a,b]`,
+then `dirExp L f ≥ 0` — the Dirichlet mean `Σ Θᵢ Lᵢ` stays in `[a,b]` (convexity), so the integrand is
+pointwise nonnegative. -/
+lemma dirExp_nonneg : ∀ (L : List ℝ) (f : ℝ → ℝ) (a b : ℝ), a ≤ b →
+    (∀ x ∈ Set.Icc a b, 0 ≤ f x) → (∀ x ∈ L, x ∈ Set.Icc a b) → 0 ≤ dirExp L f
+  | [], f, a, b, _, _, _ => by simp [dirExp]
+  | [c], f, a, b, _, hf, hL => by
+      rw [dirExp]; exact hf c (hL c (by simp))
+  | (c :: d :: L), f, a, b, hab, hf, hL => by
+      rw [dirExp]
+      apply intervalIntegral.integral_nonneg (by norm_num : (0:ℝ) ≤ 1)
+      intro t ht
+      have h0t : (0:ℝ) ≤ t := ht.1
+      have ht1 : t ≤ 1 := ht.2
+      have hc : c ∈ Set.Icc a b := hL c (by simp)
+      apply mul_nonneg
+      · exact mul_nonneg (by positivity) (pow_nonneg (by linarith) _)
+      · refine dirExp_nonneg (d :: L) _ a b hab ?_
+          (fun x hx => hL x (List.mem_cons_of_mem c hx))
+        intro x hx
+        exact hf _ ⟨by nlinarith [hc.1, hx.1], by nlinarith [hc.2, hx.2]⟩
+
+/-! ### The positivity transfer `cor:diagonal`, reduced to the mixture bridge
+
+The unconditional engine (`dirExp_nonneg`) reduces `cor:diagonal` to the single **mixture bridge**
+`multiKernel m r q L = dirExp L (diagKernel m r q ·)`.  That bridge is the remaining analytic
+obligation and combines two facts, both still to formalise:
+
+* **`dirExp` is linear** in its function argument over finite sums of monomials (so it commutes with
+  `diagKernel_expand`'s `Σⱼ kerB_j·C(j+r−1,r−1)·(·)ʲ`);
+* the **Dirichlet moment formula `eq:dir-moment`**  `dirExp L (·ʲ) = h_j(L)/C(j+|L|−1,|L|−1)`  (proved by
+  induction on `L` via `beta_nat`), which then cancels the `C(j+r−1,r−1)` factor against
+  `multiKernel_expand`'s `Σⱼ kerB_j·h_j(L)`.
+
+Both are integrability-carrying inductions on `L`; they are the next Stage-2 target. -/
+theorem multiKernel_nonneg_of_diag {m r : ℕ} (q : ℝ) (L : List ℝ)
+    (hbridge : multiKernel m r q L = dirExp L (fun x => diagKernel m r q x))
+    (hdiag : ∀ ℓ ∈ Set.Icc (-(1:ℝ) / 2) (1 / 2), 0 ≤ diagKernel m r q ℓ)
+    (hL : ∀ x ∈ L, x ∈ Set.Icc (-(1:ℝ) / 2) (1 / 2)) :
+    0 ≤ multiKernel m r q L := by
+  rw [hbridge]
+  exact dirExp_nonneg L _ (-(1:ℝ) / 2) (1 / 2) (by norm_num) hdiag hL
+
 end OddCycleBound.HighDensity
