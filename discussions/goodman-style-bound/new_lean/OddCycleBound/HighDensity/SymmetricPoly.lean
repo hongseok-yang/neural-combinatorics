@@ -136,6 +136,31 @@ lemma hsym_replicate_append (a : ℝ) (ys : List ℝ) (k d : ℕ) :
 @[simp] lemma hsym_singleton (a : ℝ) (d : ℕ) : hsym [a] d = a ^ d := by
   simpa using hsym_replicate a 0 d
 
+/-- **Homogeneity under negation.**  Negating every variable scales `h_d` by `(-1)^d`:
+`h_d(−x₁,…,−x_k) = (−1)^d h_d(x₁,…,x_k)`. -/
+lemma hsym_map_neg : ∀ (xs : List ℝ) (d : ℕ),
+    hsym (xs.map (fun x => -x)) d = (-1 : ℝ) ^ d * hsym xs d
+  | [], d => by cases d <;> simp
+  | (x :: xs), d => by
+      rw [List.map_cons, hsym_cons, hsym_cons, Finset.mul_sum]
+      refine Finset.sum_congr rfl fun j hj => ?_
+      rw [Finset.mem_range] at hj
+      rw [hsym_map_neg xs (d - j), neg_pow,
+        show (-1 : ℝ) ^ d = (-1) ^ j * (-1) ^ (d - j) from by
+          rw [← pow_add, show j + (d - j) = d from by omega]]
+      ring
+
+/-- **Diagonal block expansion.**  Specialising `hsym_replicate_append` to a *second* replicated
+block `ℓ^{×(s+1)}` (via `hsym_replicate`):
+`h_d(a^{×(k+1)}, ℓ^{×(s+1)}) = Σ_{j≤d} C(d-j+k,k) a^{d-j} · C(j+s,s) ℓ^j`. -/
+lemma hsym_replicate_append_replicate (a ℓ : ℝ) (s k d : ℕ) :
+    hsym (List.replicate (k + 1) a ++ List.replicate (s + 1) ℓ) d
+      = ∑ j ∈ Finset.range (d + 1),
+          (Nat.choose (d - j + k) k : ℝ) * a ^ (d - j) * ((Nat.choose (j + s) s : ℝ) * ℓ ^ j) := by
+  rw [hsym_replicate_append]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [hsym_replicate]
+
 /-! ### The diagonal kernel `P̃_{m,r}(q,ℓ)`
 
 The diagonal of `𝓟_{m,r}` (paper eq:P-def evaluated at `λ₁=⋯=λ_r=ℓ`), which by the
@@ -158,5 +183,94 @@ lemma diagKernel_five_one (q ℓ : ℝ) :
     Finset.sum_range_zero]
   push_cast
   ring
+
+/-! ### The multivariate kernel `𝓟_{m,r}(q; λ₁,…,λ_r)`
+
+The full (off-diagonal) kernel of `paper_new.tex` eq:P-def, evaluated at a list `L = [λ₁,…,λ_r]`.
+`diagKernel` is its diagonal (`L = replicate r ℓ`).  The mixture theorem (thm:mixture) reduces the
+positivity of `multiKernel` on `[−½,½]ʳ` to the positivity of `diagKernel` on `[−½,½]`. -/
+noncomputable def multiKernel (m r : ℕ) (q : ℝ) (L : List ℝ) : ℝ :=
+  (m / r : ℝ)
+      * (hsym (List.replicate r (1 - q) ++ L.map (fun x => -x)) (m - 2 * r)
+        + hsym (List.replicate r q ++ L) (m - 2 * r))
+    - hsym (List.replicate (r + 1) q ++ L) (m - 2 * r - 1)
+
+/-- **`diagKernel` is the diagonal of `multiKernel`.**  `P̃_{m,r}(q,ℓ) = 𝓟_{m,r}(q; ℓ,…,ℓ)`. -/
+lemma diagKernel_eq_multiKernel (m r : ℕ) (q ℓ : ℝ) :
+    diagKernel m r q ℓ = multiKernel m r q (List.replicate r ℓ) := by
+  unfold diagKernel multiKernel
+  rw [List.map_replicate]
+
+/-! ### The mixture identity (thm:mixture) at the coefficient level
+
+The paper's mixture theorem says `𝓟_{m,r}(q;λ⃗) = E_{Θ~Dir(1ʳ)}[P̃_{m,r}(q, Σ Θᵢλᵢ)]`.  Its algebraic
+core — provable *without* any integral — is that `multiKernel` and `diagKernel` share one coefficient
+sequence `kerB`, with the diagonal carrying the extra Dirichlet-normalising factor `C(j+r−1,r−1)`:
+
+* `multiKernel m r q L = Σⱼ kerB_j · h_j(L)`,
+* `diagKernel  m r q ℓ = Σⱼ kerB_j · C(j+r−1,r−1) · ℓʲ`.
+
+The positivity transfer (`cor:diagonal`) then follows once one knows `h_j(L)/C(j+r−1,r−1)` is the
+`j`-th moment of a probability distribution on `[min λᵢ, max λᵢ]` (the Dirichlet moment `eq:dir-moment`,
+supplied separately — the one genuinely analytic input). -/
+
+/-- `hsym_replicate` for a `replicate r a` block with `r ≠ 0` (rather than `k+1`). -/
+lemma hsym_replicate' (a : ℝ) {r : ℕ} (hr : r ≠ 0) (d : ℕ) :
+    hsym (List.replicate r a) d = (Nat.choose (d + (r - 1)) (r - 1) : ℝ) * a ^ d := by
+  obtain ⟨s, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hr
+  simpa using hsym_replicate a s d
+
+/-- `hsym_replicate_append` for a `replicate r a` block with `r ≠ 0` (rather than `k+1`). -/
+lemma hsym_replicate_append' (a : ℝ) {r : ℕ} (hr : r ≠ 0) (ys : List ℝ) (d : ℕ) :
+    hsym (List.replicate r a ++ ys) d
+      = ∑ j ∈ Finset.range (d + 1),
+          (Nat.choose (d - j + (r - 1)) (r - 1) : ℝ) * a ^ (d - j) * hsym ys j := by
+  obtain ⟨s, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hr
+  simpa using hsym_replicate_append a ys s d
+
+/-- The shared coefficient sequence of `multiKernel` / `diagKernel` (`n = m − 2r`, `p = 1−q`):
+`kerB_j = (m/r)·C(n−j+r−1,r−1)·[p^{n−j}(−1)ʲ + q^{n−j}] − [j<n]·C(n−1−j+r,r)·q^{n−1−j}`. -/
+noncomputable def kerB (m r : ℕ) (q : ℝ) (j : ℕ) : ℝ :=
+  (m / r : ℝ)
+      * ((Nat.choose (m - 2 * r - j + (r - 1)) (r - 1) : ℝ) * (1 - q) ^ (m - 2 * r - j) * (-1) ^ j
+        + (Nat.choose (m - 2 * r - j + (r - 1)) (r - 1) : ℝ) * q ^ (m - 2 * r - j))
+    - (if j < m - 2 * r then
+        (Nat.choose (m - 2 * r - 1 - j + r) r : ℝ) * q ^ (m - 2 * r - 1 - j) else 0)
+
+/-- **Multivariate expansion.**  `𝓟_{m,r}(q;L) = Σ_{j≤n} kerB_j · h_j(L)`  (`n = m−2r`, `r ≥ 1`,
+`n ≥ 1`).  This is the paper's line-1928 convolution applied to the three `h`-terms of `eq:P-def`. -/
+lemma multiKernel_expand {m r : ℕ} (hr : r ≠ 0) (hn : 1 ≤ m - 2 * r) (q : ℝ) (L : List ℝ) :
+    multiKernel m r q L
+      = ∑ j ∈ Finset.range (m - 2 * r + 1), kerB m r q j * hsym L j := by
+  set n := m - 2 * r with hndef
+  unfold multiKernel
+  rw [← hndef, hsym_replicate_append' (1 - q) hr, hsym_replicate_append' q hr,
+    hsym_replicate_append' q (by omega : r + 1 ≠ 0)]
+  simp_rw [hsym_map_neg L, show (r + 1) - 1 = r from rfl]
+  -- rewrite the degree-(n-1) T3 sum over `range n` as a `range (n+1)` sum with an indicator
+  have hT3 : ∑ j ∈ Finset.range (n - 1 + 1),
+        (Nat.choose (n - 1 - j + r) r : ℝ) * q ^ (n - 1 - j) * hsym L j
+      = ∑ j ∈ Finset.range (n + 1),
+        (if j < n then (Nat.choose (n - 1 - j + r) r : ℝ) * q ^ (n - 1 - j) else 0) * hsym L j := by
+    rw [show n - 1 + 1 = n from by omega, Finset.sum_range_succ, if_neg (lt_irrefl n), zero_mul,
+      add_zero]
+    refine Finset.sum_congr rfl fun j hj => ?_
+    rw [Finset.mem_range] at hj
+    rw [if_pos hj]
+  rw [hT3, mul_add, Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib,
+    ← Finset.sum_sub_distrib]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  simp only [kerB, ← hndef]
+  ring
+
+/-- **Diagonal expansion.**  `P̃_{m,r}(q,ℓ) = Σ_{j≤n} kerB_j · C(j+r−1,r−1) · ℓʲ`.  Obtained from
+`multiKernel_expand` at `L = replicate r ℓ` via `h_j(ℓ^{×r}) = C(j+r−1,r−1) ℓʲ`. -/
+lemma diagKernel_expand {m r : ℕ} (hr : r ≠ 0) (hn : 1 ≤ m - 2 * r) (q ℓ : ℝ) :
+    diagKernel m r q ℓ
+      = ∑ j ∈ Finset.range (m - 2 * r + 1),
+          kerB m r q j * ((Nat.choose (j + (r - 1)) (r - 1) : ℝ) * ℓ ^ j) := by
+  rw [diagKernel_eq_multiKernel, multiKernel_expand hr hn]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [hsym_replicate' ℓ hr]
 
 end OddCycleBound.HighDensity

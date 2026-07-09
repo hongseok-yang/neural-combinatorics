@@ -376,6 +376,24 @@ Work in this order; each milestone is independently checkpointable.
      Also `hsym_singleton` (`hsym [a] d = a^d`). **Next:** the pointwise positivity regimes
      (thm:pointwise: `ℓ≤0` or `2r≥n`) on `diagKernel`, the ρ-lemma, then `thm:r1`/strip; and the
      mixture + expansion to connect `diagKernel ≥ 0` back to `Φ_m = neckSum_moment`.
+   - **✅ Mixture identity — ALGEBRAIC CORE of thm:mixture done (2026-07-09).** `SymmetricPoly.lean`
+     (builds clean, root builds clean). The paper's mixture theorem
+     `𝓟_{m,r}(q;λ⃗)=E_{Θ~Dir(1ʳ)}[P̃_{m,r}(q,Σ Θᵢλᵢ)]` has a purely algebraic core — **NO integral** — that
+     both `multiKernel` and `diagKernel` share one coefficient sequence `kerB m r q j`, with the diagonal
+     carrying the extra Dirichlet-normalising factor `C(j+r−1,r−1)`. Proved: `multiKernel m r q L`
+     (multivariate `𝓟_{m,r}` on a list `L=[λ₁..λ_r]`), `diagKernel_eq_multiKernel`
+     (`P̃=𝓟` on `L=replicate r ℓ`); the two ELEMENTARY IDENTITIES the paper's proof invokes —
+     `hsym_map_neg` (`h_d(−x⃗)=(−1)^d h_d(x⃗)`, homogeneity) and the block expansions
+     `hsym_replicate'`/`hsym_replicate_append'`/`hsym_replicate_append_replicate` (line-1928 convolution
+     for `replicate r` blocks); and the two capstone EXPANSIONS with the shared `kerB`:
+     **`multiKernel_expand`** `𝓟_{m,r}(q;L)=Σ_{j≤n} kerB_j·h_j(L)` and **`diagKernel_expand`**
+     `P̃_{m,r}(q,ℓ)=Σ_{j≤n} kerB_j·C(j+r−1,r−1)·ℓʲ` (both need `r≥1, n=m−2r≥1`). This is the coefficient-level
+     `thm:mixture`: it exhibits `multiKernel` as the image of `diagKernel` under the substitution
+     `ℓʲ ↦ h_j(L)/C(j+r−1,r−1)`. **STILL OPEN (Stage 2, the positivity transfer `cor:diagonal`):** that
+     `diagKernel≥0` on `[−½,½]` ⇒ `multiKernel≥0` on `[−½,½]ʳ`. This is where the genuinely-analytic
+     Dirichlet moment formula `eq:dir-moment` (`E[(Σθᵢλᵢ)ʲ]=h_j(λ⃗)/C(j+r−1,r−1)`) enters — the fact that
+     `h_j(L)/C(j+r−1,r−1)` is the `j`-th moment of a probability measure on `[min λᵢ, max λᵢ]` (R3;
+     route TBD: interval-integral induction vs. building the simplex measure).
    - **Step 0 done (2026-07-08): moment-friendly rewrite of `neckSum`.**
      `OddCycleBound/HighDensity/MomentExpansion.lean` (builds clean, wired into root). `kernelOp_compl`
      (`T_{1-U} f = (∫f)·1 − T_U f`) ⇒ `complIter_compl_eq_pathIter` (`B_{1-W} = T_W`, so the complement
