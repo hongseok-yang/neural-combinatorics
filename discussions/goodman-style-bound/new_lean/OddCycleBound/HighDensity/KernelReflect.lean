@@ -70,4 +70,20 @@ lemma tail_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q b : ℝ) (hκ0 : ∀ x, 0 �
   intro s hs
   exact mul_nonneg (hκ0 s) (hρ s hs)
 
+/-- **Integral lower bound by length × constant** (surplus building block F): if `c ≤ f` on `[a,b]`,
+then `(b−a)·c ≤ ∫_a^b f`. -/
+lemma region_lower_bound {f : ℝ → ℝ} {a b c : ℝ} (hab : a ≤ b)
+    (hint : IntervalIntegrable f volume a b) (hbound : ∀ s ∈ Set.Icc a b, c ≤ f s) :
+    (b - a) * c ≤ ∫ s in a..b, f s := by
+  have h := intervalIntegral.integral_mono_on hab intervalIntegrable_const hint hbound
+  rwa [intervalIntegral.integral_const, smul_eq_mul] at h
+
+/-- **Integral upper bound by length × constant** (deficit building block E): if `f ≤ c` on `[a,b]`,
+then `∫_a^b f ≤ (b−a)·c`. -/
+lemma region_upper_bound {f : ℝ → ℝ} {a b c : ℝ} (hab : a ≤ b)
+    (hint : IntervalIntegrable f volume a b) (hbound : ∀ s ∈ Set.Icc a b, f s ≤ c) :
+    (∫ s in a..b, f s) ≤ (b - a) * c := by
+  have h := intervalIntegral.integral_mono_on hab hint intervalIntegrable_const hbound
+  rwa [intervalIntegral.integral_const, smul_eq_mul] at h
+
 end OddCycleBound.HighDensity
