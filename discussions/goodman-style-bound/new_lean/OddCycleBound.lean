@@ -53,3 +53,5 @@ import OddCycleBound.HighDensity.RhoLemma
 import OddCycleBound.HighDensity.MixtureIntegral
 -- M2/M3: eq:G-form (finite Beta(r,r) form of diagKernel) + thm:pointwise (regimes 2r≥n and ℓ≤0).
 import OddCycleBound.HighDensity.KernelForm
+-- M5/M6 gateway: prop:kernel, the improper ∫₀^∞ kernel form (via x=ℓ/(ℓ+s) substitution).
+import OddCycleBound.HighDensity.KernelImproper

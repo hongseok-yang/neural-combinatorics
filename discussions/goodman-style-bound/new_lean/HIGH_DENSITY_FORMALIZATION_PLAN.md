@@ -478,8 +478,18 @@ Work in this order; each milestone is independently checkpointable.
      `bracket_eq_rho`; x=0 endpoint = 0 by n odd) ⇒ **`diagKernel_nonneg_two_r_ge`** (regime (a) 2r≥n ⇒
      m≥2n ⇒ `rho_empty`, any q,ℓ) and **`diagKernel_nonneg_le_zero`** (regime (b) ℓ≤0, q≤1/2 ⇒ Vₓ/x≤q≤1/2
      ⇒ `rho_window_left`). Both need n=2t+1 odd (`ht : m-2r = 2t+1`), r≥1. No improper ∫ used.
-   - **Still TODO for M3:** `thm:ibp` (`ℓ ≥ q+r/m`, integration by parts vs Beta density) — 🟠, needs the
-     improper `∫₀^∞` `prop:kernel` (`eq:kernel`), deferred with M5/M6.
+   - **Still TODO for M3:** `thm:ibp` (`ℓ ≥ q+r/m`) — 🟠. NOTE it uses the FINITE `eq:G-form`, NOT the
+     improper `∫₀^∞`; the paper's proof is `E[Wⁿ]≥0` (Beta symmetry about ½) + IBP bound
+     `E[ΞVⁿ⁻¹] ≤ r/(n(ℓ−q))·E[Vⁿ]`.
+   - **✅ `prop:kernel` — the improper `∫₀^∞` form DONE (2026-07-10): `HighDensity/KernelImproper.lean`**
+     (builds clean, wired into root, no sorry/axiom). The GATEWAY for `thm:r1` + the strip. `kernel_form`:
+     for `ℓ>0`, `diagKernel m r q ℓ = Cmr·ℓ^{n+r}·∫_{Ioi 0} s^{r-1}/(ℓ+s)^m·ρ(m-2r) m (q+s) ds`. Built from
+     `gform_eq` by the change of variables `x = ℓ/(ℓ+s)` (`Ioi 0 ≃ Ioo 0 1`) via Mathlib's
+     `integral_image_eq_integral_abs_deriv_smul`. Support lemmas: `subst_image` (image = Ioo 0 1),
+     `subst_hasDerivWithinAt` (f'=−ℓ/(ℓ+s)²), `subst_injOn`, `subst_coef` (the power-bookkeeping identity
+     `ℓ/(ℓ+s)²·X^{r-1}(1-X)^{r-1}Xⁿ = ℓ^{n+r}s^{r-1}/(ℓ+s)^m`). Chain: gform → `∫_{Ioc 0 1}` → `∫_{Ioo 0 1}`
+     (`integral_Ioc_eq_integral_Ioo`) → change of vars → pointwise (`subst_coef`+rho-arg `q+s`) → pull `ℓ^{n+r}`.
+     ⇒ `0 ≤ diagKernel ⟺ 0 ≤ ∫_{Ioi 0} s^{r-1}/(ℓ+s)^m ρ(q+s)` (since Cmr>0, ℓ^{n+r}>0). NEXT: `thm:r1`.
    - **✅ ρ-lemma (`lem:rho`) FULLY DONE (2026-07-10): `HighDensity/RhoLemma.lean`** (pure real-analysis,
      no integrals, builds clean, wired into root). `rho n m u = (m/n)(uⁿ+(1-u)ⁿ)−u^{n-1}`. All five parts
      of `lem:rho` proved:
