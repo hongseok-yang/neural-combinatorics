@@ -16,11 +16,64 @@ is the remaining piece.
 
 import OddCycleBound.HighDensity.KernelImproper
 import OddCycleBound.HighDensity.KernelReflect
+import Mathlib.Analysis.Calculus.MeanValue
 
 open MeasureTheory Set
 open scoped BigOperators
 
 namespace OddCycleBound.HighDensity
+
+/-- **Deficit factor monotonicity (E).**  The factor `A(s) = (q+s)^{2t}/(ℓ+s)^m` is antitone on
+`[s₀,b]` whenever `2t·(ℓ+s) ≤ m·(q+s)` there (`= (n-1)(ℓ-q) ≤ (2r+1)(q+s)` in the paper's form).  Via
+the sign of the logarithmic derivative. -/
+lemma deficit_factor_antitone {ℓ : ℝ} (hℓ : 0 < ℓ) {m t : ℕ} (ht : t ≠ 0) (hm : m ≠ 0)
+    (q s₀ b : ℝ) (hs₀ : 0 ≤ s₀) (hq : 0 ≤ q)
+    (hsign : ∀ s ∈ Set.Icc s₀ b, 2 * (t : ℝ) * (ℓ + s) ≤ (m : ℝ) * (q + s)) :
+    AntitoneOn (fun s => (q + s) ^ (2 * t) / (ℓ + s) ^ m) (Set.Icc s₀ b) := by
+  have hcont : ContinuousOn (fun s => (q + s) ^ (2 * t) / (ℓ + s) ^ m) (Set.Icc s₀ b) := by
+    refine ContinuousOn.div (by fun_prop) (by fun_prop) (fun s hs => ?_)
+    have : 0 < ℓ + s := by have := hs.1; linarith
+    positivity
+  refine antitoneOn_of_deriv_nonpos (convex_Icc s₀ b) hcont (fun s hs => ?_) (fun s hs => ?_)
+  · rw [interior_Icc, Set.mem_Ioo] at hs
+    have hℓs : 0 < ℓ + s := by linarith [hs.1]
+    exact ((by fun_prop : DifferentiableAt ℝ (fun s => (q + s) ^ (2 * t)) s).div
+      (by fun_prop) (by positivity)).differentiableWithinAt
+  · rw [interior_Icc, Set.mem_Ioo] at hs
+    have hs0 : 0 ≤ s := le_trans hs₀ hs.1.le
+    have hℓs : 0 < ℓ + s := by linarith
+    have hqs : 0 ≤ q + s := by linarith
+    have hne : (ℓ + s) ^ m ≠ 0 := by positivity
+    have hn : HasDerivAt (fun s => (q + s) ^ (2 * t)) (2 * (t : ℝ) * (q + s) ^ (2 * t - 1)) s := by
+      have h := ((hasDerivAt_id s).const_add q).pow (2 * t)
+      simp only [mul_one] at h
+      exact_mod_cast h
+    have hd : HasDerivAt (fun s => (ℓ + s) ^ m) ((m : ℝ) * (ℓ + s) ^ (m - 1)) s := by
+      have h := ((hasDerivAt_id s).const_add ℓ).pow m
+      simp only [mul_one] at h
+      exact_mod_cast h
+    have hderiv : HasDerivAt (fun s => (q + s) ^ (2 * t) / (ℓ + s) ^ m)
+        ((2 * (t : ℝ) * (q + s) ^ (2 * t - 1) * (ℓ + s) ^ m
+          - (q + s) ^ (2 * t) * ((m : ℝ) * (ℓ + s) ^ (m - 1))) / ((ℓ + s) ^ m) ^ 2) s :=
+      hn.div hd hne
+    rw [hderiv.deriv]
+    have e1 : (q + s) ^ (2 * t) = (q + s) * (q + s) ^ (2 * t - 1) := by
+      conv_lhs => rw [show 2 * t = (2 * t - 1) + 1 from by omega]
+      rw [pow_succ']
+    have e2 : (ℓ + s) ^ m = (ℓ + s) * (ℓ + s) ^ (m - 1) := by
+      conv_lhs => rw [show m = (m - 1) + 1 from by omega]
+      rw [pow_succ']
+    have hN : 2 * (t : ℝ) * (q + s) ^ (2 * t - 1) * (ℓ + s) ^ m
+        - (q + s) ^ (2 * t) * ((m : ℝ) * (ℓ + s) ^ (m - 1))
+        = (q + s) ^ (2 * t - 1) * (ℓ + s) ^ (m - 1)
+          * (2 * (t : ℝ) * (ℓ + s) - (m : ℝ) * (q + s)) := by
+      rw [e1, e2]; ring
+    rw [div_nonpos_iff]
+    right
+    refine ⟨?_, by positivity⟩
+    rw [hN]
+    exact mul_nonpos_of_nonneg_of_nonpos (by positivity)
+      (by linarith [hsign s ⟨hs.1.le, hs.2.le⟩])
 
 /-- The kernel weight `κ(s) = (ℓ+s)^{-m}` is nonincreasing on `s > −ℓ`. -/
 lemma kappa_antitone {ℓ : ℝ} (m : ℕ) {s₁ s₂ : ℝ} (h1 : 0 < ℓ + s₁) (h12 : s₁ ≤ s₂) :
