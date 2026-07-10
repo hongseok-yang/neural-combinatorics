@@ -508,8 +508,24 @@ Work in this order; each milestone is independently checkpointable.
      then `thm:pointwise` both regimes; the improper `∫₀^∞` `prop:kernel` (`eq:kernel`) is deferred to M5/M6.
 5. 📝 🟡 **M4 — Finite certificate tail.** `Prop M61` + Appendix constants (port the cert pipeline).
    *Can be done in parallel with M1–M3 — it only needs the statement of `P̃_{m,r}`.*
-6. 📝 🟠–🔴 **M5 — `r=1` all lengths.** `Thm r1`. High risk; budget generously.
-7. 📝 🟠–🔴 **M6 — Analytic strip tail.** `Prop residual-all` (`m≥63`).
+6. 🔶→ **M5 — `r=1` all lengths (`thm:r1`). IN PROGRESS.** Base case + gateway + shared machinery done;
+   the `m≥7` integral argument remains.
+   - **✅ `prop:kernel` gateway** — `KernelImproper.lean` (see M2 above).
+   - **✅ base case `m=5` + reduction** — `HighDensity/KernelR1.lean` (builds clean, root, no sorry/axiom):
+     `diagKernel_nonneg_r1_five` (m=5 via `diagKernel_five_one`, the quadratic is nonneg for all q,ℓ) +
+     `diagKernel_nonneg_r1_of_integral` (ℓ>0 ⇒ `0≤diagKernel m 1 q ℓ` reduces to `0≤∫_{Ioi 0}(ℓ+s)^{-m}ρ(q+s)`).
+   - **✅ shared machinery (A) integrability** — `HighDensity/KernelIntegrable.lean`: `kernelIntegrand` +
+     `kernelIntegrand_integrableOn` (integrable on `Ioi 0`, via the x=ℓ/(ℓ+s) pullback to the bounded
+     `Ioo 0 1` where `gInt` = a continuous polynomial). Also exposed `gInt`/`subst_pointwise` in KernelImproper.
+   - **✅ shared machinery (D core)** — `HighDensity/KernelReflect.lean`: `reflection_weighted`
+     (`0<a≤b, 0≤y, 0≤x+y ⟹ 0≤ax+by`); + `rho_window` (combined lem:rho(ii)) in RhoLemma.
+   - **📝 REMAINING for `m≥7`:** (B) region-split `Ioi 0` into `(0,ε)(ε,2ε)(2ε,3ε)(3ε,s_b)(s_b,∞)` +
+     integral additivity; (D-integral) the reflection change-of-vars `ŝ=4ε−s` on `(2ε,3ε)↔(ε,2ε)` (interval
+     reflection + `reflection_weighted` + `rho_reflect`); (E) deficit `eq:D-new` (`rho_neg` + monotonicity of
+     `(q+s)^{n-1}/(ℓ+s)^m`); (F) surplus `eq:S-new` (second grouping); (G) rational comparison `(61/47)^m` vs
+     `η²` (m=7 and m≥9). This is the genuine R1 analytic core.
+7. 📝 🟠–🔴 **M6 — Analytic strip tail.** `Prop residual-all` (`m≥63`). Shares A/B/D/E/F/G machinery with M5;
+   additionally needs `lem:rho-one-sided` (`rho_pos_tail`/`rho_left_surplus` — quick algebra, TODO) + `app:constants`.
 8. 📝 🟡 **M7 — Assembly.** Combine the case partition into `thm:regionI-full`; wire the deletion +
    two-sided reduction; expose the `W`-facing theorem in `Main.lean` style.
 
