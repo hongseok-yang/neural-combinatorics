@@ -55,3 +55,5 @@ import OddCycleBound.HighDensity.MixtureIntegral
 import OddCycleBound.HighDensity.KernelForm
 -- M5/M6 gateway: prop:kernel, the improper ∫₀^∞ kernel form (via x=ℓ/(ℓ+s) substitution).
 import OddCycleBound.HighDensity.KernelImproper
+-- M5: thm:r1 (r=1 diagonal positivity) — base case m=5 + the prop:kernel reduction scaffold.
+import OddCycleBound.HighDensity.KernelR1
