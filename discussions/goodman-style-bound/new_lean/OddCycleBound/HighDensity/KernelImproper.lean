@@ -75,9 +75,26 @@ lemma subst_coef {ℓ : ℝ} (hl : 0 < ℓ) {m r : ℕ} (hr : r ≠ 0) (hn : 1 �
   field_simp
 
 /-- The `ρ`-form integrand of `gform_eq`: `x^{r-1}(1-x)^{r-1}·xⁿ·ρ(Vₓ/x)` (`n = m−2r`). -/
-private noncomputable def gInt (m r : ℕ) (q ℓ : ℝ) : ℝ → ℝ :=
+noncomputable def gInt (m r : ℕ) (q ℓ : ℝ) : ℝ → ℝ :=
   fun x => x ^ (r - 1) * (1 - x) ^ (r - 1)
     * (x ^ (m - 2 * r) * rho (m - 2 * r) m ((q * x + ℓ * (1 - x)) / x))
+
+/-- The substituted integrand identity (`ℓ > 0`, `s > 0`): the pushforward of `gInt` under
+`x = ℓ/(ℓ+s)` weighted by `|f'|` is `ℓ^{n+r}·s^{r-1}(ℓ+s)^{-m}·ρ(q+s)`. -/
+lemma subst_pointwise {ℓ : ℝ} (hl : 0 < ℓ) {m r : ℕ} (hr : r ≠ 0) (hn : 1 ≤ m - 2 * r) (q : ℝ)
+    (s : ℝ) (hs : 0 < s) :
+    |(-(ℓ / (ℓ + s) ^ 2))| • gInt m r q ℓ (ℓ / (ℓ + s))
+      = ℓ ^ (m - 2 * r + r) * (s ^ (r - 1) / (ℓ + s) ^ m * rho (m - 2 * r) m (q + s)) := by
+  rw [smul_eq_mul, abs_neg, abs_of_pos (by positivity : (0:ℝ) < ℓ / (ℓ + s) ^ 2)]
+  simp only [gInt]
+  have harg : (q * (ℓ / (ℓ + s)) + ℓ * (1 - ℓ / (ℓ + s))) / (ℓ / (ℓ + s)) = q + s := by
+    have : ℓ + s ≠ 0 := by positivity
+    field_simp; ring
+  have h1x : (1:ℝ) - ℓ / (ℓ + s) = s / (ℓ + s) := by
+    have hne : ℓ + s ≠ 0 := by positivity
+    field_simp; ring
+  rw [harg, h1x]
+  linear_combination rho (m - 2 * r) m (q + s) * subst_coef hl hr hn s hs
 
 /-- **`prop:kernel` — the improper `∫₀^∞` kernel form.**  For `ℓ > 0`, `r ≥ 1`, `n = m−2r ≥ 1`:
 `P̃_{m,r}(q,ℓ) = C_{m,r}·ℓ^{n+r} ∫_{(0,∞)} s^{r-1}(ℓ+s)^{-m} ρ_{n,m}(q+s) ds`.  Obtained from `gform_eq`
@@ -87,11 +104,6 @@ lemma kernel_form {m r : ℕ} (hr : r ≠ 0) (hn : 1 ≤ m - 2 * r) (q ℓ : ℝ
     diagKernel m r q ℓ
       = Cmr m r * ℓ ^ (m - 2 * r + r)
         * ∫ s in Set.Ioi (0:ℝ), s ^ (r - 1) / (ℓ + s) ^ m * rho (m - 2 * r) m (q + s) := by
-  have harg : ∀ s : ℝ, 0 < s →
-      (q * (ℓ / (ℓ + s)) + ℓ * (1 - ℓ / (ℓ + s))) / (ℓ / (ℓ + s)) = q + s := by
-    intro s hs
-    have : ℓ + s ≠ 0 := by positivity
-    field_simp; ring
   have step1 : diagKernel m r q ℓ = Cmr m r * ∫ x in Set.Ioc (0:ℝ) 1, gInt m r q ℓ x := by
     rw [gform_eq hr hn, intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1)]
     congr 1
@@ -112,13 +124,7 @@ lemma kernel_form {m r : ℕ} (hr : r ≠ 0) (hn : 1 ≤ m - 2 * r) (q ℓ : ℝ
           ℓ ^ (m - 2 * r + r) * (s ^ (r - 1) / (ℓ + s) ^ m * rho (m - 2 * r) m (q + s)) := by
     refine MeasureTheory.setIntegral_congr_fun measurableSet_Ioi (fun s hs => ?_)
     simp only [Set.mem_Ioi] at hs
-    rw [smul_eq_mul, abs_neg, abs_of_pos (by positivity : (0:ℝ) < ℓ / (ℓ + s) ^ 2)]
-    simp only [gInt]
-    have h1x : (1:ℝ) - ℓ / (ℓ + s) = s / (ℓ + s) := by
-      have hne : ℓ + s ≠ 0 := by positivity
-      field_simp; ring
-    rw [harg s hs, h1x]
-    linear_combination rho (m - 2 * r) m (q + s) * subst_coef hl hr hn s hs
+    exact subst_pointwise hl hr hn q s hs
   rw [step1, step2, step3, step4, MeasureTheory.integral_const_mul, ← mul_assoc]
 
 end OddCycleBound.HighDensity

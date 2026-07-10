@@ -57,3 +57,5 @@ import OddCycleBound.HighDensity.KernelForm
 import OddCycleBound.HighDensity.KernelImproper
 -- M5: thm:r1 (r=1 diagonal positivity) — base case m=5 + the prop:kernel reduction scaffold.
 import OddCycleBound.HighDensity.KernelR1
+-- M5/M6 shared machinery (A): integrability of the kernel integrand on (0,∞).
+import OddCycleBound.HighDensity.KernelIntegrable
