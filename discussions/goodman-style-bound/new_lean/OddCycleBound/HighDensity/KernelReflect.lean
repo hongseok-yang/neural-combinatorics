@@ -54,4 +54,20 @@ lemma reflection_pair_nonneg {m t : ℕ} (hm : (2 * (t : ℝ) + 1) ≤ (m : ℝ)
   have := rho_reflect t m hm (q + x)
   rw [he] at this; linarith
 
+/-- A region where `ρ(q+s) ≥ 0` contributes nonnegatively to the kernel integral (finite interval). -/
+lemma region_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q a b : ℝ) (hab : a ≤ b) (hκ0 : ∀ x, 0 ≤ κ x)
+    (hρ : ∀ s ∈ Set.Icc a b, 0 ≤ rho (2 * t + 1) m (q + s)) :
+    0 ≤ ∫ s in a..b, κ s * rho (2 * t + 1) m (q + s) := by
+  apply intervalIntegral.integral_nonneg hab
+  intro s hs
+  exact mul_nonneg (hκ0 s) (hρ s hs)
+
+/-- The tail `(b,∞)` (where `ρ ≥ 0`) contributes nonnegatively to the kernel integral. -/
+lemma tail_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q b : ℝ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (hρ : ∀ s ∈ Set.Ioi b, 0 ≤ rho (2 * t + 1) m (q + s)) :
+    0 ≤ ∫ s in Set.Ioi b, κ s * rho (2 * t + 1) m (q + s) := by
+  apply setIntegral_nonneg measurableSet_Ioi
+  intro s hs
+  exact mul_nonneg (hκ0 s) (hρ s hs)
+
 end OddCycleBound.HighDensity
