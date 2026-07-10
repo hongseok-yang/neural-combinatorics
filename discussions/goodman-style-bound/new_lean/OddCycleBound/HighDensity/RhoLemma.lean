@@ -186,4 +186,36 @@ lemma rho_neg (t m : ℕ) (u : ℝ) (hu : u ≤ 1) :
   rw [expand]
   linarith
 
+/-- **Left-surplus bound (`lem:rho`(vi), `eq:rho-positive-left`).**  For `u ≥ 0`,
+`ρ(u) ≥ (m/n)(1-u)ⁿ − u^{n-1}`, by dropping the nonnegative term `(m/n)uⁿ`. -/
+lemma rho_left_surplus (t m : ℕ) (u : ℝ) (hu : 0 ≤ u) :
+    (m : ℝ) / (2 * (t : ℝ) + 1) * (1 - u) ^ (2 * t + 1) - u ^ (2 * t) ≤ rho (2 * t + 1) m u := by
+  unfold rho
+  rw [show (2 * t + 1) - 1 = 2 * t from by omega]
+  push_cast
+  have h : (0 : ℝ) ≤ (m : ℝ) / (2 * (t : ℝ) + 1) * u ^ (2 * t + 1) :=
+    mul_nonneg (by positivity) (pow_nonneg hu _)
+  nlinarith [h]
+
+/-- **Right-tail bound (`lem:rho`(vi), `eq:rho-positive-right`).**  For `ν < u ≤ 1` (`ν = n/m`),
+`ρ(u) ≥ ((u−ν)/ν)·u^{n-1}`.  From `νρ(u) = uⁿ+(1-u)ⁿ − νu^{n-1}`, discard `(1-u)ⁿ ≥ 0` (`u ≤ 1`). -/
+lemma rho_pos_tail (t m : ℕ) (hm : (2 * (t : ℝ) + 1) ≤ (m : ℝ)) (u : ℝ) (hu : u ≤ 1) :
+    (u - (2 * (t : ℝ) + 1) / m) / ((2 * (t : ℝ) + 1) / m) * u ^ (2 * t) ≤ rho (2 * t + 1) m u := by
+  have hn1 : (0 : ℝ) < 2 * (t : ℝ) + 1 := by positivity
+  have hmpos : (0 : ℝ) < (m : ℝ) := by linarith
+  have hνpos : (0 : ℝ) < (2 * (t : ℝ) + 1) / m := by positivity
+  have h1u : (0 : ℝ) ≤ (1 - u) ^ (2 * t + 1) := by
+    rcases lt_or_eq_of_le hu with h | h
+    · exact pow_nonneg (by linarith) _
+    · rw [h]; simp
+  have hexp : rho (2 * t + 1) m u * ((2 * (t : ℝ) + 1) / m)
+      - (u - (2 * (t : ℝ) + 1) / m) * u ^ (2 * t) = (1 - u) ^ (2 * t + 1) := by
+    unfold rho
+    rw [show (2 * t + 1) - 1 = 2 * t from by omega, pow_succ u (2 * t)]
+    push_cast
+    field_simp
+    ring
+  rw [div_mul_eq_mul_div, div_le_iff₀ hνpos]
+  linarith [h1u, hexp]
+
 end OddCycleBound.HighDensity
