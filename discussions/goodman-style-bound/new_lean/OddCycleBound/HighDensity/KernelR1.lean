@@ -207,4 +207,21 @@ lemma deficit_bound {ℓ : ℝ} (hℓ : 0 < ℓ) {m t : ℕ} (ht : t ≠ 0) (hm 
   rw [intervalIntegral.integral_neg] at h3
   linarith [h3, h5]
 
+/-- **Ratio bound (G building block).**  For `q ∈ [0,1/3]`, `m ≥ 7`, `0 < ℓ < q + 1/m`
+(`ε = (1-2q)/4`):  `(ℓ+3ε)/(ℓ+ε) ≥ 61/47`.  Reduces (cross-multiplying) to `40ε ≥ 7ℓ`, which follows
+from `7ℓ < 7q + 7/m ≤ 7q + 1 ≤ 10 − 20q = 40ε`. -/
+lemma ratio_bound {ℓ q : ℝ} {m : ℕ} (hm : 7 ≤ m) (hq : q ≤ 1 / 3) (hℓ0 : 0 < ℓ)
+    (hℓ : ℓ < q + 1 / m) :
+    (61 : ℝ) / 47 ≤ (ℓ + 3 * ((1 - 2 * q) / 4)) / (ℓ + (1 - 2 * q) / 4) := by
+  have hm7 : (7 : ℝ) ≤ m := by exact_mod_cast hm
+  have hmp : (0 : ℝ) < m := by linarith
+  have hεpos : (0 : ℝ) < (1 - 2 * q) / 4 := by nlinarith [hq]
+  have hden : (0 : ℝ) < ℓ + (1 - 2 * q) / 4 := by linarith
+  have h7m : (7 : ℝ) / m ≤ 1 := by rw [div_le_one hmp]; exact_mod_cast hm
+  have h7ℓ : 7 * ℓ < 7 * q + 7 / m := by
+    have h := mul_lt_mul_of_pos_left hℓ (show (0:ℝ) < 7 from by norm_num)
+    rw [show (7:ℝ) * (q + 1 / m) = 7 * q + 7 / m from by ring] at h; exact h
+  rw [le_div_iff₀ hden]
+  nlinarith [h7ℓ, h7m, hq]
+
 end OddCycleBound.HighDensity
