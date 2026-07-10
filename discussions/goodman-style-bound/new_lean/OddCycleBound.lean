@@ -59,3 +59,5 @@ import OddCycleBound.HighDensity.KernelImproper
 import OddCycleBound.HighDensity.KernelR1
 -- M5/M6 shared machinery (A): integrability of the kernel integrand on (0,∞).
 import OddCycleBound.HighDensity.KernelIntegrable
+-- M5/M6 shared machinery (D core): the abstract weighted-reflection inequality.
+import OddCycleBound.HighDensity.KernelReflect

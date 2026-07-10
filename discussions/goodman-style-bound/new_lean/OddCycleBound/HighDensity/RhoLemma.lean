@@ -150,6 +150,14 @@ lemma rho_window_right (t m : ℕ) (hm : (2 * (t : ℝ) + 1) ≤ (m : ℝ)) (u :
     push_cast
     nlinarith [hmn, hD, mul_nonneg (sub_nonneg.mpr hmn) hDpos]
 
+/-- **Window (`lem:rho`(ii), combined).**  `ρ(u) ≥ 0` for `u ∉ (1/2, n/m)` — i.e. whenever `u ≤ 1/2`
+or `n ≤ m·u` (`u ≥ n/m`). -/
+lemma rho_window (t m : ℕ) (hm : (2 * (t : ℝ) + 1) ≤ (m : ℝ)) (u : ℝ)
+    (hu : u ≤ 1 / 2 ∨ (2 * (t : ℝ) + 1) ≤ (m : ℝ) * u) : 0 ≤ rho (2 * t + 1) m u := by
+  rcases hu with h | h
+  · exact rho_window_left t m hm u h
+  · exact rho_window_right t m hm u h
+
 /-- **Empty negative window (`lem:rho`(iv)).**  If `m ≥ 2n` (`n = 2t+1`), then `ρ(u) ≥ 0` for every
 real `u`: the possible negative window `(1/2, n/m)` is empty since `n/m ≤ 1/2`.  This is the key input
 for the `2r ≥ n` regime of `thm:pointwise`. -/
