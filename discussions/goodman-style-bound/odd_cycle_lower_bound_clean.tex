@@ -1,0 +1,1065 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={A Lower Bound for Odd-Cycle Densities in Dense Graphons}}
+\usepackage{enumitem}
+
+\allowdisplaybreaks
+\numberwithin{equation}{section}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\Pcal}{\mathcal P}
+\newcommand{\wtP}{\widetilde{\mathcal P}}
+\newcommand{\eps}{\varepsilon}
+
+\title{A Lower Bound for Odd-Cycle Densities in Dense Graphons}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+For a graphon $W:[0,1]^2\to[0,1]$, write
+\[
+ t(C_m,W)=\int_{[0,1]^m}\prod_{i=1}^{m}W(x_i,x_{i+1})\,dx_1\cdots dx_m,
+ \qquad x_{m+1}=x_1,
+\]
+and let $p=t(K_2,W)$.
+
+\begin{theorem}\label{thm:main}
+Let $m\ge3$ be odd. If $p\ge 2/3$, then
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+The proof below is analytic except for finite exact rational verifications stated in Appendices~\ref{app:finite} and~\ref{app:constants}. No floating-point estimate is used in those verifications.
+
+\section{Operator reduction}
+
+Put $U=1-W$ and $q=t(K_2,U)=1-p$. Let $T_U$ be the integral operator with kernel $U$. With
+\[
+        L^2[0,1]=\R\one\oplus \one^\perp,
+\]
+write
+\[
+        T_U\one=q\one+g,
+        \qquad g\perp\one,
+        \qquad A=P_{\one^\perp}T_UP_{\one^\perp}.
+\]
+Thus
+\begin{equation}\label{eq:block-U}
+        T_U=
+        \begin{pmatrix}
+          q&g^*\\
+          g&A
+        \end{pmatrix}.
+\end{equation}
+
+\begin{lemma}\label{lem:support-budget}
+The spectrum of $A$ is contained in $[-1/2,1/2]$, and
+\begin{equation}\label{eq:budget}
+        \Tr(A^2)+2\norm{g}_2^2\le pq.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $f\perp\one$ and $\norm f_2=1$. Write $f=f_+-f_-$, where $f_+,f_-\ge0$ have disjoint supports. Since $\int f=0$,
+\[
+        \int f_+=\int f_-=:a,
+        \qquad 2a=\norm f_1\le1.
+\]
+Using $0\le U\le1$,
+\[
+\begin{aligned}
+ \ip{f}{T_Uf}
+ &\le \left(\int f_+\right)^2+\left(\int f_-\right)^2
+ =2a^2\le\frac12,\\
+ \ip{f}{T_Uf}
+ &\ge-2\left(\int f_+\right)\left(\int f_-\right)
+ =-2a^2\ge-\frac12.
+\end{aligned}
+\]
+Hence $\norm A\le1/2$.
+
+The Hilbert--Schmidt norm of \eqref{eq:block-U} satisfies
+\[
+        \norm{T_U}_{\mathrm{HS}}^2
+        =q^2+2\norm g_2^2+\Tr(A^2).
+\]
+Since $0\le U\le1$,
+\[
+        \norm{T_U}_{\mathrm{HS}}^2=\int_{[0,1]^2}U^2
+        \le\int_{[0,1]^2}U=q.
+\]
+Subtracting $q^2$ gives \eqref{eq:budget}.
+\end{proof}
+
+Let $E_A$ be the spectral resolution of $A$, and define the finite positive measure
+\begin{equation}\label{eq:mu}
+        \mu(B)=\ip{g}{E_A(B)g}.
+\end{equation}
+By Lemma~\ref{lem:support-budget}, $\mu$ is supported on $[-1/2,1/2]$. Define the formal resolvents
+\begin{align}
+        R_-(z)&=\ip{g}{(I+zA)^{-1}g}
+        =\int\frac{d\mu(\lambda)}{1+\lambda z},\label{eq:Rminus}\\
+        R_+(z)&=\ip{g}{(I-zA)^{-1}g}
+        =\int\frac{d\mu(\lambda)}{1-\lambda z},\label{eq:Rplus}
+\end{align}
+and
+\begin{align}
+        L_-(z)&=-\log\left(1-\frac{z^2R_-(z)}{1-pz}\right),\label{eq:Lminus}\\
+        L_+(z)&=-\log\left(1-\frac{z^2R_+(z)}{1-qz}\right).\label{eq:Lplus}
+\end{align}
+For odd $m$, put
+\begin{equation}\label{eq:Sm}
+        S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
+\end{equation}
+
+\begin{lemma}\label{lem:trace-identity}
+For every odd $m\ge3$,
+\begin{equation}\label{eq:trace-identity}
+        t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:defect-identity}
+        t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+        =q^{m-1}+S_m-t(C_m,U).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+First suppose that $U$ has finite rank. Since
+\[
+        T_W=J-T_U=
+        \begin{pmatrix}
+          p&-g^*\\
+          -g&-A
+        \end{pmatrix},
+        \qquad Jf=\ip{f}{\one}\one,
+\]
+$T_W$ is unitarily equivalent to
+\[
+        M=\begin{pmatrix}p&g^*\\ g&-A\end{pmatrix}.
+\]
+Schur complementation gives
+\begin{align*}
+ \det(I-zM)
+ &=\det(I+zA)(1-pz)
+   \left(1-\frac{z^2\ip{g}{(I+zA)^{-1}g}}{1-pz}\right),\\
+ \det(I-zT_U)
+ &=\det(I-zA)(1-qz)
+   \left(1-\frac{z^2\ip{g}{(I-zA)^{-1}g}}{1-qz}\right).
+\end{align*}
+Using
+\[
+        -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+\]
+extract the coefficient of $z^m$ and add the two identities. Because $m$ is odd, the coefficients coming from $\det(I+zA)$ and $\det(I-zA)$ cancel. The scalar factors give $p^m+q^m$, and the remaining factors give $S_m$. This proves \eqref{eq:trace-identity} in finite rank.
+
+For a general graphon, use conditional expectations onto finite partitions. The associated operators converge in Hilbert--Schmidt norm. Cycle densities and each coefficient in \eqref{eq:Sm} converge, because the latter is a polynomial in $q$ and the finitely many moments $\ip{g}{A^jg}$ with $j\le m-2$. Thus \eqref{eq:trace-identity} passes to the limit. Finally,
+\[
+        q^m+pq^{m-1}=q^{m-1},
+\]
+which gives \eqref{eq:defect-identity}.
+\end{proof}
+
+Let
+\[
+        x_j=t(P_j,U)=\ip{\one}{T_U^j\one}.
+\]
+Deleting one factor from the integrand of $t(C_m,U)$ gives
+\begin{equation}\label{eq:delete-edge}
+        t(C_m,U)\le x_{m-1}.
+\end{equation}
+Moreover, block inversion in \eqref{eq:block-U} gives
+\begin{equation}\label{eq:path-generating}
+        \sum_{j\ge0}x_jz^j
+        =\ip{\one}{(I-zT_U)^{-1}\one}
+        =\frac{1}{1-qz-z^2R_+(z)}.
+\end{equation}
+It is therefore enough to prove
+\begin{equation}\label{eq:Phi-def}
+        \Phi_m:=q^{m-1}+S_m-x_{m-1}\ge0.
+\end{equation}
+
+\section{Expansion of \texorpdfstring{$\Phi_m$}{Phi m}}
+
+For variables $y_1,\ldots,y_k$, let $h_d(y_1,\ldots,y_k)$ be the complete homogeneous symmetric polynomial of degree $d$, with $h_0=1$. The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
+
+\begin{proposition}\label{prop:expansion}
+Let $m\ge3$ be odd. Then
+\begin{equation}\label{eq:Phi-expansion}
+ \Phi_m=
+ \sum_{r=1}^{(m-1)/2}
+ \int\cdots\int
+ \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ \prod_{i=1}^r d\mu(\lambda_i),
+\end{equation}
+where $n=m-2r$ and
+\begin{equation}\label{eq:P-def}
+\begin{aligned}
+ \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ ={}&\frac mr\left[
+ h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
+ +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)
+ \right]\\
+ &\quad-h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+\end{aligned}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Set
+\[
+        Y_-(z)=\frac{z^2R_-(z)}{1-pz},
+        \qquad
+        Y_+(z)=\frac{z^2R_+(z)}{1-qz}.
+\]
+From $-\log(1-Y)=\sum_{r\ge1}Y^r/r$,
+\[
+ m[z^m]L_-(z)
+ =\sum_{r\ge1}\frac mr[z^{m-2r}]
+   \frac{R_-(z)^r}{(1-pz)^r}.
+\]
+Since
+\[
+ R_-(z)^r
+ =\int\cdots\int\prod_{i=1}^r(1+\lambda_i z)^{-1}
+   \prod_i d\mu(\lambda_i),
+\]
+the $r$th term is the integral of
+\[
+        \frac mr h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r).
+\]
+The same calculation for $L_+$ gives the second term in the brackets of \eqref{eq:P-def}.
+
+From \eqref{eq:path-generating},
+\[
+ \frac1{1-qz-z^2R_+(z)}
+ =\sum_{r\ge0}\frac{(z^2R_+(z))^r}{(1-qz)^{r+1}}.
+\]
+The term $r=0$ contributes $q^{m-1}$ to $x_{m-1}$ and cancels the first term in \eqref{eq:Phi-def}. For $r\ge1$, the coefficient of $z^{m-1}$ is the integral of
+\[
+        h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+\]
+Combining these contributions proves \eqref{eq:Phi-expansion}.
+\end{proof}
+
+Define
+\[
+        \wtP_{m,r}(q,\ell)
+        =\Pcal_{m,r}(q;\ell,\ldots,\ell).
+\]
+
+\begin{lemma}\label{lem:dirichlet}
+Let $(\Theta_1,\ldots,\Theta_r)$ be uniformly distributed on the simplex $\{\theta_i\ge0:\sum_i\theta_i=1\}$. Then
+\begin{equation}\label{eq:dirichlet-reduction}
+ \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ =\E\left[
+ \wtP_{m,r}\left(q,\sum_{i=1}^r\Theta_i\lambda_i\right)
+ \right].
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:min-reduction}
+ \min_{\lambda_i\in[-1/2,1/2]}
+ \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ =\min_{\ell\in[-1/2,1/2]}\wtP_{m,r}(q,\ell).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For every $j\ge0$,
+\begin{equation}\label{eq:dirichlet-moment}
+ \E\left(\sum_{i=1}^r\Theta_i\lambda_i\right)^j
+ =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
+\end{equation}
+This follows by expanding the power and using the Dirichlet moment formula.
+
+Also,
+\[
+ h_d(a^{\times k},b_1,\ldots,b_r)
+ =\sum_{j=0}^d\binom{d-j+k-1}{k-1}a^{d-j}h_j(b_1,\ldots,b_r).
+\]
+Apply this identity to the three complete homogeneous polynomials in \eqref{eq:P-def}, and use \eqref{eq:dirichlet-moment}. This gives \eqref{eq:dirichlet-reduction}.
+
+Every convex combination $\sum_i\Theta_i\lambda_i$ lies in $[-1/2,1/2]$, so the right-hand side of \eqref{eq:dirichlet-reduction} is at least the minimum of the diagonal expression. The reverse inequality follows by taking all $\lambda_i$ equal. Hence \eqref{eq:min-reduction} holds.
+\end{proof}
+
+By Proposition~\ref{prop:expansion} and Lemma~\ref{lem:dirichlet}, it remains to prove
+\begin{equation}\label{eq:diagonal-goal}
+        \wtP_{m,r}(q,\ell)\ge0
+\end{equation}
+for $q\in[0,1/3]$, $1\le r\le(m-1)/2$, and $\ell\in[-1/2,1/2]$.
+
+\section{A one-dimensional formula}
+
+Fix $r\ge1$, let $n=m-2r$, and note that $n$ is odd. Let $\Xi$ have the beta distribution with parameters $(r,r)$. For $x\in[0,1]$, set
+\begin{equation}\label{eq:VW}
+        V_x=qx+\ell(1-x),
+        \qquad
+        W_x=px-\ell(1-x).
+\end{equation}
+Then $V_x+W_x=x$.
+
+\begin{lemma}\label{lem:beta-form}
+One has
+\begin{equation}\label{eq:beta-form}
+\begin{aligned}
+ \wtP_{m,r}(q,\ell)
+ ={}&\binom{n+2r-1}{2r-1}\frac nr\\
+ &\times\left[
+ \frac mn\E\bigl(V_\Xi^n+W_\Xi^n\bigr)
+ -\E\bigl(\Xi V_\Xi^{n-1}\bigr)
+ \right].
+\end{aligned}
+\end{equation}
+If $\ell>0$, then
+\begin{equation}\label{eq:integral-form}
+ \wtP_{m,r}(q,\ell)
+ =C_{m,r}\ell^{n+r}
+ \int_0^\infty
+ \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\,ds,
+\end{equation}
+where
+\begin{equation}\label{eq:rho-def}
+        \rho_{n,m}(u)=\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}
+\end{equation}
+and
+\[
+        C_{m,r}=\binom{n+2r-1}{2r-1}\frac nr
+        \frac{\Gamma(2r)}{\Gamma(r)^2}>0.
+\]
+\end{lemma}
+
+\begin{proof}
+Expanding the complete homogeneous polynomials on the diagonal and using the beta integral gives \eqref{eq:beta-form}. More explicitly, the coefficient of $a^jb^{n-j}$ in $h_n(a^{\times r},b^{\times r})$ is
+\[
+        \binom{j+r-1}{r-1}\binom{n-j+r-1}{r-1},
+\]
+which is the corresponding beta moment multiplied by $\binom{n+2r-1}{2r-1}$. The term with $r+1$ copies of $q$ is obtained similarly and produces $\E(\Xi V_\Xi^{n-1})$.
+
+For $\ell>0$, use the beta density
+\[
+        \frac{\Gamma(2r)}{\Gamma(r)^2}x^{r-1}(1-x)^{r-1}\,dx
+\]
+and make the change of variables
+\[
+        \frac{V_x}{x}=q+\ell\frac{1-x}{x}=q+s,
+        \qquad x=\frac{\ell}{\ell+s}.
+\]
+Then $W_x=x(1-q-s)$ and
+\[
+ x^{n+r-1}(1-x)^{r-1}\,dx
+ =-\ell^{n+r}s^{r-1}(\ell+s)^{-m}\,ds.
+\]
+Substitution in \eqref{eq:beta-form} gives \eqref{eq:integral-form}.
+\end{proof}
+
+\begin{lemma}\label{lem:rho}
+Let $n\ge1$ be odd and $m=n+2r$. Put $\nu=n/m$. Then:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item
+\begin{align}
+ \rho_{n,m}(u)
+ &=\frac mn(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)
+   +\left(\frac mn-1\right)u^{n-1},\label{eq:rho-first}\\
+ \rho_{n,m}(u)
+ &=\frac mn(1-u)^n+u^{n-1}\left(\frac mn u-1\right).
+ \label{eq:rho-second}
+\end{align}
+\item $\rho_{n,m}(u)\ge0$ for $u\notin(1/2,\nu)$.
+\item For every real $u$,
+\begin{equation}\label{eq:reflection-rho}
+ \rho_{n,m}(u)+\rho_{n,m}(1-u)
+ \ge(2u-1)\bigl(u^{n-1}-(1-u)^{n-1}\bigr)\ge0.
+\end{equation}
+\item If $m\ge2n$, then $\rho_{n,m}\ge0$ on $\R$.
+\item For $1/2<u<\nu$,
+\begin{equation}\label{eq:rho-negative}
+ -\rho_{n,m}(u)
+ \le u^{n-1}\left(1-\frac mn u\right)
+ =\frac{\nu-u}{\nu}u^{n-1}.
+\end{equation}
+\item For $\nu<u\le1$,
+\begin{equation}\label{eq:rho-positive-right}
+ \rho_{n,m}(u)\ge\frac{u-\nu}{\nu}u^{n-1}.
+\end{equation}
+For $u\ge0$,
+\begin{equation}\label{eq:rho-positive-left}
+ \rho_{n,m}(u)\ge\frac mn(1-u)^n-u^{n-1}.
+\end{equation}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The two identities in part (i) are direct rearrangements of \eqref{eq:rho-def}. If $u\le1/2$, then \eqref{eq:rho-first} is nonnegative because $n-1$ is even and $|1-u|\ge|u|$. If $\nu\le u\le1$, then \eqref{eq:rho-second} is nonnegative. For $u\ge1$,
+\[
+        u^n-(u-1)^n\ge u^{n-1},
+\]
+and for $u=-v\le0$,
+\[
+        (1+v)^n-v^n\ge nv^{n-1}.
+\]
+These inequalities prove part (ii). Part (iv) follows because $m\ge2n$ implies $\nu\le1/2$.
+
+For part (iii),
+\[
+ \rho(u)+\rho(1-u)
+ =\frac{2m}{n}\bigl(u^n+(1-u)^n\bigr)
+  -u^{n-1}-(1-u)^{n-1}.
+\]
+Since $n$ is odd, $u^n+(1-u)^n\ge0$, and $m/n\ge1$. Thus the last expression is at least
+\[
+        2u^n+2(1-u)^n-u^{n-1}-(1-u)^{n-1},
+\]
+which equals the first expression on the right of \eqref{eq:reflection-rho}. The final product is nonnegative.
+
+Part (v) follows from \eqref{eq:rho-second} after discarding the nonnegative term $(m/n)(1-u)^n$. Finally,
+\[
+        \nu\rho(u)=u^n+(1-u)^n-\nu u^{n-1}.
+\]
+For $\nu<u\le1$, discard $(1-u)^n\ge0$ to obtain \eqref{eq:rho-positive-right}. Equation \eqref{eq:rho-positive-left} follows directly from \eqref{eq:rho-def} by discarding $(m/n)u^n\ge0$.
+\end{proof}
+
+\section{Three direct ranges}
+
+\begin{lemma}\label{lem:direct-ranges}
+For $q\in[0,1/2]$, \eqref{eq:diagonal-goal} holds if either $2r\ge n$ or $\ell\le0$.
+\end{lemma}
+
+\begin{proof}
+If $\ell>0$ and $2r\ge n$, then $m=n+2r\ge2n$. The integral in \eqref{eq:integral-form} is nonnegative by Lemma~\ref{lem:rho}(iv).
+
+Suppose $\ell\le0$. In \eqref{eq:beta-form}, for $x>0$ put
+\[
+        u=\frac{V_x}{x}=q+\ell\frac{1-x}{x}\le q\le\frac12.
+\]
+Because $W_x=x(1-u)$, the integrand in the brackets of \eqref{eq:beta-form} is
+\[
+        x^n\rho_{n,m}(u),
+\]
+which is nonnegative by Lemma~\ref{lem:rho}(ii).
+\end{proof}
+
+\begin{lemma}\label{lem:ibp}
+For $q\in[0,1/2]$, \eqref{eq:diagonal-goal} holds whenever
+\begin{equation}\label{eq:ibp-condition}
+        \ell\ge q+\frac rm.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+It is enough to prove that the brackets in \eqref{eq:beta-form} are nonnegative. Put
+\[
+        V(x)=\ell+(q-\ell)x,
+        \qquad
+        W(x)=(p+\ell)x-\ell.
+\]
+Under \eqref{eq:ibp-condition}, $\ell>q$ and $V>0$ on $[0,1]$.
+
+First, $\E W(\Xi)^n\ge0$. Indeed, the zero of $W$ is
+\[
+        x_0=\frac{\ell}{p+\ell}\le\frac12,
+\]
+and the beta density is symmetric about $1/2$. Pairing $1/2-t$ with $1/2+t$, the positive value of $W$ has at least the absolute value of the negative one, so the sum of their odd powers is nonnegative.
+
+Next,
+\begin{equation}\label{eq:ibp-bound}
+        \E\bigl[\Xi V(\Xi)^{n-1}\bigr]
+        \le\frac{r}{n(\ell-q)}\E\bigl[V(\Xi)^n\bigr].
+\end{equation}
+For $r\ge2$, integrate by parts against the beta density $c_rx^{r-1}(1-x)^{r-1}$. The boundary terms vanish and
+\[
+\begin{aligned}
+ \E\bigl[\Xi V^{n-1}\bigr]
+ =\frac{c_r}{n(\ell-q)}
+ \int_0^1x^{r-1}(1-x)^{r-2}
+ \bigl(r-(2r-1)x\bigr)V(x)^n\,dx.
+\end{aligned}
+\]
+Discard the part where $r-(2r-1)x<0$, and use
+\[
+        \frac{r-(2r-1)x}{1-x}\le r.
+\]
+This gives \eqref{eq:ibp-bound}. For $r=1$, direct integration gives
+\[
+ \E\bigl[\Xi V^{n-1}\bigr]
+ =\frac{\E[V^n]-q^n}{n(\ell-q)}
+ \le\frac{\E[V^n]}{n(\ell-q)},
+\]
+which is the same estimate.
+
+Condition \eqref{eq:ibp-condition} implies
+\[
+        \frac mn\ge\frac{r}{n(\ell-q)}.
+\]
+Therefore
+\[
+ \frac mn\E(V^n+W^n)
+ \ge\frac mn\E V^n
+ \ge\E(\Xi V^{n-1}),
+\]
+and \eqref{eq:beta-form} is nonnegative.
+\end{proof}
+
+\begin{lemma}\label{lem:r-one}
+Let $r=1$, $q\in[0,1/3]$, and $\ell\in[-1/2,1/2]$. Then \eqref{eq:diagonal-goal} holds.
+\end{lemma}
+
+\begin{proof}
+The cases $\ell\le0$ and $\ell\ge q+1/m$ follow from Lemmas~\ref{lem:direct-ranges} and~\ref{lem:ibp}. Assume
+\begin{equation}\label{eq:r1-range}
+        0<\ell<q+\frac1m.
+\end{equation}
+For $m=3$, one has $2r\ge n$, so Lemma~\ref{lem:direct-ranges} applies. For $m=5$, direct expansion gives
+\[
+ \wtP_{5,1}(q,\ell)
+ =4\ell^2+(8q-5)\ell+12q^2-15q+5
+\]
+and hence
+\[
+ \wtP_{5,1}(q,\ell)
+ =4\left(\ell+q-\frac58\right)^2
+ +\frac{128q^2-160q+55}{16}
+ \ge\frac{143}{144}>0.
+\]
+We may therefore assume $m\ge7$ and $n=m-2\ge5$.
+
+By \eqref{eq:integral-form}, it is enough to show
+\begin{equation}\label{eq:r1-integral}
+        I=\int_0^\infty\frac{\rho_{n,m}(q+s)}{(\ell+s)^m}\,ds\ge0.
+\end{equation}
+Put
+\[
+ \eps=\frac{1-2q}{4},
+ \qquad a=\frac12-q=2\eps,
+ \qquad \sigma=3\eps,
+ \qquad b=\frac nm-q.
+\]
+By Lemma~\ref{lem:rho}(ii), the integrand can be negative only on $(a,b)$.
+
+For $s\in(2\eps,3\eps)$, set
+\[
+        \widehat s=4\eps-s\in(\eps,2\eps).
+\]
+Then $q+\widehat s=1-(q+s)$. Since $(\ell+s)^{-m}$ decreases with $s$, Lemma~\ref{lem:rho}(iii) gives
+\[
+ \frac{\rho(q+s)}{(\ell+s)^m}
+ +\frac{\rho(q+\widehat s)}{(\ell+\widehat s)^m}\ge0.
+\]
+Thus the possible negative contribution on $(2\eps,3\eps)$ is canceled by the disjoint interval $(\eps,2\eps)$.
+
+If $b\le3\eps$, this proves \eqref{eq:r1-integral}. Otherwise put
+\[
+        \eta=b-3\eps=\frac{1+2q}{4}-\frac2m>0.
+\]
+On $(3\eps,b)$, Lemma~\ref{lem:rho}(v) gives
+\[
+        -\rho(q+s)\le(q+s)^{n-1}
+        \left(1-\frac mn(q+s)\right).
+\]
+The two factors on the right, after multiplication by $(\ell+s)^{-m}$, decrease with $s$. For the first one,
+\[
+ \frac{d}{dV}\log\frac{V^{n-1}}{(\ell+V-q)^m}<0
+ \quad\Longleftrightarrow\quad
+ (n-1)(\ell-q)<3V,
+\]
+which follows from \eqref{eq:r1-range} and $V\ge p-\eps\ge7/12$. Hence the remaining negative contribution $D$ satisfies
+\begin{equation}\label{eq:r1-D}
+        D\le\frac mn\eta^2
+        \frac{(p-\eps)^{n-1}}{(\ell+3\eps)^m}.
+\end{equation}
+
+On $(0,\eps)$, one has $q+s\le5/12$. By Lemma~\ref{lem:rho}(vi),
+\[
+ \rho(q+s)
+ \ge\frac mn(p-s)^n-(q+s)^{n-1}
+ \ge\frac mn(p-\eps)^n c_n,
+\]
+where
+\[
+ c_n=1-\frac nm\frac{(q+\eps)^{n-1}}{(p-\eps)^n}.
+\]
+Since
+\[
+        \frac{q+\eps}{p-\eps}\le\frac57,
+        \qquad
+        \frac1{p-\eps}\le\frac{12}{7},
+\]
+we obtain, for $n\ge5$,
+\[
+        c_n\ge1-\frac{12}{7}\left(\frac57\right)^{n-1}>\frac12.
+\]
+The positive contribution $\Sigma$ from $(0,\eps)$ therefore satisfies
+\begin{equation}\label{eq:r1-S}
+        \Sigma\ge\frac mn(p-\eps)^n c_n
+        \frac{\eps}{(\ell+\eps)^m}.
+\end{equation}
+It remains to compare \eqref{eq:r1-D} and \eqref{eq:r1-S}. It is enough that
+\begin{equation}\label{eq:r1-compare}
+ \eps c_n(p-\eps)
+ \left(\frac{\ell+3\eps}{\ell+\eps}\right)^m
+ \ge\eta^2.
+\end{equation}
+Now
+\[
+        \eps\ge\frac1{12},
+        \qquad p-\eps\ge\frac7{12},
+        \qquad c_n>\frac12.
+\]
+Also, by \eqref{eq:r1-range},
+\[
+ \frac{\ell+3\eps}{\ell+\eps}
+ \ge\frac{q+1/m+3\eps}{q+1/m+\eps}
+ \ge\frac{61}{47}.
+\]
+The last quotient decreases in $q$ and in $1/m$, so its minimum in the present range is attained at $q=1/3$ and $m=7$. Hence the left-hand side of \eqref{eq:r1-compare} is at least
+\[
+        \frac7{288}\left(\frac{61}{47}\right)^m.
+\]
+For $m=7$, $\eta\le11/84$ and
+\[
+        \frac7{288}\left(\frac{61}{47}\right)^7
+        >\left(\frac{11}{84}\right)^2.
+\]
+For $m\ge9$, $\eta\le5/12$ and
+\[
+        \frac7{288}\left(\frac{61}{47}\right)^9
+        >\left(\frac5{12}\right)^2.
+\]
+Thus \eqref{eq:r1-compare} holds. Together with the reflected interval and the nonnegative part outside $(a,b)$, this proves \eqref{eq:r1-integral}.
+\end{proof}
+
+\section{The remaining range for large \texorpdfstring{$m$}{m}}
+
+It remains to consider
+\begin{equation}\label{eq:remaining-range}
+ q\le\frac13,
+ \qquad r\ge2,
+ \qquad n>2r,
+ \qquad 0<\ell<q+\frac rm.
+\end{equation}
+The cases $m\le61$ are handled in Appendix~\ref{app:finite}. In this section assume that $m\ge63$. Put
+\begin{equation}\label{eq:tail-notation}
+ \theta=\frac rm,
+ \qquad \nu=\frac nm=1-2\theta,
+ \qquad a=\frac12-q,
+ \qquad b=\nu-q,
+ \qquad L=b-a=\frac12-2\theta,
+\end{equation}
+\[
+        \eps=\frac{a}{2}=\frac{1-2q}{4},
+        \qquad
+        \kappa(s)=\frac{s^{r-1}}{(\ell+s)^m}.
+\]
+The only interval on which $\rho_{n,m}(q+s)$ can be negative is $(a,b)$.
+
+\begin{lemma}\label{lem:left-estimate}
+Under \eqref{eq:remaining-range} and $m\ge63$, the integral in \eqref{eq:integral-form} is nonnegative in either of the following cases:
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2em]
+\item $0<\theta\le1/6$;
+\item $1/6\le\theta<1/4$ and $0<\ell\le2/5$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+On $(a,b)$, Lemma~\ref{lem:rho}(v) gives
+\[
+        -\rho(q+s)\le(q+s)^{n-1}
+        \left(1-\frac{q+s}{\nu}\right).
+\]
+The function
+\[
+        s\longmapsto\frac{(q+s)^{n-1}}{(\ell+s)^m}
+\]
+is decreasing on $(a,b)$. Indeed, its logarithmic derivative is nonpositive if
+\[
+        (n-1)(\ell-q)\le(2r+1)(q+s),
+\]
+which follows from $\ell<q+r/m$ and $q+s\ge1/2$. Therefore the total possible negative contribution $D$ is at most
+\begin{equation}\label{eq:tail-D}
+        D\le b^{r-1}\frac{(1/2)^{n-1}}{(\ell+a)^m}
+        \frac{L^2}{2\nu}.
+\end{equation}
+
+On $0\le s\le\eps$, Lemma~\ref{lem:rho}(vi) gives
+\[
+ \rho(q+s)
+ \ge\frac mn(p-s)^n-(q+s)^{n-1}
+ \ge\frac mn(p-\eps)^n c_n,
+\]
+where
+\[
+        c_n=1-\nu\frac{(q+\eps)^{n-1}}{(p-\eps)^n}.
+\]
+The assumptions imply $n\ge33$, and therefore
+\[
+        c_n\ge1-\frac{12}{7}\left(\frac57\right)^{32}>\frac{99}{100}.
+\]
+The positive contribution $\Sigma$ from $(0,\eps)$ satisfies
+\begin{equation}\label{eq:tail-S}
+        \Sigma\ge\frac mn(p-\eps)^n c_n
+        \frac{\eps^r}{r(\ell+\eps)^m}.
+\end{equation}
+Dividing \eqref{eq:tail-S} by \eqref{eq:tail-D} gives
+\begin{equation}\label{eq:tail-ratio}
+ \frac{\Sigma}{D}
+ \ge c_n\frac{b}{rL^2}
+ \bigl(2(p-\eps)\bigr)^n
+ \left(\frac{\eps}{b}\right)^r
+ \left(\frac{\ell+a}{\ell+\eps}\right)^m.
+\end{equation}
+
+If $\theta\le1/6$, then
+\[
+ 2(p-\eps)\ge\frac76,
+ \qquad
+ \frac{\eps}{b}\ge\frac1{8-24\theta},
+ \qquad
+ \frac{\ell+a}{\ell+\eps}
+ \ge\frac{1/2+\theta}{5/12+\theta},
+\]
+and
+\[
+        \frac{b}{L^2}
+        \ge\frac{2/3-2\theta}{(1/2-2\theta)^2}.
+\]
+Hence
+\begin{equation}\label{eq:tail-A}
+ \frac{\Sigma}{D}
+ \ge\frac{99}{100m}
+ \frac{2/3-2\theta}{\theta(1/2-2\theta)^2}
+ \left[
+ \left(\frac76\right)^{1-2\theta}
+ (8-24\theta)^{-\theta}
+ \frac{1/2+\theta}{5/12+\theta}
+ \right]^m.
+\end{equation}
+Appendix~\ref{app:constants} shows that the right-hand side is at least $1$ for every admissible integer pair $(m,r)$.
+
+If $1/6\le\theta<1/4$ and $\ell\le2/5$, the same argument gives
+\[
+        \frac{\ell+a}{\ell+\eps}\ge\frac{34}{29},
+\]
+so
+\begin{equation}\label{eq:tail-B}
+ \frac{\Sigma}{D}
+ \ge\frac{99}{100m}
+ \frac{2/3-2\theta}{\theta(1/2-2\theta)^2}
+ \left[
+ \left(\frac76\right)^{1-2\theta}
+ (8-24\theta)^{-\theta}
+ \frac{34}{29}
+ \right]^m.
+\end{equation}
+Appendix~\ref{app:constants} again shows that this is at least $1$. Thus $\Sigma\ge D$ in both cases, and all remaining parts of the integral are nonnegative.
+\end{proof}
+
+\begin{lemma}\label{lem:threshold}
+Let $m\ge63$ be odd, $r/m\ge1/6$, $n=m-2r$, and $n>2r$. For $0<b\le n/m$, define
+\[
+        H(b)=\frac{m}{(r-1)/b+(n-1)/(n/m)}-b.
+\]
+Then $H(b)\le2/5$.
+\end{lemma}
+
+\begin{proof}
+Put $A_0=r-1$ and $B_0=(n-1)/(n/m)$. Since
+\[
+        H(b)=\frac{mb}{A_0+B_0b}-b,
+\]
+maximization over $b>0$ gives
+\[
+        H(b)\le\frac{(\sqrt m-\sqrt{A_0})^2}{B_0}.
+\]
+Because $m\ge63$ is odd and $r/m\ge1/6$, one has $(r-1)/m\ge2/13$. Also $n>2r$ gives $n/m>1/2$, so $B_0>m-2$. Therefore
+\[
+ H(b)
+ \le\frac{m}{m-2}\left(1-\sqrt{\frac2{13}}\right)^2
+ \le\frac{63}{61}\left(1-\sqrt{\frac2{13}}\right)^2
+ <\frac25.
+\]
+\end{proof}
+
+\begin{lemma}\label{lem:right-reflection}
+Under \eqref{eq:remaining-range}, if $m\ge63$, $\theta\ge1/6$, and $\ell>2/5$, then the integral in \eqref{eq:integral-form} is nonnegative.
+\end{lemma}
+
+\begin{proof}
+Write a point in the negative interval as
+\[
+        q+s=\nu-e,
+        \qquad 0<e<L,
+\]
+and pair it with $q+s'=\nu+e$. Thus $s=b-e$ and $s'=b+e$. Since $\theta\ge1/6$, one has $\nu\le2/3$, and therefore $\nu+e\le2\nu-1/2\le1$.
+
+By Lemma~\ref{lem:rho}(v)--(vi),
+\[
+        -\rho(\nu-e)\le\frac e\nu(\nu-e)^{n-1},
+        \qquad
+        \rho(\nu+e)\ge\frac e\nu(\nu+e)^{n-1}.
+\]
+It is therefore enough to prove
+\begin{equation}\label{eq:right-condition}
+ \left(\frac{b+e}{b-e}\right)^{r-1}
+ \left(\frac{\nu+e}{\nu-e}\right)^{n-1}
+ \ge
+ \left(\frac{\ell+b+e}{\ell+b-e}\right)^m.
+\end{equation}
+Put $C=\ell+b$. By Lemma~\ref{lem:threshold} and $\ell>2/5$,
+\[
+        \frac{r-1}{b}+\frac{n-1}{\nu}\ge\frac mC.
+\]
+For $0<e<X$,
+\[
+        \log\frac{X+e}{X-e}
+        =2\sum_{j\ge0}\frac{e^{2j+1}}{(2j+1)X^{2j+1}}.
+\]
+Since $b\le\nu<C$, each coefficient in the logarithm of the left-hand side of \eqref{eq:right-condition} minus the logarithm of the right-hand side is at least
+\[
+ C^{-2j}\left(
+ \frac{r-1}{b}+\frac{n-1}{\nu}-\frac mC
+ \right)\ge0.
+\]
+Thus \eqref{eq:right-condition} holds pointwise. The reflected positive part pays for the entire negative interval, and the rest of the integral is nonnegative.
+\end{proof}
+
+\begin{proposition}\label{prop:remaining}
+Assume \eqref{eq:remaining-range}. Then \eqref{eq:diagonal-goal} holds.
+\end{proposition}
+
+\begin{proof}
+For odd $m\le61$, use Proposition~\ref{prop:finite}. Let $m\ge63$ and $\theta=r/m$. If $\theta\le1/6$, apply Lemma~\ref{lem:left-estimate}(a). If $\theta\ge1/6$ and $\ell\le2/5$, apply Lemma~\ref{lem:left-estimate}(b). If $\theta\ge1/6$ and $\ell>2/5$, apply Lemma~\ref{lem:right-reflection}. These cases exhaust \eqref{eq:remaining-range}.
+\end{proof}
+
+\section{Completion of the proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Put $q=1-p\le1/3$. By Proposition~\ref{prop:expansion} and Lemma~\ref{lem:dirichlet}, it is enough to prove \eqref{eq:diagonal-goal} for every $r$ and $\ell\in[-1/2,1/2]$.
+
+Lemma~\ref{lem:direct-ranges} covers $\ell\le0$ and $2r\ge n$. Lemma~\ref{lem:ibp} covers $\ell\ge q+r/m$. Lemma~\ref{lem:r-one} covers $r=1$. Proposition~\ref{prop:remaining} covers the only remaining range. Hence every integrand in \eqref{eq:Phi-expansion} is nonnegative, so $\Phi_m\ge0$.
+
+By \eqref{eq:delete-edge}, \eqref{eq:Phi-def}, and \eqref{eq:defect-identity},
+\[
+\begin{aligned}
+ t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+ &=q^{m-1}+S_m-t(C_m,U)\\
+ &\ge q^{m-1}+S_m-x_{m-1}\\
+ &=\Phi_m\ge0.
+\end{aligned}
+\]
+This proves the theorem.
+\end{proof}
+
+\appendix
+
+\section{Finite exact verification}\label{app:finite}
+
+This appendix states the exact inequalities used for the remaining cases with $m\le61$. They are obtained directly from \eqref{eq:integral-form} and Lemma~\ref{lem:rho}.
+
+Let
+\[
+        \kappa(s)=s^{r-1}(\ell+s)^{-m},
+        \qquad
+        a=\frac12-q,
+        \qquad
+        b=\frac nm-q,
+        \qquad
+        \nu=\frac nm.
+\]
+Assume $r\ge2$, $n>2r$, $\ell>0$, and $a<b$.
+
+\begin{lemma}\label{lem:finite-criterion}
+Assume
+\begin{equation}\label{eq:finite-monotonicity}
+        (n-1)(\ell-q)\le\frac{2r+1}{2}.
+\end{equation}
+Choose $\sigma\in[a,\min(2a,b)]$ such that
+\begin{equation}\label{eq:finite-reflection}
+        \kappa(2a-s)\ge\kappa(s)
+        \qquad(a\le s\le\sigma).
+\end{equation}
+Choose partitions
+\[
+ \sigma=t_0<t_1<\cdots<t_K=b,
+\]
+\[
+ 0=a_0<a_1<\cdots<a_J\le\min(2a-\sigma,a),
+\]
+\[
+ 0=d_0<d_1<\cdots<d_L\le\frac{2r}{m}.
+\]
+Define
+\begin{align*}
+ \overline\Delta
+ &:=b^{r-1}\sum_{i=0}^{K-1}(t_{i+1}-t_i)
+ (q+t_i)^{n-1}
+ \left(1-\frac mn(q+t_i)\right)_+
+ (\ell+t_i)^{-m},\\
+ \Sigma_0
+ &:=\frac mn\sum_{j=1}^{J-1}(a_{j+1}-a_j)a_j^{r-1}
+ (p-a_{j+1})^n\\
+ &\hspace{2.5cm}\times
+ \left(1-\frac nm\frac{(q+a_{j+1})^{n-1}}{(p-a_{j+1})^n}\right)_+
+ (\ell+a_{j+1})^{-m},\\
+ \Sigma_1
+ &:=\frac mn\sum_{i=1}^{L-1}d_i(d_{i+1}-d_i)
+ (\nu+d_i)^{n-1}(b+d_i)^{r-1}
+ (\ell+b+d_{i+1})^{-m}.
+\end{align*}
+If
+\begin{equation}\label{eq:finite-payment}
+        \Sigma_0+\Sigma_1\ge\overline\Delta,
+\end{equation}
+then
+\[
+        \int_0^\infty\kappa(s)\rho_{n,m}(q+s)\,ds\ge0.
+\]
+\end{lemma}
+
+\begin{proof}
+The integrand is nonnegative outside $(a,b)$. For $s\in(a,\sigma)$, pair $s$ with $2a-s$. Equation \eqref{eq:finite-reflection} and Lemma~\ref{lem:rho}(iii) show that the paired contribution is nonnegative.
+
+On $(\sigma,b)$, Lemma~\ref{lem:rho}(v) bounds the absolute value of the negative part. Condition \eqref{eq:finite-monotonicity} makes
+\[
+        (q+s)^{n-1}(\ell+s)^{-m}
+\]
+decreasing there, and the remaining factors are bounded by their indicated left endpoints. This gives $\overline\Delta$.
+
+The interval $[0,a_J]$ is disjoint from the reflected interval. Lemma~\ref{lem:rho}(vi), together with monotonicity on each subinterval, gives the lower bound $\Sigma_0$. On $[b,b+2r/m]$, the same lemma gives $\Sigma_1$. Thus \eqref{eq:finite-payment} implies nonnegativity of the whole integral.
+\end{proof}
+
+\begin{proposition}\label{prop:finite}
+For every odd $m\le61$ and every pair $(m,r)$ satisfying
+\[
+        r\ge2,
+        \qquad n=m-2r>2r,
+\]
+the hypotheses of Lemma~\ref{lem:finite-criterion} hold throughout
+\[
+        0\le q\le\frac13,
+        \qquad
+        0<\ell<q+\frac rm.
+\]
+Consequently, \eqref{eq:diagonal-goal} holds in all these cases.
+\end{proposition}
+
+\begin{proof}
+Subdivide the $(q,\ell)$-rectangle into rational boxes. On each box, choose rational values of $\sigma$ and rational partitions in Lemma~\ref{lem:finite-criterion}. Clear the positive denominators in \eqref{eq:finite-monotonicity}, \eqref{eq:finite-reflection}, and \eqref{eq:finite-payment}; every resulting inequality has rational coefficients. Exact interval evaluation verifies all of them for every admissible pair $(m,r)$ with odd $m\le61$.
+\end{proof}
+
+\section{Scalar inequalities used for \texorpdfstring{$m\ge63$}{m >= 63}}\label{app:constants}
+
+Define
+\[
+ P(\theta)=\frac{2/3-2\theta}{\theta(1/2-2\theta)^2},
+\]
+\[
+ B_0(\theta)=
+ \left(\frac76\right)^{1-2\theta}
+ (8-24\theta)^{-\theta}
+ \frac{1/2+\theta}{5/12+\theta},
+\]
+and
+\[
+ B_1(\theta)=
+ \left(\frac76\right)^{1-2\theta}
+ (8-24\theta)^{-\theta}
+ \frac{34}{29}.
+\]
+The estimates needed in \eqref{eq:tail-A} and \eqref{eq:tail-B} are
+\begin{align}
+ \frac{99}{100m}P(\theta)B_0(\theta)^m&\ge1
+ &&\left(\theta=\frac rm\le\frac16\right),\label{eq:constant-A}\\
+ \frac{99}{100m}P(\theta)B_1(\theta)^m&\ge1
+ &&\left(\frac16\le\theta=\frac rm<\frac14\right),\label{eq:constant-B}
+\end{align}
+for the admissible integer pairs with $m\ge63$.
+
+For \eqref{eq:constant-A}, exact rational evaluation verifies all odd $63\le m\le499$. For $m\ge500$, use
+\[
+        P(\theta)\ge51,
+        \qquad
+        B_0(\theta)\ge\frac{201}{200}
+        \qquad(0<\theta\le1/6).
+\]
+The first inequality is equivalent to
+\[
+        \frac23-2\theta
+        -51\theta\left(\frac12-2\theta\right)^2\ge0.
+\]
+For the second, $\log B_0$ is decreasing on $[0,1/6]$. Setting $t=8-24\theta\in[4,8]$ and using
+\[
+        \log t\ge\frac{2(t-1)}{t+1},
+\]
+reduces the derivative estimate to
+\[
+ \frac{2(t-1)}{t+1}-\frac{8-t}{t}
+ +\frac{48}{(20-t)(18-t)}
+ =\frac{3t^4-123t^3+1462t^2-2888t-2880}
+ {t(t-20)(t-18)(t+1)}>0
+\]
+on $[4,8]$. Hence
+\[
+        B_0(\theta)\ge B_0(1/6)
+        =\frac4{\sqrt[3]{63}}>\frac{201}{200}.
+\]
+Since $(201/200)^m/m$ is increasing for $m\ge200$, it remains to check the exact rational inequality
+\[
+        \frac{99}{100}\frac{51}{500}
+        \left(\frac{201}{200}\right)^{500}>1.
+\]
+This proves \eqref{eq:constant-A}.
+
+For \eqref{eq:constant-B}, exact rational evaluation verifies all odd $63\le m\le499$. For all $m\ge63$ one may use
+\[
+        P(\theta)\ge72
+        \qquad(1/6\le\theta<1/4),
+\]
+because
+\[
+ \frac23-2\theta
+ -72\theta\left(\frac12-2\theta\right)^2
+ =-\frac23(6\theta-1)(72\theta^2-24\theta+1)\ge0.
+\]
+Also
+\[
+        B_1(\theta)\ge\frac{126}{125}
+        \qquad(1/6\le\theta\le1/4).
+\]
+To verify the last inequality using only rational arithmetic, divide $[1/6,1/4]$ into
+\[
+ \left[\frac16+\frac{i}{144},\frac16+\frac{i+1}{144}\right],
+ \qquad 0\le i\le11.
+\]
+On a subinterval $[a,b]$,
+\[
+        B_1(\theta)
+        \ge\left(\frac76\right)^{1-2b}
+        (8-24a)^{-b}\frac{34}{29},
+\]
+and raising to a common denominator reduces the assertion to an integer comparison. The twelve comparisons are positive. Finally, $(126/125)^m/m$ has its minimum for $m\ge63$ at $m=125$ or $126$, and
+\[
+        \frac{99}{100}\frac{72}{125}
+        \left(\frac{126}{125}\right)^{125}>1.
+\]
+This proves \eqref{eq:constant-B}.
+
+\end{document}
