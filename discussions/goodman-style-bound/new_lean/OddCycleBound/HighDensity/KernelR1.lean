@@ -146,4 +146,65 @@ lemma surplus_bound {ℓ : ℝ} (hℓ : 0 < ℓ) {m t : ℕ} (q ε : ℝ) (hq : 
   have hint := kernel_intervalIntegrable hℓ m t q 0 ε le_rfl hε
   simpa using region_lower_bound hε hint key
 
+/-- Interval-integrability of the deficit integrand `(q+s)^{2t}/(ℓ+s)^m·(1−(m/n)(q+s))` on `[a,b]`
+(endpoints `≥ 0`). -/
+lemma deficit_integrand_intervalIntegrable {ℓ : ℝ} (hℓ : 0 < ℓ) (m t : ℕ) (q a b : ℝ)
+    (ha : 0 ≤ a) (hb : 0 ≤ b) :
+    IntervalIntegrable (fun s => (q + s) ^ (2 * t) / (ℓ + s) ^ m
+      * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s))) volume a b := by
+  apply ContinuousOn.intervalIntegrable
+  refine ContinuousOn.mul (ContinuousOn.div (by fun_prop) (by fun_prop) (fun s hs => ?_)) (by fun_prop)
+  have hs0 : 0 ≤ s := by
+    rcases le_total a b with h | h
+    · rw [Set.uIcc_of_le h] at hs; linarith [hs.1]
+    · rw [Set.uIcc_of_ge h] at hs; linarith [hs.1]
+  positivity
+
+/-- **Deficit bound (E, `eq:r1-D`).**  On `(3ε,b)` the kernel integral is at least
+`−(b−3ε)·A(3ε)·B(3ε)`, where `A(s)=(q+s)^{2t}/(ℓ+s)^m` (antitone, `deficit_factor_antitone`) and
+`B(s)=1−(m/n)(q+s) ≥ 0` (antitone): the negative part is bounded by the length times the left-endpoint
+value. -/
+lemma deficit_bound {ℓ : ℝ} (hℓ : 0 < ℓ) {m t : ℕ} (ht : t ≠ 0) (hm : m ≠ 0) (q ε b : ℝ)
+    (hε0 : 0 ≤ ε) (h3εb : 3 * ε ≤ b) (hq : 0 ≤ q)
+    (hsign : ∀ s ∈ Set.Icc (3 * ε) b, 2 * (t : ℝ) * (ℓ + s) ≤ (m : ℝ) * (q + s))
+    (hB0 : ∀ s ∈ Set.Icc (3 * ε) b, 0 ≤ 1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s))
+    (hu1 : ∀ s ∈ Set.Icc (3 * ε) b, q + s ≤ 1) :
+    -((b - 3 * ε) * ((q + 3 * ε) ^ (2 * t) / (ℓ + 3 * ε) ^ m
+        * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + 3 * ε))))
+      ≤ ∫ s in (3 * ε)..b, 1 / (ℓ + s) ^ m * rho (2 * t + 1) m (q + s) := by
+  have h3ε0 : 0 ≤ 3 * ε := by linarith
+  have hAanti := deficit_factor_antitone hℓ ht hm q (3 * ε) b h3ε0 hq hsign
+  have hmono : ∀ s ∈ Set.Icc (3 * ε) b,
+      (q + s) ^ (2 * t) / (ℓ + s) ^ m * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s))
+        ≤ (q + 3 * ε) ^ (2 * t) / (ℓ + 3 * ε) ^ m
+          * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + 3 * ε)) := by
+    intro s hs
+    have hAs := hAanti ⟨le_refl _, h3εb⟩ hs hs.1
+    have hBs : 1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s)
+        ≤ 1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + 3 * ε) := by
+      have : (0 : ℝ) ≤ (m : ℝ) / (2 * (t : ℝ) + 1) := by positivity
+      nlinarith [hs.1]
+    exact mul_le_mul hAs hBs (hB0 s hs) (by positivity)
+  have hpt : ∀ s ∈ Set.Icc (3 * ε) b,
+      -((q + s) ^ (2 * t) / (ℓ + s) ^ m * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s)))
+        ≤ 1 / (ℓ + s) ^ m * rho (2 * t + 1) m (q + s) := by
+    intro s hs
+    have hs0 : 0 ≤ s := le_trans h3ε0 hs.1
+    have hℓs : 0 < ℓ + s := by linarith
+    have hrn := rho_neg t m (q + s) (hu1 s hs)
+    have hκ0 : (0 : ℝ) ≤ 1 / (ℓ + s) ^ m := by positivity
+    rw [show -((q + s) ^ (2 * t) / (ℓ + s) ^ m * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s)))
+          = 1 / (ℓ + s) ^ m
+            * (-((q + s) ^ (2 * t) * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s)))) from by ring]
+    exact mul_le_mul_of_nonneg_left (by linarith [hrn]) hκ0
+  have hint_κρ := kernel_intervalIntegrable hℓ m t q (3 * ε) b h3ε0 (by linarith)
+  have hint_d := deficit_integrand_intervalIntegrable hℓ m t q (3 * ε) b h3ε0 (by linarith)
+  have h3 : (∫ s in (3 * ε)..b,
+        -((q + s) ^ (2 * t) / (ℓ + s) ^ m * (1 - (m : ℝ) / (2 * (t : ℝ) + 1) * (q + s))))
+      ≤ ∫ s in (3 * ε)..b, 1 / (ℓ + s) ^ m * rho (2 * t + 1) m (q + s) :=
+    intervalIntegral.integral_mono_on (by linarith) hint_d.neg hint_κρ hpt
+  have h5 := region_upper_bound (by linarith : (3 * ε : ℝ) ≤ b) hint_d hmono
+  rw [intervalIntegral.integral_neg] at h3
+  linarith [h3, h5]
+
 end OddCycleBound.HighDensity
