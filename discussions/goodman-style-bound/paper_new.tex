@@ -1984,8 +1984,7 @@ Define
 \begin{proposition}[One-dimensional kernel form]\label{prop:kernel}
 For $\ell>0$,
 \begin{equation}\label{eq:kernel}
-        \wtP_{m,r}(q,
-        \ell)=C_{m,r}\ell^{n+r}
+        \wtP_{m,r}(q,\ell)=C_{m,r}\ell^{n+r}
         \int_0^\infty \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\,ds,
 \end{equation}
 where
@@ -2052,7 +2051,7 @@ On the window $u\in(1/2,n/m)$,
 \end{lemma}
 
 \begin{proof}
-The two formulae in~\ref{rho-group} are algebraic rearrangements of~\eqref{eq:rho-def}.  For $u\le1/2$, the first formula is nonnegative because $n-1$ is even and $|1-u|\ge |u|$.  For $n/m\le u\le1$, the second formula is nonnegative.  If $u\ge1$, then $u^n-(u-1)^n\ge u^{n-1}$, so $\rho(u)\ge(m/n-1)u^{n-1}\ge0$.  If $u=-v\le0$, then $(1+v)^n-v^n\ge nv^{n-1}$, so $\rho(u)\ge(m-1)v^{n-1}\ge0$.  This proves~\ref{rho-window};~\ref{rho-empty} follows because the possible negative window is empty when $n/m\le1/2$.
+The two formulae in item~\ref{rho-group} are algebraic rearrangements of~\eqref{eq:rho-def}.  For $u\le1/2$, the first formula is nonnegative because $n-1$ is even and $|1-u|\ge |u|$.  For $n/m\le u\le1$, the second formula is nonnegative.  If $u\ge1$, then $u^n-(u-1)^n\ge u^{n-1}$, so $\rho(u)\ge(m/n-1)u^{n-1}\ge0$.  If $u=-v\le0$, then $(1+v)^n-v^n\ge nv^{n-1}$, so $\rho(u)\ge(m-1)v^{n-1}\ge0$.  This proves item~\ref{rho-window}; item~\ref{rho-empty} follows because the possible negative window is empty when $n/m\le1/2$.
 
 For reflection,
 \[
@@ -2063,7 +2062,7 @@ For odd $n$, $u^n+(1-u)^n\ge0$ for every real $u$, and $m/n\ge1$.  Hence this is
         2u^n+2(1-u)^n-u^{n-1}-(1-u)^{n-1}
         =(2u-1)\bigl(u^{n-1}-(1-u)^{n-1}\bigr).
 \]
-The final product is nonnegative because $n-1$ is even and $|u|\ge|1-u|$ exactly when $u\ge1/2$.  Finally,~\ref{rho-neg} follows by dropping the nonnegative term $(m/n)(1-u)^n$ from the second formula in~\ref{rho-group}.
+The final product is nonnegative because $n-1$ is even and $|u|\ge|1-u|$ exactly when $u\ge1/2$.  Finally, item~\ref{rho-neg} follows by dropping the nonnegative term $(m/n)(1-u)^n$ from the second formula in item~\ref{rho-group}.
 \end{proof}
 
 \section{General positivity regimes}\label{sec:general-pos}
@@ -2372,7 +2371,7 @@ For an odd integer $M\ge5$, say that $\operatorname{StripCert}(M)$ holds if, for
 \end{definition}
 
 \begin{proposition}[Verified finite certificate]\label{prop:M61}
-The accompanying script \texttt{clean\_two\_sided\_shift\_checker.py} verifies $\operatorname{StripCert}(61)$ using exact rational interval arithmetic.  The run log included as \texttt{clean\_checker\_m61.log} records successful verification for all residual pairs with odd $5\le m\le61$.
+The GPT~Pro checker verifies $\operatorname{StripCert}(61)$ using exact rational interval arithmetic.  Its July 5 run log records successful verification for all residual pairs with odd $5\le m\le61$.
 \end{proposition}
 
 \begin{proof}[Verification status]
@@ -2380,7 +2379,7 @@ This is a finite, deterministic, computer-assisted certificate in exact
 rational arithmetic (Python \texttt{fractions.Fraction}); no floating point
 enters any certified statement.  Two independent implementations exist:
 \begin{enumerate}[label=\textup{(\alph*)}]
-\item \texttt{gptpro\_jul5/clean\_two\_sided\_shift\_checker.py} verifies
+\item In \texttt{gptpro\_jul5/}, \texttt{clean\_two\_sided\_shift\_checker.py} verifies
 $\operatorname{StripCert}(61)$; the run log
 \texttt{clean\_checker\_m61.log} was reproduced from scratch on July 5
 (all residual pairs, odd $5\le m\le61$).
@@ -2944,9 +2943,9 @@ $b=\ip{g}{\phi}$, $a=\int\phi^+=\int\phi^-$.  Then
 In particular $\alpha\le2a^2$, and
 \[
         \pm b\ \le\ \frac{\alpha}{2a}\Bigl(\norm{\phi^\mp}_2^2-\norm{\phi^\pm}_2^2\Bigr)
-        +\frac{2a^2-\alpha}{2a}:
+        +\frac{2a^2-\alpha}{2a}.
 \]
-an asymmetric frontier eigenfunction with $\alpha$ close to its ceiling
+Thus an asymmetric frontier eigenfunction with $\alpha$ close to its ceiling
 $2a^2$ forces a coupling of a definite sign.
 \end{lemma}
 
@@ -3044,8 +3043,7 @@ Let $s\in(0,1/3)$, and let $U_s$ be the graphon that is $1$ on two disjoint diag
         \qquad
         \alpha_1-q=\frac{s(1-s)}2,
         \qquad
-        p-
-        \alpha_1=\frac{s(3-s)}2,
+        p-\alpha_1=\frac{s(3-s)}2,
 \]
 and
 \[
@@ -3053,14 +3051,12 @@ and
 \]
 Consequently
 \[
-        \frac{\norm g_2^2(p-
-        \alpha_1)^2}{p\alpha_1(\alpha_1-q)^2}
+        \frac{\norm g_2^2(p-\alpha_1)^2}{p\alpha_1(\alpha_1-q)^2}
         =9s+O(s^2)\to0.
 \]
 Thus no universal positive constant can make the rank-one lower bound
 \[
-        \norm g_2^2\gtrsim \frac{p\alpha_1(\alpha_1-q)^2}{(p-
-        \alpha_1)^2}
+        \norm g_2^2\gtrsim \frac{p\alpha_1(\alpha_1-q)^2}{(p-\alpha_1)^2}
 \]
 valid in the one-frontier regime.
 \end{proposition}
@@ -3297,7 +3293,7 @@ Proposition~\ref{prop:retained-monotone}).
 \medskip\noindent\emph{Suggested next steps, in order.}
 \begin{enumerate}[label=\textup{(\arabic*)}]
 \item \emph{Payment counterpart of the aggregate lemma.}  Convert the forced
-coupling $\ip g{|\phi_1|}$ into multi-excursion shift.  The natural ledger is
+coupling $\ip{g}{|\phi_1|}$ into multi-excursion shift.  The natural ledger is
 the $U$-side of the two-sided identity together with
 \eqref{eq:cm-upper-interlace} and the secular equation for $\mu_1$; the
 two-valued and balanced degeneracies are excluded by
@@ -3469,6 +3465,7 @@ D_4(y)={}&98304000000000000000000000000000000000000y^{12}\\
 \end{aligned}
 \]
 Again all coefficients are positive.  Hence the third and fourth leading principal minors are positive for every $y\ge0$.
+
 \section{Constant inequalities for the residual-strip closure}\label{app:constants}
 
 This appendix justifies the two numerical inequalities used in Lemma~\ref{lem:left-surplus-tail}.  Let
