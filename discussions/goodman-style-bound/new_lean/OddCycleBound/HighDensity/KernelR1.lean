@@ -246,4 +246,27 @@ lemma cn_bound {t : ℕ} (ht : 2 ≤ t) {q : ℝ} (hq0 : 0 ≤ q) (hq : q ≤ 1 
               mul_le_mul_of_nonneg_right h1 (by positivity)
           _ = 1 / 2 * (1 - (q + ε)) ^ (2 * t + 1) := by rw [pow_succ]; ring
 
+/-- Numeric check for `m = 7`: `(11/84)² ≤ (7/288)(61/47)⁷`. -/
+lemma const_seven : (11 / 84 : ℝ) ^ 2 ≤ 7 / 288 * (61 / 47) ^ 7 := by norm_num
+
+/-- Numeric check for `m ≥ 9` (at `m = 9`): `(5/12)² ≤ (7/288)(61/47)⁹`. -/
+lemma const_nine : (5 / 12 : ℝ) ^ 2 ≤ 7 / 288 * (61 / 47) ^ 9 := by norm_num
+
+/-- **The `η²` bound (G).**  `η² ≤ (7/288)(61/47)^m` (`m = 2t+3`), using `η ≤ 11/84` for `m=7`
+(`t=2`) and `η ≤ 5/12` for `m≥9` (`t≥3`), plus `(61/47)^m` monotonicity. -/
+lemma const_final {η : ℝ} {t : ℕ} (ht : 2 ≤ t) (hη0 : 0 ≤ η)
+    (hη7 : t = 2 → η ≤ 11 / 84) (hη9 : 3 ≤ t → η ≤ 5 / 12) :
+    η ^ 2 ≤ 7 / 288 * (61 / 47) ^ (2 * t + 3) := by
+  rcases Nat.lt_or_ge t 3 with h | h
+  · have ht2 : t = 2 := by omega
+    subst ht2
+    have hb : η ≤ 11 / 84 := hη7 rfl
+    calc η ^ 2 ≤ (11 / 84) ^ 2 := by nlinarith [hη0]
+      _ ≤ 7 / 288 * (61 / 47) ^ (2 * 2 + 3) := by norm_num
+  · have hb : η ≤ 5 / 12 := hη9 h
+    calc η ^ 2 ≤ (5 / 12) ^ 2 := by nlinarith [hη0]
+      _ ≤ 7 / 288 * (61 / 47) ^ 9 := const_nine
+      _ ≤ 7 / 288 * (61 / 47) ^ (2 * t + 3) :=
+          mul_le_mul_of_nonneg_left (pow_le_pow_right₀ (by norm_num) (by omega)) (by norm_num)
+
 end OddCycleBound.HighDensity
