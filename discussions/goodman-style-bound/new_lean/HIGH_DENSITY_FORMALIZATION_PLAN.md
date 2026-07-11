@@ -486,9 +486,16 @@ Work in this order; each milestone is independently checkpointable.
      FTC on `x·Vⁿ`: `J_V + n(q−ℓ)J_{xVⁿ⁻¹} = qⁿ`, `HasDerivAt`+`integral_eq_sub_of_hasDerivAt`); then
      `J_{xVⁿ⁻¹} ≤ J_V/(n(ℓ−q))` (drop `qⁿ≥0`) and `ℓ≥q+1/m ⟹ m/n ≥ 1/(n(ℓ−q))`; capstone
      **`diagKernel_nonneg_ibp_r1`** (`q≤1/2`, `ℓ≤1−q`, `ℓ≥q+1/m` ⇒ `0≤diagKernel (2t+3) 1 q ℓ`).
-     **Still TODO for M3:** the general-`r` (`r≥2`) `thm:ibp` (needs the IBP against the Beta density
-     `x^{r-1}(1-x)^{r-1}` with boundary terms + the `(r−(2r−1)x)/(1−x)≤r` bound) — only needed for the
-     M6 strip; 🟠.
+   - **✅ general-`r` `thm:ibp` (`r ≥ 2`) DONE (2026-07-11, `KernelIBP.lean`, no sorry/axiom).**
+     `weighted_W_nonneg` (Beta symmetry with weight `x^{r-1}(1-x)^{r-1}`, symmetric under `x↦1-x`),
+     `weighted_V_nonneg` (V≥0), and **`jXV_ibp_identity`** (FTC on `G=xʳ(1-x)^{r-1}Vⁿ`, boundary vanishes
+     for `r≥2`: `n(ℓ−q)J_{xVⁿ⁻¹} = r·J_V − (r−1)·K`, `K=∫xʳ(1-x)^{r-2}Vⁿ`). **KEY SIMPLIFICATION vs
+     paper:** drop the nonnegative `(r−1)K` term to get `J_{xVⁿ⁻¹} ≤ (r/(n(ℓ−q)))J_V` directly — the
+     paper's pointwise `(r−(2r−1)x)/(1−x)≤r` bound is UNNECESSARY. Capstone **`diagKernel_nonneg_ibp`**
+     (`r≥2`, `q≤1/2`, `ℓ≤1−q`, `ℓ≥q+r/m` ⇒ `0≤diagKernel m r q ℓ`). Lean notes: `HasDerivAt.pow` gives
+     Pi.pow form — bridge with `exact_mod_cast` (not simpa/convert); triple-product deriv `(ha.mul hb).mul hc`
+     matches the stated shape exactly by stating hb/hc with the combinator's literal deriv; `push_cast
+     [Nat.cast_sub (show 1≤r)]` for `↑(r-1)`. **⇒ `thm:ibp` (`ℓ≥q+r/m`) fully done for ALL r≥1.**
    - **✅ `prop:kernel` — the improper `∫₀^∞` form DONE (2026-07-10): `HighDensity/KernelImproper.lean`**
      (builds clean, wired into root, no sorry/axiom). The GATEWAY for `thm:r1` + the strip. `kernel_form`:
      for `ℓ>0`, `diagKernel m r q ℓ = Cmr·ℓ^{n+r}·∫_{Ioi 0} s^{r-1}/(ℓ+s)^m·ρ(m-2r) m (q+s) ds`. Built from
