@@ -224,4 +224,26 @@ lemma ratio_bound {ℓ q : ℝ} {m : ℕ} (hm : 7 ≤ m) (hq : q ≤ 1 / 3) (h�
   rw [le_div_iff₀ hden]
   nlinarith [h7ℓ, h7m, hq]
 
+/-- **`cₙ > 1/2` bound (G building block).**  For `q ∈ [0,1/3]`, `t ≥ 2` (`n = 2t+1 ≥ 5`),
+`(q+ε)^{2t} ≤ ½(p−ε)^{2t+1}` (`ε=(1-2q)/4`, `p=1-q`).  Uses `(q+ε)/(p−ε) ≤ 5/7`, `(5/7)^{2t} ≤ (5/7)^4`,
+and `(5/7)^4 ≤ ½(p−ε)` (`p−ε ≥ 7/12`).  This gives `ρ0 = (m/n)(p−ε)^n − (q+ε)^{2t} ≥ ½(m/n)(p−ε)^n`. -/
+lemma cn_bound {t : ℕ} (ht : 2 ≤ t) {q : ℝ} (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3) :
+    (q + (1 - 2 * q) / 4) ^ (2 * t) ≤ 1 / 2 * (1 - (q + (1 - 2 * q) / 4)) ^ (2 * t + 1) := by
+  set ε := (1 - 2 * q) / 4 with hε
+  have hqε : 0 ≤ q + ε := by rw [hε]; linarith
+  have hpε : (7 : ℝ) / 12 ≤ 1 - (q + ε) := by rw [hε]; nlinarith [hq]
+  have hratio : q + ε ≤ 5 / 7 * (1 - (q + ε)) := by rw [hε]; nlinarith [hq]
+  calc (q + ε) ^ (2 * t)
+      ≤ (5 / 7 * (1 - (q + ε))) ^ (2 * t) := pow_le_pow_left₀ hqε hratio _
+    _ = (5 / 7) ^ (2 * t) * (1 - (q + ε)) ^ (2 * t) := by rw [mul_pow]
+    _ ≤ (5 / 7) ^ 4 * (1 - (q + ε)) ^ (2 * t) := by
+        apply mul_le_mul_of_nonneg_right _ (by positivity)
+        exact pow_le_pow_of_le_one (by norm_num) (by norm_num) (by omega)
+    _ ≤ 1 / 2 * (1 - (q + ε)) ^ (2 * t + 1) := by
+        have h1 : (5 / 7 : ℝ) ^ 4 ≤ 1 / 2 * (1 - (q + ε)) := by nlinarith [hpε]
+        calc (5 / 7) ^ 4 * (1 - (q + ε)) ^ (2 * t)
+            ≤ 1 / 2 * (1 - (q + ε)) * (1 - (q + ε)) ^ (2 * t) :=
+              mul_le_mul_of_nonneg_right h1 (by positivity)
+          _ = 1 / 2 * (1 - (q + ε)) ^ (2 * t + 1) := by rw [pow_succ]; ring
+
 end OddCycleBound.HighDensity
