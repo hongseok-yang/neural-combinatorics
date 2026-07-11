@@ -29,18 +29,13 @@ continuous and satisfies the reflection monotonicity `κ(2c−x) ≤ κ(x)` on `
 then the two half-integrals of `κ(s)·ρ(q+s)` sum to a nonnegative value: the partner band pays for the
 possible deficit.  (This is the step whose earlier version was flawed — `rmk:r1-history`.) -/
 lemma reflection_pair_nonneg {m t : ℕ} (hm : (2 * (t : ℝ) + 1) ≤ (m : ℝ)) (q : ℝ) (κ : ℝ → ℝ)
-    (hκcont : Continuous κ) (c δ : ℝ) (hδ : 0 ≤ δ) (hc : c = 1 / 2 - q)
-    (hκ0 : ∀ x, 0 ≤ κ x) (hκrefl : ∀ x ∈ Set.Icc (c - δ) c, κ (2 * c - x) ≤ κ x) :
+    (c δ : ℝ) (hδ : 0 ≤ δ) (hc : c = 1 / 2 - q) (hκ0 : ∀ x ∈ Set.Icc c (c + δ), 0 ≤ κ x)
+    (hκrefl : ∀ x ∈ Set.Icc (c - δ) c, κ (2 * c - x) ≤ κ x)
+    (hfi : IntervalIntegrable (fun x => κ (2 * c - x) * rho (2 * t + 1) m (q + (2 * c - x)))
+      volume (c - δ) c)
+    (hgi : IntervalIntegrable (fun s => κ s * rho (2 * t + 1) m (q + s)) volume (c - δ) c) :
     0 ≤ (∫ s in c..(c + δ), κ s * rho (2 * t + 1) m (q + s))
         + ∫ s in (c - δ)..c, κ s * rho (2 * t + 1) m (q + s) := by
-  have hcont : Continuous (fun s => κ s * rho (2 * t + 1) m (q + s)) := by
-    unfold rho; fun_prop
-  have hfi : IntervalIntegrable (fun x => κ (2 * c - x) * rho (2 * t + 1) m (q + (2 * c - x)))
-      volume (c - δ) c := by
-    apply Continuous.intervalIntegrable
-    exact (hκcont.comp (by fun_prop)).mul (by unfold rho; fun_prop)
-  have hgi : IntervalIntegrable (fun s => κ s * rho (2 * t + 1) m (q + s)) volume (c - δ) c :=
-    hcont.intervalIntegrable _ _
   have hrefl : (∫ x in (c - δ)..c, κ (2 * c - x) * rho (2 * t + 1) m (q + (2 * c - x)))
       = ∫ s in c..(c + δ), κ s * rho (2 * t + 1) m (q + s) := by
     rw [intervalIntegral.integral_comp_sub_left (fun s => κ s * rho (2 * t + 1) m (q + s)) (2 * c)]
@@ -48,27 +43,28 @@ lemma reflection_pair_nonneg {m t : ℕ} (hm : (2 * (t : ℝ) + 1) ≤ (m : ℝ)
   rw [← hrefl, ← intervalIntegral.integral_add hfi hgi]
   apply intervalIntegral.integral_nonneg (by linarith)
   intro x hx
-  refine reflection_weighted (hκ0 _) (hκrefl x hx)
+  refine reflection_weighted (hκ0 _ ⟨by linarith [hx.2], by linarith [hx.1]⟩) (hκrefl x hx)
     (rho_window_left t m hm (q + x) (by have := hx.2; rw [hc] at this; linarith)) ?_
   have he : (1 : ℝ) - (q + x) = q + (2 * c - x) := by rw [hc]; ring
   have := rho_reflect t m hm (q + x)
   rw [he] at this; linarith
 
 /-- A region where `ρ(q+s) ≥ 0` contributes nonnegatively to the kernel integral (finite interval). -/
-lemma region_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q a b : ℝ) (hab : a ≤ b) (hκ0 : ∀ x, 0 ≤ κ x)
+lemma region_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q a b : ℝ) (hab : a ≤ b)
+    (hκ0 : ∀ s ∈ Set.Icc a b, 0 ≤ κ s)
     (hρ : ∀ s ∈ Set.Icc a b, 0 ≤ rho (2 * t + 1) m (q + s)) :
     0 ≤ ∫ s in a..b, κ s * rho (2 * t + 1) m (q + s) := by
   apply intervalIntegral.integral_nonneg hab
   intro s hs
-  exact mul_nonneg (hκ0 s) (hρ s hs)
+  exact mul_nonneg (hκ0 s hs) (hρ s hs)
 
 /-- The tail `(b,∞)` (where `ρ ≥ 0`) contributes nonnegatively to the kernel integral. -/
-lemma tail_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q b : ℝ) (hκ0 : ∀ x, 0 ≤ κ x)
+lemma tail_nonneg {m t : ℕ} (κ : ℝ → ℝ) (q b : ℝ) (hκ0 : ∀ s ∈ Set.Ioi b, 0 ≤ κ s)
     (hρ : ∀ s ∈ Set.Ioi b, 0 ≤ rho (2 * t + 1) m (q + s)) :
     0 ≤ ∫ s in Set.Ioi b, κ s * rho (2 * t + 1) m (q + s) := by
   apply setIntegral_nonneg measurableSet_Ioi
   intro s hs
-  exact mul_nonneg (hκ0 s) (hρ s hs)
+  exact mul_nonneg (hκ0 s hs) (hρ s hs)
 
 /-- **Integral lower bound by length × constant** (surplus building block F): if `c ≤ f` on `[a,b]`,
 then `(b−a)·c ≤ ∫_a^b f`. -/

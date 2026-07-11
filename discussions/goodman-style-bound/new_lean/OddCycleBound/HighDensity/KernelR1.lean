@@ -16,6 +16,7 @@ is the remaining piece.
 
 import OddCycleBound.HighDensity.KernelImproper
 import OddCycleBound.HighDensity.KernelReflect
+import OddCycleBound.HighDensity.KernelIntegrable
 import Mathlib.Analysis.Calculus.MeanValue
 
 open MeasureTheory Set
@@ -95,6 +96,17 @@ lemma kernel_intervalIntegrable {ℓ : ℝ} (hℓ : 0 < ℓ) (m t : ℕ) (q a b 
       · rw [Set.uIcc_of_ge h] at hs; linarith [hs.1]
     positivity
   · exact (by unfold rho; fun_prop : Continuous fun s => rho (2 * t + 1) m (q + s)).continuousOn
+
+/-- Interval-integrability of the *reflected* kernel integrand `x ↦ (ℓ+(2c−x))^{-m}·ρ(q+(2c−x))` on
+`[a,b]`, when `2c−x ≥ 0` throughout. -/
+lemma kernel_refl_intervalIntegrable {ℓ : ℝ} (hℓ : 0 < ℓ) (m t : ℕ) (q c a b : ℝ)
+    (hpos : ∀ x ∈ Set.uIcc a b, 0 ≤ 2 * c - x) :
+    IntervalIntegrable
+      (fun x => 1 / (ℓ + (2 * c - x)) ^ m * rho (2 * t + 1) m (q + (2 * c - x))) volume a b := by
+  apply ContinuousOn.intervalIntegrable
+  refine ContinuousOn.mul (ContinuousOn.div continuousOn_const (by fun_prop) (fun x hx => ?_)) ?_
+  · have := hpos x hx; positivity
+  · exact (by unfold rho; fun_prop : Continuous fun x => rho (2 * t + 1) m (q + (2 * c - x))).continuousOn
 
 /-- **`thm:r1`, base case `m = 5` (`n = 3`).**  Directly from the explicit quadratic
 `P̃_{5,1}(q,ℓ) = 4ℓ² + (8q−5)ℓ + 12q² − 15q + 5`, which is nonnegative for *all* real `q, ℓ`
@@ -296,18 +308,18 @@ lemma eta_sq_le {ℓ q η : ℝ} {t : ℕ} (ht : 2 ≤ t) (hq0 : 0 ≤ q) (hq : 
 identity `1 − (m/n)(q+3ε) = (m/n)η`, and `eta_sq_le`. -/
 lemma surplus_ge_deficit {ℓ q b : ℝ} {t : ℕ} (ht : 2 ≤ t) (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3)
     (hℓ0 : 0 < ℓ) (hℓ : ℓ < q + 1 / ((2 * t + 3 : ℕ) : ℝ))
-    (hb : b = ((2 * t + 1 : ℕ) : ℝ) / ((2 * t + 3 : ℕ) : ℝ) - q)
+    (hb : b = (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) - q)
     (hη0 : 0 ≤ b - 3 * ((1 - 2 * q) / 4))
     (hη7 : t = 2 → b - 3 * ((1 - 2 * q) / 4) ≤ 11 / 84)
     (hη9 : 3 ≤ t → b - 3 * ((1 - 2 * q) / 4) ≤ 5 / 12) :
     (b - 3 * ((1 - 2 * q) / 4))
         * ((q + 3 * ((1 - 2 * q) / 4)) ^ (2 * t) / (ℓ + 3 * ((1 - 2 * q) / 4)) ^ (2 * t + 3)
-          * (1 - ((2 * t + 3 : ℕ) : ℝ) / ((2 * t + 1 : ℕ) : ℝ) * (q + 3 * ((1 - 2 * q) / 4))))
+          * (1 - ((2 * t + 3 : ℕ) : ℝ) / (2 * (t : ℝ) + 1) * (q + 3 * ((1 - 2 * q) / 4))))
       ≤ (1 - 2 * q) / 4 * (1 / (ℓ + (1 - 2 * q) / 4) ^ (2 * t + 3)
-          * (((2 * t + 3 : ℕ) : ℝ) / ((2 * t + 1 : ℕ) : ℝ) * (1 - (q + (1 - 2 * q) / 4)) ^ (2 * t + 1)
+          * (((2 * t + 3 : ℕ) : ℝ) / (2 * (t : ℝ) + 1) * (1 - (q + (1 - 2 * q) / 4)) ^ (2 * t + 1)
             - (q + (1 - 2 * q) / 4) ^ (2 * t))) := by
   set ε := (1 - 2 * q) / 4 with hε
-  set n : ℝ := ((2 * t + 1 : ℕ) : ℝ) with hn
+  set n : ℝ := (2 * (t : ℝ) + 1) with hn
   set m : ℝ := ((2 * t + 3 : ℕ) : ℝ) with hm
   set η := b - 3 * ε with hηdef
   have hnpos : 0 < n := by rw [hn]; positivity
@@ -364,5 +376,141 @@ lemma surplus_ge_deficit {ℓ q b : ℝ} {t : ℕ} (ht : 2 ≤ t) (hq0 : 0 ≤ q
       ≤ ε * (m / n * (1 - (q + ε)) ^ (2 * t + 1) - (q + ε) ^ (2 * t)) * (ℓ + 3 * ε) ^ (2 * t + 3) :=
     mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hρ0 hεnn) hDpos.le
   nlinarith [hstep, hfin]
+
+/-- **`thm:r1`, the `m ≥ 7` integral (assembly B).**  For `t ≥ 2` (`m = 2t+3 ≥ 7`, `n = 2t+1`),
+`q ∈ [0,1/3]`, `0 < ℓ < q + 1/m`:  `0 ≤ ∫₀^∞ (ℓ+s)^{-m} ρ(q+s) ds`.  Splits `(0,∞)` into
+`(0,ε)(ε,3ε)(3ε,b)(b,∞)` (or `(0,4ε−b)(4ε−b,b)(b,∞)` when `b ≤ 3ε`): the reflection pair `(ε,3ε)` (or
+around `2ε`) is `≥ 0`, the tail `(b,∞)` is `≥ 0`, and `surplus ≥ deficit` closes the negative window. -/
+theorem r1_integral_nonneg {t : ℕ} (ht : 2 ≤ t) {q ℓ : ℝ} (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3)
+    (hℓ0 : 0 < ℓ) (hℓ : ℓ < q + 1 / ((2 * t + 3 : ℕ) : ℝ)) :
+    0 ≤ ∫ s in Set.Ioi 0, 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+  have hmR : (2 * (t : ℝ) + 1) ≤ ((2 * t + 3 : ℕ) : ℝ) := by push_cast; linarith
+  have hmp : (0 : ℝ) < ((2 * t + 3 : ℕ) : ℝ) := by positivity
+  set ε := (1 - 2 * q) / 4 with hε
+  set b := (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) - q with hbdef
+  have ht' : (2 : ℝ) ≤ (t : ℝ) := by exact_mod_cast ht
+  have hεpos : 0 < ε := by rw [hε]; nlinarith [hq]
+  have hbpos : 0 < b := by
+    rw [hbdef, sub_pos, lt_div_iff₀ hmp]; push_cast
+    nlinarith [mul_le_mul_of_nonneg_right hq (show (0:ℝ) ≤ 2 * (t:ℝ) + 3 by positivity), ht']
+  have hab : 2 * ε < b := by
+    have h12 : (1 : ℝ) / 2 < (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) := by
+      rw [lt_div_iff₀ hmp]; push_cast; nlinarith [ht']
+    rw [hε, hbdef]; linarith [h12]
+  have hκpos : ∀ s : ℝ, 0 < ℓ + s → 0 ≤ 1 / (ℓ + s) ^ (2 * t + 3) := fun s h => by positivity
+  -- integrability on Ioi 0 (via kernelIntegrand)
+  have hint0 : IntegrableOn
+      (fun s => 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s)) (Set.Ioi 0) :=
+    kernelIntegrand_integrableOn (r := 1) (by norm_num) (by omega) q ℓ hℓ0
+  -- tail (b,∞) ≥ 0
+  have htail : 0 ≤ ∫ s in Set.Ioi b,
+      1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+    refine tail_nonneg _ q b (fun s hs => hκpos s (by simp only [Set.mem_Ioi] at hs; linarith))
+      (fun s hs => ?_)
+    simp only [Set.mem_Ioi] at hs
+    refine rho_window_right t (2 * t + 3) hmR (q + s) ?_
+    have hqs : (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) < q + s := by
+      rw [hbdef] at hs; linarith
+    rw [div_lt_iff₀ hmp] at hqs
+    push_cast at hqs ⊢; nlinarith [hqs]
+  -- ∫_{Ioi 0} = ∫_{0..b} + ∫_{Ioi b}
+  have hsplit : (∫ s in Set.Ioi (0:ℝ), 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s))
+      = (∫ s in (0:ℝ)..b, 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s))
+        + ∫ s in Set.Ioi b, 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+    rw [← Set.Ioc_union_Ioi_eq_Ioi hbpos.le,
+      setIntegral_union (Set.Ioc_disjoint_Ioi le_rfl) measurableSet_Ioi
+        (hint0.mono_set (fun x hx => hx.1)) (hint0.mono_set (Set.Ioi_subset_Ioi hbpos.le)),
+      intervalIntegral.integral_of_le hbpos.le]
+  rw [hsplit]
+  -- reflection pair around 2ε is ≥ 0 (right half `(2ε, 2ε+w)`, left half `(2ε-w, 2ε)`, `0<w≤ε`)
+  have hreflpair : ∀ w : ℝ, 0 ≤ w → w ≤ ε →
+      0 ≤ (∫ s in (2 * ε)..(2 * ε + w), 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s))
+        + ∫ s in (2 * ε - w)..(2 * ε), 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+    intro w hw0 hwε
+    exact reflection_pair_nonneg hmR q (fun s => 1 / (ℓ + s) ^ (2 * t + 3)) (2 * ε) w hw0
+      (by rw [hε]; ring)
+      (fun x hx => hκpos x (by have := hx.1; nlinarith [hεpos]))
+      (fun x hx => kappa_antitone (2 * t + 3) (by have := hx.1; nlinarith [hεpos])
+        (by have := hx.2; linarith))
+      (kernel_refl_intervalIntegrable hℓ0 (2 * t + 3) t q (2 * ε) (2 * ε - w) (2 * ε)
+        (fun x hx => by
+          rw [Set.uIcc_of_le (by linarith)] at hx; have := hx.2; nlinarith [hεpos, hw0]))
+      (kernel_intervalIntegrable hℓ0 (2 * t + 3) t q (2 * ε - w) (2 * ε) (by linarith) (by linarith))
+  have hmain : 0 ≤ ∫ s in (0:ℝ)..b, 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+    rcases le_or_gt b (3 * ε) with hble | hblt
+    · -- b ≤ 3ε: reflect `(2ε,b)` against `(4ε-b,2ε)`, nonneg region `(0,4ε-b)`
+      have h4b : 4 * ε - b ≤ 2 * ε := by linarith
+      have h4b0 : 0 ≤ 4 * ε - b := by linarith [hab]
+      have hIa := kernel_intervalIntegrable hℓ0 (2 * t + 3) t q 0 (4 * ε - b) le_rfl h4b0
+      have hIb := kernel_intervalIntegrable hℓ0 (2 * t + 3) t q (4 * ε - b) b h4b0 hbpos.le
+      rw [← intervalIntegral.integral_add_adjacent_intervals hIa hIb]
+      have hleft : 0 ≤ ∫ s in (0:ℝ)..(4 * ε - b), 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+        refine region_nonneg _ q 0 (4 * ε - b) h4b0 (fun s hs => hκpos s (by have := hs.1; linarith)) (fun s hs => ?_)
+        refine rho_window_left t (2 * t + 3) hmR (q + s) ?_
+        have h2ε : 2 * ε = 1 / 2 - q := by rw [hε]; ring
+        linarith [hs.2, h4b, h2ε]
+      -- reflection over (4ε-b, b) with w = b-2ε
+      have hpair := hreflpair (b - 2 * ε) (by linarith [hab]) (by linarith)
+      have hadj := intervalIntegral.integral_add_adjacent_intervals
+        (kernel_intervalIntegrable hℓ0 (2 * t + 3) t q (4 * ε - b) (2 * ε) h4b0 (by linarith))
+        (kernel_intervalIntegrable hℓ0 (2 * t + 3) t q (2 * ε) b (by linarith) hbpos.le)
+      rw [show 2 * ε + (b - 2 * ε) = b from by ring, show 2 * ε - (b - 2 * ε) = 4 * ε - b from by ring]
+        at hpair
+      rw [← hadj]
+      linarith [hleft, hpair]
+    · -- b > 3ε: surplus + reflection(ε,3ε) + deficit, with surplus ≥ deficit
+      have hI1 := kernel_intervalIntegrable hℓ0 (2 * t + 3) t q 0 ε le_rfl hεpos.le
+      have hIεb := kernel_intervalIntegrable hℓ0 (2 * t + 3) t q ε b hεpos.le hbpos.le
+      have hI2 := kernel_intervalIntegrable hℓ0 (2 * t + 3) t q ε (3 * ε) hεpos.le (by linarith)
+      have hI3 := kernel_intervalIntegrable hℓ0 (2 * t + 3) t q (3 * ε) b (by linarith) hbpos.le
+      rw [← intervalIntegral.integral_add_adjacent_intervals hI1 hIεb,
+        ← intervalIntegral.integral_add_adjacent_intervals hI2 hI3]
+      -- reflection ∫_{ε..3ε} ≥ 0
+      have hrefl : 0 ≤ ∫ s in ε..(3 * ε), 1 / (ℓ + s) ^ (2 * t + 3) * rho (2 * t + 1) (2 * t + 3) (q + s) := by
+        have hpair := hreflpair ε hεpos.le le_rfl
+        have hadj := intervalIntegral.integral_add_adjacent_intervals
+          (kernel_intervalIntegrable hℓ0 (2 * t + 3) t q ε (2 * ε) hεpos.le (by linarith))
+          (kernel_intervalIntegrable hℓ0 (2 * t + 3) t q (2 * ε) (3 * ε) (by linarith) (by linarith))
+        rw [show 2 * ε + ε = 3 * ε from by ring, show 2 * ε - ε = ε from by ring] at hpair
+        rw [← hadj]; linarith [hpair]
+      -- deficit hypotheses on [3ε, b]
+      have hℓm2 : ((2 * t + 3 : ℕ) : ℝ) * ℓ < ((2 * t + 3 : ℕ) : ℝ) * q + 1 := by
+        have := mul_lt_mul_of_pos_left hℓ hmp
+        rwa [mul_add, mul_one_div, div_self (ne_of_gt hmp)] at this
+      have hsign : ∀ s ∈ Set.Icc (3 * ε) b, 2 * (t : ℝ) * (ℓ + s) ≤ ((2 * t + 3 : ℕ) : ℝ) * (q + s) := by
+        intro s hs; have hs3 := hs.1; rw [hε] at hs3; push_cast at hℓm2 ⊢
+        nlinarith [hℓm2, hs3, hq, hℓ0, ht']
+      have hB0 : ∀ s ∈ Set.Icc (3 * ε) b, 0 ≤ 1 - ((2 * t + 3 : ℕ) : ℝ) / (2 * (t : ℝ) + 1) * (q + s) := by
+        intro s hs; have hn2 : (0:ℝ) < 2 * (t:ℝ) + 1 := by positivity
+        rw [sub_nonneg, div_mul_eq_mul_div, div_le_one hn2]
+        have hqb : q + s ≤ (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) := by
+          have := hs.2; rw [hbdef] at this; linarith
+        rw [le_div_iff₀ hmp] at hqb; push_cast at hqb ⊢; nlinarith [hqb]
+      have hu1 : ∀ s ∈ Set.Icc (3 * ε) b, q + s ≤ 1 := by
+        intro s hs
+        have hqb : q + s ≤ (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) := by
+          have := hs.2; rw [hbdef] at this; linarith
+        have : (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) ≤ 1 := by rw [div_le_one hmp]; push_cast; linarith
+        linarith
+      have hρ0 : 0 ≤ ((2 * t + 3 : ℕ) : ℝ) / (2 * (t : ℝ) + 1) * (1 - (q + ε)) ^ (2 * t + 1) - (q + ε) ^ (2 * t) := by
+        have hcn := cn_bound ht hq0 hq
+        rw [← hε] at hcn
+        have hR1 : (1:ℝ) ≤ ((2 * t + 3 : ℕ) : ℝ) / (2 * (t : ℝ) + 1) := by
+          rw [le_div_iff₀ (by positivity)]; push_cast; linarith
+        nlinarith [hcn, mul_le_mul_of_nonneg_right (sub_nonneg.mpr hR1)
+          (pow_nonneg (by rw [hε]; linarith : (0:ℝ) ≤ 1 - (q + ε)) (2 * t + 1)),
+          pow_nonneg (by rw [hε]; linarith : (0:ℝ) ≤ 1 - (q + ε)) (2 * t + 1)]
+      have hsurp := surplus_bound hℓ0 (m := 2 * t + 3) q ε hq0 hεpos.le (by rw [hε]; linarith) hρ0
+      have hdef := deficit_bound hℓ0 (m := 2 * t + 3) (t := t) (by omega) (by omega) q ε b
+        hεpos.le (by linarith) hq0 hsign hB0 hu1
+      have hsgd := surplus_ge_deficit ht hq0 hq hℓ0 hℓ hbdef (by linarith [hε])
+        (fun h => by rw [hbdef, h]; push_cast; nlinarith [hq])
+        (fun _ => by
+          rw [hbdef]
+          have hle : (2 * (t : ℝ) + 1) / ((2 * t + 3 : ℕ) : ℝ) ≤ 1 := by rw [div_le_one hmp]; push_cast; linarith
+          nlinarith [hle, hq])
+      rw [← hε] at hsgd
+      linarith [hsurp, hrefl, hdef, hsgd]
+  linarith [hmain, htail]
 
 end OddCycleBound.HighDensity
