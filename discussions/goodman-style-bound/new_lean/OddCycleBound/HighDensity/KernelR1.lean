@@ -269,4 +269,100 @@ lemma const_final {η : ℝ} {t : ℕ} (ht : 2 ≤ t) (hη0 : 0 ≤ η)
       _ ≤ 7 / 288 * (61 / 47) ^ (2 * t + 3) :=
           mul_le_mul_of_nonneg_left (pow_le_pow_right₀ (by norm_num) (by omega)) (by norm_num)
 
+/-- **`η² ≤ ½·ε·(p−ε)·((ℓ+3ε)/(ℓ+ε))^m` (G, combined).**  The constant comparison `eq:r1-compare`,
+combining `const_final`, `ratio_bound`, and `ε ≥ 1/12`, `p−ε ≥ 7/12`. -/
+lemma eta_sq_le {ℓ q η : ℝ} {t : ℕ} (ht : 2 ≤ t) (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3) (hℓ0 : 0 < ℓ)
+    (hℓ : ℓ < q + 1 / ((2 * t + 3 : ℕ) : ℝ)) (hη0 : 0 ≤ η)
+    (hη7 : t = 2 → η ≤ 11 / 84) (hη9 : 3 ≤ t → η ≤ 5 / 12) :
+    η ^ 2 ≤ 1 / 2 * ((1 - 2 * q) / 4) * (1 - (q + (1 - 2 * q) / 4))
+      * ((ℓ + 3 * ((1 - 2 * q) / 4)) / (ℓ + (1 - 2 * q) / 4)) ^ (2 * t + 3) := by
+  have hm7 : (7 : ℕ) ≤ 2 * t + 3 := by omega
+  have hεb : (1 : ℝ) / 12 ≤ (1 - 2 * q) / 4 := by linarith
+  have hpεb : (7 : ℝ) / 12 ≤ 1 - (q + (1 - 2 * q) / 4) := by nlinarith
+  have hratio : (61 : ℝ) / 47 ≤ (ℓ + 3 * ((1 - 2 * q) / 4)) / (ℓ + (1 - 2 * q) / 4) :=
+    ratio_bound hm7 hq hℓ0 hℓ
+  have hratiopow : (61 / 47 : ℝ) ^ (2 * t + 3)
+      ≤ ((ℓ + 3 * ((1 - 2 * q) / 4)) / (ℓ + (1 - 2 * q) / 4)) ^ (2 * t + 3) :=
+    pow_le_pow_left₀ (by norm_num) hratio _
+  calc η ^ 2 ≤ 7 / 288 * (61 / 47) ^ (2 * t + 3) := const_final ht hη0 hη7 hη9
+    _ = 1 / 2 * (1 / 12) * (7 / 12) * (61 / 47) ^ (2 * t + 3) := by ring
+    _ ≤ 1 / 2 * ((1 - 2 * q) / 4) * (1 - (q + (1 - 2 * q) / 4))
+          * ((ℓ + 3 * ((1 - 2 * q) / 4)) / (ℓ + (1 - 2 * q) / 4)) ^ (2 * t + 3) := by
+        apply mul_le_mul _ hratiopow (by positivity) (by positivity)
+        nlinarith [hεb, hpεb]
+
+/-- **Surplus ≥ deficit (G, algebraic core).**  `D_upper ≤ Σ_lower` (`n = 2t+1`, `m = 2t+3`,
+`ε=(1-2q)/4`, `b = n/m − q`, `η = b − 3ε ≥ 0`), combining `cn_bound` (`ρ0 ≥ ½(m/n)(p−ε)^n`), the
+identity `1 − (m/n)(q+3ε) = (m/n)η`, and `eta_sq_le`. -/
+lemma surplus_ge_deficit {ℓ q b : ℝ} {t : ℕ} (ht : 2 ≤ t) (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3)
+    (hℓ0 : 0 < ℓ) (hℓ : ℓ < q + 1 / ((2 * t + 3 : ℕ) : ℝ))
+    (hb : b = ((2 * t + 1 : ℕ) : ℝ) / ((2 * t + 3 : ℕ) : ℝ) - q)
+    (hη0 : 0 ≤ b - 3 * ((1 - 2 * q) / 4))
+    (hη7 : t = 2 → b - 3 * ((1 - 2 * q) / 4) ≤ 11 / 84)
+    (hη9 : 3 ≤ t → b - 3 * ((1 - 2 * q) / 4) ≤ 5 / 12) :
+    (b - 3 * ((1 - 2 * q) / 4))
+        * ((q + 3 * ((1 - 2 * q) / 4)) ^ (2 * t) / (ℓ + 3 * ((1 - 2 * q) / 4)) ^ (2 * t + 3)
+          * (1 - ((2 * t + 3 : ℕ) : ℝ) / ((2 * t + 1 : ℕ) : ℝ) * (q + 3 * ((1 - 2 * q) / 4))))
+      ≤ (1 - 2 * q) / 4 * (1 / (ℓ + (1 - 2 * q) / 4) ^ (2 * t + 3)
+          * (((2 * t + 3 : ℕ) : ℝ) / ((2 * t + 1 : ℕ) : ℝ) * (1 - (q + (1 - 2 * q) / 4)) ^ (2 * t + 1)
+            - (q + (1 - 2 * q) / 4) ^ (2 * t))) := by
+  set ε := (1 - 2 * q) / 4 with hε
+  set n : ℝ := ((2 * t + 1 : ℕ) : ℝ) with hn
+  set m : ℝ := ((2 * t + 3 : ℕ) : ℝ) with hm
+  set η := b - 3 * ε with hηdef
+  have hnpos : 0 < n := by rw [hn]; positivity
+  have hmpos : 0 < m := by rw [hm]; positivity
+  have hmn : n ≤ m := by rw [hn, hm]; push_cast; linarith
+  have hR1 : 1 ≤ m / n := by rw [le_div_iff₀ hnpos]; linarith
+  have hP : q + 3 * ε = 1 - (q + ε) := by rw [hε]; ring
+  have hPnn : 0 ≤ 1 - (q + ε) := by rw [hε]; linarith
+  have hPpos : 0 < 1 - (q + ε) := by rw [hε]; nlinarith
+  have hℓε : 0 < ℓ + ε := by rw [hε]; nlinarith [hℓ0, hq]
+  have hℓ3ε : 0 < ℓ + 3 * ε := by rw [hε]; nlinarith [hℓ0, hq]
+  have hEpos : (0 : ℝ) < (ℓ + ε) ^ (2 * t + 3) := pow_pos hℓε _
+  have hDpos : (0 : ℝ) < (ℓ + 3 * ε) ^ (2 * t + 3) := pow_pos hℓ3ε _
+  -- identity B3 = (m/n)η
+  have hB3 : 1 - m / n * (q + 3 * ε) = m / n * η := by
+    rw [hηdef, hb]; field_simp; ring
+  -- ρ0 ≥ ½(m/n)P^{n}
+  have hcn := cn_bound ht hq0 hq
+  rw [← hε] at hcn
+  have hρ0 : 1 / 2 * (m / n) * (1 - (q + ε)) ^ (2 * t + 1)
+      ≤ m / n * (1 - (q + ε)) ^ (2 * t + 1) - (q + ε) ^ (2 * t) := by
+    nlinarith [hcn, mul_le_mul_of_nonneg_right (sub_nonneg.mpr hR1)
+      (pow_nonneg hPnn (2 * t + 1)), pow_nonneg hPnn (2 * t + 1)]
+  -- η² comparison
+  have hηsq := eta_sq_le ht hq0 hq hℓ0 hℓ hη0 hη7 hη9
+  rw [← hε] at hηsq
+  -- cleared core: η²(ℓ+ε)^m ≤ ½εP(ℓ+3ε)^m
+  have hcore : η ^ 2 * (ℓ + ε) ^ (2 * t + 3)
+      ≤ 1 / 2 * ε * (1 - (q + ε)) * (ℓ + 3 * ε) ^ (2 * t + 3) := by
+    have hexp : ((ℓ + 3 * ε) / (ℓ + ε)) ^ (2 * t + 3) * (ℓ + ε) ^ (2 * t + 3)
+        = (ℓ + 3 * ε) ^ (2 * t + 3) := by
+      rw [div_pow, div_mul_cancel₀ _ (ne_of_gt hEpos)]
+    calc η ^ 2 * (ℓ + ε) ^ (2 * t + 3)
+        ≤ 1 / 2 * ε * (1 - (q + ε)) * ((ℓ + 3 * ε) / (ℓ + ε)) ^ (2 * t + 3) * (ℓ + ε) ^ (2 * t + 3) :=
+          mul_le_mul_of_nonneg_right hηsq hEpos.le
+      _ = 1 / 2 * ε * (1 - (q + ε)) * (ℓ + 3 * ε) ^ (2 * t + 3) := by rw [mul_assoc, hexp]
+  -- assemble
+  rw [hB3, hP,
+    show η * ((1 - (q + ε)) ^ (2 * t) / (ℓ + 3 * ε) ^ (2 * t + 3) * (m / n * η))
+        = m / n * η ^ 2 * (1 - (q + ε)) ^ (2 * t) / (ℓ + 3 * ε) ^ (2 * t + 3) from by ring,
+    show ε * (1 / (ℓ + ε) ^ (2 * t + 3)
+          * (m / n * (1 - (q + ε)) ^ (2 * t + 1) - (q + ε) ^ (2 * t)))
+        = ε * (m / n * (1 - (q + ε)) ^ (2 * t + 1) - (q + ε) ^ (2 * t)) / (ℓ + ε) ^ (2 * t + 3)
+        from by ring,
+    div_le_div_iff₀ hDpos hEpos]
+  have hεnn : 0 ≤ ε := by rw [hε]; linarith
+  have hstep : m / n * η ^ 2 * (1 - (q + ε)) ^ (2 * t) * (ℓ + ε) ^ (2 * t + 3)
+      ≤ ε * (1 / 2 * (m / n) * (1 - (q + ε)) ^ (2 * t + 1)) * (ℓ + 3 * ε) ^ (2 * t + 3) := by
+    have hfac : (0 : ℝ) ≤ m / n * (1 - (q + ε)) ^ (2 * t) := by positivity
+    have hmul := mul_le_mul_of_nonneg_left hcore hfac
+    rw [pow_succ (1 - (q + ε)) (2 * t)]
+    nlinarith [hmul]
+  have hfin : ε * (1 / 2 * (m / n) * (1 - (q + ε)) ^ (2 * t + 1)) * (ℓ + 3 * ε) ^ (2 * t + 3)
+      ≤ ε * (m / n * (1 - (q + ε)) ^ (2 * t + 1) - (q + ε) ^ (2 * t)) * (ℓ + 3 * ε) ^ (2 * t + 3) :=
+    mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hρ0 hεnn) hDpos.le
+  nlinarith [hstep, hfin]
+
 end OddCycleBound.HighDensity
