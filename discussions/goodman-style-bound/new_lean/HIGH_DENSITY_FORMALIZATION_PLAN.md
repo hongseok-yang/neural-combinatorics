@@ -519,11 +519,15 @@ Work in this order; each milestone is independently checkpointable.
      `Ioo 0 1` where `gInt` = a continuous polynomial). Also exposed `gInt`/`subst_pointwise` in KernelImproper.
    - **✅ shared machinery (D core)** — `HighDensity/KernelReflect.lean`: `reflection_weighted`
      (`0<a≤b, 0≤y, 0≤x+y ⟹ 0≤ax+by`); + `rho_window` (combined lem:rho(ii)) in RhoLemma.
-   - **📝 REMAINING for `m≥7`:** (B) region-split `Ioi 0` into `(0,ε)(ε,2ε)(2ε,3ε)(3ε,s_b)(s_b,∞)` +
-     integral additivity; (D-integral) the reflection change-of-vars `ŝ=4ε−s` on `(2ε,3ε)↔(ε,2ε)` (interval
-     reflection + `reflection_weighted` + `rho_reflect`); (E) deficit `eq:D-new` (`rho_neg` + monotonicity of
-     `(q+s)^{n-1}/(ℓ+s)^m`); (F) surplus `eq:S-new` (second grouping); (G) rational comparison `(61/47)^m` vs
-     `η²` (m=7 and m≥9). This is the genuine R1 analytic core.
+   - **✅ `m≥7` INTEGRAL FULLY DONE (2026-07-11): `r1_integral_nonneg`** (KernelR1.lean, builds clean, no
+     sorry/axiom). For t≥2, q∈[0,1/3], 0<ℓ<q+1/m: `0 ≤ ∫_{Ioi 0} (ℓ+s)^{-m}·ρ(q+s) ds`. All pieces done:
+     (A) integrability, (D) `reflection_pair_nonneg` (the corrected step) + region/tail helpers,
+     (E) `deficit_factor_antitone` (derivative monotonicity) + `deficit_bound`, (F) `surplus_bound`,
+     (G) `ratio_bound`/`cn_bound`/`const_seven`/`const_nine`/`const_final`/`eta_sq_le`/`surplus_ge_deficit`,
+     (B) the additivity assembly with both `b≤3ε`/`b>3ε` subcases. The full R1 analytic core is verified.
+   - **📝 REMAINING for full `thm:r1` (all `ℓ∈[-½,½]`):** wire `diagKernel_nonneg_r1_of_integral` + `m=5`
+     (done) + `ℓ≤0` (`thm:pointwise`, done) + `ℓ≥q+1/m` (`thm:ibp`, NOT built — finite `eq:G-form`) into one
+     `diagKernel m 1 q ℓ ≥ 0` theorem.
 7. 📝 🟠–🔴 **M6 — Analytic strip tail.** `Prop residual-all` (`m≥63`). Shares A/B/D/E/F/G machinery with M5;
    additionally needs `lem:rho-one-sided` (`rho_pos_tail`/`rho_left_surplus` — quick algebra, TODO) + `app:constants`.
 8. 📝 🟡 **M7 — Assembly.** Combine the case partition into `thm:regionI-full`; wire the deletion +
