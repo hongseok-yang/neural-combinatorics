@@ -478,9 +478,17 @@ Work in this order; each milestone is independently checkpointable.
      `bracket_eq_rho`; x=0 endpoint = 0 by n odd) ⇒ **`diagKernel_nonneg_two_r_ge`** (regime (a) 2r≥n ⇒
      m≥2n ⇒ `rho_empty`, any q,ℓ) and **`diagKernel_nonneg_le_zero`** (regime (b) ℓ≤0, q≤1/2 ⇒ Vₓ/x≤q≤1/2
      ⇒ `rho_window_left`). Both need n=2t+1 odd (`ht : m-2r = 2t+1`), r≥1. No improper ∫ used.
-   - **Still TODO for M3:** `thm:ibp` (`ℓ ≥ q+r/m`) — 🟠. NOTE it uses the FINITE `eq:G-form`, NOT the
-     improper `∫₀^∞`; the paper's proof is `E[Wⁿ]≥0` (Beta symmetry about ½) + IBP bound
-     `E[ΞVⁿ⁻¹] ≤ r/(n(ℓ−q))·E[Vⁿ]`.
+   - **✅ `thm:ibp` (`r = 1`) DONE (2026-07-11): `HighDensity/KernelIBP.lean`** (builds clean, wired into
+     root, no sorry/axiom). Uses the FINITE `eq:G-form` (`gform_eq`), NOT the improper `∫₀^∞`. For `r=1`
+     the Beta weight is `1`, so `diagKernel = C_{m,1}·[(m/n)(J_V+J_W) − J_{xVⁿ⁻¹}]` with `J_f=∫₀¹ f`.
+     Pieces: **`jW_nonneg`** (`E[Wⁿ]≥0`: reflect `x↦1-x` via `intervalIntegral.integral_comp_sub_left`;
+     `W(x)+W(1-x)=1−q−ℓ≥0` ⇒ `odd_add_pow_nonneg`, needs `ℓ≤1−q`); **`jXV_ftc`** (the IBP estimate via
+     FTC on `x·Vⁿ`: `J_V + n(q−ℓ)J_{xVⁿ⁻¹} = qⁿ`, `HasDerivAt`+`integral_eq_sub_of_hasDerivAt`); then
+     `J_{xVⁿ⁻¹} ≤ J_V/(n(ℓ−q))` (drop `qⁿ≥0`) and `ℓ≥q+1/m ⟹ m/n ≥ 1/(n(ℓ−q))`; capstone
+     **`diagKernel_nonneg_ibp_r1`** (`q≤1/2`, `ℓ≤1−q`, `ℓ≥q+1/m` ⇒ `0≤diagKernel (2t+3) 1 q ℓ`).
+     **Still TODO for M3:** the general-`r` (`r≥2`) `thm:ibp` (needs the IBP against the Beta density
+     `x^{r-1}(1-x)^{r-1}` with boundary terms + the `(r−(2r−1)x)/(1−x)≤r` bound) — only needed for the
+     M6 strip; 🟠.
    - **✅ `prop:kernel` — the improper `∫₀^∞` form DONE (2026-07-10): `HighDensity/KernelImproper.lean`**
      (builds clean, wired into root, no sorry/axiom). The GATEWAY for `thm:r1` + the strip. `kernel_form`:
      for `ℓ>0`, `diagKernel m r q ℓ = Cmr·ℓ^{n+r}·∫_{Ioi 0} s^{r-1}/(ℓ+s)^m·ρ(m-2r) m (q+s) ds`. Built from
@@ -525,9 +533,12 @@ Work in this order; each milestone is independently checkpointable.
      (E) `deficit_factor_antitone` (derivative monotonicity) + `deficit_bound`, (F) `surplus_bound`,
      (G) `ratio_bound`/`cn_bound`/`const_seven`/`const_nine`/`const_final`/`eta_sq_le`/`surplus_ge_deficit`,
      (B) the additivity assembly with both `b≤3ε`/`b>3ε` subcases. The full R1 analytic core is verified.
-   - **📝 REMAINING for full `thm:r1` (all `ℓ∈[-½,½]`):** wire `diagKernel_nonneg_r1_of_integral` + `m=5`
-     (done) + `ℓ≤0` (`thm:pointwise`, done) + `ℓ≥q+1/m` (`thm:ibp`, NOT built — finite `eq:G-form`) into one
-     `diagKernel m 1 q ℓ ≥ 0` theorem.
+   - **✅ FULL `thm:r1` DONE (2026-07-11): `diagKernel_nonneg_r1` (`KernelIBP.lean`, root builds clean,
+     no sorry/axiom).** For every odd `m ≥ 3`, `q∈[0,1/3]`, `ℓ∈[−½,½]`: `0 ≤ diagKernel m 1 q ℓ`.
+     Assembly (`obtain ⟨t,rfl⟩: m=2t+3`, then `le_or_gt` splits): `ℓ≤0` → `diagKernel_nonneg_le_zero`;
+     `ℓ≥q+1/m` → `diagKernel_nonneg_ibp_r1`; middle band `0<ℓ<q+1/m` by length — `m=3` (t=0) →
+     `diagKernel_nonneg_two_r_ge` (`2r≥n`), `m=5` (t=1) → `diagKernel_nonneg_r1_five`, `m≥7` (t≥2) →
+     `diagKernel_nonneg_r1_of_integral` + `r1_integral_nonneg`. **The entire `r=1` case is closed.**
 7. 📝 🟠–🔴 **M6 — Analytic strip tail.** `Prop residual-all` (`m≥63`). Shares A/B/D/E/F/G machinery with M5;
    additionally needs `lem:rho-one-sided` (`rho_pos_tail`/`rho_left_surplus` — quick algebra, TODO) + `app:constants`.
 8. 📝 🟡 **M7 — Assembly.** Combine the case partition into `thm:regionI-full`; wire the deletion +

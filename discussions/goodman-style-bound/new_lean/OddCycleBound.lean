@@ -61,3 +61,5 @@ import OddCycleBound.HighDensity.KernelR1
 import OddCycleBound.HighDensity.KernelIntegrable
 -- M5/M6 shared machinery (D core): the abstract weighted-reflection inequality.
 import OddCycleBound.HighDensity.KernelReflect
+-- M3/M5: thm:ibp (r=1) + full thm:r1 assembly (all lengths, r=1 diagonal positivity).
+import OddCycleBound.HighDensity.KernelIBP
