@@ -55,6 +55,92 @@ lemma constA_tail {m : ℕ} (hm : 500 ≤ m) :
       = 99 * 51 / 100 * ((201 / 200) ^ m / (m : ℝ)) := by field_simp
   rw [heq]; linarith [hbase, hkey]
 
+/-! ### `eq:constant-B` arithmetic tail: `(99/(100m))·72·(126/125)^m ≥ 1` for all `m ≥ 63`
+
+Unlike `eq:constant-A` (whose weak `P ≥ 51`/`B₀ ≥ 201/200` bound only closes `m ≥ 500`, leaving the
+finite sweep `63 ≤ m ≤ 499`), the `eq:constant-B` weak bounds `P ≥ 72`, `B₁ ≥ 126/125` close the
+**entire** `m ≥ 63` range uniformly: `f(m) = (126/125)^m/m` is decreasing for `m ≤ 125` and increasing
+for `m ≥ 125`, so its minimum over `m ≥ 63` is `f(125) = f(126) = (126/125)^125/125`, and
+`(99/100)·72·f(125) > 1`.  Hence **no** finite certificate sweep is needed on the `B`-side. -/
+
+/-- Decreasing step of `f(m) = (126/125)^m/m` for `1 ≤ k ≤ 125`: `f(k+1) ≤ f(k)` (ratio
+`(126/125)·k/(k+1) ≤ 1 ⟺ k ≤ 125`). -/
+lemma constB_step_down {k : ℕ} (hk1 : 1 ≤ k) (hk125 : k ≤ 125) :
+    (126 / 125 : ℝ) ^ (k + 1) / ((k : ℝ) + 1) ≤ (126 / 125) ^ k / (k : ℝ) := by
+  have hkpos : (0 : ℝ) < (k : ℝ) := by exact_mod_cast hk1
+  have hk1pos : (0 : ℝ) < (k : ℝ) + 1 := by linarith
+  have hppos : (0 : ℝ) < (126 / 125 : ℝ) ^ k := by positivity
+  have hkle : (k : ℝ) ≤ 125 := by exact_mod_cast hk125
+  rw [pow_succ, div_le_div_iff₀ hk1pos hkpos]
+  nlinarith [mul_nonneg hppos.le (by linarith : (0 : ℝ) ≤ 125 - (k : ℝ))]
+
+/-- Increasing step of `f(m) = (126/125)^m/m` for `k ≥ 125`: `f(k) ≤ f(k+1)`. -/
+lemma constB_step_up {k : ℕ} (hk125 : 125 ≤ k) :
+    (126 / 125 : ℝ) ^ k / (k : ℝ) ≤ (126 / 125) ^ (k + 1) / ((k : ℝ) + 1) := by
+  have hkpos : (0 : ℝ) < (k : ℝ) := by
+    have : 0 < k := by omega
+    exact_mod_cast this
+  have hk1pos : (0 : ℝ) < (k : ℝ) + 1 := by linarith
+  have hppos : (0 : ℝ) < (126 / 125 : ℝ) ^ k := by positivity
+  have hkge : (125 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk125
+  rw [pow_succ, div_le_div_iff₀ hkpos hk1pos]
+  nlinarith [mul_nonneg hppos.le (by linarith : (0 : ℝ) ≤ (k : ℝ) - 125)]
+
+/-- Antitone branch on `[1,125]`: for `1 ≤ a ≤ b ≤ 125`, `f(b) ≤ f(a)`. -/
+lemma constB_antitone_aux {a : ℕ} (ha : 1 ≤ a) {b : ℕ} (hab : a ≤ b) (hb : b ≤ 125) :
+    (126 / 125 : ℝ) ^ b / (b : ℝ) ≤ (126 / 125) ^ a / (a : ℝ) := by
+  revert hb
+  induction b, hab using Nat.le_induction with
+  | base => intro _; exact le_rfl
+  | succ k hk ih =>
+    intro hb
+    have hk125 : k ≤ 125 := by omega
+    have hka : 1 ≤ k := le_trans ha hk
+    have hstep := constB_step_down hka hk125
+    have ihk := ih hk125
+    push_cast
+    exact le_trans hstep ihk
+
+/-- Increasing branch: `f(125) ≤ f(m)` for `m ≥ 125`. -/
+lemma constB_pow_div_ge_min_up {m : ℕ} (h : 125 ≤ m) :
+    (126 / 125 : ℝ) ^ 125 / 125 ≤ (126 / 125) ^ m / (m : ℝ) := by
+  induction m, h using Nat.le_induction with
+  | base => simp
+  | succ k hk ih =>
+    have hstep := constB_step_up hk
+    push_cast
+    exact le_trans ih hstep
+
+/-- **Two-sided minimum of `f(m) = (126/125)^m/m` over `m ≥ 63`.**  Attained at `m = 125` (`= 126`):
+`f(125) ≤ f(m)` for every `m ≥ 63`. -/
+lemma constB_pow_div_ge_min {m : ℕ} (hm : 63 ≤ m) :
+    (126 / 125 : ℝ) ^ 125 / 125 ≤ (126 / 125) ^ m / (m : ℝ) := by
+  rcases Nat.lt_or_ge m 125 with h | h
+  · have h1 : 1 ≤ m := by omega
+    have h2 : m ≤ 125 := by omega
+    have hkey := constB_antitone_aux h1 h2 (le_refl 125)
+    simpa using hkey
+  · exact constB_pow_div_ge_min_up h
+
+set_option exponentiation.threshold 200 in
+/-- **`eq:constant-B` arithmetic tail.**  For `m ≥ 63`, `(99/(100m))·72·(126/125)^m ≥ 1`.  This is
+`eq:constant-B` with `P(θ)` replaced by its lower bound `72` (`P_ge_72`) and `B₁(θ)` by `126/125`
+(`B1_ge`); the two-sided minimum `(126/125)^m/m ≥ (126/125)^125/125` (`constB_pow_div_ge_min`) plus the
+base value `(99/100)(72/125)(126/125)^125 > 1` close the whole range. -/
+lemma constB_tail {m : ℕ} (hm : 63 ≤ m) :
+    1 ≤ 99 / (100 * (m : ℝ)) * 72 * (126 / 125) ^ m := by
+  have hmpos : (0 : ℝ) < (m : ℝ) := by
+    have : (63 : ℝ) ≤ (m : ℝ) := by exact_mod_cast hm
+    linarith
+  have hmne : (m : ℝ) ≠ 0 := ne_of_gt hmpos
+  have hbase : (1 : ℝ) ≤ 99 * 72 / 100 * ((126 / 125) ^ 125 / 125) := by norm_num
+  have hkey : 99 * 72 / 100 * ((126 / 125) ^ 125 / 125)
+      ≤ 99 * 72 / 100 * ((126 / 125) ^ m / (m : ℝ)) :=
+    mul_le_mul_of_nonneg_left (constB_pow_div_ge_min hm) (by norm_num)
+  have heq : 99 / (100 * (m : ℝ)) * 72 * (126 / 125) ^ m
+      = 99 * 72 / 100 * ((126 / 125) ^ m / (m : ℝ)) := by field_simp
+  rw [heq]; linarith [hbase, hkey]
+
 /-! ### `eq:constant-B`: the `rpow` factor bound `B₁(θ) ≥ 126/125` on `[1/6, 1/4]`
 
 `B₁(θ) = (7/6)^{1-2θ}·(8-24θ)^{-θ}·(34/29)`.  Proved by the paper's 12-piece subdivision of `[1/6,1/4]`
