@@ -203,7 +203,9 @@ items are P and E5; the rest are light.
 | strip `m≥63`: threshold `H(b) ≤ 2/5` (`lem:threshold`) | ✅ | `threshold_bound` (`M6Strip`) |
 | strip `m≥63`: reflection condition (`eq:right-condition`) | ✅ | `right_condition` (`M6Strip`) |
 | strip `m≥63`: right-reflection assembly `0 ≤ ∫` (`lem:right-reflection`, `ℓ>2/5`) | ✅ | `diagKernel_nonneg_strip_right` (`M6Reflection`) |
-| strip `m≥63`: left-estimate `Σ/D ≥ 1` (a)/(b) (`lem:left-estimate`) | 📝 | — (ratio + `app:constants`; large: rpow tail + finite sweep 63≤m≤499) |
+| strip: left-estimate machinery (`tail-D` deficit, `tail-S` surplus) | ✅ | `left_deficit_bound`, `left_surplus_bound`, `affine_integral`, `power_integral_lower` (`M6LeftEstimate`) |
+| strip: left-estimate assembly `0 ≤ ∫` **reduced to scalar `D ≤ Σ`** (`lem:left-estimate`) | ✅ | `diagKernel_nonneg_strip_left` (takes `hSD : D ≤ Σ`) (`M6LeftEstimate`) |
+| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | 📝 | — (rpow tail `m≥500` + finite rational sweep `63≤m≤499`) |
 
 **Stage D — certificates & final assembly.**
 

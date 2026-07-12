@@ -67,3 +67,5 @@ import OddCycleBound.HighDensity.KernelIBP
 import OddCycleBound.HighDensity.M6Strip
 -- M6: residual strip (m≥63 tail) — lem:right-reflection (θ≥1/6, ℓ>2/5) assembly.
 import OddCycleBound.HighDensity.M6Reflection
+-- M6: residual strip — lem:left-estimate machinery (tail-D/tail-S) + reduction to app:constants.
+import OddCycleBound.HighDensity.M6LeftEstimate
