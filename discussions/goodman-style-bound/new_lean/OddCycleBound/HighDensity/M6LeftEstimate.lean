@@ -179,19 +179,35 @@ lemma left_deficit_bound {ℓ : ℝ} (hℓ : 0 < ℓ) {m r t : ℕ} (hr : 1 ≤ 
   rw [affine_integral] at hmono_int
   linarith [hmono_int]
 
+/-- **Surplus constant nonnegativity** (`hconst`, `c_n ≥ 0`).  Uniform — NOT a sweep: from `cn_bound`
+(`(q+ε)^{2t} ≤ ½(1−(q+ε))^{2t+1}`, `t≥2`, `q≤1/3`, `ε=(1−2q)/4`) and `m/n ≥ 1`, the surplus constant
+`(m/n)(1−(q+ε))^{n} − (q+ε)^{2t} ≥ ½(1−(q+ε))^{n} ≥ 0`. -/
+lemma strip_surplus_const_nonneg {m t : ℕ} (ht : 2 ≤ t) (hmn : 2 * t + 1 ≤ m) {q : ℝ}
+    (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3) :
+    0 ≤ (m : ℝ) / (2 * (t : ℝ) + 1) * (1 - (q + (1 / 2 - q) / 2)) ^ (2 * t + 1)
+        - (q + (1 / 2 - q) / 2) ^ (2 * t) := by
+  have heps : (1 / 2 - q) / 2 = (1 - 2 * q) / 4 := by ring
+  rw [heps]
+  have hcn := cn_bound ht hq0 hq
+  have hmn1 : (1 : ℝ) ≤ (m : ℝ) / (2 * (t : ℝ) + 1) := by
+    rw [le_div_iff₀ (by positivity)]
+    have : (2 * (t : ℝ) + 1) ≤ (m : ℝ) := by exact_mod_cast hmn
+    linarith
+  have hp : (0 : ℝ) ≤ 1 - (q + (1 - 2 * q) / 4) := by nlinarith [hq]
+  have hpow : (0 : ℝ) ≤ (1 - (q + (1 - 2 * q) / 4)) ^ (2 * t + 1) := pow_nonneg hp _
+  nlinarith [hcn, mul_le_mul_of_nonneg_right (sub_nonneg.mpr hmn1) hpow, hpow]
+
 set_option maxHeartbeats 1000000 in
 /-- **`lem:left-estimate` reduced to the scalar comparison `D ≤ Σ`.**  In the residual strip
 (`q ≤ 1/3`, `r ≥ 2`, `n = m−2r > 2r`, `0 < ℓ < q+r/m`, `n = 2t+1`), with `a = 1/2−q`, `b = ν−q`,
-`ε = a/2` (`ν = n/m`), the diagonal kernel is nonnegative **provided** the surplus constant is
-nonnegative and the explicit deficit `D` is dominated by the explicit surplus `Σ`.  Everything but the
-scalar `D ≤ Σ` is verified here (region split, `ρ ≥ 0` on `(ε,a]` and `(b,∞)`, `tail-S`, `tail-D`).
-The remaining obligation `D ≤ Σ` is exactly `app:constants` — a finite rational sweep `63 ≤ m ≤ 499`
-plus an `rpow`-tail bound for `m ≥ 500` (deferred). -/
+`ε = a/2` (`ν = n/m`), the diagonal kernel is nonnegative **provided** the explicit deficit `D` is
+dominated by the explicit surplus `Σ`.  Everything but the scalar `D ≤ Σ` is verified here (region
+split, `ρ ≥ 0` on `(ε,a]` and `(b,∞)`, `tail-S`, `tail-D`, and the surplus constant `hconst` via
+`strip_surplus_const_nonneg`).  The remaining obligation `D ≤ Σ` is exactly `app:constants` — a finite
+rational sweep `63 ≤ m ≤ 499` plus an `rpow`-tail bound for `m ≥ 500` (deferred). -/
 theorem diagKernel_nonneg_strip_left {m r n t : ℕ} (hr2 : 2 ≤ r) (hmn : m = n + 2 * r)
     (hn2r : 2 * r < n) (hnt : n = 2 * t + 1) {q ℓ : ℝ}
     (hq0 : 0 ≤ q) (hq : q ≤ 1 / 3) (hℓ0 : 0 < ℓ) (hℓr : ℓ < q + (r : ℝ) / (m : ℝ))
-    (hconst : 0 ≤ (m : ℝ) / (2 * (t : ℝ) + 1) * (1 - (q + (1 / 2 - q) / 2)) ^ (2 * t + 1)
-        - (q + (1 / 2 - q) / 2) ^ (2 * t))
     (hSD : ((2 * (t : ℝ) + 1) / (m : ℝ) - q) ^ (r - 1)
             * ((q + (1 / 2 - q)) ^ (2 * t) / (ℓ + (1 / 2 - q)) ^ m)
             * ((((2 * (t : ℝ) + 1) / (m : ℝ) - q) - (1 / 2 - q))
@@ -257,6 +273,7 @@ theorem diagKernel_nonneg_strip_left {m r n t : ℕ} (hr2 : 2 ≤ r) (hmn : m = 
     have hqb : q + s ≤ (2 * (t : ℝ) + 1) / (m : ℝ) := by linarith
     rw [le_div_iff₀ hmpos] at hqb; nlinarith [hqb]
   -- the four region facts
+  have hconst := strip_surplus_const_nonneg (m := m) (t := t) (by omega) (by omega) hq0 hq
   have hsurp := left_surplus_bound (m := m) (r := r) (t := t) hℓ0 hr1 q ((1 / 2 - q) / 2)
     hq0 hε0 hp hconst
   have hdef := left_deficit_bound (m := m) (r := r) (t := t) hℓ0 hr1 (by omega) (by omega)
