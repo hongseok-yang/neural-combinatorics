@@ -546,8 +546,21 @@ Work in this order; each milestone is independently checkpointable.
      `ℓ≥q+1/m` → `diagKernel_nonneg_ibp_r1`; middle band `0<ℓ<q+1/m` by length — `m=3` (t=0) →
      `diagKernel_nonneg_two_r_ge` (`2r≥n`), `m=5` (t=1) → `diagKernel_nonneg_r1_five`, `m≥7` (t≥2) →
      `diagKernel_nonneg_r1_of_integral` + `r1_integral_nonneg`. **The entire `r=1` case is closed.**
-7. 📝 🟠–🔴 **M6 — Analytic strip tail.** `Prop residual-all` (`m≥63`). Shares A/B/D/E/F/G machinery with M5;
-   additionally needs `lem:rho-one-sided` (`rho_pos_tail`/`rho_left_surplus` — quick algebra, TODO) + `app:constants`.
+7. 🔶→ **M6 — Analytic strip tail. STARTED.** `Prop residual-all` (`m≥63`, residual range `q≤1/3, r≥2,
+   n>2r, 0<ℓ<q+r/m`). Shares A/B/D/E/F/G machinery with M5; the ρ-bounds it needs (`−ρ(ν−e)≤(e/ν)(ν−e)^{n-1}`,
+   `ρ(ν+e)≥(e/ν)(ν+e)^{n-1}`) are ALREADY `rho_neg`/`rho_pos_tail` (with `m/n=1/ν`).
+   - **✅ `lem:threshold` DONE (2026-07-12): `HighDensity/M6Strip.lean`** (`threshold_bound`, root builds
+     clean, no sorry/axiom). For odd `m≥63`, `m≤6r` (`θ≥1/6`), `n=m−2r`, `n>2r`, `b>0`:
+     `H(b)=m/((r-1)/b+(n-1)/(n/m))−b ≤ 2/5`. Proved WITHOUT `√` (paper maximizes to `(√m−√(r-1))²/B₀`):
+     `H(b)≤2/5 ⟺ mb≤(b+2/5)(A₀+B₀b)` (`A₀=r-1`, `B₀=(n-1)m/n`), via completing the square with the
+     discriminant `(A₀+(2/5)B₀−m)²≤(8/5)A₀B₀`. The discriminant clears (×25n²) to the quartic
+     `(5A₀n+2(n-1)m−5mn)²≤40A₀(n-1)mn` (= `(3n²+rn+7n+4r)²≤40(r-1)(n-1)(n+2r)n` with `m=n+2r`), closed by
+     `nlinarith` with square hints; extremal case `(m,r,n)=(63,11,41)` (margin ~0.82). Integer constraints
+     `13(r-1)≥2m` ⇒ `9r≥2n+13`, `r≥11`, `n≥33` all via `omega` (uses `m` odd + `6r` even ⇒ `m≤6r−1`).
+   - **📝 REMAINING for M6:** `lem:right-reflection` (needs the pointwise `eq:right-condition`
+     `((b+e)/(b-e))^{r-1}((ν+e)/(ν-e))^{n-1}≥((ℓ+b+e)/(ℓ+b-e))^m` via the `log((X+e)/(X-e))` power series +
+     `threshold_bound`); `lem:left-estimate` (a)/(b) (Σ/D≥1 ratio + `app:constants`); the finite certs
+     `prop:finite` (`m≤61`, Python port). Then `prop:remaining` assembly.
 8. 📝 🟡 **M7 — Assembly.** Combine the case partition into `thm:regionI-full`; wire the deletion +
    two-sided reduction; expose the `W`-facing theorem in `Main.lean` style.
 

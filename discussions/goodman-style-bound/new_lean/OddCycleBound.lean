@@ -63,3 +63,5 @@ import OddCycleBound.HighDensity.KernelIntegrable
 import OddCycleBound.HighDensity.KernelReflect
 -- M3/M5: thm:ibp (r=1) + full thm:r1 assembly (all lengths, r=1 diagonal positivity).
 import OddCycleBound.HighDensity.KernelIBP
+-- M6: residual strip (m≥63 tail) — lem:threshold (H(b) ≤ 2/5).
+import OddCycleBound.HighDensity.M6Strip
