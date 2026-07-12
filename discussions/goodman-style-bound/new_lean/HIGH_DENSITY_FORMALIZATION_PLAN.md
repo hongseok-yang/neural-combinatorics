@@ -206,7 +206,7 @@ items are P and E5; the rest are light.
 | strip: left-estimate machinery (`tail-D` deficit, `tail-S` surplus) | ✅ | `left_deficit_bound`, `left_surplus_bound`, `affine_integral`, `power_integral_lower` (`M6LeftEstimate`) |
 | strip: surplus constant `hconst` (`c_n ≥ 0`) — uniform, no sweep | ✅ | `strip_surplus_const_nonneg` (via `cn_bound`) (`M6LeftEstimate`) |
 | strip: left-estimate assembly `0 ≤ ∫` **reduced to the single scalar `D ≤ Σ`** (`lem:left-estimate`) | ✅ | `diagKernel_nonneg_strip_left` (takes only `hSD : D ≤ Σ`) (`M6LeftEstimate`) |
-| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | 📝 | `P_ge_51`+`P_ge_72` (`P`-factors) + `constA_tail` (`eq:constant-A` `m≥500` growth/base arithmetic) done; blocker now isolated to `B₀/B₁` rpow bounds (feasible: raise `exponentiation.threshold`, per-piece `rpow`→natpow `norm_num` confirmed) + the finite sweep `63≤m≤499` (code-gen scale) |
+| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | 📝 | DONE: `P_ge_51`+`P_ge_72` (`P`-factors), `constA_tail` (`eq:constant-A` `m≥500` growth/base), **`B1_ge` (`eq:constant-B` rpow factor `B₁(θ)≥126/125`, full 12-piece subdivision)**. LEFT: `B₀(θ)≥201/200` (near-tight, needs the rpow-derivative/monotone route — subdivision infeasible), `constB_tail` (2-sided min arithmetic), `eq:tail-ratio` reduction linking to `hSD`, and the finite sweep `63≤m≤499` (code-gen scale) |
 
 **Stage D — certificates & final assembly.**
 

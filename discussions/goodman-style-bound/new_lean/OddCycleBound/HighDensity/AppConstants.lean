@@ -55,4 +55,74 @@ lemma constA_tail {m : ℕ} (hm : 500 ≤ m) :
       = 99 * 51 / 100 * ((201 / 200) ^ m / (m : ℝ)) := by field_simp
   rw [heq]; linarith [hbase, hkey]
 
+/-! ### `eq:constant-B`: the `rpow` factor bound `B₁(θ) ≥ 126/125` on `[1/6, 1/4]`
+
+`B₁(θ) = (7/6)^{1-2θ}·(8-24θ)^{-θ}·(34/29)`.  Proved by the paper's 12-piece subdivision of `[1/6,1/4]`
+into `[(24+i)/144, (25+i)/144]`: on each piece a monotonicity bound (`B1_mono`) reduces `B₁(θ)` to its
+endpoint value `(7/6)^{1-2b}(8-24a)^{-b}(34/29)`, and that value `≥ 126/125` is verified by raising to
+the common power `144` (`B1_cert`, turning the `rpow`s into `natpow`s) and a `norm_num` (with the
+exponentiation threshold raised).  Together with `P_ge_72` this is the `θ`-factor content of
+`eq:constant-B`. -/
+
+/-- Monotonicity: on `[a,b] ⊆ [1/6,1/4]`, the endpoint value bounds `B₁(θ)` below.  `(7/6)^{1-2θ}` is
+decreasing (`rpow` exponent), and `(8-24θ)^{-θ}` is increasing (base `↓`, exponent `↑` under a `≥ 1`
+base), via `Real.rpow_le_rpow_of_exponent_le` / `Real.rpow_le_rpow` + `one_div` antitone. -/
+lemma B1_mono {a b θ : ℝ} (ha16 : 1 / 6 ≤ a) (hab : a ≤ θ) (hθb : θ ≤ b) (hb14 : b ≤ 1 / 4) :
+    (7 / 6 : ℝ) ^ (1 - 2 * b) * (8 - 24 * a) ^ (-b) * (34 / 29)
+      ≤ (7 / 6) ^ (1 - 2 * θ) * (8 - 24 * θ) ^ (-θ) * (34 / 29) := by
+  have h824θ : (0 : ℝ) < 8 - 24 * θ := by linarith
+  have h824a : (1 : ℝ) ≤ 8 - 24 * a := by linarith
+  have h1 : (7 / 6 : ℝ) ^ (1 - 2 * b) ≤ (7 / 6) ^ (1 - 2 * θ) :=
+    Real.rpow_le_rpow_of_exponent_le (by norm_num) (by linarith)
+  have hpow : (8 - 24 * θ : ℝ) ^ θ ≤ (8 - 24 * a) ^ b :=
+    le_trans (Real.rpow_le_rpow h824θ.le (by linarith) (by linarith))
+      (Real.rpow_le_rpow_of_exponent_le h824a (by linarith))
+  have h2 : (8 - 24 * a : ℝ) ^ (-b) ≤ (8 - 24 * θ) ^ (-θ) := by
+    rw [Real.rpow_neg (by linarith), Real.rpow_neg h824θ.le, inv_eq_one_div, inv_eq_one_div]
+    exact one_div_le_one_div_of_le (Real.rpow_pos_of_pos h824θ θ) hpow
+  exact mul_le_mul_of_nonneg_right
+    (mul_le_mul h1 h2 (by positivity) (by positivity)) (by norm_num)
+
+/-- Certificate reducer: the endpoint value `≥ 126/125` follows from the `144`-th-power `natpow`
+inequality `(126/125)^144 ≤ (7/6)^p·(1/(8-24a)^q)·(34/29)^144`, where `p = (1-2b)·144`, `q = b·144`. -/
+lemma B1_cert {a b : ℝ} (ha : (0 : ℝ) < 8 - 24 * a) (p q : ℕ)
+    (hp : (1 - 2 * b) * ((144 : ℕ) : ℝ) = (p : ℝ)) (hq : b * ((144 : ℕ) : ℝ) = (q : ℝ))
+    (hnat : (126 / 125 : ℝ) ^ 144 ≤ (7 / 6) ^ p * (1 / (8 - 24 * a) ^ q) * (34 / 29) ^ 144) :
+    (126 / 125 : ℝ) ≤ (7 / 6) ^ (1 - 2 * b) * (8 - 24 * a) ^ (-b) * (34 / 29) := by
+  have hXpos : (0 : ℝ) < (7 / 6) ^ (1 - 2 * b) * (8 - 24 * a) ^ (-b) * (34 / 29) := by positivity
+  apply le_of_pow_le_pow_left₀ (n := 144) (by norm_num) hXpos.le
+  rw [mul_pow, mul_pow, ← Real.rpow_natCast ((7 / 6 : ℝ) ^ (1 - 2 * b)) 144,
+      ← Real.rpow_natCast ((8 - 24 * a : ℝ) ^ (-b)) 144, ← Real.rpow_mul (by norm_num),
+      ← Real.rpow_mul ha.le, hp, show (-b) * ((144 : ℕ) : ℝ) = -(q : ℝ) from by rw [← hq]; ring,
+      Real.rpow_natCast, Real.rpow_neg ha.le, Real.rpow_natCast, ← inv_eq_one_div] at *
+  exact hnat
+
+set_option exponentiation.threshold 400 in
+/-- **`eq:constant-B` factor bound `B₁(θ) ≥ 126/125`** for `1/6 ≤ θ ≤ 1/4` (12-piece subdivision). -/
+lemma B1_ge {θ : ℝ} (h16 : (1 : ℝ) / 6 ≤ θ) (h14 : θ ≤ 1 / 4) :
+    (126 / 125 : ℝ) ≤ (7 / 6) ^ (1 - 2 * θ) * (8 - 24 * θ) ^ (-θ) * (34 / 29) := by
+  rcases le_or_gt θ ((25:ℝ)/144) with h0 | h0
+  · exact le_trans (B1_cert (a := (24:ℝ)/144) (by norm_num) 94 25 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (by linarith) h0 (by norm_num))
+  rcases le_or_gt θ ((26:ℝ)/144) with h1 | h1
+  · exact le_trans (B1_cert (a := (25:ℝ)/144) (by norm_num) 92 26 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h0) h1 (by norm_num))
+  rcases le_or_gt θ ((27:ℝ)/144) with h2 | h2
+  · exact le_trans (B1_cert (a := (26:ℝ)/144) (by norm_num) 90 27 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h1) h2 (by norm_num))
+  rcases le_or_gt θ ((28:ℝ)/144) with h3 | h3
+  · exact le_trans (B1_cert (a := (27:ℝ)/144) (by norm_num) 88 28 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h2) h3 (by norm_num))
+  rcases le_or_gt θ ((29:ℝ)/144) with h4 | h4
+  · exact le_trans (B1_cert (a := (28:ℝ)/144) (by norm_num) 86 29 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h3) h4 (by norm_num))
+  rcases le_or_gt θ ((30:ℝ)/144) with h5 | h5
+  · exact le_trans (B1_cert (a := (29:ℝ)/144) (by norm_num) 84 30 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h4) h5 (by norm_num))
+  rcases le_or_gt θ ((31:ℝ)/144) with h6 | h6
+  · exact le_trans (B1_cert (a := (30:ℝ)/144) (by norm_num) 82 31 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h5) h6 (by norm_num))
+  rcases le_or_gt θ ((32:ℝ)/144) with h7 | h7
+  · exact le_trans (B1_cert (a := (31:ℝ)/144) (by norm_num) 80 32 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h6) h7 (by norm_num))
+  rcases le_or_gt θ ((33:ℝ)/144) with h8 | h8
+  · exact le_trans (B1_cert (a := (32:ℝ)/144) (by norm_num) 78 33 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h7) h8 (by norm_num))
+  rcases le_or_gt θ ((34:ℝ)/144) with h9 | h9
+  · exact le_trans (B1_cert (a := (33:ℝ)/144) (by norm_num) 76 34 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h8) h9 (by norm_num))
+  rcases le_or_gt θ ((35:ℝ)/144) with h10 | h10
+  · exact le_trans (B1_cert (a := (34:ℝ)/144) (by norm_num) 74 35 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h9) h10 (by norm_num))
+  · exact le_trans (B1_cert (a := (35:ℝ)/144) (by norm_num) 72 36 (by norm_num) (by norm_num) (by norm_num)) (B1_mono (by norm_num) (le_of_lt h10) h14 (by norm_num))
+
 end OddCycleBound.HighDensity
