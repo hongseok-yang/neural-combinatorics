@@ -73,3 +73,5 @@ import OddCycleBound.HighDensity.M6LeftEstimate
 import OddCycleBound.HighDensity.StripAssembly
 -- Stage D: app:constants m≥500 tail arithmetic (eq:constant-A), isolating the B₀ rpow bound.
 import OddCycleBound.HighDensity.AppConstants
+-- Stage D: app:constants eq:constant-A rpow factor bound B₀(θ) ≥ 201/200 (derivative/monotone route).
+import OddCycleBound.HighDensity.AppConstantsB0
