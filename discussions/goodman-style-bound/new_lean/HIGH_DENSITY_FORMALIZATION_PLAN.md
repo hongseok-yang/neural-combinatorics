@@ -13,50 +13,58 @@ its heart is a real-analysis case analysis over an unbounded family, plus a spec
 plus a finite exact-certificate tail. The certificate machinery you already have covers only the
 smallest piece.
 
+**Paper references (two, kept in sync):**
+- `../paper_new.tex` — the verbose source with *all* proofs; the primary reference. Section/label names
+  used below (`thm:expansion`, `thm:r1`, `sec:high-density-theorem`, …) are its labels.
+- `../odd_cycle_lower_bound_clean.tex` — the cleaner writeup. Its §"The remaining range for large `m`"
+  (≈ lines 650–850: `eq:remaining-range`, `lem:left-estimate`, `lem:threshold`, `lem:right-reflection`,
+  `prop:remaining`) and `app:constants`/`app:finite` are the most useful for the Stage C/D strip work,
+  and its `thm:main` proof is the case-partition `diagKernel_nonneg` mirrors. Labels mostly coincide with
+  `paper_new.tex`; when they differ, `paper_new.tex` wins.
+
 Companion documents: `FORMALIZATION_NOTES.md` (the C9-band / operator-layer triage) and `README.md`
-(what is built). Sections referenced below are in `../paper_new.tex`.
+(what is built).
 
 ---
 
-## ⭐ SESSION HANDOFF (2026-07-07) — read before starting
+## ⭐ SESSION HANDOFF (2026-07-13) — read before starting
 
-**Ultimate goal:** the GRAPHON theorem above (all odd `m`, `p≥2/3`). The user cares about the *actual
-result* — **do not spend effort on easy finite-rank lemmas that don't advance the graphon goal.**
+**Ultimate goal:** the GRAPHON theorem above (all odd `m`, `p ≥ 2/3`), = `odd_cycle_bound` in §4.
+**The single authoritative status is the Stage A–D tables in §1 below — read those first.** This handoff
+is just the orientation; the memory entry `goodman-lean-extension.md` has the full lemma-by-lemma
+inventory and the Lean gotchas. Whole `new_lean` builds clean (root green, axiom-clean throughout: only
+`propext`/`Classical.choice`/`Quot.sound`).
 
-**Done:** the **finite-rank** two-sided identity, proved once for all odd `m` (branch
-`goodman-high-density-m0`, whole `new_lean` builds clean). Capstone `two_sided_identity` in
-`OddCycleBound/HighDensity/BlockPower.lean`:
-`Tr(blockOp q g A ^m) + Tr(blockOp (1−q) g (−A) ^m) = q^m + (1−q)^m + twoSidedShift`, for odd `m`,
-symmetric `A`. See the memory entry for the full lemma inventory (block recursion, `bodyBlock_eq`,
-`hubCol_eq`, `hubEntry_eq`, parity pillars, moments).
+**The reduction chain is fully in place.** `cycle_bound_of_neckSum` (`GraphonReduction`) reduces the
+target to `neckSum ≥ p^m − p(1−p)^{m-1}` (the graphon `Φ_m ≥ 0`), `neckSum_moment` makes it operator-free,
+and `multiKernel_nonneg` (`MixtureIntegral`) reduces the box positivity to the **1-parameter diagonal
+kernel** `diagKernel m r q ℓ ≥ 0` on `ℓ ∈ [−½,½]`, `q ≤ 1/3`.
 
-**⚠️ This is a THEOREM ON MATRICES, not graphons.** `blockOp` is a finite matrix; `Tr(P^m)` is a matrix
-trace, not yet linked to the graphon `cycleDensity`/`t(C_m,U)`, and there is no limit. It is the
-deliberate *first stage* (M0a finite-rank → M0c limit), the paper's own route (Schur in finite rank,
-then approximate-and-limit), chosen to avoid the 🔴 Fredholm/operator machinery — but it is **not** the
-graphon result.
+**Diagonal positivity `diagKernel ≥ 0` is essentially complete (Stage C).** `diagKernel_nonneg`
+(`StripAssembly`) covers the entire `(r,ℓ)` plane by the paper's case partition (`thm:main` proof):
+`r=1`, `ℓ≤0`, `2r≥n`, `ℓ≥q+r/m`, and the residual strip all discharged — the last via
+`diagKernel_nonneg_strip_right` (fully proved) and `diagKernel_nonneg_strip_left` (reduced to the single
+scalar `hSD : D ≤ Σ`). Its two hypotheses `Hfin`/`Hleft` are exactly the two remaining certificate
+families below.
 
-**Where the real remaining work is (spend effort here):**
-1. ✅ **M0c — the graphon bridge — DONE (2026-07-08, direct route, NO matrix limit).**
-   `OddCycleBound/HighDensity/GraphonReduction.lean` (builds clean; wired into root). It turned out the
-   graphon two-sided identity is *already* `complTrace_necklace` in `Necklace.lean` — no finite-rank
-   approximation, no L² step-kernel limit, no `blockOp`→`cycleDensity` bridge needed (the matrix
-   `two_sided_identity` was the go/no-go validation only). Applying `complTrace_necklace` to `compl W`
-   (a graphon by `isGraphon_compl`), for odd `m` the sign `(−1)^{m-1}=1`, and `edge_deletion_general`
-   cancels the path-density term `x_{m-1}` **exactly**, giving `cycle_ge_neckSum`:
-   `t(C_m,W) = cycleDensity μ W m ≥ neckSum W μ m` for every odd `m ≥ 3`, any density. Capstone
-   `cycle_bound_of_neckSum`: the full target `t(C_m,W) ≥ p^m − p(1−p)^{m-1}` now reduces to the SINGLE
-   inequality `neckSum W μ m ≥ p^m − p(1−p)^{m-1}` (the graphon `Φ_m ≥ 0`). `neckSum` is the explicit
-   necklace pairing sum `Σ_{j<m-1} (−1)ʲ ⟨pathIter (compl W) j, complIter (compl W) (m-1-j)⟩`.
-   **→ Everything downstream (M1–M7) is now the ONE obligation `neckSum ≥ p^m − p(1−p)^{m-1}`.**
-2. **`Φ_m ≥ 0` positivity — the genuine crux** (route-independent, = the neckSum inequality above): the
-   analytic case analysis, especially `thm:r1` and the analytic-strip tail (M3/M5/M6). NONE of this is
-   finite-rank bookkeeping. This is now the sole remaining mathematical content.
-3. Optional refinement: expand `neckSum` into the paper's symmetric-function/`PowerSeries` `S_m` in the
-   pure moments `s_j = specMoment` (= `⟨g, Aʲg⟩`), the form M1's `𝓟_{m,r}` expansion consumes.
+**What actually remains (the only open work):**
+1. **Stage A′ — the expansion `thm:expansion`** (`Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ`). The measure-free
+   eigen-sum route (E1–E6, §1 table) is the plan; steps P (port `A`'s compact self-adjoint
+   eigen-expansion) and E5 (the moment-polynomial identity) are the heavy ones. This is the last piece of
+   *genuine mathematics* between `diagKernel ≥ 0` and `Φ_m ≥ 0`.
+2. **`app:constants` scalar `D ≤ Σ` (= `Hleft`).** All `θ`-factor bounds are DONE (`P_ge_51`, `P_ge_72`,
+   `B0_ge`, `B1_ge`, `constA_tail` in `AppConstants`/`AppConstantsB0`). What's left: `constB_tail`
+   (2-sided-min arithmetic), the `eq:tail-ratio` factor-bounding reduction (links exact `D,Σ` to the
+   scalar `(99/100m)·P·B^m`), and the **finite sweep `63 ≤ m ≤ 499`** (each pair `norm_num`-able with
+   `set_option exponentiation.threshold` raised, but ~13k pairs ⇒ **code-generator job**, not hand proof).
+3. **`prop:finite` `m ≤ 61` (= `Hfin`).** The Bernstein/interval certs of `lem:finite-criterion` +
+   `(q,ℓ)`-box subdivision — another **code-generator** job (a second, harder sweep).
 
-**Build:** `new_lean` is separate — `lake exe cache get` first; never run concurrent `lake`; single-file
-build `lake build OddCycleBound.HighDensity.BlockPower`.
+Items 2–3 are computational-verification tasks (the paper's "exact rational evaluation"); the honest way
+to do them is to generate a Lean cert file from Python and accept a long build. Item 1 is theorem-proving.
+
+**Build & workflow are in §5 at the end** (`lake exe cache get` first; one build at a time; write full
+modules then one `lake build`, don't loop `lake env lean` on scratch — that was the main time sink).
 
 ---
 
@@ -257,3 +265,26 @@ theorem odd_cycle_bound (hW : IsGraphon W μ)
   (hm : m % 2 = 1) (hm3 : 3 <= m) :
   pathDensity (cycleGraphon m) W μ >= (edgeDensity W μ)^m - edgeDensity W μ * (1 - edgeDensity W μ)^(m - 1)
 ```
+
+---
+
+## 5. Build & workflow (operational)
+
+- **`new_lean` is a separate Lake project** — from `discussions/goodman-style-bound/new_lean/`, run
+  `lake exe cache get` once per checkout before building (fetches the Mathlib v4.31 cache).
+- **Never run concurrent `lake` commands** (races → Windows crashes). One build at a time.
+- **Single-file build:** `lake build OddCycleBound.HighDensity.<Module>`; filter noise with
+  `| grep -iE "error|Build completed|sorry"`. Build the root `lake build OddCycleBound` before committing.
+- **Edit `.lean` with Write/Edit, never PowerShell `Set-Content`** (corrupts the Unicode `∑ μ ρ …`).
+  `python3` is **not** available in this environment; use `cat <<'EOF'` for scratch files.
+- **Efficiency lesson (the main past time sink):** don't iterate `lake env lean /tmp/scratch.lean`
+  micro-step by micro-step (each is minutes). Verify the *hard cores* in scratch, then write the **full
+  module** and do **one** `lake build`. E.g. `AppConstantsB0` (8 lemmas incl. FTC + derivative +
+  antitone) compiled on the first build after the 3 hard cores were pre-checked.
+- **`norm_num` on big powers:** it silently refuses exponents > 256; add `set_option
+  exponentiation.threshold <N> in` before the declaration to evaluate large rational powers directly
+  (used by `constA_tail`, `B0_endpoint`, `B1_ge`).
+- **Axiom-check a capstone:** a temp file with `import …; #print axioms <lemma>`, run
+  `lake env lean <file>`; expect only `propext` / `Classical.choice` / `Quot.sound`.
+- **Protocol:** update the §1 Stage tables + the memory entry when a lemma lands; commit working
+  checkpoints; no `sorry`, no `axiom`, no overclaiming.
