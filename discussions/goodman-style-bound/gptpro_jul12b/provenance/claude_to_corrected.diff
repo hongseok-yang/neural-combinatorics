@@ -1,0 +1,1559 @@
+--- /mnt/data/regionII_corrected_solution_package/provenance/claude_original_claim.tex	2026-07-12 00:57:00.678045321 +0000
++++ /mnt/data/regionII_corrected_solution_package/regionII_corrected_solution.tex	2026-07-12 00:57:00.595660147 +0000
+@@ -4,6 +4,9 @@
+ \usepackage{enumitem}
+ \usepackage{hyperref}
+ \usepackage{xcolor}
++\usepackage{microtype}
++\usepackage{booktabs}
++\usepackage{array}
+ 
+ \hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
+ 
+@@ -25,50 +28,52 @@
+ \newcommand{\cQ}{\mathcal Q}
+ \newcommand{\cL}{\mathcal L}
+ 
+-\title{Region II of the odd-cycle lower bound:\\
+-the scalar Huber inequality and its resolution\\[1mm]
+-\large A self-contained continuation of the July 11 baton note}
+-\author{Working record for T.K., H.Y., and collaborators\\[1mm]
+-\normalsize Reduction: GPT~Pro, July 11, 2026 (recapped here with full proofs);\\
+-\normalsize scalar theorem and zone proofs: Claude, July 11, 2026}
++\title{Region II of the Goodman--Style Odd-Cycle Bound:\\
++a corrected consolidated proof for $\tfrac12<p<\tfrac23$}
++\author{Consolidated working note for T.K., H.Y., and collaborators\\[1mm]
++\normalsize Operator and Huber reduction: GPT~Pro, July 11, 2026;\\
++\normalsize scalar zone argument and certificates: Claude, July 11, 2026;\\
++\normalsize audit, corrections, and consolidation: July 12, 2026}
+ \date{}
+ 
+ \begin{document}
+ \maketitle
+ 
+ \begin{abstract}
+-Let $W$ be a graphon with edge density $p$, and let $m\ge3$ be odd.  The
+-conjecture $t(C_m,W)\ge p^m-p(1-p)^{m-1}$ was previously proved for
+-$p\le1/2$ (trivial), $p\ge2/3$ (the high-density theorem), all odd $m\le13$,
+-and several structured families; the July~11 baton note of GPT~Pro reduced
+-the remaining range $\tfrac12<p<\tfrac23$ (``Region II'') rigorously to a
+-single scalar inequality, $R_m\le C_m\psi(\xi,\rho)$, in the three variables
+-$(q,\alpha,m)$: $q=1-p$, $\alpha$ the unique frontier eigenvalue of the
+-complement compression, $\psi$ an explicit piecewise Huber envelope.
+-
+-This note proves that scalar inequality for all admissible $(q,\alpha)$ and
+-all odd $m\ge15$.  The proof splits the admissible domain into three zones
+-and, in each, certifies the Huber payment through an explicit value of its
+-dual representation; the delicate zones are the \emph{pinch}
+-($p\downarrow1/2$ with $m(1-2\alpha)\to0$, where the inequality is
+-asymptotically tight, with relative margin $\Theta(1/m)$) and the
+-\emph{Tur\'an corner} ($p\uparrow2/3$, where both sides vanish and the
+-domain constraint $q>1/3$ is essential).  All proofs are analytic with
+-explicit constants.  Combined with the earlier results, this closes
+-Region~II and hence the odd-cycle lower-bound conjecture in full:
+-\emph{for every graphon $W$ and every odd $m\ge3$,
+-$t(C_m,W)\ge p^m-p(1-p)^{m-1}$.}
+-
+-For self-containedness, the one-frontier reduction of the baton note is
+-restated here with complete proofs (with three small expository gaps
+-repaired); the new material is the reparametrization and zone analysis of
+-\S\ref{sec:coords}--\S\ref{sec:assembly}.  A companion script re-verifies
+-every algebraic identity exactly and every inequality step numerically.
+-Verification status: the reduction and Zones A and C--small are fully
+-analytic; Zone B and Zone C--moderate are analytic up to two finite exact
+-rational certificates ($23$ and $3001$ boxes); the Tur\'an corner is
+-analytic.  The pinch and Zone B were each additionally proved or certified a
+-second time by an independent derivation.
++Let $W$ be a graphon of edge density $p$, and let $m\ge3$ be odd.  This
++working note proves the remaining density range
++\[
++        \frac12<p<\frac23
++\]
++of the proposed Goodman--style inequality
++\[
++        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
++\]
++The proof has two logically separate parts.  First, an operator-theoretic
++argument reduces every possible obstruction to one frontier eigenvalue
++$\alpha$ of the complement compression and then, through an exact Huber-type
++shape elimination, to the explicit scalar inequality
++\[
++        R_m\le C_m\psi(\xi,\rho).
++\]
++Second, that scalar inequality is proved on the full admissible parameter
++region.  The pinch regime near $p=1/2$, the small-frontier regime, and the
++Tur\'an-corner sliver are handled analytically.  Two compact intermediate
++regions are covered by finite, exhaustive certificates in exact rational
++arithmetic.  Thus the final proof is rigorous but computer-assisted; the
++computer is used only for two finite semialgebraic/elementary-function
++covering checks, not for floating-point sampling.
++
++This version repairs the supplied July~11 manuscript in four places: it
++corrects a reversed comparison in the $m$-maximisation lemma; states and
++proves the frontier-gap bound used by the Zone-C certifier; replaces several
++unsafe decimal roundings by directed rational bounds; and makes the logical
++status of the exact certificates explicit.  The earlier proposed five-atom
++stop-loss argument is \emph{not} used here: its scalar variables do not match
++the Huber interface, and no valid implication from that lemma to
++$R_m\le C_m\psi(\xi,\rho)$ is currently known.  The present document therefore
++contains only the proof whose bridge to the graphon problem has been fully
++checked.
+ \end{abstract}
+ 
+ {\small\tableofcontents}
+@@ -80,7 +85,7 @@
+ \begin{equation}\label{eq:conj}
+         t(C_m,W)\ \ge\ g_m(p):=p^m-p(1-p)^{m-1}.
+ \end{equation}
+-The consolidated record \texttt{paper\_new.tex} (July 5, 2026) proves
++The consolidated record \texttt{earlier\_consolidated\_note.tex} (July 5, 2026) proves
+ \eqref{eq:conj}: for $p\le 1/2$ (trivial, $g_m(p)\le0$); for every odd $m$ when
+ $p\ge2/3$ (the high-density theorem); for all $p$ and all odd $m\le13$
+ (per-cycle theorems $C_3$--$C_{13}$); and for all $p$, all odd $m$, on several
+@@ -94,8 +99,7 @@
+         \qquad m\ge15\ \text{odd}.
+ \]
+ 
+-The July 11 baton note of GPT~Pro (\texttt{gptpro\_jul11/regionII\_baton\_note.tex})
+-reduces Region II rigorously to a single \emph{scalar} inequality --- the
++A July 11 working derivation by GPT~Pro reduces Region II rigorously to a single \emph{scalar} inequality --- the
+ \emph{Huber payment inequality} --- in the three variables $(q,\alpha,m)$, where
+ $\alpha$ is the unique eigenvalue of the complement compression above $q$
+ (the ``frontier eigenvalue''); all other spectral, eigenfunction-shape and
+@@ -127,41 +131,68 @@
+ $\ t(C_m,W)\ \ge\ p^m-p(1-p)^{m-1}$, $p=t(K_2,W)$.
+ \end{corollary}
+ 
+-\emph{Proof architecture.}  The scalar inequality is proved through the two
+-dual certificates $\lambda=1$ and $\lambda=\min(1,2\rho\xi)$ of the Huber
+-envelope $\psi$, on three zones that cover the admissible domain
+-(\S\ref{sec:coords}): the pinch zone A ($e=1-2\alpha\le\tfrac1{60}$,
+-$\xi\ge1$), where the inequality is asymptotically tight and the proof is
+-sharpest; zone B ($e\ge\tfrac1{60}$, $\xi\ge1$); and zone C ($\xi\le1$),
+-which contains the ultra-thin frontier scale and the Tur\'an corner
+-$p\uparrow\tfrac23$.  Every lemma is analytic, with explicitly displayed
+-constants; no step relies on floating-point computation.  As a safety net
+-against transcription and arithmetic slips, the companion script
+-\texttt{regionII\_scalar\_checker.py} re-verifies (i) all algebraic
+-identities exactly in rational/symbolic arithmetic and (ii) every displayed
+-inequality of every proof step numerically on dense adversarial grids
+-(\S\ref{sec:verification}).
++\paragraph{Proof architecture.}
++The scalar inequality is proved through the dual formula for the Huber
++envelope $\psi$.  Zones A and B use $\lambda=1$; Zone C uses either
++$\lambda=1$ or $\lambda=2\rho_0\xi$, where $0<\rho_0\le\rho$ is an
++explicit lower bound and the latter choice is made only when it lies in
++$[0,1]$.
++The admissible domain is covered by three zones: the pinch zone A
++($e=1-2\alpha\le1/60$, $\xi\ge1$), zone B
++($e\ge1/60$, $\xi\ge1$), and zone C ($\xi\le1$).  Zone A and the
++small-$e$ part of Zone C are elementary analytic estimates.  Zone B is an
++analytic reduction to a two-variable inequality followed by a finite exact
++rational box certificate.  The moderate-$e$ part of Zone C is an analytic
++three-geometric reduction followed by a second finite exact rational
++certificate; its very thin Tur\'an-corner remainder is again analytic.
+ 
+ \subsection*{Provenance and verification status}
+ 
+ \begin{center}
+ \small
+-\begin{tabular}{p{0.30\linewidth}p{0.22\linewidth}p{0.4\linewidth}}
+-\hline
+-Result & Origin & Verification \\
+-\hline
+-One-frontier reduction (\S\ref{sec:reduction}) & GPT~Pro, July 11 & analytic; audited line-by-line (July 11), three expository gaps repaired here; identities re-checked in exact arithmetic \\
+-Chart, defect form, certificates (\S\ref{sec:coords}) & Claude, July 11 & analytic; identities exact-checked \\
+-Zone A = pinch (\S\ref{sec:zoneA}) & Claude & analytic; every step numerically re-verified; \emph{independent second proof} with exact rational constant certificates (\texttt{claude\_jul11/proof\_Z1.md}, \texttt{claude\_jul11/check\_Z1.py}) \\
+-Zone B (\S\ref{sec:zoneB}) & Claude & analytic $m$-maximization + exact rational box certificate (\texttt{zoneB\_certifier.py}); independently re-derived box certificate (\texttt{claude\_jul11/check\_ZB\_final.py}) \\
+-Zone C, $e\le1/60$ (\S\ref{sec:zoneC}) & Claude & analytic; every step numerically re-verified \\
+-Zone C, $e\ge1/60$ (\S\ref{subsec:zoneC-mod}) & Claude & analytic superstructure (three-geometric defect, secant gate, $m$-free payment gating) + exact rational box certificate (\texttt{zoneC\_certifier.py}); Tur\'an-corner lemma analytic, constants re-verified numerically \\
+-Assembly (\S\ref{sec:assembly}) & Claude & analytic \\
+-Global sweep (\S\ref{sec:verification}) & Claude (agents) & numerical only (safety net): $68{,}564$ admissible points, no violation, min margin $4.6\times10^{-6}$ \\
+-\hline
++\begin{tabular}{>{\raggedright\arraybackslash}p{0.27\linewidth}
++                  >{\raggedright\arraybackslash}p{0.20\linewidth}
++                  >{\raggedright\arraybackslash}p{0.45\linewidth}}
++\toprule
++Result & Source & Status in this version \\
++\midrule
++One-frontier and Huber reduction (\S\ref{sec:reduction})
++& GPT~Pro, July 11
++& Pencil-and-paper proof; the endpoint issue in the forced-variance argument
++and the $K=0$ shape case are stated explicitly. \\
++Chart and scalar certificates (\S\ref{sec:coords})
++& Claude, July 11
++& Pencil-and-paper identities; exact symbolic regression checks supplied. \\
++Zone A (\S\ref{sec:zoneA})
++& Claude, corrected here
++& Pencil-and-paper proof with all decimal constants interpreted as exact
++rationals and rounded in the safe direction. \\
++Zone B (\S\ref{sec:zoneB})
++& Claude, corrected here
++& Analytic $m$-maximisation plus the exact-rational verifier
++\texttt{zoneB\_certifier.py}; the reversed comparison in the manuscript is fixed. \\
++Zone C (\S\ref{sec:zoneC})
++& Claude, corrected here
++& Analytic for $e\le1/60$ and in the Tur\'an corner; analytic reduction plus
++\texttt{zoneC\_certifier.py} on the compact middle range.  The missing bound
++$f\ge d+\delta$ is now proved and used. \\
++Numerical sweep (\S\ref{sec:verification})
++& Companion checker
++& Regression test only; no theorem depends on sampled floating-point values. \\
++\bottomrule
+ \end{tabular}
+ \end{center}
+ 
++\begin{remark}[Why the stop-loss note is not spliced into this proof]
++A separate five-atom stop-loss inequality was derived during the audit.  Its
++parameters use a different quantity
++$(q-\alpha^2)/(1-\alpha)$, whereas the Huber reduction uses
++$L=\sqrt{pq-\alpha^2}$.  The tempting domination that would bridge the two
++statements is false in general (already for admissible parameters at large
++$m$).  Accordingly, that lemma is not invoked anywhere below.  This remark is
++included to make the dependency graph unambiguous for later paper writing.
++\end{remark}
++
+ \section{The one-frontier reduction, recapped with proofs}\label{sec:reduction}
+ 
+ Everything in this section is due to the July 11 baton note; we restate it so
+@@ -231,12 +262,49 @@
+ under $(g_n,A_n)\to(g,A)$ in $L^2\times\mathrm{HS}$.
+ \end{proof}
+ 
++\begin{lemma}[Compression bound and the no-frontier case]\label{lem:no-frontier}
++The compression $A$ satisfies $\|A\|\le\tfrac12$.  Moreover, if
++$\lambda_{\max}(A)\le q$, then for every odd $m\ge3$,
++\[
++        t(C_m,W)\ge p^m-pq^{m-1}.
++\]
++\end{lemma}
++
++\begin{proof}
++For a real $h\perp\one$, write $h=h^+-h^-$ and
++$r=\int h^+=\int h^-=\tfrac12\|h\|_1$.  Since $0\le U\le1$,
++\[
++ -2r^2\le\langle h,T_Uh\rangle\le2r^2
++ \le\frac12\|h\|_2^2.
++\]
++Taking the supremum over unit $h\in\one^\perp$ gives $\|A\|\le1/2<p$.
++
++As in the proof of Proposition~\ref{prop:master-defect}, the formal series
++\[
++ u(z)=\frac{z^2\langle g,(I+zA)^{-1}g\rangle}{1-pz}
++\]
++has nonnegative coefficients: for an eigenvalue $\nu\in[-1/2,1/2]$ of $A$,
++the coefficient of $z^n$, $n\ge2$, contributed by its coupling is
++\[
++ \frac{p^{n-1}-(-\nu)^{n-1}}{p+\nu}\ge0.
++\]
++Consequently $[z^m]\mathcal L_W(z)\ge0$.  If
++$\lambda_{\max}(A)\le q$, then for every eigenvalue $\nu$ of $A$ and odd
++$m\ge3$,
++\[
++        \nu^m\le q^{m-2}\nu^2.
++\]
++Together with $\operatorname{Tr}(A^2)\le pq$, from
++\eqref{eq:HS-budget}, this yields
++$\operatorname{Tr}(A^m)\le pq^{m-1}$.  Proposition~\ref{prop:shift} now gives
++the claim.
++\end{proof}
++
+ \subsection{One frontier, forced variance, and the frontier ceiling}
+ 
+-Fix $q\in(1/3,1/2)$.  If $\lambda_{\max}(A)\le q$, the graphon is
+-positive-spectrum-safe and \eqref{eq:conj} is already proved
+-(\texttt{paper\_new.tex}, \S ``General structural results'').  So assume $A$ has
+-an eigenvalue $\alpha>q$ with unit eigenfunction $\phi\perp\one$.
++Fix $q\in(1/3,1/2)$.  By Lemma~\ref{lem:no-frontier}, only the case in which
++$A$ has an eigenvalue $\alpha>q$ remains.  Fix a corresponding unit
++eigenfunction $\phi\perp\one$.
+ 
+ \begin{lemma}[One frontier]\label{lem:one-frontier}
+ $A$ has at most one eigenvalue $>q$, and every other eigenvalue lies in
+@@ -282,12 +350,15 @@
+         \alpha\le qa^2+2a\ip gh+\alpha(1-a^2)
+         \le qa^2+2a\|g\|_2\sqrt{1-a^2}+\alpha(1-a^2),
+ \]
+-whence $(\alpha-q)a^2\le2a\|g\|_2\sqrt{1-a^2}$ and
++whence $(\alpha-q)a^2\le2a\|g\|_2\sqrt{1-a^2}$.  Here $a^2<1$:
++if $a^2=1$, then the right-hand side vanishes while $\alpha>q$, a
++contradiction.  Since $a^2\ge2\alpha$, this also gives $\alpha<1/2$.  We may
++therefore divide by $1-a^2$ and obtain
+ \[
+         \|g\|_2^2\ge\frac{(\alpha-q)^2a^2}{4(1-a^2)}
+         \ge\frac{\alpha(\alpha-q)^2}{2(1-2\alpha)},
+ \]
+-using $a^2\ge2\alpha$ and that $t\mapsto t/(1-t)$ is increasing.
++using the monotonicity of $t\mapsto t/(1-t)$.
+ Combining \eqref{eq:forced-variance} with $\alpha^2+2\|g\|_2^2\le pq$ (from
+ \eqref{eq:HS-budget}, $\Tr(A^2)\ge\alpha^2$) and clearing the positive
+ denominator $1-2\alpha$ gives
+@@ -459,10 +530,19 @@
+ shape data; by Lemmas~\ref{lem:direct} and~\ref{lem:safe} the left side
+ dominates $\cQ$ pointwise, so it suffices to prove
+ $\cQ\ge C_m\psi(\xi,\rho)$.  (Degenerate case $K=0$: then $k=0$ and
+-Lemma~\ref{lem:safe} reads $bc\ge H\ge\frac{d\sqrt{2\alpha}}2>0$, so $c>0$;
+-in the variables $v$ introduced below, $c\beta(c)\ge bc\ge\frac{d\sqrt{2\alpha}}2$
+-forces $\xi-v+v^2\le0$, whence the payment already satisfies
+-$A_mc^2=C_m\rho v^2\ge C_m\psi$.  So assume $K>0$.)
++Lemma~\ref{lem:safe} gives
++$bc\ge H=d\sqrt z/2\ge d\sqrt{2\alpha}/2>0$.  Hence $c>0$, so
++$u_c>0$ and the budget \eqref{eq:bc-budget} below applies.  With
++$v=2c\sqrt{2\alpha}/e$ it gives
++$b\le\beta(c)\le e(1-v)/(2\alpha)$, and therefore
++\[
++ \frac{d\sqrt{2\alpha}}2
++ \le bc\le c\beta(c)
++ \le\frac{e^2v(1-v)}{4\alpha\sqrt{2\alpha}}.
++\]
++Equivalently $\xi\le v-v^2$.  Thus the positive-part term in
++\eqref{eq:psi} vanishes at this $v$, and
++$A_mc^2=C_m\rho v^2\ge C_m\psi$.  We may henceforth assume $K>0$.)
+ 
+ \emph{Case $u_c\le0$.}  Every admissible $c$ is $\le0$; since $b\ge0$,
+ $H-bc\ge H$, so $\cQ\ge B_mH^2/K$.  By AM--GM,
+@@ -546,7 +626,7 @@
+ 
+ \section{The scalar problem in frontier--gap coordinates}\label{sec:coords}
+ 
+-\subsection{The admissible domain and the $(e,\kappa)$ chart}
++\subsection{The admissible domain and the \texorpdfstring{$(e,\kappa)$}{(e, kappa)} chart}
+ 
+ \begin{definition}[Admissible domain]\label{def:domain}
+ $\mathcal D$ is the set of triples $(q,\alpha,m)$ with $q\in(\tfrac13,\tfrac12)$,
+@@ -631,6 +711,36 @@
+ =\alpha^{m-1}\alpha-p\alpha^{m-1}\tau^{m-1}+L^m$.
+ \end{proof}
+ 
++\begin{lemma}[Frontier-gap inequalities]\label{lem:frontier-gap}
++Put
++\[
++        \delta:=\alpha-\frac13>0.
++\]
++Then, throughout the admissible domain,
++\begin{equation}\label{eq:frontier-gap}
++        d+L\le\frac13,
++        \qquad q-L\ge\delta,
++        \qquad f=\alpha-L\ge d+\delta.
++\end{equation}
++\end{lemma}
++
++\begin{proof}
++Since $q=\alpha-d=\frac13+\delta-d$ and
++$L^2=pq-\alpha^2$, direct expansion gives
++\[
++ \left(\frac13-d\right)^2-L^2
++ =2(d^2-d\delta+\delta^2)+\frac{\delta-d}{3}\ge0.
++\]
++The domain condition $q>1/3$ is exactly $0<d<\delta$, so
++$1/3-d>0$.  Hence $L\le1/3-d$, proving the first inequality.  The other two
++follow from
++\[
++ q-L=\alpha-(d+L)\ge\alpha-\frac13=\delta,
++ \qquad
++ f=d+(q-L).
++\]
++\end{proof}
++
+ \subsection{The three zones}
+ 
+ Theorem~\ref{thm:scalar} is proved by combining three lemmas whose hypotheses
+@@ -648,13 +758,15 @@
+ are compatible iff $6e^2<(1-e)^2(1-3e)$, whose left-minus-right side is
+ strictly increasing in $e$ and changes sign in $(0.2032,\,2033/10000)$ ---
+ exact rational evaluation at the endpoints.)
+-\item \textbf{Zone C} (\S\ref{sec:zoneC}): $\xi\le1$ (any $e$); certificate
+-$\lambda=\min(1,2\rho\xi)$.  This zone contains the ultra-thin frontier scale
++\item \textbf{Zone C} (\S\ref{sec:zoneC}): $\xi\le1$ (any $e$); the
++admissible dual choice is $\lambda=2\rho_0\xi$ when this is at most $1$,
++and $\lambda=1$ otherwise, for an explicit $\rho_0\le\rho$.  This zone
++contains the ultra-thin frontier scale
+ and the \emph{Tur\'an corner} $e\uparrow\tfrac13$, $\kappa\downarrow0$, where
+ $R_m\to0$ and the constraint $q>\tfrac13$ is essential.
+ \end{itemize}
+ 
+-\section{Zone A: $e\le1/60$, $\xi\ge1$}\label{sec:zoneA}
++\section{Zone A: \texorpdfstring{$e\le1/60$, $\xi\ge1$}{e <= 1/60, xi >= 1}}\label{sec:zoneA}
+ 
+ \begin{lemma}[Zone A]\label{lem:zoneA}
+ Let $(q,\alpha,m)\in\mathcal D$ with $e\le\tfrac1{60}$ and $\xi\ge1$.  Then
+@@ -665,240 +777,233 @@
+ \end{equation}
+ \end{lemma}
+ 
+-The second inequality is the certificate \eqref{eq:cert-II}; the content is the
+-first.  We may assume $R_m>0$.  Throughout this section put
++The second inequality is the dual certificate \eqref{eq:cert-II}; the content
++is the first.  We may assume $R_m>0$.  All terminating decimals in this
++section denote the displayed exact rational numbers.  Put
+ \[
+         z:=(m-2)u,
+         \qquad
+-        \eps:=\frac{e^2}{16\alpha^2(1+\rho)\,d}
++        \eps:=\frac{e^2}{16\alpha^2(1+\rho)d}
+         =\frac{e}{4(1-e)^2(1+\rho)\kappa},
+         \qquad
+-        \sigma_e:=(2.04\,e)^{6},
++        \sigma_e:=\left(\frac{51}{25}e\right)^6.
+ \]
+-and record the standing bounds, valid for $e\le\tfrac1{60}$, $\kappa\le1$:
++For $e\le1/60$ and $0<\kappa\le1$ we shall use
+ \begin{equation}\label{eq:standing}
+-        \alpha\ge\tfrac{59}{120},\quad
+-        p\le\tfrac{1+3e}2\le\tfrac{21}{40},\quad
+-        x\ge\tfrac{1-e}{1+3e}\ge0.9365,\quad
+-        \frac e\alpha\le\frac{2e}{1-e}\le2.04\,e,\quad
+-        \ell\le1.4262\sqrt e\le0.1842 .
++ \alpha\ge\frac{59}{120},\qquad
++ p\le\frac{1+3e}{2}\le\frac{21}{40},\qquad
++ x\ge\frac{1-e}{1+3e}\ge0.9365.
++\end{equation}
++\begin{equation}\label{eq:standing2}
++ \frac e\alpha=\frac{2e}{1-e}\le2.04e,
++ \qquad
++ \ell\le\sqrt{\frac{2e}{1-e}}\le1.4262\sqrt e\le0.1842.
+ \end{equation}
++The last two decimal comparisons follow, for example, from
++$120/59<2.034$ and $(1.4262)^2>120/59$.
+ 
+ \begin{lemma}[Positivity threshold in Zone A]\label{lem:posA}
+ If $R_m>0$, then
+ \begin{equation}\label{eq:posA}
+-        \kappa(m-1)\ >\ x(1+\kappa)-\sigma_e,
+-        \qquad\text{hence}\qquad
+-        \kappa\ \ge\ \frac{0.93}{m-1}.
++        \kappa(m-1)>x(1+\kappa)-\sigma_e,
++        \qquad
++        \kappa\ge\frac{0.93}{m-1}.
+ \end{equation}
+ \end{lemma}
+ 
+ \begin{proof}
+ From \eqref{eq:defect-form}, $R_m>0$ gives
+-$\tau^{m-1}<x+L^m/(p\alpha^{m-1})$.  Since $L^2\le\alpha e$,
++$\tau^{m-1}<x+L^m/(p\alpha^{m-1})$.  Since $L^2\le\alpha e$ and $m\ge15$,
+ \[
+-        \frac{L^m}{p\alpha^{m-1}}
+-        \le\frac{(\alpha e)^{m/2}}{p\,\alpha^{m-1}}
+-        =x\Bigl(\frac e\alpha\Bigr)^{m/2}
+-        \le x\,(2.04e)^{7.5}\le x\,\sigma_e\cdot(2.04e)^{1.5} .
+-\]
+-By Bernoulli, $\tau^{m-1}\ge1-(m-1)(1-\tau)=1-(m-1)d/\alpha$, so
+-\[
+-        (m-1)\frac d\alpha\ >\ 1-x\bigl(1+\sigma_e(2.04e)^{1.5}\bigr)
+-        \ \ge\ \frac{d+e}{p}-\sigma_e(2.04e)^{1.5}.
+-\]
+-Multiplying by $\alpha/e$ and using $\alpha(d+e)/(pe)=x(1+\kappa)$ together
+-with $\frac\alpha e\,\sigma_e(2.04e)^{1.5}
+-=\alpha\,2.04^{1.5}\sqrt e\;\sigma_e\le0.19\,\sigma_e\le\sigma_e$
+-(as $\alpha\le\tfrac12$, $e\le\tfrac1{60}$)
+-gives the first inequality of \eqref{eq:posA}.  Then
+-$\kappa(m-1-x)>x-\sigma_e$, so
+-$\kappa\ge(x-\sigma_e)/(m-1)\ge0.93/(m-1)$ by \eqref{eq:standing}.
++ \frac{L^m}{p\alpha^{m-1}}
++ \le x\left(\frac e\alpha\right)^{m/2}
++ \le x(2.04e)^{7.5}
++ =x\sigma_e(2.04e)^{1.5}.
++\]
++Bernoulli's inequality gives
++$\tau^{m-1}\ge1-(m-1)d/\alpha$, and hence
++\[
++ (m-1)\frac d\alpha
++ >1-x\bigl(1+\sigma_e(2.04e)^{1.5}\bigr)
++ \ge\frac{d+e}{p}-\sigma_e(2.04e)^{1.5}.
++\]
++After multiplication by $\alpha/e$, the first term becomes $x(1+\kappa)$,
++whereas
++$\alpha 2.04^{1.5}\sqrt e<0.19$.  This proves the first inequality.
++Since $x-\sigma_e>0.93$, it also gives the second.
+ \end{proof}
+ 
+ \begin{lemma}[Payment and defect reduction]\label{lem:reduceA}
+-Assume $R_m>0$, $e\le\tfrac1{60}$, $\xi\ge1$.  Then
++Under the hypotheses above,
+ \begin{equation}\label{eq:epsA}
+-        \eps\ \le\ \min\Bigl(\tfrac14,\ 0.278\,T\Bigr),
++        \eps\le\min\left(\frac14,\,0.2781\,T\right),
++        \qquad T:=me,
+ \end{equation}
+-and \eqref{eq:zoneA-target} is implied by
++and \eqref{eq:zoneA-target} follows from
+ \begin{equation}\label{eq:reducedA}
+-        \sqrt{1-e}\;\frac{(1-\ell)(1-y^{m-1})(1-\eps)}{1+y}
+-        \ \ge\
+-        x^{m-2}\Bigl[\frac{m-1}{mx}-\frac{1+1/\kappa}{m}\Bigr]
+-        +\Lambda,
+-        \qquad
+-        \Lambda:=\frac{(\alpha e)^{m/2}}{m\,d\,\alpha\,p^{m-2}} .
++ \sqrt{1-e}\,\frac{(1-\ell)(1-y^{m-1})(1-\eps)}{1+y}
++ \ge
++ x^{m-2}\left[\frac{m-1}{mx}-\frac{1+1/\kappa}{m}\right]+\Lambda,
++ \qquad
++ \Lambda:=\frac{(\alpha e)^{m/2}}{m d\alpha p^{m-2}}.
+ \end{equation}
+-Moreover $\Lambda\le\sigma_e\,x^{m-2}$.
++Moreover $\Lambda\le\sigma_e x^{m-2}$.
+ \end{lemma}
+ 
+ \begin{proof}
+-\eqref{eq:epsA}: $\xi\ge1$ means $d\ge e^2/(4\alpha^2)$, so
+-$\eps\le1/(4(1+\rho))\le\tfrac14$; and $\kappa\ge0.93/(m-1)$
+-(Lemma~\ref{lem:posA}) gives
+-$\eps\le\frac{(m-1)e}{0.93\cdot4(1-e)^2}\le0.278\,T$.
+-
+-Payment: $B_m\ge m\,k_m(L)=\frac{m\,p^{m-1}(1-y^{m-1})}{p+L}$, $\sqrt{2\alpha}=\sqrt{1-e}$,
+-$f=\alpha(1-\ell)$, $p+L=p(1+y)$, so
+-\[
+-        \sqrt{2\alpha}B_mf\Bigl(d-\frac{e^2}{16\alpha^2(1+\rho)}\Bigr)
+-        \ \ge\
+-        \sqrt{1-e}\;m\,d\,\alpha\,p^{m-2}\,
+-        \frac{(1-\ell)(1-y^{m-1})(1-\eps)}{1+y}.
+-\]
+-Defect: by \eqref{eq:defect-form} and Bernoulli
+-($\tau^{m-1}\ge1-(m-1)d/\alpha$, and $\alpha-p=-(d+e)$, $p/\alpha=1/x$),
+-\[
+-        R_m\le\alpha^{m-1}\Bigl[\frac{(m-1)d}{x}-(d+e)\Bigr]+(\alpha e)^{m/2}.
+-\]
+-Dividing both bounds by $m\,d\,\alpha\,p^{m-2}>0$ and using
+-$\alpha^{m-2}/p^{m-2}=x^{m-2}$, $(d+e)/d=1+1/\kappa$ yields
+-\eqref{eq:reducedA}.  Finally
+-$\Lambda=x^{m-2}\,(e/\alpha)^{m/2-1}/(m\kappa)
+-\le x^{m-2}(2.04e)^{6.5}/0.93\le\sigma_e x^{m-2}$,
+-using $m\kappa\ge0.93$ and $m\ge15$.
++The condition $\xi\ge1$ gives $d\ge e^2/(4\alpha^2)$, hence
++$\eps\le1/[4(1+\rho)]\le1/4$.  Lemma~\ref{lem:posA} also gives
++\[
++ \eps\le\frac{(m-1)e}{0.93\cdot4(1-e)^2}
++ <0.2781\,me,
++\]
++because $[0.93\cdot4(59/60)^2]^{-1}<0.2781$.
++
++Next,
++\[
++ B_m\ge m k_m(L)
++ =\frac{m p^{m-1}(1-y^{m-1})}{p+L}.
++\]
++Using $\sqrt{2\alpha}=\sqrt{1-e}$, $f=\alpha(1-\ell)$ and
++$p+L=p(1+y)$ gives the left side of \eqref{eq:reducedA}, multiplied by
++$m d\alpha p^{m-2}$.  On the other hand, Bernoulli's inequality in
++\eqref{eq:defect-form} gives
++\[
++ R_m\le\alpha^{m-1}\left[\frac{(m-1)d}{x}-(d+e)\right]
++       +(\alpha e)^{m/2}.
++\]
++Division by $m d\alpha p^{m-2}$ yields \eqref{eq:reducedA}.  Finally,
++\[
++ \Lambda=x^{m-2}\frac{(e/\alpha)^{m/2-1}}{m\kappa}
++ \le x^{m-2}\frac{(2.04e)^{6.5}}{0.93}
++ \le\sigma_e x^{m-2},
++\]
++since $m\kappa\ge0.93$ and $\sqrt{2.04e}<0.19<0.93$.
+ \end{proof}
+ 
+ \begin{proof}[Proof of Lemma~\ref{lem:zoneA}]
+-Assume $R_m>0$ and abbreviate the two sides of \eqref{eq:reducedA} as
+-$\mathrm{LHS}\ge\mathrm{RHS}$.
+-
+-\emph{Left side.}  Since $y\le\ell$ and $(1-\ell)/(1+\ell)\ge1-2\ell$, and
+-$\sqrt{1-e}\ge1-0.51e$ for $e\le0.0769$, and
+-$y^{m-1}\le\ell^{14}\le(2.04e)^7\le\sigma_e$,
++Let the left and right sides of \eqref{eq:reducedA} be $\mathrm{LHS}$ and
++$\mathrm{RHS}$.  Since $y\le\ell$,
++$(1-\ell)/(1+\ell)\ge1-2\ell$,
++$\sqrt{1-e}\ge1-0.51e$, and
++$y^{m-1}\le\ell^{14}\le(2.04e)^7\le\sigma_e$, we have
+ \begin{equation}\label{eq:GammaA}
+-        \mathrm{LHS}\ \ge\ 1-\Gamma,
++        \mathrm{LHS}\ge1-\Gamma,
+         \qquad
+-        \Gamma:=2\ell+\eps+0.51e+\sigma_e .
++        \Gamma:=2\ell+\eps+0.51e+\sigma_e.
+ \end{equation}
++If the square bracket in \eqref{eq:reducedA} is negative, then
++$\mathrm{RHS}\le\Lambda\le\sigma_e$, whereas
++$\mathrm{LHS}>0.36$, and there is nothing to prove.  Assume from now on that
++the bracket is nonnegative.
+ 
+-\emph{Right side.}  If the bracket in \eqref{eq:reducedA} is negative, then
+-$\mathrm{RHS}\le\Lambda\le\sigma_e$ while $\mathrm{LHS}\ge1-\Gamma\ge0.36$
+-(using $2\ell\le0.369$, $\eps\le\tfrac14$, $e\le\tfrac1{60}$), and we are
+-done.  So assume the bracket is nonnegative.  Since
+-$\frac{m-1}{mx}=\frac1x-\frac1{mx}$ and $\frac1{mx}\ge\frac1m$,
++We have
+ \[
+-        \Bigl[\cdots\Bigr]\ \le\ \frac1x-\frac{2+1/\kappa}{m},
+-        \qquad
+-        \frac1x=1+\frac{2(1+\kappa)e}{1-e}\le1+2.034(1+\kappa)e .
++ \left[\cdots\right]
++ \le\frac1x-\frac{2+1/\kappa}{m},
++ \qquad
++ \frac1x\le1+2.034(1+\kappa)e,
+ \]
+-By \eqref{eq:E-a} with $n=m-2\ge13$ and
+-$\binom n2u^2=\frac{m-3}{2(m-2)}z^2\ge\frac6{13}z^2$,
++and, by \eqref{eq:E-a},
+ \[
+         x^{m-2}\le\frac1{1+z+\frac6{13}z^2}.
+ \]
+-
+-\emph{Auxiliary bounds.}  From $u=(d+e)/p\ge\frac{2(1+\kappa)e}{1+3e}
+-\ge1.9048(1+\kappa)e$:
+-\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.4em]
+-\item $2.034(1+\kappa)e\le\frac{2.034}{1.9048}\cdot\frac z{m-2}
+-\le\frac{1.0679}{13}z\le0.0822\,z$;
+-\item $T=me\le\frac{15}{13}(m-2)e\le\frac{15}{13}\cdot
+-\frac{z}{1.9048(1+\kappa)}\le0.6057\,z$, so by \eqref{eq:epsA}
+-$\eps\le0.278\,T\le0.1684\,z$;
+-\item from $m\le\frac{z}{1.9048(1+\kappa)e}+2$ and
+-$(1+\kappa)(2+1/\kappa)=3+2\kappa+\frac1\kappa\ge3+2\sqrt2\ge5.8284$
+-(minimum at $\kappa=1/\sqrt2$), together with $1+\kappa\le2$:
+-\[
+-        \frac{2+1/\kappa}{m}
+-        \ \ge\ \frac{1.9048\,(1+\kappa)(2+1/\kappa)\,e}{z+3.8096(1+\kappa)e}
+-        \ \ge\ \frac{11.08\,e}{z+7.8\,e}.
++Furthermore
++\[
++ u=\frac{2(1+\kappa)e}{1+e+2\kappa e}
++ \ge\frac{40}{21}(1+\kappa)e>1.9047(1+\kappa)e.
+ \]
+-\end{enumerate}
++Consequently
++\begin{align}
++ 2.034(1+\kappa)e&\le0.0822z,\label{eq:Aaux1}\\
++ T&\le0.6058z,
++ &\eps&\le0.1686z,\label{eq:Aaux2}\\
++ \frac{2+1/\kappa}{m}
++ &\ge\frac{11.08e}{z+7.8e}.\label{eq:Aaux3}
++\end{align}
++For \eqref{eq:Aaux3}, use
++$(1+\kappa)(2+1/\kappa)\ge3+2\sqrt2>5.8284$ and
++$1+\kappa\le2$.
+ 
+-\emph{The battle inequality.}  Combining the last four displays,
+-\eqref{eq:reducedA} is implied by: for all $z>0$ and $0<e\le\tfrac1{60}$,
++Thus \eqref{eq:reducedA} follows from
+ \begin{equation}\label{eq:battle}
+-        (1-\Gamma)\Bigl(1+z+\tfrac6{13}z^2\Bigr)
+-        \ \ge\ 1+0.0822\,z-\frac{11.08\,e}{z+7.8\,e}+\sigma_e ,
++ (1-\Gamma)\left(1+z+\frac6{13}z^2\right)
++ \ge1+0.0822z-\frac{11.08e}{z+7.8e}+\sigma_e,
+ \end{equation}
+-with $\Gamma\le A_0+\min\bigl(\tfrac14,\,0.1684z\bigr)$,
+-$A_0:=2.8527\sqrt e+0.51e+\sigma_e$.
+-[Here $2\ell\le2\cdot1.4262\sqrt e\le2.8527\sqrt e$ by \eqref{eq:standing};
+-and $\sigma_e$ on the right absorbs $\Lambda\cdot(1+z+\tfrac6{13}z^2)
+-\le\sigma_e$ since $\Lambda\le\sigma_ex^{m-2}$ and
+-$x^{m-2}(1+z+\tfrac6{13}z^2)\le1$.]
++where
++\[
++ \Gamma\le A_0+\min\left(\frac14,0.1686z\right),
++ \qquad
++ A_0:=2.8527\sqrt e+0.51e+\sigma_e.
++\]
++The term $\sigma_e$ on the right absorbs $\Lambda$ because
++$\Lambda\le\sigma_e x^{m-2}$ and
++$x^{m-2}(1+z+\frac6{13}z^2)\le1$.
+ 
+-Equivalently, writing $F(z,e)$ for the difference of the two sides of
+-\eqref{eq:battle} after moving everything to the left:
++Let $F$ denote the left side of \eqref{eq:battle} minus the right side.  Then
+ \[
+-        F=z\bigl(0.9178-\Gamma\bigr)+\tfrac6{13}(1-\Gamma)z^2
+-        +\frac{11.08\,e}{z+7.8\,e}-\Gamma-\sigma_e\ \ge\ 0 .
++ F=z(0.9178-\Gamma)+\frac6{13}(1-\Gamma)z^2
++   +\frac{11.08e}{z+7.8e}-\Gamma-\sigma_e.
+ \]
+-We prove $F\ge0$ in three ranges of $z$.  Note $A_0\le0.3768$ and
+-$\sigma_e\le(0.034)^5\cdot 2.04e\le5\cdot10^{-8}e$ for $e\le\tfrac1{60}$.
++For $e\le1/60$,
++\begin{equation}\label{eq:A0bounds}
++        A_0\le0.3768,
++        \qquad
++        \sigma_e\le10^{-7}e.
++\end{equation}
++We check three ranges.
+ 
+-\emph{Range 1: $0<z\le1$.}  Here $\Gamma\le A_0+0.1684z$.  Then
++\smallskip\noindent
++\emph{Range 1: $0<z\le1$.}
++Using $\Gamma\le A_0+0.1686z$, and then $z\le1$, gives
+ \[
+-        F\ \ge\ z\bigl(0.7494-A_0\bigr)
+-        +z^2\Bigl(\tfrac6{13}(1-A_0)-0.1684-\tfrac6{13}\cdot0.1684\,z\Bigr)
+-        +\frac{11.08e}{z+7.8e}-A_0-\sigma_e .
++ F\ge0.3724z+\frac{11.08e}{z+7.8e}-A_0-\sigma_e;
+ \]
+-Since $A_0\le0.3768$ and $z\le1$, the $z^2$-coefficient is at least
+-$0.4615\cdot0.6232-0.1684-0.0777=0.0415\ge0$, so it may be dropped, and
+-$0.7494-A_0\ge0.3726$:
++the discarded $z^2$ coefficient is at least $0.041$.  By AM--GM,
+ \[
+-        F\ \ge\ h(z)-A_0-\sigma_e,
+-        \qquad
+-        h(z):=0.3726\,z+\frac{11.08\,e}{z+7.8\,e} .
++ 0.3724z+\frac{11.08e}{z+7.8e}
++ \ge4.0626\sqrt e-2.9048e.
+ \]
+-$h$ is convex with interior minimum at $z_*+7.8e=\sqrt{11.08e/0.3726}
+-=5.4532\sqrt e$ (interior since $5.4532\sqrt e>7.8e$ for $e\le\tfrac1{60}$),
+-of value
++Therefore
+ \[
+-        h(z_*)=2\sqrt{0.3726\cdot11.08\,e}-0.3726\cdot7.8\,e
+-        =4.0638\sqrt e-2.9063\,e .
++ F\ge1.2099\sqrt e-3.4148e-2\sigma_e>0,
+ \]
+-Thus $F\ge4.0638\sqrt e-2.9063e-2.8527\sqrt e-0.51e-2\sigma_e
+-=1.2111\sqrt e-3.4163e-2\sigma_e>0$, because
+-$3.4163\sqrt e\le0.4411<1.2111$ and $2\sigma_e\le10^{-7}e\ll\sqrt e$.
++since $3.4148\sqrt e<0.441$ and \eqref{eq:A0bounds} holds.
+ 
+-\emph{Range 2: $1\le z\le1.4845$.}  Still $\Gamma\le A_0+0.1684z$ (as
+-$0.1684z\le0.25$).  All occurrences of $A_0$ in $F$ carry a negative sign, so
+-the worst case is $A_0=0.3768$, and (keeping the cubic term exactly)
++\smallskip\noindent
++\emph{Range 2: $1\le z\le1.4827$.}
++Here $0.1686z<1/4$.  Substitution of $A_0\le0.3768$ gives
+ \[
+-        F\ \ge\ q(z):=0.3726\,z+0.1192\,z^2-0.0777\,z^3-0.3768-\sigma_e .
++ F\ge q(z):=0.3724z+0.1190z^2-0.0779z^3-0.3768-\sigma_e.
+ \]
+-$q'(z)=0.3726+0.2384z-0.2331z^2$ is decreasing on $[1,1.4845]$ with
+-$q'(1.4845)=0.2129>0$, so $q$ is increasing there and
+-$q(1)=0.0373-\sigma_e>0.037>0$.
++The derivative
++$q'(z)=0.3724+0.2380z-0.2337z^2$ is positive on this interval
++(it is concave and positive at both endpoints), while
++$q(1)>0.036-\sigma_e>0$.
+ 
+-\emph{Range 3: $z\ge1.4845$.}  Here $\Gamma\le A_0+\tfrac14\le0.6268$, so
++\smallskip\noindent
++\emph{Range 3: $z\ge1.4827$.}
++Now $\Gamma\le A_0+1/4\le0.6268$, so
+ \[
+-        F\ \ge\ 0.2910\,z+0.1722\,z^2-0.6268-\sigma_e ,
++ F\ge0.2910z+0.1722z^2-0.6268-\sigma_e.
+ \]
+-which at $z=1.4845$ equals $0.1847-\sigma_e>0$ and is increasing in $z$.
+-
+-In all ranges $F\ge0$, proving \eqref{eq:battle}, hence \eqref{eq:reducedA},
+-hence the lemma.
++The right side is increasing and exceeds $0.183-\sigma_e$ at $z=1.4827$.
++Thus $F>0$ in every range, proving \eqref{eq:battle} and the lemma.
+ \end{proof}
+ 
+-\begin{remark}[Independent second proof of the pinch]\label{rmk:zoneA-alt}
+-The pinch was proved twice, independently, in this project.  The proof above
+-(hypotheses $e\le\tfrac1{60}$, $\xi\ge1$, all $T$) is the one we adopt.  A
+-second derivation (working note \texttt{claude\_jul11/proof\_Z1.md}) proves the same
+-$\lambda=1$ certificate on $\{T\le\tfrac12\}$ with \emph{no} $\xi$-restriction,
+-via a normalized ``ledger'' inequality, elimination of $m$ through
+-$Y=\sqrt{m^2e}$, and negative-discriminant quadratic certificates, with all
+-constants certified in exact rational arithmetic.  The two proofs overlap on
+-$\{e\le\tfrac1{60},\xi\ge1,T\le\tfrac12\}$ and their positivity thresholds
+-agree ($\kappa m>0.93$ here, $\kappa m>0.8787$ there, empirically
+-$\kappa m\gtrsim1.04$); both show $\{\xi\le1,\ T\le\tfrac12,\ R_m>0\}=\emptyset$.
+-\end{remark}
+ 
+ \begin{remark}[Where Zone A is tight]\label{rmk:zoneA-tight}
+ In the pinch corner ($e\to0$, $T=me\to0$, $\kappa$ fixed), payment and defect
+ agree to leading order: both are $2\kappa m e\,p^m(1+o(1))$, and the margin is
+ $(4\kappa+2)e\,p^m(1+o(1))$, i.e.\ a relative margin $\sim(2+1/\kappa)/m$.
+-High-precision scans (\S\ref{sec:verification}) confirm the minimum relative
+-margin of the exact inequality over $\mathcal D$ behaves as $\approx2.60/m$:
+-the inequality is asymptotically tight along $m\to\infty$, so no proof with a
+-uniform relative constant is possible --- Range 1 above is forced to win by
+-exactly the $O(\sqrt e)$ and $O(1/m)$ amounts it does.
++Thus the relative margin can tend to zero on scales of order $1/m$.
++In particular, no proof with a uniform positive relative margin is possible;
++Range~1 above must retain the $O(\sqrt e)$ and $O(1/m)$ effects rather than
++discarding them.  The optional numerical scan in
++\S\ref{sec:verification} is consistent with this asymptotic picture.
+ \end{remark}
+ 
+-\section{Zone B: $e\ge1/60$, $\xi\ge1$}\label{sec:zoneB}
++\section{Zone B: \texorpdfstring{$e\ge1/60$, $\xi\ge1$}{e >= 1/60, xi >= 1}}\label{sec:zoneB}
+ 
+ \begin{lemma}[Zone B]\label{lem:zoneB}
+ Let $(q,\alpha,m)\in\mathcal D$ with $\tfrac1{60}\le e<\tfrac13$, $\xi\ge1$
+@@ -952,9 +1057,13 @@
+ condition $\lambda=\frac1{n-A}-\frac1{n+1}=\frac{A+1}{(n-A)(n+1)}$ gives the
+ quadratic for $s_*=n_*-A$; unimodality gives the max formula.  (iii): the
+ first claim is $(n-A)/(n+1)$ at $n=14$; for the second,
+-$s\mapsto s(s+A+1)$ is increasing, so $s_*\le14-A$ iff
+-$(14-A)\cdot15\le(A+1)/\lambda$ --- note the direction: $s_*\le14-A$ iff
+-$(14-A)(15)\ge(A+1)/\lambda$, i.e.\ $15(14-A)\lambda\ge A+1$.  (iv): from
++$s\mapsto s(s+A+1)$ is increasing, so
++\[
++ s_*\le14-A
++ \quad\Longleftrightarrow\quad
++ \frac{A+1}{\lambda}=s_*(s_*+A+1)\le15(14-A),
++\]
++which is equivalent to $15(14-A)\lambda\ge A+1$.  (iv): from
+ $s_*(s_*+A+1)=(A+1)/\lambda$, multiplying by $\lambda^2$ gives
+ $w^2+\nu w=\nu$ with $w=\lambda s_*$, so $w=(\sqrt{\nu^2+4\nu}-\nu)/2<1$ and
+ $\frac{s_*}{s_*+A+1}=\frac{\lambda s_*^2}{(A+1)/\lambda\cdot\lambda}
+@@ -1012,9 +1121,16 @@
+ $\Pi\ge\underline\Pi$ (using $\ell\le\bar\ell$, $y\le\ell$,
+ $y^{m-1}\le\bar\ell^{14}$, $\eps\le\bar\eps$, the latter by
+ $\rho\ge(1-x^{m-1})\frac{\sqrt\alpha}{2\sqrt2f(1+x)}
+-\ge\tfrac14(1-e^{-14u})\ge\underline\rho$, where
++\ge\tfrac14(1-e^{-14u})\ge\underline\rho$.  Here the first inequality
++uses
++$A_m/B_m\ge k_m(\alpha)/k_m(L)\ge(1-x^{m-1})/(1+x)$, and
+ $\frac{\sqrt\alpha}{2\sqrt2f(1+x)}\ge\frac1{2\sqrt2\sqrt\alpha\,(1+x)}
+-\ge\tfrac14$ and $u\ge\frac{2(1+\kappa)e}{1+3e}\ge1.2407(1+\kappa)e$);
++\ge\tfrac14$ and, because $e\le2033/10000$,
++\[
++ 14u\ge \frac{28(1+\kappa)e}{1+3e}
++ \ge17.37(1+\kappa)e
++\]
++(the last comparison is an exact rational inequality));
+ $\Lambda\le\overline\Lambda$ (the ratio of consecutive odd-$m$ values of
+ $\Lambda$ is $x^2(e/\alpha)\cdot\frac m{m+2}<1$, so the $m=15$ value bounds
+ all, and $\kappa\ge\kappa_\xi$ bounds $1/(15\kappa)$); and by
+@@ -1024,17 +1140,16 @@
+ \eqref{eq:cert-II}.
+ \end{proof}
+ 
+-\section{Zone C: $\xi\le1$}\label{sec:zoneC}
++\section{Zone C: \texorpdfstring{$\xi\le1$}{xi <= 1}}\label{sec:zoneC}
+ 
+ \begin{lemma}[Zone C]\label{lem:zoneC}
+ Let $(q,\alpha,m)\in\mathcal D$ with $\xi\le1$ and $R_m>0$.  Then
+-$R_m\le C_m\psi(\xi,\rho)$; more precisely the certificate
+-$\lambda=\min(1,2\rho\xi)$ pays:
+-\[
+-        2\rho\xi\le1:\quad R_m\le2\alpha^3A_m\kappa^2\cdot\frac{1+4\xi}{1+2\xi},
+-        \qquad\qquad
+-        2\rho\xi>1:\quad R_m\le\sqrt{2\alpha}\,B_mfd\cdot\frac{4\xi+1}{4\xi+2}.
+-\]
++$R_m\le C_m\psi(\xi,\rho)$.  More precisely, the proof exhibits an
++admissible value of the dual parameter: in the small-$e$ range it uses
++$\lambda=2\rho\xi<1$; in the moderate-$e$ range it uses either
++$\lambda=2\rho_{\mathrm{lo}}\xi\le1$ or $\lambda=1$, where the explicit
++lower bound $\rho_{\mathrm{lo}}\le\rho$ is defined in
++Lemma~\ref{lem:threegeo}.
+ \end{lemma}
+ 
+ We prove the small-$e$ half here (Lemma~\ref{lem:zoneC-small}); the
+@@ -1043,102 +1158,117 @@
+ equivalent to $\kappa\le\kappa_\xi:=e/(1-e)^2$, i.e.\ $d\le e^2/(1-e)^2$: the
+ frontier sits very close to $q$.
+ 
+-\subsection{Small $e$}
++\subsection{Small \texorpdfstring{$e$}{e}}
+ 
+ \begin{lemma}[Zone C, $e\le1/60$]\label{lem:zoneC-small}
+ Lemma~\ref{lem:zoneC} holds when $e\le\tfrac1{60}$.
+ \end{lemma}
+ 
+ \begin{proof}
+-Lemma~\ref{lem:posA} applies (its proof used only $e\le\tfrac1{60}$), so
+-$\kappa(m-1)>x(1+\kappa)-\sigma_e$ and $\kappa\ge0.93/(m-1)$.  Since
++Lemma~\ref{lem:posA} applies, because its proof used only $e\le1/60$.
++Thus $\kappa\ge0.93/(m-1)$.  Since
+ $\kappa\le\kappa_\xi=e/(1-e)^2$,
+ \begin{equation}\label{eq:C-mT}
+-        m-1\ \ge\ \frac{0.93(1-e)^2}{e}\ \ \Rightarrow\ \
+         m\ge55,
+         \qquad
+-        T=me\ >\ (m-1)e\ \ge\ 0.93(1-e)^2\ \ge\ 0.899 .
++        T=me>(m-1)e\ge0.93(1-e)^2\ge0.899.
+ \end{equation}
+ 
+-\emph{The case $2\rho\xi>1$ is empty here.}  Since
+-$k_m(\alpha)\le k_m(L)$,
++\emph{The branch $2\rho\xi>1$ is empty.}
++Because $k_m(\alpha)\le k_m(L)$,
+ \[
+-        \frac{A_m}{B_m}
+-        \ \le\ \frac{2L^{m-2}}{m\,k_m(L)}+\frac{k_m(\alpha)}{k_m(L)}
+-        \ \le\ \frac{2y^{m-2}(1+y)}{m\,(1-y^{m-1})}+\frac{p+L}{p+\alpha}
+-        \ \le\ 10^{-38}+\frac{1+y}{1+x}\ \le\ 0.6117,
+-\]
+-using $k_m(L)=p^{m-1}(1-y^{m-1})/(p+L)$, the bound
+-$\frac{k_m(\alpha)}{k_m(L)}=\frac{(p^{m-1}-\alpha^{m-1})(p+L)}
+-{(p^{m-1}-L^{m-1})(p+\alpha)}\le\frac{p+L}{p+\alpha}$ (as $\alpha\ge L$),
+-then $y\le\ell\le0.1843$, $x\ge0.9365$ \eqref{eq:standing} and $m\ge55$
+-\eqref{eq:C-mT}.  Also
+-$\frac{\sqrt\alpha}{2\sqrt2f}\le\frac1{2\sqrt2\cdot0.8157\sqrt\alpha}
+-\le0.6182$ ($f=\alpha(1-\ell)\ge0.8157\alpha$,
+-$\alpha\ge\tfrac{59}{120}$).  Hence
+-$\rho\le0.6117\cdot0.6182\le0.3782$, so $2\rho\xi\le0.7564\,\xi<1$.
+-
+-\emph{Case $2\rho\xi\le1$ (the whole zone).}  We show
+-$R_m\le2\alpha^3A_m\kappa^2$, which suffices since $(1+4\xi)/(1+2\xi)\ge1$.
+-Use $A_m\ge m\,k_m(\alpha)=m\,p^{m-2}\,(1-x^{m-1})/(1+x)$ and, by
+-\eqref{eq:C-mT},
++ \frac{A_m}{B_m}
++ \le\frac{2y^{m-2}(1+y)}{m(1-y^{m-1})}
++     +\frac{1+y}{1+x}
++ \le10^{-38}+0.6117.
++\]
++Here we used $y\le\ell\le0.1842$, $x\ge0.9365$, and $m\ge55$.
++Moreover $f=\alpha(1-\ell)\ge0.8157\alpha$, so
+ \[
+-        (m-1)u\ \ge\ 1.9048\,(m-1)e\ \ge\ 1.9048\cdot0.899\ \ge\ 1.712,
+-        \qquad
+-        1-x^{m-1}\ \ge\ 1-e^{-1.712}\ \ge\ 0.8142 .
++ \frac{\sqrt\alpha}{2\sqrt2f}\le0.6182.
++\]
++Consequently $\rho\le0.3782$ and
++$2\rho\xi\le0.7564<1$.
++
++Since $2\rho\xi<1$, the dual choice $\lambda=2\rho\xi$ gives the value in
++\eqref{eq:cert-I}.  It is therefore enough to prove the slightly stronger
++inequality
++\begin{equation}\label{eq:Csmall-strong}
++        R_m\le2\alpha^3A_m\kappa^2.
++\end{equation}
++Since
++\[
++ (m-1)u\ge1.9047(m-1)e\ge1.712,
++ \qquad
++ 1-x^{m-1}\ge1-e^{-1.712}>0.8142,
+ \]
+-Writing $t:=(m-1)\ln(1/\tau)-\ln(1/x)$, the defect form
+-\eqref{eq:defect-form} gives $\alpha-p\tau^{m-1}=\alpha(1-e^{-t})$, so
++we have
+ \[
+-        R_m\ \le\ \alpha^m\min(1,t_+)+L^m,
+-        \qquad
+-        t\ \le\ (m-1)\frac dq-u\ \le\ e\,(2.0351\,z-1.9048),
+-        \quad z:=\kappa m,
++ A_m\ge m k_m(\alpha)
++ =\frac{m p^{m-2}(1-x^{m-1})}{1+x}.
+ \]
+-using $\ln(1/\tau)\le\frac{1-\tau}\tau=\frac dq$, $\ln(1/x)\ge u\ge1.9048e$,
+-$\frac1q\le\frac1{\alpha-\kappa_\xi e}\le2.0351$, and $(m-1)d\le\kappa me=ze$.
+-Dividing by $\alpha^3p^{m-2}$ and using
+-$\alpha^m/(\alpha^3p^{m-2})=x^{m-2}/\alpha$ and
+-$L^m/(\alpha^3p^{m-2})=\ell^2y^{m-2}/\alpha$, the target
+-$R_m\le2\alpha^3A_m\kappa^2$ is implied by
+-\[
+-        x^{m-2}\min(1,t_+)+\ell^2y^{m-2}
+-        \ \le\ 0.8142\,\alpha\,\kappa^2m ,
+-\]
+-and $0.8142\,\alpha\ge0.40$ ($\alpha\ge0.4917$).  The $L$-term is
+-negligible: $\ell^2,y^2\le2.04e\le0.034$ and $m\ge55$ give
+-$\ell^2y^{m-2}\le0.034^{27.5}$, while
+-$\kappa^2m\ge(\kappa m)^2/m\ge0.865/m$, and
+-$m\,(0.034)^{(m-2)/2}$ is decreasing in $m$ with value $<10^{-37}$ at
+-$m=55$; so $\ell^2y^{m-2}\le10^{-37}\kappa^2m$, and it suffices to prove
+-\begin{equation}\label{eq:C-battle}
+-        x^{m-2}\min(1,t_+)\ \le\ 0.39\,\kappa^2m .
++Put
++\[
++ t:=(m-1)\log(1/\tau)-\log(1/x),
++ \qquad z:=\kappa m.
++\]
++Then $\alpha-p\tau^{m-1}=\alpha(1-e^{-t})$ and
++\begin{equation}\label{eq:Csmall-t}
++ R_m\le\alpha^m\min(1,t_+)+L^m,
++ \qquad
++ t\le e(2.0351z-1.9047).
+ \end{equation}
+-Since $(m-2)u\ge1.9048\,\tfrac{m-2}{m}\,T\ge1.8355\,T$ ($m\ge55$), we have
+-$x^{m-2}\le e^{-1.8355T}$; and $\kappa^2m=z^2e/T$.
++Indeed,
++$\log(1/\tau)\le d/q$, $\log(1/x)\ge1-x=u\ge1.9047e$,
++$1/q\le2.0351$, and $(m-1)d\le ze$.
+ 
+-\emph{If $t\le1$:} using $t\le e(2.0351z-1.9048)_+$ and
+-$\frac{(2.0351z-1.9048)_+}{z^2}\le\frac{2.0351^2}{4\cdot1.9048}\le0.5436$
+-(vertex of the parabola $z\mapsto z^2\cdot0.5436-2.0351z+1.9048$),
+-\eqref{eq:C-battle} follows from
++After division by $\alpha^3p^{m-2}$, inequality
++\eqref{eq:Csmall-strong} follows if
++\begin{equation}\label{eq:Csmall-normalized}
++ x^{m-2}\min(1,t_+)+\ell^2y^{m-2}
++ \le0.8142\alpha\kappa^2m.
++\end{equation}
++Now $0.8142\alpha\ge0.8142\cdot59/120>0.4003$.  Also
++$\ell^2,y^2\le0.034$ and $m\ge55$, whereas
++$\kappa^2m>0.864/m$; hence
++\[
++        \ell^2y^{m-2}<10^{-37}\kappa^2m.
++\]
++It therefore suffices to prove
++\begin{equation}\label{eq:C-battle}
++        x^{m-2}\min(1,t_+)\le0.39\kappa^2m.
++\end{equation}
++Since $m\ge55$,
+ \[
+-        e^{-1.8355T}\cdot0.5436\,z^2e\ \le\ 0.39\,\frac{z^2e}{T}
+-        \quad\Longleftarrow\quad
+-        Te^{-1.8355T}\le0.717,
++ (m-2)u\ge1.9047\frac{m-2}{m}T\ge1.8354T,
++ \qquad
++ x^{m-2}\le e^{-1.8354T},
++ \qquad
++ \kappa^2m=\frac{z^2e}{T}.
+ \]
+-which holds with room to spare:
+-$\max_{T>0}Te^{-1.8355T}=\tfrac1{1.8355\,\mathrm e}\le0.2004$.
+ 
+-\emph{If $t>1$:} then $e(2.0351z-1.9048)>1$ forces
+-$z\ge\frac{1/e-1.9048}{2.0351}\ge\frac{0.4753}{e}$ (using $e\le\tfrac1{60}$).
+-Then $0.39\,z^2e/T\ge0.39\cdot(0.4753)^2/(eT)=0.0881/(eT)$, so
+-\eqref{eq:C-battle} follows from $eTe^{-1.8355T}\le0.0881$, and indeed
+-$eTe^{-1.8355T}\le\tfrac1{60}\cdot0.2004\le0.0034$.
+-Thus \eqref{eq:C-battle} holds in both cases, completing Case
+-$2\rho\xi\le1$.
++If $t\le1$, then \eqref{eq:Csmall-t} and
++\[
++ \frac{(2.0351z-1.9047)_+}{z^2}
++ \le\frac{2.0351^2}{4\cdot1.9047}<0.5437
++\]
++reduce \eqref{eq:C-battle} to
++$Te^{-1.8354T}\le0.39/0.5437$.  This holds because
++\[
++        \max_{T>0}Te^{-1.8354T}
++        =\frac1{1.8354\,\mathrm e}<0.2005<\frac{0.39}{0.5437}.
++\]
++If $t>1$, then \eqref{eq:Csmall-t} implies
++$z\ge0.4753/e$.  Hence the right side of \eqref{eq:C-battle} is at least
++$0.0881/(eT)$, while
++\[
++ eT e^{-1.8354T}\le\frac{0.2005}{60}<0.0034<0.0881.
++\]
++Thus \eqref{eq:C-battle}, and hence \eqref{eq:Csmall-strong}, holds.
+ \end{proof}
+ 
+-\subsection{Moderate $e$ and the Tur\'an corner}\label{subsec:zoneC-mod}
++
++\subsection{Moderate \texorpdfstring{$e$}{e} and the Tur\'an corner}\label{subsec:zoneC-mod}
+ 
+ \begin{lemma}[Zone C, $e\ge1/60$]\label{lem:zoneC-mod}
+ Lemma~\ref{lem:zoneC} holds when $\tfrac1{60}\le e<\tfrac13$.
+@@ -1189,14 +1319,28 @@
+ \end{lemma}
+ 
+ \begin{proof}
+-(i) Divide $R_m=\alpha^m+L^m-pq^{m-1}$ by $\alpha^3p^{m-2}$ and use
+-$\alpha^m/(\alpha^3p^{m-2})=x^{m-2}/\alpha$,
+-$L^m/(\alpha^3p^{m-2})=\ell^2y^{m-2}/\alpha$,
+-$pq^{m-1}/(\alpha^3p^{m-2})=(pq/\alpha^3)s^{m-2}$; the coefficient identity is
+-$pq-\alpha^2=L^2$.  (ii) From (i),
+-$x^{m-2}>s^{m-2}+\ell^2s^{m-2}(1-(y/s)^{m-2})
+-\ge s^{m-2}(1+G_2)$ (using $m-2\ge13$ and $y/s<1$), so
+-$(m-2)\ln(x/s)>\ln(1+G_2)$; and $\ln(x/s)=\ln(\alpha/q)\le\frac{\alpha-q}q=\frac dq$.
++(i) Divide $R_m=\alpha^m+L^m-pq^{m-1}$ by
++$\alpha^3p^{m-2}$.  The three terms become, respectively,
++\[
++ \frac{x^{m-2}}{\alpha},\qquad
++ \frac{\ell^2y^{m-2}}{\alpha},\qquad
++ \frac{pq}{\alpha^3}s^{m-2},
++\]
++and the coefficient identity is $pq-\alpha^2=L^2$.
++
++(ii) From (i),
++\[
++ x^{m-2}>
++ s^{m-2}+\ell^2s^{m-2}\left(1-(y/s)^{m-2}\right)
++ \ge s^{m-2}(1+G_2),
++\]
++using $m-2\ge13$ and $y/s<1$.  Hence
++\[
++ (m-2)\log(x/s)>\log(1+G_2),
++ \qquad
++ \log(x/s)=\log(\alpha/q)\le\frac{\alpha-q}{q}=\frac dq.
++\]
++
+ (iii) By the mediant inequality and $k_m(\alpha)\le k_m(L)$,
+ \[
+         \frac{A_m}{B_m}\ \ge\ \frac{k_m(\alpha)}{k_m(L)}
+@@ -1230,117 +1374,223 @@
+ of $\{(e,\kappa)\}$ and every $m\ge15$, the (upper-bounded) three-geometric
+ defect not exceed $m$ times the (lower-bounded) applicable payment
+ coefficient; positive defect only needs checking for
+-$m\ge M_+:=2+\lceil q(G_2-G_2^2/2)/d\rceil$ (the secant gate with
+-$\ln(1+t)\ge t-t^2/2$), and all sufficiently large $m$ pass at once because
++$m\ge M_+:=3+\lfloor q(G_2-G_2^2/2)/d\rfloor$ (the strict secant
++gate with $\ln(1+t)\ge t-t^2/2$), and all sufficiently large $m$ pass at once because
+ both positive defect terms decrease geometrically while the payment grows
+ linearly.  The script \texttt{zoneC\_certifier.py} certifies exactly this, in
+ exact rational arithmetic, over $e\in[\tfrac1{60},\tfrac13-\tfrac1{1000}]$,
+-$\kappa\in(0,1]$: $3001$ boxes verified (of which $5$ by the analytic
++$\kappa\in(0,1]$: $2997$ boxes verified (of which $5$ by the analytic
+ $\kappa\to0$ bottom-out, which combines the gate $m-2>C_0/\kappa$ with the
+ monotonicity of $e^{-a/\kappa}/\kappa$), maximum subdivision depth $28$,
+-largest explicitly checked cycle length $m=1716$.
++largest explicitly checked cycle length $m=1716$.  The interval
++construction uses the lower endpoint
++\[
++        f_{\mathrm{lo}}
++        =\max\{\alpha_{\mathrm{lo}}-L_{\mathrm{up}},
++                d_{\mathrm{lo}}+\delta_{\mathrm{lo}}\},
++\]
++whose validity is exactly Lemma~\ref{lem:frontier-gap}; this is the bound that
++was missing from the supplied manuscript.
+ \end{proof}
+ 
+ \subsection{The Tur\'an-corner sliver}
+ 
+ \begin{lemma}[Tur\'an corner]\label{lem:turan}
+-Lemma~\ref{lem:zoneC} holds when $\delta=\tfrac{1-3e}6<\tfrac1{2000}$
++Lemma~\ref{lem:zoneC} holds when
++$0<\delta=\tfrac{1-3e}6<\tfrac1{2000}$
+ (equivalently $e>\tfrac13-\tfrac1{1000}$).
+ \end{lemma}
+ 
+ \begin{proof}
+-Here $0<d<\delta<\tfrac1{2000}$, $\alpha=\tfrac13+\delta$,
+-$e=\tfrac13-2\delta$, $q=\tfrac13+(\delta-d)$, $p=\tfrac23-(\delta-d)$, and
+-$\xi\le4.01\,d\le1$, so we are indeed in Zone C.  We record the standing
+-bounds (each a one-line consequence of $\delta\le\tfrac1{2000}$, $d<\delta$;
+-all are re-verified numerically in the companion checker):
+-\begin{gather}
+-        \tfrac12\le x\le\tfrac12+2.26\delta\le0.50113,\qquad
+-        x^{14}\le6.4\times10^{-5},\qquad y<\tfrac12,\notag\\
+-        q^2-L^2=3\alpha\delta-(2\alpha-e)d+2d^2\ \in\
+-        [\,0.66\,\delta,\ 1.003\,\delta\,],\qquad
+-        0.666\le q+L\le0.667,\notag\\
+-        f=\frac{3\alpha\delta+d(d+e)}{\alpha+L}\ \in\
+-        [\,1.498\,\delta,\ 2.004\,\delta\,],\qquad
+-        1-\ell=\frac f\alpha\le6.1\,\delta .\label{eq:corner-standing}
+-\end{gather}
+-
+-\emph{Step 1 (forcing).}  $1-\tfrac ys=\tfrac{q-L}q\ge\frac{0.996\,\delta}{0.334}
+-\ge2.98\,\delta$ and $1-\tfrac ys\le4.52\,\delta$, so by
+-$1-(1-t)^{13}\ge13t-78t^2$ and $\ell^2\ge1-12.2\,\delta$,
++Write
++\[
++ \alpha=\frac13+\delta,\qquad e=\frac13-2\delta,\qquad
++ q=\frac13+\delta-d,\qquad p=\frac23-\delta+d ,
++\]
++where $0<d<\delta\le1/2000$.  Since
++\[
++ \frac{\alpha}{e}\le\frac{2003}{1994},
++ \qquad
++ \xi=4\left(\frac{\alpha}{e}\right)^2d<4.04\,d<1,
++\]
++we are indeed in Zone~C.
++
++We first collect bounds that will be used repeatedly.  Put
++$S:=q^2-L^2=(q-L)(q+L)$.  Direct expansion gives
++\begin{equation}\label{eq:corner-S}
++ S=\delta+3\delta^2-\left(\frac13+4\delta\right)d+2d^2 .
++\end{equation}
++Writing $d=t\delta$, $0\le t\le1$, shows
++\[
++ \frac{S}{\delta}
++ =1-\frac t3+\delta(3-4t+2t^2),
++ \qquad
++ \frac23\le\frac{S}{\delta}\le1+3\delta\le\frac{2003}{2000}.
++\]
++Moreover
+ \[
+-        G_2\ \ge\ (1-12.2\delta)\bigl(13\cdot2.98\delta-78\,(4.52\delta)^2\bigr)
+-        \ \ge\ 37\,\delta .
++ L^2-e^2
++ =\delta-\frac d3-6\delta^2+2\delta d-d^2
++ \ge \frac23\delta-5\delta^2>0,
+ \]
+-By Lemma~\ref{lem:threegeo}(ii) and $\tfrac1q\le3$, $\ln(1+G_2)\ge
+-G_2(1-G_2/2)\ge36.9\,\delta$, hence
++because the displayed expression is decreasing in $d\in[0,\delta]$.
++Thus $e<L<q$, and consequently
++\begin{equation}\label{eq:corner-Q}
++ \frac{1997}{3000}
++ \le q+L\le\frac{2003}{3000}.
++\end{equation}
++Also
++\[
++ \frac12\le x=\frac{\alpha}{p}
++ \le\frac12+2.26\,\delta\le0.50113,
++ \qquad y<\frac12,
++ \qquad x^{14}<6.4\cdot10^{-5}.
++\]
++Here $2\alpha-p=3\delta-d>0$, while
++$x-\tfrac12=(3\delta-d)/(2p)\le2.26\delta$.
++
++The identities
++\[
++ q-L=\frac{S}{q+L},
++ \qquad
++ f=\alpha-L=\frac{\alpha^2-L^2}{\alpha+L}
++   =\frac{3\alpha\delta+d(d+e)}{\alpha+L}
++\]
++and \eqref{eq:corner-S}--\eqref{eq:corner-Q} imply
++\begin{equation}\label{eq:corner-standing}
++ \frac{2000}{2003}\,\delta\le q-L\le1.505\,\delta,
++ \qquad
++ \frac{3000}{2003}\,\delta\le f\le2.005\,\delta,
++ \qquad
++ 1-\ell=\frac f\alpha\le6.02\,\delta .
++\end{equation}
++For the upper bound on $f$ we used $L\ge e$, and hence
++$\alpha+L\ge2/3-\delta$.
++
++\emph{Step 1: positive defect forces a visible frontier gap.}
++Set
++\[
++ t_0:=1-\frac ys=\frac{q-L}{q}.
++\]
++The preceding estimates give
++\[
++ 2.99\,\delta\le t_0\le4.52\,\delta,
++ \qquad
++ \ell^2\ge1-12.1\,\delta.
++\]
++Taylor's formula with nonnegative third-order remainder gives
++$1-(1-t)^{13}\ge13t-78t^2$ for $0\le t\le1$.  Therefore
++\[
++ G_2=\ell^2\bigl(1-(1-t_0)^{13}\bigr)
++ \ge(1-12.1\delta)
++       \bigl(13\cdot2.99\delta-78(4.52\delta)^2\bigr)
++ >37.8\,\delta.
++\]
++(The quotient of the middle expression by $\delta$ decreases on
++$[0,1/2000]$, and its endpoint value is greater than $37.84$.)
++On the other hand $G_2\le13t_0\le58.8\delta\le0.0294$.  Hence
++\[
++ \log(1+G_2)\ge G_2\left(1-\frac{G_2}{2}\right)>37.2\,\delta.
++\]
++Lemma~\ref{lem:threegeo}(ii), together with $q>1/3$, now yields
+ \begin{equation}\label{eq:corner-forcing}
+-        R_m>0\ \Longrightarrow\ (m-2)\,d\ >\ 12.3\,\delta .
++ R_m>0\quad\Longrightarrow\quad
++ (m-2)d>12.4\,\delta .
+ \end{equation}
+ 
+-\emph{Step 2 (defect).}  By the mean value theorem on $[s,x]$ and $[y,s]$
+-($y=\ell x$),
++\emph{Step 2: an upper bound on the normalized defect.}
++Put $n=m-2$.  From Lemma~\ref{lem:threegeo}(i), the mean-value theorem on
++$[s,x]$ and $[y,s]$, and $y=\ell x$, we obtain
+ \[
+-        \frac{\alpha R_m}{\alpha^3 p^{m-2}}
+-        \le(m-2)(x-s)x^{m-3}-\ell^2(m-2)(s-y)y^{m-3}
+-        =(m-2)\,x^{m-3}\,\frac Np,
++ \frac{\alpha R_m}{\alpha^3p^{m-2}}
++ \le n(x-s)x^{n-1}-\ell^2n(s-y)y^{n-1}
++ =\frac{n x^{m-3}}p\,N,
+ \]
+-where $N:=d-(q^2-L^2)\,\ell^{m-1}/(q+L)$.  Insert the exact
+-$q^2-L^2$ from \eqref{eq:corner-standing}, drop $2d^2\ell^{m-1}/(q+L)\ge0$,
+-use $\ell^{m-1}\le1$ on the $d$-term and
+-$\ell^{m-1}\ge1-6.1(m-1)\delta$ on the $\delta$-term:
++where
+ \[
+-        N\ \le\ d\Bigl(1+\frac{2\alpha-e}{q+L}\Bigr)
+-        -\frac{3\alpha\delta}{q+L}
+-        +\frac{3\alpha\,\delta\cdot6.1(m-1)\delta}{q+L}.
++ N:=d-\frac{S}{q+L}\,\ell^{m-1}.
+ \]
+-Now the coefficient identity
+-$1+\frac{2\alpha-e}{q+L}-\frac{3\alpha}{q+L}=\frac{L-e-d}{q+L}$ and
+-$L-e\le(\tfrac13-\tfrac\delta2)-(\tfrac13-2\delta)=1.5\,\delta$ give
++Using \eqref{eq:corner-S}, dropping the nonpositive
++$-2d^2\ell^{m-1}/(q+L)$ term, using
++$\ell^{m-1}\le1$ in the positive $d$ term, and using
+ \[
+-        N\ \le\
+-        \Bigl(1+\frac{2\alpha-e}{q+L}\Bigr)(d-\delta)
+-        +\delta\cdot\frac{1.5\,\delta}{q+L}
+-        +9.2\,m\,\delta^2
+-        \ \le\ 10\,m\,\delta^2 ,
++ \ell^{m-1}\ge1-(m-1)(1-\ell)
++             \ge1-6.02(m-1)\delta
+ \]
+-since $d\le\delta$ kills the first term and $m\ge15$.  Hence, with
+-$\tfrac1{p\alpha}\le4.52$,
++in the negative $\delta$ term, gives
++\[
++ N\le
++ d\left(1+\frac{2\alpha-e}{q+L}\right)
++ -\frac{3\alpha\delta}{q+L}
++ +\frac{3\alpha\cdot6.02(m-1)\delta^2}{q+L}.
++\]
++Since $d\le\delta$,
++\[
++ d\left(1+\frac{2\alpha-e}{q+L}\right)
++ -\frac{3\alpha\delta}{q+L}
++ \le\delta\,\frac{L-e-d}{q+L}
++ \le\frac{3\delta^2}{q+L}<4.51\delta^2.
++\]
++The last term is less than $9.06m\delta^2$, by
++$\alpha\le2003/6000$ and \eqref{eq:corner-Q}.  Thus
++$N<9.5m\delta^2$.  Finally
++$(p\alpha)^{-1}<4.51$, and therefore
+ \begin{equation}\label{eq:corner-defect}
+-        \frac{R_m}{\alpha^3p^{m-2}}\ \le\ 45.2\,m\,(m-2)\,\delta^2\,x^{m-3}.
++ \frac{R_m}{\alpha^3p^{m-2}}
++ <43\,m(m-2)\delta^2x^{m-3}.
+ \end{equation}
+ 
+-\emph{Step 3 (payments).}  From Lemma~\ref{lem:threegeo}(iii) and
+-\eqref{eq:corner-standing} ($\kappa=d/e\ge3d$, $\sqrt{2\alpha}\ge0.816$,
+-$\alpha^3\le0.0372$, $\tfrac{1+4\xi}{1+2\xi}\ge1$,
+-$\tfrac{4\xi+1}{4\xi+2}\ge\tfrac12$):
++\emph{Step 3: the two payments.}
++Lemma~\ref{lem:threegeo}(iii), together with
++$\kappa=d/e\ge3d$, $y<1/2$, \eqref{eq:corner-standing}, and the bounds above,
++gives
++\begin{align}
++ 2\rho_{\mathrm{lo}}\xi\le1
++ &\quad\Longrightarrow\quad
++ \frac{C_m\psi(\xi,\rho)}{\alpha^3p^{m-2}}
++ >7.9\,d^2m,                                      \label{eq:corner-payI}\\
++ 2\rho_{\mathrm{lo}}\xi>1
++ &\quad\Longrightarrow\quad
++ \frac{C_m\psi(\xi,\rho)}{\alpha^3p^{m-2}}
++ >10.9\,\delta d\,m.                              \label{eq:corner-payII}
++\end{align}
++For completeness, the first numerical coefficient follows from
+ \[
+-        2\rho_{\mathrm{lo}}\xi\le1:\quad
+-        \text{payment}\ \ge\ 7.9\,d^2\,m\cdot\alpha^3p^{m-2};
+-        \qquad
+-        2\rho_{\mathrm{lo}}\xi>1:\quad
+-        \text{payment}\ \ge\ 10.9\,\delta d\,m\cdot\alpha^3p^{m-2}.
++ \frac{2(1-6.4\cdot10^{-5})(1-2^{-14})\,9}
++      {1.50113\cdot1.5}>7.9.
++\]
++For the second, use
++$\sqrt{2\alpha}>0.816$, $f>1.497\delta$,
++$\alpha^3<0.0373$, $(4\xi+1)/(4\xi+2)\ge1/2$, and
++\[
++ \frac{0.816(1-2^{-14})\,1.497}{2\cdot0.0373\cdot1.5}>10.9.
+ \]
+ 
+-\emph{Step 4 (battles).}  Suppose $R_m>0$; insert the forcing
+-\eqref{eq:corner-forcing} into each payment and compare with
+-\eqref{eq:corner-defect}:
++\emph{Step 4: comparison.}
++Assume $R_m>0$.  In the first branch, \eqref{eq:corner-forcing} and
++\eqref{eq:corner-payI} reduce the desired comparison with
++\eqref{eq:corner-defect} to
+ \[
+-        7.9\,d^2m\ \ge\ \frac{7.9\cdot12.3^2\,\delta^2m}{(m-2)^2}:
+-        \qquad
+-        45.2\,(m-2)^3x^{m-3}\ \le\ 45.2\cdot13^3\cdot0.50113^{12}\le25.1
+-        \ \le\ 7.9\cdot12.3^2=1195\,;
++ 43(m-2)^3x^{m-3}<7.9\cdot12.4^2.
+ \]
++In the second branch, \eqref{eq:corner-payII} reduces it to
+ \[
+-        10.9\,\delta dm\ \ge\ \frac{10.9\cdot12.3\,\delta^2m}{m-2}:
+-        \qquad
+-        45.2\,(m-2)^2x^{m-3}\ \le\ 45.2\cdot169\cdot0.50113^{12}\le1.92
+-        \ \le\ 10.9\cdot12.3=134\,,
++ 43(m-2)^2x^{m-3}<10.9\cdot12.4.
++\]
++For $j=2,3$, the sequence $(m-2)^j x^{m-3}$ decreases for $m\ge15$, since
++\[
++ x\left(\frac{m-1}{m-2}\right)^3
++ \le0.50113\left(\frac{14}{13}\right)^3<1.
+ \]
+-where both left sides are maximal at $m=15$
+-(the ratio of consecutive values is $<x\cdot(\tfrac{m-1}{m-2})^3<1$ for
+-$m\ge15$).  In both cases the payment exceeds the defect for every $m\ge15$,
+-whichever case of the $\rho_{\mathrm{lo}}$-gate holds pointwise.
++It therefore suffices to check $m=15$, where
++\[
++ 43\cdot13^3\cdot0.50113^{12}<24
++ <7.9\cdot12.4^2,
++ \qquad
++ 43\cdot13^2\cdot0.50113^{12}<1.83
++ <10.9\cdot12.4.
++\]
++Thus the applicable payment dominates the defect in either branch.
+ \end{proof}
+ 
+ \begin{proof}[Proof of Lemma~\ref{lem:zoneC-mod}]
+@@ -1365,9 +1615,9 @@
+ 
+ \begin{proof}[Proof of Corollary~\ref{cor:region2}]
+ Let $W$ have density $p\in(\tfrac12,\tfrac23)$ and let $m\ge3$ be odd.  For
+-$m\le13$ the conjecture is proved in \texttt{paper\_new.tex} at all densities.
+-Let $m\ge15$.  If $\lambda_{\max}(A)\le q$, $W$ is positive-spectrum-safe and
+-the bound holds (\texttt{paper\_new.tex}, \S ``General structural results'').
++$m\le13$ the conjecture is proved in \texttt{earlier\_consolidated\_note.tex} at all densities.
++Let $m\ge15$.  If $\lambda_{\max}(A)\le q$, the bound follows from
++Lemma~\ref{lem:no-frontier}.
+ Otherwise, by Lemmas~\ref{lem:one-frontier} and~\ref{lem:forced-variance}, $A$
+ has a unique frontier eigenvalue $\alpha\in(q,r(q)]$, so $(q,\alpha,m)\in\mathcal D$
+ and Theorem~\ref{thm:scalar} gives $R_m\le C_m\psi(\xi,\rho)$.  By
+@@ -1381,10 +1631,103 @@
+ 
+ \begin{proof}[Proof of Corollary~\ref{cor:full}]
+ For $p\le\tfrac12$ the right-hand side of \eqref{eq:conj} is nonpositive.  For
+-$p\ge\tfrac23$ this is the high-density theorem of \texttt{paper\_new.tex}.
++$p\ge\tfrac23$ this is the high-density theorem of \texttt{earlier\_consolidated\_note.tex}.
+ For $\tfrac12<p<\tfrac23$ this is Corollary~\ref{cor:region2}.
+ \end{proof}
+ 
++\section{Exact certificate protocol}\label{sec:certificate-protocol}
++
++This section records precisely what the two finite verifiers do.  It is part
++of the proof specification: a replacement implementation is valid if it
++checks the same interval inequalities with outward rounding.
++
++The programs certify the relative interiors of their strips.  A box that lies
++entirely on an overlap or an excluded boundary may be discarded by a
++one-sided domain test: the overlap $\xi=1$ is already covered by Zone C, the
++boundary $q=1/3$ is outside the stated domain, and the admissible ceiling
++$\alpha=r(q)$ follows from the certified interior by continuity of all scalar
++quantities.  Thus no admissible endpoint is lost by the strict skip tests.
++
++\subsection{Arithmetic primitives}
++
++Both certifiers use Python's \texttt{fractions.Fraction}; hence every field
++operation and every comparison is exact.  Square roots are enclosed by
++integer square roots: for a fixed decimal scale $S$,
++\[
++ \frac{\lfloor\sqrt{\lfloor tS^2\rfloor}\rfloor}{S}
++ \le\sqrt t\le
++ \frac{\lfloor\sqrt{\lfloor tS^2\rfloor}\rfloor+1}{S}.
++\]
++For $t\ge0$, an upper bound on $e^{-t}$ is obtained by first rounding $t$
++down rationally and then using
++\[
++        e^{-t}\le
++        \left(\sum_{j=0}^{N}\frac{t^j}{j!}\right)^{-1}.
++\]
++Where a lower bound is requested by the diagnostic checker, the omitted
++positive tail of the exponential series is bounded by a geometric tail.
++Integer powers in the Zone-C verifier are evaluated by binary powering with
++a directed rational rounding after every multiplication.  The only
++floating-point conversions in the exact certifiers occur in error messages
++or printed summaries; no branch that returns ``verified'' depends on them.
++
++\subsection{Zone B}
++
++The verifier starts from
++\[
++ \frac1{60}\le e\le\frac{2033}{10000},
++ \qquad
++ \kappa_\xi(e)\le\kappa\le
++ \min\{\kappa_{\max}(e),\kappa_q(e)\}.
++\]
++A rational rectangle is discarded only if monotonic endpoint tests show
++that it lies wholly outside this strip.  On every remaining rectangle the
++program forms outward bounds for $x,A,\lambda,\bar\ell,\rho,\varepsilon,
++\Phi$, the endpoint value $K(14)$, and the interior maximum bound
++$e^{-\Phi-2w(\Phi)}$.  It then checks exactly the box version of
++\eqref{eq:B-battle}.  A failed box is bisected in the coordinate with the
++larger relative width.  The run terminates with $23$ verified leaves,
++$3$ discarded leaves and maximum depth $8$; reaching the depth cap with an
++unverified box causes a nonzero exit.
++
++\subsection{Zone C on the compact middle range}
++
++Here the initial domain is
++\[
++ \frac1{60}\le e\le\frac13-\frac1{1000},
++ \qquad
++ 0<\kappa\le\min\{\kappa_\xi(e),\kappa_{\max}(e),\kappa_q(e)\}.
++\]
++For each rational box the verifier encloses
++$\alpha,d,q,p,x,s,L,y,\ell,\xi$ and the two payment coefficients in
++Lemma~\ref{lem:threegeo}(iii).  In particular it uses
++\[
++ f_{\rm lo}=
++ \max\{\alpha_{\rm lo}-L_{\rm up},\,d_{\rm lo}+\delta_{\rm lo}\},
++\]
++which is valid by Lemma~\ref{lem:frontier-gap}.  The secant gate says that
++positive defect is possible only for
++\[
++ m\ge3+\left\lfloor
++ \frac{q_{\rm lo}\bigl(G_{2,\rm lo}-G_{2,\rm lo}^2/2\bigr)}
++      {d_{\rm up}}\right\rfloor .
++\]
++Starting there, the program checks each integer $m$ with an outward upper
++bound on the three-geometric defect.  Once the sum of the two positive
++geometric terms is below the linearly growing payment, all later $m$ are
++certified at once.  Boxes touching $\kappa=0$ are closed by the analytic
++bottom-out estimate
++\[
++ m-2>\frac{C_0}{\kappa},\qquad
++ \frac{R_m}{\alpha^3p^{m-2}}
++ \le\frac1{\alpha_{\rm lo}}e^{-a/\kappa},
++\]
++together with monotonicity of $e^{-a/\kappa}/\kappa$ on the verified range.
++The completed run has $2997$ verified leaves, including $5$ bottom-out
++leaves, $87$ discarded leaves, maximum depth $28$, and largest explicitly
++tested exponent $m=1716$.  As in Zone B, any unresolved leaf causes a
++nonzero exit.
++
+ \section{Verification}\label{sec:verification}
+ 
+ Following the standing practice of this project, every claim above carries
+@@ -1392,43 +1735,42 @@
+ label mechanically.
+ 
+ \begin{enumerate}[label=\textup{(\arabic*)}]
+-\item \emph{Analytic.}  The reduction (\S\ref{sec:reduction}), the
+-coordinates and defect identities (\S\ref{sec:coords}), Zone A
+-(\S\ref{sec:zoneA}), the $m$-maximization Lemma~\ref{lem:Kmax}, the Zone-C
+-small-$e$ lemma, and the assembly (\S\ref{sec:assembly}) are complete
+-pencil-and-paper proofs.  Every displayed numerical constant is verified to
+-its stated inequality inside the accompanying checker.
++\item \emph{Analytic.}  The one-frontier reduction, including the
++no-frontier case (\S\ref{sec:reduction}), the coordinate and defect identities
++(\S\ref{sec:coords}), Zone A, the $m$-maximization
++Lemma~\ref{lem:Kmax}, the Zone-C small-$e$ lemma, the Tur\'an-corner lemma, and
++the assembly are complete pencil-and-paper proofs.  Every terminating decimal
++used in those arguments is checked as an exact rational inequality by the
++first layer of the companion checker.
+ \item \emph{Exact certificate.}  The Zone-B battle
+ (Lemma~\ref{lem:zoneB-battle}) and the moderate-$e$ part of Zone C
+ (Lemma~\ref{lem:zoneC-mod}, range $e\le\tfrac13-\tfrac1{1000}$) are proved by
+ finite exhaustive box subdivisions in \emph{exact rational arithmetic}
+ (\texttt{zoneB\_certifier.py}: $23$ boxes; \texttt{zoneC\_certifier.py}:
+-$3001$ boxes with a per-box finite $m$-scan plus gate and tail lemmas); no floating point enters the certified
++$2997$ boxes with a per-box finite $m$-scan plus gate and tail lemmas); no floating point enters the certified
+ statements.  The transcendentals $\sqrt t$ and $e^{-t}$ are bracketed by
+ integer square roots and by exponential-series partial sums with explicit
+ tail bounds.
+ \item \emph{Numerical (safety net only; no theorem depends on it).}
+-\texttt{regionII\_scalar\_checker.py} re-verifies: (a) all algebraic
+-identities of the paper in exact rational/symbolic arithmetic; (b) every
+-inequality step of every zone chain pointwise on dense adversarial grids
+-(mpmath, $60$ digits), reporting the worst slack of each step; (c) a global
+-scan of the target $R_m\le C_m\psi$ and of both dual certificates.  In the
+-July 11 runs: no step of any chain was violated; the global scan (together
+-with the earlier cartography sweep of $68{,}564$ admissible points, $m$ up
+-to $10^7$, adaptive precision to $400$ digits) found no violation of the
+-target anywhere, with minimum relative margin $4.6\times10^{-6}$, attained
+-in the pinch corner, and the minimum-margin curve fitting
+-$\min\text{-margin}(m)\approx2.60/m$ --- consistent with
+-Remark~\ref{rmk:zoneA-tight}: the inequality is asymptotically tight, so
+-the zone proofs above are essentially forced to be as sharp as they are.
++\texttt{regionII\_scalar\_checker.py} first checks the algebraic identities
++and all directed constants exactly (using \texttt{Fraction} and SymPy), then
++tests every analytic chain on adversarial high-precision grids.  With
++\texttt{--scan}, the recorded reproducible run examined $1359$
++positive-defect parameter triples, through $m=1{,}000{,}001$ on the prescribed grid.
++It found no target violation and no point missed by both dual certificates;
++the smallest relative payment margin in that run was
++$4.638\cdot10^{-5}$, at
++$(e,\kappa,m)=(10^{-10},\,0.59999999988,\,100001)$.  These data are useful for
++transcription control only and are not invoked by any proof.
+ \end{enumerate}
+ 
+ \subsection*{How to audit}
+ 
+ \begin{enumerate}[label=\textup{(\alph*)}]
+-\item Read \S\ref{sec:reduction} against the baton note
+-(\texttt{gptpro\_jul11/regionII\_baton\_note.tex}); the three repairs are
+-Remarks~\ref{rmk:budget-sign}, \ref{rmk:knegative} and the $K=0$ case in
++\item Audit \S\ref{sec:reduction} independently from the block
++decomposition onward.  The points most easily missed are
++Remarks~\ref{rmk:budget-sign}, \ref{rmk:knegative}, the no-frontier
++Lemma~\ref{lem:no-frontier}, and the $K=0$ case in
+ Theorem~\ref{thm:huber}.
+ \item Check the chart Lemma~\ref{lem:chart} by direct computation (or run
+ the exact identity layer of the checker).
+@@ -1443,7 +1785,7 @@
+ Lemma~\ref{lem:threegeo} (a page of identities) plus
+ \texttt{zoneC\_certifier.py}; the Tur\'an-corner Lemma~\ref{lem:turan} is
+ self-contained, and every displayed constant of its proof is re-verified
+-numerically by the checker.
++as an exact rational comparison by the checker.
+ \item Run \texttt{python3 regionII\_scalar\_checker.py --scan} for the
+ numerical safety net.
+ \end{enumerate}
