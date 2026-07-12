@@ -17,8 +17,9 @@ The mixture theorem reduces the whole target to `0 ≤ diagKernel m r q ℓ` for
 `diagKernel_nonneg` below assembles all of this: every non-residual case and the
 `m ≥ 63`/right-reflection residual sub-case are discharged unconditionally; the two remaining
 certificate families enter as the hypotheses `Hfin` (`prop:finite`, `m ≤ 61`) and `Hleft`
-(`app:constants` via `diagKernel_nonneg_strip_left`).  This file also proves the purely-polynomial
-`app:constants` lower bound `P(θ) ≥ 72` (`eq:constant-B`, `1/6 ≤ θ < 1/4`, part of the `m ≥ 500` tail).
+(`app:constants` via `diagKernel_nonneg_strip_left`).  This file also proves the two purely-polynomial
+`app:constants` lower bounds `P(θ) ≥ 51` (`eq:constant-A`, `0 < θ ≤ 1/6`) and `P(θ) ≥ 72`
+(`eq:constant-B`, `1/6 ≤ θ < 1/4`) — the scalar `P`-factor bounds feeding the `m ≥ 500` tail.
 -/
 
 import OddCycleBound.HighDensity.M6LeftEstimate
@@ -27,6 +28,22 @@ import OddCycleBound.HighDensity.KernelIBP
 open scoped BigOperators
 
 namespace OddCycleBound.HighDensity
+
+/-- **`app:constants`: `P(θ) ≥ 51` for `0 < θ ≤ 1/6`** (`eq:constant-A`, the `m ≥ 500` tail).
+`P(θ) = (2/3 − 2θ)/(θ(1/2 − 2θ)²)`; clears to `2/3 − 2θ − 51θ(1/2 − 2θ)² ≥ 0` (near-tight: interior
+minimum `≈ 0.0065`; certified by `nlinarith` with double-root square hints near `θ ≈ 0.106`). -/
+lemma P_ge_51 {θ : ℝ} (hθ0 : 0 < θ) (hθ : θ ≤ 1 / 6) :
+    (2 / 3 - 2 * θ) / (θ * (1 / 2 - 2 * θ) ^ 2) ≥ 51 := by
+  have hden : 0 < θ * (1 / 2 - 2 * θ) ^ 2 := by
+    have : (0 : ℝ) < 1 / 2 - 2 * θ := by linarith
+    positivity
+  rw [ge_iff_le, le_div_iff₀ hden]
+  nlinarith [hθ0, hθ, mul_nonneg hθ0.le (by linarith : (0:ℝ) ≤ 1 / 6 - θ),
+    mul_nonneg (mul_nonneg hθ0.le hθ0.le) (by linarith : (0:ℝ) ≤ 1 / 6 - θ),
+    mul_nonneg hθ0.le (mul_nonneg (by linarith : (0:ℝ) ≤ 1 / 6 - θ) (by linarith : (0:ℝ) ≤ 1 / 6 - θ)),
+    mul_nonneg hθ0.le (sq_nonneg (10 * θ - 1)),
+    mul_nonneg (by linarith : (0:ℝ) ≤ 1 / 6 - θ) (sq_nonneg (10 * θ - 1)),
+    mul_nonneg hθ0.le (sq_nonneg (17 * θ - 2))]
 
 /-- **`app:constants`: `P(θ) ≥ 72` for `1/6 ≤ θ < 1/4`** (`eq:constant-B`).  Uses the factorization
 `2/3 − 2θ − 72θ(1/2 − 2θ)² = −(2/3)(6θ − 1)(72θ² − 24θ + 1)`, whose sign is `≥ 0` on `[1/6, 1/4)`. -/
