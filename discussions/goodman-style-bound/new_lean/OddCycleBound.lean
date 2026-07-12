@@ -79,3 +79,5 @@ import OddCycleBound.HighDensity.AppConstantsB0
 import OddCycleBound.HighDensity.AppConstantsTail
 -- M6: residual-strip eq:tail-ratio scalar factor bounds (eq:tail-A/B, rpow-free building blocks).
 import OddCycleBound.HighDensity.M6TailFactors
+-- M6: residual-strip eq:tail-ratio bridge — c_n bound + power-lifted factor bounds (rpow).
+import OddCycleBound.HighDensity.M6TailRatio

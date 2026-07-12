@@ -58,11 +58,20 @@ families below.
    B-side). What's left: the `eq:tail-ratio` factor-bounding reduction (links exact `D,Σ` to the scalar
    `(99/100m)·P·B^m`), and the **`eq:constant-A` finite sweep `63 ≤ m ≤ 499`** (each pair `norm_num`-able
    with `set_option exponentiation.threshold` raised, but ~13k pairs ⇒ **code-generator job**).
-   The `eq:tail-ratio` reduction's **scalar per-factor bounds are now all proved** (`M6TailFactors.lean`,
+   The `eq:tail-ratio` reduction's **scalar per-factor bounds are all proved** (`M6TailFactors.lean`,
    `rpow`-free): `tail_two_p_eps` (`2(p−ε)≥7/6`), `tail_eps_b` (`ε/b≥1/(8−24θ)`), `tail_b_over_Lsq`
    (`b/L²≥(2/3−2θ)/L²`, the `P`-factor), `tail_ratio_a`/`tail_ratio_b` (`(ℓ+a)/(ℓ+ε)` ≥ case-a/-b
-   endpoint), `tail_cn_lower` (`c_n≥99/100`).  What remains for the reduction is only the `rpow`
-   bookkeeping raising these to the powers `n=νm`, `r`, `m` and multiplying into `P·B^m`.
+   endpoint), `tail_cn_lower` (`c_n≥99/100`).  Those are now **lifted to their powers** in
+   `M6TailRatio.lean`: `rpow_npow_eq`/`rpow_neg_npow_eq` (`(x^a)^m=x^k`, `(x^{−θ})^m=(1/x)^r`), `cn_core`
+   (`e^{n−1}≤(1/100)f^n`, i.e. `(m/n)f^n−e^{n−1}≥(99/100)(m/n)f^n`), and the four factor-power bounds
+   `tail_pow_p` (`(2(p−ε))^n≥((7/6)^{1−2θ})^m`), `tail_pow_eps` (`(ε/b)^r≥((8−24θ)^{−θ})^m`),
+   `tail_pow_ratio_a`/`tail_pow_ratio_b` (`((ℓ+a)/(ℓ+ε))^m` ≥ `((1/2+θ)/(5/12+θ))^m` / `(34/29)^m`).
+   **What remains** for the `D≤Σ` bridge (`hSD` of `diagKernel_nonneg_strip_left`) is only the numeric
+   assembly: the identity `Σ₁ = D·G` (with `Σ₁=(99/100)(m/n)f^n·ε^r/(r(ℓ+ε)^m)` and
+   `G=(99/100)(b/(rL²))(2(p−ε))^n(ε/b)^r((ℓ+a)/(ℓ+ε))^m`, cleared by `mul_pow`/`div_pow`+`2^n=2·2^{n−1}`,
+   `b^r=b·b^{r−1}`+`field_simp`/`ring`) and `G≥1` (factor-power bounds + `tail_b_over_Lsq` ⇒
+   `(99/(100m))P·B^m` ⇒ `constA_m500`/`constB_m63`).  On the B-branch (`θ≥1/6`, `ℓ≤2/5`) this makes the
+   left strip fully unconditional (no sweep); on the A-branch it needs the `63≤m≤499` sweep below.
 3. **`prop:finite` `m ≤ 61` (= `Hfin`).** The Bernstein/interval certs of `lem:finite-criterion` +
    `(q,ℓ)`-box subdivision — another **code-generator** job (a second, harder sweep).
 
