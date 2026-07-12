@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact rational-arithmetic certificate for Zone C-moderate of paper_new_v2.tex.
+"""Exact rational-arithmetic certificate for Zone C-moderate of paper_region2_v1.tex.
 
 CLAIM CERTIFIED: for all admissible (q, alpha, m) with
     e = 1-2 alpha in [1/60, 1/3 - 1/1000],   xi <= 1,   m >= 15,   R_m > 0,
@@ -7,7 +7,7 @@ the dual certificate lambda = min(1, 2 rho xi) pays: R_m <= C_m psi(xi, rho).
 (The remaining sliver e in (1/3 - 1/1000, 1/3) is the Turan-corner lemma,
 proved separately in the paper.)
 
-INGREDIENTS (all proved in the paper; notation of paper_new_v2.tex):
+INGREDIENTS (all proved in the paper; notation of paper_region2_v1.tex):
 
 (a) Exact three-geometric defect (uses L^2 = pq - alpha^2 exactly):
       R_m/(alpha^3 p^{m-2}) = (1/alpha) x^{m-2} + (l^2/alpha) y^{m-2}

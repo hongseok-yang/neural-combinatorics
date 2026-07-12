@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact rational-arithmetic certificate for the Zone-B battle of paper_new_v2.tex.
+"""Exact rational-arithmetic certificate for the Zone-B battle of paper_region2_v1.tex.
 
 Claim certified (the reduced form of Lemma zoneB): for all
     e in [1/60, 2032/10000],  kappa in [kappa_xi(e), kappa_bar(e)],  m >= 15 odd:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verification companion to paper_new_v2.tex (Region-II scalar Huber inequality).
+"""Verification companion to paper_region2_v1.tex (Region-II scalar Huber inequality).
 
 Three layers of checks:
   1. EXACT rational identity checks (fractions module; proof-grade for the
@@ -13,7 +13,7 @@ Usage:
     python3 regionII_scalar_checker.py            # layers 1+2 (fast)
     python3 regionII_scalar_checker.py --scan     # + layer 3
 
-Notation follows paper_new_v2.tex:
+Notation follows paper_region2_v1.tex:
   alpha = (1-e)/2, d = kappa*e, q = alpha-d, p = 1-q, L^2 = alpha*e - d(d+e),
   x = alpha/p, tau = q/alpha, y = L/p, ell = L/alpha, u = 1-x, T = m*e,
   A_m = 2L^{m-2}+m k_m(alpha), B_m = 2L^{m-2}+m k_m(L),
@@ -152,7 +152,7 @@ def psi_val(xi, rho):
 
 # ---------------------------------------------------------------------------
 # Layer 2: zone lemma chains (ported from the working notes; each named step
-# corresponds to a display in paper_new_v2.tex)
+# corresponds to a display in paper_region2_v1.tex)
 
 
 def zoneA_chain() -> None:
