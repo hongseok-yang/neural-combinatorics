@@ -149,6 +149,29 @@ Case coverage of P̃_{m,r}(q,ℓ) ≥ 0  (partition of the (r,ℓ) plane; every 
 
 The residual strip is exactly `r ≥ 2`, `n > 2r`, `0 < ℓ < q + r/m` (`eq:residual-strip`).
 
+### Live status table (updated 2026-07-12)
+
+| Step | Statement | Lean artifact | Status |
+|---|---|---|---|
+| two-sided → neckSum | `t(C_m,W) ≥ neckSum`, target ⇔ `neckSum ≥ p^m−p(1−p)^{m-1}` | `cycle_bound_of_neckSum` (`GraphonReduction`) | ✅ done |
+| neckSum moment form | `neckSum` operator-free in `x,y,s` | `neckSum_moment` (`MomentExpansion`) | ✅ done |
+| **expansion** | `Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ` | — (needs compression spectral measure `μ`) | ❌ **open** |
+| mixture → diagonal | box positivity ⇐ `diagKernel ≥ 0` on `[−½,½]` | `multiKernel_nonneg` (`MixtureIntegral`) | ✅ done |
+| kernel form (finite) | `diagKernel = C_{m,r}∫₀¹ x^{r-1}(1-x)^{r-1}[…]` | `gform_eq` (`KernelForm`) | ✅ done |
+| kernel form (improper) | `diagKernel = C_{m,r}ℓ^{n+r}∫₀^∞ s^{r-1}(ℓ+s)^{-m}ρ(q+s)` | `kernel_form` (`KernelImproper`) | ✅ done |
+| ρ-lemma | all parts (windows, reflect, empty, neg, tails) | `RhoLemma.lean` | ✅ done |
+| pointwise `ℓ≤0` | `diagKernel ≥ 0` | `diagKernel_nonneg_le_zero` | ✅ done |
+| pointwise `2r≥n` | `diagKernel ≥ 0` | `diagKernel_nonneg_two_r_ge` | ✅ done |
+| ibp `ℓ≥q+r/m`, `r=1` | `diagKernel ≥ 0` | `diagKernel_nonneg_ibp_r1` (`KernelIBP`) | ✅ done |
+| ibp `ℓ≥q+r/m`, `r≥2` | `diagKernel ≥ 0` | `diagKernel_nonneg_ibp` (`KernelIBP`) | ✅ done |
+| `r=1`, all lengths | `diagKernel m 1 q ℓ ≥ 0`, all odd `m≥3` | `diagKernel_nonneg_r1` (`KernelIBP`) | ✅ done |
+| strip `m≥63`: threshold | `H(b) ≤ 2/5` | `threshold_bound` (`M6Strip`) | ✅ done |
+| strip `m≥63`: right-condition | `((C+e)/(C-e))^m ≤ (b…)^{r-1}(ν…)^{n-1}` | `right_condition` (`M6Strip`) | ✅ done |
+| strip `m≥63`: right-reflection | `0 ≤ ∫` over neg window (`ℓ>2/5`, `θ≥1/6`) | — (assemble `right_condition`+`rho_neg`/`rho_pos_tail`) | 📝 TODO |
+| strip `m≥63`: left-estimate (a)/(b) | `Σ/D ≥ 1` (`θ≤1/6`, or `θ≥1/6 ∧ ℓ≤2/5`) | — (ratio + `app:constants`) | 📝 TODO |
+| strip `m≤61` | finite Bernstein certs | — (`prop:finite`, Python port) | 📝 TODO |
+| assembly | `prop:remaining` → `Φ_m ≥ 0` → `thm:regionI-full` | — | 📝 TODO |
+
 ---
 
 ## 2. What is reusable from the existing build
