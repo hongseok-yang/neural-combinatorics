@@ -557,10 +557,20 @@ Work in this order; each milestone is independently checkpointable.
      `(5A₀n+2(n-1)m−5mn)²≤40A₀(n-1)mn` (= `(3n²+rn+7n+4r)²≤40(r-1)(n-1)(n+2r)n` with `m=n+2r`), closed by
      `nlinarith` with square hints; extremal case `(m,r,n)=(63,11,41)` (margin ~0.82). Integer constraints
      `13(r-1)≥2m` ⇒ `9r≥2n+13`, `r≥11`, `n≥33` all via `omega` (uses `m` odd + `6r` even ⇒ `m≤6r−1`).
-   - **📝 REMAINING for M6:** `lem:right-reflection` (needs the pointwise `eq:right-condition`
-     `((b+e)/(b-e))^{r-1}((ν+e)/(ν-e))^{n-1}≥((ℓ+b+e)/(ℓ+b-e))^m` via the `log((X+e)/(X-e))` power series +
-     `threshold_bound`); `lem:left-estimate` (a)/(b) (Σ/D≥1 ratio + `app:constants`); the finite certs
-     `prop:finite` (`m≤61`, Python port). Then `prop:remaining` assembly.
+   - **✅ `eq:right-condition` (core of `lem:right-reflection`) DONE (2026-07-12, `M6Strip.lean`,
+     `right_condition`, no sorry/axiom).** For `0≤e<b≤ν≤C` and the coefficient bound `m/C ≤ (r-1)/b+(n-1)/ν`
+     (from `threshold_bound`): `((C+e)/(C-e))^m ≤ ((b+e)/(b-e))^{r-1}·((ν+e)/(ν-e))^{n-1}`.
+     **AVOIDED the paper's infinite `log` power series entirely:** with `G(t)=(r-1)(log(b+t)-log(b-t))
+     +(n-1)(…)−m(…)`, `G(0)=0` and `G'(t)=Σ coeff·(1/(X+t)+1/(X−t)) ≥ 0` pointwise (via `recip_sum_lower`:
+     `X/(X²−t²) ≥ C²/(X(C²−t²))` for `X≤C`, i.e. `t²(C²−X²)≥0`, + the coefficient bound), so `G(e)≥0` by
+     the FTC (`integral_eq_sub_of_hasDerivAt` + `integral_nonneg`); then exponentiate (`Real.exp_le_exp` +
+     `log_mul`/`log_pow`/`log_div`). Helpers `glog_hasDerivAt` (deriv of `log(X+t)−log(X−t)` via
+     `HasDerivAt.log`; combine by rewriting goal deriv then `exact` to dodge the Pi.pow/instance mismatch),
+     `recip_sum_lower`. `HasDerivAt.log` gives lambda form directly (unlike `.comp`).
+   - **📝 REMAINING for M6:** the full `lem:right-reflection` assembly (pair `q+s=ν−e` with `ν+e` over the
+     negative window, integrate `κρ`, using `right_condition` + `rho_neg`/`rho_pos_tail`); `lem:left-estimate`
+     (a)/(b) (Σ/D≥1 ratio + `app:constants`); finite certs `prop:finite` (`m≤61`, Python port); then
+     `prop:remaining` assembly.
 8. 📝 🟡 **M7 — Assembly.** Combine the case partition into `thm:regionI-full`; wire the deletion +
    two-sided reduction; expose the `W`-facing theorem in `Main.lean` style.
 
