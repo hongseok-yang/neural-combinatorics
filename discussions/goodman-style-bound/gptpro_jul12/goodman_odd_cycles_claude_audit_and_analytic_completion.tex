@@ -1,0 +1,436 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+
+\title{Audit and Analytic Completion of the Claimed Proof\\
+for the Goodman--Style Odd-Cycle Bound when $\tfrac12<p<\tfrac23$}
+\author{}
+\date{11 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We audit the supplied claimed proof of
+\[
+ t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}
+ \qquad \left(\tfrac12\le p\le\tfrac23\right).
+\]
+The operator-theoretic reduction in that proof is sound, but the submitted
+version is not a satisfactory self-contained proof: one interval certificate
+uses an unstated auxiliary inequality, a displayed extremum test has its
+inequality reversed, and several decimal estimates are rounded in the wrong
+direction.  These defects are repairable and do not produce a counterexample.
+More importantly, we replace the entire computer-assisted scalar part---including
+the narrow transition strip---by one analytic argument.  The new idea is to
+encode the final five exponential terms as even moments of a five-atom signed
+measure and prove nonnegativity of its quadratic stop-loss transform.  The only
+difficult parameter regime reduces to an explicit polynomial that is positive
+on a triangle.  Thus no interval subdivision, floating-point computation, or
+integer-by-integer maximisation is needed in the final proof.
+\end{abstract}
+
+\section{Problem and conclusion of the audit}
+
+Let $W\colon[0,1]^2\to[0,1]$ be a symmetric graphon and let
+$p=t(K_2,W)$.  The desired bound is
+\begin{equation}\label{eq:graphon-goal}
+ t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}
+ \qquad(k\ge1),
+\end{equation}
+for $1/2<p<2/3$.  Write $q=1-p$, so that $1/3<q<1/2$.
+
+The supplied proof first performs an operator/spectral reduction.  Its final
+output is the following one-parameter scalar statement.  This is the precise
+interface at which the Python certificates enter.
+
+\begin{proposition}[Scalar interface from the supplied operator reduction]
+\label{prop:interface}
+For every graphon in the problem and every $k\ge1$, the reduction in the
+supplied note produces a number
+\[
+ q\le \alpha\le\sqrt q
+\]
+and numbers $L,c,a,\beta,\gamma$ defined by
+\begin{equation}\label{eq:parameters}
+ L=\frac{q-\alpha^2}{1-\alpha},\qquad
+ c=1-\alpha-L,\qquad
+ a=\alpha(1-\alpha),
+\end{equation}
+where $\beta,\gamma\ge0$ are determined by
+\begin{equation}\label{eq:roots}
+ \beta-\gamma=c,\qquad \beta\gamma=a,
+\end{equation}
+such that
+\begin{equation}\label{eq:operator-reduction}
+ t(C_{2k+1},W)
+ \ge \beta^{2k+1}-\gamma^{2k+1}-cL^{2k}.
+\end{equation}
+\end{proposition}
+
+We found no defect in the argument leading to Proposition~\ref{prop:interface}.
+The remaining task is therefore to prove
+\begin{equation}\label{eq:scalar-goal}
+ \beta^{2k+1}-\gamma^{2k+1}-cL^{2k}
+ \ge p^{2k+1}-pq^{2k}.
+\end{equation}
+Claude's programs certify versions of \eqref{eq:scalar-goal} by subdividing the
+$(q,\alpha)$-region.  The proof below establishes \eqref{eq:scalar-goal}
+analytically on the whole region at once.
+
+\paragraph{Specific repairs to the supplied write-up.}
+The original write-up should not be used unchanged.  In particular:
+\begin{enumerate}[label=(\roman*),leftmargin=2.1em]
+\item In the part called Region II/Zone C, the subdivision estimate uses a
+lower bound on $f=\alpha-L$ that is not stated among the hypotheses.  With
+$d=\alpha-q$ and $\delta=\alpha-\tfrac13$, the needed fact follows from
+$d+L\le\tfrac13$:
+\begin{equation}\label{eq:missing-bound}
+ q-L=\alpha-(d+L)\ge\alpha-\tfrac13=\delta,
+ \qquad
+ f=d+(q-L)\ge d+\delta.
+\end{equation}
+This is stronger than the bound used by the program.
+\item The displayed test for which integer maximises the auxiliary quantity
+$K(n)$ has one comparison sign reversed.  The implementation and the later
+use have the correct orientation, so this is a textual error rather than a
+counterexample to the certificate.
+\item Several handwritten decimal inequalities round an endpoint in the
+unsafe direction.  Replacing those decimals by their exact rational endpoints
+repairs the statements; the relevant inequalities have slack.
+\end{enumerate}
+These repairs explain why the computational proof is salvageable.  They are no
+longer needed for the final result, since Sections~\ref{sec:scalar}--\ref{sec:proof}
+replace all three certificates.
+
+\section{The analytic scalar theorem}\label{sec:scalar}
+
+\begin{theorem}[Five-atom scalar inequality]\label{thm:scalar}
+Let
+\[
+ \frac13\le q\le\frac12,\qquad p=1-q,
+ \qquad q\le\alpha\le\sqrt q,
+\]
+and define $L,c,a,\beta,\gamma$ by
+\eqref{eq:parameters}--\eqref{eq:roots}.  Then, for every integer $k\ge1$,
+\begin{equation}\label{eq:scalar-theorem}
+ \beta^{2k+1}-\gamma^{2k+1}-cL^{2k}
+ \ge p^{2k+1}-pq^{2k}.
+\end{equation}
+\end{theorem}
+
+The proof uses the more convenient parameter
+\begin{equation}\label{eq:fdef}
+ f=\alpha-L,
+ \qquad r=p-q=1-2q.
+\end{equation}
+Since $0\le L\le q\le\alpha$, we have $f\ge0$.  The relation
+$q=\alpha^2+(1-\alpha)L$ gives the identities
+\begin{equation}\label{eq:fparam}
+ \alpha=\frac{q+f}{1+f},\qquad
+ L=\frac{q-f^2}{1+f},\qquad
+ c=\frac{r+f^2}{1+f},\qquad
+ a=\frac{p(q+f)}{(1+f)^2}.
+\end{equation}
+In particular,
+\begin{equation}\label{eq:cminus-r}
+ c-r=\frac{f(f-r)}{1+f}.
+\end{equation}
+
+\begin{lemma}[Ordering of the five atoms]\label{lem:order}
+The parameters satisfy
+\begin{equation}\label{eq:order}
+ 0\le L\le q<p\le\beta,
+ \qquad L\le\gamma\le p.
+\end{equation}
+Thus the only undetermined comparison among the interior atoms is whether
+$\gamma\le q$ or $q\le\gamma$.
+\end{lemma}
+
+\begin{proof}
+The bounds $0\le L\le q$ follow respectively from
+$\alpha^2\le q$ and $\alpha\ge q$.  Let
+\[
+ \chi(x)=x^2-cx-a=(x-\beta)(x+\gamma).
+\]
+A direct use of \eqref{eq:fparam} gives
+\begin{equation}\label{eq:chip}
+ \chi(p)=-af^2\le0,
+\end{equation}
+so $p\le\beta$.  Moreover $a\le1/4\le p^2$, and hence
+$\gamma=a/\beta\le a/p\le p$.  Finally,
+\begin{equation}\label{eq:chiL}
+ \chi(-L)=L^2+cL-a=-f(1-\alpha)\le0,
+\end{equation}
+which implies $L\le\gamma$.
+\end{proof}
+
+\section{Quadratic stop-loss domination}\label{sec:proof}
+
+Define a signed measure on $[0,\infty)$ by
+\begin{equation}\label{eq:measure}
+ \nu=
+ \beta\,\delta_\beta+p\,\delta_q-p\,\delta_p
+ -\gamma\,\delta_\gamma-c\,\delta_L.
+\end{equation}
+Its total mass is zero because $\beta-\gamma=c$.  For every $k\ge1$,
+\begin{equation}\label{eq:moment-is-goal}
+ \int x^{2k}\,\dd\nu(x)
+ =\beta^{2k+1}+pq^{2k}-p^{2k+1}
+  -\gamma^{2k+1}-cL^{2k}.
+\end{equation}
+Consequently Theorem~\ref{thm:scalar} is equivalent to nonnegativity of all
+positive even moments of $\nu$.
+
+Consider its quadratic stop-loss transform
+\begin{equation}\label{eq:Hdef}
+ H(t)=\int (x-t)_+^2\,\dd\nu(x),\qquad t\ge0.
+\end{equation}
+The central claim is
+\begin{equation}\label{eq:Hpositive}
+ H(t)\ge0\qquad(t\ge0).
+\end{equation}
+First observe that direct substitution in \eqref{eq:fparam} gives
+\begin{align}
+ H(0)
+ &=\beta^3+pq^2-p^3-\gamma^3-cL^2 \notag\\
+ &=c(c^2+3a-L^2)-pr
+ =2af^2\ge0.                                      \label{eq:H0}
+\end{align}
+We now prove \eqref{eq:Hpositive}.  Put
+\begin{equation}\label{eq:h-tstar}
+ h=\beta+\gamma,
+ \qquad
+ t_*=h-\frac{pr}{c}.
+\end{equation}
+(The open range $q<1/2$ has $c>0$; the endpoint follows by continuity.)
+On every interval where the atoms at $L$ and below are inactive, the relevant
+quadratic has derivative
+\begin{equation}\label{eq:Hprime-core}
+ 2c(t-t_*).
+\end{equation}
+We split according to the only two support orderings and, in the second one,
+according to whether $c\ge r$.
+
+\subsection*{Case 1: $\gamma\le q$}
+Here $c=\beta-\gamma\ge p-q=r$.  The intervals above $q$ are immediate from
+$\beta\ge p$.  For $\gamma\le t\le q$,
+\[
+ H'(t)=-2\{\beta(\beta-t)-pr\}\le0,
+\]
+because $\beta-t\ge\beta-q\ge r$ and $\beta\ge p$.
+At the lower endpoint,
+\begin{align*}
+ H(\gamma)
+ &=\beta c^2+p(q-\gamma)^2-p(p-\gamma)^2\\
+ &\ge p(q-\gamma)^2\ge0,
+\end{align*}
+since $c=\beta-\gamma\ge p-\gamma$ and $\beta\ge p$.
+For $L\le t\le\gamma$, the derivative is \eqref{eq:Hprime-core}; moreover
+$pr/c\le p\le\beta$, so $t_*\ge\gamma$.  Hence this quadratic decreases up
+to $\gamma$ and is nonnegative throughout $[L,\gamma]$.
+
+For $0\le t\le L$, all five atoms are active.  Since $\nu$ has total mass
+zero, $H$ is affine there.  Its endpoint values $H(0)$ and $H(L)$ are
+nonnegative, so $H\ge0$ also on this last interval.
+
+\subsection*{Case 2: $q\le\gamma$ and $c\ge r$}
+Write $y=\gamma-q\ge0$ and set
+\[
+ g(z)=(q+z)z^2\qquad(z\ge0).
+\]
+At $t=q$ we have
+\begin{equation}\label{eq:Hq-superadd}
+ H(q)=g(y+c)-g(y)-g(r)\ge0.
+\end{equation}
+Indeed, $g$ is increasing and
+\[
+ g(x+y)-g(x)-g(y)=xy(2q+3x+3y)\ge0;
+\]
+therefore $c\ge r$ implies
+$g(y+c)\ge g(y+r)\ge g(y)+g(r)$.
+
+On $[q,\gamma]$, the function $H$ is concave.  Its value at $q$ is
+nonnegative, while
+\[
+ H(\gamma)=\beta c^2-p(p-\gamma)^2\ge0.
+\]
+Thus it is nonnegative on that interval.  On $[L,q]$ its derivative is
+\eqref{eq:Hprime-core}.  Since
+\[
+ h-q\ge\beta\ge p\ge\frac{pr}{c},
+\]
+we have $t_*\ge q$, and hence $H(t)\ge H(q)$ on $[L,q]$.
+The affine argument on $[0,L]$ finishes this case.
+
+\subsection*{Case 3: $q\le\gamma$ and $c<r$}
+This is precisely the narrow transition regime for which the supplied proof
+uses its most delicate computer certificate.  By \eqref{eq:cminus-r},
+\begin{equation}\label{eq:f-transition}
+ 0<f<r\le\frac13.
+\end{equation}
+Define
+\begin{equation}\label{eq:u-eps}
+ u=r-c=\frac{f(r-f)}{1+f}=f(c-f),
+ \qquad
+ \varepsilon=\beta-p.
+\end{equation}
+Then
+\begin{equation}\label{eq:beta-gamma-eps}
+ \beta=p+\varepsilon,
+ \qquad
+ \gamma=q+u+\varepsilon.
+\end{equation}
+The identity \eqref{eq:chip} is equivalent to
+\begin{equation}\label{eq:eps-identity}
+ \varepsilon(1+u+\varepsilon)=af^2.
+\end{equation}
+
+For $L\le t\le q$, write
+\begin{equation}\label{eq:Hcore}
+ H_0(t)=
+ \beta(\beta-t)^2+p(q-t)^2-p(p-t)^2-\gamma(\gamma-t)^2.
+\end{equation}
+For $z=q-t$ this becomes
+\begin{equation}\label{eq:quadratic-z}
+ H_0(q-z)=H(q)+2Tz+cz^2,
+\end{equation}
+where direct expansion gives
+\begin{align}
+ T&=2c\varepsilon-u(q+u),                                      \label{eq:T}\\
+ H(q)&=3c\varepsilon^2
+       +c\{2q+3(r+u)\}\varepsilon-u^2(q+u).                    \label{eq:Hq}
+\end{align}
+It is enough to prove that the quadratic in \eqref{eq:quadratic-z} has
+nonpositive discriminant.  Using \eqref{eq:eps-identity}, one obtains the
+exact identity
+\begin{equation}\label{eq:Didentity}
+ D:=cH(q)-T^2
+ =4prc\,\varepsilon-c^2af^2-pu^2(q+u).
+\end{equation}
+
+The transition condition $f<r$ implies
+$\alpha=(q+f)/(1+f)\le1/2$.  Hence $a=\alpha(1-\alpha)\ge pq$.
+Also $\gamma\le p$ by Lemma~\ref{lem:order}.  From
+\eqref{eq:eps-identity} we therefore get
+\begin{equation}\label{eq:eps-lower}
+ \varepsilon=\frac{af^2}{p+\gamma}
+ \ge\frac{qf^2}{2}.
+\end{equation}
+Since $u=f(c-f)$, equations \eqref{eq:Didentity} and
+\eqref{eq:eps-lower} yield
+\begin{equation}\label{eq:Dlower}
+ D\ge f^2\mathcal E,
+ \qquad
+ \mathcal E=2pqrc-c^2a-p(c-f)^2(q+u).
+\end{equation}
+It remains to show $\mathcal E\ge0$.
+
+Set
+\begin{equation}\label{eq:Fdef}
+ F=\frac{(1+f)^4}{p}\,\mathcal E.
+\end{equation}
+Substituting \eqref{eq:fparam} and \eqref{eq:u-eps} and collecting terms gives
+the exact factorisation
+\begin{equation}\label{eq:Pfactor}
+ 2F=fP(r,f),
+\end{equation}
+where
+\begin{align}
+ P(r,f)={}&2r(1-3r^2)
+ +(-1+5r+7r^2-7r^3)f 
+otag\\
+ &-2(1+r^3)f^2
+ +2r(1-3r)f^3+2r(1-r)f^4.                    \label{eq:Ppoly}
+\end{align}
+We prove $P(r,f)\ge0$ on the triangle $0\le f\le r\le1/3$.
+
+If $0\le r\le1/5$, the coefficient of $f$ is at least $-1$ and the
+coefficients of $f^3,f^4$ are nonnegative.  Therefore
+\begin{align*}
+ P(r,f)
+ &\ge2r(1-3r^2)-f-2(1+r^3)f^2\\
+ &\ge r(1-2r-6r^2-2r^4)\\
+ &\ge \frac{223}{625}\,r\ge0.
+\end{align*}
+For $1/5\le r\le1/3$, the coefficient
+$-1+5r+7r^2-7r^3$ is nonnegative, and hence
+\begin{align*}
+ P(r,f)
+ &\ge2r(1-3r^2)-2(1+r^3)f^2\\
+ &\ge2r(1-r-3r^2-r^4)\\
+ &\ge\frac{52}{81}\,r\ge0.
+\end{align*}
+(The two bracketed polynomials are decreasing on their respective intervals.)
+Thus $F\ge0$, so $\mathcal E\ge0$, and consequently $D\ge0$.
+
+It follows from \eqref{eq:quadratic-z} that
+\[
+ 4(T^2-cH(q))=-4D\le0.
+\]
+Hence $H_0(t)\ge0$ for every real $t$.  On $[q,\gamma]$, the function $H$ is
+concave and both endpoint values are nonnegative: $H(q)\ge0$ follows from
+$D\ge0$, and $H(\gamma)\ge0$ was proved above.  The intervals above $\gamma$
+are immediate.  Finally, on $[0,L]$ the full $H$ is affine, with
+$H(0)\ge0$ by \eqref{eq:H0} and $H(L)=H_0(L)\ge0$.
+This completes the proof of \eqref{eq:Hpositive} in the transition case and
+therefore in all cases.
+
+\subsection*{From stop-loss domination to all odd cycle lengths}
+For every real $s\ge3$ and $x\ge0$,
+\begin{equation}\label{eq:integral-representation}
+ x^s=\frac{s(s-1)(s-2)}2
+ \int_0^\infty t^{s-3}(x-t)_+^2\,\dd t.
+\end{equation}
+Consequently \eqref{eq:Hpositive} implies
+$\int x^s\,\dd\nu(x)\ge0$ for every $s\ge3$.  For the remaining even exponent
+$s=2$, equation \eqref{eq:H0} gives the same conclusion directly.  Taking
+$s=2k$ in \eqref{eq:moment-is-goal} proves
+Theorem~\ref{thm:scalar}.
+
+\section{Consequence for the graphon problem}
+
+Combining Proposition~\ref{prop:interface} with
+Theorem~\ref{thm:scalar} gives immediately:
+
+\begin{corollary}[Goodman--style bound in the missing density range]
+\label{cor:main}
+Let $W$ be a graphon with edge density $p\in[1/2,2/3]$.  Then, for every
+integer $k\ge1$,
+\[
+ t(C_{2k+1},W)\ge p^{2k+1}-p(1-p)^{2k}.
+\]
+\end{corollary}
+
+\begin{remark}[Logical role of the checker]
+The accompanying Python file checks the polynomial identities and stress-tests
+$H(t)\ge0$ at high precision.  It is a regression checker only.  No line of
+the proof of Theorem~\ref{thm:scalar}, and hence no part of the final scalar
+argument, depends on numerical sampling or interval arithmetic.
+\end{remark}
+
+\section{What should replace the supplied computational sections}
+
+For a revised research note, we recommend retaining the operator reduction up
+to Proposition~\ref{prop:interface}, deleting the zone decomposition and all
+three computer-assisted scalar certificates, and inserting
+Sections~\ref{sec:scalar}--\ref{sec:proof}.  This makes the central argument
+shorter in logical structure, removes the transition-strip fragility, and
+proves all odd lengths simultaneously rather than verifying a succession of
+auxiliary exponential comparisons.
+
+\end{document}
