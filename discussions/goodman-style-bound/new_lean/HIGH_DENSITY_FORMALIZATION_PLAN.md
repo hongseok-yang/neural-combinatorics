@@ -58,6 +58,11 @@ families below.
    B-side). What's left: the `eq:tail-ratio` factor-bounding reduction (links exact `D,Σ` to the scalar
    `(99/100m)·P·B^m`), and the **`eq:constant-A` finite sweep `63 ≤ m ≤ 499`** (each pair `norm_num`-able
    with `set_option exponentiation.threshold` raised, but ~13k pairs ⇒ **code-generator job**).
+   The `eq:tail-ratio` reduction's **scalar per-factor bounds are now all proved** (`M6TailFactors.lean`,
+   `rpow`-free): `tail_two_p_eps` (`2(p−ε)≥7/6`), `tail_eps_b` (`ε/b≥1/(8−24θ)`), `tail_b_over_Lsq`
+   (`b/L²≥(2/3−2θ)/L²`, the `P`-factor), `tail_ratio_a`/`tail_ratio_b` (`(ℓ+a)/(ℓ+ε)` ≥ case-a/-b
+   endpoint), `tail_cn_lower` (`c_n≥99/100`).  What remains for the reduction is only the `rpow`
+   bookkeeping raising these to the powers `n=νm`, `r`, `m` and multiplying into `P·B^m`.
 3. **`prop:finite` `m ≤ 61` (= `Hfin`).** The Bernstein/interval certs of `lem:finite-criterion` +
    `(q,ℓ)`-box subdivision — another **code-generator** job (a second, harder sweep).
 

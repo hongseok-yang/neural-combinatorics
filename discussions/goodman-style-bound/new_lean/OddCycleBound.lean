@@ -77,3 +77,5 @@ import OddCycleBound.HighDensity.AppConstants
 import OddCycleBound.HighDensity.AppConstantsB0
 -- Stage D: app:constants eq:constant-A m≥500 uniform tail (P·B₀ glue: constA_m500).
 import OddCycleBound.HighDensity.AppConstantsTail
+-- M6: residual-strip eq:tail-ratio scalar factor bounds (eq:tail-A/B, rpow-free building blocks).
+import OddCycleBound.HighDensity.M6TailFactors
