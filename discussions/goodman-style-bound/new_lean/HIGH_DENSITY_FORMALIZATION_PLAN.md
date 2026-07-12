@@ -151,8 +151,8 @@ The residual strip is exactly `r ≥ 2`, `n > 2r`, `0 < ℓ < q + r/m` (`eq:resi
 
 ### Live status by tier (paper-proof order, updated 2026-07-12)
 
-Rows follow the paper's proof order within each tier; `✅` = built & axiom-clean, `📝` = to do,
-`❌` = open (no route yet).
+Rows follow the paper's proof order within each tier; `✅` = built & axiom-clean, `📝` = to do
+(concrete route known), `❌` = open (no tractable route yet).
 
 **Tier 1 — identity + expansion foundation** (paper: two-sided identity → `Φ_m` via deletion →
 expansion → mixture → reduce to the diagonal `P̃_{m,r}(q,ℓ) ≥ 0`).
@@ -161,7 +161,7 @@ expansion → mixture → reduce to the diagonal `P̃_{m,r}(q,ℓ) ≥ 0`).
 |---|---|---|
 | two-sided/deletion reduction: target ⇔ `neckSum ≥ p^m−p(1−p)^{m-1}` | ✅ | `cycle_bound_of_neckSum` (`GraphonReduction`) |
 | `neckSum` rewritten operator-free in the moments `x,y,s` | ✅ | `neckSum_moment` (`MomentExpansion`) |
-| **expansion** `Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ` (needs compression spectral measure `μ`) | ❌ | — |
+| **expansion** `Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ` (paper `thm:expansion`, `paper_new.tex` §`sec:expansion2`) — route below (E1–E6) | 📝 | — |
 | mixture `𝓟 = E_{Dir}[P̃]` ⇒ box positivity ⇐ `diagKernel ≥ 0` on `[−½,½]` | ✅ | `multiKernel_nonneg` (`MixtureIntegral`) |
 
 **Tier 2 — kernel form + special functions** (paper: write `P̃_{m,r}` as a Beta/improper integral of `ρ`).
@@ -195,6 +195,53 @@ expansion → mixture → reduce to the diagonal `P̃_{m,r}(q,ℓ) ≥ 0`).
 | finite Bernstein certs, `m ≤ 61` (`prop:finite`) | 📝 | — (Python port) |
 | appendix rational tail constants (`app:constants`) | 📝 | — |
 | `prop:remaining` → `Φ_m ≥ 0` → `thm:regionI-full` (W-facing) | 📝 | — |
+
+### Route for the expansion (Tier 1, `thm:expansion`) — the measure-free (eigen-sum) plan
+
+`paper_new.tex` §`sec:expansion2` proves `thm:expansion` by the *analytic route* (Schur/Fredholm
+determinant, `−log det(I−zX)=Σ Tr(Xʲ)/j zʲ`, the resolvent power series `R_W(z)=∫dμ/(1+λz)`, and the
+`h_n` coefficient extraction).  Formalising that verbatim is Mathlib-scale (projection-valued measure,
+`PowerSeries` `log`, `r`-fold product measure).  **The route below avoids all of it** by replacing the
+abstract `g`-weighted spectral measure `μ` with the *concrete eigen-expansion* of the compression
+`A = compress W` (compact self-adjoint), turning every `∫dμ` into a `tsum` over eigenmodes.  This makes
+positivity a one-line `tsum_nonneg` and the identity a finite moment-polynomial identity.
+
+Write the eigendata of `A`: eigenvalues `λ_n`, orthonormal eigenvectors `e_n`, `c_n = ⟨g,e_n⟩`
+(`g = degCentered`).  The (unnormalised) spectral measure is `μ = ∑_n c_n² δ_{λ_n}`, so
+`∫ f dμ = ∑'_n c_n² f(λ_n)` and `specMoment j = s_j = ∑'_n c_n² λ_n^j`.
+
+- **Prereq P — port/derive the compression eigen-expansion into `new_lean`.**  `A` is compact
+  self-adjoint (finite-rank/Hilbert–Schmidt approx), so Mathlib's compact self-adjoint spectral theorem
+  gives `{λ_n, e_n}`.  The `LowBand/` layer of the *other* Lean project already has this
+  (`CompactGraphonOperator`, `trace_compPow_*_eq_tsum_eigen_*`); `new_lean` currently has only the
+  integral `compress`/`specMoment`, so this must be brought over or re-derived.  🟠 (textbook but new
+  infrastructure — the one genuinely operator-side task).
+- **E1 — support bound `|λ_n| ≤ 1/2`** (paper `lem:compression`, `σ(A) ⊆ [−½,½]`, from `‖A‖ ≤ 1/2`).
+  🟡, self-contained.
+- **E2 — moment ↔ eigen-sum `specMoment j = ∑'_n c_n² λ_n^j`** (from P: `⟨g,Aʲg⟩` in the eigenbasis).
+  🟡; the analogue `trace(Wᵏ)=Σλⁿᵏ` already exists in `LowBand/`.
+- **E3 — positivity (the payoff).**  Define `expTerm m r q := ∑'_{(n₁,…,n_r)} (∏_i c_{n_i}²) ·
+  multiKernel m r q [λ_{n_1},…,λ_{n_r}]`.  Then `0 ≤ expTerm` by `multiKernel_nonneg` (each `λ_{n_i} ∈
+  [−½,½]` by E1) + `tsum_nonneg`; hence `0 ≤ ∑_{r=1}^{(m-1)/2} expTerm m r q`.  🟢 given P/E1.
+- **E4 — moment form of `expTerm`.**  Using `multiKernel_expand` (`𝓟 = Σ_{j≤n} kerB_j · h_j(L)`) and the
+  tsum factorisation `∑'_{tuple} (∏c²) h_j(λ⃗) = momentConv r j` where `momentConv r j := Σ_{a∈ℕʳ,|a|=j}
+  ∏_i s_{a_i}` (product measure = product of tsums, `tsum_prod`/`tsum_mul_tsum`), get
+  `expTerm m r q = ∑_{j≤n} kerB m r q j · momentConv r j` — a polynomial in `q` and `s_0,…,s_n`.  🟡.
+- **E5 — the identity `∑_{r=1}^{(m-1)/2} expTerm m r q = neckSum_moment` (`= Φ_m`).**  A finite
+  polynomial identity in `q` and the moments `s_j` (with `x_{m-1}`/pathDensity via the block recurrence).
+  Two options: (a) port the paper's generating-function extraction as an identity among **moment**
+  `PowerSeries` (`R_U=Σ s_j zʲ`, `R_W=Σ(−1)ʲ s_j zʲ`, `x`-resolvent `1/(1−qz−z²R_U)`) — no operators;
+  or (b) prove it directly against the already-derived `neckSum_moment` by matching coefficients.  🟠 —
+  the combinatorial crux, but pure algebra.
+- **E6 — assemble.**  E3 + E5 give `0 ≤ Φ_m`, i.e. `p^m−p(1−p)^{m-1} ≤ neckSum`, discharging the sole
+  remaining hypothesis of `cycle_bound_of_neckSum`.  🟢.
+
+**Why this is `📝` not `❌`:** every step is a bounded, textbook task — the only new infrastructure is
+the compact self-adjoint eigen-expansion of `A` (P/E1/E2), which Mathlib supports and the sibling
+`LowBand/` project already realises; positivity (E3) is `tsum_nonneg`; the identity (E5) is finite
+symmetric-function algebra.  No Fredholm determinant, no projection-valued measure, no abstract product
+measure.  The heaviest single item is E5 (or, if one prefers the abstract-measure variant, constructing
+`μ` as a Mathlib `Measure` with prescribed moments and using `integral_nonneg` in place of E3/E4).
 
 ---
 
