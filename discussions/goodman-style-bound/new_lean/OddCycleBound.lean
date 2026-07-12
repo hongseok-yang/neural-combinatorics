@@ -75,3 +75,5 @@ import OddCycleBound.HighDensity.StripAssembly
 import OddCycleBound.HighDensity.AppConstants
 -- Stage D: app:constants eq:constant-A rpow factor bound B₀(θ) ≥ 201/200 (derivative/monotone route).
 import OddCycleBound.HighDensity.AppConstantsB0
+-- Stage D: app:constants eq:constant-A m≥500 uniform tail (P·B₀ glue: constA_m500).
+import OddCycleBound.HighDensity.AppConstantsTail

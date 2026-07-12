@@ -214,7 +214,7 @@ items are P and E5; the rest are light.
 | strip: left-estimate machinery (`tail-D` deficit, `tail-S` surplus) | ✅ | `left_deficit_bound`, `left_surplus_bound`, `affine_integral`, `power_integral_lower` (`M6LeftEstimate`) |
 | strip: surplus constant `hconst` (`c_n ≥ 0`) — uniform, no sweep | ✅ | `strip_surplus_const_nonneg` (via `cn_bound`) (`M6LeftEstimate`) |
 | strip: left-estimate assembly `0 ≤ ∫` **reduced to the single scalar `D ≤ Σ`** (`lem:left-estimate`) | ✅ | `diagKernel_nonneg_strip_left` (takes only `hSD : D ≤ Σ`) (`M6LeftEstimate`) |
-| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | 📝 | DONE (all θ-factor bounds): `P_ge_51`+`P_ge_72`, `constA_tail` (`eq:constant-A` `m≥500` growth/base), **`B1_ge` (`B₁(θ)≥126/125`, 12-piece subdivision)**, **`B0_ge` (`B₀(θ)≥201/200`, derivative/monotone route: `log_lower` FTC + `g` antitone + endpoint `4/∛63`)**. LEFT: `constB_tail` (2-sided min arithmetic), `eq:tail-ratio` reduction linking to `hSD`, and the finite sweep `63≤m≤499` (code-gen scale) |
+| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | 📝 | DONE (all θ-factor bounds): `P_ge_51`+`P_ge_72`, `constA_tail` (`eq:constant-A` `m≥500` growth/base), **`constA_m500` (`eq:constant-A` `m≥500` glued: `(99/100m)·P(θ)·B₀(θ)^m ≥ 1` from `P_ge_51`+`B0_ge`+`constA_tail`, `AppConstantsTail`)**, **`B1_ge` (`B₁(θ)≥126/125`, 12-piece subdivision)**, **`B0_ge` (`B₀(θ)≥201/200`, derivative/monotone route: `log_lower` FTC + `g` antitone + endpoint `4/∛63`)**. LEFT: `constB_tail` (2-sided min arithmetic), `eq:tail-ratio` reduction linking to `hSD`, and the finite sweep `63≤m≤499` (code-gen scale) |
 
 **Stage D — certificates & final assembly.**
 
@@ -222,7 +222,7 @@ items are P and E5; the rest are light.
 |---|---|---|
 | **case assembly** `diagKernel ≥ 0` over the whole `(r,ℓ)` plane (`prop:remaining`/`thm:main` split) | ✅ | `diagKernel_nonneg` (`StripAssembly`) — all non-residual cases + right-reflection residual sub-case unconditional; `Hfin`/`Hleft` hypotheses = the two deferred cert families |
 | finite Bernstein certs, `m ≤ 61` (`prop:finite` = `Hfin`) | 📝 | — (Python port) |
-| appendix rational tail constants (`app:constants` = `Hleft` scalar) | 📝 | `P_ge_72` (`eq:constant-B` poly part) done; `P(θ)≥51`, `B₀/B₁` rpow tail + finite sweep left |
+| appendix rational tail constants (`app:constants` = `Hleft` scalar) | 📝 | `P_ge_51`/`P_ge_72`, `B0_ge`/`B1_ge`, `constA_tail`, and **`constA_m500`** (`eq:constant-A` `m≥500` fully assembled, `AppConstantsTail`) done; `constB_tail` + finite sweep `63≤m≤499` left |
 | `diagKernel_nonneg` → `multiKernel_nonneg` → `Φ_m ≥ 0` → `thm:regionI-full` (needs Stage A′ expansion) | 📝 | — |
 
 ---
