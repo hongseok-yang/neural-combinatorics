@@ -71,3 +71,5 @@ import OddCycleBound.HighDensity.M6Reflection
 import OddCycleBound.HighDensity.M6LeftEstimate
 -- Stage C/D: diagonal-kernel case assembly (prop:remaining / thm:main case split).
 import OddCycleBound.HighDensity.StripAssembly
+-- Stage D: app:constants m≥500 tail arithmetic (eq:constant-A), isolating the B₀ rpow bound.
+import OddCycleBound.HighDensity.AppConstants
