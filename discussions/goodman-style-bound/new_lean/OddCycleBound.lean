@@ -69,3 +69,5 @@ import OddCycleBound.HighDensity.M6Strip
 import OddCycleBound.HighDensity.M6Reflection
 -- M6: residual strip — lem:left-estimate machinery (tail-D/tail-S) + reduction to app:constants.
 import OddCycleBound.HighDensity.M6LeftEstimate
+-- Stage C/D: diagonal-kernel case assembly (prop:remaining / thm:main case split).
+import OddCycleBound.HighDensity.StripAssembly

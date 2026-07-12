@@ -211,9 +211,10 @@ items are P and E5; the rest are light.
 
 | What it is | Status | Artifact |
 |---|---|---|
-| finite Bernstein certs, `m ≤ 61` (`prop:finite`) | 📝 | — (Python port) |
-| appendix rational tail constants (`app:constants`) | 📝 | — |
-| `prop:remaining` → `Φ_m ≥ 0` → `thm:regionI-full` (W-facing) | 📝 | — |
+| **case assembly** `diagKernel ≥ 0` over the whole `(r,ℓ)` plane (`prop:remaining`/`thm:main` split) | ✅ | `diagKernel_nonneg` (`StripAssembly`) — all non-residual cases + right-reflection residual sub-case unconditional; `Hfin`/`Hleft` hypotheses = the two deferred cert families |
+| finite Bernstein certs, `m ≤ 61` (`prop:finite` = `Hfin`) | 📝 | — (Python port) |
+| appendix rational tail constants (`app:constants` = `Hleft` scalar) | 📝 | `P_ge_72` (`eq:constant-B` poly part) done; `P(θ)≥51`, `B₀/B₁` rpow tail + finite sweep left |
+| `diagKernel_nonneg` → `multiKernel_nonneg` → `Φ_m ≥ 0` → `thm:regionI-full` (needs Stage A′ expansion) | 📝 | — |
 
 ---
 
