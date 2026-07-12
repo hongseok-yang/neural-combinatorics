@@ -202,8 +202,8 @@ items are P and E5; the rest are light.
 | `r=1`, all lengths (`lem:r-one`) — incl. improper-∫ core | ✅ | `diagKernel_nonneg_r1`, `r1_integral_nonneg` (`KernelIBP`/`KernelR1`) |
 | strip `m≥63`: threshold `H(b) ≤ 2/5` (`lem:threshold`) | ✅ | `threshold_bound` (`M6Strip`) |
 | strip `m≥63`: reflection condition (`eq:right-condition`) | ✅ | `right_condition` (`M6Strip`) |
-| strip `m≥63`: right-reflection assembly `0 ≤ ∫` (`lem:right-reflection`, `ℓ>2/5`) | 📝 | — (wire `right_condition`+`rho_neg`/`rho_pos_tail`) |
-| strip `m≥63`: left-estimate `Σ/D ≥ 1` (a)/(b) (`lem:left-estimate`) | 📝 | — (ratio + `app:constants`) |
+| strip `m≥63`: right-reflection assembly `0 ≤ ∫` (`lem:right-reflection`, `ℓ>2/5`) | ✅ | `diagKernel_nonneg_strip_right` (`M6Reflection`) |
+| strip `m≥63`: left-estimate `Σ/D ≥ 1` (a)/(b) (`lem:left-estimate`) | 📝 | — (ratio + `app:constants`; large: rpow tail + finite sweep 63≤m≤499) |
 
 **Stage D — certificates & final assembly.**
 
