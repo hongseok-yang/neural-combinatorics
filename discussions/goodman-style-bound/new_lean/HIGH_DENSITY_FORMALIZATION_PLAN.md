@@ -149,28 +149,52 @@ Case coverage of P̃_{m,r}(q,ℓ) ≥ 0  (partition of the (r,ℓ) plane; every 
 
 The residual strip is exactly `r ≥ 2`, `n > 2r`, `0 < ℓ < q + r/m` (`eq:residual-strip`).
 
-### Live status table (updated 2026-07-12)
+### Live status by tier (paper-proof order, updated 2026-07-12)
 
-| Step | Statement | Lean artifact | Status |
-|---|---|---|---|
-| two-sided → neckSum | `t(C_m,W) ≥ neckSum`, target ⇔ `neckSum ≥ p^m−p(1−p)^{m-1}` | `cycle_bound_of_neckSum` (`GraphonReduction`) | ✅ done |
-| neckSum moment form | `neckSum` operator-free in `x,y,s` | `neckSum_moment` (`MomentExpansion`) | ✅ done |
-| **expansion** | `Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ` | — (needs compression spectral measure `μ`) | ❌ **open** |
-| mixture → diagonal | box positivity ⇐ `diagKernel ≥ 0` on `[−½,½]` | `multiKernel_nonneg` (`MixtureIntegral`) | ✅ done |
-| kernel form (finite) | `diagKernel = C_{m,r}∫₀¹ x^{r-1}(1-x)^{r-1}[…]` | `gform_eq` (`KernelForm`) | ✅ done |
-| kernel form (improper) | `diagKernel = C_{m,r}ℓ^{n+r}∫₀^∞ s^{r-1}(ℓ+s)^{-m}ρ(q+s)` | `kernel_form` (`KernelImproper`) | ✅ done |
-| ρ-lemma | all parts (windows, reflect, empty, neg, tails) | `RhoLemma.lean` | ✅ done |
-| pointwise `ℓ≤0` | `diagKernel ≥ 0` | `diagKernel_nonneg_le_zero` | ✅ done |
-| pointwise `2r≥n` | `diagKernel ≥ 0` | `diagKernel_nonneg_two_r_ge` | ✅ done |
-| ibp `ℓ≥q+r/m`, `r=1` | `diagKernel ≥ 0` | `diagKernel_nonneg_ibp_r1` (`KernelIBP`) | ✅ done |
-| ibp `ℓ≥q+r/m`, `r≥2` | `diagKernel ≥ 0` | `diagKernel_nonneg_ibp` (`KernelIBP`) | ✅ done |
-| `r=1`, all lengths | `diagKernel m 1 q ℓ ≥ 0`, all odd `m≥3` | `diagKernel_nonneg_r1` (`KernelIBP`) | ✅ done |
-| strip `m≥63`: threshold | `H(b) ≤ 2/5` | `threshold_bound` (`M6Strip`) | ✅ done |
-| strip `m≥63`: right-condition | `((C+e)/(C-e))^m ≤ (b…)^{r-1}(ν…)^{n-1}` | `right_condition` (`M6Strip`) | ✅ done |
-| strip `m≥63`: right-reflection | `0 ≤ ∫` over neg window (`ℓ>2/5`, `θ≥1/6`) | — (assemble `right_condition`+`rho_neg`/`rho_pos_tail`) | 📝 TODO |
-| strip `m≥63`: left-estimate (a)/(b) | `Σ/D ≥ 1` (`θ≤1/6`, or `θ≥1/6 ∧ ℓ≤2/5`) | — (ratio + `app:constants`) | 📝 TODO |
-| strip `m≤61` | finite Bernstein certs | — (`prop:finite`, Python port) | 📝 TODO |
-| assembly | `prop:remaining` → `Φ_m ≥ 0` → `thm:regionI-full` | — | 📝 TODO |
+Rows follow the paper's proof order within each tier; `✅` = built & axiom-clean, `📝` = to do,
+`❌` = open (no route yet).
+
+**Tier 1 — identity + expansion foundation** (paper: two-sided identity → `Φ_m` via deletion →
+expansion → mixture → reduce to the diagonal `P̃_{m,r}(q,ℓ) ≥ 0`).
+
+| What it is | Status | Artifact |
+|---|---|---|
+| two-sided/deletion reduction: target ⇔ `neckSum ≥ p^m−p(1−p)^{m-1}` | ✅ | `cycle_bound_of_neckSum` (`GraphonReduction`) |
+| `neckSum` rewritten operator-free in the moments `x,y,s` | ✅ | `neckSum_moment` (`MomentExpansion`) |
+| **expansion** `Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ` (needs compression spectral measure `μ`) | ❌ | — |
+| mixture `𝓟 = E_{Dir}[P̃]` ⇒ box positivity ⇐ `diagKernel ≥ 0` on `[−½,½]` | ✅ | `multiKernel_nonneg` (`MixtureIntegral`) |
+
+**Tier 2 — kernel form + special functions** (paper: write `P̃_{m,r}` as a Beta/improper integral of `ρ`).
+
+| What it is | Status | Artifact |
+|---|---|---|
+| complete-homog. symm. poly `h_d` + convolution | ✅ | `hsym`, `hsym_append` (`SymmetricPoly`) |
+| Dirichlet/Beta moment `E[(ΣΘλ)ʲ]` (`eq:dir-moment`) | ✅ | `dirExp_pow`, `beta_nat` (`MixtureIntegral`) |
+| finite Beta(r,r) kernel form (`eq:G-form`) | ✅ | `gform_eq` (`KernelForm`) |
+| improper `∫₀^∞` kernel form (`prop:kernel`) | ✅ | `kernel_form` (`KernelImproper`) |
+| `ρ`-lemma: all sign/window/reflection/tail bounds | ✅ | `RhoLemma.lean` |
+
+**Tier 3 — analytic case analysis** (paper: three direct ranges → `r=1` → the residual range).
+
+| What it is | Status | Artifact |
+|---|---|---|
+| pointwise `ℓ ≤ 0` (`lem:direct-ranges`) | ✅ | `diagKernel_nonneg_le_zero` (`KernelForm`) |
+| pointwise `2r ≥ n` (`lem:direct-ranges`) | ✅ | `diagKernel_nonneg_two_r_ge` (`KernelForm`) |
+| ibp `ℓ ≥ q+r/m`, `r=1` (`lem:ibp`) | ✅ | `diagKernel_nonneg_ibp_r1` (`KernelIBP`) |
+| ibp `ℓ ≥ q+r/m`, `r≥2` (`lem:ibp`) | ✅ | `diagKernel_nonneg_ibp` (`KernelIBP`) |
+| `r=1`, all lengths (`lem:r-one`) — incl. improper-∫ core | ✅ | `diagKernel_nonneg_r1`, `r1_integral_nonneg` (`KernelIBP`/`KernelR1`) |
+| strip `m≥63`: threshold `H(b) ≤ 2/5` (`lem:threshold`) | ✅ | `threshold_bound` (`M6Strip`) |
+| strip `m≥63`: reflection condition (`eq:right-condition`) | ✅ | `right_condition` (`M6Strip`) |
+| strip `m≥63`: right-reflection assembly `0 ≤ ∫` (`lem:right-reflection`, `ℓ>2/5`) | 📝 | — (wire `right_condition`+`rho_neg`/`rho_pos_tail`) |
+| strip `m≥63`: left-estimate `Σ/D ≥ 1` (a)/(b) (`lem:left-estimate`) | 📝 | — (ratio + `app:constants`) |
+
+**Tier 4 — exact certificates + assembly.**
+
+| What it is | Status | Artifact |
+|---|---|---|
+| finite Bernstein certs, `m ≤ 61` (`prop:finite`) | 📝 | — (Python port) |
+| appendix rational tail constants (`app:constants`) | 📝 | — |
+| `prop:remaining` → `Φ_m ≥ 0` → `thm:regionI-full` (W-facing) | 📝 | — |
 
 ---
 
