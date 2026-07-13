@@ -108,3 +108,5 @@ import OddCycleBound.HighDensity.Sweep.Aggregate
 import OddCycleBound.HighDensity.M6StripLeftA
 -- Milestone: the assembled high-density odd-cycle bound for all odd m ≥ 63 (Hfin vacuous).
 import OddCycleBound.HighDensity.HighDensityGE63
+-- Capstone: the currently provable high-density odd-cycle bound (m ≤ 7 ∨ m ≥ 63).
+import OddCycleBound.Main
