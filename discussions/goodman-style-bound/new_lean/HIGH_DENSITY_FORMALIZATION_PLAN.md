@@ -48,16 +48,16 @@ scalar `hSD : D ≤ Σ`). Its two hypotheses `Hfin`/`Hleft` are exactly the two 
 families below.
 
 **What actually remains (the only open work):**
-1. **Stage A′ — the expansion `thm:expansion`** (`Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ`). The measure-free
-   eigen-sum route (E1–E6, §1 table) is the plan; steps P (port `A`'s compact self-adjoint
-   eigen-expansion) and E5 (the moment-polynomial identity) are the heavy ones. This is the last piece of
-   *genuine mathematics* between `diagKernel ≥ 0` and `Φ_m ≥ 0`.
-2. **`app:constants` scalar `D ≤ Σ` (= `Hleft`).** All `θ`-factor bounds AND both tail assemblies are
-   DONE: `P_ge_51`/`P_ge_72`, `B0_ge`/`B1_ge`, `constA_tail`/`constB_tail`, `constA_m500` (`eq:constant-A`
+1. **`app:constants` scalar `D ≤ Σ` (= `Hleft`) — ✅ DONE (both branches, unconditional).**
+   All `θ`-factor bounds AND both tail assemblies:
+   `P_ge_51`/`P_ge_72`, `B0_ge`/`B1_ge`, `constA_tail`/`constB_tail`, `constA_m500` (`eq:constant-A`
    `m≥500`) and `constB_m63` (`eq:constant-B` fully closed for **all** `m≥63`, no sweep needed on the
-   B-side). What's left: the `eq:tail-ratio` factor-bounding reduction (links exact `D,Σ` to the scalar
-   `(99/100m)·P·B^m`), and the **`eq:constant-A` finite sweep `63 ≤ m ≤ 499`** (each pair `norm_num`-able
-   with `set_option exponentiation.threshold` raised, but ~13k pairs ⇒ **code-generator job**).
+   B-side). The `eq:tail-ratio` factor-bounding reduction and the **`eq:constant-A` finite sweep
+   `63 ≤ m ≤ 499`** are now both closed; `Hleft` is fully provided by `diagKernel_nonneg_strip_left_ab`
+   (`M6StripLeftA.lean`) with **no** remaining hypothesis.  The finite sweep is the generated per-`m`
+   tree `HighDensity/Sweep/` (`Core` collapse lemma + 219 `M0xx` files + `Aggregate`; 9928 case-A pairs,
+   each a single `norm_num`; `constA_finite`/`constA_finite_B0`), emitted by
+   `app_constants_finite_sweep.py --gen` and axiom-clean.
    The `eq:tail-ratio` reduction's **scalar per-factor bounds are all proved** (`M6TailFactors.lean`,
    `rpow`-free): `tail_two_p_eps` (`2(p−ε)≥7/6`), `tail_eps_b` (`ε/b≥1/(8−24θ)`), `tail_b_over_Lsq`
    (`b/L²≥(2/3−2θ)/L²`, the `P`-factor), `tail_ratio_a`/`tail_ratio_b` (`(ℓ+a)/(ℓ+ε)` ≥ case-a/-b
@@ -71,9 +71,13 @@ families below.
    **`diagKernel_nonneg_strip_left_b`** — the B-branch (`θ≥1/6`, `ℓ≤2/5`, `m≥63`) residual strip made
    **fully unconditional** (`cn_core` c_n step + the four factor-power bounds + `tail_b_over_Lsq` ⇒
    `(99/(100m))P·B₁^m` ⇒ `constB_m63`, which is uniform over all `m≥63`, so **no finite sweep on the
-   B-branch**).  `tail_eps_b`/`tail_pow_eps` were relaxed to `θ≤1/4` to cover the B-branch.  REMAINING
-   Stage-C: the analogous **A-branch** discharge (`θ≤1/6`, uses `tail_pow_ratio_a` + `constA_m500`),
-   which additionally needs the `63≤m≤499` finite sweep (`constA_m500` only covers `m≥500`).
+   B-branch**).  `tail_eps_b`/`tail_pow_eps` were relaxed to `θ≤1/4` to cover the B-branch.  The
+   analogous **A-branch** discharge (`M6StripLeftA.diagKernel_nonneg_strip_left_a`, `θ≤1/6`, uses
+   `tail_pow_ratio_a` + the case-a third factor `((1/2+θ)/(5/12+θ))`) is now also **done**, gluing
+   `constA_m500` (`m≥500`) with the finite sweep `constA_finite_B0` (`63≤m≤499`) via the collapse
+   lemma `Sweep.Core.constA_B0pow_eq` (`B₀(r/m)^m = (7/6)^{m-2r}·(m/(8m-24r))^r·(6(m+2r)/(5m+12r))^m`).
+   `diagKernel_nonneg_strip_left_ab` splits on `6r<m` to feed both branches into `StripAssembly`'s
+   `Hleft`.  All axiom-clean (`propext`/`Classical.choice`/`Quot.sound`).
 3. **`prop:finite` `m ≤ 61` (= `Hfin`).** The Bernstein/interval certs of `lem:finite-criterion` +
    `(q,ℓ)`-box subdivision — another **code-generator** job (a second, harder sweep).
 
@@ -125,13 +129,13 @@ routes:
 | Route | Steps 1–3 (identity + expansion) | New foundation needed | Verdict |
 |---|---|---|---|
 | **Analytic** (verbatim) | Schur det + `−log det(I−zX)=Σ Tr(Xʲ)/j zʲ` + spectral measure | Fredholm determinants, projection-valued measure, `r`-fold `∫dμʳ` | **Avoid** — Mathlib-scale detour |
-| **Moment / power-series** | recast `S_m`, `Φ_m` as `PowerSeries` coefficients in the moments `s_j`, reconciled with a **general-`m` block-trace identity** on the `LowBand/` eigen-expansion | `PowerSeries` algebra + `hₙ` symmetric polys | **Recommended** |
+| **Moment / finite-atomic** | recast `S_m`, `Φ_m` as finite coefficient expressions in the moments `s_j`, then represent only those finitely many moments by atomic data `(ι,w,λ)` | finite-dimensional spectral representation + `hₙ` symmetric polys | **Recommended** |
 
 **This is a *different proof* from the C9–C13 certificates — not an extension.** The C9–C13 path certs
 have the "range shrinks / certificate grows with `m`" pathology (frontier `ρ_m` rises with `m`, SOS
 size explodes), which is why they stop at 13. This theorem avoids that route entirely via **uniform
 analysis** (Stage C). Consequently the `LowBand/` layer is reused only for **infrastructure** (the
-operator eigen-expansion + summability), **not** for its proof method: the two-sided identity, `S_m`,
+canonical `L²` operator and finite-dimensional spectral tools), **not** for its proof method: the two-sided identity, `S_m`,
 and the `𝓟_{m,r}` expansion appear **nowhere** in the current Lean and are **from scratch**. The
 precedent that they *can* be formalised here is the necklace identity (`complTrace_necklace`, a
 general-`m` cyclic-trace expansion) — precedent by *type*, not by instance.
@@ -186,25 +190,27 @@ mixture → reduce to `P̃_{m,r}(q,ℓ) ≥ 0`).
 |---|---|---|
 | two-sided/deletion reduction: target ⇔ `neckSum ≥ p^m−p(1−p)^{m-1}` | ✅ | `cycle_bound_of_neckSum` (`GraphonReduction`) |
 | `neckSum` operator-free in the moments `x,y,s` | ✅ | `neckSum_moment` (`MomentExpansion`) |
-| **expansion** `Φ_m = Σ_r ∫···∫ 𝓟_{m,r} dμʳ` (`thm:expansion`) — broken out in Stage A′ | 📝 | — |
+| expansion algebra: coefficient formula + finite atomic product integral + positivity | ✅ | `momentPhi_eq_momentKernelExpansion`, `momentPhi_eq_atomicKernelExpansion`, `momentPhi_nonneg_of_atomic` (`Expansion`) |
+| graphon bridge for the expansion: identify the graphon defect/moments with the atomic formula | ✅ | `neckSum_eq_baseline_add_momentPhi`, `momentPhi_specMoment_nonneg`, and `neckSum_ge_baseline_of_diagKernel_nonneg` integrate E5b with P/E1/E2 (`DefectPowerSeries` / `GraphonKrylovBridge` / `ExpansionAssembly`) |
 | mixture `𝓟 = E_{Dir}[P̃]` ⇒ box positivity ⇐ `diagKernel ≥ 0` on `[−½,½]` | ✅ | `multiKernel_nonneg` (`MixtureIntegral`) |
 
-**Stage A′ — the expansion route (`thm:expansion`, measure-free eigen-sum plan).**  `paper_new.tex`
+**Stage A′ — the expansion route (`thm:expansion`, finite-atomic moment plan).**  `paper_new.tex`
 §`sec:expansion2` proves it analytically (Schur det + `−log det = Σ Tr/j` + resolvent series + `h_n`
-extraction) — Mathlib-scale.  Instead, replace the `g`-weighted spectral measure `μ` of `A = compress W`
-by its compact self-adjoint **eigen-expansion** `μ = ∑_n c_n² δ_{λ_n}` (`c_n = ⟨g,e_n⟩`), so every `∫dμ`
-becomes a `tsum`: positivity is `tsum_nonneg`, the identity a finite moment-polynomial identity.  Heaviest
-items are P and E5; the rest are light.
+extraction) — Mathlib-scale.  The Lean route uses only the finitely many moments needed for a fixed
+`m`. `Expansion.lean` proves the coefficient and product-integral algebra for arbitrary finite atomic
+data `(ι,w,λ)`. The graphon bridge obtains those atoms from the centered Krylov compression and
+identifies their moments and defect; it does not require an infinite sequence of eigenvalues.
 
-| Step | What it is | Status |
-|---|---|---|
-| P | port/derive `A`'s compact self-adjoint eigen-expansion `{λ_n,e_n}` into `new_lean` (Mathlib spectral thm; `LowBand/` has `CompactGraphonOperator`) | 📝 |
-| E1 | support `|λ_n| ≤ ½` (`‖A‖ ≤ ½`, `lem:compression`) | 📝 |
-| E2 | moment ↔ eigen-sum `specMoment j = ∑'_n c_n² λ_n^j` | 📝 |
-| E3 | positivity `0 ≤ expTerm := ∑'_{tuple}(∏c²)·multiKernel` via `multiKernel_nonneg` + `tsum_nonneg` | 📝 |
-| E4 | moment form `expTerm = ∑_j kerB_j·momentConv`, `momentConv r j = Σ_{\|a\|=j}∏s_{a_i}` (via `multiKernel_expand`+tsum Fubini) | 📝 |
-| E5 | identity `∑_r expTerm = neckSum_moment` (`= Φ_m`): finite moment-poly identity (PowerSeries-over-moments, or match `neckSum_moment`) | 📝 |
-| E6 | assemble `0 ≤ Φ_m` → close `cycle_bound_of_neckSum` | 📝 |
+| Step | What it is | Status | Artifact |
+|---|---|---|---|
+| P | construct the centered `L²` compression and a finite atomic representation `(ι,w,λ)` of the moments needed at `m` | ✅ | `centeredGraphonOp`, its symmetry and sharp norm bound, Krylov cutoff preservation, and graphon atom extraction are built in `GraphonKrylovBridge` / `KrylovCompression` |
+| E1 | support `∀ i, λ i ∈ [−1/2,1/2]` from `‖A‖ ≤ 1/2` (`lem:compression`) | ✅ | `norm_centeredGraphonOp_le_half` and `graphonAtomEigenvalue_mem_halfInterval` give the unconditional graphon support endpoint |
+| E2 | moment representation `specMoment j = atomicMoment w λ j` for every required `j` | ✅ | `inner_linearIter_centeredGraphonOp_eq_specMoment`, `specMoment_eq_graphonAtomicMoment`, and `momentPhi_specMoment_eq_graphonAtomicMoment` discharge the graphon identification and finite-cutoff locality |
+| E3 | positivity of each finite atomic product-kernel term via `multiKernel_nonneg` | ✅ | `momentKernelTerm_nonneg_of_atomic` (`Expansion`) |
+| E4 | moment form `expTerm = ∑_j kerB_j·momentConv`, `momentConv r j = [z^j](Σs_kz^k)^r` | ✅ | `atomicIntegral_hsym`, `atomicKernelTerm_eq_momentKernelTerm` (`Expansion`) |
+| E5a | coefficient identity: shift contribution minus path tail equals `Σ_r Σ_j kerB_j·momentConv` | ✅ | `momentPhiTerm_eq_momentKernelTerm`, `momentPhi_eq_momentKernelExpansion` (`Expansion`) |
+| E5b | identify the actual graphon `neckSum` defect with `momentPhi m q specMoment` | ✅ | `neckMoment_eq_baseline_add_momentPhi` proves the universal finite-sequence identity by exact formal-power-series coefficient extraction; `neckSum_eq_baseline_add_momentPhi` instantiates it for graphons (`DefectPowerSeries`) |
+| E6 | assemble `0 ≤ Φ_m` and close `cycle_bound_of_neckSum` | ✅ | `cycle_bound_of_diagKernel_nonneg` is the public Stage A endpoint; `cycle_bound_of_momentPhi_identity` remains as a compatibility alias (`ExpansionAssembly`) |
 
 **Stage B — kernel form & `ρ`-lemma** (write `P̃_{m,r}` as a Beta/improper integral of `ρ`).
 
@@ -231,16 +237,16 @@ items are P and E5; the rest are light.
 | strip: left-estimate machinery (`tail-D` deficit, `tail-S` surplus) | ✅ | `left_deficit_bound`, `left_surplus_bound`, `affine_integral`, `power_integral_lower` (`M6LeftEstimate`) |
 | strip: surplus constant `hconst` (`c_n ≥ 0`) — uniform, no sweep | ✅ | `strip_surplus_const_nonneg` (via `cn_bound`) (`M6LeftEstimate`) |
 | strip: left-estimate assembly `0 ≤ ∫` **reduced to the single scalar `D ≤ Σ`** (`lem:left-estimate`) | ✅ | `diagKernel_nonneg_strip_left` (takes only `hSD : D ≤ Σ`) (`M6LeftEstimate`) |
-| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | 📝 | DONE (all θ-factor bounds): `P_ge_51`+`P_ge_72`, `constA_tail` (`eq:constant-A` `m≥500` growth/base), **`constA_m500` (`eq:constant-A` `m≥500` glued: `(99/100m)·P(θ)·B₀(θ)^m ≥ 1` from `P_ge_51`+`B0_ge`+`constA_tail`, `AppConstantsTail`)**, **`B1_ge` (`B₁(θ)≥126/125`, 12-piece subdivision)**, **`B0_ge` (`B₀(θ)≥201/200`, derivative/monotone route: `log_lower` FTC + `g` antitone + endpoint `4/∛63`)**, **`constB_tail` (`eq:constant-B` 2-sided-min arithmetic, `AppConstants`: `f(m)=(126/125)^m/m` min over `m≥63` at `m=125=126`, `constB_step_down`/`constB_step_up`/`constB_antitone_aux`/`constB_pow_div_ge_min`) + `constB_m63` (`AppConstantsTail`: fully glues `eq:constant-B` for ALL `m≥63`, NO finite sweep on the B-side)**. LEFT: `eq:tail-ratio` reduction linking to `hSD`, and the `eq:constant-A` finite sweep `63≤m≤499` (code-gen scale) |
+| strip: the scalar `D ≤ Σ` itself (`app:constants`, `eq:constant-A/B`) | ✅ | **DONE, both branches unconditional.** θ-factor bounds `P_ge_51`+`P_ge_72`, `B0_ge`/`B1_ge`, `constA_tail`/`constB_tail`; glued tails **`constA_m500`** (`eq:constant-A` `m≥500`) + **`constB_m63`** (`eq:constant-B` all `m≥63`, no sweep). B-branch discharge **`diagKernel_nonneg_strip_left_b`** (`M6StripLeftB`). A-branch discharge **`diagKernel_nonneg_strip_left_a`** (`M6StripLeftA`): glues `constA_m500` with the **`eq:constant-A` finite sweep `63≤m≤499`** (`HighDensity/Sweep/`: `Core.constA_B0pow_eq` B₀-collapse + 219 generated `M0xx` files + `Aggregate.constA_finite`/`constA_finite_B0`; 9928 case-A pairs each one `norm_num`; emitted by `app_constants_finite_sweep.py --gen`). **`diagKernel_nonneg_strip_left_ab`** feeds both into `Hleft`. All axiom-clean |
 
 **Stage D — certificates & final assembly.**
 
 | What it is | Status | Artifact |
 |---|---|---|
-| **case assembly** `diagKernel ≥ 0` over the whole `(r,ℓ)` plane (`prop:remaining`/`thm:main` split) | ✅ | `diagKernel_nonneg` (`StripAssembly`) — all non-residual cases + right-reflection residual sub-case unconditional; `Hfin`/`Hleft` hypotheses = the two deferred cert families |
+| **case assembly** `diagKernel ≥ 0` over the whole `(r,ℓ)` plane (`prop:remaining`/`thm:main` split) | ✅ | `diagKernel_nonneg` (`StripAssembly`) — all non-residual cases + right-reflection residual sub-case unconditional; `Hfin`/`Hleft` hypotheses = the two deferred cert families (`Hleft` now fully dischargeable, see below) |
 | finite Bernstein certs, `m ≤ 61` (`prop:finite` = `Hfin`) | 📝 | — (Python port) |
-| appendix rational tail constants (`app:constants` = `Hleft` scalar) | 📝 | `P_ge_51`/`P_ge_72`, `B0_ge`/`B1_ge`, `constA_tail`/`constB_tail`, **`constA_m500`** (`eq:constant-A` `m≥500` assembled) and **`constB_m63`** (`eq:constant-B` fully assembled for ALL `m≥63`, no sweep) done (`AppConstantsTail`); only the `eq:constant-A` finite sweep `63≤m≤499` left on this row |
-| `diagKernel_nonneg` → `multiKernel_nonneg` → `Φ_m ≥ 0` → `thm:regionI-full` (needs Stage A′ expansion) | 📝 | — |
+| appendix rational tail constants (`app:constants` = `Hleft` scalar) | ✅ | `P_ge_51`/`P_ge_72`, `B0_ge`/`B1_ge`, `constA_tail`/`constB_tail`, **`constA_m500`** + **`constB_m63`** (`AppConstantsTail`), the **`eq:constant-A` finite sweep `63≤m≤499`** (`HighDensity/Sweep/`), and the two consumers **`diagKernel_nonneg_strip_left_a`** (`M6StripLeftA`) / **`_b`** (`M6StripLeftB`) with the both-branch provider **`diagKernel_nonneg_strip_left_ab`** = a complete `Hleft`.  All axiom-clean |
+| `diagKernel_nonneg` → `multiKernel_nonneg` → `Φ_m ≥ 0` → `thm:regionI-full` | ✅ | `cycle_bound_of_diagKernel_certificates` composes `StripAssembly` with the Stage A capstone, leaving exactly `Hfin` and `Hleft` (`FinalAssembly`) |
 
 ---
 

@@ -51,6 +51,22 @@ import OddCycleBound.HighDensity.SymmetricPoly
 import OddCycleBound.HighDensity.RhoLemma
 -- M1 Stage 2a: the natural Beta integral (foundation for the Dirichlet mixture positivity transfer).
 import OddCycleBound.HighDensity.MixtureIntegral
+-- M1: exact moment-polynomial / finite-atomic form of thm:expansion.
+import OddCycleBound.HighDensity.Expansion
+-- E5b: collapse the graphon necklace defect to universal path/moment sequence identities.
+import OddCycleBound.HighDensity.DefectIdentity
+-- E5b formal-series core: path recurrence as an exact Schur-complement inverse.
+import OddCycleBound.HighDensity.DefectPowerSeries
+-- E1: finite spectral atoms inherit support in [-1/2,1/2] from the compression norm bound.
+import OddCycleBound.HighDensity.AtomicSpectral
+-- E2: finite symmetric-compression vector moments are nonnegative-weight atomic moments.
+import OddCycleBound.HighDensity.AtomicMomentRepresentation
+-- P: finite Krylov subspace and its symmetric norm-controlled orthogonal compression.
+import OddCycleBound.HighDensity.KrylovCompression
+-- P/E2: centered graphon L² compression and identification of its moments with specMoment.
+import OddCycleBound.HighDensity.GraphonKrylovBridge
+-- Stage A capstone: diagonal-kernel positivity implies the existing graphon cycle bound.
+import OddCycleBound.HighDensity.ExpansionAssembly
 -- M2/M3: eq:G-form (finite Beta(r,r) form of diagKernel) + thm:pointwise (regimes 2r≥n and ℓ≤0).
 import OddCycleBound.HighDensity.KernelForm
 -- M5/M6 gateway: prop:kernel, the improper ∫₀^∞ kernel form (via x=ℓ/(ℓ+s) substitution).
@@ -71,6 +87,8 @@ import OddCycleBound.HighDensity.M6Reflection
 import OddCycleBound.HighDensity.M6LeftEstimate
 -- Stage C/D: diagonal-kernel case assembly (prop:remaining / thm:main case split).
 import OddCycleBound.HighDensity.StripAssembly
+-- Stage A/D integration: the two residual certificate families imply the graphon cycle bound.
+import OddCycleBound.HighDensity.FinalAssembly
 -- Stage D: app:constants m≥500 tail arithmetic (eq:constant-A), isolating the B₀ rpow bound.
 import OddCycleBound.HighDensity.AppConstants
 -- Stage D: app:constants eq:constant-A rpow factor bound B₀(θ) ≥ 201/200 (derivative/monotone route).
@@ -83,3 +101,8 @@ import OddCycleBound.HighDensity.M6TailFactors
 import OddCycleBound.HighDensity.M6TailRatio
 -- M6: residual-strip left-estimate B-branch assembly (Σ₁ = D·G identity; hSD discharge).
 import OddCycleBound.HighDensity.M6StripLeftB
+-- Stage D: eq:constant-A finite sweep (63 ≤ m ≤ 499) — core collapse + per-m generated tree.
+import OddCycleBound.HighDensity.Sweep.Core
+import OddCycleBound.HighDensity.Sweep.Aggregate
+-- M6: residual-strip left-estimate A-branch assembly + both-branch Hleft provider.
+import OddCycleBound.HighDensity.M6StripLeftA
