@@ -66,12 +66,14 @@ families below.
    (`e^{n−1}≤(1/100)f^n`, i.e. `(m/n)f^n−e^{n−1}≥(99/100)(m/n)f^n`), and the four factor-power bounds
    `tail_pow_p` (`(2(p−ε))^n≥((7/6)^{1−2θ})^m`), `tail_pow_eps` (`(ε/b)^r≥((8−24θ)^{−θ})^m`),
    `tail_pow_ratio_a`/`tail_pow_ratio_b` (`((ℓ+a)/(ℓ+ε))^m` ≥ `((1/2+θ)/(5/12+θ))^m` / `(34/29)^m`).
-   **What remains** for the `D≤Σ` bridge (`hSD` of `diagKernel_nonneg_strip_left`) is only the numeric
-   assembly: the identity `Σ₁ = D·G` (with `Σ₁=(99/100)(m/n)f^n·ε^r/(r(ℓ+ε)^m)` and
-   `G=(99/100)(b/(rL²))(2(p−ε))^n(ε/b)^r((ℓ+a)/(ℓ+ε))^m`, cleared by `mul_pow`/`div_pow`+`2^n=2·2^{n−1}`,
-   `b^r=b·b^{r−1}`+`field_simp`/`ring`) and `G≥1` (factor-power bounds + `tail_b_over_Lsq` ⇒
-   `(99/(100m))P·B^m` ⇒ `constA_m500`/`constB_m63`).  On the B-branch (`θ≥1/6`, `ℓ≤2/5`) this makes the
-   left strip fully unconditional (no sweep); on the A-branch it needs the `63≤m≤499` sweep below.
+   The `D≤Σ` bridge is now **assembled** (`M6StripLeftB.lean`): `sig1_eq` (the identity `Σ₁ = D·G`,
+   cleared by `mul_pow`/`div_pow`+`2^n=2·2^{n−1}`, `b^r=b·b^{r−1}`+`field_simp`) and
+   **`diagKernel_nonneg_strip_left_b`** — the B-branch (`θ≥1/6`, `ℓ≤2/5`, `m≥63`) residual strip made
+   **fully unconditional** (`cn_core` c_n step + the four factor-power bounds + `tail_b_over_Lsq` ⇒
+   `(99/(100m))P·B₁^m` ⇒ `constB_m63`, which is uniform over all `m≥63`, so **no finite sweep on the
+   B-branch**).  `tail_eps_b`/`tail_pow_eps` were relaxed to `θ≤1/4` to cover the B-branch.  REMAINING
+   Stage-C: the analogous **A-branch** discharge (`θ≤1/6`, uses `tail_pow_ratio_a` + `constA_m500`),
+   which additionally needs the `63≤m≤499` finite sweep (`constA_m500` only covers `m≥500`).
 3. **`prop:finite` `m ≤ 61` (= `Hfin`).** The Bernstein/interval certs of `lem:finite-criterion` +
    `(q,ℓ)`-box subdivision — another **code-generator** job (a second, harder sweep).
 

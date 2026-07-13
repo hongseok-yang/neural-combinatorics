@@ -32,7 +32,7 @@ lemma tail_two_p_eps {q : ℝ} (hq : q ≤ 1 / 3) :
 
 /-- **`eq:tail-A` factor `ε/b ≥ 1/(8−24θ)`** (`ε = (1−2q)/4`, `b = ν−q = (1−2θ)−q`).  The cleared
 surplus `(1−2q)/4·(8−24θ) − ((1−2θ)−q) = (1−3q)(1−4θ)` is `≥ 0` on `q ≤ 1/3`, `θ ≤ 1/6`. -/
-lemma tail_eps_b {q θ : ℝ} (hq : q ≤ 1 / 3) (hθ0 : 0 ≤ θ) (hθ : θ ≤ 1 / 6) :
+lemma tail_eps_b {q θ : ℝ} (hq : q ≤ 1 / 3) (hθ0 : 0 ≤ θ) (hθ : θ ≤ 1 / 4) :
     1 / (8 - 24 * θ) ≤ ((1 - 2 * q) / 4) / ((1 - 2 * θ) - q) := by
   have hd : (0 : ℝ) < 8 - 24 * θ := by linarith
   have hb : (0 : ℝ) < (1 - 2 * θ) - q := by linarith

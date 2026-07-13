@@ -69,7 +69,7 @@ lemma tail_pow_p {n r m : ℕ} (hm : 0 < m) (hnrm : (n : ℝ) = (m : ℝ) - 2 * 
 
 /-- **`eq:tail-A` factor `(ε/b)^r ≥ ((8−24θ)^{−θ})^m`** (`ε = (1−2q)/4`, `b = (1−2θ)−q`, `θ = r/m`). -/
 lemma tail_pow_eps {r m : ℕ} (hm : 0 < m) {q : ℝ}
-    (hq : q ≤ 1 / 3) (hθ0 : (0 : ℝ) ≤ (r : ℝ) / m) (hθ : (r : ℝ) / m ≤ 1 / 6) :
+    (hq : q ≤ 1 / 3) (hθ0 : (0 : ℝ) ≤ (r : ℝ) / m) (hθ : (r : ℝ) / m ≤ 1 / 4) :
     ((8 - 24 * ((r : ℝ) / m)) ^ (-((r : ℝ) / m))) ^ m
       ≤ ((1 - 2 * q) / 4 / ((1 - 2 * ((r : ℝ) / m)) - q)) ^ r := by
   have hm0 : (m : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
