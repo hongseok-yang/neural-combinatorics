@@ -81,3 +81,5 @@ import OddCycleBound.HighDensity.AppConstantsTail
 import OddCycleBound.HighDensity.M6TailFactors
 -- M6: residual-strip eq:tail-ratio bridge — c_n bound + power-lifted factor bounds (rpow).
 import OddCycleBound.HighDensity.M6TailRatio
+-- M6: residual-strip left-estimate B-branch assembly (Σ₁ = D·G identity; hSD discharge).
+import OddCycleBound.HighDensity.M6StripLeftB
