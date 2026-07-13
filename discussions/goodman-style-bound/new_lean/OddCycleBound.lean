@@ -106,3 +106,5 @@ import OddCycleBound.HighDensity.Sweep.Core
 import OddCycleBound.HighDensity.Sweep.Aggregate
 -- M6: residual-strip left-estimate A-branch assembly + both-branch Hleft provider.
 import OddCycleBound.HighDensity.M6StripLeftA
+-- Milestone: the assembled high-density odd-cycle bound for all odd m ≥ 63 (Hfin vacuous).
+import OddCycleBound.HighDensity.HighDensityGE63
