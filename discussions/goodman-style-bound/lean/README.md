@@ -216,9 +216,17 @@ inequality). With $d = \alpha - q$, $f = \alpha - L$ and $e = 1 - 2\alpha$,
 $$\xi = \frac{4\alpha^{2} d}{e^{2}}, \qquad \rho = \frac{A_m}{B_m}\cdot\frac{\sqrt{\alpha}}{2\sqrt2\,f},
   \qquad C_m = \frac{B_m\, f \sqrt{2\alpha}\,e^{2}}{4\alpha^{2}}.$$
 
-The whole case is thus reduced to the single scalar inequality $R_m \le C_m\,\psi(\xi,\rho)$, proved by
-splitting the $(\xi,\rho)$ domain into zones A/B/C (`Scalar/*`), the leftover boxes verified by exact
-Bernstein certificates as above (`Certificate/*`).
+The whole case is thus reduced to the single scalar inequality $R_m \le C_m\,\psi(\xi,\rho)$. This is
+checked by partitioning the admissible domain according to $\xi$ and $e = 1 - 2\alpha$ into three zones
+(`Scalar/*`):
+
+- **Zone A** ($\xi \ge 1$ and $e \le 1/60$) — an elementary analytic estimate (`Scalar/ZoneA`);
+- **Zone B** ($\xi \ge 1$ and $e \ge 1/60$) — an exact rational box certificate (`Scalar/ZoneBReduction`,
+  `Scalar/ZoneBMax`);
+- **Zone C** ($\xi \le 1$, any $e$) — elementary for $e \le 1/60$ (`Scalar/ZoneCSmall`), and an analytic
+  estimate together with a box certificate for $e \ge 1/60$,
+
+the box certificates in Zones B and C being the exact Bernstein ones described above (`Certificate/*`).
 
 Module dependencies (arrows point from a file to the files it imports; certificate block files omitted):
 
