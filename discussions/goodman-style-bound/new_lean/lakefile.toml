@@ -8,3 +8,6 @@ rev = "v4.31.0"
 
 [[lean_lib]]
 name = "OddCycleBound"
+# Strict per-process memory cap (MB) for the Hfin reflection `decide +kernel` builds.
+# weakLeanArgs do not affect the module trace/hash, so this does not force a rebuild.
+weakLeanArgs = ["-M", "48000"]

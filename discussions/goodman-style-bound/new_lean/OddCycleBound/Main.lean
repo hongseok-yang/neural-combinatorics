@@ -1,30 +1,26 @@
 /-
-# High-density odd-cycle bound — the assembled theorem (`Main`)
+# High-density odd-cycle bound — the complete theorem (`Main`)
 
 The target (`paper_new.tex` §`sec:high-density-theorem`, project form):
 
 > for every graphon `W` with `edgeDensity W μ ≥ 2/3` and every odd `m ≥ 3`,
 > `p^m − p(1−p)^{m-1} ≤ cycleDensity μ W m`   (`p = edgeDensity W μ`).
 
-**Currently proved, axiom-clean, for odd `m ≤ 41` and odd `m ≥ 63`.**  The two halves:
+**Now proved for all odd `m ≥ 3`, axiom-clean.**  The two halves:
 
-* `m ≤ 41` — `HighDensityLE41.odd_cycle_bound_le41`: the Stage A expansion reduction plus the
+* `m ≤ 61` — `HighDensityLE61.odd_cycle_bound_le61`: the Stage A expansion reduction plus the
   generated `Hfin` family (`Hfin.Aggregate.finKernel_all`, `prop:finite`): exact
-  degree-`(m−2r−1)` Bernstein/Handelman certificates for the residual-strip pairs with odd
-  `9 ≤ m ≤ 41`, verified in-kernel by `decide +kernel`, discharging both `Hfin` and (on this
-  range) `Hleft`;
+  degree-`(m−2r−1)` Bernstein/Handelman certificates for all 196 residual-strip pairs with odd
+  `9 ≤ m ≤ 61`, verified in-kernel by `decide +kernel` over the reflection infrastructure
+  `HfinPolyReflect`, discharging both `Hfin` and (on this range) `Hleft`;
 * `m ≥ 63` — `HighDensityGE63.odd_cycle_bound_ge63`: the analytic milestone (`eq:constant-A`
   finite sweep + `constA_m500` + `constB_m63`, `Hfin` vacuous).
 
-The band `43 ≤ m ≤ 61` is **deferred**: the `Hfin` certificates for those `m` are proven
-valid (Python) and pass Lean's `decide +kernel` at higher `-M`, but their cleared identities
-have >~500-bit integer coefficients whose in-kernel check exceeds ~16 GB.  Building them
-(serially, at higher `-M`) removes the range hypothesis and recovers the full odd `m ≥ 3`
-theorem; the infrastructure (`HfinPolyReflect`, the emitter) is already in place.
+Odd `m` skips `62`, so the two halves cover everything.
 -/
 
 import OddCycleBound.HighDensity.HighDensityGE63
-import OddCycleBound.HighDensity.HighDensityLE41
+import OddCycleBound.HighDensity.HighDensityLE61
 
 open MeasureTheory
 
@@ -34,18 +30,27 @@ variable {Ω : Type*} [MeasurableSpace Ω]
 variable {μ : Measure Ω} [IsProbabilityMeasure μ]
 variable {W : Ω → Ω → ℝ}
 
-/-- **High-density odd-cycle bound (currently-provable band).**  For a graphon `W` with
-`edgeDensity W μ ≥ 2/3` and every odd `m` with `3 ≤ m` satisfying `m ≤ 41 ∨ 63 ≤ m`,
+/-- **High-density odd-cycle bound.**  For a graphon `W` with `edgeDensity W μ ≥ 2/3` and
+every odd `m ≥ 3`,
 `p^m − p(1−p)^{m-1} ≤ cycleDensity μ W m`  (`p = edgeDensity W μ`).
-Unconditional on `W` within this band, and axiom-clean.  (The excluded band `43 ≤ m ≤ 61`
-is a memory-budget deferral, not a mathematical gap — see the module docstring.) -/
-theorem odd_cycle_bound_main {m : ℕ} (hW : IsGraphon W μ)
-    (hp : 2 / 3 ≤ edgeDensity W μ) (hm : Odd m) (hm3 : 3 ≤ m)
-    (hrange : m ≤ 41 ∨ 63 ≤ m) :
+Unconditional and axiom-clean. -/
+theorem odd_cycle_bound {m : ℕ} (hW : IsGraphon W μ)
+    (hp : 2 / 3 ≤ edgeDensity W μ) (hm : Odd m) (hm3 : 3 ≤ m) :
     edgeDensity W μ ^ m - edgeDensity W μ * (1 - edgeDensity W μ) ^ (m - 1) ≤
       cycleDensity μ W m := by
-  rcases hrange with hle | hge
-  · exact odd_cycle_bound_le41 hW hp hm hm3 hle
-  · exact odd_cycle_bound_ge63 hW hp hm hge
+  rcases le_or_lt m 61 with hle | hgt
+  · exact odd_cycle_bound_le61 hW hp hm hm3 hle
+  · -- odd `m > 61` means `m ≥ 63`
+    have hm63 : 63 ≤ m := by rcases hm with ⟨k, hk⟩; omega
+    exact odd_cycle_bound_ge63 hW hp hm hm63
+
+/-- The previous milestone form (kept for compatibility): the bound on
+`m ≤ 7 ∨ m ≥ 63`, now an instance of `odd_cycle_bound`. -/
+theorem odd_cycle_bound_main {m : ℕ} (hW : IsGraphon W μ)
+    (hp : 2 / 3 ≤ edgeDensity W μ) (hm : Odd m) (hm3 : 3 ≤ m)
+    (_hrange : m ≤ 7 ∨ 63 ≤ m) :
+    edgeDensity W μ ^ m - edgeDensity W μ * (1 - edgeDensity W μ) ^ (m - 1) ≤
+      cycleDensity μ W m :=
+  odd_cycle_bound hW hp hm hm3
 
 end OddCycleBound.HighDensity

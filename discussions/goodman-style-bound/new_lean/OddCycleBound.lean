@@ -109,10 +109,10 @@ import OddCycleBound.HighDensity.M6StripLeftA
 -- Milestone: the assembled high-density odd-cycle bound for all odd m ≥ 63 (Hfin vacuous).
 import OddCycleBound.HighDensity.HighDensityGE63
 -- Hfin (prop:finite): generated exact Bernstein/Handelman certificates for the residual
--- strip, odd 9 ≤ m ≤ 41 (per-pair files P0xxRyy + per-m dispatchers, via Hfin.Aggregate),
+-- strip, all odd 9 ≤ m ≤ 61 (per-pair files P0xxRyy + per-m dispatchers, via Hfin.Aggregate),
 -- verified in-kernel by `decide +kernel` over the reflection infra `HfinPolyReflect`.
 import OddCycleBound.HighDensity.Hfin.Aggregate
--- Capstone: the m ≤ 41 band (Stage A reduction + Hfin certificates).
-import OddCycleBound.HighDensity.HighDensityLE41
+-- Capstone: the m ≤ 61 band (Stage A reduction + Hfin certificates).
+import OddCycleBound.HighDensity.HighDensityLE61
 -- The complete high-density odd-cycle bound: every odd m ≥ 3.
 import OddCycleBound.Main
