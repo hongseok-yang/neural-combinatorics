@@ -96,11 +96,18 @@ graphon `W` with the single hypothesis `hW : IsGraphon W μ` and edge density
 
 | Theorem | Statement | Range |
 |---------|-----------|-------|
+| `C3_bound` | `t(C₃, W) ≥ p³ − p(1−p)²` | all densities |
 | `C5_bound` | `t(C₅, W) ≥ p⁵ − p(1−p)⁴` | all densities |
 | `C7_bound` | `t(C₇, W) ≥ p⁷ − p(1−p)⁶` | all densities |
 | `C9_path_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | `p ≥ 1003/2000` (path-certificate range) |
 | `C11_path_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | `p ≥ 103/200` (path-certificate frontier `ρ₁₁`) |
-| `C13_path_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≥ 519/1000` (path-certificate frontier `ρ₁₃`) |
+| `C13_path_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≥ 51/100` (certified frontier plus path range) |
+| `C9_conditional_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | all densities, assuming the triangle bound through `1003/2000` |
+| `C11_conditional_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | all densities, assuming the triangle bound through `103/200` |
+| `C13_path_conditional_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≤ 51/100`, assuming the triangle bound |
+| `C13_conditional_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | all densities, assuming the triangle bound through `51/100` |
+| `odd_cycle_regionII_large_bound` | `t(C_m,W) ≥ p^m − p(1−p)^(m−1)` | odd `m ≥ 15`, `1/2 < p < 2/3`, unconditional |
+| `odd_cycle_regionII_conditional_bound` | `t(C_m,W) ≥ p^m − p(1−p)^(m−1)` | odd `m ≥ 3`, `1/2 < p < 2/3`, assuming the triangle bound through `103/200` |
 
 The `C₁₁` bound is proved on `p ≥ 103/200` (complement density `q = 1−p ≤ 97/200`), the
 **path-certificate frontier `ρ₁₁`** — the lowest `p` at which the joint-Positivstellensatz SOS

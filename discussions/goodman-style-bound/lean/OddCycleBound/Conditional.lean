@@ -28,6 +28,28 @@ universe u
 variable {Omega : Type u} [MeasurableSpace Omega] {mu : Measure Omega} [IsProbabilityMeasure mu]
 variable {W : Omega -> Omega -> Real}
 
+/-- Direct Razborov--Reiher triangle-density lower bound up to an
+edge-density cutoff.  This is the sole external interface used by the public
+conditional cycle theorems. -/
+def TriangleDensityLowerBoundUpTo (rho : Real) : Prop :=
+  forall {Omega' : Type u} [MeasurableSpace Omega']
+    {mu' : Measure Omega'} [IsProbabilityMeasure mu']
+    {W' : Omega' -> Omega' -> Real},
+    IsGraphon W' mu' ->
+    1 / 2 < edgeDensity W' mu' ->
+    edgeDensity W' mu' <= rho ->
+    let c := (1 - Real.sqrt (4 - 6 * edgeDensity W' mu')) / 3
+    (3 / 2) * c * (1 - c) ^ 2 <= trace mu' (compPow mu' W' 2)
+
+/-- Restrict a triangle-density hypothesis to a smaller cutoff. -/
+theorem TriangleDensityLowerBoundUpTo.mono
+    {rho sigma : Real}
+    (h : TriangleDensityLowerBoundUpTo.{u} rho)
+    (hsigma : sigma <= rho) :
+    TriangleDensityLowerBoundUpTo.{u} sigma := by
+  intro Omega' _ mu' _ W' hW' hp hle
+  exact h hW' hp (hle.trans hsigma)
+
 /-- `CycleBound n W μ` is the normalized odd-cycle lower bound in the shifted
 indexing used by `compPow`: for cycle length `n + 1`, it states
 `t(C_{n+1}, W) >= p^(n+1) - p*(1-p)^n`, where `p = edgeDensity W μ`. -/

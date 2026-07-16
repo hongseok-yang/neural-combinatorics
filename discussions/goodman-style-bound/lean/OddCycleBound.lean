@@ -14,6 +14,7 @@ import OddCycleBound.LowBand.C11Spectral
 import OddCycleBound.LowBand.C13Scalar
 import OddCycleBound.LowBand.C13Spectral
 import OddCycleBound.Conditional
+import OddCycleBound.Main
 
 /-!
 # OddCycleBound ??the odd-cycle Goodman-type bound, integral-grounded
