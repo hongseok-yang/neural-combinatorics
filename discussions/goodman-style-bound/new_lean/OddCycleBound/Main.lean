@@ -38,7 +38,7 @@ theorem odd_cycle_bound {m : ℕ} (hW : IsGraphon W μ)
     (hp : 2 / 3 ≤ edgeDensity W μ) (hm : Odd m) (hm3 : 3 ≤ m) :
     edgeDensity W μ ^ m - edgeDensity W μ * (1 - edgeDensity W μ) ^ (m - 1) ≤
       cycleDensity μ W m := by
-  rcases le_or_lt m 61 with hle | hgt
+  by_cases hle : m ≤ 61
   · exact odd_cycle_bound_le61 hW hp hm hm3 hle
   · -- odd `m > 61` means `m ≥ 63`
     have hm63 : 63 ≤ m := by rcases hm with ⟨k, hk⟩; omega
