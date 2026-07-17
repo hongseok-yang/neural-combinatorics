@@ -1,280 +1,429 @@
-# OddCycleBound — Lean 4 formalization of the odd-cycle Goodman-type bound
+# The odd-cycle Goodman-type bound
 
-This project formalizes, in Lean 4 + Mathlib, the odd-cycle homomorphism-density inequality of
-`../paper.tex`,
+A Lean 4 + Mathlib formalization of the odd-cycle homomorphism-density inequality for graphons, over a
+range of edge densities and cycle lengths.
 
-```
-t(C_{2k+1}, W) ≥ p^{2k+1} − p(1−p)^{2k},   p = t(K₂, W),
-```
+## Main theorem
 
-for the **complement path-certificate** cases, built so that the **only trusted input is the
-integral definition of homomorphism density**. There is no operator model, no Hilbert space, no
-analytic facts taken as hypotheses: the graphon is a measurable symmetric `[0,1]`-valued kernel
-`W : Ω → Ω → ℝ` over an abstract probability space `(Ω, μ)`, and every density is a nested integral.
+For a graphon $`W`$ of edge density $`p`$ and an odd cycle $`C_m`$, the target inequality is
 
-## Build
-
-```
-lake exe cache get        # download prebuilt Mathlib oleans (already done once)
-lake build                # compiles the whole library
-lake env lean CheckGraphon.lean   # prints the axiom trail of the main results
+```math
+t(C_m, W) \;\ge\; p^{m} - p(1-p)^{m-1}.
 ```
 
-Toolchain: Lean `v4.31.0`, Mathlib `v4.31.0` (pinned in `lean-toolchain` / `lakefile.toml`).
-
-## Build performance and memory
-
-The table below is a per-module **isolated** profile: each row is a single `lean <module>` run — a
-one-threaded elaboration of that module against already-built dependency oleans — so the rows are
-reproducible and do **not** overlap (unlike a parallel `lake build`, where independent files run
-concurrently and the wall time is far below the column sum). A clean parallel `lake build` of the
-whole project (Mathlib oleans already fetched, so Mathlib is not recompiled) takes **PARALLEL_WALL s
-wall**, bounded from below by the longest single non-splittable file (`C13/Bivar`).
-
-* **Wall** = single-thread elaboration time. **Peak memory** = process peak working set. 
-
-| Module | Wall | Peak memory |
-|--------|-----:|------------:|
-| `C13/Bivar` | 835 s | 18.3 GB |
-| `C13/Trivar` | 586 s | ≤ 11.8 GB |
-| `C11/Trivar` | 275 s | ≤ 5.9 GB |
-| `C13` (assembly) | 180 s | 6.9 GB |
-| `C11/Bivar` | 97 s | ≤ 6.0 GB |
-| `C13/Linear` | 114 s | ≤ 5.7 GB |
-| `C9` | 71 s | 4.3 GB |
-| `C13/Quad` | 84 s | ≤ 4.7 GB |
-| `General.SumOfSquares` | 56 s | 3.3 GB |
-| `C11/Linear` | 40 s | ≤ 4.0 GB |
-| `C11` (assembly) | 39 s | 4.0 GB |
-| `C13/Engine4` | 31 s | 3.5 GB |
-| `C13/Engine` | 25 s | 3.5 GB |
-| `General.PathRecurrence` | 19 s | 3.3 GB |
-| `Certificate` | 14 s | 3.2 GB |
-| `PathDensity` | 13 s | 3.1 GB |
-| `BoundsC5C7` | 13 s | 3.2 GB |
-| `Necklace` | 13 s | 3.2 GB |
-| `Graphon` | 13 s | 3.1 GB |
-| `C13/Hankel` | 13 s | 3.1 GB |
-| `Kernel` | 13 s | 3.1 GB |
-| `Cycle` | 12 s | 3.1 GB |
-| `General.Necklace` | 13 s | 3.1 GB |
-| `Main` | 13 s | 3.1 GB |
-
-Notes:
-* The **`C11/*` rows are the `p ≥ 103/200` frontier certificates** and the **`C13/*` rows the
-  `p ≥ 519/1000` frontier certificates** (both Peyrl–Parrilo rounded). Their integer-cleared
-  coefficients are smaller-magnitude than the former `2/3` certs, so the memory figures above
-  (several carried over from the `2/3` build, marked `≤`) are upper bounds — `C13/Bivar`'s measured
-  frontier peak was 18.3 GB, *below* the old 18.7 GB. `C11/Linear`/`Bivar` are slightly *faster*;
-  `C11/Trivar` is slower (≈ 275 s vs the old 75 s) because the PP projection distributes the rounding
-  correction over the whole null space, giving denser SOS squares and heavier `ring` normalisation at
-  the same square count. All are still bounded by `C13/Bivar`, so the **parallel-build wall is
-  essentially unchanged**.
-* The **~3.1 GB floor** on every row is the Mathlib import baseline — each `lean.exe` memory-maps
-  Mathlib's oleans before doing any work; a module's real cost is the *excess* above that floor (and
-  its wall time above the ~13 s cold-import baseline).
-* The **SOS certificate files dominate** both axes. `C13/Bivar` (the 95-square `sos2var5` block) and
-  `C13/Trivar` (80-square `sos3var4`) peak at ~19 GB / ~12 GB — this is **elaboration of giant
-  proof-term `Expr` trees**, *not* parsing or kernel typechecking (isolating a heavy block:
-  parsing+statement-elaboration ≈ 2 s, kernel checking ≈ 0 with `skipKernelTC`, proof elaboration
-  dominates).
-* **Memory in a parallel build:** the worst spikes come from several heavy files elaborating at once.
-  To cap peak memory, throttle the Lean task pool, e.g. `LEAN_NUM_THREADS=4 lake build` (slower wall,
-  far smaller peak). The `C11`/`C13` certificates are **split into per-block files** so each is a
-  separate compilation unit (the editor and the build elaborate one block at a time), which is what
-  keeps any single module's footprint to the ~5–19 GB range rather than one monolith.
-
-**Benchmark machine:** Intel Core i5-14600K (14C/20T), 64 GB RAM, Windows 11 Pro (build 26200),
-Lean/Mathlib `v4.31.0`. Wall times are single-thread and scale with single-thread performance; peak
-memory is largely machine-independent (term sizes, not cores).
-
-## Headline results
-
-The paper-facing statements live in `OddCycleBound/Main.lean`, namespace `OddCycleBound`, for a
-graphon `W` with the single hypothesis `hW : IsGraphon W μ` and edge density
-`p = edgeDensity W μ = ∫∫W`:
-
-| Theorem | Statement | Range |
-|---------|-----------|-------|
-| `C3_bound` | `t(C₃, W) ≥ p³ − p(1−p)²` | all densities |
-| `C5_bound` | `t(C₅, W) ≥ p⁵ − p(1−p)⁴` | all densities |
-| `C7_bound` | `t(C₇, W) ≥ p⁷ − p(1−p)⁶` | all densities |
-| `C9_path_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | `p ≥ 1003/2000` (path-certificate range) |
-| `C11_path_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | `p ≥ 103/200` (path-certificate frontier `ρ₁₁`) |
-| `C13_path_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≥ 51/100` (certified frontier plus path range) |
-| `C9_conditional_bound` | `t(C₉, W) ≥ p⁹ − p(1−p)⁸` | all densities, assuming the triangle bound through `1003/2000` |
-| `C11_conditional_bound` | `t(C₁₁, W) ≥ p¹¹ − p(1−p)¹⁰` | all densities, assuming the triangle bound through `103/200` |
-| `C13_path_conditional_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | `p ≤ 51/100`, assuming the triangle bound |
-| `C13_conditional_bound` | `t(C₁₃, W) ≥ p¹³ − p(1−p)¹²` | all densities, assuming the triangle bound through `51/100` |
-| `odd_cycle_regionII_large_bound` | `t(C_m,W) ≥ p^m − p(1−p)^(m−1)` | odd `m ≥ 15`, `1/2 < p < 2/3`, unconditional |
-| `odd_cycle_regionII_conditional_bound` | `t(C_m,W) ≥ p^m − p(1−p)^(m−1)` | odd `m ≥ 3`, `1/2 < p < 2/3`, assuming the triangle bound through `103/200` |
-
-The `C₁₁` bound is proved on `p ≥ 103/200` (complement density `q = 1−p ≤ 97/200`), the
-**path-certificate frontier `ρ₁₁`** — the lowest `p` at which the joint-Positivstellensatz SOS
-certificate is feasible (the SDP goes infeasible just below). This was pushed down from the former
-`2/3` by replacing the certificate rationaliser with a **Peyrl–Parrilo rational rounding**
-(`cert_scripts/pp_round.py`): the SDP interior point is projected into the exact coefficient-matching
-affine subspace by rounding in a QR-orthogonalised null-space basis (Babai nearest-plane), which uses
-the full SDP margin and so rationalises the near-marginal certificate where the old "round-then-poke"
-scheme failed — while keeping the Gram at a controlled denominator, so the integer-cleared
-coefficients stay *smaller* than the former `2/3` certificate. Below `103/200` the path certificate
-cannot reach (the SDP is infeasible); the thin remaining band `1/2 < p < 103/200` is exactly the
-range the spectral / Razborov-triangle closure must cover. The rounding methods (and why the naive
-one fails near the frontier) are written up in `cert_scripts/RATIONAL_ROUNDING.md`, with a minimal
-self-contained runnable example in `cert_scripts/rational_rounding_demo.py`.
-
-Here `t(C_m, W)` is `trace μ (compPow μ W (m−1))` — the cyclic trace of the powers of the kernel
-`W` — written out purely as nested integrals.
-
-These are the `W`-facing restatements of the complement-form lemmas (phrased for `U = compl W =
-1 − W`, where the inclusion–exclusion is natural), via `compl (compl W) = W` and
-`edgeDensity (compl W) = 1 − edgeDensity W`:
-
-| Lemma | Statement (`q = edgeDensity U μ = ∫∫U`) | Range |
-|-------|------------------------------------------|-------|
-| `C5_integral` | `t(C₅, 1−U) ≥ (1−q)⁵ − (1−q)q⁴` | all densities |
-| `C7_integral` | `t(C₇, 1−U) ≥ (1−q)⁷ − (1−q)q⁶` | nontrivial regime `q ≤ ½` |
-| `C7_integral_all` | the same `C₇` bound for all densities (`q > ½` is `g₇ ≤ 0 ≤ t`) | all densities |
-| `C9_path_integral` | `t(C₉, 1−U) ≥ (1−q)⁹ − (1−q)q⁸` | `q ≤ 997/2000` |
-
-## Module layout
-
-```
-Graphon → PathDensity → { Kernel, Certificate } → Cycle → Necklace → BoundsC5C7 → Main
-                                                                   ↘ General/* → C9
-                                                                              ↘ C11
-C11 (assembly) ← { C11/Linear, C11/Bivar, C11/Trivar }
-```
-
-| Module | Content |
-|--------|---------|
-| `Graphon` | Integral foundations: `IsGraphon`, the integral operator `kernelOp`, `edgeDensity`, `degree`, the mean-zero degree part `compress`/`compressIter`, the moments `specMoment j = ∫ hᵢ·hⱼ`, and `sos1`. |
-| `PathDensity` | **Lemma 2.4** (`pathDensity_two … _six`): the path densities `xⱼ` as polynomials in `q` and the moments `specMoment`, proved from the integral definitions. |
-| `Kernel` | The reusable **kernel-composition algebra**: `comp`, the all-ones kernel `onesKernel`, `doubleMean`, the `GoodK` closure, the cut lemma, `comp_assoc`, the powers `compPow`, the trace `trace`, and its cyclic invariance `trace_comp_comm`. |
-| `Certificate` | The Φ₅/Φ₇ **positivity certificates** (`sos2`, `cert5_specMoment`, `cert7_specMoment`) in the integral moments `specMoment`. |
-| `Cycle` | The cycle density `cycleDensity`, `compPow_nonneg`, and the **edge-deletion bound** `edge_deletion_general : c_{k+2} ≤ x_{k+1}`. |
-| `Necklace` | All necklace machinery (see below): the recursions `mixedTrace_succ`/`_zero`, `pairing_complIter_succ`, `complMean_succ`; the telescoped **general necklace identity** `complTrace_necklace`; the **closed form for the pairings** `pairing_pathIter_complIter_closed`; and `pathDensity_zero`/`_one`. |
-| `BoundsC5C7` | Assembles the necklace + certificate + edge deletion into `C5_integral` / `C7_integral` / `C7_integral_all`. |
-| `C9` | The Φ₉ certificate (`cert9_specMoment`, via the degree-3 and bivariate SOS engines on the path-certificate range `q ≤ 997/2000`) and the assembled `C9_path_integral`. |
-| `C11` | **Assembly** for the Φ₁₁ bound: `cert11_L4`/`L5` (Hankel `nlinarith`), `cert11_specMoment` (combines `L1 … L5`), and `C11_path_integral`. Imports the three block files below. Split out of a former 1.2 MB monolith to bound per-file memory. |
-| `C11/Linear` | The Φ₁₁ `L₁` block — linear in the moments, certified by `sos4` (`cert11_L10 … L13`, `cert11_L1`). |
-| `C11/Bivar` | The Φ₁₁ `L₂` block — bivariate, certified by `sos2var4` (`cert11_L20 … L23` chunks, `cert11_L2`). |
-| `C11/Trivar` | The Φ₁₁ `L₃` block — trivariate, certified by `sos3var3` (`cert11_L30 … L33` chunks, `cert11_L3`). |
-| `C13` | **Assembly** for the Φ₁₃ bound: `cert13_specMoment` (combines `L₁ … L₆`) and `C13_path_integral`. Imports the block files below. The path-density recurrence reaches `pathDensity_twelve`. |
-| `C13/Engine` | The `sos2var5` (degree-(4,4)) and `sos3var4` (Newton maxdeg-3) Hankel SOS engine lemmas for `L₂`/`L₃`. |
-| `C13/Engine4` | The **four-fold** moment engine `sos_sq_expand_4var` (`0 ≤ ∫⁴(Σ C·h h h h)²`) and its Newton wrapper `sos4var3`, for the quartic `L₄`. |
-| `C13/Linear` | The Φ₁₃ `L₁` block — linear, certified by `sos5`. |
-| `C13/Bivar` | The Φ₁₃ `L₂` block — bivariate, `sos2var5`, 95 squares (CHUNK=1). |
-| `C13/Trivar` | The Φ₁₃ `L₃` block — trivariate, `sos3var4`, 80 squares (CHUNK=1). |
-| `C13/Quad` | The Φ₁₃ `L₄` block — quartic, `sos4var3`, 39 squares (CHUNK=1). |
-| `C13/Hankel` | The Φ₁₃ `L₅` (`s₀³·B₅` via the `momcs` minor) and `L₆` (`12 s₀⁶`) blocks. |
-| `Main` | The `W`-facing headline theorems `C5_bound`, `C7_bound`, `C9_path_bound`, `C11_path_bound` and the complement translation. |
-| `General/PathRecurrence` | The **general path-density recurrence** `pathDensity_succ : x_{n+1} = q·xₙ + Σ sᵢ·x_{n−1−i}`, and `pathDensity_seven`/`_eight`. |
-| `General/SumOfSquares` | The general Hankel sum-of-squares engine: `sos_sq_expand`, `sos_sq_expand_2var`, and the fixed-degree `sos2var3`/`sos3`. |
-| `General/Necklace` | Regression `example`s checking that `complTrace_necklace` specialises to the explicit four-term (`C₅`) and six-term (`C₇`) inner-product forms. |
-
-### The necklace identity and the uniform assembly
-
-The cyclic inclusion–exclusion sum was feared to be `O(2ᵐ)`, but it **telescopes** to an
-`O(m)`-term identity (verified numerically in `verify_necklace.py`). In `Necklace.lean`:
-
-* `mixedTrace a b = trace(Uᵒ⁽ᵃ⁺¹⁾ ∘ (complᵒᵇ))` satisfies the recursion `mixedTrace_succ` and base
-  `mixedTrace_zero : mixedTrace a 0 = x_{a+1} − c_{a+1}`;
-* telescoping it (`mixedTrace_telescope`) and peeling (`complTrace_peel`) gives the
-  **general-`m` necklace identity**
-
-  ```
-  complTrace_necklace : trace(complᵒ⁽ⁿ⁺¹⁾)
-      = Σ_{j=0}^{n} (−1)ʲ ⟨pathIter j, complIter (n+1−j)⟩  +  (−1)ⁿ⁺¹ (x_{n+1} − c_{n+1}),
-  ```
-
-  with `x_{n+1} = pathDensity (n+1)` and `c_{n+1} = trace (Uᵒ⁽ⁿ⁺¹⁾)` the cycle density.
-
-The inner products `⟨pathIter j, complIter k⟩` then collapse to path densities by the **single
-closed-form lemma**
-
-```
-pairing_pathIter_complIter_closed :
-    ⟨pathIter j, complIter k⟩ = Σ_{i<k} (−1)ⁱ · mean(complIter (k−1−i)) · x_{j+i}  +  (−1)ᵏ · x_{j+k},
-```
-
-proved once by induction via `pairing_complIter_succ`. Consequently every `Cₘ` assembly
-(`C5_integral`, `C7_integral`, `C9_path_integral`) reduces the necklace to a pure polynomial in the
-path densities by the **same** uniform step
+In Lean (`OddCycleBound/Main.lean`, namespace `OddCycleBound`) this reads
 
 ```lean
-rw [complTrace_necklace hU (m-1)]
-simp only [pairing_pathIter_complIter_closed hU, complMean_succ hU, complMean_zero,
-           pathDensity_zero, pairing_pathIter_zero, Finset.sum_range_succ, Finset.sum_range_zero, …]
-rw [hx1, …, hxₘ₋₁]; ring
+trace mu (compPow mu W (m - 1)) ≥
+  edgeDensity W mu ^ m - edgeDensity W mu * (1 - edgeDensity W mu) ^ (m - 1)
 ```
 
-after which `Φₘ ≥ 0` (the certificate) and `x_{m−1} − cₘ ≥ 0` (`edge_deletion_general`) finish by
-linear arithmetic. The only per-cycle inputs are the cycle length, the path-density formulas `hxᵢ`,
-and the SOS certificate. The exact polynomial identities are double-checked symbolically before
-being committed to Lean: `verify_c5_moments.py`, `verify_c7_moments.py`, `verify_c7.py`,
-`verify_necklace.py`.
+The project proves this in several ranges of `p` and `m`. Unconditional results hold for the graphon
+alone; the all-density results for `m ≥ 9` additionally take Razborov's triangle-density lower bound as a
+hypothesis.
 
-## Axioms
+| Lean theorem | Cycle | Density range | Hypothesis |
+|--------------|-------|---------------|-----------|
+| `C3_bound` | `C₃` | all `p` | — |
+| `C5_bound` | `C₅` | all `p` | — |
+| `C7_bound` | `C₇` | all `p` | — |
+| `C9_path_bound` | `C₉` | `p ≥ 1003/2000` | — |
+| `C11_path_bound` | `C₁₁` | `p ≥ 103/200` | — |
+| `C13_path_bound` | `C₁₃` | `p ≥ 51/100` | — |
+| `odd_cycle_regionII_large_bound` | odd `m ≥ 15` | `1/2 < p < 2/3` | — |
+| `C9_conditional_bound` | `C₉` | all `p` | triangle bound up to `1003/2000` |
+| `C11_conditional_bound` | `C₁₁` | all `p` | triangle bound up to `103/200` |
+| `C13_conditional_bound` | `C₁₃` | all `p` | triangle bound up to `51/100` |
+| `odd_cycle_regionII_conditional_bound` | odd `m ≥ 3` | `1/2 < p < 2/3` | triangle bound up to `103/200` |
 
-`lake build` succeeds with **zero `sorry`**, and all results — including `C5_integral`,
-`C7_integral`, `C7_integral_all`, `C9_path_integral` and the `W`-facing theorems — depend on **only**
-Lean's three standard axioms `propext, Classical.choice, Quot.sound` (no extra axioms).
-`CheckGraphon.lean` prints the full axiom trail.
+### Definitions needed to read the statement
 
-## Not (yet) formalized
+Fix a probability space $`(\Omega, \mu)`$ ($`\mu`$ a probability measure on a measurable space $`\Omega`$).
 
-* **`C₉` for all densities.** The middle band `1/2 < p < 1003/2000` needs the spectral closure of
-  `paper.tex` §6.2 (the sharp Razborov–Reiher triangle-density bound plus a spectral decomposition
-  `t(Cₘ,W) = Σ λᵢᵐ`). The latter requires an operator/Hilbert–Schmidt layer — Mathlib has the
-  compact self-adjoint spectral theorem but not the trace/moment identity — and is out of scope of
-  the current integral-only design.
-* **`C₁₁` is done on the path-certificate frontier `p ≥ 103/200`** (`OddCycleBound/C11.lean`): the
-  complement defect `Φ₁₁ = L₁ + L₂ + L₃ + L₄ + 10 s₀⁵` is certified piecewise via the joint `(q, λ, …)`
-  **Positivstellensatz** with `{1, q, 97/200−q, q(97/200−q)}` multipliers — `L₁` linear (`sos4`),
-  `L₂` bivariate (`sos2var4`), `L₃` trivariate (`sos3var3` / `sos_sq_expand_3var`), `L₄`/`L₅` by
-  Hankel `nlinarith`. The certificates are machine-generated by the exact-rational pipeline in
-  `cert_scripts/` (CLARABEL SDP → **Peyrl–Parrilo rational rounding** (`pp_round.py`) → `ring`-verified
-  Lean), chunked to fit Lean's `ring`. The path-density recurrence is extended with
-  `pathDensity_nine … _twelve`. The range was pushed from the former `2/3` down to `ρ₁₁ = 103/200`
-  (where the SDP first goes infeasible) purely by upgrading the rationaliser — same SDP, same square
-  counts, same `Φ₁₁` split, only the `RHO = 97/200` multiplier and the bound hypotheses changed.
-* **`C₁₃` is fully formalized on the path-certificate frontier `p ≥ 519/1000`** (`OddCycleBound/
-  C13.lean` + `OddCycleBound/C13/*`), axiom-clean (`propext, Classical.choice, Quot.sound`, zero
-  `sorry`). Pushed from the former `2/3` to `ρ₁₃ = 519/1000` by the same Peyrl–Parrilo rationaliser
-  (`cert_scripts/pp_round.py`) at `RHO = 481/1000`, where the binding linear block `L₁` first goes
-  marginal (SDP margin → 0); the four blocks rationalise at `D = 16384 / 8192 / 512 / 64`
-  (`L₁/L₂/L₃/L₄`). The complement defect
-  `Φ₁₃ = L₁ + L₂ + L₃ + L₄ + L₅ + 12 s₀⁶` is certified piecewise and assembled (`cert13_specMoment`)
-  into `C13_path_integral` via the same necklace identity as `C₉`/`C₁₁`; `Main.lean` exposes the
-  `W`-facing `C13_path_bound`:
+- **Graphon** $`W : \Omega \times \Omega \to \mathbb{R}`$ — a symmetric, measurable, $`[0,1]`$-valued
+  kernel. In Lean this is `IsGraphon W μ`: `Measurable (uncurry W)`, $`0 \le W(x,y) \le 1`$, and
+  $`W(x,y) = W(y,x)`$. It is the limit object of a sequence of dense graphs; $`W(x,y)`$ is the "probability
+  of an edge" between $`x`$ and $`y`$.
 
-  | block | form | engine | module | squares |
-  |-------|------|--------|--------|--------:|
-  | `L₁` | linear | `sos5` | `C13/Linear.lean` | 66 |
-  | `L₂` | bivariate | `sos2var5` | `C13/Bivar.lean` | 95 |
-  | `L₃` | trivariate (Newton maxdeg-3) | `sos3var4` | `C13/Trivar.lean` | 80 |
-  | `L₄` | **quartic** (Newton maxdeg-2) | **`sos4var3`** | `C13/Quad.lean` | 39 |
-  | `L₅` | `s₀³·B₅` (Hankel-minor + square) | `momcs` + `nlinarith` | `C13/Hankel.lean` | — |
-  | `L₆` | `12 s₀⁶` | `pow_nonneg` | `C13/Hankel.lean` | — |
+- **Edge density** $`p = \iint W(x,y)\,d\mu(x)\,d\mu(y)`$ (`edgeDensity W μ`), the homomorphism density
+  $`t(K_2, W)`$.
 
-  The pieces once believed to overflow Lean's `ring`/heartbeat budget all build (the **low-rank dead
-  end** is irrelevant — `cert_scripts/LOWRANK_FINDINGS.md`). What unstuck them, none touching the
-  math: (1) the `sos2var5`/`sos3var4`/`sos4var3` engine lemmas **never existed** — generated by
-  `cert_scripts/gen_engine.py` and proved `simp; norm_num at h; exact le_of_le_of_eq h (by ring)`
-  (the old `nlinarith` closing times out at `whnf` at these arities), plus `maxRecDepth 8000` and, for
-  the 4-fold engine, a raised `simp` `maxSteps`; (2) **CHUNK=1** emission (one square per `ring`)
-  so each per-square `ring` fits; (3) **8 M** heartbeat ceilings on the block-combiner/assembly
-  lemmas. `L₄` is the genuinely new piece — a degree-4 moment form is not a real-SOS nor a 2-/3-fold
-  SOS, so it needed the **four-fold engine `sos_sq_expand_4var`** (`0 ≤ ∫⁴(Σ C·h h h h)²`, the
-  degree-4 analog of the 2-/3-var engines, in `C13/Engine4.lean`) and a 4-variable symmetric-kernel
-  SDP (`cert_scripts/gen_4var.py`); `L₅` factors as `s₀³·B₅` with `B₅ ≥ 0` by the `momcs` Hankel
-  minor plus a square. Per-file build times at the `519/1000` frontier (cached Mathlib): `C13/Bivar`
-  ≈ 835 s (peak 18.3 GB), `C13/Trivar` ≈ 586 s, `C13/Linear` ≈ 114 s, `C13/Quad` ≈ 84 s, `C13.lean`
-  assembly ≈ 180 s — essentially unchanged from the `2/3` build (the PP certs are slightly denser but
-  smaller-magnitude, so wall and peak memory both stay put; same square counts).
-* The all-densities versions (closing the thin remaining bands `1/2 < p < 103/200` for `C₁₁` and
-  `1/2 < p < 519/1000` for `C₁₃` — the path certificate cannot go lower, the SDP is infeasible there —
-  and the `C₉` middle band) additionally need the spectral/Razborov-triangle closure of the paper.
-* The conditional results (regularity, the operator-theoretic universal bound, the variational
-  structure) — explicitly out of scope.
+- **Cycle density** $`t(C_m, W) = \int\!\cdots\!\int W(x_1,x_2)\cdots W(x_m,x_1)\,d\mu^m`$
+  (`trace μ (compPow μ W (m−1))`), the cyclic trace of the $`(m-1)`$-st power of the integral operator
+  with kernel $`W`$.
+
+- **Triangle-density hypothesis** `TriangleDensityLowerBoundUpTo c` — the assertion that the sharp
+  Razborov lower bound on $`t(K_3, W)`$ in terms of $`p`$ holds for every graphon with $`p \le c`$.
+  Formalizing this extremal-graph-theory theorem is out of scope, so the all-density results for
+  $`m \ge 9`$ carry it as an explicit assumption.
+
+The right-hand side $`p^{m} - p(1-p)^{m-1}`$ is the conjectured extremal value, attained by the union of a
+clique and isolated vertices.
+
+## Idea of the proof
+
+It is cleaner to work with the complement kernel $`U = 1 - W`$, again a graphon, with edge density
+$`q = 1 - p`$. Two functionals of $`U`$ drive the argument. The *centred degree*
+$`g(x) = \int U(x,y)\,d\mu(y) - q`$ measures how far $`x`$ is from average degree; it is mean-zero. The
+*compression* $`A`$ is the integral operator of $`U`$ restricted to mean-zero functions. Their interaction
+is recorded by the **spectral moments**
+
+```math
+s_j = \langle g,\, A^{j} g\rangle, \qquad s_0 = \lVert g\rVert^2 \ (\text{the degree variance}).
+```
+
+All of $`g`$, $`A`$, $`s_j`$ are defined in `Graphon.lean`.
+
+Expanding the cyclic product $`t(C_m,W) = \int \prod_i\bigl(1 - U(x_i,x_{i+1})\bigr)`$ by
+inclusion–exclusion telescopes — despite the $`2^m`$ naive terms — to an $`O(m)`$-term identity
+(`complTrace_necklace`) in the path densities $`x_j = t(P_j, U)`$, and Lemma 2.4 (`PathDensity.lean`)
+writes each $`x_j`$ as an explicit polynomial in $`q`$ and $`s_0,\dots,s_{j-1}`$. Substituting, the difference
+
+```math
+\Phi_m \;:=\; t(C_m,W) - \bigl(p^{m} - p(1-p)^{m-1}\bigr)
+```
+
+becomes an explicit polynomial in $`q`$ and the moments $`s_j`$, and the theorem is $`\Phi_m \ge 0`$. For
+$`m = 3`$ it collapses to $`\Phi_3 = 2 s_0 = 2\lVert g\rVert^2 \ge 0`$, i.e. the triangle bound is "degree
+variance is nonnegative" (`cycle_bound_three`).
+
+The one fact that makes the moments tractable is that the sequence $`(s_j)`$ is *Hankel-positive*: writing
+$`h_i = A^i g`$, one has $`\int h_i h_j\,d\mu = s_{i+j}`$, so for any real coefficients $`c_0,\dots,c_d`$
+
+```math
+\sum_{i,j} c_i c_j\, s_{i+j} = \int \Bigl(\sum_i c_i\, h_i\Bigr)^{2} d\mu \;\ge\; 0
+```
+
+(`General/SumOfSquares.lean`, `sos_sq_expand`). Every quadratic form of this shape is therefore a valid
+"square" in the moments, and a nonnegativity certificate for $`\Phi_m`$ is a way of exhibiting it as a
+combination of such squares. What differs between density ranges is how much room there is to do so.
+
+**$`p \ge \overline{p}`$ — sum-of-squares certificates** ($`\overline{p} = 1003/2000`$ for $`C_9`$,
+$`103/200`$ for $`C_{11}`$, $`519/1000`$ for $`C_{13}`$). For $`C_5`$ and $`C_7`$, $`\Phi_m`$ is directly a sum of
+squares in the moments, so the bound holds at *every* density (`cert5_specMoment`, `cert7_specMoment`,
+assembled in `BoundsC5C7`). For $`C_9`$–$`C_{13}`$, $`\Phi_m`$ becomes a sum of squares only after the density
+constraint $`q \le \overline{q}`$ is used, so the certificate is a **Positivstellensatz identity**
+
+```math
+\gamma(q)\,\Phi_m = \sum_i \sigma_i\, g_i, \qquad \gamma(q) \ge 0,
+```
+
+with multipliers $`g_i`$ from $`\{\,1,\ q,\ \overline{q} - q,\ q(\overline{q} - q)\,\}`$
+($`\overline{q} = 1 - \overline{p}`$ the complement threshold) and each $`\sigma_i`$ a sum of squares in
+the moments, so the right-hand side is manifestly nonnegative. A single such identity already proves the
+bound, but the one sum of squares is large enough that checking it in Lean at once exhausts memory; so
+it is broken into pieces $`L_1, L_2, \dots`$ — each a sum of squares in only a few of the moments and
+checked on its own — whose total is $`\gamma(q)\,\Phi_m`$. The pieces are found numerically by a semidefinite
+program and then rationalised to exact coefficients, hence large and machine-generated (`cert_scripts/`,
+the `C11/*` and `C13/*` blocks).
+
+**$`1/2 < p \le \underline{p}`$ — Razborov's triangle bound** ($`\underline{p} = 1003/2000`$ for $`C_9`$,
+$`103/200`$ for $`C_{11}`$, $`51/100`$ for $`C_{13}`$; `Conditional`, `LowBand/`). Below the certificate
+threshold the algebraic route fails, and the argument works with the eigenvalues of the graphon
+operator $`T_W`$ itself: its top eigenvalue is $`\ell := \lambda_0 \ge p`$ (Rayleigh quotient at the
+constant function), the rest $`\lambda_1, \lambda_2, \dots`$ have either sign, and
+
+```math
+\sum_i \lambda_i^{2} = \textstyle\iint W^2 \le p, \qquad t(C_m, W) = \sum_i \lambda_i^{\,m}, \qquad
+  t(K_3, W) = \sum_i \lambda_i^{3}.
+```
+
+Only negative eigenvalues can pull $`t(C_m,W)`$ below the target: with $`N = \sum_{\lambda_i < 0}|\lambda_i|^{m}`$
+one has $`t(C_m,W) \ge \ell^{m} - N`$, so the bound follows once
+$`N \le \ell^{m} - p^{m} + pq^{m-1} =: \alpha^{m}`$. Suppose not, so $`z := N^{1/m} > \alpha`$.
+Monotonicity of power sums gives
+$`\sum_{\lambda_i<0}|\lambda_i|^{2} \ge z^{2}`$ and $`\sum_{\lambda_i<0}|\lambda_i|^{3} \ge z^{3}`$; with the
+square-mass bound $`\sum_{i\ge1}\lambda_i^{2} \le S := p - \ell^{2}`$ and $`\sum a_i^3 \le (\sum a_i^2)^{3/2}`$
+for the positive eigenvalues, the triangle density is squeezed *from above*,
+
+```math
+\sum_{i\ge1}\lambda_i^{3} \ \le\ (S - z^{2})^{3/2} - z^{3} \ <\ (S - \alpha^{2})^{3/2} - \alpha^{3}.
+```
+
+But **Razborov's triangle-density theorem** pushes it *from below*: with $`c \in [0,1/3]`$ defined by
+$`p = \tfrac12 + c - \tfrac32 c^{2}`$,
+
+```math
+\sum_{i\ge1}\lambda_i^{3} = t(K_3,W) - \ell^{3} \ \ge\ \Theta(p) - \ell^{3}, \qquad
+  \Theta(p) := \tfrac32\, c\,(1-c)^{2}.
+```
+
+The two are incompatible: the difference is monotone in $`\ell`$, so it reduces to $`\ell = p`$, and at
+$`\varepsilon = p - \tfrac12`$ small one gets $`\Theta(p) \ge \tfrac{149}{100}\varepsilon`$ against a
+right-hand side $`< \tfrac{7}{5}\varepsilon`$. The contradiction forces $`N \le \alpha^{m}`$, hence the
+bound. ($`C_9`$ is $`m = 9`$; $`C_{11}`$ and $`C_{13}`$ have the same shape with a wider cutoff and adjusted
+constants.) Formalizing Razborov's theorem is out of scope, so it enters as the hypothesis
+`TriangleDensityLowerBoundUpTo` (`RazborovTriangleLower`).
+
+For $`C_{13}`$ the two thresholds do not meet — the certificate needs $`p \ge \overline{p} = 519/1000`$ but
+the argument above only reaches $`p \le \underline{p} = 51/100`$ — leaving the band
+$`51/100 \le p \le 519/1000`$ covered by *neither*. It is closed **unconditionally** by the
+one-eigenvalue spectral reduction below (the Region II method) specialised to $`m = 13`$, whose residual
+step is the nonnegativity of a polynomial $`P`$ on a box, discharged by an **exact Bernstein
+certificate**: $`P`$ is written as
+
+```math
+P = \sum_{\beta} b_\beta\, B_\beta, \qquad b_\beta \ge 0,
+```
+
+where the $`B_\beta \ge 0`$ are the Bernstein basis polynomials of the box, after subdividing the box
+until all coefficients $`b_\beta`$ come out nonnegative; then $`P \ge 0`$ is immediate, and the $`b_\beta`$ are
+exact rationals Lean rechecks (`RegionII/C13Frontier`, `Certificate/C13*`).
+
+**$`1/2 < p < 2/3`$, odd $`m \ge 15`$** (`RegionII/`). Now $`q > 1/3`$. The eigenvalues $`\lambda_i`$ of the
+compression $`A`$ obey the spectral-energy bound
+
+```math
+\sum_i \lambda_i^{2} \;+\; 2\lVert g\rVert^{2} \;\le\; p\,q
+```
+
+(`HilbertSchmidtBudget`): $`A`$ cannot carry more squared spectral mass than $`pq`$ leaves after the degree
+variance, and because $`q > 1/3`$ this permits **at most one** eigenvalue $`\alpha`$ above $`q`$. That
+eigenvalue is itself bounded,
+
+```math
+\alpha^{2} + q\alpha - q \le 0, \qquad\text{i.e.}\qquad \alpha \le \tfrac{1}{2}\bigl(\sqrt{q^{2}+4q}-q\bigr)
+```
+
+(`ForcedVariance`). If there is no such eigenvalue, a direct spectral estimate gives $`\Phi_m \ge 0`$
+(`no_frontier_odd_cycle_bound`). Otherwise let $`\varphi`$ be the unit eigenfunction with
+$`A\varphi = \alpha\varphi`$ and decompose
+
+```math
+g = c\varphi + g_s, \qquad c = \langle g,\varphi\rangle,\quad g_s \perp \varphi,\quad
+  \lVert g\rVert^{2} = c^{2} + \lVert g_s\rVert^{2}.
+```
+
+Because $`\alpha`$ is the *only* eigenvalue exceeding $`q`$, every other eigenvalue of $`A`$ has modulus at
+most
+
+```math
+L := \sqrt{pq - \alpha^{2}} \quad (\lt q),
+```
+
+since the non-$`\alpha`$ spectrum carries total square mass
+$`\sum_{\lambda_i \ne \alpha}\lambda_i^{2} \le pq - \alpha^{2} = L^{2}`$ (`SafeFrontier`). As
+$`g_s \perp \varphi`$ lies in the span of these
+eigenfunctions, each application of $`A`$ to it multiplies by a factor in $`[-L, L]`$ — that is what keeps
+its contribution to $`\Phi_m`$ under control. Substituting the decomposition into $`\Phi_m`$ gives the
+explicit **master inequality** (`MasterDefect`)
+
+```math
+\Phi_m \ \ge\ -R_m + A_m\,c^{2} + B_m\,\lVert g_s\rVert^{2},
+```
+
+with $`R_m = \alpha^{m} + L^{m} - p\,q^{m-1}`$, $`A_m = 2L^{m-2} + m\,K(p,m,\alpha)`$ and
+$`B_m = 2L^{m-2} + m\,K(p,m,L)`$, where $`K`$ is the finite geometric sum (`directedKernel`)
+
+```math
+K(p,m,\lambda) = \frac{p^{m-1}-\lambda^{m-1}}{p+\lambda} = \sum_{j=0}^{m-2}(-\lambda)^{j}\,p^{m-2-j} \ >\ 0
+  \qquad (|\lambda| < p).
+```
+
+It remains to show $`A_m c^{2} + B_m\lVert g_s\rVert^{2} \ge R_m`$. Two inequalities, one from $`U \le 1`$
+and one from $`U \ge 0`$, relate $`c`$ and $`\lVert g_s\rVert^{2}`$ to the shape of $`\varphi`$. Writing
+$`\varphi^{+}`$ for its positive part and $`|\varphi|`$ for its absolute value, and setting
+$`z = \bigl(\int|\varphi|\bigr)^{2}`$, $`b = \langle|\varphi|,\varphi\rangle \ge 0`$,
+$`k = |\varphi| - \sqrt z\,\mathbf 1 - b\varphi`$, $`K_0 = \lVert k\rVert^{2}`$ (so $`z + b^{2} + K_0 = 1`$,
+and $`z \ge 2\alpha`$):
+
+```math
+c \ \le\ \frac{(z - 2\alpha) - 2\alpha b}{2\sqrt z}
+  \quad(\text{from } U \le 1), \qquad
+  \lVert g_s\rVert^{2} \ \ge\ \frac{(H - bc)_+^{2}}{K_0},\ \
+  H = \frac{(\alpha - q)z + (\alpha - L)K_0}{2\sqrt z}
+  \quad(\text{from } U \ge 0).
+```
+
+The first pairs $`T_U\varphi \le \int\varphi^{+} = \sqrt z/2`$ against $`\varphi^{+}`$; the second pairs
+$`|\varphi|`$ against $`T_U|\varphi| \ge \alpha`$ and applies Cauchy–Schwarz. Inserting both into
+$`A_m c^{2} + B_m\lVert g_s\rVert^{2}`$ and minimizing over the one free parameter $`v \in [0,1]`$ that
+remains gives the exact bound (`Scalar/Huber`)
+
+```math
+A_m c^{2} + B_m\lVert g_s\rVert^{2} \ \ge\ C_m\,\psi(\xi,\rho),
+  \qquad \psi(\xi,\rho) = \min_{0\le v\le 1}\bigl\{\rho v^{2} + (\xi - v + v^{2})_+\bigr\}.
+```
+
+Here $`\psi`$ is a Huber-type envelope: $`\xi - v + v^{2}`$ is an upward parabola, so $`(\xi - v + v^{2})_+`$
+is flat where it dips below $`0`$ and quadratic outside (the positive part is the one from the $`U \ge 0`$
+inequality). With $`d = \alpha - q`$, $`f = \alpha - L`$ and $`e = 1 - 2\alpha`$,
+
+```math
+\xi = \frac{4\alpha^{2} d}{e^{2}}, \qquad \rho = \frac{A_m}{B_m}\cdot\frac{\sqrt{\alpha}}{2\sqrt2\,f},
+  \qquad C_m = \frac{B_m\, f \sqrt{2\alpha}\,e^{2}}{4\alpha^{2}}.
+```
+
+The whole case is thus reduced to the single scalar inequality $`R_m \le C_m\,\psi(\xi,\rho)`$. This is
+checked by partitioning the admissible domain according to $`\xi`$ and $`e = 1 - 2\alpha`$ into three zones
+(`Scalar/*`):
+
+- **Zone A** ($`\xi \ge 1`$ and $`e \le 1/60`$) — an elementary analytic estimate (`Scalar/ZoneA`);
+- **Zone B** ($`\xi \ge 1`$ and $`e \ge 1/60`$) — an exact rational box certificate (`Scalar/ZoneBReduction`,
+  `Scalar/ZoneBMax`);
+- **Zone C** ($`\xi \le 1`$, any $`e`$) — elementary for $`e \le 1/60`$ (`Scalar/ZoneCSmall`), and an analytic
+  estimate together with a box certificate for $`e \ge 1/60`$,
+
+the box certificates in Zones B and C being the exact Bernstein ones described above (`Certificate/*`).
+
+Module dependencies (arrows point from a file to the files it imports; certificate block files omitted):
+
+```
+Graphon → PathDensity → Kernel, Certificate → Cycle → Necklace → BoundsC5C7 ─┐
+                                                        General/* → C9, C11, C13 ─┤
+                                        BasicBounds ──────────────────────────────┤
+LowBand/GraphonL2Operator → CompactGraphonOperator → LowBand C9/C11/C13 → Conditional ─┤
+HighDensity/* (reduction layer) → RegionII/* ─────────────────────────────────────────┤
+                                                                                       ▼
+                                                                                     Main
+```
+
+## Building
+
+```
+lake exe cache get     # download the prebuilt Mathlib v4.31.0 oleans
+lake build -j 1        # build one module at a time (sequential)
+```
+
+Toolchain: Lean `v4.31.0`, Mathlib `v4.31.0` (pinned in `lean-toolchain` / `lakefile.toml`). Build
+sequentially with `-j 1`: several certificate modules use well over `10 GB` each even single-threaded,
+and a parallel build multiplies this beyond what typical machines have.
+
+## Files
+
+All proof files live under `OddCycleBound/`; the library namespace is `OddCycleBound`. Tables give the
+mathematical content and the principal Lean names.
+
+### Main results and integral foundation
+
+| File | Mathematical content | Lean names |
+|------|----------------------|-----------|
+| `Main.lean` | the graphon-facing theorems of the table above, obtained from the complement-form lemmas | `C3_bound` … `C13_bound`, `odd_cycle_regionII_large_bound`, `*_conditional_bound` |
+| `Graphon.lean` | graphon and its integral functionals: edge density `p = ∫∫W`, degree function, its mean-zero part, and the spectral moments `s_j = ⟨g, Aʲg⟩` of the centred degree operator `A` | `IsGraphon`, `edgeDensity`, `degree`, `degCentered`, `compress`, `specMoment`, `kernelOp` |
+| `PathDensity.lean` | the path densities `x_j = t(P_j, W)` as explicit polynomials in `q` and the moments `s_j` (Lemma 2.4) | `pathDensity`, `pathIter` |
+| `Kernel.lean` | the kernel-composition algebra: composition, iterated powers, and the cyclic trace with its rotation invariance | `comp`, `compPow`, `trace`, `trace_comp_comm`, `onesKernel` |
+| `Cycle.lean` | the cycle density `cycleDensity μ W m = t(C_m,W)` and the edge-deletion inequality `t(C_m,W) ≤ x_{m−1}` | `cycleDensity`, `edge_deletion_general` |
+| `Necklace.lean` | the cyclic inclusion–exclusion (telescoping) expansion of the trace of powers into path densities | necklace recursion lemmas |
+| `BoundsC5C7.lean` | the `C₅` and `C₇` bounds, assembling the identity, the certificates, and edge deletion | `C5_integral`, `C7_integral`, `C7_integral_all` |
+| `BasicBounds.lean` | trivial-regime facts: the cycle density is nonnegative, and the right-hand side is `≤ 0` when `p ≤ 1/2` | `trace_compPow_nonneg`, `rhs9_nonpos_of_le_half` |
+| `General/Necklace.lean` | the general-`m` cyclic inclusion–exclusion identity | `complTrace_necklace` |
+| `General/PathRecurrence.lean` | the general-`m` recurrence `x_{n+1} = q·x_n + Σ s_i·x_{n−1−i}` | `pathDensity_succ` |
+| `General/SumOfSquares.lean` | the moment sum-of-squares engine `∫(Σ c·h)² ≥ 0` and its fixed-arity specializations | `sos_sq_expand`, `sos2var3`, `sos3` |
+
+### Fixed-length cycle bounds `C₉`–`C₁₃`
+
+The assembly files below combine the general identity with a sum-of-squares certificate for
+$`\Phi_m \ge 0`$. The certificate blocks they import (`C11/*`, `C13/*`) are machine-generated data,
+listed under Certificates.
+
+| File | Mathematical content | Lean names |
+|------|----------------------|-----------|
+| `C9.lean` | the `C₉` bound on `p ≥ 1003/2000`, $`\Phi_9 \ge 0`$ certified by degree-3/bivariate sum-of-squares | `cert9_specMoment`, `C9_path_integral` |
+| `C11.lean` | the `C₁₁` bound on `p ≥ 103/200`, $`\Phi_{11} \ge 0`$ certified piecewise by a Positivstellensatz | `cert11_specMoment`, `C11_path_integral` |
+| `C13.lean` | the `C₁₃` bound on `p ≥ 519/1000`, $`\Phi_{13}`$ split into linear/bivariate/trivariate/quartic blocks | `cert13_specMoment`, `C13_path_integral` |
+
+### Region II — `1/2 < p < 2/3`, odd `m ≥ 15` (`RegionII/`)
+
+A compact self-adjoint spectral argument on the centred complement operator. The corrected reference
+proof is vendored under `provenance/regionII_jul12b/`.
+
+| File | Mathematical content | Lean names |
+|------|----------------------|-----------|
+| `RegionII/LargeOdd.lean` | the unconditional Region II bound for every odd `m ≥ 15` | `regionII_large_odd_bound`, `no_frontier_odd_cycle_bound` |
+| `RegionII/C13Frontier.lean` | the unconditional `C₁₃` bound on the range `51/100 ≤ p ≤ 519/1000` | `C13_frontier_bound` |
+| `RegionII/C13PathIdentity.lean` | the density-independent identity expressing $`\Phi_{13}`$ through path densities | path-identity lemma |
+| `RegionII/C13FrontierAtoms.lean` | splits the spectral moments into the contribution of the eigenvalue `α` and that of its orthogonal complement | splitting lemmas |
+| `RegionII/C13MomentPositivity.lean` | positivity of the `C₁₃` moment polynomial from the exact Bernstein certificates | positivity lemma |
+| `RegionII/CenteredOperator.lean` | the centred complement operator | `centeredGraphonOp` |
+| `RegionII/CenteredKernel.lean` | the kernel realization of the centred compression | kernel lemmas |
+| `RegionII/BoundedKernelL2.lean` | the `L²` realization for signed bounded symmetric kernels | realization lemmas |
+| `RegionII/HilbertSchmidtBudget.lean` | the spectral-energy bound `Σλ² + 2‖g‖² ≤ p·q` (`Σλ² = Tr(A²)`) | spectral-energy bound |
+| `RegionII/SpectralFoundation.lean` | reusable compact self-adjoint spectral data for a signed kernel | `NonzeroEigenIndex`, expansion lemmas |
+| `RegionII/TracePowers.lean` | trace powers of the signed centred kernel | trace-power lemmas |
+| `RegionII/OneSidedPolynomial.lean` | the finite coefficient polynomial of the one-sided shift | `oneSidedShift` |
+| `RegionII/FormalShift.lean` | the formal-power-series algebra behind the shift | series algebra |
+| `RegionII/KernelBlockDecomposition.lean` | the direct block decomposition of the kernel | block lemmas |
+| `RegionII/GraphonShiftIdentity.lean` | the one-sided shift identity for an arbitrary graphon (finite-rank approximation) | shift identity |
+| `RegionII/OneSidedShift.lean` | nonnegativity and the linear-term lower bound of the shift | shift bounds |
+| `RegionII/ShiftSpectral.lean` | the spectral lower bound for the linear term | spectral bound |
+| `RegionII/DirectedKernel.lean` | the scalar kernel `K(p,m,λ) = (p^{m-1}−λ^{m-1})/(p+λ)` of the master inequality | `directedKernel` |
+| `RegionII/FrontierTrace.lean` | the refined trace bound at the eigenvalue `α` | trace bound |
+| `RegionII/Frontier.lean` | the spectrum above `q`: existence and uniqueness of the eigenvalue `α > q` | spectrum lemmas |
+| `RegionII/ForcedVariance.lean` | the bound `α² + q·α − q ≤ 0` on the eigenvalue above `q` | `forced_variance` |
+| `RegionII/SafeFrontier.lean` | the safe radius `L = √(pq − α²)` and the bound `\|λ\| ≤ L` on the rest of the spectrum | safe-radius lemmas |
+| `RegionII/CouplingChannels.lean` | the two inequalities (from `U ≤ 1` and `U ≥ 0`) bounding `c` and `‖g_s‖²` | coupling lemmas |
+| `RegionII/MasterDefect.lean` | the master inequality `Φ_m ≥ −R_m + A_m c² + B_m‖g_s‖²` (operator-to-scalar reduction) | `graphon_frontier_master_defect_directed` |
+| `RegionII/HuberGraphon.lean` | the graphon interface to the exact Huber-objective elimination | Huber interface |
+| `RegionII/Scalar/Definitions.lean` | the scalar parameters and admissible domain | `AdmissibleParams`, `frontierRadius` |
+| `RegionII/Scalar/ParameterFacts.lean` | elementary facts about admissible parameters | parameter lemmas |
+| `RegionII/Scalar/ShapeElimination.lean` | exact Huber shape elimination | shape lemmas |
+| `RegionII/Scalar/Huber.lean` | the exact Huber minimum: compactness and dual certificates | `huberMin` |
+| `RegionII/Scalar/FrontierAlgebra.lean` | scalar algebra for the ceiling on `α` | algebra lemmas |
+| `RegionII/Scalar/Coordinates.lean` | the `(e, κ)` chart coordinates for the scalar problem | chart lemmas |
+| `RegionII/Scalar/Elementary.lean` | elementary admissible-domain inequalities | domain lemmas |
+| `RegionII/Scalar/ThreeGeometric.lean` | a three-term geometric estimate and the secant gate | zone-estimate lemmas |
+| `RegionII/Scalar/Payments.lean` | the scalar accounting feeding the zone bounds | accounting lemmas |
+| `RegionII/Scalar/TuranCorner.lean` | the analytic Turán extremal-boundary case | `turan_corner` |
+| `RegionII/Scalar/ZoneA.lean` | the Zone A estimate | `zoneA` |
+| `RegionII/Scalar/ZoneBReduction.lean`, `Scalar/ZoneBMax.lean` | the Zone B reduction and the corrected cycle-length maximization | Zone B lemmas |
+| `RegionII/Scalar/ZoneCSmall.lean` | the small-`e` Zone C estimate | Zone C lemmas |
+| `RegionII/Scalar/Assembly.lean` | the scalar inequality for every admissible odd `m ≥ 15` | scalar assembly |
+
+### All-density closure under the triangle-density hypothesis
+
+| File | Mathematical content | Lean names |
+|------|----------------------|-----------|
+| `Conditional.lean` | closes the remaining low bands for `m = 9, 11, 13` from the spectral data, given the triangle-density hypothesis | `TriangleDensityLowerBoundUpTo`, `C11_bound_of_razborov_theorem`, `C13_nearbipartite_bound_of_razborov_theorem` |
+| `LowBand/GraphonL2Operator.lean` | the graphon as a self-adjoint `L²` integral operator | `kernelL2Op` |
+| `LowBand/CompactGraphonOperator.lean` | compactness and the self-adjoint eigen-expansion / finite-rank approximation | compact-operator interfaces |
+| `LowBand/C9Spectral.lean`, `C11Spectral.lean`, `C13Spectral.lean` | the countable-spectrum data `t(C_m,W) = Σ λᵢᵐ` and its use in the low-band `C₉/C₁₁/C₁₃` arguments | spectral-data structures |
+| `LowBand/C9Scalar.lean`, `C11Scalar.lean`, `C13Scalar.lean` | the scalar arithmetic of the corresponding low-band arguments | scalar lemmas |
+
+### High-density reduction layer (`HighDensity/`, shared with `../new_lean`)
+
+The subset of the high-density reduction reused by Region II: the reduction of the cycle bound to
+$`\Phi_m \ge 0`$, the moment expansion, and the Krylov compression producing the eigenvalue data. The full high-density
+theorem lives in `../new_lean`.
+
+| File | Mathematical content | Lean names |
+|------|----------------------|-----------|
+| `HighDensity/GraphonReduction.lean` | reduces the cycle bound to nonnegativity of the cyclic inclusion–exclusion sum | `cycle_bound_of_neckSum` |
+| `HighDensity/MomentExpansion.lean` | rewrites that sum as a polynomial in the path densities and moments; the `m = 3` case | `neckSum_moment`, `cycle_bound_three` |
+| `HighDensity/SymmetricPoly.lean` | complete homogeneous symmetric polynomials and the kernels `diagKernel`, `multiKernel` | `hsym`, `diagKernel`, `multiKernel` |
+| `HighDensity/MixtureIntegral.lean` | box positivity from one-parameter positivity via a Dirichlet-mixture integral | `multiKernel_nonneg` |
+| `HighDensity/Expansion.lean` | the expansion of $`\Phi_m`$ evaluated at a finite set of eigenvalues | expansion lemmas |
+| `HighDensity/FiniteRank.lean`, `BlockPower.lean` | a finite-dimensional block-matrix identity and a recurrence for the block operator's powers | block lemmas |
+| `HighDensity/AtomicSpectral.lean`, `AtomicMomentRepresentation.lean` | the eigenvalues of the compression lie in $`[-1/2, 1/2]`$; each moment is $`s_j = \sum_k w_k \lambda_k^{j}`$ | representation lemmas |
+| `HighDensity/KrylovCompression.lean`, `GraphonKrylovBridge.lean` | the finite Krylov compression and the identification of its moments with `s_j` | Krylov/bridge lemmas |
+
+### Certificates (least-central; machine-generated data checked in Lean)
+
+The certificate blocks serialize exact-rational data emitted by scripts in `cert_scripts/`; every
+identity and sign is re-checked inside Lean. Each generated file names its emitter in its header.
+
+| File(s) | Mathematical content | Generated by |
+|---------|----------------------|--------------|
+| `C11/Linear.lean`, `C11/Bivar.lean`, `C11/Trivar.lean` | the linear / bivariate / trivariate sum-of-squares blocks of $`\Phi_{11}`$ | `cert_scripts/gen_linear.py`, `gen_bivar.py`, `gen_trivar.py` |
+| `C13/Linear.lean`, `C13/Bivar.lean`, `C13/Trivar.lean`, `C13/Quad.lean`, `C13/Hankel.lean` | the linear / bivariate / trivariate / quartic / Hankel blocks of $`\Phi_{13}`$ | `cert_scripts/gen_linear.py`, `gen_bivar.py`, `gen_trivar.py` |
+| `C13/Engine.lean`, `C13/Engine4.lean` | the multivariate Hankel sum-of-squares engine lemmas used by those blocks | `cert_scripts/gen_engine.py` |
+| `RegionII/Certificate/Tree.lean`, `Intervals.lean`, `Soundness.lean`, `Coverage.lean`, `ChartIntervals.lean` | the certificate-tree format, executable rational-interval primitives, and their soundness | — (hand-written checkers) |
+| `RegionII/Certificate/Bernstein.lean`, `BernsteinCube.lean` | the checked exact-rational multivariate Bernstein format | — (hand-written checkers) |
+| `RegionII/Certificate/ZoneB*.lean`, `ZoneC*.lean` | the semantics and soundness of the Zone B and Zone C certificate boxes and trees | — (hand-written checkers) |
+| `RegionII/Certificate/Generated.lean` | the Zone B / shared certificate token stream | `cert_scripts/regionII/emit_certificates.py` |
+| `RegionII/Certificate/ZoneCChunked.lean` + `ZoneCChunks/Chunk00…21.lean` | the Zone C certificate as bounded kernel-checking chunks (22 files) | `cert_scripts/regionII/emit_zone_c_chunks.py` |
+| `RegionII/Certificate/C13Generated.lean` | the exact `C₁₃` frontier Bernstein coefficient payloads | `cert_scripts/regionII/emit_c13_bernstein.py` |
+| `RegionII/Certificate/C13BernsteinSound.lean` | the semantic verification of those payloads | — (hand-written) |
+
+Generator and validation scripts (not part of any Lean proof; several also run as independent checks):
+
+| Script | Role |
+|--------|------|
+| `cert_scripts/certgen.py` | exact Gram → sum-of-squares certificate generator (univariate Hankel form) |
+| `cert_scripts/gen_engine.py` | emits the multivariate Hankel sum-of-squares engine lemmas |
+| `cert_scripts/gen_linear.py`, `gen_bivar.py`, `gen_trivar.py`, `gen_assembly.py`, `gen_paths.py` | emit the `C₁₁`/`C₁₃` blocks, the block combiners, and the path recurrences |
+| `cert_scripts/lin11.py`, `emit_lin11.py`, `extract_lin11.py`, `feas_c11.py`, `sos_feas_c11.py` | the `C₁₁` linear-block pipeline and feasibility probes |
+| `cert_scripts/phi11_moments.py`, `phi13_moments.py` | the moment expansions of $`\Phi_{11}`$ / $`\Phi_{13}`$ |
+| `cert_scripts/regionII/emit_certificates.py`, `emit_zone_c_chunks.py`, `emit_c13_bernstein.py` | emit the Region II certificate data files |
+| `provenance/regionII_jul12b/{zoneB,zoneC}_certifier.py`, `run_all_checks.sh` | the vendored upstream exact certifiers (regression only); `VENDORED_SHA256.md` pins their hashes |
+| `verify_c5_moments.py`, `verify_c7.py`, `verify_c7_moments.py`, `verify_necklace.py` | numeric double-checks of the core polynomial identities |
+| `CheckGraphon.lean`, `CheckRegionII.lean` | print the axiom trail of the `C₅`–`C₁₃` and Region II theorems |
