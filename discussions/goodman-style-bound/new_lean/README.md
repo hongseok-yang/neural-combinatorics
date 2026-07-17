@@ -13,124 +13,147 @@ theorem odd_cycle_bound {m : ℕ} (hW : IsGraphon W μ)
 ```
 (`OddCycleBound/Main.lean`, namespace `OddCycleBound.HighDensity`.)
 
-Mathematically: for every graphon $W$ of edge density $p \ge 2/3$ and every odd $m \ge 3$,
+Mathematically: for every graphon $`W`$ of edge density $`p \ge 2/3`$ and every odd $`m \ge 3`$,
 
-$$t(C_m, W) \;\ge\; p^{m} - p(1-p)^{m-1}.$$
+```math
+t(C_m, W) \;\ge\; p^{m} - p(1-p)^{m-1}.
+```
 
 ### Definitions needed to read the statement
 
-Fix a probability space $(\Omega, \mu)$ ($\mu$ a probability measure on a measurable space $\Omega$).
+Fix a probability space $`(\Omega, \mu)`$ ($`\mu`$ a probability measure on a measurable space $`\Omega`$).
 
-- **Graphon** $W : \Omega \times \Omega \to \mathbb{R}$ — a symmetric, measurable, $[0,1]$-valued
-  kernel. In Lean this is `IsGraphon W μ`: `Measurable (uncurry W)`, $0 \le W(x,y) \le 1$, and
-  $W(x,y) = W(y,x)$. A graphon is the limit object of a sequence of dense graphs; $W(x,y)$ is the
-  "probability of an edge" between points $x$ and $y$.
+- **Graphon** $`W : \Omega \times \Omega \to \mathbb{R}`$ — a symmetric, measurable, $`[0,1]`$-valued
+  kernel. In Lean this is `IsGraphon W μ`: `Measurable (uncurry W)`, $`0 \le W(x,y) \le 1`$, and
+  $`W(x,y) = W(y,x)`$. A graphon is the limit object of a sequence of dense graphs; $`W(x,y)`$ is the
+  "probability of an edge" between points $`x`$ and $`y`$.
 
-- **Edge density** $p = \iint W(x,y)\,d\mu(x)\,d\mu(y)$ (`edgeDensity W μ`), the homomorphism density
-  $t(K_2, W)$ of a single edge.
+- **Edge density** $`p = \iint W(x,y)\,d\mu(x)\,d\mu(y)`$ (`edgeDensity W μ`), the homomorphism density
+  $`t(K_2, W)`$ of a single edge.
 
-- **Cycle density** $t(C_m, W) = \int\!\cdots\!\int W(x_1,x_2)\,W(x_2,x_3)\cdots W(x_m,x_1)\,
-  d\mu(x_1)\cdots d\mu(x_m)$ (`cycleDensity μ W m`), the homomorphism density of the $m$-cycle. In Lean
-  it is `trace μ (compPow μ W (m−1))`, the cyclic trace of the $(m-1)$-st power of the integral
-  operator with kernel $W$.
+- **Cycle density** $`t(C_m, W) = \int\!\cdots\!\int W(x_1,x_2)\,W(x_2,x_3)\cdots W(x_m,x_1)\,d\mu(x_1)\cdots d\mu(x_m)`$ (`cycleDensity μ W m`), the homomorphism density of the $`m`$-cycle. In Lean
+  it is `trace μ (compPow μ W (m−1))`, the cyclic trace of the $`(m-1)`$-st power of the integral
+  operator with kernel $`W`$.
 
-The right-hand side $p^{m} - p(1-p)^{m-1}$ is the conjectured extremal value, attained by the union of
+The right-hand side $`p^{m} - p(1-p)^{m-1}`$ is the conjectured extremal value, attained by the union of
 a clique and isolated vertices.
 
 ## Idea of the proof
 
-It is cleaner to work with the complement kernel $U = 1 - W$, again a graphon, with edge density
-$q = 1 - p \le 1/3$. Two functionals of $U$ drive the argument. The *centred degree*
-$g(x) = \int U(x,y)\,d\mu(y) - q$ measures how far $x$ is from average degree; it is mean-zero. The
-*compression* $A$ is the integral operator of $U$ restricted to mean-zero functions. Their interaction
+It is cleaner to work with the complement kernel $`U = 1 - W`$, again a graphon, with edge density
+$`q = 1 - p \le 1/3`$. Two functionals of $`U`$ drive the argument. The *centred degree*
+$`g(x) = \int U(x,y)\,d\mu(y) - q`$ measures how far $`x`$ is from average degree; it is mean-zero. The
+*compression* $`A`$ is the integral operator of $`U`$ restricted to mean-zero functions. Their interaction
 is recorded by the **spectral moments**
 
-$$s_j = \langle g,\, A^{j} g\rangle, \qquad s_0 = \lVert g\rVert^2 \ (\text{the degree variance}).$$
+```math
+s_j = \langle g,\, A^{j} g\rangle, \qquad s_0 = \lVert g\rVert^2 \ (\text{the degree variance}).
+```
 
-All of $g$, $A$, $s_j$ are defined in `Graphon.lean`.
+All of $`g`$, $`A`$, $`s_j`$ are defined in `Graphon.lean`.
 
 **From the cycle density to a polynomial in the moments.** Expand the cyclic product
-$t(C_m,W) = \int \prod_i \bigl(1 - U(x_i,x_{i+1})\bigr)$ by inclusion–exclusion. The naive expansion has
-$2^m$ terms, but as a cyclic sum it telescopes to an $O(m)$-term identity (`complTrace_necklace`) in the
-*path densities* $x_j = t(P_j, U)$ of the complement, and Lemma 2.4 (`PathDensity.lean`) writes each
-$x_j$ as an explicit polynomial in $q$ and $s_0,\dots,s_{j-1}$. Substituting, the difference
+$`t(C_m,W) = \int \prod_i \bigl(1 - U(x_i,x_{i+1})\bigr)`$ by inclusion–exclusion. The naive expansion has
+$`2^m`$ terms, but as a cyclic sum it telescopes to an $`O(m)`$-term identity (`complTrace_necklace`) in the
+*path densities* $`x_j = t(P_j, U)`$ of the complement, and Lemma 2.4 (`PathDensity.lean`) writes each
+$`x_j`$ as an explicit polynomial in $`q`$ and $`s_0,\dots,s_{j-1}`$. Substituting, the difference
 
-$$\Phi_m \;:=\; t(C_m,W) - \bigl(p^{m} - p(1-p)^{m-1}\bigr)$$
+```math
+\Phi_m \;:=\; t(C_m,W) - \bigl(p^{m} - p(1-p)^{m-1}\bigr)
+```
 
-becomes an explicit polynomial in $q$ and $s_0,\dots,s_{m-2}$ with no operators left in it
-(`neckSum_moment`), and the theorem is exactly $\Phi_m \ge 0$. For $m = 3$ everything collapses to
+becomes an explicit polynomial in $`q`$ and $`s_0,\dots,s_{m-2}`$ with no operators left in it
+(`neckSum_moment`), and the theorem is exactly $`\Phi_m \ge 0`$. For $`m = 3`$ everything collapses to
 
-$$\Phi_3 = 2 s_0 = 2\lVert g\rVert^2 \ge 0,$$
+```math
+\Phi_3 = 2 s_0 = 2\lVert g\rVert^2 \ge 0,
+```
 
 i.e. the triangle bound is just "degree variance is nonnegative" (`cycle_bound_three`).
 
-**Making the moments visible.** $A$ is compact and self-adjoint with $\lVert A\rVert \le 1/2$, so by the
-spectral theorem its eigenvalues $\lambda_k$ lie in $[-1/2, 1/2]$ and
+**Making the moments visible.** $`A`$ is compact and self-adjoint with $`\lVert A\rVert \le 1/2`$, so by the
+spectral theorem its eigenvalues $`\lambda_k`$ lie in $`[-1/2, 1/2]`$ and
 
-$$s_j = \sum_k w_k\, \lambda_k^{\,j}, \qquad w_k \ge 0$$
+```math
+s_j = \sum_k w_k\, \lambda_k^{\,j}, \qquad w_k \ge 0
+```
 
-(`AtomicSpectral.lean`, `AtomicMomentRepresentation.lean`; the relevant part of $A$ is finite-rank on
-the Krylov subspace spanned by $g, Ag, A^2 g, \dots$, `KrylovCompression.lean`). Grouping the terms of
-$\Phi_m$ by how many moment factors they carry writes it as
+(`AtomicSpectral.lean`, `AtomicMomentRepresentation.lean`; the relevant part of $`A`$ is finite-rank on
+the Krylov subspace spanned by $`g, Ag, A^2 g, \dots`$, `KrylovCompression.lean`). Grouping the terms of
+$`\Phi_m`$ by how many moment factors they carry writes it as
 
-$$\Phi_m = \sum_{r=1}^{(m-1)/2} \ \sum_{k_1,\dots,k_r} w_{k_1}\cdots w_{k_r}\;
-  \mathrm{multiKernel}(m, r, q; \lambda_{k_1},\dots,\lambda_{k_r}),$$
+```math
+\Phi_m = \sum_{r=1}^{(m-1)/2} \ \sum_{k_1,\dots,k_r} w_{k_1}\cdots w_{k_r}\;
+  \mathrm{multiKernel}(m, r, q; \lambda_{k_1},\dots,\lambda_{k_r}),
+```
 
-a nonnegative-weighted average of one symmetric polynomial $\mathrm{multiKernel}$. Since the weights are
-nonnegative, $\Phi_m \ge 0$ follows once $\mathrm{multiKernel}(m,r,q;\cdot) \ge 0$ on the cube
-$[-1/2,1/2]^r$ for each $r$.
+a nonnegative-weighted average of one symmetric polynomial $`\mathrm{multiKernel}`$. Since the weights are
+nonnegative, $`\Phi_m \ge 0`$ follows once $`\mathrm{multiKernel}(m,r,q;\cdot) \ge 0`$ on the cube
+$`[-1/2,1/2]^r`$ for each $`r`$.
 
-Explicitly (`SymmetricPoly.lean`), let $h_d$ be the complete homogeneous symmetric polynomial of
-degree $d$, i.e. the sum of all degree-$d$ monomials in its arguments,
+Explicitly (`SymmetricPoly.lean`), let $`h_d`$ be the complete homogeneous symmetric polynomial of
+degree $`d`$, i.e. the sum of all degree-$`d`$ monomials in its arguments,
 
-$$h_d(a_1,\dots,a_k) = \sum_{i_1 + \cdots + i_k = d} a_1^{i_1}\cdots a_k^{i_k},$$
+```math
+h_d(a_1,\dots,a_k) = \sum_{i_1 + \cdots + i_k = d} a_1^{i_1}\cdots a_k^{i_k},
+```
 
-and write $a^{\times k}$ for the argument $a$ repeated $k$ times. With $p = 1 - q$ and $n = m - 2r$,
+and write $`a^{\times k}`$ for the argument $`a`$ repeated $`k`$ times. With $`p = 1 - q`$ and $`n = m - 2r`$,
 
-$$\mathrm{multiKernel}(m,r,q;\lambda_1,\dots,\lambda_r) = \frac{m}{r}\Bigl[\,
+```math
+\mathrm{multiKernel}(m,r,q;\lambda_1,\dots,\lambda_r) = \frac{m}{r}\Bigl[\,
   h_n\bigl(p^{\times r},\, -\lambda_1,\dots,-\lambda_r\bigr)
   + h_n\bigl(q^{\times r},\, \lambda_1,\dots,\lambda_r\bigr)\Bigr]
-  - h_{n-1}\bigl(q^{\times (r+1)},\, \lambda_1,\dots,\lambda_r\bigr).$$
+  - h_{n-1}\bigl(q^{\times (r+1)},\, \lambda_1,\dots,\lambda_r\bigr).
+```
 
 **Reducing to one variable.** Averaging a symmetric polynomial against a Dirichlet weight is a mixture
-of its values along the diagonal, so positivity of $\mathrm{multiKernel}$ on the cube follows from
-positivity of its diagonal restriction $\lambda_1 = \cdots = \lambda_r = \ell$ — a *single-variable*
+of its values along the diagonal, so positivity of $`\mathrm{multiKernel}`$ on the cube follows from
+positivity of its diagonal restriction $`\lambda_1 = \cdots = \lambda_r = \ell`$ — a *single-variable*
 polynomial (`MixtureIntegral.lean`, `multiKernel_nonneg`),
 
-$$\mathrm{diagKernel}(m,r,q,\ell) = \frac{m}{r}\Bigl[\,
+```math
+\mathrm{diagKernel}(m,r,q,\ell) = \frac{m}{r}\Bigl[\,
   h_n\bigl(p^{\times r},\, (-\ell)^{\times r}\bigr)
   + h_n\bigl(q^{\times r},\, \ell^{\times r}\bigr)\Bigr]
-  - h_{n-1}\bigl(q^{\times (r+1)},\, \ell^{\times r}\bigr).$$
+  - h_{n-1}\bigl(q^{\times (r+1)},\, \ell^{\times r}\bigr).
+```
 
-For instance $\mathrm{diagKernel}(5,1,q,\ell) = 4\ell^2 + (8q-5)\ell + 12q^2 - 15q + 5$. The whole
+For instance $`\mathrm{diagKernel}(5,1,q,\ell) = 4\ell^2 + (8q-5)\ell + 12q^2 - 15q + 5`$. The whole
 theorem has now come down to
 
-$$\mathrm{diagKernel}(m,r,q,\ell) \ge 0 \qquad
-  \text{for all } 0 \le q \le \tfrac13,\ \ell \in [-\tfrac12, \tfrac12],\ 1 \le r \le \tfrac{m-1}{2}.$$
+```math
+\mathrm{diagKernel}(m,r,q,\ell) \ge 0 \qquad
+  \text{for all } 0 \le q \le \tfrac13,\ \ell \in [-\tfrac12, \tfrac12],\ 1 \le r \le \tfrac{m-1}{2}.
+```
 
 **Nonnegativity of `diagKernel`.** The reduction to real analysis runs through the auxiliary function
 
-$$\rho_{n,m}(u) = \frac{m}{n}\bigl(u^{n} + (1-u)^{n}\bigr) - u^{\,n-1}$$
+```math
+\rho_{n,m}(u) = \frac{m}{n}\bigl(u^{n} + (1-u)^{n}\bigr) - u^{\,n-1}
+```
 
 (`RhoLemma.lean`), which is `diagKernel` stripped down to a single real variable. Replacing the symmetric
-polynomials $h_d$ by their Beta-integral representation and substituting $x = \ell/(\ell+s)$ gives, for
-$\ell > 0$,
+polynomials $`h_d`$ by their Beta-integral representation and substituting $`x = \ell/(\ell+s)`$ gives, for
+$`\ell > 0`$,
 
-$$\mathrm{diagKernel}(m,r,q,\ell) = C_{m,r}\,\ell^{\,n+r}\int_0^{\infty}
-  \frac{s^{\,r-1}}{(\ell+s)^{m}}\,\rho_{n,m}(q+s)\,ds, \qquad C_{m,r} > 0$$
+```math
+\mathrm{diagKernel}(m,r,q,\ell) = C_{m,r}\,\ell^{\,n+r}\int_0^{\infty}
+  \frac{s^{\,r-1}}{(\ell+s)^{m}}\,\rho_{n,m}(q+s)\,ds, \qquad C_{m,r} > 0
+```
 
-(`KernelForm.lean`, `KernelImproper.lean`). The prefactor and the weight $s^{r-1}/(\ell+s)^m$ are
-positive, so the sign of $\mathrm{diagKernel}$ is governed entirely by that of $\rho_{n,m}(q+s)$ as $s$
-ranges over $(0,\infty)$ (equivalently $u = q + s$ over $(q, \infty)$). Now $\rho_{n,m}$ is *not*
+(`KernelForm.lean`, `KernelImproper.lean`). The prefactor and the weight $`s^{r-1}/(\ell+s)^m`$ are
+positive, so the sign of $`\mathrm{diagKernel}`$ is governed entirely by that of $`\rho_{n,m}(q+s)`$ as $`s`$
+ranges over $`(0,\infty)`$ (equivalently $`u = q + s`$ over $`(q, \infty)`$). Now $`\rho_{n,m}`$ is *not*
 everywhere nonnegative — it can dip below zero on a bounded window — but it is nonnegative for
-$u \le 1/2$ and for $u \ge n/m$, and it satisfies a reflection inequality
-$\rho_{n,m}(u) + \rho_{n,m}(1-u) \ge 0$ (`RhoLemma.lean`). These sign windows, together with integration
-by parts, close the region in four cases directly — $r = 1$, $\ell \le 0$, $2r \ge n$, and
-$\ell \ge q + r/m$ (`KernelR1.lean`, `KernelIBP.lean`, `StripAssembly.lean`) — because in each the
+$`u \le 1/2`$ and for $`u \ge n/m`$, and it satisfies a reflection inequality
+$`\rho_{n,m}(u) + \rho_{n,m}(1-u) \ge 0`$ (`RhoLemma.lean`). These sign windows, together with integration
+by parts, close the region in four cases directly — $`r = 1`$, $`\ell \le 0`$, $`2r \ge n`$, and
+$`\ell \ge q + r/m`$ (`KernelR1.lean`, `KernelIBP.lean`, `StripAssembly.lean`) — because in each the
 integral either avoids the negative window or the reflection cancels it. What is left is a bounded strip
-in the $(r,\ell)$ plane where the negative window contributes and must be beaten quantitatively; it is
+in the $`(r,\ell)`$ plane where the negative window contributes and must be beaten quantitatively; it is
 closed two ways: exact rational (Bernstein/Handelman) certificates for the finitely many odd
-$9 \le m \le 61$ (the hypothesis `Hfin`), and a uniform analytic tail estimate for all odd $m \ge 63$
+$`9 \le m \le 61`$ (the hypothesis `Hfin`), and a uniform analytic tail estimate for all odd $`m \ge 63`$
 (the hypothesis `Hleft`, the `M6*` and `AppConstants*` files).
 
 Module dependencies (hand-written files; arrows point from a file to the files it imports):
@@ -192,7 +215,7 @@ names.
 | `General/Necklace.lean` | the general-`m` cyclic inclusion–exclusion identity | `complTrace_necklace` |
 | `General/PathRecurrence.lean` | the general-`m` recurrence for the path densities `x_{n+1} = q·x_n + Σ s_i·x_{n−1−i}` | `pathDensity_succ` |
 | `General/SumOfSquares.lean` | the moment sum-of-squares engine `∫(Σ c·h)² ≥ 0` | `sos_sq_expand` |
-| `Certificate.lean` | sum-of-squares proofs that $\Phi_m$ is nonnegative for `C₅` and `C₇` | `sos2`, `cert5_specMoment`, `cert7_specMoment` |
+| `Certificate.lean` | sum-of-squares proofs that $`\Phi_m`$ is nonnegative for `C₅` and `C₇` | `sos2`, `cert5_specMoment`, `cert7_specMoment` |
 | `LowBand/GraphonL2Operator.lean` | the graphon as a self-adjoint `L²` integral operator | `kernelL2Op` |
 | `LowBand/CompactGraphonOperator.lean` | compactness and the self-adjoint eigen-expansion / finite-rank approximation of that operator | compact-operator interfaces |
 
@@ -200,18 +223,18 @@ names.
 
 | File | Mathematical content | Lean names |
 |------|----------------------|-----------|
-| `HighDensity/GraphonReduction.lean` | reduces the cycle bound to $\Phi_m \ge 0$, i.e. nonnegativity of the cyclic-trace sum `neckSum` | `cycle_bound_of_neckSum` |
-| `HighDensity/MomentExpansion.lean` | writes $\Phi_m$ as a polynomial in the path densities and moments, with no operators left; the `m = 3` case | `neckSum_moment`, `cycle_bound_three` |
+| `HighDensity/GraphonReduction.lean` | reduces the cycle bound to $`\Phi_m \ge 0`$, i.e. nonnegativity of the cyclic-trace sum `neckSum` | `cycle_bound_of_neckSum` |
+| `HighDensity/MomentExpansion.lean` | writes $`\Phi_m`$ as a polynomial in the path densities and moments, with no operators left; the `m = 3` case | `neckSum_moment`, `cycle_bound_three` |
 | `HighDensity/SymmetricPoly.lean` | complete homogeneous symmetric polynomials; the one-parameter kernel `diagKernel` and its multivariate form `multiKernel` with their shared coefficient sequence | `hsym`, `diagKernel`, `multiKernel`, `kerB` |
 | `HighDensity/MixtureIntegral.lean` | box positivity of `multiKernel` follows from `diagKernel ≥ 0` on `[−½,½]`, via a Dirichlet-mixture (iterated Beta) integral | `multiKernel_nonneg`, `dirExp_pow`, `beta_nat` |
-| `HighDensity/Expansion.lean` | the expansion of $\Phi_m$ evaluated at a finite set of eigenvalues | expansion lemmas |
+| `HighDensity/Expansion.lean` | the expansion of $`\Phi_m`$ evaluated at a finite set of eigenvalues | expansion lemmas |
 | `HighDensity/FiniteRank.lean` | a finite-dimensional block-matrix identity validating steps 1–4 on a model with finitely many eigenvalues | `two_sided_identity` |
 | `HighDensity/BlockPower.lean` | a recurrence for the powers of the block operator, toward the cyclic-trace identity | block-power lemmas |
 | `HighDensity/AtomicSpectral.lean` | the eigenvalues of the compression lie in `[−1/2, 1/2]` | support lemmas |
-| `HighDensity/AtomicMomentRepresentation.lean` | each moment is a nonnegative-weighted power sum $s_j = \sum_k w_k \lambda_k^{j}$ | representation lemmas |
+| `HighDensity/AtomicMomentRepresentation.lean` | each moment is a nonnegative-weighted power sum $`s_j = \sum_k w_k \lambda_k^{j}`$ | representation lemmas |
 | `HighDensity/KrylovCompression.lean` | a finite Krylov subspace and its symmetric, norm-controlled orthogonal compression | Krylov compression |
 | `HighDensity/GraphonKrylovBridge.lean` | identifies the moments of the centred graphon `L²` compression with the integral moments `s_j` | bridge lemmas |
-| `HighDensity/DefectIdentity.lean` | expresses $\Phi_m$ as a universal identity in the path densities and moments | identity lemmas |
+| `HighDensity/DefectIdentity.lean` | expresses $`\Phi_m`$ as a universal identity in the path densities and moments | identity lemmas |
 | `HighDensity/DefectPowerSeries.lean` | the path recurrence as an exact Schur-complement inverse (formal power series) | series identities |
 | `HighDensity/ExpansionAssembly.lean` | `diagKernel ≥ 0` implies the graphon cycle bound (assembly of the reduction) | assembly lemma |
 
