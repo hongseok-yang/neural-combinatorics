@@ -198,7 +198,7 @@ Because $`\alpha`$ is the *only* eigenvalue exceeding $`q`$, every other eigenva
 most
 
 ```math
-L := \sqrt{pq - \alpha^{2}} \quad (<q),
+L := \sqrt{pq - \alpha^{2}} \quad (\lt q),
 ```
 
 since the non-$`\alpha`$ spectrum carries total square mass
@@ -350,7 +350,7 @@ proof is vendored under `provenance/regionII_jul12b/`.
 | `RegionII/FrontierTrace.lean` | the refined trace bound at the eigenvalue `α` | trace bound |
 | `RegionII/Frontier.lean` | the spectrum above `q`: existence and uniqueness of the eigenvalue `α > q` | spectrum lemmas |
 | `RegionII/ForcedVariance.lean` | the bound `α² + q·α − q ≤ 0` on the eigenvalue above `q` | `forced_variance` |
-| `RegionII/SafeFrontier.lean` | the safe radius `L = √(pq − α²)` and the bound `|λ| ≤ L` on the rest of the spectrum | safe-radius lemmas |
+| `RegionII/SafeFrontier.lean` | the safe radius `L = √(pq − α²)` and the bound `\|λ\| ≤ L` on the rest of the spectrum | safe-radius lemmas |
 | `RegionII/CouplingChannels.lean` | the two inequalities (from `U ≤ 1` and `U ≥ 0`) bounding `c` and `‖g_s‖²` | coupling lemmas |
 | `RegionII/MasterDefect.lean` | the master inequality `Φ_m ≥ −R_m + A_m c² + B_m‖g_s‖²` (operator-to-scalar reduction) | `graphon_frontier_master_defect_directed` |
 | `RegionII/HuberGraphon.lean` | the graphon interface to the exact Huber-objective elimination | Huber interface |
