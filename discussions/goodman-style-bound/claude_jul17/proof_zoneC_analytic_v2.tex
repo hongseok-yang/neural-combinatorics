@@ -1,0 +1,664 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[margin=1.1in]{geometry}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\eu}{\mathrm{e}}
+\newcommand{\D}{\mathcal D}
+\title[Analytic Zone C, moderate $e$]{An analytic proof of the Zone-C
+moderate-$e$ lemma\\ (elimination of the $3001$-box certificate)}
+\author{Claude (v2, 2026-07-17)}
+\begin{document}
+\maketitle
+
+\section{Statement, set-up, and what is being replaced}\label{sec:setup}
+
+This note refers throughout to the Region-II manuscript
+(\texttt{paper\_region2\_v2.tex}); results quoted from it are cited by their
+labels.  We work on the Region-II domain
+$\D=\{\,\tfrac13<q<\tfrac12,\ q<\alpha\le r(q),\ m\ \text{odd}\,\}$ in the
+$(e,\kappa)$ chart of that paper:
+\[
+ \alpha=\tfrac{1-e}2,\quad d=\alpha-q\in(0,\delta),\quad
+ \delta=\tfrac{1-3e}6,\quad \kappa=\tfrac de,\quad p=1-q,\quad
+ \xi=\tfrac{4\alpha^2d}{e^2},
+\]
+\[
+ L=\sqrt{pq-\alpha^2},\quad x=\tfrac\alpha p,\quad s=\tfrac qp,\quad
+ y=\tfrac Lp,\quad \ell=\tfrac L\alpha,\quad f=\alpha-L,\quad
+ R_m=\alpha^m+L^m-pq^{m-1}.
+\]
+Note $q>\tfrac13\iff d<\delta$ and $\xi\le1\iff d\le e^2/(1-e)^2$.  The goal
+is Lemma~\emph{zoneC-mod} of the paper: for every
+$(q,\alpha,m)\in\D$ with $m\ge15$, $\xi\le1$ and $\tfrac1{60}\le e<\tfrac13$,
+\begin{equation}\label{eq:target}
+ R_m\ \le\ C_m\,\psi(\xi,\rho),
+\end{equation}
+with the Huber payment $C_m\psi$ of Lemma~\emph{huber} of the paper.  In the
+paper, \eqref{eq:target} is proved on $e\le\tfrac13-\tfrac1{1000}$ by the
+exact interval certificate \texttt{zoneC\_certifier.py} ($3001$ boxes,
+subdivision depth $28$, cycle lengths checked up to $m=1716$; the prose count
+``$2997$'' at the certificate paragraph is stale), plus the analytic
+Tur\'an-corner sliver $\delta<\tfrac1{2000}$ (Lemma~\emph{turan}).  Here we
+prove \eqref{eq:target} analytically on the whole range:
+
+\begin{theorem}\label{thm:main}
+Let $(q,\alpha,m)\in\D$ with $m\ge15$ odd, $\xi\le1$, and
+$\tfrac1{60}\le e<\tfrac13$.  Then \eqref{eq:target} holds, with the dual
+certificate $\lambda=2\rho_{\mathrm{lo}}\xi$ if
+$2\rho_{\mathrm{lo}}\xi\le1$ and $\lambda=1$ otherwise, exactly as in
+Lemma~\emph{threegeo}(iii).  Consequently Lemma~\emph{zoneC-mod} holds with
+no computer certificate, and Lemma~\emph{turan} is the special case
+$\delta<\tfrac1{2000}$ of Proposition~\ref{prop:wide} below.
+\end{theorem}
+
+The proof splits at $e=\tfrac3{10}$ (i.e.\ $\delta=\tfrac1{60}$):
+Proposition~\ref{prop:strip} covers $\tfrac1{60}\le e\le\tfrac3{10}$ by a
+two-variable analysis whose only case analysis is a $21$-row table of
+one-variable evaluations at rational endpoints; Proposition~\ref{prop:wide}
+covers $\tfrac3{10}\le e<\tfrac13$ (all $0<d<\delta$, hence in particular
+all $\xi\le1$) by a widened Tur\'an-corner chain.  Everything below uses only
+Lemma~\emph{threegeo} of the paper and elementary calculus; every decimal
+constant is an exact rational rounded in the safe direction, and every
+displayed inequality --- including each individual link of the two
+comparison chains in Step~4 of Proposition~\ref{prop:wide} --- is checked
+by the companion script \texttt{validate\_zoneC\_analytic\_v2.py} (dense
+float grids over the exact stated domains, exact \texttt{Fraction}
+arithmetic at corners and for every chain link, table rows recomputed to
+$50$ digits).
+
+\subsection*{Standing notation}
+For $m\ge15$ put $n=m-2\ge13$ and
+\[
+ \lambda_x=\ln\tfrac1x=\ln\tfrac p\alpha,\qquad
+ \Delta=\ln\tfrac xs=\ln\tfrac\alpha q>0,\qquad
+ \lambda_s=\ln\tfrac1s=\lambda_x+\Delta,
+\]
+\[
+ G_2=\ell^2\bigl(1-(y/s)^{13}\bigr),\qquad G=\ln(1+G_2),\qquad
+ n_g=\tfrac G\Delta,\qquad
+ \mathrm{Def}_m=\tfrac{R_m}{\alpha^3p^{\,m-2}} .
+\]
+On $\D$ one has $0<y<s$ and $0\le\ell<1$ (Lemma~\emph{frontier-gap} of the
+paper; equivalently $L<q\iff q>\tfrac13$), so $0<G_2<1+G_2$ and $G>0$.
+
+\subsection*{Elementary identities}
+All are one-line expansions, checked in exact rational arithmetic in Part~1
+of the validation script.  With $S:=q^2-L^2$:
+\begin{align}
+ &L^2=\alpha e-d(e+d),\qquad pq-\alpha^2=L^2,\qquad
+ \alpha-\delta=\tfrac13,\qquad \alpha-e=\tfrac{1-3e}2=3\delta,
+ \label{eq:id1}\\
+ &S=3\alpha\delta-(2\alpha-e)d+2d^2,\qquad
+ L^2-e^2=\delta-\tfrac d3-6\delta^2+2\delta d-d^2,\label{eq:id2}\\
+ &(1-\alpha)^2-4\alpha e=\tfrac{(1-3e)^2}4\ \ge0
+ \quad\Longrightarrow\quad 4L^2\le4\alpha e\le(1-\alpha)^2\le p^2
+ \quad\Longrightarrow\quad y\le\tfrac12.\label{eq:yhalf}
+\end{align}
+
+\section{The defect majorant and its closed-form supremum}\label{sec:majorant}
+
+\begin{lemma}[majorant]\label{lem:majorant}
+For every $n\ge13$,
+\(
+ \alpha\,\mathrm{Def}_m
+ = x^n-s^n-\ell^2(s^n-y^n)
+ \le \varphi(n):=x^n-(1+G_2)s^n .
+\)
+\end{lemma}
+
+\begin{proof}
+The identity is Lemma~\emph{threegeo}(i) (divide $R_m$ by $\alpha^2p^{m-2}$
+and use $pq-\alpha^2=L^2$).  Since $0<y/s<1$ and $n\ge13$,
+$\ell^2(s^n-y^n)=\ell^2 s^n(1-(y/s)^n)\ge s^nG_2$.
+\end{proof}
+
+\begin{lemma}[closed-form supremum]\label{lem:sup}
+Extend $\varphi(t)=x^t-(1+G_2)s^t$ to real $t$.  Then $\varphi$ is increasing
+on $(-\infty,n_*]$ and decreasing on $[n_*,\infty)$, where
+$n_*=\bigl(G+\ln(\lambda_s/\lambda_x)\bigr)/\Delta>n_g$, and
+\begin{equation}\label{eq:phistar}
+ \sup_{t\in\mathbb R}\varphi(t)=\varphi(n_*)
+ =\frac{\Delta}{\lambda_s}\;h\;x^{\,n_g},
+ \qquad
+ h:=\exp\Bigl(-\frac{\lambda_x}{\Delta}\,
+ \ln\bigl(1+\tfrac\Delta{\lambda_x}\bigr)\Bigr)\in(\eu^{-1},1).
+\end{equation}
+Moreover, with $v:=\Delta/\lambda_x$,
+\begin{equation}\label{eq:hbound}
+ h\ \le\ \exp\bigl(-1+\tfrac v2\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+$\varphi'(t)=x^t\bigl[-\lambda_x+(1+G_2)\lambda_s(s/x)^t\bigr]$ and
+$(s/x)^t$ is strictly decreasing, so $\varphi'$ changes sign exactly once,
+from $+$ to $-$, at the root $n_*$ of
+$(x/s)^{n_*}=(1+G_2)\lambda_s/\lambda_x$; taking logarithms gives the stated
+$n_*$, and $n_*>n_g=G/\Delta$ because $\lambda_s>\lambda_x$.  At $t=n_*$,
+$(1+G_2)s^{n_*}=x^{n_*}\lambda_x/\lambda_s$, hence
+$\varphi(n_*)=x^{n_*}(1-\lambda_x/\lambda_s)=x^{n_*}\Delta/\lambda_s$; and
+$x^{n_*}=\exp(-\lambda_xn_*)
+ =x^{n_g}\exp\bigl(-\tfrac{\lambda_x}\Delta\ln\tfrac{\lambda_s}{\lambda_x}\bigr)
+ =x^{n_g}h$.
+For \eqref{eq:hbound}: $-\ln h=\tfrac1v\ln(1+v)\ge\tfrac1v(v-\tfrac{v^2}2)
+=1-\tfrac v2$, by $\ln(1+v)\ge v-v^2/2$ for $v\ge0$.
+\end{proof}
+
+\begin{lemma}[pointwise scalar facts]\label{lem:scalar}
+On $\D$:
+\begin{enumerate}
+\item[(i)] $d\ge q\Delta$ and $\kappa\ge q\Delta/e$
+  \quad(from $d=q(\eu^\Delta-1)\ge q\Delta$);
+\item[(ii)] $\Delta\le d/q$ \quad(from $\ln(1+d/q)\le d/q$);
+\item[(iii)] $\lambda_x\ge\ln\frac{1+e}{1-e}\ge2e$
+  \quad(from $p/\alpha=1+\frac{e+d}\alpha\ge1+\frac{2e}{1-e}=\frac{1+e}{1-e}$
+  and $\ln\frac{1+e}{1-e}=2\operatorname{artanh}e\ge2e$);
+\item[(iv)] $G_2\le\ell^2\le\frac e\alpha=\frac{2e}{1-e}$
+  \quad(from $L^2\le\alpha e$ by \eqref{eq:id1});
+\item[(v)] if $R_m>0$ and $m\ge15$, then $n=m-2>n_g$, i.e.\ $m>2+n_g$
+  \quad(Lemma~\emph{threegeo}(ii): $x^n>(1+G_2)s^n$, take logarithms).
+\end{enumerate}
+\end{lemma}
+
+\section{Payment floors and the three pointwise master inequalities}
+\label{sec:master}
+
+Define the $m$-free payment coefficients
+\[
+ c_e:=\frac{2(1-x^{14})(1-y^{14})}{(1+x)(1+y)},
+ \qquad
+ K_2:=\frac{\sqrt{2\alpha}\,(1-y^{14})}{2\alpha^3(1+y)} .
+\]
+
+\begin{lemma}[payment floors]\label{lem:payfloor}
+Let $m\ge15$.  If $2\rho_{\mathrm{lo}}\xi\le1$ then
+$\dfrac{C_m\psi(\xi,\rho)}{\alpha^3p^{m-2}}\ \ge\ m\,c_e\,\kappa^2$;
+if $2\rho_{\mathrm{lo}}\xi>1$ then
+$\dfrac{C_m\psi(\xi,\rho)}{\alpha^3p^{m-2}}\ \ge\ m\,K_2\,f\,d$.
+\end{lemma}
+
+\begin{proof}
+Relax Lemma~\emph{threegeo}(iii): in the first branch use
+$(1+4\xi)/(1+2\xi)\ge1$ and $1-y^{m-1}\ge1-y^{14}$ ($m\ge15$); in the second
+use $(4\xi+1)/(4\xi+2)\ge\tfrac12$ and $1-y^{m-1}\ge1-y^{14}$.
+\end{proof}
+
+\begin{lemma}[pointwise master inequalities]\label{lem:master}
+Let $(q,\alpha,m)\in\D$, $m\ge15$ odd, $R_m>0$, and write $w:=\lambda_xG/\Delta$
+(so $x^{n_g}=\eu^{-w}$).  Then \eqref{eq:target} holds as soon as the
+applicable one of the following scalar inequalities does:
+\begin{align}
+ &\textup{(deep, case I: }2\rho_{\mathrm{lo}}\xi\le1,\ n_g\ge15\textup{):}
+ &h\,\eu^{-w}e^2\ &\le\ \lambda_x\,\alpha\,c_e\,q^2\,G,
+ \label{eq:SCdeep}\\
+ &\textup{(shallow, case I: }2\rho_{\mathrm{lo}}\xi\le1,\ n_g<15\textup{):}
+ &h\,\eu^{-w}e^2\ &\le\ 15\,\lambda_x\,\alpha\,c_e\,q^2\,\Delta,
+ \label{eq:SCsh}\\
+ &\textup{(case II: }2\rho_{\mathrm{lo}}\xi>1\textup{):}
+ &h\,\eu^{-w}\ &\le\ 15\,\lambda_x\,\alpha\,K_2\,f\,q.
+ \label{eq:SCII}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+By Lemmas~\ref{lem:majorant} and~\ref{lem:sup},
+$\alpha\,\mathrm{Def}_m\le\varphi(n)\le\varphi(n_*)
+=(\Delta/\lambda_s)h\,\eu^{-w}\le(\Delta/\lambda_x)h\,\eu^{-w}$.
+It therefore suffices that
+$(\Delta/\lambda_x)\,h\,\eu^{-w}\le\alpha\,m\cdot(\text{payment floor of
+Lemma~\ref{lem:payfloor}})$.
+
+\emph{Deep.}  By Lemma~\ref{lem:scalar}(v), $m>n_g$, so
+$m\,c_e\kappa^2\ge n_g\,c_e\,q^2\Delta^2/e^2$ using
+Lemma~\ref{lem:scalar}(i).  Since $n_g\Delta^2=G\Delta$, the sufficient
+condition becomes
+$(\Delta/\lambda_x)h\eu^{-w}\le\alpha c_eq^2G\Delta/e^2$, which is
+\eqref{eq:SCdeep}.
+
+\emph{Shallow.}  Use $m\ge15$ and $\kappa\ge q\Delta/e$:
+$(\Delta/\lambda_x)h\eu^{-w}\le15\alpha c_eq^2\Delta^2/e^2$ is
+\eqref{eq:SCsh}.
+
+\emph{Case II.}  Use $m\ge15$ and $d\ge q\Delta$:
+$(\Delta/\lambda_x)h\eu^{-w}\le15\alpha K_2fq\Delta$ is \eqref{eq:SCII}.
+
+Finally, if $R_m\le0$ then \eqref{eq:target} is trivial because
+$C_m\ge0$ and $\psi\ge0$.
+\end{proof}
+
+\section{Interval brackets and the $21$-row table
+($\tfrac1{60}\le e\le\tfrac3{10}$)}\label{sec:table}
+
+Fix a closed interval $E=[e_L,e_R]\subseteq[\tfrac1{60},\tfrac3{10}]$ and let
+$(q,\alpha,m)$ range over all points of $\D$ with $e\in E$, $m\ge15$ odd and
+\begin{equation}\label{eq:dcap}
+ d\ \le\ d_{\max}(e):=\min\Bigl(\frac{e^2}{(1-e)^2},\ \delta(e)\Bigr),
+\end{equation}
+which contains the Zone-C constraint set $\{\xi\le1,\ q>\tfrac13\}$.
+Define the \emph{interval constants} (elementary evaluations at the rational
+endpoints; $\alpha(u)=\tfrac{1-u}2$, $\delta(u)=\tfrac{1-3u}6$):
+\[
+ \bar q:=\max\Bigl(\tfrac13,\ \alpha(e_R)-\tfrac{e_R^2}{(1-e_R)^2}\Bigr),
+ \qquad
+ D:=\min\Bigl(\tfrac{e_R^2}{(1-e_R)^2},\ \delta(e_L)\Bigr),
+ \qquad
+ \Lambda:=\frac D{\bar q},
+\]
+\[
+ \lambda_L:=\ln\frac{1+e_L}{1-e_L},\qquad
+ \widehat G_2:=\frac{2e_R}{1-e_R},\qquad
+ Y:=\frac{\sqrt{e_R(1-e_R)/2}}{\bar q},
+\]
+\[
+ \gamma:=\Bigl[\frac2{1-e_L}-\frac{D(e_R+D)}{\alpha(e_R)^2e_L}\Bigr]
+ \,(1-Y^{13})\,\frac{\ln(1+\widehat G_2)}{\widehat G_2},
+ \qquad
+ a:=\lambda_L\,\gamma\,e_L,
+\]
+\[
+ w^-:=2\gamma\max\Bigl((1-e_R)^2\bar q,\ \frac{e_L^2}{3\delta(e_L)}\Bigr),
+ \qquad
+ v^+:=\min\Bigl(\frac{e_R}{2(1-e_R)^2\bar q},\ \frac{3\delta(e_L)}{\lambda_L}
+ \Bigr),\qquad
+ h^+:=\eu^{-1+v^+/2},
+\]
+\[
+ x_U:=\frac{1-e_L}{1+e_L},\qquad
+ y_U:=\frac{\sqrt{e_R(1-e_R)/2}}{\alpha(e_R)+e_R},\qquad
+ c^-:=\frac{2(1-x_U^{14})(1-y_U^{14})}{(1+x_U)(1+y_U)},
+\]
+\[
+ f^-:=\alpha(e_R)-\sqrt{e_R(1-e_R)/2},\qquad
+ K^-:=\frac{\sqrt{2\alpha(e_R)}\,(1-y_U^{14})}{2\,\alpha(e_L)^3\,(1+y_U)}.
+\]
+
+\begin{lemma}[brackets]\label{lem:bracket}
+For every point as above with $e\in E$:
+\begin{enumerate}
+\item[(a)] $q\ge\bar q$;\ \ $d\le d_{\max}(e)\le D$;\ \
+  $\Delta\le d/q\le\Lambda$;\ \ $\lambda_x\ge\max(\lambda_L,2e)$.
+\item[(b)] $G\ge\gamma\,e>0$, and hence
+  $\lambda_xG\ge a$ and $\lambda_xG\ge2\gamma e^2$.
+\item[(c)] $w=\lambda_xG/\Delta\ \ge\ w^-$; if moreover $n_g\ge15$ then also
+  $w\ge15\lambda_L$.
+\item[(d)] $v=\Delta/\lambda_x\le v^+$ and $h\le h^+$.
+\item[(e)] $c_e\ge c^-$,\quad $f\ge f^-$,\quad $K_2\ge K^-$.
+\item[(f)] if $n_g<15$ at some point of $E$, then $\Lambda>\gamma e_L/15$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $q=\alpha(e)-d\ge\alpha(e)-d_{\max}(e)
+=\max\bigl(\tfrac13,\alpha(e)-\tfrac{e^2}{(1-e)^2}\bigr)$ (using
+$\alpha-\delta=\tfrac13$), and both expressions in the maximum are
+nonincreasing in $e$, so $q\ge\bar q$.  $d_{\max}$ is a minimum of an
+increasing and a decreasing function of $e$, whence $d_{\max}(e)\le D$.
+$\Delta\le d/q$ is Lemma~\ref{lem:scalar}(ii); then $\Delta\le D/\bar q$.
+$\lambda_x\ge\ln\frac{1+e}{1-e}\ge\lambda_L$ (monotone) and $\ge2e$ by
+Lemma~\ref{lem:scalar}(iii).
+
+(b) Write $G_2=\ell^2(1-(y/s)^{13})$.  First,
+$\ell^2/e=\frac1\alpha-\frac{d(e+d)}{\alpha^2e}
+\ge\frac2{1-e_L}-\frac{D(e_R+D)}{\alpha(e_R)^2e_L}$,
+bounding each monotone atom at its worst endpoint
+($\tfrac1\alpha=\tfrac2{1-e}\ge\tfrac2{1-e_L}$; $d\le D$; $e+d\le e_R+D$;
+$\alpha\ge\alpha(e_R)$; $e\ge e_L$).  Second,
+$y/s=L/q\le\sqrt{\alpha e}/\bar q\le Y$ since
+$\alpha e=\tfrac{e(1-e)}2$ is increasing on $e\le\tfrac12$; hence
+$1-(y/s)^{13}\ge1-Y^{13}$.  Third, by concavity of $\ln(1+\cdot)$ and
+Lemma~\ref{lem:scalar}(iv) ($G_2\le\widehat G_2$),
+$G=\ln(1+G_2)\ge G_2\,\ln(1+\widehat G_2)/\widehat G_2$.  Multiplying the
+three bounds gives $G\ge\gamma e$.  Then
+$\lambda_xG\ge\lambda_L\cdot\gamma e_L=a$ and
+$\lambda_xG\ge2e\cdot\gamma e$.
+
+(c) $w=\lambda_xG/\Delta\ge2\gamma e^2/\Delta$.  Bound $\Delta$ twice:
+$\Delta\le\frac{e^2}{(1-e)^2q}$ gives
+$w\ge2\gamma(1-e)^2q\ge2\gamma(1-e_R)^2\bar q$;
+$\Delta\le d/q\le\delta(e)\cdot3$ gives
+$w\ge\frac{2\gamma e^2}{3\delta(e)}\ge\frac{2\gamma e_L^2}{3\delta(e_L)}$
+because $e^2/\delta(e)$ is increasing.  Hence $w\ge w^-$.  If $n_g\ge15$,
+$w=\lambda_xn_g\ge15\lambda_x\ge15\lambda_L$.
+
+(d) As in (c), $v=\Delta/\lambda_x
+\le\min\bigl(\frac{e^2}{(1-e)^2q}\cdot\frac1{2e},\
+\frac{3\delta(e_L)}{\lambda_L}\bigr)$, and
+$\frac{e}{2(1-e)^2q}\le\frac{e_R}{2(1-e_R)^2\bar q}$ (increasing numerator
+atoms, decreasing $q$).  Then $h\le\eu^{-1+v/2}\le h^+$ by
+\eqref{eq:hbound}.
+
+(e) $x=\alpha/p\le\alpha/(\alpha+e)=\frac{1-e}{1+e}\le x_U$ and
+$t\mapsto(1-t^{14})/(1+t)$ is decreasing on $(0,1)$, so
+$(1-x^{14})/(1+x)\ge(1-x_U^{14})/(1+x_U)$.  Similarly
+$y\le\sqrt{\alpha e}/(\alpha+e)=:y_{\mathrm{up}}(e)\le y_U$
+($y_{\mathrm{up}}^2=\frac{2e(1-e)}{(1+e)^2}$ is increasing for
+$e<\tfrac13$), giving $(1-y^{14})/(1+y)\ge(1-y_U^{14})/(1+y_U)$; multiply
+for $c_e\ge c^-$.  Next $f=\alpha-L\ge\alpha(e)-\sqrt{\alpha(e)e}$, which is
+decreasing in $e$, so $f\ge f^-$.  Finally
+$\sqrt{2\alpha}\ge\sqrt{2\alpha(e_R)}$, $\alpha^3\le\alpha(e_L)^3$, and the
+$y$-factor as before give $K_2\ge K^-$.
+
+(f) $n_g<15$ means $\Delta>G/15\ge\gamma e/15\ge\gamma e_L/15$; combined
+with $\Delta\le\Lambda$ from (a), such a point can exist only if
+$\Lambda>\gamma e_L/15$.
+\end{proof}
+
+\begin{lemma}[assembled row bounds]\label{lem:rows}
+With the constants above, define
+\[
+ \Psi_{\mathrm{deep}}(E):=
+ \frac{h^+\exp\bigl(-\max(w^-,\,15\lambda_L)\bigr)}
+      {2\gamma\,\alpha(e_R)\,c^-\,\bar q^{\,2}},
+ \qquad
+ \Psi_{\mathrm{II}}(E):=
+ \frac{h^+\,\eu^{-a/\Lambda}}
+      {15\,\lambda_L\,\alpha(e_R)\,K^-\,f^-\,\bar q},
+\]
+and, when $\Lambda>\gamma e_L/15$ (otherwise the shallow case is empty
+on $E$ by Lemma~\ref{lem:bracket}(f)),
+\[
+ \Psi_{\mathrm{sh}}(E):=
+ \frac{h^+\,(e_R/2)\,\eu^{-a/\Delta^*}}
+      {15\,\alpha(e_R)\,c^-\,\bar q^{\,2}\,\Delta^*},
+ \qquad
+ \Delta^*:=\min\Bigl(\Lambda,\ \max\bigl(a,\ \tfrac{\gamma e_L}{15}\bigr)\Bigr).
+\]
+If $\Psi_{\mathrm{deep}}(E)\le1$, $\Psi_{\mathrm{II}}(E)\le1$, and (when
+applicable) $\Psi_{\mathrm{sh}}(E)\le1$, then \eqref{eq:target} holds at
+every point of $\D$ with $e\in E$, \eqref{eq:dcap}, and $m\ge15$ odd.
+\end{lemma}
+
+\begin{proof}
+Assume $R_m>0$ (else trivial) and verify the applicable master inequality of
+Lemma~\ref{lem:master}.
+
+\emph{Deep} \eqref{eq:SCdeep}: by Lemma~\ref{lem:bracket},
+$h\eu^{-w}e^2\le h^+\exp(-\max(w^-,15\lambda_L))\,e^2$ and
+$\lambda_x\alpha c_eq^2G
+\ge(\lambda_xG)\,\alpha(e_R)c^-\bar q^2
+\ge2\gamma e^2\,\alpha(e_R)c^-\bar q^2$; the $e^2$ cancels and the claim is
+$\Psi_{\mathrm{deep}}(E)\le1$.
+
+\emph{Shallow} \eqref{eq:SCsh}: divide \eqref{eq:SCsh} by
+$\lambda_x\Delta$ and use $h\le h^+$,
+$\eu^{-w}=\eu^{-\lambda_xG/\Delta}\le\eu^{-a/\Delta}$
+(Lemma~\ref{lem:bracket}(b)), $e^2/\lambda_x\le e/2\le e_R/2$
+(Lemma~\ref{lem:scalar}(iii)), $\alpha\ge\alpha(e_R)$, $c_e\ge c^-$ and
+$q\ge\bar q$: \eqref{eq:SCsh} follows from
+\[
+ h^+\,\frac{e_R}2\,\frac{\eu^{-a/\Delta}}{\Delta}
+ \ \le\ 15\,\alpha(e_R)\,c^-\,\bar q^{\,2}.
+\]
+The function $\Delta\mapsto\eu^{-a/\Delta}/\Delta$ increases on $(0,a]$ and
+decreases on $[a,\infty)$; the shallow case confines $\Delta$ to
+$(\gamma e_L/15,\ \Lambda]$ (Lemma~\ref{lem:bracket}(a),(f) and
+$\Delta>G/15\ge\gamma e_L/15$), on which its supremum is attained at
+$\Delta^*$.  The claim is $\Psi_{\mathrm{sh}}(E)\le1$.
+
+\emph{Case II} \eqref{eq:SCII}: $h\eu^{-w}\le h^+\eu^{-a/\Delta}\le
+h^+\eu^{-a/\Lambda}$ ($\Delta\le\Lambda$, and $\eu^{-a/\Delta}$ is
+increasing in $\Delta$), while
+$15\lambda_x\alpha K_2fq\ge15\lambda_L\alpha(e_R)K^-f^-\bar q$; the claim is
+$\Psi_{\mathrm{II}}(E)\le1$.
+\end{proof}
+
+\begin{proposition}[the strip $\tfrac1{60}\le e\le\tfrac3{10}$]
+\label{prop:strip}
+For every $(q,\alpha,m)\in\D$ with $m\ge15$ odd,
+$e\in[\tfrac1{60},\tfrac3{10}]$ and $d\le d_{\max}(e)$ (in particular for
+all of Zone C there), \eqref{eq:target} holds.
+\end{proposition}
+
+\begin{proof}
+Apply Lemma~\ref{lem:rows} to the $21$ intervals of
+Table~\ref{tab:rows}, whose union is $[\tfrac1{60},\tfrac3{10}]$.  Each
+table entry is an upper bound (rounded up in the last digit) for the
+corresponding $\Psi(E)$, an explicit elementary expression in the rational
+endpoints; all entries are $<1$.  The entries are recomputed with $50$-digit
+arithmetic in Part~4 of the validation script, and every bracket of
+Lemma~\ref{lem:bracket} is checked on dense $(e,\kappa,m)$ grids in Part~3.
+In the first four rows $\Lambda\le\gamma e_L/15$, so the shallow case is
+empty there by Lemma~\ref{lem:bracket}(f).
+\end{proof}
+
+\begin{table}[h]
+\centering\small
+\caption{Row bounds for Lemma~\ref{lem:rows}.  ``--'' means
+$\Lambda\le\gamma e_L/15$ (shallow case empty).  $\gamma$ is rounded down;
+$\Psi$ entries are rounded up.}\label{tab:rows}
+\begin{tabular}{llcccc}
+\toprule
+$e_L$ & $e_R$ & $\gamma\ge$ & $\Psi_{\mathrm{deep}}\le$ &
+$\Psi_{\mathrm{sh}}\le$ & $\Psi_{\mathrm{II}}\le$\\
+\midrule
+$1/60$ & $1/48$ & $1.9894$ & $0.391$ & -- & $0.698$\\
+$1/48$ & $1/40$ & $1.9885$ & $0.348$ & -- & $0.537$\\
+$1/40$ & $1/32$ & $1.9822$ & $0.333$ & -- & $0.545$\\
+$1/32$ & $1/25$ & $1.9733$ & $0.322$ & -- & $0.521$\\
+$1/25$ & $1/20$ & $1.9654$ & $0.315$ & $0.643$ & $0.441$\\
+$1/20$ & $1/16$ & $1.9508$ & $0.331$ & $0.497$ & $0.416$\\
+$1/16$ & $1/13$ & $1.9326$ & $0.248$ & $0.390$ & $0.388$\\
+$1/13$ & $1/10$ & $1.8759$ & $0.177$ & $0.368$ & $0.477$\\
+$1/10$ & $1/8$  & $1.8173$ & $0.100$ & $0.308$ & $0.476$\\
+$1/8$  & $3/20$ & $1.7382$ & $0.057$ & $0.284$ & $0.506$\\
+$3/20$ & $17/100$ & $1.6632$ & $0.032$ & $0.268$ & $0.520$\\
+$17/100$ & $9/50$ & $1.6382$ & $0.019$ & $0.241$ & $0.472$\\
+$9/50$ & $19/100$ & $1.5462$ & $0.017$ & $0.263$ & $0.541$\\
+$19/100$ & $1/5$ & $1.4072$ & $0.015$ & $0.302$ & $0.638$\\
+$1/5$ & $21/100$ & $1.3018$ & $0.013$ & $0.324$ & $0.690$\\
+$21/100$ & $11/50$ & $1.2826$ & $0.009$ & $0.305$ & $0.630$\\
+$11/50$ & $6/25$ & $1.1403$ & $0.008$ & $0.338$ & $0.703$\\
+$6/25$ & $13/50$ & $1.0113$ & $0.005$ & $0.335$ & $0.639$\\
+$13/50$ & $7/25$ & $0.8181$ & $0.004$ & $0.368$ & $0.640$\\
+$7/25$ & $29/100$ & $0.7254$ & $0.002$ & $0.329$ & $0.436$\\
+$29/100$ & $3/10$ & $0.5823$ & $0.002$ & $0.379$ & $0.487$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The widened Tur\'an corner ($\tfrac3{10}\le e<\tfrac13$)}
+\label{sec:wide}
+
+Here $\delta=\tfrac{1-3e}6\in(0,\tfrac1{60}]$, $\alpha=\tfrac13+\delta$,
+$e=\tfrac13-2\delta$, and $d\in(0,\delta)$ is unrestricted (no use of
+$\xi\le1$ is made).  All constants below are for this range; each is checked
+on dense $(\delta,d,m)$ grids and, where rational, exactly, in Part~5 of the
+validation script.
+
+\begin{lemma}[corner geometry]\label{lem:corner-geo}
+For $0<\delta\le\tfrac1{60}$ and $0<d<\delta$:
+\begin{enumerate}
+\item[(C1)] $\tfrac23\delta\le S\le(1+3\delta)\delta\le1.05\,\delta$, where
+ $S=q^2-L^2=3\alpha\delta-(2\alpha-e)d+2d^2$ by \eqref{eq:id2}.
+ \emph{Proof:} $S/\delta=1-\tfrac t3+\delta(3-4t+2t^2)$ with
+ $t=d/\delta\in(0,1)$, and $1\le3-4t+2t^2\le3$ on $[0,1]$.
+\item[(C2)] $e<L\le\sqrt{\alpha e}\le\tfrac13-\tfrac\delta2$.
+ \emph{Proof:} $L^2-e^2$ in \eqref{eq:id2} is decreasing in $d$; at
+ $d=\delta$ it equals $\tfrac23\delta-5\delta^2>0$.  And
+ $\alpha e=\tfrac19-\tfrac\delta3-2\delta^2
+ \le(\tfrac13-\tfrac\delta2)^2$.
+\item[(C3)] $\tfrac{19}{30}\le\tfrac23-2\delta\le q+L\le\tfrac23
+ +\tfrac\delta2\le0.675$;\quad
+ $\alpha+L\le0.35+0.3415651\le0.6915651$
+ (using $\sqrt{\alpha e}\le\sqrt{0.35/3}\le0.3415651$);\quad
+ $x\le\tfrac\alpha{1-\alpha}\le\tfrac7{13}$;\quad $y\le\tfrac12$
+ by \eqref{eq:yhalf}.
+\item[(C4)] $f=\dfrac{3\alpha\delta+d(e+d)}{\alpha+L}$
+ (identity, from $\alpha^2-L^2=3\alpha\delta+d(e+d)$), and
+ \[
+  1.4459\,\delta\le\frac{3\alpha\delta}{0.6915651}\le f
+  \le\frac{(1.05+\tfrac13)\delta}{2/3-\delta}\le
+  \frac{1.383334\,\delta}{0.65}\le2.1283\,\delta,
+ \]
+ whence $1-\ell=f/\alpha\le3f\le6.3849\,\delta$ and
+ $\ell^2\ge1-12.7698\,\delta\ge0.78717$.
+\item[(C5)] $t_0:=1-\tfrac ys=\tfrac{q-L}q=\tfrac S{(q+L)q}$ satisfies
+ \[
+  2.8218\,\delta\le\frac{(2/3)\delta}{0.675\cdot0.35}\le t_0\le
+  \frac{1.05\,\delta}{(19/30)(1/3)}\le4.9737\,\delta .
+ \]
+\item[(C6)] $G_2\ge18.09\,\delta$ and $G_2\le13\,t_0\le64.6581\,\delta
+ \le1.0777$; consequently $\ln(1+G_2)\ge12.27\,\delta$.
+ \emph{Proof:} $t\mapsto1-(1-t)^{13}$ is concave, so on
+ $[0,T]$ with $T:=4.9737/60$ it dominates its chord:
+ $1-(1-t_0)^{13}\ge t_0\,(1-(1-T)^{13})/T\ge8.146\,t_0$.  Hence
+ $G_2=\ell^2(1-(1-t_0)^{13})\ge0.78717\cdot8.146\cdot2.8218\,\delta
+ \ge18.09\,\delta$.  The upper bound is Bernoulli
+ ($1-(1-t_0)^{13}\le13t_0$, $\ell\le1$).  Concavity of $\ln(1+\cdot)$ on
+ $[0,1.0777]$ gives
+ $\ln(1+G_2)\ge G_2\,\tfrac{\ln2.0777}{1.0777}\ge0.6785\,G_2
+ \ge12.27\,\delta$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}[wide Tur\'an corner]\label{prop:wide}
+For every $(q,\alpha,m)\in\D$ with $m\ge15$ odd and
+$0<\delta\le\tfrac1{60}$ (i.e.\ $\tfrac3{10}\le e<\tfrac13$),
+\eqref{eq:target} holds.
+\end{proposition}
+
+\begin{proof}
+Assume $R_m>0$ (else trivial).
+
+\emph{Step 1 (forcing).}  Lemma~\emph{threegeo}(ii) with
+$\ln(\alpha/q)\le d/q$ and $q>\tfrac13$ gives, by (C6),
+\begin{equation}\label{eq:wide-forcing}
+ (m-2)\,d\ >\ q\,\ln(1+G_2)\ \ge\ \tfrac13\cdot12.27\,\delta\ =\ 4.09\,\delta .
+\end{equation}
+
+\emph{Step 2 (defect).}  With $n=m-2$, the mean value theorem on
+$[s,x]$ and $[y,s]$ in Lemma~\ref{lem:majorant}'s identity, together with
+$y=\ell x$, $x-s=d/p$, $s-y=(q-L)/p$ and $q-L=S/(q+L)$, gives
+\[
+ \alpha\,\mathrm{Def}_m\ \le\ \frac{n\,x^{n-1}}p\,N,
+ \qquad
+ N:=d-\ell^{\,m-1}\frac S{q+L}.
+\]
+Insert $S=3\alpha\delta-(2\alpha-e)d+2d^2$, drop the term
+$-2d^2\ell^{m-1}/(q+L)\le0$, use $\ell^{m-1}\le1$ on the positive $d$-term
+and Bernoulli $\ell^{m-1}\ge1-(m-1)(1-\ell)$ on the $3\alpha\delta$-term:
+\[
+ N\le d\Bigl(1+\frac{2\alpha-e}{q+L}\Bigr)-\frac{3\alpha\delta}{q+L}
+ +\frac{3\alpha\delta\,(m-1)(1-\ell)}{q+L}.
+\]
+Since $d\le\delta$ and $q-\alpha=-d$, the first two terms combine to
+\[
+ \frac{d(q+L+2\alpha-e)-3\alpha\delta}{q+L}
+ \le\delta\,\frac{q+L-\alpha-e}{q+L}
+ =\delta\,\frac{L-e-d}{q+L}
+ \le\frac{\delta\,(L-e)}{q+L}
+ \le\frac{\delta}{2e}\cdot\frac{\delta}{19/30}
+ \le2.6316\,\delta^2,
+\]
+using $L-e=(L^2-e^2)/(L+e)\le\delta/(2e)\le\delta/0.6$ from \eqref{eq:id2}
+(note $L^2-e^2\le\delta$ because $2\delta d\le\tfrac d3$).  For the third
+term, (C4) and (C3) give
+$3\alpha\cdot6.3849/(19/30)\le1.05\cdot6.3849\cdot\tfrac{30}{19}
+\le10.5855$, so
+\[
+ N\ \le\ 2.6316\,\delta^2+10.5855\,(m-1)\,\delta^2
+ \ \le\ \Bigl(\tfrac{2.6316}{15}+10.5855\Bigr)m\,\delta^2
+ \ \le\ 10.761\,m\,\delta^2 \qquad(m\ge15).
+\]
+With $\alpha p\ge\tfrac13\cdot0.65=\tfrac{13}{60}$,
+\begin{equation}\label{eq:wide-defect}
+ \mathrm{Def}_m\ \le\ \tfrac{60}{13}\cdot10.761\,m(m-2)\,\delta^2x^{\,m-3}
+ \ \le\ 49.67\,m(m-2)\,\delta^2x^{\,m-3}.
+\end{equation}
+
+\emph{Step 3 (payments).}  From Lemma~\ref{lem:payfloor} with
+$\kappa=d/e\ge3d$, $x\le\tfrac7{13}$, $y\le\tfrac12$ and $e^2\le\tfrac19$:
+\begin{align}
+ 2\rho_{\mathrm{lo}}\xi\le1:\quad
+ &\frac{C_m\psi}{\alpha^3p^{m-2}}\ \ge\
+ \frac{2\bigl(1-(\tfrac7{13})^{14}\bigr)(1-2^{-14})\cdot9\cdot13}
+      {20\cdot\tfrac32}\;d^2m\ \ge\ 7.798\,d^2m,
+ \label{eq:wide-payI}\\
+ 2\rho_{\mathrm{lo}}\xi>1:\quad
+ &\frac{C_m\psi}{\alpha^3p^{m-2}}\ \ge\
+ \frac{0.8164\,(1-2^{-14})\cdot1.4459}
+      {0.042875\cdot\tfrac32\cdot2}\;\delta\,d\,m\ \ge\ 9.176\,\delta\,d\,m,
+ \label{eq:wide-payII}
+\end{align}
+using in the second line $\sqrt{2\alpha}\ge\sqrt{2/3}\ge0.8164$,
+$f\ge1.4459\,\delta$ from (C4), $\alpha^3\le0.35^3=0.042875$, and
+$\tfrac{4\xi+1}{4\xi+2}\ge\tfrac12$.
+
+\emph{Step 4 (comparison).}  For $j\in\{2,3\}$ the sequence
+$(m-2)^jx^{m-3}$ is decreasing in $m\ge15$, because
+$x\,\bigl(\tfrac{14}{13}\bigr)^3\le\tfrac7{13}\bigl(\tfrac{14}{13}\bigr)^3
+<1$.  In the branch \eqref{eq:wide-payI}, insert
+\eqref{eq:wide-forcing} as $d>4.09\,\delta/(m-2)$; comparing with
+\eqref{eq:wide-defect} it suffices that
+\[
+ 49.67\,(m-2)^3x^{\,m-3}\ \le\ 49.67\cdot13^3\cdot
+ \bigl(\tfrac7{13}\bigr)^{12}\ \le\ 64.84\ \le\ 130.44\ \le\
+ 7.798\cdot4.09^2 .
+\]
+In the branch \eqref{eq:wide-payII} it suffices that
+\[
+ 49.67\,(m-2)^2x^{\,m-3}\ \le\ 49.67\cdot169\cdot
+ \bigl(\tfrac7{13}\bigr)^{12}\ \le\ 4.99\ \le\ 37.52\ \le\
+ 9.176\cdot4.09 .
+\]
+Every link in both chains is an exact rational inequality, with the
+decimal buffers rounded in the safe direction:
+$49.67\cdot13^3\cdot(7/13)^{12}=64.8306\ldots\le64.84$ and
+$49.67\cdot169\cdot(7/13)^{12}=4.9869\ldots\le4.99$ (upper bounds of the
+left sides, rounded up), while $130.44\le7.798\cdot4.09^2=130.4457\ldots$
+and $37.52\le9.176\cdot4.09=37.5298\ldots$ (lower bounds of the right
+sides, rounded down).  Part~5 of the validation script checks each link
+separately in \texttt{Fraction} arithmetic.
+\end{proof}
+
+\section{Assembly and remarks}\label{sec:assembly}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+If $e\le\tfrac3{10}$, the Zone-C constraints $\xi\le1$ and $q>\tfrac13$
+imply $d\le d_{\max}(e)$, so Proposition~\ref{prop:strip} applies.  If
+$e\ge\tfrac3{10}$, i.e.\ $\delta\le\tfrac1{60}$,
+Proposition~\ref{prop:wide} applies (it needs neither $\xi\le1$ nor
+$e<\tfrac13-\tfrac1{1000}$).  The dual-certificate clause is inherited from
+Lemma~\emph{threegeo}(iii), which is the only payment bound used.
+\end{proof}
+
+\begin{remark}[what this deletes from the paper]
+Theorem~\ref{thm:main} replaces, in the proof of Lemma~\emph{zoneC-mod}:
+the exact interval certificate \texttt{zoneC\_certifier.py} ($3001$ boxes,
+depth $28$, explicit cycle lengths up to $m=1716$), the strict-gate bound
+$M_+$, the per-box $m$-loop with its geometric tail argument, and the
+$\kappa\to0$ bottom-out.  Lemma~\emph{turan} ($\delta<\tfrac1{2000}$)
+becomes the trivial sub-case of Proposition~\ref{prop:wide}.  The only
+remaining checks are: the $21\times3$ evaluations of Table~\ref{tab:rows}
+(explicit elementary expressions at rational endpoints) and the
+finitely many decimal constants of Section~\ref{sec:wide} — all
+hand-checkable, none requiring subdivision, interval arithmetic, or a scan
+over $m$.  After this change, the only computer certificate left in
+Region~II is Zone B's $23$ boxes.
+\end{remark}
+
+\begin{remark}[where the slack lives]
+The tightest entries are $\Psi_{\mathrm{deep}}=0.391$ on
+$[\tfrac1{60},\tfrac1{48}]$ (the ridge at the junction with the small-$e$
+lemma, where the certificate itself was tightest: the true pointwise ratio
+there is $\approx0.136$) and $\Psi_{\mathrm{II}}=0.703$ on
+$[\tfrac{11}{50},\tfrac6{25}]$; the wide-corner branch~I comparison closes
+with factor $130.44/64.84\approx2.0$.  The three structural losses
+accepted for the sake of $m$-freeness are: the unconstrained supremum
+$\varphi(n_*)$ (worth $\le\eu$ when $n_*<13$), the crude
+$\tfrac{1+4\xi}{1+2\xi}\ge1$, and $h\le\eu^{-1+v/2}$; none is close to
+critical.
+\end{remark}
+
+\begin{remark}[hypotheses actually used]
+The proof uses $m\ge15$ only through $n\ge13$ (the exponent $13$ in $G_2$),
+$1-y^{m-1}\ge1-y^{14}$, and the constant $15$ in
+Lemma~\ref{lem:master}; the oddness of $m$ is never used.  The domain
+$\alpha\le r(q)$ is used only through $L^2>0$, $\ell<1$, $y<s$
+(Lemma~\emph{frontier-gap}).
+\end{remark}
+
+\end{document}

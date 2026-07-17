@@ -1,0 +1,924 @@
+% strip_final.tex -- UNIFIED analytic closure of the residual diagonal strip.
+% Merges stage_A1_leftsurplus.tex (case (i) mechanism), stage_A2_reflection.tex
+% (case (ii) mechanism), stage_B1_reductions.tex (domain reductions) and
+% stage_B2_tail.tex (criterion tail + finite pairs) into one self-contained
+% section.  Supersedes: Theorem r1, Definition cert + Proposition M61
+% (StripCert(61)), section sec:analytic-strip, and Appendix app:constants of
+% paper_new.tex; prop:residual-all becomes a corollary of Theorem 1 below.
+% Validation: validate_strip_final.py (same directory; must exit 0).
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,enumitem,booktabs}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{fact}[theorem]{Fact}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\wtP}{\widetilde P}
+\newcommand{\lbar}{\bar\ell}
+\newcommand{\Lhat}{\widehat\Lambda}
+\title[The residual strip, unified]{The residual diagonal strip is nonnegative:\\ a unified analytic proof}
+\begin{document}
+\maketitle
+
+\section{Setting and main result}\label{sec:setting}
+
+A \emph{residual pair} is a pair of integers $(m,r)$ with $r\ge1$ and $n:=m-2r$ odd with $n>2r$ (so $m\ge5$ is odd).  Throughout, $q\in[0,1/3]$, $p=1-q$, and
+\[
+        \theta=\frac rm\in\bigl(0,\tfrac14\bigr),\quad
+        \nu=\frac nm=1-2\theta,\quad
+        a=\frac12-q,\quad
+        b=\nu-q,\quad
+        L=b-a=\nu-\frac12>0,\quad
+        \varepsilon=\frac{1-2q}{4}=\frac a2 .
+\]
+The \emph{strip} of the pair is $\{(q,\ell):q\in[0,\tfrac13],\ \ell\in(0,\tfrac12],\ \ell<q+\tfrac rm\}$.  For $\ell>0$ put $\kappa(s)=s^{r-1}(\ell+s)^{-m}$ and
+\[
+        I=I_{m,r}(q,\ell)
+        =\int_0^\infty \kappa(s)\,\rho_{n,m}(q+s)\,ds,
+        \qquad
+        \rho_{n,m}(u)=\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+\]
+By the one-dimensional kernel form (\texttt{paper\_new.tex}, Prop.~\emph{kernel}), $\wtP_{m,r}(q,\ell)=C_{m,r}\ell^{\,n+r}I$ with $C_{m,r}>0$, so $I\ge0$ is exactly diagonal positivity on the strip.  We write $\rho=\rho_{n,m}$.  Define the \emph{handoff function}
+\begin{equation}\label{eq:Lambda}
+        \Lambda(q)\;=\;\frac{m}{\dfrac{r-1}{b}+\dfrac{n-1}{\nu}}-b
+        \qquad(\text{well defined: }n\ge3\text{ gives }\tfrac{n-1}\nu>0,\ \tfrac{r-1}b\ge0).
+\end{equation}
+
+\begin{theorem}[Unified strip theorem]\label{thm:main}
+For every residual pair $(m,r)$ with $r\ge1$, every $q\in[0,1/3]$, and every $\ell\in(0,\tfrac12]$ with $\ell<q+\tfrac rm$,
+\[
+        I_{m,r}(q,\ell)\;\ge\;0,
+        \qquad\text{hence}\qquad
+        \wtP_{m,r}(q,\ell)\;\ge\;0 .
+\]
+\end{theorem}
+
+The proof occupies \S\ref{sec:rho}--\S\ref{sec:assembly}: a left-surplus criterion (\S\ref{sec:leftsurplus}), an upper-end reflection lemma (\S\ref{sec:reflection}), a closed-form cap on $\Lambda$ (\S\ref{sec:cap}), and an analytic verification of the criterion at the single worst point $q=\tfrac13$ for every pair (\S\ref{sec:prod}--\S\ref{sec:finite}), assembled in \S\ref{sec:assembly}.
+
+\begin{corollary}[Supersession]\label{cor:supersede}
+In \texttt{paper\_new.tex}, keep Theorem~\textup{pointwise} (cases $\ell\le0$ or $2r\ge n$, valid for $q\le\tfrac12$) and Theorem~\textup{ibp} (case $\ell\ge q+r/m$, valid for $q\le\tfrac12$).  Together with these two, Theorem~\ref{thm:main} covers every diagonal case $\wtP_{m,r}(q,\ell)\ge0$ with $q\in[0,1/3]$, $\ell\in[-\tfrac12,\tfrac12]$, and therefore:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item \emph{Proposition~M61 / $\operatorname{StripCert}(61)$ is superseded}: its scope ($r\ge2$, odd $m\le61$, $(q,\ell)\in[0,\tfrac13]\times[0,\tfrac12]$, $0<\ell<q+r/m$) is strictly contained in Theorem~\ref{thm:main}; the exact-rational interval checker leaves the proof chain.
+\item \emph{Theorem~r1 is superseded}: its new content was the range $0<\ell<q+\tfrac1m$ at $r=1$, which is the $r=1$ instance of Theorem~\ref{thm:main}; its other cases were already delegated to Theorems pointwise/ibp.
+\item \emph{\S sec:analytic-strip is superseded} (Lemmas left-surplus-tail, upper-threshold, upper-reflection-tail, and the $m\ge63$ case of prop:residual-all): Theorem~\ref{thm:main} needs neither $m\ge63$, nor $n\ge33$, nor $\theta\ge\tfrac16$, nor $\ell>\tfrac25$.
+\item \emph{Proposition residual-all becomes a one-line corollary} of Theorem~\ref{thm:main} (its hypotheses $r\ge2$, $n>2r$, $0<\ell<q+r/m$, $q\le\tfrac13$ define a subset of our strip), and the high-density theorem's case list shrinks to: pointwise, ibp, Theorem~\ref{thm:main}.
+\item \emph{Appendix app:constants is superseded}: its only clients are the lemmas of \S sec:analytic-strip; the four constant lemmas this note does use (Lemmas~\ref{lem:tools}, \ref{lem:B0linear}, \ref{lem:cubic}, \ref{lem:P72}) are restated here with complete proofs, so this note is self-contained.
+\end{enumerate}
+What Theorem~\ref{thm:main} does \emph{not} cover: $q>\tfrac13$ (Region II), $\ell\le0$ and $2r\ge n$ (Theorem pointwise), $\ell\ge q+r/m$ (Theorem ibp) --- exactly the intended division of labour.
+\end{corollary}
+
+\begin{proof}[Proof of the coverage claim]
+Fix $q\le\tfrac13$ and a diagonal pair $(r,\ell)$, $\ell\in[-\tfrac12,\tfrac12]$.  If $\ell\le0$ or $2r\ge n$, Theorem pointwise applies.  Otherwise $\ell>0$ and $n>2r$; if $n$ were even, $m$ would be even --- excluded, so $(m,r)$ is a residual pair.  If $\ell\ge q+r/m$, Theorem ibp applies; else $0<\ell<q+r/m$ and $\ell\le\tfrac12$, a strip point, and Theorem~\ref{thm:main} applies.
+\end{proof}
+
+\section{The one-sided kernel bounds}\label{sec:rho}
+
+All four facts below have one-line proofs from the identity $\nu\rho(u)=u^n+(1-u)^n-\nu u^{n-1}$ ($n$ odd).
+
+\begin{fact}[$\rho$-lemma]\label{fact:rho}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\rho(u)\ge0$ for all $u\ge0$ with $u\notin(\tfrac12,\nu)$.
+\item $-\rho(u)\le\dfrac{\nu-u}{\nu}\,u^{n-1}$ for $\tfrac12<u<\nu$.
+\item $\rho(u)\ge\dfrac mn(1-u)^n-u^{n-1}$ for $u\ge0$.
+\item $\rho(u)\ge\dfrac{u-\nu}{\nu}\,u^{n-1}$ for $\nu<u\le1$.
+\end{enumerate}
+\end{fact}
+
+\begin{proof}
+(i) For $0\le u\le\tfrac12$: since $1-u\ge u\ge0$ and $n-1$ is even, $(1-u)^{n-1}\ge u^{n-1}$, so $(1-u)^n\ge(1-u)u^{n-1}$ and
+$\nu\rho(u)\ge u^n+(1-u)u^{n-1}-\nu u^{n-1}=(1-\nu)u^{n-1}\ge0$.
+For $\nu\le u\le1$: $\nu\rho(u)=(u-\nu)u^{n-1}+(1-u)^n\ge0$, both terms nonnegative ($n$ odd).
+For $u>1$: $(1-u)^n=-(u-1)^n\ge-(u-1)u^{n-1}$ since $0\le u-1<u$, so $\nu\rho(u)\ge(u-\nu)u^{n-1}-(u-1)u^{n-1}=(1-\nu)u^{n-1}\ge0$.
+
+(ii) and (iv): from $\nu\rho(u)=(u-\nu)u^{n-1}+(1-u)^n$ and $(1-u)^n\ge0$ --- valid \emph{exactly when} $u\le1$, since $n$ is odd --- we get $\nu\rho(u)\ge(u-\nu)u^{n-1}$ for all $u\le1$; rearranged, this is (ii) on $(\tfrac12,\nu)$ and (iv) on $(\nu,1]$.  The restriction $u\le1$ is where the side condition of \S\ref{sec:reflection} enters.
+
+(iii) Drop $\tfrac mn u^n\ge0$ (valid as $u\ge0$) from $\rho(u)=\tfrac mn u^n+\tfrac mn(1-u)^n-u^{n-1}$.
+
+Negative $u$ is never used ($u=q+s\ge0$).
+\end{proof}
+
+\section{The left-surplus criterion}\label{sec:leftsurplus}
+
+This section proves the case-(i) mechanism.  With
+\begin{equation}\label{eq:cn}
+        c_n=c_n(m,r,q)=1-\nu\,\frac{(q+\varepsilon)^{n-1}}{(p-\varepsilon)^{n}},
+\end{equation}
+define the \emph{criterion ratio}
+\begin{equation}\label{eq:R}
+        R(m,r,q,\ell)
+        \;=\;
+        c_n\cdot\frac{b}{r L^{2}}\cdot
+        \bigl(2(p-\varepsilon)\bigr)^{n}
+        \left(\frac{\varepsilon}{b}\right)^{r}
+        \left(\frac{\ell+a}{\ell+\varepsilon}\right)^{m}.
+\end{equation}
+
+\begin{theorem}[Left-surplus criterion]\label{thm:leftsurplus}
+Let $(m,r)$ be a residual pair, $q\in[0,1/3]$, and $0<\ell<q+\tfrac rm$.  If $R(m,r,q,\ell)\ge1$, then $I_{m,r}(q,\ell)\ge0$.
+\end{theorem}
+
+No upper bound on $\ell$, no lower bound on $n$ or $r$, and no reference to $\Lambda$ enters the hypotheses: the chain below uses only $q\in[0,\tfrac13]$ and $0<\ell<q+r/m$.  (The stage-A1 note stated this theorem with the case label $\ell\le\min(\max(\Lambda(q),q),\tfrac12)$ attached; as observed in stage B1, that label is not a hypothesis of the mechanism, and we drop it here.)
+
+\begin{lemma}[Deficit monotonicity, all $r\ge1$]\label{lem:defmon}
+Let $(m,r)$ be a residual pair, $q\in[0,1/3]$, and $0<\ell<q+r/m$.  Then for every $s\ge a$,
+\begin{equation}\label{eq:defmon}
+        (n-1)(\ell-q)\;\le\;(2r+1)(q+s),
+\end{equation}
+and consequently $s\mapsto(q+s)^{n-1}/(\ell+s)^{m}$ is nonincreasing on $[a,\infty)$.
+\end{lemma}
+
+\begin{proof}
+First \eqref{eq:defmon}.  If $\ell\le q$ the left side is nonpositive and there is nothing to prove, so assume $\ell>q$.  From $\ell<q+r/m$,
+$(n-1)(\ell-q)<(n-1)r/m$, while $s\ge a$ gives $q+s\ge q+a=\tfrac12$, so $(2r+1)(q+s)\ge\tfrac{2r+1}{2}$.  Hence \eqref{eq:defmon} follows from
+$2r(n-1)\le(2r+1)m$, an identity-level triviality: with $m=n+2r$,
+\[
+        (2r+1)m-2r(n-1)=(2r+1)(n+2r)-2r(n-1)=n+4r^{2}+4r\;>\;0
+\]
+for all integers $r\ge1$, $n\ge1$.  (Exact check: \texttt{validate\_strip\_final.py}, step~A1-1.)
+
+For the monotonicity: the logarithmic derivative of $(q+s)^{n-1}(\ell+s)^{-m}$ is $\frac{n-1}{q+s}-\frac{m}{\ell+s}$, which is $\le0$ iff $(n-1)(\ell+s)\le m(q+s)$, i.e.\ iff $(n-1)(\ell-q)\le(m-n+1)(q+s)=(2r+1)(q+s)$, which is \eqref{eq:defmon}.
+\end{proof}
+
+By Fact~\ref{fact:rho}(i), the integrand of $I$ can be negative only for $q+s\in(\tfrac12,\nu)$, i.e.\ $s\in(a,b)$.  Define the \emph{deficit} and the \emph{surplus} (collected on the band $(0,\varepsilon)$, which is disjoint from $(a,b)$ since $\varepsilon=a/2<a$; $a\ge\tfrac16$ for $q\le\tfrac13$):
+\[
+        D=\int_a^b \kappa(s)\bigl(-\rho(q+s)\bigr)_+\,ds\ \ge0,
+        \qquad
+        \Sigma=\int_0^{\varepsilon}\kappa(s)\,\rho(q+s)\,ds .
+\]
+
+\begin{lemma}[Deficit upper bound]\label{lem:deficit}
+Let $(m,r)$ be a residual pair, $q\in[0,1/3]$, $0<\ell<q+r/m$.  Then
+\begin{equation}\label{eq:Dbar}
+        D\;\le\;\overline D
+        \;:=\;
+        b^{\,r-1}\,\frac{(1/2)^{n-1}}{(\ell+a)^{m}}\,\frac{L^{2}}{2\nu}
+        \;>\;0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+On $(a,b)$, Fact~\ref{fact:rho}(ii) at $u=q+s\in(\tfrac12,\nu)$ gives $(-\rho(q+s))_+\le(q+s)^{n-1}\,\frac{\nu-(q+s)}{\nu}$, the right side nonnegative on the whole window.  Hence
+\[
+        D\;\le\;\int_a^b s^{r-1}\,\frac{(q+s)^{n-1}}{(\ell+s)^{m}}\,
+        \frac{\nu-q-s}{\nu}\,ds .
+\]
+Bound the three factors separately: $s^{r-1}\le b^{\,r-1}$ (for $r=1$ both sides are $1$); by Lemma~\ref{lem:defmon} the middle factor is nonincreasing on $[a,b]$, hence at most $(q+a)^{n-1}/(\ell+a)^{m}=(1/2)^{n-1}/(\ell+a)^{m}$; and the remaining integral is exact:
+$\int_a^b\frac{\nu-q-s}{\nu}\,ds=\frac1\nu\int_0^{L}t\,dt=\frac{L^{2}}{2\nu}$ (substitute $t=b-s$, $b-a=L$).  Multiplying gives \eqref{eq:Dbar}; positivity is clear ($b\ge\nu-\tfrac13>\tfrac16$, $L>0$).
+\end{proof}
+
+\begin{lemma}[Surplus lower bound]\label{lem:surplus}
+Let $(m,r)$ be a residual pair, $q\in[0,1/3]$, $\ell>0$.  With $c_n$ as in \eqref{eq:cn},
+\begin{equation}\label{eq:Sbar}
+        \Sigma\;\ge\;\underline\Sigma
+        \;:=\;
+        \frac mn\,(p-\varepsilon)^{n}\,c_n\,
+        \frac{\varepsilon^{r}}{r\,(\ell+\varepsilon)^{m}} .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For $s\in(0,\varepsilon)$ we have $u=q+s\in[q,q+\varepsilon]\subset[0,\tfrac12)$, so Fact~\ref{fact:rho}(iii) applies: $\rho(q+s)\ge\frac mn(p-s)^{n}-(q+s)^{n-1}$.  On $(0,\varepsilon)$, $s\mapsto(p-s)^n$ is decreasing (as $p-s\ge p-\varepsilon>0$) and $s\mapsto(q+s)^{n-1}$ is increasing, so
+\[
+        \rho(q+s)\;\ge\;\frac mn(p-\varepsilon)^{n}-(q+\varepsilon)^{n-1}
+        =\frac mn(p-\varepsilon)^{n}
+        \Bigl(1-\nu\,\frac{(q+\varepsilon)^{n-1}}{(p-\varepsilon)^{n}}\Bigr)
+        =\frac mn(p-\varepsilon)^{n}c_n,
+\]
+using $\tfrac nm=\nu$.  Also $(\ell+s)^{-m}\ge(\ell+\varepsilon)^{-m}$ on $(0,\varepsilon)$, and $\int_0^{\varepsilon}s^{r-1}ds=\varepsilon^{r}/r$ exactly.  Since $c_n>0$ (Lemma~\ref{lem:cn} below), the three bounds multiply to \eqref{eq:Sbar}.
+\end{proof}
+
+\begin{lemma}[Lower bounds for $c_n$]\label{lem:cn}
+For every residual pair and every $q\in[0,1/3]$,
+\[
+        c_n\;\ge\;1-\frac{12}{7}\Bigl(\frac57\Bigr)^{n-1}.
+\]
+In particular $c_n\ge\frac{43}{343}>0$ for all $n\ge3$, and $c_n\ge1-\frac{7500}{16807}=\frac{9307}{16807}>\frac12$ for all $n\ge5$.
+\end{lemma}
+
+\begin{proof}
+Write $t=q+\varepsilon=\frac{1+2q}{4}$ and $w=p-\varepsilon=\frac{3-2q}{4}$, so $c_n=1-\nu\,t^{n-1}/w^{n}$.  On $q\in[0,1/3]$, $t$ is increasing and $w$ is decreasing in $q$ with $w\ge\tfrac7{12}>0$, so $t^{n-1}/w^{n}$ is maximal at $q=\tfrac13$, where $t=\tfrac5{12}$, $w=\tfrac7{12}$, and
+$t^{n-1}/w^{n}\le(5/12)^{n-1}/(7/12)^{n}=\frac{12}{7}(\frac57)^{n-1}$.
+Together with $\nu\le1$ this gives the display.  The two evaluations are exact rational comparisons:
+$n=3$: $\frac{12}{7}\cdot\frac{25}{49}=\frac{300}{343}<1$, so $c_3\ge\frac{43}{343}$;
+$n=5$: $\frac{12}{7}\cdot\frac{625}{2401}=\frac{7500}{16807}\le\frac12\iff15000\le16807$.
+(Both checked exactly; step~A1-1.)  For the single pair with $n=3$, namely $(5,1)$, the exact value at $q=\tfrac13$ is $c_3=\tfrac{163}{343}\approx0.475<\tfrac12$, so $c_n$ must be kept as an explicit factor in \eqref{eq:R}.
+\end{proof}
+
+\begin{proposition}[Ratio identity]\label{prop:ratio}
+With $\underline\Sigma$, $\overline D$, $R$ as in \eqref{eq:Sbar}, \eqref{eq:Dbar}, \eqref{eq:R}: $\underline\Sigma/\overline D=R(m,r,q,\ell)$.
+\end{proposition}
+
+\begin{proof}
+Direct computation:
+\[
+        \frac{\underline\Sigma}{\overline D}
+        =\frac{\frac mn(p-\varepsilon)^{n}c_n\,\dfrac{\varepsilon^{r}}{r(\ell+\varepsilon)^{m}}}
+              {b^{\,r-1}\dfrac{(1/2)^{n-1}}{(\ell+a)^{m}}\dfrac{L^{2}}{2\nu}}
+        =c_n\cdot\frac mn\cdot\frac{2\nu}{L^{2}}\cdot
+         \frac{(p-\varepsilon)^{n}}{(1/2)^{n-1}}\cdot
+         \frac{\varepsilon^{r}}{r\,b^{\,r-1}}\cdot
+         \Bigl(\frac{\ell+a}{\ell+\varepsilon}\Bigr)^{m}.
+\]
+Now $\frac mn\cdot\nu=1$, $\frac{(p-\varepsilon)^n}{(1/2)^{n-1}}=\tfrac12(2(p-\varepsilon))^n$, and $\frac{\varepsilon^r}{r\,b^{r-1}}=\frac br(\varepsilon/b)^r$; collecting gives $R$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:leftsurplus}]
+Decompose $I=\int_0^\infty\kappa(s)\rho(q+s)\,ds$ over the pairwise disjoint bands $(0,\varepsilon]$, $(\varepsilon,a]$, $(a,b)$, $[b,\infty)$ ($\varepsilon=a/2<a<b$).  On $(\varepsilon,a]$ and $[b,\infty)$, $u=q+s\ge0$ and $u\notin(\tfrac12,\nu)$, so the integrand is nonnegative by Fact~\ref{fact:rho}(i); on $(a,b)$ the integrand is $\ge-\kappa(s)(-\rho(q+s))_+$.  Hence
+\[
+        I\;\ge\;\Sigma-D\;\ge\;\underline\Sigma-\overline D
+        \;=\;\overline D\,\bigl(R(m,r,q,\ell)-1\bigr)\;\ge\;0
+\]
+by Lemmas~\ref{lem:surplus}, \ref{lem:deficit}, Proposition~\ref{prop:ratio}, $\overline D>0$, and the hypothesis.  The only two bands carrying estimates, $(0,\varepsilon)$ and $(a,b)$, are disjoint by construction; no reflection is used, so no reflection/surplus overlap can arise.
+\end{proof}
+
+\begin{proposition}[Monotonicity of $R$]\label{prop:mono}
+Fix a residual pair $(m,r)$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item For fixed $q\in[0,1/3]$, $\ell\mapsto R(m,r,q,\ell)$ is positive and strictly decreasing on $(0,\infty)$.
+\item For fixed $\ell>0$, $q\mapsto R(m,r,q,\ell)$ is strictly decreasing on $[0,1/3]$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Only the last factor of \eqref{eq:R} depends on $\ell$.  Since $\varepsilon=a/2<a$ (as $a\ge\tfrac16>0$),
+$\frac{d}{d\ell}\,\frac{\ell+a}{\ell+\varepsilon}=\frac{\varepsilon-a}{(\ell+\varepsilon)^{2}}<0$,
+and the $m$-th power of a positive decreasing function is decreasing; positivity holds as $\ell+a>\ell+\varepsilon>0$ and $c_n>0$.
+
+(b) We show each factor of \eqref{eq:R} is positive and nonincreasing in $q$, at least one strictly.  Recall $\tfrac{da}{dq}=-1$, $\tfrac{d\varepsilon}{dq}=-\tfrac12$, $\tfrac{db}{dq}=-1$; $L,\nu$ do not depend on $q$.
+\begin{itemize}
+\item $c_n=1-\nu t^{n-1}/w^{n}$ with $t=\frac{1+2q}{4}$ increasing, $w=\frac{3-2q}{4}$ decreasing and positive: $t^{n-1}/w^{n}$ is increasing, so $c_n$ is decreasing; $c_n>0$ by Lemma~\ref{lem:cn}.
+\item $b/(rL^{2})$: $b$ is decreasing and positive ($b>\tfrac16$), $rL^{2}$ constant.
+\item $(2(p-\varepsilon))^{n}=\bigl(\tfrac{3-2q}{2}\bigr)^{n}$: decreasing, positive.
+\item $(\varepsilon/b)^{r}$: $\frac{d}{dq}\log\frac{\varepsilon}{b}=-\frac{2}{1-2q}+\frac{1}{\nu-q}<0$ because $2(\nu-q)>1-2q\iff\nu>\tfrac12$, true for every residual pair.
+\item $\bigl(\frac{\ell+a}{\ell+\varepsilon}\bigr)^{m}$:
+$\frac{d}{dq}\log\frac{\ell+a}{\ell+\varepsilon}
+=\frac{-1}{\ell+a}+\frac{1/2}{\ell+\varepsilon}<0
+\iff\ell+a<2(\ell+\varepsilon)=2\ell+a\iff0<\ell$: strictly decreasing, positive.
+\end{itemize}
+A product of positive nonincreasing factors, one strictly decreasing, is strictly decreasing.  (Re-verified by random finite differences; step~A1-3.)
+\end{proof}
+
+\begin{corollary}[Two-variable comparison]\label{cor:twovar}
+For any residual pair, any $q\in[0,1/3]$, $\ell>0$, and any $\lbar\ge\ell$:
+$R(m,r,q,\ell)\ge R(m,r,\tfrac13,\lbar)$.
+\end{corollary}
+
+\begin{proof}
+$R(m,r,q,\ell)\ge R(m,r,q,\lbar)\ge R(m,r,\tfrac13,\lbar)$ by Proposition~\ref{prop:mono}(a),(b).
+\end{proof}
+
+\section{The upper-end reflection lemma}\label{sec:reflection}
+
+This is the case-(ii) mechanism.  The reflection sends the negative window $u\in(\tfrac12,\nu)$, parametrized as $u=\nu-e$ with $e\in(0,L)$, to the reflected points $u'=\nu+e$; Fact~\ref{fact:rho}(iv) is applied at $u'$, so we need $u'\le1$ throughout the band.
+
+\begin{lemma}[Side condition]\label{lem:side}
+For a residual pair $(m,r)$, the following are equivalent: \textup{(i)} $\nu+e\le1$ for every $e\in(0,\nu-\tfrac12)$; \textup{(ii)} $2\nu-\tfrac12\le1$; \textup{(iii)} $\theta\ge\tfrac18$.  Under \textup{(iii)} every reflected point satisfies the strict bound $u'=\nu+e<2\nu-\tfrac12\le1$, so Fact~\ref{fact:rho}(iv) applies at every $u'$ in the open band.  For $\theta<\tfrac18$ the reflected band leaves $[0,1]$, so $\tfrac18$ is sharp for this argument.
+\end{lemma}
+
+\begin{proof}
+The supremum of $\nu+e$ over $e\in(0,\nu-\tfrac12)$ is $2\nu-\tfrac12$ (not attained), so (i)$\Leftrightarrow$(ii); and $2\nu-\tfrac12\le1\iff\nu\le\tfrac34\iff1-2\theta\le\tfrac34\iff\theta\ge\tfrac18$.  The final claims hold because $e<\nu-\tfrac12$ is strict.
+\end{proof}
+
+\begin{theorem}[Generalized upper-end reflection]\label{thm:reflection}
+Let $(m,r)$ be a residual pair with $\theta\ge\tfrac18$, let $q\in[0,\tfrac13]$, and let $\ell\in(0,\tfrac12]$ satisfy $\ell\ge\max(\Lambda(q),q)$.  Then $I_{m,r}(q,\ell)\ge0$.
+\end{theorem}
+
+\begin{proof}
+\emph{Step 0: consequences of the hypotheses.}  Put $C=\ell+b$.  From $\ell\ge q$,
+\begin{equation}\label{eq:chain}
+        b\;\le\;\nu\;\le\;C,
+\end{equation}
+since $b=\nu-q\le\nu$ (as $q\ge0$) and $C-\nu=\ell-q\ge0$.  From $\ell\ge\Lambda(q)$ and \eqref{eq:Lambda},
+$C=\ell+b\ge\Lambda(q)+b=m\big/\bigl(\tfrac{r-1}{b}+\tfrac{n-1}{\nu}\bigr)$,
+and since $C>0$ and the denominator is positive, this is equivalent to the \emph{payment condition}
+\begin{equation}\label{eq:payment}
+        \frac{r-1}{b}+\frac{n-1}{\nu}\;\ge\;\frac mC ,
+\end{equation}
+which thus holds \emph{by definition} of $\Lambda$; no auxiliary threshold estimate is needed.
+
+\emph{Step 1: band decomposition.}  The negative window of $\rho(q+s)$ is $s\in(a,b)$ by Fact~\ref{fact:rho}(i).  Split $I$ over $(0,a)$, $(a,b)$, $(b,b+L)$, $(b+L,\infty)$ --- pairwise disjoint, so no mass is used twice; in particular the reflection partner band $(b,b+L)$ is disjoint from the deficit band $(a,b)$.  On $(0,a)$, $q+s\le\tfrac12$; on $(b+L,\infty)$, $q+s\ge\nu$: both contributions are $\ge0$ by Fact~\ref{fact:rho}(i).
+
+\emph{Step 2: reflection pairing.}  Substituting $s=b\mp e$, $e\in(0,L)$:
+\[
+        I_-+I_+=\int_0^{L}
+        \Bigl[\kappa(b+e)\,\rho(\nu+e)+\kappa(b-e)\,\rho(\nu-e)\Bigr]\,de .
+\]
+Fix $e\in(0,L)$.  At the deficit point $u=\nu-e\in(\tfrac12,\nu)$, Fact~\ref{fact:rho}(ii) gives $-\rho(\nu-e)\le\frac e\nu(\nu-e)^{n-1}$.  At the reflected point $u'=\nu+e$, Lemma~\ref{lem:side} (here $\theta\ge\tfrac18$ is used, and only here) gives $u'<1$, so Fact~\ref{fact:rho}(iv) yields $\rho(\nu+e)\ge\frac e\nu(\nu+e)^{n-1}$.  Hence the integrand is at least
+$\frac e\nu[\kappa(b+e)(\nu+e)^{n-1}-\kappa(b-e)(\nu-e)^{n-1}]$,
+which is $\ge0$ provided
+\begin{equation}\label{eq:product}
+        \Bigl(\frac{b+e}{b-e}\Bigr)^{r-1}
+        \Bigl(\frac{\nu+e}{\nu-e}\Bigr)^{n-1}
+        \;\ge\;
+        \Bigl(\frac{C+e}{C-e}\Bigr)^{m}
+        \qquad\bigl(\kappa(b\pm e)=(b\pm e)^{r-1}(C\pm e)^{-m}\bigr).
+\end{equation}
+
+\emph{Step 3: odd-log series.}  All three base points exceed $e$: $e<L=\nu-\tfrac12<\nu-q=b\le\nu\le C$, using $q<\tfrac12$ and \eqref{eq:chain}.  Therefore
+$\log\frac{X+e}{X-e}=2\sum_{j\ge0}\frac{e^{2j+1}}{(2j+1)X^{2j+1}}$ ($0<e<X$) applies with $X\in\{b,\nu,C\}$, and \eqref{eq:product} is equivalent to
+\[
+        \sum_{j\ge0}\frac{2\,e^{2j+1}}{2j+1}
+        \left[\frac{r-1}{b^{2j+1}}+\frac{n-1}{\nu^{2j+1}}-\frac{m}{C^{2j+1}}\right]
+        \;\ge\;0 .
+\]
+Each bracket is nonnegative: fix $j\ge0$; by \eqref{eq:chain}, $b^{-2j}\ge\nu^{-2j}\ge C^{-2j}$, so
+\[
+        \frac{r-1}{b^{2j+1}}+\frac{n-1}{\nu^{2j+1}}
+        =\frac{r-1}{b}\cdot\frac1{b^{2j}}+\frac{n-1}{\nu}\cdot\frac1{\nu^{2j}}
+        \;\ge\;
+        \Bigl(\frac{r-1}{b}+\frac{n-1}{\nu}\Bigr)\frac1{C^{2j}}
+        \;\ge\;\frac{m}{C^{2j+1}},
+\]
+the last inequality being \eqref{eq:payment}.  (For $r=1$ the first summand is $0$ on both sides.)  Hence \eqref{eq:product} holds for every $e\in(0,L)$, so $I_-+I_+\ge0$ and $I\ge0$.
+\end{proof}
+
+\begin{remark}[Where each hypothesis is used]
+$\theta\ge\tfrac18$ only places the reflected band inside $[0,1]$ (Lemma~\ref{lem:side}), which is what Fact~\ref{fact:rho}(iv) requires.  $\ell\ge\Lambda(q)$ enters only through \eqref{eq:payment}, at its exact threshold.  $\ell\ge q$ enters only through $\nu\le C$ in \eqref{eq:chain} ($\nu\le C\iff\ell\ge q$ exactly).  No lower bound on $m$ and no upper bound on $\ell$ is needed.  This theorem frees Lemma upper-reflection-tail of \texttt{paper\_new.tex} from its hypotheses $m\ge63$, $\theta\ge\tfrac16$, $\ell>\tfrac25$: the constant $\tfrac25$ and the residue count $(r-1)/m\ge\tfrac2{13}$ disappear because the payment condition is taken at $\ell=\Lambda(q)$ rather than at a uniform numeric surrogate.
+\end{remark}
+
+\section{The $\Lambda$-cap}\label{sec:cap}
+
+$\Lambda$ is not monotone in $q$ for $r\ge2$, and the inequality $\Lambda(q)\ge\tfrac12$ is \emph{false} in general (e.g.\ $\Lambda(0)=\tfrac4{17}$ for $(17,2)$; even $\Lambda(q)\ge q+\theta$ fails, e.g.\ $(49,6)$, $q=\tfrac13$: $\Lambda=\tfrac{54808}{136563}<\tfrac{67}{147}$; step~B1-3).  What holds is a sharp $q$-free \emph{upper} cap, in closed form.
+
+\begin{lemma}[M\"obius form and $\Lambda$-cap]\label{lem:cap}
+Let $(m,r)$ be a residual pair ($r\ge1$) and write $E=(r-1)\nu$, $B=n-1$, $A=n-E$.  Then for every $q$ with $b=\nu-q>0$ (in particular for every $q\in[0,1/3]$),
+\begin{equation}\label{eq:moebius}
+        \Lambda(q)\;=\;\frac{b\,(A-Bb)}{E+Bb}
+        \;=\;\frac1B\Bigl[(n+E)-t-\frac{En}{t}\Bigr]
+        \Big|_{t=E+Bb},
+\end{equation}
+and consequently
+\begin{equation}\label{eq:cap}
+        \Lambda(q)\;\le\;\Lhat=\Lhat(m,r)
+        \;:=\;\frac{\bigl(\sqrt n-\sqrt E\bigr)^2}{n-1}
+        \;=\;\frac{n}{n-1}\Bigl(1-\sqrt{\tfrac{r-1}{m}}\Bigr)^{\!2}
+        \;=\;\nu\,\frac{\bigl(\sqrt m-\sqrt{r-1}\bigr)^2}{n-1}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Since $\frac{r-1}b+\frac{n-1}\nu=\frac{(r-1)\nu+(n-1)b}{b\nu}=\frac{E+Bb}{b\nu}$ and $m\nu=n$,
+\[
+        \Lambda(q)=\frac{mb\nu}{E+Bb}-b
+        =\frac{b\bigl(n-E-Bb\bigr)}{E+Bb}
+        =\frac{b(A-Bb)}{E+Bb}.
+\]
+Substituting $t=E+Bb$ (so $t>E\ge0$, $b=(t-E)/B$, $A-Bb=A+E-t=n-t$):
+$\Lambda=\frac{(t-E)(n-t)}{Bt}=\frac1B[(n+E)-t-\frac{En}{t}]$, which is \eqref{eq:moebius}.  By AM--GM, $t+\frac{En}t\ge2\sqrt{En}$ for every $t>0$ (for $E=0$, i.e.\ $r=1$, this reads $t\ge0$, trivial), hence
+$\Lambda\le\frac{(n+E)-2\sqrt{En}}{B}=\frac{(\sqrt n-\sqrt E)^2}{n-1}$.
+Finally $E=(r-1)\nu=n\cdot\frac{r-1}m$ gives $(\sqrt n-\sqrt E)^2=n(1-\sqrt{(r-1)/m})^2$, and $n=m\nu$ gives the third form.  (Identities and the rationalized cap $(t^2+En)^2\ge4En\,t^2$ checked exactly at $10^4$ random rational points; step~B1-1/2.)
+\end{proof}
+
+\begin{remark}[Sharpness]\label{rmk:sharp}
+The cap is attained at $b^*=(\sqrt{En}-E)/B$ whenever $b^*\in[\nu-\tfrac13,\nu]$, which happens for genuine pairs: for $(113,26)$ the scanned $\max_{q\in[0,1/3]}\Lambda(q)$ agrees with $\Lhat$ to $10^{-13}$.  So no uniform-in-$q$ cap can improve on \eqref{eq:cap}.  For $r=1$, $\Lhat=\frac n{n-1}>1$ and the cap is vacuous --- $r=1$ pairs are never routed through Theorem~\ref{thm:reflection} below.
+\end{remark}
+
+\begin{corollary}[Window caps]\label{cor:capwindows}
+Let $(m,r)$ be a residual pair with $r\ge2$.  Then:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\Lhat\le\dfrac{m}{m-2}\Bigl(1-\sqrt{\tfrac{r-1}{m}}\Bigr)^{2}$.
+\item If $m\ge31$ and $\theta\ge\tfrac16$, then $r\ge6$ and
+\[
+        \Lhat\;\le\;\frac{31}{29}\Bigl(1-\sqrt{\tfrac{5\theta}6}\Bigr)^{2}
+        \;\le\;
+        \begin{cases}
+        \dfrac{54901}{130500}\;\le\;\dfrac{43}{100}, & \theta\ge\tfrac16,\\[2mm]
+        \dfrac{84289}{217500}\;\le\;\dfrac{39}{100}, & \theta\ge\tfrac{19}{100}.
+        \end{cases}
+\]
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(a) Since $\nu>\tfrac12$, $1\le2\nu$, so $n-1=\nu m-1\ge\nu m-2\nu=\nu(m-2)$ and the third form of \eqref{eq:cap} gives
+$\Lhat\le\frac{\nu(\sqrt m-\sqrt{r-1})^2}{\nu(m-2)}=\frac{m}{m-2}(1-\sqrt{\tfrac{r-1}m})^2$.
+
+(b) $r=\theta m\ge\tfrac{31}6>5$, so $r\ge6$ and $\frac{r-1}m=\theta(1-\tfrac1r)\ge\tfrac56\theta$.  The map $t\mapsto(1-\sqrt t\,)^2$ is nonincreasing on $[0,1]$ and $\tfrac m{m-2}\le\tfrac{31}{29}$ for $m\ge31$, giving the first bound.  For $\theta\ge\tfrac16$: $\tfrac{5\theta}6\ge\tfrac5{36}$ and, using $\sqrt5\ge\tfrac{559}{250}$ ($559^2=312481\le312500$),
+\[
+        \Bigl(1-\tfrac{\sqrt5}6\Bigr)^2=\frac{41}{36}-\frac{\sqrt5}{3}
+        \le\frac{41}{36}-\frac{559}{750}=\frac{1771}{4500},
+        \qquad
+        \frac{31}{29}\cdot\frac{1771}{4500}=\frac{54901}{130500}
+        \le\frac{43}{100}
+\]
+($\iff5490100\le5611500$).  For $\theta\ge\tfrac{19}{100}$: $\tfrac{5\theta}6\ge\tfrac{19}{120}$ and, using $\sqrt{19/120}\ge\tfrac{3979}{10000}$ ($3979^2\cdot120=1899892920\le19\cdot10^8$),
+\[
+        \Bigl(1-\sqrt{\tfrac{19}{120}}\Bigr)^2
+        =\frac{139}{120}-2\sqrt{\tfrac{19}{120}}
+        \le\frac{139}{120}-\frac{3979}{5000}=\frac{2719}{7500},
+        \qquad
+        \frac{31}{29}\cdot\frac{2719}{7500}=\frac{84289}{217500}
+        \le\frac{39}{100}
+\]
+($\iff8428900\le8482500$).  (All comparisons exact; step~B2-1.)
+\end{proof}
+
+\section{The product form at the worst point}\label{sec:prod}
+
+By Corollary~\ref{cor:twovar}, the criterion of Theorem~\ref{thm:leftsurplus} only needs to be verified at $q=\tfrac13$ and at one level $\lbar$ per pair.  At $q=\tfrac13$: $\varepsilon=\tfrac1{12}$, $a=\tfrac16$, $p-\varepsilon=\tfrac7{12}$, $b=\tfrac23-2\theta$, $L=\tfrac12-2\theta$, and
+\begin{equation}\label{eq:cn-exact}
+        c_n\;=\;1-\nu\,\frac{(5/12)^{n-1}}{(7/12)^{n}}
+        \;=\;1-\nu\,\frac{12}{7}\Bigl(\frac57\Bigr)^{n-1}.
+\end{equation}
+Define, for $0<\theta<\tfrac14$ and $\ell>0$,
+\begin{equation}\label{eq:PBF}
+        P(\theta)=\frac{2/3-2\theta}{\theta\,(1/2-2\theta)^2},
+        \qquad
+        F(\ell)=\frac{\ell+1/6}{\ell+1/12}=\frac{12\ell+2}{12\ell+1},
+        \qquad
+        B_\ell(\theta)=\Bigl(\frac76\Bigr)^{1-2\theta}(8-24\theta)^{-\theta}F(\ell).
+\end{equation}
+
+\begin{lemma}[Product form]\label{lem:prod}
+For every residual pair $(m,r)$ and every $\ell>0$,
+\[
+        R\bigl(m,r,\tfrac13,\ell\bigr)
+        \;=\;c_n\cdot\frac{P(\theta)}{m}\cdot B_\ell(\theta)^m .
+\]
+\end{lemma}
+
+\begin{proof}
+Term by term in \eqref{eq:R}, using $r=m\theta$ and $n=m(1-2\theta)$:
+$\frac{b}{rL^2}=\frac{2/3-2\theta}{m\theta(1/2-2\theta)^2}=\frac{P(\theta)}m$;
+$(2(p-\varepsilon))^n=(\tfrac76)^n=((\tfrac76)^{1-2\theta})^m$;
+$\frac{\varepsilon}{b}=\frac1{12b}=\frac1{8-24\theta}$, so $(\varepsilon/b)^r=((8-24\theta)^{-\theta})^m$; and
+$\frac{\ell+a}{\ell+\varepsilon}=F(\ell)$.  Multiply and insert \eqref{eq:cn-exact}.  (For rational $\ell$ every factor of $R$ is rational: $B_\ell(\theta)^m=(\tfrac76)^n(\tfrac{m}{8m-24r})^rF(\ell)^m$.)
+\end{proof}
+
+With $\ell=\tfrac13+\theta$ (so $12\ell+2=6+12\theta$, $12\ell+1=5+12\theta$),
+\begin{equation}\label{eq:B0}
+        F\bigl(\tfrac13+\theta\bigr)=\frac{1/2+\theta}{5/12+\theta},
+        \qquad
+        B_0(\theta):=B_{\frac13+\theta}(\theta)
+        =\Bigl(\frac76\Bigr)^{1-2\theta}\frac{(8-24\theta)^{-\theta}\,(\tfrac12+\theta)}{5/12+\theta}.
+\end{equation}
+$P$ and $B_0$ are exactly the functions of appendix app:constants of \texttt{paper\_new.tex}; its Case-A inequality was engineered for the left-surplus estimate at $q=\tfrac13$, $\ell=q+r/m$, and \S\ref{sec:tools} reproves the three lemmas it rests on, making this note independent of that appendix.
+
+\section{Elementary tools and constant lemmas}\label{sec:tools}
+
+\begin{lemma}[Exponential and logarithm bounds]\label{lem:tools}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $e^{y}\ge1+y$ for every real $y$.
+\item $B^m/m\ge e\log B$ for every real $B>0$, $m>0$.
+\item $\log u\le u-1$ for every real $u>0$.
+\item For every real $t\ge1$:
+$L(t):=\dfrac{3(t^2-1)}{t^2+4t+1}\;\le\;\log t\;\le\;\dfrac{(t-1)(t+5)}{2(2t+1)}=:U(t)$.
+\item $e\ge65/24$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) $y\mapsto e^y-1-y$ has derivative $e^y-1$, negative for $y<0$, positive for $y>0$; its minimum, at $y=0$, is $0$.
+(ii) Apply (i) with $y=m\log B-1$: $B^m=e\cdot e^{\,m\log B-1}\ge e\,m\log B$; divide by $m>0$.
+(iii) Apply (i) with $y=u-1$ and take logarithms.
+(iv) Both bounds are equalities at $t=1$, so compare derivatives on $t\ge1$:
+\[
+        \frac{1}{t}-L'(t)
+        =\frac{(t^2+4t+1)^2-12t(t^2+t+1)}{t\,(t^2+4t+1)^2}
+        =\frac{(t-1)^4}{t\,(t^2+4t+1)^2}\ \ge\ 0,
+\qquad
+        U'(t)-\frac1t
+        =\frac{4(t-1)^3}{t\,(4t+2)^2}\ \ge\ 0,
+\]
+using $L'(t)=12(t^2+t+1)/(t^2+4t+1)^2$ and, with $U(t)=(t^2+4t-5)/(4t+2)$, $U'(t)=(4t^2+4t+28)/(4t+2)^2$; integrate from $1$ to $t$.
+(v) $e=\sum_{k\ge0}1/k!\ge1+1+\frac12+\frac16+\frac1{24}=\frac{65}{24}$.
+\end{proof}
+
+The rational Pad\'e values used below, each obtained from Lemma~\ref{lem:tools}(iv) by clearing denominators (exact re-check: step~B2-1):
+\begin{equation}\label{eq:pade}
+\begin{aligned}
+        \log\frac{64}{63}&\ge L\Bigl(\frac{64}{63}\Bigr)=\frac{3\cdot127}{24193},
+        &\log\frac73&\ge L\Bigl(\frac73\Bigr)=\frac{60}{71},
+        &\log\frac76&\ge L\Bigl(\frac76\Bigr)=\frac{39}{253},
+        \\[1mm]
+        \log\frac76&\le U\Bigl(\frac76\Bigr)=\frac{37}{240},
+        &\log2&\le U(2)=\frac7{10},
+        &&
+        \\[1mm]
+        \log\frac{179}{154}&\ge L\Bigl(\frac{179}{154}\Bigr)=\frac{24975}{166021},
+        &\log\frac{167}{142}&\ge L\Bigl(\frac{167}{142}\Bigr)=\frac{23175}{142909}.
+        &&
+\end{aligned}
+\end{equation}
+Set
+\begin{equation}\label{eq:Kbar}
+        \overline K\;=\;1+2\cdot\frac7{10}+2\cdot\frac{37}{240}
+        \;=\;\frac{65}{24}
+        \;\ge\;K:=1+2\log2+2\log\frac76 ,
+        \qquad
+        \lambda_*=\frac{127}{24193},
+        \qquad
+        s=\frac{89}{100}.
+\end{equation}
+
+\begin{lemma}[Linear minorant of $\log B_0$]\label{lem:B0linear}
+For every $0\le\theta\le\frac16$,
+$\log B_0(\theta)\ \ge\ \lambda_*+s\bigl(\frac16-\theta\bigr)$.
+\end{lemma}
+
+\begin{proof}
+\emph{Value at the right endpoint.}  Since $4^{-1/6}=2^{-1/3}$,
+\[
+        B_0(1/6)
+        =\Bigl(\frac76\Bigr)^{2/3}4^{-1/6}\,\frac{2/3}{7/12}
+        =7^{2/3}6^{-2/3}\cdot2^{-1/3}\cdot\frac{8}{7}
+        =\frac{8}{504^{1/3}}
+        =\frac{4}{63^{1/3}},
+\]
+so $B_0(1/6)^3=\tfrac{64}{63}$ and, by \eqref{eq:pade}, $\log B_0(1/6)=\frac13\log\frac{64}{63}\ge\frac{127}{24193}=\lambda_*$.
+
+\emph{Slope.}  From $\log B_0(\theta)=(1-2\theta)\log\frac76-\theta\log(8-24\theta)+\log(\frac12+\theta)-\log(\frac5{12}+\theta)$, the negated derivative $c(\theta):=-\frac{d}{d\theta}\log B_0(\theta)$ is
+\[
+        c(\theta)
+        =2\log\frac76+\log(8-24\theta)-\frac{24\theta}{8-24\theta}
+        -\frac{1}{1/2+\theta}+\frac{1}{5/12+\theta},
+\]
+\[
+        c'(\theta)
+        =-\frac{24}{8-24\theta}-\frac{192}{(8-24\theta)^2}
+        +\frac{1}{(1/2+\theta)^2}-\frac{1}{(5/12+\theta)^2}.
+\]
+On $[0,\tfrac16]$, $8-24\theta\ge4>0$ makes the first two terms negative, and $0<\frac5{12}+\theta<\frac12+\theta$ makes the sum of the last two negative; so $c$ is strictly decreasing and, for every $\theta\in[0,\tfrac16]$,
+\[
+        c(\theta)\ \ge\ c(1/6)
+        =2\log\frac76+\log4-1-\frac32+\frac{12}7
+        =2\log\frac73-\frac{11}{14}
+        \ \ge\ \frac{120}{71}-\frac{11}{14}
+        =\frac{899}{994}
+        \ \ge\ \frac{89}{100}=s,
+\]
+using \eqref{eq:pade} at $t=\tfrac73$ and $899\cdot100=89900\ge88466=89\cdot994$.
+
+\emph{Conclusion.}  $\log B_0(\theta)=\log B_0(1/6)+\int_\theta^{1/6}c(u)\,du\ge\lambda_*+s(\frac16-\theta)$.
+\end{proof}
+
+\begin{lemma}[Weighted polynomial inequality]\label{lem:cubic}
+For every $0<\theta\le\frac16$,
+$P(\theta)\bigl[\lambda_*+s\bigl(\frac16-\theta\bigr)\bigr]\ \ge\ 72\,\lambda_*$.
+\end{lemma}
+
+\begin{proof}
+For $0<\theta<\tfrac14$, $\theta(\tfrac12-2\theta)^2>0$, so the claim is equivalent to $G(\theta)\ge0$ on $(0,\tfrac16]$, where
+\[
+        G(\theta)
+        :=\Bigl(\frac23-2\theta\Bigr)
+        \Bigl[\lambda_*+s\Bigl(\frac16-\theta\Bigr)\Bigr]
+        -72\lambda_*\,\theta\Bigl(\frac12-2\theta\Bigr)^2 .
+\]
+At $\theta=\tfrac16$ both terms equal $\frac13\lambda_*$, so $G(\tfrac16)=0$ and $(\tfrac16-\theta)$ divides $G$; polynomial division gives the exact factorisation
+\[
+        G(\theta)=\Bigl(\frac16-\theta\Bigr)Q(\theta),
+        \qquad
+        Q(\theta)
+        =288\lambda_*\theta^2-(2s+96\lambda_*)\theta
+        +\Bigl(\frac{2s}3+4\lambda_*\Bigr),
+\]
+verified by expanding both sides to
+$(\frac{2\lambda_*}3+\frac s9)-(s+20\lambda_*)\theta+(2s+144\lambda_*)\theta^2-288\lambda_*\theta^3$.
+On $[0,\tfrac16]$, $Q'(\theta)=576\lambda_*\theta-(2s+96\lambda_*)\le96\lambda_*-(2s+96\lambda_*)=-2s<0$, so
+\[
+        Q(\theta)\ \ge\ Q(1/6)
+        =\frac s3-4\lambda_*
+        =\frac{89}{300}-\frac{508}{24193}
+        =\frac{2000777}{7257900}\ >\ 0,
+\]
+hence $Q>0$ and $G\ge0$ on $(0,\tfrac16]$.
+\end{proof}
+
+\begin{lemma}[Prefactor bound]\label{lem:P72}
+For every real $\frac16\le\theta<\frac14$, $\;P(\theta)\ge72$.
+\end{lemma}
+
+\begin{proof}
+One checks by expansion the polynomial identity
+\[
+        \frac23-2\theta-72\,\theta\Bigl(\frac12-2\theta\Bigr)^2
+        =-\frac23\,(6\theta-1)(72\theta^2-24\theta+1).
+\]
+On $[\tfrac16,\tfrac14]$, $6\theta-1\ge0$; the convex quadratic $72\theta^2-24\theta+1$ has endpoint values $-1$ and $-\tfrac12$, so it is $\le\max\{-1,-\tfrac12\}<0$ there.  Hence the right side is nonnegative, i.e.\ $\frac23-2\theta\ge72\,\theta(\frac12-2\theta)^2$, and dividing by $\theta(\frac12-2\theta)^2>0$ gives the claim.
+\end{proof}
+
+\begin{lemma}[Quadratic minorant]\label{lem:quad}
+For every real $\theta\in[\tfrac16,\tfrac14)$ and every fixed $\ell>0$,
+\[
+        \log B_\ell(\theta)\;\ge\;
+        \log F(\ell)+\log\frac76-\overline K\theta+6\theta^2,
+        \qquad \overline K=\frac{65}{24}.
+\]
+\end{lemma}
+
+\begin{proof}
+Write $8-24\theta=4(2-6\theta)$ with $2-6\theta\in(\tfrac12,1]$ on the stated range, so $\log(2-6\theta)\le1-6\theta$ by Lemma~\ref{lem:tools}(iii), and therefore, using $\theta>0$,
+\[
+        \log B_\ell(\theta)
+        =\log F(\ell)+\log\frac76
+        -\theta\Bigl(2\log\frac76+2\log2\Bigr)-\theta\log(2-6\theta)
+        \;\ge\;\log F(\ell)+\log\frac76-K\theta+6\theta^2
+\]
+with $K$ as in \eqref{eq:Kbar}; replacing $K$ by $\overline K\ge K$ decreases the right side further.
+\end{proof}
+
+\section{Lower bounds for $c_n$ at $q=1/3$}\label{sec:cn}
+
+\begin{lemma}[$c_n$ thresholds]\label{lem:cnthr}
+Let $(m,r)$ be a residual pair and $c_n$ as in \eqref{eq:cn-exact} (the exact value at $q=\tfrac13$).  Then:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item if $n\ge14$, then $c_n\ge\dfrac{24193}{24765}$;
+\item if $n\ge17$, then $c_n\ge\dfrac{99}{100}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Since $\nu<1$ and $\tfrac57<1$, \eqref{eq:cn-exact} gives $c_n\ge1-\tfrac{12}7(\tfrac57)^{n-1}$, with deficit decreasing in $n$.
+(a) It suffices that $\tfrac{12}7(\tfrac57)^{13}\le\tfrac{572}{24765}=1-\tfrac{24193}{24765}$, i.e.
+\[
+        24765\cdot12\cdot5^{13}
+        =362\,768\,554\,687\,500\;\le\;387\,943\,597\,669\,628
+        =572\cdot7^{14}.
+\]
+(b) It suffices that $\tfrac{12}7(\tfrac57)^{16}\le\tfrac1{100}$, i.e.
+\[
+        1200\cdot5^{16}=183\,105\,468\,750\,000\;\le\;232\,630\,513\,987\,207=7^{17}.
+\]
+Both integer comparisons are exact (step~B2-1).
+\end{proof}
+
+\section{The three $\theta$-windows}\label{sec:windows}
+
+Each window proposition has \emph{scalar} hypotheses only (a $c_n$ level and a $\theta$ range); $\theta$ and $m$ are treated as real numbers, so the propositions apply both to the uniform tail and to individual small pairs.  The evaluation levels are $\tfrac13+\theta$ (W1), $\tfrac{43}{100}$ (W2), $\tfrac{39}{100}$ (W3).
+
+\begin{proposition}[Window W1: $\theta\le1/6$]\label{prop:W1}
+Let $(m,r)$ be a residual pair with $\theta\le\tfrac16$ and $c_n\ge\tfrac{24193}{24765}$.  Then
+\[
+        R\bigl(m,r,\tfrac13,\tfrac13+\tfrac rm\bigr)\;\ge\;
+        c_n\cdot\frac{24765}{24193}\;\ge\;1 .
+\]
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:prod} and \eqref{eq:B0}, $R=c_n\,\frac{P(\theta)}m\,B_0(\theta)^m$.  By Lemma~\ref{lem:B0linear}, $\log B_0(\theta)\ge\lambda_*+s(\tfrac16-\theta)>0$; by Lemma~\ref{lem:tools}(ii), $B_0(\theta)^m/m\ge e\log B_0(\theta)$; and $P(\theta)>0$ on $(0,\tfrac14)$.  Hence, by Lemma~\ref{lem:cubic} and Lemma~\ref{lem:tools}(v),
+\[
+        R\;\ge\;c_n\,e\,P(\theta)\Bigl[\lambda_*+s\Bigl(\tfrac16-\theta\Bigr)\Bigr]
+        \;\ge\;c_n\,e\cdot72\lambda_*
+        \;\ge\;c_n\cdot\frac{65}{24}\cdot\frac{72\cdot127}{24193}
+        \;=\;c_n\cdot\frac{24765}{24193}\;\ge\;1 . \qedhere
+\]
+\end{proof}
+
+\begin{proposition}[Window W2: $1/6\le\theta\le19/100$]\label{prop:W2}
+Let $(m,r)$ be a residual pair with $\tfrac16\le\theta\le\tfrac{19}{100}$ and $c_n\ge\tfrac{99}{100}$.  Then
+\[
+        R\bigl(m,r,\tfrac13,\tfrac{43}{100}\bigr)
+        \;\ge\;\frac{3861}{20}\,V_2\;=\;
+        \frac{1\,945\,991\,604\,141}{1\,527\,393\,200\,000}\;>\;\frac54\;>\;1,
+        \quad
+        V_2=\frac{24975}{166021}+\frac{39}{253}
+        -\frac{65}{24}\cdot\frac{19}{100}+6\Bigl(\frac{19}{100}\Bigr)^2>0 .
+\]
+\end{proposition}
+
+\begin{proof}
+$F(\tfrac{43}{100})=\tfrac{179}{154}$, so $\log F\ge\tfrac{24975}{166021}$ and $\log\tfrac76\ge\tfrac{39}{253}$ by \eqref{eq:pade}.  By Lemma~\ref{lem:quad},
+$\log B_{43/100}(\theta)\ge g(\theta):=\tfrac{24975}{166021}+\tfrac{39}{253}-\tfrac{65}{24}\theta+6\theta^2$.
+Since $g'(\theta)=12\theta-\tfrac{65}{24}\le12\cdot\tfrac{19}{100}-\tfrac{65}{24}=-\tfrac{257}{600}<0$ on the window, $g(\theta)\ge g(\tfrac{19}{100})=V_2=\tfrac{16\,632\,406\,873}{2\,520\,198\,780\,000}>0$ there.  By Lemma~\ref{lem:prod}, Lemma~\ref{lem:tools}(ii),(v) and Lemma~\ref{lem:P72},
+\[
+        R\;=\;c_n\,\frac{P(\theta)}m\,B_{43/100}(\theta)^m
+        \;\ge\;\frac{99}{100}\cdot72\cdot e\,\log B_{43/100}(\theta)
+        \;\ge\;\frac{99}{100}\cdot72\cdot\frac{65}{24}\,V_2
+        \;=\;\frac{3861}{20}\,V_2 ,
+\]
+and $\tfrac{3861}{20}V_2>\tfrac54\iff4\cdot1945991604141=7783966416564\ge7636966000000=5\cdot1527393200000$.
+\end{proof}
+
+\begin{proposition}[Window W3: $19/100\le\theta<1/4$]\label{prop:W3}
+Let $(m,r)$ be a residual pair with $\tfrac{19}{100}\le\theta<\tfrac14$ and $c_n\ge\tfrac{99}{100}$.  Then
+\[
+        R\bigl(m,r,\tfrac13,\tfrac{39}{100}\bigr)
+        \;\ge\;\frac{3861}{20}\,V_3\;=\;
+        \frac{5\,342\,297\,399}{2\,589\,071\,360}\;>\;2\;>\;1,
+        \quad
+        V_3=\frac{23175}{142909}+\frac{39}{253}-\frac{4225}{13824}>0 .
+\]
+\end{proposition}
+
+\begin{proof}
+$F(\tfrac{39}{100})=\tfrac{167}{142}$, so $\log F\ge\tfrac{23175}{142909}$ by \eqref{eq:pade}.  By Lemma~\ref{lem:quad} and completion of the square, for \emph{every} real $\theta$,
+\[
+        \log B_{39/100}(\theta)
+        \;\ge\;\frac{23175}{142909}+\frac{39}{253}
+        -\frac{\overline K^2}{24}
+        +6\Bigl(\theta-\frac{\overline K}{12}\Bigr)^2
+        \;\ge\;\frac{23175}{142909}+\frac{39}{253}-\frac{4225}{13824}
+        \;=\;V_3\;=\;\frac{5\,342\,297\,399}{499\,820\,226\,048}\;>\;0,
+\]
+using $\overline K^2/24=4225/13824$.  Exactly as in Proposition~\ref{prop:W2},
+$R\ge\tfrac{99}{100}\cdot72\cdot\tfrac{65}{24}V_3=\tfrac{3861}{20}V_3>2$
+($\iff5342297399\ge5178142720=2\cdot2589071360$).
+\end{proof}
+
+\begin{remark}
+The window margins are genuine: the true minimum of the rate $\theta\mapsto\log B_{\lbar(\theta)}(\theta)$ over the ridge $\theta\in[0.15,0.22]$ is $\approx0.042$ (near $\theta=0.2$), while the minorants certify $V_2\approx0.0066$ and $V_3\approx0.0107$ against the required $\tfrac{20}{3861}\approx0.00518$ --- covered with factors $1.27$ and $2.06$.  The crude level $\lbar=\tfrac12$ would \emph{fail} here at large $m$ (the rate $(1-2\theta)\log\tfrac76+\log\tfrac87-\theta\log(8-24\theta)$ is negative near $\theta=0.2$); the caps $\tfrac{43}{100},\tfrac{39}{100}$ from Corollary~\ref{cor:capwindows} are what make the ridge windows close.
+\end{remark}
+
+\section{The criterion theorem}\label{sec:crit}
+
+Let $\mathcal T$ denote the set of $21$ pairs listed in Table~\ref{tab:pairs} below.  For a residual pair $(m,r)$ define the \emph{evaluation level}
+\begin{equation}\label{eq:lbar}
+        \lbar_{m,r}=
+        \begin{cases}
+        \min\bigl(\tfrac12,\ \tfrac13+\tfrac rm\bigr), & \theta\le\tfrac16
+                \text{ or } (m,r)\in\mathcal T,\\[1mm]
+        \tfrac{43}{100}, & \theta\in(\tfrac16,\tfrac{19}{100}],\ (m,r)\notin\mathcal T,\\[1mm]
+        \tfrac{39}{100}, & \theta\in(\tfrac{19}{100},\tfrac14),\ (m,r)\notin\mathcal T .
+        \end{cases}
+\end{equation}
+
+\begin{theorem}[Criterion, all residual pairs]\label{thm:crit}
+For every residual pair $(m,r)$:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $R\bigl(m,r,\tfrac13,\lbar_{m,r}\bigr)\;\ge\;1$;
+\item if $\theta>\tfrac16$ and $(m,r)\notin\mathcal T$, then $\Lambda(q)\le\lbar_{m,r}$ for every $q\in[0,\tfrac13]$.
+\end{enumerate}
+\end{theorem}
+
+The proof is a uniform tail argument valid for all $m\ge31$ (Theorem~\ref{thm:tail}; in the range $\theta\le\tfrac16$ it is valid for all real $m>0$), plus finitely many exact rational checks for the $49$ residual pairs with $m\le29$ (\S\ref{sec:finite}), each displayed.
+
+\begin{theorem}[Tail: $m\ge31$]\label{thm:tail}
+Every residual pair with $m\ge31$ satisfies Theorem~\ref{thm:crit}\,(a),(b).
+\end{theorem}
+
+\begin{proof}
+Two integrality facts: $n>2r$ and $n+2r=m$ give $n>\tfrac m2$; and $n$ is odd.  Thus $m\ge31$ implies $n\ge17$, so $c_n\ge\tfrac{99}{100}\ge\tfrac{24193}{24765}$ by Lemma~\ref{lem:cnthr} (the last comparison: $99\cdot24765=2451735\ge2419300=100\cdot24193$).  No pair with $m\ge31$ lies in $\mathcal T$.
+
+\emph{Case $\theta\le\tfrac16$.}  Then $\lbar=\tfrac13+\tfrac rm$ (as $\tfrac13+\theta\le\tfrac12$) and Proposition~\ref{prop:W1} gives (a); (b) is vacuous.
+
+\emph{Case $\tfrac16<\theta\le\tfrac{19}{100}$.}  By Corollary~\ref{cor:capwindows}(b) ($m\ge31$, $\theta\ge\tfrac16$, and $r\ge6\ge2$), $\Lambda(q)\le\Lhat\le\tfrac{54901}{130500}\le\tfrac{43}{100}=\lbar$ for all $q$, which is (b); and Proposition~\ref{prop:W2} gives (a).
+
+\emph{Case $\tfrac{19}{100}<\theta<\tfrac14$.}  Identical via Corollary~\ref{cor:capwindows}(b) with $\theta\ge\tfrac{19}{100}$ ($\Lhat\le\tfrac{84289}{217500}\le\tfrac{39}{100}=\lbar$) and Proposition~\ref{prop:W3}.
+
+Every residual pair has $\theta\in(0,\tfrac14)$, so the three cases are exhaustive.
+\end{proof}
+
+\begin{remark}\label{rmk:realm}
+In the window $\theta\le\tfrac16$ no lower bound on $m$ is used: Proposition~\ref{prop:W1} needs only $c_n\ge\tfrac{24193}{24765}$, which Lemma~\ref{lem:cnthr}(a) reduces to $n\ge14$.  This already disposes of most pairs with $m\le29$.  The genuine role of $m\ge31$ is confined to Corollary~\ref{cor:capwindows}(b) (through $r\ge6$ and $\tfrac m{m-2}\le\tfrac{31}{29}$) and to $n\ge17$.
+\end{remark}
+
+\section{The finite pairs: $5\le m\le29$}\label{sec:finite}
+
+There are exactly $49$ residual pairs with $m\le29$.  We close them in three groups.
+
+\subsection{Group (a): window W1 by the $c_n$ threshold ($22$ pairs)}\label{sec:grpA}
+By Lemma~\ref{lem:cnthr}(a), Proposition~\ref{prop:W1} applies whenever $\theta\le\tfrac16$ and $n\ge14$, i.e.\ to the $21$ pairs
+\[
+        (17,1);\ (19,1),(19,2);\ (21,1),(21,2),(21,3);\ (23,1),(23,2),(23,3);\
+        (25,1),\dots,(25,4);\ (27,1),\dots,(27,4);\ (29,1),\dots,(29,4)
+\]
+(each has $6r\le m$ and $n\ge15$).  One further pair, $(19,3)$ ($\theta=\tfrac3{19}\le\tfrac16$, $n=13$), passes the threshold through the exact value \eqref{eq:cn-exact} thanks to $\nu=\tfrac{13}{19}$:
+\begin{equation}\label{eq:193}
+        c_{13}(19,3)\ge\frac{24193}{24765}
+        \iff
+        24765\cdot156\cdot5^{12}=943\,198\,242\,187\,500
+        \;\le\;1\,052\,989\,765\,103\,276=572\cdot19\cdot7^{13}.
+\end{equation}
+For all $22$ pairs, $\lbar=\tfrac13+\tfrac rm=\min(\tfrac12,\tfrac13+\tfrac rm)$, so Theorem~\ref{thm:crit}(a) holds; (b) is vacuous ($\theta\le\tfrac16$).
+
+\subsection{Group (b): windows W2/W3 by explicit handoff caps ($6$ pairs)}\label{sec:grpB}
+For six pairs with $\theta>\tfrac16$ we check the hypotheses of Propositions~\ref{prop:W2}/\ref{prop:W3} directly, using Lemma~\ref{lem:cap} in the form $\sup_q\Lambda(q)\le\Lhat=\nu\,\frac{m+r-1-2\sqrt{m(r-1)}}{n-1}$ and a rational $\sigma\le\sqrt{m(r-1)}$ (safe direction: it \emph{increases} the bound; each $\sigma^2\le m(r-1)$ is one integer comparison).  The $c_n$ hypothesis holds by Lemma~\ref{lem:cnthr}(b) for $n\ge17$; for $n=15$ it is checked exactly via \eqref{eq:cn-exact}, each display being $\nu\frac{12}7(\tfrac57)^{14}\le\tfrac1{100}$ cleared of denominators:
+\begin{equation}\label{eq:c15}
+\begin{aligned}
+        (25,5):&\ \ 3600\cdot5^{14}=21\,972\,656\,250\,000
+                \le35\cdot7^{14}=23\,737\,807\,549\,715,\\
+        (27,6):&\ \ 6000\cdot5^{14}=36\,621\,093\,750\,000
+                \le63\cdot7^{14}=42\,728\,053\,589\,487,\\
+        (29,7):&\ \ 18000\cdot5^{14}=109\,863\,281\,250\,000
+                \le203\cdot7^{14}=137\,679\,283\,788\,347.
+\end{aligned}
+\end{equation}
+The caps ($\sigma$ first, then the resulting bound on $\Lhat$):
+\begin{itemize}[leftmargin=2em]
+\item $(27,5)\in\mathrm{W2}$: $\sigma=\tfrac{1039}{100}$ ($1039^2=1079521\le1080000$),\quad
+ $\Lhat\le\tfrac{17}{27}\cdot\tfrac{31-1039/50}{16}=\tfrac{8687}{21600}\le\tfrac{43}{100}$ ($868700\le928800$);
+\item $(29,5)\in\mathrm{W2}$: $\sigma=\tfrac{1077}{100}$ ($1077^2=1159929\le1160000$),\quad
+ $\Lhat\le\tfrac{19}{29}\cdot\tfrac{33-1077/50}{18}=\tfrac{3629}{8700}\le\tfrac{43}{100}$ ($362900\le374100$);
+\item $(25,5)\in\mathrm{W3}$: $\sigma=10$ ($10^2=100=25\cdot4$),\quad
+ $\Lhat\le\tfrac{15}{25}\cdot\tfrac{29-20}{14}=\tfrac{27}{70}\le\tfrac{39}{100}$ ($2700\le2730$);
+\item $(27,6)\in\mathrm{W3}$: $\sigma=\tfrac{1161}{100}$ ($1161^2=1347921\le1350000$),\quad
+ $\Lhat\le\tfrac{15}{27}\cdot\tfrac{32-1161/50}{14}=\tfrac{439}{1260}\le\tfrac{39}{100}$ ($43900\le49140$);
+\item $(29,6)\in\mathrm{W3}$: $\sigma=\tfrac{301}{25}$ ($301^2=90601\le90625$),\quad
+ $\Lhat\le\tfrac{17}{29}\cdot\tfrac{34-602/25}{16}=\tfrac{527}{1450}\le\tfrac{39}{100}$ ($52700\le56550$);
+\item $(29,7)\in\mathrm{W3}$: $\sigma=\tfrac{1319}{100}$ ($1319^2=1739761\le1740000$),\quad
+ $\Lhat\le\tfrac{15}{29}\cdot\tfrac{35-1319/50}{14}=\tfrac{1293}{4060}\le\tfrac{39}{100}$ ($129300\le158340$).
+\end{itemize}
+Window membership: $\theta=\tfrac5{27},\tfrac5{29}\le\tfrac{19}{100}$ ($500\le513$, $500\le551$) for the two W2 pairs, and $\theta=\tfrac15,\tfrac29,\tfrac6{29},\tfrac7{29}\ge\tfrac{19}{100}$ ($500\ge475$, $200\ge171$, $600\ge551$, $700\ge551$) for the four W3 pairs.  So Theorem~\ref{thm:crit}(a) holds by Propositions~\ref{prop:W2}/\ref{prop:W3}, and (b) holds because $\Lambda(q)\le\Lhat\le$ cap $=\lbar$.
+
+\subsection{Group (c): the remaining $21$ pairs $\mathcal T$, one exact evaluation each}\label{sec:grpC}
+For the pairs of $\mathcal T$ we evaluate $R$ at $\lbar=\min(\tfrac12,\tfrac13+\tfrac rm)$ and check $R\ge1$ in exact rational arithmetic.  By Lemma~\ref{lem:prod}, for each pair
+\begin{equation}\label{eq:row}
+        R\bigl(m,r,\tfrac13,\lbar\bigr)
+        \;=\;c_n\cdot\frac b{rL^2}\cdot\Bigl(\frac76\Bigr)^{n}
+        \Bigl(\frac{m}{8m-24r}\Bigr)^{r} F(\lbar)^{m},
+        \qquad F(\lbar)=\frac{12\lbar+2}{12\lbar+1},
+\end{equation}
+a product of explicit rationals: each row of Table~\ref{tab:pairs} is one exact rational inequality.  The stated lower bounds $R_{\mathrm{lb}}$ are safe roundings (rounded \emph{down} to two decimals); every row, cleared of denominators, is a single comparison of two explicit integers, performed exactly in \texttt{validate\_strip\_final.py}, step~B2-5.  The smallest margin, row $(23,4)$, asserts
+\[
+        \frac{108095281916189}{109193914728689}\cdot\frac{506}{147}\cdot
+        \Bigl(\frac76\Bigr)^{15}\Bigl(\frac{23}{88}\Bigr)^{4}
+        \Bigl(\frac87\Bigr)^{23}
+        =\frac ND\;\ge\;\frac{173}{50}\;>\;1
+\]
+with, in reduced form, $N=266\,077\,343\,630\,402\,608\,833\,493\,983\,035\,392$ and $D=76\,836\,775\,534\,377\,178\,226\,484\,864\,720\,357$ (so $50N\ge173D$); the smallest pair, row $(5,1)$, asserts
+\[
+        \frac{163}{343}\cdot\frac{80}{3}\cdot\Bigl(\frac76\Bigr)^{3}
+        \Bigl(\frac5{16}\Bigr)^{1}\Bigl(\frac87\Bigr)^{5}
+        =\frac{16\,691\,200}{1\,361\,367}\;\ge\;\frac{613}{50}\;>\;1 .
+\]
+Theorem~\ref{thm:crit}(b) is vacuous for $\mathcal T$ by definition of $\lbar$.
+
+\begin{table}[ht]
+\caption{Group (c): exact evaluation \eqref{eq:row} at $\lbar=\min(\tfrac12,\tfrac13+\tfrac rm)$.  All entries are exact rationals; $R_{\mathrm{lb}}$ is a safe (rounded-down) certified lower bound on $R(m,r,\tfrac13,\lbar)$, verified by exact cross-multiplication.}
+\label{tab:pairs}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}rrrllllr@{}}
+\toprule
+$m$ & $r$ & $n$ & $\lbar$ & $c_n$ & $\dfrac b{rL^2}$ & $\dfrac m{8m-24r},\ F(\lbar)$ & $R_{\mathrm{lb}}$\\
+\midrule
+ 5&1& 3&$1/2$  &$163/343$                        &$80/3$   &$5/16,\ 8/7$    &$12.26$\\
+ 7&1& 5&$10/21$&$80149/117649$                   &$224/27$ &$7/32,\ 54/47$  &$7.06$\\
+ 9&1& 7&$4/9$  &$290447/352947$                  &$144/25$ &$3/16,\ 22/19$  &$9.78$\\
+ 9&2& 5&$1/2$  &$37921/50421$                    &$36$     &$3/8,\ 8/7$     &$27.37$\\
+11&1& 9&$14/33$&$401702177/443889677$            &$704/147$&$11/64,\ 78/67$ &$15.87$\\
+11&2& 7&$1/2$  &$1106639/1294139$                &$220/27$ &$11/40,\ 8/7$   &$6.73$\\
+13&1&11&$16/39$&$24416185159/25705247659$        &$1040/243$&$13/80,\ 90/77$&$27.36$\\
+13&2& 9&$19/39$&$482409391/524596891$            &$364/75$ &$13/56,\ 102/89$&$5.66$\\
+13&3& 7&$1/2$  &$1341937/1529437$                &$416/9$  &$13/32,\ 8/7$   &$45.38$\\
+15&1&13&$2/5$  &$94349947907/96889010407$        &$480/121$&$5/32,\ 34/29$  &$48.67$\\
+15&2&11&$7/15$ &$1891389243/1977326743$          &$180/49$ &$5/24,\ 38/33$  &$6.89$\\
+15&3& 9&$1/2$  &$37541107/40353607$              &$80/9$   &$5/16,\ 8/7$    &$7.48$\\
+17&2&13&$23/51$&$1609027239419/1647113176919$    &$748/243$&$17/88,\ 126/109$&$9.78$\\
+17&3&11&$1/2$  &$32325492131/33614554631$        &$1088/225$&$17/64,\ 8/7$  &$4.59$\\
+17&4& 9&$1/2$  &$643823819/686011319$            &$170/3$  &$17/40,\ 8/7$   &$67.25$\\
+19&4&11&$1/2$  &$36280145617/37569208117$        &$266/27$ &$19/56,\ 8/7$   &$8.68$\\
+21&4&13&$1/2$  &$665527760349/678223072849$      &$126/25$ &$7/24,\ 8/7$    &$4.38$\\
+21&5&11&$1/2$  &$13411599701/13841287201$        &$336/5$  &$7/16,\ 8/7$    &$93.93$\\
+23&4&15&$1/2$  &$108095281916189/109193914728689$&$506/147$&$23/88,\ 8/7$   &$3.46$\\
+23&5&13&$1/2$  &$2190361301861/2228447239361$    &$1472/135$&$23/64,\ 8/7$  &$10.27$\\
+25&6&13&$1/2$  &$95365572907/96889010407$        &$700/9$  &$25/56,\ 8/7$   &$126.64$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Completeness}\label{sec:complete}
+Groups (a), (b), (c) contain $22+6+21=49$ pairs; they are pairwise disjoint and their union is the full list of residual pairs with $m\le29$, as one checks by enumeration (step~B2-6).
+
+\begin{proof}[Proof of Theorem~\ref{thm:crit}]
+For $m\ge31$: Theorem~\ref{thm:tail}.  For $m\le29$: \S\ref{sec:grpA}--\S\ref{sec:grpC} cover all $49$ pairs by \S\ref{sec:complete}.
+\end{proof}
+
+\section{Assembly: proof of the unified strip theorem}\label{sec:assembly}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Fix a residual pair $(m,r)$ and a strip point $(q,\ell)$: $q\in[0,\tfrac13]$, $\ell\in(0,\tfrac12]$, $\ell<q+\tfrac rm$.  Let $\lbar=\lbar_{m,r}$ be the evaluation level \eqref{eq:lbar}.
+
+\emph{Route 1: $\ell\le\lbar$.}  By Corollary~\ref{cor:twovar} ($q\le\tfrac13$, $\ell\le\lbar$) and Theorem~\ref{thm:crit}(a),
+$R(m,r,q,\ell)\ge R(m,r,\tfrac13,\lbar)\ge1$,
+and Theorem~\ref{thm:leftsurplus} (hypotheses $q\in[0,\tfrac13]$, $0<\ell<q+\tfrac rm$: both hold at a strip point) gives $I\ge0$.
+
+\emph{Route 2: $\ell>\lbar$.}  We first claim $\theta>\tfrac16$ and $(m,r)\notin\mathcal T$.  Indeed, in the opposite case $\lbar=\min(\tfrac12,\tfrac13+\tfrac rm)$, while every strip point satisfies $\ell\le\tfrac12$ and $\ell<q+\tfrac rm\le\tfrac13+\tfrac rm$, hence $\ell\le\lbar$ --- contradiction.  So $\lbar\in\{\tfrac{43}{100},\tfrac{39}{100}\}$, and:
+\begin{itemize}
+\item $\theta>\tfrac16>\tfrac18$;
+\item $q\le\tfrac13<\tfrac{39}{100}\le\lbar<\ell$ (as $100<117$);
+\item $\Lambda(q)\le\lbar<\ell$ by Theorem~\ref{thm:crit}(b);
+\item $\ell\in(0,\tfrac12]$.
+\end{itemize}
+Thus $\ell\ge\max(\Lambda(q),q)$ and Theorem~\ref{thm:reflection} gives $I\ge0$.
+
+In both routes $I_{m,r}(q,\ell)\ge0$, hence $\wtP_{m,r}(q,\ell)=C_{m,r}\ell^{\,n+r}I\ge0$.
+\end{proof}
+
+\begin{remark}[Structure of the case split]\label{rmk:structure}
+The two routes overlap harmlessly and their union is the whole strip by the trivial dichotomy $\ell\le\lbar$ or $\ell>\lbar$; no covering lemma involving $\ell_{\mathrm{hand}}=\min(\max(\Lambda(q),q),\tfrac12)$ is needed (the stage A1/A2 handoff at $\ell_{\mathrm{hand}}$ is replaced by the handoff at the $q$-free level $\lbar$, which Theorem~\ref{thm:crit} makes admissible on both sides).  The two estimate-carrying band systems are internally disjoint: $(0,\varepsilon)$ vs.\ $(a,b)$ in Route~1, and $(a,b)$ vs.\ $(b,b+L)$ in Route~2; Route~1 uses no reflection and Route~2 uses no surplus, so the band-accounting pitfall of the July-4 $r=1$ proof cannot arise in either.
+\end{remark}
+
+\section{Validation}\label{sec:valid}
+
+Margins (float; step~B1-4): over all $2500$ residual pairs with $5\le m\le201$, $\min\log R(m,r,\tfrac13,\lbar_{m,r})=0.1695$ at $(187,31)$ (a W1 pair with $\theta$ just below $\tfrac16$); over $203\le m\le1001$, the minimum is $0.1729$ at $(205,34)$.  At the finer stage-B1 evaluation level $\min(\max(\Lhat,\tfrac13),\tfrac12,\tfrac13+\theta)$ the corresponding minimum is $1.4810$, at $(19,3)$ --- the coarser $q$-free windows of \eqref{eq:lbar} trade margin for a fully analytic tail, and the criterion stays comfortably true either way.  As a sanity anchor, three handoff margins of the cartography are reproduced exactly: $R(9,2,\tfrac13,\tfrac12)\ge27$, $R(19,3,\tfrac13,\tfrac{470}{1007})\ge\tfrac{489}{100}$, $R(61,11,\tfrac13,\tfrac{107492}{301767})\ge14$ (log-margins $3.3095$, $1.5879$, $2.6532$).
+
+\smallskip
+\noindent\textbf{Validation script} (\texttt{validate\_strip\_final.py}, same directory; merges the four stage scripts; must exit $0$):
+\begin{enumerate}[label=\textup{\arabic*.}]
+\item[A1-1/2/3.] Exact sublemma checks ($2r(n-1)\le(2r+1)m$; $c_n$ comparisons); chain soundness $\underline\Sigma\le\Sigma$, $\overline D\ge D$, $\underline\Sigma/\overline D=R$, $I\ge\underline\Sigma-\overline D$ by 40-digit quadrature at twelve stress points; monotonicity of $R$ in $q,\ell$ by random finite differences.
+\item[A2-1/2/3.] Side-condition equivalence on all pairs $m\le101$; payment product inequality \eqref{eq:product} on a float grid plus \emph{exact} rational verification at $\ell=\max(\Lambda(q),q)$ ($j=0$ equality at $\ell=\Lambda$, bracket inequality $j\le40$, product at rational $e$); quadrature $I\ge0$ at sample points of Route~2.
+\item[B1-1/2/3/4.] M\"obius identities \eqref{eq:moebius} and rationalized cap exact at $10^4$ random rational points; $\Lhat-\max_q\Lambda\ge0$ float sweep (sharp at $(113,26)$); falsification values $\Lambda(0)=\tfrac4{17}$ for $(17,2)$, $\Lambda(\tfrac13)=\tfrac{54808}{136563}<\tfrac{67}{147}$ for $(49,6)$; the criterion scan and tail probe above.
+\item[B2-1\dots7.] Every displayed constant of \S\ref{sec:tools}--\S\ref{sec:finite} in exact arithmetic (Pad\'e values, $\overline K$, $V_2$, $V_3$, final fractions, $c_n$ thresholds, \eqref{eq:193}, \eqref{eq:c15}, all group-(b) integer comparisons); minorant soundness on dense float grids; the $\Lambda$-cap lemma symbolically/numerically; tail simulation $31\le m\le501$ (window membership, hypotheses, $R\ge1$ float everywhere, exact on a subsample); all $21$ table rows recomputed exactly, the two reduced fractions digit-for-digit; completeness $49=22+6+21$; the three handoff anchors.
+\item[M-1/2.] \emph{Merged assembly checks} (new): for every pair $m\le201$, $R(m,r,\tfrac13,\lbar_{m,r})\ge1$ (exact rational for $m\le61$, float beyond) and, for every $\theta>\tfrac16$ pair $\notin\mathcal T$, $\sup_q\Lambda(q)\le\lbar_{m,r}$ on a dense $q$-grid (exact at $q\in\{0,\tfrac16,\tfrac13\}$) --- i.e.\ both inputs of the Route-1/Route-2 dichotomy.
+\end{enumerate}
+
+\begin{remark}[Remaining computer-assisted residue; honest scope]\label{rmk:residue}
+Everything above is analytic except one class of statements: the $21$ table rows are one-line exact rational inequalities whose large-integer cross-multiplications are verified by \texttt{validate\_strip\_final.py} rather than by hand (the remaining displayed integer comparisons --- \eqref{eq:pade}, \eqref{eq:193}, \eqref{eq:c15}, the group-(b) caps and window memberships, and the window constants --- are small enough to check manually).  This is the only computer-assisted residue in the strip proof.  The theorem covers exactly $q\in[0,\tfrac13]$; nothing here touches Region II ($q>\tfrac13$), where the diagonal-positivity route is known to fail structurally beyond $q\approx0.41175$.
+\end{remark}
+
+\end{document}

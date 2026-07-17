@@ -1,0 +1,875 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\pos}[1]{\left(#1\right)_+}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cS}{\mathcal S}
+
+\title{Region II of the Goodman--Style Odd-Cycle Bound:\\
+       a computer-free scalar proof}
+\author{Working note for T.K., H.Y., and collaborators}
+\date{July 17, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $W$ be a graphon of edge density $p$, put $q=1-p$, and let $m\ge15$ be
+odd.  We prove, throughout the remaining density range
+$\tfrac12<p<\tfrac23$, that
+\[
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+The operator and eigenfunction argument from the previous Region-II note
+reduces the problem to a three-variable Huber payment inequality.  The old
+proof of that inequality divided the parameter space into three externally
+chosen zones and used two exhaustive interval-box certificates.  Here the
+scalar inequality is proved analytically.  At theorem level there is only one
+split, namely the intrinsic active-set split
+$2\rho\xi\le1$ or $2\rho\xi>1$ in the dual Huber problem.  The first branch is
+settled by a quadratic payment estimate and the second by a linear payment
+estimate.  All remaining estimates use finite geometric sums, Bernoulli's
+inequality, a symmetric second-difference bound, and one-variable calculus.
+No numerical sampling, interval arithmetic, or generated certificate is used.
+
+This note replaces the computation-assisted scalar part for odd $m\ge15$.
+The finitely many cycles $C_5,\ldots,C_{13}$ remain logically separate and
+are not claimed here to have acquired new computer-free proofs.
+\end{abstract}
+
+\tableofcontents
+
+\section{Result and proof architecture}\label{sec:intro}
+
+For a graphon $W:[0,1]^2\to[0,1]$, write
+\[
+        p=t(K_2,W),\qquad q=1-p.
+\]
+The conjectured Goodman--style inequality for an odd cycle is
+\begin{equation}\label{eq:goal}
+        t(C_m,W)\ge p^m-pq^{m-1}.
+\end{equation}
+For $p\le\tfrac12$ the right-hand side is nonpositive.  The present note is
+concerned with the nontrivial lower-density band
+\[
+        \frac12<p<\frac23,
+        \qquad \frac13<q<\frac12.
+\]
+
+\begin{theorem}[Computer-free Region II for long odd cycles]\label{thm:main}
+Let $W$ be a graphon with edge density $\tfrac12<p<\tfrac23$.  For every odd
+$m\ge15$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+The proof has three layers.  Section~\ref{sec:reduction} records the exact
+one-frontier and Huber reduction.  Section~\ref{sec:chart} introduces the
+dimensionless chart
+\[
+        a=\frac q\alpha,\qquad r=\frac Lq,\qquad
+        \ell=\frac L\alpha=ar,\qquad N=m-2.
+\]
+In this chart the Huber dual has two canonical witnesses.  They lead to the
+following two analytic statements.
+
+\begin{proposition}[Quadratic certificate]\label{prop:quadratic}
+On the branch $2\rho\xi\le1$, the scalar defect satisfies
+\[
+        R_m\le C_m\psi(\xi,\rho).
+\]
+\end{proposition}
+
+\begin{proposition}[Linear certificate]\label{prop:linear}
+On the branch $2\rho\xi>1$, the scalar defect satisfies
+\[
+        R_m\le C_m\psi(\xi,\rho).
+\]
+\end{proposition}
+
+The proofs of these propositions are given in
+Sections~\ref{sec:quadratic} and~\ref{sec:linear}.  Some elementary estimates
+inside those proofs are separated according to whether a geometric ratio is
+close to $1$.  Those are estimates within a lemma, not different graphon
+regimes: the only case distinction propagated through the proof is the
+active-set distinction $2\rho\xi\le1$ versus $2\rho\xi>1$.
+
+\begin{remark}[What has been removed]\label{rem:removed}
+The proof below does not use the former cuts $e=1/60$ and $\xi=1$, the
+frontier-gap parameter $\kappa$, an $m$-maximisation by interval bounds, the
+secant gate near the Tur\'an corner, or either of the Zone-B and Zone-C box
+certifiers.  In particular, the scalar proof can be checked line by line
+without running a script.
+\end{remark}
+
+\begin{remark}[Why the split at \(p=2/3\) is structural]
+The division between Regions I and II should not itself be removed.  In
+complement variables it is the threshold \(q=1/3\): the Hilbert--Schmidt
+budget forces at most one compression eigenvalue above \(q\) exactly when
+\(2q^2\ge q(1-q)\), i.e.\ \(q\ge1/3\).  Below that threshold several frontier
+modes are compatible with the same budget.  What the present argument removes
+is the downstream zone decomposition inside the one-frontier region.
+\end{remark}
+
+\section{The exact one-frontier reduction}\label{sec:reduction}
+
+This section condenses the operator and Huber reduction from
+\texttt{paper\_region2\_v2.tex}.  It is included to fix the interface used by
+the new scalar proof.
+
+Let $U=1-W$, let $T_U$ be its integral operator, and decompose
+$L^2([0,1])=\mathbb R\one\oplus\one^\perp$.  In block form,
+\begin{equation}\label{eq:block}
+        T_U=
+        \begin{pmatrix}q&g^*\\ g&A\end{pmatrix},
+        \qquad
+        g=T_U\one-q\one,
+        \qquad
+        A=P_{\one^\perp}T_UP_{\one^\perp}.
+\end{equation}
+Since $0\le U\le1$,
+\begin{equation}\label{eq:HS}
+        \Tr(A^2)+2\norm g_2^2\le pq.
+\end{equation}
+The one-sided determinant expansion gives, for odd $m$,
+\begin{equation}\label{eq:shift}
+ t(C_m,W)=p^m-\Tr(A^m)+m[z^m]\cL_W(z),
+ \qquad
+ \cL_W(z)=-\log\!\left(
+ 1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}
+ \right).
+\end{equation}
+Indeed, after conjugating by the sign flip on $\one^\perp$, the relevant
+operator is
+$\left(\begin{smallmatrix}p&g^*\\g&-A\end{smallmatrix}\right)$; Schur's
+determinant formula and
+$-\log\det(I-zT)=\sum_{j\ge1}z^j\Tr(T^j)/j$ give
+\eqref{eq:shift}.  Step-graphon approximation extends the identity from
+finite rank to every graphon.
+
+The compression satisfies $\norm A\le\tfrac12$.  If
+$\lambda_{\max}(A)\le q$, then
+$\Tr(A^m)\le q^{m-2}\Tr(A^2)\le pq^{m-1}$, while the last term in
+\eqref{eq:shift} is nonnegative.  Thus only a frontier eigenvalue
+$\alpha>q$ needs attention.  It is unique: two such eigenvalues would
+contribute more than $2q^2>q(1-q)$ to \eqref{eq:HS}.  Every other eigenvalue
+lies in $[-L,L]$, where
+\begin{equation}\label{eq:L}
+        L=\sqrt{pq-\alpha^2},
+        \qquad 0<L<q<\alpha<\frac12.
+\end{equation}
+
+For completeness, the eigenfunction shape argument also gives
+\begin{equation}\label{eq:forced}
+ \norm g_2^2\ge
+ \frac{\alpha(\alpha-q)^2}{2(1-2\alpha)},
+ \qquad
+ \alpha^2+q\alpha-q\le0.
+\end{equation}
+To see this, choose a unit frontier eigenfunction $\phi\perp\one$ and put
+$a_\phi=\int|\phi|$.  Positivity and boundedness of $U$ imply
+$a_\phi^2\ge2\alpha$.  Writing
+$|\phi|=a_\phi\one+h$, one obtains
+\[
+ (\alpha-q)a_\phi^2
+ \le2a_\phi\norm g_2\sqrt{1-a_\phi^2},
+\]
+which proves the first inequality in \eqref{eq:forced}.  Combining it with
+$\alpha^2+2\norm g_2^2\le pq$ yields the second.  Hence
+\begin{equation}\label{eq:ceiling}
+        q<\alpha\le r(q):=\frac{\sqrt{q^2+4q}-q}{2}.
+\end{equation}
+
+For odd $m$, define
+\begin{align}
+ k_m(\lambda)&=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda},\label{eq:kdef}\\
+ A_m&=2L^{m-2}+m k_m(\alpha),\qquad
+ B_m=2L^{m-2}+m k_m(L),\label{eq:AB}\\
+ R_m&=\alpha^m+L^m-pq^{m-1}.\label{eq:R}
+\end{align}
+The function $k_m$ is positive and strictly decreasing on $[0,p)$, so
+\begin{equation}\label{eq:A<B}
+        0<A_m<B_m.
+\end{equation}
+Writing $g=\gamma\phi+g_s$, the trace term and the linear term of the logarithm
+in \eqref{eq:shift} give the master estimate
+\begin{equation}\label{eq:master}
+ t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+ \ge -R_m+A_m\gamma^2+B_m\norm{g_s}_2^2.
+\end{equation}
+
+It remains to eliminate the shape of $\phi$.  Put
+\[
+ z_\phi=\left(\int|\phi|\right)^2,\qquad
+ b_\phi=\ip{|\phi|}{\phi}\ge0,\qquad
+ k_\phi=|\phi|-\sqrt{z_\phi}\one-b_\phi\phi,\qquad
+ K=\norm{k_\phi}_2^2.
+\]
+Then $z_\phi+b_\phi^2+K=1$ and $z_\phi\ge2\alpha$.  Direct use of
+$0\le U\le1$ gives
+\begin{equation}\label{eq:direct-safe}
+ \gamma\le
+ \frac{z_\phi-2\alpha-2\alpha b_\phi}{2\sqrt{z_\phi}},
+ \qquad
+ b_\phi\gamma+\ip{g_s}{k_\phi}
+ \ge
+ \frac{(\alpha-q)z_\phi+(\alpha-L)K}{2\sqrt{z_\phi}}.
+\end{equation}
+Minimising the quadratic payment in \eqref{eq:master} subject to
+\eqref{eq:direct-safe} is exact and leads to the following quantities.  Set
+\begin{equation}\label{eq:dfedef}
+        d=\alpha-q,\qquad f=\alpha-L,\qquad e=1-2\alpha,
+\end{equation}
+and
+\begin{align}
+ C_m&=\frac{B_m f\sqrt{2\alpha}\,e^2}{4\alpha^2},
+ &
+ \xi&=\frac{4\alpha^2d}{e^2},
+ &
+ \rho&=\frac{A_m}{B_m}\frac{\sqrt\alpha}{2\sqrt2 f},
+ \label{eq:Cxirho}\\
+ \psi(\xi,\rho)
+ &=\min_{0\le v\le1}
+   \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.\label{eq:psi}
+\end{align}
+The exact shape elimination is
+\begin{equation}\label{eq:huber-elim}
+        A_m\gamma^2+B_m\norm{g_s}_2^2
+        \ge C_m\psi(\xi,\rho).
+\end{equation}
+Here is a short derivation.  In the nondegenerate case $K>0$, the second
+inequality in \eqref{eq:direct-safe} and Cauchy--Schwarz give
+\[
+ \norm{g_s}_2^2\ge
+ \frac1K\pos{
+ \frac{dz_\phi+fK}{2\sqrt{z_\phi}}-b_\phi\gamma}^2.
+\]
+When the first bound in \eqref{eq:direct-safe} is positive, a minimiser may be
+taken with $\gamma\ge0$, and it obeys
+\[
+ b_\phi^2+2\alpha b_\phi+2\gamma\sqrt{2\alpha}\le e.
+\]
+Thus, with $v=2\gamma\sqrt{2\alpha}/e\in[0,1]$,
+\[
+ b_\phi\gamma\le
+ \frac{e^2v(1-v)}{4\alpha\sqrt{2\alpha}}.
+\]
+Minimising first over $K$ by AM--GM gives exactly the right side of
+\eqref{eq:huber-elim}.  If the first bound in \eqref{eq:direct-safe} is
+nonpositive, the safe-channel payment is at least $B_mdf$, which is stronger.
+The case $K=0$ follows directly from the displayed budget (or by its limiting
+form): it forces $\xi\le v-v^2$, so the positive-part term vanishes.  This
+proves \eqref{eq:huber-elim} in all cases.
+
+Finally, convex duality gives the formula central to the new proof:
+\begin{equation}\label{eq:dual}
+ \psi(\xi,\rho)=
+ \max_{0\le\lambda\le1}
+ \left\{\lambda\xi-
+ \frac{\lambda^2}{4(\rho+\lambda)}\right\}.
+\end{equation}
+Indeed, write $x_+=\max_{0\le\lambda\le1}\lambda x$, exchange min and max,
+and minimise $(\rho+\lambda)v^2-\lambda v+\lambda\xi$ in $v$.
+
+There are two canonical choices in \eqref{eq:dual}.  If $2\rho\xi\le1$, take
+$\lambda=2\rho\xi$ to get
+\begin{equation}\label{eq:certA}
+ C_m\psi(\xi,\rho)
+ \ge
+ \frac{2\alpha^3A_m d^2}{e^2}
+ \frac{1+4\xi}{1+2\xi}.
+\end{equation}
+If $2\rho\xi>1$, take $\lambda=1$.  Since
+$1/[4(1+\rho)]<\xi/(2+4\xi)$ on this branch,
+\begin{equation}\label{eq:certB}
+ C_m\psi(\xi,\rho)
+ \ge
+ \sqrt{2\alpha}\,B_m f d
+ \frac{1+4\xi}{2+4\xi}.
+\end{equation}
+These are the quadratic and linear certificates, respectively.
+
+\section{The dimensionless frontier chart}\label{sec:chart}
+
+Fix an admissible pair $(q,\alpha)$ and an odd $m\ge15$.  Put
+\begin{equation}\label{eq:chart}
+ N=m-2,\qquad
+ a=\frac q\alpha,\qquad
+ r=\frac Lq,\qquad
+ \ell=\frac L\alpha=ar,
+ \qquad z=\ell^2,\qquad u=1-a.
+\end{equation}
+Also set
+\begin{equation}\label{eq:D-sigma}
+ D=1+a^2+z,
+ \qquad
+ \sigma=\frac p\alpha=\frac{1+z}{a}.
+\end{equation}
+Dividing $L^2=pq-\alpha^2$ by $\alpha^2$ and using $p+q=1$ gives
+\begin{equation}\label{eq:chart-identities}
+ z=a\sigma-1,\qquad
+ \alpha=\frac aD,\qquad q=\frac{a^2}{D},\qquad
+ e=\frac{u^2+z}{D},\qquad
+ \xi=\frac{4a^3u}{D(u^2+z)^2}.
+\end{equation}
+
+The structural conditions become especially simple:
+\begin{equation}\label{eq:domain}
+ 0<r<1,\qquad
+ z\ge au,\qquad
+ D<3a^2,\qquad
+ a>\frac{1+\sqrt{13}}6>\frac34.
+\end{equation}
+Here $z\ge au$ is exactly the frontier ceiling
+$\alpha^2+q\alpha-q\le0$, and $D<3a^2$ is exactly $q>1/3$.
+Their compatibility gives $3a^2-a-1>0$, proving the last bound.  We shall
+also use
+\begin{equation}\label{eq:domain-consequences}
+        a^2(2-r^2)>1,\qquad a>r,\qquad
+        \sigma>1+z.
+\end{equation}
+
+After division by $\alpha^m$, the scalar defect is
+\begin{align}
+ F_N:=\frac{R_m}{\alpha^m}
+ &=1-(1+z)a^N+\ell^{N+2}\notag\\
+ &=1-a^N-z(a^N-\ell^N).\label{eq:defect-normal}
+\end{align}
+Define the two finite quotients
+\begin{equation}\label{eq:KA-KL}
+ K_A=\frac{\sigma^{N+1}-1}{\sigma+1},
+ \qquad
+ K_L=\frac{\sigma^{N+1}-\ell^{N+1}}{\sigma+\ell}.
+\end{equation}
+Then
+\begin{align}
+ \frac{A_m}{\alpha^N}&=2\ell^N+(N+2)K_A,
+ &
+ \frac{B_m}{\alpha^N}&=2\ell^N+(N+2)K_L.
+ \label{eq:AB-normal}
+\end{align}
+
+The next two sections prove that \eqref{eq:certA} and \eqref{eq:certB}, in
+these coordinates, both dominate $F_N$ on their respective intrinsic
+branches.
+
+\section{The quadratic certificate}\label{sec:quadratic}
+
+Assume \(2\rho\xi\le1\).  From \eqref{eq:certA} and
+\(A_m\ge m k_m(\alpha)\),
+\begin{equation}\label{eq:quadratic-start}
+ \frac{C_m\psi(\xi,\rho)}{\alpha^m}
+ \ge 2(N+2)\alpha\left(\frac d e\right)^2K_A.
+\end{equation}
+(The omitted factor \((1+4\xi)/(1+2\xi)\) is at least \(1\).)
+The next lemma proves that the right side dominates the normalized defect.
+It is valid on the whole admissible chart; the branch assumption is needed
+only for the dual witness in \eqref{eq:quadratic-start}.
+
+\begin{lemma}[Quadratic payment lemma]\label{lem:quadratic-payment}
+For every point satisfying \eqref{eq:domain} and every odd \(N\ge13\),
+\begin{equation}\label{eq:quadratic-lemma}
+ F_N\le 2(N+2)\alpha\left(\frac d e\right)^2K_A.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Introduce two further dimensionless variables
+\begin{equation}\label{eq:zeta-v}
+ \zeta=\frac{\ell^2}{u},\qquad v=\sigma-1.
+\end{equation}
+The frontier ceiling gives \(\zeta\ge a>3/4\), while
+\(1<\sigma<2\) gives \(0<v<1\).  Solving the definitions yields
+\begin{equation}\label{eq:zeta-param}
+ H_\zeta:=\zeta+1+v,\qquad
+ u=\frac v{H_\zeta},\qquad
+ a=\frac{\zeta+1}{H_\zeta},\qquad
+ \ell^2=\frac{\zeta v}{H_\zeta}.
+\end{equation}
+Set
+\begin{equation}\label{eq:TN}
+        T_N=N-\zeta(a^N-\ell^N).
+\end{equation}
+Since \(1-a^N\le Nu\) and \(\ell^2=\zeta u\),
+\begin{equation}\label{eq:F-to-T}
+        F_N\le uT_N.
+\end{equation}
+Thus we may assume \(T_N>0\).
+
+Because \(N\) is odd, AM--GM in the finite geometric sum gives
+\begin{equation}\label{eq:KA-amgm}
+ K_A=(\sigma-1)\sum_{j=0}^{(N-1)/2}\sigma^{2j}
+ \ge\frac{N+1}{2}(\sigma-1)\sigma^{(N-1)/2}.
+\end{equation}
+Also
+\[
+ \alpha=\frac aD,\qquad
+ \frac d e=\frac{a}{u+\zeta},\qquad
+ \sigma-1=\frac{u(1+\zeta)}a.
+\]
+Consequently the right side of \eqref{eq:quadratic-lemma} is at least
+\begin{equation}\label{eq:quadratic-payment-lower}
+ u\,\frac{(N+2)(N+1)a^2(1+\zeta)\sigma^{(N-1)/2}}
+          {D(u+\zeta)^2}.
+\end{equation}
+
+We need one coefficient estimate:
+\begin{equation}\label{eq:coefficient-lemma}
+ \frac{a^2\sigma^{5/2}}{D(u+\zeta)^2}\ge\frac1{2\zeta^2}.
+\end{equation}
+Indeed, \(u+\zeta\le\zeta/a\), \(D=a(\sigma+a)\), and it is enough to
+show \(2a^3\sigma^{5/2}\ge\sigma+a\).  The left side minus the right side
+is increasing in \(\sigma\).  Moreover,
+\[
+ \sigma\ge\sigma_0:=\frac{1+a-a^2}{a}.
+\]
+Since \(\sqrt{\sigma_0}\ge1+(\sigma_0-1)/3\), substitution reduces the
+desired inequality to
+\[
+ \frac{(1-a)P(a)}{3a}>0,\qquad
+ P(a)=2a^6-8a^5+14a^3+6a^2-4a-3.
+\]
+Here
+\[
+ P'(a)=2Q(a),\qquad
+ Q(a)=6a^5-20a^4+21a^2+6a-2
+ \ge a^2+6a-2>0
+\]
+on \(a\ge3/4\), and \(P(3/4)=3561/2048>0\).  This proves
+\eqref{eq:coefficient-lemma}.
+
+Put
+\begin{equation}\label{eq:Czeta}
+ C_N(\zeta)=\frac{(N+2)(N+1)(1+\zeta)}{2\zeta^2},
+ \qquad R=\frac{N-6}{2}.
+\end{equation}
+Equations \eqref{eq:quadratic-payment-lower} and
+\eqref{eq:coefficient-lemma} show that it remains only to prove
+\begin{equation}\label{eq:TN-core}
+        T_N\le C_N(\zeta)(1+v)^R.
+\end{equation}
+This estimate has a natural interpretation: \(\zeta\) measures frontier
+variance in units of the gap \(u\), and the comparison changes when that
+variance crosses the cycle scale \(N\).
+
+From \eqref{eq:zeta-param}, Bernoulli's inequality gives the two bounds
+\begin{align}
+ T_N&\le N-\zeta+Nv+\zeta v^{N/2},\label{eq:T-first}\\
+ T_N&<N(1-\ell^{N+1}).\label{eq:T-second}
+\end{align}
+For the second, note that
+\(\ell^2<2a^2-1<(2a-1)^2\), so \(a-\ell>1-a=u\), and use
+convexity: \(a^N-\ell^N>N u\ell^{N-1}\).
+
+\smallskip
+\noindent\emph{Variance below the cycle scale.}
+If \(\zeta\le N/2\), then \(C_N(\zeta)\ge C_N(N/2)>N>T_N\).
+If \(N/2\le\zeta\le N\), then
+\begin{equation}\label{eq:C-two}
+        C_N(\zeta)\ge N-\zeta,\qquad
+        C_N(\zeta)R\ge N+\zeta.
+\end{equation}
+The first inequality follows from
+\(C_N(\zeta)\ge C_N(N)>N/2\); for the second, the worst endpoint is
+\(\zeta=N\), where it is equivalent to
+\[
+ (N+2)(N+1)^2(N-6)\ge8N^3,
+\]
+which holds for \(N\ge13\).  Bernoulli's inequality and
+\(v^{N/2}\le v\) now give
+\[
+ C_N(\zeta)(1+v)^R
+ \ge(N-\zeta)+(N+\zeta)v
+ \ge T_N.
+\]
+
+\smallskip
+\noindent\emph{Variance above the cycle scale.}
+Suppose \(\zeta\ge N\).  Positivity of \(T_N\), together with
+\(a^N\ge1-Nv/\zeta\) and \(\ell^N\le v^{N/2}\), implies
+\begin{equation}\label{eq:zeta-upper}
+ \zeta<Z:=\frac{N(1+v)}{1-v^{N/2}}.
+\end{equation}
+
+First let \(0<v\le1/2\).  From \eqref{eq:T-first},
+\[
+        T_N\le N(v+v^{N/2}).
+\]
+Using \eqref{eq:zeta-upper} and \(1+\zeta>\zeta\),
+\begin{align}
+ C_N(\zeta)(1+v)^R
+ &>
+ \frac{(N+2)(N+1)}{2N}
+ (1-v^{N/2})(1+v)^{R-1}.\label{eq:Mv}
+\end{align}
+Now \(v^{N/2}\le v/32\), \(1-v^{N/2}>63/64\), and
+\((1+v)^{R-1}\ge1+5v/2\).  The right side of \eqref{eq:Mv} is therefore
+larger than \(33Nv/32\), because
+\[
+ \frac{63(N+1)}{128}\left(1+\frac52v\right)
+ -\frac{33N}{32}v>0.
+\]
+This dominates \(N(v+v^{N/2})\).
+
+It remains to consider \(1/2\le v<1\).  We use the vanishing in
+\eqref{eq:T-second} more accurately.  For fixed \(v\), define
+\[
+ g(t)=t\left[1-
+ \left(\frac{tv}{t+1+v}\right)^{(N+1)/2}\right].
+\]
+Writing \(\theta=(1+v)/(t+1+v)\), differentiation gives
+\[
+ g'(t)=1-[v(1-\theta)]^{(N+1)/2}
+ \left(1+\frac{N+1}{2}\theta\right)\ge0;
+\]
+the last inequality is Bernoulli's inequality in the form
+\((1-\theta)^{-(N+1)/2}\ge1+(N+1)\theta/2\).
+Hence \eqref{eq:T-second} and \eqref{eq:zeta-upper} imply
+\begin{equation}\label{eq:gZ}
+ \zeta T_N<N g(\zeta)<N g(Z)
+ =\frac{N^2(1+v)}{1-y}(1-\omega^{(N+1)/2}),
+\end{equation}
+where
+\[
+        y=v^{N/2},\qquad
+        \omega=\frac{Nv}{N+1-y}.
+\]
+The following tangent estimate is uniform:
+\begin{equation}\label{eq:tangent}
+ 1-\omega^{(N+1)/2}
+ \le\frac{3(N+1)}{2N}(1-y).
+\end{equation}
+Indeed, as a function of \(y\),
+\[
+ f(y):=\omega^{(N+1)/2}
+ =\left(\frac{N}{N+1-y}\right)^{(N+1)/2}
+  y^{(N+1)/N}
+\]
+satisfies \(f(1)=1\), \(f'(1)=3(N+1)/(2N)\), and \(f''(y)>0\).
+Convexity places \(f\) above its tangent at \(1\), proving
+\eqref{eq:tangent}.  Equations \eqref{eq:gZ} and \eqref{eq:tangent} give
+\[
+        T_N<\frac{3N(N+1)}{2\zeta}(1+v).
+\]
+On the other hand,
+\[
+ C_N(\zeta)(1+v)^R>
+ \frac{(N+2)(N+1)}{2\zeta}(1+v)^R.
+\]
+Thus \eqref{eq:TN-core} follows from
+\[
+ (1+v)^{R-1}\ge\frac{3N}{N+2}.
+\]
+For \(N=13\), this is implied by
+\((3/2)^{5/2}>13/5\), whose square is
+\(243/32>169/25\).  For odd \(N\ge15\), the left side is at least
+\((3/2)^{7/2}>3\), while the right side is smaller than \(3\).
+This completes the proof of \eqref{eq:TN-core} and of the lemma.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:quadratic}]
+Combine \eqref{eq:quadratic-start} with
+Lemma~\ref{lem:quadratic-payment} and \(F_N=R_m/\alpha^m\).
+\end{proof}
+
+\section{The linear certificate}\label{sec:linear}
+
+Assume now that $2\rho\xi>1$, and abbreviate
+\begin{equation}\label{eq:varphi-c}
+        \varphi=\frac{1+4\xi}{2+4\xi},
+        \qquad c_\xi=\sqrt{2\alpha}\,\varphi.
+\end{equation}
+By \eqref{eq:certB} and \eqref{eq:AB-normal},
+\begin{equation}\label{eq:linear-start}
+ \frac{C_m\psi(\xi,\rho)}{\alpha^m}
+ \ge u(N+2)c_\xi(1-\ell)K_L.
+\end{equation}
+Since $N+1$ is even,
+\begin{equation}\label{eq:KL-lower}
+ K_L=(\sigma-\ell)
+ \sum_{j=0}^{(N-1)/2}\sigma^{N-1-2j}\ell^{2j}
+ \ge(\sigma-\ell)\sigma^{N-1}.
+\end{equation}
+Recall the variables $\zeta,v,T_N$ from
+\eqref{eq:zeta-v}--\eqref{eq:TN}.  In view of
+$F_N\le uT_N$, Proposition~\ref{prop:linear} will follow from
+\begin{equation}\label{eq:linear-core}
+ T_N\le
+ (N+2)c_\xi(1-\ell)(\sigma-\ell)\sigma^{N-1}.
+\end{equation}
+
+The key point is that the Huber factor $\varphi$ compensates automatically
+for the possible loss when $\ell$ is close to $1$.
+
+\begin{lemma}[Compensation]\label{lem:compensation}
+On the whole admissible chart,
+\begin{equation}\label{eq:compensation}
+        c_\xi\,\sigma^{\zeta/4}\ge1-\ell^2.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+We prove separately the two factors in $c_\xi$.
+First,
+\begin{equation}\label{eq:sqrt-comp}
+        \sqrt{2\alpha}\ge1-\ell^2.
+\end{equation}
+Indeed, with $y=\ell^2$, this is equivalent after squaring to
+\[
+        2a\ge(1+a^2+y)(1-y)^2.
+\]
+The difference between the two sides is increasing in $y$, since its
+derivative is $(1-y)(2a^2+3y+1)$.  At the smallest allowed value
+$y=au$ it equals
+\[
+        (1-a)(a^4+a^2+2a-1)>0.
+\]
+
+It remains to prove $\varphi\sigma^{\zeta/4}\ge1$.  In terms of
+$H_\zeta=\zeta+1+v$, direct substitution gives
+\begin{equation}\label{eq:xi-zeta-v}
+ \xi=\frac{4H_\zeta^2}
+ {v(\zeta+v)^2Q},
+ \qquad
+ Q=v^2+v\zeta+2v+2\zeta+2<3(\zeta+1).
+\end{equation}
+Moreover,
+\[
+ \zeta H_\zeta^2-(\zeta+1)(\zeta+v)^2
+ =\zeta^2+\zeta-v^2>0.
+\]
+Consequently
+\begin{equation}\label{eq:xi-large-enough}
+        4\zeta v\xi>\frac{16}{3}.
+\end{equation}
+Since $\zeta>3/4$ and $0<v<1$, this implies
+\[
+        \zeta v(1+4\xi)>2(v+2).
+\]
+(For $\zeta\ge2$ this is immediate; for $\zeta<2$, use
+$v(2-\zeta)<5/4<4/3$.)  Finally,
+\[
+ \log\sigma=\log(1+v)\ge\frac{2v}{v+2},
+\]
+and hence
+\[
+ \frac\zeta4\log\sigma>
+ \frac1{1+4\xi}.
+\]
+Exponentiating and using $e^t>1+t$ gives
+\[
+ \sigma^{\zeta/4}>
+ 1+\frac1{1+4\xi}=\frac1\varphi.
+\]
+Together with \eqref{eq:sqrt-comp}, this proves
+\eqref{eq:compensation}.
+\end{proof}
+
+We shall also need one elementary one-variable inequality.
+
+\begin{lemma}[Geometric growth]\label{lem:geometric-growth}
+Let $N\ge13$ and put $A=3N/4-1$.  If $0\le x<1$ and
+\begin{equation}\label{eq:growth-assumption}
+        1-x\ge\frac{2x^2}{N},
+\end{equation}
+then
+\begin{equation}\label{eq:growth-conclusion}
+        (1-x)^2(1+x^2)^A\ge\frac{N}{N+2}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $G(x)=(1-x)^2(1+x^2)^A$, and let $\beta$ be the positive solution of
+$1-\beta=2\beta^2/N$.  Condition \eqref{eq:growth-assumption} says
+$0\le x\le\beta$.  The sign of the logarithmic derivative of $G$ is the
+sign of
+\begin{equation}\label{eq:growth-derivative}
+        -(A+1)x^2+Ax-1.
+\end{equation}
+Thus a global minimum occurs at $0$, at $\beta$, or at the smaller critical
+point $t$ of \eqref{eq:growth-derivative}, if it exists.
+
+At $x=0$, $G=1$.  At a critical point,
+$At(1-t)=1+t^2$, and Bernoulli's inequality gives
+\[
+        G(t)\ge(1-t)^2(1+At^2)=(1-t)(1+t^3).
+\]
+The smaller critical point satisfies $0<t\le7/52$.  Eliminating $N$ via the
+critical-point equation gives
+\begin{equation}\label{eq:growth-critical}
+ (1-t)(1+t^3)-\frac{N}{N+2}
+ =\frac{t(1+t)P(t)}{(2-t)(1+3t)},
+\end{equation}
+where
+\[
+        P(t)=3t^4-11t^3+14t^2-9t+1.
+\]
+The polynomial $P$ is decreasing on $[0,7/52]$ and
+$P(7/52)=119263/7311616>0$, so \eqref{eq:growth-critical} is nonnegative.
+
+Finally, $\beta\ge7/8$, and therefore
+\begin{align*}
+ G(\beta)
+ &=\frac{4\beta^4}{N^2}(1+\beta^2)^A\\
+ &\ge
+ \frac{4(7/8)^4}{N^2}
+ \left(\frac{113}{64}\right)^{3N/4-1}>1.
+\end{align*}
+The last inequality holds at $N=13$ even with the exponent replaced by $8$;
+its ratio under $N\mapsto N+2$ is larger than $1$.  Thus every possible
+minimum is at least $N/(N+2)$.
+\end{proof}
+
+\begin{lemma}[Linear payment lemma]\label{lem:linear-payment}
+For every point satisfying \eqref{eq:domain} and every odd $N\ge13$,
+inequality \eqref{eq:linear-core} holds.
+\end{lemma}
+
+\begin{proof}
+If $T_N\le0$ the claim is immediate, so assume $T_N>0$.
+
+\smallskip
+\noindent\emph{Variance below the cycle scale: $\zeta\le N$.}
+By Lemma~\ref{lem:compensation},
+\begin{align}
+ &(N+2)c_\xi(1-\ell)(\sigma-\ell)\sigma^{N-1}\notag\\
+ &\quad\ge
+ (N+2)(1-\ell)^2(1+\ell^3)
+ \sigma^{N-1-\zeta/4}\notag\\
+ &\quad\ge
+ (N+2)(1-\ell)^2(1+\ell^2)^{3N/4-1}.
+ \label{eq:linear-below}
+\end{align}
+Here we used $\sigma\ge1+\ell^2$ and
+$(1+\ell)(1-\ell+\ell^2)=1+\ell^3$.
+The domain inequality $\ell^2<2a^2-1$ implies
+$\ell<2a-1$, whence
+\[
+ 1-\ell>2u=\frac{2\ell^2}{\zeta}
+ \ge\frac{2\ell^2}{N}.
+\]
+Lemma~\ref{lem:geometric-growth}, with $x=\ell$, shows that the final
+line of \eqref{eq:linear-below} is at least $N$.  Since
+$T_N=N-\zeta(a^N-\ell^N)<N$, this proves the claim.
+
+\smallskip
+\noindent\emph{Variance above the cycle scale: $\zeta\ge N$.}
+Recall $v=\sigma-1$.  From \eqref{eq:zeta-param},
+$\ell^2<v$, and \eqref{eq:T-first} gives
+\begin{equation}\label{eq:T-high-zeta}
+        T_N\le N(v+v^{N/2}).
+\end{equation}
+Also $c_\xi>1/\sqrt6$, because $\alpha>1/3$ and $\varphi>1/2$.
+
+Suppose first that $0<v\le1/2$, and put $y=\sqrt v$.  Since
+$\ell\le y$,
+\begin{equation}\label{eq:Py}
+        (1-\ell)(\sigma-\ell)
+        \ge(1-y)(1-y+y^2)=:P_y.
+\end{equation}
+If $v\le1/4$, then $P_y\ge3/8$,
+$v+v^{N/2}\le2v$, and
+$(1+v)^{N-1}\ge1+(N-1)v$.  Thus \eqref{eq:linear-core} follows from
+\[
+        \frac{2N}{N-1}\le\frac{3(N+2)}{8\sqrt6},
+\]
+which holds at $N=13$ and becomes stronger as $N$ increases.
+If $1/4\le v\le1/2$, then $P_y\ge3/16$ and the left side of
+\eqref{eq:T-high-zeta} is at most $N$.  It is enough that
+\[
+        \frac{3(N+2)}{16\sqrt6}
+        \left(\frac54\right)^{N-1}>N.
+\]
+Again the inequality holds at $N=13$ (squaring clears the only radical) and
+its ratio increases with $N$.
+
+Finally suppose $v\ge1/2$.  From \eqref{eq:T-second},
+\[
+        T_N<N(N+1)(1-\ell).
+\]
+On the other hand, $\sigma-\ell>v\ge1/2$ and $\sigma\ge3/2$.
+After cancelling $1-\ell$, it is enough to prove
+\begin{equation}\label{eq:last-growth}
+        \left(\frac32\right)^{N-1}
+        \ge\frac{2\sqrt6\,N(N+1)}{N+2}.
+\end{equation}
+For $N\ge13$, one has $(3/2)^{N-1}\ge5N$: check $N=13$ and use the
+ratio under $N\mapsto N+1$.  Since
+$5>2\sqrt6\,(N+1)/(N+2)$, this proves
+\eqref{eq:last-growth}.  All values of $\zeta$ and $v$ have now been
+covered.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:linear}]
+Combine \eqref{eq:linear-start}, \eqref{eq:KL-lower}, and
+Lemma~\ref{lem:linear-payment}, then use $F_N=R_m/\alpha^m$.
+\end{proof}
+
+\section{Assembly and scope}\label{sec:assembly}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let $q=1-p\in(1/3,1/2)$.  If the compression $A$ has no eigenvalue larger
+than $q$, the no-frontier argument following \eqref{eq:shift} proves
+\eqref{eq:goal}.  Otherwise there is a unique frontier eigenvalue
+$q<\alpha\le r(q)$, and \eqref{eq:master}--\eqref{eq:huber-elim} reduce the
+claim to
+\[
+        R_m\le C_m\psi(\xi,\rho).
+\]
+If $2\rho\xi\le1$, this is Proposition~\ref{prop:quadratic}; if
+$2\rho\xi>1$, it is Proposition~\ref{prop:linear}.  These alternatives are
+exhaustive.
+\end{proof}
+
+\begin{remark}[Nature of the remaining subdivisions]
+The proof of each scalar lemma compares a geometric parameter with its
+natural scale: $\zeta$ with the cycle length $N$, and $v=\sigma-1$ with a
+fixed distance from the endpoint $1$.  These subdivisions only select among
+elementary estimates of the same scalar expression.  They do not create
+different graphon configurations, different spectral reductions, or
+separately certified parameter boxes.
+\end{remark}
+
+\begin{remark}[Short odd cycles]
+The threshold $N\ge13$, equivalently $m\ge15$, enters only through coarse
+uniform estimates such as Lemma~\ref{lem:geometric-growth}.  Direct numerical
+inspection of the exact scalar inequality does not suggest a failure for
+$m\le13$; rather, these particular lower bounds cease to close.  A genuinely
+uniform computer-free proof of $C_5,\ldots,C_{13}$ would require a sharper
+finite-cycle lemma and is not supplied here.  Thus this document should be
+combined with the existing per-cycle results only when stating the full
+conjecture.
+\end{remark}
+
+\begin{remark}[Auditability]
+Every non-symbolic endpoint check in this proof is displayed as a rational
+inequality or can be reduced to one by squaring a positive radical.  No claim
+depends on floating-point evaluation.  The proof is therefore suitable for a
+conventional line-by-line audit independently of the former certifier code.
+\end{remark}
+
+\end{document}

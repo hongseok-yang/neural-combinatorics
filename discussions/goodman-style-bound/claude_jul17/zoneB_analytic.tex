@@ -1,0 +1,590 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{corollary}[lemma]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[lemma]{Remark}
+\newtheorem{convention}[lemma]{Convention}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\Kfrak}{\mathfrak K}
+\newcommand{\Kstar}{K^{*}}
+\newcommand{\kxi}{\kappa_\xi}
+\newcommand{\kbar}{\bar\kappa}
+\newcommand{\lbar}{\bar\ell}
+\newcommand{\epsbar}{\bar\eps}
+\newcommand{\RII}{[R2]}
+
+\title{Zone B: an analytic proof of the two-variable battle\\
+{\large (replacement for the box certificate of Lemma \texttt{lem:zoneB-battle}
+in \texttt{paper\_region2\_v2.tex})}}
+\author{}
+\date{2026-07-16}
+
+\begin{document}
+\maketitle
+
+\noindent
+\textbf{Scope.}  This note replaces the computational proof (the
+$23$-box exhaustive-subdivision certificate \texttt{zoneB\_certifier.py})
+of the Zone-B battle, Lemma~\texttt{lem:zoneB-battle} of
+\texttt{paper\_region2\_v2.tex} (henceforth \RII), by a fully analytic
+proof.  The \emph{statement} of the battle lemma is unchanged, so the proof
+of Lemma~\texttt{lem:zoneB} in \RII{} (which combines the battle with
+Lemma~\texttt{lem:Kmax}, the bounds
+$\Pi\ge\underline\Pi$, $\Lambda\le\overline\Lambda$, and the certificate
+\texttt{eq:cert-II}) goes through verbatim.  The only results quoted from
+\RII{} are: the chart formulas of Lemma~\texttt{lem:chart}, and items (ii)
+and (iv) of Lemma~\texttt{lem:Kmax}; everything else below is
+self-contained.  Every displayed inequality is validated by
+\texttt{validate\_zoneB.py} (dense float grids over the exact stated
+domains, plus exact rational arithmetic for every table row, every
+surrogate constant, and a family of corner spot checks).
+
+\section{Setting and statement}
+
+Throughout, $e\in[\tfrac1{60},\tfrac{2033}{10000}]$ and
+\[
+        \kxi(e)=\frac e{(1-e)^2},\qquad
+        \kbar(e)=\min\Bigl(\frac{1-e}{1+e},\ \frac{1-3e}{6e}\Bigr),\qquad
+        \kappa\in[\kxi(e),\kbar(e)]
+\]
+(the \emph{strip}; it is empty unless $\kxi\le\kbar$, and all statements are
+vacuous at such $e$).  From the chart (Lemma~\texttt{lem:chart} of \RII):
+\[
+        x=x(e,\kappa)=\frac{1-e}{1+e+2\kappa e},\qquad
+        u=1-x=\frac{2e(1+\kappa)}{1+e+2\kappa e},\qquad
+        A=A(e,\kappa)=\frac{x(1+\kappa)}\kappa ,
+\]
+\[
+        \Phi=\Phi(e,\kappa)=\frac{2(1-e)(1+\kappa)^2e}{\kappa(1+e+2\kappa e)^2},
+        \qquad
+        w(\nu)=\frac{\sqrt{\nu^2+4\nu}-\nu}2 ,
+        \qquad
+        \lambda=\ln(1/x).
+\]
+Since $\nu+2w(\nu)=\sqrt{\nu^2+4\nu}$, the quantity
+$e^{-\Phi-2w(\Phi)}$ of \RII{} equals
+\begin{equation}\label{eq:Kstar-def}
+        \Kstar(e,\kappa):=\exp\Bigl(-\sqrt{\Phi^2+4\Phi}\Bigr).
+\end{equation}
+The battle lemma to be proved is
+(Lemma~\texttt{lem:zoneB-battle} of \RII):
+for all $e\in[\tfrac1{60},\tfrac{2033}{10000}]$ and
+$\kappa\in[\kxi(e),\kbar(e)]$,
+\begin{equation}\label{eq:battle}
+        \underline\Pi(e,\kappa)\ \ge\
+        \frac{\Kfrak(e,\kappa)}{x^2}+\overline\Lambda(e,\kappa),
+\end{equation}
+where, with $\lbar=\sqrt{2e/(1-e)}$,
+$\underline\rho=\tfrac14(1-e^{-17.37(1+\kappa)e})$ and
+$\epsbar=\min\bigl(\tfrac14,\;\frac e{4(1-e)^2\kappa(1+\underline\rho)}\bigr)$,
+\[
+        \underline\Pi
+        =\sqrt{1-e}\;\frac{(1-\lbar)(1-\lbar^{14})(1-\epsbar)}{1+\lbar},
+        \qquad
+        \overline\Lambda
+        =x^{13}\Bigl(\frac{2e}{1-e}\Bigr)^{13/2}\frac{(1-e)^2}{15e},
+\]
+and $\Kfrak=x^{14}(14-A)_+/15$ if the \emph{gate}
+``$A<14$ and $15(14-A)\lambda\ge A+1$'' holds, while
+$\Kfrak=\max\bigl(x^{14}(14-A)_+/15,\;\Kstar\bigr)$ otherwise.
+
+Two explicit curves organise the proof:
+\[
+        \gamma(e):=\frac7{25}-e
+        \qquad\text{(the \emph{gate curve})},
+        \qquad
+        G(e):=\sqrt{1-e}\;\frac{(1-\lbar)(1-\lbar^{14})}{1+\lbar},
+\]
+and the branch point of $\max(\gamma,\kxi)$ lies in
+$(\tfrac{111}{1000},\tfrac18)$; we only use the rational comparison
+$\kxi(\tfrac18)=\tfrac8{49}>\tfrac{31}{200}=\gamma(\tfrac18)$
+(equivalently $8\cdot200>49\cdot31$).
+The $e$-range is split at $e=\tfrac18$: for $e\le\tfrac18$ we work with the
+curve $\kappa=\gamma(e)$, for $e\ge\tfrac18$ with the curve
+$\kappa=\kxi(e)$.
+
+\begin{convention}[safe decimals]\label{conv:safe}
+Every terminating decimal below denotes the displayed exact rational
+number.  In the verification tables, quantities that must be bounded
+\emph{above} (marked~$\uparrow$) are exact rationals rounded up, and
+quantities that must be bounded \emph{below} (marked~$\downarrow$) are
+rounded down, so each table row is, as displayed, a finite exact rational
+computation that certifies its inequality.  The script
+\texttt{validate\_zoneB.py} re-verifies every row from the unrounded
+rationals.
+\end{convention}
+
+\section{Monotonicity toolkit}
+
+\begin{lemma}[elementary monotonicities]\label{lem:mono}
+For $e\in(0,\tfrac13)$ and $\kappa>0$, with $D:=1+e+2\kappa e$:
+\begin{enumerate}[label=\textup{(\roman*)},itemsep=1pt]
+\item $x=(1-e)/D\in(0,1)$ is strictly decreasing in $e$ and in $\kappa$.
+\item $u=1-x=2e(1+\kappa)/D$ is strictly increasing in $e$ and in $\kappa$:
+$\partial_e u=2(1+\kappa)/D^2>0$ and $\partial_\kappa u=2e(1-e)/D^2>0$.
+\item $A=(1-e)(1+\kappa)/(\kappa D)$ is strictly decreasing in $e$ and in
+$\kappa$.
+\item $\Phi$ is strictly decreasing in $\kappa$ on $\kappa\in(0,1]$;
+and for $e\in[\tfrac1{60},\tfrac18]$, $\kappa\le\tfrac{79}{300}$, $\Phi$ is
+strictly increasing in $e$.
+\item $t\mapsto\exp(-\sqrt{t^2+4t})$ is strictly decreasing on $t\ge0$;
+hence by \eqref{eq:Kstar-def}, $\Kstar$ is increasing in $\kappa$ on
+$\kappa\in(0,1]$ and, on the domain of \textup{(iv)}, decreasing in $e$.
+\item $G$ is positive and strictly decreasing on $(0,\tfrac13)$.
+\item $\kxi$ is strictly increasing; $\gamma$ is strictly decreasing;
+$\kxi/(4\gamma)$ is strictly increasing on $[\tfrac1{60},\tfrac18]$, with
+maximal value $\kxi(\tfrac18)/(4\gamma(\tfrac18))=\tfrac{400}{1519}<1$.
+\item $e\mapsto x(e,\gamma(e))=\dfrac{1-e}{1+\tfrac{39}{25}e-2e^2}$ is
+strictly decreasing on $[\tfrac1{60},\tfrac18]$.
+\item $e\mapsto x(e,\kxi(e))$ is strictly decreasing on
+$[\tfrac18,\tfrac{2033}{10000}]$.
+\item $\lambda=\ln(1/x)\ge u=1-x$ for $x\in(0,1]$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) In $\kappa$: $\partial_\kappa x=-2e(1-e)/D^2<0$.  In $e$: the numerator
+$1-e$ decreases and $D=1+e(1+2\kappa)$ increases.
+(ii) Direct differentiation as displayed.
+(iii) In $e$: by (i), $x$ decreases and the factor $(1+\kappa)/\kappa$ is
+constant.  In $\kappa$: with $N=1+\kappa$ and $\tilde D=\kappa D
+=\kappa(1+e)+2\kappa^2e$,
+\[
+        N'\tilde D-N\tilde D'
+        =\kappa(1+e)+2\kappa^2e-(1+\kappa)\bigl((1+e)+4\kappa e\bigr)
+        =-(1+e)-4\kappa e-2\kappa^2e<0 .
+\]
+(iv) $\partial_\kappa\ln\Phi=\frac2{1+\kappa}-\frac1\kappa-\frac{4e}D
+=\frac{\kappa-1}{\kappa(1+\kappa)}-\frac{4e}D\le-\frac{4e}D<0$ for
+$\kappa\le1$.  Next,
+$\partial_e\ln\Phi=\frac1e-\frac1{1-e}-\frac{2(1+2\kappa)}D
+\ge\frac1e-\frac1{1-e}-2(1+2\kappa)$ (as $D\ge1$); for $e\le\tfrac18$ and
+$\kappa\le\tfrac{79}{300}$ this is at least
+$8-\tfrac87-2\bigl(1+\tfrac{158}{300}\bigr)=\tfrac{1997}{525}>0$.
+(v) $t^2+4t$ is increasing on $t\ge0$; combine with (iv).
+(vi) $\lbar=\sqrt{2e/(1-e)}$ is increasing in $e$ and $\lbar<1$ iff
+$e<\tfrac13$; the three factors $\sqrt{1-e}$, $(1-\lbar)/(1+\lbar)$ and
+$1-\lbar^{14}$ are positive and decreasing.
+(vii) $\kxi$: numerator increases, denominator decreases.  The quotient of
+a positive increasing by a positive decreasing function increases; its
+value at $e=\tfrac18$ is $\frac{8/49}{4\cdot31/200}=\frac{400}{1519}$.
+(viii) With $\kappa=\gamma(e)$ one gets $2\kappa e=\tfrac{14}{25}e-2e^2$,
+so $D=1+\tfrac{39}{25}e-2e^2$, whose derivative $\tfrac{39}{25}-4e$ is
+positive for $e\le\tfrac18<\tfrac{39}{100}$; the numerator $1-e$ decreases.
+(ix) Composition of (i) with $\kxi$ increasing (vii).
+(x) $-\ln x\ge1-x$.
+\end{proof}
+
+\begin{lemma}[the $\Lambda$-bound]\label{lem:lambda}
+For all $(e,\kappa)$ in the strip,
+\[
+        \overline\Lambda(e,\kappa)\ \le\
+        \Lambda_1(e):=\Bigl(\frac{1-e}{1+e}\Bigr)^{13}
+        \Bigl(\frac{2e}{1-e}\Bigr)^{13/2}\frac{(1-e)^2}{15e}
+        \ \le\ \widehat\Lambda:=\frac{13}{10^6}.
+\]
+\end{lemma}
+
+\begin{proof}
+The first inequality is $x\le(1-e)/(1+e)$ (Lemma~\ref{lem:mono}(i) with
+$\kappa\downarrow0$), all other factors of $\overline\Lambda$ being
+$\kappa$-free.  Collecting exponents,
+\[
+        \Lambda_1(e)=\frac{2^{13/2}}{15}\,
+        \frac{e^{11/2}(1-e)^{17/2}}{(1+e)^{13}},
+        \qquad
+        (\ln\Lambda_1)'(e)=\frac{11}{2e}-\frac{17}{2(1-e)}-\frac{13}{1+e}.
+\]
+For $e\le e_1:=\tfrac{2033}{10000}$ each term is bounded by its value at
+$e_1$ resp.\ by $13$:
+\[
+        (\ln\Lambda_1)'(e)\ \ge\ \frac{11}{2e_1}-\frac{17}{2(1-e_1)}-13
+        =\frac{55000}{2033}-\frac{85000}{7967}-13>3.38>0
+\]
+(exact rational comparison: $55000\cdot7967-85000\cdot2033-13\cdot2033\cdot
+7967=54{,}820{,}157>0$).  Hence $\Lambda_1$ is increasing on $(0,e_1]$ and
+\[
+        \Lambda_1(e)\le\Lambda_1(e_1)
+        =\frac{2^6}{15}\,\sqrt{2e_1(1-e_1)}\;
+        \frac{e_1^5(1-e_1)^8}{(1+e_1)^{13}}
+        \ \le\ \frac{64}{15}\cdot\frac{14229}{25000}\cdot
+        \frac{e_1^5(1-e_1)^8}{(1+e_1)^{13}}
+        \ \le\ \frac{124}{10^7}\ <\ \widehat\Lambda,
+\]
+using $\bigl(\tfrac{14229}{25000}\bigr)^2\ge2e_1(1-e_1)
+=\tfrac{32393822}{10^8}$; the final two comparisons are exact rational
+evaluations (script, \S1--2).
+\end{proof}
+
+\begin{lemma}[envelope and the $\Kfrak$-bounds]\label{lem:envelope}
+At every strip point:
+\begin{enumerate}[label=\textup{(\alph*)},itemsep=1pt]
+\item $\underline\Pi\ \ge\ G(e)\,(1-\epsbar)$ with
+$\epsbar\le\min\bigl(\tfrac14,\ \tfrac{\kxi(e)}{4\kappa}\bigr)$;
+in particular $\underline\Pi\ge\tfrac34G(e)$.
+\item $\Kfrak\le\Kstar(e,\kappa)$ (in both gate branches); consequently the
+$\max(\cdot,\cdot)$ in the definition of $\Kfrak$ is redundant.
+\item If the gate holds at $(e,\kappa)$ then
+$\Kfrak\le\tfrac{14}{15}x^{14}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $\underline\Pi=G(e)(1-\epsbar)$ by definition, and
+$\epsbar\le\frac e{4(1-e)^2\kappa(1+\underline\rho)}
+\le\frac e{4(1-e)^2\kappa}=\frac{\kxi(e)}{4\kappa}$ because
+$\underline\rho\ge0$; also $\epsbar\le\tfrac14$ by its definition as a
+minimum, and $\kappa\ge\kxi$ gives again $\epsbar\le\tfrac14$.
+
+(b) Write $K(n)=x^n(n-A)/(n+1)$.  If $A\ge14$ then
+$x^{14}(14-A)_+/15=0\le\Kstar$.  If $A<14$, then by
+Lemma~\texttt{lem:Kmax}(ii) of \RII{} the function $K$ is log-concave on
+$(A,\infty)$ with an interior stationary point $n_*$ (the unique root of
+$\lambda=(A+1)/((n-A)(n+1))$, which exists because the right side decreases
+from $+\infty$ to $0$), so $K(14)\le K(n_*)$; and by
+Lemma~\texttt{lem:Kmax}(iv), $K(n_*)\le e^{-\Phi-2w(\Phi)}=\Kstar$.  Thus
+$x^{14}(14-A)_+/15\le\Kstar$ always.  On the gate branch
+$\Kfrak=x^{14}(14-A)_+/15\le\Kstar$; on the other branch
+$\Kfrak=\max\bigl(x^{14}(14-A)_+/15,\Kstar\bigr)=\Kstar$.
+
+(c) On the gate branch, $(14-A)_+\le14$.
+\end{proof}
+
+\section{The gate on the two curves}
+
+\begin{lemma}[$u$-gate]\label{lem:ugate}
+Say the \emph{$u$-gate} holds at $(e,\kappa)$ if $A<14$ and
+$15(14-A)u\ge A+1$.  Then:
+\begin{enumerate}[label=\textup{(\alph*)},itemsep=1pt]
+\item ($u$-gate $\Rightarrow$ gate)  If the $u$-gate holds at $(e,\kappa)$,
+so does the gate of \eqref{eq:battle}, since
+$\lambda\ge u$ (Lemma~\ref{lem:mono}(x)) and $14-A>0$ give
+$15(14-A)\lambda\ge15(14-A)u\ge A+1$.
+\item (upward extension)  If the $u$-gate holds at $(e,\kappa_0)$, it holds
+at $(e,\kappa)$ for every $\kappa\ge\kappa_0$: by
+Lemma~\ref{lem:mono}(ii),(iii), $A(e,\kappa)\le A(e,\kappa_0)<14$ and
+$u(e,\kappa)\ge u(e,\kappa_0)$, so
+$15\bigl(14-A(e,\kappa)\bigr)u(e,\kappa)
+\ge15\bigl(14-A(e,\kappa_0)\bigr)u(e,\kappa_0)\ge A(e,\kappa_0)+1\ge
+A(e,\kappa)+1$. \qedhere
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}[gate on the curves]\label{prop:gate}
+\begin{enumerate}[label=\textup{(\alph*)},itemsep=1pt]
+\item For every $e\in[\tfrac1{60},\tfrac18]$ the $u$-gate holds at
+$(e,\gamma(e))$, hence the gate holds at $(e,\kappa)$ for all
+$\kappa\ge\gamma(e)$.
+\item For every $e\in[\tfrac18,\tfrac{2033}{10000}]$ the $u$-gate holds at
+$(e,\kxi(e))$, hence the gate holds at every strip point with
+$e\ge\tfrac18$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Fix a row $[a,b]$ of Table~\ref{tab:gate} (the three rows tile
+$[\tfrac1{60},\tfrac18]$) and let $e\in[a,b]$, $\kappa=\gamma(e)\in
+[\gamma(b),\gamma(a)]$.  By Lemma~\ref{lem:mono}(i),(iii),
+\[
+        A(e,\gamma(e))=x(e,\gamma(e))\Bigl(1+\frac1{\gamma(e)}\Bigr)
+        \ \le\ x\bigl(a,\gamma(b)\bigr)\Bigl(1+\frac1{\gamma(b)}\Bigr)
+        =:\overline A,
+\]
+since $x$ decreases in both arguments and $1+1/\gamma(e)\le1+1/\gamma(b)$;
+and by Lemma~\ref{lem:mono}(ii),
+$u(e,\gamma(e))\ge u(a,\gamma(b))=:\underline u$.
+The row certifies $\overline A<14$ and
+$15(14-\overline A)\,\underline u-(\overline A+1)>0$; monotonicity then
+gives $15(14-A)u\ge15(14-\overline A)\underline u\ge\overline A+1\ge A+1$,
+i.e.\ the $u$-gate at $(e,\gamma(e))$.  Lemma~\ref{lem:ugate} extends it
+upward and converts it to the gate.
+
+(b) Same argument on the single row $[\tfrac18,\tfrac{2033}{10000}]$: by
+Lemma~\ref{lem:mono}(ii),(iii),(vii), for $e\ge a=\tfrac18$,
+\[
+        A(e,\kxi(e))\le A(e,\kxi(a))\le A(a,\kxi(a))=:\overline A,
+        \qquad
+        u(e,\kxi(e))\ge u(a,\kxi(a))=:\underline u ,
+\]
+and the row of Table~\ref{tab:gate} certifies the $u$-gate.  Every strip
+point with $e\ge\tfrac18$ has $\kappa\ge\kxi(e)$, so
+Lemma~\ref{lem:ugate}(b),(a) applies.
+\end{proof}
+
+\begin{table}[h]\centering
+\caption{Gate rows.  $\overline A{=}x(a,\kappa_-)(1{+}1/\kappa_-)\uparrow$,
+$\underline u{=}u(a,\kappa_-)\downarrow$ with $\kappa_-=\gamma(b)$ (part a)
+resp.\ $\kappa_-=\kxi(a)$ (part b); slack
+$=15(14-\overline A)\underline u-(\overline A+1)\downarrow$.  All entries
+exact rationals (Convention~\ref{conv:safe}).}\label{tab:gate}
+\begin{tabular}{lcccc}
+\toprule
+$[a,b]$ & $\kappa_-$ & $\overline A\uparrow$ & $\underline u\downarrow$ & slack$\downarrow$\\
+\midrule
+\multicolumn{5}{l}{(a) curve $\kappa=\gamma(e)$ on $[\tfrac1{60},\tfrac18]$}\\
+$[1/60,\,21/1000]$ & $259/1000$ & $4.6621$ & $0.0409$ & $0.06$ \\
+$[21/1000,\,8/125]$ & $27/125$ & $5.3506$ & $0.0495$ & $0.07$ \\
+$[8/125,\,1/8]$ & $31/200$ & $6.4352$ & $0.1364$ & $8.04$ \\
+\midrule
+\multicolumn{5}{l}{(b) curve $\kappa=\kxi(e)$ on $[\tfrac18,\tfrac{2033}{10000}]$}\\
+$[1/8,\,2033/10000]$ & $8/49$ & $5.3477$ & $0.2494$ & $26.02$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The two one-dimensional inequalities}
+
+For a rational $b$ let $c_\ell(b)$, $c_s(b)$ denote the $5$-digit decimals
+of Table~\ref{tab:surr} with
+\begin{equation}\label{eq:surr}
+        c_\ell^2\ \ge\ \frac{2b}{1-b},
+        \qquad
+        c_s^2\ \le\ 1-b
+        \qquad(\text{exact rational comparisons}),
+\end{equation}
+so that, by Lemma~\ref{lem:mono}(vi) and since
+$\lbar(b)^{14}=\bigl(\tfrac{2b}{1-b}\bigr)^7$ is rational,
+\begin{equation}\label{eq:Glo}
+        G(e)\ \ge\ G(b)\ \ge\
+        G_\downarrow(b):=c_s\,
+        \frac{\bigl(1-c_\ell\bigr)\Bigl(1-\bigl(\tfrac{2b}{1-b}\bigr)^{7}\Bigr)}
+        {1+c_\ell}
+        \qquad\text{for } e\le b .
+\end{equation}
+
+\begin{proposition}[Case-S inequality]\label{prop:caseS}
+For every $e\in[\tfrac1{60},\tfrac18]$,
+\begin{equation}\label{eq:caseS}
+        \tfrac34\,G(e)\ \ge\
+        \frac{\Kstar\bigl(e,\gamma(e)\bigr)}{x\bigl(e,\gamma(e)\bigr)^2}
+        +\widehat\Lambda .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Fix the row $[a,b]$ of Table~\ref{tab:caseS} containing $e$ (the seven rows
+tile $[\tfrac1{60},\tfrac18]$).  Since $\gamma(e)\le\gamma(a)\le
+\gamma(\tfrac1{60})=\tfrac{79}{300}$ and by
+Lemma~\ref{lem:mono}(iv) (both parts, on the stated domains),
+\[
+        \Phi\bigl(e,\gamma(e)\bigr)\ \ge\ \Phi\bigl(e,\gamma(a)\bigr)
+        \ \ge\ \Phi\bigl(a,\gamma(a)\bigr)=:\Phi_a ,
+\]
+so by Lemma~\ref{lem:mono}(v) and $e^t\ge1+t+\tfrac{t^2}2+\tfrac{t^3}6$
+($t\ge0$),
+\[
+        \Kstar\bigl(e,\gamma(e)\bigr)
+        \ \le\ \exp\Bigl(-\sqrt{\Phi_a^2+4\Phi_a}\Bigr)
+        \ \le\ e^{-r}
+        \ \le\ \frac1{1+r+\frac{r^2}2+\frac{r^3}6}=:K^{\uparrow},
+\]
+where $r=r(a)$ is the rational surrogate of Table~\ref{tab:caseS} with
+$r^2\le\Phi_a^2+4\Phi_a$ (exact comparison).  By
+Lemma~\ref{lem:mono}(viii), $x(e,\gamma(e))^2\ge x(b,\gamma(b))^2$, and by
+\eqref{eq:Glo}, $G(e)\ge G_\downarrow(b)$.  The row certifies
+\[
+        \tfrac34\,G_\downarrow(b)\ \ge\
+        \frac{K^{\uparrow}}{x(b,\gamma(b))^2}+\widehat\Lambda,
+\]
+which combined with the three monotone bounds yields \eqref{eq:caseS}.
+\end{proof}
+
+\begin{table}[h]\centering
+\caption{Case-S rows.  $r=r(a)$ satisfies $r^2\le\Phi_a(\Phi_a+4)$,
+$\Phi_a=\Phi(a,\gamma(a))$;
+$K^\uparrow=1/(1{+}r{+}\tfrac{r^2}2{+}\tfrac{r^3}6)\uparrow$;
+$X_\downarrow=x(b,\gamma(b))^2\downarrow$;
+margin $=\tfrac34G_\downarrow(b)-K^\uparrow/X_\downarrow-\widehat\Lambda
+\downarrow$.}\label{tab:caseS}
+\begin{tabular}{lccccc}
+\toprule
+$[a,b]$ & $r$ & $K^\uparrow$ & $X_\downarrow$ & $G_\downarrow(b)\downarrow$ & margin$\downarrow$\\
+\midrule
+$[1/60,\,23/1000]$ & $0.88959$ & $0.41622$ & $0.89136$ & $0.63595$ & $0.0100$ \\
+$[23/1000,\,33/1000]$ & $1.04817$ & $0.35850$ & $0.84928$ & $0.57596$ & $0.0098$ \\
+$[33/1000,\,6/125]$ & $1.26209$ & $0.29468$ & $0.79119$ & $0.50537$ & $0.0065$ \\
+$[6/125,\,67/1000]$ & $1.53635$ & $0.23144$ & $0.72527$ & $0.43499$ & $0.0071$ \\
+$[67/1000,\,89/1000]$ & $1.84283$ & $0.17909$ & $0.65808$ & $0.36930$ & $0.0048$ \\
+$[89/1000,\,111/1000]$ & $2.17522$ & $0.13781$ & $0.59913$ & $0.31450$ & $0.0058$ \\
+$[111/1000,\,1/8]$ & $2.51056$ & $0.10754$ & $0.56532$ & $0.28369$ & $0.0225$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proposition}[Case-L inequalities]\label{prop:caseL}
+\begin{enumerate}[label=\textup{(\alph*)},itemsep=1pt]
+\item For every $e\in[\tfrac1{60},\tfrac18]$,
+\begin{equation}\label{eq:caseLg}
+        G(e)\Bigl(1-\frac{\kxi(e)}{4\gamma(e)}\Bigr)
+        \ \ge\ \tfrac{14}{15}\,x\bigl(e,\gamma(e)\bigr)^{12}+\widehat\Lambda .
+\end{equation}
+\item For every $e\in[\tfrac18,\tfrac{2033}{10000}]$,
+\begin{equation}\label{eq:caseLx}
+        \tfrac34\,G(e)
+        \ \ge\ \tfrac{14}{15}\,x\bigl(e,\kxi(e)\bigr)^{12}+\widehat\Lambda .
+\end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Fix the row $[a,b]$ of Table~\ref{tab:caseL}(a) containing $e$.  By
+Lemma~\ref{lem:mono}(vi),(vii) the left side of \eqref{eq:caseLg} is a
+product of two positive decreasing functions of $e$ (positivity of the
+second factor: $\kxi/(4\gamma)\le\tfrac{400}{1519}<1$ on
+$[\tfrac1{60},\tfrac18]$ by (vii)), so it is at least
+$G_\downarrow(b)\bigl(1-\kxi(b)/(4\gamma(b))\bigr)=:L_\downarrow$; by
+Lemma~\ref{lem:mono}(viii) the right side is at most
+$\tfrac{14}{15}x(a,\gamma(a))^{12}+\widehat\Lambda=:R_\uparrow$ (the power
+$x(a,\gamma(a))^{12}$ is an exact rational).  The row certifies
+$L_\downarrow\ge R_\uparrow$.
+
+(b) Same with the single row of Table~\ref{tab:caseL}(b), using
+Lemma~\ref{lem:mono}(vi) for the left side and (ix) for the right.
+\end{proof}
+
+\begin{table}[h]\centering
+\caption{Case-L rows.  (a): $L_\downarrow=G_\downarrow(b)\bigl(1-
+\kxi(b)/(4\gamma(b))\bigr)\downarrow$,
+$R_\uparrow=\tfrac{14}{15}x(a,\gamma(a))^{12}\uparrow$.
+(b): $L_\downarrow=\tfrac34G_\downarrow(b)\downarrow$,
+$R_\uparrow=\tfrac{14}{15}x(a,\kxi(a))^{12}\uparrow$.
+Margin $=L_\downarrow-R_\uparrow-\widehat\Lambda\downarrow$.}\label{tab:caseL}
+\begin{tabular}{lccc}
+\toprule
+$[a,b]$ & $L_\downarrow$ & $R_\uparrow$ & margin$\downarrow$\\
+\midrule
+\multicolumn{4}{l}{(a) curve $\kappa=\gamma(e)$ on $[\tfrac1{60},\tfrac18]$}\\
+$[1/60,\,29/1000]$ & $0.57998$ & $0.56429$ & $0.0156$ \\
+$[29/1000,\,13/200]$ & $0.40350$ & $0.39307$ & $0.0104$ \\
+$[13/200,\,1/8]$ & $0.20898$ & $0.14341$ & $0.0655$ \\
+\midrule
+\multicolumn{4}{l}{(b) curve $\kappa=\kxi(e)$ on $[\tfrac18,\tfrac{2033}{10000}]$}\\
+$[1/8,\,2033/10000]$ & $0.11051$ & $0.02983$ & $0.0806$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering
+\caption{Surrogates for \eqref{eq:surr} (exact $5$-digit decimals;
+each satisfies the displayed exact rational comparison).}\label{tab:surr}
+\begin{tabular}{lcc@{\qquad}lcc}
+\toprule
+$b$ & $c_\ell$ & $c_s$ & $b$ & $c_\ell$ & $c_s$\\
+\midrule
+$23/1000$ & $0.21699$ & $0.98843$ & $89/1000$ & $0.44203$ & $0.95446$\\
+$29/1000$ & $0.24441$ & $0.98539$ & $111/1000$ & $0.49972$ & $0.94286$\\
+$33/1000$ & $0.26126$ & $0.98336$ & $1/8$ & $0.53453$ & $0.93541$\\
+$6/125$ & $0.31756$ & $0.97570$ & $2033/10000$ & $0.71440$ & $0.89258$\\
+$13/200$ & $0.37288$ & $0.96695$ & & &\\
+$67/1000$ & $0.37898$ & $0.96591$ & & &\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Proof of the battle}
+
+\begin{proof}[Proof of \eqref{eq:battle} \textup{(Lemma
+\texttt{lem:zoneB-battle} of \RII)}]
+Let $(e,\kappa)$ be a strip point.  By Lemma~\ref{lem:lambda},
+$\overline\Lambda\le\widehat\Lambda$ throughout, so it suffices to prove
+$\underline\Pi\ge\Kfrak/x^2+\widehat\Lambda$.  We distinguish three cases.
+
+\medskip\noindent
+\emph{Case S: $e\le\tfrac18$ and $\kappa\le\gamma(e)$.}
+By Lemma~\ref{lem:envelope}(a),(b),
+\[
+        \underline\Pi\ \ge\ \tfrac34G(e),
+        \qquad
+        \frac{\Kfrak}{x^2}\ \le\ \frac{\Kstar(e,\kappa)}{x(e,\kappa)^2}.
+\]
+Since $\kappa\le\gamma(e)\le\tfrac{79}{300}<1$, Lemma~\ref{lem:mono}(iv),(v)
+give $\Kstar(e,\kappa)\le\Kstar(e,\gamma(e))$, and Lemma~\ref{lem:mono}(i)
+gives $x(e,\kappa)\ge x(e,\gamma(e))$; hence
+$\Kfrak/x^2\le\Kstar(e,\gamma(e))/x(e,\gamma(e))^2$, and
+Proposition~\ref{prop:caseS} closes this case.
+
+\medskip\noindent
+\emph{Case L-$\gamma$: $e\le\tfrac18$ and $\kappa\ge\gamma(e)$.}
+By Proposition~\ref{prop:gate}(a) the gate holds at $(e,\kappa)$, so
+Lemma~\ref{lem:envelope}(c) and Lemma~\ref{lem:mono}(i) give
+\[
+        \frac{\Kfrak}{x^2}\ \le\ \tfrac{14}{15}\,x(e,\kappa)^{12}
+        \ \le\ \tfrac{14}{15}\,x\bigl(e,\gamma(e)\bigr)^{12}.
+\]
+By Lemma~\ref{lem:envelope}(a) and $\kappa\ge\gamma(e)$,
+\[
+        \underline\Pi\ \ge\ G(e)\Bigl(1-\frac{\kxi(e)}{4\kappa}\Bigr)
+        \ \ge\ G(e)\Bigl(1-\frac{\kxi(e)}{4\gamma(e)}\Bigr),
+\]
+and Proposition~\ref{prop:caseL}(a) closes this case.
+
+\medskip\noindent
+\emph{Case L-$\xi$: $e\ge\tfrac18$.}
+Here $\kappa\ge\kxi(e)$, so by Proposition~\ref{prop:gate}(b) the gate
+holds; as above
+$\Kfrak/x^2\le\tfrac{14}{15}x(e,\kappa)^{12}
+\le\tfrac{14}{15}x(e,\kxi(e))^{12}$, while
+$\underline\Pi\ge\tfrac34G(e)$ by Lemma~\ref{lem:envelope}(a).
+Proposition~\ref{prop:caseL}(b) closes this case.
+
+\medskip
+The three cases cover the strip: for $e\le\tfrac18$ every $\kappa$
+satisfies $\kappa\le\gamma(e)$ or $\kappa\ge\gamma(e)$, and $e\ge\tfrac18$
+is Case L-$\xi$.
+\end{proof}
+
+\section{Remarks}
+
+\begin{remark}[the $\underline\rho$-term is not needed]\label{rmk:rho}
+The proof used only $\underline\rho\ge0$
+(Lemma~\ref{lem:envelope}(a)).  Hence the battle \eqref{eq:battle} holds
+with $\epsbar$ replaced by the larger
+$\min\bigl(\tfrac14,\kxi(e)/(4\kappa)\bigr)$, i.e.\ the
+$17.37$-exponential can be deleted from the statement of
+Lemma~\texttt{lem:zoneB-battle}, and with it the rational comparison
+$28(1+\kappa)e/(1+3e)\ge17.37(1+\kappa)e$ in the proof of
+Lemma~\texttt{lem:zoneB} of \RII{} becomes unnecessary (only
+$\rho\ge0$ is used there).
+\end{remark}
+
+\begin{remark}[the $\max$ is redundant]
+By Lemma~\ref{lem:envelope}(b), on the gate-failure branch
+$\Kfrak=\Kstar$; the paper may state the dichotomy as: gate
+$\Rightarrow\Kfrak=x^{14}(14-A)_+/15$, otherwise $\Kfrak=\Kstar$.
+\end{remark}
+
+\begin{remark}[margins]
+The battle \eqref{eq:battle} in fact holds with pointwise margin
+$\ge0.116$ on the whole strip (minimum at the pinch corner
+$e\approx0.2029$, $\kappa=\kxi(e)$, where $\kxi$ meets $\kappa_q$); the
+analytic chain above retains a margin $\ge0.0048$ in the tightest table
+row (Case S, $[67/1000,89/1000]$) and $\ge0.06$ in the tightest gate row.
+The proof uses $15$ table rows in total.
+\end{remark}
+
+\begin{remark}[verification protocol]
+\texttt{validate\_zoneB.py} checks, and exits $0$ only if all pass:
+(1) exact rational verification of every row of
+Tables~\ref{tab:gate}--\ref{tab:surr}, including every surrogate comparison
+\eqref{eq:surr} and $r^2\le\Phi_a(\Phi_a+4)$;
+(2) the exact rational comparisons quoted in Lemma~\ref{lem:lambda} and
+Lemma~\ref{lem:mono}(iv),(vii);
+(3) every monotonicity claim of Lemma~\ref{lem:mono} on a dense grid over
+its exact stated domain;
+(4) an end-to-end pointwise replay of the three-case assembly on a
+$1201\times1201$ grid over the strip (each intermediate inequality
+checked pointwise, including $\Kfrak\le\Kstar$ and the direct battle
+margin);
+(5) exact-\texttt{Fraction} spot checks of \eqref{eq:battle} at $25$
+corner/extreme rational points via safe-direction brackets, independent of
+the tables.
+\end{remark}
+
+\end{document}

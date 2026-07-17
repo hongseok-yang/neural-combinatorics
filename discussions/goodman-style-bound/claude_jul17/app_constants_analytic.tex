@@ -1,0 +1,457 @@
+% ---------------------------------------------------------------------------
+% Drop-in replacement for Appendix app:constants of paper_new.tex
+% (replaces lines 3469-3559 of the current file).
+%
+% All labels used elsewhere in the paper (app:constants, eq:app-caseA,
+% eq:app-caseB) are preserved.  The scripted sweep over odd 63<=m<=499 and the
+% twelve scripted integer comparisons are eliminated: every step below is
+% analytic, and every rational constant is an exact fraction rounded in the
+% safe direction, with the underlying comparison displayed.
+%
+% Every displayed inequality of this appendix is checked by
+% validate_app_constants.py (dense float grids over the exact stated domains
+% plus exact Fraction arithmetic at all corners and for all rational
+% identities/comparisons).
+% ---------------------------------------------------------------------------
+
+\section{Constant inequalities for the residual-strip closure}\label{app:constants}
+
+This appendix proves the two numerical inequalities used in
+Lemma~\ref{lem:left-surplus-tail}.  Let
+\[
+        P(\theta)=\frac{2/3-2\theta}{\theta(1/2-2\theta)^2},
+\]
+\[
+        B_0(\theta)=
+        \left(\frac76\right)^{1-2\theta}
+        (8-24\theta)^{-\theta}
+        \frac{1/2+\theta}{5/12+\theta},
+\]
+and
+\[
+        B_1(\theta)=
+        \left(\frac76\right)^{1-2\theta}
+        (8-24\theta)^{-\theta}
+        \frac{34}{29}.
+\]
+The required inequalities are
+\begin{align}
+        \frac{99}{100m}P(\theta)B_0(\theta)^m&\ge1
+        &&(\theta=r/m\le1/6),\label{eq:app-caseA}\\
+        \frac{99}{100m}P(\theta)B_1(\theta)^m&\ge1
+        &&(1/6\le\theta=r/m<1/4),\label{eq:app-caseB}
+\end{align}
+for the integer pairs appearing in the residual strip with $m\ge63$ and
+$r\ge2$.  We prove the following stronger statements, in which the parameters
+are \emph{real} and unconstrained: \eqref{eq:app-caseA} holds for every real
+$0<\theta\le1/6$ and every real $m>0$
+(Proposition~\ref{prop:app-caseA-full}), and \eqref{eq:app-caseB} holds for
+every real $1/6\le\theta<1/4$ and every real $m>0$
+(Proposition~\ref{prop:app-caseB-full}).  In particular no finite
+verification, and no use of the integrality of $r$ or of the parity or size
+of $m$, remains in this appendix.
+
+The elimination of the parameter $m$ rests on the elementary bound
+$B^m/m\ge e\log B$ (Lemma~\ref{lem:app-tools}(ii) below): it replaces the
+minimisation of $B^m/m$ over $m$ by its exact infimum over real $m>0$, which
+is attained as $m\log B\to1$ and equals $e\log B$.  After this step both
+inequalities become one-variable statements about $\theta$ alone, and these
+are proved by exhibiting rational tangent/secant minorants of the logarithms
+involved.
+
+\subsection*{Elementary tools}
+
+\begin{lemma}[Exponential and logarithm bounds]\label{lem:app-tools}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $e^{y}\ge1+y$ for every real $y$.
+\item For every real $B>0$ and every real $m>0$,
+\[
+        \frac{B^m}{m}\ \ge\ e\log B .
+\]
+\item $\log u\le u-1$ for every real $u>0$.
+\item For every real $t\ge1$,
+\[
+        \frac{3(t^2-1)}{t^2+4t+1}
+        \ \le\ \log t\ \le\
+        \frac{(t-1)(t+5)}{2(2t+1)} .
+\]
+We write $L(t)$ and $U(t)$ for the left and right members.
+\item $e\ge 65/24$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) The function $y\mapsto e^y-1-y$ has derivative $e^y-1$, which is
+negative for $y<0$ and positive for $y>0$; its minimum value, at $y=0$, is
+$0$.
+
+(ii) Apply (i) with $y=m\log B-1$:
+\[
+        B^m=e^{m\log B}=e\cdot e^{\,m\log B-1}\ge e\,(1+m\log B-1)=e\,m\log B,
+\]
+and divide by $m>0$.
+
+(iii) Apply (i) with $y=u-1$: $e^{u-1}\ge u$, and take logarithms (both
+sides are positive).
+
+(iv) Both bounds are equalities at $t=1$, so it suffices to compare
+derivatives for $t\ge1$.  For the lower bound,
+\[
+        \frac{d}{dt}L(t)
+        =\frac{6t(t^2+4t+1)-3(t^2-1)(2t+4)}{(t^2+4t+1)^2}
+        =\frac{12(t^2+t+1)}{(t^2+4t+1)^2},
+\]
+and therefore
+\[
+        \frac{1}{t}-\frac{d}{dt}L(t)
+        =\frac{(t^2+4t+1)^2-12t(t^2+t+1)}{t\,(t^2+4t+1)^2}
+        =\frac{t^4-4t^3+6t^2-4t+1}{t\,(t^2+4t+1)^2}
+        =\frac{(t-1)^4}{t\,(t^2+4t+1)^2}\ \ge\ 0 .
+\]
+For the upper bound, writing $U(t)=(t^2+4t-5)/(4t+2)$,
+\[
+        \frac{d}{dt}U(t)
+        =\frac{(2t+4)(4t+2)-4(t^2+4t-5)}{(4t+2)^2}
+        =\frac{4t^2+4t+28}{(4t+2)^2},
+\]
+and therefore
+\[
+        \frac{d}{dt}U(t)-\frac1t
+        =\frac{4t^3+4t^2+28t-(4t+2)^2}{t\,(4t+2)^2}
+        =\frac{4(t-1)^3}{t\,(4t+2)^2}\ \ge\ 0
+        \qquad(t\ge1).
+\]
+Integrating the two derivative inequalities from $1$ to $t$ gives (iv).
+
+(v) $e=\sum_{k\ge0}1/k!\ge1+1+\frac12+\frac16+\frac1{24}=\frac{65}{24}$,
+since all terms of the series are positive.
+\end{proof}
+
+We record the six rational values of $L$ and $U$ that will be used; each is
+obtained from Lemma~\ref{lem:app-tools}(iv) by clearing denominators.
+\begin{equation}\label{eq:app-pade-values}
+\begin{aligned}
+        \log\frac{64}{63}&\ \ge\ L\!\left(\frac{64}{63}\right)
+        =\frac{3\,(64^2-63^2)}{64^2+4\cdot64\cdot63+63^2}
+        =\frac{3\cdot127}{24193},
+        &
+        \log\frac73&\ \ge\ L\!\left(\frac73\right)
+        =\frac{3\,(49-9)}{49+84+9}
+        =\frac{60}{71},
+        \\[1mm]
+        \log\frac{34}{29}&\ \ge\ L\!\left(\frac{34}{29}\right)
+        =\frac{3\,(34^2-29^2)}{34^2+4\cdot34\cdot29+29^2}
+        =\frac{945}{5941},
+        &
+        \log\frac76&\ \ge\ L\!\left(\frac76\right)
+        =\frac{3\,(49-36)}{49+168+36}
+        =\frac{39}{253},
+        \\[1mm]
+        \log 2&\ \le\ U(2)
+        =\frac{1\cdot7}{2\cdot5}
+        =\frac{7}{10},
+        &
+        \log\frac76&\ \le\ U\!\left(\frac76\right)
+        =\frac{\frac16\cdot\frac{37}6}{2\cdot\frac{10}3}
+        =\frac{37}{240}.
+\end{aligned}
+\end{equation}
+
+\subsection*{Case A: $0<\theta\le1/6$}
+
+Throughout this subsection set
+\[
+        \lambda_*=\frac{127}{24193},
+        \qquad
+        s=\frac{89}{100}.
+\]
+
+\begin{lemma}[Linear minorant of $\log B_0$]\label{lem:app-B0-linear}
+For every $0\le\theta\le\frac16$,
+\[
+        \log B_0(\theta)\ \ge\ \lambda_*+s\left(\frac16-\theta\right).
+\]
+\end{lemma}
+
+\begin{proof}
+\emph{Value at the right endpoint.}
+Since $4^{-1/6}=2^{-1/3}$,
+\[
+        B_0(1/6)
+        =\left(\frac76\right)^{2/3}4^{-1/6}\,\frac{2/3}{7/12}
+        =7^{2/3}6^{-2/3}\cdot2^{-1/3}\cdot\frac{8}{7}
+        =8\,(7\cdot6^2\cdot2)^{-1/3}
+        =\frac{8}{504^{1/3}}
+        =\frac{4}{63^{1/3}},
+\]
+so that $B_0(1/6)^3=64/63$ and, by \eqref{eq:app-pade-values},
+\begin{equation}\label{eq:app-lam-star}
+        \log B_0(1/6)=\frac13\log\frac{64}{63}
+        \ \ge\ \frac13\cdot\frac{3\cdot127}{24193}
+        =\frac{127}{24193}=\lambda_* .
+\end{equation}
+
+\emph{Slope.}  From
+\[
+        \log B_0(\theta)
+        =(1-2\theta)\log\frac76-\theta\log(8-24\theta)
+        +\log\Bigl(\frac12+\theta\Bigr)-\log\Bigl(\frac5{12}+\theta\Bigr),
+\]
+the negated derivative $c(\theta):=-\dfrac{d}{d\theta}\log B_0(\theta)$ is
+\begin{equation}\label{eq:app-c-def}
+        c(\theta)
+        =2\log\frac76+\log(8-24\theta)-\frac{24\theta}{8-24\theta}
+        -\frac{1}{1/2+\theta}+\frac{1}{5/12+\theta},
+\end{equation}
+and differentiating once more,
+\begin{equation}\label{eq:app-c-prime}
+        c'(\theta)
+        =-\frac{24}{8-24\theta}-\frac{192}{(8-24\theta)^2}
+        +\frac{1}{(1/2+\theta)^2}-\frac{1}{(5/12+\theta)^2}.
+\end{equation}
+On $[0,1/6]$ we have $8-24\theta\ge4>0$, so the first two terms of
+\eqref{eq:app-c-prime} are negative; and $0<\frac5{12}+\theta<\frac12+\theta$
+gives $(1/2+\theta)^{-2}<(5/12+\theta)^{-2}$, so the sum of the last two
+terms is negative as well.  Hence $c'<0$ on $[0,1/6]$, i.e.\ $c$ is strictly
+decreasing there, and for every $\theta\in[0,1/6]$,
+\begin{equation}\label{eq:app-c-lb}
+        c(\theta)\ \ge\ c(1/6)
+        =2\log\frac76+\log4-1-\frac32+\frac{12}7
+        =2\log\frac73-\frac{11}{14}
+        \ \ge\ \frac{120}{71}-\frac{11}{14}
+        =\frac{899}{994}
+        \ \ge\ \frac{89}{100}=s,
+\end{equation}
+where the value of $c(1/6)$ is read off from \eqref{eq:app-c-def} (using
+$2\log\frac76+\log4=2\log\frac73$ and $-1-\frac32+\frac{12}7=-\frac{11}{14}$),
+the penultimate inequality is \eqref{eq:app-pade-values} at $t=7/3$, and the
+last comparison is $899\cdot100=89900\ge88466=89\cdot994$.
+
+\emph{Conclusion.}  By the fundamental theorem of calculus, for
+$0\le\theta\le1/6$,
+\[
+        \log B_0(\theta)
+        =\log B_0(1/6)+\int_\theta^{1/6}c(u)\,du
+        \ \ge\ \lambda_*+s\left(\frac16-\theta\right). \qedhere
+\]
+\end{proof}
+
+\begin{lemma}[Weighted polynomial inequality]\label{lem:app-cubic}
+For every $0<\theta\le\frac16$,
+\[
+        P(\theta)\left[\lambda_*+s\left(\frac16-\theta\right)\right]
+        \ \ge\ 72\,\lambda_* .
+\]
+\end{lemma}
+
+\begin{proof}
+For $0<\theta<1/4$ one has $\theta(1/2-2\theta)^2>0$, so the claim is
+equivalent to $G(\theta)\ge0$ on $(0,1/6]$, where
+\[
+        G(\theta)
+        :=\left(\frac23-2\theta\right)
+        \left[\lambda_*+s\left(\frac16-\theta\right)\right]
+        -72\lambda_*\,\theta\left(\frac12-2\theta\right)^2 .
+\]
+$G$ is a cubic polynomial with rational coefficients.  At $\theta=1/6$ the
+first term equals $\frac13\lambda_*$ and the second equals
+$72\lambda_*\cdot\frac16\cdot\frac1{36}=\frac13\lambda_*$, so $G(1/6)=0$ and
+$\left(\frac16-\theta\right)$ divides $G$.  Polynomial division gives the
+exact factorisation
+\begin{equation}\label{eq:app-G-factor}
+        G(\theta)=\left(\frac16-\theta\right)Q(\theta),
+        \qquad
+        Q(\theta)
+        =288\lambda_*\theta^2-(2s+96\lambda_*)\theta
+        +\left(\frac{2s}3+4\lambda_*\right),
+\end{equation}
+which is verified by expanding both sides to
+\[
+        \left(\frac{2\lambda_*}3+\frac s9\right)
+        -\left(s+20\lambda_*\right)\theta
+        +\left(2s+144\lambda_*\right)\theta^2
+        -288\lambda_*\theta^3 .
+\]
+On $[0,1/6]$,
+\[
+        Q'(\theta)=576\lambda_*\theta-(2s+96\lambda_*)
+        \ \le\ 96\lambda_*-(2s+96\lambda_*)=-2s\ <\ 0,
+\]
+so $Q$ is strictly decreasing on $[0,1/6]$, and
+\begin{equation}\label{eq:app-Q-endpoint}
+        Q(\theta)\ \ge\ Q(1/6)
+        =8\lambda_*-\frac{2s+96\lambda_*}{6}+\frac{2s}3+4\lambda_*
+        =\frac s3-4\lambda_*
+        =\frac{89}{300}-\frac{508}{24193}
+        =\frac{2000777}{7257900}\ >\ 0 .
+\end{equation}
+Hence $Q>0$ on $[0,1/6]$ and $G\ge0$ on $(0,1/6]$ (with equality only at
+$\theta=1/6$), which proves the lemma.
+\end{proof}
+
+\begin{proposition}[Case A, all real parameters]\label{prop:app-caseA-full}
+For every real $0<\theta\le\frac16$ and every real $m>0$,
+\[
+        \frac{99}{100m}P(\theta)B_0(\theta)^m\ \ge\
+        \frac{99}{100}\cdot72\cdot\frac{127}{24193}\cdot\frac{65}{24}
+        =\frac{58841640}{58063200}\ >\ 1 .
+\]
+In particular \eqref{eq:app-caseA} holds for every integer pair of the
+residual strip.
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:app-B0-linear},
+$\log B_0(\theta)\ge\lambda_*+s(\frac16-\theta)>0$.  By
+Lemma~\ref{lem:app-tools}(ii) applied to $B=B_0(\theta)$,
+\[
+        \frac{B_0(\theta)^m}{m}\ \ge\ e\log B_0(\theta)
+        \ \ge\ e\left[\lambda_*+s\left(\frac16-\theta\right)\right].
+\]
+Since $0<\theta\le1/6$ gives $\frac23-2\theta\ge\frac13>0$, we have
+$P(\theta)>0$, and multiplying by $\frac{99}{100}P(\theta)$ preserves the
+inequality:
+\[
+        \frac{99}{100m}P(\theta)B_0(\theta)^m
+        \ \ge\ \frac{99e}{100}\,P(\theta)
+        \left[\lambda_*+s\left(\frac16-\theta\right)\right]
+        \ \ge\ \frac{99e}{100}\cdot72\,\lambda_*,
+\]
+the last step by Lemma~\ref{lem:app-cubic}.  Finally, by
+Lemma~\ref{lem:app-tools}(v),
+\[
+        \frac{99e}{100}\cdot72\,\lambda_*
+        \ \ge\ \frac{99}{100}\cdot72\cdot\frac{127}{24193}\cdot\frac{65}{24}
+        =\frac{99\cdot72\cdot127\cdot65}{100\cdot24193\cdot24}
+        =\frac{58841640}{58063200}\ >\ 1 . \qedhere
+\]
+\end{proof}
+
+\subsection*{Case B: $1/6\le\theta<1/4$}
+
+\begin{lemma}[Prefactor bound]\label{lem:app-P72}
+For every $\frac16\le\theta<\frac14$, $\;P(\theta)\ge72$.
+\end{lemma}
+
+\begin{proof}
+One checks by expansion the polynomial identity
+\[
+        \frac23-2\theta-72\,\theta\left(\frac12-2\theta\right)^2
+        =-\frac23\,(6\theta-1)(72\theta^2-24\theta+1).
+\]
+On $[1/6,1/4]$ the factor $6\theta-1$ is nonnegative.  The quadratic
+$72\theta^2-24\theta+1$ is convex, and its values at the endpoints are
+\[
+        72\cdot\frac1{36}-24\cdot\frac16+1=-1,
+        \qquad
+        72\cdot\frac1{16}-24\cdot\frac14+1=-\frac12,
+\]
+so by convexity it is at most $\max\{-1,-\frac12\}<0$ on all of $[1/6,1/4]$.
+Hence the identity's right-hand side is nonnegative on $[1/6,1/4]$, i.e.
+\[
+        \frac23-2\theta\ \ge\ 72\,\theta\left(\frac12-2\theta\right)^2
+        \qquad\left(\frac16\le\theta\le\frac14\right),
+\]
+and dividing by $\theta(1/2-2\theta)^2>0$ (legitimate for $\theta<1/4$)
+gives $P(\theta)\ge72$.
+\end{proof}
+
+\begin{lemma}[Uniform lower bound for $\log B_1$]\label{lem:app-B1-quad}
+For every $\frac16\le\theta\le\frac14$,
+\[
+        \log B_1(\theta)\ \ge\
+        \frac{945}{5941}+\frac{39}{253}-\frac{4225}{13824}
+        =\frac{157634591}{20778481152}
+        \ \ge\ \frac{7}{1000}.
+\]
+\end{lemma}
+
+\begin{proof}
+Write $8-24\theta=4(2-6\theta)$, where $2-6\theta\in[\frac12,1]$ on the
+stated range.  By Lemma~\ref{lem:app-tools}(iii) with $u=2-6\theta$,
+\[
+        \log(2-6\theta)\ \le\ 1-6\theta,
+\]
+hence, using $\theta>0$,
+\[
+        \log B_1(\theta)
+        =\log\frac{34}{29}+(1-2\theta)\log\frac76
+        -\theta\log4-\theta\log(2-6\theta)
+        \ \ge\ C-K\theta+6\theta^2,
+\]
+where
+\[
+        C=\log\frac{34}{29}+\log\frac76,
+        \qquad
+        K=1+2\log2+2\log\frac76 .
+\]
+By \eqref{eq:app-pade-values},
+\[
+        C\ \ge\ \bar C:=\frac{945}{5941}+\frac{39}{253},
+        \qquad
+        K\ \le\ \bar K:=1+2\cdot\frac{7}{10}+2\cdot\frac{37}{240}
+        =1+\frac75+\frac{37}{120}=\frac{325}{120}=\frac{65}{24}.
+\]
+Since $\theta>0$, replacing $C$ by $\bar C$ and $K$ by $\bar K$ can only
+decrease $C-K\theta+6\theta^2$, and completing the square,
+\[
+        \log B_1(\theta)
+        \ \ge\ \bar C-\bar K\theta+6\theta^2
+        =\bar C-\frac{\bar K^2}{24}+6\left(\theta-\frac{\bar K}{12}\right)^2
+        \ \ge\ \bar C-\frac{\bar K^2}{24}
+        =\frac{945}{5941}+\frac{39}{253}-\frac{4225}{13824}.
+\]
+The exact value of the right-hand side is
+$\frac{157634591}{20778481152}$ (the three denominators
+$5941=13\cdot457$, $253=11\cdot23$ and $13824=2^9\cdot3^3$ are pairwise
+coprime), and the final comparison
+\[
+        \frac{157634591}{20778481152}\ \ge\ \frac{7}{1000}
+\]
+is the integer inequality
+$1000\cdot157634591=157634591000\ \ge\ 145449368064=7\cdot20778481152$.
+\end{proof}
+
+\begin{proposition}[Case B, all real parameters]\label{prop:app-caseB-full}
+For every real $\frac16\le\theta<\frac14$ and every real $m>0$,
+\[
+        \frac{99}{100m}P(\theta)B_1(\theta)^m\ \ge\
+        \frac{99}{100}\cdot72\cdot\frac{7}{1000}\cdot\frac{65}{24}
+        =\frac{3243240}{2400000}\ >\ 1 .
+\]
+In particular \eqref{eq:app-caseB} holds for every integer pair of the
+residual strip.
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:app-B1-quad}, $\log B_1(\theta)\ge\frac7{1000}>0$.  By
+Lemma~\ref{lem:app-tools}(ii) applied to $B=B_1(\theta)$, and then
+Lemma~\ref{lem:app-P72} together with $\log B_1(\theta)>0$,
+\[
+        \frac{99}{100m}P(\theta)B_1(\theta)^m
+        \ \ge\ \frac{99e}{100}\,P(\theta)\log B_1(\theta)
+        \ \ge\ \frac{99e}{100}\cdot72\cdot\frac{7}{1000}
+        \ \ge\ \frac{99}{100}\cdot72\cdot\frac{7}{1000}\cdot\frac{65}{24},
+\]
+the last step by Lemma~\ref{lem:app-tools}(v).  Finally
+\[
+        \frac{99\cdot72\cdot7\cdot65}{100\cdot1000\cdot24}
+        =\frac{3243240}{2400000}\ >\ 1 . \qedhere
+\]
+\end{proof}
+
+\begin{remark}[No computer assistance]\label{rmk:app-no-computer}
+Propositions~\ref{prop:app-caseA-full} and~\ref{prop:app-caseB-full} prove
+\eqref{eq:app-caseA} and \eqref{eq:app-caseB} for all real $\theta$ in the
+stated ranges and all real $m>0$; the hypotheses $m\ge63$, $r\ge2$, $n>2r$
+and $\theta=r/m$ of the residual strip are not needed here.  Consequently
+the scripted verification of the finite range odd $63\le m\le499$ and the
+twelve scripted integer comparisons of earlier versions of this appendix are
+now superfluous, and the only computer-assisted ingredient remaining in the
+proof of Theorem~\ref{thm:regionI-full} is Proposition~\ref{prop:M61}
+(the residual strip for $m\le61$).  The margins of the two propositions are
+$\frac{58841640}{58063200}-1\approx1.3\%$ (Case A; this is intrinsically
+tight, since $\frac{99}{100m}P(\theta)B_0(\theta)^m\to\frac{99e}{100}\cdot
+72\log B_0(1/6)\approx1.017$ along $\theta=1/6$, $m\log B_0(1/6)\to1$) and
+$\frac{3243240}{2400000}-1\approx35\%$ (Case B).
+\end{remark}
