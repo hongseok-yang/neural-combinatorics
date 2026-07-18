@@ -163,29 +163,158 @@ symmetric step graphons.
 \end{lemma}
 
 \begin{proof}
-Let \((\mathcal P_n)\) be refining finite measurable partitions generating
-the Borel sigma-algebra, and put
+We spell out the approximation, including the meaning of the finite
+sigma-algebras.  For \(n\ge1\), divide \([0,1]\) into the \(2^n\) dyadic
+intervals
 \[
- W_n=\E[W\mid\mathcal P_n\times\mathcal P_n].
+ I_{n,a}=\left[\frac{a}{2^n},\frac{a+1}{2^n}\right),
+ \qquad 0\le a<2^n,
 \]
-Then \(W_n\) is a symmetric step graphon, \(0\le W_n\le1\), and
-\(W_n\to W\) in \(L^2([0,1]^2)\).  Conditional expectation preserves the
-integral, so \(t(K_2,W_n)=p\) exactly.  The associated integral operators
-converge in Hilbert--Schmidt norm.  A telescoping expansion of
-\(T_{W_n}^m-T_W^m\), followed by Schatten--H\"older, gives
+with the harmless convention that the last interval contains the endpoint
+\(1\).  Let \(\mathcal A_n\) be the finite sigma-algebra consisting of all
+unions of these intervals.  Thus the atoms of the product sigma-algebra
+\(\mathcal A_n\otimes\mathcal A_n\) are precisely the dyadic rectangles
+\(I_{n,a}\times I_{n,b}\).  The partitions refine as \(n\) increases, and
+dyadic intervals generate the Borel sigma-algebra.
+
+On each such rectangle, replace \(W\) by its average.  More explicitly, set
+\begin{equation}\label{eq:dyadic-step-approximation}
+ w^{(n)}_{ab}
+   =2^{2n}\int_{I_{n,a}\times I_{n,b}}W(x,y)\dd x\dd y,
+ \qquad
+ W_n(x,y)=w^{(n)}_{ab}
+ \quad\text{if }(x,y)\in I_{n,a}\times I_{n,b}.
+\end{equation}
+This cell-averaging operation is what the compact notation
+\(\E[W\mid\mathcal A_n\otimes\mathcal A_n]\) means.  Since \(0\le W\le1\),
+every cell average lies in \([0,1]\).  Moreover, symmetry of \(W\) gives
+\(w^{(n)}_{ab}=w^{(n)}_{ba}\).  Hence \(W_n\) is a symmetric step graphon.
+
+There is also a completely finite interpretation.  The matrix
+\((w^{(n)}_{ab})_{0\le a,b<2^n}\) is the weighted adjacency matrix of a graph
+on \(2^n\) equally weighted vertices (loops are allowed), and
 \[
-       \Tr(T_{W_n}^m)\longrightarrow\Tr(T_W^m).
+ t(C_m,W_n)
+ =\frac{1}{2^{nm}}
+   \sum_{a_1,\ldots,a_m=0}^{2^n-1}
+   w^{(n)}_{a_1a_2}w^{(n)}_{a_2a_3}\cdots
+   w^{(n)}_{a_ma_1}.
 \]
-Since \(t(C_m,W)=\Tr(T_W^m)\), the desired inequality passes to the limit.
-The graphon--operator dictionary used here is standard; see, for example,
-Lov\'asz~\cite{Lovasz2012}.
+Equivalently, the integral operator with kernel \(W_n\) has range in the
+span of the \(2^n\) interval indicators, which explains the term
+``finite-rank reduction.''
+
+Two facts remain to be checked: the edge density is unchanged, and the cycle
+density converges.  For the first, summing the averages in
+\eqref{eq:dyadic-step-approximation} over all cells gives
+\[
+ \int_{[0,1]^2}W_n(x,y)\dd x\dd y
+ =\sum_{a,b}|I_{n,a}|\,|I_{n,b}|\,w^{(n)}_{ab}
+ =\int_{[0,1]^2}W(x,y)\dd x\dd y=p.
+\]
+Thus \(t(K_2,W_n)=p\) for every \(n\), not merely in the limit.
+
+Next we verify that \(W_n\to W\) in \(L^2([0,1]^2)\).  Dyadic rectangle
+step functions are dense in this space.  Therefore, given \(\varepsilon>0\),
+we may choose an integer \(N\) and a function \(S\), constant on every
+rectangle \(I_{N,a}\times I_{N,b}\), such that
+\(\norm{W-S}_2<\varepsilon\).  For \(n\ge N\), the function \(S\) is also
+constant on every level-\(n\) rectangle.  Averaging is an \(L^2\)-contraction
+(this is Jensen's inequality on each rectangle), so
+\[
+ \norm{W_n-S}_2
+ =\norm{\E[W-S\mid\mathcal A_n\otimes\mathcal A_n]}_2
+ \le \norm{W-S}_2.
+\]
+Consequently
+\[
+       \norm{W_n-W}_2
+       \le \norm{W_n-S}_2+\norm{S-W}_2
+       <2\varepsilon,
+\]
+which proves the asserted convergence.
+
+Finally, cycle densities are continuous under this convergence for an
+elementary reason.  Put \(x_{m+1}=x_1\), and for a fixed
+\((x_1,\ldots,x_m)\) write
+\[
+       a_i=W_n(x_i,x_{i+1}),\qquad b_i=W(x_i,x_{i+1}).
+\]
+The telescoping identity
+\[
+ \prod_{i=1}^m a_i-\prod_{i=1}^m b_i
+ =\sum_{j=1}^m
+   \left(\prod_{i<j}a_i\right)(a_j-b_j)
+   \left(\prod_{i>j}b_i\right)
+\]
+and the bounds \(0\le a_i,b_i\le1\) show, after integration, that
+\begin{align*}
+ \bigl|t(C_m,W_n)-t(C_m,W)\bigr|
+ &\le \sum_{j=1}^m
+       \int_{[0,1]^m}
+       |W_n(x_j,x_{j+1})-W(x_j,x_{j+1})|
+       \prod_{i=1}^m\dd x_i \\
+ &=m\norm{W_n-W}_1
+ \le m\norm{W_n-W}_2
+ \longrightarrow0.
+\end{align*}
+Here the equality in the second line follows because all variables other
+than \(x_j,x_{j+1}\) integrate out to \(1\).
+
+Now suppose \eqref{eq:main-goal} has been proved for every symmetric step
+graphon.  Applying it to \(W_n\), whose edge density is exactly \(p\), gives
+\[
+       t(C_m,W_n)\ge p^m-p(1-p)^{m-1}.
+\]
+Letting \(n\to\infty\) proves the same inequality for \(W\), as required.
 \end{proof}
 
-\begin{remark}[Formal versus analytic power series]
-All coefficient extractions below may be read formally.  After the
-finite-rank reduction, the relevant resolvents are rational functions
-analytic near the origin, so ordinary determinant and logarithm identities
-are also legitimate analytically.
+\begin{remark}[How to read the power-series calculations]
+Several later arguments introduce an auxiliary variable \(z\) and use the
+notation \([z^m]F(z)\).  The variable \(z\) is simply a bookkeeping device:
+its exponent records the length of a walk or cycle.  If
+\[
+       F(z)=c_0+c_1z+c_2z^2+\cdots,
+\]
+then \([z^m]F(z)=c_m\).  Thus extracting \([z^m]\) means retaining exactly
+the terms corresponding to length \(m\).
+
+There are two equivalent rigorous ways to interpret the power series.  The
+first is the \emph{formal} interpretation.  Here no numerical value is ever
+assigned to \(z\), and convergence is not being asserted or needed.  We
+manipulate coefficients according to the usual rules for generating
+functions.  For example, for a finite matrix \(X\),
+\[
+       (I-zX)^{-1}=I+zX+z^2X^2+z^3X^3+\cdots
+\]
+is a valid formal identity: multiplying the right side by \(I-zX\) makes
+all positive powers cancel coefficient by coefficient.  Similarly, if
+\(Y(z)\) has zero constant term, then
+\[
+       -\log(1-Y(z))
+       =\sum_{r\ge1}\frac{Y(z)^r}{r}
+\]
+is a formal identity.  For any fixed target coefficient \([z^m]\), only
+finitely many powers on the right can contribute.  In this sense, the
+subsequent calculations are finite algebraic calculations disguised as
+power series; ``formal'' does not mean heuristic.
+
+The second interpretation is the usual \emph{analytic} one.  By
+\Cref{lem:step-reduction}, it is enough during these calculations to work
+with a step graphon.  Its operator is represented on its finite-dimensional
+range by a finite matrix \(X\).  The determinant \(\det(I-zX)\) is then a
+polynomial equal to \(1\) at \(z=0\), so it is nonzero for all sufficiently
+small \(|z|\).  Consequently \((I-zX)^{-1}\) is a matrix of rational
+functions analytic near \(0\), and the branch of
+\(\log\det(I-zX)\) that vanishes at \(0\) is analytic there as well.  Their
+ordinary Taylor expansions are exactly the formal series above.
+
+The two readings therefore give the same coefficient identities.  One may
+read the later determinant, resolvent, and logarithm manipulations as
+ordinary finite-matrix generating-function arguments.  After those
+identities prove the desired inequality for step graphons,
+\Cref{lem:step-reduction} passes it to the original graphon; no
+infinite-dimensional determinant theory is required.
 \end{remark}
 \section{The elementary cases \texorpdfstring{\(m=3,5,7\)}{m=3,5,7}}\label{sec:short-cycles}
 
