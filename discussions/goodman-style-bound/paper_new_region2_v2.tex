@@ -157,7 +157,7 @@ interval covering is used.  The two fixed Bernstein coefficient lists in
 
 \subsection{Step-graphon reduction}\label{subsec:step-reduction}
 
-\begin{lemma}[Finite-rank reduction]\label{lem:step-reduction}
+\begin{lemma}[Finite-rank reduction]\label[lemma]{lem:step-reduction}
 For each fixed odd \(m\ge3\), it is enough to prove \eqref{eq:main-goal} for
 symmetric step graphons.
 \end{lemma}
@@ -313,24 +313,30 @@ all positive powers cancel coefficient by coefficient.  Similarly, if
 is a formal identity.  For any fixed target coefficient \([z^m]\), only
 finitely many powers on the right can contribute.  In this sense, the
 subsequent calculations are finite algebraic calculations disguised as
-power series; ``formal'' does not mean heuristic.
+power series.  Here ``formal'' is a technical algebraic term: two formal
+series are equal when every coefficient is exactly equal.  
 
-The second interpretation is the usual \emph{analytic} one.  By
-\Cref{lem:step-reduction}, it is enough during these calculations to work
-with a step graphon.  Its operator is represented on its finite-dimensional
-range by a finite matrix \(X\).  The determinant \(\det(I-zX)\) is then a
-polynomial equal to \(1\) at \(z=0\), so it is nonzero for all sufficiently
-small \(|z|\).  Consequently \((I-zX)^{-1}\) is a matrix of rational
-functions analytic near \(0\), and the branch of
-\(\log\det(I-zX)\) that vanishes at \(0\) is analytic there as well.  Their
-ordinary Taylor expansions are exactly the formal series above.
+The second interpretation packages the same bookkeeping into ordinary
+functions.  By \Cref{lem:step-reduction}, we may temporarily work with a
+step graphon, whose operator is represented by a finite matrix \(X\).  At
+\(z=0\), the matrix \(I-zX\) is just the identity matrix, so it is invertible.
+It remains invertible when \(z\) is sufficiently close to \(0\).  In that
+small neighbourhood, \((I-zX)^{-1}\), \(\det(I-zX)\), and the logarithm of
+the determinant are honest ordinary functions with convergent Taylor
+series.  Expanding those functions at \(z=0\) produces exactly the formal
+coefficients described above.  The restriction to small \(|z|\) is used
+only to justify these Taylor expansions; it imposes no additional condition
+on the graphon.
 
-The two readings therefore give the same coefficient identities.  One may
-read the later determinant, resolvent, and logarithm manipulations as
-ordinary finite-matrix generating-function arguments.  After those
-identities prove the desired inequality for step graphons,
-\Cref{lem:step-reduction} passes it to the original graphon; no
-infinite-dimensional determinant theory is required.
+Informally, the two interpretations are simply two ways of storing the same
+list of coefficients.  The formal viewpoint manipulates the list directly;
+the analytic viewpoint packages the list into a function near \(z=0\) and
+then recovers it from the Taylor expansion.  Since the proof only asks for a
+particular coefficient \([z^m]\), both viewpoints give the same exact finite
+calculation.  We perform that calculation for the finite matrix associated
+with a step graphon and then use \Cref{lem:step-reduction} to pass to the
+original graphon.  Thus no determinant of an infinite-dimensional operator
+is needed.
 \end{remark}
 \section{The elementary cases \texorpdfstring{\(m=3,5,7\)}{m=3,5,7}}\label{sec:short-cycles}
 
