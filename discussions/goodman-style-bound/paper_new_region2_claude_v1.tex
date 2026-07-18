@@ -75,9 +75,15 @@ and $\tfrac13$ is the canonical switch point.
 one budget and one frontier dichotomy, so the split becomes a principled
 branching.
 (3)~It removes case-split and computer-assisted content from the chain:
-the Region-II scalar route is extended from $m\ge15$ to \emph{all} odd
-$m\ge3$ (\S\ref{sec:smallm}), which deletes the per-cycle theorems
-$C_5$--$C_{13}$ from the main chain; the Zone-B $23$-box certificate
+the Region-II small-cycle range is split cleanly (\S\ref{sec:smallm}) into
+$m=3,5,7$ --- closed by elementary density-free identities (Goodman's
+triangle theorem, a completed square, a sum of squares) --- and
+$m=9,11,13$ --- closed by extending the verified zone proofs of
+\S\ref{sec:zoneB}--\S\ref{sec:zoneC} to the fixed length, replacing the
+earlier draft's two computational residues (Bernstein tables and a box
+subdivision) by fixed displayed covers; this deletes the heavy per-cycle
+theorems $C_9$--$C_{13}$ of [R1] from the main chain.  The Zone-B $23$-box
+certificate
 (\S\ref{sec:zoneB}) and the Zone-C $3001$-box certificate
 (\S\ref{sec:zoneC}) are replaced by fully analytic proofs; the
 Appendix-B constant inequalities of [R1] are proved analytically for all
@@ -355,536 +361,398 @@ existing schemes cannot individually be stretched to cover $(0,\tfrac12)$.
 \section{Region II for all odd $m\ge3$: removing the per-cycle theorems}\label{sec:smallm}
 
 \subsection*{Provenance and verification status}
-Proved by Claude on 2026-07-17 (prover--verifier--skeptic pipeline; one
-repair round fixing five display-level constant errors flagged by the
-adversarial reviewer, whose final verdict was \emph{sound}; independent
-verifier: \emph{pass}, $124$ checks, $0$ failures, including independent
-re-derivations of the two certificate steps).  The result
-extends the Region-II scalar inequality to all odd $3\le m\le13$ through
-the single relaxed $\lambda=1$ certificate $(T_m)$; together with the
-$m$-uniformity of the [R2] reduction (Remark~\emph{muniform} below) this
-deletes the per-cycle theorems $C_5$--$C_{13}$ from the main chain.  Two
-steps remain certificate-based (exact rational, uniform protocol): the
-two-variable Bernstein tables of Prop.~\emph{band} and the per-$m$
-subdivision of Prop.~\emph{moderate}; everything else is prose.  The
-content of this section is the note
-\texttt{claude\_jul17/smallm\_regionII\_proof\_v2.tex}, inlined verbatim
-(sectioning demoted, labels prefixed where needed).
+This section supersedes the earlier draft of \S\ref{sec:smallm}
+(\texttt{claude\_jul17/smallm\_regionII\_proof\_v2.tex}), which proved all odd
+$3\le m\le13$ through a single relaxed certificate and carried \emph{two}
+computational residues (the $2$-D Bernstein tables of its Prop.~\emph{band} and
+the box subdivision of its Prop.~\emph{moderate}).  Both are now removed.  The
+three shortest lengths $m=3,5,7$ are closed by \emph{elementary, self-contained,
+density-free} identities (Goodman's triangle theorem; a completed square; an
+explicit sum of squares), symbolically verified by
+\texttt{claude\_jul17/validate\_elem\_357.py} and independently re-derived
+(\texttt{verify\_indep\_elem.py}).  The three remaining lengths $m=9,11,13$ are
+closed by \emph{extending the verified zone proofs} of \S\ref{sec:zoneB} and
+\S\ref{sec:zoneC} to the fixed length (\S\ref{sec:smallm-91113}); this replaces
+the subdivision by fixed displayed covers, verified end-to-end
+(\texttt{validate\_m91113.py}; whole-domain worst ratio
+$R_m/(C_m\psi)=0.710/0.763/0.799$ for $m=9/11/13$), with an adversarial-review
+verdict recorded in \S\ref{sec:smallm-91113}.  Peeling off $m=3,5,7$ removes
+exactly the two tightest cases (corner ratios $c'_3=0.9479$, $c'_5=0.8777$) that
+had forced the certificates.
 
-\subsection{Statement, notation and result status}\label{sec:smallm-intro}
+The upshot is a clean split of the Region-II small-cycle range: $m\le7$
+elementary; $m\ge9$ by the same zone machinery as $m\ge15$, so that the only
+per-cycle theorems the main chain still invokes are the two-line $C_5$ and $C_7$
+arguments below, and the heavy $C_9$--$C_{13}$ theorems of [R1] (with their
+Gram-minor and frontier-split computations) leave the chain entirely.
 
-This note extends the Region-II scalar inequality of
-\texttt{paper\_region2\_v2.tex} (cited below as [R2]) from odd $m\ge15$ to all
-odd $3\le m\le 13$, so that the per-cycle theorems for $C_5,\dots,C_{13}$ can
-be removed from the main chain.  All notation is from [R2]:
-$q\in(\tfrac13,\tfrac12)$, $p=1-q$, $\alpha\in(q,r(q)]$ the frontier
-eigenvalue, $L=\sqrt{pq-\alpha^2}$, $d=\alpha-q$, $e=1-2\alpha$,
-$f=\alpha-L$, $\kappa=d/e$, $x=\alpha/p$, $\tau=q/\alpha$, $y=L/p$,
-$\ell=L/\alpha$, $u=1-x$, $\delta=\alpha-\tfrac13$,
-\[
- k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda},\quad
- A_m=2L^{m-2}+mk_m(\alpha),\quad
- B_m=2L^{m-2}+mk_m(L),\quad
- R_m=\alpha^m+L^m-pq^{m-1},
-\]
-and $C_m$, $\xi$, $\rho$, $\psi(\xi,\rho)$ as in [R2, Def.~huber].  We use the
-$(e,\kappa)$ chart of [R2, Lem.~chart]: the admissible $(q,\alpha)$ are
-exactly $0<e<\tfrac13$, $0<\kappa\le\kappa_{\max}(e)=\frac{1-e}{1+e}$,
-$\kappa<\kappa_q(e)=\frac{1-3e}{6e}$, and on it
-$L^2=\alpha e-d(d+e)$, $\xi=(1-e)^2\kappa/e$, $\delta=\frac{1-3e}{6}$.
+\subsection{Overview and the \texorpdfstring{$m$}{m}-uniform reduction}\label{sec:smallm-intro}
 
-\begin{theorem}\label{thm:smallm-main}
-For every odd $m$ with $3\le m\le13$ and every admissible $(q,\alpha)$,
+The goal of this section is the odd-cycle bound
 \begin{equation}\label{eq:smallm-target}
- R_m\ \le\ C_m\,\psi(\xi,\rho).
+        t(C_m,W)\ \ge\ p^m-p(1-p)^{m-1}\qquad(\text{odd }3\le m\le13)
 \end{equation}
-Consequently (Remark~\ref{rem:muniform}), the odd-cycle bound
-$t(C_m,W)\ge p^m-pq^{m-1}$ holds in Region II for these $m$.
-\end{theorem}
+on Region~II ($\tfrac12<p<\tfrac23$), by routes that do not use the per-cycle
+theorems $C_9$--$C_{13}$ of [R1].  Two routes are used.  For $m=3,5,7$ the bound
+holds at \emph{every} density by an elementary argument
+(\S\ref{sec:smallm-elem}).  For $m=9,11,13$ we instead prove the Region-II
+scalar inequality $R_m\le C_m\psi(\xi,\rho)$ and feed it to the one-frontier
+reduction, exactly as for $m\ge15$ (\S\ref{sec:smallm-91113}).
 
-\begin{remark}[$m$-uniformity of the reduction in {[R2]}]\label{rem:muniform}
-The statement of [R2, Thm.~huber] carries the standing hypothesis
-``odd $m\ge15$'' of that paper's domain $D$, but its proof --- and the proofs
-of the whole reduction chain it rests on, namely
-[R2, Prop.~shift, Lem.~no-frontier, Lem.~one-frontier,
-Lem.~forced-variance, Prop.~master-defect, Prop.~psi-forms] --- is
-$m$-pointwise: $m$ enters only through the quantities $A_m$, $B_m$, $R_m$
-defined above, and the only structural inputs are
-$0<A_m<B_m$ [R2, Rem.~knegative] and the frontier geometry $L<q<\alpha<p$,
-which hold for every odd $m\ge3$ on the admissible domain.
-($A_m<B_m$ because $k_m$ is strictly decreasing on $[0,p]$ and $L<\alpha$;
-$A_m>0$ because $\alpha<p$ gives $k_m(\alpha)>0$.)
-Hence the implication
-``\eqref{eq:smallm-target} on the admissible domain $\Rightarrow$
-$t(C_m,W)\ge p^m-pq^{m-1}$ in Region II'' is valid verbatim for every odd
-$m\ge3$, and Theorem~\ref{thm:smallm-main} may legitimately invoke it for
-$3\le m\le13$.
+\begin{remark}[$m$-uniformity of the one-frontier reduction]\label{rem:muniform-91113}
+The reduction of [R2] --- Lemma~\ref{lem:shift}, the one-frontier and
+forced-variance lemmas, the master defect estimate, and the exact Huber
+elimination --- is stated there under the standing hypothesis ``odd $m\ge15$'',
+but every step is $m$-pointwise: $m$ enters only through $A_m=2L^{m-2}+mk_m(\alpha)$,
+$B_m=2L^{m-2}+mk_m(L)$, $R_m=\alpha^m+L^m-pq^{m-1}$, and the only structural
+inputs are $0<A_m<B_m$ and the frontier geometry $L<q<\alpha<p$, all valid for
+every odd $m\ge3$ on the admissible domain.  Hence the implication ``$R_m\le
+C_m\psi(\xi,\rho)$ on the admissible domain $\Rightarrow$ \eqref{eq:smallm-target}
+in Region~II'' holds verbatim for every odd $m\ge3$.
 \end{remark}
 
-\emph{Status of the proof.}  Steps proved analytically below: the certificate
-relaxation (Lemma~\ref{lem:relax}), the positivity gate
-(Lemma~\ref{lem:gate}), the small-$e$ range $e\le1/60$
-(Proposition~\ref{prop:smalle}), the tail cut on the Tur\'an band
-(Lemma~\ref{lem:tail}: analytic reduction to six one-line exact rational
-inequalities, displayed in Table~\ref{tab:tailints}), and the reduction of
-the Tur\'an band $\delta\le\Delta_m$ to two explicit polynomial
-nonnegativity claims (Proposition~\ref{prop:band}), which are then certified
-by exact Bernstein coefficient tables.  The remaining moderate range
-($1/60\le e\le\tfrac13-2\Delta_m$) is covered by an exact-rational certified
-subdivision (Proposition~\ref{prop:moderate}), in the same certificate
-protocol as [R2]; replacing these two certificate steps by prose arguments
-is left open.
+\subsection{The elementary range \texorpdfstring{$m=3,5,7$}{m=3,5,7}}\label{sec:smallm-elem}
 
-Throughout, a terminating decimal denotes that exact rational number, and
-every decimal comparison is rounded in the safe direction with the
-underlying exact comparison stated; all displayed inequalities are
-additionally machine-verified by \texttt{validate\_smallm\_v2.py}.
+Throughout this section $W$ is an arbitrary graphon, $p=t(K_2,W)$, and we
+write $U=1-W$, $q=t(K_2,U)=1-p$.  We prove the odd-cycle bound
+\begin{equation}\label{sm:eq:target}
+        t(C_m,W)\ \ge\ p^{m}-p(1-p)^{m-1}
+        \qquad(m=3,5,7)
+\end{equation}
+by wholly elementary arguments that are valid at \emph{every} edge density
+$p\in[0,1]$; in particular they hold verbatim on Region~II.  For each of the
+three lengths the right-hand side of \eqref{sm:eq:target} is nonpositive once
+$q\ge 1/2$ (indeed $p^m\ge p(1-p)^{m-1}$ fails only in the direction that makes
+the bound trivial), so throughout we may and do assume
+\[
+        0\le q\le \tfrac12 .
+\]
+The three proofs are independent: $m=3$ is Goodman's triangle theorem
+(\S\ref{sm:sub:C3}); $m=5$ is a single completion of a square
+(\S\ref{sm:sub:C5}); $m=7$ is an explicit sum-of-squares identity
+(\S\ref{sm:sub:C7}).
 
-\subsection{The relaxed certificate and the positivity gate}
+\subsubsection{The triangle: \texorpdfstring{$m=3$}{m=3}}\label{sm:sub:C3}
 
-\begin{lemma}[Relaxed $\lambda=1$ certificate]\label{lem:relax}
-On the admissible domain, with $w:=\sqrt{2\alpha}$,
-\begin{equation}\label{eq:rho-id}
- \rho=\frac{A_m w}{4B_m f},
-\end{equation}
-and consequently
-\begin{equation}\label{eq:Tm}
- C_m\psi(\xi,\rho)\ \ge\ \sqrt{2\alpha}\,B_mf\Bigl(d-\frac{e^2}{16\alpha^2(1+\rho)}\Bigr)
- \ \ge\ \sqrt{2\alpha}\,B_mfd-\frac{e^2B_m^2f^2}{4\alpha^2A_m}.
-\end{equation}
-Hence \eqref{eq:smallm-target} follows from
-\begin{equation}\label{eq:Tm2}
- (T_m):\qquad 4\alpha^2A_m R_m\ \le\ 4\alpha^2 A_m\sqrt{2\alpha}\,B_mfd-e^2B_m^2f^2 .
-\end{equation}
+For a triangle the pattern graph is complete, $C_3=K_3$, and the target
+constant simplifies to a linear-in-$p^2$ expression.
+
+\begin{lemma}\label{sm:lem:g3}
+$\displaystyle p^{3}-p(1-p)^{2}=p(2p-1)=2p^{2}-p$ identically in $p$.
 \end{lemma}
 
 \begin{proof}
-By [R2, Def.~huber], $\rho=\frac{A_m}{B_m}\frac{\sqrt\alpha}{2\sqrt2 f}$, and
-$\frac{\sqrt\alpha}{2\sqrt2}=\frac{\sqrt{2\alpha}}4$, giving \eqref{eq:rho-id}.
-The first inequality in \eqref{eq:Tm} is the dual certificate $\lambda=1$
-[R2, eq.~cert-II].  For the second, $1+\rho\ge\rho$ and \eqref{eq:rho-id} give
-\[
- \sqrt{2\alpha}\,B_mf\cdot\frac{e^2}{16\alpha^2(1+\rho)}
- \le \sqrt{2\alpha}\,B_mf\cdot\frac{e^2}{16\alpha^2}\cdot\frac{4B_mf}{A_m\sqrt{2\alpha}}
- =\frac{e^2B_m^2f^2}{4\alpha^2A_m}. \qedhere
-\]
+Expanding, $p^3-p(1-p)^2=p^3-p(1-2p+p^2)=p^3-p+2p^2-p^3=2p^2-p=p(2p-1)$.
 \end{proof}
 
-\begin{lemma}[Positivity gate; all odd $m\ge3$]\label{lem:gate}
-If $R_m>0$ then
-\begin{equation}\label{eq:gate}
- (m-1)\kappa\ >\ x\bigl(1+\kappa-\ell^{m-2}\bigr).
-\end{equation}
+\begin{theorem}[Goodman triangle bound]\label{sm:thm:C3}
+For every graphon $W$ with $p=t(K_2,W)$,
+\[
+        t(C_3,W)=t(K_3,W)\ \ge\ p^{3}-p(1-p)^{2}.
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{sm:lem:g3} it suffices to prove $t(K_3,W)\ge 2p^2-p$, which is
+Goodman's theorem.  We recall the one-line argument.  Let
+$d_W(x)=\int_0^1 W(x,y)\,dy$, so $\int_0^1 d_W(x)\,dx=p$.  For
+$a,b\in[0,1]$ one has $ab\ge a+b-1$; applying this pointwise to
+$a=W(x,z),\,b=W(y,z)$ and integrating in $z$ gives
+\[
+        \int_0^1 W(x,z)W(y,z)\,dz\ \ge\ d_W(x)+d_W(y)-1 .
+\]
+Multiplying by $W(x,y)\ge0$ and integrating in $(x,y)$,
+\[
+        t(K_3,W)\ \ge\ \int W(x,y)\bigl(d_W(x)+d_W(y)-1\bigr)\,dx\,dy
+        =2\!\int_0^1 d_W(x)^2\,dx-p
+        \ \ge\ 2p^2-p ,
+\]
+the last step by Cauchy--Schwarz ($\int d_W^2\ge(\int d_W)^2=p^2$).  This is
+\eqref{sm:eq:target} for $m=3$.
+\end{proof}
+
+\subsubsection{Operator notation for \texorpdfstring{$m=5,7$}{m=5,7}}
+\label{sm:sub:ops}
+
+The two remaining cases share a common setup.  Let $T=T_U$ be the graphon
+operator $Tf(x)=\int_0^1 U(x,y)f(y)\,dy$, a self-adjoint operator with
+spectrum in $[0,1]$ since $0\le U\le1$.  Let $d=T\one$ be the degree function
+of $U$, so $\int_0^1 d=q$, and split off its fluctuation
+\[
+        d=T\one=q\one+g,\qquad \ip{g}{\one}=0 .
+\]
+Path densities are $x_j:=t(P_j,U)=\ip{\one}{T^{j}\one}$; in particular
+$x_1=q$.  From $T^{k}\one=\ip{\one}{T^{k}\one}$-normalisation and
+self-adjointness, using $T\one=q\one+g$ and
+$\ip{\one}{Tg}=\ip{T\one}{g}=\ip{q\one+g}{g}=\norm{g}^2$, a direct
+computation gives the identities recorded next.
+
+\begin{lemma}[Path moments through $x_4$]\label{sm:lem:moments}
+With $T\one=q\one+g$ as above,
+\[
+   x_2=q^{2}+\norm{g}^{2},\qquad
+   x_3=q^{3}+2q\norm{g}^{2}+\ip{g}{Tg},\qquad
+   x_4=q^{4}+3q^{2}\norm{g}^{2}+2q\ip{g}{Tg}+\norm{Tg}^{2}.
+\]
 \end{lemma}
 
 \begin{proof}
-By [R2, eq.~defect-form], $R_m=\alpha^{m-1}(\alpha-p\tau^{m-1})+L^m$, so
-$R_m>0$ means $\tau^{m-1}<x(1+\ell^m)$, since
-$L^m/(p\alpha^{m-1})=x\ell^m$.  Bernoulli's inequality gives
-$\tau^{m-1}=(1-d/\alpha)^{m-1}\ge1-(m-1)d/\alpha$, whence
-\[
- (m-1)\frac d\alpha\ >\ 1-x-x\ell^m .
-\]
-Multiply by $\alpha/e$ and use $1-x=u=\frac{d+e}p=\frac{x(d+e)}\alpha$, so
-that $(1-x)\alpha/e=x(1+\kappa)$; finally
-$\ell^m\alpha/e\le\ell^{m-2}$ because $\ell^2\le e/\alpha$
-[R2, Lem.~elementary].
+$x_2=\ip{\one}{T^2\one}=\norm{T\one}^2=\norm{q\one+g}^2=q^2+\norm{g}^2$.
+For $x_3=\ip{T\one}{T^2\one}=\ip{d}{Td}$ with
+$Td=q\,d+Tg=q^2\one+qg+Tg$: expanding
+$\ip{q\one+g}{q^2\one+qg+Tg}$ and using $\ip{\one}{g}=0$,
+$\ip{\one}{Tg}=\norm{g}^2$ yields
+$q^3+q\norm{g}^2+q\norm{g}^2+\ip{g}{Tg}$.
+For $x_4=\norm{T^2\one}^2=\norm{q^2\one+qg+Tg}^2$: the cross terms with $\one$
+give $2q^2\ip{\one}{Tg}=2q^2\norm{g}^2$ and $2q^2\ip{\one}{g}=0$, so
+$x_4=q^4+q^2\norm{g}^2+2q^2\norm{g}^2+2q\ip{g}{Tg}+\norm{Tg}^2$,
+which is the stated identity.
 \end{proof}
 
-\begin{corollary}[Gate on the small-$e$ range]\label{cor:gate-smalle}
-Let $3\le m\le13$ be odd, $e\le1/60$, and $R_m>0$.  Then, with the standing
-bounds $x\ge\frac{1-e}{1+3e}\ge\frac{59}{63}>0.9365$ and
-$\ell\le\sqrt{2e/(1-e)}\le1.4262\sqrt e\le0.1842$,
-\begin{equation}\label{eq:gate-smalle}
- \kappa\ >\ \frac{x(1-\ell)}{m-1-x}\ \ge\ \frac{0.763}{m-1}\ \ge\ 0.0635,
- \qquad
- \xi=\frac{(1-e)^2\kappa}e\ \ge\ 3.68,
-\end{equation}
-and for $m=3$ moreover $\kappa>0.7183$.  In particular the region
-$\{\,e\le1/60,\ \xi\le1,\ R_m>0\,\}$ is empty for $3\le m\le13$, and
-\begin{equation}\label{eq:eps-smalle}
- \eps:=\frac{e^2}{16\alpha^2(1+\rho)d}=\frac{e}{4(1-e)^2(1+\rho)\kappa}
- \ \le\ \min\Bigl(0.068,\ \frac{e}{4(1-e)^2\kappa}\Bigr).
-\end{equation}
-\end{corollary}
+\subsubsection{The pentagon: \texorpdfstring{$m=5$}{m=5}}\label{sm:sub:C5}
+
+\begin{theorem}\label{sm:thm:C5}
+For every graphon $W$ with $p=t(K_2,W)$,
+$\ t(C_5,W)\ge p^{5}-p(1-p)^{4}.$
+\end{theorem}
 
 \begin{proof}
-Since $m\ge3$ and $\ell<1$, $\ell^{m-2}\le\ell$, so \eqref{eq:gate} gives
-$\kappa(m-1-x)>x(1-\ell)$, i.e.\ the first bound; then
-$x(1-\ell)\ge0.9365\cdot0.8158>0.763$ and $m-1-x<m-1$.  For $m=3$,
-$t\mapsto t/(2-t)$ is increasing, so
-$\kappa>0.9365\cdot0.8158/(2-0.9365)>0.7183$.  Next,
-$\xi\ge(59/60)^2\cdot\frac{0.763}{12}\cdot60>3.68$ using $m\le13$; in
-particular $\xi>1$.  Finally $\eps=1/(4\xi(1+\rho))\le1/(4\cdot3.68)<0.068$
-and $\rho\ge0$; the equality in \eqref{eq:eps-smalle} is the chart identity
-$\xi=(1-e)^2\kappa/e$.
-\end{proof}
-(The displayed decimal replacements: $0.9365\cdot0.8158=0.76399\ldots>0.763$,
-$0.9365\cdot0.8158/1.0635=0.71837\ldots>0.7183$,
-$(59/60)^2\cdot0.763\cdot5=3.68889\ldots>3.68$, and
-$1/14.72=0.06793\ldots<0.068$.)
-
-\subsection{The small-$e$ range $e\le1/60$}
-
-\begin{proposition}\label{prop:smalle}
-Let $3\le m\le13$ be odd, $e\le1/60$, $R_m>0$.  Then
-$R_m\le\sqrt{2\alpha}B_mf\bigl(d-\frac{e^2}{16\alpha^2(1+\rho)}\bigr)\le C_m\psi$.
-\end{proposition}
-
-\begin{lemma}[Reduction; m-adapted {[R2, Lem.~reduceA]}]\label{lem:reduce}
-Under the hypotheses of Proposition~\ref{prop:smalle}, the first inequality
-follows from
-\begin{equation}\label{eq:red}
- \sqrt{1-e}\,\frac{(1-\ell)(1-y^{m-1})(1-\eps)}{1+y}
- \ \ge\
- x^{m-2}\Bigl[\frac{m-1}{mx}-\frac{1+1/\kappa}{m}\Bigr]+\Lambda,
- \qquad
- \Lambda:=\frac{x^{m-2}(e/\alpha)^{m/2-1}}{m\kappa}.
+Assume $0\le q\le1/2$.  Writing the inclusion--exclusion expansion of
+$t(C_5,1-U)$ over the five edges of $C_5$ and using $0\le U\le1$ to drop the
+single closed-cycle term $c_5:=t(C_5,U)\le x_4$ (deleting one edge from a
+nonnegative integrand can only increase it),
+\[
+   t(C_5,W)=t(C_5,1-U)
+   \ \ge\ 1-5q+5q^{2}+5(1-q)x_2-5x_3+4x_4 .
+\]
+Subtracting the target value
+$(1-q)^5-(1-q)q^4=1-5q+10q^{2}-10q^{3}+4q^{4}$, it suffices to prove
+$\Phi_5\ge0$, where
+\begin{equation}\label{sm:eq:Phi5}
+   \Phi_5:=4x_4-5x_3+5(1-q)x_2-\bigl(4q^{4}-10q^{3}+5q^{2}\bigr).
 \end{equation}
+Substituting the moment identities of Lemma~\ref{sm:lem:moments} and
+collecting (the constant, linear and quadratic terms in $q$ cancel against the
+subtracted polynomial, leaving only the fluctuation quadratic) gives the exact
+identity
+\begin{equation}\label{sm:eq:Phi5-collected}
+   \Phi_5=4\norm{Tg}^{2}+(8q-5)\ip{g}{Tg}+(12q^{2}-15q+5)\norm{g}^{2}.
+\end{equation}
+Complete the square in the pair $\bigl(Tg,\,g\bigr)$:
+\begin{equation}\label{sm:eq:Phi5-square}
+   \Phi_5=4\Bigl\|\,Tg+\tfrac{8q-5}{8}\,g\,\Bigr\|^{2}
+          +\Bigl(8q^{2}-10q+\tfrac{55}{16}\Bigr)\norm{g}^{2},
+\end{equation}
+the residual coefficient being
+$(12q^{2}-15q+5)-4\bigl(\tfrac{8q-5}{8}\bigr)^{2}
+   =8q^{2}-10q+\tfrac{55}{16}$.
+The quadratic $8q^{2}-10q+\tfrac{55}{16}$ is strictly positive for
+\emph{all} real $q$: its discriminant is
+\[
+   (-10)^{2}-4\cdot 8\cdot\tfrac{55}{16}=100-110=-10<0,
+\]
+and its leading coefficient $8>0$.  Both terms of
+\eqref{sm:eq:Phi5-square} are therefore nonnegative, so $\Phi_5\ge0$ and
+\eqref{sm:eq:target} holds for $m=5$.
+\end{proof}
+
+\subsubsection{The heptagon: \texorpdfstring{$m=7$}{m=7}}\label{sm:sub:C7}
+
+For $C_7$ we need one more piece of notation.  Let $H_0=\one^{\perp}$ and let
+$A=P_{H_0}TP_{H_0}\colon H_0\to H_0$ be the compression of $T$ to the
+constants' orthogonal complement; $A$ is self-adjoint with spectrum in
+$[-1,1]$ (indeed in $[0,1]$, but $[-1,1]$ suffices).  Put
+\[
+   s_j:=\ip{g}{A^{j}g}=\int_{-1}^{1}\lambda^{j}\,d\mu(\lambda),
+   \qquad j\ge0,
+\]
+where $\mu\ge0$ is the $g$-weighted spectral measure of $A$; in particular
+$s_0=\norm{g}^{2}=\mu([-1,1])$.  Expanding
+$x_j=\ip{\one}{T^{j}\one}$ through the block form of $T$ on
+$\mathbb R\one\oplus H_0$ (as in Lemma~\ref{sm:lem:moments}, continued by the
+recursion $a_{n+1}=qa_n+\ip{g}{h_n}$, $h_{n+1}=a_ng+Ah_n$) yields
+\[
+\begin{aligned}
+   x_2&=q^{2}+s_0, & x_3&=q^{3}+2qs_0+s_1,\\
+   x_4&=q^{4}+3q^{2}s_0+2qs_1+s_0^{2}+s_2,\qquad
+   & x_5&=q^{5}+4q^{3}s_0+3q^{2}s_1+3qs_0^{2}+2qs_2+2s_0s_1+s_3,\\
+\end{aligned}
+\]
+\[
+   x_6=q^{6}+5q^{4}s_0+4q^{3}s_1+6q^{2}s_0^{2}+3q^{2}s_2
+       +6qs_0s_1+2qs_3+s_0^{3}+2s_0s_2+s_1^{2}+s_4 .
+\]
+
+\begin{theorem}\label{sm:thm:C7}
+For every graphon $W$ with $p=t(K_2,W)$,
+$\ t(C_7,W)\ge p^{7}-p(1-p)^{6}.$
+\end{theorem}
+
+\begin{proof}
+Assume $0\le q\le1/2$.  The inclusion--exclusion expansion of
+$t(C_7,1-U)$ over the seven edges, with $c_7:=t(C_7,U)\le x_6$, reduces the
+claim to $\Phi_7\ge0$, where
+\[
+\begin{aligned}
+   \Phi_7={}&6x_6-7x_5+7(1-q)x_4+7(2q-1)x_3\\
+   &+7(q^{2}-3q+1)x_2+7x_2^{2}-7x_2x_3-6q^{6}+21q^{5}-35q^{4}+28q^{3}-7q^{2}.
+\end{aligned}
+\]
+Substituting the moment formulae above and collecting in the $s_j$ gives
+\begin{equation}\label{sm:eq:Phi7-s}
+\begin{aligned}
+   \Phi_7={}&6s_4+(12q-7)s_3+(18q^{2}-21q+7)s_2
+             +(24q^{3}-42q^{2}+28q-7)s_1\\
+   &+(30q^{4}-70q^{3}+70q^{2}-35q+7)s_0
+     +12s_0s_2+(36q-21)s_0s_1\\
+   &+(36q^{2}-42q+14)s_0^{2}+6s_0^{3}+6s_1^{2}.
+\end{aligned}
+\end{equation}
+Write $r:=s_0=\mu([-1,1])\ge0$.  Grouping the $\mu$-integrals and completing
+the $s_1$ term as a square, \eqref{sm:eq:Phi7-s} becomes
+\begin{equation}\label{sm:eq:Phi7-int}
+   \Phi_7=6s_1^{2}+\int_{-1}^{1}R_{q,r}(\lambda)\,d\mu(\lambda),
+   \qquad
+   R_{q,r}(\lambda)=P_q(\lambda)+r\,B_q(\lambda)+6r^{2},
+\end{equation}
+where
+\[
+\begin{aligned}
+   P_q(\lambda)={}&6\lambda^{4}+(12q-7)\lambda^{3}+(18q^{2}-21q+7)\lambda^{2}
+                    +(24q^{3}-42q^{2}+28q-7)\lambda\\
+   &+30q^{4}-70q^{3}+70q^{2}-35q+7,\\
+   B_q(\lambda)={}&12\lambda^{2}+(36q-21)\lambda+36q^{2}-42q+14 .
+\end{aligned}
+\]
+Since $6s_1^{2}\ge0$ and $\mu\ge0$, it suffices to prove
+$R_{q,r}(\lambda)\ge0$ for all $0\le q\le1/2$, $r\ge0$, $-1\le\lambda\le1$.
+This is done in Lemma~\ref{sm:lem:C7-pos} below, which completes the proof.
+\end{proof}
+
+\begin{lemma}\label{sm:lem:C7-pos}
+For all $0\le q\le1/2$, $r\ge0$ and $-1\le\lambda\le1$,
+$\ R_{q,r}(\lambda)=P_q(\lambda)+rB_q(\lambda)+6r^{2}\ge0.$
 \end{lemma}
 
 \begin{proof}
-Exactly as in [R2, Lem.~reduceA]: $B_m\ge mk_m(L)=\frac{mp^{m-2}(1-y^{m-1})}{1+y}$,
-$\sqrt{2\alpha}=\sqrt{1-e}$, $f=\alpha(1-\ell)$ give: payment
-$\ge md\alpha p^{m-2}\cdot\mathrm{LHS}\eqref{eq:red}$; Bernoulli
-$\tau^{m-1}\ge1-(m-1)d/\alpha$ and $L^m\le(\alpha e)^{m/2}$ give
-$R_m\le md\alpha p^{m-2}\cdot\mathrm{RHS}\eqref{eq:red}$.
-(No $m\ge15$ constant enters.)
-\end{proof}
+\emph{Step 1: $B_q\ge0$.}  As a quadratic in $\lambda$ with positive leading
+coefficient $12$, $B_q$ attains its minimum at
+$\lambda_*=\tfrac{7-12q}{8}\in[\tfrac18,\tfrac78]$, where
+\[
+   B_q(\lambda_*)=\frac{144q^{2}-168q+77}{16}.
+\]
+On $0\le q\le1/2$ the numerator satisfies
+$144q^{2}-168q+77-29=144q^{2}-168q+48=144\bigl(q-\tfrac12\bigr)\bigl(q-\tfrac23\bigr)\ge0$,
+since both factors are $\le0$ there (they vanish at $q=\tfrac12$ and
+$q=\tfrac23$).  Hence $B_q(\lambda)\ge B_q(\lambda_*)\ge\tfrac{29}{16}>0$, and
+since $r\ge0$,
+\[
+   R_{q,r}(\lambda)\ \ge\ P_q(\lambda).
+\]
 
-\begin{proof}[Proof of Proposition~\ref{prop:smalle}]
-Standing bounds for $e\le1/60$, each stated with its exact justification:
-$x\ge\frac{1-e}{1+3e}\ge\frac{59}{63}>0.9365$ (from $d\le e$);
-$\ell^2\le e/\alpha=\frac{2e}{1-e}\le\frac{120}{59}e\le2.04e$, hence
-$\ell\le1.4262\sqrt e\le0.1842$
-($1.4262^2=2.03404\ldots>120/59=2.03389\ldots$;
-$1.4262/\sqrt{60}<0.1842$); $y\le\ell$ (as $p\ge\alpha$);
-$\sqrt{1-e}\ge1-0.51e$ (as $(1-0.51e)^2-(1-e)=-0.02e+0.2601e^2\le0$ for
-$e\le0.02/0.2601$); $1/x=1+(1+\kappa)e/\alpha\le1+2.04(1+\kappa)e$
-(as $1/\alpha\le120/59\le2.04$);
-$u=1-x=\frac{(1+\kappa)e}{p}\ge1.9047(1+\kappa)e$
-(as $p=\frac{1+e}2+d\le\frac{1+3e}2\le\frac{21}{40}$ and
-$40/21=1.90476\ldots\ge1.9047$); and Corollary~\ref{cor:gate-smalle}.
-
-\emph{Case $m=3$.}  Using
-$\frac{(1-\ell)(1-y^2)(1-\eps)}{1+y}\ge(1-\ell)(1-y)(1-y^2)(1-\eps)$ and
-$(1-a_1)\cdots(1-a_k)\ge1-\sum a_i$ on $[0,1]$,
+\emph{Step 2: $P_q\ge0$ by an explicit SOS identity.}  Set
 \[
- \mathrm{LHS}\eqref{eq:red}\ \ge\ 1-2\ell-y^2-\eps-0.51e
- \ \ge\ 1-0.3684-0.034-0.068-0.0085\ >\ 0.52,
+   D(q)=288q^{2}-336q+119,\qquad
+   C(q)=24q^{3}-42q^{2}+28q-7,
 \]
-where $y^2\le\ell^2\le2.04e\le2.04/60=0.034$.  On the other side, for $m=3$
-the bracket in \eqref{eq:red} is $\frac{2}{3x}-\frac{1+1/\kappa}3$, so
-$\mathrm{RHS}\eqref{eq:red}=\frac23-\frac{x(1+1/\kappa)}3+\Lambda$ with
-$\Lambda=\frac{x\sqrt{e/\alpha}}{3\kappa}$.  Using $\kappa>0.7183$,
-$1+1/\kappa>2$, $x\ge0.9365$, $x\le1$, $\sqrt{e/\alpha}\le1.4262\sqrt e$
-and $1.4262/(3\cdot0.7183)=0.66183\ldots\le0.662$:
 \[
- \mathrm{RHS}\eqref{eq:red}\le\frac23-\frac{0.9365\cdot2}{3}+0.662\sqrt e
- \le\frac23-0.6243+0.662\cdot0.1291<0.128<0.52,
+   N(q)=5184q^{6}-18144q^{5}+28602q^{4}-25802q^{3}+13874q^{2}-4165q+539 .
 \]
-($\sqrt{1/60}<0.1291$ as $0.1291^2=0.01666\,681>1/60$).  So \eqref{eq:red}
-holds for $m=3$.
-
-\emph{Case $5\le m\le13$.}  Put $z:=(m-2)u$, $c_m:=\frac{m-3}{2(m-2)}$,
-$\beta_m:=\frac{1.0711}{m-2}$ (so that $2.04(1+\kappa)e\le\beta_m z$, since
-$\beta_mz\ge1.0711\cdot1.9047(1+\kappa)e=2.04012\ldots(1+\kappa)e$), and
-\[
- \Gamma_0(e):=2.8524\sqrt e+0.51e+(2.04e)^2,\qquad
- \sigma_m(e):=1.21\,(2.04e)^{(m-2)/2}.
-\]
-Then $2\ell+0.51e+y^{m-1}\le\Gamma_0$ (using
-$y^{m-1}\le\ell^4\le(2.04e)^2$ for $m\ge5$), and
-$\Lambda\le\sigma_mx^{m-2}$: indeed
-$(e/\alpha)^{(m-2)/2}\le(2.04e)^{(m-2)/2}$, and by
-Corollary~\ref{cor:gate-smalle} and $m\le13$,
-\[
- \frac1{m\kappa}\ <\ \frac{m-1}{0.763\,m}\ \le\ \frac{12}{0.763\cdot13}
- \ =\ 1.20979\ldots\ <\ 1.21 .
-\]
-Since $x^{m-2}\le(1+z+c_mz^2)^{-1}$ [R2, eq.~E-a] and
-$1/x\le1+\beta_mz$, $\frac1{mx}\ge\frac1m$, \eqref{eq:red} follows from
-\begin{equation}\label{eq:F}
- F:=\bigl(1-\Gamma_0-\eps\bigr)(1+z+c_mz^2)-\frac1x+\frac{2+1/\kappa}m-\sigma_m\ \ge\ 0 .
+Then one has the polynomial identity
+\begin{equation}\label{sm:eq:C7-P-square}
+   P_q(\lambda)=6\Bigl(\lambda^{2}+\bigl(q-\tfrac{7}{12}\bigr)\lambda\Bigr)^{2}
+   +\frac{D(q)}{24}\Bigl(\lambda+\frac{12C(q)}{D(q)}\Bigr)^{2}
+   +\frac{N(q)}{D(q)},
 \end{equation}
-We record two endpoint evaluations, rounded up
-($2.8524/\sqrt{60}<2.8524/7.7459<0.36825$, since $7.7459^2=59.99896681<60$;
-$0.51/60=0.0085$; $(2.04/60)^2=0.001156$; $1.293/60=0.02155$):
-\begin{equation}\label{eq:G-ends}
- \Gamma_0(e)\le\Gamma_0(1/60)<0.378,\qquad
- \Gamma_1(e):=\Gamma_0(e)+1.293e\le\Gamma_1(1/60)<0.3995,
-\end{equation}
-both $\Gamma_0,\Gamma_1$ being increasing in $e$; and
-$\sigma_m(e)\le\sigma_5(1/60)=1.21\cdot(0.034)^{3/2}<0.0076$ for all
-$5\le m\le13$ (as $2.04e\le0.034<1$).
-
-\emph{Sub-case $\kappa<\tfrac15$.}  Here $\frac{2+1/\kappa}m\ge\frac7m$, and
-by \eqref{eq:eps-smalle} $\eps\le0.068$.  Since
-$1-\Gamma_0-0.068-\beta_m\ge1-0.378-0.068-0.35704>0.19>0$
-($\beta_m\le\beta_5=1.0711/3=0.35703\ldots$), dropping $c_mz^2\ge0$,
+verified by expanding both sides (the $\lambda^4,\lambda^3,\lambda^2,\lambda^1$
+coefficients match term by term, and the $\lambda$-free remainder equals
+$N(q)/D(q)$).  It remains to check that the two denominators-and-remainder are
+positive on $0\le q\le1/2$.  Substituting $y=\tfrac12-q\in[0,\tfrac12]$,
 \[
- F\ \ge\ z\bigl(1-\Gamma_0-0.068-\beta_m\bigr)+\frac7m-\Gamma_0-0.068-\sigma_m
- \ \ge\ \frac7{13}-0.378-0.068-0.0076\ >\ 0.084\ >\ 0 .
+   D(q)=288y^{2}+48y+23>0,
 \]
-
-\emph{Sub-case $\kappa\ge\tfrac15$.}  Here \eqref{eq:eps-smalle} gives
-$\eps\le\frac{5e}{4(1-e)^2}\le\frac{4500}{3481}e\le1.293e$, so
-$1-\Gamma_0-\eps\ge1-\Gamma_1>0$ by \eqref{eq:G-ends}.  Dropping
-$c_mz^2\ge0$ and using $1/x\le1+\beta_mz$, $\frac{2+1/\kappa}m\ge\frac3m$
-($\kappa<1$ on the domain):
 \[
- F\ \ge\ z\bigl(1-\Gamma_1-\beta_m\bigr)+\frac3m-\Gamma_1-\sigma_m .
+   8N(q)=41472y^{6}+20736y^{5}+21456y^{4}+7984y^{3}+2032y^{2}+316y+11>0,
 \]
-The bracket is positive ($\ge1-0.3995-0.35704>0.24$), and
-$z\ge1.9047\cdot1.2\,(m-2)e\ge2.2856(m-2)e$ (from $1+\kappa\ge1.2$), so
-\begin{equation}\label{eq:Gm}
- F\ \ge\ G_m(e):=2.2856(m-2)e\bigl(1-\Gamma_1(e)-\beta_m\bigr)
- +\frac3m-\Gamma_1(e)-\sigma_m(e) .
-\end{equation}
-Bounding the bracket once more by $\Gamma_1\le0.3995$ and expanding
-$\Gamma_1(e)=2.8524\sqrt e+1.803e+4.1616e^2$,
-\begin{equation}\label{eq:Ghat}
- G_m(e)\ \ge\ \widehat G_m(e):=\frac3m+\bigl(c_{1,m}e-2.8524\sqrt e\bigr)
- -4.1616e^2-\sigma_m(e),
-\end{equation}
-\begin{equation}\label{eq:c1}
- c_{1,m}:=2.2856(m-2)\bigl(0.6005-\beta_m\bigr)-1.803
- \ =\ 1.3725028\,(m-2)-4.25110616,
-\end{equation}
-an exact terminating decimal for each $m$ (Table~\ref{tab:smalle}).
-
-\emph{$\widehat G_m$ is strictly decreasing on $(0,1/60]$.}  The three terms
-$-4.1616e^2$, $-\sigma_m(e)$, and the constant are nonincreasing in $e$; for
-the remaining term, its derivative satisfies, for $0<e\le1/60$,
-\[
- \frac{d}{de}\bigl(c_{1,m}e-2.8524\sqrt e\bigr)
- =c_{1,m}-\frac{1.4262}{\sqrt e}
- \ \le\ c_{1,m}-1.4262\sqrt{60}
- \ <\ 10.847-11.045\ <\ 0,
-\]
-because $c_{1,m}$ is increasing in $m$ with
-$c_{1,13}=10.84642464<10.847$, and
-$1.4262\sqrt{60}>1.4262\cdot7.745=11.045919>11.045$
-($7.745^2=59.985025<60$).  Hence
-$\widehat G_m(e)\ge\widehat G_m(1/60)$ on $(0,1/60]$, and evaluating with
-the safe roundings above ($2.8524\sqrt{1/60}<0.36825$,
-$4.1616/3600<0.001156\,1$, $\sigma_m(1/60)\le\bar\sigma_m$ of
-Table~\ref{tab:smalle}, $c_{1,m}\ge\underline c_{1,m}$ of
-Table~\ref{tab:smalle}):
-\[
- \widehat G_m(1/60)\ \ge\ \frac3m+\frac{\underline c_{1,m}}{60}
- -0.36825-0.0011561-\bar\sigma_m\ \ge\ \widehat G_m^{\,\flat}
-\]
-with the values $\widehat G_m^{\,\flat}$ of Table~\ref{tab:smalle}, all
-positive (minimum $0.0383$ at $m=11$).  This proves $F\ge0$ in both
-sub-cases, hence \eqref{eq:red}, hence the proposition via
-Lemma~\ref{lem:reduce} and Lemma~\ref{lem:relax}.
+both being polynomials in $y\ge0$ with strictly positive coefficients.  Thus
+$D(q)>0$ and $N(q)>0$, so every term on the right of
+\eqref{sm:eq:C7-P-square} is nonnegative and $P_q(\lambda)\ge0$.  Combined with
+Step~1 this gives $R_{q,r}(\lambda)\ge0$.
 \end{proof}
 
-\begin{table}\centering
-\begin{tabular}{lccccc}\toprule
-$m$&5&7&9&11&13\\\midrule
-$\beta_m$&$0.35704$&$0.21422$&$0.15302$&$0.11902$&$0.09738$\\
-$\underline c_{1,m}$ &$-0.13360$&$2.61140$&$5.35641$&$8.10141$&$10.84642$\\
-$\bar\sigma_m$&$0.0076$&$0.000258$&$0.0000088$&$0.0000003$&$0.00000002$\\
-$\widehat G_m^{\,\flat}$&$0.2207$&$0.1024$&$0.0531$&$0.0383$&$0.0421$\\
-\bottomrule
-\end{tabular}
-\caption{Small-$e$ constants.  $\beta_m$ is rounded up (safe in
-$1-\Gamma_1-\beta_m$ and in $c_{1,m}$ via \eqref{eq:c1});
-$\underline c_{1,m}$ is the exact value \eqref{eq:c1} truncated toward
-$-\infty$ at the fifth decimal; $\bar\sigma_m$ is an upper bound for
-$\sigma_m(1/60)=1.21(0.034)^{(m-2)/2}$; $\widehat G_m^{\,\flat}$ is the
-resulting lower bound for $\widehat G_m(1/60)$, truncated down.}
-\label{tab:smalle}
-\end{table}
+\begin{remark}\label{sm:rmk:allp}
+None of the three arguments uses any hypothesis beyond $0\le q\le\tfrac12$
+(equivalently $\tfrac12\le p\le1$), and the range $q>\tfrac12$ is trivial.
+Hence \eqref{sm:eq:target} holds for $m=3,5,7$ at every density, so in
+particular on Region~II, with no frontier machinery, no reflection, and no
+numerical certificate.  All algebraic identities of this section
+(Lemma~\ref{sm:lem:g3}; the collection \eqref{sm:eq:Phi5-collected} and square
+\eqref{sm:eq:Phi5-square} with discriminant $-10$; the SOS
+\eqref{sm:eq:C7-P-square} together with the $y$-expansions of $D$ and $8N$) are
+confirmed symbolically by the accompanying script
+\texttt{validate\_elem\_357.py}.
+\end{remark}
 
-\subsection{The Tur\'an band $\delta\le\Delta_m$: polynomial Bernstein certificates}
+\subsection{The lengths \texorpdfstring{$m\in\{9,11,13\}$}{m in 9,11,13}: extending the zone proofs}\label{sec:smallm-91113}
 
-Here $\delta=\frac{1-3e}6\in(0,\Delta_m]$ with
-$\Delta_m=\tfrac1{40}$ for $m\le9$ and $\Delta_m=\tfrac1{80}$ for
-$m\in\{11,13\}$; write $s:=1-d/\delta\in[0,1)$, so
-$\alpha=\tfrac13+\delta$, $e=\tfrac13-2\delta$, $q=\tfrac13+s\delta$,
-$p=\tfrac23-s\delta$, and
-$L^2=\tfrac19-\tfrac{(2-s)\delta}3-(1+s^2)\delta^2$, a polynomial in
-$(\delta,s)$.  The band covers all admissible $\kappa$ (there
-$\kappa_q<\kappa_{\max}$).
+For the three remaining lengths the square/SOS identities of
+\S\ref{sec:smallm-elem} have no clean analogue, and we prove the scalar
+inequality $R_m\le C_m\psi(\xi,\rho)$ directly, in the $(e,\kappa)$ chart of
+[R2] and with the notation of \S\ref{sec:zoneB}--\S\ref{sec:zoneC}
+($\alpha=\tfrac{1-e}2$, $L=\sqrt{pq-\alpha^2}$, $d=\alpha-q$, $\kappa=d/e$,
+$\xi=(1-e)^2\kappa/e$, $\delta=\tfrac{1-3e}6$; the admissible domain is
+$0<e<\tfrac13$, $0<\kappa\le\tfrac{1-e}{1+e}$, $\kappa<\tfrac{1-3e}{6e}$).  By
+Remark~\ref{rem:muniform-91113} this yields \eqref{eq:smallm-target} for
+$m\in\{9,11,13\}$.
 
-\begin{lemma}[Chord]\label{lem:chord}
-$\sqrt{2\alpha}\ \ge\ w_\ell(\delta):=0.8164+1.2\,\delta$ for
-$0\le\delta\le\tfrac1{40}$.
-\end{lemma}
+\begin{theorem}\label{thm:smallm-91113}
+For every $m\in\{9,11,13\}$ and every admissible $(q,\alpha)$,
+$R_m\le C_m\psi(\xi,\rho)$; hence $t(C_m,W)\ge p^m-pq^{m-1}$ throughout Region~II.
+\end{theorem}
 
-\begin{proof}
-$w_\ell(\delta)^2-(2/3+2\delta)$ is a quadratic in $\delta$ with positive
-leading coefficient, hence maximal at the endpoints, where it is
-negative: $0.8164^2=0.66650\ldots<2/3$ and
-$(0.8164+0.03)^2=0.71639296<2/3+1/20=0.71666\ldots$.
-\end{proof}
+\emph{Method.}  The admissible domain is tiled into the same three analytic
+zones as the $m\ge15$ proof, each closed by a \emph{fixed, fully displayed}
+certificate (no adaptive subdivision):
+\begin{itemize}[leftmargin=1.6em]
+\item \textbf{Zone A} ($e\le\tfrac1{60}$): the small-$e$ proposition of the
+earlier draft already covers all odd $3\le m\le13$ (its positivity gate makes
+$\{e\le\tfrac1{60},\ \xi\le1,\ R_m>0\}$ empty), and is reused verbatim.
+\item \textbf{Zone B} ($\xi\ge1$, $e\ge\tfrac1{60}$): the Zone-B battle of
+\S\ref{sec:zoneB}, specialised to the fixed length --- where the
+$m$-maximisation (\S\ref{sec:zoneB}, the $K$-max lemma) is unnecessary, so the
+argument simplifies to a two-variable inequality --- closes on a $26$-row fixed
+rational cover, with true payment/defect margin $>0.41$ on every row.
+\item \textbf{Zone C} ($\xi\le1$, including the Tur\'an corner): the
+three-geometric majorant of \S\ref{sec:zoneC}, under the substitutions
+$13\mapsto n=m-2$, $14\mapsto m-1$, $15\mapsto m$ that \S\ref{sec:zoneC}
+isolates as its only uses of $m\ge15$, plus a new mean-value defect bound
+$\alpha\,\mathrm{Def}_m\le (n\,x^{n-1}/p)\,N$ with $N=d-\ell^{m-1}(q-L)\le d$
+that sharpens the binding (Case-II) payment at the $\xi=1$ ridge.  This closes
+on fixed displayed $\varphi$-row covers ($14/23/31$ rows for $m=13/11/9$) and,
+for $m=9$ only, a fixed $16$-cell table on the junction sliver
+$e\in[\tfrac{59}{200},\tfrac{31}{100}]$.
+\end{itemize}
+The full displayed proof ($15$ pp) is the companion note
+\texttt{claude\_jul17/m91113\_final.tex}; \texttt{validate\_m91113.py}
+re-verifies every row numerically and in exact rational arithmetic and confirms
+the three zones tile the domain, with whole-domain worst ratio
+$R_m/(C_m\psi)=0.710/0.763/0.799$ for $m=9/11/13$.  An independent verifier
+(own scripts) returned \emph{pass}; an adversarial reviewer returned
+\emph{within tolerance}, with the reservations recorded next.
 
-\begin{lemma}[Tail]\label{lem:tail}
-Let $t_m^*$ be as in Table~\ref{tab:band}.  If $R_m>0$ and
-$\delta\le\Delta_m$, then $d/\delta>t^*_m$, i.e.\ $s<1-t^*_m$.
-\end{lemma}
-
-\begin{proof}
-\emph{Step 1 (gate $\Rightarrow$ curve).}
-By Lemma~\ref{lem:gate}, $\kappa(m-1-x)>x(1-\ell^{m-2})$; on the band
-$x=\alpha/p\ge\tfrac12$ (as $\alpha\ge\tfrac13\ge p/2$) and $m-1-x<m-1$,
-and $\ell^{m-2}\le w(\delta)^{\nu}$ where
-\[
- w(\delta):=\frac e\alpha=\frac{1-6\delta}{1+3\delta},\qquad
- \nu:=\frac{m-2}2
-\]
-(from $\ell^2\le e/\alpha$, [R2, Lem.~elementary]).  Hence, for $R_m>0$,
-\begin{equation}\label{eq:phi}
- \frac d\delta=\frac{\kappa e}\delta
- \ >\ \phi_m(\delta):=\frac{e}{2(m-1)\delta}\,h(\delta),
- \qquad h(\delta):=1-w(\delta)^{\nu}.
-\end{equation}
-
-\emph{Step 2 (endpoint reduction: $\phi_m(\delta)\ge\phi_m(\Delta_m)$ on
-$(0,\Delta_m]$).}
-We claim $h$ is concave on $[0,\Delta_m]$.  Writing
-$w=-2+3/(1+3\delta)$, so $w'=-9/(1+3\delta)^2$ and $w''=54/(1+3\delta)^3$,
-\[
- (w^{\nu})''=\nu w^{\nu-2}\bigl[(\nu-1)w'^2+w\,w''\bigr]
- =\nu w^{\nu-2}\,\frac{27\,\bigl(3\nu-1-12\delta\bigr)}{(1+3\delta)^4}
- \ \ge\ 0
-\]
-on $[0,\Delta_m]$: indeed $w>0$ there (as $\delta\le\tfrac1{40}<\tfrac16$),
-and $3\nu-1-12\delta\ge0$ because for $m\ge5$, $3\nu\ge\tfrac92>1+\tfrac{12}{40}$,
-while for $m=3$, $3\nu=\tfrac32\ge1+12\delta$ iff $\delta\le\tfrac1{24}$,
-and $\Delta_3=\tfrac1{40}<\tfrac1{24}$.  So $w^{\nu}$ is convex, $h$ is
-concave, and $h(0)=0$; concavity then gives, for $0<\delta\le\Delta_m$,
-\[
- h(\delta)\ \ge\ \tfrac{\delta}{\Delta_m}h(\Delta_m)
- +\bigl(1-\tfrac{\delta}{\Delta_m}\bigr)h(0)
- =\tfrac{\delta}{\Delta_m}h(\Delta_m),
- \qquad\text{i.e.}\qquad
- \frac{h(\delta)}\delta\ \ge\ \frac{h(\Delta_m)}{\Delta_m}.
-\]
-Combining with $e=\tfrac13-2\delta\ge\tfrac13-2\Delta_m$ (both factors
-positive),
-\[
- \phi_m(\delta)=\frac{e}{2(m-1)}\cdot\frac{h(\delta)}{\delta}
- \ \ge\ \frac{\tfrac13-2\Delta_m}{2(m-1)}\cdot\frac{h(\Delta_m)}{\Delta_m}
- \ =\ \phi_m(\Delta_m).
-\]
-
-\emph{Step 3 (endpoint comparison, exact).}
-It remains to check $\phi_m(\Delta_m)>t^*_m$, i.e.\ with the rationals
-\[
- c_m:=\frac{\tfrac13-2\Delta_m}{2(m-1)\Delta_m},\qquad
- w_m:=w(\Delta_m),\qquad r_m:=1-\frac{t^*_m}{c_m},
-\]
-that $w_m^{\nu}<r_m$.  Table~\ref{tab:tailints} lists $c_m$, $w_m$, $r_m$;
-each $r_m\in(0,1)$, so squaring gives the equivalent \emph{rational}
-inequality $w_m^{m-2}<r_m^2$, i.e.\ the one-line integer comparison in the
-last column of Table~\ref{tab:tailints}, which is verified exactly (and can
-be checked by hand or by any exact integer arithmetic).  This proves
-$d/\delta>\phi_m(\delta)\ge\phi_m(\Delta_m)>t^*_m$.
-\end{proof}
-
-\begin{table}\centering
-\small
-\begin{tabular}{cccccl}\toprule
-$m$&$\Delta_m$&$w_m$&$c_m$&$r_m$&integer form of $w_m^{m-2}<r_m^2$\\\midrule
-$3$&$1/40$&$34/43$&$17/6$&$757/850$&$34\cdot850^2=24\,565\,000<24\,641\,107=43\cdot757^2$\\
-$5$&$1/40$&$34/43$&$17/12$&$299/425$&$34^3\!\cdot\!425^2=7\,099\,285\,000<7\,108\,005\,307=43^3\!\cdot\!299^2$\\
-$7$&$1/40$&$34/43$&$17/18$&$481/850$&$34^5\!\cdot\!850^2=32\,827\,093\,840\,000<34\,012\,020\,380\,923=43^5\!\cdot\!481^2$\\
-$9$&$1/40$&$34/43$&$17/24$&$191/425$&$34^7\!\cdot\!425^2=9\,487\,030\,119\,760\,000<9\,916\,214\,751\,794\,467=43^7\!\cdot\!191^2$\\
-$11$&$1/80$&$74/83$&$37/30$&$223/370$&$74^9\!\cdot\!370^2<83^9\!\cdot\!223^2$ \ (see below)\\
-$13$&$1/80$&$74/83$&$37/36$&$493/925$&$74^{11}\!\cdot\!925^2<83^{11}\!\cdot\!493^2$ \ (see below)\\
-\bottomrule
-\end{tabular}
-\caption{Tail-lemma endpoint data.  All entries are exact rationals:
-$w_m=e(\Delta_m)/\alpha(\Delta_m)$, $c_m$ as in Step~3, $r_m=1-t^*_m/c_m$.
-The two large comparisons are
-$74^9\cdot370^2=9\,109\,382\,235\,108\,373\,145\,600
-<9\,296\,351\,954\,199\,516\,700\,787=83^9\cdot223^2$ and
-$74^{11}\cdot925^2=311\,768\,606\,996\,584\,070\,908\,160\,000
-<313\,006\,138\,444\,263\,224\,418\,858\,083=83^{11}\cdot493^2$.}
-\label{tab:tailints}
-\end{table}
-
-\begin{proposition}[Band]\label{prop:band}
-For odd $3\le m\le13$, $R_m>0$ and $\delta\le\Delta_m$ imply $(T_m)$.
-\end{proposition}
-
-\begin{proof}
-Write $A_m=A^e+LA^o$, $B_m=B^e+LB^o$, $R_m=R^e+LR^o$, $f=\alpha-L$ with
-$A^e,\dots$ polynomials in $(\delta,s)$ (possible since $m-1$ is even and
-$p^{m-1}-L^{m-1}$ is divisible by $p^2-L^2$).  Substituting
-$w_\ell\le\sqrt{2\alpha}$ (Lemma~\ref{lem:chord}) into \eqref{eq:Tm2} and
-collecting $L$-parities, $(T_m)$ follows from $G:=P+LQ\ge0$, where
-\[
- P+LQ\ :=\ w_\ell(\delta)\,4\alpha^2d\,(A B f)\big|_{\text{parity}}
- -e^2\,(B f)^2\big|_{\text{parity}}-4\alpha^2 (A R)\big|_{\text{parity}},
-\]
-two explicit polynomials in $(\delta,s)$ with rational coefficients
-(generated and archived by the validation script).  Let
-$H:=L^2Q^2-P^2$; then $H=c_m\,\delta\,K$ with $c_m>0$ and $K$ a polynomial.
-On the box $\mathcal B_m:=[0,\Delta_m]\times[0,1-t^*_m]$ (which by
-Lemma~\ref{lem:tail} contains all band points with $R_m>0$):
-\emph{all two-dimensional Bernstein coefficients of $Q$ and of $K$ on
-$\mathcal B_m$ are nonnegative} (exact rational computation; no subdivision
-is needed).  Hence $Q\ge0$ and $H\ge0$ on $\mathcal B_m$; if $P\ge0$ then
-$G\ge0$ trivially, and if $P<0$ then $L^2Q^2\ge P^2$ gives $LQ\ge|P|$, so
-$G\ge0$.  By \eqref{eq:Tm2} and Lemma~\ref{lem:relax} this proves the claim.
-\end{proof}
-
-\begin{table}\centering
-\begin{tabular}{lcccccc}\toprule
-$m$&3&5&7&9&11&13\\\midrule
-$\Delta_m$&$1/40$&$1/40$&$1/40$&$1/40$&$1/80$&$1/80$\\
-$t^*_m$&$0.31$&$0.42$&$0.41$&$0.39$&$0.49$&$0.48$\\\bottomrule
-\end{tabular}\caption{Band parameters.}\label{tab:band}
-\end{table}
-
-\subsection{The moderate range: certified subdivision}
-
-\begin{proposition}\label{prop:moderate}
-For odd $3\le m\le13$ and $e\in[\tfrac1{60},\tfrac13-2\Delta_m]$, either
-$R_m\le0$ or $(T_m)$ holds.
-\end{proposition}
-
-\begin{proof}[Certificate]
-Exact-rational interval subdivision over
-$(e,\kappa)\in[\tfrac1{60},\tfrac13-2\Delta_m]\times[0,1]$: on each box,
-directed rational bounds for $\alpha,d,q,p,L^2,f,k_m(\alpha),k_m(L),A_m,B_m,
-R_m$ and integer-square-root brackets for $L$, $\sqrt{2\alpha}$ certify
-either $R_m\le0$ or \eqref{eq:Tm2}; boxes wholly outside the admissible
-domain ($q\le\tfrac13$ or $\kappa>\kappa_{\max}$) are discarded.  The run
-(same protocol as [R2, \S certificate-protocol]) terminates with
-$6757,3911,3567,4307,6487,8785$ boxes for $m=3,5,\dots,13$.  This step is
-\emph{computational}; a prose replacement is open.
-\end{proof}
-
-\subsection{Assembly}
-
-\begin{proof}[Proof of Theorem~\ref{thm:smallm-main}]
-If $R_m\le0$, \eqref{eq:smallm-target} is trivial ($\psi\ge0$).  If $R_m>0$:
-for $e\le1/60$, Proposition~\ref{prop:smalle} applies (Corollary
-\ref{cor:gate-smalle} shows this range meets $\xi>1$);
-for $1/60\le e\le\tfrac13-2\Delta_m$, Proposition~\ref{prop:moderate}
-gives $(T_m)$; for $e\ge\tfrac13-2\Delta_m$ (i.e.\ $\delta\le\Delta_m$),
-Proposition~\ref{prop:band} gives $(T_m)$.  In the latter two cases
-Lemma~\ref{lem:relax} upgrades $(T_m)$ to \eqref{eq:smallm-target}.
-Finally, Remark~\ref{rem:muniform} converts \eqref{eq:smallm-target} into the
-odd-cycle bound in Region II.
-\end{proof}
-
-\begin{remark}[Computational components]\label{rem:comp}
-Two steps are certificate-based rather than prose: (i) the Bernstein
-coefficient tables of Proposition~\ref{prop:band} (a classical positivity
-certificate: nonnegativity of all Bernstein coefficients of an explicit
-rational polynomial on a box implies nonnegativity of the polynomial), and
-(ii) the subdivision of Proposition~\ref{prop:moderate}.  Both are
-exact-rational and small.  Everything else is analytic; in particular the
-tail cut (Lemma~\ref{lem:tail}) is analytic up to the six displayed
-one-line integer comparisons of Table~\ref{tab:tailints}.  The
-per-cycle theorems $C_5,\dots,C_{13}$ are no longer used.
+\begin{remark}[Honest status of the $m\in\{9,11,13\}$ certificates]\label{rem:smallm-91113-status}
+Unlike $m\le7$, these lengths are not closed by a self-contained hand-identity.
+The proof (i) \emph{inherits} the bracket lemmas of \S\ref{sec:zoneC} under the
+$m\mapsto n$ substitution rather than re-deriving them (justified by
+\S\ref{sec:zoneC}'s own remark that $m\ge15$ is used there only through the
+three quantities above); (ii) closes each zone by a fixed displayed cover of
+closed-form monotone rows --- the same standard as the $21$-row table of
+\S\ref{sec:zoneC} and the tables of \S\ref{sec:zoneB} --- whose endpoints are
+checked numerically and in exact rational arithmetic rather than reduced to bare
+integer comparisons; and (iii) is tightest at $m=9$, whose majorant margins fall
+to $\approx6\%$ (against a true ratio $0.12$) and which needs the largest cover.
+No adaptive subdivision remains.  Reducing the $m=9$ cover, or replacing the
+inherited brackets by a global one-radical SOS, is the natural next refinement.
 \end{remark}
 
 \section{Zone B without boxes}\label{sec:zoneB}
@@ -3566,11 +3434,14 @@ $21$-row displayed table (\S\ref{sec:strip}) \\
 & \emph{eliminated}: analytic; 21 displayed hand-checkable rows
 (\S\ref{sec:zoneC}) \\
 (C5) $C_5$--$C_{13}$ per-cycle theorems (for $m\le13$ in Region II)
-& long bespoke chapters with own certificates
-& removed from the main chain by \S\ref{sec:smallm}; the small-$m$ route
-retains two certificate steps: the Bernstein tables of
-Prop.~\emph{band} and the moderate-range subdivision of
-Prop.~\emph{moderate} (both exact rational, uniform protocol) \\
+& long bespoke chapters with own certificates ($C_9$ Gram minors,
+$C_{13}$ frontier split)
+& \emph{heavy $C_9$--$C_{13}$ removed} from the main chain by
+\S\ref{sec:smallm}: $m=3,5,7$ elementary (density-free, symbolically
+verified); $m=9,11,13$ by extending the \S\ref{sec:zoneB}--\S\ref{sec:zoneC}
+zone proofs to fixed length --- fixed displayed covers, no subdivision
+(companion \texttt{m91113\_final.tex}; whole-domain check passes, worst
+ratio $0.71/0.76/0.80$), tightest at $m=9$ ($\approx6\%$ majorant slack) \\
 \bottomrule
 \end{tabular}
 \end{center}

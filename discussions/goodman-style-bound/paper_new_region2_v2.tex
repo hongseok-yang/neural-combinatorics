@@ -185,11 +185,12 @@ On each such rectangle, replace \(W\) by its average.  More explicitly, set
  W_n(x,y)=w^{(n)}_{ab}
  \quad\text{if }(x,y)\in I_{n,a}\times I_{n,b}.
 \end{equation}
-This cell-averaging operation is the conditional 
-expectation of $W$ with respect to the sigma algebra
-$A_n\otimes\mathcal A_n$. It is usually 
-denoted by the compact notation
-\(\E[W\mid\mathcal A_n\otimes\mathcal A_n]\). Since \(0\le W\le1\),
+This cell-averaging operation is the standard conditional 
+expectation operation with respect to the sigma algebra
+$\mathcal A_n\otimes\mathcal A_n$, and is 
+denoted by the notation
+\(\E[\,\_\, \mid\mathcal A_n\otimes\mathcal A_n]\). So,
+\(W_n = \E[W\mid\mathcal A_n\otimes\mathcal A_n] \). Since \(0\le W\le1\),
 every cell average lies in \([0,1]\).  Moreover, symmetry of \(W\) gives
 \(w^{(n)}_{ab}=w^{(n)}_{ba}\).  Hence \(W_n\) is a symmetric step graphon.
 
@@ -203,9 +204,22 @@ on \(2^n\) equally weighted vertices (loops are allowed), and
    w^{(n)}_{a_1a_2}w^{(n)}_{a_2a_3}\cdots
    w^{(n)}_{a_ma_1}.
 \]
-Equivalently, the integral operator with kernel \(W_n\) has range in the
-span of the \(2^n\) interval indicators, which explains the term
-``finite-rank reduction.''
+The same finite structure can be seen directly at the operator level.  For
+any function \(f\), if \(x\in I_{n,a}\), then
+\[
+ (T_{W_n}f)(x)
+ =\int_0^1W_n(x,y)f(y)\dd y
+ =\sum_{b=0}^{2^n-1}w^{(n)}_{ab}
+       \int_{I_{n,b}}f(y)\dd y.
+\]
+Thus the output \(T_{W_n}f\) is constant on each interval \(I_{n,a}\), no
+matter how complicated the input \(f\) is.  Every such output is therefore a
+linear combination of the \(2^n\) indicator functions
+\(\one_{I_{n,0}},\ldots,\one_{I_{n,2^n-1}}\).  The set of all possible
+outputs is called the \emph{range} of the operator, and its dimension is the
+\emph{rank}.  Since the range is contained in a space of dimension \(2^n\),
+the rank is at most \(2^n\).  This explains the term ``finite-rank
+reduction.''
 
 Two facts remain to be checked: the edge density is unchanged, and the cycle
 density converges.  For the first, summing the averages in
@@ -237,9 +251,8 @@ Consequently
 \]
 which proves the asserted convergence.
 
-Finally, cycle densities are continuous under this convergence for an
-elementary reason.  Put \(x_{m+1}=x_1\), and for a fixed
-\((x_1,\ldots,x_m)\) write
+Finally, cycle densities are continuous under this convergence.  Put \(x_{m+1}=x_1\), and for a fixed
+\((x_1,\ldots,x_m)\), write
 \[
        a_i=W_n(x_i,x_{i+1}),\qquad b_i=W(x_i,x_{i+1}).
 \]
