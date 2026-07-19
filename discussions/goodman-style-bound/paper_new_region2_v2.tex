@@ -442,6 +442,14 @@ For \(C_7\), let \(H_0=\one^\perp\) and
 \[
        A=P_{H_0}TP_{H_0}.
 \]
+Concretely, \(H_0\) is the space of mean-zero functions, and its orthogonal
+projection is the centering operation
+\[
+       (P_{H_0}f)(x)=f(x)-\int_0^1f(y)\dd y.
+\]
+Thus \(P_{H_0}\) removes the constant part of \(f\), while \(A\) centers the
+input, applies \(T\), and then centers the output.  In particular, \(A\) acts
+entirely within the mean-zero subspace.
 Define
 \begin{equation}\label{eq:sj-def}
        s_j=\ip g{A^jg}\qquad(j\ge0).
@@ -463,16 +471,48 @@ Then \(a_n=x_n\), and the block form of \(T\) gives the recursion
        \qquad h_{n+1}=a_ng+Ah_n,
        \qquad (a_0,h_0)=(1,0).
 \end{equation}
-Repeated use of \eqref{eq:path-recursion} yields
+For clarity, iterating the second recursion first gives
+\[
+\begin{aligned}
+ h_1={}&g,\\
+ h_2={}&qg+Ag,\\
+ h_3={}&a_2g+qAg+A^2g,\\
+ h_4={}&a_3g+a_2Ag+qA^2g+A^3g,\\
+ h_5={}&a_4g+a_3Ag+a_2A^2g+qA^3g+A^4g,\\
+ h_6={}&a_5g+a_4Ag+a_3A^2g+a_2A^3g
+          +qA^4g+A^5g.
+\end{aligned}
+\]
+More generally,
+\[
+       h_n=\sum_{j=0}^{n-1}a_{n-1-j}A^jg.
+\]
+Taking the inner product with \(g\), and recalling that
+\(s_j=\ip g{A^jg}\), turns the first recursion in
+\eqref{eq:path-recursion} into the scalar formula
+\begin{equation}\label{eq:path-scalar-recursion}
+       a_{n+1}=qa_n+\sum_{j=0}^{n-1}a_{n-1-j}s_j
+       \qquad(n\ge1).
+\end{equation}
+For example, since \(a_0=1\) and \(a_1=q\),
+\[
+\begin{aligned}
+ a_2&=qa_1+a_0s_0=q^2+s_0,\\
+ a_3&=qa_2+a_1s_0+a_0s_1=q^3+2qs_0+s_1,\\
+ a_4&=qa_3+a_2s_0+a_1s_1+a_0s_2
+      =q^4+3q^2s_0+2qs_1+s_0^2+s_2.
+\end{aligned}
+\]
+Continuing the same calculation gives
 \begin{equation}\label{eq:path-2-6}
 \begin{aligned}
- x_2={}&q^2+s_0,\\
- x_3={}&q^3+2qs_0+s_1,\\
- x_4={}&q^4+3q^2s_0+2qs_1+s_0^2+s_2,\\
- x_5={}&q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3,\\
- x_6={}&q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
+ x_2={}&a_2 = q^2+s_0,\\
+ x_3={}&a_3 = q^3+2qs_0+s_1,\\
+ x_4={}&a_4 = q^4+3q^2s_0+2qs_1+s_0^2+s_2,\\
+ x_5={}&a_5 = q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3,\\
+ x_6={}&a_6 = q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
        +6qs_0s_1+2qs_3\\
-     &\quad+s_0^3+2s_0s_2+s_1^2+s_4.
+     &\qquad{}+s_0^3+2s_0s_2+s_1^2+s_4.
 \end{aligned}
 \end{equation}
 
@@ -486,24 +526,46 @@ For every graphon \(W\),
 \end{proposition}
 
 \begin{proof}
-Assume \eqref{eq:q-short}.  Expand the five factors \(1-U_e\) around the
-cycle.  Every proper selected subgraph is a disjoint union of paths, and
-homomorphism density is multiplicative over disjoint unions.  The relevant
-counts are
+Assume \eqref{eq:q-short}.  Label the integration variables cyclically by
+\(z_1,\ldots,z_5\), put \(z_6=z_1\), and abbreviate
 \[
-\begin{array}{c|c|c}
-\text{number of selected edges}&\text{component lengths}&\text{multiplicity}\\
-\hline
-0&-&1\\
-1&1&5\\
-2&2&5\\
-2&1+1&5\\
-3&3&5\\
-3&2+1&5\\
-4&4&5.
-\end{array}
+       U_i=U(z_i,z_{i+1})\qquad(1\le i\le5).
 \]
-Consequently, with \(c_5=t(C_5,U)\),
+Since \(W=1-U\), the integrand defining \(t(C_5,W)\) is
+\(\prod_{i=1}^5(1-U_i)\).  Ordinary inclusion--exclusion gives the exact
+pointwise expansion
+\[
+\begin{aligned}
+ \prod_{i=1}^5(1-U_i)
+ ={}&1-\sum_{i=1}^5U_i
+     +\sum_{1\le i<j\le5}U_iU_j
+     -\sum_{1\le i<j<k\le5}U_iU_jU_k\\
+    &+\sum_{i=1}^5\prod_{j\ne i}U_j
+     -\prod_{i=1}^5U_i.
+\end{aligned}
+\]
+We now integrate this identity over \((z_1,\ldots,z_5)\).  Each single-edge
+term has integral \(q=x_1\), so the first sum contributes \(5q\).  Among the
+\(\binom52=10\) pairs of edges, five pairs are adjacent around the cycle;
+each forms a two-edge path and hence has integral \(x_2\).  The other five
+pairs are disjoint edges.  Their variables separate, so each has integral
+\(x_1^2=q^2\).  Therefore
+\[
+       \int\sum_{i<j}U_iU_j=5x_2+5q^2.
+\]
+
+Similarly, among the \(\binom53=10\) triples, five consist of three
+consecutive edges and form a path with three edges, contributing \(x_3\)
+each.  Each of the other five consists of a two-edge path together with one
+disjoint edge.  Homomorphism density is multiplicative over disjoint unions,
+so each of these contributes \(x_2x_1=qx_2\).  Thus
+\[
+       \int\sum_{i<j<k}U_iU_jU_k=5x_3+5qx_2.
+\]
+There are five ways to select four edges; deleting any one edge from the
+cycle leaves a four-edge path, so every corresponding integral is \(x_4\).
+Finally, selecting all five edges gives \(c_5:=t(C_5,U)\).  Combining these
+contributions with their alternating signs yields
 \[
 \begin{aligned}
  t(C_5,1-U)
