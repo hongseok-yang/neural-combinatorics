@@ -612,8 +612,28 @@ For every graphon \(W\),
 \end{proposition}
 
 \begin{proof}
-Assume \eqref{eq:q-short}.  The proper edge subsets of a labelled \(7\)-cycle
-have the following run-length types.
+Assume \eqref{eq:q-short}.  As in the proof for \(C_5\), label the integration
+variables cyclically by \(z_1,\ldots,z_7\), put \(z_8=z_1\), and write
+\[
+       U_i=U(z_i,z_{i+1})\qquad(1\le i\le7).
+\]
+Expanding the seven factors \(1-U_i\) gives the exact inclusion--exclusion
+identity
+\begin{equation}\label{eq:C7-subset-expansion}
+ t(C_7,W)
+ =\sum_{S\subseteq\{1,\ldots,7\}}(-1)^{|S|}
+   \int_{[0,1]^7}\prod_{i\in S}U_i\prod_{j=1}^7\dd z_j.
+\end{equation}
+For a proper subset \(S\), the selected edges break into disjoint runs of
+consecutive edges around the cycle.  If their lengths are
+\(r_1,\ldots,r_\ell\), the selected subgraph is
+\(P_{r_1}\sqcup\cdots\sqcup P_{r_\ell}\).  Its variables separate between
+components, so its contribution to \eqref{eq:C7-subset-expansion} is
+\[
+       x_{r_1}\cdots x_{r_\ell}.
+\]
+In particular, a run of length one contributes \(x_1=q\).  The proper edge
+subsets of the labelled \(7\)-cycle have the following run-length types.
 \[
 \begin{array}{c|l}
  k&\text{types and multiplicities for }k\text{ selected edges}\\
@@ -627,9 +647,39 @@ have the following run-length types.
 6&7(6).
 \end{array}
 \]
-Here, for example, \(3+1\) denotes a disjoint union of a three-edge path and
-an edge.  Expanding \(t(C_7,1-U)\), and using
-\(c_7=t(C_7,U)\le x_6\), gives
+Here, for example, \(3+1\) denotes a three-edge path together with a
+disjoint edge.  The multiplicities can be checked directly around the
+cycle.  For two selected edges, seven pairs are adjacent and the remaining
+\(21-7=14\) are disjoint.  For three selected edges, there are seven
+rotations of a three-edge run and seven rotations of the alternating pattern
+with three isolated edges; the remaining \(35-7-7=21\) have type \(2+1\).
+For four selected edges, there are seven four-edge runs, fourteen choices of
+type \(3+1\), and seven choices of type \(2+2\); the remaining seven have
+type \(2+1+1\).  Finally, for five selected edges, the two omitted edges are
+either adjacent, giving seven five-edge runs, or nonadjacent, giving seven
+configurations of each type \(4+1\) and \(3+2\).  Thus the multiplicities in
+each row sum, as they should, to \(\binom7k\).
+
+Substituting the path-density product associated with each entry of the
+table into \eqref{eq:C7-subset-expansion} gives
+\begin{align*}
+ t(C_7,W)={}&1-7q
+ +(7x_2+14q^2)
+ -(7x_3+21qx_2+7q^3)\\
+ &+(7x_4+14qx_3+7x_2^2+7q^2x_2)\\
+ &-(7x_5+7qx_4+7x_3x_2)
+ +7x_6-c_7,
+\end{align*}
+where \(c_7=t(C_7,U)\) is the contribution obtained by selecting all seven
+edges.  Because \(0\le U_i\le1\), deleting one factor from that integrand
+can only increase it; the remaining six factors form a six-edge path.
+Hence
+\[
+       c_7=\int\prod_{i=1}^7U_i
+       \le\int\prod_{i=1}^6U_i=x_6.
+\]
+Replacing \(-c_7\) by \(-x_6\) in the preceding identity and collecting the
+coefficients of the same path densities gives
 \begin{equation}\label{eq:C7-IE}
 \begin{aligned}
  t(C_7,W)\ge{}&6x_6-7x_5+7(1-q)x_4+7(2q-1)x_3\\
