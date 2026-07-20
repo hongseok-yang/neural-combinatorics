@@ -367,7 +367,7 @@ The following is the graphon form of Goodman's classical counting
 argument~\cite{Goodman1959}.
 
 \begin{proposition}\label{prop:C3}
-For every graphon \(W\),
+For every graphon \(W\) with edge density \(p=t(K_2,W)\),
 \[
        t(C_3,W)\ge p^3-p(1-p)^2.
 \]
@@ -519,7 +519,7 @@ Continuing the same calculation gives
 \subsection{The pentagon: one completion of a square}\label{subsec:C5}
 
 \begin{proposition}\label{prop:C5}
-For every graphon \(W\),
+For every graphon \(W\) with edge density \(p=t(K_2,W)\),
 \[
        t(C_5,W)\ge p^5-p(1-p)^4.
 \]
@@ -605,7 +605,7 @@ general background on positivity of polynomials on an interval, see
 Powers--Reznick~\cite{PowersReznick2000}.
 
 \begin{proposition}\label{prop:C7}
-For every graphon \(W\),
+For every graphon \(W\) with edge density \(p=t(K_2,W)\),
 \[
        t(C_7,W)\ge p^7-p(1-p)^6.
 \]
@@ -626,7 +626,7 @@ identity
 \end{equation}
 For a proper subset \(S\), the selected edges break into disjoint runs of
 consecutive edges around the cycle.  If their lengths are
-\(r_1,\ldots,r_\ell\), the selected subgraph is
+\(r_1,\ldots,r_\ell\), the selected subgraph is the disjoint union of paths
 \(P_{r_1}\sqcup\cdots\sqcup P_{r_\ell}\).  Its variables separate between
 components, so its contribution to \eqref{eq:C7-subset-expansion} is
 \[
@@ -636,7 +636,7 @@ In particular, a run of length one contributes \(x_1=q\).  The proper edge
 subsets of the labelled \(7\)-cycle have the following run-length types.
 \[
 \begin{array}{c|l}
- k&\text{types and multiplicities for }k\text{ selected edges}\\
+ k&\text{types inside parenthesis and their multiplicities outside them for }k\text{ selected edges}\\
 \hline
 0&1\\
 1&7(1)\\
@@ -647,7 +647,8 @@ subsets of the labelled \(7\)-cycle have the following run-length types.
 6&7(6).
 \end{array}
 \]
-Here, for example, \(3+1\) denotes a three-edge path together with a
+Here, for example, \(14(3+1)\) denotes 
+the fourteen different ways (i.e., multiplicity 14) to select a three-edge path together with a
 disjoint edge.  The multiplicities can be checked directly around the
 cycle.  For two selected edges, seven pairs are adjacent and the remaining
 \(21-7=14\) are disjoint.  For three selected edges, there are seven
