@@ -841,26 +841,60 @@ The spectrum of \(A\) lies in \([-1/2,1/2]\); equivalently,
 \end{lemma}
 
 \begin{proof}
-Let \(f\perp\one\) and \(\norm f=1\), and write \(f=f_+-f_-\).  Since
+Let \(f\perp\one\) and \(\norm f=1\), and write \(f=f_+-f_-\) for nonnegative
+functions \(f_+\) and \(f_-\) on \([0,1]\).  Since
 \(\int f=0\),
 \[
        \int f_+=\int f_-=:a,
        \qquad 2a=\lVert f\rVert_1\le\lVert f\rVert_2=1.
 \]
-Using \(0\le U\le1\),
+We also have
+\[
+\begin{aligned}
+ \ip f{T_Uf}
+ ={}&\ip {f_+}{T_Uf_+}+\ip {f_-}{T_Uf_-}
+      -2\ip {f_+}{T_Uf_-}.
+\end{aligned}
+\]
+Each of the three inner products on the right is nonnegative.  Moreover,
+\[
+ \ip {f_+}{T_Uf_+}\le\left(\int f_+\right)^2,
+ \qquad
+ \ip {f_-}{T_Uf_-}\le\left(\int f_-\right)^2,
+ \qquad
+ \ip {f_+}{T_Uf_-}
+ \le\left(\int f_+\right)\left(\int f_-\right),
+\]
+because \(f_+\) and \(f_-\) are nonnegative and so replacing \(U(x,y)\) by \(1\) in each of the above three cases gives the corresponding product of
+integrals.  For the upper bound, we discard the nonpositive cross term and
+bound the two diagonal terms; hence
 \[
  \ip f{T_Uf}
  \le\left(\int f_+\right)^2+\left(\int f_-\right)^2
- =2a^2\le\frac12,
+ =2a^2\le\frac12.
 \]
-and similarly
+For the lower bound, we instead discard the two nonnegative diagonal terms
+and bound the cross term, obtaining
 \[
  \ip f{T_Uf}
  \ge-2\left(\int f_+\right)\left(\int f_-\right)
  =-2a^2\ge-\frac12.
 \]
-The variational characterization of the norm of a self-adjoint operator
-proves the result.
+Finally, \(A=P_{\one^\perp}T_UP_{\one^\perp}\) acts on \(\one^\perp\).  Thus,
+for every \(f\in\one^\perp\), we have \(P_{\one^\perp}f=f\) and hence
+\[
+       \ip f{Af}=\ip f{T_Uf}.
+\]
+Moreover, \(A\) is self-adjoint, so its operator norm is the largest absolute
+value of its Rayleigh quotient:
+\[
+ \norm A_{\mathrm{op}}
+ =\sup_{\substack{f\in\one^\perp\\ \norm f=1}}
+    \bigl|\ip f{Af}\bigr|.
+\]
+The upper and lower bounds just proved therefore give
+\(\bigl|\ip f{Af}\bigr|\le\tfrac12\) for every unit \(f\in\one^\perp\), and
+so \(\norm A_{\mathrm{op}}\le\tfrac12\), as claimed.
 \end{proof}
 
 \begin{remark}[No positivity-of-operator assumption]
