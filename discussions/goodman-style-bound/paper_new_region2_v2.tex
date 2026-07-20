@@ -903,16 +903,44 @@ compression \(A\) is positive semidefinite.  The proof above controls the
 quadratic form directly and is the only spectral support statement needed.
 \end{remark}
 
-Let \(E_A\) be the spectral resolution of \(A\), and define the finite
-positive measure
+Let \(E_A\) be the spectral resolution of \(A\): for a Borel set
+\(B\subseteq\R\), the operator \(E_A(B)\) is the orthogonal projection onto
+the spectral subspace of \(A\) corresponding to eigenvalues in \(B\).
+Define the finite positive measure
 \begin{equation}\label{eq:mu-def}
        \mu(B)=\ip g{E_A(B)g}.
 \end{equation}
-Then \(\mu\) is supported on \([-1/2,1/2]\), and
+Concretely, in the finite-rank case write
+\[
+       A=\sum_i\lambda_iP_i,
+\]
+where \(P_i\) is the orthogonal projection onto the \(\lambda_i\)-eigenspace.
+Then
+\[
+ \mu(B)=\sum_{\lambda_i\in B}\ip g{P_i g}
+       =\sum_{\lambda_i\in B}\norm{P_i g}^2.
+\]
+The last equality holds because \(P_i\) is an orthogonal projection:
+\(\ip g{P_i g}=\ip{P_i g}{P_i g}\).  Thus \(\mu\) assigns to each
+eigenvalue the nonnegative weight measuring how much of \(g\) lies in its
+eigenspace.  By \Cref{lem:half-norm}, \(\mu\) is supported on
+\([-1/2,1/2]\).  More generally, the spectral theorem gives
+\[
+       \ip g{F(A)g}
+       =\int_{-1/2}^{1/2}F(\lambda)\dd\mu(\lambda)
+\]
+for every bounded Borel function
+\(F:[-1/2,1/2]\to\R\).
+
+For real \(|z|<2\), the function
+\(F_z(\lambda)=(1-z\lambda)^{-1}\) is bounded and continuous on this
+interval.  Taking \(F=F_z\) therefore gives
 \begin{equation}\label{eq:resolvents-common}
  \ip g{(I-zA)^{-1}g}
  =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
 \end{equation}
+Equivalently, this identity holds coefficientwise as a formal power series
+at \(z=0\).
 This positive spectral measure is the bridge from the graphon operator to
 one-variable moment inequalities.
 
