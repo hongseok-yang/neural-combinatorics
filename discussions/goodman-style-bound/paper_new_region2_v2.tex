@@ -693,7 +693,7 @@ Since
  (1-q)^7-(1-q)q^6
  =1-7q+21q^2-35q^3+35q^4-21q^5+6q^6,
 \]
-substitution of \eqref{eq:path-2-6} reduces the desired inequality to
+substitution of \eqref{eq:path-2-6} reduces the desired inequality to the nonnegativity of the polynomial
 \begin{equation}\label{eq:Phi7-expanded}
 \begin{aligned}
  \Phi_7={}&6s_4+(12q-7)s_3+(18q^2-21q+7)s_2\\
@@ -765,11 +765,29 @@ Thus \(P_q(\lambda)\ge0\) for every real \(\lambda\).  Since
 \(\Phi_7\ge0\).
 \end{proof}
 
-\begin{remark}
-The \(C_5\) and \(C_7\) arguments use no positivity of the kernel operator
-\(T_U\); a pointwise nonnegative kernel need not define a positive
-semidefinite operator.  Only self-adjointness, the positive spectral measure
-associated with a vector, and the displayed algebraic identities are used.
+\begin{remark}[Pointwise nonnegativity versus operator positivity]
+The \(C_5\) and \(C_7\) arguments do not require the kernel operator \(T_U\)
+to be positive semidefinite.  Such positivity would mean that
+\[
+ \ip f{T_Uf}
+ =\int_{[0,1]^2}U(x,y)f(x)f(y)\dd x\dd y\ge0
+ \qquad\text{for every }f\in L^2([0,1]).
+\]
+Although \(U(x,y)\ge0\) pointwise, this condition need not hold, because
+\(f(x)f(y)\) may be negative.  For example, let \(U\) be the balanced
+complete bipartite graphon, equal to \(1\) between the two halves of
+\([0,1]\) and to \(0\) within each half.  If \(f\) equals \(1\) on the first
+half and \(-1\) on the second, then \(T_Uf=-\tfrac12f\), and hence
+\(\ip f{T_Uf}=-\tfrac12\norm f^2<0\).
+
+What the proofs use instead is self-adjointness, which follows from the
+symmetry of \(U\).  The spectral theorem then associates with \(g\) a
+nonnegative measure \(\mu\) satisfying \(s_j=\int\lambda^j\dd\mu(\lambda)\).
+Here nonnegative refers to the weights of the measure; its support may still
+contain negative eigenvalues \(\lambda\).  This is why the proof above shows
+that the relevant polynomials are nonnegative for every real \(\lambda\),
+rather than only for \(\lambda\ge0\).  No positive-semidefiniteness assumption
+on \(T_U\) is needed.
 \end{remark}
 
 
