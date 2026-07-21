@@ -1,0 +1,293 @@
+%% ======================================================================
+%%  Elementary section: the odd-cycle bound for m = 3, 5, 7
+%%  Self-contained. All labels carry the prefix  sm:  to avoid collisions.
+%%  Requires \newcommand{\one}{\mathbf 1}, \norm, \ip in the host preamble
+%%  (fallbacks provided below if compiled standalone).
+%% ======================================================================
+\providecommand{\one}{\mathbf 1}
+\providecommand{\norm}[1]{\lVert #1\rVert}
+\providecommand{\ip}[2]{\langle #1,#2\rangle}
+\providecommand{\texorpdfstring}[2]{#1}
+
+\section{The bound for \texorpdfstring{$m=3,5,7$}{m=3,5,7} by elementary means}
+\label{sm:sec:elem357}
+
+Throughout this section $W$ is an arbitrary graphon, $p=t(K_2,W)$, and we
+write $U=1-W$, $q=t(K_2,U)=1-p$.  We prove the odd-cycle bound
+\begin{equation}\label{sm:eq:target}
+        t(C_m,W)\ \ge\ p^{m}-p(1-p)^{m-1}
+        \qquad(m=3,5,7)
+\end{equation}
+by wholly elementary arguments that are valid at \emph{every} edge density
+$p\in[0,1]$; in particular they hold verbatim on Region~II.  For each of the
+three lengths the right-hand side of \eqref{sm:eq:target} is nonpositive once
+$q\ge 1/2$ (indeed $p^m\ge p(1-p)^{m-1}$ fails only in the direction that makes
+the bound trivial), so throughout we may and do assume
+\[
+        0\le q\le \tfrac12 .
+\]
+The three proofs are independent: $m=3$ is Goodman's triangle theorem
+(\S\ref{sm:sub:C3}); $m=5$ is a single completion of a square
+(\S\ref{sm:sub:C5}); $m=7$ is an explicit sum-of-squares identity
+(\S\ref{sm:sub:C7}).
+
+\subsection{The triangle: \texorpdfstring{$m=3$}{m=3}}\label{sm:sub:C3}
+
+For a triangle the pattern graph is complete, $C_3=K_3$, and the target
+constant simplifies to a linear-in-$p^2$ expression.
+
+\begin{lemma}\label{sm:lem:g3}
+$\displaystyle p^{3}-p(1-p)^{2}=p(2p-1)=2p^{2}-p$ identically in $p$.
+\end{lemma}
+
+\begin{proof}
+Expanding, $p^3-p(1-p)^2=p^3-p(1-2p+p^2)=p^3-p+2p^2-p^3=2p^2-p=p(2p-1)$.
+\end{proof}
+
+\begin{theorem}[Goodman triangle bound]\label{sm:thm:C3}
+For every graphon $W$ with $p=t(K_2,W)$,
+\[
+        t(C_3,W)=t(K_3,W)\ \ge\ p^{3}-p(1-p)^{2}.
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{sm:lem:g3} it suffices to prove $t(K_3,W)\ge 2p^2-p$, which is
+Goodman's theorem.  We recall the one-line argument.  Let
+$d_W(x)=\int_0^1 W(x,y)\,dy$, so $\int_0^1 d_W(x)\,dx=p$.  For
+$a,b\in[0,1]$ one has $ab\ge a+b-1$; applying this pointwise to
+$a=W(x,z),\,b=W(y,z)$ and integrating in $z$ gives
+\[
+        \int_0^1 W(x,z)W(y,z)\,dz\ \ge\ d_W(x)+d_W(y)-1 .
+\]
+Multiplying by $W(x,y)\ge0$ and integrating in $(x,y)$,
+\[
+        t(K_3,W)\ \ge\ \int W(x,y)\bigl(d_W(x)+d_W(y)-1\bigr)\,dx\,dy
+        =2\!\int_0^1 d_W(x)^2\,dx-p
+        \ \ge\ 2p^2-p ,
+\]
+the last step by Cauchy--Schwarz ($\int d_W^2\ge(\int d_W)^2=p^2$).  This is
+\eqref{sm:eq:target} for $m=3$.
+\end{proof}
+
+\subsection{Operator notation for \texorpdfstring{$m=5,7$}{m=5,7}}
+\label{sm:sub:ops}
+
+The two remaining cases share a common setup.  Let $T=T_U$ be the graphon
+operator $Tf(x)=\int_0^1 U(x,y)f(y)\,dy$, a self-adjoint operator with
+spectrum in $[0,1]$ since $0\le U\le1$.  Let $d=T\one$ be the degree function
+of $U$, so $\int_0^1 d=q$, and split off its fluctuation
+\[
+        d=T\one=q\one+g,\qquad \ip{g}{\one}=0 .
+\]
+Path densities are $x_j:=t(P_j,U)=\ip{\one}{T^{j}\one}$; in particular
+$x_1=q$.  From $T^{k}\one=\ip{\one}{T^{k}\one}$-normalisation and
+self-adjointness, using $T\one=q\one+g$ and
+$\ip{\one}{Tg}=\ip{T\one}{g}=\ip{q\one+g}{g}=\norm{g}^2$, a direct
+computation gives the identities recorded next.
+
+\begin{lemma}[Path moments through $x_4$]\label{sm:lem:moments}
+With $T\one=q\one+g$ as above,
+\[
+   x_2=q^{2}+\norm{g}^{2},\qquad
+   x_3=q^{3}+2q\norm{g}^{2}+\ip{g}{Tg},\qquad
+   x_4=q^{4}+3q^{2}\norm{g}^{2}+2q\ip{g}{Tg}+\norm{Tg}^{2}.
+\]
+\end{lemma}
+
+\begin{proof}
+$x_2=\ip{\one}{T^2\one}=\norm{T\one}^2=\norm{q\one+g}^2=q^2+\norm{g}^2$.
+For $x_3=\ip{T\one}{T^2\one}=\ip{d}{Td}$ with
+$Td=q\,d+Tg=q^2\one+qg+Tg$: expanding
+$\ip{q\one+g}{q^2\one+qg+Tg}$ and using $\ip{\one}{g}=0$,
+$\ip{\one}{Tg}=\norm{g}^2$ yields
+$q^3+q\norm{g}^2+q\norm{g}^2+\ip{g}{Tg}$.
+For $x_4=\norm{T^2\one}^2=\norm{q^2\one+qg+Tg}^2$: the cross terms with $\one$
+give $2q^2\ip{\one}{Tg}=2q^2\norm{g}^2$ and $2q^2\ip{\one}{g}=0$, so
+$x_4=q^4+q^2\norm{g}^2+2q^2\norm{g}^2+2q\ip{g}{Tg}+\norm{Tg}^2$,
+which is the stated identity.
+\end{proof}
+
+\subsection{The pentagon: \texorpdfstring{$m=5$}{m=5}}\label{sm:sub:C5}
+
+\begin{theorem}\label{sm:thm:C5}
+For every graphon $W$ with $p=t(K_2,W)$,
+$\ t(C_5,W)\ge p^{5}-p(1-p)^{4}.$
+\end{theorem}
+
+\begin{proof}
+Assume $0\le q\le1/2$.  Writing the inclusion--exclusion expansion of
+$t(C_5,1-U)$ over the five edges of $C_5$ and using $0\le U\le1$ to drop the
+single closed-cycle term $c_5:=t(C_5,U)\le x_4$ (deleting one edge from a
+nonnegative integrand can only increase it),
+\[
+   t(C_5,W)=t(C_5,1-U)
+   \ \ge\ 1-5q+5q^{2}+5(1-q)x_2-5x_3+4x_4 .
+\]
+Subtracting the target value
+$(1-q)^5-(1-q)q^4=1-5q+10q^{2}-10q^{3}+4q^{4}$, it suffices to prove
+$\Phi_5\ge0$, where
+\begin{equation}\label{sm:eq:Phi5}
+   \Phi_5:=4x_4-5x_3+5(1-q)x_2-\bigl(4q^{4}-10q^{3}+5q^{2}\bigr).
+\end{equation}
+Substituting the moment identities of Lemma~\ref{sm:lem:moments} and
+collecting (the constant, linear and quadratic terms in $q$ cancel against the
+subtracted polynomial, leaving only the fluctuation quadratic) gives the exact
+identity
+\begin{equation}\label{sm:eq:Phi5-collected}
+   \Phi_5=4\norm{Tg}^{2}+(8q-5)\ip{g}{Tg}+(12q^{2}-15q+5)\norm{g}^{2}.
+\end{equation}
+Complete the square in the pair $\bigl(Tg,\,g\bigr)$:
+\begin{equation}\label{sm:eq:Phi5-square}
+   \Phi_5=4\Bigl\|\,Tg+\tfrac{8q-5}{8}\,g\,\Bigr\|^{2}
+          +\Bigl(8q^{2}-10q+\tfrac{55}{16}\Bigr)\norm{g}^{2},
+\end{equation}
+the residual coefficient being
+$(12q^{2}-15q+5)-4\bigl(\tfrac{8q-5}{8}\bigr)^{2}
+   =8q^{2}-10q+\tfrac{55}{16}$.
+The quadratic $8q^{2}-10q+\tfrac{55}{16}$ is strictly positive for
+\emph{all} real $q$: its discriminant is
+\[
+   (-10)^{2}-4\cdot 8\cdot\tfrac{55}{16}=100-110=-10<0,
+\]
+and its leading coefficient $8>0$.  Both terms of
+\eqref{sm:eq:Phi5-square} are therefore nonnegative, so $\Phi_5\ge0$ and
+\eqref{sm:eq:target} holds for $m=5$.
+\end{proof}
+
+\subsection{The heptagon: \texorpdfstring{$m=7$}{m=7}}\label{sm:sub:C7}
+
+For $C_7$ we need one more piece of notation.  Let $H_0=\one^{\perp}$ and let
+$A=P_{H_0}TP_{H_0}\colon H_0\to H_0$ be the compression of $T$ to the
+constants' orthogonal complement; $A$ is self-adjoint with spectrum in
+$[-1,1]$ (indeed in $[0,1]$, but $[-1,1]$ suffices).  Put
+\[
+   s_j:=\ip{g}{A^{j}g}=\int_{-1}^{1}\lambda^{j}\,d\mu(\lambda),
+   \qquad j\ge0,
+\]
+where $\mu\ge0$ is the $g$-weighted spectral measure of $A$; in particular
+$s_0=\norm{g}^{2}=\mu([-1,1])$.  Expanding
+$x_j=\ip{\one}{T^{j}\one}$ through the block form of $T$ on
+$\mathbb R\one\oplus H_0$ (as in Lemma~\ref{sm:lem:moments}, continued by the
+recursion $a_{n+1}=qa_n+\ip{g}{h_n}$, $h_{n+1}=a_ng+Ah_n$) yields
+\[
+\begin{aligned}
+   x_2&=q^{2}+s_0, & x_3&=q^{3}+2qs_0+s_1,\\
+   x_4&=q^{4}+3q^{2}s_0+2qs_1+s_0^{2}+s_2,\qquad
+   & x_5&=q^{5}+4q^{3}s_0+3q^{2}s_1+3qs_0^{2}+2qs_2+2s_0s_1+s_3,\\
+\end{aligned}
+\]
+\[
+   x_6=q^{6}+5q^{4}s_0+4q^{3}s_1+6q^{2}s_0^{2}+3q^{2}s_2
+       +6qs_0s_1+2qs_3+s_0^{3}+2s_0s_2+s_1^{2}+s_4 .
+\]
+
+\begin{theorem}\label{sm:thm:C7}
+For every graphon $W$ with $p=t(K_2,W)$,
+$\ t(C_7,W)\ge p^{7}-p(1-p)^{6}.$
+\end{theorem}
+
+\begin{proof}
+Assume $0\le q\le1/2$.  The inclusion--exclusion expansion of
+$t(C_7,1-U)$ over the seven edges, with $c_7:=t(C_7,U)\le x_6$, reduces the
+claim to $\Phi_7\ge0$, where
+\[
+\begin{aligned}
+   \Phi_7={}&6x_6-7x_5+7(1-q)x_4+7(2q-1)x_3\\
+   &+7(q^{2}-3q+1)x_2+7x_2^{2}-7x_2x_3-6q^{6}+21q^{5}-35q^{4}+28q^{3}-7q^{2}.
+\end{aligned}
+\]
+Substituting the moment formulae above and collecting in the $s_j$ gives
+\begin{equation}\label{sm:eq:Phi7-s}
+\begin{aligned}
+   \Phi_7={}&6s_4+(12q-7)s_3+(18q^{2}-21q+7)s_2
+             +(24q^{3}-42q^{2}+28q-7)s_1\\
+   &+(30q^{4}-70q^{3}+70q^{2}-35q+7)s_0
+     +12s_0s_2+(36q-21)s_0s_1\\
+   &+(36q^{2}-42q+14)s_0^{2}+6s_0^{3}+6s_1^{2}.
+\end{aligned}
+\end{equation}
+Write $r:=s_0=\mu([-1,1])\ge0$.  Grouping the $\mu$-integrals and completing
+the $s_1$ term as a square, \eqref{sm:eq:Phi7-s} becomes
+\begin{equation}\label{sm:eq:Phi7-int}
+   \Phi_7=6s_1^{2}+\int_{-1}^{1}R_{q,r}(\lambda)\,d\mu(\lambda),
+   \qquad
+   R_{q,r}(\lambda)=P_q(\lambda)+r\,B_q(\lambda)+6r^{2},
+\end{equation}
+where
+\[
+\begin{aligned}
+   P_q(\lambda)={}&6\lambda^{4}+(12q-7)\lambda^{3}+(18q^{2}-21q+7)\lambda^{2}
+                    +(24q^{3}-42q^{2}+28q-7)\lambda\\
+   &+30q^{4}-70q^{3}+70q^{2}-35q+7,\\
+   B_q(\lambda)={}&12\lambda^{2}+(36q-21)\lambda+36q^{2}-42q+14 .
+\end{aligned}
+\]
+Since $6s_1^{2}\ge0$ and $\mu\ge0$, it suffices to prove
+$R_{q,r}(\lambda)\ge0$ for all $0\le q\le1/2$, $r\ge0$, $-1\le\lambda\le1$.
+This is done in Lemma~\ref{sm:lem:C7-pos} below, which completes the proof.
+\end{proof}
+
+\begin{lemma}\label{sm:lem:C7-pos}
+For all $0\le q\le1/2$, $r\ge0$ and $-1\le\lambda\le1$,
+$\ R_{q,r}(\lambda)=P_q(\lambda)+rB_q(\lambda)+6r^{2}\ge0.$
+\end{lemma}
+
+\begin{proof}
+\emph{Step 1: $B_q\ge0$.}  As a quadratic in $\lambda$ with positive leading
+coefficient $12$, $B_q$ attains its minimum at
+$\lambda_*=\tfrac{7-12q}{8}\in[\tfrac18,\tfrac78]$, where
+\[
+   B_q(\lambda_*)=\frac{144q^{2}-168q+77}{16}.
+\]
+On $0\le q\le1/2$ the numerator satisfies
+$144q^{2}-168q+77-29=144q^{2}-168q+48=144\bigl(q-\tfrac12\bigr)\bigl(q-\tfrac23\bigr)\ge0$,
+since both factors are $\le0$ there (they vanish at $q=\tfrac12$ and
+$q=\tfrac23$).  Hence $B_q(\lambda)\ge B_q(\lambda_*)\ge\tfrac{29}{16}>0$, and
+since $r\ge0$,
+\[
+   R_{q,r}(\lambda)\ \ge\ P_q(\lambda).
+\]
+
+\emph{Step 2: $P_q\ge0$ by an explicit SOS identity.}  Set
+\[
+   D(q)=288q^{2}-336q+119,\qquad
+   C(q)=24q^{3}-42q^{2}+28q-7,
+\]
+\[
+   N(q)=5184q^{6}-18144q^{5}+28602q^{4}-25802q^{3}+13874q^{2}-4165q+539 .
+\]
+Then one has the polynomial identity
+\begin{equation}\label{sm:eq:C7-P-square}
+   P_q(\lambda)=6\Bigl(\lambda^{2}+\bigl(q-\tfrac{7}{12}\bigr)\lambda\Bigr)^{2}
+   +\frac{D(q)}{24}\Bigl(\lambda+\frac{12C(q)}{D(q)}\Bigr)^{2}
+   +\frac{N(q)}{D(q)},
+\end{equation}
+verified by expanding both sides (the $\lambda^4,\lambda^3,\lambda^2,\lambda^1$
+coefficients match term by term, and the $\lambda$-free remainder equals
+$N(q)/D(q)$).  It remains to check that the two denominators-and-remainder are
+positive on $0\le q\le1/2$.  Substituting $y=\tfrac12-q\in[0,\tfrac12]$,
+\[
+   D(q)=288y^{2}+48y+23>0,
+\]
+\[
+   8N(q)=41472y^{6}+20736y^{5}+21456y^{4}+7984y^{3}+2032y^{2}+316y+11>0,
+\]
+both being polynomials in $y\ge0$ with strictly positive coefficients.  Thus
+$D(q)>0$ and $N(q)>0$, so every term on the right of
+\eqref{sm:eq:C7-P-square} is nonnegative and $P_q(\lambda)\ge0$.  Combined with
+Step~1 this gives $R_{q,r}(\lambda)\ge0$.
+\end{proof}
+
+\begin{remark}\label{sm:rmk:allp}
+None of the three arguments uses any hypothesis beyond $0\le q\le\tfrac12$
+(equivalently $\tfrac12\le p\le1$), and the range $q>\tfrac12$ is trivial.
+Hence \eqref{sm:eq:target} holds for $m=3,5,7$ at every density, so in
+particular on Region~II, with no frontier machinery, no reflection, and no
+numerical certificate.  All algebraic identities of this section
+(Lemma~\ref{sm:lem:g3}; the collection \eqref{sm:eq:Phi5-collected} and square
+\eqref{sm:eq:Phi5-square} with discriminant $-10$; the SOS
+\eqref{sm:eq:C7-P-square} together with the $y$-expansions of $D$ and $8N$) are
+confirmed symbolically by the accompanying script
+\texttt{validate\_elem\_357.py}.
+\end{remark}
