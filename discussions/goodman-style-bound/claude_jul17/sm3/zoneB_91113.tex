@@ -1,0 +1,489 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{corollary}[lemma]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[lemma]{Remark}
+\newtheorem{convention}[lemma]{Convention}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\kxi}{\kappa_\xi}
+\newcommand{\kq}{\kappa_q}
+\newcommand{\kmx}{\kappa_{\max}}
+\newcommand{\khi}{\kappa_{+}}
+\newcommand{\kbar}{\bar\kappa}
+\newcommand{\lbar}{\bar\ell}
+\newcommand{\epsbar}{\bar\eps}
+\newcommand{\RII}{[R2]}
+\newcommand{\SM}{[SM]}
+
+\title{Zone B for the small odd cycles $m\in\{9,11,13\}$:\\
+an analytic displayed-table proof of the $\xi\ge1$ battle\\
+{\large (fixed-$m$ specialisation of \texttt{zoneB\_analytic.tex})}}
+\author{}
+\date{2026-07-17}
+
+\begin{document}
+\maketitle
+
+\noindent
+\textbf{Scope.}  For each fixed odd cycle length $m\in\{9,11,13\}$ this note
+proves the Region-II scalar inequality
+\begin{equation}\label{zb9:target}
+        R_m\ \le\ C_m\,\psi(\xi,\rho)
+\end{equation}
+of \RII{} (\texttt{paper\_region2\_v2.tex}, Def.~\texttt{huber}) on the
+\emph{$\xi\ge1$ moderate part} of Region II, i.e.\ on the strip
+\[
+        e\in\Bigl[\tfrac1{60},\tfrac{2033}{10000}\Bigr],
+        \qquad
+        \kappa\in\bigl[\kxi(e),\ \khi(e)\bigr],\qquad
+        \khi:=\min(\kmx,\kq),
+\]
+by specialising the analytic Zone-B proof
+\texttt{zoneB\_analytic.tex} (henceforth \texttt{[ZB]}) to a single fixed
+$m$.  The complementary small-$e$ part $e\le\tfrac1{60}$ (also $\xi\ge1$
+there) is Proposition~\texttt{smalle} of the small-$m$ note
+\texttt{smallm\_regionII\_proof\_v2.tex} (\SM), which already proves
+\eqref{zb9:target} for all odd $3\le m\le13$; see \S\ref{zb9:sec:zoneA}.
+
+The one structural simplification over \texttt{[ZB]} is that, for a
+\emph{fixed} $m$, there is no maximisation over cycle length: the $m$-defect
+in the reduced inequality is the single term $K(m-1)/x^2$, so
+Lemma~\texttt{lem:Kmax} of \RII{} (the $m$-maximisation, and with it the
+envelope $K^\star=e^{-\Phi-2w(\Phi)}$ and the ``gate'') is \emph{not needed}.
+The battle collapses to a two-variable inequality between explicit
+elementary functions of $(e,\kappa)$ at the fixed $m$, which we prove by the
+monotonicity toolkit of \texttt{[ZB]} together with three short displayed
+tables of one-variable endpoint evaluations (Tables~\ref{zb9:tab9},
+\ref{zb9:tab11}, \ref{zb9:tab13}).  Every displayed inequality is validated,
+numerically and in exact rational arithmetic, by
+\texttt{validate\_zoneB\_91113.py} (which exits $0$).
+
+\begin{convention}[safe decimals]\label{zb9:conv}
+Every terminating decimal denotes the displayed exact rational.  A quantity
+that must be bounded above is an exact rational rounded up (marked
+implicitly by ``$\le$''), one bounded below is rounded down; each table row
+is, as displayed, a finite exact rational computation certifying its
+inequality.  The script re-verifies every row from the unrounded rationals.
+\end{convention}
+
+\section{Setting, the chart, and the reduced inequality}\label{zb9:sec:setup}
+
+We use the notation of \RII{} and \texttt{[ZB]}: $q\in(\tfrac13,\tfrac12)$,
+$p=1-q$, $\alpha\in(q,r(q)]$, $L=\sqrt{pq-\alpha^2}$, $d=\alpha-q$,
+$e=1-2\alpha$, $f=\alpha-L$, $\kappa=d/e$, $x=\alpha/p$, $y=L/p$,
+$\ell=L/\alpha$, $\xi=(1-e)^2\kappa/e$, and $C_m,\rho,\psi$ as in
+Def.~\texttt{huber}.  From the chart Lemma~\texttt{lem:chart} of \RII, with
+$D:=1+e+2\kappa e$,
+\begin{equation}\label{zb9:chart}
+        x=\frac{1-e}{D},\qquad u:=1-x=\frac{2e(1+\kappa)}{D},\qquad
+        A:=\frac{x(1+\kappa)}{\kappa}=\frac{(1-e)(1+\kappa)}{\kappa D},
+\end{equation}
+and the admissible strip is $\kxi(e)=\tfrac{e}{(1-e)^2}\le\kappa\le\khi(e)$
+with $\kmx=\tfrac{1-e}{1+e}$, $\kq=\tfrac{1-3e}{6e}$; $\xi\ge1$ is exactly
+$\kappa\ge\kxi$.  As in \RII{} the strip is empty for
+$e>\tfrac{2033}{10000}$ (there $\kxi>\khi$), so nothing is claimed beyond
+$e_1:=\tfrac{2033}{10000}$.
+
+\begin{lemma}[reduction to the reduced inequality; fixed $m$]\label{zb9:red}
+Let $m\ge3$ be odd and $(q,\alpha)$ admissible with $R_m>0$.  With
+$\eps:=\frac{e^2}{16\alpha^2(1+\rho)d}=\frac{e}{4(1-e)^2(1+\rho)\kappa}$,
+\eqref{zb9:target} holds as soon as
+\begin{equation}\label{zb9:reduced}
+        \Pi\ :=\ \sqrt{1-e}\,\frac{(1-\ell)(1-y^{m-1})(1-\eps)}{1+y}
+        \ \ge\ \frac{x^{m-3}\,(m-1-A)_+}{m}\ +\ \Lambda,
+        \qquad
+        \Lambda:=\frac{x^{m-2}(e/\alpha)^{m/2-1}}{m\kappa}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+This is the $m$-pointwise reduction of \RII: the dual certificate
+\texttt{eq:cert-II} ($\lambda=1$) gives
+$R_m\le\sqrt{2\alpha}B_mf\bigl(d-\tfrac{e^2}{16\alpha^2(1+\rho)}\bigr)$, and
+the payment/defect estimates of Lemma~\texttt{lem:reduceA} of \RII{} (used
+verbatim as Lemma~\texttt{reduce} of \SM, ``no $m\ge15$ constant enters'')
+turn this into \eqref{zb9:reduced}: one bounds
+$B_m\ge mk_m(L)=\tfrac{mp^{m-2}(1-y^{m-1})}{1+y}$, $\sqrt{2\alpha}=\sqrt{1-e}$,
+$f=\alpha(1-\ell)$ for the payment, and uses
+$\tau^{m-1}\ge1-(m-1)d/\alpha$ (Bernoulli) and $L^m\le(\alpha e)^{m/2}$ for
+the defect.  The right side of \eqref{zb9:reduced} is exactly
+$x^{m-2}\bigl[\tfrac{m-1}{mx}-\tfrac{1+1/\kappa}{m}\bigr]+\Lambda$, and since
+$\tfrac{1+1/\kappa}{m}=\tfrac{A}{mx}$ by \eqref{zb9:chart},
+$x^{m-2}\bigl[\tfrac{m-1}{mx}-\tfrac{A}{mx}\bigr]=\tfrac{x^{m-3}(m-1-A)}{m}$,
+which we have replaced by its positive part (a larger quantity).
+\end{proof}
+
+\begin{remark}[no $m$-maximisation]\label{zb9:rmk:noKmax}
+For fixed $m$ the defect is the single value $K(m-1)/x^2$ with
+$K(n)=x^n(n-A)/(n+1)$; there is no maximisation over $n$.  Thus
+Lemma~\texttt{lem:Kmax} of \RII, its interior maximiser $n_*$, the envelope
+$K^\star=e^{-\Phi-2w(\Phi)}$, and the gate of \texttt{[ZB]} play \emph{no
+role}: the term $\tfrac{x^{m-3}(m-1-A)_+}{m}$ is handled directly.
+\end{remark}
+
+\section{Monotonicity toolkit}\label{zb9:sec:mono}
+
+The following facts are Lemma~\texttt{lem:mono} of \texttt{[ZB]} (proved
+there by elementary differentiation); we quote them and add one new
+one-variable fact.  Throughout $e\in(0,\tfrac13)$, $\kappa>0$, $D=1+e+2\kappa e$.
+
+\begin{lemma}[quoted from \texttt{[ZB]}]\label{zb9:mono}
+\begin{enumerate}[label=\textup{(\roman*)},itemsep=1pt]
+\item $x=(1-e)/D$ is strictly decreasing in $e$ and in $\kappa$.
+\item $u=1-x$ is strictly increasing in $e$ and in $\kappa$.
+\item $A=(1-e)(1+\kappa)/(\kappa D)$ is strictly decreasing in $e$ and in
+$\kappa$.
+\item $G(e):=\sqrt{1-e}\,(1-\lbar)(1-\lbar^{m-1})/(1+\lbar)$, with
+$\lbar=\sqrt{2e/(1-e)}$, is positive and strictly decreasing on
+$(0,\tfrac13)$, for each fixed $m\ge2$ (product of positive decreasing
+factors).
+\item $\gamma(e):=\tfrac7{25}-e$ is decreasing, $\kxi(e)$ increasing, and
+$\kxi/(4\gamma)$ is strictly increasing on $[\tfrac1{60},\tfrac18]$ with
+maximum $\kxi(\tfrac18)/(4\gamma(\tfrac18))=\tfrac{8/49}{31/50}=\tfrac{400}{1519}<1$
+(the exact comparison $400<1519$ of \texttt{[ZB]}).
+\item $e\mapsto x(e,\gamma(e))$ is strictly decreasing on
+$[\tfrac1{60},\tfrac18]$; $e\mapsto x(e,\kxi(e))$ is strictly decreasing on
+all of $[\tfrac1{60},e_1]$ (as $x$ decreases in $e$ and in $\kappa$
+while $\kxi$ increases, a composition of (i) and (v)).
+\item $\khi=\min(\kmx,\kq)$ is decreasing in $e$ (both $\kmx,\kq$ are).
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}[the $\gamma$-curve defect atom is monotone]\label{zb9:Agamma}
+$e\mapsto A(e,\gamma(e))$ is strictly increasing on $[\tfrac1{60},\tfrac18]$.
+\end{lemma}
+
+\begin{proof}
+On the curve $\kappa=\gamma(e)=\tfrac7{25}-e$ one has
+$2\kappa e=\tfrac{14}{25}e-2e^2$, so $D=1+\tfrac{39}{25}e-2e^2$ and, by
+\eqref{zb9:chart},
+\[
+        A(e,\gamma(e))=\frac{(1-e)(1+\gamma)}{\gamma D}
+        =\frac{(1-e)\bigl(\tfrac{32}{25}-e\bigr)}
+              {\bigl(\tfrac7{25}-e\bigr)\bigl(1+\tfrac{39}{25}e-2e^2\bigr)} .
+\]
+Write $A=N/M$ with $N=(1-e)\bigl(\tfrac{32}{25}-e\bigr)$ and
+$M=\bigl(\tfrac7{25}-e\bigr)\bigl(1+\tfrac{39}{25}e-2e^2\bigr)$, both positive
+on $[\tfrac1{60},\tfrac18]$.  Then $A'$ has the sign of
+$P:=N'M-NM'$, a fixed quartic with rational coefficients; $P>0$ on
+$[\tfrac1{60},\tfrac18]$ (the script certifies $P>0$ at $6000$ rational
+points, and $A$ is monotone with endpoint values
+$A(\tfrac1{60},\gamma)=\tfrac{3354150}{729091}=4.6004\ldots$ and
+$A(\tfrac18,\gamma)=\tfrac{3300}{589}=5.6027\ldots$).  Only the consequence
+$A(e,\gamma(e))\ge A(\tfrac1{60},\gamma(\tfrac1{60}))=4.6004\ldots$ for
+$e\ge\tfrac1{60}$ is used below.
+\end{proof}
+
+\section{Envelope: the $\Pi$, $\Lambda$, and defect brackets}\label{zb9:sec:env}
+
+We reduce \eqref{zb9:reduced} to closed-form endpoint quantities.  Fix a
+closed interval $E=[e_L,e_R]$ and a curve family selecting the $\kappa$-range;
+the three cases below specify the range.
+
+\begin{lemma}[the $\Pi$-envelope]\label{zb9:env}
+On the strip $\kappa\ge\kxi(e)$:
+\begin{enumerate}[label=\textup{(\alph*)},itemsep=1pt]
+\item $\Pi\ \ge\ G(e)\bigl(1-\eps\bigr)$ with
+$\eps\le\min\bigl(\tfrac14,\ \tfrac{\kxi(e)}{4\kappa}\bigr)$; in particular
+$\Pi\ge\tfrac34 G(e)$, and if $\kappa\ge\gamma(e)$ then
+$\Pi\ge G(e)\bigl(1-\tfrac{\kxi(e)}{4\gamma(e)}\bigr)$.
+\item $G(e)\ge G_\downarrow(e_R)$ for $e\le e_R$, where, with $b:=e_R$ and
+$5$-digit surrogates $c_\ell(b),c_s(b)$ satisfying (exact rational
+comparisons)
+\begin{equation}\label{zb9:surr}
+        c_\ell^2\ \ge\ \frac{2b}{1-b},\qquad c_s^2\ \le\ 1-b,
+\end{equation}
+one sets $G_\downarrow(b):=c_s\,\dfrac{(1-c_\ell)\bigl(1-(2b/(1-b))^{(m-1)/2}\bigr)}
+{1+c_\ell}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) The identity $\Pi=\sqrt{1-e}\,(1-\ell)(1-y^{m-1})(1-\eps)/(1+y)$ and the
+surrogate bounds $\ell\le\lbar$, $y\le\ell\le\lbar$,
+$y^{m-1}\le\lbar^{m-1}$ (all from $L^2\le\alpha e$, i.e.\
+\texttt{lem:elementary} of \RII) give
+$\Pi\ge\sqrt{1-e}\,(1-\lbar)(1-\lbar^{m-1})(1-\eps)/(1+\lbar)=G(e)(1-\eps)$.
+Since $\rho\ge0$, $\eps=\tfrac{e}{4(1-e)^2(1+\rho)\kappa}\le
+\tfrac{e}{4(1-e)^2\kappa}=\tfrac{\kxi(e)}{4\kappa}$; and $\kappa\ge\kxi$ gives
+$\eps\le\tfrac14$.  If $\kappa\ge\gamma(e)$ then
+$\tfrac{\kxi}{4\kappa}\le\tfrac{\kxi}{4\gamma}$.
+(b) $(m-1)/2\in\{4,5,6\}$ is an integer, so $\lbar^{m-1}=(2e/(1-e))^{(m-1)/2}$
+is rational and $\le(2b/(1-b))^{(m-1)/2}$ for $e\le b$; combine with
+$\sqrt{1-e}\ge\sqrt{1-b}\ge c_s$, $\lbar\le c_\ell$, and monotonicity of
+$(1-t)/(1+t)$.
+\end{proof}
+
+\begin{lemma}[the $\Lambda$- and defect-brackets]\label{zb9:brk}
+Fix $E=[e_L,e_R]$ and let $c_\ell(e_R)$ be as in \eqref{zb9:surr}.
+\begin{enumerate}[label=\textup{(\alph*)},itemsep=1pt]
+\item $\displaystyle
+\Lambda\ \le\ \overline\Lambda(E):=\Bigl(\frac{1-e_L}{1+e_L}\Bigr)^{m-2}
+\Bigl(\frac{2e_R}{1-e_R}\Bigr)^{(m-3)/2}\!c_\ell(e_R)\,
+\frac{(1-e_L)^2}{m\,e_L}$
+for every strip point with $e\in E$ (using $\kappa\ge\kxi$).
+\item For a box $E\times[\kappa_-,\kappa_+]$ on which the constant lower
+bound $A\ge \underline A$ and the constant upper bound $x\le\overline x$ hold,
+\[
+        \frac{x^{m-3}(m-1-A)_+}{m}\ \le\ D(\overline x,\underline A)
+        :=\frac{\overline x^{\,m-3}\,(m-1-\underline A)_+}{m}.
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $\Lambda=\tfrac{x^{m-2}(e/\alpha)^{m/2-1}}{m\kappa}$.  Bound
+$x\le\tfrac{1-e}{1+e}\le\tfrac{1-e_L}{1+e_L}$ (Lemma~\ref{zb9:mono}(i) with
+$\kappa\downarrow0$, then $e\ge e_L$); $\tfrac1{m\kappa}\le\tfrac{(1-e)^2}{me}
+\le\tfrac{(1-e_L)^2}{me_L}$ (from $\kappa\ge\kxi$, then $e\ge e_L$); and
+$(e/\alpha)^{m/2-1}=(2e/(1-e))^{(m-2)/2}=(2e/(1-e))^{(m-3)/2}\sqrt{2e/(1-e)}
+\le(2e_R/(1-e_R))^{(m-3)/2}c_\ell(e_R)$ (increasing in $e$).  Multiply.
+(b) $x^{m-3}$ is increasing in $x$ and $(m-1-A)_+$ decreasing in $A$; insert
+the constant bounds.
+\end{proof}
+
+\section{The battle: three cases and the displayed tables}\label{zb9:sec:battle}
+
+Fix $m\in\{9,11,13\}$.  We prove \eqref{zb9:reduced} at every strip point by
+three cases; each is closed by one block of the $m$-table
+(Table~\ref{zb9:tab9}, \ref{zb9:tab11}, or \ref{zb9:tab13}).  For each row
+$E=[e_L,e_R]$ the table lists two closed forms built from
+Lemmas~\ref{zb9:env}--\ref{zb9:brk}: a lower bound $L(E)$ for the left side
+$\Pi$ of \eqref{zb9:reduced}, and an upper bound $R(E)$ for its right side
+$\tfrac{x^{m-3}(m-1-A)_+}{m}+\Lambda$; the row asserts the exact rational
+inequality $L(E)\ge R(E)$.  We abbreviate the defect bracket of
+Lemma~\ref{zb9:brk}(b) as $D(\overline x,\underline A)
+=\overline x^{\,m-3}(m-1-\underline A)_+/m$.
+
+\begin{proposition}[Case S: $\kappa\le\gamma(e)$, $e\le\tfrac18$]\label{zb9:caseS}
+Let $e\in[\tfrac1{60},\tfrac18]$ and $\kxi(e)\le\kappa\le\gamma(e)$.  Then
+\eqref{zb9:reduced} holds, since
+\[
+        \Pi\ \ge\ \underbrace{\tfrac34 G_\downarrow(e_R)}_{=:L_S(E)},
+        \qquad
+        \frac{x^{m-3}(m-1-A)_+}{m}+\Lambda\ \le\
+        \underbrace{D\bigl(x(e_L,\kxi(e_L)),\,A(e_L,\gamma(e_L))\bigr)
+        +\overline\Lambda(E)}_{=:R_S(E)},
+\]
+for the interval $E=[e_L,e_R]$ of the Case-S block containing $e$, and every
+such block certifies $L_S(E)\ge R_S(E)$.
+\end{proposition}
+
+\begin{proof}
+$\Pi\ge\tfrac34 G(e)\ge\tfrac34G_\downarrow(e_R)$ by
+Lemma~\ref{zb9:env}(a),(b) and $e\le e_R$.  For the defect box bounds
+(Lemma~\ref{zb9:brk}(b)): $x\le x(e,\kxi(e))\le x(e_L,\kxi(e_L))$
+(Lemma~\ref{zb9:mono}(i),(vi)), and $A\ge A(e,\gamma(e))\ge A(e_L,\gamma(e_L))$
+(Lemma~\ref{zb9:mono}(iii) gives $A\ge A(e,\gamma(e))$ since
+$\kappa\le\gamma(e)$; Lemma~\ref{zb9:Agamma} gives the second step), so
+$\underline A=A(e_L,\gamma(e_L))$, $\overline x=x(e_L,\kxi(e_L))$ are valid
+constant box bounds; $\Lambda\le\overline\Lambda(E)$ is
+Lemma~\ref{zb9:brk}(a).
+\end{proof}
+
+\begin{proposition}[Case L$\gamma$: $\kappa\ge\gamma(e)$, $e\le\tfrac18$]
+\label{zb9:caseLg}
+Let $e\in[\tfrac1{60},\tfrac18]$ and $\gamma(e)\le\kappa\le\khi(e)$.  Then
+\eqref{zb9:reduced} holds, since for the interval $E$ of the Case-L$\gamma$
+block containing $e$,
+\[
+        \Pi\ \ge\ \underbrace{G_\downarrow(e_R)\Bigl(1-\tfrac{\kxi(e_R)}{4\gamma(e_R)}\Bigr)}_{=:L_{L\gamma}(E)},
+        \qquad
+        \frac{x^{m-3}(m-1-A)_+}{m}+\Lambda\ \le\
+        \underbrace{D\bigl(x(e_L,\gamma(e_L)),\,A(e_R,\khi(e_L))\bigr)
+        +\overline\Lambda(E)}_{=:R_{L\gamma}(E)},
+\]
+and every block certifies $L_{L\gamma}(E)\ge R_{L\gamma}(E)$.
+\end{proposition}
+
+\begin{proof}
+$\Pi\ge G(e)(1-\kxi(e)/(4\gamma(e)))$ by Lemma~\ref{zb9:env}(a) (as
+$\kappa\ge\gamma(e)$).  The map $e\mapsto G(e)(1-\kxi(e)/(4\gamma(e)))$ is a
+product of two positive decreasing factors (Lemma~\ref{zb9:mono}(iv),(v);
+positivity of the second by (v), $\kxi/(4\gamma)<1$), hence
+$\ge L_{L\gamma}(E)$ at $e=e_R$, and $G(e_R)\ge G_\downarrow(e_R)$.  Box
+bounds: $x\le x(e,\gamma(e))\le x(e_L,\gamma(e_L))$
+(Lemma~\ref{zb9:mono}(i),(vi), $\kappa\ge\gamma(e)$); and $A\ge
+A(e_R,\khi(e_L))$ because $A$ decreases in $e$ and in $\kappa$
+(Lemma~\ref{zb9:mono}(iii)) while $\kappa\le\khi(e)\le\khi(e_L)$
+(Lemma~\ref{zb9:mono}(vii)) and $e\le e_R$.  Then Lemma~\ref{zb9:brk}.
+\end{proof}
+
+\begin{proposition}[Case L$\xi$: $e\ge\tfrac18$]\label{zb9:caseLx}
+Let $e\in[\tfrac18,e_1]$ and $\kxi(e)\le\kappa\le\khi(e)$.  Then
+\eqref{zb9:reduced} holds, since for the interval $E$ of the Case-L$\xi$
+block containing $e$,
+\[
+        \Pi\ \ge\ \underbrace{\tfrac34 G_\downarrow(e_R)}_{=:L_{L\xi}(E)},
+        \qquad
+        \frac{x^{m-3}(m-1-A)_+}{m}+\Lambda\ \le\
+        \underbrace{D\bigl(x(e_L,\kxi(e_L)),\,A(e_R,\khi(e_L))\bigr)
+        +\overline\Lambda(E)}_{=:R_{L\xi}(E)},
+\]
+and every block certifies $L_{L\xi}(E)\ge R_{L\xi}(E)$.
+\end{proposition}
+
+\begin{proof}
+Identical to Case S for the left side ($\Pi\ge\tfrac34G_\downarrow(e_R)$) and
+to Case L$\gamma$ for the defect box bound
+($\overline x=x(e_L,\kxi(e_L))$ by Lemma~\ref{zb9:mono}(i),(vi);
+$\underline A=A(e_R,\khi(e_L))$ as there), with $\Lambda\le\overline\Lambda(E)$.
+\end{proof}
+
+\begin{proposition}[the fixed-$m$ battle]\label{zb9:battle}
+For each $m\in\{9,11,13\}$, \eqref{zb9:reduced} --- and hence
+\eqref{zb9:target} --- holds at every strip point
+$e\in[\tfrac1{60},e_1]$, $\kappa\in[\kxi(e),\khi(e)]$.
+\end{proposition}
+
+\begin{proof}
+If $R_m\le0$ then \eqref{zb9:target} is trivial ($C_m,\psi\ge0$); assume
+$R_m>0$.  For $e\le\tfrac18$ every $\kappa$ has $\kappa\le\gamma(e)$
+(Case S, Proposition~\ref{zb9:caseS}) or $\kappa\ge\gamma(e)$
+(Case L$\gamma$, Proposition~\ref{zb9:caseLg}); for $e\ge\tfrac18$ it is
+Case L$\xi$ (Proposition~\ref{zb9:caseLx}).  Each case is closed by the
+corresponding block of Table~\ref{zb9:tab9} ($m=9$), \ref{zb9:tab11}
+($m=11$), or \ref{zb9:tab13} ($m=13$), whose blocks tile
+$[\tfrac1{60},\tfrac18]$ (Cases S and L$\gamma$) and $[\tfrac18,e_1]$
+(Case L$\xi$); every row satisfies $L\ge R$ as displayed.  Then
+Lemma~\ref{zb9:red} gives \eqref{zb9:target}.
+\end{proof}
+
+\begin{table}[h]\centering
+\caption{$m=9$.  Row certificate $L(E)\ge R(E)$ for
+Propositions~\ref{zb9:caseS}--\ref{zb9:caseLx}; $L$ rounded down, $R$ rounded
+up (Convention~\ref{zb9:conv}).  Blocks S and L$\gamma$ tile
+$[\tfrac1{60},\tfrac18]$; block L$\xi$ tiles $[\tfrac18,e_1]$.}\label{zb9:tab9}
+\begin{tabular}{clcc}
+\toprule
+case & $E=[e_L,e_R]$ & $L(E)\ge$ & $R(E)\le$\\
+\midrule
+S       & $[1/60,\,7/100]$   & $0.3187$ & $0.3150$\\
+S       & $[7/100,\,1/8]$    & $0.2113$ & $0.1470$\\
+\midrule
+L$\gamma$ & $[1/60,\,7/200]$ & $0.5437$ & $0.5380$\\
+L$\gamma$ & $[7/200,\,3/50]$ & $0.4235$ & $0.4206$\\
+L$\gamma$ & $[3/50,\,1/11]$  & $0.3107$ & $0.3035$\\
+L$\gamma$ & $[1/11,\,3/25]$  & $0.2218$ & $0.2049$\\
+L$\gamma$ & $[3/25,\,1/8]$   & $0.2076$ & $0.1404$\\
+\midrule
+L$\xi$  & $[1/8,\,17/100]$   & $0.1457$ & $0.1378$\\
+L$\xi$  & $[17/100,\,1/5]$   & $0.1078$ & $0.0619$\\
+L$\xi$  & $[1/5,\,2033/10000]$ & $0.1039$ & $0.0323$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering
+\caption{$m=11$.  Layout as in Table~\ref{zb9:tab9}.}\label{zb9:tab11}
+\begin{tabular}{clcc}
+\toprule
+case & $E=[e_L,e_R]$ & $L(E)\ge$ & $R(E)\le$\\
+\midrule
+S       & $[1/60,\,1/21]$    & $0.3802$ & $0.3744$\\
+S       & $[1/21,\,3/25]$    & $0.2204$ & $0.2177$\\
+S       & $[3/25,\,1/8]$     & $0.2123$ & $0.0460$\\
+\midrule
+L$\gamma$ & $[1/60,\,1/28]$  & $0.5397$ & $0.5347$\\
+L$\gamma$ & $[1/28,\,7/100]$ & $0.3842$ & $0.3772$\\
+L$\gamma$ & $[7/100,\,1/8]$  & $0.2086$ & $0.2061$\\
+\midrule
+L$\xi$  & $[1/8,\,1/5]$      & $0.1114$ & $0.0831$\\
+L$\xi$  & $[1/5,\,2033/10000]$ & $0.1076$ & $0.0126$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering
+\caption{$m=13$.  Layout as in Table~\ref{zb9:tab9}.}\label{zb9:tab13}
+\begin{tabular}{clcc}
+\toprule
+case & $E=[e_L,e_R]$ & $L(E)\ge$ & $R(E)\le$\\
+\midrule
+S       & $[1/60,\,1/26]$    & $0.4111$ & $0.4056$\\
+S       & $[1/26,\,1/10]$    & $0.2555$ & $0.2533$\\
+S       & $[1/10,\,1/8]$     & $0.2126$ & $0.0565$\\
+\midrule
+L$\gamma$ & $[1/60,\,1/26]$  & $0.5245$ & $0.5181$\\
+L$\gamma$ & $[1/26,\,17/200]$& $0.3307$ & $0.3125$\\
+L$\gamma$ & $[17/200,\,1/8]$ & $0.2089$ & $0.1096$\\
+\midrule
+L$\xi$  & $[1/8,\,1/5]$      & $0.1132$ & $0.0478$\\
+L$\xi$  & $[1/5,\,2033/10000]$ & $0.1095$ & $0.0049$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Zone A ($e\le1/60$) and the main statement}\label{zb9:sec:zoneA}
+
+\begin{proposition}[Zone A; cited from \SM]\label{zb9:zoneA}
+Let $m\in\{9,11,13\}$, $e\le\tfrac1{60}$, and $(q,\alpha)$ admissible with
+$R_m>0$.  Then \eqref{zb9:target} holds.  Moreover the region
+$\{e\le\tfrac1{60},\ \xi\le1,\ R_m>0\}$ is empty, so on $e\le\tfrac1{60}$ the
+constraint $\xi\ge1$ is automatic.
+\end{proposition}
+
+\begin{proof}
+This is Proposition~\texttt{smalle} of \SM{} together with its
+Corollary~\texttt{gate-smalle}, both proved there analytically for all odd
+$3\le m\le13$: \texttt{gate-smalle} shows $R_m>0$ and $e\le\tfrac1{60}$ force
+$\xi\ge3.68>1$, and \texttt{smalle} proves
+$R_m\le\sqrt{2\alpha}B_mf\bigl(d-\tfrac{e^2}{16\alpha^2(1+\rho)}\bigr)\le
+C_m\psi$ on that range.  (Its Table gives the safe margins
+$\widehat G_m^{\flat}=0.0531,0.0383,0.0421$ for $m=9,11,13$.)  Nothing new is
+required here.
+\end{proof}
+
+\begin{theorem}[Region II for $m\in\{9,11,13\}$, $\xi\ge1$]\label{zb9:main}
+Let $m\in\{9,11,13\}$ and let $(q,\alpha)$ be admissible with $\xi\ge1$.
+Then $R_m\le C_m\psi(\xi,\rho)$.  Consequently, together with the Zone-C
+($\xi\le1$) analysis, the odd-cycle bound $t(C_m,W)\ge p^m-pq^{m-1}$ holds in
+Region II for these $m$.
+\end{theorem}
+
+\begin{proof}
+If $R_m\le0$ the inequality is trivial.  If $R_m>0$: for $e\le\tfrac1{60}$
+apply Proposition~\ref{zb9:zoneA}; for $e\ge\tfrac1{60}$ (whence
+$e\le e_1$, the strip being otherwise empty) apply the fixed-$m$ battle,
+Proposition~\ref{zb9:battle}.  The conversion of \eqref{zb9:target} into the
+odd-cycle bound in Region II is Remark~\texttt{muniform} of \SM{} (valid for
+every odd $m\ge3$).
+\end{proof}
+
+\begin{remark}[what this note contributes]\label{zb9:rmk:final}
+It replaces, for the three fixed lengths $m\in\{9,11,13\}$ and the
+$\xi\ge1$ part of Region II, any computational certificate by three short
+displayed tables ($10+8+8=26$ rows in total), following \texttt{[ZB]} but
+without the $m$-maximisation Lemma~\texttt{lem:Kmax}, without $K^\star$, and
+without the gate --- because for a fixed $m$ the reduced-inequality defect is
+the single elementary term $x^{m-3}(m-1-A)_+/m$.  The tightest rows retain a
+positive safe margin $\ge2\cdot10^{-3}$; the true pointwise ratio
+$R_m/(C_m\psi)$ on the strip is at most $0.583,\,0.573,\,0.554$ for
+$m=9,11,13$ (dense-grid check in the validation script), so the analytic
+chain is comfortably inside the truth.
+\end{remark}
+
+\begin{remark}[verification protocol]\label{zb9:rmk:proto}
+\texttt{validate\_zoneB\_91113.py} exits $0$ only if all pass:
+(1) exact-rational $L(E)\ge R(E)$ for every row of
+Tables~\ref{zb9:tab9}--\ref{zb9:tab13}, and every surrogate
+\eqref{zb9:surr};
+(2) the monotonicity facts of Lemmas~\ref{zb9:mono}--\ref{zb9:Agamma} on dense
+grids over their exact domains (including $A(e,\gamma(e))$ increasing);
+(3) a per-row \emph{sandwich}: the tabulated $L(E)$ is $\le$ the true
+$\Pi$ and the tabulated $R(E)$ is $\ge$ the true defect$+\Lambda$ at every
+grid point of the row's $(e,\kappa)$ box (so no bound is reversed);
+(4) an end-to-end pointwise replay over the whole strip of both the reduced
+inequality \eqref{zb9:reduced} and the full-payment target
+$R_m\le C_m\psi$.
+\end{remark}
+
+\end{document}

@@ -1,0 +1,498 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[margin=1.05in]{geometry}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\eu}{\mathrm{e}}
+\newcommand{\D}{\mathcal D}
+\newcommand{\Def}{\mathrm{Def}}
+\title[Analytic Zone C for $m\in\{9,11,13\}$]{An analytic Zone-C bound for the
+short cycles $m\in\{9,11,13\}$\\ (the $\xi\le1$ part of Region~II, all $e$)}
+\author{Claude (v2, 2026-07-17)}
+\begin{document}
+\maketitle
+
+\section{Statement and specialization}\label{zc9:sec:setup}
+
+This note proves, for each fixed odd $m\in\{9,11,13\}$, the scalar Region-II
+inequality on the whole $\xi\le1$ (Zone-C) slice of the domain.  It specializes
+the verified analytic Zone-C proof for $m\ge15$
+(\texttt{proof\_zoneC\_analytic\_v2.tex}, hereafter \textbf{[ZC]}) to the fixed
+exponent $n=m-2\in\{7,9,11\}$.  The single new analytic ingredient is a
+\emph{mean-value Case-II row bound} (\S\ref{zc9:sec:mvt}) that removes the
+$m$-uniform supremum loss of [ZC] for the small exponents; with it, every range
+closes on a \textbf{fixed, fully displayed} interval cover.  There is no
+adaptive or greedy subdivision anywhere in this note.  Every displayed constant
+is an exact rational rounded in the stated safe direction and is re-checked by
+the companion script \texttt{validate\_zoneC\_91113\_v2.py} (dense float grids
+over the exact domains, \texttt{Fraction} arithmetic at the endpoints; exit
+$0$).
+
+We use the $(e,\kappa)$ chart of the Region-II manuscript
+(\texttt{paper\_region2\_v2.tex}, hereafter \textbf{[R2]}) exactly as in [ZC]:
+\[
+ \alpha=\tfrac{1-e}2,\ \ d=\alpha-q,\ \ \delta=\tfrac{1-3e}6,\ \
+ \kappa=\tfrac de,\ \ p=1-q,\ \ L=\sqrt{pq-\alpha^2},\ \
+ x=\tfrac\alpha p,\ s=\tfrac qp,\ y=\tfrac Lp,\ \ell=\tfrac L\alpha,
+\]
+\[
+ f=\alpha-L,\qquad \xi=\tfrac{4\alpha^2d}{e^2},\qquad
+ R_m=\alpha^m+L^m-pq^{m-1},\qquad n:=m-2 .
+\]
+The target is the Huber inequality of Lemma~\emph{huber} of [R2]:
+\begin{equation}\label{zc9:eq:target}
+ R_m\ \le\ C_m\,\psi(\xi,\rho),\qquad
+ C_m=\tfrac{\sqrt{2\alpha}}{4\alpha^2}B_mf e^2,\quad
+ \psi=\max_{0\le\lambda\le1}\Bigl(\lambda\xi-\tfrac{\lambda^2}{4(\rho+\lambda)}\Bigr),
+\end{equation}
+with $A_m=2L^{n}+m\,k_m(\alpha)$, $B_m=2L^{n}+m\,k_m(L)$,
+$k_m(\mu)=\tfrac{p^{m-1}-\mu^{m-1}}{p+\mu}$ and
+$\rho=\tfrac{A_m}{B_m}\tfrac{\sqrt\alpha}{2\sqrt2 f}$.  Write
+$\Def_m=R_m/(\alpha^3p^{\,n})$.
+
+\begin{theorem}\label{zc9:thm:main}
+Let $m\in\{9,11,13\}$ and let $(q,\alpha)$ be any Region-II point with $\xi\le1$
+(equivalently $d\le e^2/(1-e)^2$) and $q>\tfrac13$.  Then
+\eqref{zc9:eq:target} holds.
+\end{theorem}
+
+The proof partitions $e\in(0,\tfrac13)$ into the pieces of
+Table~\ref{zc9:tab:split}; the strip end $e^\star_m$ equals the corner start for
+$m\in\{11,13\}$, while for $m=9$ a short \emph{sliver} bridges the two.
+\begin{table}[h]\centering\small
+\caption{Zone-C partition.  $e^\star_m=\tfrac13-2\Delta_m$ with
+$\Delta_{13}=\tfrac{13}{600},\Delta_{11}=\tfrac9{600},\Delta_9=\tfrac7{600}$.}
+\label{zc9:tab:split}
+\begin{tabular}{llll}
+\toprule
+piece & range & method & where\\
+\midrule
+Zone A & $0<e\le\tfrac1{60}$ & $R_m\le0$ & Cor.~\ref{zc9:cor:za}\\
+strip  & $\tfrac1{60}\le e\le \bar e_m$ & fixed $\varphi$-row table & Prop.~\ref{zc9:prop:strip}\\
+sliver & ($m=9$) $\tfrac{29}{100}\le e\le\tfrac{31}{100}$ & fixed $(e,t)$ cell table & Prop.~\ref{zc9:prop:sliver}\\
+corner & $e^\star_m\le e<\tfrac13$ & dual-certificate chain & Prop.~\ref{zc9:prop:wide}\\
+\bottomrule
+\end{tabular}
+\end{table}
+Here $\bar e_{13}=e^\star_{13}=\tfrac{29}{100}$,
+$\bar e_{11}=e^\star_{11}=\tfrac{91}{300}$, and
+$\bar e_{9}=\tfrac{29}{100}$ with $e^\star_9=\tfrac{31}{100}$.
+
+\subsection*{What is inherited verbatim from [ZC]}
+[ZC] states (its closing remark) that it uses $m\ge15$ \emph{only} through
+$n\ge13$ (the exponent in $G_2$), $1-y^{m-1}\ge1-y^{14}$, and the constant $15$
+in its Lemma~\emph{master}.  Replacing $13\rightsquigarrow n=m-2$,
+$14\rightsquigarrow m-1$ and $15\rightsquigarrow m$ throughout leaves the
+following results and their proofs intact for every fixed $m\ge9$ ($n\ge7$); we
+quote them by the [ZC] names, with
+\[
+ \lambda_x=\ln\tfrac p\alpha,\quad \Delta=\ln\tfrac\alpha q,\quad
+ \lambda_s=\lambda_x+\Delta,\quad G_2=\ell^2\bigl(1-(y/s)^{n}\bigr),\quad
+ G=\ln(1+G_2),\quad n_g=\tfrac G\Delta .
+\]
+\begin{itemize}
+\item \textbf{[ZC] Lemma~\emph{majorant}} (three-geometric identity of [R2]
+ Lemma~\emph{threegeo}(i) + $s^n-y^n\ge s^nG_2$):
+ $\alpha\,\Def_m=x^n-s^n-\ell^2(s^n-y^n)\le\varphi(n):=x^n-(1+G_2)s^n$.
+\item \textbf{[ZC] Lemma~\emph{sup}}: $\varphi(t)=x^t-(1+G_2)s^t$ is unimodal with
+ $\sup_t\varphi=(\Delta/\lambda_s)h\,\eu^{-w}$, $w:=\lambda_xG/\Delta$,
+ $h:=\exp(-\tfrac{\lambda_x}\Delta\ln(1+\tfrac\Delta{\lambda_x}))\in(\eu^{-1},1)$,
+ $h\le\eu^{-1+v/2}$, $v=\Delta/\lambda_x$.
+\item \textbf{[ZC] Lemma~\emph{scalar}}, \textbf{Lemma~\emph{payfloor}} and
+ \textbf{Lemma~\emph{master}}: with
+ $c_e=\tfrac{2(1-x^{m-1})(1-y^{m-1})}{(1+x)(1+y)}$,
+ $K_2=\tfrac{\sqrt{2\alpha}(1-y^{m-1})}{2\alpha^3(1+y)}$, the payment floors are
+ $\Def_m^{-1}C_m\psi/(\alpha^{-3}p^{-n})\ge m c_e\kappa^2$ if $2\rho\xi\le1$ and
+ $\ge mK_2fd$ if $2\rho\xi>1$; and, if $R_m>0$, \eqref{zc9:eq:target} follows
+ from the applicable one of the \emph{Case-I} master inequalities
+ \begin{align}
+  &\textup{(deep,}\ 2\rho\xi\le1,\ n_g\ge m)&
+   h\eu^{-w}e^2&\le\lambda_x\alpha c_e q^2G,\label{zc9:eq:SCdeep}\\
+  &\textup{(shallow,}\ 2\rho\xi\le1,\ n_g<m)&
+   h\eu^{-w}e^2&\le m\lambda_x\alpha c_e q^2\Delta.\label{zc9:eq:SCsh}
+ \end{align}
+\item \textbf{[ZC] Lemma~\emph{bracket}}: over an interval $E=[e_L,e_R]$ with
+ $d\le d_{\max}(e)=\min(e^2/(1-e)^2,\delta)$, the monotone-endpoint constants
+ $\bar q,D,\Lambda,\lambda_L,\widehat G_2,Y,\gamma,a,w^-,v^+,h^+,x_U,y_U,c^-,
+ f^-,K^-$ of [ZC] Lemma~\emph{bracket} (recorded in \S\ref{zc9:sec:strip})
+ satisfy $q\ge\bar q$, $\Delta\le\Lambda$, $\lambda_x\ge\lambda_L$,
+ $\lambda_xG\ge a$, $w\ge w^-$, $h\le h^+$, $c_e\ge c^-$, $f\ge f^-$,
+ $K_2\ge K^-$, $x\le x_U$, $y\le y_U$.
+\end{itemize}
+The oddness of $m$ and $\alpha\le r(q)$ enter only through $L^2>0$,
+$0\le\ell<1$, $0<y<s$, $L<q$ (i.e.\ [R2] Lemma~\emph{frontier-gap}, valid on all
+of $\D$).  This note replaces only the \emph{Case-II} treatment of [ZC] (its
+master inequality \eqref{zc9:eq:SCII-old} below and the resulting row bound
+$\Psi_{\mathrm{II}}$): for $m\le13$ the $m$-uniform supremum
+$\varphi(n)\le\sup_t\varphi$ overshoots by a factor $\approx4$ on the Case-II
+ridge, and we recover it by the mean-value bound of \S\ref{zc9:sec:mvt}.  The
+[ZC] Case-II master inequality, retained as one of two admissible Case-II
+sufficient conditions, is
+\begin{equation}\label{zc9:eq:SCII-old}
+ \textup{(Case II, }2\rho\xi>1):\qquad
+ h\eu^{-w}\ \le\ m\lambda_x\alpha K_2 f q .
+\end{equation}
+
+\section{Zone A: $e\le\tfrac1{60}$}\label{zc9:sec:za}
+
+\begin{corollary}\label{zc9:cor:za}
+For every $m\in\{9,11,13\}$ and every Region-II point with $\xi\le1$ and
+$e\le\tfrac1{60}$ one has $R_m\le0$; hence \eqref{zc9:eq:target} holds trivially
+($C_m,\psi\ge0$).
+\end{corollary}
+
+\begin{proof}
+This is [R2] Cor.~\emph{gate-smalle} at the fixed $m$: [R2]
+Prop.~\emph{smalle} (valid for all odd $3\le m\le13$) gives $R_m\le0$ on
+$\{e\le\tfrac1{60},\ \xi\le1\}$.  Part~7 of the validation script confirms
+$\max R_m<0$ there (grid maxima $-3.9\cdot10^{-7},-9.7\cdot10^{-8},
+-2.4\cdot10^{-8}$ for $m=9,11,13$).
+\end{proof}
+
+Because of Corollary~\ref{zc9:cor:za} the strip may start at $e=\tfrac1{60}$.
+
+\section{A mean-value Case-II row bound}\label{zc9:sec:mvt}
+
+The only structural change from [ZC] is to replace, in Case~II, the majorant
+$\alpha\Def_m\le\varphi(n)\le\sup_t\varphi$ (which loses a factor
+$\approx\!4$ at $n=7$) by the sharper mean-value majorant already used by [ZC]
+in its wide corner.
+
+\begin{lemma}[mean-value defect]\label{zc9:lem:mvt}
+On all of $\D$, $\alpha\,\Def_m\le\dfrac{n\,x^{\,n-1}}p\,N$ where
+$N:=d-\ell^{\,m-1}(q-L)$, and moreover $0<N\le d$ whenever $R_m>0$.
+\end{lemma}
+
+\begin{proof}
+By [ZC] Lemma~\emph{majorant}, $\alpha\Def_m=(x^n-s^n)-\ell^2(s^n-y^n)$.  The
+mean value theorem gives $c'\in(s,x)$, $c\in(y,s)$ with $x^n-s^n=n c'^{\,n-1}
+(x-s)\le n x^{n-1}(x-s)$ and $s^n-y^n=n c^{\,n-1}(s-y)\ge n y^{n-1}(s-y)$.
+Since $\ell^2>0$,
+\[
+ \alpha\Def_m\ \le\ n x^{n-1}(x-s)-\ell^2 n y^{n-1}(s-y).
+\]
+Now $x-s=(\alpha-q)/p=d/p$, $s-y=(q-L)/p$, and $y=\ell x$ gives
+$\ell^2 y^{n-1}=\ell^{\,n+1}x^{n-1}=\ell^{\,m-1}x^{n-1}$ (as $m-1=n+1$).  Hence
+$\alpha\Def_m\le\tfrac{n x^{n-1}}p\bigl(d-\ell^{\,m-1}(q-L)\bigr)
+=\tfrac{n x^{n-1}}p N$.  Finally $q>L$ on $\D$ ($L<q\iff q>\tfrac13$) and
+$\ell>0$, so $\ell^{\,m-1}(q-L)\ge0$ and $N\le d$; and $R_m>0$ forces
+$\alpha\Def_m>0$, whence $N>0$.  (Part~4 of the script verifies both
+inequalities on a dense grid.)
+\end{proof}
+
+The point is that $N\le d$ makes the Case-II comparison \emph{$d$-free}: the
+defect and the floor $mK_2fd$ are both proportional to $d$.
+
+\begin{lemma}[Case-II master, MVT form]\label{zc9:lem:mvtII}
+Let $R_m>0$ and $2\rho\xi>1$.  Then \eqref{zc9:eq:target} holds as soon as
+\begin{equation}\label{zc9:eq:SCII-mvt}
+ \frac{n\,x^{\,n-1}}{p\,\alpha}\ \le\ m\,K_2\,f .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+By [ZC] Lemma~\emph{payfloor}, $2\rho\xi>1$ gives
+$C_m\psi/(\alpha^3p^{n})\ge mK_2fd$, i.e.\ it suffices that $\Def_m\le mK_2fd$.
+By Lemma~\ref{zc9:lem:mvt}, $\Def_m\le\tfrac{n x^{n-1}}{p\alpha}N\le
+\tfrac{n x^{n-1}}{p\alpha}d$.  Dividing by $d>0$ turns $\Def_m\le mK_2fd$ into
+\eqref{zc9:eq:SCII-mvt}.
+\end{proof}
+
+\begin{lemma}[assembled Case-II row bound]\label{zc9:lem:mvtrow}
+Over an interval $E=[e_L,e_R]$ with $d\le d_{\max}$, put
+$p^-:=\tfrac{1+e_L}2$ (so $p\ge p^-$) and take $x_U,f^-,K^-$ from [ZC]
+Lemma~\emph{bracket}.  If
+\[
+ \Psi_{\mathrm{II}}^{\mathrm{mvt}}(E):=
+ \frac{n\,x_U^{\,n-1}}{p^-\,\alpha(e_R)\,m\,K^-\,f^-}\ \le\ 1,
+\]
+then \eqref{zc9:eq:SCII-mvt} holds throughout $E\cap\{2\rho\xi>1,\ R_m>0\}$.
+\end{lemma}
+
+\begin{proof}
+$x\le x_U$ and $n\ge1$ give $n x^{n-1}\le n x_U^{\,n-1}$.  Also $p\ge1-\alpha=
+\tfrac{1+e}2\ge p^-$, $\alpha\ge\alpha(e_R)$, $f\ge f^-$, and $K_2\ge K^-$
+(the last three are [ZC] Lemma~\emph{bracket}(a),(e), unchanged).  Hence
+$\tfrac{n x^{n-1}}{p\alpha}\le\tfrac{n x_U^{\,n-1}}{p^-\alpha(e_R)}$ and
+$mK_2f\ge m K^-f^-$, so
+$\Psi_{\mathrm{II}}^{\mathrm{mvt}}(E)\le1$ implies \eqref{zc9:eq:SCII-mvt}.
+\end{proof}
+
+Since \eqref{zc9:eq:SCII-old} and \eqref{zc9:eq:SCII-mvt} are \emph{both}
+sufficient for the Case-II target, the effective Case-II row bound on $E$ is
+\begin{equation}\label{zc9:eq:PsiII}
+ \Psi_{\mathrm{II}}(E):=\min\bigl(\Psi_{\mathrm{II}}^{\mathrm{[ZC]}}(E),\
+ \Psi_{\mathrm{II}}^{\mathrm{mvt}}(E)\bigr),
+\end{equation}
+where $\Psi_{\mathrm{II}}^{\mathrm{[ZC]}}(E)=h^+\eu^{-a/\Lambda}/
+(m\lambda_L\alpha(e_R)K^-f^-\bar q)$ is [ZC]'s row bound for
+\eqref{zc9:eq:SCII-old}.  The [ZC] form is tighter at small $e$ (where $N\ll d$,
+so the $d$-free bound is loose); the MVT form is tighter on the ridge.
+No $d$-lower-bound (the ``$d_{\mathrm{lo}}$ upgrade'' of the previous draft) is
+needed.
+
+\section{The strip $\tfrac1{60}\le e\le\bar e_m$}\label{zc9:sec:strip}
+
+Fix $E=[e_L,e_R]$ with $d\le d_{\max}(e)$.  The [ZC] Lemma~\emph{bracket}
+constants (elementary evaluations at the rational endpoints;
+$\alpha(u)=\tfrac{1-u}2$, $\delta(u)=\tfrac{1-3u}6$) are
+\[
+ \bar q=\max\bigl(\tfrac13,\alpha(e_R)-\tfrac{e_R^2}{(1-e_R)^2}\bigr),\ \
+ D=\min\bigl(\tfrac{e_R^2}{(1-e_R)^2},\delta(e_L)\bigr),\ \
+ \Lambda=\tfrac D{\bar q},\ \
+ \lambda_L=\ln\tfrac{1+e_L}{1-e_L},\ \
+ \widehat G_2=\tfrac{2e_R}{1-e_R},
+\]
+\[
+ Y=\tfrac{\sqrt{e_R(1-e_R)/2}}{\bar q},\quad
+ \gamma=\Bigl[\tfrac2{1-e_L}-\tfrac{D(e_R+D)}{\alpha(e_R)^2e_L}\Bigr]
+ (1-Y^n)\tfrac{\ln(1+\widehat G_2)}{\widehat G_2},\quad
+ a=\lambda_L\gamma e_L,
+\]
+\[
+ w^-=2\gamma\max\bigl((1-e_R)^2\bar q,\tfrac{e_L^2}{3\delta(e_L)}\bigr),\quad
+ v^+=\min\bigl(\tfrac{e_R}{2(1-e_R)^2\bar q},\tfrac{3\delta(e_L)}{\lambda_L}\bigr),\quad
+ h^+=\eu^{-1+v^+/2},
+\]
+\[
+ x_U=\tfrac{1-e_L}{1+e_L},\ \
+ y_U=\tfrac{\sqrt{e_R(1-e_R)/2}}{\alpha(e_R)+e_R},\ \
+ c^-=\tfrac{2(1-x_U^{m-1})(1-y_U^{m-1})}{(1+x_U)(1+y_U)},\ \
+ f^-=\alpha(e_R)-\sqrt{\tfrac{e_R(1-e_R)}2},
+\]
+\[
+ K^-=\tfrac{\sqrt{2\alpha(e_R)}(1-y_U^{m-1})}{2\alpha(e_L)^3(1+y_U)},\qquad
+ p^-=\tfrac{1+e_L}2 .
+\]
+As in [ZC] Lemma~\emph{rows}, the deep and shallow (Case-I) sufficient
+conditions \eqref{zc9:eq:SCdeep}--\eqref{zc9:eq:SCsh} reduce, via
+Lemma~\emph{bracket}, to $\Psi_{\mathrm{deep}}(E)\le1$ and (when the shallow case
+is nonempty, i.e.\ $\Lambda>\gamma e_L/m$) $\Psi_{\mathrm{sh}}(E)\le1$, where
+\[
+ \Psi_{\mathrm{deep}}=\frac{h^+\eu^{-\max(w^-,m\lambda_L)}}
+ {2\gamma\,\alpha(e_R)\,c^-\,\bar q^{\,2}},\qquad
+ \Psi_{\mathrm{sh}}=\frac{h^+(e_R/2)\eu^{-a/\Delta^*}}
+ {m\,\alpha(e_R)\,c^-\,\bar q^{\,2}\,\Delta^*},\quad
+ \Delta^*=\min\bigl(\Lambda,\max(a,\tfrac{\gamma e_L}m)\bigr),
+\]
+and the Case-II condition reduces to $\Psi_{\mathrm{II}}(E)\le1$ with
+$\Psi_{\mathrm{II}}$ of \eqref{zc9:eq:PsiII}.  Thus if
+$\max(\Psi_{\mathrm{deep}},\Psi_{\mathrm{sh}},\Psi_{\mathrm{II}})\le1$ on $E$
+then \eqref{zc9:eq:target} holds at every point of $\D$ with $e\in E$ and
+$d\le d_{\max}(e)$.
+
+\begin{proposition}[strip]\label{zc9:prop:strip}
+For each $m\in\{9,11,13\}$, \eqref{zc9:eq:target} holds at every Region-II point
+with $\xi\le1$ and $\tfrac1{60}\le e\le\bar e_m$, where
+$\bar e_{13}=\bar e_9=\tfrac{29}{100}$ and $\bar e_{11}=\tfrac{91}{300}$.
+\end{proposition}
+
+\begin{proof}
+The cover of $[\tfrac1{60},\bar e_m]$ is the \textbf{fixed} rational partition of
+Tables~\ref{zc9:tab:m13}--\ref{zc9:tab:m9}: the [ZC] Table-1 breakpoints
+$\tfrac1{60},\tfrac1{48},\dots,\tfrac{29}{100}$ (extended by
+$\tfrac{3}{10},\tfrac{91}{300}$ for $m=11$), with three of them bisected for
+$m=9$ and one for $m=11$ (the bisection midpoints $\tfrac3{160},\tfrac{27}{100},
+\tfrac{57}{200}$ are displayed as ordinary rows).  Every row lists an upper
+bound (rounded up in the last digit) for the corresponding $\Psi$, an explicit
+elementary expression in the rational endpoints; all are $<1$.  On the first few
+rows of each table $\Lambda\le\gamma e_L/m$, so the shallow case is empty and
+$\Psi_{\mathrm{sh}}$ is marked ``$-$''.  Part~3 recomputes every row; Part~2
+independently verifies, on a dense $(e,\kappa)$ grid over each interval, that
+the tabulated $\Psi$ of the \emph{applicable} branch dominates the true ratio
+$\Def_m/\text{floor}$ (worst slack $+0.05$ at $m=13$).
+\end{proof}
+
+\input{strip_tables.tex}
+
+\section{The $m=9$ junction sliver}\label{zc9:sec:sliver}
+
+For $m=9$ the strip stops at $\bar e_9=\tfrac{29}{100}$ (beyond which the
+$m$-uniform \emph{shallow} bound $\Psi_{\mathrm{sh}}$ exceeds $1$ near the
+Case-I/II boundary) and the corner starts at $e^\star_9=\tfrac{31}{100}$ (its
+$\ell$-envelope needs $\delta\le\tfrac7{600}$).  The sliver
+$e\in[\tfrac{29}{100},\tfrac{31}{100}]$ (true ratio $\le0.13$ there) is closed by
+a \textbf{fixed} $(e,t)$ cell table, $t:=d/\delta$, using the mean-value defect
+of Lemma~\ref{zc9:lem:mvt} and the sharper Case-II validity condition below.
+
+\begin{lemma}\label{zc9:lem:certIIval}
+The Case-II floor $mK_2fd$ is a valid lower bound for $C_m\psi/(\alpha^3p^{n})$
+whenever $2(1+\rho)\xi\ge1$ (weaker than $2\rho\xi>1$).
+\end{lemma}
+\begin{proof}
+The $\lambda=1$ dual (cert-II, [R2]) gives $C_m\psi\ge\sqrt{2\alpha}B_mf
+(d-\tfrac{e^2}{16\alpha^2(1+\rho)})$; and
+$d-\tfrac{e^2}{16\alpha^2(1+\rho)}\ge\tfrac d2\iff\xi\ge\tfrac1{2(1+\rho)}$; then
+relax $\tfrac12\sqrt{2\alpha}B_mf\ge\alpha^3 mK_2f$ as in [ZC]
+Lemma~\emph{payfloor}.
+\end{proof}
+
+\begin{proposition}[sliver]\label{zc9:prop:sliver}
+\eqref{zc9:eq:target} holds for $m=9$ at every Region-II point with
+$\tfrac{29}{100}\le e\le\tfrac{31}{100}$ and $d<\delta$.
+\end{proposition}
+
+\begin{proof}
+First, $R_9\le0$ on $\{t\le\tfrac{16}{25}\}$ throughout
+$e\in[\tfrac{29}{100},\tfrac{31}{100}]$ (Part~6: the grid maximum of $R_9$ there
+is $-1.4\cdot10^{-6}$); on that region \eqref{zc9:eq:target} is trivial.  On
+$t\in[\tfrac{16}{25},1]$ use the fixed $4\times4$ cell table of
+Table~\ref{zc9:tab:sliver} (e-strips
+$\tfrac{29}{100},\tfrac{59}{200},\tfrac3{10},\tfrac{61}{200},\tfrac{31}{100}$;
+$t$-bands $\tfrac{16}{25},\tfrac{73}{100},\tfrac{41}{50},\tfrac{91}{100},1$).
+On each cell $\Def_9$ is bounded above by
+$\tfrac{n x_U^{\,n-1}}{(\alpha p)^-}\,d_{\mathrm{hi}}(1-\ell_L^{\,m-1})$
+(Lemma~\ref{zc9:lem:mvt} with $N\le d(1-\ell^{m-1})$, valid since $2d\le f$ here
+by Lemma~\ref{zc9:lem:cornerN}(i), and cell-local monotone envelopes); the
+payment is bounded below by $mc_e d_{\mathrm{lo}}^2/e^2$ where $2\rho\xi\le1$ and
+by $mK_2fd_{\mathrm{lo}}$ where $2(1+\rho)\xi\ge1$
+(Lemma~\ref{zc9:lem:certIIval}), the two conditions covering each cell (their
+endpoints of $2(1+\rho)\xi$ are displayed by the script; on any straddling cell
+both floors are required, which is what the tabulated ratio uses).  Every
+tabulated ratio is $<1$ (worst $0.690$), so $\Def_9\le$ payment on each cell.
+\end{proof}
+
+\begin{table}[h]\centering\small
+\caption{$m=9$ sliver: $16$ floored $(e,t)$ cells on
+$[\tfrac{29}{100},\tfrac{31}{100}]\times[\tfrac{16}{25},1]$; $R_9\le0$ below
+$t=\tfrac{16}{25}$.  Ratio $=\Def_9/\text{floor}$ (rounded up).}
+\label{zc9:tab:sliver}
+\begin{tabular}{lllll}\toprule
+$e_L$&$e_R$&$t_L$&$t_R$&ratio $\le$\\\midrule
+$\tfrac{29}{100}$&$\tfrac{59}{200}$&$\tfrac{16}{25}$&$\tfrac{73}{100}$&$0.362$\\
+$\tfrac{29}{100}$&$\tfrac{59}{200}$&$\tfrac{73}{100}$&$\tfrac{41}{50}$&$0.353$\\
+$\tfrac{29}{100}$&$\tfrac{59}{200}$&$\tfrac{41}{50}$&$\tfrac{91}{100}$&$0.346$\\
+$\tfrac{29}{100}$&$\tfrac{59}{200}$&$\tfrac{91}{100}$&$1$&$0.340$\\
+$\tfrac{59}{200}$&$\tfrac3{10}$&$\tfrac{16}{25}$&$\tfrac{73}{100}$&$0.690$\\
+$\tfrac{59}{200}$&$\tfrac3{10}$&$\tfrac{73}{100}$&$\tfrac{41}{50}$&$0.605$\\
+$\tfrac{59}{200}$&$\tfrac3{10}$&$\tfrac{41}{50}$&$\tfrac{91}{100}$&$0.343$\\
+$\tfrac{59}{200}$&$\tfrac3{10}$&$\tfrac{91}{100}$&$1$&$0.337$\\
+$\tfrac3{10}$&$\tfrac{61}{200}$&$\tfrac{16}{25}$&$\tfrac{73}{100}$&$0.000$\\
+$\tfrac3{10}$&$\tfrac{61}{200}$&$\tfrac{73}{100}$&$\tfrac{41}{50}$&$0.638$\\
+$\tfrac3{10}$&$\tfrac{61}{200}$&$\tfrac{41}{50}$&$\tfrac{91}{100}$&$0.343$\\
+$\tfrac3{10}$&$\tfrac{61}{200}$&$\tfrac{91}{100}$&$1$&$0.338$\\
+$\tfrac{61}{200}$&$\tfrac{31}{100}$&$\tfrac{16}{25}$&$\tfrac{73}{100}$&$0.000$\\
+$\tfrac{61}{200}$&$\tfrac{31}{100}$&$\tfrac{73}{100}$&$\tfrac{41}{50}$&$0.685$\\
+$\tfrac{61}{200}$&$\tfrac{31}{100}$&$\tfrac{41}{50}$&$\tfrac{91}{100}$&$0.613$\\
+$\tfrac{61}{200}$&$\tfrac{31}{100}$&$\tfrac{91}{100}$&$1$&$0.344$\\
+\bottomrule\end{tabular}
+\end{table}
+
+\section{The corner $e^\star_m\le e<\tfrac13$}\label{zc9:sec:wide}
+
+Here $\delta=\tfrac{1-3e}6\in(0,\Delta_m]$ with
+$\Delta_{13}=\tfrac{13}{600}$, $\Delta_{11}=\tfrac9{600}$,
+$\Delta_9=\tfrac7{600}$, $\alpha=\tfrac13+\delta$, $d\in(0,\delta)$ (no use of
+$\xi\le1$).  We use the mean-value defect of Lemma~\ref{zc9:lem:mvt} together
+with the near-cancellation $d\approx q-L$ forced by $R_m>0$.
+
+\begin{lemma}[corner defect]\label{zc9:lem:cornerN}
+For any Region-II point with $0<d<\delta$ (i.e.\ $q>\tfrac13$; in particular on
+both the sliver and the corner), with $n=m-2$:
+\begin{enumerate}
+\item[(i)] $2d\le f$, equivalently $d\le q-L$.
+\item[(ii)] If $R_m>0$ then $0<N\le d\,(1-\ell^{\,m-1})$, with $N$ as in
+ Lemma~\ref{zc9:lem:mvt}.
+\item[(iii)] $\alpha\,\Def_m\le\dfrac{n\,x^{n-1}}p\,N$
+ (Lemma~\ref{zc9:lem:mvt}).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) $2d\le f=\alpha-L\iff L\le2q-\alpha$; since $2q-\alpha\ge\tfrac13-\delta>0$,
+this is $(2q-\alpha)^2-L^2\ge0$.  With $u:=q-\tfrac13=\delta-d>0$ and
+$\alpha=\tfrac13+\delta$, a direct expansion gives
+$5q^2-q-4q\alpha+2\alpha^2=u+(5u^2-4u\delta+2\delta^2)>0$
+(the quadratic has discriminant $16\delta^2-40\delta^2<0$).  Then $d\le q-L$
+because $2d\le\alpha-L=(q-L)+d$.
+(ii) $R_m>0\Rightarrow N>0$ (Lemma~\ref{zc9:lem:mvt}); and $d\le q-L$ gives
+$N=d-\ell^{m-1}(q-L)\le d-\ell^{m-1}d=d(1-\ell^{m-1})$.
+(iii) is Lemma~\ref{zc9:lem:mvt}.
+\end{proof}
+
+Let $\alpha(u)=\tfrac{1-u}2$ and, on $[e^\star_m,\tfrac13)$, put
+\[
+ a_U=\tfrac13+\Delta_m,\quad x_U=\tfrac{a_U}{1-a_U},\quad
+ q_L^-=\tfrac23-2\Delta_m,\quad q_L^+=\tfrac23+\tfrac{\Delta_m}2,\quad
+ (\alpha p)^-=\tfrac13(1-a_U),
+\]
+\[
+ f_{\!H}=\tfrac{3a_U+\frac13}{q_L^-},\quad E_L=3f_{\!H},\quad
+ \ell_L=1-E_L\Delta_m,\quad Q_L=\tfrac{2/3}{q_L^+},\quad
+ c^-=\tfrac{2(1-x_U^{m-1})(1-2^{-(m-1)})}{(1+x_U)(3/2)},
+\]
+\[
+ K^-=\tfrac{\sqrt{2/3}\,(1-2^{-(m-1)})}{2a_U^3(3/2)}
+\]
+(upper bounds for $\alpha,x$; lower/upper bounds for $q+L$; a lower bound for
+$\alpha p$; upper bounds for $f/\delta$ and $1-\ell$; a lower bound for $\ell$;
+an upper bound for $(q-L)/\delta$; and lower bounds for $c_e,K_2$;
+all monotone-endpoint, checked in Part~5).
+
+\begin{proposition}[corner]\label{zc9:prop:wide}
+For each $m\in\{9,11,13\}$, \eqref{zc9:eq:target} holds at every Region-II point
+with $e^\star_m\le e<\tfrac13$ (indeed all $d<\delta$).
+\end{proposition}
+
+\begin{proof}
+Assume $R_m>0$.  By Lemma~\ref{zc9:lem:cornerN}(ii)--(iii),
+$\Def_m\le\tfrac{n x^{n-1}}{\alpha p}\,d(1-\ell^{m-1})$.
+\emph{Case I} ($2\rho\xi\le1$): floor $mc_e\kappa^2\ge9mc_e d^2$
+($\kappa=d/e\ge3d$).  Using $d\ge\ell^{m-1}(q-L)\ge\ell_L^{m-1}Q_L\delta$ (from
+$R_m>0$ and $q-L\ge Q_L\delta$), $1-\ell^{m-1}\le(m-1)(1-\ell)\le(m-1)E_L\delta$,
+$e^2\le\tfrac19$,
+\[
+ \frac{\Def_m}{mc_e\kappa^2}\ \le\
+ \frac{n\,x_U^{\,n-1}}{(\alpha p)^-}\cdot\frac{(m-1)E_L}
+ {9\,m\,c^-\,\ell_L^{\,m-1}\,Q_L}\ =:\ r_{\mathrm I}(m).
+\]
+\emph{Case II} ($2\rho\xi>1$): floor $mK_2fd$; with $f=\alpha(1-\ell)$,
+$(1-\ell^{m-1})/f\le(m-1)/\alpha\le3(m-1)$, so
+\[
+ \frac{\Def_m}{mK_2fd}\ \le\
+ \frac{n\,x_U^{\,n-1}}{(\alpha p)^-}\cdot\frac{3(m-1)}{m\,K^-}\ =:\
+ r_{\mathrm{II}}(m).
+\]
+Numerically (Part~5, exact envelopes):
+\[
+\begin{array}{lccccc}
+\toprule
+m & \Delta_m & x_U & \ell_L & r_{\mathrm I}(m) & r_{\mathrm{II}}(m)\\
+\midrule
+13 & \tfrac{13}{600} & 0.5504 & 0.8542 & 0.7063 & 0.0594\\
+11 & \tfrac{9}{600}  & 0.5345 & 0.9026 & 0.5893 & 0.1171\\
+ 9 & \tfrac{7}{600}  & 0.5267 & 0.9256 & 0.9345 & 0.2765\\
+\bottomrule
+\end{array}
+\]
+Both are $<1$, so \eqref{zc9:eq:target} holds; if $R_m\le0$ it is trivial.
+\end{proof}
+
+\section{Assembly}\label{zc9:sec:assembly}
+
+\begin{proof}[Proof of Theorem~\ref{zc9:thm:main}]
+Fix $m\in\{9,11,13\}$ and a Region-II point with $\xi\le1$, $q>\tfrac13$.  If
+$e\le\tfrac1{60}$: Corollary~\ref{zc9:cor:za}.  If
+$\tfrac1{60}\le e\le\bar e_m$: Proposition~\ref{zc9:prop:strip}.  If
+$e\ge e^\star_m$: Proposition~\ref{zc9:prop:wide} (for $m\in\{11,13\}$,
+$\bar e_m=e^\star_m$, so the strip meets the corner).  For $m=9$ the sliver
+$[\tfrac{29}{100},\tfrac{31}{100}]$ is covered by
+Proposition~\ref{zc9:prop:sliver} and $[\tfrac{31}{100},\tfrac13)$ by
+Proposition~\ref{zc9:prop:wide}.  These ranges cover $(0,\tfrac13)$.
+\end{proof}
+
+\begin{remark}
+The independent ground-truth scan (Part~7) gives
+$\max R_m/(C_m\psi)=0.122,\,0.094,\,0.080$ for $m=9,11,13$ over the entire
+$\xi\le1$ region: the true margins are large everywhere.  The tightest displayed
+row is $\Psi_{\mathrm{sh}}=0.938$ (the $m=9$ shallow ridge at $e\approx0.29$) and
+$r_{\mathrm I}(9)=0.935$; both reflect slack in the $m$-uniform Case-I
+floor/majorant, not in the inequality itself.  The $d_{\mathrm{lo}}$ upgrade of
+the previous draft, and its dependence on an inherited bracket, are eliminated:
+the only Case-II ingredient beyond [ZC] is the mean-value bound
+Lemma~\ref{zc9:lem:mvt}, proved here in full.
+\end{remark}
+\end{document}
