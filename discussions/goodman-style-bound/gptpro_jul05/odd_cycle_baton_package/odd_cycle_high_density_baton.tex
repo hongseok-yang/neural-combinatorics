@@ -1,0 +1,1366 @@
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!55!black, citecolor=blue!55!black, urlcolor=blue!55!black}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pcal}{\mathcal P}
+\newcommand{\wtP}{\widetilde{\mathcal P}}
+\newcommand{\Dir}{\operatorname{Dir}}
+\newcommand{\Beta}{\operatorname{Beta}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\title{A self-contained spectral-shift proof package for the odd-cycle lower bound\\
+\large High-density theorem, bipodal theorem, and the remaining Region-II target}
+\author{Prepared for Hongseok Yang, Claude, and collaborators}
+\date{July 4, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note consolidates the spectral-shift work following the original file \texttt{paper.tex} and Claude's two-sided-shift note.  It gives self-contained proofs of the algebraic reductions and records the cleaned conclusions.  The main theorem proved here is the high-density case of the original conjecture: if a graphon $W$ has edge density $p\ge2/3$, then for every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+The proof uses the two-sided spectral-shift identity, a complete-homogeneous-polynomial expansion, a mixture-of-diagonals reduction, a one-dimensional kernel representation, exact finite rational certificates for the short residual strip $m\le61$, and a new analytic argument for the infinite residual strip $m\ge63$.  The note also proves a separate all-density theorem for rank-two complement graphons, hence for all bipodal graphons.  The full conjecture remains open only in the Region-II range $1/2<p<2/3$, where the remaining task is a one-frontier nonlinear spectral-payment lemma.
+\end{abstract}
+
+\tableofcontents
+
+\section{Problem statement and results}
+
+For a graphon $W:[0,1]^2\to[0,1]$, write $t(H,W)$ for the homomorphism density of a finite graph $H$ in $W$.  Let
+\[
+        p=t(K_2,W),\qquad U=1-W,\qquad q=t(K_2,U)=1-p.
+\]
+The original conjecture is the following.
+
+\begin{conjecture}[Odd-cycle lower bound]\label{conj:main}
+For every graphon $W$ and every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}=p^m-pq^{m-1}.
+\]
+\end{conjecture}
+
+The case $p\le1/2$ is immediate, since the right-hand side is nonpositive.  The results proved in this note are:
+\begin{enumerate}[label=\textup{(\roman*)}, leftmargin=2em]
+\item Conjecture~\ref{conj:main} holds for all graphons when $p\ge2/3$.
+\item Conjecture~\ref{conj:main} holds for every graphon whose complement has the rank-two form
+\[
+        1-W(x,y)=q+u(\psi(x)+\psi(y))+\lambda\psi(x)\psi(y),
+        \qquad \int\psi=0,
+        \quad \int\psi^2=1.
+\]
+In particular, it holds for every bipodal graphon, with arbitrary block sizes.
+\end{enumerate}
+The remaining range of the full conjecture is $1/2<p<2/3$.
+
+\section{Spectral setup}
+
+Let $T_U$ be the integral operator of $U$ on $L^2[0,1]$, and decompose $L^2=\mathbb R\one\oplus\one^\perp$.  Write
+\[
+        T_U\one=q\one+g,
+        \qquad g\in\one^\perp,
+        \qquad A=P_{\one^\perp}T_UP_{\one^\perp}.
+\]
+Then, relative to $\mathbb R\one\oplus\one^\perp$,
+\[
+        T_U=\begin{pmatrix}q&g^*\\ g&A\end{pmatrix}.
+\]
+Let $\mu$ denote the spectral measure of $A$ weighted by $g$:
+\[
+        \mu(B)=\ip{g}{E_A(B)g},
+        \qquad
+        s_j:=\int \lambda^j\,d\mu(\lambda)=\ip{g}{A^jg}.
+\]
+The earlier note \texttt{paper.tex} uses the standard compression bound $\sigma(A)\subseteq[-1/2,1/2]$ and the trace-square budget
+\[
+        \Tr(A^2)+2\norm g_2^2\le pq.
+\]
+The arguments below only need the spectral support bound for the certificate domain.
+
+Define formal power series
+\begin{align}
+        R_W(z)&=\int \frac{d\mu(\lambda)}{1+\lambda z},
+        &
+        \mathcal L_W(z)&=-\log\left(1-\frac{z^2R_W(z)}{1-pz}\right),\label{eq:LW}\\
+        R_U(z)&=\int \frac{d\mu(\lambda)}{1-\lambda z},
+        &
+        \mathcal L_U(z)&=-\log\left(1-\frac{z^2R_U(z)}{1-qz}\right),\label{eq:LU}
+\end{align}
+and for odd $m$ set
+\begin{equation}\label{eq:S-def}
+        S_m=m[z^m](\mathcal L_W(z)+\mathcal L_U(z)).
+\end{equation}
+These are formal identities: $[z^m]$ depends only on $q,p$ and the finitely many moments $s_0,\ldots,s_{m-2}$.
+
+\section{The exact two-sided identity}
+
+\begin{theorem}[Two-sided spectral-shift identity]\label{thm:two-sided}
+For every graphon $W$ and every odd $m\ge3$,
+\begin{equation}\label{eq:two-sided}
+        t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
+\end{equation}
+Consequently Conjecture~\ref{conj:main} is equivalent to
+\begin{equation}\label{eq:equiv}
+        t(C_m,U)\le q^{m-1}+S_m.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+First assume that $U$ has finite rank.  Since
+\[
+        T_W=J-T_U=\begin{pmatrix}p&-g^*\\ -g&-A\end{pmatrix},
+\]
+conjugating by the sign flip on $\one^\perp$ shows that $T_W$ is isospectral to
+\[
+        M=\begin{pmatrix}p&g^*\\ g&-A\end{pmatrix}.
+\]
+Schur's determinant formula gives
+\begin{align*}
+        \det(I-zM)
+        &=\det(I+zA)(1-pz)\left(1-\frac{z^2\ip{g}{(I+zA)^{-1}g}}{1-pz}\right),\\
+        \det(I-zT_U)
+        &=\det(I-zA)(1-qz)\left(1-\frac{z^2\ip{g}{(I-zA)^{-1}g}}{1-qz}\right).
+\end{align*}
+Taking $-\log$ and using
+\[
+        -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}jz^j,
+\]
+we extract the coefficient of $z^m$ and add the two identities.  Since $m$ is odd, the contributions from $\det(I+zA)$ and $\det(I-zA)$ cancel.  The two scalar hub factors contribute $p^m+q^m$, and the two remaining factors contribute $S_m$.  This proves~\eqref{eq:two-sided} in finite rank.
+
+For a general graphon, approximate $U$ in $L^2$ by step kernels.  Cycle densities are continuous under $L^2$ convergence for fixed cycle length, and $S_m$ is a polynomial in the finitely many quantities $q,s_0,\ldots,s_{m-2}$, each of which is continuous under Hilbert--Schmidt convergence.  Hence the identity passes to the limit.
+
+Finally,
+\[
+\begin{aligned}
+        t(C_m,W)-(p^m-pq^{m-1})
+        &=q^m+pq^{m-1}+S_m-t(C_m,U)\\
+        &=q^{m-1}+S_m-t(C_m,U),
+\end{aligned}
+\]
+which proves the equivalence.
+\end{proof}
+
+\section{The path-shift defect and its exact expansion}
+
+Since $0\le U\le1$, deleting one edge from the odd cycle gives
+\[
+        t(C_m,U)\le t(P_{m-1},U)=:x_{m-1}.
+\]
+By Theorem~\ref{thm:two-sided}, it is therefore enough to prove nonnegativity of the path-shift defect
+\begin{equation}\label{eq:Phi-def}
+        \Phi_m:=q^{m-1}+S_m-x_{m-1}.
+\end{equation}
+The resolvent identity for the block matrix gives
+\begin{equation}\label{eq:path-resolvent}
+        \sum_{j\ge0}x_jz^j
+        =\ip{\one}{(I-zT_U)^{-1}\one}
+        =\frac1{1-qz-z^2R_U(z)}.
+\end{equation}
+
+For $d\ge0$, let $h_d$ denote the complete homogeneous symmetric polynomial of degree $d$, with $h_0=1$.
+
+\begin{theorem}[Exact expansion of $\Phi_m$]\label{thm:expansion}
+Let $m\ge3$ be odd.  Then
+\begin{equation}\label{eq:Phi-expansion}
+        \Phi_m=
+        \sum_{r=1}^{(m-1)/2}\int\cdots\int
+        \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+        \prod_{i=1}^r d\mu(\lambda_i),
+\end{equation}
+where, writing $n=m-2r$,
+\begin{equation}\label{eq:P-def}
+\begin{aligned}
+        \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+        ={}&\frac mr\left(
+        h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
+        +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)
+        \right)\\
+        &\quad-h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+\end{aligned}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+        Y_W(z)=\frac{z^2R_W(z)}{1-pz},
+        \qquad
+        Y_U(z)=\frac{z^2R_U(z)}{1-qz}.
+\]
+From $-\log(1-Y)=\sum_{r\ge1}Y^r/r$,
+\[
+        m[z^m]\mathcal L_W
+        =\sum_{r\ge1}\frac mr[z^{m-2r}]\frac{R_W(z)^r}{(1-pz)^r}.
+\]
+Since
+\[
+        R_W(z)^r=\int\cdots\int\prod_{i=1}^r(1+\lambda_iz)^{-1}\prod_i d\mu(\lambda_i),
+\]
+the $r$th term on the $W$ side is the integral of $\frac mr h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)$.  The same argument on the $U$ side gives the integral of $\frac mr h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)$.
+
+For the path term, using~\eqref{eq:path-resolvent},
+\[
+\begin{aligned}
+        \frac1{1-qz-z^2R_U(z)}
+        &=\sum_{r\ge0}\frac{(z^2R_U(z))^r}{(1-qz)^{r+1}}.
+\end{aligned}
+\]
+The $r=0$ contribution to $x_{m-1}$ is $q^{m-1}$, which cancels the leading term in~\eqref{eq:Phi-def}.  For $r\ge1$, extracting $[z^{m-1}]$ gives the integral of
+\[
+        h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+\]
+Combining the three contributions proves the formula.
+\end{proof}
+
+\begin{corollary}[Master sufficient criterion]\label{cor:master}
+If $\Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0$ for every $1\le r\le(m-1)/2$ and every $\lambda_i\in[-1/2,1/2]$, then Conjecture~\ref{conj:main} holds for this $m$ and this value of $q$.
+\end{corollary}
+
+\section{Mixture of diagonals}
+
+The next theorem is the main structural simplification.  It says that the multivariate kernel is an average of diagonal kernels.
+
+\begin{theorem}[Mixture-of-diagonals theorem]\label{thm:mixture}
+Let $(\Theta_1,\ldots,\Theta_r)\sim\Dir(1,\ldots,1)$, the uniform distribution on the simplex.  Define
+\[
+        \wtP_{m,r}(q,\ell):=\Pcal_{m,r}(q;\ell,\ldots,\ell).
+\]
+Then
+\begin{equation}\label{eq:mixture}
+        \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+        =\E\left[\wtP_{m,r}\left(q,\sum_{i=1}^r\Theta_i\lambda_i\right)\right].
+\end{equation}
+Consequently
+\[
+        \min_{\lambda_1,\ldots,\lambda_r\in[-1/2,1/2]}
+        \Pcal_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+        =\min_{\ell\in[-1/2,1/2]}\wtP_{m,r}(q,\ell).
+\]
+\end{theorem}
+
+\begin{proof}
+We use two elementary identities.  First,
+\[
+        h_d(a^{\times k},b_1,\ldots,b_r)
+        =\sum_{j=0}^d\binom{d-j+k-1}{k-1}a^{d-j}h_j(b_1,\ldots,b_r).
+\]
+Second, for $\Theta\sim\Dir(1^r)$,
+\begin{equation}\label{eq:dir-moment}
+        \E(\Theta_1\lambda_1+\cdots+\Theta_r\lambda_r)^j
+        =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
+\end{equation}
+This is the standard Dirichlet moment formula, or equivalently the generating-function identity obtained by integrating powers over the simplex.
+
+Apply the first identity to the three complete homogeneous polynomials in~\eqref{eq:P-def}.  For example,
+\[
+        h_n(p^{\times r},-\vec\lambda)
+        =\sum_{j=0}^n\binom{n-j+r-1}{r-1}p^{n-j}(-1)^jh_j(\vec\lambda).
+\]
+On the diagonal with $\ell$ repeated $r$ times,
+\[
+        h_n(p^{\times r},(-\ell)^{\times r})
+        =\sum_{j=0}^n\binom{n-j+r-1}{r-1}p^{n-j}\binom{j+r-1}{r-1}(-\ell)^j.
+\]
+Taking expectation with $\ell=\sum_i\Theta_i\lambda_i$ and using~\eqref{eq:dir-moment} recovers the previous expression.  The same argument applies to $h_n(q^{\times r},\vec\lambda)$ and to $h_{n-1}(q^{\times(r+1)},\vec\lambda)$; in the last case the coefficient of $\ell^j$ on the diagonal is still multiplied by $\binom{j+r-1}{r-1}$, which is cancelled by~\eqref{eq:dir-moment}.  Linearity gives~\eqref{eq:mixture}.
+
+The minimum equality follows because every convex combination $\sum_i\Theta_i\lambda_i$ lies in the interval spanned by the $\lambda_i$, while diagonal choices $\lambda_1=\cdots=\lambda_r=\ell$ are allowed.
+\end{proof}
+
+\begin{corollary}[Diagonal sufficient criterion]\label{cor:diagonal}
+It is enough to prove
+\[
+        \wtP_{m,r}(q,\ell)\ge0
+        \qquad
+        (1\le r\le(m-1)/2,\\ -1/2\le\ell\le1/2).
+\]
+\end{corollary}
+
+\section{The diagonal family as a one-dimensional integral}\label{sec:kernel}
+
+Fix $r\ge1$ and odd $n\ge1$, and put $m=n+2r$.  The diagonal family has a useful probabilistic form.  Let $\Xi\sim\Beta(r,r)$ and set
+\[
+        V_x=qx+\ell(1-x),
+        \qquad
+        W_x=px-\ell(1-x).
+\]
+Then $V_x+W_x=x$, and a direct use of the Dirichlet formula gives
+\begin{equation}\label{eq:G-form}
+        \wtP_{m,r}(q,\ell)=
+        \binom{n+2r-1}{2r-1}\frac nr
+        \left[
+        \frac mn\E(V_\Xi^n+W_\Xi^n)-\E(\Xi V_\Xi^{n-1})
+        \right].
+\end{equation}
+
+Define
+\begin{equation}\label{eq:rho-def}
+        \rho_{n,m}(u)=\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+\end{equation}
+
+\begin{proposition}[One-dimensional kernel form]\label{prop:kernel}
+For $\ell>0$,
+\begin{equation}\label{eq:kernel}
+        \wtP_{m,r}(q,
+        \ell)=C_{m,r}\ell^{n+r}
+        \int_0^\infty \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\,ds,
+\end{equation}
+where
+\[
+        C_{m,r}=\binom{n+2r-1}{2r-1}\frac nr\frac{\Gamma(2r)}{\Gamma(r)^2}>0.
+\]
+\end{proposition}
+
+\begin{proof}
+In~\eqref{eq:G-form}, write the $\Beta(r,r)$ density as
+\[
+        \frac{\Gamma(2r)}{\Gamma(r)^2}x^{r-1}(1-x)^{r-1}\,dx.
+\]
+For $\ell>0$, set
+\[
+        u=\frac{V_x}{x}=q+\ell\frac{1-x}{x}=q+s,
+        \qquad
+        x=\frac{\ell}{\ell+s}.
+\]
+Then $W_x=x(1-u)$, and
+\[
+        dx=-\frac{\ell}{(\ell+s)^2}\,ds,
+        \qquad
+        x^{n+r-1}(1-x)^{r-1}dx
+        =-\ell^{n+r}s^{r-1}(\ell+s)^{-m}\,ds.
+\]
+Changing variables from $x\in(0,1)$ to $s\in(\infty,0)$ gives~\eqref{eq:kernel}.
+\end{proof}
+
+\section{The sign structure of $\rho$}
+
+\begin{lemma}[$\rho$-lemma]\label{lem:rho}
+Let $n\ge1$ be odd and $m=n+2r\ge n+2$.  Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item\label{rho-group}
+\[
+        \rho(u)=\frac mn(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)
+        +\left(\frac mn-1\right)u^{n-1},
+\]
+and also
+\[
+        \rho(u)=\frac mn(1-u)^n+u^{n-1}\left(\frac mn u-1\right).
+\]
+\item\label{rho-window}
+$\rho(u)\ge0$ for $u\notin(1/2,n/m)$.
+\item\label{rho-reflect}
+For every real $u$,
+\[
+        \rho(u)+\rho(1-u)\ge0.
+\]
+More precisely,
+\[
+        \rho(u)+\rho(1-u)
+        \ge (2u-1)\bigl(u^{n-1}-(1-u)^{n-1}\bigr)\ge0.
+\]
+\item\label{rho-empty}
+If $m\ge2n$, then $\rho\ge0$ on all of $\mathbb R$.
+\item\label{rho-neg}
+On the window $u\in(1/2,n/m)$,
+\[
+        -\rho(u)\le u^{n-1}\left(1-\frac mn u\right).
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The two formulae in~\ref{rho-group} are algebraic rearrangements of~\eqref{eq:rho-def}.  For $u\le1/2$, the first formula is nonnegative because $n-1$ is even and $|1-u|\ge |u|$.  For $n/m\le u\le1$, the second formula is nonnegative.  If $u\ge1$, then $u^n-(u-1)^n\ge u^{n-1}$, so $\rho(u)\ge(m/n-1)u^{n-1}\ge0$.  If $u=-v\le0$, then $(1+v)^n-v^n\ge nv^{n-1}$, so $\rho(u)\ge(m-1)v^{n-1}\ge0$.  This proves~\ref{rho-window};~\ref{rho-empty} follows because the possible negative window is empty when $n/m\le1/2$.
+
+For reflection,
+\[
+        \rho(u)+\rho(1-u)=\frac{2m}{n}(u^n+(1-u)^n)-u^{n-1}-(1-u)^{n-1}.
+\]
+For odd $n$, $u^n+(1-u)^n\ge0$ for every real $u$, and $m/n\ge1$.  Hence this is at least
+\[
+        2u^n+2(1-u)^n-u^{n-1}-(1-u)^{n-1}
+        =(2u-1)\bigl(u^{n-1}-(1-u)^{n-1}\bigr).
+\]
+The final product is nonnegative because $n-1$ is even and $|u|\ge|1-u|$ exactly when $u\ge1/2$.  Finally,~\ref{rho-neg} follows by dropping the nonnegative term $(m/n)(1-u)^n$ from the second formula in~\ref{rho-group}.
+\end{proof}
+
+\section{General positivity regimes}\label{sec:general-pos}
+
+\begin{theorem}[Pointwise regimes]\label{thm:pointwise}
+For every $q\in[0,1/2]$, $\wtP_{m,r}(q,\ell)\ge0$ in each of the following regimes:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $2r\ge n$;
+\item $\ell\le0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+If $\ell>0$ and $2r\ge n$, then $m=n+2r\ge2n$, so the kernel representation and Lemma~\ref{lem:rho}\ref{rho-empty} give nonnegativity.  If $\ell\le0$, use~\eqref{eq:G-form}.  For $x\in(0,1]$,
+\[
+        \frac{V_x}{x}=q+\ell\frac{1-x}{x}\le q\le1/2,
+\]
+so the corresponding $x^n\rho(V_x/x)$ integrand is pointwise nonnegative by Lemma~\ref{lem:rho}\ref{rho-window}.  This proves the theorem.
+\end{proof}
+
+\begin{theorem}[Integration-by-parts regime]\label{thm:ibp}
+For every $q\in[0,1/2]$, if
+\[
+        \ell\ge q+\frac rm,
+\]
+then $\wtP_{m,r}(q,\ell)\ge0$.
+\end{theorem}
+
+\begin{proof}
+It is enough to prove the bracket in~\eqref{eq:G-form} is nonnegative.  Assume $\ell>q$, since otherwise this theorem is contained in Theorem~\ref{thm:pointwise}.  The function $V(x)=\ell+(q-\ell)x$ is positive on $[0,1]$.
+
+First, $\E W_\Xi^n\ge0$.  Indeed, $W(x)=(p+\ell)(x-x_w)$ with $x_w=\ell/(p+\ell)\le1/2$, and the $\Beta(r,r)$ law is symmetric about $1/2$.  Pairing $x=1/2+t$ with $x=1/2-t$, the two values of $x-x_w$ have nonnegative sum and the larger absolute value is the positive one, so their odd $n$th powers sum to a nonnegative number.
+
+Second, we prove
+\begin{equation}\label{eq:ibp-bound}
+        \E[\Xi V_\Xi^{n-1}]
+        \le \frac{r}{n(\ell-q)}\E[V_\Xi^n].
+\end{equation}
+For $r\ge2$, integrate by parts against the density $c_rx^{r-1}(1-x)^{r-1}$; the boundary terms vanish and
+\[
+\begin{aligned}
+        \E[\Xi V^{n-1}]
+        &=\frac{c_r}{n(\ell-q)}
+        \int_0^1x^{r-1}(1-x)^{r-2}\bigl(r-(2r-1)x\bigr)V(x)^n\,dx.
+\end{aligned}
+\]
+Discarding the negative part of the integrand and using
+\[
+        \frac{r-(2r-1)x}{1-x}\le r
+        \qquad (0\le x\le r/(2r-1))
+\]
+gives~\eqref{eq:ibp-bound}.  For $r=1$, integration by parts gives directly
+\[
+        \E[\Xi V^{n-1}]=\frac{\E[V^n]-q^n}{n(\ell-q)}
+        \le\frac{\E[V^n]}{n(\ell-q)},
+\]
+which is~\eqref{eq:ibp-bound} for $r=1$.
+
+If $\ell\ge q+r/m$, then $m/n\ge r/(n(\ell-q))$.  Thus
+\[
+        \frac mn\E[V^n+W^n]
+        \ge\frac mn\E[V^n]
+        \ge\E[\Xi V^{n-1}],
+\]
+which proves the claim.
+\end{proof}
+
+\section{The repaired all-length theorem for $r=1$}\label{sec:r1}
+
+The following proof is the main correction to Claude's note.  The issue in the original proof was that the reflection step paired negative mass in the interval $(s_a,2s_a)$ with positive mass in $(0,s_a)$ and then the strip estimate attempted to reuse part of the same positive mass.  The repair is to pair only the middle band $(2\varepsilon,3\varepsilon)$ with $(\varepsilon,2\varepsilon)$ and reserve $(0,\varepsilon)$ for the surplus estimate.
+
+\begin{theorem}[$r=1$ diagonal positivity, all lengths]\label{thm:r1}
+Let $r=1$, $m=n+2$ with $n\ge3$ odd, $q\in[0,1/3]$, and $\ell\in[-1/2,1/2]$.  Then
+\[
+        \wtP_{m,1}(q,\ell)\ge0.
+\]
+\end{theorem}
+
+\begin{proof}
+The cases $\ell\le0$ and $\ell\ge q+1/m$ are covered by Theorems~\ref{thm:pointwise} and~\ref{thm:ibp}.  We assume from now on that
+\[
+        0<\ell<q+\frac1m.
+\]
+By Proposition~\ref{prop:kernel}, it suffices to prove
+\[
+        I:=\int_0^\infty \frac{\rho(q+s)}{(\ell+s)^m}\,ds\ge0,
+        \qquad \rho=\rho_{n,m}.
+\]
+The case $m=5$ is elementary: directly from~\eqref{eq:P-def},
+\[
+        \wtP_{5,1}(q,\ell)=4\ell^2+(8q-5)\ell+12q^2-15q+5.
+\]
+On $0\le q\le1/3$ and $-1/2\le\ell\le1/2$, this quadratic is nonnegative.  Indeed, if its vertex $\ell_*=5/8-q$ lies in the interval, the minimum is
+\[
+        \frac{128q^2-160q+55}{16}\ge \frac{143}{144}>0;
+\]
+otherwise the minimum over the interval is attained at an endpoint, where direct substitution gives positive quadratics.  We may therefore assume $m\ge7$, hence $n\ge5$.
+
+Put
+\[
+        \varepsilon=\frac{1-2q}{4},
+        \qquad s_a=\frac12-q=2\varepsilon,
+        \qquad \sigma=3\varepsilon,
+        \qquad s_b=\frac nm-q.
+\]
+By Lemma~\ref{lem:rho}, the integrand can be negative only for $s\in(s_a,s_b)$.
+
+\emph{Disjoint reflection band.}  For $s\in(s_a,\sigma)=(2\varepsilon,3\varepsilon)$ define
+\[
+        \widehat s=2s_a-s=4\varepsilon-s\in(\varepsilon,2\varepsilon).
+\]
+Then $q+\widehat s=1-(q+s)$.  Since $(\ell+s)^{-m}$ is decreasing in $s$,
+\[
+        (\ell+\widehat s)^{-m}\ge(\ell+s)^{-m}.
+\]
+Together with Lemma~\ref{lem:rho}\ref{rho-reflect}, this gives
+\[
+        \frac{\rho(q+s)}{(\ell+s)^m}
+        +\frac{\rho(q+\widehat s)}{(\ell+\widehat s)^m}
+        \ge0.
+\]
+Thus the negative contribution on $(2\varepsilon,3\varepsilon)$ is paid for by the disjoint positive partner band $(\varepsilon,2\varepsilon)$.
+
+It remains only to compare the possible deficit on $(3\varepsilon,s_b)$ with the unused surplus on $(0,\varepsilon)$.  If $s_b\le3\varepsilon$, there is no remaining deficit and we are done.  Assume $s_b>3\varepsilon$, and define
+\[
+        \eta=s_b-3\varepsilon=\frac{1+2q}{4}-\frac2m>0.
+\]
+For $s\in(3\varepsilon,s_b)$ set $V=q+s$.  Then $V\in(p-\varepsilon,n/m)$, and Lemma~\ref{lem:rho}\ref{rho-neg} gives
+\[
+        -\rho(V)\le V^{n-1}\left(1-\frac mnV\right).
+\]
+The function $V^{n-1}(\ell+V-q)^{-m}$ is decreasing on this interval because
+\[
+        \frac{d}{dV}\log\frac{V^{n-1}}{(\ell+V-q)^m}<0
+        \iff (n-1)(\ell-q)<3V,
+\]
+and the left side is $<(n-1)/m<1$, while $V\ge p-\varepsilon\ge7/12$.  The bracket $1-(m/n)V$ is also decreasing.  Hence the total remaining deficit $D$ is bounded by its left-endpoint upper sum:
+\begin{equation}\label{eq:D-new}
+        D\le \frac mn\,\eta^2\,\frac{(p-\varepsilon)^{n-1}}{(\ell+3\varepsilon)^m}.
+\end{equation}
+Indeed, $1-(m/n)(p-\varepsilon)=m\eta/n$ and the interval length is $\eta$.
+
+On the surplus band $(0,\varepsilon)$, we have $q+s\le q+\varepsilon\le5/12<1/2$.  Using the second grouping of Lemma~\ref{lem:rho}\ref{rho-group},
+\[
+        \rho(q+s)
+        \ge \frac mn(p-s)^n-(q+s)^{n-1}
+        \ge \frac mn(p-\varepsilon)^n c_n,
+\]
+where
+\[
+        c_n=1-\frac nm\frac{(q+\varepsilon)^{n-1}}{(p-\varepsilon)^n}.
+\]
+Since $(q+\varepsilon)/(p-\varepsilon)\le5/7$ and $(p-\varepsilon)^{-1}\le12/7$, for $n\ge5$,
+\[
+        c_n\ge1-\frac{12}{7}\left(\frac57\right)^{n-1}
+        \ge1-\frac{12}{7}\left(\frac57\right)^4>\frac12.
+\]
+Therefore the unused surplus $\Sigma$ on $(0,\varepsilon)$ satisfies
+\begin{equation}\label{eq:S-new}
+        \Sigma\ge \frac mn\,(p-\varepsilon)^n c_n
+        \frac{\varepsilon}{(\ell+\varepsilon)^m}.
+\end{equation}
+It remains to prove $\Sigma\ge D$.  From~\eqref{eq:D-new} and~\eqref{eq:S-new}, it is enough that
+\begin{equation}\label{eq:compare-new}
+        \varepsilon c_n(p-\varepsilon)
+        \left(\frac{\ell+3\varepsilon}{\ell+\varepsilon}\right)^m
+        \ge\eta^2.
+\end{equation}
+Now
+\[
+        \varepsilon\ge\frac1{12},\qquad
+        p-\varepsilon\ge\frac7{12},\qquad
+        c_n>\frac12.
+\]
+Also $\ell<q+1/m$, and the function $t\mapsto (a+t)/(b+t)$ is decreasing when $a>b$, so
+\[
+        \frac{\ell+3\varepsilon}{\ell+\varepsilon}
+        \ge
+        \frac{q+1/m+3\varepsilon}{q+1/m+\varepsilon}.
+\]
+The right-hand side is decreasing in both $q$ and $1/m$; hence for $q\le1/3$ and $m\ge7$ it is at least
+\[
+        \frac{1/3+1/7+3/12}{1/3+1/7+1/12}=\frac{61}{47}.
+\]
+Thus the left side of~\eqref{eq:compare-new} is at least
+\[
+        \frac7{288}\left(\frac{61}{47}\right)^m.
+\]
+For $m=7$, we have $\eta\le 5/12-2/7=11/84$, and
+\[
+        \frac7{288}\left(\frac{61}{47}\right)^7>\left(\frac{11}{84}\right)^2.
+\]
+For $m\ge9$, we use $\eta\le5/12$ and
+\[
+        \frac7{288}\left(\frac{61}{47}\right)^9>
+        \left(\frac5{12}\right)^2.
+\]
+This proves~\eqref{eq:compare-new}.  Summing the disjoint reflection pair, the unused surplus, the remaining deficit, and the regions where $\rho\ge0$, we get $I\ge0$.
+\end{proof}
+
+\section{The residual strip and exact finite verification}\label{sec:strip}
+
+After Theorems~\ref{thm:pointwise}, \ref{thm:ibp}, and~\ref{thm:r1}, the only diagonal cases left for $q\le1/3$ are
+\begin{equation}\label{eq:residual-strip}
+        r\ge2,
+        \qquad n>2r,
+        \qquad 0<\ell<q+\frac rm.
+\end{equation}
+For these cases, the one-dimensional integral~\eqref{eq:kernel} has a negative window, but the following criterion gives a rigorous way to pay for it by reflection plus two positive surplus bands.
+
+\begin{theorem}[Two-sided surplus criterion]\label{thm:strip}
+Let $r\ge2$, $n>2r$ be odd, $m=n+2r$, $q\in[0,1/2)$, and $\ell>0$.  Put
+\[
+        \kappa(s)=s^{r-1}(\ell+s)^{-m},
+        \qquad
+        s_a=\frac12-q,
+        \qquad
+        s_b=\frac nm-q,
+        \qquad
+        \nu=\frac nm.
+\]
+Assume $s_a<s_b$ and
+\begin{equation}\label{eq:mono-cond}
+        (n-1)(\ell-q)\le\frac{2r+1}{2}.
+\end{equation}
+Let $\sigma\in[s_a,\min(2s_a,s_b)]$ satisfy
+\begin{equation}\label{eq:Z-clean}
+        \kappa(2s_a-s)\ge\kappa(s)
+        \qquad(s_a\le s\le\sigma).
+\end{equation}
+Choose partitions
+\[
+        \sigma=t_0<t_1<\cdots<t_K=s_b,
+\]
+\[
+        0=a_0<a_1<\cdots<a_J\le\min(2s_a-\sigma,s_a),
+\]
+\[
+        0=d_0<d_1<\cdots<d_L\le\frac{2r}{m}.
+\]
+Define
+\begin{align*}
+        \overline\Delta
+        &:=s_b^{r-1}\sum_{i=0}^{K-1}(t_{i+1}-t_i)
+        (q+t_i)^{n-1}\left(1-\frac mn(q+t_i)\right)_+
+        (\ell+t_i)^{-m},\\
+        \Sigma_L
+        &:=\frac mn\sum_{j=1}^{J-1}(a_{j+1}-a_j)a_j^{r-1}
+        (p-a_{j+1})^n
+        \left(1-\frac nm\frac{(q+a_{j+1})^{n-1}}{(p-a_{j+1})^n}\right)_+
+        (\ell+a_{j+1})^{-m},\\
+        \Sigma_R
+        &:=\frac mn\sum_{i=1}^{L-1}d_i(d_{i+1}-d_i)
+        (\nu+d_i)^{n-1}(s_b+d_i)^{r-1}
+        (\ell+s_b+d_{i+1})^{-m}.
+\end{align*}
+If
+\[
+        \Sigma_L+\Sigma_R\ge\overline\Delta,
+\]
+then
+\[
+        \int_0^\infty \kappa(s)\rho_{n,m}(q+s)\,ds\ge0.
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:rho}, the integrand is nonnegative outside $(s_a,s_b)$.  For $s\in(s_a,\sigma)$, pair it with $\widehat s=2s_a-s$.  Then $q+\widehat s=1-(q+s)$, and~\eqref{eq:Z-clean} plus Lemma~\ref{lem:rho}\ref{rho-reflect} gives
+\[
+        \kappa(s)\rho(q+s)+\kappa(\widehat s)\rho(q+\widehat s)\ge0.
+\]
+Thus the negative part on $(s_a,\sigma)$ is paid for by the disjoint partner interval $(2s_a-\sigma,s_a)$.
+
+It remains to bound the deficit on $D=(\sigma,s_b)$.  By Lemma~\ref{lem:rho}\ref{rho-neg},
+\[
+        -\rho(q+s)\le(q+s)^{n-1}\left(1-\frac mn(q+s)\right)_+.
+\]
+The factor $(q+s)^{n-1}(\ell+s)^{-m}$ is decreasing on $D$: writing $V=q+s>1/2$, its logarithmic derivative is negative whenever
+\[
+        (n-1)(\ell-q)<(m-n+1)V=(2r+1)V,
+\]
+which follows from~\eqref{eq:mono-cond}.  The bracket is decreasing as well, and $s^{r-1}\le s_b^{r-1}$.  Hence the deficit on each interval $[t_i,t_{i+1}]$ is bounded by the corresponding term of $\overline\Delta$.
+
+For the left surplus band, $a_J\le2s_a-\sigma$ makes it disjoint from the partner interval used above.  On each $[a_j,a_{j+1}]$, the second formula in Lemma~\ref{lem:rho}\ref{rho-group} and monotonicity of the factors give the lower sum $\Sigma_L$.  For the right surplus band, $q+s\in[n/m,1]$ on $[s_b,s_b+2r/m]$, and the same formula gives the lower sum $\Sigma_R$.  All unused regions are nonnegative, so $\Sigma_L+\Sigma_R\ge\overline\Delta$ implies the integral is nonnegative.
+\end{proof}
+
+\begin{definition}[Exact strip certificate]\label{def:cert}
+For an odd integer $M\ge5$, say that $\operatorname{StripCert}(M)$ holds if, for every odd $m\le M$ and every residual pair $(m,r)$ satisfying~\eqref{eq:residual-strip}, the exact rational interval checker supplied with this note proves the hypotheses of Theorem~\ref{thm:strip} for all $(q,\ell)\in[0,1/3]\times[0,1/2]$.
+\end{definition}
+
+\begin{proposition}[Verified finite certificate]\label{prop:M61}
+The accompanying script \texttt{clean\_two\_sided\_shift\_checker.py} verifies $\operatorname{StripCert}(61)$ using exact rational interval arithmetic.  The run log included as \texttt{clean\_checker\_m61.log} records successful verification for all residual pairs with odd $5\le m\le61$.
+\end{proposition}
+
+\begin{proof}[Proof status]
+This is a finite, deterministic computer-assisted certificate.  The script uses rational arithmetic from Python's \texttt{fractions.Fraction}.  Each interval cell is certified by one of the analytic regimes above or by rational upper and lower Riemann sums appearing in Theorem~\ref{thm:strip}.  No floating-point inequality is used for Proposition~\ref{prop:M61}.  The code is short enough to audit directly; the log records the exact list of $m$ values checked.  Claude's original checker also advertised a recorded run to $M=201$, but no certificate log was supplied in the uploaded material, so this note does not use $201$ as a proved bound.
+\end{proof}
+
+
+
+\section{Analytic closure of the residual strip for $q\le 1/3$}\label{sec:analytic-strip}
+
+We now close the residual strip for all odd lengths.  This is the new ingredient beyond the finite certificate in Proposition~\ref{prop:M61}.  Throughout this section assume
+\begin{equation}\label{eq:residual-tail}
+        q\le\frac13,\qquad m=n+2r\ge63,\qquad r\ge2,\qquad n>2r,
+        \qquad 0<\ell<q+\frac rm.
+\end{equation}
+Put
+\[
+        \theta=\frac rm,
+        \qquad \nu=\frac nm=1-2\theta,
+        \qquad a=\frac12-q,
+        \qquad b=\nu-q,
+        \qquad L=b-a=\nu-\frac12=\frac12-2\theta,
+\]
+and
+\[
+        \varepsilon=\frac{1-2q}{4}=\frac a2,
+        \qquad p=1-q,
+        \qquad \kappa(s)=\frac{s^{r-1}}{(\ell+s)^m}.
+\]
+The negative window of the kernel integral in Proposition~\ref{prop:kernel} is exactly
+\[
+        q+s\in\left(\frac12,\nu\right),
+        \qquad\text{that is,}\qquad s\in(a,b).
+\]
+
+\begin{lemma}[One-sided bounds for the kernel sign function]\label{lem:rho-one-sided}
+For $\rho=\rho_{n,m}$ and $\nu=n/m$,
+\begin{align}
+        -\rho(u)&\le \frac{\nu-u}{\nu}u^{n-1}
+        &&\text{for }1/2<u<\nu,\label{eq:rho-neg-tail}\\
+        \rho(u)&\ge \frac{u-\nu}{\nu}u^{n-1}
+        &&\text{for }u>\nu,\label{eq:rho-pos-tail}\\
+        \rho(u)&\ge \frac mn(1-u)^n-u^{n-1}
+        &&\text{for all }u.\label{eq:rho-left-surplus}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Since
+\[
+        \nu\rho(u)=u^n+(1-u)^n-\nu u^{n-1},
+\]
+we have, for $u<\nu$,
+\[
+        -\nu\rho(u)=(\nu-u)u^{n-1}-(1-u)^n\le(\nu-u)u^{n-1},
+\]
+and, for $u>\nu$,
+\[
+        \nu\rho(u)=(u-\nu)u^{n-1}+(1-u)^n\ge(u-\nu)u^{n-1}.
+\]
+The final inequality is obtained from the definition of $\rho$ by discarding the nonnegative term $(m/n)u^n$.
+\end{proof}
+
+\begin{lemma}[Left-surplus estimate]\label{lem:left-surplus-tail}
+Under the assumptions \eqref{eq:residual-tail}, the integral
+\[
+        I=\int_0^\infty \kappa(s)\rho_{n,m}(q+s)\,ds
+\]
+is nonnegative in each of the following two cases:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $0<\theta\le1/6$;
+\item $1/6\le\theta<1/4$ and $0<\ell\le2/5$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The only possible negative contribution is from $s\in(a,b)$.  On this interval, Lemma~\ref{lem:rho-one-sided} gives
+\[
+        -\rho(q+s)\le (q+s)^{n-1}\left(1-\frac{q+s}{\nu}\right).
+\]
+The function
+\[
+        s\mapsto \frac{(q+s)^{n-1}}{(\ell+s)^m}
+\]
+is decreasing on $(a,b)$.  Indeed, its logarithmic derivative is nonpositive once
+\[
+        (n-1)(\ell-q)\le(2r+1)(q+s),
+\]
+and this follows from $\ell<q+r/m$ and $q+s\ge1/2$.
+Therefore the total possible deficit $D$ obeys
+\begin{equation}\label{eq:tail-D}
+        D\le b^{r-1}\frac{(1/2)^{n-1}}{(\ell+a)^m}\frac{L^2}{2\nu}.
+\end{equation}
+
+On $0\le s\le\varepsilon$, Lemma~\ref{lem:rho-one-sided} gives
+\[
+        \rho(q+s)\ge \frac mn(p-s)^n-(q+s)^{n-1}
+        \ge \frac mn(p-\varepsilon)^n c_n,
+\]
+where
+\[
+        c_n=1-\nu\frac{(q+\varepsilon)^{n-1}}{(p-\varepsilon)^n}.
+\]
+Since $q+\varepsilon\le5/12$, $p-\varepsilon\ge7/12$, and in \eqref{eq:residual-tail} one has $n\ge33$, we get
+\[
+        c_n\ge1-\frac{12}{7}\left(\frac57\right)^{32}>\frac{99}{100}.
+\]
+The positive contribution $\Sigma$ from $(0,\varepsilon)$ therefore satisfies
+\begin{equation}\label{eq:tail-S}
+        \Sigma\ge \frac mn(p-\varepsilon)^n c_n
+        \frac{\varepsilon^r}{r(\ell+\varepsilon)^m}.
+\end{equation}
+Dividing \eqref{eq:tail-S} by \eqref{eq:tail-D} gives
+\begin{equation}\label{eq:tail-ratio}
+        \frac{\Sigma}{D}
+        \ge
+        c_n\frac{b}{rL^2}
+        \left(2(p-\varepsilon)\right)^n
+        \left(\frac{\varepsilon}{b}\right)^r
+        \left(\frac{\ell+a}{\ell+\varepsilon}\right)^m .
+\end{equation}
+
+\smallskip
+\noindent\emph{Case (a): $0<\theta\le1/6$.}
+Here $\ell<q+\theta$.  The elementary monotonicities in $q$ and $\ell$ give
+\[
+        2(p-\varepsilon)\ge\frac76,
+        \qquad
+        \frac{\varepsilon}{b}\ge\frac{1}{8-24\theta},
+\]
+\[
+        \frac{\ell+a}{\ell+\varepsilon}
+        \ge\frac{1/2+\theta}{5/12+\theta},
+        \qquad
+        \frac{b}{L^2}\ge\frac{2/3-2\theta}{(1/2-2\theta)^2}.
+\]
+Thus
+\begin{equation}\label{eq:case-a-ratio}
+        \frac{\Sigma}{D}
+        \ge
+        \frac{99}{100m}
+        \frac{2/3-2\theta}{\theta(1/2-2\theta)^2}
+        \left[
+        \left(\frac76\right)^{1-2\theta}
+        (8-24\theta)^{-\theta}
+        \frac{1/2+\theta}{5/12+\theta}
+        \right]^m .
+\end{equation}
+Appendix~\ref{app:constants} proves that the right-hand side is at least $1$ for every integer pair in this case.  Hence $\Sigma\ge D$.
+
+\smallskip
+\noindent\emph{Case (b): $1/6\le\theta<1/4$ and $\ell\le2/5$.}
+The same comparison yields
+\[
+        2(p-\varepsilon)\ge\frac76,
+        \qquad
+        \frac{\varepsilon}{b}\ge\frac{1}{8-24\theta},
+        \qquad
+        \frac{\ell+a}{\ell+\varepsilon}\ge\frac{34}{29},
+\]
+where the last inequality follows by taking $q=1/3$ and $\ell=2/5$.  Therefore
+\begin{equation}\label{eq:case-b-ratio}
+        \frac{\Sigma}{D}
+        \ge
+        \frac{99}{100m}
+        \frac{2/3-2\theta}{\theta(1/2-2\theta)^2}
+        \left[
+        \left(\frac76\right)^{1-2\theta}
+        (8-24\theta)^{-\theta}
+        \frac{34}{29}
+        \right]^m .
+\end{equation}
+Appendix~\ref{app:constants} proves that this lower bound is also at least $1$.  Hence $\Sigma\ge D$.
+
+Outside $(a,b)$ the integrand is nonnegative.  Thus in both cases $I\ge0$.
+\end{proof}
+
+\begin{lemma}[The upper-reflection threshold]\label{lem:upper-threshold}
+Let $m\ge63$ be odd, $r/m\ge1/6$, $n=m-2r$, $\nu=n/m$, and $n>2r$.  For every $0<b\le\nu$ define
+\[
+        L_A(b)=\frac{m}{(r-1)/b+(n-1)/\nu}-b.
+\]
+Then $L_A(b)\le2/5$.
+\end{lemma}
+
+\begin{proof}
+Put $A=r-1$ and $B=(n-1)/\nu$.  Since
+\[
+        L_A(b)=\frac{mb}{A+Bb}-b,
+\]
+maximising over $b>0$ gives
+\[
+        L_A(b)\le\frac{(\sqrt m-\sqrt A)^2}{B}.
+\]
+Because $m\ge63$ is odd and $r/m\ge1/6$, a check of residues modulo $6$ gives
+\[
+        \frac{r-1}{m}\ge\frac{2}{13}.
+\]
+Also $n>2r$ gives $\nu>1/2$, so
+\[
+        B=\frac{n-1}{\nu}=m-\frac1\nu>m-2.
+\]
+Therefore
+\[
+        L_A(b)\le
+        \frac{m}{m-2}\left(1-\sqrt{\frac{2}{13}}\right)^2
+        \le
+        \frac{63}{61}\left(1-\sqrt{\frac{2}{13}}\right)^2
+        <\frac25.
+\]
+The final inequality is equivalent, after moving positive terms and squaring once, to a positive rational inequality.
+\end{proof}
+
+\begin{lemma}[Upper-end reflection]\label{lem:upper-reflection-tail}
+Under the assumptions \eqref{eq:residual-tail}, if $\theta\ge1/6$ and $\ell>2/5$, then
+\[
+        \int_0^\infty \kappa(s)\rho_{n,m}(q+s)\,ds\ge0.
+\]
+\end{lemma}
+
+\begin{proof}
+Write the negative point as $u=\nu-e$, where $0<e<L=\nu-1/2$, and reflect it through the upper endpoint $\nu$ to $u'=\nu+e$.  In $s$-coordinates this pairs $s=b-e$ with $s'=b+e$.  Since $\theta\ge1/6$, we have $\nu\le2/3$, and hence $u'\le2\nu-1/2\le1$.
+
+By Lemma~\ref{lem:rho-one-sided},
+\[
+        -\rho(\nu-e)\le\frac e\nu(\nu-e)^{n-1},
+        \qquad
+        \rho(\nu+e)\ge\frac e\nu(\nu+e)^{n-1}.
+\]
+Thus pointwise payment follows if
+\begin{equation}\label{eq:upper-reflection-condition}
+        \left(\frac{b+e}{b-e}\right)^{r-1}
+        \left(\frac{\nu+e}{\nu-e}\right)^{n-1}
+        \ge
+        \left(\frac{\ell+b+e}{\ell+b-e}\right)^m.
+\end{equation}
+Put $C=\ell+b$.  By Lemma~\ref{lem:upper-threshold} and $\ell>2/5$,
+\[
+        \frac{r-1}{b}+\frac{n-1}{\nu}\ge\frac mC.
+\]
+Taking logarithms in \eqref{eq:upper-reflection-condition}, expanding
+\[
+        \log\frac{X+e}{X-e}=2\sum_{j\ge0}\frac{e^{2j+1}}{(2j+1)X^{2j+1}},
+        \qquad 0<e<X,
+\]
+and using $b\le\nu<C$, each coefficient is bounded below by
+\[
+        C^{-2j}\left(\frac{r-1}{b}+\frac{n-1}{\nu}-\frac mC\right)\ge0.
+\]
+Hence \eqref{eq:upper-reflection-condition} holds.  The reflected positive mass pays the whole negative window pointwise; all remaining parts of the integral are nonnegative by Lemma~\ref{lem:rho}.  This proves the claim.
+\end{proof}
+
+\begin{proposition}[Residual diagonal strip, all odd lengths]\label{prop:residual-all}
+Let $q\le1/3$, let $m=n+2r$ be odd, and assume
+\[
+        r\ge2,
+        \qquad n>2r,
+        \qquad 0<\ell<q+\frac rm .
+\]
+Then
+\[
+        \wtP_{m,r}(q,\ell)\ge0.
+\]
+\end{proposition}
+
+\begin{proof}
+For odd $m\le61$, this is Proposition~\ref{prop:M61}.  Let $m\ge63$ and put $\theta=r/m$.  If $\theta\le1/6$, Lemma~\ref{lem:left-surplus-tail}(a) applies.  If $\theta\ge1/6$ and $\ell\le2/5$, Lemma~\ref{lem:left-surplus-tail}(b) applies.  If $\theta\ge1/6$ and $\ell>2/5$, Lemma~\ref{lem:upper-reflection-tail} applies.  These alternatives cover the residual strip.
+\end{proof}
+
+\section{The high-density theorem}\label{sec:high-density-theorem}
+
+\begin{theorem}[High-density odd-cycle lower bound]\label{thm:regionI-full}
+Let $W$ be a graphon with edge density $p\ge2/3$.  Then for every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Put $q=1-p\le1/3$.  By Corollary~\ref{cor:diagonal}, it suffices to prove $\wtP_{m,r}(q,\ell)\ge0$ for every $r$ and every $\ell\in[-1/2,1/2]$.  Theorem~\ref{thm:pointwise} covers $\ell\le0$ and $2r\ge n$.  Theorem~\ref{thm:ibp} covers $\ell\ge q+r/m$.  Theorem~\ref{thm:r1} covers $r=1$.  Proposition~\ref{prop:residual-all} covers the only remaining case.  Therefore all diagonal kernels are nonnegative, hence all multivariate kernels are nonnegative by Theorem~\ref{thm:mixture}, hence $\Phi_m\ge0$ by Theorem~\ref{thm:expansion}.  The deletion inequality and the two-sided identity then imply the desired odd-cycle bound.
+\end{proof}
+
+
+\section{A second theorem: rank-two complement graphons and all bipodal graphons}\label{sec:ranktwo}
+
+The high-density theorem applies to all graphons but only for $p\ge2/3$.  The spectral-shift method also gives a separate all-density theorem for every graphon whose complement has one mean-zero direction.  This includes every two-block graphon, balanced or unbalanced.
+
+\begin{theorem}[Rank-two complement graphons are safe]\label{thm:ranktwo}
+Let $W$ be a graphon and put $U=1-W$.  Suppose that there are $q\in[0,1]$, $u,\lambda\in\mathbb R$, and a measurable function $\psi$ satisfying
+\[
+        \int\psi=0,
+        \qquad \int\psi^2=1,
+\]
+such that
+\begin{equation}\label{eq:ranktwo-kernel-full}
+        U(x,y)=q+u(\psi(x)+\psi(y))+\lambda\psi(x)\psi(y)
+\end{equation}
+for almost every $(x,y)$, with $0\le U\le1$.  Let $p=1-q$.  Then for every odd $m\ge3$,
+\[
+        t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\]
+\end{theorem}
+
+\begin{corollary}[Arbitrary bipodal graphons]\label{cor:bipodal}
+The odd-cycle lower bound holds for every two-block graphon, with arbitrary block sizes and arbitrary block values in $[0,1]$.
+\end{corollary}
+
+\begin{proof}
+A two-block graphon becomes two-dimensional after passing to block-constant functions.  In the orthonormal basis consisting of $\one$ and the normalized mean-zero block vector, its complement has the form \eqref{eq:ranktwo-kernel-full}.  Theorem~\ref{thm:ranktwo} applies.
+\end{proof}
+
+We now prove Theorem~\ref{thm:ranktwo}.  The case $p\le1/2$ is immediate because the right-hand side is nonpositive, so assume $p>1/2$.  On $\operatorname{span}\{\one,\psi\}$ the nonzero part of $T_U$ is
+\[
+        \begin{pmatrix}q&u\\ u&\lambda\end{pmatrix}.
+\]
+Conjugating $T_W=J-T_U$ by the sign flip on $\psi$ gives the isospectral matrix
+\begin{equation}\label{eq:ranktwo-M}
+        M=\begin{pmatrix}p&u\\ u&-\lambda\end{pmatrix},
+        \qquad t(C_m,W)=\Tr M^m.
+\end{equation}
+
+\begin{lemma}[Mean-zero compression bound]\label{lem:half-bound-full}
+If $0\le U\le1$ and $f\perp\one$, $\|f\|_2=1$, then
+\[
+        -\frac12\le\langle f,T_Uf\rangle\le\frac12.
+\]
+In particular $|\lambda|\le1/2$ in \eqref{eq:ranktwo-kernel-full}.
+\end{lemma}
+
+\begin{proof}
+Write $f=f_+-f_-$ and $a=\int f_+=\int f_-$.  Since $0\le U\le1$,
+\[
+        \langle f,T_Uf\rangle
+        \le \left(\int f_+\right)^2+\left(\int f_-\right)^2=2a^2.
+\]
+If $f_+$ and $f_-$ are supported on sets of measures $\alpha$ and $\beta$, Cauchy's inequality gives $a^2\le\alpha\int f_+^2$ and $a^2\le\beta\int f_-^2$.  Hence
+\[
+        1=\int f_+^2+\int f_-^2\ge a^2\left(\frac1\alpha+\frac1\beta\right)\ge4a^2,
+\]
+because $\alpha+\beta\le1$.  Thus $\langle f,T_Uf\rangle\le1/2$.  Applying the same argument to $1-U$ and using $\langle f,T_{1-U}f\rangle=-\langle f,T_Uf\rangle$ gives the lower bound.
+\end{proof}
+
+\begin{lemma}[Linear spectral-shift bound]\label{lem:linear-shift-full}
+Assume $p\ge1/2$, $|\lambda|\le p$, and $m\ge3$ is odd.  Then
+\[
+        \Tr\begin{pmatrix}p&u\\ u&-\lambda\end{pmatrix}^m
+        \ge
+        p^m-\lambda^m
+        +m u^2\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda},
+\]
+with the quotient interpreted by continuity if $p+\lambda=0$.
+\end{lemma}
+
+\begin{proof}
+Schur's determinant formula gives
+\[
+        \det(I-zM)=(1-pz)(1+\lambda z)-u^2z^2.
+\]
+Therefore
+\[
+        -\log\det(I-zM)= -\log(1-pz)-\log(1+\lambda z)
+        -\log\left(1-\frac{u^2z^2}{(1-pz)(1+\lambda z)}\right).
+\]
+Taking $m[z^m]$ gives $\Tr(M^m)$.  The coefficient of $z^j$ in $((1-pz)(1+\lambda z))^{-1}$ is nonnegative when $|\lambda|\le p$.  Keeping only the term linear in $u^2$ in the last logarithm gives the stated lower bound; since $m-2$ is odd, the needed coefficient is $(p^{m-1}-\lambda^{m-1})/(p+\lambda)$.
+\end{proof}
+
+If $\lambda\le q$, Theorem~\ref{thm:ranktwo} follows immediately: if $\lambda<0$, then $p^m-\lambda^m\ge p^m$, and if $0\le\lambda\le q$, then $p^m-\lambda^m\ge p^m-q^m\ge p^m-pq^{m-1}$.  Thus only the frontier case
+\[
+        p>1/2,
+        \qquad \lambda>q
+\]
+remains.
+
+\begin{lemma}[Pointwise boundedness forces coupling]\label{lem:ranktwo-coupling}
+In the frontier case,
+\[
+        u^2\ge
+        \frac{p\lambda(\lambda-q)^2}{(p-\lambda)^2}.
+\]
+\end{lemma}
+
+\begin{proof}
+Because $\lambda>0$, the upper bound $U\le1$ implies that $\psi$ is essentially bounded.  Let
+\[
+        A=\operatorname*{ess\,sup}\psi,
+        \qquad B=-\operatorname*{ess\,inf}\psi.
+\]
+Mean zero and variance one imply $AB\ge1$: integrate $(A-\psi)(\psi+B)\ge0$.  The inequalities below are first written at extremal values; the rigorous version follows by using essential $\varepsilon$-extrema and letting $\varepsilon\downarrow0$.
+
+From $U\ge0$ at opposite extremes,
+\[
+        q+u(A-B)-\lambda AB\ge0.
+\]
+Since $\lambda>q$ and $AB\ge1$, orient $\psi$ so that $A>B$ and $u>0$.  From $U\le1$ at the positive extreme,
+\[
+        q+2uA+\lambda A^2\le1,
+\]
+so $A\le\sqrt{p/\lambda}$.  Since $AB\ge1$,
+\[
+        A-B\le A-\frac1A\le
+        \sqrt{\frac p\lambda}-\sqrt{\frac\lambda p}
+        =\frac{p-\lambda}{\sqrt{p\lambda}}.
+\]
+Combining this with $u(A-B)\ge\lambda AB-q\ge\lambda-q$ gives the desired lower bound.
+\end{proof}
+
+\begin{lemma}[Scalar domination]\label{lem:ranktwo-scalar}
+For every odd $m\ge3$ and all $0\le s\le x<1$,
+\[
+        s^{m-1}-x^m
+        +m x\frac{(x-s)^2}{(1-x)^2}\frac{1-x^{m-1}}{1+x}
+        \ge0.
+\]
+\end{lemma}
+
+\begin{proof}
+Put $n=m-1$, so $n$ is even.  The claim is equivalent to
+\[
+        s^n+A_n(x)(x-s)^2\ge x^{n+1},
+        \qquad
+        A_n(x)=\frac{(n+1)x(1-x^n)}{(1-x)^2(1+x)}.
+\]
+Assume $0<x<1$ and write $s=x(1-z)$, $0\le z\le1$.  After division by $x^n$, it is enough to show
+\[
+        (1-z)^n+B_n(x)z^2\ge x,
+        \qquad
+        B_n(x)=\frac{(n+1)x^{3-n}(1-x^n)}{(1-x)^2(1+x)}.
+\]
+For $n=2$, the left side is minimized at value $3x/(1+2x)\ge x$.  For $n\ge4$, Bernoulli gives $(1-z)^n\ge1-nz$, so it suffices that $B_n(x)\ge n^2/(4(1-x))$.  This is equivalent to
+\[
+        4(n+1)x^{3-n}\frac{1-x^n}{1-x^2}\ge n^2.
+\]
+Writing $n=2k$,
+\[
+        x^{3-n}\frac{1-x^n}{1-x^2}
+        =x^{3-n}+x^{5-n}+\cdots+x
+        \ge k-1=\frac n2-1,
+\]
+because the first $k-1$ exponents are nonpositive.  Hence the left side is at least $2(n+1)(n-2)\ge n^2$ for even $n\ge4$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:ranktwo}]
+In the frontier case, Lemmas~\ref{lem:linear-shift-full} and~\ref{lem:ranktwo-coupling} give
+\[
+\begin{aligned}
+\Tr(M^m)-\bigl(p^m-pq^{m-1}\bigr)
+&\ge pq^{m-1}-\lambda^m \\
+&\quad +m\frac{p\lambda(\lambda-q)^2}{(p-\lambda)^2}
+      \frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+\end{aligned}
+\]
+Set $s=q/p$ and $x=\lambda/p$.  Since $0\le s\le x<1$, division by $p^m$ turns the right-hand side into the expression in Lemma~\ref{lem:ranktwo-scalar}.  Thus $\Tr(M^m)\ge p^m-pq^{m-1}$, which is the desired inequality by \eqref{eq:ranktwo-M}.
+\end{proof}
+
+\section{Region II: what the new method says and does not say}\label{sec:regionII}
+
+Theorem~\ref{thm:regionI-full} proves the conjecture for $q\le1/3$.  For $1/3<q<1/2$, the trace-square budget implies that the complement compression $A$ can have at most one eigenvalue above $q$.  This is the one-frontier regime.  Claude's note contains a useful aggregate forced-coupling lemma, which is rigorous and worth keeping.
+
+\begin{lemma}[Aggregate forced coupling]\label{lem:aggregate}
+Let $\phi\in\one^\perp$ be a unit eigenfunction of $A$ with eigenvalue $\alpha\ge0$.  Put
+\[
+        a=\int\phi^+=\int\phi^-,
+\]
+and define
+\[
+        w^+=(\phi^+-a)-\ip{\phi^+}{\phi}\phi,
+        \qquad
+        w^-=(\phi^--a)-\ip{\phi^-}{\phi}\phi.
+\]
+Then
+\begin{equation}\label{eq:aggregate}
+        a\ip{g}{|\phi|}
+        \ge
+        \alpha\norm{\phi^+}_2^2
+        \norm{\phi^-}_2^2
+        -qa^2-\ip{w^+}{Aw^-}
+        \ge
+        \alpha\norm{\phi^+}_2^2
+        \norm{\phi^-}_2^2
+        -qa^2-\frac12\norm{w^+}_2\norm{w^-}_2.
+\end{equation}
+Consequently
+\begin{equation}\label{eq:aggregate-CS}
+        a\norm g_2\sqrt{1-4a^2}
+        \ge
+        \alpha\norm{\phi^+}_2^2
+        \norm{\phi^-}_2^2
+        -qa^2-\frac12\norm{w^+}_2\norm{w^-}_2.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write the doubly-centred kernel of $A$ as $\mathcal A$, so that
+\[
+        U(x,y)=q+g(x)+g(y)+\mathcal A(x,y).
+\]
+Testing the pointwise inequality $U\ge0$ against the nonnegative function $\phi^+(x)\phi^-(y)$ gives
+\[
+        0\le q a^2+a\ip{g}{\phi^+}+a\ip{g}{\phi^-}
+        +\ip{\phi^+-a}{A(\phi^--a)}.
+\]
+Since $\ip{g}{\phi^+}+\ip{g}{\phi^-}=\ip{g}{|\phi|}$, and
+\[
+        \ip{\phi^+-a}{\phi}=\norm{\phi^+}_2^2,
+        \qquad
+        \ip{\phi^--a}{\phi}=-\norm{\phi^-}_2^2,
+\]
+the decomposition of $\phi^\pm-a$ into its $\phi$ component plus $w^\pm$ gives
+\[
+        \ip{\phi^+-a}{A(\phi^--a)}
+        =-\alpha\norm{\phi^+}_2^2\norm{\phi^-}_2^2+
+        \ip{w^+}{Aw^-}.
+\]
+Rearranging proves the first inequality in~\eqref{eq:aggregate}.  The second follows from $\norm A\le1/2$.  Finally,
+\[
+        \ip{g}{|\phi|}=\ip{g}{|\phi|-2a}
+        \le\norm g_2\norm{|\phi|-2a}_2
+        =\norm g_2\sqrt{1-4a^2},
+\]
+because $\int g=0$, $\int |\phi|=2a$, and $\int\phi^2=1$.
+\end{proof}
+
+The aggregate lemma also explains why a tempting extension of the rank-one forced-coupling theorem is false.
+
+\begin{proposition}[Failure of the naive total-coupling bound]\label{prop:two-clique}
+Let $s\in(0,1/3)$, and let $U_s$ be the graphon that is $1$ on two disjoint diagonal cliques of measure $(1-s)/2$ each and $0$ elsewhere.  Then
+\[
+        q=\frac{(1-s)^2}{2},
+        \qquad
+        \alpha_1=\frac{1-s}{2},
+        \qquad
+        \alpha_1-q=\frac{s(1-s)}2,
+        \qquad
+        p-
+        \alpha_1=\frac{s(3-s)}2,
+\]
+and
+\[
+        \norm g_2^2=sq^2+(1-s)(\alpha_1-q)^2.
+\]
+Consequently
+\[
+        \frac{\norm g_2^2(p-
+        \alpha_1)^2}{p\alpha_1(\alpha_1-q)^2}
+        =9s+O(s^2)\to0.
+\]
+Thus no universal positive constant can make the rank-one lower bound
+\[
+        \norm g_2^2\gtrsim \frac{p\alpha_1(\alpha_1-q)^2}{(p-
+        \alpha_1)^2}
+\]
+valid in the one-frontier regime.
+\end{proposition}
+
+\begin{proof}
+The eigenfunction distinguishing the two cliques is mean-zero and has eigenvalue $(1-s)/2$.  The degree is $(1-s)/2$ on the two cliques and $0$ on the remaining set of measure $s$, which gives the formula for $q$ and $\norm g_2^2$.  The displayed ratio is then a direct expansion at $s=0$.
+\end{proof}
+
+\begin{remark}[Current global status]
+The high-density theorem closes Region I.  The remaining part of Conjecture~\ref{conj:main} is therefore the one-frontier range $1/3<q<1/2$, equivalently $1/2<p<2/3$.  In that range one needs a payment lemma converting the aggregate forced coupling in Lemma~\ref{lem:aggregate} into nonlinear spectral shift.  The two-clique family in Proposition~\ref{prop:two-clique} shows that the payment cannot be just the rank-one forced-coupling bound with $b_1^2$ replaced by $\norm g_2^2$.
+\end{remark}
+
+
+
+\section{Accompanying files and certificate status}\label{sec:files}
+
+This package contains the following files.
+\begin{itemize}[leftmargin=2em]
+\item \texttt{odd\_cycle\_high\_density\_baton.tex}: this note.
+\item \texttt{odd\_cycle\_high\_density\_baton.pdf}: compiled version.
+\item \texttt{clean\_two\_sided\_shift\_checker.py}: exact rational checker for the two-sided identity, the path-shift expansion, the mixture identity, the kernel form, the finite strip certificate through $m=61$, and several Region-II diagnostics.
+\item \texttt{clean\_checker\_m61.log}: successful run log for the finite strip certificate.
+\item \texttt{regionI\_constant\_certifier\_exact.py}: exact rational certificate for the constants used in Appendix~\ref{app:constants}.
+\item \texttt{regionI\_constant\_certifier\_exact.log}: successful run log for the constant certificate.
+\end{itemize}
+
+The high-density theorem is therefore a small computer-assisted proof only in the finite range $m\le61$ and in the rational constant inequalities in Appendix~\ref{app:constants}; the infinite tail $m\ge63$ is otherwise analytic.
+
+\appendix
+\section{Constant inequalities for the residual-strip closure}\label{app:constants}
+
+This appendix justifies the two numerical inequalities used in Lemma~\ref{lem:left-surplus-tail}.  Let
+\[
+        P(\theta)=\frac{2/3-2\theta}{\theta(1/2-2\theta)^2},
+\]
+\[
+        B_0(\theta)=
+        \left(\frac76\right)^{1-2\theta}
+        (8-24\theta)^{-\theta}
+        \frac{1/2+\theta}{5/12+\theta},
+\]
+and
+\[
+        B_1(\theta)=
+        \left(\frac76\right)^{1-2\theta}
+        (8-24\theta)^{-\theta}
+        \frac{34}{29}.
+\]
+The required inequalities are
+\begin{align}
+        \frac{99}{100m}P(\theta)B_0(\theta)^m&\ge1
+        &&(\theta=r/m\le1/6),\label{eq:app-caseA}\\
+        \frac{99}{100m}P(\theta)B_1(\theta)^m&\ge1
+        &&(1/6\le\theta=r/m<1/4),\label{eq:app-caseB}
+\end{align}
+for the integer pairs appearing in the residual strip with $m\ge63$ and $r\ge2$.
+
+For \eqref{eq:app-caseA}, the exact script first checks every integer pair with odd $63\le m\le499$.  For the tail $m\ge500$, use the elementary bounds
+\[
+        P(\theta)\ge51,
+        \qquad
+        B_0(\theta)\ge\frac{201}{200}
+        \qquad(0<\theta\le1/6).
+\]
+The first is the polynomial inequality
+\[
+        \frac23-2\theta-51\theta\left(\frac12-2\theta\right)^2\ge0
+        \qquad(0<\theta\le1/6).
+\]
+For the second, $\log B_0$ is decreasing on $[0,1/6]$.  One way to see this is to set $t=8-24\theta\in[4,8]$ and use
+\[
+        \log t\ge \frac{2(t-1)}{t+1}.
+\]
+The remaining rational inequality is
+\[
+\frac{2(t-1)}{t+1}-\frac{8-t}{t}+\frac{48}{(20-t)(18-t)}
+=\frac{3t^4-123t^3+1462t^2-2888t-2880}{t(t-20)(t-18)(t+1)}>0
+\]
+on $[4,8]$, which is elementary.  Hence
+\[
+        B_0(\theta)\ge B_0(1/6)=\frac{4}{\sqrt[3]{63}}>\frac{201}{200}.
+\]
+Since $(201/200)^m/m$ is increasing for $m\ge200$, it remains only to check
+\[
+        \frac{99}{100}\frac{51}{500}\left(\frac{201}{200}\right)^{500}>1,
+\]
+which is an exact rational inequality recorded by the constant certifier.
+
+For \eqref{eq:app-caseB}, the exact script again checks all odd $63\le m\le499$.  For the tail and, in fact, for all $m\ge63$, use
+\[
+        P(\theta)\ge72
+        \qquad(1/6\le\theta<1/4),
+\]
+which follows from
+\[
+        \frac23-2\theta-72\theta\left(\frac12-2\theta\right)^2
+        =-\frac23(6\theta-1)(72\theta^2-24\theta+1)
+        \ge0
+\]
+on $[1/6,1/4]$.  The uniform bound
+\[
+        B_1(\theta)\ge\frac{126}{125}
+        \qquad(1/6\le\theta\le1/4)
+\]
+is proved by splitting $[1/6,1/4]$ into the twelve intervals
+\[
+        \left[\frac16+\frac{i}{144},\frac16+\frac{i+1}{144}\right],
+        \qquad 0\le i\le11.
+\]
+On an interval $[a,b]$, the lower bound
+\[
+        B_1(\theta)\ge
+        \left(\frac76\right)^{1-2b}(8-24a)^{-b}\frac{34}{29}
+\]
+holds.  Since $a,b$ are rational, the inequality that this lower bound is at least $126/125$ becomes an exact integer comparison after raising to a common denominator.  The file \texttt{regionI\_constant\_certifier\_exact.py} performs these twelve integer comparisons.  Finally, $(126/125)^m/m$ has its minimum for $m\ge63$ at $m=125$ or $126$, and the exact inequality
+\[
+        \frac{99}{100}\frac{72}{125}\left(\frac{126}{125}\right)^{125}>1
+\]
+completes the proof of \eqref{eq:app-caseB}.
+
+\end{document}
