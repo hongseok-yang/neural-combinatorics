@@ -793,12 +793,68 @@ on \(T_U\) is needed.
 
 \section{The common complement-operator framework}\label{sec:common-operator}
 
-By \Cref{lem:step-reduction}, determinant arguments may be carried out for a
-step graphon.  Decompose
+We first make explicit the finite-dimensional setting in which all subsequent
+determinants are taken.  By \Cref{lem:step-reduction}, for each fixed odd
+cycle length it is enough to prove the desired inequality for a symmetric
+step graphon.  Thus, throughout the determinant-based argument, fix a finite
+measurable partition
 \[
-       L^2([0,1])=\R\one\oplus\one^\perp
+       [0,1]=B_1\sqcup\cdots\sqcup B_N
 \]
-and write the complement operator as
+into sets of positive measure such that \(W\), and hence \(U=1-W\), is
+constant on each rectangle \(B_a\times B_b\).  After the inequality has been
+proved in this setting, \Cref{lem:step-reduction} passes it to an arbitrary
+graphon.
+
+Let
+\[
+       \mathcal E=\operatorname{span}
+       \{\one_{B_1},\ldots,\one_{B_N}\}\subseteq L^2([0,1]).
+\]
+This is the \(N\)-dimensional space of functions that are constant on every
+part \(B_a\).  If a step kernel \(K\) has value \(K_{ab}\) on
+\(B_a\times B_b\), then, for \(x\in B_a\),
+\begin{equation}\label{eq:step-operator-action}
+       (T_Kf)(x)=\sum_{b=1}^N K_{ab}\int_{B_b}f(y)\dd y.
+\end{equation}
+Consequently, \(T_Kf\in\mathcal E\) for every \(f\in L^2\).  Moreover, if
+\(f\in\mathcal E^\perp\), then every integral in
+\eqref{eq:step-operator-action} is zero, so \(T_Kf=0\).  Hence all nonzero
+action of \(T_K\) takes place on the finite-dimensional space
+\(\mathcal E\).
+
+From this point on, whenever a determinant involving \(T_W\) or \(T_U\)
+appears, it means the ordinary determinant of the restriction to
+\(\mathcal E\); no determinant of an operator on the whole infinite-dimensional
+space \(L^2([0,1])\) is being used.  The trace has the same finite-matrix
+interpretation.  Indeed, in the orthonormal basis
+\(e_a=\one_{B_a}/\sqrt{|B_a|}\), the matrix of \(T_K|_{\mathcal E}\) has
+entries
+\[
+       \ip{e_a}{T_Ke_b}=K_{ab}\sqrt{|B_a||B_b|}.
+\]
+Here \(|B_a|\) denotes the measure of \(B_a\).
+Multiplying this matrix around a cycle shows, for every \(r\ge2\), that
+\begin{equation}\label{eq:finite-trace-cycle}
+\begin{aligned}
+ \Tr(T_K^r)
+ &=\sum_{a_1,\ldots,a_r=1}^N
+   |B_{a_1}|\cdots|B_{a_r}|
+   K_{a_1a_2}\cdots K_{a_ra_1}\\
+ &=t(C_r,K).
+\end{aligned}
+\end{equation}
+Thus the finite matrix trace is exactly the cycle-density quantity that the
+proof needs.
+
+The constant function \(\one\) lies in \(\mathcal E\) and has norm one,
+because the underlying probability space has total mass one.  Set
+\[
+       \mathcal E_0=\mathcal E\cap\one^\perp.
+\]
+Then \(\mathcal E=\R\one\oplus\mathcal E_0\) is an orthogonal decomposition.
+Relative to this finite-dimensional decomposition, write the complement
+operator as
 \begin{equation}\label{eq:block-U}
        T_U=
        \begin{pmatrix}
@@ -808,10 +864,14 @@ and write the complement operator as
        \qquad
        g=T_U\one-q\one,
        \qquad
-       A=P_{\one^\perp}T_UP_{\one^\perp}.
+       A=P_{\mathcal E_0}T_UP_{\mathcal E_0}.
 \end{equation}
-The vector \(\one\) has norm one because the underlying probability space
-has total mass one.
+Here \(g\in\mathcal E_0\), \(g^*\) denotes the linear functional
+\(h\mapsto\ip g h\), and \(A\) is a self-adjoint linear map on the
+finite-dimensional space \(\mathcal E_0\), equivalently a real symmetric
+matrix in an orthonormal basis.  This \(A\) is precisely the nonzero part of the
+mean-zero compression \(P_{\one^\perp}T_UP_{\one^\perp}\): that larger
+compression vanishes on \(\mathcal E^\perp\).
 
 \begin{lemma}[Square budget]\label{lem:HS-budget}
 One has
@@ -841,7 +901,7 @@ The spectrum of \(A\) lies in \([-1/2,1/2]\); equivalently,
 \end{lemma}
 
 \begin{proof}
-Let \(f\perp\one\) and \(\norm f=1\), and write \(f=f_+-f_-\) for nonnegative
+Let \(f\in\mathcal E_0\) with \(\norm f=1\), and write \(f=f_+-f_-\) for nonnegative
 functions \(f_+\) and \(f_-\) on \([0,1]\).  Since
 \(\int f=0\),
 \[
@@ -880,8 +940,8 @@ and bound the cross term, obtaining
  \ge-2\left(\int f_+\right)\left(\int f_-\right)
  =-2a^2\ge-\frac12.
 \]
-Finally, \(A=P_{\one^\perp}T_UP_{\one^\perp}\) acts on \(\one^\perp\).  Thus,
-for every \(f\in\one^\perp\), we have \(P_{\one^\perp}f=f\) and hence
+Finally, \(A=P_{\mathcal E_0}T_UP_{\mathcal E_0}\) acts on \(\mathcal E_0\).
+Thus, for every \(f\in\mathcal E_0\), we have \(P_{\mathcal E_0}f=f\) and hence
 \[
        \ip f{Af}=\ip f{T_Uf}.
 \]
@@ -889,11 +949,11 @@ Moreover, \(A\) is self-adjoint, so its operator norm is the largest absolute
 value of its Rayleigh quotient:
 \[
  \norm A_{\mathrm{op}}
- =\sup_{\substack{f\in\one^\perp\\ \norm f=1}}
+ =\sup_{\substack{f\in\mathcal E_0\\ \norm f=1}}
     \bigl|\ip f{Af}\bigr|.
 \]
 The upper and lower bounds just proved therefore give
-\(\bigl|\ip f{Af}\bigr|\le\tfrac12\) for every unit \(f\in\one^\perp\), and
+\(\bigl|\ip f{Af}\bigr|\le\tfrac12\) for every unit \(f\in\mathcal E_0\), and
 so \(\norm A_{\mathrm{op}}\le\tfrac12\), as claimed.
 \end{proof}
 
@@ -903,34 +963,29 @@ compression \(A\) is positive semidefinite.  The proof above controls the
 quadratic form directly and is the only spectral support statement needed.
 \end{remark}
 
-Let \(E_A\) be the spectral resolution of \(A\): for a Borel set
-\(B\subseteq\R\), the operator \(E_A(B)\) is the orthogonal projection onto
-the spectral subspace of \(A\) corresponding to eigenvalues in \(B\).
-Define the finite positive measure
-\begin{equation}\label{eq:mu-def}
-       \mu(B)=\ip g{E_A(B)g}.
-\end{equation}
-Concretely, in the finite-rank case write
+Because \(A\) is a finite real symmetric matrix, it has an orthogonal
+eigenspace decomposition
 \[
        A=\sum_i\lambda_iP_i,
 \]
-where \(P_i\) is the orthogonal projection onto the \(\lambda_i\)-eigenspace.
-Then
-\[
- \mu(B)=\sum_{\lambda_i\in B}\ip g{P_i g}
-       =\sum_{\lambda_i\in B}\norm{P_i g}^2.
-\]
-The last equality holds because \(P_i\) is an orthogonal projection:
-\(\ip g{P_i g}=\ip{P_i g}{P_i g}\).  Thus \(\mu\) assigns to each
+where the distinct \(\lambda_i\) are its eigenvalues and \(P_i\) is the
+orthogonal projection onto the corresponding eigenspace.  Define the finite
+positive measure
+\begin{equation}\label{eq:mu-def}
+       \mu=\sum_i\norm{P_i g}^2\,\delta_{\lambda_i},
+\end{equation}
+where \(\delta_{\lambda_i}\) denotes a unit point mass at \(\lambda_i\).
+Thus \(\mu\) assigns to each
 eigenvalue the nonnegative weight measuring how much of \(g\) lies in its
-eigenspace.  By \Cref{lem:half-norm}, \(\mu\) is supported on
-\([-1/2,1/2]\).  More generally, the spectral theorem gives
+eigenspace.  For any function \(F\) defined on the finite set of eigenvalues,
+orthogonality of the eigenspaces gives
 \[
        \ip g{F(A)g}
-       =\int_{-1/2}^{1/2}F(\lambda)\dd\mu(\lambda)
+       =\sum_i F(\lambda_i)\norm{P_i g}^2
+       =\int F(\lambda)\dd\mu(\lambda).
 \]
-for every bounded Borel function
-\(F:[-1/2,1/2]\to\R\).
+By \Cref{lem:half-norm}, every \(\lambda_i\) lies in
+\([-1/2,1/2]\), so \(\mu\) is supported on that interval.
 
 For real \(|z|<2\), the function
 \(F_z(\lambda)=(1-z\lambda)^{-1}\) is bounded and continuous on this
@@ -988,35 +1043,184 @@ Consequently,
 \end{lemma}
 
 \begin{proof}
-The operator of \(W=1-U\) is
+All operators in this proof are the finite matrices on \(\mathcal E\)
+described in \Cref{sec:common-operator}.  In particular, every determinant
+and trace below is an ordinary finite-matrix determinant or trace.
+The plan is to encode the cycle densities of \(W\) and \(U\) in two
+determinant power series and then add those series.  Their mean-zero blocks
+will be \(-A\) and \(A\), so the terms containing an odd power of \(A\)
+will cancel.
+
+We first derive the block matrix for \(W\).  The operator \(T_1\) associated
+with the constant kernel \(1\) sends \(a\one+h\), with
+\(h\in\mathcal E_0\), to
+\[
+       T_1(a\one+h)=\left(\int(a\one+h)\right)\one=a\one,
+\]
+because \(\int h=0\).  Thus \(T_1\) has block matrix
+\(\left(\begin{smallmatrix}1&0\\0&0\end{smallmatrix}\right)\).  Since
+\(W=1-U\), we have \(T_W=T_1-T_U\), and \eqref{eq:block-U} gives
 \[
  T_W=
- \begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix}.
+ \begin{pmatrix}1&0\\0&0\end{pmatrix}
+ -
+ \begin{pmatrix}q&g^*\\g&A\end{pmatrix}
+ =
+ \begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix},
 \]
-Conjugating by the sign flip on \(\one^\perp\), it is unitarily equivalent
-to
+where \(p=1-q\).
+
+We use the following sign change.  On the orthogonal decomposition
+\(\mathcal E=\R\one\oplus\mathcal E_0\), define
 \[
-       M=\begin{pmatrix}p&g^*\\g&-A\end{pmatrix}.
+ \mathcal J(a\one+h)=a\one-h
+ \qquad(a\in\R,\ h\in\mathcal E_0).
 \]
-Schur complementation gives
+Thus \(\mathcal J\) fixes the constant part of a function and reverses the
+sign of its mean-zero part.  For \(a,b\in\R\) and
+\(h,k\in\mathcal E_0\), orthogonality of the two summands gives
+\[
+\begin{aligned}
+ \ip{\mathcal J(a\one+h)}{\mathcal J(b\one+k)}
+ &=\ip{a\one-h}{b\one-k}\\
+ &=ab+\ip h{k}
+ =\ip{a\one+h}{b\one+k}.
+\end{aligned}
+\]
+Thus \(\mathcal J\) preserves the inner product.  It also satisfies
+\(\mathcal J^{-1}=\mathcal J\), so it is onto.  Hence \(\mathcal J\) is a
+unitary (in this real setting, orthogonal) operator.  In block form,
+\[
+ \mathcal J=\begin{pmatrix}1&0\\0&-I\end{pmatrix},
+ \qquad
+ \mathcal JT_W\mathcal J^{-1}
+ =\begin{pmatrix}p&g^*\\g&-A\end{pmatrix}
+ =:M.
+\]
+Two operators related by such a unitary change of coordinates are called
+\emph{unitarily equivalent}.  This changes only their coordinate
+description: for every \(j\ge1\),
+\[
+       M^j=\mathcal JT_W^j\mathcal J^{-1}.
+\]
+For finite matrices, \(\Tr(BC)=\Tr(CB)\), as one sees directly by writing
+both sides as \(\sum_{i,k}B_{ik}C_{ki}\).  Therefore
+\[
+ \Tr(M^j)
+ =\Tr(\mathcal JT_W^j\mathcal J^{-1})
+ =\Tr(T_W^j\mathcal J^{-1}\mathcal J)
+ =\Tr(T_W^j).
+\]
+By \eqref{eq:finite-trace-cycle}, this says that \(M\) has exactly the same
+cycle traces as \(T_W\), so we may use \(M\) in place of \(T_W\).
+
+We next compute the two determinants by a block elimination.  Recall the
+following elementary identity.  If \(D\) is invertible, then
+\begin{equation}\label{eq:block-determinant-identity}
+ \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
+ =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr).
+\end{equation}
+The scalar \(\alpha-v^*D^{-1}v\) is called the \emph{Schur complement} of
+the block \(D\).  To see the identity directly, multiply on the left by a
+block matrix of determinant one:
+\[
+ \begin{pmatrix}1&-v^*D^{-1}\\0&I\end{pmatrix}
+ \begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
+ =\begin{pmatrix}\alpha-v^*D^{-1}v&0\\v&D\end{pmatrix}.
+\]
+The matrix on the right is block triangular, so its determinant is the
+product of its diagonal-block determinants, proving
+\eqref{eq:block-determinant-identity}.  All matrices here act on the
+finite-dimensional space \(\mathcal E\).  Formally, the blocks
+\(I\pm zA\) are invertible because their constant term is \(I\); analytically,
+they are invertible for \(z\) sufficiently close to zero.
+
+For \(M\),
+\[
+ I-zM=
+ \begin{pmatrix}
+  1-pz&-zg^*\\
+  -zg&I+zA
+ \end{pmatrix}.
+\]
+Apply \eqref{eq:block-determinant-identity} with
+\(D=I+zA\) and \(v=-zg\).  Since
+\(R_-(z)=\ip g{(I+zA)^{-1}g}\), we obtain
 \begin{align*}
  \det(I-zM)
+ &=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)\\
  &=\det(I+zA)(1-pz)
-   \left(1-\frac{z^2R_-(z)}{1-pz}\right),\\
+   \left(1-\frac{z^2R_-(z)}{1-pz}\right).
+\end{align*}
+Similarly,
+\[
+ I-zT_U=
+ \begin{pmatrix}
+  1-qz&-zg^*\\
+  -zg&I-zA
+ \end{pmatrix},
+\]
+so using \(D=I-zA\) and the definition of \(R_+(z)\) gives
+\begin{align*}
  \det(I-zT_U)
+ &=\det(I-zA)\bigl(1-qz-z^2R_+(z)\bigr)\\
  &=\det(I-zA)(1-qz)
    \left(1-\frac{z^2R_+(z)}{1-qz}\right).
 \end{align*}
-Using
+
+It remains to extract the cycle traces from these factorizations.  For a
+finite self-adjoint matrix \(X\), choose an orthonormal eigenbasis and denote
+the eigenvalues by \(\lambda_i\).  In that basis, \(I-zX\) is diagonal with
+diagonal entries \(1-z\lambda_i\), while \(X^j\) is diagonal with entries
+\(\lambda_i^j\).  Therefore
 \[
-       -\log\det(I-zX)
-       =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+\begin{aligned}
+ -\log\det(I-zX)
+ &=-\sum_i\log(1-z\lambda_i)\\
+ &=\sum_{j\ge1}\frac{\sum_i\lambda_i^j}{j}z^j
+ =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j.
+\end{aligned}
 \]
-extract the coefficient of \(z^m\) and add the two formulas.  Because \(m\)
-is odd, the contributions of \(\det(I+zA)\) and \(\det(I-zA)\) cancel.
-The scalar factors contribute \(p^m+q^m\), and the remaining factors
-contribute \(S_m\).  This proves \eqref{eq:dense-cycle-sum}.  Finally,
-\(q^m+pq^{m-1}=q^{m-1}\), giving \eqref{eq:dense-defect}.
+Taking minus the logarithm of the two determinant factorizations therefore
+gives
+\begin{align*}
+ -\log\det(I-zM)
+ ={}&-\log\det(I+zA)-\log(1-pz)+L_-(z),\\
+ -\log\det(I-zT_U)
+ ={}&-\log\det(I-zA)-\log(1-qz)+L_+(z).
+\end{align*}
+We now add these identities and extract \([z^m]\).  The left sides,
+multiplied by \(m\), give
+\[
+       \Tr(M^m)+\Tr(T_U^m)
+       =t(C_m,W)+t(C_m,U).
+\]
+Here the equality with the cycle densities is exactly
+\eqref{eq:finite-trace-cycle}.
+The scalar logarithms satisfy
+\[
+       -\log(1-pz)=\sum_{j\ge1}\frac{p^j}{j}z^j,
+       \qquad
+       -\log(1-qz)=\sum_{j\ge1}\frac{q^j}{j}z^j,
+\]
+so their contribution, after multiplication by \(m\), is \(p^m+q^m\).
+For the compressed block \(A\), the coefficient of \(z^m\) in
+\(-\log\det(I-zA)\) is \(\Tr(A^m)/m\), whereas its coefficient in
+\(-\log\det(I+zA)\) is \((-1)^m\Tr(A^m)/m\).  These two coefficients cancel
+because \(m\) is odd.  Finally, the two remaining logarithms contribute
+\[
+       m[z^m]\bigl(L_-(z)+L_+(z)\bigr)=S_m.
+\]
+Combining these contributions proves \eqref{eq:dense-cycle-sum}.
+
+To obtain the second displayed identity in the lemma, rearrange the first:
+\begin{align*}
+ t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+ &=q^m+S_m-t(C_m,U)+pq^{m-1}\\
+ &=(p+q)q^{m-1}+S_m-t(C_m,U)\\
+ &=q^{m-1}+S_m-t(C_m,U),
+\end{align*}
+using \(p+q=1\).  This is \eqref{eq:dense-defect}.
 \end{proof}
 
 The cancellation is the decisive reason for using \emph{both} \(W\) and its
