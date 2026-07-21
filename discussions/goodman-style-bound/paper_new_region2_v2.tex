@@ -1070,50 +1070,6 @@ because \(\int h=0\).  Thus \(T_1\) has block matrix
 \]
 where \(p=1-q\).
 
-We use the following sign change.  On the orthogonal decomposition
-\(\mathcal E=\R\one\oplus\mathcal E_0\), define
-\[
- \mathcal J(a\one+h)=a\one-h
- \qquad(a\in\R,\ h\in\mathcal E_0).
-\]
-Thus \(\mathcal J\) fixes the constant part of a function and reverses the
-sign of its mean-zero part.  For \(a,b\in\R\) and
-\(h,k\in\mathcal E_0\), orthogonality of the two summands gives
-\[
-\begin{aligned}
- \ip{\mathcal J(a\one+h)}{\mathcal J(b\one+k)}
- &=\ip{a\one-h}{b\one-k}\\
- &=ab+\ip h{k}
- =\ip{a\one+h}{b\one+k}.
-\end{aligned}
-\]
-Thus \(\mathcal J\) preserves the inner product.  It also satisfies
-\(\mathcal J^{-1}=\mathcal J\), so it is onto.  Hence \(\mathcal J\) is a
-unitary (in this real setting, orthogonal) operator.  In block form,
-\[
- \mathcal J=\begin{pmatrix}1&0\\0&-I\end{pmatrix},
- \qquad
- \mathcal JT_W\mathcal J^{-1}
- =\begin{pmatrix}p&g^*\\g&-A\end{pmatrix}
- =:M.
-\]
-Two operators related by such a unitary change of coordinates are called
-\emph{unitarily equivalent}.  This changes only their coordinate
-description: for every \(j\ge1\),
-\[
-       M^j=\mathcal JT_W^j\mathcal J^{-1}.
-\]
-For finite matrices, \(\Tr(BC)=\Tr(CB)\), as one sees directly by writing
-both sides as \(\sum_{i,k}B_{ik}C_{ki}\).  Therefore
-\[
- \Tr(M^j)
- =\Tr(\mathcal JT_W^j\mathcal J^{-1})
- =\Tr(T_W^j\mathcal J^{-1}\mathcal J)
- =\Tr(T_W^j).
-\]
-By \eqref{eq:finite-trace-cycle}, this says that \(M\) has exactly the same
-cycle traces as \(T_W\), so we may use \(M\) in place of \(T_W\).
-
 We next compute the two determinants by a block elimination.  Recall the
 following elementary identity.  If \(D\) is invertible, then
 \begin{equation}\label{eq:block-determinant-identity}
@@ -1130,24 +1086,23 @@ block matrix of determinant one:
 \]
 The matrix on the right is block triangular, so its determinant is the
 product of its diagonal-block determinants, proving
-\eqref{eq:block-determinant-identity}.  All matrices here act on the
-finite-dimensional space \(\mathcal E\).  Formally, the blocks
+\eqref{eq:block-determinant-identity}.  Formally, the blocks
 \(I\pm zA\) are invertible because their constant term is \(I\); analytically,
 they are invertible for \(z\) sufficiently close to zero.
 
-For \(M\),
+For \(T_W\), the block matrix above gives
 \[
- I-zM=
+ I-zT_W=
  \begin{pmatrix}
-  1-pz&-zg^*\\
-  -zg&I+zA
+  1-pz&zg^*\\
+  zg&I+zA
  \end{pmatrix}.
 \]
 Apply \eqref{eq:block-determinant-identity} with
-\(D=I+zA\) and \(v=-zg\).  Since
+\(D=I+zA\) and \(v=zg\).  Since
 \(R_-(z)=\ip g{(I+zA)^{-1}g}\), we obtain
 \begin{align*}
- \det(I-zM)
+ \det(I-zT_W)
  &=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)\\
  &=\det(I+zA)(1-pz)
    \left(1-\frac{z^2R_-(z)}{1-pz}\right).
@@ -1184,7 +1139,7 @@ diagonal entries \(1-z\lambda_i\), while \(X^j\) is diagonal with entries
 Taking minus the logarithm of the two determinant factorizations therefore
 gives
 \begin{align*}
- -\log\det(I-zM)
+ -\log\det(I-zT_W)
  ={}&-\log\det(I+zA)-\log(1-pz)+L_-(z),\\
  -\log\det(I-zT_U)
  ={}&-\log\det(I-zA)-\log(1-qz)+L_+(z).
@@ -1192,7 +1147,7 @@ gives
 We now add these identities and extract \([z^m]\).  The left sides,
 multiplied by \(m\), give
 \[
-       \Tr(M^m)+\Tr(T_U^m)
+       \Tr(T_W^m)+\Tr(T_U^m)
        =t(C_m,W)+t(C_m,U).
 \]
 Here the equality with the cycle densities is exactly
