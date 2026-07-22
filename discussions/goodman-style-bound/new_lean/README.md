@@ -107,10 +107,20 @@ and write $`a^{\times k}`$ for the argument $`a`$ repeated $`k`$ times. With $`p
   - h_{n-1}\bigl(q^{\times (r+1)},\, \lambda_1,\dots,\lambda_r\bigr).
 ```
 
-**Reducing to one variable.** Averaging a symmetric polynomial against a Dirichlet weight is a mixture
-of its values along the diagonal, so positivity of $`\mathrm{multiKernel}`$ on the cube follows from
-positivity of its diagonal restriction $`\lambda_1 = \cdots = \lambda_r = \ell`$ — a *single-variable*
-polynomial (`MixtureIntegral.lean`, `multiKernel_nonneg`),
+**Reducing to one variable.** Restricting $`\mathrm{multiKernel}`$ to the diagonal
+$`\lambda_1 = \cdots = \lambda_r = \ell`$ gives the *single-variable* polynomial $`\mathrm{diagKernel}`$
+(`diagKernel_eq_multiKernel`), and the two are not independent: they share one coefficient sequence
+$`\mathrm{kerB}_j`$, with $`\mathrm{multiKernel} = \sum_j \mathrm{kerB}_j\, h_j(\vec\lambda)`$ and
+$`\mathrm{diagKernel} = \sum_j \mathrm{kerB}_j \binom{j+r-1}{r-1}\ell^j`$ (`multiKernel_expand`,
+`diagKernel_expand`). Since $`h_j(\vec\lambda)/\binom{j+r-1}{r-1}`$ is the $`j`$-th moment of a Dirichlet
+weight, averaging $`\mathrm{diagKernel}`$ against that weight reproduces $`\mathrm{multiKernel}`$ exactly
+(`multiKernel_eq_dirExp`): 
+```math
+\mathrm{multiKernel}(m,r,q;\vec\lambda) = \mathbb{E}_{\Theta\sim\mathrm{Dir}(1^r)}\,\mathrm{diagKernel}(m,r,q,\textstyle\sum_i \Theta_i\lambda_i)
+```
+As that weight is a probability measure supported inside $`[-\tfrac12,\tfrac12]`$, positivity of
+$`\mathrm{multiKernel}`$ on the cube follows from positivity of its diagonal $`\mathrm{diagKernel}`$ on
+$`[-\tfrac12,\tfrac12]`$ (`MixtureIntegral.lean`, `multiKernel_nonneg`),
 
 ```math
 \mathrm{diagKernel}(m,r,q,\ell) = \frac{m}{r}\Bigl[\,
@@ -133,9 +143,11 @@ theorem has now come down to
 \rho_{n,m}(u) = \frac{m}{n}\bigl(u^{n} + (1-u)^{n}\bigr) - u^{\,n-1}
 ```
 
-(`RhoLemma.lean`), which is `diagKernel` stripped down to a single real variable. Replacing the symmetric
-polynomials $`h_d`$ by their Beta-integral representation and substituting $`x = \ell/(\ell+s)`$ gives, for
-$`\ell > 0`$,
+(`RhoLemma.lean`). This is not pulled from nowhere: replacing the symmetric polynomials $`h_d`$ by their
+Beta-integral representation writes $`\mathrm{diagKernel}`$ as a finite $`\mathrm{Beta}(r,r)`$ integral
+(`gform_eq`), and its integrand — once a factor $`x^{n}`$ is cleared — is precisely
+$`\rho_{n,m}\bigl((qx+\ell(1-x))/x\bigr)`$ (`bracket_eq_rho`), which is what $`\rho`$ is defined to be.
+Substituting $`x = \ell/(\ell+s)`$ then gives, for $`\ell > 0`$,
 
 ```math
 \mathrm{diagKernel}(m,r,q,\ell) = C_{m,r}\,\ell^{\,n+r}\int_0^{\infty}
