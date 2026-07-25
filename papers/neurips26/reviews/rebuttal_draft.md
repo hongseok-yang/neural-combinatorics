@@ -146,6 +146,16 @@ For \(\mathbf{(P2)}\), the bipodal candidates have now led to a rigorous local t
 
 **Baselines and cost.** We extended the fixed-grid/SBM and SIREN baselines to [C7 INSTANCE], [H6 INSTANCE], and [P2 INSTANCE]: [INSERT RESULT]. The dominant per-iteration cost is approximately \(O(Nv(H)^2Ld^2+N|\mathcal S|e(H))\); training uses \(2^{12}\)-\(2^{16}\) samples, while \(2^{28}\) is only one-time final evaluation. Measured seconds/iteration and peak memory are [INSERT].
 
+## Omitted Details
+
+- Throughout the experiments, we ran each of hyperparameter configuration once, over two activations ($\sin$ and $\mathrm{GeLU}$) and learning rates $10^{-3}, 3 \times 10^{-4}, 10^{-4}, 3\times 10^{-5}$, total 8 configurations for each experiments.
+- It is true that we can't guarantee that the trained model is the global optimum. Their main goal is to find a good candidate for the global optimum, which can suggest the structure of the global optimum. With the help of our framework, after submission of the paper, we have proved three theorems and formalised these results. These theorems were proven with the help of ChatGPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8. As the reviewer guidline does not allow inclusion of link unless required, if the reviewer wants to see the formalised proof, we can provide the link in the discussion phase. The theorems are as follows:
+  + When a graph is odd cycle (as in experiments for Figure 3 & 4), its density can be lower bounded as 
+    $$ t(C_{2m+1}, W) \ge p^{2m+1} - p(1-p)^{2m}, \forall m \ge 3, \quad p = t(K_2, W)$$
+    and therefore the balanced $k$-partite complete graphon is optimiser for $p = 1 - 1/k$.
+  + When a graph is chordal (contains no induced cycle of length greater than 3), and all of its maximal cliques have the same size $r \ge 3$, the optimiser for the density minimisation (P1) is the balanced $r$-partite complete graphon when $p = 1 - 1/k$ for some integer $k \ge r$. This covers 17 unproven cases included in the exhaustive experiments (page 8).
+  + When a graph is $d$-regular, the optimiser for the large deviation problem (P2) is unique up to relabelling and bipodal in a nontrivial open neighborhood of the Lubetzky-Zhao phase boundary, except for the exceptional value $r = (d-1)/d$.
+
 ## Experiment priorities
 
 ### Priority 0: recover facts before launching jobs
