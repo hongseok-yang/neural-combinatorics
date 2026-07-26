@@ -5,8 +5,11 @@ import PureChordal.Regularization
 /-!
 # Entropy gluing for a pure clique tree
 
-This file applies the local Gibbs inequality to the normalized junction law.
-All densities are explicit functions; no conditional-probability API is used.
+This file proves the clique-tree gluing inequality `t(H,W) ∏ t_{s_i} ≥ t_r^m`.
+It builds the normalized junction densities, applies the local Gibbs inequality
+to them for strictly positive regularised kernels, and then removes the
+regularisation by letting `ε → 0` via the explicit continuity estimate.  All
+densities are explicit functions; no conditional-probability API is used.
 -/
 
 namespace PureChordal
@@ -22,48 +25,69 @@ variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
 
 namespace PureCliqueTreeDecomp
 
+/-! ### Normalized junction densities
+
+The gluing argument compares two probability laws with the local Gibbs
+inequality.  Each object below is either an `ℝ≥0∞`-valued weight/law (`…ENN`) or
+its real-valued `toReal` counterpart (`…Density`). -/
+
+/-- Total mass of the separator clique weight: `∫ κ_{S_i} = t(K_{|S_i|}, W)`. -/
 noncomputable def separatorMassENN
     (W : Graphon Ω μ) (i : Fin m) : ℝ≥0∞ :=
   ENNReal.ofReal (cliqueDensity (D.separator i).card W)
 
+/-- The clique weight `κ_{S_i}` of the parent separator of bag `i`. -/
 noncomputable def separatorWeightENN
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ≥0∞ :=
   cliqueWeightOnENN (D.separator i) W
 
+/-- The separator clique weight normalized to a probability law by its mass. -/
 noncomputable def normalizedSeparatorENN
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ≥0∞ :=
   fun x => (D.separatorMassENN W i)⁻¹ * D.separatorWeightENN W i x
 
+/-- The new-vertex marginal of bag `i`, normalized by the common clique mass. -/
 noncomputable def normalizedBagNewENN
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ≥0∞ :=
   fun x => (D.cliqueMassENN W)⁻¹ * D.bagNewMarginalENN W i x
 
+/-- The completed junction law reweighted at bag `i` by the ratio of its
+normalized separator law to its normalized new-vertex law.  This is the second
+comparison law feeding the Gibbs inequality for the separator factors. -/
 noncomputable def separatorTiltENN
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ≥0∞ :=
   fun x => D.partialJunctionENN W m x *
     ((D.normalizedBagNewENN W i x)⁻¹ *
       D.normalizedSeparatorENN W i x)
 
+/-- The graph weight normalized by its homomorphism density: the graph Gibbs
+law whose relative entropy against the junction law drives the bound. -/
 noncomputable def normalizedGraphENN
     [DecidableRel H.Adj] (W : Graphon Ω μ) : (V → Ω) → ℝ≥0∞ :=
   fun x => (ENNReal.ofReal (homDensity H W))⁻¹ *
     ENNReal.ofReal (graphWeight H W x)
 
+/-- Real-valued form of `normalizedGraphENN`. -/
 noncomputable def normalizedGraphDensity
     [DecidableRel H.Adj] (W : Graphon Ω μ) : (V → Ω) → ℝ :=
   fun x => (normalizedGraphENN (H := H) W x).toReal
 
+/-- Real-valued form of `separatorTiltENN`. -/
 noncomputable def separatorTiltDensity
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ :=
   fun x => (D.separatorTiltENN W i x).toReal
 
+/-- Real-valued form of `normalizedBagNewENN`. -/
 noncomputable def normalizedBagNewDensity
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ :=
   fun x => (D.normalizedBagNewENN W i x).toReal
 
+/-- Real-valued form of `normalizedSeparatorENN`. -/
 noncomputable def normalizedSeparatorDensity
     (W : Graphon Ω μ) (i : Fin m) : (V → Ω) → ℝ :=
   fun x => (D.normalizedSeparatorENN W i x).toReal
+
+/-! ### Measurability, positivity, and bounds of the densities -/
 
 lemma measurable_separatorWeightENN
     (W : Graphon Ω μ) (i : Fin m) :
@@ -659,6 +683,8 @@ theorem integral_separatorTiltDensity_eq_one
   rw [D.lintegral_separatorTiltENN_eq_one W hδpos hδ i]
   rfl
 
+/-! ### The Gibbs gluing inequality for positive regularised kernels -/
+
 theorem gibbs_junction_normalizedGraph_nonpos
     [DecidableRel H.Adj]
     (W : Graphon Ω μ) {δ : ℝ} (hδpos : 0 < δ)
@@ -969,6 +995,8 @@ theorem abs_prod_separatorDensity_regularize_sub_le
           abs_homDensity_regularize_sub_le
             (⊤ : SimpleGraph (Fin (D.separator i).card))
             W ε hε0 hε1
+
+/-! ### Removing the regularisation by letting `ε → 0` -/
 
 /-- Explicit continuity estimate for the full right side of clique-tree
 gluing under regularization. -/

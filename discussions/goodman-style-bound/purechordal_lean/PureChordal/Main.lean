@@ -1,5 +1,15 @@
 import PureChordal.ChromaticFactorization
 
+/-!
+# The pure-chordal graphon inequalities
+
+The two user-facing results for a chordal graph all of whose maximal cliques
+have size `r`: the chromatic-polynomial lower bound
+(`pureChordal_chromaticPolynomial_lower_bound`) and, at edge density `1 - 1/k`,
+the minimality of the balanced complete `k`-partite graphon
+(`pureChordal_balancedMultipartite_minimal`).
+-/
+
 namespace PureChordal
 
 open MeasureTheory
