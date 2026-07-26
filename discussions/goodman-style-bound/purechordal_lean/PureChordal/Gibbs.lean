@@ -6,6 +6,11 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 This is the only relative-entropy fact needed by the graphon-direct
 junction-tree argument.  It is proved pointwise from `log u ≤ u - 1`.
+
+The public entry points are `integral_mul_log_div_nonpos` (the bare inequality,
+assuming integrability of the logarithmic integrand) and the
+`*_of_exists_bounds` forms, which package the uniformly-positive-density case
+used by the entropy-gluing argument.
 -/
 
 open MeasureTheory
@@ -14,6 +19,9 @@ namespace PureChordal
 
 variable {X : Type*} [MeasurableSpace X] {ν : Measure X}
 
+/-- Gibbs' inequality in the form `∫ f · log (g / f) ≤ 0` for positive densities
+of equal total mass, given integrability of the logarithmic integrand.  This is
+the mathematical core; everything else supplies its hypotheses. -/
 lemma integral_mul_log_div_nonpos
     {f g : X → ℝ}
     (hf_int : Integrable f ν)
@@ -40,33 +48,58 @@ lemma integral_mul_log_div_nonpos
   rw [integral_sub hg_int hf_int, hg_one, hf_one, sub_self] at hle
   exact hle
 
-/-- A bounded measurable logarithmic integrand is automatically integrable on
-a finite measure space, which is the form used for uniformly positive graphon
-densities. -/
-lemma integral_mul_log_div_nonpos_of_bound
+/-- The pointwise bound underlying integrability and nonpositivity for
+uniformly two-sided-bounded densities: if `a ≤ u, v ≤ b` with `0 < a`, then
+`‖u · log (v / u)‖ ≤ b · max |log (a/b)| |log (b/a)|`. -/
+private lemma norm_mul_log_div_le
+    {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
+    {u v : ℝ} (hu_lower : a ≤ u) (hu_upper : u ≤ b)
+    (hv_lower : a ≤ v) (hv_upper : v ≤ b) :
+    ‖u * Real.log (v / u)‖ ≤ b * max |Real.log (a / b)| |Real.log (b / a)| := by
+  set C := max |Real.log (a / b)| |Real.log (b / a)| with hC
+  have hu : 0 < u := ha.trans_le hu_lower
+  have hv : 0 < v := ha.trans_le hv_lower
+  have hl : a / b ≤ v / u := by
+    apply (div_le_div_iff₀ hb hu).2
+    exact mul_le_mul hv_lower hu_upper hu.le hv.le
+  have hupper : v / u ≤ b / a := by
+    apply (div_le_div_iff₀ hu ha).2
+    exact mul_le_mul hv_upper hu_lower ha.le hb.le
+  have hlogl : Real.log (a / b) ≤ Real.log (v / u) :=
+    Real.log_le_log (div_pos ha hb) hl
+  have hlogu : Real.log (v / u) ≤ Real.log (b / a) :=
+    Real.log_le_log (div_pos hv hu) hupper
+  have habs : |Real.log (v / u)| ≤ C := by
+    rw [abs_le]
+    refine ⟨?_, ?_⟩
+    · calc
+        -C ≤ -|Real.log (a / b)| := neg_le_neg (le_max_left _ _)
+        _ ≤ Real.log (a / b) := neg_abs_le _
+        _ ≤ Real.log (v / u) := hlogl
+    · calc
+        Real.log (v / u) ≤ Real.log (b / a) := hlogu
+        _ ≤ |Real.log (b / a)| := le_abs_self _
+        _ ≤ C := le_max_right _ _
+  rw [Real.norm_eq_abs, abs_mul, abs_of_pos hu]
+  exact mul_le_mul hu_upper habs (abs_nonneg _) hb.le
+
+/-- The logarithmic integrand is integrable on a finite measure space once the
+densities have common positive lower and finite upper bounds. -/
+lemma integrable_mul_log_div_of_two_sided_bounds
     [IsFiniteMeasure ν]
     {f g : X → ℝ}
     (hf_meas : Measurable f) (hg_meas : Measurable g)
-    (hf_int : Integrable f ν) (hg_int : Integrable g ν)
-    (hf_pos : ∀ᵐ x ∂ν, 0 < f x)
-    (hg_pos : ∀ᵐ x ∂ν, 0 < g x)
-    (hf_one : ∫ x, f x ∂ν = 1)
-    (hg_one : ∫ x, g x ∂ν = 1)
-    (C : ℝ)
-    (hbound : ∀ x, ‖f x * Real.log (g x / f x)‖ ≤ C) :
-    ∫ x, f x * Real.log (g x / f x) ∂ν ≤ 0 := by
-  have hlog_meas :
-      Measurable (fun x => f x * Real.log (g x / f x)) :=
-    hf_meas.mul ((hg_meas.div hf_meas).log)
-  have hlog_int :
-      Integrable (fun x => f x * Real.log (g x / f x)) ν := by
-    exact (integrable_const C).mono'
-      hlog_meas.aestronglyMeasurable
-      (Filter.Eventually.of_forall hbound)
-  exact integral_mul_log_div_nonpos hf_int hg_int
-    hf_pos hg_pos hf_one hg_one hlog_int
+    {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
+    (hf_lower : ∀ x, a ≤ f x) (hg_lower : ∀ x, a ≤ g x)
+    (hf_upper : ∀ x, f x ≤ b) (hg_upper : ∀ x, g x ≤ b) :
+    Integrable (fun x => f x * Real.log (g x / f x)) ν :=
+  (integrable_const (b * max |Real.log (a / b)| |Real.log (b / a)|)).mono'
+    (hf_meas.mul ((hg_meas.div hf_meas).log)).aestronglyMeasurable
+    (Filter.Eventually.of_forall fun x =>
+      norm_mul_log_div_le ha hb (hf_lower x) (hf_upper x) (hg_lower x) (hg_upper x))
 
-/-- Gibbs with explicit common positive lower and finite upper bounds. -/
+/-- Gibbs with explicit common positive lower and finite upper bounds;
+integrability of the logarithmic integrand is automatic. -/
 lemma integral_mul_log_div_nonpos_of_two_sided_bounds
     [IsFiniteMeasure ν]
     {f g : X → ℝ}
@@ -77,52 +110,16 @@ lemma integral_mul_log_div_nonpos_of_two_sided_bounds
     {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
     (hf_lower : ∀ x, a ≤ f x) (hg_lower : ∀ x, a ≤ g x)
     (hf_upper : ∀ x, f x ≤ b) (hg_upper : ∀ x, g x ≤ b) :
-    ∫ x, f x * Real.log (g x / f x) ∂ν ≤ 0 := by
-  let C := max |Real.log (a / b)| |Real.log (b / a)|
-  have hbound :
-      ∀ x, ‖f x * Real.log (g x / f x)‖ ≤ b * C := by
-    intro x
-    have hfx : 0 < f x := ha.trans_le (hf_lower x)
-    have hgx : 0 < g x := ha.trans_le (hg_lower x)
-    have hl : a / b ≤ g x / f x := by
-      apply (div_le_div_iff₀ hb hfx).2
-      exact mul_le_mul (hg_lower x) (hf_upper x)
-        hfx.le hgx.le
-    have hu : g x / f x ≤ b / a := by
-      apply (div_le_div_iff₀ hfx ha).2
-      exact mul_le_mul (hg_upper x) (hf_lower x)
-        ha.le hb.le
-    have hlogl :
-        Real.log (a / b) ≤ Real.log (g x / f x) :=
-      Real.log_le_log (div_pos ha hb) hl
-    have hlogu :
-        Real.log (g x / f x) ≤ Real.log (b / a) :=
-      Real.log_le_log (div_pos hgx hfx) hu
-    have habs :
-        |Real.log (g x / f x)| ≤ C := by
-      rw [abs_le]
-      constructor
-      · calc
-          -C ≤ -|Real.log (a / b)| :=
-            neg_le_neg (le_max_left _ _)
-          _ ≤ Real.log (a / b) := neg_abs_le _
-          _ ≤ Real.log (g x / f x) := hlogl
-      · calc
-          Real.log (g x / f x) ≤ Real.log (b / a) := hlogu
-          _ ≤ |Real.log (b / a)| := le_abs_self _
-          _ ≤ C := le_max_right _ _
-    rw [Real.norm_eq_abs, abs_mul, abs_of_pos hfx]
-    exact mul_le_mul (hf_upper x) habs (abs_nonneg _) hb.le
-  apply integral_mul_log_div_nonpos_of_bound
-    hf_meas hg_meas hf_int hg_int
-  · exact Filter.Eventually.of_forall fun x =>
-      ha.trans_le (hf_lower x)
-  · exact Filter.Eventually.of_forall fun x =>
-      ha.trans_le (hg_lower x)
-  · exact hf_one
-  · exact hg_one
-  · exact hbound
+    ∫ x, f x * Real.log (g x / f x) ∂ν ≤ 0 :=
+  integral_mul_log_div_nonpos hf_int hg_int
+    (Filter.Eventually.of_forall fun x => ha.trans_le (hf_lower x))
+    (Filter.Eventually.of_forall fun x => ha.trans_le (hg_lower x))
+    hf_one hg_one
+    (integrable_mul_log_div_of_two_sided_bounds hf_meas hg_meas ha hb
+      hf_lower hg_lower hf_upper hg_upper)
 
+/-- Gibbs nonpositivity from existence of common positive lower and finite upper
+bounds; this is the form the entropy-gluing argument applies. -/
 lemma integral_mul_log_div_nonpos_of_exists_bounds
     [IsFiniteMeasure ν]
     {f g : X → ℝ}
@@ -147,53 +144,8 @@ lemma integral_mul_log_div_nonpos_of_exists_bounds
   · exact fun x => (hfhi x).trans (le_max_left bf bg)
   · exact fun x => (hghi x).trans (le_max_right bf bg)
 
-lemma integrable_mul_log_div_of_two_sided_bounds
-    [IsFiniteMeasure ν]
-    {f g : X → ℝ}
-    (hf_meas : Measurable f) (hg_meas : Measurable g)
-    {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
-    (hf_lower : ∀ x, a ≤ f x) (hg_lower : ∀ x, a ≤ g x)
-    (hf_upper : ∀ x, f x ≤ b) (hg_upper : ∀ x, g x ≤ b) :
-    Integrable (fun x => f x * Real.log (g x / f x)) ν := by
-  let C := max |Real.log (a / b)| |Real.log (b / a)|
-  have hbound :
-      ∀ x, ‖f x * Real.log (g x / f x)‖ ≤ b * C := by
-    intro x
-    have hfx : 0 < f x := ha.trans_le (hf_lower x)
-    have hgx : 0 < g x := ha.trans_le (hg_lower x)
-    have hl : a / b ≤ g x / f x := by
-      apply (div_le_div_iff₀ hb hfx).2
-      exact mul_le_mul (hg_lower x) (hf_upper x)
-        hfx.le hgx.le
-    have hu : g x / f x ≤ b / a := by
-      apply (div_le_div_iff₀ hfx ha).2
-      exact mul_le_mul (hg_upper x) (hf_lower x)
-        ha.le hb.le
-    have hlogl :
-        Real.log (a / b) ≤ Real.log (g x / f x) :=
-      Real.log_le_log (div_pos ha hb) hl
-    have hlogu :
-        Real.log (g x / f x) ≤ Real.log (b / a) :=
-      Real.log_le_log (div_pos hgx hfx) hu
-    have habs :
-        |Real.log (g x / f x)| ≤ C := by
-      rw [abs_le]
-      constructor
-      · calc
-          -C ≤ -|Real.log (a / b)| :=
-            neg_le_neg (le_max_left _ _)
-          _ ≤ Real.log (a / b) := neg_abs_le _
-          _ ≤ Real.log (g x / f x) := hlogl
-      · calc
-          Real.log (g x / f x) ≤ Real.log (b / a) := hlogu
-          _ ≤ |Real.log (b / a)| := le_abs_self _
-          _ ≤ C := le_max_right _ _
-    rw [Real.norm_eq_abs, abs_mul, abs_of_pos hfx]
-    exact mul_le_mul (hf_upper x) habs (abs_nonneg _) hb.le
-  exact (integrable_const (b * C)).mono'
-    (hf_meas.mul ((hg_meas.div hf_meas).log)).aestronglyMeasurable
-    (Filter.Eventually.of_forall hbound)
-
+/-- Integrability of the logarithmic integrand from existence of common positive
+lower and finite upper bounds. -/
 lemma integrable_mul_log_div_of_exists_bounds
     [IsFiniteMeasure ν]
     {f g : X → ℝ}
