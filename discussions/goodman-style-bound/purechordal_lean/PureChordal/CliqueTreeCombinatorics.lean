@@ -100,41 +100,16 @@ theorem biUnion_pairsIn_bag :
         exact ⟨i, Finset.mem_univ _, mk_mem_pairsIn.mpr
           ⟨hadj.ne, hui, hvi⟩⟩
 
-private def bagIndicesBefore
-    (D : PureCliqueTreeDecomp H r m) (n : ℕ) : Finset (Fin m) :=
-  Finset.univ.filter fun i => i.val < n
-
 private def accumulatedPairs
     (D : PureCliqueTreeDecomp H r m) (n : ℕ) : Finset (Sym2 V) :=
-  (D.bagIndicesBefore n).biUnion fun i => pairsIn (D.bag i)
-
-private lemma bagIndicesBefore_succ
-    {n : ℕ} (hn : n < m) :
-    D.bagIndicesBefore (n + 1) =
-      insert (⟨n, hn⟩ : Fin m) (D.bagIndicesBefore n) := by
-  ext j
-  simp only [bagIndicesBefore, Finset.mem_filter, Finset.mem_univ, true_and,
-    Finset.mem_insert]
-  constructor
-  · intro hj
-    by_cases heq : j.val = n
-    · exact Or.inl (Fin.ext heq)
-    · exact Or.inr (by omega)
-  · rintro (hji | hj)
-    · subst j
-      simp
-    · omega
-
-private lemma index_not_mem_before {n : ℕ} (hn : n < m) :
-    (⟨n, hn⟩ : Fin m) ∉ D.bagIndicesBefore n := by
-  simp [bagIndicesBefore]
+  (D.bagIndicesLT n).biUnion fun i => pairsIn (D.bag i)
 
 private lemma accumulatedPairs_succ
     {n : ℕ} (hn : n < m) :
     D.accumulatedPairs (n + 1) =
       pairsIn (D.bag ⟨n, hn⟩) ∪ D.accumulatedPairs n := by
   unfold accumulatedPairs
-  rw [D.bagIndicesBefore_succ hn]
+  rw [D.bagIndicesLT_succ hn]
   simp
 
 private lemma previousPairs_eq_accumulated
@@ -145,23 +120,23 @@ private lemma previousPairs_eq_accumulated
 private theorem prod_pairsIn_bags_before
     {M : Type*} [CommMonoid M] (f : Sym2 V → M)
     (n : ℕ) (hn : n ≤ m) :
-    (∏ i ∈ D.bagIndicesBefore n,
+    (∏ i ∈ D.bagIndicesLT n,
         ∏ e ∈ pairsIn (D.bag i), f e) =
       (∏ e ∈ D.accumulatedPairs n, f e) *
-        ∏ i ∈ D.bagIndicesBefore n,
+        ∏ i ∈ D.bagIndicesLT n,
           ∏ e ∈ pairsIn (D.separator i), f e := by
   induction n with
   | zero =>
-      simp [bagIndicesBefore, accumulatedPairs]
+      simp [bagIndicesLT, accumulatedPairs]
   | succ n ih =>
       have hnlt : n < m := by omega
       let i : Fin m := ⟨n, hnlt⟩
       have hindex :
-          D.bagIndicesBefore (n + 1) =
-            insert i (D.bagIndicesBefore n) :=
-        D.bagIndicesBefore_succ hnlt
-      have hinot : i ∉ D.bagIndicesBefore n :=
-        D.index_not_mem_before hnlt
+          D.bagIndicesLT (n + 1) =
+            insert i (D.bagIndicesLT n) :=
+        D.bagIndicesLT_succ hnlt
+      have hinot : i ∉ D.bagIndicesLT n :=
+        D.index_not_mem_bagIndicesLT hnlt
       have hacc :
           D.accumulatedPairs (n + 1) =
             pairsIn (D.bag i) ∪ D.accumulatedPairs n :=
@@ -181,22 +156,22 @@ private theorem prod_pairsIn_bags_before
       calc
         (∏ e ∈ pairsIn (D.bag i), f e) *
             ((∏ e ∈ D.accumulatedPairs n, f e) *
-              ∏ j ∈ D.bagIndicesBefore n,
+              ∏ j ∈ D.bagIndicesLT n,
                 ∏ e ∈ pairsIn (D.separator j), f e) =
             ((∏ e ∈ D.accumulatedPairs n, f e) *
               ∏ e ∈ pairsIn (D.bag i), f e) *
-              ∏ j ∈ D.bagIndicesBefore n,
+              ∏ j ∈ D.bagIndicesLT n,
                 ∏ e ∈ pairsIn (D.separator j), f e := by
           ac_rfl
         _ = ((∏ e ∈ pairsIn (D.bag i) ∪ D.accumulatedPairs n, f e) *
               ∏ e ∈ pairsIn (D.separator i), f e) *
-              ∏ j ∈ D.bagIndicesBefore n,
+              ∏ j ∈ D.bagIndicesLT n,
                 ∏ e ∈ pairsIn (D.separator j), f e := by
           rw [hui]
           ac_rfl
         _ = (∏ e ∈ pairsIn (D.bag i) ∪ D.accumulatedPairs n, f e) *
               ((∏ e ∈ pairsIn (D.separator i), f e) *
-                ∏ j ∈ D.bagIndicesBefore n,
+                ∏ j ∈ D.bagIndicesLT n,
                   ∏ e ∈ pairsIn (D.separator j), f e) := by
           ac_rfl
 
@@ -210,9 +185,9 @@ theorem prod_pairsIn_bags
   have h :=
     D.prod_pairsIn_bags_before f m (le_refl m)
   have hindex :
-      D.bagIndicesBefore m = (Finset.univ : Finset (Fin m)) := by
+      D.bagIndicesLT m = (Finset.univ : Finset (Fin m)) := by
     ext i
-    simp [bagIndicesBefore, i.isLt]
+    simp [bagIndicesLT, i.isLt]
   have hacc :
       D.accumulatedPairs m = H.edgeFinset := by
     unfold accumulatedPairs
