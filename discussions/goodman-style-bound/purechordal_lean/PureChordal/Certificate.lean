@@ -117,10 +117,6 @@ lemma sepCard_lt {i : Fin m} (hi : i ≠ D.root) :
   rw [← hip] at hlt
   exact (Nat.lt_irrefl _ hlt)
 
-lemma sepCard_le_pred {i : Fin m} (hi : i ≠ D.root) :
-    D.sepCard i ≤ r - 1 :=
-  Nat.le_pred_of_lt (D.sepCard_lt hi)
-
 @[simp] lemma previousVertices_root :
     D.previousVertices D.root = ∅ := by
   ext v
@@ -279,18 +275,6 @@ lemma card_newVertices (i : Fin m) :
   rw [newVertices, Finset.card_sdiff,
     Finset.inter_eq_left.mpr (D.separator_subset_bag i), D.bag_card]
   rfl
-
-/-- Vertex-count identity obtained from the new-vertex partition. -/
-theorem card_vertices :
-    Fintype.card V =
-      m * r - ∑ i : Fin m, D.sepCard i := by
-  have hcard :=
-    Finset.card_biUnion D.newVertices_pairwiseDisjoint
-  rw [D.biUnion_newVertices] at hcard
-  simp_rw [D.card_newVertices] at hcard
-  rw [Finset.sum_tsub_distrib Finset.univ
-    (fun i _ => D.sepCard_le i)] at hcard
-  simpa [Nat.mul_comm] using hcard
 
 end PureCliqueTreeDecomp
 

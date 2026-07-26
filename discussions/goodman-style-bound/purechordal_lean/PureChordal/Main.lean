@@ -9,12 +9,12 @@ variable {H : SimpleGraph V} {r : ℕ}
 variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
   [IsProbabilityMeasure μ]
 
-/-- A connected chordal graph whose maximal cliques all have size `r`
-satisfies the Goodman-style chromatic-polynomial graphon bound. -/
+/-- A chordal graph whose maximal cliques all have size `r` satisfies the
+Goodman-style chromatic-polynomial graphon bound.  (Connectivity is not needed:
+the certificate factors over connected components.) -/
 theorem pureChordal_chromaticPolynomial_lower_bound
     [DecidableRel H.Adj]
     (W : Graphon Ω μ)
-    (hconnected : H.Connected)
     (hchordal : IsChordal H)
     (hpure : HasPureMaximalCliques H r)
     (hr : 3 ≤ r)

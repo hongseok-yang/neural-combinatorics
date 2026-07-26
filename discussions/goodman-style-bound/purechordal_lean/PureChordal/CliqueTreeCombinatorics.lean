@@ -22,14 +22,6 @@ lemma mk_mem_pairsIn {A : Finset V} {u v : V} :
     s(u, v) ∈ pairsIn A ↔ u ≠ v ∧ u ∈ A ∧ v ∈ A := by
   simp [pairsIn, SimpleGraph.mem_edgeFinset, Sym2.mem_iff, and_assoc]
 
-lemma pairsIn_mono {A B : Finset V} (hAB : A ⊆ B) :
-    pairsIn A ⊆ pairsIn B := by
-  intro e he
-  induction e using Sym2.inductionOn with
-  | _ u v =>
-      rw [mk_mem_pairsIn] at he ⊢
-      exact ⟨he.1, hAB he.2.1, hAB he.2.2⟩
-
 namespace PureCliqueTreeDecomp
 
 variable {H : SimpleGraph V} [DecidableRel H.Adj] {r m : ℕ}

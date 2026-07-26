@@ -799,7 +799,6 @@ theorem pureChordal_balancedMultipartite_minimal
     [DecidableRel H.Adj]
     (k : ℕ) [NeZero k]
     (W : Graphon Ω μ)
-    (hconnected : H.Connected)
     (hchordal : IsChordal H)
     (hpure : HasPureMaximalCliques H r)
     (hr : 3 ≤ r)

@@ -155,25 +155,6 @@ theorem cliquePoly_pow_le_homDensity_mul_separatorPoly
       _ = S * (homDensity H W * A) := by ring
   exact le_of_mul_le_mul_left hmul hSpos
 
-/-- Division form of the certificate theorem.  Every separator polynomial is
-strictly positive because its size is strictly below `r` (and the root
-separator has size zero). -/
-theorem homDensity_ge_cliquePoly_quotient
-    [DecidableRel H.Adj]
-    (W : Graphon Ω μ) (hr : 3 ≤ r)
-    (hp : 1 - 1 / (((r - 1 : ℕ) : ℝ)) ≤ cliqueDensity 2 W) :
-    (cliquePoly r (cliqueDensity 2 W)) ^ m /
-        (∏ i : Fin m,
-          cliquePoly (D.separator i).card (cliqueDensity 2 W)) ≤
-      homDensity H W := by
-  have hden :
-      0 < ∏ i : Fin m,
-        cliquePoly (D.separator i).card (cliqueDensity 2 W) :=
-    Finset.prod_pos fun i _ => D.separatorCliquePoly_pos hr hp i
-  exact (div_le_iff₀ hden).2 <| by
-    simpa [mul_comm] using
-      D.cliquePoly_pow_le_homDensity_mul_separatorPoly W hr hp
-
 /-- The requested polynomial lower bound in a form with no division. -/
 theorem certificateBound_le_homDensity
     [DecidableRel H.Adj]
