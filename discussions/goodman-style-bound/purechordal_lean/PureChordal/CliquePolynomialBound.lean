@@ -24,61 +24,48 @@ def cliqueStepFactor (j : ℕ) (p : ℝ) : ℝ :=
     cliqueStepFactor 2 p = p := by
   simp [cliqueStepFactor]
 
-lemma cliqueStepFactor_nonneg
-    {r j : ℕ} {p : ℝ}
-    (hr : 3 ≤ r) (hj : j ≤ r)
-    (hp : 1 - 1 / (((r - 1 : ℕ) : ℝ)) ≤ p) :
-    0 ≤ cliqueStepFactor j p := by
-  let A : ℝ := ((j - 1 : ℕ) : ℝ)
-  let R : ℝ := ((r - 1 : ℕ) : ℝ)
-  have hRpos : 0 < R := by
-    dsimp [R]
-    exact_mod_cast (show 0 < r - 1 by omega)
-  have hAR : A ≤ R := by
-    dsimp [A, R]
-    exact_mod_cast Nat.sub_le_sub_right hj 1
-  have hA0 : 0 ≤ A := by positivity
-  have hq : 1 - p ≤ 1 / R := by
-    dsimp [R]
-    linarith
-  have hmul : A * (1 - p) ≤ A * (1 / R) :=
-    mul_le_mul_of_nonneg_left hq hA0
-  have htail : A * (1 / R) ≤ 1 := by
-    calc
-      A * (1 / R) ≤ R * (1 / R) :=
-        mul_le_mul_of_nonneg_right hAR (by positivity)
-      _ = 1 := by field_simp
-  dsimp [cliqueStepFactor]
-  dsimp [A] at hmul htail
-  linarith
-
 lemma cliqueStepFactor_pos_of_lt
     {r j : ℕ} {p : ℝ}
     (hr : 3 ≤ r) (hj : j < r)
     (hp : 1 - 1 / (((r - 1 : ℕ) : ℝ)) ≤ p) :
     0 < cliqueStepFactor j p := by
-  let A : ℝ := ((j - 1 : ℕ) : ℝ)
-  let R : ℝ := ((r - 1 : ℕ) : ℝ)
-  have hRpos : 0 < R := by
-    dsimp [R]
+  have hRpos : 0 < ((r - 1 : ℕ) : ℝ) := by
     exact_mod_cast (show 0 < r - 1 by omega)
-  have hAR : A < R := by
-    dsimp [A, R]
+  have hAR : ((j - 1 : ℕ) : ℝ) < ((r - 1 : ℕ) : ℝ) := by
     exact_mod_cast (show j - 1 < r - 1 by omega)
-  have hA0 : 0 ≤ A := by positivity
-  have hq : 1 - p ≤ 1 / R := by
-    dsimp [R]
-    linarith
-  have hmul : A * (1 - p) ≤ A * (1 / R) :=
-    mul_le_mul_of_nonneg_left hq hA0
-  have htail : A * (1 / R) < 1 := by
+  have hq : 1 - p ≤ 1 / ((r - 1 : ℕ) : ℝ) := by linarith
+  have htail : ((j - 1 : ℕ) : ℝ) * (1 - p) < 1 := by
     calc
-      A * (1 / R) < R * (1 / R) :=
-        mul_lt_mul_of_pos_right hAR (by positivity)
-      _ = 1 := by field_simp
+      ((j - 1 : ℕ) : ℝ) * (1 - p)
+          ≤ ((j - 1 : ℕ) : ℝ) * (1 / ((r - 1 : ℕ) : ℝ)) :=
+        mul_le_mul_of_nonneg_left hq (Nat.cast_nonneg _)
+      _ < ((r - 1 : ℕ) : ℝ) * (1 / ((r - 1 : ℕ) : ℝ)) :=
+        mul_lt_mul_of_pos_right hAR (one_div_pos.mpr hRpos)
+      _ = 1 := by rw [mul_one_div, div_self hRpos.ne']
   dsimp [cliqueStepFactor]
-  dsimp [A] at hmul htail
   linarith
+
+/-- Nonnegativity holds up to and including the boundary `j = r`, where the
+step factor is exactly zero at the threshold density. -/
+lemma cliqueStepFactor_nonneg
+    {r j : ℕ} {p : ℝ}
+    (hr : 3 ≤ r) (hj : j ≤ r)
+    (hp : 1 - 1 / (((r - 1 : ℕ) : ℝ)) ≤ p) :
+    0 ≤ cliqueStepFactor j p := by
+  rcases hj.lt_or_eq with hlt | heq
+  · exact (cliqueStepFactor_pos_of_lt hr hlt hp).le
+  · have hRpos : 0 < ((r - 1 : ℕ) : ℝ) := by
+      exact_mod_cast (show 0 < r - 1 by omega)
+    have hq : 1 - p ≤ 1 / ((r - 1 : ℕ) : ℝ) := by linarith
+    have htail : ((j - 1 : ℕ) : ℝ) * (1 - p) ≤ 1 := by
+      rw [show ((j - 1 : ℕ) : ℝ) = ((r - 1 : ℕ) : ℝ) by rw [heq]]
+      calc
+        ((r - 1 : ℕ) : ℝ) * (1 - p)
+            ≤ ((r - 1 : ℕ) : ℝ) * (1 / ((r - 1 : ℕ) : ℝ)) :=
+          mul_le_mul_of_nonneg_left hq (Nat.cast_nonneg _)
+        _ = 1 := by rw [mul_one_div, div_self hRpos.ne']
+    dsimp [cliqueStepFactor]
+    linarith
 
 private theorem cliqueDensity_step_lower_and_pos
     (W : Graphon Ω μ) {r : ℕ} (hr : 3 ≤ r)
