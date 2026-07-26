@@ -1,5 +1,6 @@
-import PureChordal.CliqueMarginals
+import Mathlib.MeasureTheory.Integral.Marginal
 import Mathlib.MeasureTheory.Integral.Lebesgue.Add
+import Mathlib.Tactic
 
 /-!
 # Algebra for finite-coordinate marginals

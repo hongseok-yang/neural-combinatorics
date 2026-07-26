@@ -1,4 +1,4 @@
-import PureChordal.MarginalAlgebra
+import PureChordal.CliqueMarginals
 
 /-!
 # The normalized junction-tree density

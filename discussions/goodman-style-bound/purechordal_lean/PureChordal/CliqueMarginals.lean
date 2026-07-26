@@ -1,5 +1,6 @@
 import PureChordal.CliqueTreeCombinatorics
 import PureChordal.Relabeling
+import PureChordal.MarginalAlgebra
 import Mathlib.MeasureTheory.Integral.Marginal
 import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.Logic.Equiv.Fintype
