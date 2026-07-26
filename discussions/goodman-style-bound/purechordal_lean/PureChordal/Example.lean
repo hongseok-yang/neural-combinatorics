@@ -1,37 +1,19 @@
 import PureChordal.Main
-import PureChordal.Examples.Diamond
-import PureChordal.Examples.GoldnerHarary
+import PureChordal.Examples.N4
+import PureChordal.Examples.N5
+import PureChordal.Examples.N6
 
-namespace PureChordal
+/-!
+# Worked examples: `k`-partite optimality for small pure chordal graphs
 
-open MeasureTheory
+This module collects certificates and `k`-partite optimality theorems for all
+`17` non-clique pure chordal graphs on at most six vertices (`1` on four
+vertices, `4` on five, `12` on six; the complete graphs `Kᵣ` are excluded).
+They are grouped by vertex count in `Examples/N4`, `Examples/N5`, and
+`Examples/N6`.
 
-/-- The diamond bound `t(K₄-e,W) ≥ p(2p-1)²` for `p ≥ 1/2`. -/
-theorem diamond_homDensity_lower_bound
-    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ]
-    (W : Graphon Ω μ)
-    (hp : (1 / 2 : ℝ) ≤ cliqueDensity 2 W) :
-    cliqueDensity 2 W * (2 * cliqueDensity 2 W - 1) ^ 2 ≤
-      homDensity diamondGraph W := by
-  rw [← diamond_certificateBound]
-  apply diamondDecomp.certificateBound_le_homDensity W (by omega)
-  norm_num
-  exact hp
-
-/-- The Goldner--Harary bound
-`t(GH,W) ≥ p(2p-1)(3p-2)⁸` for `p ≥ 2/3`. -/
-theorem goldnerHarary_homDensity_lower_bound
-    {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-    [IsProbabilityMeasure μ]
-    (W : Graphon Ω μ)
-    (hp : (2 / 3 : ℝ) ≤ cliqueDensity 2 W) :
-    cliqueDensity 2 W * (2 * cliqueDensity 2 W - 1) *
-        (3 * cliqueDensity 2 W - 2) ^ 8 ≤
-      homDensity goldnerHararyGraph W := by
-  rw [← goldnerHarary_certificateBound]
-  apply goldnerHararyDecomp.certificateBound_le_homDensity W (by omega)
-  norm_num
-  exact hp
-
-end PureChordal
+Each graph is named `G<n>_<i>` and lives in its own namespace
+`PureChordal.Examples.G<n>_<i>`, exhibiting a `PureCliqueTreeDecomp` and deriving
+`optimality` from `PureCliqueTreeDecomp.balancedMultipartite_minimal` — so no
+chordality or maximal-clique reasoning is used, only the explicit certificate.
+-/
