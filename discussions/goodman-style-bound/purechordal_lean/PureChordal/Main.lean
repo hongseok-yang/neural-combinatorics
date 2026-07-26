@@ -52,27 +52,7 @@ theorem pureChordal_balancedMultipartite_minimal
     (hrk : r ≤ k)
     (hedge :
       cliqueDensity 2 W = 1 - 1 / (k : ℝ)) :
-    homDensity H (balancedMultipartiteGraphon k) ≤ homDensity H W := by
-  let D := hchordal.pureDecomp hpure
-  have hrsPos : 0 < (((r - 1 : ℕ) : ℝ)) := by
-    exact_mod_cast (show 0 < r - 1 by omega)
-  have hrsLeK : ((r - 1 : ℕ) : ℝ) ≤ (k : ℝ) := by
-    exact_mod_cast (show r - 1 ≤ k by omega)
-  have hinv :
-      1 / (k : ℝ) ≤ 1 / (((r - 1 : ℕ) : ℝ)) :=
-    one_div_le_one_div_of_le hrsPos hrsLeK
-  have hthreshold :
-      1 - 1 / (((r - 1 : ℕ) : ℝ)) ≤ cliqueDensity 2 W := by
-    rw [hedge]
-    linarith
-  calc
-    homDensity H (balancedMultipartiteGraphon k) =
-        D.certificateBound
-          (cliqueDensity 2 (balancedMultipartiteGraphon k)) :=
-      (D.certificateBound_balancedMultipartite k).symm
-    _ = D.certificateBound (cliqueDensity 2 W) := by
-      rw [edgeDensity_balancedMultipartite, hedge]
-    _ ≤ homDensity H W :=
-      D.certificateBound_le_homDensity W hr hthreshold
+    homDensity H (balancedMultipartiteGraphon k) ≤ homDensity H W :=
+  (hchordal.pureDecomp hpure).balancedMultipartite_minimal k W hr hrk hedge
 
 end PureChordal
