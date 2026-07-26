@@ -160,21 +160,6 @@ lemma updateInvariant_lmarginal
   intro i hi
   simp [Function.updateFinset, hi]
 
-lemma UpdateInvariant.mul {T : Finset I} {f g : (I → Ω) → ℝ≥0∞}
-    (hf : UpdateInvariant T f) (hg : UpdateInvariant T g) :
-    UpdateInvariant T (fun x => f x * g x) := by
-  intro x y
-  change f (Function.updateFinset x T y) *
-      g (Function.updateFinset x T y) = f x * g x
-  rw [hf x y, hg x y]
-
-lemma UpdateInvariant.inv {T : Finset I} {f : (I → Ω) → ℝ≥0∞}
-    (hf : UpdateInvariant T f) :
-    UpdateInvariant T (fun x => (f x)⁻¹) := by
-  intro x y
-  change (f (Function.updateFinset x T y))⁻¹ = (f x)⁻¹
-  rw [hf x y]
-
 lemma lmarginal_mul_of_left_updateInvariant
     (T : Finset I) {f g : (I → Ω) → ℝ≥0∞}
     (hf : Measurable f) (hg : Measurable g)
@@ -333,63 +318,5 @@ theorem lintegral_mul_eq_of_lmarginal_eq
         ∫⁻ x, g x * k x ∂Measure.pi (fun _ : I => μ)) := by
     simpa only [lmarginal_univ] using hfull
   exact congrFun hconstants x₀
-
-/-- Real-integral form of `lintegral_mul_eq_of_lmarginal_eq` for a
-nonnegative test function.  Finiteness is stated explicitly so the lemma can
-also be used with logarithmic test functions after adding a constant. -/
-theorem integral_toReal_mul_eq_of_lmarginal_eq
-    {A : Finset I} {f g : (I → Ω) → ℝ≥0∞} {φ : (I → Ω) → ℝ}
-    (x₀ : I → Ω)
-    (hfmeas : Measurable f) (hgmeas : Measurable g)
-    (hφmeas : Measurable φ) (hφnonneg : ∀ x, 0 ≤ φ x)
-    (hφdep : ∀ x y, (∀ i ∈ A, x i = y i) → φ x = φ y)
-    (hmarg :
-      lmarginal (fun _ : I => μ) (Finset.univ \ A) f =
-        lmarginal (fun _ : I => μ) (Finset.univ \ A) g)
-    (hf_top :
-      ∫⁻ x, f x * ENNReal.ofReal (φ x)
-          ∂Measure.pi (fun _ : I => μ) ≠ ∞)
-    (hg_top :
-      ∫⁻ x, g x * ENNReal.ofReal (φ x)
-          ∂Measure.pi (fun _ : I => μ) ≠ ∞) :
-    ∫ x, (f x).toReal * φ x
-        ∂Measure.pi (fun _ : I => μ) =
-      ∫ x, (g x).toReal * φ x
-        ∂Measure.pi (fun _ : I => μ) := by
-  let k : (I → Ω) → ℝ≥0∞ := fun x => ENNReal.ofReal (φ x)
-  have hkmeas : Measurable k := hφmeas.ennreal_ofReal
-  have hkdep : FinsetDependsOn A k := by
-    intro x y hxy
-    exact congrArg ENNReal.ofReal (hφdep x y hxy)
-  have hlin :
-      ∫⁻ x, f x * k x ∂Measure.pi (fun _ : I => μ) =
-        ∫⁻ x, g x * k x ∂Measure.pi (fun _ : I => μ) :=
-    lintegral_mul_eq_of_lmarginal_eq x₀ hfmeas hgmeas
-      hkmeas hkdep hmarg
-  calc
-    ∫ x, (f x).toReal * φ x
-        ∂Measure.pi (fun _ : I => μ) =
-        ∫ x, (f x * k x).toReal
-          ∂Measure.pi (fun _ : I => μ) := by
-      apply integral_congr_ae
-      filter_upwards [] with x
-      simp [k, ENNReal.toReal_mul,
-        ENNReal.toReal_ofReal (hφnonneg x)]
-    _ = (∫⁻ x, f x * k x
-          ∂Measure.pi (fun _ : I => μ)).toReal := by
-      rw [integral_toReal (hfmeas.mul hkmeas).aemeasurable
-        (ae_lt_top (hfmeas.mul hkmeas) hf_top)]
-    _ = (∫⁻ x, g x * k x
-          ∂Measure.pi (fun _ : I => μ)).toReal := by rw [hlin]
-    _ = ∫ x, (g x * k x).toReal
-          ∂Measure.pi (fun _ : I => μ) := by
-      rw [integral_toReal (hgmeas.mul hkmeas).aemeasurable
-        (ae_lt_top (hgmeas.mul hkmeas) hg_top)]
-    _ = ∫ x, (g x).toReal * φ x
-          ∂Measure.pi (fun _ : I => μ) := by
-      apply integral_congr_ae
-      filter_upwards [] with x
-      simp [k, ENNReal.toReal_mul,
-        ENNReal.toReal_ofReal (hφnonneg x)]
 
 end PureChordal

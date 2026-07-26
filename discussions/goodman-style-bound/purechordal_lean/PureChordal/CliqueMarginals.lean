@@ -117,15 +117,6 @@ lemma finsetPermFixing_map_common
     refine Finset.mem_map.mpr ⟨v, hv, ?_⟩
     exact finsetPermFixing_apply_of_mem hSA hSB hcard hv
 
-lemma finsetPermFixing_map_diff
-    {S A B : Finset V} (hSA : S ⊆ A) (hSB : S ⊆ B)
-    (hcard : A.card = B.card) :
-    (A \ S).map (finsetPermFixing hSA hSB hcard).toEmbedding =
-      B \ S := by
-  classical
-  rw [Finset.map_sdiff, finsetPermFixing_map_left hSA hSB hcard,
-    finsetPermFixing_map_common hSA hSB hcard]
-
 lemma finsetPermFixing_map_compl
     {S A B : Finset V} (hSA : S ⊆ A) (hSB : S ⊆ B)
     (hcard : A.card = B.card) :

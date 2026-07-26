@@ -103,16 +103,6 @@ lemma measurable_separatorTiltDensity
     Measurable (D.separatorTiltDensity W i) :=
   (D.measurable_separatorTiltENN W i).ennreal_toReal
 
-lemma measurable_normalizedBagNewDensity
-    (W : Graphon Ω μ) (i : Fin m) :
-    Measurable (D.normalizedBagNewDensity W i) :=
-  (D.measurable_normalizedBagNewENN W i).ennreal_toReal
-
-lemma measurable_normalizedSeparatorDensity
-    (W : Graphon Ω μ) (i : Fin m) :
-    Measurable (D.normalizedSeparatorDensity W i) :=
-  (D.measurable_normalizedSeparatorENN W i).ennreal_toReal
-
 lemma normalizedBagNewENN_dependsOn
     (W : Graphon Ω μ) (i : Fin m) :
     FinsetDependsOn (D.separator i) (D.normalizedBagNewENN W i) :=
