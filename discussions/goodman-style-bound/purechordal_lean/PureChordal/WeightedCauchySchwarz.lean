@@ -17,6 +17,9 @@ open MeasureTheory
 
 namespace PureChordal
 
+/-- Weighted integral Cauchy--Schwarz: `(∫ A η)² ≤ (∫ A)(∫ A η²)` for a
+nonnegative integrable weight `A`.  Proved directly by integrating `A (η - c)²`,
+avoiding square roots of graphon products. -/
 theorem integral_mul_sq_le_integral_mul_integral_mul_sq
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
     {A η : α → ℝ}

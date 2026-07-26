@@ -93,6 +93,9 @@ theorem graph_edge_cube_inequality
     (sum_incidenceFinset_eq_two_mul_sum_edges G)
     a ha0 ha1
 
+/-- The integrated cube inequality: the pointwise graph cube inequality averaged
+over the assignment measure, stated with homomorphism densities of the
+edge-deleted and vertex-deleted graphs.  No clique symmetry is used. -/
 theorem integrated_graph_edge_cube_inequality
     {V : Type*} [Fintype V] [DecidableEq V]
     (G : SimpleGraph V) [DecidableRel G.Adj]

@@ -42,6 +42,7 @@ lemma graphWeight_iso (W : Graphon Ω μ) (φ : H ≃g H') (x : V' → Ω) :
   intro e
   exact edgeValue_iso W φ x e.1
 
+/-- Homomorphism density is invariant under graph isomorphism. -/
 theorem homDensity_iso (W : Graphon Ω μ) (φ : H ≃g H') :
     homDensity H W = homDensity H' W := by
   let q : (V' → Ω) ≃ᵐ (V → Ω) :=

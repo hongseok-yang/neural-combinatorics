@@ -17,6 +17,9 @@ open scoped BigOperators
 
 namespace PureChordal
 
+/-- Exactly-one-failure is at most at-least-one-failure: for independent events
+with success probabilities `a i ∈ [0,1]`, the probability that exactly one event
+fails is at most the probability that at least one fails. -/
 lemma sum_one_sub_mul_prod_erase_le_one_sub_prod
     {ι : Type*} [DecidableEq ι] (s : Finset ι) (a : ι → ℝ)
     (ha0 : ∀ i ∈ s, 0 ≤ a i)
@@ -61,6 +64,8 @@ lemma sum_one_sub_mul_prod_erase_le_one_sub_prod
               (mul_le_mul_of_nonneg_left (ih ha0s ha1s) hae0)
         _ = 1 - a e * ∏ i ∈ s, a i := by ring
 
+/-- Deficit inequality on a subset `I ⊆ E`: the total single-factor deletion
+deficit summed over `I` is at most the deficit of deleting all of `I` at once. -/
 lemma sum_prod_erase_sub_prod_le_prod_sdiff_sub_prod
     {ι : Type*} [DecidableEq ι] (E I : Finset ι) (hIE : I ⊆ E)
     (a : ι → ℝ)
@@ -123,6 +128,10 @@ lemma sum_prod_erase_sub_prod_le_prod_sdiff_sub_prod
       rw [hfull]
       ring
 
+/-- Summed deficit inequality.  Given a double-counting identity relating the
+per-vertex incidence sums to twice the edge sum, twice the total single-edge
+deletion deficit is bounded by the vertex-deletion sum plus an edge-count
+correction.  This is the pointwise input to the graphon cube inequality. -/
 lemma two_mul_sum_prod_erase_le_vertex_deleted_sum
     {V ι : Type*} [Fintype V] [DecidableEq ι]
     (E : Finset ι) (I : V → Finset ι)
