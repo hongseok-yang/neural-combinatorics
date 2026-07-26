@@ -178,6 +178,25 @@ def extendColor {k n : ℕ} (hn : n < m)
       (D.newVertices_disjoint_accumulatedVerticesLT ⟨n, hn⟩) hv
   simp [extendColor, hnot]
 
+/-- A bag vertex already exposed before its own bag lies in the parent
+separator. -/
+lemma mem_separator_of_mem_accumulated {i : Fin m} {v : V}
+    (hbag : v ∈ D.bag i) (hacc : v ∈ D.accumulatedVerticesLT i.val) :
+    v ∈ D.separator i := by
+  have hmem : v ∈ D.accumulatedVerticesLT i.val ∩ D.bag i :=
+    Finset.mem_inter.mpr ⟨hacc, hbag⟩
+  rw [D.accumulatedVerticesLT_inter_bag] at hmem
+  exact hmem
+
+/-- A bag vertex not yet exposed before its own bag is one of its new
+vertices. -/
+lemma mem_newVertices_of_notMem_accumulated {i : Fin m} {v : V}
+    (hbag : v ∈ D.bag i) (hacc : v ∉ D.accumulatedVerticesLT i.val) :
+    v ∈ D.newVertices i := by
+  rw [D.newVertices_eq_bag_sdiff_previous,
+    D.previousVertices_eq_accumulatedVerticesLT]
+  exact Finset.mem_sdiff.mpr ⟨hbag, hacc⟩
+
 lemma extendColor_current_injective {k n : ℕ} (hn : n < m)
     (c : D.PrefixColoring k n)
     (e : ↥(D.newVertices ⟨n, hn⟩) ↪ ↥(D.availableColors ⟨n, hn⟩ c)) :
@@ -189,33 +208,16 @@ lemma extendColor_current_injective {k n : ℕ} (hn : n < m)
   intro a b hab
   by_cases ha : a.1 ∈ D.accumulatedVerticesLT n
   · by_cases hb : b.1 ∈ D.accumulatedVerticesLT n
-    · have hasa : a.1 ∈ D.separator i := by
-        have hmem : a.1 ∈ D.accumulatedVerticesLT i.val ∩ D.bag i :=
-          Finset.mem_inter.mpr ⟨ha, a.property⟩
-        rw [D.accumulatedVerticesLT_inter_bag] at hmem
-        exact hmem
-      have hasb : b.1 ∈ D.separator i := by
-        have hmem : b.1 ∈ D.accumulatedVerticesLT i.val ∩ D.bag i :=
-          Finset.mem_inter.mpr ⟨hb, b.property⟩
-        rw [D.accumulatedVerticesLT_inter_bag] at hmem
-        exact hmem
+    · have hasa := D.mem_separator_of_mem_accumulated a.property ha
+      have hasb := D.mem_separator_of_mem_accumulated b.property hb
       have hcolor :
           D.separatorColor i c ⟨a.1, hasa⟩ =
             D.separatorColor i c ⟨b.1, hasb⟩ := by
         simpa [i, separatorColor, extendColor, ha, hb] using hab
       have hsep := D.separatorColor_injective i c hcolor
-      have hval : a.1 = b.1 :=
-        congrArg (fun z : ↥(D.separator i) ↦ z.1) hsep
-      exact Subtype.ext hval
-    · have hasa : a.1 ∈ D.separator i := by
-        have hmem : a.1 ∈ D.accumulatedVerticesLT i.val ∩ D.bag i :=
-          Finset.mem_inter.mpr ⟨ha, a.property⟩
-        rw [D.accumulatedVerticesLT_inter_bag] at hmem
-        exact hmem
-      have hbnew : b.1 ∈ D.newVertices i := by
-        rw [D.newVertices_eq_bag_sdiff_previous,
-          D.previousVertices_eq_accumulatedVerticesLT]
-        exact Finset.mem_sdiff.mpr ⟨b.property, hb⟩
+      exact Subtype.ext (congrArg (fun z : ↥(D.separator i) ↦ z.1) hsep)
+    · have hasa := D.mem_separator_of_mem_accumulated a.property ha
+      have hbnew := D.mem_newVertices_of_notMem_accumulated b.property hb
       have hcolor :
           D.separatorColor i c ⟨a.1, hasa⟩ =
             (e ⟨b.1, hbnew⟩).1 := by
@@ -224,15 +226,8 @@ lemma extendColor_current_injective {k n : ℕ} (hn : n < m)
       apply D.separatorColor_not_mem_available i c ⟨a.1, hasa⟩
       simpa [hcolor] using (e ⟨b.1, hbnew⟩).property
   · by_cases hb : b.1 ∈ D.accumulatedVerticesLT n
-    · have hasb : b.1 ∈ D.separator i := by
-        have hmem : b.1 ∈ D.accumulatedVerticesLT i.val ∩ D.bag i :=
-          Finset.mem_inter.mpr ⟨hb, b.property⟩
-        rw [D.accumulatedVerticesLT_inter_bag] at hmem
-        exact hmem
-      have hanew : a.1 ∈ D.newVertices i := by
-        rw [D.newVertices_eq_bag_sdiff_previous,
-          D.previousVertices_eq_accumulatedVerticesLT]
-        exact Finset.mem_sdiff.mpr ⟨a.property, ha⟩
+    · have hasb := D.mem_separator_of_mem_accumulated b.property hb
+      have hanew := D.mem_newVertices_of_notMem_accumulated a.property ha
       have hcolor :
           (e ⟨a.1, hanew⟩).1 =
             D.separatorColor i c ⟨b.1, hasb⟩ := by
@@ -240,21 +235,13 @@ lemma extendColor_current_injective {k n : ℕ} (hn : n < m)
       exfalso
       apply D.separatorColor_not_mem_available i c ⟨b.1, hasb⟩
       simpa [← hcolor] using (e ⟨a.1, hanew⟩).property
-    · have hanew : a.1 ∈ D.newVertices i := by
-        rw [D.newVertices_eq_bag_sdiff_previous,
-          D.previousVertices_eq_accumulatedVerticesLT]
-        exact Finset.mem_sdiff.mpr ⟨a.property, ha⟩
-      have hbnew : b.1 ∈ D.newVertices i := by
-        rw [D.newVertices_eq_bag_sdiff_previous,
-          D.previousVertices_eq_accumulatedVerticesLT]
-        exact Finset.mem_sdiff.mpr ⟨b.property, hb⟩
+    · have hanew := D.mem_newVertices_of_notMem_accumulated a.property ha
+      have hbnew := D.mem_newVertices_of_notMem_accumulated b.property hb
       have hcolor : e ⟨a.1, hanew⟩ = e ⟨b.1, hbnew⟩ := by
         apply Subtype.ext
         simpa [i, extendColor, ha, hb] using hab
       have hnew := e.injective hcolor
-      have hval : a.1 = b.1 :=
-        congrArg (fun z : ↥(D.newVertices i) ↦ z.1) hnew
-      exact Subtype.ext hval
+      exact Subtype.ext (congrArg (fun z : ↥(D.newVertices i) ↦ z.1) hnew)
 
 /-- Assemble a valid successor prefix from an old prefix and an injection into
 the available colours. -/
