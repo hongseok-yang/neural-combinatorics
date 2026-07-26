@@ -46,5 +46,5 @@ Status key: ✅ DONE · 🚧 WIP · ❌ TODO
 | Diamond certificate and bound | Certify $K_4$ minus one edge as two triangles glued along an edge and specialize the polynomial bound. | Hard | ✅ |
 | Goldner–Harary certificate and bound | Certify the standard 11-vertex graph by its eight maximal tetrahedra and prove $t(GH,W)\ge p(2p-1)(3p-2)^8$. | Very hard | ✅ |
 | Balanced multipartite extremizer | At $p=1-1/k$, compute the balanced complete $k$-partite graphon density, prove exact attainment, and prove minimality among graphons of that edge density when $r\le k$. | Very hard | ✅ |
-| Leaf API layout | Keep the sole final theorem in `Main.lean`, the two graph corollaries in `Example.lean`, and make `Example.lean` the only direct importer of `Main.lean`. | Medium | ✅ |
+| Leaf API layout | Keep both final theorems (`pureChordal_chromaticPolynomial_lower_bound`, `pureChordal_balancedMultipartite_minimal`) in `Main.lean`, the two graph corollaries in `Example.lean`, and make `Example.lean` the only direct importer of `Main.lean`. | Medium | ✅ |
 | Soundness audit | Full root build; no `sorry`, `admit`, declared axioms, or `native_decide`; key theorems use only standard Lean axioms; no tracked `complete_lean` diff. | Medium | ✅ |
