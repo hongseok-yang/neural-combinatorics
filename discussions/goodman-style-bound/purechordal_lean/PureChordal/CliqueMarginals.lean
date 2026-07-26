@@ -242,21 +242,10 @@ lemma lmarginal_cliqueWeightOnENN_eq_self_of_disjoint
     (A T : Finset V) (W : Graphon Ω μ) (hTA : Disjoint T A) :
     lmarginal (fun _ : V => μ) T (cliqueWeightOnENN A W) =
       cliqueWeightOnENN A W := by
-  classical
-  funext x
-  unfold lmarginal
-  have hupdate :
-      ∀ y : T → Ω,
-        cliqueWeightOnENN A W (Function.updateFinset x T y) =
-          cliqueWeightOnENN A W x := by
-    intro y
-    apply cliqueWeightOnENN_congr_on
-    intro v hvA
-    have hvT : v ∉ T := fun hvT =>
-      Finset.disjoint_left.mp hTA hvT hvA
-    simp [Function.updateFinset, hvT]
-  simp_rw [hupdate]
-  simp
+  have hdep : FinsetDependsOn A (cliqueWeightOnENN A W) := by
+    intro x y hxy
+    exact cliqueWeightOnENN_congr_on A W hxy
+  exact hdep.lmarginal_eq_self_of_disjoint hTA
 
 lemma lmarginal_cliqueWeightOnENN_compl_eq_diff
     {S A : Finset V} (hSA : S ⊆ A) (W : Graphon Ω μ) :
@@ -264,29 +253,9 @@ lemma lmarginal_cliqueWeightOnENN_compl_eq_diff
         (cliqueWeightOnENN A W) =
       lmarginal (fun _ : V => μ) (A \ S)
         (cliqueWeightOnENN A W) := by
-  classical
-  have hunion :
-      Finset.univ \ S = (A \ S) ∪ (Finset.univ \ A) := by
-    ext v
-    simp only [Finset.mem_sdiff, Finset.mem_univ, true_and,
-      Finset.mem_union]
-    constructor
-    · intro hv
-      by_cases hvA : v ∈ A
-      · exact Or.inl ⟨hvA, hv⟩
-      · exact Or.inr hvA
-    · rintro (hv | hv)
-      · exact hv.2
-      · exact fun hvS => hv (hSA hvS)
-  have hdisj : Disjoint (A \ S) (Finset.univ \ A) := by
-    exact (Finset.disjoint_sdiff (s := A) (t := Finset.univ)).mono
-      Finset.sdiff_subset (by rfl)
-  have hout : Disjoint (Finset.univ \ A) A :=
-    (Finset.disjoint_sdiff (s := A) (t := Finset.univ)).symm
-  rw [hunion, lmarginal_union (fun _ : V => μ)
-    (cliqueWeightOnENN A W) (measurable_cliqueWeightOnENN A W) hdisj,
-    lmarginal_cliqueWeightOnENN_eq_self_of_disjoint A
-      (Finset.univ \ A) W hout]
+  rw [lmarginal_compl_subset hSA (measurable_cliqueWeightOnENN A W),
+    lmarginal_cliqueWeightOnENN_eq_self_of_disjoint A (Finset.univ \ A) W
+      ((Finset.disjoint_sdiff (s := A) (t := Finset.univ)).symm)]
 
 /-- Purity at the analytic level: two equal-size complete-graph weights have
 the same marginal on any common vertex subset.  All ambient coordinates outside
