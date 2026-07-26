@@ -249,7 +249,24 @@ Check by removing on a build machine and rebuilding.
   `Example` → `Corollaries` rename (the FINAL task reworks `Examples/` anyway) and
   the two large file *splits* (ChromaticFactorization ~776 lines, EntropyGluing
   1162) — delicate new-file surgery, moderate value; do as a focused pass.
-- **WS-D / WS-J / WS-A remaining:** EntropyGluing density-API bundling (highest
+- **WS-A (documentation) largely done** (commits `43889dd`, `1cb4d92`, `03f7e0d`).
+  Docstrings for all 10 EntropyGluing normalized-density defs + four section
+  headers + expanded module docstring; module docstring for Main; docstrings for
+  the ProductInequalities deficit lemmas, weighted Cauchy–Schwarz, `homDensity_iso`,
+  the integrated cube inequality, and the graphWeight/homDensity lower bounds.
+  HomDensity's core objects were already documented.
+- **Still deferred (reasoned):**
+  - **File splits** (ChromaticFactorization ~776, EntropyGluing 1162): section
+    headers now give EntropyGluing internal structure, mitigating the size
+    concern; the actual new-file surgery is delicate for modest gain.
+  - **EntropyGluing density-API bundling**: highest-risk edit in the plan
+    (~300 lines but rewrites four proof tracks); not attempted.
+  - **Naming sweep** `ge`→`le`: not pure renames — each flips the inequality
+    direction in the *statement* and touches call sites; churny and semantics-
+    adjacent, deferred.
+  - **Fine lint** (`linter.unusedSectionVars`, `linter.unnecessarySimpa`):
+    benign style warnings; each fix rebuilds deep files for marginal gain.
+- **~~WS-D / WS-J / WS-A remaining:~~ (superseded by the two entries above)** EntropyGluing density-API bundling (highest
   risk — a `BoundedDensity` structure rewriting four tracks; ~300 lines but high
   breakage risk), section headers + docstrings, the `ge`→`le` / `*_lower_bound`
   naming sweep, and the compiler's accumulated lint (unused section variables,
