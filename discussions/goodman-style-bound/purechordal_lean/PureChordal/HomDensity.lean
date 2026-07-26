@@ -96,6 +96,7 @@ lemma graphWeight_le_one (H : SimpleGraph V) [DecidableRel H.Adj]
     (fun e _ ↦ edgeValue_nonneg W x e)
     (fun e _ ↦ edgeValue_le_one W x e)
 
+/-- A uniform lower bound `δ ≤ W` propagates to `δ ^ |E(H)| ≤ graphWeight`. -/
 lemma graphWeight_lower_bound (H : SimpleGraph V) [DecidableRel H.Adj]
     (W : Graphon Ω μ) {δ : ℝ} (hδ0 : 0 ≤ δ)
     (hδ : ∀ a b, δ ≤ W a b) (x : V → Ω) :
@@ -133,6 +134,8 @@ lemma homDensity_le_one (H : SimpleGraph V) [DecidableRel H.Adj]
       (integrable_const (μ := assignmentMeasure V μ) (1 : ℝ))
       (fun x ↦ graphWeight_le_one H W x)
 
+/-- A uniform lower bound `δ ≤ W` gives the density bound
+`δ ^ |E(H)| ≤ t(H, W)`. -/
 lemma homDensity_lower_bound (H : SimpleGraph V) [DecidableRel H.Adj]
     (W : Graphon Ω μ) {δ : ℝ} (hδ0 : 0 ≤ δ)
     (hδ : ∀ a b, δ ≤ W a b) :
