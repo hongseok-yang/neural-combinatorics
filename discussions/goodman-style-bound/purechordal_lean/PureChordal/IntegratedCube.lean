@@ -1,12 +1,15 @@
-import PureChordal.CubeInequality
+import PureChordal.ProductInequalities
 import PureChordal.HomDensity
+import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 import Mathlib.Combinatorics.SimpleGraph.DeleteEdges
+import Mathlib.Combinatorics.SimpleGraph.Finite
 
 /-!
-# The integrated graph cube inequality
+# The graph cube inequality
 
-This file lifts the pointwise cube inequality to homomorphism densities.  The
-result remains completely general: no clique symmetry is used here.
+This file proves the pointwise clique cube inequality on a graph's incidence
+sets and lifts it to homomorphism densities.  The result remains completely
+general: no clique symmetry is used here.
 -/
 
 open MeasureTheory
@@ -37,6 +40,58 @@ lemma graphWeight_deleteIncidence
       ∏ f ∈ G.edgeFinset \ G.incidenceFinset v, edgeValue W x f := by
   unfold graphWeight
   rw [SimpleGraph.edgeFinset_deleteIncidenceSet_eq_sdiff]
+
+/-- Every edge is counted at its two endpoints, so summing an edge weight over
+all vertex incidence sets doubles the total. -/
+lemma sum_incidenceFinset_eq_two_mul_sum_edges
+    {V : Type*} [Fintype V] [DecidableEq V]
+    (G : SimpleGraph V) [DecidableRel G.Adj] (f : Sym2 V → ℝ) :
+    (∑ v, ∑ e ∈ G.incidenceFinset v, f e)
+      = 2 * ∑ e ∈ G.edgeFinset, f e := by
+  classical
+  calc
+    (∑ v, ∑ e ∈ G.incidenceFinset v, f e)
+        =
+      ∑ v, ∑ e ∈ G.edgeFinset,
+        if v ∈ e then f e else 0 := by
+          apply Finset.sum_congr rfl
+          intro v _
+          rw [G.incidenceFinset_eq_filter, Finset.sum_filter]
+    _ = ∑ e ∈ G.edgeFinset, ∑ v, if v ∈ e then f e else 0 := by
+          rw [Finset.sum_comm]
+    _ = ∑ e ∈ G.edgeFinset, 2 * f e := by
+          apply Finset.sum_congr rfl
+          intro e he
+          have hcard : e.toFinset.card = 2 :=
+            G.card_toFinset_mem_edgeFinset ⟨e, he⟩
+          have hfilter :
+              (Finset.univ.filter fun v : V ↦ v ∈ e) = e.toFinset := by
+            ext v
+            simp
+          rw [← Finset.sum_filter, hfilter]
+          simp [hcard]
+    _ = 2 * ∑ e ∈ G.edgeFinset, f e := by
+          rw [Finset.mul_sum]
+
+/-- The pointwise clique cube inequality: the finite-product deficit inequality
+instantiated on the incidence sets of a simple graph. -/
+theorem graph_edge_cube_inequality
+    {V : Type*} [Fintype V] [DecidableEq V]
+    (G : SimpleGraph V) [DecidableRel G.Adj]
+    (a : Sym2 V → ℝ)
+    (ha0 : ∀ e ∈ G.edgeFinset, 0 ≤ a e)
+    (ha1 : ∀ e ∈ G.edgeFinset, a e ≤ 1) :
+    2 * (∑ e ∈ G.edgeFinset, ∏ f ∈ G.edgeFinset.erase e, a f)
+      ≤
+    (∑ v, ∏ f ∈ G.edgeFinset \ G.incidenceFinset v, a f) +
+      (2 * (G.edgeFinset.card : ℝ) - (Fintype.card V : ℝ)) *
+        ∏ f ∈ G.edgeFinset, a f := by
+  classical
+  exact two_mul_sum_prod_erase_le_vertex_deleted_sum
+    G.edgeFinset (fun v ↦ G.incidenceFinset v)
+    (fun v ↦ G.incidenceFinset_subset v)
+    (sum_incidenceFinset_eq_two_mul_sum_edges G)
+    a ha0 ha1
 
 theorem integrated_graph_edge_cube_inequality
     {V : Type*} [Fintype V] [DecidableEq V]

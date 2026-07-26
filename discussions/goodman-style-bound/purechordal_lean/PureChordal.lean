@@ -1,10 +1,9 @@
-import PureChordal.Algebra
+import PureChordal.CliquePolynomial
 import PureChordal.HomDensity
 import PureChordal.Regularization
 import PureChordal.Gibbs
 import PureChordal.Certificate
 import PureChordal.ProductInequalities
-import PureChordal.CubeInequality
 import PureChordal.Relabeling
 import PureChordal.WeightedCauchySchwarz
 import PureChordal.CliqueMoments
@@ -18,6 +17,9 @@ import PureChordal.JunctionDensity
 import PureChordal.EntropyGluing
 import PureChordal.CertificatePolynomialBound
 import PureChordal.ChordalStructure
+import PureChordal.BalancedMultipartite
+import PureChordal.ChromaticFactorization
+import PureChordal.Main
 import PureChordal.Example
 
 /-!

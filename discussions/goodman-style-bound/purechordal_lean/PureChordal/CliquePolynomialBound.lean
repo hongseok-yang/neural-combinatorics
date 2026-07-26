@@ -1,4 +1,4 @@
-import PureChordal.Algebra
+import PureChordal.CliquePolynomial
 import PureChordal.MoonMoser
 import Mathlib.Tactic
 
