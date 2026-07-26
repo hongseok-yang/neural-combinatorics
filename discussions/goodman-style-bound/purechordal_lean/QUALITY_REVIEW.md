@@ -231,6 +231,30 @@ Check by removing on a build machine and rebuilding.
   Nat-subtraction form aligns `cliqueStepFactor` definitionally with `cliquePoly`
   at the `cliquePoly_succ` interface, so switching would relocate cast-repair, not
   remove it.
+- **WS-F done** (commits `152c227`, `66d1af7`). Reversed the
+  MarginalAlgebra ← CliqueMarginals import (MarginalAlgebra now imports the
+  Mathlib marginal API directly), then deduplicated two CliqueMarginals lemmas
+  against the generic `lmarginal_compl_subset` /
+  `FinsetDependsOn.lmarginal_eq_self_of_disjoint` (523 → 484 lines).
+  **Deferred:** the `FinsetDependsOn` → Mathlib `DependsOn` swap — it needs a full
+  rewrite of ~8 combinators + ~20 sites against the Set-based API for no functional
+  gain.
+- **WS-G done** (commit `6c9ff91`). Extracted `mem_separator_of_mem_accumulated`
+  and `mem_newVertices_of_notMem_accumulated`; the 77-line
+  `extendColor_current_injective` inlined these eight times, now one-liners.
+- **WS-I (module moves) done** (commits `79e7d25`, `9dde12b`). Renamed
+  `Algebra` → `CliquePolynomial`, merged `CubeInequality` → `IntegratedCube`,
+  rewrote the root import list to name every module, and moved
+  `pureChordal_balancedMultipartite_minimal` to Main. **Deferred:** the
+  `Example` → `Corollaries` rename (the FINAL task reworks `Examples/` anyway) and
+  the two large file *splits* (ChromaticFactorization ~776 lines, EntropyGluing
+  1162) — delicate new-file surgery, moderate value; do as a focused pass.
+- **WS-D / WS-J / WS-A remaining:** EntropyGluing density-API bundling (highest
+  risk — a `BoundedDensity` structure rewriting four tracks; ~300 lines but high
+  breakage risk), section headers + docstrings, the `ge`→`le` / `*_lower_bound`
+  naming sweep, and the compiler's accumulated lint (unused section variables,
+  `simpa`→`simp`, unused `hf`/`hsr` binders). All lower-risk polish except the
+  bundling.
 - **FINAL workstream added (deferred to the very end by user request):** replace
   the Diamond/Goldner–Harary examples with k-partite optimality proofs for all 17
   non-clique pure chordal graphs on ≤ 6 vertices (1+2+5+13 = 21 total, minus 4
