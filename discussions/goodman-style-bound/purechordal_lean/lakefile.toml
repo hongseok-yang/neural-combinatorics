@@ -1,0 +1,46 @@
+name = "PureChordal"
+defaultTargets = ["PureChordal"]
+
+# Reuse the already checked-out Mathlib source as a read-only path dependency.
+# All PureChordal source and build products remain in this directory.
+[[require]]
+name = "mathlib"
+path = "../complete_lean/.lake/packages/mathlib"
+
+# Declare Mathlib's transitive packages as root path dependencies too.  This
+# makes Lake reuse their existing read-only checkouts/builds instead of cloning
+# or building anything below `complete_lean`.
+[[require]]
+name = "plausible"
+path = "../complete_lean/.lake/packages/plausible"
+
+[[require]]
+name = "LeanSearchClient"
+path = "../complete_lean/.lake/packages/LeanSearchClient"
+
+[[require]]
+name = "importGraph"
+path = "../complete_lean/.lake/packages/importGraph"
+
+[[require]]
+name = "proofwidgets"
+path = "../complete_lean/.lake/packages/proofwidgets"
+
+[[require]]
+name = "aesop"
+path = "../complete_lean/.lake/packages/aesop"
+
+[[require]]
+name = "Qq"
+path = "../complete_lean/.lake/packages/Qq"
+
+[[require]]
+name = "batteries"
+path = "../complete_lean/.lake/packages/batteries"
+
+[[require]]
+name = "Cli"
+path = "../complete_lean/.lake/packages/Cli"
+
+[[lean_lib]]
+name = "PureChordal"
