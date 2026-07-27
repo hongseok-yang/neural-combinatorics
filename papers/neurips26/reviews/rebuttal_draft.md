@@ -90,22 +90,22 @@ $$
 =\exp\!\Big(-N\big(a\log\tfrac{a}{q}+(1-a)\log\tfrac{1-a}{1-q}\big)+o(N)\Big)
 $$
 by Stirling's approximation: the exponential cost of an atypical edge fraction $a$ is the Bernoulli KL divergence between $a$ and $q$. 
-The graphon large-deviation principle generalises this from a single edge fraction to a full edge-probability profile $W$, whose cost is the integrated KL divergence $h_q(W)$. 
+The graphon large-deviation principle generalises this from a single edge fraction to a full edge-probability profile expressed by a graphon $W$, whose cost is the integrated KL divergence $h_q(W)$. 
 Conditioning on an atypical $H$-density restricts the admissible profiles; the exponential probability of the event is controlled by the minimum of $h_q$ over them, and the conditioned graphs concentrate near the minimising graphons. 
 We will add this explanation to the revised version of the paper.
 
-**Mathematical outcome of the discovery workflow.** Since submission, the strongest independent validation is that structures found by the framework have led to three new mathematical theorems.
+**Mathematical outcome of the discovery workflow.** Since submission, the structures found by the framework have led to three new mathematical theorems.
 First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1},
 $$
 extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
-Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven.
+Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph case study that were previously unproven.
 Third, for the dense upper-tail problem, every $d$-regular pattern graph with $d\ge2$ has, near each Lubetzky-Zhao phase-boundary point with $r \ne (d-1)/d$, a unique nonconstant bipodal optimiser up to relabelling throughout a nontrivial neighbourhood on the symmetry-breaking side.
-The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third is partial and takes some established results from the literature and parts of graphon theory as axioms. 
 Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
 We are preparing manuscripts describing all three for submission to mathematics journals, and we will summarise their statements, scope, and connection to the learnt structures in the revised version of the paper.
-This is the intended use of the framework: learnt structures guide new, independent mathematics.
+This is the intended use of the framework: learnt structures guide new mathematics.
 
 ## Reviewer PPij
 
