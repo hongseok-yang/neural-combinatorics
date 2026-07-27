@@ -4,11 +4,36 @@ For every experiments, we repeated the experiment once for each hyperparameter c
 
 ### Property & Numerical Stability of implicit gradient
 
+One can show that our implicit gradient is consistent. 
+1. Assume that the output $f_\theta[0](x, y) \in [-M, M]$ for some $M>0$, which is assured by constructions of our network and from the assumption on the input that $x, y \in [0, 1]$.
+2. Then, the optimal $c^*$ is bounded by $[-M + \mathrm{logit}(p), M + \mathrm{logit}(p)]$.
+3. By the uniform law of large number, we can see that $\frac{1}{|\Epsilon|}\sum_{(x_1, x_2) \in \Epsilon}f_\theta[c](x_1, x_2)$ almost surely converges to expected value uniformly over $c \in [-M + \mathrm{logit}(p), M + \mathrm{logit}(p)]$.
+4. Since the function $c \mapsto \frac{1}{|\Epsilon|}\sum_{(x_1, x_2) \in \Epsilon}f_\theta[c](x_1, x_2)$ is continuous, the optimal $c^*$ converges to the population-optimal $c^*$ almost surely also.
+5. Finally, the continuous mapping theorem asserts that the implicit gradient converges to the true gradient almost surely.
 
+Our implicit gradient is a biased estimator, due to the finite sample term appearing in the denominator.
+
+Finally, our implicit gradient is numerically stable. 
+The possible numerical instability can arise from the deminator term $\sum_{\mathbb{z} \in \Epsilon} \mathrm{sm}'(h_\theta(z) + c_\theta)$ being close to zero.
+However, one can view this as weighting factors on $\nabla_\theta h_\theta(\mathbb{y})$, similar to the attention mechanism excpet we have $\mathrm{sm}'$ as nonlinearity instead of $\exp$ in attention.
+We also didn't observe any numerical instability in our experiments.
 
 ### Connection between the KL-divergence and the large deviation problem
 
-
+For $N = n(n-1)/2$, consider the event that $rN$ edges are present in a random graph $G \sim G(n, p)$.
+The probability of this event is given by
+$$
+P(B(N, p) = qN) = \binom{N}{qN} p^{qN} (1-p)^{(1-q)N}.
+$$
+From Stirling's approximation, we have
+$$
+\binom{N}{qN} \approx \exp(N h(q) + o(N))
+$$
+where $h(q) = -q \log q - (1-q) \log (1-q)$.
+Therefore, 
+$$
+  \log P(B(N, p) = qN) \approx N h(q) + Nq \log p + N(1-q) \log (1-p) +o(N) = - N \left(q \log \frac{q}{p} + (1-q) \log \frac{1-q}{1-p} \right) + o(N).
+$$
 
 ### Too large sample size
 
@@ -32,9 +57,10 @@ When these trivial solutions are comparable to the optimal solution (the differe
 
 ### What about wavelet basis?
 
-We tested the ... on non-neural baselines, i.e., parameterising graphon $W$ as a linear combinations of basis functions.
-We found out that none of these representations match with the bound requirements $W(x, y) \in [0, 1]$, and invalidates the constraints. 
-We also further tested if these representations are expressive enough to represent the optimal solution, and found out that the optimal solution being either $0$ or $1$ makes...
+We tested the four non-neural representation methods, Fourier basis, Haar wavelet basis, Legendre polynomial basis, and Bernstein polynomial basis.
+Throughout the experiments, all four methods failed to satisfy the constraint of $W(x, y) \in [0, 1]$ and gave invalid resulting values like $t(K_3, W) \approx -44752$.
+We also performed supervised training on these methods, i.e., we trained the model to fit the optimal solution, and except for wavelet basis, all other methods still failed to satisfy the constraint of $W(x, y) \in [0, 1]$ (45% of the input were invalid).
+For wavelet basis, while it satisfies the constraint, it fails to represent the optimal solution accurately mostly due to the discrete boundary, and resulted $t(K_3, W) = 0.444238$, which is worse than fixed grid SBM solution ($t(K_3, W) = 435817$).
 
 ### Practical Application
 
@@ -69,7 +95,7 @@ TODO
 Up to our knowledge, computational lower bound for problems like P2 is not known.
 There are some empirical tests that can be used to check comparable lower bound:
 - Using some advanced sampling methods to directly sample from the conditional distribution $G \sim G(n, p) | t(K_3, G) \ge r^3$ and compare the sampled finite graph with the trained model. However, this is not feasible for large $n$ and $r$.
-- Under assumption that the optimal solution is bipodal, we can reduce the problem to a 4-dimensional optimisation problem, and use constrained optimisation methods to find the solution. We report the results:...
+- Under assumption that the optimal solution is bipodal, we can reduce the problem to a 4-dimensional optimisation problem, and use constrained optimisation methods to find the solution. We report the results: TODO
 
 ### How much dependency on the initialisation, frequency schedule, and MC permutations? 
 
@@ -97,4 +123,8 @@ We do not have proof for the optimality of these constructions.
   + Figure 1: Rediscover of Razborov's theorem
   + Figure 2: Rediscover of Reiher's theorem
   + Figure 3: Rediscover of Bennet et al.'s result
-- 
+- TODO
+
+### LZ is only designed for K3, not C4 or C5
+
+While LZ construction is only designed to prove non-optimality of constant graphon not as optimal solution, it is not limited to $K_3$ but is applicable to any d-regular graphs.
