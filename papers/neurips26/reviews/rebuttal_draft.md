@@ -317,31 +317,44 @@ For the tree-based baselines and the fixed-grid SBM, moving a decision boundary 
 Parameterising the decision boundary directly (the second and third panels of Figure 15) also fails: the optimisation landscape is very sharp, and training always converges to the constant solution. 
 The neural graphon instead optimises the region values and the boundary locations jointly and continuously, and we view this joint flexibility, combined with a favourable optimisation landscape, as the main benefit of the neural representation. 
 The discovery advantage is that the network does not require choosing in advance between multipartite, diagonal/banded, circular-distance, or bipodal forms. 
-We are extending the fixed-grid/SBM and sinusoidal-MLP controls to $C_7$, $H_6$, and triangle $\mathbf{(P2)}$, and will report them during the discussion phase; agreement between the neural output and a distilled structured construction supports the framework's interpretability and provides an independent check.
 
 ## Reviewer s6Ge
 
 Thank you for recognising the mathematically meaningful problem setting, the problem-specific architecture, and the breadth of the experiments. We address reliability with targeted sensitivity studies and, more importantly, with explicit constructions and new mathematical theorems.
 
-**Initialisation, schedule, and permutation sensitivity.** Every reported value was selected from exactly eight runs: two activations crossed with four learning rates. We are now separating that finite hyperparameter search from reproducibility through three controlled studies. (i) Initialisation: 10 fixed-protocol repetitions on $K_3$ at $p=7/9$, followed by $K_3$ $\mathbf{(P2)}$, $C_7$, and $H_6$, reporting objective distributions, constraint residuals, structural success rates, and fitted parameters after accounting for graphon relabelling. [TODO: insert completed results.] (ii) Schedule: at a fixed 20,000-epoch budget, we compare 1, 2, 4, 8, and 20 cosine cycles. [TODO: insert result.] (iii) Permutations: on $C_5$, we compare the identity, two cyclic permutations, and the full symmetry set. Every choice remains unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. [TODO: insert variance, objective, and runtime results.]
+**Initialisation, schedule, and permutation sensitivity.** 
+Every reported value was selected from exactly eight runs: two activations crossed with four learning rates. We separate that finite hyperparameter search from reproducibility through three controlled studies. 
+(i) Initialisation: we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration. The mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225\approx0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so we report structure recovery and objective quality separately). The same repetition analysis for $C_5$, $C_7$, and $H_6$ will follow during the discussion phase. 
+(ii) Frequency schedule: we trained with both encoding-scale schedules. With $s(\ell)=2^{\ell-1}$, the ten repetitions above give mean $0.435711$; with $s(\ell)=\ell$, the best run gives $0.435754$. The discovered solution and its objective are insensitive to the schedule choice.
+(iii) Permutations: on $C_5$, we compare three symmetry sets for the estimator: the identity only; the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$; and the full set of coset representatives. Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. [TODO: insert permutation-study results.]
 
-**Population-level constraint error.** We will quantify population feasibility independently of the training batch: recalibrate $c$ on a large independent sample, evaluate the constraint and objective on a disjoint sample or grid, and report the residual distribution arising from ordinary training-sized solver batches. [TODO: insert instances, maximum/median residual, and interval.] This held-out residual will accompany every central objective value.
+**Population-level constraint error.** 
+The constraint solver runs not only during training but also on the final trained graphon: the reported values re-solve the scalar bias deterministically on the evaluation grid, so no training-batch residual persists in them (and the reference is converged: refining the grid from $256^2$ to $512^2$ changes $t(K_3)$ by only $9.7\times10^{-5}$). 
+The remaining question is how much a random batch would move the output, which we measured at the final $K_3$ graphon over 1000 independent batches per batch size. 
+At the training size $N=2^{16}$, solving the bias on a batch instead of the grid induces a population constraint residual of standard deviation $1.1\times10^{-3}$ (maximum $3.4\times10^{-3}$, mean $1.2\times10^{-4}$), an entry-wise output standard deviation averaging $1.1\times10^{-3}$, and a spread of $t(K_3)$ with standard deviation $2.3\times10^{-3}$; all of these shrink as $N^{-1/2}$. 
 
-**Cross-run uncertainty and the $q=0.10$ comparison.** The seed study will report mean/SD, median/IQR, best, and structural success rate rather than only a bootstrap interval for the selected run. For the triangle upper tail at $q=0.10$, entropy evaluation is deterministic, so we will report the paired gap to $W_{\mathrm{LZ}}$, its convergence across integration resolutions, and the held-out constraint residual separately from cross-seed optimisation variability. [TODO: insert results.]
-
-**Analytic constructions and mathematical outcome.** The $C_7$ appendix already distils the learned pattern into an explicit low-dimensional family. For $H_6$ at $p=4/5$, the circular-distance pattern has the symbolic form
+**Analytic constructions and mathematical outcome.** 
+For $C_5$, the construction of Bennett et al. is known optimal at $p=1-1/k$ and conjectured optimal at the densities in between. For $C_7$, the conjecture described in Appendix E generalises this construction to a specific parametric family, and our learnt graphons do not follow it, so we do not currently have an explicit symbolic construction for them. This does not imply that the learnt graphons are suboptimal: the minimiser need not be unique, and the conjectured construction is only one of the possible optima. 
+For $H_6$, we have a symbolic construction at $p=4/5$ only, where the learnt circular-distance pattern has the form
 $$
 W(x,y)=\begin{cases}1&\text{if }|x-y|\in[0.1,0.9],\\0&\text{otherwise},\end{cases}
 $$
-which mathematicians can inspect directly. More substantially, follow-up analysis of the learned structures has produced three new theorems. For every graphon and every odd $m\ge3$, we proved
+whose optimality we have not proved. 
+More substantially, follow-up analysis of the learned structures has produced three new theorems. For every graphon and every odd $m\ge3$, we proved
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1}
 $$
-extending Goodman's inequality to all odd cycles and proving optimality of the balanced complete $k$-partite graphons at $p=1-1/k$. We also proved the corresponding balanced $k$-partite minimiser for every chordal graph whose maximal cliques have a common size $r\ge3$, settling 17 previously unproven cases of the 175-graph study. For $\mathbf{(P2)}$, we proved unique bipodal optimisers in a nontrivial neighbourhood on the symmetry-breaking side of every nonexceptional phase-boundary point for every $d$-regular $H$, $d\ge2$. The first two theorems are fully formalised in Lean 4. We are preparing manuscripts describing all three for submission to mathematics journals. Outside the proved regimes, including $H_6$ and $C_7$ away from the sharp densities, we retain candidate language.
+extending Goodman's inequality to all odd cycles and proving optimality of the balanced complete $k$-partite graphons at $p=1-1/k$. 
+We also proved the corresponding balanced $k$-partite minimiser for every chordal graph whose maximal cliques have a common size $r\ge3$; this proves 17 cases of the 175-graph study that were previously unproven. 
+For $\mathbf{(P2)}$, we proved unique bipodal optimisers in a nontrivial neighbourhood on the symmetry-breaking side of every nonexceptional phase-boundary point for every $d$-regular $H$, $d\ge2$. 
+The first two theorems are fully formalised in Lean 4; the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+We are preparing manuscripts describing all three for submission to mathematics journals. Outside the proved regimes, including $H_6$ and $C_7$ away from the sharp densities, we retain candidate language.
 
-**Conclusion levels.** We will use three labels consistently: (i) recovery of a proven optimum, as in Figures 1–3; (ii) candidate matching an independent lower bound; and (iii) numerically competitive candidate, including an explicit feasible candidate improving on a reference construction.
-
-**Baselines and cost.** We are extending the fixed-grid/SBM and sinusoidal-MLP baselines to representative $C_7$, $H_6$, and triangle-$\mathbf{(P2)}$ instances. [TODO: insert completed results.] The dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$; training uses $2^{12}$-$2^{16}$ samples, while $2^{28}$ is only a one-time final-evaluation budget. [TODO: insert seconds per iteration and peak memory.]
+**Levels of evidence.** 
+We agree that these three levels should be kept explicit, and in the revision we will label every reported instance with one of them. 
+- Rediscovery of a known extremal construction: Figures 1-3. The $K_3$ and clique optima are classical; the $C_5$ optimum is known at $p=1-1/k$, while at the intermediate densities the construction is conjectured optimal, so those cells belong to the second category. 
+- Numerically competitive candidates: Figure 4 ($C_7$) and the $\mathbf{(P2)}$ instances of Figures 6 and 8-12.  
+- Evidence against an existing reference construction: Figure 5 ($H_6$), where the learnt graphons improve on both the constant and the $k$-partite reference constructions at every tested density.
 
 ## Experiment priorities
 
