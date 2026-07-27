@@ -266,37 +266,58 @@ Every experiment in the paper fits on this single workstation GPU.
 
 Thank you for recognising the coherent methodology, effective symmetry-aware estimator, and extensive experimental scope. We address the two issues most relevant to the score—novelty and reliability—before answering the individual experimental questions.
 
-**Novelty and Xia et al.** Xia et al. (2023) address graphon learning: reconstructing an unknown graphon from observed graphs using a SIREN and a Gromov-Wasserstein loss. Our problem observes neither graphs nor a target graphon; it searches directly over graphons to optimise constrained homomorphism-density and KL functionals. We will cite Xia et al. and make clear that neural graphon representation itself is not our novelty. The contribution is the integrated graphon-variational framework: progressive per-layer features for sharp extremisers, an embedded monotone constraint solver with implicit differentiation, and symmetry-aware density estimation. These components turn a generic representation into a solver for the two mathematical problem families studied here.
+**Benefit coming from the sinusoidal encoding** The per-layer injection and the increasing frequency schedule play different roles. To isolate them, we reran the entire ablation suite of the paper with GeLU features replacing the sinusoidal per-layer features, keeping the injection structure fixed. On $K_3$ at $p=7/9$:
 
-**Sinusoid versus injection.** We are rerunning the full ablation suite in two versions: sinusoidal per-layer features and GeLU features, with the repeated injection structure held fixed. This comparison isolates periodic features from repeated injection; the existing constant-scale control separately tests the progressive frequency schedule. The suite also includes a parameter-matched sinusoidal MLP backbone under the same solver and estimator. [TODO: insert completed factorised-ablation and backbone results.]
+| variant | with sinusoidal features | without |
+|---|---|---|
+| Ours | 0.427215 | 0.436118 |
+| ResNet | 0.428968 | 0.436457 |
+| Constant-scale $s$ | 0.428190 | 0.436500 |
+| Regulariser | 0.434445 | 0.437376 |
+| Constant LR (low) | 0.430071 | 0.442499 |
+| Constant LR (high) | 0.431645 | 0.436795 |
 
-**Reliability: discovery has already led to proof.** The strongest independent validation of the framework is what happened after submission: interpretable learned structures led to three new mathematical theorems.
+Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the existing constant-scale control separately tests the progressive frequency schedule.
 
-First, following the learned $C_5/C_7$ structures, we proved that for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
-$$
-t(C_m,W)\ge p^m-p(1-p)^{m-1}.
-$$
-This extends Goodman's inequality to every odd cycle and is sharp at every balanced complete $k$-partite graphon, proving those graphons minimise $\mathbf{(P1)}$ at $p=1-1/k$.
+**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** The Table 6 entropy values are computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them. 
+In the course of this audit we also refined the evaluation: the reported run in each cell is now selected with the constraint enforced exactly at the evaluation resolution, which slightly revises the reported values (below). 
+More importantly, independent verification is possible in both directions. 
+In one direction, from the conjecture suggested by our observations — the learned profiles are nearly bipodal — we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), in which both $t(K_3,W)$ and $h_q(W)$ are exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound. 
+In the other direction, Lemma 3.3 of Lubetzky and Zhao (2012) provides a computable lower bound: for a $2$-regular pattern graph, the optimum is at least the convex minorant of $x \mapsto h_q(x^{1/2})$ evaluated at $x = r^2$. 
+The results:
 
-Second, for every chordal graph $H$ whose maximal cliques have a common size $r\ge3$, we proved that the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$. This settles 17 previously unproven cases of our 175-graph study.
+| $q$ | $r$ | lower bound | bipodal $h_q$ (explicit, feasible) | $h_q(W_{\mathrm{ours}})$, revised | $h_q(W_{\mathrm{LZ}})$ | $\Delta = h_q(W_{\mathrm{LZ}})-h_q(W_{\mathrm{ours}})$ |
+|---|---|---|---|---|---|---|
+| 0.05 | 0.4 | 0.460284 | 0.463083 | 0.464208 | 0.556057 | 0.091849 |
+| 0.05 | 0.5 | 0.725284 | 0.727151 | 0.727881 | 0.830366 | 0.102485 |
+| 0.05 | 0.6 | 1.049172 | 1.050275 | 1.051203 | 1.144945 | 0.093742 |
+| 0.10 | 0.4 | 0.306561 | 0.308803 | 0.309109 | 0.311239 | 0.002130 |
+| 0.10 | 0.5 | 0.504311 | 0.505990 | 0.506060 | 0.510826 | 0.004766 |
+| 0.10 | 0.6 | 0.746006 | 0.746713 | 0.747694 | 0.750684 | 0.002990 |
 
-Third, motivated by the bipodal outputs for $\mathbf{(P2)}$, we proved that for every $d$-regular $H$ with $d\ge2$ and every phase-boundary point with $r\ne(d-1)/d$, there is a nontrivial neighbourhood in which the optimiser on the symmetry-breaking side is unique up to relabelling and bipodal; its parameters and optimal value are analytic in $(q,r)$. This provides a provable qualitative description of nonconstant minimisers and addresses a central open question in dense-graph large-deviation theory.
+The lower bound and the bipodal construction bracket the true optimum within $7\times10^{-4}$ to $2.8\times10^{-3}$ in every cell, and $h_q(W_{\mathrm{LZ}})$ exceeds even the upper end of the bracket. 
+Thus $W_{\mathrm{LZ}}$ is certified suboptimal in all six cells, including the small-gap $q=0.10$ regime, and the revised learnt values are provably within $4\times10^{-3}$ of the true optimum; the run study below separately measures discovery reliability. 
+The same audit extends to $C_4$ and $C_5$: both are $2$-regular, so the same lower bound applies at $x=r^2$, the bipodal cycle densities are again closed forms, and explicit feasible bipodal graphons beat $W_{\mathrm{LZ}}$ in all 18 cells across the three pattern graphs; the revised $C_5$ values at $q=0.05$ are $0.465644, 0.727618, 1.052023$ ($q=0.10$ values unchanged).
 
-The odd-cycle and chordal theorems are fully formalised in Lean 4. We are preparing manuscripts describing all three for submission to mathematics journals. These results validate the paper's central claim: the method produces interpretable structures that can seed new mathematics. We retain "candidate" language for numerical outputs outside the theorems' scope, including $H_6$ and the displayed $C_7$ solutions away from the sharp densities.
+Finally, we note that the Lubetzky-Zhao construction is not specific to the triangle: it is defined for every $d$-regular pattern graph, so it is an equally valid reference for $C_4$ and $C_5$. 
+Its role, for all three pattern graphs, is that of a reference construction demonstrating non-optimality of the constant graphon rather than a claimed optimum; with the bracket above, the $C_4$ and $C_5$ comparisons carry the same certification as $K_3$.
 
-**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** The Table 6 entropy values were obtained by deterministic 64-bit integration, not Monte Carlo, so training-sample confidence intervals are not the relevant error measure. We are reporting convergence across integration resolutions, the constraint residual, and the paired gap
-$$
-\Delta=h_q(W_{\mathrm{LZ}})-h_q(W_{\mathrm{ours}})
-$$
-for every $K_3$ cell. [TODO: insert resolution audit, residuals, and paired gaps.] More importantly, the learned profiles can be distilled into a bipodal graphon. In that four-parameter family, the constraint and entropy are finite explicit formulas, so the constraint can be enforced analytically and the objective independently evaluated. [TODO: insert fitted parameters, exact/verified feasibility, and objective gap.] A single explicit feasible graphon with $\Delta>0$ proves that $W_{\mathrm{LZ}}$ is suboptimal, regardless of how often training finds it; the seed study separately measures discovery reliability.
+**Run distribution.** Every reported candidate was selected from exactly eight runs: two activations crossed with four learning rates. 
+To measure sensitivity to initialisation separately from this search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration: the mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so this does not indicate suboptimality). 
+We will report the same repetition analysis for $C_5$, $C_7$, and $H_6$ during the discussion phase.
 
-We will reserve "outperforms Lubetzky-Zhao" for $K_3$. The Lubetzky-Zhao construction is defined for regular graphs, including $C_4$ and $C_5$, but there it is a reference construction rather than a claimed optimum; improving on it is therefore evidence of a better construction, not evidence of near-optimality.
+**The 11.8% suboptimal sweep cases.** 
+Among these, 7% converged to a suboptimal local optimum, and 4.8% failed from training or inference instability (divergence to NaN or out-of-memory errors). 
+Independently of this failure analysis, we have proved, and verified in Lean 4, the theorem that if a graph is chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$. 
+This proves exact optimality for 17 cases of the sweep at the densities $p=1-1/k$; for these cases, our flag-algebra bounds were tight only in the low-density regime and did not certify the all the learnt graphons at $p=1-1/k$.
 
-**Run distribution and the 175-graph failures.** Every reported candidate was selected from exactly eight runs: two activations crossed with four learning rates. A standardised 10-seed study is running on $K_3$ at $p=7/9$, followed by $K_3$ $\mathbf{(P2)}$, $C_7$, and $H_6$; it reports objective and constraint distributions, fitted structural parameters, and structural success rates. [TODO: insert completed results.] We are also classifying the 11.8% suboptimal sweep cases into convergence to a suboptimal local optimum versus numerical divergence. [TODO: insert counts.] Separately, the new chordal theorem now proves optimality for 17 sweep cases for which the submitted flag-algebra bounds were not tight.
-
-**Why the neural representation helps.** The Appendix H baselines have enough nominal capacity on a finite grid to represent the benchmark solution; the observed difference is optimisation. A fixed-grid SBM cannot move its partition boundaries, trainable-block SBMs collapsed to nearly constant solutions in our experiments, and tree boundaries change through discrete splits. The neural graphon can adjust region values and boundary locations continuously. Conversely, once the structure is known, a well-chosen low-dimensional family can often recover it—the bipodal verification above is an example. The discovery advantage is that the network does not require choosing in advance between multipartite, diagonal/banded, circular-distance, or bipodal forms. We are extending fixed-grid/SBM and sinusoidal-MLP controls to $C_7$, $H_6$, and triangle $\mathbf{(P2)}$. [TODO: insert completed baseline results.] Agreement between the neural output and a distilled structured construction supports the framework's interpretability and provides an independent check.
-
-**Computational cost.** The dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time evaluation budget. On one RTX A5000, the submitted runs range from about 30 minutes for $K_3$ to a few hours for the Petersen graph. [TODO: insert seconds-per-iteration and peak-memory microbenchmark.]
+**Why the neural representation helps.** 
+The non-neural baselines in Appendix H have enough expressivity to represent the optimal solution; the observed difference is optimisation. 
+For the tree-based baselines and the fixed-grid SBM, moving a decision boundary is hard: almost every $\{0,1\}$-valued configuration is a local optimum that cannot be escaped without a reset, so these methods depend strongly on the initialisation and rarely leave the geometry of their initial solution. 
+Parameterising the decision boundary directly (the second and third panels of Figure 15) also fails: the optimisation landscape is very sharp, and training always converges to the constant solution. 
+The neural graphon instead optimises the region values and the boundary locations jointly and continuously, and we view this joint flexibility, combined with a favourable optimisation landscape, as the main benefit of the neural representation. 
+The discovery advantage is that the network does not require choosing in advance between multipartite, diagonal/banded, circular-distance, or bipodal forms. 
+We are extending the fixed-grid/SBM and sinusoidal-MLP controls to $C_7$, $H_6$, and triangle $\mathbf{(P2)}$, and will report them during the discussion phase; agreement between the neural output and a distilled structured construction supports the framework's interpretability and provides an independent check.
 
 ## Reviewer s6Ge
 
