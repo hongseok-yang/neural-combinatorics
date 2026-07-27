@@ -59,7 +59,7 @@ To apply graphon learning problem to extremal graph theory problem like our prob
 [1] Scalable Implicit Graphon Learning, Ali Aziz pour, Nicolas Zilberstein, and Santiago Segarra, AISTATS 2025.
 
 On Xia, Mishne, and Wang (2023) specifically: they introduced implicit neural graphon representations for this reconstruction task, using a SIREN with a Gromov-Wasserstein loss, with extensions to graph generation and representation learning. Our task observes no target graphon or graph dataset; we directly optimise homomorphism-density or KL functionals under a density constraint. Contributions specific to our setting: progressive per-layer input encoding for discontinuous extremisers, symmetry-aware Monte Carlo estimators, embedded monotone constraint solver with implicit differentiation. We add the citation and narrow the novelty wording so we do not claim to introduce neural graphon representations.
-The promised parameter-matched SIREN control is already covered by the ablation: the plain-MLP variant with sinusoidal activations *is* a parameter-matched SIREN under our objective, solver, and estimator (no separate run needed; quote its number).
+Correction: the ablation suite has NO plain-MLP variant (six entries: ours, ResNet, constant $s(\ell)$, no solver/regulariser, low-LR without scheduling, high-LR without scheduling), so the parameter-matched SIREN control is NOT covered by the ablation. Decide: either run one parameter-matched SIREN backbone (sinusoidal-activation MLP under our same objective, solver, and estimator) or soften the promised SIREN comparison in the responses. Any "plain-MLP variant is a SIREN" sentence in the draft must be removed.
 
 ### Some theoretical idea when works well or not? 
 
@@ -135,7 +135,7 @@ We repeated the ablation study in our paper, but with no sinusoidal encoding.
 - Constant LR (low), without sinusoidal encoding: $t(K_3, W) = 0.442499$
 - Constant LR (high), without sinusoidal encoding: $t(K_3, W) = 0.436795$
 
-Interpretation note: every no-sin number here (0.4361–0.4425) is worse than every sin-encoding variant in the paper's ablation table (0.4272–0.4344), so pairing each variant with its no-sin counterpart attributes the gain to the sinusoidal features themselves, not merely to the per-layer injection — this is exactly the disentanglement BFdn and 6KFF asked for. Add the plain-MLP number when available; with sinusoidal activations it doubles as the parameter-matched Xia/SIREN control.
+Interpretation note: every no-sin number here (0.4361–0.4425) is worse than every sin-encoding variant in the paper's ablation table (0.4272–0.4344), so pairing each variant with its no-sin counterpart attributes the gain to the sinusoidal features themselves, not merely to the per-layer injection — this is exactly the disentanglement BFdn and 6KFF asked for. (All six variants are done; there is no MLP variant — see the SIREN correction in the Graphon-INR section.)
 
 ### P2 has no good lower bound?
 
@@ -149,6 +149,8 @@ There are some empirical tests that can be used to check comparable lower bound:
 We repeated the $K_3$ density minimisation experiment under best hyperparameter configuration 10 times:
 - Mean : $0.435711$
 - Gaussian CI (95%): $[0.435705, 0.435718]$.
+- Known optimum for reference: $98/225 \approx 0.435556$. So the CI has width $\approx 1.3 \times 10^{-5}$ and sits $\approx 1.6 \times 10^{-4}$ ($\approx 0.04\%$ relative) above the optimum — quote the optimum right beside the CI in the reproducibility answers.
+- Structural outcome: 7/10 runs recovered the clean 5-block structure; 3/10 produced five parts in which the smallest part deviates from being an exact block, with comparable objective values. Wording caution: the 5-block construction is not the unique optimiser, so deviating from the exact block structure does not imply suboptimality — report "structure recovery" and "objective value" as separate columns rather than counting the 3 runs as failures.
 
 For the 
 
@@ -207,10 +209,10 @@ Framing to keep: the intended workflow is candidate discovery followed by indepe
 
 ### Running / planned robustness protocols (for the sensitivity answers)
 
-- Learning-rate schedule robustness at a fixed budget of 20000 epochs: cosine-annealing cycles $20000\times1$, $10000\times2$, $5000\times4$, $2500\times8$, $1000\times20$.
-- MC-permutation study on $C_5$: identity only, the two cyclic permutations $(0\,1\,2\,3\,4)$ and $(0\,2\,4\,1\,3)$, and the full permutation set. All unbiased — the choice affects only variance and cost; for cycles the main estimator averages all coset representatives, so the choice of representatives does not change the symmetrised estimator.
+- (The learning-rate-cycle study was dropped — it stemmed from a misreading of the reviewer's "frequency schedule"; remove any mention of cosine-cycle robustness from the draft.)
+- MC-permutation study on $C_5$ (running): identity only, the two cyclic permutations $(0\,1\,2\,3\,4)$ and $(0\,2\,4\,1\,3)$, and the full permutation set. All unbiased — the choice affects only variance and cost; for cycles the main estimator averages all coset representatives, so the choice of representatives does not change the symmetrised estimator.
 - Same repetition protocol on the open instances to follow ($C_7$ at $p=5/8$, $H_6$, triangle P2 at $q=0.10$) — these are the distributions the reviewers weighted most.
-- If s6Ge's "frequency schedule" means the encoding scale schedule: compare $s(\ell) = \ell$ vs $s(\ell) = 2^{\ell-1}$ under the same protocol (the paper says $2^{\ell-1}$ was used in pilot runs, so the logs may already cover this).
+- Frequency (encoding-scale) schedule study is running: $s(\ell) = \ell$ vs $s(\ell) = 2^{\ell-1}$ under the same protocol — this answers s6Ge's "frequency schedule" sensitivity question directly.
 
 ### Internal notes (do not volunteer in responses)
 
