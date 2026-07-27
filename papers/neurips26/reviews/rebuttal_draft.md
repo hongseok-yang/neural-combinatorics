@@ -181,8 +181,10 @@ Thank you for recognising that the paper tackles important problems, that the fr
 
 **Theoretical results and operating regime.** 
 A convergence guarantee for the nonconvex optimisation is out of reach, and we do not claim one. 
-Instead, the framework now has theoretical results of a different kind: three new mathematical theorems proved from its outputs — an odd-cycle lower bound extending Goodman's inequality, a chordal-graph minimiser theorem, and a local structure theorem for the large-deviation problem — described in detail under "Application and significance" below. 
-On when the method works well or fails: the target regime is dense-graph problems with one monotone scalar constraint, moderate motif density, and a low-complexity block or geometric optimiser. 
+We nevertheless have a theoretical guarantee for the implicit gradient estimator. For fixed network parameters, the finite-batch implicit gradient is exact for the empirical constrained problem and converges almost surely to the population constrained gradient as the batch size grows; for details, see our response to Reviewer 1jpj (item 2).
+Separately, the framework has led to three new mathematical theorems from its outputs: an odd-cycle lower bound extending Goodman's inequality, a chordal-graph minimiser theorem, and a local structure theorem for the large-deviation problem. These results are described in detail under "Application and significance" below. 
+The method is best suited to dense-graph problems with one monotone scalar constraint. It works best when the target homomorphism density is large enough to estimate accurately with the available Monte Carlo batch size and when an optimiser is expected to have a relatively simple structure, such as a graphon governed by a low-dimensional geometric rule.
+It becomes less reliable when the motif density is so small that Monte Carlo estimation has high relative variance, or when the optimiser requires fine irregular structure.
 Across our experiments, the clearest failure diagnostic is a nearly competitive constant graphon. 
 The problems we study often admit the constant graphon as a trivial solution, and when constant graphon's objective value is within roughly $10^{-5}$ of the best known value, training often remains at that trivial solution. 
 We will state this operating regime and failure diagnostic explicitly in the revised version of the paper.
