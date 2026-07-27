@@ -17,9 +17,8 @@ Internal drafting note: the 2026 rules allow up to 10,000 characters per review,
 - Lean status, to be stated precisely: the odd-cycle and chordal theorems are formalised in full, with no conditional assumptions. The formalisation of the large-deviation theorem takes some established results from the literature and parts of graphon theory as axioms.
 - Do not offer links to proofs or formalisation: the response rules prohibit links except when a reviewer requests code.
 - Do not describe a running or planned experiment as completed. Replace each results placeholder only after the corresponding numbers have been checked.
-- Before posting exact learning rates, reconcile the human notes ($10^{-3},3\times10^{-4},10^{-4},3\times10^{-5}$) with the submitted Appendix D ($10^{-3},5\times10^{-4},10^{-4},5\times10^{-5}$). Until then, state only that the search crossed two activations with four learning rates.
-- Reconcile the Haar-wavelet result before quoting it: `rough_answer.md` gives $0.444238$, while the earlier internal experiment note gives $0.446430$.
-- Author-verify the exact large-deviation theorem statement and the count of 17 newly settled sweep cases against the current mathematical manuscripts; neither fact is documented in the submitted paper or `rough_answer.md`.
+- Learning rates verified: $10^{-3},5\times10^{-4},10^{-4},5\times10^{-5}$, matching the submitted Appendix D.
+- The count of 17 newly settled sweep cases is verified. Still author-verify the exact large-deviation theorem statement (it appears in the AC comment) against the current mathematical manuscripts.
 
 ## Optional confidential overview to the AC
 
@@ -51,7 +50,7 @@ We are preparing manuscripts describing these theorems for submission to mathema
 
 Thank you for recognising the framework as coherent, the implicit-differentiation formula as mathematically sound, and best-run reporting as reasonable for candidate discovery. We answer the four questions directly below.
 
-**1. Number of runs and robustness.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. Thus "best across multiple runs" refers to a finite eight-configuration search. 
+**1. Number of runs and robustness.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus "best across multiple runs" refers to a finite eight-configuration search. 
 To measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). 
 The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. 
 Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
@@ -103,7 +102,7 @@ $$
 extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
 Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven. 
 Third, for every $d$-regular pattern graph with $d\ge2$ and every phase-boundary point with $r \ne (d-1)/d$, the large-deviation optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. 
-The first two theorems are fully formalised in Lean 4; the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
 Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
 We are preparing manuscripts describing all three for submission to mathematics journals. 
 This is the intended use of the framework: learned structures guide new, independent mathematics.
@@ -122,7 +121,7 @@ At $N=2^{28}$, the distribution-free 95% absolute-error bound is approximately $
 Thus $2^{28}$ was a conservative evaluation choice, not a sample size required by either training or theory. 
 Training uses $2^{12}$-$2^{16}$, and the usual $N^{-1/2}$ rate lets users choose the evaluation budget for the desired absolute precision. We will state this distinction explicitly.
 
-**Runs.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. Thus the reported best-found values come from a finite eight-configuration search. 
+**Runs.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus the reported best-found values come from a finite eight-configuration search. 
 To measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). 
 The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. 
 Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
@@ -224,7 +223,7 @@ $$
 extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
 Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven. 
 Third, for every $d$-regular pattern graph with $d\ge2$ and every phase-boundary point with $r \ne (d-1)/d$, the large-deviation optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. 
-The first two theorems are fully formalised in Lean 4; the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
 Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
 We are preparing manuscripts describing all three for submission to mathematics journals. 
 This is the intended use of the framework: learned structures guide new, independent mathematics.
@@ -304,15 +303,15 @@ Thus $W_{\mathrm{LZ}}$ is certified suboptimal in all six cells, including the s
 The same audit extends to $C_4$ and $C_5$: both are $2$-regular, so the same lower bound applies at $x=r^2$, the bipodal cycle densities are again closed forms, and explicit feasible bipodal graphons beat $W_{\mathrm{LZ}}$ in all 18 cells across the three pattern graphs; the revised $C_5$ values at $q=0.05$ are $0.465644, 0.727618, 1.052023$ ($q=0.10$ values unchanged).
 
 Finally, we note that the Lubetzky-Zhao construction is not specific to the triangle: it is defined for every $d$-regular pattern graph, so it is an equally valid reference for $C_4$ and $C_5$. 
-Its role, for all three pattern graphs, is that of a reference construction demonstrating non-optimality of the constant graphon rather than a claimed optimum; with the bracket above, the $C_4$ and $C_5$ comparisons carry the same certification as $K_3$.
+Its role, for all three pattern graphs, is that of a reference construction demonstrating non-optimality of the constant graphon rather than a claimed optimum; with the bounds above, the $C_4$ and $C_5$ comparisons carry the same certification as $K_3$.
 
-**Run distribution.** Every reported candidate was selected from exactly eight runs: two activations crossed with four learning rates. 
+**Run distribution.** Every reported candidate was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). 
 To measure sensitivity to initialisation separately from this search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration: the mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so this does not indicate suboptimality). 
 We will report the same repetition analysis for $C_5$, $C_7$, and $H_6$ during the discussion phase.
 
 **The 11.8% suboptimal sweep cases.** 
 Among these, 7% converged to a suboptimal local optimum, and 4.8% failed from training or inference instability (divergence to NaN or out-of-memory errors). 
-Independently of this failure analysis, we have proved, and verified in Lean 4, the theorem that if a graph is chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$. 
+Independently of this failure analysis, we have proved — with the help of GPT 5.5, and verified in Lean 4 with the help of Claude Opus 4.8 — the theorem that if a graph is chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$. 
 This proves exact optimality for 17 cases of the sweep at the densities $p=1-1/k$; for these cases, our flag-algebra bounds were tight only in the low-density regime and did not certify the all the learnt graphons at $p=1-1/k$.
 
 **Why the neural representation helps.** 
@@ -327,7 +326,7 @@ The discovery advantage is that the network does not require choosing in advance
 Thank you for recognising the mathematically meaningful problem setting, the problem-specific architecture, and the breadth of the experiments. We address reliability with targeted sensitivity studies and, more importantly, with explicit constructions and new mathematical theorems.
 
 **Initialisation, schedule, and permutation sensitivity.** 
-Every reported value was selected from exactly eight runs: two activations crossed with four learning rates. We separate that finite hyperparameter search from reproducibility through three controlled studies. 
+Every reported value was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). We separate that finite hyperparameter search from reproducibility through three controlled studies. 
 (i) Initialisation: we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration. The mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225\approx0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so we report structure recovery and objective quality separately). The same repetition analysis for $C_5$, $C_7$, and $H_6$ will follow during the discussion phase. 
 (ii) Frequency schedule: we trained with both encoding-scale schedules. With $s(\ell)=2^{\ell-1}$, the ten repetitions above give mean $0.435711$; with $s(\ell)=\ell$, the best run gives $0.435754$. The discovered solution and its objective are insensitive to the schedule choice.
 (iii) Permutations: on $C_5$, we compare three symmetry sets for the estimator: the identity only; the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$; and the full set of coset representatives. Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. [TODO: insert permutation-study results.]
@@ -351,7 +350,7 @@ $$
 extending Goodman's inequality to all odd cycles and proving optimality of the balanced complete $k$-partite graphons at $p=1-1/k$. 
 We also proved the corresponding balanced $k$-partite minimiser for every chordal graph whose maximal cliques have a common size $r\ge3$; this proves 17 cases of the 175-graph study that were previously unproven. 
 For $\mathbf{(P2)}$, we proved unique bipodal optimisers in a nontrivial neighbourhood on the symmetry-breaking side of every nonexceptional phase-boundary point for every $d$-regular $H$, $d\ge2$. 
-The first two theorems are fully formalised in Lean 4; the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
 We are preparing manuscripts describing all three for submission to mathematics journals. Outside the proved regimes, including $H_6$ and $C_7$ away from the sharp densities, we retain candidate language.
 
 **Levels of evidence.** 
