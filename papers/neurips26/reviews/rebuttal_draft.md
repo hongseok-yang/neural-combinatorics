@@ -109,36 +109,36 @@ This is the intended use of the framework: learnt structures guide new mathemati
 
 ## Reviewer PPij
 
-Thank you for recognising the framework's novelty, tailored architecture, and comprehensive experiments. The requested details sharpen the computational and related-work positioning as follows.
+Thank you for recognising our framework's novelty, our tailored architecture, and comprehensive experiments. We answer your questions below. 
 
-**Sample size.** The $2^{28}$ figure is not the training batch size. Training uses $2^{12}$-$2^{16}$ sampled tuples; $2^{28}$ is a conservative, one-time post-training evaluation budget used only when deterministic high-resolution contraction is infeasible. 
+**Sample size.** The $2^{28}$ figure is not the training batch size. Training uses $2^{12}$-$2^{16}$ sampled tuples; $2^{28}$ is a conservative, one-time post-training budget for evaluating the found graphons, and it is used only when deterministic high-resolution contraction is infeasible. 
 The theoretical bound is as follows: for any fixed permutation set, the estimator is an average of $N$ independent tuple contributions in $[0,1]$. 
 Hoeffding's inequality therefore gives
 $$
 \Pr(|\widehat t-t|\ge\epsilon)\le2e^{-2N\epsilon^2}.
 $$
 At $N=2^{28}$, the distribution-free 95% absolute-error bound is approximately $8.3\times10^{-5}$. 
-Thus $2^{28}$ was a conservative evaluation choice, not a sample size required by either training or theory. 
+Thus, $2^{28}$ was a conservative evaluation choice, not a sample size required by either training or theory. 
 Training uses $2^{12}$-$2^{16}$, and the usual $N^{-1/2}$ rate lets users choose the evaluation budget for the desired absolute precision. We will state this distinction explicitly in the revised version of the paper.
 
-**Runs.** Every candidate reported in the submitted paper was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus the reported best-found values come from a finite eight-configuration search.
+**Runs.** Every candidate reported in the submitted paper was selected from exactly eight runs: one run for each of two activations (sin or GeLU) across four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus, "best across multiple runs" refers to a finite eight-configuration hyperparameter search.
 During rebuttal, to measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study).
-The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$ — an interval of width $1.3\times10^{-5}$. 
+The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, an interval of width $1.3\times10^{-5}$. 
 Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
-Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality; we therefore report structure recovery and objective quality separately. 
-We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
+Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality.
+We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-configuration results in the revised version of the paper.
 
 **Relation to graphon learning.** 
 Xia, Mishne, and Wang (2023) and, more recently, Azizpour, Zilberstein, and Segarra (AISTATS 2025) introduced implicit neural representations for graphon learning, a problem in network analysis: given a set of graphs $\{G_i\}_{i=1}^N$ assumed to be sampled from a common underlying graphon $W$, estimate $W$ from these samples. 
 Because the goal is to reconstruct a graphon close to the true one from finite samples, sharp details of the true graphon are often lost; see, for instance, Figures 3(b) and 9 of Azizpour et al. 
-Moreover, applying graphon learning to problems like ours would first require finding near-optimal finite graphs — itself a hard discrete optimisation — and only then estimating the underlying graphon from them. 
+Moreover, applying graphon learning to problems like ours would first require finding near-optimal finite graphs, which is itself a hard discrete optimisation, and only then estimating the underlying graphon from them. 
 Our setting observes neither a graph dataset nor a target graphon: we search directly over graphons to optimise homomorphism-density or KL functionals under a density constraint. 
 The contributions specific to this setting are the progressive per-layer input encoding for discontinuous extremisers, the symmetry-aware Monte Carlo estimators, and the embedded monotone constraint solver with implicit differentiation. 
 We will cite Xia et al. and make clear in the revised version of the paper that we do not claim to introduce neural graphon representations.
 
 During rebuttal, we also ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$), whereas our method reaches $0.427215$. We will include this baseline and the distinction between graphon reconstruction and direct graphon optimisation in the revised version of the paper.
 
-**Complexity.** The practical conclusion is that the method is manageable on one workstation GPU for the small fixed motifs common in extremal graph theory, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
+**Complexity.** Our method is manageable on one workstation GPU for the small fixed motifs common in extremal graph theory, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
 With width $d$, depth $L$, batch size $N$, and cached evaluations on at most $\binom{v(H)}2$ unordered pairs per tuple, the dominant neural forward/backward cost is approximately
 $$
 O\!\left(Nv(H)^2Ld^2\right),
@@ -146,7 +146,7 @@ $$
 with an additional $O(N|\mathcal S|e(H))$ cost for motif-product aggregation. 
 Activation memory is approximately $O(Nv(H)^2Ld)$. 
 Monte Carlo absolute error scales as $N^{-1/2}$, so halving it requires approximately four times as many samples. 
-During rebuttal, we measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all submitted experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
+During rebuttal, we measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all experiments in our submission, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
 
 Sample size ($K_3$, width $256$):
 
@@ -173,7 +173,7 @@ Motif ($N=2^{15}$, width $256$):
 The measurements match the stated scaling. Memory grows linearly in $N$ and in width, and proportionally to the pair count $\binom{v(H)}2$ across motifs. Time grows linearly in $N$ once the GPU is saturated (sub-linearly at small $N$ from under-utilisation), between linearly and quadratically in width, and roughly proportionally to the pair count across motifs, with the $C_7$ excess over this proportion coming from the $|\mathcal S|e(H)=360\times7$ aggregation term. 
 Full-run wall-clock follows directly: $20000$ epochs take about $18$ minutes for $K_3$ and about $57$ minutes for $C_5$ at $N=2^{15}$. 
 In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
-Thus every submitted experiment fits on a single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
+Thus, every submitted experiment fits on a single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
 
 ## Reviewer 6KFF
 
@@ -299,7 +299,7 @@ The results:
 | 0.10 | 0.6 | 0.746006 | 0.746713 | 0.747694 | 0.750684 | 0.002990 |
 
 The lower bound and the feasible bipodal values agree to within $7\times10^{-4}$ to $2.8\times10^{-3}$ in every cell, and $h_q(W_{\mathrm{LZ}})$ exceeds even the bipodal upper bounds. 
-Thus $W_{\mathrm{LZ}}$ is certified suboptimal in all six cells, including the small-gap $q=0.10$ regime, and the revised learnt values lie within $4\times10^{-3}$ of the computable lower bound (the exact optimum itself is not known; its bipodal form is our conjecture); the run study below separately measures discovery reliability. 
+Thus, $W_{\mathrm{LZ}}$ is certified suboptimal in all six cells, including the small-gap $q=0.10$ regime, and the revised learnt values lie within $4\times10^{-3}$ of the computable lower bound (the exact optimum itself is not known; its bipodal form is our conjecture); the run study below separately measures discovery reliability. 
 The same audit extends to $C_4$ and $C_5$: both are $2$-regular, so the same lower bound applies at $x=r^2$, the bipodal cycle densities are again closed forms, and explicit feasible bipodal graphons beat $W_{\mathrm{LZ}}$ in all 18 cells across the three pattern graphs; the revised $C_5$ values at $q=0.05$ are $0.465644, 0.727618, 1.052023$ ($q=0.10$ values unchanged).
 
 Finally, we note that the Lubetzky-Zhao construction is not specific to the triangle: it is defined for every $d$-regular pattern graph, so it is an equally valid reference for $C_4$ and $C_5$. 
