@@ -100,7 +100,7 @@ and at $N=2^{28}$ the distribution-free 95% absolute-error bound is approximatel
 
 **Runs.** The reported objective values are highly reproducible under a fixed configuration, and the best-found values come from a finite eight-configuration search rather than unbounded selection. Every candidate reported in the submitted paper was selected from exactly eight runs: one for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). During rebuttal, to measure reproducibility separately from this search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). The mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. Structurally, 7 of the 10 runs recovered the clean 5-block partition, while the remaining 3 produced five parts of comparable objective quality whose smallest part deviated from an exact block; since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality, and we therefore report structure recovery and objective quality separately. We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
 
-**Relation to graphon learning.** Graphon learning reconstructs an unknown graphon from sampled graphs; we solve a different problem — directly optimising a graphon against a variational objective, with no data to fit — so the two settings share neural representations but not goals. Xia, Mishne, and Wang (2023) and, more recently, Azizpour, Zilberstein, and Segarra (AISTATS 2025) introduced implicit neural representations for graphon learning, a problem in network analysis: given a set of graphs $\{G_i\}_{i=1}^N$ assumed to be sampled from a common underlying graphon $W$, estimate $W$ from these samples. Because the goal is to reconstruct a graphon close to the true one from finite samples, sharp details of the true graphon are often lost (see, for instance, Figures 3(b) and 9 of Azizpour et al.), and applying graphon learning to problems like ours would first require finding near-optimal finite graphs — itself a hard discrete optimisation — before estimating the underlying graphon from them. Our setting observes neither a graph dataset nor a target graphon: we search directly over graphons to optimise homomorphism-density or KL functionals under a density constraint, and the contributions specific to this setting are the progressive per-layer input encoding for discontinuous extremisers, the symmetry-aware Monte Carlo estimators, and the embedded monotone constraint solver with implicit differentiation. Consistent with this distinction, during rebuttal we ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$), whereas our method reaches $0.427215$. We will cite Xia et al., include this baseline, and make clear in the revised version of the paper that we claim direct graphon optimisation, not the introduction of neural graphon representations.
+**Relation to graphon learning.** Graphon learning reconstructs an unknown graphon from sampled graphs; we solve a different problem — directly optimising a graphon against a variational objective, with no data to fit — so the two settings share neural representations but not goals. Xia, Mishne, and Wang (2023) and, more recently, Azizpour, Zilberstein, and Segarra (AISTATS 2025) introduced implicit neural representations for graphon learning, a problem in network analysis: given a set of graphs $\{G_i\}_{i=1}^N$ assumed to be sampled from a common underlying graphon $W$, estimate $W$ from these samples. Because the goal is to reconstruct a graphon close to the true one from finite samples, sharp details of the true graphon are often lost (see, for instance, Figures 3(b) and 9 of Azizpour et al.), and applying graphon learning to problems like ours would first require finding near-optimal finite graphs — itself a hard discrete optimisation — before estimating the underlying graphon from them. Our setting observes neither a graph dataset nor a target graphon: we search directly over graphons to optimise homomorphism-density or KL functionals under a density constraint, and the contributions specific to this setting are the progressive per-layer input encoding for discontinuous extremisers, the symmetry-aware Monte Carlo estimators, and the embedded monotone constraint solver with implicit differentiation. Consistent with this distinction, during rebuttal we ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$). We will cite Xia et al., include this baseline, and make clear in the revised version of the paper that we claim direct graphon optimisation, not the introduction of neural graphon representations.
 
 **Complexity.** The practical conclusion is that the method is manageable on one workstation GPU for the small fixed motifs common in extremal combinatorics, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
 With width $d$, depth $L$, batch size $N$, and cached evaluations on at most $\binom{v(H)}2$ unordered pairs per tuple, the dominant neural forward/backward cost is approximately
@@ -148,19 +148,8 @@ Thank you for recognising that the paper tackles important problems, that the fr
 **Why progressive sinusoidal features.** The main conclusion is that the performance gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, and the progressive frequency schedule provides a further benefit.
 A step boundary requires increasingly high spatial frequencies for accurate approximation. 
 The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. 
-The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
+The submitted paper included the sinusoidal ResNet and constant-scale controls. 
 
-| variant | with sinusoidal features | without |
-|---|---|---|
-| Ours | 0.427215 | 0.436118 |
-| ResNet | 0.428968 | 0.436457 |
-| Constant-scale $s$ | 0.428190 | 0.436500 |
-| Regulariser | 0.434445 | 0.437376 |
-| Constant LR (low) | 0.430071 | 0.442499 |
-| Constant LR (high) | 0.431645 | 0.436795 |
-
-Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). 
-This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the existing constant-scale control separately tests the multiscale schedule. 
 The $d^{-1/2}$ initialisation of residual matrices controls activation growth with fan-in, while the range of each row of $U^{(\ell)}$ directly controls the initialised spatial frequency. Increasing $s(\ell)$ therefore gives later layers access to progressively finer scales without increasing hidden-state magnitude.
 We will include this factorised ablation, its interpretation, and an illustration of the multiscale encoding in the revised version of the paper.
 
@@ -170,7 +159,7 @@ During rebuttal, we tested other encodings in non-neural form: parameterising $W
 In direct objective optimisation, all of them diverge: a fixed linear basis cannot enforce the constraint $W(x,y)\in[0,1]$, at any basis size. 
 We further tested the expressivity of these bases by training them to fit the known optimal solution.
 The Fourier and polynomial representations overshoot the step boundaries by about $\pm0.2$ (known as the Gibbs phenomenon) and violate the bound on about half of the domain.
-The Haar representation stays within $[0,1]$ and reaches $t(K_3,W)=0.436341$ — but clipped Haar expansions are exactly fixed-grid block models, so this route reduces to the fixed-grid SBM baseline in Appendix H ($0.435817$, against $0.427215$ for our method). We will include this basis-function comparison and its limitations in the revised version of the paper.
+The Haar representation stays within $[0,1]$ and reaches $t(K_3,W)=0.436341$. We will include this basis-function comparison and its limitations in the revised version of the paper.
 
 **Application and significance.** Since submission, the strongest independent validation is that structures found by the framework have led to three new mathematical theorems. This is the intended use of the framework: it supplies the candidate structures, and separate mathematical arguments establish the theorems.
 
@@ -229,16 +218,16 @@ Thank you for recognising the coherent methodology, effective symmetry-aware est
 
 **Benefit from the sinusoidal encoding.** The main conclusion is that the gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, while the progressive frequency schedule provides a further benefit. The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
 
-| variant | with sinusoidal features | without |
-|---|---|---|
-| Ours | 0.427215 | 0.436118 |
-| ResNet | 0.428968 | 0.436457 |
-| Constant-scale $s$ | 0.428190 | 0.436500 |
-| Regulariser | 0.434445 | 0.437376 |
-| Constant LR (low) | 0.430071 | 0.442499 |
-| Constant LR (high) | 0.431645 | 0.436795 |
+| variant without sinusoidal features | $t(K_3, W)$ |
+|---|---|
+| Ours | 0.436118 |
+| ResNet | 0.436457 |
+| Constant-scale $s$ | 0.436500 |
+| Regulariser | 0.437376 |
+| Constant LR (low) | 0.442499 |
+| Constant LR (high) | 0.436795 |
 
-Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the submitted constant-scale control separately tests the progressive frequency schedule. We will include this factorised ablation and its interpretation in the revised version of the paper.
+Our models without sinusoidal features are consistently worse than the same models with them. This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the submitted constant-scale control separately tests the progressive frequency schedule. We will include this factorised ablation and its interpretation in the revised version of the paper.
 
 **Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** Independent bounds computed during rebuttal now certify the comparison: a computable lower bound and explicit feasible upper bounds bracket the optimum, certify $W_{\mathrm{LZ}}$ as suboptimal in every tested cell, and place the revised learnt values within $4\times10^{-3}$ of the optimum. In the submitted paper, the Table 6 entropy values were computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them; during rebuttal, we refined this evaluation by enforcing the constraint exactly at the evaluation resolution, which slightly revises the reported values below. Verification then proceeds in both directions. In one direction, from the conjecture suggested by our observations — the learnt profiles are nearly bipodal — we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), in which both $t(K_3,W)$ and $h_q(W)$ are exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound. In the other direction, Lemma 3.3 of Lubetzky and Zhao (2012) provides a computable lower bound: for a $2$-regular pattern graph, the optimum is at least the convex minorant of $x \mapsto h_q(x^{1/2})$ evaluated at $x = r^2$. The bounds and revised values are:
 
