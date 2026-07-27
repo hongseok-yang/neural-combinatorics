@@ -48,28 +48,28 @@ The neural framework supplies the candidate structures; separate mathematical ar
 
 ## Reviewer 1jpj
 
-Thank you for recognising the framework as coherent, the implicit-differentiation formula as mathematically sound, and best-run reporting as reasonable for candidate discovery. We answer the four questions directly below.
+Thank you for recognising our framework as coherent, the implicit-differentiation formula as mathematically sound, and best-run reporting as reasonable for candidate discovery. We answer the four questions directly below.
 
-**1. Number of runs and robustness.** Every candidate reported in the submitted paper was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus "best across multiple runs" refers to a finite eight-configuration search.
+**1. Number of runs and robustness.** Every candidate reported in the submitted paper was selected from exactly eight runs: one run for each of two activations (sin or GeLU) across four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus, "best across multiple runs" refers to a finite eight-configuration hyperparameter search.
 During rebuttal, to measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study).
-The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$ — an interval of width $1.3\times10^{-5}$. 
+The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, an interval of width $1.3\times10^{-5}$. 
 Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
-Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality; we therefore report structure recovery and objective quality separately. 
-We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
+Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality.
+We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-configuration results in the revised version of the paper.
 
-**2. Population interpretation of the implicit gradient.** The complete finite-batch implicit gradient is generally biased, because the same empirical batch enters the constraint root and the derivative ratio. 
+**2. Population interpretation of the implicit gradient.** The finite-batch implicit gradient is the exact gradient of the empirical constrained problem, but it is generally a biased estimator of the population constrained gradient. The bias arises because it contains a nonlinear term computed from samples. 
 On the other hand, it is a consistent estimator of the population constrained gradient, by the following argument. 
-For fixed $\theta$, the pre-sigmoid output $h_\theta$ is bounded on the compact domain, say $|h_\theta|\le M$, so both the empirical root and the population root lie in
+For fixed $\theta$, the pre-sigmoid output $h_\theta$ is bounded on the compact domain $[0,1]^2$, say $|h_\theta|\le M$. Let $\widehat c_S(\theta)$ be the scalar offset that makes the batch-average density equal to the target $p$, and let $c(\theta)$ be the offset that makes the exact population density equal to $p$. Both offsets lie in
 $$
 [\mathrm{logit}(p)-M,\ \mathrm{logit}(p)+M].
 $$
 On this compact interval, the uniform law of large numbers gives almost-sure convergence of the empirical constraint to the population constraint, uniformly in $c$. 
-Since the population constraint is strictly increasing in $c$ and its root is unique, it follows that $\widehat c_S(\theta)\to c(\theta)$ almost surely. 
+Since the population constraint is strictly increasing in $c$, its constraint-enforcing offset is unique. It follows that $\widehat c_S(\theta)\to c(\theta)$ almost surely. 
 Finally, the convergence of the implicit gradient follows from the continuous mapping theorem. 
 We will state this argument and its assumptions explicitly in the revised version of the paper.
 
 **3. Small sigmoid derivatives.** While the denominator may look like a source of numerical instability, the implicit derivative is a stable estimator, because it can be understood as a weighting scheme. 
-For the edge-density constraint, writing $s_i = \sigma'(h_\theta(x_i)+\widehat c)$ for the sigmoid derivatives,
+For the edge-density constraint, writing $s_i = \mathit{sm}'(h_\theta(x_i)+\widehat c)$ for the sigmoid derivatives,
 $$
 \nabla_\theta \widehat c
 =-\sum_i w_i\nabla_\theta h_\theta(x_i),
