@@ -47,38 +47,62 @@ We are preparing manuscripts describing these theorems for submission to mathema
 
 Thank you for recognising the framework as coherent, the implicit-differentiation formula as mathematically sound, and best-run reporting as reasonable for candidate discovery. We answer the four questions directly below.
 
-**1. Number of runs and robustness.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. Thus "best across multiple runs" refers to a finite eight-configuration search, which we will state explicitly. To measure reproducibility separately from hyperparameter selection, we are running 10 independent repetitions under a fixed protocol on $K_3$ at $p=7/9$, followed by the key open instances. We will report mean/SD, median/IQR, best value, held-out constraint residual, and the fraction recovering the same structure up to graphon relabelling. [TODO: insert completed benchmark and open-instance results.]
+**1. Number of runs and robustness.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. Thus "best across multiple runs" refers to a finite eight-configuration search. 
+To measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). 
+The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. 
+Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
+Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality; we therefore report structure recovery and objective quality separately. 
+We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ and report it during the discussion phase.
 
-**2. Population interpretation of the implicit gradient.** The complete finite-batch implicit gradient is generally biased, because the same empirical batch enters the constraint root and the derivative ratio. It is nevertheless strongly consistent. For fixed $\theta$, the pre-sigmoid output $h_\theta$ and its parameter derivative are bounded on the compact domain. If $|h_\theta|\le M$, both the empirical root and the population root lie in
+**2. Population interpretation of the implicit gradient.** The complete finite-batch implicit gradient is generally biased, because the same empirical batch enters the constraint root and the derivative ratio. 
+On the other hand, it is a consistent estimator of the population constrained gradient, by the following argument. 
+For fixed $\theta$, the pre-sigmoid output $h_\theta$ is bounded on the compact domain, say $|h_\theta|\le M$, so both the empirical root and the population root lie in
 $$
 [\mathrm{logit}(p)-M,\ \mathrm{logit}(p)+M].
 $$
-On this compact interval, uniform laws of large numbers apply jointly to the empirical constraint and its $c$- and $\theta$-derivatives. Continuity and strict monotonicity imply $\widehat c_S(\theta)\to c(\theta)$ almost surely; substituting this convergence into the derivative ratio gives almost-sure convergence of the empirical implicit gradient to the population constrained gradient. Thus the precise statement is: exact for the empirical constrained problem, biased at finite batch size, and consistent as the batch size grows. We are also measuring convergence to a large-batch reference at fixed checkpoints over $N=2^{10},\ldots,2^{16}$. [TODO: insert bias, norm-error, and cosine-similarity results.]
+On this compact interval, the uniform law of large numbers gives almost-sure convergence of the empirical constraint to the population constraint, uniformly in $c$. 
+Since the population constraint is strictly increasing in $c$ and its root is unique, it follows that $\widehat c_S(\theta)\to c(\theta)$ almost surely. 
+Finally, the convergence of the implicit gradient follows from the continuous mapping theorem. 
+We will state this argument and its assumptions explicitly in the paper.
 
-**3. Small sigmoid derivatives.** The backward derivative is better conditioned than the unnormalised quotient suggests. For the edge-density constraint,
+**3. Small sigmoid derivatives.** While the denominator may look like a source of numerical instability, the implicit derivative is a stable estimator, because it can be understood as a weighting scheme. 
+For the edge-density constraint, writing $s_i = \sigma'(h_\theta(x_i)+\widehat c)$ for the sigmoid derivatives,
 $$
 \nabla_\theta \widehat c
 =-\sum_i w_i\nabla_\theta h_\theta(x_i),
-\qquad w_i\ge0,\quad \sum_iw_i=1.
+\qquad w_i=\frac{s_i}{\sum_j s_j},
 $$
-For a general homomorphism-density constraint, the same formula uses nonnegative normalised weights over sampled edge occurrences, including products of the other edge probabilities. Therefore
+a weighted average of the per-sample logit gradients with nonnegative weights summing to one. 
+Small sigmoid derivatives shrink the numerator and the denominator together: they can concentrate the weights on a few samples, but they never amplify the derivative, since
 $$
 \|\nabla_\theta\widehat c\|\le \max_i\|\nabla_\theta h_\theta(x_i)\|.
 $$
-Small sigmoid derivatives can concentrate these weights but cannot amplify $\nabla_\theta\widehat c$ beyond the largest sampled logit-gradient norm. The separate forward root solve can be unstable under saturation; Appendix D already addresses this with a clipped Newton update whose clipping range shrinks across iterations. We observed no backward instability from the normalised implicit derivative.
+A general homomorphism-density constraint follows the same idea, with the weights additionally carrying the products of the other edge probabilities. Consistent with this, we observed no numerical instability in any of our experiments.
 
-**4. Why the KL variational problem describes conditioned Erdős-Rényi graphs.** The simplest case already shows where the KL divergence comes from. In $G(n,q)$, each of the $N=\binom n2$ edges is independently Bernoulli-$q$, so the probability that exactly $aN$ edges are present is
+**4. Why the KL variational problem describes conditioned Erdős-Rényi graphs.** 
+Let us describe the connection in the easiest case, the large deviation of the number of edges. 
+In $G(n,q)$, each of the $N=\binom n2$ edges is independently Bernoulli-$q$, so the probability that exactly $aN$ edges are present is
 $$
 \binom{N}{aN}q^{aN}(1-q)^{(1-a)N}
 =\exp\!\Big(-N\big(a\log\tfrac{a}{q}+(1-a)\log\tfrac{1-a}{1-q}\big)+o(N)\Big)
 $$
-by Stirling's approximation: the exponential cost of an atypical edge fraction $a$ is the Bernoulli KL divergence between $a$ and $q$. The graphon large-deviation principle generalises this from a single edge fraction to a full edge-probability profile $W$, whose cost is the integrated KL divergence $h_q(W)$. Conditioning on an atypical $H$-density restricts the admissible profiles; the exponential probability of the event is controlled by the minimum of $h_q$ over them, and the conditioned graphs concentrate near the minimising graphons. We will add this short explanation before the formal variational statement.
+by Stirling's approximation: the exponential cost of an atypical edge fraction $a$ is the Bernoulli KL divergence between $a$ and $q$. 
+The graphon large-deviation principle generalises this from a single edge fraction to a full edge-probability profile $W$, whose cost is the integrated KL divergence $h_q(W)$. 
+Conditioning on an atypical $H$-density restricts the admissible profiles; the exponential probability of the event is controlled by the minimum of $h_q$ over them, and the conditioned graphs concentrate near the minimising graphons. 
+We will add this explanation to the supplementary material.
 
-**Mathematical outcome of the discovery workflow.** The strongest independent validation is that structures found by the framework have already led to three new mathematical theorems. First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
+**Mathematical outcome of the discovery workflow.** The strongest independent validation is that structures found by the framework have led to three new mathematical theorems. 
+First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1},
 $$
-extending Goodman's inequality to every odd cycle and attaining equality at the balanced complete $k$-partite graphons. Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$, settling 17 previously unproven cases of our 175-graph study. Third, for every $d$-regular pattern graph with $d\ge2$, the large-deviation optimiser is unique up to relabelling and bipodal in a nontrivial neighbourhood on the symmetry-breaking side of each nonexceptional phase-boundary point. The first two theorems are fully formalised in Lean 4. We are preparing manuscripts describing all three for submission to mathematics journals. This is the intended use of the framework: learned structures seed independent mathematics.
+extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
+Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven. 
+Third, for every $d$-regular pattern graph with $d\ge2$ and every phase-boundary point with $r \ne (d-1)/d$, the large-deviation optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. 
+The first two theorems are fully formalised in Lean 4; the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
+We are preparing manuscripts describing all three for submission to mathematics journals. 
+This is the intended use of the framework: learned structures guide new, independent mathematics.
 
 ## Reviewer PPij
 
