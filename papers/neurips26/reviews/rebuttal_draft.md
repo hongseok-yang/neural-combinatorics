@@ -299,8 +299,8 @@ The results:
 | 0.10 | 0.5 | 0.504311 | 0.505990 | 0.506060 | 0.510826 | 0.004766 |
 | 0.10 | 0.6 | 0.746006 | 0.746713 | 0.747694 | 0.750684 | 0.002990 |
 
-The lower bound and the bipodal construction bracket the true optimum within $7\times10^{-4}$ to $2.8\times10^{-3}$ in every cell, and $h_q(W_{\mathrm{LZ}})$ exceeds even the upper end of the bracket. 
-Thus $W_{\mathrm{LZ}}$ is certified suboptimal in all six cells, including the small-gap $q=0.10$ regime, and the revised learnt values are provably within $4\times10^{-3}$ of the true optimum; the run study below separately measures discovery reliability. 
+The lower bound and the feasible bipodal values agree to within $7\times10^{-4}$ to $2.8\times10^{-3}$ in every cell, and $h_q(W_{\mathrm{LZ}})$ exceeds even the bipodal upper bounds. 
+Thus $W_{\mathrm{LZ}}$ is certified suboptimal in all six cells, including the small-gap $q=0.10$ regime, and the revised learnt values lie within $4\times10^{-3}$ of the computable lower bound (the exact optimum itself is not known; its bipodal form is our conjecture); the run study below separately measures discovery reliability. 
 The same audit extends to $C_4$ and $C_5$: both are $2$-regular, so the same lower bound applies at $x=r^2$, the bipodal cycle densities are again closed forms, and explicit feasible bipodal graphons beat $W_{\mathrm{LZ}}$ in all 18 cells across the three pattern graphs; the revised $C_5$ values at $q=0.05$ are $0.465644, 0.727618, 1.052023$ ($q=0.10$ values unchanged).
 
 Finally, we note that the Lubetzky-Zhao construction is not specific to the triangle: it is defined for every $d$-regular pattern graph, so it is an equally valid reference for $C_4$ and $C_5$. 
