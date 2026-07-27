@@ -11,7 +11,7 @@ Internal drafting note: the 2026 rules allow up to 10,000 characters per review,
   $$
   for every graphon $W$ of edge density $p$ and every odd $m\ge3$; for $m=3$ it reduces to Goodman's inequality. It is sharp at the balanced complete $k$-partite graphons, so those are minimisers at $p=1-1/k$.
 - This theorem is a lower bound valid for every graphon. It does **not** prove the stronger exact-optimiser conjecture stated in the appendix at every $p$, and it does not certify every displayed $C_7$ candidate.
-- The new chordal theorem: for every chordal graph $H$ (no induced cycle of length greater than 3) whose maximal cliques all have the same size $r\ge3$, the minimiser of $\mathbf{(P1)}$ at $p=1-1/k$, for every integer $k\ge r$, is the balanced complete $k$-partite graphon. This settles 17 cases of the 175-graph study that were previously unproven.
+- The new chordal theorem: for every connected chordal graph $H$ (no induced cycle of length greater than 3) whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$. This settles 17 cases of the 175-graph study that were previously unproven.
 - The new large-deviation theorem is local near the Lubetzky-Zhao phase boundary: for every $d$-regular $H$ with $d\ge2$, away from the exceptional value $r=(d-1)/d$, the nonconstant optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. It does **not** automatically certify every parameter in Table 6.
 - The $H_6$ construction remains a numerical conjecture; we have a symbolic construction only at $p=4/5$, without a proof of optimality.
 - Lean status, to be stated precisely: the odd-cycle and chordal theorems are formalised in full, with no conditional assumptions. The formalisation of the large-deviation theorem takes some established results from the literature and parts of graphon theory as axioms.
@@ -22,11 +22,11 @@ Internal drafting note: the 2026 rules allow up to 10,000 characters per review,
 
 ## Optional confidential overview to the AC
 
-We thank the AC and reviewers for their thoughtful feedback. A central strength of our work is that the method produces interpretable candidate solutions to difficult graphon variational problems. Its recovery of known extremal solutions provides controlled evidence of its optimisation performance. On open problems, the interpretable structures identified by the method have guided new mathematical analysis. Since submission, this process has led to three new theorems in extremal graph theory and dense-graph large-deviation theory. The first extends Goodman's inequality to all odd cycles. The second is a chordal-graph extremal theorem that settles 17 previously unproven cases in our study. The third is a local structural theorem for the large-deviation problem. We are preparing manuscripts describing these theorems for submission to mathematics journals. In this rebuttal, we report a fixed-protocol reproducibility study and classify the failures in our 175-graph sweep. For the large-deviation experiments reported in the submission, we provide a new lower- and upper-bound analysis during rebuttal. The objective values of our learnt graphons lie within $4\times10^{-3}$ of the resulting lower bound at all six tested triangle parameter settings. Simple two-block graphons suggested by the learnt structures provide an additional continuum-feasible check and, together with the lower bound, tightly bracket the true optimum. Finally, a factorised ablation separates the effects of sinusoidal features, repeated input injection, and progressive frequency scaling, while runtime and memory benchmarks quantify how the computational cost scales with sample size, network width, and motif size.
+We thank the AC and reviewers for their thoughtful feedback. A central strength of our work is that the method produces interpretable candidate solutions to difficult graphon variational problems. Its recovery of known extremal solutions provides controlled evidence of its optimisation performance. On open problems, the interpretable structures identified by the method have guided new mathematical analysis. Since submission, this process has led to three new theorems in extremal graph theory and dense-graph large-deviation theory. The first extends Goodman's inequality to all odd cycles. The second is a chordal-graph extremal theorem that settles 17 previously unproven cases in our study. The third is a local structural theorem for the large-deviation problem. We are preparing manuscripts describing these theorems for submission to mathematics journals. In this rebuttal, we report a fixed-protocol reproducibility study and classify the failures in our 175-graph sweep. For the large-deviation experiments reported in the submission, we provide a new lower- and upper-bound analysis during rebuttal. The objective values of our learnt graphons lie within $4\times10^{-3}$ of the resulting lower bound at all six tested triangle parameter settings. Simple two-block graphons suggested by the learnt structures provide an additional continuum-feasible check and, together with the lower bound, tightly bracket the true optimum. Finally, during the rebuttal period, we completed a factorised ablation that distinguishes the contribution of the sinusoidal features from repeated input injection, and runtime and memory benchmarks that quantify computational cost.
 
-**Robustness.** Each reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. This was a finite hyperparameter search, not an unspecified number of attempts. During the rebuttal period, in order to separate hyperparameter selection from sensitivity to initialisation, we repeated the $K_3$ benchmark at $p=7/9$ ten times under one fixed configuration. The mean objective was $0.435711$, with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225\approx0.435556$. Seven runs recovered the clean five-block partition; the other three attained comparable objective values with a deviation in the smallest part. Because the five-block construction is not the unique optimiser, we report structural recovery separately from objective quality. We also classified the 11.8% of suboptimal cases in the 175-graph sweep: 7% converged to a suboptimal local optimum, while 4.8% failed due to training or inference instability, namely NaNs or out-of-memory errors. The corresponding fixed-protocol studies for the key open instances, the $C_5$ permutation study, and the held-out population-constraint audit remain in progress. [TODO: insert any completed open-instance, permutation, and population-constraint results. Also, write a promise that we will incorporate our findings in this robustness analysis.]
+**Robustness.** Each candidate in the submitted paper was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. This was a finite hyperparameter search, not an unspecified number of attempts. During the rebuttal period, in order to separate hyperparameter selection from sensitivity to initialisation, we repeated the $K_3$ benchmark at $p=7/9$ ten times under one fixed configuration. The mean objective was $0.435711$, with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225\approx0.435556$. Seven runs recovered the clean five-block partition; the other three attained comparable objective values with a deviation in the smallest part. Because the five-block construction is not the unique optimiser, we report structural recovery separately from objective quality. During rebuttal, we also classified the 11.8% of suboptimal cases in the submitted 175-graph sweep: 7% converged to a suboptimal local optimum, while 4.8% failed due to training or inference instability, namely NaNs or out-of-memory errors. The corresponding fixed-protocol studies for the key open instances, the $C_5$ permutation study, and the held-out population-constraint audit remain in progress. We will incorporate the completed fixed-protocol results and failure-mode analysis into the revised version of the paper. [TODO: insert any completed open-instance, permutation, and population-constraint results.]
 
-**New validation of the submitted large-deviation experiments.** The submitted paper reports learnt graphons for the six triangle parameter settings $(q,r)\in\{0.05,0.10\}\times\{0.4,0.5,0.6\}$. Their entropies were evaluated by discretising each learnt graphon on an $M\times M$ grid and replacing the graphon integrals with finite sums in 64-bit floating-point arithmetic; no Monte Carlo sampling was used. During the rebuttal period, we strengthened this evaluation by re-solving the density constraint on each evaluation grid before computing the entropy. We then applied an argument of Lubetzky and Zhao to obtain a lower bound $L(q,r)$ on the optimal entropy. The revised learnt values lie within $4\times10^{-3}$ of $L(q,r)$ at every setting, directly quantifying their possible objective suboptimality. As an additional check independent of grid discretisation, the two-block structures suggested by the learnt graphons yield analytically evaluable feasible graphons. Their objective values and $L(q,r)$ bracket the true optimum within $7\times10^{-4}$ to $2.8\times10^{-3}$. These new rebuttal checks also certify that the Lubetzky-Zhao reference construction is suboptimal at all six triangle settings and the corresponding twelve settings for $C_4$ and $C_5$.
+**New validation of the submitted large-deviation experiments.** The submitted paper reports learnt graphons for the six triangle parameter settings $(q,r)\in\{0.05,0.10\}\times\{0.4,0.5,0.6\}$. Their entropies were evaluated by discretising each learnt graphon on an $M\times M$ grid and replacing the graphon integrals with finite sums in 64-bit floating-point arithmetic; no Monte Carlo sampling was used. During the rebuttal period, we strengthened this evaluation by re-solving the density constraint on each evaluation grid before computing the entropy. We then applied an argument of Lubetzky and Zhao to obtain a lower bound $L(q,r)$ on the optimal entropy. The revised learnt values lie within $4\times10^{-3}$ of $L(q,r)$ at every setting, directly quantifying their possible objective suboptimality. As an additional check independent of grid discretisation, the two-block structures suggested by the learnt graphons yield analytically evaluable feasible graphons. Their objective values and $L(q,r)$ bracket the true optimum within $7\times10^{-4}$ to $2.8\times10^{-3}$. These new rebuttal checks also certify that the Lubetzky-Zhao reference construction is suboptimal at all six triangle settings and the corresponding twelve settings for $C_4$ and $C_5$. We will include the refined evaluation protocol, the lower and upper bounds, and the corrected values in the revised version of the paper.
 
 **Mathematical results prompted by the learnt structures.** Most importantly, the framework has already achieved its intended scientific purpose: interpretable learnt structures have led to three new theorems.
 
@@ -40,22 +40,22 @@ Second, we proved that if $H$ is a connected chordal graph whose maximal cliques
 
 Third, motivated by the bipodal outputs for the dense upper-tail problem, we proved a local structural theorem. For every finite simple $d$-regular graph $H$ with $d\ge2$ and every Lubetzky-Zhao phase-boundary point with $r\ne(d-1)/d$, there is a nontrivial open neighbourhood such that, throughout its symmetry-breaking side, the optimiser is unique up to relabelling, nonconstant, and bipodal; its parameters and optimal value depend analytically on $(q,r)$. Consequently, $G(n,q)$, conditioned on the corresponding upper-tail event, concentrates in cut distance around this bipodal structure. This gives a local answer on the symmetry-breaking side to Chatterjee and Varadhan's question about the typical structure of conditioned dense random graphs.
 
-We are preparing manuscripts describing these theorems for submission to mathematics journals. The first two theorems are fully formalised in Lean 4; the formalisation of the third takes established results from the literature and parts of graphon theory as axioms. Together, these theorems demonstrate the intended workflow: the neural framework of our submission produces interpretable candidate structures, and separate mathematical analysis converts those structures into theorems.
+We are preparing manuscripts describing these theorems for submission to mathematics journals. The first two theorems are fully formalised in Lean 4; the formalisation of the third takes established results from the literature and parts of graphon theory as axioms. Together, these theorems demonstrate the intended workflow: the neural framework of our submission produces interpretable candidate structures, and separate mathematical analysis converts those structures into theorems. We will summarise these results, their connection to the learnt structures, and their precise scope in the revised version of the paper.
 
-**Architectural ablation.** Our architecture combines progressive per-layer encoding for sharp extremisers, a monotone constraint layer with implicit differentiation, and symmetry-aware integral estimators. To separate the sinusoidal features from repeated input injection, we reran the full ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. Removing the sinusoidal features worsened the reported objective in all six paired variants, while the existing constant-scale control separately tests the progressive frequency schedule. Thus the paired study distinguishes the contribution of the sinusoidal features from that of per-layer injection, and the constant-scale control isolates the multiscale schedule. [TODO: reconcile the quoted ablation objectives with the stated $K_3,p=7/9$ optimum before posting.]
+**Architectural ablation.** The performance gain of our method cannot be attributed merely to repeated input injection: the sinusoidal features make an independent contribution, and progressive frequency scaling provides a separate benefit. The submitted paper compared our architecture with a ResNet using sinusoidal encoding only in its first layer and included a constant-scale control for the progressive schedule. During rebuttal, we reran the full ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. Removing the sinusoidal features worsened the objective in all six paired variants; together with the submitted constant-scale control, this separates the benefit of the sinusoidal features from that of the progressive frequency schedule. We will include this factorised ablation and its interpretation in the revised version of the paper. [TODO: reconcile the quoted ablation objectives with the stated $K_3,p=7/9$ optimum before posting.]
 
-**Computational cost.** With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time post-training evaluation budget. On the RTX A5000 used for the experiments, increasing $N$ from $2^{12}$ to $2^{15}$ increased the $K_3$ step from $0.012$ to $0.054$ seconds and peak memory from $0.33$ to $2.37$ GB. At $N=2^{15}$, increasing width from 128 to 512 increased the step from $0.023$ to $0.151$ seconds and memory from $1.19$ to $4.74$ GB. At width 256 and $N=2^{15}$, the $K_3$, $C_5$, and $C_7$ steps took $0.054$, $0.172$, and $0.452$ seconds, using $2.37$, $7.84$, and $16.45$ GB, respectively. These measurements agree with the stated scaling: memory is linear in $N$ and width and grows with the number of evaluated vertex pairs, while motif-product aggregation adds the $|\mathcal S|e(H)$ term. A 20,000-epoch run takes about 18 minutes for $K_3$ and 57 minutes for $C_5$, and every reported experiment fits on a single workstation GPU.
+**Computational cost.** Our method is computationally manageable on a single workstation GPU for small fixed motifs such as $K_3$, $C_5$, and $C_7$, which are representative of many concrete problems in extremal combinatorics. But its cost does grow quickly with motif size and the number of symmetry terms, so the method is not intended for motifs with hundreds or thousands of vertices. The submitted experiments used training batches of $2^{12}$-$2^{16}$ samples; $2^{28}$ was only a one-time post-training evaluation budget. During rebuttal, we benchmarked runtime and memory on the RTX A5000 used for the experiments. With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Increasing $N$ from $2^{12}$ to $2^{15}$ increased the $K_3$ step from $0.012$ to $0.054$ seconds and peak memory from $0.33$ to $2.37$ GB. At $N=2^{15}$, increasing width from 128 to 512 increased the step from $0.023$ to $0.151$ seconds and memory from $1.19$ to $4.74$ GB. At width 256 and $N=2^{15}$, the $K_3$, $C_5$, and $C_7$ steps took $0.054$, $0.172$, and $0.452$ seconds, using $2.37$, $7.84$, and $16.45$ GB, respectively. A 20,000-epoch run takes about 18 minutes for $K_3$ and 57 minutes for $C_5$, and every submitted experiment fits on a single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
 
 ## Reviewer 1jpj
 
 Thank you for recognising the framework as coherent, the implicit-differentiation formula as mathematically sound, and best-run reporting as reasonable for candidate discovery. We answer the four questions directly below.
 
-**1. Number of runs and robustness.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus "best across multiple runs" refers to a finite eight-configuration search. 
-To measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). 
+**1. Number of runs and robustness.** Every candidate reported in the submitted paper was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus "best across multiple runs" refers to a finite eight-configuration search.
+During rebuttal, to measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study).
 The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. 
 Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
 Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality; we therefore report structure recovery and objective quality separately. 
-We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ and report it during the discussion phase.
+We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
 
 **2. Population interpretation of the implicit gradient.** The complete finite-batch implicit gradient is generally biased, because the same empirical batch enters the constraint root and the derivative ratio. 
 On the other hand, it is a consistent estimator of the population constrained gradient, by the following argument. 
@@ -66,7 +66,7 @@ $$
 On this compact interval, the uniform law of large numbers gives almost-sure convergence of the empirical constraint to the population constraint, uniformly in $c$. 
 Since the population constraint is strictly increasing in $c$ and its root is unique, it follows that $\widehat c_S(\theta)\to c(\theta)$ almost surely. 
 Finally, the convergence of the implicit gradient follows from the continuous mapping theorem. 
-We will state this argument and its assumptions explicitly in the paper.
+We will state this argument and its assumptions explicitly in the revised version of the paper.
 
 **3. Small sigmoid derivatives.** While the denominator may look like a source of numerical instability, the implicit derivative is a stable estimator, because it can be understood as a weighting scheme. 
 For the edge-density constraint, writing $s_i = \sigma'(h_\theta(x_i)+\widehat c)$ for the sigmoid derivatives,
@@ -80,7 +80,7 @@ Small sigmoid derivatives shrink the numerator and the denominator together: the
 $$
 \|\nabla_\theta\widehat c\|\le \max_i\|\nabla_\theta h_\theta(x_i)\|.
 $$
-A general homomorphism-density constraint follows the same idea, with the weights additionally carrying the products of the other edge probabilities. Consistent with this, we observed no numerical instability in any of our experiments.
+A general homomorphism-density constraint follows the same idea, with the weights additionally carrying the products of the other edge probabilities. Consistent with this, we observed no numerical instability in any of our submitted experiments. We will add this weighting interpretation and stability discussion to the revised version of the paper.
 
 **4. Why the KL variational problem describes conditioned Erdős-Rényi graphs.** 
 Let us describe the connection in the easiest case, the large deviation of the number of edges. 
@@ -92,19 +92,19 @@ $$
 by Stirling's approximation: the exponential cost of an atypical edge fraction $a$ is the Bernoulli KL divergence between $a$ and $q$. 
 The graphon large-deviation principle generalises this from a single edge fraction to a full edge-probability profile $W$, whose cost is the integrated KL divergence $h_q(W)$. 
 Conditioning on an atypical $H$-density restricts the admissible profiles; the exponential probability of the event is controlled by the minimum of $h_q$ over them, and the conditioned graphs concentrate near the minimising graphons. 
-We will add this explanation to the supplementary material.
+We will add this explanation to the revised version of the paper.
 
-**Mathematical outcome of the discovery workflow.** The strongest independent validation is that structures found by the framework have led to three new mathematical theorems. 
+**Mathematical outcome of the discovery workflow.** Since submission, the strongest independent validation is that structures found by the framework have led to three new mathematical theorems.
 First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1},
 $$
 extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
-Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven. 
-Third, for every $d$-regular pattern graph with $d\ge2$ and every phase-boundary point with $r \ne (d-1)/d$, the large-deviation optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. 
+Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven.
+Third, for the dense upper-tail problem, every $d$-regular pattern graph with $d\ge2$ has, near each Lubetzky-Zhao phase-boundary point with $r \ne (d-1)/d$, a unique nonconstant bipodal optimiser up to relabelling throughout a nontrivial neighbourhood on the symmetry-breaking side.
 The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
 Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
-We are preparing manuscripts describing all three for submission to mathematics journals. 
+We are preparing manuscripts describing all three for submission to mathematics journals, and we will summarise their statements, scope, and connection to the learnt structures in the revised version of the paper.
 This is the intended use of the framework: learnt structures guide new, independent mathematics.
 
 ## Reviewer PPij
@@ -119,14 +119,14 @@ $$
 $$
 At $N=2^{28}$, the distribution-free 95% absolute-error bound is approximately $8.3\times10^{-5}$. 
 Thus $2^{28}$ was a conservative evaluation choice, not a sample size required by either training or theory. 
-Training uses $2^{12}$-$2^{16}$, and the usual $N^{-1/2}$ rate lets users choose the evaluation budget for the desired absolute precision. We will state this distinction explicitly.
+Training uses $2^{12}$-$2^{16}$, and the usual $N^{-1/2}$ rate lets users choose the evaluation budget for the desired absolute precision. We will state this distinction explicitly in the revised version of the paper.
 
-**Runs.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus the reported best-found values come from a finite eight-configuration search. 
-To measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). 
+**Runs.** Every candidate reported in the submitted paper was selected from exactly eight runs: one run for each of two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). Thus the reported best-found values come from a finite eight-configuration search.
+During rebuttal, to measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study).
 The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. 
 Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
 Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality; we therefore report structure recovery and objective quality separately. 
-We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ and report it during the discussion phase.
+We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
 
 **Relation to graphon learning.** 
 Xia, Mishne, and Wang (2023) and, more recently, Azizpour, Zilberstein, and Segarra (AISTATS 2025) introduced implicit neural representations for graphon learning, a problem in network analysis: given a set of graphs $\{G_i\}_{i=1}^N$ assumed to be sampled from a common underlying graphon $W$, estimate $W$ from these samples. 
@@ -134,11 +134,11 @@ Because the goal is to reconstruct a graphon close to the true one from finite s
 Moreover, applying graphon learning to problems like ours would first require finding near-optimal finite graphs — itself a hard discrete optimisation — and only then estimating the underlying graphon from them. 
 Our setting observes neither a graph dataset nor a target graphon: we search directly over graphons to optimise homomorphism-density or KL functionals under a density constraint. 
 The contributions specific to this setting are the progressive per-layer input encoding for discontinuous extremisers, the symmetry-aware Monte Carlo estimators, and the embedded monotone constraint solver with implicit differentiation. 
-We will cite Xia et al. and make clear that we do not claim to introduce neural graphon representations. 
+We will cite Xia et al. and make clear in the revised version of the paper that we do not claim to introduce neural graphon representations.
 
-We also ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$), whereas our method reaches $0.427215$.
+During rebuttal, we also ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$), whereas our method reaches $0.427215$. We will include this baseline and the distinction between graphon reconstruction and direct graphon optimisation in the revised version of the paper.
 
-**Complexity.** 
+**Complexity.** The practical conclusion is that the method is manageable on one workstation GPU for the small fixed motifs common in extremal combinatorics, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
 With width $d$, depth $L$, batch size $N$, and cached evaluations on at most $\binom{v(H)}2$ unordered pairs per tuple, the dominant neural forward/backward cost is approximately
 $$
 O\!\left(Nv(H)^2Ld^2\right),
@@ -146,7 +146,7 @@ $$
 with an additional $O(N|\mathcal S|e(H))$ cost for motif-product aggregation. 
 Activation memory is approximately $O(Nv(H)^2Ld)$. 
 Monte Carlo absolute error scales as $N^{-1/2}$, so halving it requires approximately four times as many samples. 
-We measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
+During rebuttal, we measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all submitted experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
 
 Sample size ($K_3$, width $256$):
 
@@ -173,7 +173,7 @@ Motif ($N=2^{15}$, width $256$):
 The measurements match the stated scaling. Memory grows linearly in $N$ and in width, and proportionally to the pair count $\binom{v(H)}2$ across motifs. Time grows linearly in $N$ once the GPU is saturated (sub-linearly at small $N$ from under-utilisation), between linearly and quadratically in width, and roughly proportionally to the pair count across motifs, with the $C_7$ excess over this proportion coming from the $|\mathcal S|e(H)=360\times7$ aggregation term. 
 Full-run wall-clock follows directly: $20000$ epochs take about $18$ minutes for $K_3$ and about $57$ minutes for $C_5$ at $N=2^{15}$. 
 In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
-Finally, we note that the total cost is modest by current standards: every experiment in the paper fits on a single workstation GPU.
+Thus every submitted experiment fits on a single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
 
 ## Reviewer 6KFF
 
@@ -185,11 +185,12 @@ Instead, the framework now has theoretical results of a different kind: three ne
 On when the method works well or fails: the target regime is dense-graph problems with one monotone scalar constraint, moderate motif density, and a low-complexity block or geometric optimiser. 
 Across our experiments, the clearest failure diagnostic is a nearly competitive constant graphon. 
 The problems we study often admit the constant graphon as a trivial solution, and when constant graphon's objective value is within roughly $10^{-5}$ of the best known value, training often remains at that trivial solution. 
+We will state this operating regime and failure diagnostic explicitly in the revised version of the paper.
 
-**Why progressive sinusoidal features.** 
+**Why progressive sinusoidal features.** The main conclusion is that the performance gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, and the progressive frequency schedule provides a further benefit.
 A step boundary requires increasingly high spatial frequencies for accurate approximation. 
 The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. 
-The per-layer injection and the increasing frequency schedule play different roles. To isolate them, we reran the entire ablation suite of the paper with GeLU features replacing the sinusoidal per-layer features, keeping the injection structure fixed. On $K_3$ at $p=7/9$:
+The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
 
 | variant | with sinusoidal features | without |
 |---|---|---|
@@ -202,41 +203,40 @@ The per-layer injection and the increasing frequency schedule play different rol
 
 Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). 
 This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the existing constant-scale control separately tests the multiscale schedule. 
-We will also prepare an illustration of the role of the multiscale encoding and share it during the discussion phase.
-
 The $d^{-1/2}$ initialisation of residual matrices controls activation growth with fan-in, while the range of each row of $U^{(\ell)}$ directly controls the initialised spatial frequency. Increasing $s(\ell)$ therefore gives later layers access to progressively finer scales without increasing hidden-state magnitude.
+We will include this factorised ablation, its interpretation, and an illustration of the multiscale encoding in the revised version of the paper.
 
 **Wavelets.** 
 Yes, in principle: the constraint solver and Monte Carlo estimator are representation-agnostic, so wavelet-type features could replace the sinusoidal ones inside the network. 
-We have tested other encodings only in non-neural form so far: parameterising $W$ directly as a symmetric linear combination of a fixed basis — Fourier, Haar wavelet, and polynomial —  on $K_3$ minimisation at $p=7/9$. 
+During rebuttal, we tested other encodings in non-neural form: parameterising $W$ directly as a symmetric linear combination of a fixed basis — Fourier, Haar wavelet, and polynomial — on $K_3$ minimisation at $p=7/9$.
 In direct objective optimisation, all of them diverge: a fixed linear basis cannot enforce the constraint $W(x,y)\in[0,1]$, at any basis size. 
 We further tested the expressivity of these bases by training them to fit the known optimal solution.
 The Fourier and polynomial representations overshoot the step boundaries by about $\pm0.2$ (known as the Gibbs phenomenon) and violate the bound on about half of the domain.
-The Haar representation stays within $[0,1]$ and reaches $t(K_3,W)=0.436341$ — but clipped Haar expansions are exactly fixed-grid block models, so this route reduces to the fixed-grid SBM baseline in Appendix H ($0.435817$, against $0.427215$ for our method).
+The Haar representation stays within $[0,1]$ and reaches $t(K_3,W)=0.436341$ — but clipped Haar expansions are exactly fixed-grid block models, so this route reduces to the fixed-grid SBM baseline in Appendix H ($0.435817$, against $0.427215$ for our method). We will include this basis-function comparison and its limitations in the revised version of the paper.
 
 **Application and significance.** 
-The strongest independent validation is that structures found by the framework have led to three new mathematical theorems. 
+Since submission, the strongest independent validation is that structures found by the framework have led to three new mathematical theorems.
 First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1},
 $$
 extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
-Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven. 
-Third, for every $d$-regular pattern graph with $d\ge2$ and every phase-boundary point with $r \ne (d-1)/d$, the large-deviation optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. 
+Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven.
+Third, for the dense upper-tail problem, every $d$-regular pattern graph with $d\ge2$ has, near each Lubetzky-Zhao phase-boundary point with $r \ne (d-1)/d$, a unique nonconstant bipodal optimiser up to relabelling throughout a nontrivial neighbourhood on the symmetry-breaking side.
 The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
 Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
-We are preparing manuscripts describing all three for submission to mathematics journals. 
+We are preparing manuscripts describing all three for submission to mathematics journals, and we will summarise their statements, scope, and connection to the learnt structures in the revised version of the paper.
 This is the intended use of the framework: learnt structures guide new, independent mathematics.
 
 While there are practical applications of extremal graph theory in graph machine learning, such as the use of expander graphs in GNNs, these involve sparse graphs, which are outside the scope of our current work. 
 On the dense side, the closest practical contact point is the exponential random graph model (ERGM), a standard model of social networks in the social sciences. 
 In the dense regime, the asymptotic behaviour of an ERGM is governed by a graphon variational problem of exactly the type our framework optimises: its free energy maximises a linear combination of homomorphism densities minus an entropy functional as in $\mathbf{(P2)}$, and its typical networks concentrate near the optimal graphons (Chatterjee and Diaconis, 2013). 
 The well-known degeneracy of ERGM fitting corresponds to phase transitions of these optimisers, so our framework could be used to compute the optimal structures, map phase diagrams, and diagnose degenerate parameter regions before fitting. 
-We consider this a promising direction for our future work.
+We consider this a promising direction for our future work and will add this practical-context discussion to the revised version of the paper.
 
-**Computational cost.** 
+**Computational cost.** The practical conclusion is that the method is manageable on one workstation GPU for the small fixed motifs common in extremal combinatorics, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
 With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time evaluation budget. 
-We measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
+During rebuttal, we measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all submitted experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
 
 Sample size ($K_3$, width $256$):
 
@@ -263,13 +263,13 @@ Motif ($N=2^{15}$, width $256$):
 The measurements match the stated scaling: memory grows linearly in $N$ and in width, and proportionally to the pair count $\binom{v(H)}2$ across motifs; time grows linearly in $N$ once the GPU is saturated, between linearly and quadratically in width, and roughly proportionally to the pair count, with the $C_7$ excess coming from the $|\mathcal S|e(H)=360\times7$ aggregation term. 
 A full $20000$-epoch run takes about $18$ minutes for $K_3$ and about $57$ minutes for $C_5$. 
 In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
-Every experiment in the paper fits on this single workstation GPU.
+Every submitted experiment fits on this single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
 
 ## Reviewer BFdn
 
 Thank you for recognising the coherent methodology, effective symmetry-aware estimator, and extensive experimental scope. We address the two issues most relevant to the score—novelty and reliability—before answering the individual experimental questions.
 
-**Benefit coming from the sinusoidal encoding** The per-layer injection and the increasing frequency schedule play different roles. To isolate them, we reran the entire ablation suite of the paper with GeLU features replacing the sinusoidal per-layer features, keeping the injection structure fixed. On $K_3$ at $p=7/9$:
+**Benefit from the sinusoidal encoding.** The main conclusion is that the gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, while the progressive frequency schedule provides a further benefit. The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
 
 | variant | with sinusoidal features | without |
 |---|---|---|
@@ -280,10 +280,10 @@ Thank you for recognising the coherent methodology, effective symmetry-aware est
 | Constant LR (low) | 0.430071 | 0.442499 |
 | Constant LR (high) | 0.431645 | 0.436795 |
 
-Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the existing constant-scale control separately tests the progressive frequency schedule.
+Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the submitted constant-scale control separately tests the progressive frequency schedule. We will include this factorised ablation and its interpretation in the revised version of the paper.
 
-**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** The Table 6 entropy values are computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them. 
-In the course of this audit we also refined the evaluation: the reported run in each cell is now selected with the constraint enforced exactly at the evaluation resolution, which slightly revises the reported values (below). 
+**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** In the submitted paper, the Table 6 entropy values were computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them.
+During rebuttal, we refined the evaluation by enforcing the constraint exactly at the evaluation resolution, which slightly revises the reported values below.
 More importantly, independent verification is possible in both directions. 
 In one direction, from the conjecture suggested by our observations — the learnt profiles are nearly bipodal — we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), in which both $t(K_3,W)$ and $h_q(W)$ are exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound.
 In the other direction, Lemma 3.3 of Lubetzky and Zhao (2012) provides a computable lower bound: for a $2$-regular pattern graph, the optimum is at least the convex minorant of $x \mapsto h_q(x^{1/2})$ evaluated at $x = r^2$. 
@@ -304,37 +304,38 @@ The same audit extends to $C_4$ and $C_5$: both are $2$-regular, so the same low
 
 Finally, we note that the Lubetzky-Zhao construction is not specific to the triangle: it is defined for every $d$-regular pattern graph, so it is an equally valid reference for $C_4$ and $C_5$. 
 Its role, for all three pattern graphs, is that of a reference construction demonstrating non-optimality of the constant graphon rather than a claimed optimum; with the bounds above, the $C_4$ and $C_5$ comparisons carry the same certification as $K_3$.
+We will include the refined evaluation protocol, the lower and upper bounds, and the corrected values in the revised version of the paper.
 
-**Run distribution.** Every reported candidate was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). 
-To measure sensitivity to initialisation separately from this search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration: the mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so this does not indicate suboptimality). 
-We will report the same repetition analysis for $C_5$, $C_7$, and $H_6$ during the discussion phase.
+**Run distribution.** Every candidate reported in the submitted paper was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$).
+During rebuttal, to measure sensitivity to initialisation separately from this search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration: the mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so this does not indicate suboptimality).
+We will report the same repetition analysis for $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
 
 **The 11.8% suboptimal sweep cases.** 
-Among these, 7% converged to a suboptimal local optimum, and 4.8% failed from training or inference instability (divergence to NaN or out-of-memory errors). 
-Independently of this failure analysis, we have proved — with the help of GPT 5.5, and verified in Lean 4 with the help of Claude Opus 4.8 — the theorem that if a graph is chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$. 
-This proves exact optimality for 17 cases of the sweep at the densities $p=1-1/k$; for these cases, our flag-algebra bounds were tight only in the low-density regime and did not certify the all the learnt graphons at $p=1-1/k$.
+During rebuttal, we classified the 11.8% of suboptimal cases in the submitted sweep: 7% converged to a suboptimal local optimum, and 4.8% failed from training or inference instability (divergence to NaN or out-of-memory errors).
+Independently of this failure analysis, we have proved — with the help of GPT 5.5, and verified in Lean 4 with the help of Claude Opus 4.8 — that if a graph is connected and chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$.
+This proves exact optimality for 17 cases of the sweep at the densities $p=1-1/k$; for these cases, our flag-algebra bounds were tight only in the low-density regime and did not certify all the learnt graphons at $p=1-1/k$. We will add this failure-mode classification and the new certification status to the revised version of the paper.
 
 **Why the neural representation helps.** 
-The non-neural baselines in Appendix H have enough expressivity to represent the optimal solution; the observed difference is optimisation. 
+The non-neural baselines reported in Appendix H of the submitted paper have enough expressivity to represent the optimal solution; the observed difference is optimisation.
 For the tree-based baselines and the fixed-grid SBM, moving a decision boundary is hard: almost every $\{0,1\}$-valued configuration is a local optimum that cannot be escaped without a reset, so these methods depend strongly on the initialisation and rarely leave the geometry of their initial solution. 
 Parameterising the decision boundary directly (the second and third panels of Figure 15) also fails: the optimisation landscape is very sharp, and training always converges to the constant solution. 
 The neural graphon instead optimises the region values and the boundary locations jointly and continuously, and we view this joint flexibility, combined with a favourable optimisation landscape, as the main benefit of the neural representation. 
-The discovery advantage is that the network does not require choosing in advance between multipartite, diagonal/banded, circular-distance, or bipodal forms. 
+The discovery advantage is that the network does not require choosing in advance between multipartite, diagonal/banded, circular-distance, or bipodal forms. We will add this optimisation-based interpretation of the baseline comparison to the revised version of the paper.
 
 ## Reviewer s6Ge
 
 Thank you for recognising the mathematically meaningful problem setting, the problem-specific architecture, and the breadth of the experiments. We address reliability with targeted sensitivity studies and, more importantly, with explicit constructions and new mathematical theorems.
 
 **Initialisation, schedule, and permutation sensitivity.** 
-Every reported value was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). We separate that finite hyperparameter search from reproducibility through three controlled studies. 
+Every value reported in the submitted paper was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). During rebuttal, we separated that finite hyperparameter search from reproducibility through three controlled studies.
 (i) Initialisation: we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration. The mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225\approx0.435556$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so we report structure recovery and objective quality separately). The same repetition analysis for $C_5$, $C_7$, and $H_6$ will follow during the discussion phase. 
 (ii) Frequency schedule: we trained with both encoding-scale schedules. With $s(\ell)=2^{\ell-1}$, the ten repetitions above give mean $0.435711$; with $s(\ell)=\ell$, the best run gives $0.435754$. The discovered solution and its objective are insensitive to the schedule choice.
-(iii) Permutations: on $C_5$, we compare three symmetry sets for the estimator: the identity only; the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$; and the full set of coset representatives. Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. [TODO: insert permutation-study results.]
+(iii) Permutations: on $C_5$, we are comparing three symmetry sets for the estimator: the identity only; the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$; and the full set of coset representatives. Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. We will include the completed sensitivity studies and their protocol in the revised version of the paper. [TODO: insert permutation-study results.]
 
 **Population-level constraint error.** 
-The constraint solver runs not only during training but also on the final trained graphon: the reported values re-solve the scalar bias deterministically on the evaluation grid, so no training-batch residual persists in them (and the reference is converged: refining the grid from $256^2$ to $512^2$ changes $t(K_3)$ by only $9.7\times10^{-5}$). 
-The remaining question is how much a random batch would move the output, which we measured at the final $K_3$ graphon over 1000 independent batches per batch size. 
-At the training size $N=2^{16}$, solving the bias on a batch instead of the grid induces a population constraint residual of standard deviation $1.1\times10^{-3}$ (maximum $3.4\times10^{-3}$, mean $1.2\times10^{-4}$), an entry-wise output standard deviation averaging $1.1\times10^{-3}$, and a spread of $t(K_3)$ with standard deviation $2.3\times10^{-3}$; all of these shrink as $N^{-1/2}$. 
+The constraint solver runs not only during training but also on the final trained graphon: the submitted evaluation re-solves the scalar bias deterministically on the evaluation grid, so no training-batch residual persists in the reported values (and the reference is converged: refining the grid from $256^2$ to $512^2$ changes $t(K_3)$ by only $9.7\times10^{-5}$).
+During rebuttal, we additionally measured how much a random batch would move the output at the final $K_3$ graphon, using 1000 independent batches per batch size.
+At the training size $N=2^{16}$, solving the bias on a batch instead of the grid induces a population constraint residual of standard deviation $1.1\times10^{-3}$ (maximum $3.4\times10^{-3}$, mean $1.2\times10^{-4}$), an entry-wise output standard deviation averaging $1.1\times10^{-3}$, and a spread of $t(K_3)$ with standard deviation $2.3\times10^{-3}$; all of these shrink as $N^{-1/2}$. We will include this population-level constraint audit and the grid-convergence check in the revised version of the paper.
 
 **Analytic constructions and mathematical outcome.** 
 For $C_5$, the construction of Bennett et al. is known optimal at $p=1-1/k$ and conjectured optimal at the densities in between. For $C_7$, the conjecture described in Appendix E generalises this construction to a specific parametric family, and our learnt graphons do not follow it, so we do not currently have an explicit symbolic construction for them. This does not imply that the learnt graphons are suboptimal: the minimiser need not be unique, and the conjectured construction is only one of the possible optima. 
@@ -343,15 +344,15 @@ $$
 W(x,y)=\begin{cases}1&\text{if }|x-y|\in[0.1,0.9],\\0&\text{otherwise},\end{cases}
 $$
 whose optimality we have not proved. 
-More substantially, follow-up analysis of the learnt structures has produced three new theorems. For every graphon and every odd $m\ge3$, we proved
+More substantially, since submission, follow-up analysis of the learnt structures has produced three new theorems. For every graphon and every odd $m\ge3$, we proved
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1}
 $$
 extending Goodman's inequality to all odd cycles and proving optimality of the balanced complete $k$-partite graphons at $p=1-1/k$. 
-We also proved the corresponding balanced $k$-partite minimiser for every chordal graph whose maximal cliques have a common size $r\ge3$; this proves 17 cases of the 175-graph study that were previously unproven. 
-For $\mathbf{(P2)}$, we proved unique bipodal optimisers in a nontrivial neighbourhood on the symmetry-breaking side of every nonexceptional phase-boundary point for every $d$-regular $H$, $d\ge2$. 
+We also proved that the balanced $k$-partite graphon is a minimiser for every connected chordal graph whose maximal cliques have a common size $r\ge3$; this proves 17 cases of the 175-graph study that were previously unproven.
+For the dense upper-tail problem in $\mathbf{(P2)}$, we proved unique nonconstant bipodal optimisers in a nontrivial neighbourhood on the symmetry-breaking side of every nonexceptional Lubetzky-Zhao phase-boundary point for every $d$-regular $H$, $d\ge2$.
 The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
-We are preparing manuscripts describing all three for submission to mathematics journals. Outside the proved regimes, including $H_6$ and $C_7$ away from the sharp densities, we retain candidate language.
+We are preparing manuscripts describing all three for submission to mathematics journals. Outside the proved regimes, including $H_6$ and $C_7$ away from the sharp densities, we retain candidate language. We will summarise these results, their connection to the learnt structures, and their precise scope in the revised version of the paper.
 
 **Levels of evidence.** 
 We agree that these three levels should be kept explicit, and in the revision we will label every reported instance with one of them. 
