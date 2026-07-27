@@ -176,25 +176,91 @@ Finally, we note that the total cost is modest by current standards: every exper
 
 Thank you for recognising that the paper tackles important problems, that the framework is interesting, and that the empirical results are encouraging. We can give concrete theoretical support, a clearer operating regime, and a direct account of the architecture's design.
 
-**Theoretical support and operating regime.** Three parts of the computational method have exact guarantees: the empirical scalar constraint has a unique root; the homomorphism-density estimator is unbiased for a fixed graphon; and the displayed implicit formula is the exact derivative of the empirical constrained problem. In addition, continuous neural graphons approximate step graphons in $L^1$, and
-$$
-|t(H,W)-t(H,U)|\le e(H)\|W-U\|_1,
-$$
-so representational approximation transfers quantitatively to the motif objective. Global convergence of the nonconvex parameter optimisation is not guaranteed, but the target regime is concrete: dense-graph problems with one monotone scalar constraint, moderate motif density, and a low-complexity block or geometric optimiser. Across our experiments, the clearest failure diagnostic is a nearly competitive constant graphon: when its objective is within roughly $10^{-5}$ of the best known value, training often remains at that trivial solution. Sparse limits, extremely rare motifs, multiple nonmonotone constraints, and very large motifs fall outside the method's intended regime. We will state this operating regime explicitly.
+**Theoretical results and operating regime.** 
+A convergence guarantee for the nonconvex optimisation is out of reach, and we do not claim one. 
+Instead, the framework now has theoretical results of a different kind: three new mathematical theorems proved from its outputs — an odd-cycle lower bound extending Goodman's inequality, a chordal-graph minimiser theorem, and a local structure theorem for the large-deviation problem — described in detail under "Application and significance" below. 
+On when the method works well or fails: the target regime is dense-graph problems with one monotone scalar constraint, moderate motif density, and a low-complexity block or geometric optimiser. 
+Across our experiments, the clearest failure diagnostic is a nearly competitive constant graphon. 
+The problems we study often admit the constant graphon as a trivial solution, and when constant graphon's objective value is within roughly $10^{-5}$ of the best known value, training often remains at that trivial solution. 
 
-**Why progressive sinusoidal features.** A step boundary requires increasingly high spatial frequencies for accurate approximation. The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. The per-layer injection and the increasing frequency schedule play different roles. We are therefore rerunning the entire ablation suite of the paper—a plain MLP, the ResNet variant with first-layer-only encoding, our model, the constant encoding scale, the regulariser-based constraint, and constant learning rates—with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. Comparing each variant with its GeLU counterpart isolates the periodic features from repeated injection; the existing constant-scale control separately tests the multiscale schedule. [TODO: insert completed results.] We will also add a boundary-refinement visualisation.
+**Why progressive sinusoidal features.** 
+A step boundary requires increasingly high spatial frequencies for accurate approximation. 
+The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. 
+The per-layer injection and the increasing frequency schedule play different roles. To isolate them, we reran the entire ablation suite of the paper with GeLU features replacing the sinusoidal per-layer features, keeping the injection structure fixed. On $K_3$ at $p=7/9$:
+
+| variant | with sinusoidal features | without |
+|---|---|---|
+| Ours | 0.427215 | 0.436118 |
+| ResNet | 0.428968 | 0.436457 |
+| Constant-scale $s$ | 0.428190 | 0.436500 |
+| Regulariser | 0.434445 | 0.437376 |
+| Constant LR (low) | 0.430071 | 0.442499 |
+| Constant LR (high) | 0.431645 | 0.436795 |
+
+Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). 
+This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the existing constant-scale control separately tests the multiscale schedule. 
+We will also prepare an illustration of the role of the multiscale encoding and share it during the discussion phase.
 
 The $d^{-1/2}$ initialisation of residual matrices controls activation growth with fan-in, while the range of each row of $U^{(\ell)}$ directly controls the initialised spatial frequency. Increasing $s(\ell)$ therefore gives later layers access to progressively finer scales without increasing hidden-state magnitude.
 
-**Wavelets.** Yes. The constraint solver and Monte Carlo estimator are representation-agnostic, so localised wavelet or Gabor features are plausible alternatives inside the network. We tested direct symmetric linear representations using Fourier, Haar wavelet, Legendre, and Bernstein bases on $K_3$ minimisation at $p=7/9$. Without an output nonlinearity, the Fourier and polynomial models leave $[0,1]$; the Haar fit remains bounded but cannot place the known non-dyadic boundaries accurately and underperforms the fixed-grid SBM. [TODO: insert the verified Haar and SBM values.] This experiment does not rule out a wavelet INR with a bounded output layer. We chose sinusoidal features because they are differentiable and their initial frequency scale is controlled directly by $U^{(\ell)}$; we will present wavelet INRs as a promising alternative rather than claim that sinusoids are uniquely suitable.
+**Wavelets.** 
+Yes, in principle: the constraint solver and Monte Carlo estimator are representation-agnostic, so wavelet-type features could replace the sinusoidal ones inside the network. 
+We have tested other encodings only in non-neural form so far: parameterising $W$ directly as a symmetric linear combination of a fixed basis — Fourier, Haar wavelet, and polynomial —  on $K_3$ minimisation at $p=7/9$. 
+In direct objective optimisation, all of them diverge: a fixed linear basis cannot enforce the constraint $W(x,y)\in[0,1]$, at any basis size. 
+We further tested the expressivity of these bases by training them to fit the known optimal solution.
+The Fourier and polynomial representations overshoot the step boundaries by about $\pm0.2$ (known as the Gibbs phenomenon) and violate the bound on about half of the domain.
+The Haar representation stays within $[0,1]$ and reaches $t(K_3,W)=0.436341$ — but clipped Haar expansions are exactly fixed-grid block models, so this route reduces to the fixed-grid SBM baseline in Appendix H ($0.435817$, against $0.427215$ for our method).
 
-**Application and significance.** The primary application is mathematical discovery, and it has already produced concrete outcomes. Learned odd-cycle structures led to the theorem
+**Application and significance.** 
+The strongest independent validation is that structures found by the framework have led to three new mathematical theorems. 
+First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
 $$
-t(C_m,W)\ge p^m-p(1-p)^{m-1}
+t(C_m,W)\ge p^m-p(1-p)^{m-1},
 $$
-for every odd $m\ge3$, extending Goodman's inequality to all odd cycles. A second theorem proves the balanced complete $k$-partite minimiser at $p=1-1/k$ for every chordal graph whose maximal cliques have a common size $r\ge3$, settling 17 previously unproven cases of our 175-graph study. The learned bipodal structures in $\mathbf{(P2)}$ led to a local theorem proving uniqueness and bipodality near the phase boundary for every $d$-regular pattern graph with $d\ge2$; this describes the typical structure of conditioned dense Erdős-Rényi graphs and addresses a central open question about nonconstant variational minimisers. The odd-cycle and chordal theorems are fully formalised in Lean 4. We are preparing manuscripts describing all three for submission to mathematics journals. This demonstrated discovery-to-theorem pipeline is the practical value we claim; we do not claim downstream graph-ML performance.
+extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
+Second, for every chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon minimises $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven. 
+Third, for every $d$-regular pattern graph with $d\ge2$ and every phase-boundary point with $r \ne (d-1)/d$, the large-deviation optimiser on the symmetry-breaking side is unique up to relabelling and bipodal in a nontrivial open neighbourhood. 
+The first two theorems are fully formalised in Lean 4; the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
+We are preparing manuscripts describing all three for submission to mathematics journals. 
+This is the intended use of the framework: learned structures guide new, independent mathematics.
 
-**Computational cost.** With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time evaluation budget. On one RTX A5000, the reported runs range from about 30 minutes for $K_3$ to a few hours for the Petersen graph. [TODO: insert seconds-per-iteration and peak-memory microbenchmark.]
+While there are practical applications of extremal graph theory in graph machine learning, such as the use of expander graphs in GNNs, these involve sparse graphs, which are outside the scope of our current work. 
+On the dense side, the closest practical contact point is the exponential random graph model (ERGM), a standard model of social networks in the social sciences. 
+In the dense regime, the asymptotic behaviour of an ERGM is governed by a graphon variational problem of exactly the type our framework optimises: its free energy maximises a linear combination of homomorphism densities minus an entropy functional as in $\mathbf{(P2)}$, and its typical networks concentrate near the optimal graphons (Chatterjee and Diaconis, 2013). 
+The well-known degeneracy of ERGM fitting corresponds to phase transitions of these optimisers, so our framework could be used to compute the optimal structures, map phase diagrams, and diagnose degenerate parameter regions before fitting. 
+We consider this a promising direction for our future work.
+
+**Computational cost.** 
+With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time evaluation budget. 
+We measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
+
+Sample size ($K_3$, width $256$):
+
+| $N$ | $2^{12}$ | $2^{13}$ | $2^{14}$ | $2^{15}$ |
+|---|---|---|---|---|
+| sec/iter | 0.012 | 0.017 | 0.029 | 0.054 |
+| peak memory (GB) | 0.33 | 0.63 | 1.20 | 2.37 |
+
+Width ($K_3$, $N=2^{15}$):
+
+| width | 128 | 256 | 512 |
+|---|---|---|---|
+| sec/iter | 0.023 | 0.054 | 0.151 |
+| peak memory (GB) | 1.19 | 2.37 | 4.74 |
+
+Motif ($N=2^{15}$, width $256$):
+
+| motif | $\binom{v(H)}2$ | $\|\mathcal S\|$ | sec/iter | peak memory (GB) |
+|---|---|---|---|---|
+| $K_3$ | 3 | 1 | 0.054 | 2.37 |
+| $C_5$ | 10 | 12 | 0.172 | 7.84 |
+| $C_7$ | 21 | 360 | 0.452 | 16.45 |
+
+The measurements match the stated scaling: memory grows linearly in $N$ and in width, and proportionally to the pair count $\binom{v(H)}2$ across motifs; time grows linearly in $N$ once the GPU is saturated, between linearly and quadratically in width, and roughly proportionally to the pair count, with the $C_7$ excess coming from the $|\mathcal S|e(H)=360\times7$ aggregation term. 
+A full $20000$-epoch run takes about $18$ minutes for $K_3$ and about $57$ minutes for $C_5$. 
+In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
+Every experiment in the paper fits on this single workstation GPU.
 
 ## Reviewer BFdn
 
