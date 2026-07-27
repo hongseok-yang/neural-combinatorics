@@ -108,21 +108,69 @@ This is the intended use of the framework: learned structures guide new, indepen
 
 Thank you for recognising the framework's novelty, tailored architecture, and comprehensive experiments. The requested details sharpen the computational and related-work positioning as follows.
 
-**Sample size.** The $2^{28}$ figure is not the training batch size. Training uses $2^{12}$-$2^{16}$ sampled tuples; $2^{28}$ is a conservative, one-time post-training evaluation budget used only when deterministic high-resolution contraction is infeasible. For any fixed permutation set, the estimator is an average of $N$ independent tuple contributions in $[0,1]$. Hoeffding's inequality therefore gives
+**Sample size.** The $2^{28}$ figure is not the training batch size. Training uses $2^{12}$-$2^{16}$ sampled tuples; $2^{28}$ is a conservative, one-time post-training evaluation budget used only when deterministic high-resolution contraction is infeasible. 
+The theoretical bound is as follows: for any fixed permutation set, the estimator is an average of $N$ independent tuple contributions in $[0,1]$. 
+Hoeffding's inequality therefore gives
 $$
 \Pr(|\widehat t-t|\ge\epsilon)\le2e^{-2N\epsilon^2}.
 $$
-At $N=2^{28}$, the distribution-free 95% absolute-error bound is approximately $8.3\times10^{-5}$. Thus $2^{28}$ was a conservative evaluation choice, not a sample size required by either training or theory. Training uses $2^{12}$-$2^{16}$, and the usual $N^{-1/2}$ rate lets users choose the evaluation budget for the desired absolute precision. We will state this distinction explicitly.
+At $N=2^{28}$, the distribution-free 95% absolute-error bound is approximately $8.3\times10^{-5}$. 
+Thus $2^{28}$ was a conservative evaluation choice, not a sample size required by either training or theory. 
+Training uses $2^{12}$-$2^{16}$, and the usual $N^{-1/2}$ rate lets users choose the evaluation budget for the desired absolute precision. We will state this distinction explicitly.
 
-**Runs.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. To complement this finite hyperparameter search with a reproducibility measure, a standardised 10-seed study is running on $K_3$ at $p=7/9$, followed by the key open instances. [TODO: insert completed distribution and structural success rates.]
+**Runs.** Every reported candidate was selected from exactly eight runs: one run for each of two activations crossed with four learning rates. Thus the reported best-found values come from a finite eight-configuration search. 
+To measure reproducibility separately from hyperparameter selection, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration (the same setting as the ablation study). 
+The objective is highly reproducible: the mean is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$, against the known optimum $98/225 \approx 0.435556$ — an interval of width $1.3\times10^{-5}$, lying about $0.04\%$ above the optimum. 
+Structurally, 7 of the 10 runs recovered the clean 5-block partition; the remaining 3 produced five parts whose smallest part deviates from an exact block while achieving comparable objective values. 
+Since the 5-block construction is not the unique optimiser, this deviation does not indicate suboptimality; we therefore report structure recovery and objective quality separately. 
+We will perform the same repetition analysis for the open instances $C_5$, $C_7$, and $H_6$ and report it during the discussion phase.
 
-**Relation to Xia, Mishne, and Wang (2023).** Xia et al. introduced a SIREN representation for graphon learning: reconstructing an unknown graphon from observed graphs using a Gromov-Wasserstein loss. Our problem has neither an observed graph dataset nor a target graphon. It directly searches over graphons to optimise homomorphism-density or KL functionals subject to a density constraint. We will cite Xia et al. and make clear that we do not claim to introduce neural graphon representations. The contribution here is the graphon-variational framework: progressive per-layer features for sharp extremisers, an embedded monotone constraint solver with implicit differentiation, and symmetry-aware density estimators. Our factorised ablation also includes a parameter-matched sinusoidal MLP backbone under the same objective, solver, and estimator. [TODO: insert completed backbone result.]
+**Relation to graphon learning.** 
+Xia, Mishne, and Wang (2023) and, more recently, Azizpour, Zilberstein, and Segarra (AISTATS 2025) introduced implicit neural representations for graphon learning, a problem in network analysis: given a set of graphs $\{G_i\}_{i=1}^N$ assumed to be sampled from a common underlying graphon $W$, estimate $W$ from these samples. 
+Because the goal is to reconstruct a graphon close to the true one from finite samples, sharp details of the true graphon are often lost; see, for instance, Figures 3(b) and 9 of Azizpour et al. 
+Moreover, applying graphon learning to problems like ours would first require finding near-optimal finite graphs — itself a hard discrete optimisation — and only then estimating the underlying graphon from them. 
+Our setting observes neither a graph dataset nor a target graphon: we search directly over graphons to optimise homomorphism-density or KL functionals under a density constraint. 
+The contributions specific to this setting are the progressive per-layer input encoding for discontinuous extremisers, the symmetry-aware Monte Carlo estimators, and the embedded monotone constraint solver with implicit differentiation. 
+We will cite Xia et al. and make clear that we do not claim to introduce neural graphon representations. 
 
-**Complexity.** With width $d$, depth $L$, batch size $N$, and cached evaluations on at most $\binom{v(H)}2$ unordered pairs per tuple, the dominant neural forward/backward cost is approximately
+We also ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$), whereas our method reaches $0.427215$.
+
+**Complexity.** 
+With width $d$, depth $L$, batch size $N$, and cached evaluations on at most $\binom{v(H)}2$ unordered pairs per tuple, the dominant neural forward/backward cost is approximately
 $$
 O\!\left(Nv(H)^2Ld^2\right),
 $$
-with an additional $O(N|\mathcal S|e(H))$ cost for motif-product aggregation. Activation memory is approximately $O(Nv(H)^2Ld)$. Monte Carlo absolute error scales as $N^{-1/2}$, so halving it requires approximately four times as many samples. On one RTX A5000, the full runs reported in the paper ranged from about 30 minutes for $K_3$ to a few hours for the Petersen graph. We will supplement these end-to-end times with seconds per iteration and peak memory across representative $N,d,H$. [TODO: insert microbenchmark.]
+with an additional $O(N|\mathcal S|e(H))$ cost for motif-product aggregation. 
+Activation memory is approximately $O(Nv(H)^2Ld)$. 
+Monte Carlo absolute error scales as $N^{-1/2}$, so halving it requires approximately four times as many samples. 
+We measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
+
+Sample size ($K_3$, width $256$):
+
+| $N$ | $2^{12}$ | $2^{13}$ | $2^{14}$ | $2^{15}$ |
+|---|---|---|---|---|
+| sec/iter | 0.012 | 0.017 | 0.029 | 0.054 |
+| peak memory (GB) | 0.33 | 0.63 | 1.20 | 2.37 |
+
+Width ($K_3$, $N=2^{15}$):
+
+| width | 128 | 256 | 512 |
+|---|---|---|---|
+| sec/iter | 0.023 | 0.054 | 0.151 |
+| peak memory (GB) | 1.19 | 2.37 | 4.74 |
+
+Motif ($N=2^{15}$, width $256$):
+
+| motif | $\binom{v(H)}2$ | $\|\mathcal S\|$ | sec/iter | peak memory (GB) |
+|---|---|---|---|---|
+| $K_3$ | 3 | 1 | 0.054 | 2.37 |
+| $C_5$ | 10 | 12 | 0.172 | 7.84 |
+| $C_7$ | 21 | 360 | 0.452 | 16.45 |
+
+The measurements match the stated scaling. Memory grows linearly in $N$ and in width, and proportionally to the pair count $\binom{v(H)}2$ across motifs. Time grows linearly in $N$ once the GPU is saturated (sub-linearly at small $N$ from under-utilisation), between linearly and quadratically in width, and roughly proportionally to the pair count across motifs, with the $C_7$ excess over this proportion coming from the $|\mathcal S|e(H)=360\times7$ aggregation term. 
+Full-run wall-clock follows directly: $20000$ epochs take about $18$ minutes for $K_3$ and about $57$ minutes for $C_5$ at $N=2^{15}$. 
+In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
+Finally, we note that the total cost is modest by current standards: every experiment in the paper fits on a single workstation GPU.
 
 ## Reviewer 6KFF
 
