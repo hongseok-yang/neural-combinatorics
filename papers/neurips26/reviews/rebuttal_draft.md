@@ -19,6 +19,7 @@ Internal drafting note: the 2026 rules allow up to 10,000 characters per review,
 - Do not describe a running or planned experiment as completed. Replace each results placeholder only after the corresponding numbers have been checked.
 - Learning rates verified: $10^{-3},5\times10^{-4},10^{-4},5\times10^{-5}$, matching the submitted Appendix D.
 - The count of 17 newly settled sweep cases is verified. Still author-verify the exact large-deviation theorem statement (it appears in the AC comment) against the current mathematical manuscripts.
+- Openreview does not show -- (en-dashes) correctly but show two hyphens in preview. Use - (single hyphen) instead.
 
 ## Optional confidential overview to the AC
 
