@@ -367,7 +367,17 @@ Thank you for recognising the mathematically meaningful problem setting, the pro
 Every value reported in the submitted paper was selected from exactly eight runs: two activations (sin or GeLU) across four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). During rebuttal, we separated this finite hyperparameter search from reproducibility through three controlled studies.
 (i) Initialisation: we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration. The mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so we report structure recovery and objective quality separately). The same repetition analysis for $C_5$, $C_7$, and $H_6$ will follow during the discussion phase. 
 (ii) Frequency schedule: we trained with both encoding-scale schedules. With $s(\ell)=2^{\ell-1}$, the ten repetitions above give mean $0.435711$; with $s(\ell)=\ell$, the best run gives $0.435754$. The discovered solution and its objective are insensitive to the schedule choice.
-(iii) Permutations: on $C_5$, we are comparing three symmetry sets for the estimator: the identity only; the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$; and the full set of coset representatives. Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. We will include the completed sensitivity studies and their protocol in the revised version of the paper. [TODO: insert permutation-study results.]
+(iii) Permutations: on $C_5$, we trained with three symmetry sets for the estimator: the identity only ($|S|=1$); the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$ ($|S|=2$); and the full set of 12 coset representatives ($|S|=12$). 
+Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. The objectives attained across the six edge densities are:
+
+| $p$ | $1/2$ | $4/7$ | $5/8$ | $2/3$ | $5/7$ | $4/5$ |
+|---|---|---|---|---|---|---|
+| $\|S\|=1$ | 0.000001 | 0.046035 | 0.08667 | **0.123518** | 0.182094 | 0.326479 |
+| $\|S\|=2$ | **0** | 0.045884 | **0.086575** | 0.123559 | **0.182005** | **0.326451** |
+| $\|S\|=12$ | **0** | **0.045881** | 0.086655 | 0.12364 | 0.182081 | 0.326481 |
+
+At every density the three settings agree to within $1.6\times10^{-4}$, the same order as the run-to-run variability in (i), so the choice of permutation set does not affect the discovered solution or its objective. 
+We will include the completed sensitivity studies and their protocol in the revised version of the paper.
 
 **Population-level constraint error.** 
 The constraint solver runs not only during training but also on the final trained graphon: the submitted evaluation re-solves the scalar bias deterministically on the evaluation grid, so no training-batch residual persists in the reported values (and the reference is converged: refining the grid from $256^2$ to $512^2$ changes $t(K_3)$ by only $9.7\times10^{-5}$).
