@@ -210,31 +210,31 @@ We will include this factorised ablation, its interpretation, and an illustratio
 
 **Wavelets.** 
 Yes, in principle: the constraint solver and Monte Carlo estimator are representation-agnostic, so wavelet-type features could replace the sinusoidal ones inside the network. 
-During rebuttal, we tested other encodings in non-neural form: parameterising $W$ directly as a symmetric linear combination of a fixed basis — Fourier, Haar wavelet, and polynomial — on $K_3$ minimisation at $p=7/9$.
+During rebuttal, we tested other encodings in non-neural form: parameterising $W$ directly as a symmetric linear combination of a fixed basis, namely, Fourier, Haar wavelet, and polynomial, on $K_3$ minimisation at $p=7/9$.
 In direct objective optimisation, all of them diverge: a fixed linear basis cannot enforce the constraint $W(x,y)\in[0,1]$, at any basis size. 
 We further tested the expressivity of these bases by training them to fit the known optimal solution.
 The Fourier and polynomial representations overshoot the step boundaries by about $\pm0.2$ (known as the Gibbs phenomenon) and violate the bound on about half of the domain.
 The Haar representation stays within $[0,1]$ and reaches $t(K_3,W)=0.436341$.
 
 **Application and significance.** 
-Since submission, the strongest independent validation is that structures found by the framework have led to three new mathematical theorems.
+Since submission, the structures found by the framework have led to three new mathematical theorems.
 First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1},
 $$
 extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
-Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph study that were previously unproven.
+Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph case study that were previously unproven.
 Third, for the dense upper-tail problem, every $d$-regular pattern graph with $d\ge2$ has, near each Lubetzky-Zhao phase-boundary point with $r \ne (d-1)/d$, a unique nonconstant bipodal optimiser up to relabelling throughout a nontrivial neighbourhood on the symmetry-breaking side.
-The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third is partial and takes some established results from the literature and parts of graphon theory as axioms. 
 Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
 We are preparing manuscripts describing all three for submission to mathematics journals, and we will summarise their statements, scope, and connection to the learnt structures in the revised version of the paper.
-This is the intended use of the framework: learnt structures guide new, independent mathematics.
+This is the intended use of the framework: learnt structures guide new mathematics.
 
 While there are practical applications of extremal graph theory in graph machine learning, such as the use of expander graphs in GNNs, these involve sparse graphs, which are outside the scope of our current work. 
 On the dense side, the closest practical contact point is the exponential random graph model (ERGM), a standard model of social networks in the social sciences. 
 In the dense regime, the asymptotic behaviour of an ERGM is governed by a graphon variational problem of exactly the type our framework optimises: its free energy maximises a linear combination of homomorphism densities minus an entropy functional as in $\mathbf{(P2)}$, and its typical networks concentrate near the optimal graphons (Chatterjee and Diaconis, 2013). 
 The well-known degeneracy of ERGM fitting corresponds to phase transitions of these optimisers, so our framework could be used to compute the optimal structures, map phase diagrams, and diagnose degenerate parameter regions before fitting. 
-We consider this a promising direction for our future work and will add this practical-context discussion to the revised version of the paper.
+We consider this a promising direction for the future work and will add this practical-context discussion to the revised version of the paper.
 
 **Computational cost.** The practical conclusion is that the method is manageable on one workstation GPU for the small fixed motifs common in extremal graph theory, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
 With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time evaluation budget. 
