@@ -303,8 +303,6 @@ Every submitted experiment fits on this single workstation GPU. We will include 
 
 ## Reviewer BFdn
 
-We respond to the reviewer's concerns below. 
-
 **Benefit from the sinusoidal encoding.** The performance gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, and the progressive frequency schedule provides a further benefit.
 A step boundary requires increasingly high spatial frequencies for accurate approximation. 
 The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. 
@@ -324,11 +322,10 @@ This attributes the gain to the sinusoidal features themselves rather than to th
 The $d^{-1/2}$ initialisation of residual matrices controls activation growth with fan-in, while the range of each row of $U^{(\ell)}$ directly controls the initialised spatial frequency. Increasing $s(\ell)$ therefore gives later layers access to progressively finer scales without increasing hidden-state magnitude.
 We will include this factorised ablation, its interpretation, and an illustration of the multiscale encoding in the revised version.
 
-**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** In the submitted paper, the entropy values in Table 6 were computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them.
+**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** In our submission, the entropy values in Table 6 were computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them.
 During rebuttal, we refined the evaluation by enforcing the constraint exactly at the evaluation resolution, which slightly revises the reported values as shown below.
-More importantly, independent verification is possible in both directions. 
-In one direction, from the conjecture suggested by our observations (the learnt graphons are nearly bipodal), we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), in which both $t(K_3,W)$ and $h_q(W)$ have exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound.
-In the other direction, Lemma 3.3 of Lubetzky and Zhao (2012) provides a computable lower bound: for a $2$-regular pattern graph, the optimum is at least the convex minorant of $x \mapsto h_q(x^{1/2})$ evaluated at $x = r^2$. 
+Also, motivated by the graph structure our experiments suggest (the learnt graphons are nearly bipodal), we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), where $t(K_3,W)$ and $h_q(W)$ have exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound.
+Meanwhile, Lemma 3.3 of Lubetzky and Zhao (2012) provides a computable lower bound: for a $2$-regular pattern graph, the optimum is at least the convex minorant of $x \mapsto h_q(x^{1/2})$ evaluated at $x = r^2$. 
 The results:
 
 | $q$ | $r$ | lower bound | bipodal $h_q$ (explicit, feasible) | $h_q(W_{\mathrm{ours}})$, revised | $h_q(W_{\mathrm{LZ}})$ | $\Delta = h_q(W_{\mathrm{LZ}})-h_q(W_{\mathrm{ours}})$ |
