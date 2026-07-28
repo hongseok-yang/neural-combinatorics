@@ -361,10 +361,10 @@ This is the intended use of the framework: learnt structures guide new mathemati
 
 ## Reviewer s6Ge
 
-Thank you for recognising the mathematically meaningful problem setting, the problem-specific architecture, and the breadth of the experiments. We address reliability with targeted sensitivity studies and, more importantly, with explicit constructions and new mathematical theorems.
+Thank you for recognising the mathematically meaningful problem setting, the problem-specific architecture, and the breadth of the experiments. We address the raised issues with targeted sensitivity studies and, more importantly, with explicit constructions and new mathematical theorems.
 
 **Initialisation, schedule, and permutation sensitivity.** 
-Every value reported in the submitted paper was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). During rebuttal, we separated that finite hyperparameter search from reproducibility through three controlled studies.
+Every value reported in the submitted paper was selected from exactly eight runs: two activations (sin or GeLU) across four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$). During rebuttal, we separated this finite hyperparameter search from reproducibility through three controlled studies.
 (i) Initialisation: we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration. The mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so we report structure recovery and objective quality separately). The same repetition analysis for $C_5$, $C_7$, and $H_6$ will follow during the discussion phase. 
 (ii) Frequency schedule: we trained with both encoding-scale schedules. With $s(\ell)=2^{\ell-1}$, the ten repetitions above give mean $0.435711$; with $s(\ell)=\ell$, the best run gives $0.435754$. The discovered solution and its objective are insensitive to the schedule choice.
 (iii) Permutations: on $C_5$, we are comparing three symmetry sets for the estimator: the identity only; the two cyclic orderings $0\text{-}1\text{-}2\text{-}3\text{-}4$ and $0\text{-}2\text{-}4\text{-}1\text{-}3$; and the full set of coset representatives. Every choice is unbiased and changes variance and cost rather than the target; the full cycle estimator averages all coset representatives, so its value does not depend on which representatives are chosen. We will include the completed sensitivity studies and their protocol in the revised version of the paper. [TODO: insert permutation-study results.]
@@ -381,21 +381,27 @@ $$
 W(x,y)=\begin{cases}1&\text{if }|x-y|\in[0.1,0.9],\\0&\text{otherwise},\end{cases}
 $$
 whose optimality we have not proved. 
-More substantially, since submission, follow-up analysis of the learnt structures has produced three new theorems. For every graphon and every odd $m\ge3$, we proved
+
+More substantially, since submission, the follow-up analysis of the learnt structures has produced three new theorems. For every graphon and every odd $m\ge3$, we proved
 $$
 t(C_m,W)\ge p^m-p(1-p)^{m-1}
 $$
 extending Goodman's inequality to all odd cycles and proving optimality of the balanced complete $k$-partite graphons at $p=1-1/k$. 
 We also proved that the balanced $k$-partite graphon is a minimiser for every connected chordal graph whose maximal cliques have a common size $r\ge3$; this proves 17 cases of the 175-graph study that were previously unproven.
 For the dense upper-tail problem in $\mathbf{(P2)}$, we proved unique nonconstant bipodal optimisers in a nontrivial neighbourhood on the symmetry-breaking side of every nonexceptional Lubetzky-Zhao phase-boundary point for every $d$-regular $H$, $d\ge2$.
-The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third takes some established results from the literature and parts of graphon theory as axioms. 
-We are preparing manuscripts describing all three for submission to mathematics journals. Outside the proved regimes, including $H_6$ and $C_7$ away from the sharp densities, we retain candidate language. We will summarise these results, their connection to the learnt structures, and their precise scope in the revised version of the paper.
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third is partial and takes some established results from the literature and parts of graphon theory as axioms. 
+We are preparing manuscripts describing all three for submission to mathematics journals; since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
+Outside these proved regimes, we have not established global optimality. The $H_6$ construction, the $C_7$ solutions away from $p=1-1/k$, and the large-deviation instances not covered by the local theorem therefore remain numerical candidates. We will summarise these results, their connection to the learnt structures, and their precise scope in the revised version of the paper.
 
 **Levels of evidence.** 
-We agree that these three levels should be kept explicit, and in the revision we will label every reported instance with one of them. 
-- Rediscovery of a known extremal construction: Figures 1-3. The $K_3$ and clique optima are classical; the $C_5$ optimum is known at $p=1-1/k$, while at the intermediate densities the construction is conjectured optimal, so those cells belong to the second category. 
-- Numerically competitive candidates: Figure 4 ($C_7$) and the $\mathbf{(P2)}$ instances of Figures 6 and 8-12.  
-- Evidence against an existing reference construction: Figure 5 ($H_6$), where the learnt graphons improve on both the constant and the $k$-partite reference constructions at every tested density.
+We agree that the three distinctions identified by the reviewer should be explicit. Our mathematical follow-up adds a fourth category: a candidate construction discovered numerically and subsequently proved globally optimal. In the revision, we will state the status of every reported instance using the following categories.
+
+- **Rediscovery of a previously known optimum.** This includes Figures 1 and 2 and the $C_5$ cases in Figure 3 at $p=1-1/k$.
+- **A candidate construction subsequently proved globally optimal.** Our new odd-cycle theorem proves the balanced complete $k$-partite construction for the $C_7$ cases in Figure 4 at $p\in\{1/2,2/3,4/5\}$. The new chordal-graph theorem similarly proves 17 cases from the submitted 175-graph study that were previously unproven.
+- **A numerically competitive candidate without a proof of global optimality.** This includes the intermediate-density $C_5$ and $C_7$ cases, the $H_6$ and Petersen-graph constructions, and the displayed large-deviation instances not established to lie in the regime covered by our local theorem. For the six triangle upper-tail instances, rigorous lower bound (by Lemma 3.3 of Lubetzky and Zhao (2012)) and feasible upper bound additionally bound the optimality gap without proving exact optimality; for details, see our response to Reviewer BFdn (item 2).
+- **Evidence against an existing reference construction.** The learnt $H_6$ candidates improve on the constant and $k$-partite references. For the tested $K_3$, $C_4$, and $C_5$ upper-tail settings, explicit feasible bipodal constructions also prove that the Lubetzky-Zhao reference is suboptimal. These comparisons do not by themselves establish global optimality.
+
+The last two categories can overlap: a candidate may rigorously improve on a reference construction without being globally optimal.
 
 ## Experiment priorities
 
