@@ -34,9 +34,9 @@ We will include the completed reproducibility, permutation, failure-mode, and po
 Their entropies were evaluated by discretising each learnt graphon on an $M\times M$ grid and replacing the graphon integrals with finite sums in 64-bit floating-point arithmetic; no Monte Carlo sampling was used. 
 During rebuttal, we revised this evaluation so that the density constraint is re-solved exactly on each evaluation grid before the entropy is computed; the revised values are slightly weaker than those in Table 6, and every comparison below uses them. 
 The central question for these open instances is whether the learnt graphons are close to the optimum, not merely better than the constant graphon, and answering it requires a near-optimal value to compare against. 
-Guided by our observation that the learnt solutions are nearly bipodal, we obtained such a value by numerically optimising the four-parameter bipodal family; its members are feasible and their densities and entropies have exact closed forms, so this benchmark is independent of grid discretisation. 
+Guided by our observation that the learnt solutions are nearly bipodal, we obtained such a value by numerically optimising the four-parameter bipodal family; its members are feasible, and their densities and entropies have exact closed forms, so this benchmark is independent of grid discretisation. 
 This benchmark became available only after the learnt structures revealed the bipodal form, and the revised learnt values lie within $4\times10^{-3}$ of the bipodal optima at every triangle setting. 
-The learnt graphons also attain strictly lower entropy than the Lubetzky-Zhao reference construction at all eighteen tested settings across $K_3$, $C_4$, and $C_5$, so they are consistently the closer to the numerical optimum. 
+The learnt graphons also attain strictly lower entropy than the Lubetzky-Zhao reference construction at all eighteen tested settings across $K_3$, $C_4$, and $C_5$, so they are consistently closer to the numerical optimum. 
 We will include the revised evaluation protocol, the bipodal benchmark, and the revised values in the revised version of the paper.
 
 **Mathematical results prompted by the learnt structures.** Since submission, analysis prompted by the learnt structures with our method has produced three new theorems.
@@ -131,7 +131,6 @@ This is the intended use of the framework: learnt structures guide new mathemati
 
 Thank you for recognising our framework's novelty, our tailored architecture, and comprehensive experiments. We answer your questions below. 
 
-
 **Sample size.** The $2^{28}$ figure is not the training batch size. Training uses $2^{12}$-$2^{16}$ sampled tuples; $2^{28}$ is a conservative, one-time post-training budget for evaluating the found graphons, and it is used only when deterministic high-resolution contraction is infeasible. 
 The theoretical bound is as follows: for any fixed permutation set, the estimator is an average of $N$ independent tuple contributions in $[0,1]$. 
 Hoeffding's inequality therefore gives
@@ -157,7 +156,7 @@ Our setting observes neither a graph dataset nor a target graphon: we search dir
 The contributions specific to this setting are the progressive per-layer input encoding for discontinuous extremisers, the symmetry-aware Monte Carlo estimators, and the embedded monotone constraint solver with implicit differentiation. 
 We will cite Xia et al. and make clear in the revised version of the paper that we do not claim to introduce neural graphon representations.
 
-During rebuttal, we also ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$), whereas our method reaches $0.427215$. We will include this baseline and the distinction between graphon reconstruction and direct graphon optimisation in the revised version of the paper.
+During rebuttal, we also ran a parameter-matched SIREN backbone under our identical objective, solver, estimator, and budget on $K_3$ at $p=7/9$: it converged to the trivial constant graphon ($t(K_3,W)=0.470507\approx p^3$). We will include this baseline and the distinction between graphon reconstruction and direct graphon optimisation in the revised version of the paper.
 
 **Complexity.** Our method is manageable on one workstation GPU for the small fixed motifs common in extremal graph theory, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
 With width $d$, depth $L$, batch size $N$, and cached evaluations on at most $\binom{v(H)}2$ unordered pairs per tuple, the dominant neural forward/backward cost is approximately
@@ -299,7 +298,7 @@ Motif ($N=2^{15}$, width $256$):
 
 The measurements match the stated scaling: memory grows linearly in $N$ and in width, and proportionally to the pair count $\binom{v(H)}2$ across motifs; time grows linearly in $N$ once the GPU is saturated, between linearly and quadratically in width, and roughly proportionally to the pair count, with the $C_7$ excess coming from the $|\mathcal S|e(H)=360\times7$ aggregation term. 
 A full $20000$-epoch run takes about $18$ minutes for $K_3$ and about $57$ minutes for $C_5$. 
-In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
+In training, we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
 Every submitted experiment fits on this single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
 
 ## Reviewer BFdn
@@ -396,7 +395,7 @@ Every choice is unbiased and changes variance and cost rather than the target; t
 | $\|S\|=2$ | **0** | 0.045884 | **0.086575** | 0.123559 | **0.182005** | **0.326451** |
 | $\|S\|=12$ | **0** | **0.045881** | 0.086655 | 0.12364 | 0.182081 | 0.326481 |
 
-At every density the three settings agree to within $1.6\times10^{-4}$, the same order as the run-to-run variability in (i), so the choice of permutation set does not affect the discovered solution or its objective. 
+At every density, the three settings agree to within $1.6\times10^{-4}$, the same order as the run-to-run variability in (i), so the choice of permutation set does not affect the discovered solution or its objective. 
 We will include the completed sensitivity studies and their protocol in the revised version of the paper.
 
 **Population-level constraint error.** 
@@ -428,7 +427,7 @@ We agree that the three distinctions identified by the reviewer should be explic
 
 - **Rediscovery of a previously known optimum.** This includes Figures 1 and 2 and the $C_5$ cases in Figure 3 at $p=1-1/k$.
 - **A candidate construction subsequently proved globally optimal.** Our new odd-cycle theorem proves the balanced complete $k$-partite construction for the $C_7$ cases in Figure 4 at $p\in\{1/2,2/3,4/5\}$. The new chordal-graph theorem similarly proves 17 cases from the submitted 175-graph study that were previously unproven.
-- **A numerically competitive candidate without a proof of global optimality.** This includes the intermediate-density $C_5$ and $C_7$ cases, the $H_6$ and Petersen-graph constructions, and the displayed large-deviation instances not established to lie in the regime covered by our local theorem. For the six triangle upper-tail instances, rigorous lower bound (by Lemma 3.3 of Lubetzky and Zhao (2012)) and feasible upper bound additionally bound the optimality gap without proving exact optimality; for details, see our response to Reviewer BFdn (item 2).
+- **A numerically competitive candidate without a proof of global optimality.** This includes the intermediate-density $C_5$ and $C_7$ cases, the $H_6$ and Petersen-graph constructions, and the displayed large-deviation instances not established to lie in the regime covered by our local theorem. For the six triangle upper-tail instances, a rigorous lower bound (by Lemma 3.3 of Lubetzky and Zhao (2012)) and a feasible upper bound additionally bound the optimality gap without proving exact optimality; for details, see our response to Reviewer BFdn (item 2).
 - **Evidence against an existing reference construction.** The learnt $H_6$ candidates improve on the constant and $k$-partite references. For the tested $K_3$, $C_4$, and $C_5$ upper-tail settings, explicit feasible bipodal constructions also prove that the Lubetzky-Zhao reference is suboptimal. These comparisons do not by themselves establish global optimality.
 
 The last two categories can overlap: a candidate may rigorously improve on a reference construction without being globally optimal.
