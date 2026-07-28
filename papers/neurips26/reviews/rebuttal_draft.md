@@ -22,8 +22,8 @@ Internal drafting note: the 2026 rules allow up to 10,000 characters per review,
 
 ## Optional confidential overview to the AC
 
-We thank the AC and reviewers for their thoughtful feedback. The paper presents a neural discovery framework that searches over graphons, the limit objects of dense graphs, to solve difficult variational problems in extremal graph theory and large-deviation theory. Its recovery of known extremisers demonstrates strong optimisation performance, while its interpretable candidates for open problems have already led to new mathematical results after the submission, as we explain below. We respond to 
-the concerns of the AC's summary. 
+This paper presents a neural discovery framework that searches over graphons, the limit objects of dense graphs, to solve difficult variational problems in extremal graph theory and large-deviation theory. Its recovery of known extremisers demonstrates strong optimisation performance, while its interpretable candidates for open problems have already led to new mathematical results as we will explain shortly. We respond to 
+the concerns in the AC's summary below. 
 
 **Robustness.** We quantified the sensitivity of the reported results to the three sources of randomness the reviewers raise: random initialisation, the random batches used to enforce the density constraint, and the choice of Monte Carlo permutations. In all three cases the effect on the objective is at most of order $10^{-3}$, and the discovered structure is stable.
 Every candidate reported in the submitted paper was selected from exactly eight runs, one for each combination of two activations and four learning rates.
