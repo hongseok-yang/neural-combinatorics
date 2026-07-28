@@ -236,9 +236,9 @@ In the dense regime, the asymptotic behaviour of an ERGM is governed by a grapho
 The well-known degeneracy of ERGM fitting corresponds to phase transitions of these optimisers, so our framework could be used to compute the optimal structures, map phase diagrams, and diagnose degenerate parameter regions before fitting. 
 We consider this a promising direction for the future work and will add this practical-context discussion to the revised version of the paper.
 
-**Computational cost.** The practical conclusion is that the method is manageable on one workstation GPU for the small fixed motifs common in extremal graph theory, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
-With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a one-time evaluation budget. 
-During rebuttal, we measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all submitted experiments, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
+**Computational cost.** Our method is manageable on one workstation GPU for the small fixed motifs common in extremal graph theory, although its cost grows quickly with motif size and it is not intended for motifs with hundreds or thousands of vertices.
+With width $d$, depth $L$, batch size $N$, and motif $H$, the dominant per-iteration cost is $O(Nv(H)^2Ld^2+N|\mathcal S|e(H))$, with activation memory $O(Nv(H)^2Ld)$. Training uses $2^{12}$-$2^{16}$ samples; $2^{28}$ is only a conservative one-time post-training budget for evaluating found graphons, and it is used only when deterministic high-resolution contraction is infeasible. 
+During rebuttal, we measured seconds per iteration of the core training step and peak memory on the RTX A5000 used for all experiments in our submission, varying one factor at a time from the default configuration (width $256$, depth $5$, $N=2^{15}$).
 
 Sample size ($K_3$, width $256$):
 
