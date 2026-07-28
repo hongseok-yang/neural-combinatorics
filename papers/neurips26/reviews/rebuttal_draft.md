@@ -111,6 +111,7 @@ This is the intended use of the framework: learnt structures guide new mathemati
 
 Thank you for recognising our framework's novelty, our tailored architecture, and comprehensive experiments. We answer your questions below. 
 
+
 **Sample size.** The $2^{28}$ figure is not the training batch size. Training uses $2^{12}$-$2^{16}$ sampled tuples; $2^{28}$ is a conservative, one-time post-training budget for evaluating the found graphons, and it is used only when deterministic high-resolution contraction is infeasible. 
 The theoretical bound is as follows: for any fixed permutation set, the estimator is an average of $N$ independent tuple contributions in $[0,1]$. 
 Hoeffding's inequality therefore gives
@@ -175,6 +176,20 @@ Full-run wall-clock follows directly: $20000$ epochs take about $18$ minutes for
 In training we choose the batch size to fill the available GPU memory, since larger batches reduce estimator variance at fixed wall time; gradient accumulation achieves the same batch size under smaller memory. 
 Thus, every submitted experiment fits on a single workstation GPU. We will include the complexity analysis, benchmarks, and practical scope in the revised version of the paper.
 
+**Mathematical outcome of the discovery workflow.** Since submission, the structures found by the framework have led to three new mathematical theorems.
+First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
+$$
+t(C_m,W)\ge p^m-p(1-p)^{m-1},
+$$
+extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
+Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph case study that were previously unproven.
+Third, for the dense upper-tail problem, every $d$-regular pattern graph with $d\ge2$ has, near each Lubetzky-Zhao phase-boundary point with $r \ne (d-1)/d$, a unique nonconstant bipodal optimiser up to relabelling throughout a nontrivial neighbourhood on the symmetry-breaking side.
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third is partial and takes some established results from the literature and parts of graphon theory as axioms. 
+Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
+We are preparing manuscripts describing all three for submission to mathematics journals, and we will summarise their statements, scope, and connection to the learnt structures in the revised version of the paper.
+This is the intended use of the framework: learnt structures guide new mathematics.
+
+
 ## Reviewer 6KFF
 
 Thank you for recognising that the paper tackles important problems, that the framework is interesting, and that the empirical results are encouraging. We can give concrete theoretical support, a clearer operating regime, and a direct account of the architecture's design.
@@ -189,7 +204,7 @@ Across our experiments, the clearest failure diagnostic is a nearly competitive 
 The problems we study often admit the constant graphon as a trivial solution, and when constant graphon's objective value is within roughly $10^{-5}$ of the best known value, training often remains at that trivial solution. 
 We will state this operating regime and failure diagnostic explicitly in the revised version of the paper.
 
-**Why progressive sinusoidal features.** The main conclusion is that the performance gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, and the progressive frequency schedule provides a further benefit.
+**Why progressive sinusoidal features.** The performance gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, and the progressive frequency schedule provides a further benefit.
 A step boundary requires increasingly high spatial frequencies for accurate approximation. 
 The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. 
 The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
@@ -269,9 +284,12 @@ Every submitted experiment fits on this single workstation GPU. We will include 
 
 ## Reviewer BFdn
 
-Thank you for recognising the coherent methodology, effective symmetry-aware estimator, and extensive experimental scope. We address the two issues most relevant to the score—novelty and reliability—before answering the individual experimental questions.
+Thank you for recognising that our methodology is coherent, uses an effective symmetry-aware estimator, and is backed by extensive experiments. Below, we respond to the issues you raised.
 
-**Benefit from the sinusoidal encoding.** The main conclusion is that the gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, while the progressive frequency schedule provides a further benefit. The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
+**Benefit from the sinusoidal encoding.** The performance gain cannot be explained merely by repeated input injection: the sinusoidal features make an independent contribution, and the progressive frequency schedule provides a further benefit.
+A step boundary requires increasingly high spatial frequencies for accurate approximation. 
+The early, low-scale features provide coarse block geometry, while later high-scale features provide short paths that refine boundaries without forcing every preceding layer to preserve high-frequency information. 
+The submitted paper included the sinusoidal ResNet and constant-scale controls. During rebuttal, to distinguish sinusoidal features from per-layer injection, we reran the entire ablation suite with GeLU features replacing the sinusoidal per-layer features while keeping the injection structure fixed. On $K_3$ at $p=7/9$:
 
 | variant | with sinusoidal features | without |
 |---|---|---|
@@ -282,12 +300,15 @@ Thank you for recognising the coherent methodology, effective symmetry-aware est
 | Constant LR (low) | 0.430071 | 0.442499 |
 | Constant LR (high) | 0.431645 | 0.436795 |
 
-Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the submitted constant-scale control separately tests the progressive frequency schedule. We will include this factorised ablation and its interpretation in the revised version of the paper.
+Removing the sinusoidal features degrades every variant, and every value without them ($0.4361$-$0.4425$) is worse than every value with them ($0.4272$-$0.4344$). 
+This attributes the gain to the sinusoidal features themselves rather than to the per-layer injection alone, while the existing constant-scale control separately tests the multiscale schedule. 
+The $d^{-1/2}$ initialisation of residual matrices controls activation growth with fan-in, while the range of each row of $U^{(\ell)}$ directly controls the initialised spatial frequency. Increasing $s(\ell)$ therefore gives later layers access to progressively finer scales without increasing hidden-state magnitude.
+We will include this factorised ablation, its interpretation, and an illustration of the multiscale encoding in the revised version of the paper.
 
-**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** In the submitted paper, the Table 6 entropy values were computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them.
-During rebuttal, we refined the evaluation by enforcing the constraint exactly at the evaluation resolution, which slightly revises the reported values below.
+**Lubetzky-Zhao comparison and independent verification of $\mathbf{(P2)}$.** In the submitted paper, the entropy values in Table 6 were computed by deterministic 64-bit numerical integration, not Monte Carlo sampling, so sampling error does not enter them.
+During rebuttal, we refined the evaluation by enforcing the constraint exactly at the evaluation resolution, which slightly revises the reported values as shown below.
 More importantly, independent verification is possible in both directions. 
-In one direction, from the conjecture suggested by our observations — the learnt profiles are nearly bipodal — we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), in which both $t(K_3,W)$ and $h_q(W)$ are exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound.
+In one direction, from the conjecture suggested by our observations (the learnt graphons are nearly bipodal), we numerically optimised the four-parameter bipodal family (value $a$ on $[0,t)^2$, $b$ on the mixed blocks, $c$ on $[t,1]^2$), in which both $t(K_3,W)$ and $h_q(W)$ have exact closed forms; each optimised member is an explicit feasible graphon, hence an upper bound on the optimum, though not a lower bound.
 In the other direction, Lemma 3.3 of Lubetzky and Zhao (2012) provides a computable lower bound: for a $2$-regular pattern graph, the optimum is at least the convex minorant of $x \mapsto h_q(x^{1/2})$ evaluated at $x = r^2$. 
 The results:
 
@@ -306,15 +327,15 @@ The same audit extends to $C_4$ and $C_5$: both are $2$-regular, so the same low
 
 Finally, we note that the Lubetzky-Zhao construction is not specific to the triangle: it is defined for every $d$-regular pattern graph, so it is an equally valid reference for $C_4$ and $C_5$. 
 Its role, for all three pattern graphs, is that of a reference construction demonstrating non-optimality of the constant graphon rather than a claimed optimum; with the bounds above, the $C_4$ and $C_5$ comparisons carry the same certification as $K_3$.
-We will include the refined evaluation protocol, the lower and upper bounds, and the corrected values in the revised version of the paper.
+We will include the refined evaluation protocol, the lower and upper bounds, and the revised values in the revised version of the paper.
 
-**Run distribution.** Every candidate reported in the submitted paper was selected from exactly eight runs: two activations crossed with four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$).
-During rebuttal, to measure sensitivity to initialisation separately from this search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration: the mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so this does not indicate suboptimality).
+**Run distribution.** Every candidate reported in the submitted paper was selected from exactly eight runs: two activations (sin or GeLU) across four learning rates ($10^{-3}$, $5\times10^{-4}$, $10^{-4}$, $5\times10^{-5}$).
+During rebuttal, to measure sensitivity to initialisation separately from this hyperparameter search, we repeated the $K_3$ instance at $p=7/9$ ten times under a single fixed configuration: the mean objective is $0.435711$ with 95% confidence interval $[0.435705, 0.435718]$; 7 of the 10 runs recovered the clean 5-block partition, and the remaining 3 reached comparable objective values with the smallest part deviating from an exact block (the 5-block construction is not the unique optimiser, so this does not indicate suboptimality).
 We will report the same repetition analysis for $C_5$, $C_7$, and $H_6$ during the discussion phase and include the fixed-protocol results in the revised version of the paper.
 
 **The 11.8% suboptimal sweep cases.** 
-During rebuttal, we classified the 11.8% of suboptimal cases in the submitted sweep: 7% converged to a suboptimal local optimum, and 4.8% failed from training or inference instability (divergence to NaN or out-of-memory errors).
-Independently of this failure analysis, we have proved — with the help of GPT 5.5, and verified in Lean 4 with the help of Claude Opus 4.8 — that if a graph is connected and chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$.
+During rebuttal, we classified the 11.8% of suboptimal cases in the submitted sweep: 7% converged to a suboptimal local optimum, and 4.8% failed due to training or inference instability (divergence to NaN or out-of-memory errors).
+Independently of this failure analysis, we have proved (with the help of GPT 5.5, and verified in Lean 4 with the help of Claude Opus 4.8) that if a graph is connected and chordal and all of its maximal cliques have the same size $r\ge3$, then the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$.
 This proves exact optimality for 17 cases of the sweep at the densities $p=1-1/k$; for these cases, our flag-algebra bounds were tight only in the low-density regime and did not certify all the learnt graphons at $p=1-1/k$. We will add this failure-mode classification and the new certification status to the revised version of the paper.
 
 **Why the neural representation helps.** 
@@ -323,6 +344,20 @@ For the tree-based baselines and the fixed-grid SBM, moving a decision boundary 
 Parameterising the decision boundary directly (the second and third panels of Figure 15) also fails: the optimisation landscape is very sharp, and training always converges to the constant solution. 
 The neural graphon instead optimises the region values and the boundary locations jointly and continuously, and we view this joint flexibility, combined with a favourable optimisation landscape, as the main benefit of the neural representation. 
 The discovery advantage is that the network does not require choosing in advance between multipartite, diagonal/banded, circular-distance, or bipodal forms. We will add this optimisation-based interpretation of the baseline comparison to the revised version of the paper.
+
+**Mathematical outcome of the discovery workflow.** Since submission, the structures found by the framework have led to three new mathematical theorems.
+First, for every graphon $W$ of edge density $p$ and every odd $m\ge3$,
+$$
+t(C_m,W)\ge p^m-p(1-p)^{m-1},
+$$
+extending Goodman's inequality to every odd cycle; the bound is tight at $p=1-1/k$, attained by the balanced complete $k$-partite graphon. 
+Second, for every connected chordal graph whose maximal cliques all have the same size $r\ge3$, the balanced complete $k$-partite graphon is a minimiser of $\mathbf{(P1)}$ at $p=1-1/k$ for every integer $k\ge r$; this proves 17 cases of our 175-graph case study that were previously unproven.
+Third, for the dense upper-tail problem, every $d$-regular pattern graph with $d\ge2$ has, near each Lubetzky-Zhao phase-boundary point with $r \ne (d-1)/d$, a unique nonconstant bipodal optimiser up to relabelling throughout a nontrivial neighbourhood on the symmetry-breaking side.
+The three theorems were proved with the help of GPT 5.5 and formalised in Lean 4 with the help of Claude Opus 4.8; the first two are formalised in full, with no conditional assumptions, while the formalisation of the third is partial and takes some established results from the literature and parts of graphon theory as axioms. 
+Since the guidelines do not permit links in responses, we will gladly provide the Lean formalisation through the Area Chair to any reviewer who wishes to inspect it. 
+We are preparing manuscripts describing all three for submission to mathematics journals, and we will summarise their statements, scope, and connection to the learnt structures in the revised version of the paper.
+This is the intended use of the framework: learnt structures guide new mathematics.
+
 
 ## Reviewer s6Ge
 
