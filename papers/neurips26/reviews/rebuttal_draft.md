@@ -72,6 +72,21 @@ Training uses batches of $2^{12}$-$2^{16}$ samples; the $2^{28}$ sample size in 
 
 (Kim and Lee, 2024) Extended commonality of paths and cycles via Schur convexity, Jang Soo Kim and Joonkyung Lee, Journal of Combinatorial Theory, Series B, May 2024. 
 
+## Confidential comment to the AC (visible to the AC only, not to reviewers)
+
+So that the three theorems announced in our responses can be verified independently of our claims, we are handing in three anonymised GitHub repositories, one for each theorem. Each repository contains a machine-checkable Lean 4 formalisation together with a README stating the formalised theorem, the exact correspondence between the Lean statement and the statement in our responses, and one-command build instructions; the repositories were created under a fresh anonymous account and contain no author-identifying information.
+
+First, the odd-cycle theorem, $t(C_m,W)\ge p^m-p(1-p)^{m-1}$ for every graphon $W$ of edge density $p$ and every odd $m\ge3$. The formalisation is complete, with no conditional assumptions; the final theorem depends only on the standard Lean axioms.
+https://anonymous.4open.science/r/OddCycleGoodman-67F4/README.md
+
+Second, the chordal theorem, that the balanced complete $k$-partite graphon minimises the $H$-density at $p=1-1/k$ for every connected chordal $H$ with uniform maximal clique size $r\ge3$ and every $k\ge r$. This formalisation is likewise complete and unconditional.
+https://anonymous.4open.science/r/PureChordalGoodman-A1B3/README.md
+
+Third, the local large-deviation theorem at the Lubetzky-Zhao phase boundary. As stated in our responses, this formalisation takes some established results from the literature and parts of graphon theory as axioms; the README enumerates every such axiom with a citation to the result it encodes, so the reader can see precisely what is assumed and what is proved.
+https://anonymous.4open.science/r/UpperTailLargeDeviation-D872/README.md
+
+We provide these links here rather than in the reviewer-visible responses because the response rules prohibit links except when a reviewer requests code. Should the AC consider it appropriate, we are happy to share any of the repositories with the reviewers through whichever channel the AC prefers.
+
 ## Reviewer 1jpj
 
 We respond to the reviewer's concerns below. 
