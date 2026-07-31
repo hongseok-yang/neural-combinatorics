@@ -87,6 +87,21 @@ https://anonymous.4open.science/r/UpperTailLargeDeviation-D872/README.md
 
 We provide these links here rather than in the reviewer-visible responses because the response rules prohibit links except when a reviewer requests code. Should the AC consider it appropriate, we are happy to share any of the repositories with the reviewers through whichever channel the AC prefers.
 
+## Further comments on the experiments
+
+**Repetition study for the open instances and the large-deviation problem.** As promised in our robustness answer, we repeated the three open instances ($C_5$, $C_7$, $H_6$) and the (P2) instance $(q,r)=(0.05,0.5)$ ten times each under a single fixed configuration, varying only the random seed; the results are consistent across all runs, with the single exception of one $C_7$ run that converged to the trivial constant graphon, and the qualitative structure of each learnt graphon is aligned with its quantitative objective. Every run is evaluated deterministically: the learnt graphon is discretised, a constant logit shift is re-solved so that the constraint holds exactly on the evaluation grid, and the objective is computed exactly on the discretised graphon. We report the mean over the ten runs with a 95% Gaussian confidence interval.
+
+| Instance | Mean | 95% CI | Reference |
+|---|---|---|---|
+| $\min t(C_5,W)$, $p=3/5$ | $0.066731$ | $[0.066706,\,0.066756]$ | $0.066616$ (conjectured optimum) |
+| $\min t(C_7,W)$, $p=3/5$ | $0.026467$ | $[0.026134,\,0.026800]$ | $0.026261$ (our conjectured optimum) |
+| $\min t(H_6,W)$, $p=4/5$ | $0.129877$ | $[0.129851,\,0.129902]$ | $0.13056$ ($k$-partite), $0.134218$ (constant) |
+| $\min h_{0.05}(W)$, $t(K_3,W)\ge 0.5^3$ | $0.727215$ | $[0.727210,\,0.727220]$ | $0.727151$ (bipodal optimum), $0.830366$ ($W_{\mathrm{LZ}}$) |
+
+For $C_5$, the mean lies $0.17\%$ above the conjectured optimum of Bennett et al. For $H_6$, the value reported in the submission lies inside the confidence interval. For (P2), the mean lies $0.009\%$ above the exact optimum over bipodal graphons. The $C_7$ interval is wider; as detailed below, this is driven by a single run that converged to the trivial constant graphon: its attained density agrees with $p^7$ to within $10^{-11}$, and $p^7$ lies $6.6\%$ above the conjectured optimum. The remaining nine runs concentrate near our conjectured value: their mean is $0.026297$ with 95% confidence interval $[0.026279,\,0.026315]$, lying $0.14\%$ above the conjectured optimum, with the entire interval above it.
+
+Structurally, the runs are as consistent as the objectives. For $C_5$, all ten runs recover the two-block global structure and block sizes of Figure 3(d); for $C_7$, nine of ten recover the structure of Figure 4(d), while the remaining run converged to the constant graphon. Within the recovered two-block structure, the fine structure inside the blocks varies between runs; since the minimiser of this problem need not be unique, this variation does not indicate suboptimality. For $H_6$, eight of ten runs recover the diagonal pattern of Figure 5(d) up to relabeling; the remaining two recover the same diagonal band but with a periodically oscillating boundary, and attain objectives $0.04\%$ and $0.10\%$ above the average of the other eight runs, so the structural deviation is aligned with, and diagnosed by, the objective value. For (P2), all ten runs recover exactly the bipodal structure of Figure 8(b). We will include these fixed-configuration statistics in the revised version.
+
 ## Reviewer 1jpj
 
 We respond to the reviewer's concerns below. 
