@@ -44,7 +44,7 @@ noncomputable def partialJunctionENN (W : Graphon Ω μ) (n : ℕ) :
 
 /-- Common total mass of every `r`-clique bag. -/
 noncomputable def cliqueMassENN
-    (D : PureCliqueTreeDecomp H r m) (W : Graphon Ω μ) : ℝ≥0∞ :=
+    (_D : PureCliqueTreeDecomp H r m) (W : Graphon Ω μ) : ℝ≥0∞ :=
   ENNReal.ofReal (cliqueDensity r W)
 
 /-- The normalized law carried by one bag. -/

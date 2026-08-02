@@ -73,7 +73,7 @@ theorem assignmentMeasure_finiteUniform
   unfold finiteUniformMeasure
   simp_rw [PMF.toMeasure_uniformOfFintype_apply _
     (MeasurableSet.singleton _)]
-  simp [Fintype.card_fun]
+  simp
   exact ENNReal.inv_pow.symm
 
 section ColoringDensity
@@ -148,8 +148,7 @@ lemma properAssignmentCount_top (s k : ℕ) :
     · intro hx u v hxy
       by_contra huv
       exact (hx (by simpa [SimpleGraph.top_adj] using huv)) hxy
-    · intro hx u v huv
-      intro hxy
+    · intro hx u v huv hxy
       have huv' : u ≠ v := by
         simpa [SimpleGraph.top_adj] using huv
       exact huv' (hx hxy)
@@ -161,7 +160,7 @@ lemma properAssignmentCount_top (s k : ℕ) :
         Fintype.card (Fin s ↪ Fin k) :=
       Fintype.card_congr (Equiv.subtypeInjectiveEquivEmbedding _ _)
     _ = k.descFactorial s := by
-      simpa using Fintype.card_embedding_eq (α := Fin s) (β := Fin k)
+      simp
 
 theorem cliqueDensity_balancedMultipartite
     (s k : ℕ) [NeZero k] :

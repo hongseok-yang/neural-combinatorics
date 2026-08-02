@@ -891,7 +891,7 @@ theorem log_gluing_ratio_nonpos
   have hsumInt :
       Integrable (fun x => ∑ i : Fin m, g i x)
         (assignmentMeasure V μ) :=
-    integrable_finset_sum _ fun i hi => hgint i
+    integrable_finsetSum _ fun i hi => hgint i
   have hnonpos :
       (∫ x, g₀ x ∂assignmentMeasure V μ) +
           ∑ i : Fin m, ∫ x, g i x ∂assignmentMeasure V μ ≤ 0 := by

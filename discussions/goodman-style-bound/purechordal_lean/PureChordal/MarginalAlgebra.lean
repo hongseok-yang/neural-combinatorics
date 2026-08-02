@@ -163,7 +163,7 @@ lemma updateInvariant_lmarginal
 
 lemma lmarginal_mul_of_left_updateInvariant
     (T : Finset I) {f g : (I → Ω) → ℝ≥0∞}
-    (hf : Measurable f) (hg : Measurable g)
+    (_hf : Measurable f) (hg : Measurable g)
     (hfinv : UpdateInvariant T f) :
     lmarginal (fun _ : I => μ) T (fun x => f x * g x) =
       fun x => f x * lmarginal (fun _ : I => μ) T g x := by

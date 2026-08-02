@@ -23,7 +23,6 @@ import PureChordal.Main
 import PureChordal.Examples.N4
 import PureChordal.Examples.N5
 import PureChordal.Examples.N6
-import PureChordal.Example
 
 /-!
 # The pure-chordal graphon inequality

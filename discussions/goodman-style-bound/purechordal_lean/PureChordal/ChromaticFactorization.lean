@@ -224,7 +224,7 @@ lemma extendColor_current_injective {k n : ℕ} (hn : n < m)
         simpa [i, separatorColor, extendColor, ha, hb] using hab
       exfalso
       apply D.separatorColor_not_mem_available i c ⟨a.1, hasa⟩
-      simpa [hcolor] using (e ⟨b.1, hbnew⟩).property
+      simp [hcolor]
   · by_cases hb : b.1 ∈ D.accumulatedVerticesLT n
     · have hasb := D.mem_separator_of_mem_accumulated b.property hb
       have hanew := D.mem_newVertices_of_notMem_accumulated a.property ha
@@ -234,7 +234,7 @@ lemma extendColor_current_injective {k n : ℕ} (hn : n < m)
         simpa [i, separatorColor, extendColor, ha, hb] using hab
       exfalso
       apply D.separatorColor_not_mem_available i c ⟨b.1, hasb⟩
-      simpa [← hcolor] using (e ⟨a.1, hanew⟩).property
+      simp [← hcolor]
     · have hanew := D.mem_newVertices_of_notMem_accumulated a.property ha
       have hbnew := D.mem_newVertices_of_notMem_accumulated b.property hb
       have hcolor : e ⟨a.1, hanew⟩ = e ⟨b.1, hbnew⟩ := by
@@ -337,7 +337,7 @@ lemma restrictPrefix_extendPrefix {k n : ℕ} (hn : n < m)
     D.restrictPrefix hn (D.extendPrefix hn c e) = c := by
   apply Subtype.ext
   funext v
-  simp [restrictPrefix, extendPrefix, extendColor, v.property]
+  simp [restrictPrefix, extendPrefix, extendColor]
 
 lemma extendPrefix_restrictPrefix_newColorEmbedding {k n : ℕ} (hn : n < m)
     (d : D.PrefixColoring k (n + 1)) :
@@ -352,7 +352,7 @@ lemma extendPrefix_restrictPrefix_newColorEmbedding {k n : ℕ} (hn : n < m)
         rw [← D.accumulatedVerticesLT_succ_eq_new_union hn]
         exact v.property
       exact (Finset.mem_union.mp hvUnion).resolve_right hv
-    simp [extendPrefix, extendColor, newColorEmbedding, hv, hvnew]
+    simp [extendPrefix, extendColor, newColorEmbedding, hv]
 
 /-- The fibre of prefix restriction over a fixed old prefix. -/
 def PrefixFiber {k n : ℕ} (hn : n < m) (c : D.PrefixColoring k n) :=
@@ -477,9 +477,7 @@ lemma card_prefixFiber {k n : ℕ} (hn : n < m)
       Fintype.card_congr (D.prefixFiberEquiv hn c)
     _ = (Fintype.card ↥(D.availableColors ⟨n, hn⟩ c)).descFactorial
           (Fintype.card ↥(D.newVertices ⟨n, hn⟩)) := by
-      simpa using Fintype.card_embedding_eq
-        (α := ↥(D.newVertices ⟨n, hn⟩))
-        (β := ↥(D.availableColors ⟨n, hn⟩ c))
+      simp
     _ = (k - D.sepCard ⟨n, hn⟩).descFactorial
           (r - D.sepCard ⟨n, hn⟩) := by
       rw [Fintype.card_coe, Fintype.card_coe, D.card_availableColors,
@@ -519,7 +517,7 @@ lemma card_prefixColoring_zero (k : ℕ) :
     ⟨fun v ↦ False.elim (by
         have hv : v.1 ∈ (∅ : Finset V) := by
           simpa only [D.accumulatedVerticesLT_zero] using v.property
-        exact (by simpa using hv)),
+        exact (by simp at hv)),
       by
         intro i hi
         omega⟩
@@ -530,7 +528,7 @@ lemma card_prefixColoring_zero (k : ℕ) :
     funext v
     have hv : v.1 ∈ (∅ : Finset V) := by
       simpa only [D.accumulatedVerticesLT_zero] using v.property
-    exact False.elim (by simpa using hv)
+    exact False.elim (by simp at hv)
   letI : Unique (D.PrefixColoring k 0) :=
     { default := c₀
       uniq := fun a ↦ hsub.elim a c₀ }
@@ -715,7 +713,7 @@ lemma certificateBound_eq_prod_tail (p : ℝ) :
   · simp [hir, sepCard]
 
 lemma cliquePolyTail_eq_scaled_chromaticTail
-    {s : ℕ} (hsr : s ≤ r) {p : ℝ} (hp : p ≠ 1) :
+    {s : ℕ} (_hsr : s ≤ r) {p : ℝ} (hp : p ≠ 1) :
     cliquePolyTail s r p =
       (1 - p) ^ (r - s) *
         ∏ j ∈ Finset.Ico s r,
@@ -770,7 +768,7 @@ theorem certificateBound_balancedMultipartite
     field_simp
   rw [hone, hinv, D.chromaticPolynomialEval_natCast,
     homDensity_balancedMultipartite]
-  simp [div_eq_mul_inv, one_div, mul_comm]
+  simp [div_eq_mul_inv, mul_comm]
 
 include D in
 /-- At edge density `1 - 1/k`, the balanced complete `k`-partite graphon

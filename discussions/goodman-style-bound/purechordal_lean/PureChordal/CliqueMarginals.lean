@@ -78,7 +78,7 @@ lemma splitFinsetEquiv_apply_of_mem
   classical
   rw [finsetEquivFixing, Equiv.trans_apply, Equiv.trans_apply,
     splitFinsetEquiv_apply_of_mem hSA a ha]
-  simp [splitFinsetEquiv, ha]
+  simp [splitFinsetEquiv]
 
 @[simp] lemma finsetPermFixing_apply_of_mem
     {S A B : Finset V} (hSA : S ⊆ A) (hSB : S ⊆ B)
@@ -307,7 +307,7 @@ theorem cliqueWeightOnENN_separatorMarginal_eq
           (fun v => x (σ v)) =
         lmarginal (fun _ : V => μ) (T.image σ)
           (fun y => cliqueWeightOnENN A W (fun v => y (σ v))) x := by
-    convert hrename.symm using 1 <;> rfl
+    (convert hrename.symm using 1; rfl)
   calc
     lmarginal (fun _ : V => μ) T (cliqueWeightOnENN A W) x =
         lmarginal (fun _ : V => μ) T (cliqueWeightOnENN A W)

@@ -20,7 +20,7 @@ def pairsIn (A : Finset V) : Finset (Sym2 V) :=
 
 lemma mk_mem_pairsIn {A : Finset V} {u v : V} :
     s(u, v) ∈ pairsIn A ↔ u ≠ v ∧ u ∈ A ∧ v ∈ A := by
-  simp [pairsIn, SimpleGraph.mem_edgeFinset, Sym2.mem_iff, and_assoc]
+  simp [pairsIn, Sym2.mem_iff]
 
 namespace PureCliqueTreeDecomp
 
@@ -66,7 +66,7 @@ theorem pairsIn_bag_inter_previousPairs (i : Fin m) :
         refine ⟨⟨huv, hui, hvi⟩, ?_⟩
         by_cases hi : i = D.root
         · subst i
-          simpa using huSep
+          simp at huSep
         · rw [previousPairs, Finset.mem_biUnion]
           refine ⟨D.parent i, ?_, ?_⟩
           · exact Finset.mem_filter.mpr
@@ -187,7 +187,7 @@ theorem prod_pairsIn_bags
   have hindex :
       D.bagIndicesLT m = (Finset.univ : Finset (Fin m)) := by
     ext i
-    simp [bagIndicesLT, i.isLt]
+    simp [bagIndicesLT]
   have hacc :
       D.accumulatedPairs m = H.edgeFinset := by
     unfold accumulatedPairs

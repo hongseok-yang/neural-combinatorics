@@ -44,3 +44,8 @@ path = "../complete_lean/.lake/packages/Cli"
 
 [[lean_lib]]
 name = "PureChordal"
+# The `unusedSectionVars` linter fires on essentially every lemma here: these
+# files share broad `variable` blocks, so most lemmas legitimately do not use
+# every ambient instance.  Disable just that linter package-wide (all genuinely
+# useful linters stay on).
+leanOptions = [{name = "linter.unusedSectionVars", value = false}]

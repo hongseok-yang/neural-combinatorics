@@ -45,7 +45,7 @@ def previousVertices (i : Fin m) : Finset V :=
   (Finset.univ.filter fun j : Fin m ↦ j.val < i.val).biUnion D.bag
 
 /-- Bag indices whose numerical value is strictly below `n`. -/
-def bagIndicesLT (D : PureCliqueTreeDecomp H r m)
+def bagIndicesLT (_D : PureCliqueTreeDecomp H r m)
     (n : ℕ) : Finset (Fin m) :=
   Finset.univ.filter fun i : Fin m ↦ i.val < n
 
@@ -149,7 +149,7 @@ lemma index_not_mem_bagIndicesLT {n : ℕ} (hn : n < m) :
 lemma bagIndicesLT_card :
     D.bagIndicesLT m = Finset.univ := by
   ext i
-  simp [bagIndicesLT, i.isLt]
+  simp [bagIndicesLT]
 
 lemma accumulatedVerticesLT_succ {n : ℕ} (hn : n < m) :
     D.accumulatedVerticesLT (n + 1) =
@@ -169,7 +169,7 @@ lemma accumulatedVerticesLT_card :
       (Finset.univ.filter fun i : Fin m => i.val < m) =
         Finset.univ := by
     ext i
-    simp [i.isLt]
+    simp
   rw [hfilter]
   ext v
   simp only [Finset.mem_biUnion, Finset.mem_univ, iff_true]
