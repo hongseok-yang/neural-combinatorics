@@ -66,7 +66,7 @@ average, converted to a beta integral, and smoothed by a Laplace transform
 into expectations of a shifted gamma random variable.  The remaining
 positivity follows from a uniform odd-to-even gamma moment inequality.
 
-For $1/2<p<2/3$, the Hilbert--Schmidt budget allows at most one compression
+For $1/2<p<2/3$, the Hilbert--Schmidt bound allows at most one compression
 eigenvalue above $q=1-p$.  Isolating this frontier eigenvalue and retaining
 both its direct coupling and the coupling forced into the safe spectral
 subspace leads to a one-dimensional Huber-type envelope.  Two canonical
@@ -1099,18 +1099,15 @@ on $T_U$ is needed.
 
 \section{The common complement-operator framework}\label{sec:common-operator}
 
-We first make explicit the finite-dimensional setting in which all subsequent
-determinants are taken.  By \Cref{lem:step-reduction}, for each fixed odd
-cycle length it is enough to prove the desired inequality for a symmetric
-step graphon.  Thus, throughout the determinant-based argument, fix a finite
+Throughout this section, and in the two that follow, we assume $W$ to be a
+step graphon, as \Cref{lem:step-reduction} proves, and all determinants and
+traces are taken in the resulting finite-dimensional setting.  Fix a finite
 measurable partition
 \[
    [0,1]=B_1\sqcup\cdots\sqcup B_N
 \]
 into sets of positive measure such that $W$, and hence $U=1-W$, is
-constant on each rectangle $B_a\times B_b$.  After the inequality has been
-proved in this setting, \Cref{lem:step-reduction} passes it to an arbitrary
-graphon.
+constant on each rectangle $B_a\times B_b$.
 
 Let
 \[
@@ -1125,17 +1122,13 @@ $B_a\times B_b$, then, for $x\in B_a$,
 \end{equation}
 Consequently, $T_Kf\in\mathcal E$ for every $f\in L^2$.  Moreover, if
 $f\in\mathcal E^\perp$, then every integral in
-\eqref{eq:step-operator-action} is zero, so $T_Kf=0$.  Hence all nonzero
-action of $T_K$ takes place on the finite-dimensional space
+\eqref{eq:step-operator-action} is zero, so $T_Kf=0$.  Hence $T_K$ is
+determined by its restriction to the finite-dimensional space
 $\mathcal E$.
 
-From this point on, whenever a determinant involving $T_W$ or $T_U$
-appears, it means the ordinary determinant of the restriction to
-$\mathcal E$; no determinant of an operator on the whole infinite-dimensional
-space $L^2([0,1])$ is being used.  The trace has the same finite-matrix
-interpretation.  Indeed, in the orthonormal basis
-$e_a=\one_{B_a}/\sqrt{|B_a|}$, the matrix of $T_K|_{\mathcal E}$ has
-entries
+The cycle densities of $K$ are computed from this finite matrix as follows.
+In the orthonormal basis $e_a=\one_{B_a}/\sqrt{|B_a|}$, the matrix of
+$T_K|_{\mathcal E}$ has entries
 \[
    \ip{e_a}{T_Ke_b}=K_{ab}\sqrt{|B_a||B_b|}.
 \]
@@ -1150,36 +1143,42 @@ Multiplying this matrix around a cycle shows, for every $r\ge2$, that
  &=t(C_r,K).
 \end{aligned}
 \end{equation}
-Thus the finite matrix trace is exactly the cycle-density quantity that the
-proof needs.
 
-The constant function $\one$ lies in $\mathcal E$ and has norm one,
-because the underlying probability space has total mass one.  Set
+We now split $\mathcal E$ into the constant direction and its orthogonal
+complement, and decompose $T_U$ accordingly.  The constant function $\one$
+lies in $\mathcal E$ and has norm one, because the underlying probability
+space has total mass one, so setting
 \[
-   \mathcal E_0=\mathcal E\cap\one^\perp.
+   \mathcal E_0=\mathcal E\cap\one^\perp
 \]
-Then $\mathcal E=\R\one\oplus\mathcal E_0$ is an orthogonal decomposition.
-Relative to this finite-dimensional decomposition, write the complement
-operator as
+gives the orthogonal decomposition $\mathcal E=\R\one\oplus\mathcal E_0$.
+Put
+\[
+   g=T_U\one-q\one\in\mathcal E_0,
+   \qquad
+   A=P_{\mathcal E_0}T_UP_{\mathcal E_0},
+\]
+so that $A$ is a self-adjoint map on $\mathcal E_0$, equivalently a real
+symmetric matrix in an orthonormal basis of that space.  These two determine
+$T_U$: for $f=a\one+h$ with $h\in\mathcal E_0$,
+\[
+   T_Uf=\bigl(aq+\ip gh\bigr)\one+\bigl(ag+Ah\bigr),
+\]
+since $\ip\one{T_Uh}=\ip{T_U\one}h=\ip gh$ and $P_{\mathcal E_0}T_Uh=Ah$.
+In block form,
 \begin{equation}\label{eq:block-U}
    T_U=
    \begin{pmatrix}
       q&g^*\\
       g&A
    \end{pmatrix},
-   \qquad
-   g=T_U\one-q\one,
-   \qquad
-   A=P_{\mathcal E_0}T_UP_{\mathcal E_0}.
 \end{equation}
-Here $g\in\mathcal E_0$, $g^*$ denotes the linear functional
-$h\mapsto\ip g h$, and $A$ is a self-adjoint linear map on the
-finite-dimensional space $\mathcal E_0$, equivalently a real symmetric
-matrix in an orthonormal basis.  This $A$ is precisely the nonzero part of the
-mean-zero compression $P_{\one^\perp}T_UP_{\one^\perp}$: that larger
-compression vanishes on $\mathcal E^\perp$.
+where $g^*$ denotes the linear functional $h\mapsto\ip gh$.  This $A$ plays
+the role of the operator in \Cref{subsec:path-moments}: for a step graphon,
+the compression $P_{\one^\perp}T_UP_{\one^\perp}$ used there vanishes on
+$\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
 
-\begin{lemma}[Square budget]\label{lem:HS-budget}
+\begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
 One has
 \begin{equation}\label{eq:HS-budget}
    \Tr(A^2)+2\norm g^2\le pq.
@@ -1194,12 +1193,12 @@ Since $0\le U\le1$,
 \]
 On the other hand, \eqref{eq:block-U} gives
 \[
-   \Tr(T_U^2)=q^2+2\norm g^2+\Tr(A^2).
+   \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
 \]
 Subtracting $q^2$ proves the claim.
 \end{proof}
 
-\begin{lemma}[Half-norm lemma]\label{lem:half-norm}
+\begin{lemma}[Operator norm bound]\label{lem:half-norm}
 The spectrum of $A$ lies in $[-1/2,1/2]$; equivalently,
 \begin{equation}\label{eq:A-half}
    \norm A_{\mathrm{op}}\le\frac12.
@@ -1223,14 +1222,13 @@ We also have
 \end{aligned}
 \]
 Each of the three inner products on the right is nonnegative.  Moreover,
-\[
- \ip {f_+}{T_Uf_+}\le\left(\int f_+\right)^2,
- \qquad
- \ip {f_-}{T_Uf_-}\le\left(\int f_-\right)^2,
- \qquad
- \ip {f_+}{T_Uf_-}
- \le\left(\int f_+\right)\left(\int f_-\right),
-\]
+\begin{align*}
+  \ip {f_+}{T_Uf_+} &= \int_{[0,1]^2}U(x,y)f_+(x)f_+(y)\dd x\dd y \le \int_{[0,1]^2}f_+(x)f_+(y)\dd x\dd y = \left(\int f_+\right)^2,
+  \\
+  \ip {f_-}{T_Uf_-} &= \int_{[0,1]^2}U(x,y)f_-(x)f_-(y)\dd x\dd y \le \int_{[0,1]^2}f_-(x)f_-(y)\dd x\dd y = \left(\int f_-\right)^2,
+  \\
+  \ip {f_+}{T_Uf_-} &= \int_{[0,1]^2}U(x,y)f_+(x)f_-(y)\dd x\dd y \le \int_{[0,1]^2}f_+(x)f_-(y)\dd x\dd y = \left(\int f_+\right)\left(\int f_-\right).
+\end{align*}
 because $f_+$ and $f_-$ are nonnegative and so replacing $U(x,y)$ by $1$ in each of the above three cases gives the corresponding product of
 integrals.  For the upper bound, we discard the nonpositive cross term and
 bound the two diagonal terms; hence
@@ -1246,71 +1244,55 @@ and bound the cross term, obtaining
  \ge-2\left(\int f_+\right)\left(\int f_-\right)
  =-2a^2\ge-\frac12.
 \]
-Finally, $A=P_{\mathcal E_0}T_UP_{\mathcal E_0}$ acts on $\mathcal E_0$.
-Thus, for every $f\in\mathcal E_0$, we have $P_{\mathcal E_0}f=f$ and hence
+The upper and lower bounds just proved concern the quadratic form of $T_U$
+on $\mathcal E_0$, and this is also the quadratic form of $A$: since
+$P_{\mathcal E_0}f=f$,
 \[
-   \ip f{Af}=\ip f{T_Uf}.
+   \ip f{Af}=\ip f{P_{\mathcal E_0}T_UP_{\mathcal E_0}f}=\ip f{T_Uf},
 \]
-Moreover, $A$ is self-adjoint, so its operator norm is the largest absolute
-value of its Rayleigh quotient:
-\[
- \norm A_{\mathrm{op}}
- =\sup_{\substack{f\in\mathcal E_0\\ \norm f=1}}
-    \bigl|\ip f{Af}\bigr|.
-\]
-The upper and lower bounds just proved therefore give
-$\bigl|\ip f{Af}\bigr|\le\tfrac12$ for every unit $f\in\mathcal E_0$, and
-so $\norm A_{\mathrm{op}}\le\tfrac12$, as claimed.
+so $\bigl|\ip f{Af}\bigr|\le\tfrac12$ for every unit $f\in\mathcal E_0$.
+As $A$ is self-adjoint, its operator norm is the supremum of
+$\bigl|\ip f{Af}\bigr|$ over such $f$, whence
+$\norm A_{\mathrm{op}}\le\tfrac12$.
 \end{proof}
 
-\begin{remark}[No positivity-of-operator assumption]
-The pointwise inequality $U\ge0$ does \emph{not} imply that $T_U$ or its
-compression $A$ is positive semidefinite.  The proof above controls the
-quadratic form directly and is the only spectral support statement needed.
-\end{remark}
-
-Because $A$ is a finite real symmetric matrix, it has an orthogonal
-eigenspace decomposition
+In the remaining section, $A$ and $g$ will appear through the quantities of the form $\ip g{F(A)g}$, which can be expressed as an integral against a measure supported on the spectrum of $A$.
+Specifically, since $A$ is a finite real symmetric matrix, it has an orthogonal eigenspace decomposition
 \[
    A=\sum_i\lambda_iP_i,
 \]
 where the distinct $\lambda_i$ are its eigenvalues and $P_i$ is the
-orthogonal projection onto the corresponding eigenspace.  Define the finite
-positive measure
+orthogonal projection onto the corresponding eigenspace.  
+Define the finite positive measure
 \begin{equation}\label{eq:mu-def}
    \mu=\sum_i\norm{P_i g}^2\,\delta_{\lambda_i},
 \end{equation}
-where $\delta_{\lambda_i}$ denotes a unit point mass at $\lambda_i$.
-Thus $\mu$ assigns to each
-eigenvalue the nonnegative weight measuring how much of $g$ lies in its
-eigenspace.  For any function $F$ defined on the finite set of eigenvalues,
+where $\delta_{\lambda_i}$ denotes a unit point mass at $\lambda_i$; thus
+$\mu$ assigns to each eigenvalue the weight measuring how much of $g$ lies
+in its eigenspace, and by \Cref{lem:half-norm} it is supported on
+$[-1/2,1/2]$.  For any function $F$ defined on the eigenvalues of $A$,
 orthogonality of the eigenspaces gives
 \[
    \ip g{F(A)g}
    =\sum_i F(\lambda_i)\norm{P_i g}^2
    =\int F(\lambda)\dd\mu(\lambda).
 \]
-By \Cref{lem:half-norm}, every $\lambda_i$ lies in
-$[-1/2,1/2]$, so $\mu$ is supported on that interval.
 
-Applying this to $F(\lambda)=\lambda^j$ and summing the series of
-\Cref{lem:analytic-reading}\,(1) coefficientwise gives
+In particular, expanding $(I-zA)^{-1}=\sum_{j\ge0}z^jA^j$ by
+\Cref{lem:analytic-reading}\,(1) and taking $F(\lambda)=\lambda^j$ in each
+coefficient,
 \begin{equation}\label{eq:resolvents-common}
  \ip g{(I-zA)^{-1}g}
- =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z},
+ =\sum_{j\ge0}z^j\int\lambda^j\dd\mu(\lambda)
+ =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
 \end{equation}
-an identity of formal power series, the right side denoting
-$\sum_{j\ge0}z^j\int\lambda^j\dd\mu(\lambda)$.
-This positive spectral measure is the bridge from the graphon operator to
-one-variable moment inequalities.
 
 \section{The dense region \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet and gamma smoothing}
 \label{sec:dense-region}
 
 Throughout this section,
 \begin{equation}\label{eq:dense-q}
-   0\le q\le\frac13,
-   \qquad p=1-q,
+  q = 1 - p, \qquad 0 \le q \le \frac{1}{3},
 \end{equation}
 and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
 The proof is first presented as a sequence of exact reductions; a conceptual
@@ -2113,7 +2095,7 @@ From now on,
    \qquad \frac12<p<\frac23,
 \end{equation}
 and $m\ge9$ is odd.  We continue with the common block decomposition
-\eqref{eq:block-U}, the square budget \eqref{eq:HS-budget}, and the spectral
+\eqref{eq:block-U}, the Hilbert--Schmidt bound \eqref{eq:HS-budget}, and the spectral
 bound \eqref{eq:A-half}.  By \Cref{lem:step-reduction}, we may again work
 with a step graphon during determinant manipulations.
 \subsection{The one-sided spectral-shift identity}\label{subsec:shift}
@@ -2242,7 +2224,7 @@ precisely because $q>1/3$.  Define
 \begin{equation}\label{eq:L-def}
    L=\sqrt{pq-\alpha^2}.
 \end{equation}
-The square budget implies that every other eigenvalue has absolute value at
+The bound \eqref{eq:HS-budget} implies that every other eigenvalue has absolute value at
 most $L$.  Moreover,
 \begin{equation}\label{eq:L-order}
    0\le L<q<\alpha<\frac12<p.
@@ -2323,7 +2305,7 @@ The first factor is positive by \eqref{eq:L-order}, so
 \eqref{eq:alpha-ceiling-poly} follows.  Solving the quadratic gives
 \eqref{eq:alpha-ceiling}.  Finally, because $\alpha>q$, the right side of
 \eqref{eq:forced-variance} is strictly positive.  Thus $g\ne0$, and the
-square budget gives $\alpha^2<pq$.  Consequently $L>0$.
+bound \eqref{eq:HS-budget} gives $\alpha^2<pq$.  Consequently $L>0$.
 \end{proof}
 
 \subsection{The master defect inequality}\label{subsec:master-defect}
@@ -2363,7 +2345,7 @@ other than $\alpha$.  Since $|\lambda_i|\le L$ and $m$ is odd,
    \sum_i\lambda_i^m
    \le L^{m-2}\sum_i\lambda_i^2.
 \]
-The budget \eqref{eq:HS-budget} and \eqref{eq:g-decomp} give
+The bound \eqref{eq:HS-budget} and \eqref{eq:g-decomp} give
 \[
    \sum_i\lambda_i^2
    \le L^2-2\gamma^2-2\norm{g_s}^2.
@@ -3890,7 +3872,7 @@ for $m=11,13$, and no adaptive interval subdivision anywhere in the proof.
 The manuscript is organized to prove the inequality rather than classify all
 equality cases.  A stability analysis would require tracking near-equality
 in the cycle-to-path deletion, the gamma moment inequality, the
-Hilbert--Schmidt budget, the forced-variance inequality, and the active Huber
+Hilbert--Schmidt bound, the forced-variance inequality, and the active Huber
 witness.  The reductions here identify those loci but do not pursue the
 classification.
 \end{remark}
@@ -4084,7 +4066,7 @@ more effective than coefficientwise estimation of high moments.
 \subsection{The one-dangerous-mode principle and Huber duality}
 
 The intermediate region exhibits a complementary mechanism.  The square
-budget says that two eigenvalues above $q$ would cost more than $pq$ when
+bound says that two eigenvalues above $q$ would cost more than $pq$ when
 $q>1/3$, so there is at most one dangerous mode.  Entrywise constraints on
 the corresponding eigenfunction force a choice: either $g$ couples
 substantially to that mode, or a quantitatively controlled part of $g$
@@ -4099,7 +4081,7 @@ quadratic and saturated linear regimes.
 
 This suggests a general recipe for constrained spectral inequalities:
 \begin{enumerate}[leftmargin=2.2em]
-\item use a trace or energy budget to isolate a finite set of dangerous
+\item use a trace or energy bound to isolate a finite set of dangerous
   modes;
 \item derive geometric constraints that force compensation either in direct
   coupling or in the safe complement;
@@ -4123,7 +4105,7 @@ $\delta=1/2-q$.  The gamma moment lemma pays for the odd term in
    \qquad\text{i.e.}\qquad q\le\frac13.
 \]
 On the intermediate side, two eigenvalues larger than $q$ would consume
-more than $2q^2$ of the square budget, and uniqueness is guaranteed
+more than $2q^2$ of the bound \eqref{eq:HS-budget}, and uniqueness is guaranteed
 precisely when
 \[
    2q^2>pq=q(1-q),
