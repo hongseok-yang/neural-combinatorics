@@ -28,6 +28,7 @@
 \newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
 \newcommand{\norm}[1]{\left\lVert #1\right\rVert}
 \newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ord}{\operatorname{ord}}
 \newcommand{\pos}[1]{\left(#1\right)_{+}}
 \newcommand{\cH}{\mathcal H}
 \newcommand{\cQ}{\mathcal Q}
@@ -425,29 +426,27 @@ methods used here to other problems in extremal combinatorics.
 
 \subsection{Step-graphon reduction}\label{subsec:step-reduction}
 
+As described in the proof map above, the cycle densities appear as the
+coefficients of $-\log\det(I-zT_W)$.  To avoid taking determinants of
+operators on an infinite-dimensional space, we reduce the theorem to step
+graphons, whose operators have finite rank.  The approximation is the
+dyadic conditional expectation of \cite[Appendix~A.3.6]{Lovasz2012}, which
+has the property we need here: the approximating graphons have edge density
+exactly $p$.
+
 \begin{lemma}[Finite-rank reduction]\label[lemma]{lem:step-reduction}
 For each fixed odd $m\ge3$, it is enough to prove \eqref{eq:main-goal} for
 symmetric step graphons.
 \end{lemma}
 
-This is a standard graphon-approximation principle.  The interpretation of
-step graphons as finite weighted graphs and the continuity of homomorphism
-densities are developed in Lov\'asz~\cite[Sections~7.2 and~10.5, especially
-Lemma~10.23]{Lovasz2012}; the dyadic conditional-expectation approximation
-used below is also the elementary martingale approximation discussed in
-\cite[Appendix~A.3.6]{Lovasz2012}.  We include the details because the present
-argument needs the approximating graphons to have edge density exactly $p$,
-not merely a density converging to $p$.
-
 \begin{proof}
-We spell out the approximation, including the meaning of the finite
-sigma-algebras.  For $n\ge1$, divide $[0,1]$ into the $2^n$ dyadic
+For $n\ge1$, divide $[0,1]$ into the $2^n$ dyadic
 intervals
 \[
  I_{n,a}=\left[\frac{a}{2^n},\frac{a+1}{2^n}\right),
  \qquad 0\le a<2^n,
 \]
-with the harmless convention that the last interval contains the endpoint
+with the convention that the last interval contains the endpoint
 $1$.  Let $\mathcal A_n$ be the finite sigma-algebra consisting of all
 unions of these intervals.  Thus the atoms of the product sigma-algebra
 $\mathcal A_n\otimes\mathcal A_n$ are precisely the dyadic rectangles
@@ -466,7 +465,7 @@ This cell-averaging operation is the standard conditional
 expectation operation with respect to the sigma algebra
 $\mathcal A_n\otimes\mathcal A_n$, and is 
 denoted by the notation
-$\E[\,\_\, \mid\mathcal A_n\otimes\mathcal A_n]$. So,
+$\E[\,-\, \mid\mathcal A_n\otimes\mathcal A_n]$. So,
 $W_n = \E[W\mid\mathcal A_n\otimes\mathcal A_n] $. Since $0\le W\le1$,
 every cell average lies in $[0,1]$.  Moreover, symmetry of $W$ gives
 $w^{(n)}_{ab}=w^{(n)}_{ba}$.  Hence $W_n$ is a symmetric step graphon.
@@ -566,103 +565,72 @@ Letting $n\to\infty$ proves the same inequality for $W$, as required.
 calculations}\label{subsec:analytic-reading}
 
 Several later arguments introduce an auxiliary variable $z$ and use the
-notation $[z^m]F(z)$, the exponent of $z$ recording the length of a walk or
-cycle.  Here $z$ is always a \emph{real} number in an explicitly given
-interval $(-r,r)$, every $F$ below is the sum of a power series converging
-on that interval, and
-\begin{equation}\label{eq:coeff-def}
-   [z^m]F:=\frac{F^{(m)}(0)}{m!}
-\end{equation}
-is the corresponding Taylor coefficient. 
+notation $[z^m]F(z)$; the exponent of $z$ is the length of a walk or cycle.
+We do not assign a value to $z$; every $F$ below is a formal power series,
+that is, a sequence of real coefficients $(c_j)_{j\ge0}$ written as
+$F=\sum_{j\ge0}c_jz^j$, and $[z^m]F=c_m$.  We say that two such series are
+equal when all their coefficients are equal.
 
-Two elementary facts about convergent power series are used throughout.
-First, the coefficients are determined by the function: if $F$ and $G$ are
-sums of power series converging on $(-r,r)$ and $F=G$ there, then
-$[z^m]F=[z^m]G$ for every $m$, by \eqref{eq:coeff-def}.  Every identity
-below is therefore obtained by ordinary linear algebra for all small real
-$z$, and the coefficient of interest is then read off.  The restriction to
-small $|z|$ only keeps the series convergent; it imposes no condition on the
-graphon.  Second, sums and products of such series are again such series,
-with coefficients given by the Cauchy product, and so is a quotient $F/G$
-with $G(0)\ne0$, on a possibly smaller interval.
+Four operations on these series are used below, and in each of them every
+coefficient of the result is computed from finitely many coefficients of the
+arguments.  Series are added coefficientwise.  They are multiplied by the
+Cauchy product,
+\[
+   [z^m](FG)=\sum_{i+j=m}\bigl([z^i]F\bigr)\bigl([z^j]G\bigr).
+\]
+A series with $c_0\ne0$ has an inverse, obtained by solving the equations
+for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a
+series.  Finally, if we write $\ord F$ for the least $j$ with $c_j\ne0$,
+then the series
+\[
+   -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
+\]
+is defined whenever $\ord Y\ge1$: in that case $\ord Y^k\ge k$, so only the
+terms with $k\le m$ contribute to $[z^m]$.
 
-By \Cref{lem:step-reduction} we may work with a step graphon, whose
-operator is a finite matrix; this is made explicit in
-\Cref{sec:common-operator}.  All generating functions below are built from
-such matrices by the three constructions in the next lemma.
+By \Cref{lem:step-reduction} we will work with a step graphon, whose operator
+is a finite matrix; this is made explicit in \Cref{sec:common-operator}.  We
+build our series from such matrices, using the two expansions in the next
+lemma.
 
-\begin{lemma}[Taylor expansions used below]\label{lem:analytic-reading}
-Let $X$ be a real symmetric matrix with eigenvalues $\lambda_1,\ldots,
-\lambda_N$ and spectral radius $\rho(X)=\max_i|\lambda_i|$, and let $z$ be
-real with $|z|<1/\rho(X)$.
+\begin{lemma}[Series expansions used below]\label{lem:analytic-reading}
+Let $X$ be a real symmetric $N\times N$ matrix.  As formal power series
+in $z$:
 \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
-\item \emph{(Resolvent.)}  The matrix $I-zX$ is invertible and
+\item \emph{(Resolvent.)}  The matrix $I-zX$ is invertible over $\R[[z]]$
+  and
   \[
    (I-zX)^{-1}=\sum_{j\ge0}z^jX^j,
   \]
-  the series converging absolutely.  Hence, for fixed vectors $u,v$,
-  \[
-   [z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}.
-  \]
-\item \emph{(Log-determinant.)}  One has $\det(I-zX)>0$ and
+  so that $[z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}$ for fixed vectors $u,v$.
+\item \emph{(Log-determinant.)}  The polynomial $\det(I-zX)$ has constant
+  term $1$, and
   \[
    -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
   \]
   so that $m\,[z^m]\bigl(-\log\det(I-zX)\bigr)=\Tr(X^m)$.
-\item \emph{(Outer logarithm.)}  If $Y$ is the sum of a power series
-  converging on $(-r,r)$, with $Y(0)=0$ and $|Y|\le\theta$ there for
-  some $\theta<1$, then
-  \[
-   -\log\bigl(1-Y(z)\bigr)=\sum_{k\ge1}\frac{Y(z)^k}{k}
-   \qquad(|z|<r),
-  \]
-  and the right side is again a convergent power series on $(-r,r)$.
-  Since $Y(0)=0$, the term $Y^k$ has a zero of order at least $k$ at
-  the origin, so only the terms with $k\le m$ affect $[z^m]$.
 \end{enumerate}
 \end{lemma}
 
 \begin{proof}
-(1)  Diagonalize $X=Q\Lambda Q^{\!\top}$ with $Q$ orthogonal.  Each
-$1-z\lambda_i$ is nonzero, so $I-zX$ is invertible.  Since
-$\norm{X^j}_{\mathrm{op}}=\rho(X)^j$, the series is dominated by the
-geometric series $\sum_j(|z|\rho(X))^j$; multiplying its partial sums by
-$I-zX$ telescopes to $I-z^{J+1}X^{J+1}\to I$.
+(1)  The constant term of $I-zX$ is $I$, so the matrix is invertible over
+$\R[[z]]$; multiplying $\sum_{j\ge0}z^jX^j$ by $I-zX$ cancels all positive
+powers of $z$ and leaves $I$.
 
-(2)  Here $\det(I-zX)=\prod_i(1-z\lambda_i)$, and each factor is positive
-because $|z\lambda_i|<1$.  Taking real logarithms and using
-$-\log(1-w)=\sum_{j\ge1}w^j/j$ for $|w|<1$,
+(2)  Both sides are unchanged under $X\mapsto Q^{\!\top}XQ$ with $Q$
+orthogonal, so we may take $X$ diagonal with entries $\lambda_i$.  Then
+$\det(I-zX)=\prod_i(1-z\lambda_i)$, and $-\log$ of a product is the sum of
+the $-\log$s, whence
 \[
  -\log\det(I-zX)
- =-\sum_{i=1}^N\log(1-z\lambda_i)
- =\sum_{j\ge1}\frac{\sum_i\lambda_i^j}{j}z^j
+ =\sum_{i=1}^N\sum_{j\ge1}\frac{\lambda_i^j}{j}z^j
  =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
 \]
-the interchange of the finite sum over $i$ with the sum over $j$ being
-justified by absolute convergence.
-
-(3)  Apply $-\log(1-w)=\sum_{k\ge1}w^k/k$ at $w=Y(z)$, which is legitimate
-since $|Y(z)|\le\theta<1$; the series is dominated by
-$\sum_k\theta^k/k<\infty$.  The final statement holds because
-$[z^j]Y^k=0$ for $j<k$.
+the interchange being a finite sum in each coefficient.
 \end{proof}
 
-The matrices occurring below are $T_W$, $T_U$, and the compression $A$ of
-\eqref{eq:block-U}, all symmetric.  For any kernel $0\le K\le1$, the finite
-matrix $T_K$ of \Cref{sec:common-operator} satisfies
-\[
- \sum_i\lambda_i(T_K)^2=\Tr(T_K^2)
- =\int_{[0,1]^2}K(x,y)^2\dd x\dd y\le1,
-\]
-so $\rho(T_W)\le1$ and $\rho(T_U)\le1$, and items~(1) and~(2) apply for
-$|z|<1$; for $A$ one has $\rho(A)\le1/2$ by \Cref{lem:half-norm}.  The
-composite functions $R_\pm$, $L_\pm$ of \Cref{sec:dense-region} and $\cL$ of
-\Cref{sec:regionII-operator} are obtained from these by item~(1), a quotient,
-and item~(3); \Cref{lem:analytic-disc} shows that the single interval
-$|z|<1/2$ serves for all of them, with $\theta=1/12$ in item~(3).
-
-The smallest instance shows the whole mechanism.  Take $X=T_W$ and $m=3$.
-Item~(2) gives, for $|z|<1$, the convergent expansion
+For an example of this formal series, take $X=T_W$ and $m=3$.  Item~(2)
+gives
 \[
  -\log\det(I-zT_W)
  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}2z^2+\frac{\Tr(T_W^3)}3z^3+\cdots,
@@ -671,13 +639,15 @@ whence
 \[
  3\,[z^3]\bigl(-\log\det(I-zT_W)\bigr)=\Tr(T_W^3)=t(C_3,W)
 \]
-by \eqref{eq:finite-trace-cycle}.  Every later identity has this shape: a
-determinant is factorized by Schur complementation for small real $z$, the
-factorization is turned into a sum of logarithms by item~(2), and one Taylor
-coefficient is extracted.  Readers who prefer formal generating functions
-lose nothing: passing to the coefficient sequence is an injective ring
-homomorphism into $\R[[z]]$ which matches items~(1)--(3) with their formal
-counterparts, so each identity below may be read in either sense.
+by \eqref{eq:finite-trace-cycle}.
+
+Alternatively, one may read these series as functions.  If a series
+converges in a neighbourhood of the origin, its sum is a function there, and
+the coefficients are recovered from that function by differentiation,
+\begin{equation}\label{eq:coeff-def}
+   [z^m]F=\frac{F^{(m)}(0)}{m!}.
+\end{equation}
+The arguments below are the same under either reading.
 \section{The elementary cases \texorpdfstring{$m=3,5,7$}{m=3,5,7}}\label{sec:short-cycles}
 
 Throughout this section, $W$ is any graphon, $p=t(K_2,W)$,
@@ -1319,63 +1289,16 @@ orthogonality of the eigenspaces gives
 By \Cref{lem:half-norm}, every $\lambda_i$ lies in
 $[-1/2,1/2]$, so $\mu$ is supported on that interval.
 
-For real $|z|<2$, the function
-$F_z(\lambda)=(1-z\lambda)^{-1}$ is bounded and continuous on this
-interval.  Taking $F=F_z$ therefore gives
+Applying this to $F(\lambda)=\lambda^j$ and summing the series of
+\Cref{lem:analytic-reading}\,(1) coefficientwise gives
 \begin{equation}\label{eq:resolvents-common}
  \ip g{(I-zA)^{-1}g}
- =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
+ =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z},
 \end{equation}
+an identity of formal power series, the right side denoting
+$\sum_{j\ge0}z^j\int\lambda^j\dd\mu(\lambda)$.
 This positive spectral measure is the bridge from the graphon operator to
 one-variable moment inequalities.
-
-The next lemma exhibits a single interval on which every generating function
-of \Cref{sec:dense-region,sec:regionII-operator} is a convergent power
-series, so that the coefficient extraction \eqref{eq:coeff-def} is available
-for all of them at once.  The two parameter choices used later are
-$(\varepsilon,c)=(-1,p)$ and $(\varepsilon,c)=(+1,q)$.
-
-\begin{lemma}[A common interval of convergence]\label{lem:analytic-disc}
-Let $c\in[0,1]$ and $\varepsilon\in\{+1,-1\}$, and put
-\[
- R_\varepsilon(z)=\ip g{(I-\varepsilon zA)^{-1}g}
-   =\int\frac{\dd\mu(\lambda)}{1-\varepsilon\lambda z},
- \qquad
- Y(z)=\frac{z^2R_\varepsilon(z)}{1-cz}.
-\]
-Then $R_\varepsilon$ and $Y$ are sums of power series converging for real
-$|z|<1/2$, where they satisfy
-\[
- |R_\varepsilon(z)|\le\tfrac43\norm g^2\le\tfrac16,
- \qquad
- |Y(z)|\le\tfrac1{12}.
-\]
-Consequently $-\log\bigl(1-Y(z)\bigr)=\sum_{k\ge1}Y(z)^k/k$ for $|z|<1/2$.
-\end{lemma}
-
-\begin{proof}
-The matrix $\varepsilon A$ is symmetric with $\rho(\varepsilon A)\le1/2$ by
-\Cref{lem:half-norm}, so $R_\varepsilon(z)=\sum_{j\ge0}\varepsilon^j
-\ip g{A^jg}z^j$ converges for $|z|<2$ by
-\Cref{lem:analytic-reading}\,(1).  The total mass of $\mu$ is
-$\mu(\R)=\sum_i\norm{P_ig}^2=\norm g^2$, and \Cref{lem:HS-budget} gives
-$\norm g^2\le pq/2\le1/8$.  For $|z|<1/2$ and $\lambda\in\supp\mu$ we have
-$|\varepsilon\lambda z|<1/4$, hence $1-\varepsilon\lambda z>3/4$ and
-\[
- |R_\varepsilon(z)|
- \le\frac{\mu(\R)}{3/4}
- =\frac43\norm g^2\le\frac16.
-\]
-Since $c\in[0,1]$ we also have $1-cz\ge1-|z|>1/2$, so $Y$ is again a
-convergent power series on $|z|<1/2$, being $z^2R_\varepsilon(z)$ times the
-geometric series $\sum_{j\ge0}c^jz^j$, and
-\[
- |Y(z)|\le\frac{|z|^2\cdot\frac16}{1/2}
- \le\frac{\frac14\cdot\frac16}{1/2}=\frac1{12}.
-\]
-The last assertion is \Cref{lem:analytic-reading}\,(3) with $Y(0)=0$ and
-$\theta=1/12$.
-\end{proof}
 
 \section{The dense region \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet and gamma smoothing}
 \label{sec:dense-region}
@@ -1403,14 +1326,11 @@ and
  L_-(z)&=-\log\left(1-\frac{z^2R_-(z)}{1-pz}\right),\label{eq:dense-Lminus}\\
  L_+(z)&=-\log\left(1-\frac{z^2R_+(z)}{1-qz}\right).\label{eq:dense-Lplus}
 \end{align}
-By \Cref{lem:analytic-disc}, applied with $(\varepsilon,c)=(-1,p)$ and with
-$(\varepsilon,c)=(+1,q)$, all four functions are convergent power series for
-$|z|<1/2$.  For odd $m$, put
+The two inner series have zero constant term, so $L_\pm$ are well defined
+formal power series.  For odd $m$, put
 \begin{equation}\label{eq:dense-Sm}
-   S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr),
+   S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
 \end{equation}
-the coefficients being taken at $z=0$ in the sense of
-\eqref{eq:coeff-def}.
 
 \begin{lemma}[Two-sided odd cancellation]\label{lem:dense-cancellation}
 For every odd $m\ge3$,
@@ -1469,10 +1389,8 @@ block matrix of determinant one:
 The matrix on the right is block triangular, so its determinant is the
 product of its diagonal-block determinants, proving
 \eqref{eq:block-determinant-identity}.  The blocks $I\pm zA$ used below are
-invertible for $|z|<2$ by \Cref{lem:analytic-reading}\,(1), since
-$\rho(A)\le1/2$; in particular they are invertible on the interval
-$|z|<1/2$ of \Cref{lem:analytic-disc}, on which all identities of this
-proof hold between convergent power series.
+invertible over $\R[[z]]$ by \Cref{lem:analytic-reading}\,(1), their
+constant term being $I$.
 
 For $T_W$, the block matrix above gives
 \[
