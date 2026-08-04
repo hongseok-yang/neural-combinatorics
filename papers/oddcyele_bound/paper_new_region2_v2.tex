@@ -784,10 +784,10 @@ which is the $j$-th moment of the finite positive measure
    \mu=\sum_i\norm{P_ig}^2\,\delta_{\lambda_i}.
 \end{equation}
 Rewriting $s_j$ in terms of this measure,
-\[
+\begin{equation}\label{eq:sj-moment}
    s_j=\int\lambda^j\dd\mu(\lambda),
    \qquad s_0=\norm g^2=\mu(\R).
-\]
+\end{equation}
 
 We now express the path densities $x_j$ through $q$ and the moments $s_j$.
 Split $T^n\one$ into its constant and mean-zero parts.  The constant part is
@@ -927,10 +927,6 @@ $\Phi_5\ge0$, proving the claim.
 
 \subsection{The heptagon: a univariate sum of squares}\label{subsec:C7}
 
-The final certificate below is an explicit one-variable sum of squares; for
-general background on positivity of polynomials on an interval, see
-Powers--Reznick~\cite{PowersReznick2000}.
-
 \begin{proposition}\label{prop:C7}
 For every graphon $W$ with edge density $p=t(K_2,W)$,
 \[
@@ -939,8 +935,12 @@ For every graphon $W$ with edge density $p=t(K_2,W)$,
 \end{proposition}
 
 \begin{proof}
-Assume \eqref{eq:q-short}.  As in the proof for $C_5$, label the integration
-variables cyclically by $z_1,\ldots,z_7$, put $z_8=z_1$, and write
+Write $U=1-W$ and $q=1-p=t(K_2,U)$, and let $x_j=t(P_j,U)$ be the path
+densities of \eqref{eq:sj-def} above, so that $x_1=q$.  If $p<1/2$, the
+right side of the claim is nonpositive and there is nothing to prove, so
+assume $p\ge1/2$, that is $q\le1/2$.  As in the proof for $C_5$, label the
+integration variables cyclically by $z_1,\ldots,z_7$, put $z_8=z_1$, and
+write
 \[
    U_i=U(z_i,z_{i+1})\qquad(1\le i\le7).
 \]
@@ -951,55 +951,26 @@ identity
  =\sum_{S\subseteq\{1,\ldots,7\}}(-1)^{|S|}
    \int_{[0,1]^7}\prod_{i\in S}U_i\prod_{j=1}^7\dd z_j.
 \end{equation}
-For a proper subset $S$, the selected edges break into disjoint runs of
-consecutive edges around the cycle.  If their lengths are
-$r_1,\ldots,r_\ell$, the selected subgraph is the disjoint union of paths
-$P_{r_1}\sqcup\cdots\sqcup P_{r_\ell}$.  Its variables separate between
-components, so its contribution to \eqref{eq:C7-subset-expansion} is
-\[
-   x_{r_1}\cdots x_{r_\ell}.
-\]
-In particular, a run of length one contributes $x_1=q$.  The proper edge
-subsets of the labelled $7$-cycle have the following run-length types.
-\[
-\begin{array}{c|l}
- k&\text{types inside parenthesis and their multiplicities outside them for }k\text{ selected edges}\\
-\hline
-0&1\\
-1&7(1)\\
-2&7(2)+14(1+1)\\
-3&7(3)+21(2+1)+7(1+1+1)\\
-4&7(4)+14(3+1)+7(2+2)+7(2+1+1)\\
-5&7(5)+7(4+1)+7(3+2)\\
-6&7(6).
-\end{array}
-\]
-Here, for example, $14(3+1)$ denotes 
-the fourteen different ways (i.e., multiplicity 14) to select a three-edge path together with a
-disjoint edge.  The multiplicities can be checked directly around the
-cycle.  For two selected edges, seven pairs are adjacent and the remaining
-$21-7=14$ are disjoint.  For three selected edges, there are seven
-rotations of a three-edge run and seven rotations of the alternating pattern
-with three isolated edges; the remaining $35-7-7=21$ have type $2+1$.
-For four selected edges, there are seven four-edge runs, fourteen choices of
-type $3+1$, and seven choices of type $2+2$; the remaining seven have
-type $2+1+1$.  Finally, for five selected edges, the two omitted edges are
-either adjacent, giving seven five-edge runs, or nonadjacent, giving seven
-configurations of each type $4+1$ and $3+2$.  Thus the multiplicities in
-each row sum, as they should, to $\binom7k$.
-
-Substituting the path-density product associated with each entry of the
-table into \eqref{eq:C7-subset-expansion} gives
+A proper subset $S$ selects a disjoint union of paths around the cycle, and
+its variables separate between the components, so its term is the
+corresponding product of path densities; the full subset gives
+$c_7=t(C_7,U)$.  Collecting the subsets of each size, \eqref{eq:C7-subset-expansion}
+reads
 \begin{align*}
- t(C_7,W)={}&1-7q
- +(7x_2+14q^2)
- -(7x_3+21qx_2+7q^3)\\
- &+(7x_4+14qx_3+7x_2^2+7q^2x_2)\\
- &-(7x_5+7qx_4+7x_3x_2)
- +7x_6-c_7,
+ t(C_7,W)={}&1\\
+ &-7x_1\\
+ &+7x_2+14x_1^2\\
+ &-7x_3-21x_1x_2-7x_1^3\\
+ &+7x_4+14x_1x_3+7x_2^2+7x_1^2x_2\\
+ &-7x_5-7x_1x_4-7x_2x_3\\
+ &+7x_6\\
+ &-c_7.
 \end{align*}
-where $c_7=t(C_7,U)$ is the contribution obtained by selecting all seven
-edges.  Because $0\le U_i\le1$, deleting one factor from that integrand
+The seven subsets of size one each contribute $x_1$; of the $21$ subsets of
+size two, seven consist of two adjacent edges and contribute $x_2$ while the
+other fourteen contribute $x_1^2$; and so on, the coefficients in each line
+summing to $\binom7k$.  Because $0\le U_i\le1$, deleting one factor from the
+integrand of $c_7$
 can only increase it; the remaining six factors form a six-edge path.
 Hence
 \[
@@ -1030,7 +1001,9 @@ substitution of \eqref{eq:path-2-6} reduces the desired inequality to the nonneg
  +(36q^2-42q+14)s_0^2+6s_0^3+6s_1^2.
 \end{aligned}
 \end{equation}
-Put $r=s_0=\mu(\R)$.  Grouping the terms integrated against $\mu$,
+Write $r$ for the total mass $s_0=\mu(\R)$.  Keeping one factor $r$ in each
+product and expressing every remaining $s_j$ by \eqref{eq:sj-moment} as an
+integral against $\mu$, the polynomial \eqref{eq:Phi7-expanded} becomes
 \begin{equation}\label{eq:Phi7-integral}
    \Phi_7=6s_1^2+\int R_{q,r}(\lambda)\dd\mu(\lambda),
 \end{equation}
@@ -1092,6 +1065,11 @@ $r\ge0$, $R_{q,r}(\lambda)\ge0$, and \eqref{eq:Phi7-integral} yields
 $\Phi_7\ge0$.
 \end{proof}
 
+The identity \eqref{eq:Pq-SOS} is an explicit sum-of-squares certificate for
+$P_q$.  For background on positivity of one-variable polynomials and on such
+certificates, see Powers--Reznick~\cite{PowersReznick2000}.
+
+\iffalse
 \begin{remark}[Pointwise nonnegativity versus operator positivity]
 The $C_5$ and $C_7$ arguments do not require the kernel operator $T_U$
 to be positive semidefinite.  Such positivity would mean that
@@ -1117,6 +1095,7 @@ rather than only for $\lambda\ge0$.  No positive-semidefiniteness assumption
 on $T_U$ is needed.
 \end{remark}
 
+\fi
 
 \section{The common complement-operator framework}\label{sec:common-operator}
 
