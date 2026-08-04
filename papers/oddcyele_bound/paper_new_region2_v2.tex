@@ -1383,9 +1383,9 @@ invertible over $\R[[z]]$ by \Cref{lem:analytic-reading}\,(1).  Applying
 with $D=I+zA$ and $v=zg$, factorizes the determinants into three parts,
 \[
 \begin{aligned}
- \det(I-zT_U)&=\det(I-zA)\,(1-qz)
+ \det(I-zT_U)&=\det(I-zA)\bigl(1-qz-z^2R_+(z)\bigr) =\det(I-zA)\,(1-qz)
    \left(1-\frac{z^2R_+(z)}{1-qz}\right),\\
- \det(I-zT_W)&=\det(I+zA)\,(1-pz)
+ \det(I-zT_W)&=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)=\det(I+zA)\,(1-pz)
    \left(1-\frac{z^2R_-(z)}{1-pz}\right).
 \end{aligned}
 \]
@@ -1437,19 +1437,46 @@ Let $P_j$ denote the path with $j$ edges and set
 \begin{equation}\label{eq:dense-xj}
    x_j=t(P_j,U)=\ip\one{T_U^j\one}.
 \end{equation}
-Deleting one factor from the integrand of $t(C_m,U)$, and using $0\le U\le1$, gives
+As in \Cref{sec:short-cycles}, deleting one edge from the $m$-cycle leaves a
+path with $m-1$ edges, so $0\le U\le1$ gives
 \begin{equation}\label{eq:dense-cycle-path}
    t(C_m,U)\le x_{m-1}.
 \end{equation}
-Block inversion in \eqref{eq:block-U} gives the moment generating function
-\begin{equation}\label{eq:dense-path-gf}
- \sum_{j\ge0}x_jz^j
- =\ip\one{(I-zT_U)^{-1}\one}
- =\frac1{1-qz-z^2R_+(z)}.
-\end{equation}
-Thus it is enough to prove
+
+By \eqref{eq:dense-defect} and \eqref{eq:dense-cycle-path}, it is enough to
+prove
 \begin{equation}\label{eq:dense-Phi}
    \Phi_m:=q^{m-1}+S_m-x_{m-1}\ge0.
+\end{equation}
+Two of the three terms are already expressed through $q$ and $R_\pm$, so it
+remains to do the same for the path densities.  By
+\Cref{lem:analytic-reading}\,(1),
+\[
+ \sum_{j\ge0}x_jz^j
+ =\sum_{j\ge0}z^j\ip\one{T_U^j\one}
+ =\ip\one{(I-zT_U)^{-1}\one}.
+\]
+Write $(I-zT_U)^{-1}\one=a\one+h$ with $h\in\mathcal E_0$, so that
+$\ip\one{(I-zT_U)^{-1}\one}=a$.  In the block form of $I-zT_U$ this is
+\[
+ \begin{pmatrix}1-qz&-zg^*\\-zg&I-zA\end{pmatrix}
+ \begin{pmatrix}a\\h\end{pmatrix}
+ =\begin{pmatrix}1\\0\end{pmatrix}.
+\]
+Multiply on the left by the triangular matrix of
+\eqref{eq:block-determinant-identity}, here
+$\left(\begin{smallmatrix}1&zg^*(I-zA)^{-1}\\0&I\end{smallmatrix}\right)$.
+It fixes $\left(\begin{smallmatrix}1\\0\end{smallmatrix}\right)$ and
+produces the Schur complement in the upper left corner, so the system
+becomes
+\[
+ \begin{pmatrix}1-qz-z^2R_+(z)&0\\-zg&I-zA\end{pmatrix}
+ \begin{pmatrix}a\\h\end{pmatrix}
+ =\begin{pmatrix}1\\0\end{pmatrix}.
+\]
+Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
+\begin{equation}\label{eq:dense-path-gf}
+ \sum_{j\ge0}x_jz^j=\frac1{1-qz-z^2R_+(z)}.
 \end{equation}
 
 \subsection{Expansion in complete homogeneous polynomials}
