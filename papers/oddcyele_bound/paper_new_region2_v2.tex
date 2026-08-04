@@ -23,6 +23,8 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
+\numberwithin{equation}{section}
+
 \newcommand{\one}{\mathbf 1}
 \newcommand{\R}{\mathbb R}
 \newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
@@ -1705,14 +1707,7 @@ Fix $r\ge1$ and put
 \begin{equation}\label{eq:dense-n}
   n=m-2r.
 \end{equation}
-Then $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$, and for $x\in[0,1]$
-set
-\begin{equation}\label{eq:dense-VW}
-  V_x=qx+\ell(1-x),
-  \qquad
-  W_x=px-\ell(1-x).
-\end{equation}
-Thus $V_x+W_x=x$.  Define
+Then $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$ and define
 \begin{equation}\label{eq:dense-rho}
   \rho_{n,m}(u)
   =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
@@ -1720,18 +1715,13 @@ Thus $V_x+W_x=x$.  Define
 
 \begin{lemma}[Beta formula]\label{lem:dense-beta}
   One has
-  \begin{align}
+  \begin{equation}\label{eq:dense-beta-second}
     \widetilde P_{m,r}(q,\ell)
-    ={}&\binom{n+2r-1}{2r-1}\frac {n}{r}
-    \left[
-    \frac {m}{n}\E\bigl(V_X^n+W_X^n\bigr)
-    -\E\bigl(X V_X^{n-1}\bigr)
-    \right]\label{eq:dense-beta-first}\\
-    ={}&\binom{n+2r-1}{2r-1}\frac {n}{r}
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \E\left[
     X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)
-    \right].\label{eq:dense-beta-second}
-  \end{align}
+    \right].
+  \end{equation}
   If $\ell>0$, then
   \begin{equation}\label{eq:dense-beta-integral}
     \widetilde P_{m,r}(q,\ell)
@@ -1778,10 +1768,8 @@ Thus $V_x+W_x=x$.  Define
   factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel against those of
   $\binom{n+2r-1}{2r-1}\binom nk$.
 
-  \tk{Revised until here.}
-
-  Next we differentiate \eqref{eq:dense-beta-h} with respect to the common
-  variable $a$.  On the left, differentiating the generating function
+  Next we differentiate the both side of \eqref{eq:dense-beta-h} with respect to $a$. 
+  On the left, differentiating the generating function
   \eqref{eq:dense-h-gf} in the form
   $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d=(1-az)^{-r}(1-bz)^{-r}$
   gives
@@ -1801,69 +1789,115 @@ Thus $V_x+W_x=x$.  Define
     \E\left[X\bigl(aX+b(1-X)\bigr)^{n-1}\right].
   \end{equation}
 
-  Now take $\lambda_1=\cdots=\lambda_r=\ell$ in the definition
-  \eqref{eq:dense-Pmr} of $P_{m,r}$ and apply the two formulas to its three
-  terms.  With $(a,b)=(q,\ell)$ and with $(a,b)=(p,-\ell)$, the linear form
-  $aX+b(1-X)$ is $V_X$ and $W_X$ respectively, so
-  \eqref{eq:dense-beta-h} gives
+  By the definition \eqref{eq:dense-Ptilde} of the diagonal polynomial,
   \[
-    h_n(q^{\times r},\ell^{\times r})=\binom{n+2r-1}{2r-1}\E V_X^n,
+    \widetilde P_{m,r}(q,\ell)
+    =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
+    +h_n(q^{\times r},\ell^{\times r})\bigr]
+    -h_{n-1}(q^{\times(r+1)},\ell^{\times r}),
+  \]
+  and we apply \eqref{eq:dense-beta-h} to the first two terms, with
+  $(a,b)=(p,-\ell)$ and $(a,b)=(q,\ell)$, and
+  \eqref{eq:dense-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
+  Using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$, this gives
+  \begin{align*}
+    &\widetilde P_{m,r}(q,\ell)
+    \\
+    {} = &\binom{n+2r-1}{2r-1}\frac {n}{r}
+    \left[
+    \frac {m}{n}\E\Bigl(\bigl(pX-\ell(1-X)\bigr)^n
+                       +\bigl(qX+\ell(1-X)\bigr)^n\Bigr)
+    -\E\Bigl(X\bigl(qX+\ell(1-X)\bigr)^{n-1}\Bigr)
+    \right].
+  \end{align*}
+  Abbreviating the two linear forms by
+  \[
+    V_X=qX+\ell(1-X),
     \qquad
-    h_n(p^{\times r},(-\ell)^{\times r})=\binom{n+2r-1}{2r-1}\E W_X^n,
+    W_X=pX-\ell(1-X),
+    \qquad\text{so that } V_X+W_X=X,
   \]
-  while \eqref{eq:dense-beta-h-deriv} with $(a,b)=(q,\ell)$ gives
-  \[
-    h_{n-1}(q^{\times(r+1)},\ell^{\times r})
-    =\binom{n+2r-1}{2r-1}\frac {n}{r}\E\bigl[XV_X^{n-1}\bigr].
-  \]
-  Substituting these into
-  $\widetilde P_{m,r}(q,\ell)
-  =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
-  +h_n(q^{\times r},\ell^{\times r})\bigr]
-  -h_{n-1}(q^{\times(r+1)},\ell^{\times r})$
-  and using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$ proves
-  \eqref{eq:dense-beta-first}.
+  this simplifies to
+  \begin{equation}\label{eq:dense-beta-first}
+    \widetilde P_{m,r}(q,\ell)
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}
+    \left[
+    \frac {m}{n}\E\bigl(V_X^n+W_X^n\bigr)
+    -\E\bigl(X V_X^{n-1}\bigr)
+    \right].
+  \end{equation}
 
-  For \eqref{eq:dense-beta-second}, put
+  The three terms $V_X^n$, $W_X^n$, and $XV_X^{n-1}$ all have degree $n$ in
+  $(V_X,W_X,X)$, and $V_X+W_X=X$.  They therefore depend on $X$ only
+  through the proportion of $X$ taken by $V_X$.  Writing that proportion as
   \[
-    u=q+\ell\frac{1-x}{x},
+    u_X=\frac{V_X}{X}=q+\ell\,\frac{1-X}{X},
+    \qquad
+    V_X=Xu_X,
+    \qquad
+    W_X=X(1-u_X),
   \]
-  so that $V_x=xu$ and, since $p=1-q$, also $W_x=x(1-u)$.  Then
-  $V_x^n+W_x^n=x^n\bigl(u^n+(1-u)^n\bigr)$ and $xV_x^{n-1}=x^nu^{n-1}$,
-  whence
+  the last equality again because $V_X+W_X=X$, we obtain
   \[
-    \frac {m}{n}\bigl(V_x^n+W_x^n\bigr)-xV_x^{n-1}
-    =x^n\left[\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}\right]
-    =x^n\rho_{n,m}(u).
+    V_X^n+W_X^n=X^n\bigl(u_X^n+(1-u_X)^n\bigr),
+    \qquad
+    XV_X^{n-1}=X\cdot X^{n-1}u_X^{n-1}=X^nu_X^{n-1}.
   \]
-  Taking $x=X$ and expectations gives \eqref{eq:dense-beta-second}.
+  By linearity, the two expectations in \eqref{eq:dense-beta-first} combine
+  into the expectation of
+  \[
+    \frac {m}{n}\bigl(V_X^n+W_X^n\bigr)-XV_X^{n-1}
+    =X^n\left[\frac {m}{n}\bigl(u_X^n+(1-u_X)^n\bigr)-u_X^{n-1}\right]
+    =X^n\rho_{n,m}(u_X),
+  \]
+  by the definition \eqref{eq:dense-rho} of $\rho_{n,m}$, and this proves
+  \eqref{eq:dense-beta-second}.
 
-  For $\ell>0$, write \eqref{eq:dense-beta-second} out with the beta density,
+  For $\ell>0$, expand the expectation in \eqref{eq:dense-beta-second} as an
+  integral against the beta density,
   \[
     \E\left[X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)\right]
     =\frac{\Gamma(2r)}{\Gamma(r)^2}
     \int_0^1 x^{n+r-1}(1-x)^{r-1}
     \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x,
   \]
-  and make the projective substitution
+  and apply the change of variable
   \[
     s=\ell\frac{1-x}{x},
     \qquad x=\frac{\ell}{\ell+s},
     \qquad 1-x=\frac {s}{\ell+s},
     \qquad \dd x=-\frac{\ell}{(\ell+s)^2}\dd s,
   \]
-  which maps $x\in(0,1]$ onto $s\in[0,\infty)$ and turns the argument of
-  $\rho_{n,m}$ into $q+s$.  Since $n+2r=m$,
+  under which $x=1$ corresponds to $s=0$, and $x\to0^+$ to
+  $s\to\infty$.  Thus
+  \begin{align*}
+    &\int_0^1 x^{n+r-1}(1-x)^{r-1}
+     \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x\\
+    &\qquad=\int_\infty^0
+     \left(\frac{\ell}{\ell+s}\right)^{n+r-1}
+     \left(\frac{s}{\ell+s}\right)^{r-1}
+     \rho_{n,m}(q+s)
+     \left(-\frac{\ell}{(\ell+s)^2}\right)\dd s\\
+    &\qquad=\int_0^\infty
+     \frac{\ell^{n+r}s^{r-1}}{(\ell+s)^{n+2r}}\rho_{n,m}(q+s)\dd s
+     =\ell^{n+r}\int_0^\infty
+     \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
+  \end{align*}
+  where in the last line the minus sign has been used to interchange the
+  endpoints of integration, and the exponent $n+2r$ has been replaced by
+  $m$ according to \eqref{eq:dense-n}.  Altogether
   \[
-    x^{n+r-1}(1-x)^{r-1}\dd x
-    =-\ell^{n+r}\frac{s^{r-1}}{(\ell+s)^{n+2r}}\dd s
-    =-\ell^{n+r}\frac{s^{r-1}}{(\ell+s)^{m}}\dd s,
+    \widetilde P_{m,r}(q,\ell)
+    =\binom{m-1}{2r-1}\frac {n}{r}\frac{\Gamma(2r)}{\Gamma(r)^2}\,
+     \ell^{n+r}\int_0^\infty
+     \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
   \]
-  the sign being absorbed by the reversal of the limits of integration.
-  Together with
+  and since
   \[
     \binom{m-1}{2r-1}\frac {n}{r}
     \frac{\Gamma(2r)}{\Gamma(r)^2}
+    =\frac{(m-1)!}{(2r-1)!\,n!}\cdot\frac {n}{r}
+     \cdot\frac{(2r-1)!}{((r-1)!)^2}
     =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2},
   \]
   this proves \eqref{eq:dense-beta-integral}.
