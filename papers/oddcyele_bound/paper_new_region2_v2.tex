@@ -1612,30 +1612,107 @@ Consequently,
 \end{lemma}
 
 \begin{proof}
-For every $j\ge0$, the Dirichlet moment formula gives
+Write $S=\sum_{i=1}^r\Theta_i\lambda_i$.  The proof rests on two properties
+of $h_j$.
+
+First, the moments of $S$ are the complete homogeneous polynomials, up to a
+constant:
 \begin{equation}\label{eq:dense-dirichlet-moment}
- \E\left(\sum_{i=1}^r\Theta_i\lambda_i\right)^j
+ \E\,S^j
  =\frac{h_j(\lambda_1,\ldots,\lambda_r)}
     {\binom{j+r-1}{r-1}}.
 \end{equation}
-Indeed, expand the power and use
+To see this, expand
+\[
+ S^j=\Bigl(\sum_{i=1}^r\Theta_i\lambda_i\Bigr)^j
+ =\sum_{\alpha_1+\cdots+\alpha_r=j}
+   \frac{j!}{\alpha_1!\cdots\alpha_r!}
+   \prod_{i=1}^r\Theta_i^{\alpha_i}\lambda_i^{\alpha_i},
+\]
+and take expectations.  From
 \[
  \E\prod_{i=1}^r\Theta_i^{\alpha_i}
- =\frac{(r-1)!\prod_i\alpha_i!}{(j+r-1)!},
- \qquad \sum_i\alpha_i=j.
+ =\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!},
+ \qquad \alpha_1+\cdots+\alpha_r=j,
 \]
-Also,
+we obtain
+\[
+\begin{aligned}
+ \E\,S^j
+ &=\sum_{\alpha_1+\cdots+\alpha_r=j}
+   \frac{j!}{\alpha_1!\cdots\alpha_r!}
+   \cdot\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!}
+   \prod_{i=1}^r\lambda_i^{\alpha_i}\\
+ &=\frac{j!\,(r-1)!}{(j+r-1)!}
+   \sum_{\alpha_1+\cdots+\alpha_r=j}\prod_{i=1}^r\lambda_i^{\alpha_i}
+ =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
+\end{aligned}
+\]
+
+Second, setting all variables equal in the definition of $h_j$ gives
+\begin{equation}\label{eq:dense-h-diagonal}
+ h_j(\ell,\ldots,\ell)=\binom{j+r-1}{r-1}\ell^j,
+\end{equation}
+the binomial coefficient being the number of monomials of degree $j$ in $r$
+variables. 
+
+It remains to express the terms of \eqref{eq:dense-Pmr} through the
+$h_j(\lambda_1,\ldots,\lambda_r)$.  In \eqref{eq:dense-h-gf} the $k$ equal
+variables and the remaining ones give separate factors, so
+\[
+ \sum_{d\ge0}h_d(a^{\times k},b_1,\ldots,b_r)z^d
+ =\frac1{(1-az)^k}\prod_{i=1}^r\frac1{1-b_iz}
+ =\Bigl(\sum_{s\ge0}\binom{s+k-1}{k-1}a^sz^s\Bigr)
+  \Bigl(\sum_{j\ge0}h_j(b_1,\ldots,b_r)z^j\Bigr),
+\]
+and comparing the coefficients of $z^d$ gives
 \begin{equation}\label{eq:dense-h-split}
  h_d(a^{\times k},b_1,\ldots,b_r)
  =\sum_{j=0}^d
    \binom{d-j+k-1}{k-1}a^{d-j}h_j(b_1,\ldots,b_r).
 \end{equation}
-Apply \eqref{eq:dense-h-split} to each term in \eqref{eq:dense-Pmr} and then
-use \eqref{eq:dense-dirichlet-moment}; this gives
-\eqref{eq:dense-dirichlet-identity}.  Every convex combination
-$\sum_i\Theta_i\lambda_i$ lies in $[-1/2,1/2]$, so the expectation is
-at least the diagonal minimum.  Conversely, taking
-$\lambda_1=\cdots=\lambda_r=\ell$ realizes every diagonal value.
+Apply this to the three terms of \eqref{eq:dense-Pmr}, the first two with
+$k=r$ and $a=p$ or $q$, the third with $k=r+1$ and $a=q$.  Since $h_j$ is
+homogeneous of degree $j$, we have
+$h_j(-\lambda_1,\ldots,-\lambda_r)=(-1)^jh_j(\lambda_1,\ldots,\lambda_r)$,
+and therefore
+\begin{equation}\label{eq:dense-P-in-h}
+\begin{aligned}
+ P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ ={}&\frac mr\sum_{j=0}^{n}\binom{n-j+r-1}{r-1}
+      \bigl((-1)^jp^{n-j}+q^{n-j}\bigr)
+      h_j(\lambda_1,\ldots,\lambda_r)\\
+ &-\sum_{j=0}^{n-1}\binom{n-1-j+r}{r}q^{n-1-j}
+      h_j(\lambda_1,\ldots,\lambda_r).
+\end{aligned}
+\end{equation}
+
+
+Write \eqref{eq:dense-P-in-h} as
+\[
+ P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ =\sum_{j=0}^nc_j\,h_j(\lambda_1,\ldots,\lambda_r),
+\]
+where $c_j$ subsumes the two coefficients of $h_j$ above, which do not
+involve the $\lambda_i$.  Setting $\lambda_1=\cdots=\lambda_r=\ell$ and
+using \eqref{eq:dense-h-diagonal},
+\[
+ \widetilde P_{m,r}(q,\ell)
+ =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\ell^j.
+\]
+On the other hand, \eqref{eq:dense-dirichlet-moment} gives
+\[
+ P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+ =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\E\,S^j
+ =\E\sum_{j=0}^nc_j\binom{j+r-1}{r-1}S^j
+ =\E\,\widetilde P_{m,r}(q,S),
+\]
+the last equality is \eqref{eq:dense-dirichlet-identity} with $\ell$ replaced by $S$. 
+
+For the second claim, if the $\lambda_i$ lie in $[-1/2,1/2]$ then so does every convex
+combination $S$, so the right side of \eqref{eq:dense-dirichlet-identity} is
+at least $\min_\ell\widetilde P_{m,r}(q,\ell)$; conversely
+$\lambda_1=\cdots=\lambda_r=\ell$ attains each diagonal value.
 \end{proof}
 
 Thus \eqref{eq:dense-expansion} will be nonnegative once we prove
@@ -1648,8 +1725,8 @@ for
  \quad 1\le r\le\frac{m-1}{2},
  \quad -\frac12\le\ell\le\frac12.
 \]
-This is the first major dimension reduction: an $r$-variable spectral
-polynomial is replaced exactly, not approximately, by one scalar variable.
+This is the first major simplification: an $r$-variable symmetric
+polynomial is replaced by one scalar variable polynomial.
 
 \subsection{A beta representation}
 
