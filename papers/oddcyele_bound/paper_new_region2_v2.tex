@@ -580,8 +580,8 @@ Cauchy product,
 \]
 A series with $c_0\ne0$ has an inverse, obtained by solving the equations
 for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a
-series.  Finally, if we write $\ord F$ for the least $j$ with $c_j\ne0$,
-then the series
+series.  Finally, if we write $\ord F$ for the order of $F$, that is the
+least $j$ with $c_j\ne0$, then the series
 \[
    -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
 \]
@@ -1295,25 +1295,79 @@ Throughout this section,
   q = 1 - p, \qquad 0 \le q \le \frac{1}{3},
 \end{equation}
 and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
-The proof is first presented as a sequence of exact reductions; a conceptual
-interpretation is given in \Cref{sec:transferable}.
 
 \subsection{A two-sided spectral shift and cancellation of the tail}
 
-Define
+By \Cref{lem:analytic-reading}\,(2) and \eqref{eq:finite-trace-cycle}, every
+step kernel $K$ satisfies
+\begin{equation}\label{eq:logdet-cycle}
+   -\log\det(I-zT_K)=\sum_{j\ge1}\frac{\Tr(T_K^j)}{j}z^j,
+   \qquad
+   m\,[z^m]\bigl(-\log\det(I-zT_K)\bigr)=t(C_m,K)
+\end{equation}
+for every $m\ge2$.  Thus the cycle densities of $U$ and of $W$ are the
+coefficients of $-\log\det(I-zT_U)$ and $-\log\det(I-zT_W)$, and we expand
+these two series along the block decomposition \eqref{eq:block-U}.  Since
+$T_W=T_1-T_U$ has block matrix
+$\left(\begin{smallmatrix}p&-g^*\\-g&-A\end{smallmatrix}\right)$, as computed
+in the proof of \Cref{lem:dense-cancellation} below,
+\[
+ I-zT_U=
+ \begin{pmatrix}1-qz&-zg^*\\-zg&I-zA\end{pmatrix},
+ \qquad
+ I-zT_W=
+ \begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
+\]
+The two matrices differ only in the sign of the mean-zero block and in the
+scalar entry, which is the reason for treating $W$ and $U$ together.
+
+Eliminating the off-diagonal entries by the Schur complement identity
+\eqref{eq:block-determinant-identity} factorizes the determinants into three
+parts,
+\[
+ \det(I-zT_U)=\det(I-zA)\,(1-qz)
+   \left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right),
+\]
+and likewise for $W$ with $A$ replaced by $-A$ and $q$ by $p$.  Taking
+$-\log$ turns each product into a sum of three series, which we track separately:
+\[
+\begin{aligned}
+ -\log\det(I-zT_U)={}&-\log\det(I-zA)-\log(1-qz)-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right),\\
+ -\log\det(I-zT_W)={}&-\log\det(I+zA)-\log(1-pz)-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
+\end{aligned}
+\]
+Write
 \begin{align}
  R_-(z)&=\ip g{(I+zA)^{-1}g}
    =\int\frac{\dd\mu(\lambda)}{1+\lambda z},\label{eq:dense-Rminus}\\
  R_+(z)&=\ip g{(I-zA)^{-1}g}
    =\int\frac{\dd\mu(\lambda)}{1-\lambda z},\label{eq:dense-Rplus}
 \end{align}
-and
+for the two Schur complements, as in \eqref{eq:resolvents-common} with $A$
+replaced by $\mp A$, and abbreviate the third summands by
 \begin{align}
  L_-(z)&=-\log\left(1-\frac{z^2R_-(z)}{1-pz}\right),\label{eq:dense-Lminus}\\
  L_+(z)&=-\log\left(1-\frac{z^2R_+(z)}{1-qz}\right).\label{eq:dense-Lplus}
 \end{align}
-The two inner series have zero constant term, so $L_\pm$ are well defined
-formal power series.  For odd $m$, put
+Each inner series $z^2R_\pm(z)/(1-cz)$ has order at least two, so $L_\pm$
+are well defined formal power series, as discussed in
+\Cref{subsec:analytic-reading}.
+
+The first two summands are already explicit.  For the first,
+\Cref{lem:analytic-reading}\,(2) gives, for odd $m$,
+\[
+ m\,[z^m]\bigl(-\log\det(I-zA)\bigr)=\Tr(A^m),
+ \qquad
+ m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
+\]
+so the two cancel when the identities for $U$ and $W$ are added.  For the
+second,
+\[
+ m\,[z^m]\bigl(-\log(1-qz)\bigr)=q^m,
+ \qquad
+ m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
+\]
+For odd $m$, put
 \begin{equation}\label{eq:dense-Sm}
    S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
 \end{equation}
@@ -1411,6 +1465,8 @@ so using $D=I-zA$ and the definition of $R_+(z)$ gives
    \left(1-\frac{z^2R_+(z)}{1-qz}\right).
 \end{align*}
 
+% TODO: this re-derives the expansion of \Cref{lem:analytic-reading}(2);
+% replace by a reference to \eqref{eq:logdet-cycle}.
 It remains to extract the cycle traces from these factorizations.  For a
 finite self-adjoint matrix $X$, choose an orthonormal eigenbasis and denote
 the eigenvalues by $\lambda_i$.  In that basis, $I-zX$ is diagonal with
@@ -2141,6 +2197,8 @@ Schur complementation gives
  &=\det(I+zA)(1-pz)
    \left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
 \end{align*}
+% TODO: this display repeats \Cref{lem:analytic-reading}(2);
+% replace by a reference to \eqref{eq:logdet-cycle}.
 Taking $-\log$, and using
 \[
  -\log\det(I-zM)=\sum_{j\ge1}\frac{z^j}{j}\Tr(M^j),
