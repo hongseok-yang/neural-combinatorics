@@ -117,9 +117,9 @@ If $p\le1/2$, then
 whereas $t(C_m,W)\ge0$.  Thus only $p>1/2$, or $q<1/2$, needs proof.
 The nontrivial range splits into
 \[
-  \underbrace{0\le q\le\frac13}_{p\ge2/3}
+  \underbrace{0\le q\le\frac{1}{3}}_{p\ge2/3}
   \qquad\text{and}\qquad
-  \underbrace{\frac13<q<\frac12}_{1/2<p<2/3}.
+  \underbrace{\frac{1}{3}<q<\frac{1}{2}}_{1/2<p<2/3}.
 \]
 
 \begin{corollary} \label{cor:main}
@@ -160,7 +160,7 @@ $\int\lambda^j\dd\mu(\lambda)=\ip g{A^jg}$ for every $j\ge0$ and
 $\mu(\R)=\norm g^2$.  Two elementary lemmas about these eigenvalues are used
 in every part:
 \[
-  |\lambda_i|\le\frac12\quad\text{for every }i \qquad(\Cref{lem:half-norm}),
+  |\lambda_i|\le\frac{1}{2}\quad\text{for every }i \qquad(\Cref{lem:half-norm}),
 \]
 and
 \[
@@ -205,12 +205,10 @@ and
   Schur complementation against the constant direction.  This produces two
   further generating functions $L_+(z)$ and $L_-(z)$, whose form is
   recorded in \eqref{eq:dense-Lminus}--\eqref{eq:dense-Lplus}, and
-  \[
-    \begin{aligned}
-      t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\\
-      t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).
-    \end{aligned}
-  \]
+  \begin{align*}
+    t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\\
+    t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).
+  \end{align*}
   The two traces have opposite signs because the mean-zero part of $T_U$
   is $A$, that of $T_W=T_1-T_U$ is $-A$, and $m$ is odd.  Since neither
   lemma above controls the odd power sum $\Tr(A^m)=\sum_i\lambda_i^m$, we
@@ -235,7 +233,7 @@ and
     \prod_{i=1}^r\dd\mu(\lambda_i),
   \]
   \[
-    P_{m,r}=\frac mr\Bigl[
+    P_{m,r}=\frac {m}{r}\Bigl[
     h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
     +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)\Bigr]
     -h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r),
@@ -266,7 +264,7 @@ and
     \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}
     \rho_{n,m}(q+s)\dd s,
     \\    
-    \rho_{n,m}(u)&=\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+    \rho_{n,m}(u)&=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
   \end{align*}
   The case $\ell\le0$ is proved separately in
   \Cref{lem:dense-ell-negative}, where the argument of $\rho_{n,m}$ stays
@@ -281,7 +279,7 @@ and
     \widetilde P_{m,r}(q,\ell)
     =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
     \int_0^\infty t^{n+r-1}e^{-\ell t}\,
-    \E\,\rho_{n,m}\Bigl(q+\frac Yt\Bigr)\dd t.
+    \E\,\rho_{n,m}\Bigl(q+\frac {Y}{t}\Bigr)\dd t.
   \]
   As all the remaining terms are nonnegative, it is enough to prove that
   $\E\rho_{n,m}(q+xY)\ge0$ for every $x\ge0$.  Centering at $u=1/2$ and
@@ -376,7 +374,7 @@ and
   $q$, $\alpha$, and $m$.  Since $p=1-q$ and $L^2=pq-\alpha^2$, the two
   ratios
   \[
-    v=\frac p\alpha-1,
+    v=\frac {p}{\alpha}-1,
     \qquad
     \zeta=\frac{L^2}{\alpha(\alpha-q)}
   \]
@@ -633,7 +631,7 @@ For an example of this formal series, take $X=T_W$ and $m=3$.  Item~(2)
 gives
 \[
   -\log\det(I-zT_W)
-  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}2z^2+\frac{\Tr(T_W^3)}3z^3+\cdots,
+  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}{2}z^2+\frac{\Tr(T_W^3)}{3}z^3+\cdots,
 \]
 whence
 \[
@@ -658,7 +656,7 @@ and $T=T_U$ is the integral operator of $U$.  When $q>1/2$, the
 right side of \eqref{eq:main-goal} is nonpositive, so the result is trivial.
 We may therefore assume
 \begin{equation}\label{eq:q-short}
-  0\le q\le\frac12.
+  0\le q\le\frac{1}{2}.
 \end{equation}
 The arguments below actually prove the three cases at every edge density.
 
@@ -686,14 +684,12 @@ argument~\cite{Goodman1959}.
   \]
   Multiplying by $W(x,y)\ge0$, integrating in $(x,y)$, and applying
   Jensen's inequality gives
-  \[
-    \begin{aligned}
-      t(C_3,W)
-      &\ge \int W(x,y)\bigl(d_W(x)+d_W(y)-1\bigr)\dd x\dd y\\
-      &=2\int_0^1d_W(x)^2\dd x-p
-      \ge2p^2-p,
-    \end{aligned}
-  \]
+  \begin{align*}
+    t(C_3,W)
+    &\ge \int W(x,y)\bigl(d_W(x)+d_W(y)-1\bigr)\dd x\dd y\\
+    &=2\int_0^1d_W(x)^2\dd x-p
+    \ge2p^2-p,
+  \end{align*}
   as desired.
 \end{proof}
 
@@ -721,13 +717,11 @@ Note that $T$ is a symmetric operator, so $\ip{f}{Tg}=\ip{Tf}{g}$ for all $f,g$.
 
 \begin{lemma}\label{lem:path-to-4}
   With \eqref{eq:T1-decomp},
-  \[
-    \begin{aligned}
-      x_2&=q^2+\norm g^2,\\
-      x_3&=q^3+2q\norm g^2+\ip g{Tg},\\
-      x_4&=q^4+3q^2\norm g^2+2q\ip g{Tg}+\norm{Tg}^2.
-    \end{aligned}
-  \]
+  \begin{align*}
+    x_2&=q^2+\norm g^2,\\
+    x_3&=q^3+2q\norm g^2+\ip g{Tg},\\
+    x_4&=q^4+3q^2\norm g^2+2q\ip g{Tg}+\norm{Tg}^2.
+  \end{align*}
 \end{lemma}
 
 \begin{proof}
@@ -802,17 +796,15 @@ $A$ give the recursive formulas
   \qquad h_{n+1}=x_ng+Ah_n.
 \end{equation}
 For clarity, iterating the second recursion first gives
-\[
-  \begin{aligned}
-    h_1={}&g,\\
-    h_2={}&qg+Ag,\\
-    h_3={}&x_2g+qAg+A^2g,\\
-    h_4={}&x_3g+x_2Ag+qA^2g+A^3g,\\
-    h_5={}&x_4g+x_3Ag+x_2A^2g+qA^3g+A^4g,\\
-    h_6={}&x_5g+x_4Ag+x_3A^2g+x_2A^3g
-    +qA^4g+A^5g.
-  \end{aligned}
-\]
+\begin{align*}
+  h_1={}&g,\\
+  h_2={}&qg+Ag,\\
+  h_3={}&x_2g+qAg+A^2g,\\
+  h_4={}&x_3g+x_2Ag+qA^2g+A^3g,\\
+  h_5={}&x_4g+x_3Ag+x_2A^2g+qA^3g+A^4g,\\
+  h_6={}&x_5g+x_4Ag+x_3A^2g+x_2A^3g
+  +qA^4g+A^5g.
+\end{align*}
 More generally,
 \[
   h_n=\sum_{j=0}^{n-1}x_{n-1-j}A^jg.
@@ -831,17 +823,15 @@ eliminates $h_n$, and leaves a recursion for the path densities alone,
   \qquad(n\ge1).
 \end{equation}
 We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
-\begin{equation}\label{eq:path-2-6}
-  \begin{aligned}
-    x_2={}& q^2+s_0,\\
-    x_3={}& q^3+2qs_0+s_1,\\
-    x_4={}& q^4+3q^2s_0+2qs_1+s_0^2+s_2,\\
-    x_5={}& q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3,\\
-    x_6={}& q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
-    +6qs_0s_1+2qs_3\\
-    &\qquad{}+s_0^3+2s_0s_2+s_1^2+s_4.
-  \end{aligned}
-\end{equation}
+\begin{align}
+  x_2={}& q^2+s_0, \notag\\
+  x_3={}& q^3+2qs_0+s_1, \notag\\
+  x_4={}& q^4+3q^2s_0+2qs_1+s_0^2+s_2, \notag\\
+  x_5={}& q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3, \notag\\
+  x_6={}& q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
+  +6qs_0s_1+2qs_3 \notag\\
+  &\qquad{}+s_0^3+2s_0s_2+s_1^2+s_4. \label{eq:path-2-6}
+\end{align}
 
 \subsection{The pentagon: one completion of a square}\label{subsec:C5}
 
@@ -861,16 +851,14 @@ We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
   Since $W=1-U$, the integrand defining $t(C_5,W)$ is
   $\prod_{i=1}^5(1-U_i)$.  Ordinary inclusion--exclusion gives the exact
   pointwise expansion
-  \[
-    \begin{aligned}
-      \prod_{i=1}^5(1-U_i)
-      ={}&1-\sum_{i=1}^5U_i
-      +\sum_{1\le i<j\le5}U_iU_j
-      -\sum_{1\le i<j<k\le5}U_iU_jU_k\\
-      &+\sum_{i=1}^5\prod_{j\ne i}U_j
-      -\prod_{i=1}^5U_i.
-    \end{aligned}
-  \]
+  \begin{align*}
+    \prod_{i=1}^5(1-U_i)
+    ={}&1-\sum_{i=1}^5U_i
+    +\sum_{1\le i<j\le5}U_iU_j
+    -\sum_{1\le i<j<k\le5}U_iU_jU_k\\
+    &+\sum_{i=1}^5\prod_{j\ne i}U_j
+    -\prod_{i=1}^5U_i.
+  \end{align*}
   We now integrate this identity over $(z_1,\ldots,z_5)$.  Each single-edge
   term has integral $q=x_1$, so the first sum contributes $5q$.  Among the
   $\binom52=10$ pairs of edges, five pairs are adjacent around the cycle;
@@ -893,12 +881,10 @@ We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
   cycle leaves a four-edge path, so every corresponding integral is $x_4$.
   Finally, selecting all five edges gives $c_5:=t(C_5,U)$.  Combining these
   contributions with their alternating signs yields
-  \[
-    \begin{aligned}
-      t(C_5,1-U)
-      ={}&1-5q+5x_2+5q^2-5x_3-5qx_2+5x_4-c_5.
-    \end{aligned}
-  \]
+  \begin{align*}
+    t(C_5,1-U)
+    ={}&1-5q+5x_2+5q^2-5x_3-5qx_2+5x_4-c_5.
+  \end{align*}
   Since $0\le U\le1$, deleting one edge from the cycle integrand gives
   $c_5\le x_4$.  Therefore
   \begin{equation}\label{eq:C5-IE}
@@ -909,14 +895,12 @@ We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
     (1-q)^5-(1-q)q^4=1-5q+10q^2-10q^3+4q^4
   \]
   from \eqref{eq:C5-IE} and using \Cref{lem:path-to-4} gives
-  \begin{equation}\label{eq:Phi5}
-    \begin{aligned}
-      \Phi_5={}&4\norm{Tg}^2+(8q-5)\ip g{Tg}
-      +(12q^2-15q+5)\norm g^2\\
-      ={}&4\left\|Tg+\frac{8q-5}{8}g\right\|^2
-      +\left(8q^2-10q+\frac{55}{16}\right)\norm g^2.
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    \Phi_5={}&4\norm{Tg}^2+(8q-5)\ip g{Tg}
+    +(12q^2-15q+5)\norm g^2 \notag\\
+    ={}&4\left\|Tg+\frac{8q-5}{8}g\right\|^2
+    +\left(8q^2-10q+\frac{55}{16}\right)\norm g^2. \label{eq:Phi5}
+  \end{align}
   The quadratic coefficient $8q^2-10q+\frac{55}{16}$ has discriminant
   \[
     100-4\cdot8\cdot\frac{55}{16}=-10<0
@@ -979,28 +963,24 @@ We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
   \]
   Replacing $-c_7$ by $-x_6$ in the preceding identity and collecting the
   coefficients of the same path densities gives
-  \begin{equation}\label{eq:C7-IE}
-    \begin{aligned}
-      t(C_7,W)\ge{}&6x_6-7x_5+7(1-q)x_4+7(2q-1)x_3\\
-      &+7(q^2-3q+1)x_2+7x_2^2-7x_2x_3\\
-      &+1-7q+14q^2-7q^3.
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    t(C_7,W)\ge{}&6x_6-7x_5+7(1-q)x_4+7(2q-1)x_3 \notag\\
+    &+7(q^2-3q+1)x_2+7x_2^2-7x_2x_3 \notag\\
+    &+1-7q+14q^2-7q^3. \label{eq:C7-IE}
+  \end{align}
   Since
   \[
     (1-q)^7-(1-q)q^6
     =1-7q+21q^2-35q^3+35q^4-21q^5+6q^6,
   \]
   substitution of \eqref{eq:path-2-6} reduces the desired inequality to the nonnegativity of the polynomial
-  \begin{equation}\label{eq:Phi7-expanded}
-    \begin{aligned}
-      \Phi_7={}&6s_4+(12q-7)s_3+(18q^2-21q+7)s_2\\
-      &+(24q^3-42q^2+28q-7)s_1\\
-      &+(30q^4-70q^3+70q^2-35q+7)s_0\\
-      &+12s_0s_2+(36q-21)s_0s_1
-      +(36q^2-42q+14)s_0^2+6s_0^3+6s_1^2.
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    \Phi_7={}&6s_4+(12q-7)s_3+(18q^2-21q+7)s_2 \notag\\
+    &+(24q^3-42q^2+28q-7)s_1 \notag\\
+    &+(30q^4-70q^3+70q^2-35q+7)s_0 \notag\\
+    &+12s_0s_2+(36q-21)s_0s_1
+    +(36q^2-42q+14)s_0^2+6s_0^3+6s_1^2. \label{eq:Phi7-expanded}
+  \end{align}
   Write $r$ for the total mass $s_0=\mu(\R)$.  Keeping one factor $r$ in each
   product and expressing every remaining $s_j$ by \eqref{eq:sj-moment} as an
   integral against $\mu$, the polynomial \eqref{eq:Phi7-expanded} becomes
@@ -1027,8 +1007,8 @@ We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
   \]
   because
   \[
-    144q^2-168q+48=144\left(q-\frac12\right)
-    \left(q-\frac23\right)\ge0
+    144q^2-168q+48=144\left(q-\frac{1}{2}\right)
+    \left(q-\frac{2}{3}\right)\ge0
   \]
   on $[0,1/2]$.
 
@@ -1040,26 +1020,22 @@ We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
     &\qquad+13874q^2-4165q+539.
   \end{align*}
   Direct expansion gives the exact identity
-  \begin{equation}\label{eq:Pq-SOS}
-    \begin{aligned}
-      P_q(\lambda)
-      ={}&6\left(\lambda^2+\left(q-\frac7{12}\right)\lambda\right)^2\\
-      &+\frac{D(q)}{24}
-      \left(\lambda+\frac{12C(q)}{D(q)}\right)^2
-      +\frac{N(q)}{D(q)}.
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    P_q(\lambda)
+    ={}&6\left(\lambda^2+\left(q-\frac{7}{12}\right)\lambda\right)^2 \notag\\
+    &+\frac{D(q)}{24}
+    \left(\lambda+\frac{12C(q)}{D(q)}\right)^2
+    +\frac{N(q)}{D(q)}. \label{eq:Pq-SOS}
+  \end{align}
   Writing $y=1/2-q\ge0$,
   \[
     D(q)=288y^2+48y+23>0
   \]
   and
-  \[
-    \begin{aligned}
-      8N(q)={}&41472y^6+20736y^5+21456y^4+7984y^3\\
-      &+2032y^2+316y+11>0.
-    \end{aligned}
-  \]
+  \begin{align*}
+    8N(q)={}&41472y^6+20736y^5+21456y^4+7984y^3\\
+    &+2032y^2+316y+11>0.
+  \end{align*}
   Thus $P_q(\lambda)\ge0$ for every real $\lambda$.  Since
   $r\ge0$, $R_{q,r}(\lambda)\ge0$, and \eqref{eq:Phi7-integral} yields
   $\Phi_7\ge0$.
@@ -1082,8 +1058,8 @@ certificates, see Powers--Reznick~\cite{PowersReznick2000}.
   $f(x)f(y)$ may be negative.  For example, let $U$ be the balanced
   complete bipartite graphon, equal to $1$ between the two halves of
   $[0,1]$ and to $0$ within each half.  If $f$ equals $1$ on the first
-  half and $-1$ on the second, then $T_Uf=-\tfrac12f$, and hence
-  $\ip f{T_Uf}=-\tfrac12\norm f^2<0$.
+  half and $-1$ on the second, then $T_Uf=-\tfrac{1}{2}f$, and hence
+  $\ip f{T_Uf}=-\tfrac{1}{2}\norm f^2<0$.
 
   What the proofs use instead is self-adjointness, which follows from the
   symmetry of $U$.  The spectral theorem then associates with $g$ a
@@ -1134,15 +1110,13 @@ $T_K|_{\mathcal E}$ has entries
 \]
 Here $|B_a|$ denotes the measure of $B_a$.
 Multiplying this matrix around a cycle shows, for every $r\ge2$, that
-\begin{equation}\label{eq:finite-trace-cycle}
-  \begin{aligned}
-    \Tr(T_K^r)
-    &=\sum_{a_1,\ldots,a_r=1}^N
-    |B_{a_1}|\cdots|B_{a_r}|
-    K_{a_1a_2}\cdots K_{a_ra_1}\\
-    &=t(C_r,K).
-  \end{aligned}
-\end{equation}
+\begin{align}
+  \Tr(T_K^r)
+  &=\sum_{a_1,\ldots,a_r=1}^N
+  |B_{a_1}|\cdots|B_{a_r}|
+  K_{a_1a_2}\cdots K_{a_ra_1} \notag\\
+  &=t(C_r,K). \label{eq:finite-trace-cycle}
+\end{align}
 
 We now split $\mathcal E$ into the constant direction and its orthogonal
 complement, and decompose $T_U$ accordingly.  The constant function $\one$
@@ -1201,7 +1175,7 @@ $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
 \begin{lemma}[Operator norm bound]\label{lem:half-norm}
   The spectrum of $A$ lies in $[-1/2,1/2]$; equivalently,
   \begin{equation}\label{eq:A-half}
-    \norm A_{\mathrm{op}}\le\frac12.
+    \norm A_{\mathrm{op}}\le\frac{1}{2}.
   \end{equation}
 \end{lemma}
 
@@ -1214,13 +1188,11 @@ $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
     \qquad 2a=\lVert f\rVert_1\le\lVert f\rVert_2=1.
   \]
   We also have
-  \[
-    \begin{aligned}
-      \ip f{T_Uf}
-      ={}&\ip {f_+}{T_Uf_+}+\ip {f_-}{T_Uf_-}
-      -2\ip {f_+}{T_Uf_-}.
-    \end{aligned}
-  \]
+  \begin{align*}
+    \ip f{T_Uf}
+    ={}&\ip {f_+}{T_Uf_+}+\ip {f_-}{T_Uf_-}
+    -2\ip {f_+}{T_Uf_-}.
+  \end{align*}
   Each of the three inner products on the right is nonnegative.  Moreover,
   \begin{align*}
     \ip {f_+}{T_Uf_+} &= \int_{[0,1]^2}U(x,y)f_+(x)f_+(y)\dd x\dd y \le \int_{[0,1]^2}f_+(x)f_+(y)\dd x\dd y = \left(\int f_+\right)^2,
@@ -1235,14 +1207,14 @@ $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
   \[
     \ip f{T_Uf}
     \le\left(\int f_+\right)^2+\left(\int f_-\right)^2
-    =2a^2\le\frac12.
+    =2a^2\le\frac{1}{2}.
   \]
   For the lower bound, we instead discard the two nonnegative diagonal terms
   and bound the cross term, obtaining
   \[
     \ip f{T_Uf}
     \ge-2\left(\int f_+\right)\left(\int f_-\right)
-    =-2a^2\ge-\frac12.
+    =-2a^2\ge-\frac{1}{2}.
   \]
   The upper and lower bounds just proved concern the quadratic form of $T_U$
   on $\mathcal E_0$, and this is also the quadratic form of $A$: since
@@ -1250,10 +1222,10 @@ $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
   \[
     \ip f{Af}=\ip f{P_{\mathcal E_0}T_UP_{\mathcal E_0}f}=\ip f{T_Uf},
   \]
-  so $\bigl|\ip f{Af}\bigr|\le\tfrac12$ for every unit $f\in\mathcal E_0$.
+  so $\bigl|\ip f{Af}\bigr|\le\tfrac{1}{2}$ for every unit $f\in\mathcal E_0$.
   As $A$ is self-adjoint, its operator norm is the supremum of
   $\bigl|\ip f{Af}\bigr|$ over such $f$, whence
-  $\norm A_{\mathrm{op}}\le\tfrac12$.
+  $\norm A_{\mathrm{op}}\le\tfrac{1}{2}$.
 \end{proof}
 
 In the remaining section, $A$ and $g$ will appear through the quantities of the form $\ip g{F(A)g}$, which can be expressed as an integral against a measure supported on the spectrum of $A$.
@@ -1381,21 +1353,17 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
   invertible over $\R[[z]]$ by \Cref{lem:analytic-reading}\,(1).  Applying
   \eqref{eq:block-determinant-identity} with $D=I-zA$ and $v=-zg$, and then
   with $D=I+zA$ and $v=zg$, factorizes the determinants into three parts,
-  \[
-    \begin{aligned}
-      \det(I-zT_U)&=\det(I-zA)\bigl(1-qz-z^2R_+(z)\bigr) =\det(I-zA)\,(1-qz)
-      \left(1-\frac{z^2R_+(z)}{1-qz}\right),\\
-      \det(I-zT_W)&=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)=\det(I+zA)\,(1-pz)
-      \left(1-\frac{z^2R_-(z)}{1-pz}\right).
-    \end{aligned}
-  \]
+  \begin{align*}
+    \det(I-zT_U)&=\det(I-zA)\bigl(1-qz-z^2R_+(z)\bigr) =\det(I-zA)\,(1-qz)
+    \left(1-\frac{z^2R_+(z)}{1-qz}\right),\\
+    \det(I-zT_W)&=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)=\det(I+zA)\,(1-pz)
+    \left(1-\frac{z^2R_-(z)}{1-pz}\right).
+  \end{align*}
   Taking $-\log$ turns each product into a sum of three series,
-  \[
-    \begin{aligned}
-      -\log\det(I-zT_U)&=-\log\det(I-zA)-\log(1-qz)+L_+(z),\\
-      -\log\det(I-zT_W)&=-\log\det(I+zA)-\log(1-pz)+L_-(z),
-    \end{aligned}
-  \]
+  \begin{align*}
+    -\log\det(I-zT_U)&=-\log\det(I-zA)-\log(1-qz)+L_+(z),\\
+    -\log\det(I-zT_W)&=-\log\det(I+zA)-\log(1-pz)+L_-(z),
+  \end{align*}
   and we extract the coefficient of $z^m$ from each summand.  On the left,
   \eqref{eq:logdet-cycle} gives
   \[
@@ -1476,7 +1444,7 @@ becomes
 \]
 Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
 \begin{equation}\label{eq:dense-path-gf}
-  \sum_{j\ge0}x_jz^j=\frac1{1-qz-z^2R_+(z)}.
+  \sum_{j\ge0}x_jz^j=\frac{1}{1-qz-z^2R_+(z)}.
 \end{equation}
 
 \subsection{Expansion in complete homogeneous polynomials}
@@ -1494,7 +1462,7 @@ polynomial} of degree $d$ is
 \]
 the sum of all monomials of degree $d$ in $y_1,\ldots,y_k$.  Equivalently,
 \begin{equation}\label{eq:dense-h-gf}
-  \prod_{i=1}^k\frac1{1-y_i z}
+  \prod_{i=1}^k\frac{1}{1-y_i z}
   =\sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d.
 \end{equation}
 The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
@@ -1510,7 +1478,7 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
   where $n=m-2r$ and
   \begin{align}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-    ={}&\frac mr\Bigl[
+    ={}&\frac {m}{r}\Bigl[
     h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
     +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)
     \Bigr]\notag\\
@@ -1532,12 +1500,12 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
     \\
     {} &= m[z^m]\sum_{r\ge1}\frac{Y_-(z)^r}{r}
     \\
-    {} &=\sum_{r\ge1}\frac mr [z^{m-2r}]\frac{R_-(z)^r}{(1-pz)^r}.
+    {} &=\sum_{r\ge1}\frac {m}{r} [z^{m-2r}]\frac{R_-(z)^r}{(1-pz)^r}.
   \end{align*}
   The spectral representation of $R_-(z) = \int \frac{d \mu(\lambda)}{1 + \lambda z}$ gives
   \begin{align*}
     R_-(z)^r &=\int\!\cdots\!\int
-    \prod_{i=1}^r\frac1{1+\lambda_i z}
+    \prod_{i=1}^r\frac{1}{1+\lambda_i z}
     \prod_{i=1}^r\dd\mu(\lambda_i),
     \\
     \frac{R_-(z)^r}{(1-pz)^r} &= \int\!\cdots\!\int \frac{1}{(1-pz)^r} \prod_{i=1}^r \frac{1}{1+\lambda_i z} \prod_{i=1}^r \dd\mu(\lambda_i).
@@ -1566,8 +1534,8 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
   $R_+(z)=\int\frac{\dd\mu(\lambda)}{1-\lambda z}$ gives, as above,
   \[
     \frac{R_+(z)^r}{(1-qz)^{r+1}}
-    =\int\!\cdots\!\int\frac1{(1-qz)^{r+1}}
-    \prod_{i=1}^r\frac1{1-\lambda_iz}
+    =\int\!\cdots\!\int\frac{1}{(1-qz)^{r+1}}
+    \prod_{i=1}^r\frac{1}{1-\lambda_iz}
     \prod_{i=1}^r\dd\mu(\lambda_i),
   \]
   and \eqref{eq:dense-h-gf}, applied now to the $r+1$ copies of $q$ together
@@ -1637,18 +1605,16 @@ Define the diagonal polynomial
     \qquad \alpha_1+\cdots+\alpha_r=j,
   \]
   we obtain
-  \[
-    \begin{aligned}
-      \E\,S^j
-      &=\sum_{\alpha_1+\cdots+\alpha_r=j}
-      \frac{j!}{\alpha_1!\cdots\alpha_r!}
-      \cdot\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!}
-      \prod_{i=1}^r\lambda_i^{\alpha_i}\\
-      &=\frac{j!\,(r-1)!}{(j+r-1)!}
-      \sum_{\alpha_1+\cdots+\alpha_r=j}\prod_{i=1}^r\lambda_i^{\alpha_i}
-      =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
-    \end{aligned}
-  \]
+  \begin{align*}
+    \E\,S^j
+    &=\sum_{\alpha_1+\cdots+\alpha_r=j}
+    \frac{j!}{\alpha_1!\cdots\alpha_r!}
+    \cdot\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!}
+    \prod_{i=1}^r\lambda_i^{\alpha_i}\\
+    &=\frac{j!\,(r-1)!}{(j+r-1)!}
+    \sum_{\alpha_1+\cdots+\alpha_r=j}\prod_{i=1}^r\lambda_i^{\alpha_i}
+    =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
+  \end{align*}
 
   Second, setting all variables equal in the definition of $h_j$ gives the
   diagonal value
@@ -1665,7 +1631,7 @@ Define the diagonal polynomial
   remaining ones give separate factors, so
   \[
     \sum_{d\ge0}h_d(a^{\times k},b_1,\ldots,b_r)z^d
-    =\frac1{(1-az)^k}\prod_{i=1}^r\frac1{1-b_iz}
+    =\frac{1}{(1-az)^k}\prod_{i=1}^r\frac{1}{1-b_iz}
     =\Bigl(\sum_{s\ge0}\binom{s+k-1}{k-1}a^sz^s\Bigr)
     \Bigl(\sum_{j\ge0}h_j(b_1,\ldots,b_r)z^j\Bigr),
   \]
@@ -1680,16 +1646,14 @@ Define the diagonal polynomial
   $k=r+1$ and $a=q$.  Since $h_j$ is homogeneous of degree $j$, we have
   $h_j(-\lambda_1,\ldots,-\lambda_r)=(-1)^jh_j(\lambda_1,\ldots,\lambda_r)$,
   and therefore
-  \begin{equation}\label{eq:dense-P-in-h}
-    \begin{aligned}
-      P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-      ={}&\frac mr\sum_{j=0}^{n}\binom{n-j+r-1}{r-1}
-      \bigl((-1)^jp^{n-j}+q^{n-j}\bigr)
-      h_j(\lambda_1,\ldots,\lambda_r)\\
-      &-\sum_{j=0}^{n-1}\binom{n-1-j+r}{r}q^{n-1-j}
-      h_j(\lambda_1,\ldots,\lambda_r).
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac {m}{r}\sum_{j=0}^{n}\binom{n-j+r-1}{r-1}
+    \bigl((-1)^jp^{n-j}+q^{n-j}\bigr)
+    h_j(\lambda_1,\ldots,\lambda_r) \notag\\
+    &-\sum_{j=0}^{n-1}\binom{n-1-j+r}{r}q^{n-1-j}
+    h_j(\lambda_1,\ldots,\lambda_r). \label{eq:dense-P-in-h}
+  \end{align}
 
   Write the expansion \eqref{eq:dense-P-in-h} as
   \[
@@ -1726,9 +1690,9 @@ Thus \eqref{eq:dense-expansion} will be nonnegative once we prove
 \end{equation}
 for
 \[
-  0\le q\le\frac13,
+  0\le q\le\frac{1}{3},
   \quad 1\le r\le\frac{m-1}{2},
-  \quad -\frac12\le\ell\le\frac12.
+  \quad -\frac{1}{2}\le\ell\le\frac{1}{2}.
 \]
 This is the first major simplification: an $r$-variable symmetric
 polynomial is replaced by one scalar variable polynomial.
@@ -1751,19 +1715,19 @@ set
 Thus $V_x+W_x=x$.  Define
 \begin{equation}\label{eq:dense-rho}
   \rho_{n,m}(u)
-  =\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+  =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
 \end{equation}
 
 \begin{lemma}[Beta formula]\label{lem:dense-beta}
   One has
   \begin{align}
     \widetilde P_{m,r}(q,\ell)
-    ={}&\binom{n+2r-1}{2r-1}\frac nr
+    ={}&\binom{n+2r-1}{2r-1}\frac {n}{r}
     \left[
-    \frac mn\E\bigl(V_X^n+W_X^n\bigr)
+    \frac {m}{n}\E\bigl(V_X^n+W_X^n\bigr)
     -\E\bigl(X V_X^{n-1}\bigr)
     \right]\label{eq:dense-beta-first}\\
-    ={}&\binom{n+2r-1}{2r-1}\frac nr
+    ={}&\binom{n+2r-1}{2r-1}\frac {n}{r}
     \E\left[
     X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)
     \right].\label{eq:dense-beta-second}
@@ -1833,7 +1797,7 @@ Thus $V_x+W_x=x$.  Define
   =nX\bigl(aX+b(1-X)\bigr)^{n-1}$.  Hence
   \begin{equation}\label{eq:dense-beta-h-deriv}
     h_{n-1}(a^{\times(r+1)},b^{\times r})
-    =\binom{n+2r-1}{2r-1}\frac nr
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \E\left[X\bigl(aX+b(1-X)\bigr)^{n-1}\right].
   \end{equation}
 
@@ -1850,14 +1814,14 @@ Thus $V_x+W_x=x$.  Define
   while \eqref{eq:dense-beta-h-deriv} with $(a,b)=(q,\ell)$ gives
   \[
     h_{n-1}(q^{\times(r+1)},\ell^{\times r})
-    =\binom{n+2r-1}{2r-1}\frac nr\E\bigl[XV_X^{n-1}\bigr].
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}\E\bigl[XV_X^{n-1}\bigr].
   \]
   Substituting these into
   $\widetilde P_{m,r}(q,\ell)
-  =\frac mr\bigl[h_n(p^{\times r},(-\ell)^{\times r})
+  =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
   +h_n(q^{\times r},\ell^{\times r})\bigr]
   -h_{n-1}(q^{\times(r+1)},\ell^{\times r})$
-  and using $\frac mr=\frac nr\cdot\frac mn$ proves
+  and using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$ proves
   \eqref{eq:dense-beta-first}.
 
   For \eqref{eq:dense-beta-second}, put
@@ -1868,8 +1832,8 @@ Thus $V_x+W_x=x$.  Define
   $V_x^n+W_x^n=x^n\bigl(u^n+(1-u)^n\bigr)$ and $xV_x^{n-1}=x^nu^{n-1}$,
   whence
   \[
-    \frac mn\bigl(V_x^n+W_x^n\bigr)-xV_x^{n-1}
-    =x^n\left[\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}\right]
+    \frac {m}{n}\bigl(V_x^n+W_x^n\bigr)-xV_x^{n-1}
+    =x^n\left[\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}\right]
     =x^n\rho_{n,m}(u).
   \]
   Taking $x=X$ and expectations gives \eqref{eq:dense-beta-second}.
@@ -1884,8 +1848,8 @@ Thus $V_x+W_x=x$.  Define
   and make the projective substitution
   \[
     s=\ell\frac{1-x}{x},
-    \qquad x=\frac\ell{\ell+s},
-    \qquad 1-x=\frac s{\ell+s},
+    \qquad x=\frac{\ell}{\ell+s},
+    \qquad 1-x=\frac {s}{\ell+s},
     \qquad \dd x=-\frac{\ell}{(\ell+s)^2}\dd s,
   \]
   which maps $x\in(0,1]$ onto $s\in[0,\infty)$ and turns the argument of
@@ -1898,7 +1862,7 @@ Thus $V_x+W_x=x$.  Define
   the sign being absorbed by the reversal of the limits of integration.
   Together with
   \[
-    \binom{m-1}{2r-1}\frac nr
+    \binom{m-1}{2r-1}\frac {n}{r}
     \frac{\Gamma(2r)}{\Gamma(r)^2}
     =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2},
   \]
@@ -1916,16 +1880,16 @@ Thus $V_x+W_x=x$.  Define
   The identity
   \begin{align}
     \rho_{n,m}(u)
-    ={}&\frac mn(1-u)
+    ={}&\frac {m}{n}(1-u)
     \bigl((1-u)^{n-1}-u^{n-1}\bigr)
-    +\left(\frac mn-1\right)u^{n-1}
+    +\left(\frac {m}{n}-1\right)u^{n-1}
     \label{eq:dense-rho-pointwise}
   \end{align}
   shows that $\rho_{n,m}(u)\ge0$ whenever $u\le1/2$: the exponent
   $n-1$ is even and $|1-u|\ge|u|$.  If $\ell\le0$, then for
   $x>0$,
   \[
-    q+\ell\frac{1-x}{x}\le q\le\frac12.
+    q+\ell\frac{1-x}{x}\le q\le\frac{1}{2}.
   \]
   The integrand in \eqref{eq:dense-beta-second} is therefore nonnegative.
 \end{proof}
@@ -1938,7 +1902,7 @@ object.
 
 Let $Y\sim\GammaLaw(r,1)$, with density
 \[
-  \frac1{\Gamma(r)}y^{r-1}e^{-y}\mathbf1_{(0,\infty)}(y).
+  \frac{1}{\Gamma(r)}y^{r-1}e^{-y}\mathbf1_{(0,\infty)}(y).
 \]
 
 \begin{lemma}[Gamma smoothing]\label{lem:dense-gamma-smoothing}
@@ -1948,15 +1912,15 @@ Let $Y\sim\GammaLaw(r,1)$, with density
     =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
     \int_0^\infty
     t^{n+r-1}e^{-\ell t}
-    \E\rho_{n,m}\left(q+\frac Yt\right)\dd t.
+    \E\rho_{n,m}\left(q+\frac {Y}{t}\right)\dd t.
   \end{equation}
 \end{lemma}
 
 \begin{proof}
   Insert the Laplace representation
   \[
-    \frac1{(\ell+s)^m}
-    =\frac1{\Gamma(m)}\int_0^\infty
+    \frac{1}{(\ell+s)^m}
+    =\frac{1}{\Gamma(m)}\int_0^\infty
     t^{m-1}e^{-t(\ell+s)}\dd t
   \]
   into \eqref{eq:dense-beta-integral}.  The exchange of integrals is justified
@@ -1965,7 +1929,7 @@ Let $Y\sim\GammaLaw(r,1)$, with density
   \[
     \int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s
     =\Gamma(r)t^{-r}
-    \E\rho_{n,m}\left(q+\frac Yt\right).
+    \E\rho_{n,m}\left(q+\frac {Y}{t}\right).
   \]
   Substitution gives \eqref{eq:dense-gamma-smoothing}.
 \end{proof}
@@ -2007,14 +1971,14 @@ finishes the dense region.
   \end{equation}
   Because $n$ is odd,
   \begin{equation}\label{eq:dense-even-expansion}
-    A_n\left(\frac12+v\right)
+    A_n\left(\frac{1}{2}+v\right)
     =\sum_{j=0}^{(n-1)/2}a_jv^{2j},
     \qquad
     a_j=2^{2j+1-n}\binom n{2j}>0.
   \end{equation}
   Substituting into \eqref{eq:dense-rho-derivative} yields
   \begin{equation}\label{eq:dense-rho-centered}
-    n\rho_{n,m}\left(\frac12+v\right)
+    n\rho_{n,m}\left(\frac{1}{2}+v\right)
     =2ra_0+
     \sum_{j=1}^{(n-1)/2}
     a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).
@@ -2022,11 +1986,11 @@ finishes the dense region.
 
   Put
   \[
-    \delta=\frac12-q\ge\frac16.
+    \delta=\frac{1}{2}-q\ge\frac{1}{6}.
   \]
   For fixed $x\ge0$, write $z=x/\delta$.  Then
   \[
-    q+xY-\frac12=\delta(zY-1).
+    q+xY-\frac{1}{2}=\delta(zY-1).
   \]
   By \Cref{lem:gamma-moment}, for each $j\ge1$,
   \begin{align*}
@@ -2036,7 +2000,7 @@ finishes the dense region.
     \right]\\
     &\quad\ge
     \delta^{2j-1}(r+j)
-    \left(2\delta-\frac13\right)
+    \left(2\delta-\frac{1}{3}\right)
     \E(zY-1)^{2j}\ge0.
   \end{align*}
   Every coefficient $a_j$ is positive, and the constant term in
@@ -2047,7 +2011,7 @@ finishes the dense region.
 \begin{remark}[The threshold is retained exactly]\label{rem:dense-threshold}
   The density assumption enters only through
   \[
-    2\delta-\frac13=2\left(\frac13-q\right).
+    2\delta-\frac{1}{3}=2\left(\frac{1}{3}-q\right).
   \]
   Thus gamma smoothing reaches precisely $q=1/3$; it does not merely yield a
   weaker artificial threshold.
@@ -2106,7 +2070,7 @@ finishes the dense region.
 
   For the rest of the proof put $b=b_*$, and define
   \begin{equation}\label{eq:gamma-cd}
-    d=\frac{2(r+j)}3,
+    d=\frac{2(r+j)}{3},
     \qquad
     c=\frac{3jb}{r+j}.
   \end{equation}
@@ -2149,7 +2113,7 @@ finishes the dense region.
   $c$.  Their ratio is
   \begin{equation}\label{eq:gamma-max-ratio}
     \frac{G(c)}{G(-d)}
-    =\left(\frac cd\right)^{2j}
+    =\left(\frac {c}{d}\right)^{2j}
     \left(\frac{b+c}{b-d}\right)^r e^{-(c+d)}.
   \end{equation}
   Put $t=j/r>0$.  The logarithm of \eqref{eq:gamma-max-ratio}, divided by
@@ -2196,12 +2160,12 @@ finishes the dense region.
   \]
   At $t=3/2$, concavity of $\log$, together with $\log2<7/10$, gives
   \[
-    L'\left(\frac32\right)
+    L'\left(\frac{3}{2}\right)
     <\frac{111}{70}-\frac{19847}{12495}<0.
   \]
   Thus the only interior local maximum of $L$ lies in $(1,3/2)$, while
   \[
-    \lim_{t\downarrow0}L(t)=\log\frac53-\frac23<0.
+    \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0.
   \]
   It remains to control $L$ on $[1,3/2]$.  Put
   \[
@@ -2252,13 +2216,11 @@ finishes the dense region.
   $r,\ell$.  Therefore every integrand in \eqref{eq:dense-expansion} is
   nonnegative, so $\Phi_m\ge0$.  Finally,
   \eqref{eq:dense-defect}, \eqref{eq:dense-cycle-path}, and \eqref{eq:dense-Phi} give
-  \[
-    \begin{aligned}
-      t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
-      &=q^{m-1}+S_m-t(C_m,U)\\
-      &\ge q^{m-1}+S_m-x_{m-1}=\Phi_m\ge0.
-    \end{aligned}
-  \]
+  \begin{align*}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    &=q^{m-1}+S_m-t(C_m,U)\\
+    &\ge q^{m-1}+S_m-x_{m-1}=\Phi_m\ge0.
+  \end{align*}
   The finite-rank reduction returns the conclusion to arbitrary graphons.
 \end{proof}
 
@@ -2267,8 +2229,8 @@ finishes the dense region.
 
 From now on,
 \begin{equation}\label{eq:regionII}
-  \frac13<q<\frac12,
-  \qquad \frac12<p<\frac23,
+  \frac{1}{3}<q<\frac{1}{2},
+  \qquad \frac{1}{2}<p<\frac{2}{3},
 \end{equation}
 and $m\ge9$ is odd.  We continue with the common block decomposition
 \eqref{eq:block-U}, the Hilbert--Schmidt bound \eqref{eq:HS-budget}, and the spectral
@@ -2405,7 +2367,7 @@ precisely because $q>1/3$.  Define
 The bound \eqref{eq:HS-budget} implies that every other eigenvalue has absolute value at
 most $L$.  Moreover,
 \begin{equation}\label{eq:L-order}
-  0\le L<q<\alpha<\frac12<p.
+  0\le L<q<\alpha<\frac{1}{2}<p.
 \end{equation}
 The strict inequality $L>0$ will follow from the forced-variance lemma
 below; no argument before that lemma requires it.
@@ -2440,14 +2402,12 @@ The next inequality restricts the admissible pair $(q,\alpha)$.
 \begin{proof}
   Put $a_\phi=\int|\phi|$.  Since $\int\phi=0$,
   $\int\phi_+=\int\phi_-=a_\phi/2$.  As $0\le U\le1$,
-  \[
-    \begin{aligned}
-      \alpha=\ip\phi{T_U\phi}
-      &\le\iint U(x,y)
-      \bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
-      &\le\frac{a_\phi^2}{2}.
-    \end{aligned}
-  \]
+  \begin{align*}
+    \alpha=\ip\phi{T_U\phi}
+    &\le\iint U(x,y)
+    \bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
+    &\le\frac{a_\phi^2}{2}.
+  \end{align*}
   Thus $a_\phi^2\ge2\alpha$.
 
   Write $|\phi|=a_\phi\one+h$, where $h\perp\one$ and
@@ -2456,14 +2416,12 @@ The next inequality restricts the admissible pair $(q,\alpha)$.
     \ip{|\phi|}{T_U|\phi|}\ge\ip\phi{T_U\phi}=\alpha.
   \]
   Since $\alpha$ is the largest eigenvalue of $A$,
-  \[
-    \begin{aligned}
-      \alpha
-      &\le qa_\phi^2+2a_\phi\ip g h+\ip h{Ah}\\
-      &\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
-      +\alpha(1-a_\phi^2).
-    \end{aligned}
-  \]
+  \begin{align*}
+    \alpha
+    &\le qa_\phi^2+2a_\phi\ip g h+\ip h{Ah}\\
+    &\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
+    +\alpha(1-a_\phi^2).
+  \end{align*}
   Therefore
   \[
     (\alpha-q)a_\phi
@@ -2509,10 +2467,8 @@ $k_m$,
 \begin{proposition}[Master defect]\label{prop:master-defect}
   One has
   \begin{equation}\label{eq:master-defect}
-    \begin{aligned}
-      t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
-      \ge -R_m+A_m\gamma^2+B_m\norm{g_s}^2.
-    \end{aligned}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    \ge -R_m+A_m\gamma^2+B_m\norm{g_s}^2.
   \end{equation}
 \end{proposition}
 
@@ -2593,7 +2549,7 @@ Then
   \[
     \frac{\gamma\sqrt z}{2}
     +\frac{\alpha(1+b)}{2}
-    \le\frac z4.
+    \le\frac {z}{4}.
   \]
   This is \eqref{eq:direct-channel}.
 \end{proof}
@@ -2623,15 +2579,13 @@ Then
   Expanding $|\phi|=\sqrt z\,\one+b\phi+k$, using
   $k\perp\one,\phi$, and using that every safe eigenvalue is at most $L$,
   we obtain
-  \[
-    \begin{aligned}
-      \alpha
-      &\le qz+2\sqrt z\bigl(b\gamma+\ip{g_s}{k}\bigr)
-      +\alpha b^2+\ip k{Ak}\\
-      &\le qz+2\sqrt z\bigl(b\gamma+\ip{g_s}{k}\bigr)
-      +\alpha b^2+LK.
-    \end{aligned}
-  \]
+  \begin{align*}
+    \alpha
+    &\le qz+2\sqrt z\bigl(b\gamma+\ip{g_s}{k}\bigr)
+    +\alpha b^2+\ip k{Ak}\\
+    &\le qz+2\sqrt z\bigl(b\gamma+\ip{g_s}{k}\bigr)
+    +\alpha b^2+LK.
+  \end{align*}
   Since $z+b^2+K=1$, this rearranges to
   \eqref{eq:safe-channel}.  If $\cH-b\gamma>0$, Cauchy--Schwarz gives
   $\norm{g_s}\sqrt K\ge\cH-b\gamma$; otherwise
@@ -2732,7 +2686,7 @@ and define
   \end{equation}
   Also, since $z\ge2\alpha$ and $z\le1$,
   \begin{equation}\label{eq:H-lower}
-    \cH\ge\frac{d\sqrt{2\alpha}}2+\frac{fK}{2}.
+    \cH\ge\frac{d\sqrt{2\alpha}}{2}+\frac{fK}{2}.
   \end{equation}
   For every real $w$,
   \begin{equation}\label{eq:K-AMGM}
@@ -2748,12 +2702,12 @@ and define
     \min_{0\le\gamma\le e/(2\sqrt{2\alpha})}
     \left\{
     A_m\gamma^2+2B_mf
-    \pos{\frac{d\sqrt{2\alpha}}2-\gamma\beta(\gamma)}
+    \pos{\frac{d\sqrt{2\alpha}}{2}-\gamma\beta(\gamma)}
     \right\}.
   \end{equation}
   Set
   \[
-    v=\frac{2\gamma\sqrt{2\alpha}}e\in[0,1].
+    v=\frac{2\gamma\sqrt{2\alpha}}{e}\in[0,1].
   \]
   By \eqref{eq:beta-rational},
   \[
@@ -2762,7 +2716,7 @@ and define
   \]
   Therefore
   \[
-    \frac{d\sqrt{2\alpha}}2-\gamma\beta(\gamma)
+    \frac{d\sqrt{2\alpha}}{2}-\gamma\beta(\gamma)
     \ge\frac{\sqrt{2\alpha}\,e^2}{8\alpha^2}
     (\xi-v+v^2).
   \]
@@ -2778,12 +2732,12 @@ and define
   Finally suppose $K=0$.  The safe channel becomes
   \[
     b\gamma\ge\frac{d\sqrt z}{2}
-    \ge\frac{d\sqrt{2\alpha}}2>0,
+    \ge\frac{d\sqrt{2\alpha}}{2}>0,
   \]
   so $b,\gamma>0$ and \eqref{eq:b-gamma-budget} still applies.  With the
   same variable $v$,
   \[
-    \frac{d\sqrt{2\alpha}}2
+    \frac{d\sqrt{2\alpha}}{2}
     \le b\gamma
     \le\frac{e^2v(1-v)}{4\alpha\sqrt{2\alpha}},
   \]
@@ -2860,12 +2814,12 @@ Two choices of $\lambda$ will be used throughout.
   In the second case, take $\lambda=1$.  Since
   $\rho>1/(2\xi)$,
   \[
-    \frac1{4(1+\rho)}<\frac{\xi}{2+4\xi}.
+    \frac{1}{4(1+\rho)}<\frac{\xi}{2+4\xi}.
   \]
   Therefore
   \[
     \psi(\xi,\rho)
-    \ge\xi-\frac1{4(1+\rho)}
+    \ge\xi-\frac{1}{4(1+\rho)}
     >\xi\frac{1+4\xi}{2+4\xi}.
   \]
   Finally,
@@ -2882,19 +2836,19 @@ Set
 \end{equation}
 Thus $N\ge7$ is odd.  Introduce
 \begin{equation}\label{eq:chart-basic}
-  a=\frac q\alpha,
+  a=\frac {q}{\alpha},
   \qquad
-  \ell=\frac L\alpha,
+  \ell=\frac {L}{\alpha},
   \qquad
   u=1-a,
   \qquad
   D=1+a^2+\ell^2,
   \qquad
-  \sigma=\frac p\alpha.
+  \sigma=\frac {p}{\alpha}.
 \end{equation}
 The relation $L^2=pq-\alpha^2$ is equivalent to
 \begin{equation}\label{eq:chart-inverse-1}
-  \alpha=\frac aD,
+  \alpha=\frac {a}{D},
   \qquad q=\frac{a^2}{D},
   \qquad \sigma=\frac{1+\ell^2}{a}.
 \end{equation}
@@ -2906,18 +2860,11 @@ Moreover,
 
 \begin{lemma}[Chart domain]\label{lem:chart-domain}
   The admissible parameters satisfy
-  \begin{equation}\label{eq:chart-domain}
-    \begin{gathered}
-      0<\ell<a<1,
-      \qquad
-      D<3a^2,
-      \qquad
-      \ell^2\ge a(1-a)=au,\\
-      a>\frac{1+\sqrt{13}}6>\frac34,
-      \qquad
-      1<\sigma<2.
-    \end{gathered}
-  \end{equation}
+  \begin{align*}
+      &0<\ell<a<1, \qquad D<3a^2, \qquad \ell^2\ge a(1-a)=au, \nonumber
+      \\
+      &a>\frac{1+\sqrt{13}}{6}>\frac{3}{4}, \qquad 1<\sigma<2. \label{eq:chart-domain}
+  \end{align*}
 \end{lemma}
 
 \begin{proof}
@@ -2942,7 +2889,7 @@ Now put
 \end{equation}
 Solving these relations gives
 \begin{equation}\label{eq:zeta-v-inverse}
-  u=\frac v{H_\zeta},
+  u=\frac {v}{H_\zeta},
   \qquad
   a=\frac{\zeta+1}{H_\zeta},
   \qquad
@@ -2954,11 +2901,11 @@ The frontier ceiling $\ell^2\ge au$ becomes
 \end{equation}
 Equivalently,
 \begin{equation}\label{eq:zeta-simple-lower}
-  \zeta\ge\frac{\sqrt{v^2+4}-v}{2}\ge1-\frac v2.
+  \zeta\ge\frac{\sqrt{v^2+4}-v}{2}\ge1-\frac {v}{2}.
 \end{equation}
 In particular,
 \begin{equation}\label{eq:zeta-lower}
-  \zeta\ge a>\frac34,
+  \zeta\ge a>\frac{3}{4},
   \qquad 0<v<1.
 \end{equation}
 
@@ -3044,7 +2991,7 @@ Because $N+1$ is even,
   \end{align}
   If $T_N>0$, then also
   \begin{equation}\label{eq:T-tangent-bound}
-    \zeta T_N<\frac{3N(N+1)}2(1+v).
+    \zeta T_N<\frac{3N(N+1)}{2}(1+v).
   \end{equation}
 \end{lemma}
 
@@ -3055,14 +3002,12 @@ Because $N+1$ is even,
   \]
   Also $\ell^2=\zeta v/H_\zeta<v$, so
   $\ell^N<v^{N/2}$.  Since $\zeta u< v$,
-  \[
-    \begin{aligned}
-      T_N
-      &=N-\zeta(a^N-\ell^N)\\
-      &\le N-\zeta+N\zeta u+\zeta v^{N/2}\\
-      &\le N(1+v)-\zeta(1-v^{N/2}),
-    \end{aligned}
-  \]
+  \begin{align*}
+    T_N
+    &=N-\zeta(a^N-\ell^N)\\
+    &\le N-\zeta+N\zeta u+\zeta v^{N/2}\\
+    &\le N(1+v)-\zeta(1-v^{N/2}),
+  \end{align*}
   proving \eqref{eq:T-bound-one}.
 
   Next, $D<3a^2$ gives
@@ -3149,7 +3094,7 @@ By \eqref{eq:witness-quadratic}, discarding the factor
 $(1+4\xi)/(1+2\xi)>1$, and using \eqref{eq:KA-def},
 \begin{equation}\label{eq:quadratic-payment-start}
   \frac{C_m\psi(\xi,\rho)}{\alpha^m}
-  \ge2(N+2)\alpha\left(\frac de\right)^2K_A.
+  \ge2(N+2)\alpha\left(\frac {d}{e}\right)^2K_A.
 \end{equation}
 Since the summands in \eqref{eq:KA-sum} have geometric mean
 $\sigma^{(N-1)/2}$, AM--GM gives
@@ -3170,7 +3115,7 @@ $v=u(1+\zeta)/a$, the right side of
   One has
   \begin{equation}\label{eq:M-lower}
     \frac{a^2(1+\zeta)}{D(u+\zeta)^2}
-    >\frac1{3\zeta}.
+    >\frac{1}{3\zeta}.
   \end{equation}
 \end{lemma}
 
@@ -3229,7 +3174,7 @@ In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
 
   If $N\ge9$ and $v\le3/5$, then
   \[
-    E_N(v)\ge\frac43\left(1-\left(\frac35\right)^4\right)
+    E_N(v)\ge\frac{4}{3}\left(1-\left(\frac{3}{5}\right)^4\right)
     =\frac{2176}{1875}>1.
   \]
   If $N\ge9$ and $v\ge3/5$, then
@@ -3250,7 +3195,7 @@ In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
   $[0,9/10]$ occurs at an endpoint; at $v=9/10$ it equals
   $5149/10000>49/96$.  For $v\ge9/10$,
   \[
-    H_7(v)\ge\frac27\left(\frac{19}{10}\right)^2
+    H_7(v)\ge\frac{2}{7}\left(\frac{19}{10}\right)^2
     =\frac{361}{350}>1.
   \]
   Thus either \eqref{eq:E-N} or \eqref{eq:H-N} holds in every case, proving
@@ -3335,7 +3280,7 @@ $\sigma$ compensates for it.
   Indeed, the left side is larger than $\zeta v+16/3$.  If
   $\zeta\ge2$, this is immediate.  If $\zeta<2$, then
   \[
-    v(2-\zeta)<\frac54<\frac43
+    v(2-\zeta)<\frac{5}{4}<\frac{4}{3}
   \]
   because $v<1$ and $\zeta>3/4$, which again proves
   \eqref{eq:key-log-comp}.
@@ -3346,14 +3291,14 @@ $\sigma$ compensates for it.
   \]
   now gives
   \[
-    \frac\zeta4\log\sigma>
-    \frac1{1+4\xi}.
+    \frac{\zeta}{4}\log\sigma>
+    \frac{1}{1+4\xi}.
   \]
   Exponentiating and using $e^t>1+t$,
   \[
     \sigma^{\zeta/4}>
-    1+\frac1{1+4\xi}
-    =\frac{2+4\xi}{1+4\xi}=\frac1\varphi.
+    1+\frac{1}{1+4\xi}
+    =\frac{2+4\xi}{1+4\xi}=\frac{1}{\varphi}.
   \]
   Together with \eqref{eq:sqrt-compensation}, this proves
   \eqref{eq:compensation}.
@@ -3381,7 +3326,7 @@ We first dispose of the range $\zeta\ge N$ when $v$ is not large.
   Also $q<\alpha$ and $p=(1+v)\alpha$ imply
   $\alpha>1/(2+v)$, while $\varphi>1/2$.  Hence
   \begin{equation}\label{eq:cxi-crude}
-    c_\xi>\frac1{\sqrt{2(2+v)}}.
+    c_\xi>\frac{1}{\sqrt{2(2+v)}}.
   \end{equation}
   It is enough to show
   \begin{equation}\label{eq:h-sufficient}
@@ -3402,30 +3347,26 @@ We first dispose of the range $\zeta\ge N$ when $v$ is not large.
   \]
   For $0\le y\le1/2$,
   \[
-    S(y)\ge2-2y-8y^2+9y^3\ge\frac18.
+    S(y)\ge2-2y-8y^2+9y^3\ge\frac{1}{8}.
   \]
   Here the first inequality follows from
   $y^3(11y^2-20y+10)\ge0$, and the cubic on the right is decreasing on this
   interval.  For $1/2\le y\le4/5$, write $y=2/3+t$.  If $t\ge0$, then $0\le t\le2/15$, and
-  \[
-    \begin{aligned}
-      S(y)&=\frac{58}{243}-\frac{14}{81}t
-      +\frac{250}{27}t^2+\frac{131}{9}t^3
-      +\frac{50}{3}t^4+11t^5\\
-      &\ge \frac{58}{243}-\frac{14}{81}\frac{2}{15}
-      =\frac{262}{1215}>0.
-    \end{aligned}
-  \]
+  \begin{align*}
+    S(y)&=\frac{58}{243}-\frac{14}{81}t
+    +\frac{250}{27}t^2+\frac{131}{9}t^3
+    +\frac{50}{3}t^4+11t^5\\
+    &\ge \frac{58}{243}-\frac{14}{81}\frac{2}{15}
+    =\frac{262}{1215}>0.
+  \end{align*}
   If $t=-s\le0$, where $0\le s\le1/6$, then
-  \[
-    \begin{aligned}
-      S(y)={}&\frac{58}{243}+\frac{14}{81}s
-      +\frac{250}{27}s^2-\frac{131}{9}s^3
-      +\frac{50}{3}s^4-11s^5\\
-      \ge{}&\frac{58}{243}+\frac{14}{81}s
-      +\frac{1465}{216}s^2>0.
-    \end{aligned}
-  \]
+  \begin{align*}
+    S(y)={}&\frac{58}{243}+\frac{14}{81}s
+    +\frac{250}{27}s^2-\frac{131}{9}s^3
+    +\frac{50}{3}s^4-11s^5\\
+    \ge{}&\frac{58}{243}+\frac{14}{81}s
+    +\frac{1465}{216}s^2>0.
+  \end{align*}
   Thus $h'\le0$.
 
   Since $v\le5/8$, we have $y<4/5$, and therefore
@@ -3437,7 +3378,7 @@ We first dispose of the range $\zeta\ge N$ when $v$ is not large.
   \[
     \sqrt{2(2+y^2)}(1+y^{N-2})
     \le\sqrt{\frac{21}{4}}
-    \left(1+\left(\frac45\right)^5\right)
+    \left(1+\left(\frac{4}{5}\right)^5\right)
     <\frac{46}{15};
   \]
   after squaring, the final difference is
@@ -3468,7 +3409,7 @@ The next estimate handles all $\zeta$ once $v$ is large.
   $1+v-\sqrt v$ is increasing for $v>1/4$, and
   \[
     \frac{\dd}{\dd v}\log\frac{(1+v)^{N-1}}{\sqrt{2+v}}
-    =\frac{N-1}{1+v}-\frac1{2(2+v)}>0.
+    =\frac{N-1}{1+v}-\frac{1}{2(2+v)}>0.
   \]
   After division by $N(N+1)$, its ratio under $N\mapsto N+2$ is at least
   \[
@@ -3483,8 +3424,8 @@ The next estimate handles all $\zeta$ once $v$ is large.
   It remains to check $N=7$, $v=5/8$.  The estimates
   $\sqrt{10}<19/6$ and $\sqrt{21}<23/5$ give
   \[
-    \frac9{\sqrt{21/4}}
-    \left(\frac{13}{8}-\sqrt{\frac58}\right)
+    \frac{9}{\sqrt{21/4}}
+    \left(\frac{13}{8}-\sqrt{\frac{5}{8}}\right)
     \left(\frac{13}{8}\right)^6
     >\frac{75}{23}\left(\frac{13}{8}\right)^6
     >56,
@@ -3519,7 +3460,7 @@ lemma reduces this to one variable.
   \noindent\emph{Step 1: $0\le x\le2/5$.}
   Taking logarithms in \eqref{eq:J-ineq}, and using
   \begin{align*}
-    \log(1+2/N)&\ge\frac2N-\frac2{N^2},\\
+    \log(1+2/N)&\ge\frac{2}{N}-\frac{2}{N^2},\\
     \log(1+x^2)&\ge x^2-\frac{x^4}{2},\\
     -\log(1-x^2/N)&\ge\frac{x^2}{N},
   \end{align*}
@@ -3529,19 +3470,17 @@ lemma reduces this to one variable.
     \ge-2x-x^2-\frac{x^4}{1-x}-\frac{x^6}{2},
   \end{equation}
   we obtain
-  \begin{equation}\label{eq:L-N-def}
-    \begin{aligned}
-      \log J_N(x)\ge\mathcal L_N(x):={}&
-      \frac2N-\frac2{N^2}-2x\\
-      &+\left[A\left(1+\frac1N\right)-1\right]x^2
-      -\frac A2x^4-\frac{x^4}{1-x}-\frac{x^6}{2}.
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    \log J_N(x)\ge\mathcal L_N(x):={}&
+    \frac{2}{N}-\frac{2}{N^2}-2x \notag\\
+    &+\left[A\left(1+\frac{1}{N}\right)-1\right]x^2
+    -\frac {A}{2}x^4-\frac{x^4}{1-x}-\frac{x^6}{2}. \label{eq:L-N-def}
+  \end{align}
   For completeness, \eqref{eq:log-shape-bound} follows by writing
   \[
     2\log(1-x)
-    =-2x-x^2-\frac23x^3-2\sum_{j\ge4}\frac{x^j}{j}
-    \ge-2x-x^2-\frac23x^3-\frac{x^4}{1-x}
+    =-2x-x^2-\frac{2}{3}x^3-2\sum_{j\ge4}\frac{x^j}{j}
+    \ge-2x-x^2-\frac{2}{3}x^3-\frac{x^4}{1-x}
   \]
   and using $\log(1+x^3)\ge x^3-x^6/2$.
 
@@ -3559,7 +3498,7 @@ lemma reduces this to one variable.
   \]
   where
   \[
-    c_N=\frac2N-\frac2{N^2},
+    c_N=\frac{2}{N}-\frac{2}{N^2},
     \qquad
     B_N=\frac{1116N^2-2003N-1536}{1536N}.
   \]
@@ -3575,7 +3514,7 @@ lemma reduces this to one variable.
   On $1/4\le x\le2/5$, differentiation in the real parameter $N$ gives
   \[
     \frac{\partial\mathcal L_N}{\partial N}
-    \ge\frac{93}{2048}-\frac2{81}>0.
+    \ge\frac{93}{2048}-\frac{2}{81}>0.
   \]
   It is therefore enough to take $N=9$.  Direct differentiation gives
   \begin{equation}\label{eq:L9-data}
@@ -3657,10 +3596,10 @@ lemma reduces this to one variable.
   \]
   Taylor's formula with positive third derivative gives
   \[
-    \left(1+\frac4{25}\right)^{23/4}
-    \ge1+\frac{23}{4}\frac4{25}
-    +\frac12\frac{23}{4}\frac{19}{4}
-    \left(\frac4{25}\right)^2
+    \left(1+\frac{4}{25}\right)^{23/4}
+    \ge1+\frac{23}{4}\frac{4}{25}
+    +\frac{1}{2}\frac{23}{4}\frac{19}{4}
+    \left(\frac{4}{25}\right)^2
     =\frac{2837}{1250}.
   \]
   Hence
@@ -3682,21 +3621,19 @@ lemma reduces this to one variable.
   $h_N(x)=1-x-2x^2/N$ is strictly decreasing, and $h_N(\beta_N)=0$.
   The exact evaluations
   \[
-    h_9(21/25)=\frac2{625},\qquad
-    h_{11}(6/7)=\frac5{539},\qquad
-    h_{13}(7/8)=\frac3{416}
+    h_9(21/25)=\frac{2}{625},\qquad
+    h_{11}(6/7)=\frac{5}{539},\qquad
+    h_{13}(7/8)=\frac{3}{416}
   \]
   show that $\beta_9>21/25$, $\beta_{11}>6/7$, and
   $\beta_N\ge7/8$ for every $N\ge13$.  When $N=9$, hence
-  \[
-    \begin{aligned}
-      K_9(\beta_9)
-      &>\frac{11}{9}\frac4{81}
-      \frac{497}{1000}\frac{159}{100}
-      \left(\frac{17}{10}\right)^5\frac{37}{25}\\
-      &=\frac{15221984467459}{15187500000000}>1.
-    \end{aligned}
-  \]
+  \begin{align*}
+    K_9(\beta_9)
+    &>\frac{11}{9}\frac{4}{81}
+    \frac{497}{1000}\frac{159}{100}
+    \left(\frac{17}{10}\right)^5\frac{37}{25}\\
+    &=\frac{15221984467459}{15187500000000}>1.
+  \end{align*}
   Here we used
   \[
     \left(\frac{21}{25}\right)^4>\frac{497}{1000},
@@ -3716,7 +3653,7 @@ lemma reduces this to one variable.
   $1+\beta_{11}^2>17/10$ give
   \[
     K_{11}(\beta_{11})
-    >\frac{13}{11}\frac4{121}\frac12\frac32
+    >\frac{13}{11}\frac{4}{121}\frac{1}{2}\frac{3}{2}
     \left(\frac{17}{10}\right)^7
     =\frac{16003208247}{13310000000}>1.
   \]
@@ -3730,13 +3667,13 @@ lemma reduces this to one variable.
   \]
   At $N=13$, this is larger than
   \[
-    \frac{4(7/8)^4}{13^2}\left(\frac74\right)^8
+    \frac{4(7/8)^4}{13^2}\left(\frac{7}{4}\right)^8
     =\frac{13841287201}{11341398016}>1.
   \]
   The ratio of these lower bounds under $N\mapsto N+2$ is at least
   \[
     \left(\frac{13}{15}\right)^2
-    \left(\frac74\right)^{3/2}>1.
+    \left(\frac{7}{4}\right)^{3/2}>1.
   \]
   This completes all endpoint checks and the proof of
   \eqref{eq:J-ineq}.
@@ -3789,7 +3726,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
 \begin{equation}\label{eq:N7-corner}
   N=7,
   \qquad \zeta\le7,
-  \qquad v\le\frac58.
+  \qquad v\le\frac{5}{8}.
 \end{equation}
 
 \begin{lemma}[The small-$v$ part of $N=7$]\label{lem:N7-small-v}
@@ -3801,7 +3738,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   Put $s=\sqrt v$.  Since
   \[
     \frac{\ell^2}{v}=\frac{\zeta}{\zeta+1+v}
-    \le\frac7{8+v}<\frac78<\left(\frac{15}{16}\right)^2,
+    \le\frac{7}{8+v}<\frac{7}{8}<\left(\frac{15}{16}\right)^2,
   \]
   we have
   \begin{equation}\label{eq:ell-small-v}
@@ -3810,7 +3747,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
 
   We next prove
   \begin{equation}\label{eq:xi-small-v}
-    \xi\ge\frac1{4v}.
+    \xi\ge\frac{1}{4v}.
   \end{equation}
   Let $t=\zeta+v$.  Formula \eqref{eq:xi-zeta-v} becomes
   \[
@@ -3853,45 +3790,39 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   Both sides are positive.  If $L(v)$ and $R(v)$ denote respectively
   the left and right sides of \eqref{eq:cxi-small-v-poly}, then exact
   expansion gives
-  \begin{equation}\label{eq:small-v-square-diff}
-    \begin{aligned}
-      &128(1+2v)^2(1+v/2)\bigl(L(v)^2-R(v)^2\bigr)\\
-      &\quad=v\bigl(128v^{13}+1792v^{12}+11648v^{11}+46592v^{10}
-      +128128v^9\\
-      &\qquad\quad+232540v^8+345884v^7+492971v^6+464196v^5\\
-      &\qquad\quad+258097v^4+86924v^3+18035v^2+2254v+160\bigr),
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    &128(1+2v)^2(1+v/2)\bigl(L(v)^2-R(v)^2\bigr) \notag\\
+    &\quad=v\bigl(128v^{13}+1792v^{12}+11648v^{11}+46592v^{10}
+    +128128v^9 \notag\\
+    &\qquad\quad+232540v^8+345884v^7+492971v^6+464196v^5 \notag\\
+    &\qquad\quad+258097v^4+86924v^3+18035v^2+2254v+160\bigr), \label{eq:small-v-square-diff}
+  \end{align}
   which is nonnegative.
 
   For the defect, use \eqref{eq:zeta-simple-lower}.  From
   \eqref{eq:T-bound-one},
-  \[
-    \begin{aligned}
-      T_7
-      &\le7+7v-(1-v/2)(1-v^{7/2})\\
-      &\le6+\frac{15}{2}v+\frac12v^3,
-    \end{aligned}
-  \]
+  \begin{align*}
+    T_7
+    &\le7+7v-(1-v/2)(1-v^{7/2})\\
+    &\le6+\frac{15}{2}v+\frac{1}{2}v^3,
+  \end{align*}
   because $\sqrt v\le1/2$.  On the other hand,
   \eqref{eq:ell-small-v} and \eqref{eq:cxi-small-v-poly} show that the right
   side of \eqref{eq:linear-core} is at least
   \[
-    9\left(1-\frac78s^2\right)
+    9\left(1-\frac{7}{8}s^2\right)
     \left(1-\frac{15}{16}s\right)
     \left(1+s^2-\frac{15}{16}s\right)
     (1+5s^2+11s^4).
   \]
   After subtracting $6+15s^2/2+s^6/2$, we obtain the polynomial
-  \begin{equation}\label{eq:P9-small}
-    \begin{aligned}
-      P_9(s)={}&\frac{10395}{128}s^9-\frac{333333}{2048}s^8
-      +\frac{13635}{128}s^7+\frac{51005}{2048}s^6\\
-      &-\frac{18765}{128}s^5+\frac{264969}{2048}s^4
-      -\frac{4995}{64}s^3+\frac{11913}{256}s^2\\
-      &-\frac{135}{8}s+3.
-    \end{aligned}
-  \end{equation}
+  \begin{align}
+    P_9(s)={}&\frac{10395}{128}s^9-\frac{333333}{2048}s^8
+    +\frac{13635}{128}s^7+\frac{51005}{2048}s^6 \notag\\
+    &-\frac{18765}{128}s^5+\frac{264969}{2048}s^4
+    -\frac{4995}{64}s^3+\frac{11913}{256}s^2 \notag\\
+    &-\frac{135}{8}s+3. \label{eq:P9-small}
+  \end{align}
   By \Cref{lem:bernstein-P9}, $P_9(s)>0$ on $[0,1/2]$.  This proves
   \eqref{eq:linear-core}.
 \end{proof}
@@ -3904,7 +3835,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
 \begin{proof}
   We first show $\xi>1/3$.  With $t=\zeta+v$,
   \[
-    \xi=\frac4v\frac{(t+1)^2}{t^2(t(v+2)+2)}.
+    \xi=\frac{4}{v}\frac{(t+1)^2}{t^2(t(v+2)+2)}.
   \]
   The quantity $vG(t,v)$, with $G$ as in the proof of
   \Cref{lem:N7-small-v}, is increasing in both variables.  Indeed,
@@ -3921,7 +3852,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   \]
   Thus $\xi>1/3$, and hence
   \begin{equation}\label{eq:varphi-7/10}
-    \varphi\ge\frac7{10}.
+    \varphi\ge\frac{7}{10}.
   \end{equation}
 
   Put
@@ -3952,7 +3883,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   \]
   For $1/4\le v\le5/8$,
   \[
-    \frac9{20}<y<\frac57.
+    \frac{9}{20}<y<\frac{5}{7}.
   \]
   Define
   \[
@@ -3982,8 +3913,8 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   \begin{align*}
     &\frac{63}{10}(1-y_0^2)(1-y_0)(5/4-y_0)(5/4)^6\\
     &\quad>
-    \frac{63}{10}\frac{26}{33}\frac7{13}\frac{41}{52}
-    \left(\frac54\right)^6
+    \frac{63}{10}\frac{26}{33}\frac{7}{13}\frac{41}{52}
+    \left(\frac{5}{4}\right)^6
     =\frac{18834375}{2342912}>8.
   \end{align*}
   This proves \eqref{eq:middle-target} at the left endpoint.  The monotonicity
@@ -4072,7 +4003,7 @@ vector, and decompose
 The same block inversion used in \eqref{eq:dense-path-gf} gives
 \begin{equation}\label{eq:general-stripping}
   M_{K,e}(z):=\ip e{(I-zK)^{-1}e}
-  =\frac1{1-az-z^2\ip h{(I-zB)^{-1}h}}.
+  =\frac{1}{1-az-z^2\ip h{(I-zB)^{-1}h}}.
 \end{equation}
 If $h\ne0$, let $\nu$ be the probability spectral measure of $B$ at
 $h/\norm h$.  Then
@@ -4103,7 +4034,7 @@ is rigid but the tail is not.
 
 Equation \eqref{eq:dense-path-gf} has the first-return form
 \[
-  M(z)=\frac1{1-H(z)},
+  M(z)=\frac{1}{1-H(z)},
   \qquad H(z)=qz+z^2R_+(z).
 \]
 Combinatorially, a closed walk from the distinguished state is a sequence of
@@ -4279,15 +4210,15 @@ On the dense side, centering at $1/2$ gives
 $\delta=1/2-q$.  The gamma moment lemma pays for the odd term in
 \eqref{eq:dense-rho-centered} precisely when
 \[
-  2\delta\ge\frac13,
-  \qquad\text{i.e.}\qquad q\le\frac13.
+  2\delta\ge\frac{1}{3},
+  \qquad\text{i.e.}\qquad q\le\frac{1}{3}.
 \]
 On the intermediate side, two eigenvalues larger than $q$ would consume
 more than $2q^2$ of the bound \eqref{eq:HS-budget}, and uniqueness is guaranteed
 precisely when
 \[
   2q^2>pq=q(1-q),
-  \qquad\text{i.e.}\qquad q>\frac13.
+  \qquad\text{i.e.}\qquad q>\frac{1}{3}.
 \]
 Thus the two mechanisms meet without overlap or gap.  This matching strongly
 suggests that $q=1/3$ is an intrinsic phase boundary of the proof problem,
@@ -4326,7 +4257,7 @@ then
 \end{equation}
 Indeed,
 \[
-  t^j=\frac1{\binom nj}
+  t^j=\frac{1}{\binom nj}
   \sum_{i=j}^n\binom ij B_{i,n}(t),
 \]
 and substitution gives \eqref{eq:power-to-bernstein}.
