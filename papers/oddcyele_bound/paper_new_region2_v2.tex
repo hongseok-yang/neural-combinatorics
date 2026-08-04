@@ -1305,74 +1305,33 @@ step kernel $K$ satisfies
    \qquad
    m\,[z^m]\bigl(-\log\det(I-zT_K)\bigr)=t(C_m,K)
 \end{equation}
-for every $m\ge2$.  Thus the cycle densities of $U$ and of $W$ are the
-coefficients of $-\log\det(I-zT_U)$ and $-\log\det(I-zT_W)$, and we expand
-these two series along the block decomposition \eqref{eq:block-U}.  Since
-$T_W=T_1-T_U$ has block matrix
-$\left(\begin{smallmatrix}p&-g^*\\-g&-A\end{smallmatrix}\right)$, as computed
-in the proof of \Cref{lem:dense-cancellation} below,
-\[
- I-zT_U=
- \begin{pmatrix}1-qz&-zg^*\\-zg&I-zA\end{pmatrix},
- \qquad
- I-zT_W=
- \begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
-\]
-The two matrices differ only in the sign of the mean-zero block and in the
-scalar entry, which is the reason for treating $W$ and $U$ together.
-
-Eliminating the off-diagonal entries by the Schur complement identity
-\eqref{eq:block-determinant-identity} factorizes the determinants into three
-parts,
-\[
- \det(I-zT_U)=\det(I-zA)\,(1-qz)
-   \left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right),
-\]
-and likewise for $W$ with $A$ replaced by $-A$ and $q$ by $p$.  Taking
-$-\log$ turns each product into a sum of three series, which we track separately:
-\[
-\begin{aligned}
- -\log\det(I-zT_U)={}&-\log\det(I-zA)-\log(1-qz)-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right),\\
- -\log\det(I-zT_W)={}&-\log\det(I+zA)-\log(1-pz)-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
-\end{aligned}
-\]
-Write
+for every $m\ge2$. We expand
+these two series along the block decomposition \eqref{eq:block-U}. 
+As the proof of the next lemma shows, each of them splits into three
+summands: one coming from the mean-zero block $\mp A$, one from the scalar
+entry, and the third coming from the Schur complement:
+\begin{align}
+ L_-(z)&=-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right),
+ \label{eq:dense-Lminus}\\
+ L_+(z)&=-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right).
+ \label{eq:dense-Lplus}
+\end{align}
+Writing
 \begin{align}
  R_-(z)&=\ip g{(I+zA)^{-1}g}
    =\int\frac{\dd\mu(\lambda)}{1+\lambda z},\label{eq:dense-Rminus}\\
  R_+(z)&=\ip g{(I-zA)^{-1}g}
    =\int\frac{\dd\mu(\lambda)}{1-\lambda z},\label{eq:dense-Rplus}
 \end{align}
-for the two Schur complements, as in \eqref{eq:resolvents-common} with $A$
-replaced by $\mp A$, and abbreviate the third summands by
-\begin{align}
- L_-(z)&=-\log\left(1-\frac{z^2R_-(z)}{1-pz}\right),\label{eq:dense-Lminus}\\
- L_+(z)&=-\log\left(1-\frac{z^2R_+(z)}{1-qz}\right).\label{eq:dense-Lplus}
-\end{align}
-Each inner series $z^2R_\pm(z)/(1-cz)$ has order at least two, so $L_\pm$
-are well defined formal power series, as discussed in
-\Cref{subsec:analytic-reading}.
-
-The first two summands are already explicit.  For the first,
-\Cref{lem:analytic-reading}\,(2) gives, for odd $m$,
-\[
- m\,[z^m]\bigl(-\log\det(I-zA)\bigr)=\Tr(A^m),
- \qquad
- m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
-\]
-so the two cancel when the identities for $U$ and $W$ are added.  For the
-second,
-\[
- m\,[z^m]\bigl(-\log(1-qz)\bigr)=q^m,
- \qquad
- m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
-\]
-For odd $m$, put
+as in \eqref{eq:resolvents-common} with $A$ replaced by $\mp A$, the inner
+series of $L_\pm$ is $z^2R_\pm(z)/(1-cz)$, with $c=p$ or $q$.  It has order
+at least two, so $L_\pm$ are well defined formal power series, as discussed
+in \Cref{subsec:analytic-reading}.  For odd $m$, put
 \begin{equation}\label{eq:dense-Sm}
    S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
 \end{equation}
 
-\begin{lemma}[Two-sided odd cancellation]\label{lem:dense-cancellation}
+\begin{lemma}[Sum of the two cycle densities]\label{lem:dense-cancellation}
 For every odd $m\ge3$,
 \begin{equation}\label{eq:dense-cycle-sum}
    t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
@@ -1385,147 +1344,92 @@ Consequently,
 \end{lemma}
 
 \begin{proof}
-All operators in this proof are the finite matrices on $\mathcal E$
-described in \Cref{sec:common-operator}.  In particular, every determinant
-and trace below is an ordinary finite-matrix determinant or trace.
-The plan is to encode the cycle densities of $W$ and $U$ in two
-determinant power series and then add those series.  Their mean-zero blocks
-will be $-A$ and $A$, so the terms containing an odd power of $A$
-will cancel.
-
-We first derive the block matrix for $W$.  The operator $T_1$ associated
-with the constant kernel $1$ sends $a\one+h$, with
-$h\in\mathcal E_0$, to
-\[
-   T_1(a\one+h)=\left(\int(a\one+h)\right)\one=a\one,
-\]
-because $\int h=0$.  Thus $T_1$ has block matrix
-$\left(\begin{smallmatrix}1&0\\0&0\end{smallmatrix}\right)$.  Since
-$W=1-U$, we have $T_W=T_1-T_U$, and \eqref{eq:block-U} gives
+We first put the two matrices $I-zT_U$ and $I-zT_W$ in block form.  The
+operator $T_1$ of the constant kernel $1$ sends $a\one+h$, with
+$h\in\mathcal E_0$, to $a\one$, because $\int h=0$; thus $T_1$ has block
+matrix $\left(\begin{smallmatrix}1&0\\0&0\end{smallmatrix}\right)$ and
+$T_W=T_1-T_U$ has block matrix
 \[
  T_W=
  \begin{pmatrix}1&0\\0&0\end{pmatrix}
  -
  \begin{pmatrix}q&g^*\\g&A\end{pmatrix}
  =
- \begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix},
+ \begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix}.
 \]
-where $p=1-q$.
-
-We next compute the two determinants by a block elimination.  Recall the
-following elementary identity.  If $D$ is invertible, then
-\begin{equation}\label{eq:block-determinant-identity}
- \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
- =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr).
-\end{equation}
-The scalar $\alpha-v^*D^{-1}v$ is called the \emph{Schur complement} of
-the block $D$.  To see the identity directly, multiply on the left by a
-block matrix of determinant one:
-\[
- \begin{pmatrix}1&-v^*D^{-1}\\0&I\end{pmatrix}
- \begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
- =\begin{pmatrix}\alpha-v^*D^{-1}v&0\\v&D\end{pmatrix}.
-\]
-The matrix on the right is block triangular, so its determinant is the
-product of its diagonal-block determinants, proving
-\eqref{eq:block-determinant-identity}.  The blocks $I\pm zA$ used below are
-invertible over $\R[[z]]$ by \Cref{lem:analytic-reading}\,(1), their
-constant term being $I$.
-
-For $T_W$, the block matrix above gives
-\[
- I-zT_W=
- \begin{pmatrix}
-  1-pz&zg^*\\
-  zg&I+zA
- \end{pmatrix}.
-\]
-Apply \eqref{eq:block-determinant-identity} with
-$D=I+zA$ and $v=zg$.  Since
-$R_-(z)=\ip g{(I+zA)^{-1}g}$, we obtain
-\begin{align*}
- \det(I-zT_W)
- &=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)\\
- &=\det(I+zA)(1-pz)
-   \left(1-\frac{z^2R_-(z)}{1-pz}\right).
-\end{align*}
-Similarly,
+Consequently
 \[
  I-zT_U=
- \begin{pmatrix}
-  1-qz&-zg^*\\
-  -zg&I-zA
- \end{pmatrix},
+ \begin{pmatrix}1-qz&-zg^*\\-zg&I-zA\end{pmatrix},
+ \qquad
+ I-zT_W=
+ \begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
 \]
-so using $D=I-zA$ and the definition of $R_+(z)$ gives
-\begin{align*}
- \det(I-zT_U)
- &=\det(I-zA)\bigl(1-qz-z^2R_+(z)\bigr)\\
- &=\det(I-zA)(1-qz)
-   \left(1-\frac{z^2R_+(z)}{1-qz}\right).
-\end{align*}
 
-% TODO: this re-derives the expansion of \Cref{lem:analytic-reading}(2);
-% replace by a reference to \eqref{eq:logdet-cycle}.
-It remains to extract the cycle traces from these factorizations.  For a
-finite self-adjoint matrix $X$, choose an orthonormal eigenbasis and denote
-the eigenvalues by $\lambda_i$.  In that basis, $I-zX$ is diagonal with
-diagonal entries $1-z\lambda_i$, while $X^j$ is diagonal with entries
-$\lambda_i^j$.  Therefore
+The determinants decompose along this block structure by the following
+elementary identity.  If $D$ is invertible, then
+\begin{equation}\label{eq:block-determinant-identity}
+ \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
+ =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr),
+\end{equation}
+the scalar $\alpha-v^*D^{-1}v$ being the Schur complement of $D$.  
+To see this, multiply on the left by the block matrix
+$\left(\begin{smallmatrix}1&-v^*D^{-1}\\0&I\end{smallmatrix}\right)$, which
+has determinant one and makes the product block triangular; the determinant
+of the latter is the product of its diagonal-block determinants.  We may
+take $D=I\mp zA$ here: these blocks have constant term $I$, hence are
+invertible over $\R[[z]]$ by \Cref{lem:analytic-reading}\,(1).  Applying
+\eqref{eq:block-determinant-identity} with $D=I-zA$ and $v=-zg$, and then
+with $D=I+zA$ and $v=zg$, factorizes the determinants into three parts,
 \[
 \begin{aligned}
- -\log\det(I-zX)
- &=-\sum_i\log(1-z\lambda_i)\\
- &=\sum_{j\ge1}\frac{\sum_i\lambda_i^j}{j}z^j
- =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j.
+ \det(I-zT_U)&=\det(I-zA)\,(1-qz)
+   \left(1-\frac{z^2R_+(z)}{1-qz}\right),\\
+ \det(I-zT_W)&=\det(I+zA)\,(1-pz)
+   \left(1-\frac{z^2R_-(z)}{1-pz}\right).
 \end{aligned}
 \]
-Taking minus the logarithm of the two determinant factorizations therefore
-gives
-\begin{align*}
- -\log\det(I-zT_W)
- ={}&-\log\det(I+zA)-\log(1-pz)+L_-(z),\\
- -\log\det(I-zT_U)
- ={}&-\log\det(I-zA)-\log(1-qz)+L_+(z).
-\end{align*}
-We now add these identities and extract $[z^m]$.  The left sides,
-multiplied by $m$, give
+Taking $-\log$ turns each product into a sum of three series,
 \[
-   \Tr(T_W^m)+\Tr(T_U^m)
-   =t(C_m,W)+t(C_m,U).
+\begin{aligned}
+ -\log\det(I-zT_U)&=-\log\det(I-zA)-\log(1-qz)+L_+(z),\\
+ -\log\det(I-zT_W)&=-\log\det(I+zA)-\log(1-pz)+L_-(z),
+\end{aligned}
 \]
-Here the equality with the cycle densities is exactly
-\eqref{eq:finite-trace-cycle}.
-The scalar logarithms satisfy
+and we extract the coefficient of $z^m$ from each summand.  On the left,
+\eqref{eq:logdet-cycle} gives
 \[
-   -\log(1-pz)=\sum_{j\ge1}\frac{p^j}{j}z^j,
-   \qquad
-   -\log(1-qz)=\sum_{j\ge1}\frac{q^j}{j}z^j,
+ m\,[z^m]\bigl(-\log\det(I-zT_U)\bigr)=t(C_m,U),
+ \qquad
+ m\,[z^m]\bigl(-\log\det(I-zT_W)\bigr)=t(C_m,W).
 \]
-so their contribution, after multiplication by $m$, is $p^m+q^m$.
-For the compressed block $A$, the coefficient of $z^m$ in
-$-\log\det(I-zA)$ is $\Tr(A^m)/m$, whereas its coefficient in
-$-\log\det(I+zA)$ is $(-1)^m\Tr(A^m)/m$.  These two coefficients cancel
-because $m$ is odd.  Finally, the two remaining logarithms contribute
+For the first summand on the right, \Cref{lem:analytic-reading}\,(2) gives,
+for odd $m$,
 \[
-   m[z^m]\bigl(L_-(z)+L_+(z)\bigr)=S_m.
+ m\,[z^m]\bigl(-\log\det(I-zA)\bigr)=\Tr(A^m),
+ \qquad
+ m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
 \]
-Combining these contributions proves \eqref{eq:dense-cycle-sum}.
+so the two cancel when the identities for $U$ and $W$ are added.  For the
+second summand,
+\[
+ m\,[z^m]\bigl(-\log(1-qz)\bigr)=q^m,
+ \qquad
+ m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m,
+\]
+and the third summands give $m[z^m]\bigl(L_-(z)+L_+(z)\bigr)=S_m$ by
+\eqref{eq:dense-Sm}.  Adding the two identities therefore proves
+\eqref{eq:dense-cycle-sum}.
 
-To obtain the second displayed identity in the lemma, rearrange the first:
+To obtain the second identity, rearrange the first:
 \begin{align*}
  t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
  &=q^m+S_m-t(C_m,U)+pq^{m-1}\\
  &=(p+q)q^{m-1}+S_m-t(C_m,U)\\
  &=q^{m-1}+S_m-t(C_m,U),
 \end{align*}
-using $p+q=1$.  This is \eqref{eq:dense-defect}.
+using $p+q=1$. 
 \end{proof}
-
-The cancellation is the decisive reason for using \emph{both} $W$ and its
-complement in this region: all odd moments $\Tr(A^m)$ of the inaccessible
-compressed tail disappear.  For background on determinant/trace expansions
-and finite-rank perturbations, see Simon~\cite{Simon2005}.
 
 \subsection{Replacing a complement cycle by a path}
 
@@ -4351,12 +4255,6 @@ V.~Powers and B.~Reznick,
 \newblock Polynomials that are positive on an interval,
 \newblock \emph{Transactions of the American Mathematical Society}
 \textbf{352} (2000), 4677--4692.
-
-\bibitem{Simon2005}
-B.~Simon,
-\newblock \emph{Trace Ideals and Their Applications}, second edition,
-\newblock Mathematical Surveys and Monographs, vol.~120,
-American Mathematical Society, Providence, RI, 2005.
 
 \bibitem{Sion1958}
 M.~Sion,
