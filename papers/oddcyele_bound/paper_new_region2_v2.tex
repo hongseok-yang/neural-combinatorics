@@ -1481,15 +1481,18 @@ Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
 
 \subsection{Expansion in complete homogeneous polynomials}
 
-For variables $y_1,\ldots,y_k$, define
+We now give the explicit form of $\Phi_m$ as an integral of a polynomial in $q$ and the eigenvalues of $A$.
+
+For variables $y_1,\ldots,y_k$, the \emph{complete homogeneous symmetric
+polynomial} of degree $d$ is
 \[
  h_d(y_1,\ldots,y_k)
  =\sum_{\substack{\alpha_1,\ldots,\alpha_k\ge0\\
        \alpha_1+\cdots+\alpha_k=d}}
     y_1^{\alpha_1}\cdots y_k^{\alpha_k},
- \qquad h_0=1.
+ \qquad h_0=1,
 \]
-Equivalently,
+the sum of all monomials of degree $d$ in $y_1,\ldots,y_k$.  Equivalently,
 \begin{equation}\label{eq:dense-h-gf}
    \prod_{i=1}^k\frac1{1-y_i z}
    =\sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d.
@@ -1524,37 +1527,61 @@ Put
    Y_+(z)=\frac{z^2R_+(z)}{1-qz}.
 \]
 From $-\log(1-Y)=\sum_{r\ge1}Y^r/r$,
+\begin{align*}
+  m[z^m]L_-(z) &=m[z^m] (- \log (1-Y_-(z)))
+  \\
+  {} &= m[z^m]\sum_{r\ge1}\frac{Y_-(z)^r}{r}
+  \\
+  {} &=\sum_{r\ge1}\frac mr [z^{m-2r}]\frac{R_-(z)^r}{(1-pz)^r}.
+\end{align*}
+The spectral representation of $R_-(z) = \int \frac{d \mu(\lambda)}{1 + \lambda z}$ gives
+\begin{align*}
+  R_-(z)^r &=\int\!\cdots\!\int
+  \prod_{i=1}^r\frac1{1+\lambda_i z}
+  \prod_{i=1}^r\dd\mu(\lambda_i),
+  \\
+  \frac{R_-(z)^r}{(1-pz)^r} &= \int\!\cdots\!\int \frac{1}{(1-pz)^r} \prod_{i=1}^r \frac{1}{1+\lambda_i z} \prod_{i=1}^r \dd\mu(\lambda_i).
+\end{align*}
+By \eqref{eq:dense-h-gf}, the $r$-th coefficient is 
 \[
- m[z^m]L_-(z)
- =\sum_{r\ge1}\frac mr
-   [z^{m-2r}]\frac{R_-(z)^r}{(1-pz)^r}.
-\]
-The spectral representation gives
-\[
- R_-(z)^r
- =\int\!\cdots\!\int
-   \prod_{i=1}^r\frac1{1+\lambda_i z}
-   \prod_{i=1}^r\dd\mu(\lambda_i).
-\]
-By \eqref{eq:dense-h-gf}, the $r$-th contribution is the integral of
-\[
-   \frac mr h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r).
+  [z^{m-2r}] \frac{R_-(z)^r}{(1-pz)^r} = \int\!\cdots\!\int h_{m-2r}(p^{\times r}, -\lambda_1, \ldots, -\lambda_r) \prod_{i=1}^r \dd\mu(\lambda_i).
 \]
 The same argument for $L_+$ produces the second term in brackets in
 \eqref{eq:dense-Pmr}.
 
-On the other hand, \eqref{eq:dense-path-gf} expands as
+On the other hand, factoring $1-qz$ out of the denominator of
+\eqref{eq:dense-path-gf} and expanding the geometric series gives
+\begin{align*}
+ \sum_{j\ge0}x_jz^j
+ &=\frac{1}{(1-qz)\left(1-\dfrac{z^2R_+(z)}{1-qz}\right)}
+ \\
+ {}&=\sum_{r\ge0}\frac{z^{2r}R_+(z)^r}{(1-qz)^{r+1}},
+\end{align*}
+so that
 \[
- \frac1{1-qz-z^2R_+(z)}
- =\sum_{r\ge0}\frac{(z^2R_+(z))^r}{(1-qz)^{r+1}}.
+ x_{m-1}=\sum_{r\ge0}[z^{m-1-2r}]\frac{R_+(z)^r}{(1-qz)^{r+1}}.
 \]
-The term $r=0$ contributes $q^{m-1}$ to $x_{m-1}$, cancelling the
-first term in \eqref{eq:dense-Phi}.  For $r\ge1$, the coefficient of
-$z^{m-1}$ is the integral of
+The term $r=0$ is $[z^{m-1}](1-qz)^{-1}=q^{m-1}$, which cancels the first
+term of \eqref{eq:dense-Phi}.  For $r\ge1$, the spectral representation of
+$R_+(z)=\int\frac{\dd\mu(\lambda)}{1-\lambda z}$ gives, as above,
 \[
-   h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+ \frac{R_+(z)^r}{(1-qz)^{r+1}}
+ =\int\!\cdots\!\int\frac1{(1-qz)^{r+1}}
+   \prod_{i=1}^r\frac1{1-\lambda_iz}
+   \prod_{i=1}^r\dd\mu(\lambda_i),
 \]
-Combining the contributions proves the proposition.
+and \eqref{eq:dense-h-gf}, applied now to the $r+1$ copies of $q$ together
+with $\lambda_1,\ldots,\lambda_r$, yields
+\[
+ [z^{m-1-2r}]\frac{R_+(z)^r}{(1-qz)^{r+1}}
+ =\int\!\cdots\!\int
+   h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r)
+   \prod_{i=1}^r\dd\mu(\lambda_i),
+\]
+because $m-1-2r=n-1$.  Subtracting these terms from the contributions of
+$L_-$ and $L_+$ gives \eqref{eq:dense-expansion}.  All three sums are
+finite and stop at $r=(m-1)/2$, since their coefficients vanish once
+$2r>m-1$.
 \end{proof}
 
 \subsection{Dirichlet diagonalization: a probabilistic polarization}
