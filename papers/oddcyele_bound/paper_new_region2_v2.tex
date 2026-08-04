@@ -39,7 +39,7 @@
 \newcommand{\BetaLaw}{\operatorname{Beta}}
 \newcommand{\supp}{\operatorname{supp}}
 
-\newcommand*{\tk}[1]{\textcolor{blue}{\textbf{TK: [#1]}}}
+\newcommand*{\tk}[1]{\textcolor{blue}{\textbf{[TK: #1]}}}
 
 \title{A Complete Proof of the Goodman--Style Lower Bound\\
    for Odd-Cycle Densities in Graphons}
@@ -1481,7 +1481,7 @@ Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
 
 \subsection{Expansion in complete homogeneous polynomials}
 
-We now give the explicit form of $\Phi_m$ as an integral of a polynomial in $q$ and the eigenvalues of $A$.
+In this seciton, we will give the explicit form of $\Phi_m$ as an integral of a polynomial in $q$ and the eigenvalues of $A$.
 
 For variables $y_1,\ldots,y_k$, the \emph{complete homogeneous symmetric
 polynomial} of degree $d$ is
@@ -1586,6 +1586,7 @@ $2r>m-1$.
 
 \subsection{Dirichlet diagonalization: a probabilistic polarization}
 
+In this section, we will simplify the integrand $P_{m,r}$ of \eqref{eq:dense-expansion} by replacing the eigenvalues $\lambda_1,\ldots,\lambda_r$ by a single variable $\ell$.
 Define the diagonal polynomial
 \begin{equation}\label{eq:dense-Ptilde}
    \widetilde P_{m,r}(q,\ell)
@@ -1734,11 +1735,13 @@ polynomial is replaced by one scalar variable polynomial.
 
 \subsection{A beta representation}
 
+In this section, we will further simplify the diagonal polynomial $\widetilde P_{m,r}$ by representing it as an expectation over a beta distribution.
+
 Fix $r\ge1$ and put
 \begin{equation}\label{eq:dense-n}
    n=m-2r.
 \end{equation}
-Then $n\ge1$ is odd.  Let $\Xi\sim\BetaLaw(r,r)$, and for $x\in[0,1]$
+Then $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$, and for $x\in[0,1]$
 set
 \begin{equation}\label{eq:dense-VW}
    V_x=qx+\ell(1-x),
@@ -1757,12 +1760,12 @@ One has
  \widetilde P_{m,r}(q,\ell)
  ={}&\binom{n+2r-1}{2r-1}\frac nr
  \left[
-   \frac mn\E\bigl(V_\Xi^n+W_\Xi^n\bigr)
-   -\E\bigl(\Xi V_\Xi^{n-1}\bigr)
+   \frac mn\E\bigl(V_X^n+W_X^n\bigr)
+   -\E\bigl(X V_X^{n-1}\bigr)
  \right]\label{eq:dense-beta-first}\\
  ={}&\binom{n+2r-1}{2r-1}\frac nr
  \E\left[
-   \Xi^n\rho_{n,m}\left(q+\ell\frac{1-\Xi}{\Xi}\right)
+   X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)
  \right].\label{eq:dense-beta-second}
 \end{align}
 If $\ell>0$, then
@@ -1776,52 +1779,130 @@ If $\ell>0$, then
 \end{lemma}
 
 \begin{proof}
-For arbitrary $a,b$, comparison of coefficients with the beta moments
-shows
+For arbitrary $a,b$ we first claim that
 \begin{equation}\label{eq:dense-beta-h}
  h_n(a^{\times r},b^{\times r})
  =\binom{n+2r-1}{2r-1}
-  \E\bigl(a\Xi+b(1-\Xi)\bigr)^n.
+  \E\bigl(aX+b(1-X)\bigr)^n.
 \end{equation}
-Differentiating with respect to the common variable $a$, and noting that
-the derivative of the left side is
-$r h_{n-1}(a^{\times(r+1)},b^{\times r})$, gives
+Both sides are polynomials in $a$ and $b$, so it suffices to compare the
+coefficient of $a^kb^{n-k}$.  On the left, the splitting identity
+\eqref{eq:dense-h-split} and the diagonal value
+\eqref{eq:dense-h-diagonal} give
+\[
+ h_n(a^{\times r},b^{\times r})
+ =\sum_{k=0}^n h_k(a^{\times r})\,h_{n-k}(b^{\times r})
+ =\sum_{k=0}^n\binom{k+r-1}{r-1}\binom{n-k+r-1}{r-1}a^kb^{n-k}.
+\]
+On the right, the binomial theorem and the beta moments
+\[
+ \E\bigl[X^k(1-X)^{n-k}\bigr]
+ =\frac{\Gamma(2r)}{\Gamma(r)^2}
+  \cdot\frac{\Gamma(r+k)\,\Gamma(r+n-k)}{\Gamma(2r+n)}
+  =\frac{(2r-1)!}{((r-1)!)^2}
+   \cdot\frac{(k+r-1)!\,(n-k+r-1)!}{(n+2r-1)!}
+\]
+give
+\[
+ \binom{n+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^n
+ =\sum_{k=0}^n\binom{n+2r-1}{2r-1}\binom nk
+   \E\bigl[X^k(1-X)^{n-k}\bigr]a^kb^{n-k}.
+\]
+The two coefficients agree, since writing every factor in factorials turns
+both into
+$(r+k-1)!\,(r+n-k-1)!/\bigl(k!\,(n-k)!\,((r-1)!)^2\bigr)$; on the right the
+factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel against those of
+$\binom{n+2r-1}{2r-1}\binom nk$.
+
+\tk{Revised until here.}
+
+Next we differentiate \eqref{eq:dense-beta-h} with respect to the common
+variable $a$.  On the left, differentiating the generating function
+\eqref{eq:dense-h-gf} in the form
+$\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d=(1-az)^{-r}(1-bz)^{-r}$
+gives
+\[
+ \sum_{d\ge0}\frac{\partial h_d(a^{\times r},b^{\times r})}{\partial a}z^d
+ =rz\,(1-az)^{-(r+1)}(1-bz)^{-r}
+ =r\sum_{d\ge0}h_d(a^{\times(r+1)},b^{\times r})z^{d+1},
+\]
+so that
+$\partial_a h_n(a^{\times r},b^{\times r})
+ =r\,h_{n-1}(a^{\times(r+1)},b^{\times r})$.
+On the right, $\partial_a\bigl(aX+b(1-X)\bigr)^n
+ =nX\bigl(aX+b(1-X)\bigr)^{n-1}$.  Hence
 \begin{equation}\label{eq:dense-beta-h-deriv}
  h_{n-1}(a^{\times(r+1)},b^{\times r})
  =\binom{n+2r-1}{2r-1}\frac nr
-  \E\left[\Xi\bigl(a\Xi+b(1-\Xi)\bigr)^{n-1}\right].
+  \E\left[X\bigl(aX+b(1-X)\bigr)^{n-1}\right].
 \end{equation}
-Apply these formulas to the three terms of \eqref{eq:dense-Pmr}; the two
-linear forms are precisely $V_\Xi$ and $W_\Xi$.  This proves
-\eqref{eq:dense-beta-first}.  If
+
+Now take $\lambda_1=\cdots=\lambda_r=\ell$ in the definition
+\eqref{eq:dense-Pmr} of $P_{m,r}$ and apply the two formulas to its three
+terms.  With $(a,b)=(q,\ell)$ and with $(a,b)=(p,-\ell)$, the linear form
+$aX+b(1-X)$ is $V_X$ and $W_X$ respectively, so
+\eqref{eq:dense-beta-h} gives
+\[
+ h_n(q^{\times r},\ell^{\times r})=\binom{n+2r-1}{2r-1}\E V_X^n,
+ \qquad
+ h_n(p^{\times r},(-\ell)^{\times r})=\binom{n+2r-1}{2r-1}\E W_X^n,
+\]
+while \eqref{eq:dense-beta-h-deriv} with $(a,b)=(q,\ell)$ gives
+\[
+ h_{n-1}(q^{\times(r+1)},\ell^{\times r})
+ =\binom{n+2r-1}{2r-1}\frac nr\E\bigl[XV_X^{n-1}\bigr].
+\]
+Substituting these into
+$\widetilde P_{m,r}(q,\ell)
+ =\frac mr\bigl[h_n(p^{\times r},(-\ell)^{\times r})
+ +h_n(q^{\times r},\ell^{\times r})\bigr]
+ -h_{n-1}(q^{\times(r+1)},\ell^{\times r})$
+and using $\frac mr=\frac nr\cdot\frac mn$ proves
+\eqref{eq:dense-beta-first}.
+
+For \eqref{eq:dense-beta-second}, put
 \[
    u=q+\ell\frac{1-x}{x},
 \]
-then $V_x=xu$ and $W_x=x(1-u)$, giving
-\eqref{eq:dense-beta-second}.
-
-For $\ell>0$, use the beta density
+so that $V_x=xu$ and, since $p=1-q$, also $W_x=x(1-u)$.  Then
+$V_x^n+W_x^n=x^n\bigl(u^n+(1-u)^n\bigr)$ and $xV_x^{n-1}=x^nu^{n-1}$,
+whence
 \[
-   \frac{\Gamma(2r)}{\Gamma(r)^2}
-   x^{r-1}(1-x)^{r-1}\dd x
+ \frac mn\bigl(V_x^n+W_x^n\bigr)-xV_x^{n-1}
+ =x^n\left[\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}\right]
+ =x^n\rho_{n,m}(u).
+\]
+Taking $x=X$ and expectations gives \eqref{eq:dense-beta-second}.
+
+For $\ell>0$, write \eqref{eq:dense-beta-second} out with the beta density,
+\[
+ \E\left[X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)\right]
+ =\frac{\Gamma(2r)}{\Gamma(r)^2}
+  \int_0^1 x^{n+r-1}(1-x)^{r-1}
+   \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x,
 \]
 and make the projective substitution
 \[
    s=\ell\frac{1-x}{x},
-   \qquad x=\frac\ell{\ell+s}.
+   \qquad x=\frac\ell{\ell+s},
+   \qquad 1-x=\frac s{\ell+s},
+   \qquad \dd x=-\frac{\ell}{(\ell+s)^2}\dd s,
 \]
-Then
+which maps $x\in(0,1]$ onto $s\in[0,\infty)$ and turns the argument of
+$\rho_{n,m}$ into $q+s$.  Since $n+2r=m$,
 \[
  x^{n+r-1}(1-x)^{r-1}\dd x
- =-\ell^{n+r}\frac{s^{r-1}}{(\ell+s)^m}\dd s.
+ =-\ell^{n+r}\frac{s^{r-1}}{(\ell+s)^{n+2r}}\dd s
+ =-\ell^{n+r}\frac{s^{r-1}}{(\ell+s)^{m}}\dd s,
 \]
-Substitution into \eqref{eq:dense-beta-second}, together with
+the sign being absorbed by the reversal of the limits of integration.
+Together with
 \[
  \binom{m-1}{2r-1}\frac nr
  \frac{\Gamma(2r)}{\Gamma(r)^2}
  =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2},
 \]
-proves \eqref{eq:dense-beta-integral}.
+this proves \eqref{eq:dense-beta-integral}.
 \end{proof}
 
 \subsection{The nonpositive diagonal is pointwise safe}
