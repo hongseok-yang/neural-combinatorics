@@ -723,21 +723,37 @@ Note that $T$ is a symmetric operator, so $\ip{f}{Tg}=\ip{Tf}{g}$ for all $f,g$.
 With \eqref{eq:T1-decomp},
 \[
 \begin{aligned}
- x_2&=q^2+\norm g^2,\\
- x_3&=q^3+2q\norm g^2+\ip g{Tg},\\
- x_4&=q^4+3q^2\norm g^2+2q\ip g{Tg}+\norm{Tg}^2.
+  x_2&=q^2+\norm g^2,\\
+  x_3&=q^3+2q\norm g^2+\ip g{Tg},\\
+  x_4&=q^4+3q^2\norm g^2+2q\ip g{Tg}+\norm{Tg}^2.
 \end{aligned}
 \]
 \end{lemma}
 
 \begin{proof}
-The first identity is $x_2=\norm{T\one}^2$.  Next,
-$T^2\one=q^2\one+qg+Tg$, while
-\[
-   \ip{\one}{Tg}=\ip{T\one}{g}=\norm g^2.
-\]
-Expanding $x_3=\ip{T\one}{T^2\one}$ and
-$x_4=\norm{T^2\one}^2$ gives the displayed formulas.
+  The first identity is 
+  \[
+    x_2 = \langle T\one, T\one\rangle = \langle q\one + g, q\one + g\rangle = q^2 \norm{\one}^2 + \norm{g}^2 = q^2 + \norm{g}^2.
+  \]
+  Next,
+  $T^2\one=T(q \one + g) = q^2\one + qg + Tg$, while
+  \[
+    \ip{\one}{Tg}=\ip{T\one}{g}= \ip{q\one + g}{g}=\norm g^2.
+  \]
+  Expanding $x_3$ and $x_4$ similarly gives the other two identities:
+  \begin{align*}
+    x_3 &= \ip{T^2\one}{T\one} = \ip{q^2\one + qg + Tg}{q\one + g} \\
+    {} &= \ip{q^2\one}{q\one} + \ip{q^2\one}{g} + \ip{qg}{q\one} + \ip{qg}{g} + \ip{Tg}{q\one} + \ip{Tg}{g} \\
+    {} &= q^3 + q \norm{g}^2 + q \ip{g}{T \one} + \ip{Tg}{g} \\
+    {} &= q^3 + q \norm{g}^2 + q \ip{g}{q \one + g} + \ip{Tg}{g} \\
+    {} &= q^3 + 2q \norm{g}^2 + \ip{g}{Tg}, 
+    \\ 
+    x_4 &= \ip{T^2 \one}{T^2 \one} = \ip{q^2\one + qg + Tg}{q^2\one + qg + Tg} \\
+    {} &= \ip{q^2\one}{q^2\one} + 2 \ip{q^2\one}{qg} + 2 \ip{q^2\one}{Tg} + \ip{qg}{qg} + 2 \ip{qg}{Tg} + \ip{Tg}{Tg} \\
+    {} &= q^4 + 2q^2 \ip{T \one}{g} + q^2 \norm{g}^2 + 2q \ip{g}{Tg} + \norm{Tg}^2 \\
+    {} &= q^4 + 2q^2 \ip{q \one + g}{g} + q^2 \norm{g}^2 + 2q \ip{g}{Tg} + \norm{Tg}^2 \\
+    {} &= q^4 + 3q^2 \norm{g}^2 + 2q \ip{g}{Tg} + \norm{Tg}^2.
+  \end{align*}
 \end{proof}
 
 For $C_7$, let $H_0=\one^\perp$ and
@@ -749,70 +765,79 @@ projection is the centering operation
 \[
    (P_{H_0}f)(x)=f(x)-\int_0^1f(y)\dd y.
 \]
-Thus $P_{H_0}$ removes the constant part of $f$, while $A$ centers the
-input, applies $T$, and then centers the output.  In particular, $A$ acts
-entirely within the mean-zero subspace.
-Define
+Thus $P_{H_0}$ removes the constant part of $f$, and $A$ is the restriction
+of $T$ to $H_0$, in the sense that $\ip f{Ah}=\ip f{Th}$ for all
+$f,h\in H_0$.  Define
 \begin{equation}\label{eq:sj-def}
    s_j=\ip g{A^jg}\qquad(j\ge0).
 \end{equation}
-The spectral theorem supplies a finite positive measure $\mu$ on the real
-line such that
+The kernel of $T$ is square-integrable, so $A$ is a compact self-adjoint
+operator and $H_0$ has an orthonormal basis of its eigenfunctions.  Write
+$\lambda_i$ for the distinct eigenvalues of $A$ and $P_i$ for the orthogonal
+projection onto the eigenspace of $\lambda_i$, so that $\sum_iP_i$ is the
+identity on $H_0$ and $A^j=\sum_i\lambda_i^jP_i$.  Then
+\[
+   s_j=\sum_i\lambda_i^j\norm{P_ig}^2,
+\]
+which is the $j$-th moment of the finite positive measure
+\begin{equation}\label{eq:mu-short}
+   \mu=\sum_i\norm{P_ig}^2\,\delta_{\lambda_i}.
+\end{equation}
+Rewriting $s_j$ in terms of this measure,
 \[
    s_j=\int\lambda^j\dd\mu(\lambda),
    \qquad s_0=\norm g^2=\mu(\R).
 \]
 
-A useful way to verify all path formulas is to write
+We now express the path densities $x_j$ through $q$ and the moments $s_j$.
+Split $T^n\one$ into its constant and mean-zero parts.  The constant part is
+$\ip\one{T^n\one}\one=x_n\one$, so
 \[
-   T^n\one=a_n\one+h_n,\qquad h_n\perp\one.
+   T^n\one=x_n\one+h_n,\qquad h_n\perp\one,
 \]
-Then $a_n=x_n$, and the block form of $T$ gives the recursion
+where $x_0=1$ and $h_0=0$.  Now \eqref{eq:T1-decomp} and the definition of
+$A$ give the recursive formulas
 \begin{equation}\label{eq:path-recursion}
-   a_{n+1}=qa_n+\ip g{h_n},
-   \qquad h_{n+1}=a_ng+Ah_n,
-   \qquad (a_0,h_0)=(1,0).
+   x_{n+1}=qx_n+\ip g{h_n},
+   \qquad h_{n+1}=x_ng+Ah_n.
 \end{equation}
 For clarity, iterating the second recursion first gives
 \[
 \begin{aligned}
  h_1={}&g,\\
  h_2={}&qg+Ag,\\
- h_3={}&a_2g+qAg+A^2g,\\
- h_4={}&a_3g+a_2Ag+qA^2g+A^3g,\\
- h_5={}&a_4g+a_3Ag+a_2A^2g+qA^3g+A^4g,\\
- h_6={}&a_5g+a_4Ag+a_3A^2g+a_2A^3g
+ h_3={}&x_2g+qAg+A^2g,\\
+ h_4={}&x_3g+x_2Ag+qA^2g+A^3g,\\
+ h_5={}&x_4g+x_3Ag+x_2A^2g+qA^3g+A^4g,\\
+ h_6={}&x_5g+x_4Ag+x_3A^2g+x_2A^3g
       +qA^4g+A^5g.
 \end{aligned}
 \]
 More generally,
 \[
-   h_n=\sum_{j=0}^{n-1}a_{n-1-j}A^jg.
+   h_n=\sum_{j=0}^{n-1}x_{n-1-j}A^jg.
 \]
-Taking the inner product with $g$, and recalling that
-$s_j=\ip g{A^jg}$, turns the first recursion in
-\eqref{eq:path-recursion} into the scalar formula
+If we take the inner product with $g$ and use the definition
+\eqref{eq:sj-def} of $s_j$,
+\[
+   \ip g{h_n}
+   =\sum_{j=0}^{n-1}x_{n-1-j}\ip g{A^jg}
+   =\sum_{j=0}^{n-1}x_{n-1-j}s_j.
+\]
+Substituting this into the first recursion of \eqref{eq:path-recursion}
+eliminates $h_n$, and leaves a recursion for the path densities alone,
 \begin{equation}\label{eq:path-scalar-recursion}
-   a_{n+1}=qa_n+\sum_{j=0}^{n-1}a_{n-1-j}s_j
+   x_{n+1}=qx_n+\sum_{j=0}^{n-1}x_{n-1-j}s_j
    \qquad(n\ge1).
 \end{equation}
-For example, since $a_0=1$ and $a_1=q$,
-\[
-\begin{aligned}
- a_2&=qa_1+a_0s_0=q^2+s_0,\\
- a_3&=qa_2+a_1s_0+a_0s_1=q^3+2qs_0+s_1,\\
- a_4&=qa_3+a_2s_0+a_1s_1+a_0s_2
-  =q^4+3q^2s_0+2qs_1+s_0^2+s_2.
-\end{aligned}
-\]
-Continuing the same calculation gives
+We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
 \begin{equation}\label{eq:path-2-6}
 \begin{aligned}
- x_2={}&a_2 = q^2+s_0,\\
- x_3={}&a_3 = q^3+2qs_0+s_1,\\
- x_4={}&a_4 = q^4+3q^2s_0+2qs_1+s_0^2+s_2,\\
- x_5={}&a_5 = q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3,\\
- x_6={}&a_6 = q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
+ x_2={}& q^2+s_0,\\
+ x_3={}& q^3+2qs_0+s_1,\\
+ x_4={}& q^4+3q^2s_0+2qs_1+s_0^2+s_2,\\
+ x_5={}& q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3,\\
+ x_6={}& q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
    +6qs_0s_1+2qs_3\\
      &\qquad{}+s_0^3+2s_0s_2+s_1^2+s_4.
 \end{aligned}
@@ -879,12 +904,11 @@ $c_5\le x_4$.  Therefore
 \begin{equation}\label{eq:C5-IE}
  t(C_5,W)\ge1-5q+5q^2+5(1-q)x_2-5x_3+4x_4.
 \end{equation}
-The target is
+Subtracting the lower bound
 \[
- (1-q)^5-(1-q)q^4=1-5q+10q^2-10q^3+4q^4.
+ (1-q)^5-(1-q)q^4=1-5q+10q^2-10q^3+4q^4
 \]
-Subtracting it from \eqref{eq:C5-IE} and using
-\Cref{lem:path-to-4} gives
+from \eqref{eq:C5-IE} and using \Cref{lem:path-to-4} gives
 \begin{equation}\label{eq:Phi5}
 \begin{aligned}
  \Phi_5={}&4\norm{Tg}^2+(8q-5)\ip g{Tg}
@@ -893,11 +917,12 @@ Subtracting it from \eqref{eq:C5-IE} and using
    +\left(8q^2-10q+\frac{55}{16}\right)\norm g^2.
 \end{aligned}
 \end{equation}
-The residual quadratic has discriminant
+The quadratic coefficient $8q^2-10q+\frac{55}{16}$ has discriminant
 \[
    100-4\cdot8\cdot\frac{55}{16}=-10<0
 \]
-and positive leading coefficient.  Thus $\Phi_5\ge0$, proving the claim.
+and positive leading coefficient, so it is positive for every $q$.  Thus
+$\Phi_5\ge0$, proving the claim.
 \end{proof}
 
 \subsection{The heptagon: a univariate sum of squares}\label{subsec:C7}
