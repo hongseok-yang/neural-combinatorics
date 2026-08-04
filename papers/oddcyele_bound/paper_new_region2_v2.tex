@@ -1911,26 +1911,32 @@ Then $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$ and define
 \end{lemma}
 
 \begin{proof}
-  The identity
-  \begin{align}
+  From the definition \eqref{eq:dense-rho} of $\rho_{n,m}$,
+  \begin{align*}
     \rho_{n,m}(u)
-    ={}&\frac {m}{n}(1-u)
-    \bigl((1-u)^{n-1}-u^{n-1}\bigr)
-    +\left(\frac {m}{n}-1\right)u^{n-1}
-    \label{eq:dense-rho-pointwise}
-  \end{align}
-  shows that $\rho_{n,m}(u)\ge0$ whenever $u\le1/2$: the exponent
-  $n-1$ is even and $|1-u|\ge|u|$.  If $\ell\le0$, then for
-  $x>0$,
+    &=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1} \nonumber \\
+    &=\frac {m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)
+    +\left(\frac {m}{n}-1\right)u^{n-1}, \label{eq:dense-rho-pointwise}
+  \end{align*}
+  which can be shown by expanding
+  $(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)=(1-u)^n-u^{n-1}+u^n$.  
+  Recall that $\frac{m}{n}-1=\frac{2r}{n}>0$ by \eqref{eq:dense-n}, and $n-1$ is even. 
+  The second term is therefore always nonnegative, and the first is
+  nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, which hold for $u \le 1/2$.
+
+  Since $X \sim \mathrm{Beta}(r, r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\ell\le0$
+  gives
   \[
-    q+\ell\frac{1-x}{x}\le q\le\frac{1}{2}.
+    q+\ell\,\frac{1-X}{X}\le q\le\frac{1}{2}.
   \]
-  The integrand in \eqref{eq:dense-beta-second} is therefore nonnegative.
+  Hence $X^n\rho_{n,m}\bigl(q+\ell(1-X)/X\bigr)\ge0$, and
+  \eqref{eq:dense-beta-second} gives $\widetilde P_{m,r}(q,\ell)\ge0$.
 \end{proof}
 
-Only $\ell>0$ remains.  Pointwise positivity of $\rho_{n,m}(q+s)$ fails
-for large $s$, so the beta integral must be used as a genuinely averaged
-object.
+So only $\ell>0$ case remains. 
+There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:dense-beta-integral} ranges over $[q,\infty)$, 
+and unlike the $\ell\le0$ case, $\rho_{n,m}$ can be negative on that range: for instance $\rho_{5,7}(0.7)<0$.
+The integrand can therefore no longer be handled pointwise, and nonnegativity has to be derived from the integral as a whole.
 
 \subsection{Laplace--gamma smoothing}
 
