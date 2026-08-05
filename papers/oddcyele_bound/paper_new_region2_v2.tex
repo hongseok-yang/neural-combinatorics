@@ -167,15 +167,16 @@ $\lambda_i$.  We write
 \]
 for the associated measure on the spectrum of $A$, so that
 $\int\lambda^j\dd\mu(\lambda)=\ip g{A^jg}$ for every $j\ge0$ and
-$\mu(\R)=\norm g^2$.  Two elementary lemmas about these eigenvalues are used
-in every part:
+$\mu(\R)=\norm g^2$.  Two elementary lemmas bound these eigenvalues.  The
+first,
 \[
   |\lambda_i|\le\frac{1}{2}\quad\text{for every }i \qquad(\Cref{lem:half-norm}),
 \]
-and
+is used from Part~2 on; the second,
 \[
-  \sum_i\lambda_i^2+2\norm g^2=\Tr(A^2)+2\norm g^2\le pq \qquad(\Cref{lem:HS-budget}).
+  \sum_i\lambda_i^2+2\norm g^2=\Tr(A^2)+2\norm g^2\le pq \qquad(\Cref{lem:HS-budget}),
 \]
+only in Part~3.
 
 \begin{enumerate}[label=\textbf{Part \arabic*.},leftmargin=3.4em]
   \item \Cref{sec:short-cycles} considers $m=3,5,7$. We prove these cases so that when we consider the general odd $m$ in the later parts, we can assume $m\ge9$.
@@ -201,7 +202,7 @@ and
     \qquad r=\norm g^2,
   \]
   where $R_{q,r}$ is a quartic in $\lambda$; \Cref{subsec:C7} writes it
-  as an explicit sum of squares, nonnegative for every real $\lambda$.
+  as an sum of squares, nonnegative for every real $\lambda$.
 
   \item \Cref{sec:common-operator,sec:dense-region} prove all odd lengths
   when $q\le1/3$.  We first show that the logarithm of a determinant
@@ -885,7 +886,7 @@ certificates, see Powers--Reznick~\cite{PowersReznick2000}.
 
 \fi
 
-\section{The common complement-operator framework}\label{sec:common-operator}
+\section{Reductions and notation used in both regions}\label{sec:common-operator}
 
 \subsection{Step-graphon reduction}\label{subsec:step-reduction}
 
@@ -1112,7 +1113,7 @@ the coefficients are recovered from that function by differentiation,
 \end{equation}
 The arguments below are the same under either reading.
 
-\subsection{The block decomposition and two spectral bounds}
+\subsection{The block decomposition and the support of the spectral measure}
 \label{subsec:block-decomposition}
 
 From here to the end of \Cref{sec:regionII-operator}, we assume $W$ to be a
@@ -1192,25 +1193,6 @@ the role of the operator in \Cref{subsec:path-moments}: for a step graphon,
 the compression $P_{\one^\perp}T_UP_{\one^\perp}$ used there is zero on
 $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
 
-\begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
-  One has
-  \begin{equation}\label{eq:HS-budget}
-    \Tr(A^2)+2\norm g^2\le pq.
-  \end{equation}
-\end{lemma}
-
-\begin{proof}
-  Since $0\le U\le1$,
-  \[
-    \Tr(T_U^2)=\int_{[0,1]^2}U(x,y)^2\dd x\dd y
-    \le\int_{[0,1]^2}U(x,y)\dd x\dd y=q.
-  \]
-  On the other hand, \eqref{eq:block-U} gives
-  \[
-    \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
-  \]
-  Subtracting $q^2$ proves the claim.
-\end{proof}
 
 \begin{lemma}[Operator norm bound]\label{lem:half-norm}
   The spectrum of $A$ lies in $[-1/2,1/2]$; equivalently,
@@ -1299,7 +1281,7 @@ coefficient,
   =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
 \end{equation}
 
-\section{Below the threshold \texorpdfstring{$q\le1/3$}{q<=1/3}: Dirichlet averages and gamma smoothing}
+\section{Above the threshold \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet averages and gamma smoothing}
 \label{sec:dense-region}
 
 Throughout this section,
@@ -2433,9 +2415,9 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   $b>0$, which is \eqref{eq:gamma-H} and hence implies \eqref{eq:gamma-moment2}.
 \end{proof}
 
-\subsection{Completion of the proof for \texorpdfstring{$q\le1/3$}{q<=1/3}}
+\subsection{Completion of the proof for \texorpdfstring{$p\ge2/3$}{p>=2/3}}
 
-\begin{theorem}[The theorem for $q\le1/3$]\label{thm:dense-region}
+\begin{theorem}[The theorem for $p\ge2/3$]\label{thm:dense-region}
   If $p\ge2/3$, then \eqref{eq:main-goal} holds for every odd $m\ge3$.
 \end{theorem}
 
@@ -2466,7 +2448,7 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   throughout that range, so $\Phi_m\ge0$.
 \end{proof}
 
-\section{Above the threshold \texorpdfstring{$1/3<q<1/2$}{1/3<q<1/2}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
+\section{Below the threshold \texorpdfstring{$1/2<p<2/3$}{1/2<p<2/3}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
 \label{sec:regionII-operator}
 
 From now on,
@@ -2474,10 +2456,30 @@ From now on,
   \frac{1}{3}<q<\frac{1}{2},
   \qquad \frac{1}{2}<p<\frac{2}{3},
 \end{equation}
-and $m\ge9$ is odd.  We continue with the common block decomposition
-\eqref{eq:block-U}, the Hilbert--Schmidt bound \eqref{eq:HS-budget}, and the spectral
-bound \eqref{eq:A-half}.  By \Cref{lem:step-reduction}, we may again work
-with a step graphon during determinant manipulations.
+and $m\ge9$ is odd.  We continue with the block decomposition
+\eqref{eq:block-U} and the operator norm bound of \Cref{lem:half-norm}.  The
+second bound on the spectrum of $A$, used only in this section, is the
+following.
+
+\begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
+  One has
+  \begin{equation}\label{eq:HS-budget}
+    \Tr(A^2)+2\norm g^2\le pq.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Since $0\le U\le1$,
+  \[
+    \Tr(T_U^2)=\int_{[0,1]^2}U(x,y)^2\dd x\dd y
+    \le\int_{[0,1]^2}U(x,y)\dd x\dd y=q.
+  \]
+  On the other hand, \eqref{eq:block-U} gives
+  \[
+    \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
+  \]
+  Subtracting $q^2$ proves the claim.
+\end{proof}
 \subsection{The one-sided spectral-shift identity}\label{subsec:shift}
 
 The graphon operator of $W=1-U$ has block form
