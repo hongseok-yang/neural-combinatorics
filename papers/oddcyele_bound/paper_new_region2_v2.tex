@@ -43,7 +43,6 @@
 \newcommand{\pos}[1]{\left(#1\right)_{+}}
 \newcommand{\cH}{\mathcal H}
 \newcommand{\cQ}{\mathcal Q}
-\newcommand{\cL}{\mathcal L}
 \newcommand{\dd}{\,\mathrm d}
 \newcommand{\E}{\mathbb E}
 \newcommand{\GammaLaw}{\operatorname{Gamma}}
@@ -305,42 +304,59 @@ and
   assumption $p\ge2/3$ is used.
 
   \item \Cref{sec:regionII-operator,sec:huber,sec:chart,sec:quadratic,sec:linear}
-  prove all odd $m\ge9$ when $1/2<p<2/3$.  The argument in this part is
-  spectral.  Only the identity for $W$ from Part~2 is used,
+  prove all odd $m\ge9$ when $1/2<p<2/3$.  The argument in this part is a
+  spectral analysis of $A$.  We use two results, the identity for $W$ from
+  Part~2,
   \[
     t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
   \]
-  and every coefficient of $L_-$ is nonnegative (\Cref{lem:shift}, where
-  $L_-$ is written $\cL$).  Nothing cancels $\Tr(A^m)$ this time, so it
-  must be bounded directly.
+  and the nonnegativity of every coefficient of $L_-$; \Cref{lem:shift}
+  states both.  Nothing cancels $\Tr(A^m)$ this time, so it must be bounded
+  directly.
 
-  The two lemmas above restrict the spectrum of $A$.  If two eigenvalues
-  were larger than $q$, then $\sum_i\lambda_i^2>2q^2$; but $2q^2>pq$
-  exactly when $q>1/3$, which contradicts the second lemma.  Hence at most
-  one eigenvalue exceeds $q$.  If none does, the theorem is immediate
-  (\Cref{lem:no-frontier}), so we may assume that exactly one does and
-  write $\alpha$ for it.  The second lemma then also gives
-  $|\lambda_i|\le L:=\sqrt{pq-\alpha^2}$ for every other eigenvalue.  An
-  upper bound for $\alpha$ comes from its eigenfunction $\phi$: since
-  $U\ge0$, replacing $\phi$ by $|\phi|$ can only increase
-  $\ip\phi{T_U\phi}$, and expanding $|\phi|$ along $\one$ and $\phi$
-  gives
+  We first consider the eigenvalues of $A$ larger than $q$.  If there were
+  two of them, then $\sum_i\lambda_i^2>2q^2$, whereas
+  $\sum_i\lambda_i^2\le pq$ by \Cref{lem:HS-budget}, so it contradicts with $2q^2 > pq$ when $q>1/3$. 
+  Hence at most one eigenvalue exceeds $q$.  
+  If none does the theorem is immediate (\Cref{lem:no-frontier}), 
+  so we may assume that exactly one does and write $\alpha$ for it.  
+  The same bound gives
+  $|\lambda_i|\le L:=\sqrt{pq-\alpha^2}$ for every other eigenvalue.  
+  One can also derive an upper bound on $\alpha$ by using its eigenfunction $\phi$: 
+  since $U\ge0$, replacing $\phi$ by $|\phi|$ can only increase
+  $\ip\phi{T_U\phi}$, and expanding $|\phi|$ along $\one$ and $\phi$ gives
   \[
     \norm g^2\ge\frac{\alpha(\alpha-q)^2}{2(1-2\alpha)},
   \]
-  which with the second lemma forces $\alpha^2+q\alpha-q\le0$
-  (\Cref{lem:forced-variance}).
+  which with $2\norm g^2\le pq-\alpha^2$, again from \Cref{lem:HS-budget},
+  gives $\alpha^2+q\alpha-q\le0$ (\Cref{lem:forced-variance}).
 
-  Splitting $g=\gamma\phi+g_s$ into its component along $\phi$ and its
-  component in the remaining spectral subspace turns the identity into
+  Decomposing $g=\gamma\phi+g_s$ into its component along $\phi$ and its
+  component in the remaining spectral subspace, the two nonconstant terms
+  of the identity can be bounded.  For $\Tr(A^m)$, the eigenvalues other
+  than $\alpha$ satisfy $\sum\lambda_i^m\le L^{m-2}\sum\lambda_i^2$, so
+  \Cref{lem:HS-budget} gives
+  \[
+    \Tr(A^m)\le\alpha^m+L^m-2L^{m-2}\bigl(\gamma^2+\norm{g_s}^2\bigr).
+  \]
+  For the generating function, keeping only the first term of
+  $-\log(1-X)=\sum_{k\ge1}X^k/k$ discards
+  nonnegative coefficients, and leaves
+  \[
+    m[z^m]L_-(z)\ge m\int k_m\dd\mu
+    \ge mk_m(\alpha)\gamma^2+mk_m(L)\norm{g_s}^2,
+    \qquad
+    k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+  \]
+  Together they give (\Cref{prop:master-defect})
   \[
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
     \ge-R_m+A_m\gamma^2+B_m\norm{g_s}^2,
-    \qquad R_m=\alpha^m+L^m-pq^{m-1},
   \]
-  where the explicit form of $A_m$ and $B_m$ is given in
-  \eqref{eq:Am-def}--\eqref{eq:Bm-def} (\Cref{prop:master-defect}).  It
-  therefore suffices to prove $A_m\gamma^2+B_m\norm{g_s}^2\ge R_m$.
+  where $R_m=\alpha^m+L^m-pq^{m-1}$, $A_m=2L^{m-2}+mk_m(\alpha)$ and
+  $B_m=2L^{m-2}+mk_m(L)$, with $0<A_m<B_m$ because $k_m$ decreases and
+  $L<\alpha$.  It therefore suffices to prove
+  $A_m\gamma^2+B_m\norm{g_s}^2\ge R_m$.
 
   To prove this lower bound, we first derive bounds on $\gamma$ and
   $\norm{g_s}$ from the eigenfunction $\phi$.  Decompose
@@ -349,16 +365,16 @@ and
     \qquad a_\phi=\int_0^1|\phi|,
     \qquad k\perp\one,\phi,
   \]
-  and put $K=\norm k^2$, so that $a_\phi^2+b^2+K=1$.  Using $0\le U\le1$
-  as above gives (\Cref{lem:direct-channel,lem:safe-channel})
+  and set $K=\norm k^2$, so that $a_\phi^2+b^2+K=1$.  One can then show
+  (\Cref{lem:direct-channel,lem:safe-channel}) that
   \[
     \gamma\le\frac{a_\phi^2-2\alpha(1+b)}{2a_\phi},
     \qquad
     b\gamma+\ip{g_s}k\ge
     \frac{(\alpha-q)a_\phi^2+(\alpha-L)K}{2a_\phi},
   \]
-  and Cauchy--Schwarz turns the second into a lower bound on
-  $\norm{g_s}^2$.  We then solve the constrained minimization of
+  and the Cauchy--Schwarz inequality $\ip{g_s}k\le\norm{g_s}\sqrt K$ turns
+  the second inequality into a lower bound on $\norm{g_s}^2$.  We then solve the constrained minimization of
   $A_m\gamma^2+B_m\norm{g_s}^2$ under these two bounds.  Minimizing first
   in $\gamma$, and then over the three numbers $a_\phi,b,K$ that describe
   $\phi$, gives (\Cref{thm:huber-elim})
@@ -368,36 +384,49 @@ and
     \psi(\xi,\rho)=\min_{0\le v\le1}
     \bigl\{\rho v^2+\pos{\xi-v+v^2}\bigr\},
   \]
-  where $C_m$, $\xi$, and $\rho$ depends on $q$, $\alpha$,
+  where $C_m$, $\xi$, and $\rho$ depend on $q$, $\alpha$,
   and $m$.  The theorem in this region is thereby reduced to the scalar
-  inequality $R_m\le C_m\psi(\xi,\rho)$.  Writing
-  $\pos x=\max_{0\le\lambda\le1}\lambda x$ and interchanging the minimum
-  and the maximum, which strong duality permits, gives
+  inequality $R_m\le C_m\psi(\xi,\rho)$.  Since
+  $\pos x=\max_{0\le\lambda\le1}\lambda x$, the definition of $\psi$ is a
+  nested optimization,
+  \[
+    \psi(\xi,\rho)=\min_{0\le v\le1}\ \max_{0\le\lambda\le1}
+    \bigl\{\rho v^2+\lambda(\xi-v+v^2)\bigr\}.
+  \]
+  We interchange the minimum and the maximum by the strong duality of this
+  problem and carry out the inner minimization in $v$, which gives
+  (\Cref{prop:huber-dual})
   \[
     \psi(\xi,\rho)=\max_{0\le\lambda\le1}
-    \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\},
+    \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\}.
   \]
-  and the choices $\lambda=2\rho\xi$ and $\lambda=1$ give the two lower
-  bounds used, one for each of the regimes $2\rho\xi\le1$ and
-  $2\rho\xi>1$ (\Cref{prop:huber-dual,cor:two-witnesses}).
+  Two choices of $\lambda$ gives the lower bounds
+  (\Cref{cor:two-witnesses}),
+  \begin{align*}
+    \psi(\xi,\rho)&\ge\rho\xi^2\,\frac{1+4\xi}{1+2\xi}
+    &&(\lambda=2\rho\xi,\text{ admissible when }2\rho\xi\le1),\\
+    \psi(\xi,\rho)&\ge\xi-\frac{1}{4(1+\rho)}
+    &&(\lambda=1),
+  \end{align*}
+  one for each of the regimes $2\rho\xi\le1$ and $2\rho\xi>1$.
 
-  What is left is an inequality between explicit quantities depending on
-  $q$, $\alpha$, and $m$.  Since $p=1-q$ and $L^2=pq-\alpha^2$, the two
-  ratios
+  The goal $R_m\le C_m\psi(\xi,\rho)$ involves only $q$, $\alpha$, and $m$.
+  From $p=1-q$ and $L^2=pq-\alpha^2$, the two ratios
   \[
     v=\frac {p}{\alpha}-1,
     \qquad
     \zeta=\frac{L^2}{\alpha(\alpha-q)}
   \]
-  already determine $q$, $p$, $\alpha$, and $L$, so we may use them as the
-  two free parameters.  Here $v$ measures how much smaller the leading
-  eigenvalue $\alpha$ is than the edge density, and $\zeta$ compares the
-  remaining spectrum with the gap $\alpha-q$.  The pairs $(v,\zeta)$ that
-  can occur form a region of the plane, cut out by explicit inequalities
-  such as $0<v<1$ and $\zeta(\zeta+v)\ge1$, and the same region applies
-  every $m$ (\Cref{sec:chart}).  What has to be proved is that
-  $R_m\le C_m\psi(\xi,\rho)$ holds at every point of that region and for
-  every odd $m\ge9$.
+  determine $q$, $p$, $\alpha$, and $L$, so we may replace $q$ and $\alpha$
+  by $v$ and $\zeta$.  For every $m$, the pairs $(v,\zeta)$ to be considered
+  are those satisfying
+  \[
+    0<v<1,
+    \qquad
+    \zeta(\zeta+v)\ge1
+  \]
+  (\Cref{sec:chart}).  What has to be proved is that
+  $R_m\le C_m\psi(\xi,\rho)$ holds in that region for every odd $m\ge9$.
 
   This is done by the following case analysis on the region.
   \begin{itemize}[leftmargin=1.6em,topsep=2pt,itemsep=1pt]
@@ -419,19 +448,15 @@ and
       (\Cref{lem:N7-small-v,lem:N7-middle-v}).
     \end{itemize}
   \end{itemize}
-  These are all elementary analysis, except the last case, $m=9$, where
-  two fixed polynomials have to be shown positive on an interval.  Their
-  coefficients in a Bernstein basis are listed as exact rationals in
-  \Cref{app:bernstein}, positivity of the coefficients giving positivity
-  on the interval.
-
+  These can be proved by elementary analysis, except the last case, $m=9$, where we should show two polynomials are nonnegative on an interval.
+  We expand the polynomials in the Bernstein basis of that interval, where each element of the basis is nonnegative there.
+  To verify the nonnegativity, one can check that the coefficients of the expansion are nonnegative, which is listed in \Cref{app:bernstein}.
 \end{enumerate}
 
-The final assembly is in \Cref{sec:assembly}.  No numerical optimization or
-interval covering is used.  The two fixed Bernstein coefficient lists in
-\Cref{app:bernstein} are exact rational certificates.  Separately from the
-proof, \Cref{sec:transferable} discusses the possible applicability of the
-methods used here to other problems in extremal combinatorics.
+We prove \Cref{thm:main} in \Cref{sec:assembly}, combining the parts above.
+Separately from the proof, \Cref{sec:transferable} discusses the possible
+applicability of the methods used here to other problems in extremal
+combinatorics.
 
 \subsection{Step-graphon reduction}\label{subsec:step-reduction}
 
@@ -2472,15 +2497,15 @@ may instead use
 \begin{lemma}[One-sided shift]\label{lem:shift}
   For every odd $m\ge3$,
   \begin{equation}\label{eq:shift}
-    t(C_m,W)=p^m-\Tr(A^m)+m[z^m]\cL(z),
+    t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
   \end{equation}
   where
   \begin{equation}\label{eq:L-series}
-    \cL(z)=-\log\left(
+    L_-(z)=-\log\left(
     1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}
     \right).
   \end{equation}
-  Moreover, every coefficient of $\cL(z)$ is nonnegative.
+  Moreover, every coefficient of $L_-(z)$ is nonnegative.
 \end{lemma}
 
 \begin{proof}
@@ -2519,7 +2544,7 @@ may instead use
 For odd $m$, the linear term of the logarithm supplies the useful lower
 bound
 \begin{equation}\label{eq:linear-shift-lower}
-  m[z^m]\cL(z)
+  m[z^m]L_-(z)
   \ge m\int k_m(\lambda)\dd\mu_g(\lambda),
   \qquad
   k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
@@ -2664,6 +2689,9 @@ Choose the sign of $\phi$ later as convenient, and decompose
   g=\gamma\phi+g_s,
   \qquad g_s\perp\phi.
 \end{equation}
+% TODO(notation): rename $A_m$, $B_m$, $R_m$ (and $C_m$ at
+% \eqref{eq:C-xi-rho}).  $A$ is already the mean-zero operator and $C_m$ is
+% the $m$-cycle, so these letters collide with established notation.
 For odd $m$, define
 \begin{align}
   A_m&=2L^{m-2}+mk_m(\alpha),\label{eq:Am-def}\\
@@ -2705,7 +2733,7 @@ $k_m$,
   \end{equation}
   By \eqref{eq:linear-shift-lower} and \eqref{eq:k-safe},
   \begin{equation}\label{eq:shift-payment}
-    m[z^m]\cL(z)
+    m[z^m]L_-(z)
     \ge mk_m(\alpha)\gamma^2+mk_m(L)\norm{g_s}^2.
   \end{equation}
   Combining \eqref{eq:shift}, \eqref{eq:trace-payment}, and
@@ -2825,6 +2853,8 @@ Define
   \qquad e=1-2\alpha,
 \end{equation}
 so $d,f,e>0$.  Put
+% TODO(notation): $C_m$ collides with the cycle $C_m$; rename together with
+% $A_m$, $B_m$, $R_m$ of \eqref{eq:Am-def}--\eqref{eq:Rm-def}.
 \begin{equation}\label{eq:C-xi-rho}
   C_m=\frac{B_mf\sqrt{2\alpha}\,e^2}{4\alpha^2},
   \qquad
