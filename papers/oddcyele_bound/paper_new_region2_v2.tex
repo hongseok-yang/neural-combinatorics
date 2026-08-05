@@ -252,7 +252,7 @@ and
   $d$ and $a^{\times k}$ means $a$ repeated $k$ times.  It therefore
   suffices to prove $P_{m,r}\ge0$ on $[-1/2,1/2]^r$.
 
-  That polynomial is then simplified three times until it can be shown nonnegative with elementary methods  
+  That polynomial is then simplified three times until it can be shown nonnegative with elementary methods.
   First, using the fact that a complete homogeneous
   polynomial is an expectation of a power of a random convex combination,
   so with $\Theta$ uniform on the simplex $\Delta^r$ and
@@ -316,7 +316,7 @@ and
 
   We first consider the eigenvalues of $A$ larger than $q$.  If there were
   two of them, then $\sum_i\lambda_i^2>2q^2$, whereas
-  $\sum_i\lambda_i^2\le pq$ by \Cref{lem:HS-budget}, so it contradicts with $2q^2 > pq$ when $q>1/3$. 
+  $\sum_i\lambda_i^2\le pq$ by \Cref{lem:HS-budget}, a contradiction because $2q^2 > pq$ when $q>1/3$.
   Hence at most one eigenvalue exceeds $q$.  
   If none does the theorem is immediate (\Cref{lem:no-frontier}), 
   so we may assume that exactly one does and write $\alpha$ for it.  
@@ -400,7 +400,7 @@ and
     \psi(\xi,\rho)=\max_{0\le\lambda\le1}
     \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\}.
   \]
-  Two choices of $\lambda$ gives the lower bounds
+  Two choices of $\lambda$ give the lower bounds
   (\Cref{cor:two-witnesses}),
   \begin{align*}
     \psi(\xi,\rho)&\ge\rho\xi^2\,\frac{1+4\xi}{1+2\xi}
@@ -1299,7 +1299,7 @@ coefficient,
   =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
 \end{equation}
 
-\section{The dense region \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet and gamma smoothing}
+\section{Below the threshold \texorpdfstring{$q\le1/3$}{q<=1/3}: Dirichlet averages and gamma smoothing}
 \label{sec:dense-region}
 
 Throughout this section,
@@ -1308,7 +1308,7 @@ Throughout this section,
 \end{equation}
 and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
 
-\subsection{A two-sided spectral shift and cancellation of the tail}
+\subsection{A two-sided Schur-complement identity and cancellation of the odd trace}
 
 By \Cref{lem:analytic-reading}\,(2) and \eqref{eq:finite-trace-cycle}, every
 step kernel $K$ satisfies
@@ -1489,7 +1489,7 @@ Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
 
 \subsection{Expansion in complete homogeneous polynomials}
 
-In this seciton, we will give the explicit form of $\Phi_m$ as an integral of a polynomial in $q$ and the eigenvalues of $A$.
+In this section, we will give the explicit form of $\Phi_m$ as an integral of a polynomial in $q$ and the eigenvalues of $A$.
 
 For variables $y_1,\ldots,y_k$, the \emph{complete homogeneous symmetric
 polynomial} of degree $d$ is
@@ -1592,7 +1592,7 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
   $2r>m-1$.
 \end{proof}
 
-\subsection{Dirichlet diagonalization: a probabilistic polarization}
+\subsection{Diagonalization by a Dirichlet average}
 
 In this section, we will simplify the integrand $P_{m,r}$ of \eqref{eq:dense-expansion} by replacing the eigenvalues $\lambda_1,\ldots,\lambda_r$ by a single variable $\ell$.
 Define the diagonal polynomial
@@ -1805,7 +1805,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel against those of
   $\binom{n+2r-1}{2r-1}\binom nk$.
 
-  Next we differentiate the both side of \eqref{eq:dense-beta-h} with respect to $a$. 
+  Next we differentiate both sides of \eqref{eq:dense-beta-h} with respect to $a$.
   On the left, differentiating the generating function
   \eqref{eq:dense-h-gf} in the form
   $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d=(1-az)^{-r}(1-bz)^{-r}$
@@ -1940,7 +1940,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   this proves \eqref{eq:dense-beta-integral}.
 \end{proof}
 
-\subsection{The nonpositive diagonal is pointwise safe}
+\subsection{The case \texorpdfstring{$\ell\le0$}{l<=0}: pointwise nonnegativity}
 
 \begin{lemma}\label{lem:dense-ell-negative}
   If $0\le q\le1/2$ and $\ell\le0$, then
@@ -1970,7 +1970,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   \eqref{eq:dense-beta-second} gives $\widetilde P_{m,r}(q,\ell)\ge0$.
 \end{proof}
 
-So only $\ell>0$ case remains. 
+So only the case $\ell>0$ remains.
 There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:dense-beta-integral} ranges over $[q,\infty)$, 
 and unlike the $\ell\le0$ case, $\rho_{n,m}$ can be negative on that range: for instance $\rho_{5,7}(0.7)<0$.
 The integrand can therefore no longer be handled pointwise, and nonnegativity has to be derived from the integral as a whole.
@@ -1995,7 +1995,7 @@ $x\mapsto x^{-m}$ is $t\mapsto t^{m-1}/\Gamma(m)$, so that
 which can be shown by evaluating the integral under the substitution
 $w=t(\ell+s)$.
 
-\begin{lemma}[Gamma smoothing]\label{lem:dense-gamma-smoothing}
+\begin{lemma}[Laplace--gamma representation]\label{lem:dense-gamma-smoothing}
   Let $Y\sim\GammaLaw(r,1)$.  If $\ell>0$, then
   \begin{equation}\label{eq:dense-gamma-smoothing}
     \widetilde P_{m,r}(q,\ell)
@@ -2060,7 +2060,7 @@ $\ell>0$ at once.  This is what the next two subsections do.
 
 \subsection{The shifted-gamma moment inequality}
 
-To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we centre $\rho_{n,m}$ at $u=1/2$ and expand. 
+To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we center $\rho_{n,m}$ at $u=1/2$ and expand.
 This produces the terms with positive constant factors
 \[
   2(r+j)v^{2j}-jv^{2j-1},
@@ -2080,7 +2080,7 @@ The following lemma supplies such a bound, uniformly in the scaling of $Y$.
   \end{equation}
 \end{lemma}
 
-We postpone its proof to the next subsection and first show exactly how it proves the the nonnegativity of $\E\rho_{n,m}(q+xY)$.
+We postpone its proof to the next subsection and first show exactly how it proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 
 \begin{proposition}[Shifted-gamma positivity]\label{prop:dense-gamma-positive}
   Let $n\ge1$ be odd, $r\ge1$, and $m=n+2r$.  If $0\le q\le1/3$, then
@@ -2433,9 +2433,9 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   $b>0$, which is \eqref{eq:gamma-H} and hence implies \eqref{eq:gamma-moment2}.
 \end{proof}
 
-\subsection{Completion of the dense-region proof}
+\subsection{Completion of the proof for \texorpdfstring{$q\le1/3$}{q<=1/3}}
 
-\begin{theorem}[Dense-region theorem]\label{thm:dense-region}
+\begin{theorem}[The theorem for $q\le1/3$]\label{thm:dense-region}
   If $p\ge2/3$, then \eqref{eq:main-goal} holds for every odd $m\ge3$.
 \end{theorem}
 
@@ -2466,7 +2466,7 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   throughout that range, so $\Phi_m\ge0$.
 \end{proof}
 
-\section{The intermediate region: the one-frontier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
+\section{Above the threshold \texorpdfstring{$1/3<q<1/2$}{1/3<q<1/2}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
 \label{sec:regionII-operator}
 
 From now on,
@@ -2521,8 +2521,8 @@ may instead use
     &=\det(I+zA)(1-pz)
     \left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
   \end{align*}
-  % TODO: this display repeats \Cref{lem:analytic-reading}(2);
-  % replace by a reference to \eqref{eq:logdet-cycle}.
+  \tk{TODO: this display repeats \Cref{lem:analytic-reading}(2); replace by a
+  reference to \eqref{eq:logdet-cycle}.}
   Taking $-\log$, and using
   \[
     -\log\det(I-zM)=\sum_{j\ge1}\frac{z^j}{j}\Tr(M^j),
@@ -2570,9 +2570,9 @@ Consequently,
   \qquad\text{whenever }|\lambda|\le L<p.
 \end{equation}
 
-\subsection{No frontier, and uniqueness of a frontier}
+\subsection{At most one eigenvalue above \texorpdfstring{$q$}{q}}
 
-\begin{lemma}[No-frontier case]\label{lem:no-frontier}
+\begin{lemma}[No eigenvalue above $q$]\label{lem:no-frontier}
   If the largest eigenvalue of $A$ is at most $q$, then
   \eqref{eq:main-goal} holds.
 \end{lemma}
@@ -2611,7 +2611,7 @@ most $L$.  Moreover,
 \begin{equation}\label{eq:L-order}
   0\le L<q<\alpha<\frac{1}{2}<p.
 \end{equation}
-The strict inequality $L>0$ will follow from the forced-variance lemma
+The strict inequality $L>0$ will follow from the variance lower bound
 below; no argument before that lemma requires it.
 For example,
 \[
@@ -2620,11 +2620,11 @@ For example,
 because $q>1/3$, while $\alpha<1/2$ follows from
 \Cref{lem:half-norm}.
 
-\subsection{The forced-variance ceiling}\label{subsec:forced-variance}
+\subsection{A variance lower bound and the eigenvalue upper bound}\label{subsec:forced-variance}
 
 The next inequality restricts the admissible pair $(q,\alpha)$.
 
-\begin{lemma}[Forced variance]\label{lem:forced-variance}
+\begin{lemma}[Variance lower bound]\label{lem:forced-variance}
   Let $\phi\perp\one$ be a unit eigenvector with $A\phi=\alpha\phi$.  Then
   \begin{equation}\label{eq:forced-variance}
     \norm g^2\ge
@@ -2688,14 +2688,19 @@ The next inequality restricts the admissible pair $(q,\alpha)$.
 
 \subsection{The master defect inequality}\label{subsec:master-defect}
 
+\tk{TODO (naming): ``master defect inequality'' --- defect, excess, master, and the
+weaker ``lower bound in terms of\ldots'' have all been rejected; a direct name for this
+subsection, for the proposition below, and for the word ``payment'' used in its proof is
+still to be found.}
+
 Choose the sign of $\phi$ later as convenient, and decompose
 \begin{equation}\label{eq:g-decomp}
   g=\gamma\phi+g_s,
   \qquad g_s\perp\phi.
 \end{equation}
-% TODO(notation): rename $A_m$, $B_m$, $R_m$ (and $C_m$ at
-% \eqref{eq:C-xi-rho}).  $A$ is already the mean-zero operator and $C_m$ is
-% the $m$-cycle, so these letters collide with established notation.
+\tk{TODO (notation): rename $A_m$, $B_m$, $R_m$ (and $C_m$ at
+\eqref{eq:C-xi-rho}).  $A$ is already the mean-zero operator and $C_m$ is
+the $m$-cycle, so these letters collide with established notation.}
 For odd $m$, define
 \begin{align}
   A_m&=2L^{m-2}+mk_m(\alpha),\label{eq:Am-def}\\
@@ -2747,6 +2752,10 @@ $k_m$,
 \subsection{Eliminating the frontier eigenfunction: a Huber envelope}
 \label{sec:huber}
 
+\tk{TODO (naming): ``Huber'' is to be dropped from display text (kept only as the
+historical remark below), but the replacement for ``envelope'' is not settled; also
+``frontier eigenfunction'' awaits the leading-vs-outlier decision.}
+
 The terminology refers to the same quadratic-versus-linear active-set
 geometry as Huber's robust loss~\cite{Huber1964}.  The exact dual formula
 below is a compact convex--concave minimax interchange of the type developed
@@ -2776,6 +2785,9 @@ Then
 \end{equation}
 
 \subsection{The direct and safe channels}
+
+\tk{TODO (naming): ``channel'' and ``safe'' are to be dropped; the replacement for the
+quantity $\gamma=\ip{g}{\phi}$ (``coupling'' vs ``overlap'') is undecided.}
 
 \begin{lemma}[Direct channel]\label{lem:direct-channel}
   The frontier coupling obeys
@@ -2850,15 +2862,20 @@ with the natural limiting interpretation when $K=0$.
 
 \subsection{Exact shape elimination}\label{subsec:shape-elim}
 
+\tk{TODO (naming): ``shape'' refers to the variables $(a_\phi,b,K)$ of the decomposition
+$|\phi|=a_\phi\one+b\phi+k$; shape and profile have both been rejected, and a name for
+these variables and for this optimization step is still to be found.}
+
 Define
 \begin{equation}\label{eq:dfe}
   d=\alpha-q,
   \qquad f=\alpha-L,
   \qquad e=1-2\alpha,
 \end{equation}
-so $d,f,e>0$.  Put
-% TODO(notation): $C_m$ collides with the cycle $C_m$; rename together with
-% $A_m$, $B_m$, $R_m$ of \eqref{eq:Am-def}--\eqref{eq:Rm-def}.
+so $d,f,e>0$.
+\tk{TODO (notation): $C_m$ below collides with the cycle $C_m$; rename together with
+$A_m$, $B_m$, $R_m$ of \eqref{eq:Am-def}--\eqref{eq:Rm-def}.}
+Put
 \begin{equation}\label{eq:C-xi-rho}
   C_m=\frac{B_mf\sqrt{2\alpha}\,e^2}{4\alpha^2},
   \qquad
@@ -3077,6 +3094,10 @@ Two choices of $\lambda$ will be used throughout.
 
 \subsection{The dimensionless chart}\label{sec:chart}
 
+\tk{TODO (notation): $N$ defined below collides with the partition size $N$ of
+\Cref{subsec:block-decomposition} (the $N\times N$ matrices of
+\Cref{lem:analytic-reading}); several later subsection titles use this $N$,
+so rename one of the two.}
 Set
 \begin{equation}\label{eq:N-def}
   N=m-2.
@@ -3228,7 +3249,7 @@ Because $N+1$ is even,
 
 \subsection{Three elementary bounds for \texorpdfstring{$T_N$}{TN}}
 
-\begin{lemma}[Defect bounds]\label{lem:T-bounds}
+\begin{lemma}[Bounds for $T_N$]\label{lem:T-bounds}
   For every admissible chart point and every odd $N\ge7$,
   \begin{align}
     T_N&\le N(1+v)-\zeta(1-v^{N/2}),
@@ -3328,7 +3349,7 @@ Because $N+1$ is even,
   \eqref{eq:T-tangent-bound}.
 \end{proof}
 
-\subsection{The quadratic Huber branch}\label{sec:quadratic}
+\subsection{The regime \texorpdfstring{$2\rho\xi\le1$}{2 rho xi <= 1}}\label{sec:quadratic}
 
 Assume
 \begin{equation}\label{eq:quadratic-branch}
@@ -3388,7 +3409,7 @@ Combining \eqref{eq:quad-payment-M} and \eqref{eq:M-lower},
 \end{equation}
 In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
 
-\begin{proposition}[Quadratic branch]\label{prop:quadratic-branch}
+\begin{proposition}[The regime $2\rho\xi\le1$]\label{prop:quadratic-branch}
   For every odd $N\ge7$, assumption \eqref{eq:quadratic-branch} implies
   \[
     R_m\le C_m\psi(\xi,\rho).
@@ -3449,7 +3470,7 @@ In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
   the proposition.
 \end{proof}
 
-\subsection{The linear Huber branch}\label{sec:linear}
+\subsection{The regime \texorpdfstring{$2\rho\xi>1$}{2 rho xi > 1}}\label{sec:linear}
 
 Assume
 \begin{equation}\label{eq:linear-branch}
@@ -3551,11 +3572,11 @@ $\sigma$ compensates for it.
   \eqref{eq:compensation}.
 \end{proof}
 
-\subsection{Two broad estimates for the linear payment}
+\subsection{The cases \texorpdfstring{$\zeta\ge N$}{zeta >= N} and \texorpdfstring{$v\ge5/8$}{v >= 5/8}}
 
 We first dispose of the range $\zeta\ge N$ when $v$ is not large.
 
-\begin{lemma}[Above the cycle scale]\label{lem:linear-high-zeta}
+\begin{lemma}[The regime $\zeta\ge N$]\label{lem:linear-high-zeta}
   If $\zeta\ge N$, $0<v\le5/8$, and $N\ge7$ is odd, then
   \eqref{eq:linear-core} holds.
 \end{lemma}
@@ -3681,7 +3702,7 @@ The next estimate handles all $\zeta$ once $v$ is large.
   \eqref{eq:large-v-target} holds.
 \end{proof}
 
-\subsection{Below the cycle scale: the growth lemma}
+\subsection{The regime \texorpdfstring{$\zeta\le N$}{zeta<=N}: the growth lemma}
 
 It remains, except for $N=7$, to handle $\zeta\le N$.  The compensation
 lemma reduces this to one variable.
@@ -3926,7 +3947,7 @@ lemma reduces this to one variable.
   \eqref{eq:J-ineq}.
 \end{proof}
 
-\begin{lemma}[Below the cycle scale]\label{lem:linear-low-zeta}
+\begin{lemma}[The regime $\zeta\le N$]\label{lem:linear-low-zeta}
   If $\zeta\le N$ and $N\ge9$ is odd, then
   \eqref{eq:linear-core} holds.
 \end{lemma}
@@ -3965,7 +3986,7 @@ lemma reduces this to one variable.
   $N$.  Since $T_N<N$, \eqref{eq:linear-core} follows.
 \end{proof}
 
-\subsection{The exceptional cycle scale \texorpdfstring{$N=7$, i.e. $m=9$}{N=7, i.e. m=9}}
+\subsection{The exceptional case \texorpdfstring{$N=7$, i.e. $m=9$}{N=7, i.e. m=9}}
 
 The preceding lemmas already cover $N=7$ whenever either
 $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
@@ -4168,7 +4189,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   of $\mathcal R$ proves it throughout the interval.
 \end{proof}
 
-\begin{proposition}[Linear branch]\label{prop:linear-branch}
+\begin{proposition}[The regime $2\rho\xi>1$]\label{prop:linear-branch}
   For every odd $N\ge7$, assumption \eqref{eq:linear-branch} implies
   \[
     R_m\le C_m\psi(\xi,\rho).
@@ -4228,7 +4249,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   The manuscript is organized to prove the inequality rather than classify all
   equality cases.  A stability analysis would require tracking near-equality
   in the cycle-to-path deletion, the gamma moment inequality, the
-  Hilbert--Schmidt bound, the forced-variance inequality, and the active Huber
+  Hilbert--Schmidt bound, the variance lower bound, and the active Huber
   witness.  The reductions here identify those loci but do not pursue the
   classification.
 \end{remark}
