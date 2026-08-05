@@ -280,7 +280,7 @@ and
   \[
     \widetilde P_{m,r}(q,\ell)
     =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
-    \int_0^\infty t^{n+r-1}e^{-\ell t}\,
+    \int_0^\infty t^{m-r-1}e^{-\ell t}\,
     \E\,\rho_{n,m}\Bigl(q+\frac {Y}{t}\Bigr)\dd t.
   \]
   As all the remaining terms are nonnegative, it is enough to prove that
@@ -1703,18 +1703,17 @@ polynomial is replaced by one scalar variable polynomial.
 
 In this section, we will further simplify the diagonal polynomial $\widetilde P_{m,r}$ by representing it as an expectation over a beta distribution.
 
-Fix $r\ge1$ and put
-\begin{equation}\label{eq:dense-n}
-  n=m-2r.
-\end{equation}
-Then $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$ and define
-\begin{equation}\label{eq:dense-rho}
-  \rho_{n,m}(u)
-  =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
-\end{equation}
-
 \begin{lemma}[Beta formula]\label{lem:dense-beta}
-  One has
+  Let $1\le r\le\frac{m-1}{2}$ and put
+  \begin{equation}\label{eq:dense-n}
+    n=m-2r,
+  \end{equation}
+  so that $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$ and
+  \begin{equation}\label{eq:dense-rho}
+    \rho_{n,m}(u)
+    =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+  \end{equation}
+  Then
   \begin{equation}\label{eq:dense-beta-second}
     \widetilde P_{m,r}(q,\ell)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
@@ -1924,7 +1923,7 @@ Then $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$ and define
   The second term is therefore always nonnegative, and the first is
   nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, which hold for $u \le 1/2$.
 
-  Since $X \sim \mathrm{Beta}(r, r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\ell\le0$
+  Since $X\sim\BetaLaw(r,r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\ell\le0$
   gives
   \[
     q+\ell\,\frac{1-X}{X}\le q\le\frac{1}{2}.
@@ -1938,44 +1937,88 @@ There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:dense-beta-integral} range
 and unlike the $\ell\le0$ case, $\rho_{n,m}$ can be negative on that range: for instance $\rho_{5,7}(0.7)<0$.
 The integrand can therefore no longer be handled pointwise, and nonnegativity has to be derived from the integral as a whole.
 
-\subsection{Laplace--gamma smoothing}
+\subsection{Laplace--gamma representation}
 
-Let $Y\sim\GammaLaw(r,1)$, with density
+Since the constant and the factor $\ell^{n+r}$ in
+\eqref{eq:dense-beta-integral} are positive, what has to be shown
+nonnegative for $\ell>0$ is
 \[
-  \frac{1}{\Gamma(r)}y^{r-1}e^{-y}\mathbf1_{(0,\infty)}(y).
+  \int_0^\infty
+  \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s.
 \]
+Here $\ell$ and $s$ are coupled through $(\ell+s)^{-m}$, which is what
+makes the integral difficult to handle.  They can be separated by an
+inverse Laplace transform: the inverse Laplace transform of
+$x\mapsto x^{-m}$ is $t\mapsto t^{m-1}/\Gamma(m)$, so that
+\begin{equation}\label{eq:laplace-kernel}
+  \frac{1}{(\ell+s)^m}
+  =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t,
+\end{equation}
+which can be shown by evaluating the integral under the substitution
+$w=t(\ell+s)$.
 
 \begin{lemma}[Gamma smoothing]\label{lem:dense-gamma-smoothing}
-  If $\ell>0$, then
+  Let $Y\sim\GammaLaw(r,1)$.  If $\ell>0$, then
   \begin{equation}\label{eq:dense-gamma-smoothing}
     \widetilde P_{m,r}(q,\ell)
     =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
     \int_0^\infty
-    t^{n+r-1}e^{-\ell t}
+    t^{m-r-1}e^{-\ell t}
     \E\rho_{n,m}\left(q+\frac {Y}{t}\right)\dd t.
   \end{equation}
 \end{lemma}
 
 \begin{proof}
-  Insert the Laplace representation
+  Insert \eqref{eq:laplace-kernel} into \eqref{eq:dense-beta-integral} and
+  exchange the two integrals:
+  \begin{align*}
+    \widetilde P_{m,r}(q,\ell)
+    &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
+      \int_0^\infty s^{r-1}\rho_{n,m}(q+s)
+      \left(\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t\right)
+      \dd s\\
+    &=\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)^2}
+      \int_0^\infty t^{m-1}e^{-\ell t}
+      \left(\int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s\right)\dd t.
+  \end{align*}
+  This exchange is justified by Fubini's theorem, given the absolute
+  integrability of the double integral.  To verify absolute integrability,
+  integrate the absolute value in $t$ first: by \eqref{eq:laplace-kernel},
   \[
-    \frac{1}{(\ell+s)^m}
-    =\frac{1}{\Gamma(m)}\int_0^\infty
-    t^{m-1}e^{-t(\ell+s)}\dd t
+    \int_0^\infty\!\!\int_0^\infty
+    s^{r-1}t^{m-1}e^{-t(\ell+s)}\bigl|\rho_{n,m}(q+s)\bigr|\dd t\dd s
+    =\Gamma(m)\int_0^\infty \frac{s^{r-1}}{(\ell+s)^m}
+    \bigl|\rho_{n,m}(q+s)\bigr|\dd s.
   \]
-  into \eqref{eq:dense-beta-integral}.  The exchange of integrals is justified
-  by absolute convergence: because $n$ is odd, $\rho_{n,m}$ has degree at
-  most $n-1$, while $m=n+2r$.  With $y=ts$,
+  It remains to show that the integral on the right is finite.  Recall that
+  $\rho_{n,m}$ is a polynomial of degree $n-1$, since the terms $u^n$ and
+  $-u^n$ of $u^n+(1-u)^n$ cancel for odd $n$.  As $s\to\infty$, the
+  integrand is therefore $O\bigl(s^{r+n-2-m}\bigr)=O\bigl(s^{-r-2}\bigr)$
+  by \eqref{eq:dense-n}, which is integrable at infinity.  As $s\to0$, the
+  integrand is $O\bigl(s^{r-1}\bigr)$, which is integrable because
+  $r\ge1$.
+
+  It remains to compute the inner integral.  Substituting $y=ts$, so that
+  $s=y/t$ and $\dd s=\dd y/t$, gives
   \[
     \int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s
-    =\Gamma(r)t^{-r}
-    \E\rho_{n,m}\left(q+\frac {Y}{t}\right).
+    =t^{-r}\int_0^\infty y^{r-1}e^{-y}
+     \rho_{n,m}\left(q+\frac {y}{t}\right)\dd y
+    =\Gamma(r)\,t^{-r}
+     \E\rho_{n,m}\left(q+\frac {Y}{t}\right),
   \]
-  Substitution gives \eqref{eq:dense-gamma-smoothing}.
+  where the last equality holds because $Y$ has density
+  $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.  Substituting this for the
+  inner integral obtained after the exchange gives
+  \eqref{eq:dense-gamma-smoothing}.
 \end{proof}
 
-The dependence on the diagonal parameter $\ell$ now occurs only through a
-positive weight.  It remains to prove a statement independent of $\ell$.
+In \eqref{eq:dense-gamma-smoothing} the parameter $\ell$ occurs only in the
+factor $\ell^{n+r}$ and in the weight $t^{m-r-1}e^{-\ell t}$, both of which
+are positive; the expectation $\E\rho_{n,m}(q+Y/t)$ does not involve $\ell$
+at all.  It is therefore enough to prove that this expectation is
+nonnegative for every $t>0$, and the conclusion then follows for all
+$\ell>0$ at once.  This is what the next two subsections do.
 
 \subsection{The shifted-gamma moment inequality}
 
