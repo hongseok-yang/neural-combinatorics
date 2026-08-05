@@ -1290,7 +1290,8 @@ Throughout this section,
 \end{equation}
 and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
 
-\subsection{A two-sided Schur-complement identity and cancellation of the odd trace}
+\subsection{A two-sided Schur-complement identity and cancellation of the odd
+trace}\label{subsec:two-sided}
 
 By \Cref{lem:analytic-reading}\,(2) and \eqref{eq:finite-trace-cycle}, every
 step kernel $K$ satisfies
@@ -2451,15 +2452,20 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
 \section{Below the threshold \texorpdfstring{$1/2<p<2/3$}{1/2<p<2/3}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
 \label{sec:regionII-operator}
 
-From now on,
+\tk{TODO (structure): make this section readable independently of
+\Cref{sec:dense-region}, so that a reader interested in one region need not
+read the other.  Remaining dependencies: the generating function $L_-$ and the
+block determinant identity \eqref{eq:block-determinant-identity}.}
+
+From now on, we assume
 \begin{equation}\label{eq:regionII}
-  \frac{1}{3}<q<\frac{1}{2},
-  \qquad \frac{1}{2}<p<\frac{2}{3},
+  \frac{1}{2}<p<\frac{2}{3}, \qquad \frac{1}{3}<q<\frac{1}{2},
 \end{equation}
-and $m\ge9$ is odd.  We continue with the block decomposition
-\eqref{eq:block-U} and the operator norm bound of \Cref{lem:half-norm}.  The
-second bound on the spectrum of $A$, used only in this section, is the
-following.
+and $m\ge9$ is odd. 
+We continue with the block decomposition
+\eqref{eq:block-U} and the operator norm bound of \Cref{lem:half-norm}.  
+We will also use the following bound on the spectrum of $A$, in which
+$\Tr(A^2)=\sum_i\lambda_i^2$.
 
 \begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
   One has
@@ -2474,99 +2480,100 @@ following.
     \Tr(T_U^2)=\int_{[0,1]^2}U(x,y)^2\dd x\dd y
     \le\int_{[0,1]^2}U(x,y)\dd x\dd y=q.
   \]
-  On the other hand, \eqref{eq:block-U} gives
+  Expanding $T_U^2$ in the block decomposition \eqref{eq:block-U},
   \[
     \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
   \]
-  Subtracting $q^2$ proves the claim.
+  Subtracting $q^2$ from the both sides proves the claim.
 \end{proof}
-\subsection{The one-sided spectral-shift identity}\label{subsec:shift}
 
-The graphon operator of $W=1-U$ has block form
-\[
-  T_W=
-  \begin{pmatrix}
-    p&-g^*\\
-    -g&-A
-  \end{pmatrix}.
-\]
-Conjugating by the sign flip on $\one^\perp$ does not change traces, so we
-may instead use
-\[
-  M=
-  \begin{pmatrix}
-    p&g^*\\
-    g&-A
-  \end{pmatrix}.
-\]
+\subsection{A one-sided Schur-complement identity}\label{subsec:shift}
 
-\begin{lemma}[One-sided shift]\label{lem:shift}
+In \Cref{subsec:two-sided} we introduced the generating functions $L_-$ and
+$L_+$, attached to $W$ and to $U$.  Only $L_-$ is used here.
+
+By \eqref{eq:logdet-cycle},
+\[
+  t(C_m,W)=m\,[z^m]\bigl(-\log\det(I-zT_W)\bigr),
+\]
+and the block decomposition \eqref{eq:block-U} gives
+\[
+  I-zT_W=\begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
+\]
+Applying the block determinant identity
+\eqref{eq:block-determinant-identity} with $D=I+zA$ and $v=zg$ factorizes
+this determinant into three parts,
+\begin{equation}\label{eq:shift-factorization}
+  \det(I-zT_W)=\det(I+zA)\,(1-pz)\bigl(1-Y(z)\bigr),
+  \qquad
+  Y(z)=\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz},
+\end{equation}
+the last factor being the Schur complement, divided by $1-pz$.
+
+\begin{lemma}[One-sided identity]\label{lem:shift}
   For every odd $m\ge3$,
   \begin{equation}\label{eq:shift}
     t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
   \end{equation}
   where
   \begin{equation}\label{eq:L-series}
-    L_-(z)=-\log\left(
-    1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}
-    \right).
+    L_-(z)=-\log\bigl(1-Y(z)\bigr).
   \end{equation}
   Moreover, every coefficient of $L_-(z)$ is nonnegative.
 \end{lemma}
 
 \begin{proof}
-  Schur complementation gives
-  \begin{align*}
-    \det(I-zM)
-    &=\det(I+zA)
-    \left(1-pz-z^2\ip g{(I+zA)^{-1}g}\right)\\
-    &=\det(I+zA)(1-pz)
-    \left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
-  \end{align*}
-  \tk{TODO: this display repeats \Cref{lem:analytic-reading}(2); replace by a
-  reference to \eqref{eq:logdet-cycle}.}
-  Taking $-\log$, and using
+  Taking $-\log$ in \eqref{eq:shift-factorization} turns the product into a
+  sum of three terms,
   \[
-    -\log\det(I-zM)=\sum_{j\ge1}\frac{z^j}{j}\Tr(M^j),
+    -\log\det(I-zT_W)=-\log\det(I+zA)-\log(1-pz)+L_-(z),
   \]
-  we obtain \eqref{eq:shift} by comparing the coefficient of odd degree
-  $m$.
+  and for odd $m$, \Cref{lem:analytic-reading}\,(2) gives
+  \[
+    m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
+    \qquad
+    m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
+  \]
+  Together with the third summand this is \eqref{eq:shift}.
 
-  It remains to check coefficientwise nonnegativity.  Let $\mu_g$ be the
-  spectral measure of $A$ associated with $g$.  For every integer
-  $r\ge2$,
-  \begin{align}
-    &[z^r]\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\notag\\
-    &\qquad=\int
-    \frac{p^{r-1}-(-\lambda)^{r-1}}{p+\lambda}\dd\mu_g(\lambda).
-    \label{eq:X-coeff}
-  \end{align}
-  By \Cref{lem:half-norm}, $|\lambda|\le1/2<p$.  Thus the denominator and
-  numerator in \eqref{eq:X-coeff} are positive.  The inner series in
-  \eqref{eq:L-series} therefore has nonnegative coefficients, and so does
-  $-\log(1-X)=\sum_{k\ge1}X^k/k$.
+  It remains to check nonnegativity of coefficients.
+  The coefficients of $Y$ are integrals against the measure
+  $\mu=\sum_i\norm{P_ig}^2\delta_{\lambda_i}$ of \eqref{eq:mu-def}: for every
+  integer $r\ge2$,
+  \begin{equation}\label{eq:X-coeff}
+    [z^r]Y(z)
+    =\int\frac{p^{r-1}-(-\lambda)^{r-1}}{p+\lambda}\dd\mu(\lambda).
+  \end{equation}
+  By \Cref{lem:half-norm}, $|\lambda|\le1/2<p$, so both the numerator and the
+  denominator on the right of \eqref{eq:X-coeff} are positive, and $Y$ has
+  nonnegative coefficients.  Since $-\log(1-Y)=\sum_{k\ge1}Y^k/k$, the
+  same holds for $L_-$.
 \end{proof}
 
-For odd $m$, the linear term of the logarithm supplies the useful lower
-bound
+Since $L_-(z)-Y(z)=\sum_{k\ge2}Y(z)^k/k$ again has nonnegative coefficients,
+$[z^m]L_-(z)\ge[z^m]Y(z)$.  Hence \eqref{eq:X-coeff} with $r=m$ gives
 \begin{equation}\label{eq:linear-shift-lower}
   m[z^m]L_-(z)
-  \ge m\int k_m(\lambda)\dd\mu_g(\lambda),
+  \ge m\int k_m(\lambda)\dd\mu(\lambda),
   \qquad
-  k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+  k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda},
 \end{equation}
-The function $k_m$ is strictly decreasing on $[0,p)$.  Indeed, with
-$n=m-1$,
+where $(-\lambda)^{m-1}=\lambda^{m-1}$ because $m$ is odd.
+
+We will apply \eqref{eq:linear-shift-lower} when the eigenvalues in question
+lie in an interval $[-L,L]$ with $L<p$, so we compute
+$\min_{|\lambda|\le L}k_m(\lambda)$.  For $0\le s<p$,
+\[
+  k_m(-s)=\frac{p^{m-1}-s^{m-1}}{p-s}
+  >\frac{p^{m-1}-s^{m-1}}{p+s}=k_m(s),
+\]
+so it suffices to minimize over $0\le\lambda\le L$.  There $k_m$ is strictly
+decreasing: with $n=m-1$,
 \[
   k_m'(\lambda)
   =-\frac{p^n+np\lambda^{n-1}+(n-1)\lambda^n}{(p+\lambda)^2}<0.
 \]
-Also, for $0\le s<p$,
-\[
-  k_m(-s)=\frac{p^{m-1}-s^{m-1}}{p-s}
-  >\frac{p^{m-1}-s^{m-1}}{p+s}=k_m(s).
-\]
-Consequently,
+The minimum is therefore attained at $\lambda=L$:
 \begin{equation}\label{eq:k-safe}
   k_m(\lambda)\ge k_m(L)
   \qquad\text{whenever }|\lambda|\le L<p.
