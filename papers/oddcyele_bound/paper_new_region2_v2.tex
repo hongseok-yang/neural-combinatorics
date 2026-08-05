@@ -1160,7 +1160,7 @@ In block form,
 \end{equation}
 where $g^*$ denotes the linear functional $h\mapsto\ip gh$.  This $A$ plays
 the role of the operator in \Cref{subsec:path-moments}: for a step graphon,
-the compression $P_{\one^\perp}T_UP_{\one^\perp}$ used there vanishes on
+the compression $P_{\one^\perp}T_UP_{\one^\perp}$ used there is zero on
 $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
 
 \begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
@@ -1559,7 +1559,7 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
   \]
   because $m-1-2r=n-1$.  Subtracting these terms from the contributions of
   $L_-$ and $L_+$ gives \eqref{eq:dense-expansion}.  All three sums are
-  finite and stop at $r=(m-1)/2$, since their coefficients vanish once
+  finite and stop at $r=(m-1)/2$, since their coefficients are zero once
   $2r>m-1$.
 \end{proof}
 
@@ -2138,41 +2138,63 @@ We postpone its proof to the next subsection and first show exactly how it prove
   which proves \eqref{eq:dense-shifted-positive}.
 \end{proof}
 
-\begin{remark}[Tightness of density requiremennt $p \ge 2/3$]\label{rem:dense-threshold}
+\begin{remark}[Tightness of the density requirement $p \ge 2/3$]\label{rem:dense-threshold}
   This is the only place in the proof where the restriction $p\ge 2/3$ is used.
   As this inequality is tight, this proof only works for $p \ge 2/3$, and we require a different argument for $p<2/3$.
 \end{remark}
 
 \subsection{Proof of the gamma moment inequality}\label{subsec:gamma-moment-proof}
 
+It remains to prove \Cref{lem:gamma-moment}: for integers $r,j\ge1$, for
+$Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
+\begin{equation}
+  3j\,\E(zY-1)^{2j-1}
+  \le(r+j)\,\E(zY-1)^{2j}. \label{eq:gamma-moment2}
+\end{equation}
+
 \begin{proof}[Proof of \Cref{lem:gamma-moment}]
-  The case $z=0$ is immediate.  Assume $z>0$, put $b=1/z$, and define
+  The case $z=0$ is immediate, since the left hand side equals $-3j < 0$ and the right hand side equals $r+j > 0$.
+  
+  Now assume $z>0$, put $b=1/z$, and define
   \[
-    F(b)=\E(Y-b)^{2j}.
+    F(b)=\E(Y-b)^{2j},
+    \qquad\text{so that}\qquad
+    F'(b)=-2j\,\E(Y-b)^{2j-1}.
   \]
-  Since $F'(b)=-2j\E(Y-b)^{2j-1}$, inequality
-  \eqref{eq:gamma-moment} is equivalent to
+  Since $zY-1=z(Y-b)$, dividing \eqref{eq:gamma-moment2} by $z^{2j}>0$ gives
+  the equivalent inequality
   \begin{equation}\label{eq:gamma-H}
     H(b):=(r+j)F(b)+\frac{3b}{2}F'(b)\ge0.
   \end{equation}
 
-  For $I_k(b)=\E(Y-b)^k$, gamma integration by parts gives
+  For $I_k(b)=\E(Y-b)^k$, apply the Stein identity of the gamma
+  distribution $Y\sim\GammaLaw(r,1)$,
+  \begin{equation}\label{eq:gamma-Stein}
+    \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr],
+  \end{equation}
+  to $f(y)=(y-b)^k$.  Its two sides are
+  \begin{align*}
+    \E[Y f'(Y)] &= k\E\bigl[(Y-b)(Y-b)^{k-1}+b(Y-b)^{k-1}\bigr] = kI_k(b)+kbI_{k-1}(b),\\
+    \E[(Y-r)f(Y)] &= \E\bigl[(Y-b)(Y-b)^k + (b-r)(Y-b)^k\bigr] = I_{k+1}(b)-(r-b)I_k(b),
+  \end{align*}
+  so that
   \begin{equation}\label{eq:gamma-recurrence}
     I_{k+1}(b)=(r+k-b)I_k(b)+kbI_{k-1}(b).
   \end{equation}
-  Indeed, applying
-  \begin{equation}\label{eq:gamma-Stein}
-    \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr]
-  \end{equation}
-  to $f(y)=(y-b)^k$ yields \eqref{eq:gamma-recurrence}.  Taking
-  $k=2j-1$, and using $F'=-2jI_{2j-1}$ and
-  $F''=2j(2j-1)I_{2j-2}$, gives the differential equation
+  Taking $k=2j-1$, and using $I_{k+1} = F$, $I_{k}=-\frac{F'}{2j}$ and
+  $I_{k-1}=\frac{F''}{2j(2j-1)}$, gives the differential equation
   \begin{equation}\label{eq:gamma-ODE}
     bF''(b)+(b-r-2j+1)F'(b)-2jF(b)=0.
   \end{equation}
 
-  At a zero of $H$, equations \eqref{eq:gamma-H} and
-  \eqref{eq:gamma-ODE} give
+  We next determine the sign of $H'$ at a zero of $H$.  Differentiating
+  \eqref{eq:gamma-H} and then eliminating $F''$ by \eqref{eq:gamma-ODE}, we obtain
+  \[
+    H'(b)=\left(r+j+\frac{3}{2}\right)F'(b)+\frac{3b}{2}F''(b)
+    =3jF(b)+\left(\frac{5r}{2}+4j-\frac{3b}{2}\right)F'(b).
+  \]
+  At a zero of $H$ we have $F'(b)=-\frac{2(r+j)}{3b}F(b)$ by
+  \eqref{eq:gamma-H}, and substituting this leaves
   \begin{equation}\label{eq:gamma-crossing}
     \frac{H'(b)}{F(b)}
     =\frac{3(r+4j)b-(r+j)(5r+8j)}{3b}.
@@ -2181,86 +2203,125 @@ We postpone its proof to the next subsection and first show exactly how it prove
   \begin{equation}\label{eq:gamma-bstar}
     b_*:=\frac{(r+j)(5r+8j)}{3(r+4j)}.
   \end{equation}
-  Now $H(0)=(r+j)\E Y^{2j}>0$, while
+  Since $F(b)=\E(Y-b)^{2j}>0$, formula \eqref{eq:gamma-crossing} shows that
+  at a zero $b$ of $H$ we have $H'(b)>0$ if $b>b_*$, and $H'(b)<0$ if
+  $b<b_*$.  Now
   \[
+    H(0)=(r+j)\E Y^{2j}>0,
+    \qquad
     H(b)=(r+4j)b^{2j}+O(b^{2j-1})
-    \qquad(b\to\infty).
+    \qquad(b\to\infty),
   \]
-  Formula \eqref{eq:gamma-crossing} says that every zero below $b_*$ is a
-  strict downward crossing and every zero above $b_*$ is a strict upward
-  crossing.  Therefore, if $H$ were ever negative, its negative interval
-  would contain $b_*$.  It is enough to prove
+  so $H$ is positive at both ends of $[0,\infty)$.  If $H$ were negative
+  somewhere, it would have a first zero, where $H'\le0$, and a later zero,
+  where $H'\ge0$; the first therefore lies below $b_*$ and the second above
+  it, so the interval where $H$ is negative would contain $b_*$.  It is
+  therefore enough to prove
   \begin{equation}\label{eq:gamma-Hbstar}
-    H(b_*)>0.
+    H(b_*)\ge0.
   \end{equation}
 
-  For the rest of the proof put $b=b_*$, and define
-  \begin{equation}\label{eq:gamma-cd}
-    d=\frac{2(r+j)}{3},
-    \qquad
-    c=\frac{3jb}{r+j}.
+  We first write $H(b_*)$ as an integral.  Since
+  $F'(b)=-2j\E(Y-b)^{2j-1}$, \eqref{eq:gamma-H} gives
+  \[
+    H(b_*)=(r+j)\E(Y-b_*)^{2j}-3jb_*\E(Y-b_*)^{2j-1}
+    =(r+j)\,\E\bigl[(Y-b_*)^{2j-1}(Y-b_*-c)\bigr],
+  \]
+  where $c=\frac{3jb_*}{r+j}$. 
+  Expanding the expectation as an integral and substituting $x=y-b_*$,
+  \begin{equation}\label{eq:gamma-H-integral}
+    H(b_*) =\frac{r+j}{\Gamma(r) e^{b_*}}\int_{-b_*}^{\infty}
+    x^{2j-1}(x-c)(x+b_*)^{r-1}e^{-x}\dd x.
   \end{equation}
-  Direct calculation gives
-  \begin{equation}\label{eq:gamma-cd-identities}
-    b-d=\frac{r(r+j)}{r+4j}>0,
-    \qquad cd=2jb,
-    \qquad c-d=r+2j-b.
-  \end{equation}
-  Let
+
+  Set
   \begin{equation}\label{eq:gamma-G}
-    G(x)=x^{2j}(x+b)^re^{-x},
-    \qquad -b\le x<\infty.
+    G(x)=x^{2j}(x+b_*)^re^{-x},
+    \qquad -b_*\le x<\infty,
   \end{equation}
-  Using \eqref{eq:gamma-cd-identities}, its derivative factors as
+  so that
+  \[
+    G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}
+    \bigl(-x^2+(r+2j-b_*)x+2jb_*\bigr).
+  \]
+  The quadratic factor here factors further as $(c-x)(x+d)$, where
+  \[
+    d=\frac{2jb_*}{c}=\frac{2(r+j)}{3}.
+  \]
+  Thus
   \begin{equation}\label{eq:gamma-Gprime}
-    G'(x)=x^{2j-1}(x+b)^{r-1}e^{-x}(c-x)(x+d).
+    G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}(c-x)(x+d),
   \end{equation}
-  After the change of variables $x=y-b$, equation
-  \eqref{eq:gamma-H} becomes
+  and the integrand of \eqref{eq:gamma-H-integral} is $-G'(x)/(x+d)$, whence
+  \[
+    \frac{\Gamma(r)e^{b_*}}{r+j}H(b_*)
+    =-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x.
+  \]
+  While $-d$ lies inside the range of integration, the quotient
+  $-G'(x)/(x+d)$ is the integrand of \eqref{eq:gamma-H-integral} and is
+  therefore harmless there.
+
+  We integrate by parts on the two sides of $-d$.  Away from $x=-d$,
+  \[
+    \frac{\dd}{\dd x}\left(-\frac{G(x)-G(-d)}{x+d}\right)
+    =-\frac{G'(x)}{x+d}+\frac{G(x)-G(-d)}{(x+d)^2}
+  \]
+  holds, so for $0<\varepsilon<b_*-d$ we have
+  \begin{align*}
+    -\int_{-b_*}^{-d-\varepsilon}\frac{G'(x)}{x+d}\dd x
+    &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d-\varepsilon}
+    -\int_{-b_*}^{-d-\varepsilon}\frac{G(x)-G(-d)}{(x+d)^2}\dd x,\\
+    -\int_{-d+\varepsilon}^{\infty}\frac{G'(x)}{x+d}\dd x
+    &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}
+    -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
+  \end{align*}
+  Here $G(-b_*)=0$ and $G(x)$ converges to zero as $x\to\infty$, so the
+  boundary terms at $-b_*$ and at $\infty$ contribute $G(-d)/(b_*-d)$; the boundary
+  terms at $-d-\varepsilon$ and at $-d+\varepsilon$ vanish as
+  $\varepsilon\downarrow0$, because $G(-d\pm\varepsilon)-G(-d)
+  =O(\varepsilon^2)$ by $G'(-d)=0$; and $(G(x)-G(-d))/(x+d)^2$ extends
+  continuously to $x=-d$ for the same reason, combining the two remaining
+  integrals.  Hence
   \begin{align}
-    \frac{\Gamma(r)e^b}{r+j}H(b)
-    &=\int_{-b}^{\infty}
-    x^{2j-1}(x-c)(x+b)^{r-1}e^{-x}\dd x\notag\\
-    &=-\int_{-b}^{\infty}\frac{G'(x)}{x+d}\dd x.
-    \label{eq:gamma-H-integral}
+    -\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x
+    &=\lim_{\varepsilon\downarrow0}
+    \left(-\int_{-b_*}^{-d-\varepsilon}\frac{G'(x)}{x+d}\dd x
+    -\int_{-d+\varepsilon}^{\infty}\frac{G'(x)}{x+d}\dd x\right)\notag\\
+    &=\lim_{\varepsilon\downarrow0}
+    \left(\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d-\varepsilon}
+    +\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}\right.\notag\\
+    &\qquad\left.-\int_{-b_*}^{-d-\varepsilon}\frac{G(x)-G(-d)}{(x+d)^2}\dd x
+    -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x\right)\notag\\
+    &=\frac{G(-d)}{b_*-d}
+    -\int_{-b_*}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
+    \label{eq:gamma-ibp-max}
   \end{align}
-  The apparent singularity at $x=-d$ is removable because
-  $G'(-d)=0$.  Write $G_0=G(-d)$.  Integrating by parts separately on
-  the two sides of $-d$ gives
-  \begin{equation}\label{eq:gamma-ibp-max}
-    -\int_{-b}^{\infty}\frac{G'(x)}{x+d}\dd x
-    =\frac{G_0}{b-d}
-    -\int_{-b}^{\infty}\frac{G(x)-G_0}{(x+d)^2}\dd x.
-  \end{equation}
-  Thus \eqref{eq:gamma-Hbstar} follows if $G(-d)$ is the global maximum of
-  $G$.
+  Here $b_*-d=r(r+j)/(r+4j)>0$ and $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, so the
+  first term is positive.  For the second term, $(x+d)^{-2}$ is positive as
+  well, so its sign is decided by that of $G(x)-G(-d)$.
+  Consequently, if $G(x)-G(-d)\le0$ for every $x\ge-b_*$, that is, if $G(-d)$
+  is the global maximum of $G$, then the second term is nonnegative and
+  \eqref{eq:gamma-Hbstar} follows.
 
   By \eqref{eq:gamma-Gprime}, the two nonzero local maxima occur at $-d$ and
   $c$.  Their ratio is
   \begin{equation}\label{eq:gamma-max-ratio}
     \frac{G(c)}{G(-d)}
     =\left(\frac {c}{d}\right)^{2j}
-    \left(\frac{b+c}{b-d}\right)^r e^{-(c+d)}.
+    \left(\frac{b_*+c}{b_*-d}\right)^r e^{-(c+d)}.
   \end{equation}
-  Put $t=j/r>0$.  The logarithm of \eqref{eq:gamma-max-ratio}, divided by
-  $r$, is
+  Let $t=j/r>0$.  To see that $G$ attains its maximum at $-d$ we prove that
+  the logarithm of \eqref{eq:gamma-max-ratio}, divided by $r$, namely
   \begin{align}
     L(t)={}&2t\log\left(
     \frac{3t(5+8t)}{2(1+t)(1+4t)}\right)
     +\log\left(
     \frac{(1+4t)(5+8t)}{3(1+t)}\right)\notag\\
-    &-\frac{32t^2+25t+2}{3(1+4t)}.
+    &-\frac{32t^2+25t+2}{3(1+4t)},
     \label{eq:gamma-L}
   \end{align}
-  We prove
-  \begin{equation}\label{eq:gamma-Lnegative}
-    L(t)<0\qquad(t>0).
-  \end{equation}
-  Let
-  \[
-    A(t)=\frac{3t(5+8t)}{2(1+t)(1+4t)}.
-  \]
-  Direct differentiation gives
+  is negative for every $t>0$.  Direct differentiation gives, with
+  $A(t)=\frac{3t(5+8t)}{2(1+t)(1+4t)}$,
   \begin{align}
     L'(t)
     &=2\log A(t)
@@ -2272,31 +2333,49 @@ We postpone its proof to the next subsection and first show exactly how it prove
     {t(t+1)^2(4t+1)^3(8t+5)^2}.
     \label{eq:gamma-Lsecond}
   \end{align}
-  The quartic in \eqref{eq:gamma-Lsecond} has exactly one positive root: its
-  coefficient sequence has one sign change, its value at zero is negative, and
-  its leading coefficient is positive.  Hence $L'$ first increases and then
-  decreases.  Also $L'(t)\to-\infty$ as $t\downarrow0$.  At $t=1$, the
-  bound
+  Every factor of \eqref{eq:gamma-Lsecond} other than the quartic
+  $P(t)=128t^4+224t^3+120t^2-28t-25$ is positive for $t>0$, so $L''$ and $P$
+  have opposite signs.  The coefficients of $P$ change sign once, so by
+  Descartes' rule of signs $P$ has at most one positive root.
+  Since $P(0) = -25 < 0$ and $P(t)\to\infty$, it has exactly one positive root
+  $t_0$, and $L'$ increases on $(0,t_0)$ and decreases on $(t_0,\infty)$.
+
+  We evaluate $L'$ at three places to see its sign changes.
+  As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:gamma-Lprime} tends to
+  $-14/15$, so $L'(t)\to-\infty$.  At $t=1$ we have $A(1)=39/20$ and the
+  rational term equals $2419/1950$, so the bound
   \[
     \log x\ge\frac{2(x-1)}{x+1}\qquad(x\ge1)
   \]
-  gives
+  gives $2\log A(1)\ge\frac{76}{59}$ and
   \[
-    L'(1)\ge\frac{76}{59}-\frac{2419}{1950}>0.
+    L'(1)\ge\frac{76}{59}-\frac{2419}{1950} \approxeq 0.047622... >0.
   \]
-  At $t=3/2$, concavity of $\log$, together with $\log2<7/10$, gives
+  At $t=3/2$ we have $A(3/2)=153/70$ and the rational
+  term equals $19847/12495$; concavity of the logarithm at $x=2$ gives
+  \[
+    \log\frac{153}{70}\le\log2+\frac{1}{2}\left(\frac{153}{70}-2\right)
+    =\log2+\frac{13}{140},
+  \]
+  so with $2 \log 2 < 7/5$,
   \[
     L'\left(\frac{3}{2}\right)
-    <\frac{111}{70}-\frac{19847}{12495}<0.
+    <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}\approxeq -0.002681... <0.
   \]
-  Thus the only interior local maximum of $L$ lies in $(1,3/2)$, while
+
+  Since $L'$ increases and then decreases, and is negative near $0$, positive at $t=1$ and negative at $t=3/2$, it has two roots: 
+  at some $t_1\in(0,1)$ with $L''(t_1) > 0$, and at some $t_2\in(1,3/2)$ with $L''(t_2) < 0$. 
+  Thus $L$ decreases on $(0,t_1)$, increases on $(t_1,t_2)$ and decreases on
+  $(t_2,\infty)$, so its supremum over $(0,\infty)$ is the larger of $L(t_2)$
+  and the limit of $L$ at $0$.  The latter is negative,
   \[
-    \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0.
+    \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0,
   \]
-  It remains to control $L$ on $[1,3/2]$.  Put
+  and $t_2$ lies in $[1,3/2]$, so it remains to control $L$ on $[1,3/2]$.  Let
   \[
-    B(t)=\frac{(1+4t)(5+8t)}{3(1+t)}.
+    B(t)=\frac{(1+4t)(5+8t)}{3(1+t)}
   \]
+  so that $L(t)=2t\log A(t)+\log B(t)-(32t^2+25t+2)/(3(4t+1))$.
   By concavity of $\log$,
   \[
     \log A\le\log2+\frac{A-2}{2},
@@ -2309,20 +2388,20 @@ We postpone its proof to the next subsection and first show exactly how it prove
     \frac{3(96t^3-191t^2-16t+46)}
     {130(t+1)(4t+1)}.
   \end{equation}
-  The cubic numerator is negative on $[1,3/2]$.  Its derivative has exactly
-  one zero in that interval; this critical point is a minimum, while the
-  endpoint values are
-  \[
-    -65,
-    \qquad -\frac{335}{4}.
-  \]
-  This proves \eqref{eq:gamma-Lnegative}.  The elementary logarithm bounds
-  follow directly from the exponential series.
+  On $[1,3/2]$ we have $96t-191<0$ and $t^2\ge1$, so the cubic numerator is at
+  most $(96t-191)-16t+46=80t-145\le-25$, and $L(t)<0$ there as well.
 
-  It follows from \eqref{eq:gamma-max-ratio} that $G(c)<G(-d)$, so
-  $G(-d)$ is the global maximum.  Equation \eqref{eq:gamma-ibp-max} gives
-  $H(b_*)>0$.  The zero-crossing argument then proves $H(b)\ge0$ for all
-  $b>0$, which is equivalent to \eqref{eq:gamma-moment}.
+  To summarize the proof: the signs of $L'$ and $L''$ in
+  \eqref{eq:gamma-Lprime} and \eqref{eq:gamma-Lsecond} leave two candidates for
+  the supremum of $L$, namely its limit at $0$, which is negative, and a single
+  local maximum, which lies in $[1,3/2]$.  Confined to that interval, $L$ is
+  bounded by the rational function \eqref{eq:gamma-L-rational}, which is
+  negative there; hence $L<0$ on all of $(0,\infty)$.  The ratio
+  \eqref{eq:gamma-max-ratio} is therefore smaller than $1$, so $G$ attains its
+  maximum at $-d$ and the integrand $G(x)-G(-d)$ in \eqref{eq:gamma-ibp-max} is
+  nonpositive.  The right side of \eqref{eq:gamma-ibp-max} is then positive,
+  giving $H(b_*)>0$, and the crossing argument yields $H(b)\ge0$ for every
+  $b>0$, which is \eqref{eq:gamma-H} and hence implies \eqref{eq:gamma-moment2}.
 \end{proof}
 
 \subsection{Completion of the dense-region proof}
