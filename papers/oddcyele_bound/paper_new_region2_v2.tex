@@ -303,8 +303,8 @@ and
   differential equation it induces.  The constant $3$ is where the
   assumption $p\ge2/3$ is used.
 
-  \item \Cref{sec:regionII-operator,sec:huber,sec:chart,sec:quadratic,sec:linear}
-  prove all odd $m\ge9$ when $1/2<p<2/3$.  The argument in this part is a
+  \item \Cref{sec:regionII-operator}
+  proves all odd $m\ge9$ when $1/2<p<2/3$.  The argument in this part is a
   spectral analysis of $A$.  We use two results, the identity for $W$ from
   Part~2,
   \[
@@ -458,230 +458,6 @@ Separately from the proof, \Cref{sec:transferable} discusses the possible
 applicability of the methods used here to other problems in extremal
 combinatorics.
 
-\subsection{Step-graphon reduction}\label{subsec:step-reduction}
-
-As described in the proof map above, the cycle densities appear as the
-coefficients of $-\log\det(I-zT_W)$.  To avoid taking determinants of
-operators on an infinite-dimensional space, we reduce the theorem to step
-graphons, whose operators have finite rank.  The approximation is the
-dyadic conditional expectation of \cite[Appendix~A.3.6]{Lovasz2012}, which
-has the property we need here: the approximating graphons have edge density
-exactly $p$.
-
-\begin{lemma}[Finite-rank reduction]\label{lem:step-reduction}
-  For each fixed odd $m\ge3$, it is enough to prove \eqref{eq:main-goal} for
-  symmetric step graphons.
-\end{lemma}
-
-\begin{proof}
-  For $n\ge1$, divide $[0,1]$ into the $2^n$ dyadic
-  intervals
-  \[
-    I_{n,a}=\left[\frac{a}{2^n},\frac{a+1}{2^n}\right),
-    \qquad 0\le a<2^n,
-  \]
-  with the convention that the last interval contains the endpoint
-  $1$.  Let $\mathcal A_n$ be the finite sigma-algebra consisting of all
-  unions of these intervals.  Thus the atoms of the product sigma-algebra
-  $\mathcal A_n\otimes\mathcal A_n$ are precisely the dyadic rectangles
-  $I_{n,a}\times I_{n,b}$.  The partitions refine as $n$ increases, and
-  dyadic intervals generate the Borel sigma-algebra.
-
-  On each such rectangle, replace $W$ by its average.  More explicitly, set
-  \begin{equation}\label{eq:dyadic-step-approximation}
-    w^{(n)}_{ab}
-    =2^{2n}\int_{I_{n,a}\times I_{n,b}}W(x,y)\dd x\dd y,
-    \qquad
-    W_n(x,y)=w^{(n)}_{ab}
-    \quad\text{if }(x,y)\in I_{n,a}\times I_{n,b}.
-  \end{equation}
-  This cell-averaging operation is the standard conditional 
-  expectation operation with respect to the sigma algebra
-  $\mathcal A_n\otimes\mathcal A_n$, and is 
-  denoted by the notation
-  $\E[\,-\, \mid\mathcal A_n\otimes\mathcal A_n]$. So,
-  $W_n = \E[W\mid\mathcal A_n\otimes\mathcal A_n] $. Since $0\le W\le1$,
-  every cell average lies in $[0,1]$.  Moreover, symmetry of $W$ gives
-  $w^{(n)}_{ab}=w^{(n)}_{ba}$.  Hence $W_n$ is a symmetric step graphon.
-
-  There is also a completely finite interpretation.  The matrix
-  $(w^{(n)}_{ab})_{0\le a,b<2^n}$ is the weighted adjacency matrix of a graph
-  on $2^n$ equally weighted vertices (loops are allowed), and
-  \[
-    t(C_m,W_n)
-    =\frac{1}{2^{nm}}
-    \sum_{a_1,\ldots,a_m=0}^{2^n-1}
-    w^{(n)}_{a_1a_2}w^{(n)}_{a_2a_3}\cdots
-    w^{(n)}_{a_ma_1}.
-  \]
-  The same finite structure can be seen directly at the operator level.  For
-  any function $f$, if $x\in I_{n,a}$, then
-  \[
-    (T_{W_n}f)(x)
-    =\int_0^1W_n(x,y)f(y)\dd y
-    =\sum_{b=0}^{2^n-1}w^{(n)}_{ab}
-    \int_{I_{n,b}}f(y)\dd y.
-  \]
-  Thus the output $T_{W_n}f$ is constant on each interval $I_{n,a}$, no
-  matter how complicated the input $f$ is.  Every such output is therefore a
-  linear combination of the $2^n$ indicator functions
-  $\one_{I_{n,0}},\ldots,\one_{I_{n,2^n-1}}$.  The set of all possible
-  outputs is called the \emph{range} of the operator, and its dimension is the
-  \emph{rank}.  Since the range is contained in a space of dimension $2^n$,
-  the rank is at most $2^n$.  This explains the term ``finite-rank
-  reduction.''
-
-  Two facts remain to be checked: the edge density is unchanged, and the cycle
-  density converges.  For the first, summing the averages in
-  \eqref{eq:dyadic-step-approximation} over all cells gives
-  \[
-    \int_{[0,1]^2}W_n(x,y)\dd x\dd y
-    =\sum_{a,b}|I_{n,a}|\,|I_{n,b}|\,w^{(n)}_{ab}
-    =\int_{[0,1]^2}W(x,y)\dd x\dd y=p.
-  \]
-  Thus $t(K_2,W_n)=p$ for every $n$, not merely in the limit.
-
-  Next we verify that $W_n\to W$ in $L^2([0,1]^2)$.  Dyadic rectangle
-  step functions are dense in this space.  Therefore, given $\varepsilon>0$,
-  we may choose an integer $N$ and a function $S$, constant on every
-  rectangle $I_{N,a}\times I_{N,b}$, such that
-  $\norm{W-S}_2<\varepsilon$.  For $n\ge N$, the function $S$ is also
-  constant on every level-$n$ rectangle.  Averaging is an $L^2$-contraction
-  (this is Jensen's inequality on each rectangle), so
-  \[
-    \norm{W_n-S}_2
-    =\norm{\E[W-S\mid\mathcal A_n\otimes\mathcal A_n]}_2
-    \le \norm{W-S}_2.
-  \]
-  Consequently
-  \[
-    \norm{W_n-W}_2
-    \le \norm{W_n-S}_2+\norm{S-W}_2
-    <2\varepsilon,
-  \]
-  which proves the asserted convergence.
-
-  Finally, cycle densities are continuous under this convergence.  Put $x_{m+1}=x_1$, and for a fixed
-  $(x_1,\ldots,x_m)$, write
-  \[
-    a_i=W_n(x_i,x_{i+1}),\qquad b_i=W(x_i,x_{i+1}).
-  \]
-  The telescoping identity
-  \[
-    \prod_{i=1}^m a_i-\prod_{i=1}^m b_i
-    =\sum_{j=1}^m
-    \left(\prod_{i<j}a_i\right)(a_j-b_j)
-    \left(\prod_{i>j}b_i\right)
-  \]
-  and the bounds $0\le a_i,b_i\le1$ show, after integration, that
-  \begin{align*}
-    \bigl|t(C_m,W_n)-t(C_m,W)\bigr|
-    &\le \sum_{j=1}^m
-    \int_{[0,1]^m}
-    |W_n(x_j,x_{j+1})-W(x_j,x_{j+1})|
-    \prod_{i=1}^m\dd x_i \\
-    &=m\norm{W_n-W}_1
-    \le m\norm{W_n-W}_2
-    \longrightarrow0.
-  \end{align*}
-  Here the equality in the second line follows because all variables other
-  than $x_j,x_{j+1}$ integrate out to $1$.
-
-  Now suppose \eqref{eq:main-goal} has been proved for every symmetric step
-  graphon.  Applying it to $W_n$, whose edge density is exactly $p$, gives
-  \[
-    t(C_m,W_n)\ge p^m-p(1-p)^{m-1}.
-  \]
-  Letting $n\to\infty$ proves the same inequality for $W$, as required.
-\end{proof}
-
-\subsection{Reading the power-series
-calculations}\label{subsec:analytic-reading}
-
-Several later arguments introduce an auxiliary variable $z$ and use the
-notation $[z^m]F(z)$; the exponent of $z$ is the length of a walk or cycle.
-We do not assign a value to $z$; every $F$ below is a formal power series,
-that is, a sequence of real coefficients $(c_j)_{j\ge0}$ written as
-$F=\sum_{j\ge0}c_jz^j$, and $[z^m]F=c_m$.  We say that two such series are
-equal when all their coefficients are equal.
-
-Four operations on these series are used below, and in each of them every
-coefficient of the result is computed from finitely many coefficients of the
-arguments.  Series are added coefficientwise.  They are multiplied by the
-Cauchy product,
-\[
-  [z^m](FG)=\sum_{i+j=m}\bigl([z^i]F\bigr)\bigl([z^j]G\bigr).
-\]
-A series with $c_0\ne0$ has an inverse, obtained by solving the equations
-for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a
-series.  Finally, if we write $\ord F$ for the order of $F$, that is the
-least $j$ with $c_j\ne0$, then the series
-\[
-  -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
-\]
-is defined whenever $\ord Y\ge1$: in that case $\ord Y^k\ge k$, so only the
-terms with $k\le m$ contribute to $[z^m]$.
-
-By \Cref{lem:step-reduction} we will work with a step graphon, whose operator
-is a finite matrix; this is made explicit in \Cref{sec:common-operator}.  We
-build our series from such matrices, using the two expansions in the next
-lemma.
-
-\begin{lemma}[Series expansions used below]\label{lem:analytic-reading}
-  Let $X$ be a real symmetric $N\times N$ matrix.  As formal power series
-  in $z$:
-  \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
-    \item \emph{(Resolvent.)}  The matrix $I-zX$ is invertible over $\R[[z]]$
-    and
-    \[
-      (I-zX)^{-1}=\sum_{j\ge0}z^jX^j,
-    \]
-    so that $[z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}$ for fixed vectors $u,v$.
-    \item \emph{(Log-determinant.)}  The polynomial $\det(I-zX)$ has constant
-    term $1$, and
-    \[
-      -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
-    \]
-    so that $m\,[z^m]\bigl(-\log\det(I-zX)\bigr)=\Tr(X^m)$.
-  \end{enumerate}
-\end{lemma}
-
-\begin{proof}
-  (1)  The constant term of $I-zX$ is $I$, so the matrix is invertible over
-  $\R[[z]]$; multiplying $\sum_{j\ge0}z^jX^j$ by $I-zX$ cancels all positive
-  powers of $z$ and leaves $I$.
-
-  (2)  Both sides are unchanged under $X\mapsto Q^{\!\top}XQ$ with $Q$
-  orthogonal, so we may take $X$ diagonal with entries $\lambda_i$.  Then
-  $\det(I-zX)=\prod_i(1-z\lambda_i)$, and $-\log$ of a product is the sum of
-  the $-\log$s, whence
-  \[
-    -\log\det(I-zX)
-    =\sum_{i=1}^N\sum_{j\ge1}\frac{\lambda_i^j}{j}z^j
-    =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
-  \]
-  the interchange being a finite sum in each coefficient.
-\end{proof}
-
-For an example of this formal series, take $X=T_W$ and $m=3$.  Item~(2)
-gives
-\[
-  -\log\det(I-zT_W)
-  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}{2}z^2+\frac{\Tr(T_W^3)}{3}z^3+\cdots,
-\]
-whence
-\[
-  3\,[z^3]\bigl(-\log\det(I-zT_W)\bigr)=\Tr(T_W^3)=t(C_3,W)
-\]
-by \eqref{eq:finite-trace-cycle}.
-
-Alternatively, one may read these series as functions.  If a series
-converges in a neighbourhood of the origin, its sum is a function there, and
-the coefficients are recovered from that function by differentiation,
-\begin{equation}\label{eq:coeff-def}
-  [z^m]F=\frac{F^{(m)}(0)}{m!}.
-\end{equation}
-The arguments below are the same under either reading.
 \section{The elementary cases \texorpdfstring{$m=3,5,7$}{m=3,5,7}}\label{sec:short-cycles}
 
 Throughout this section, $W$ is any graphon, $p=t(K_2,W)$,
@@ -1111,9 +887,237 @@ certificates, see Powers--Reznick~\cite{PowersReznick2000}.
 
 \section{The common complement-operator framework}\label{sec:common-operator}
 
-Throughout this section, and in the two that follow, we assume $W$ to be a
-step graphon, as \Cref{lem:step-reduction} proves, and all determinants and
-traces are taken in the resulting finite-dimensional setting.  Fix a finite
+\subsection{Step-graphon reduction}\label{subsec:step-reduction}
+
+As described in the proof map above, the cycle densities appear as the
+coefficients of $-\log\det(I-zT_W)$.  To avoid taking determinants of
+operators on an infinite-dimensional space, we reduce the theorem to step
+graphons, whose operators have finite rank.  The approximation is the
+dyadic conditional expectation of \cite[Appendix~A.3.6]{Lovasz2012}, which
+has the property we need here: the approximating graphons have edge density
+exactly $p$.
+
+\begin{lemma}[Finite-rank reduction]\label{lem:step-reduction}
+  For each fixed odd $m\ge3$, it is enough to prove \eqref{eq:main-goal} for
+  symmetric step graphons.
+\end{lemma}
+
+\begin{proof}
+  For $n\ge1$, divide $[0,1]$ into the $2^n$ dyadic
+  intervals
+  \[
+    I_{n,a}=\left[\frac{a}{2^n},\frac{a+1}{2^n}\right),
+    \qquad 0\le a<2^n,
+  \]
+  with the convention that the last interval contains the endpoint
+  $1$.  Let $\mathcal A_n$ be the finite sigma-algebra consisting of all
+  unions of these intervals.  Thus the atoms of the product sigma-algebra
+  $\mathcal A_n\otimes\mathcal A_n$ are precisely the dyadic rectangles
+  $I_{n,a}\times I_{n,b}$.  The partitions refine as $n$ increases, and
+  dyadic intervals generate the Borel sigma-algebra.
+
+  On each such rectangle, replace $W$ by its average.  More explicitly, set
+  \begin{equation}\label{eq:dyadic-step-approximation}
+    w^{(n)}_{ab}
+    =2^{2n}\int_{I_{n,a}\times I_{n,b}}W(x,y)\dd x\dd y,
+    \qquad
+    W_n(x,y)=w^{(n)}_{ab}
+    \quad\text{if }(x,y)\in I_{n,a}\times I_{n,b}.
+  \end{equation}
+  This cell-averaging operation is the standard conditional 
+  expectation operation with respect to the sigma algebra
+  $\mathcal A_n\otimes\mathcal A_n$, and is 
+  denoted by the notation
+  $\E[\,-\, \mid\mathcal A_n\otimes\mathcal A_n]$. So,
+  $W_n = \E[W\mid\mathcal A_n\otimes\mathcal A_n] $. Since $0\le W\le1$,
+  every cell average lies in $[0,1]$.  Moreover, symmetry of $W$ gives
+  $w^{(n)}_{ab}=w^{(n)}_{ba}$.  Hence $W_n$ is a symmetric step graphon.
+
+  There is also a completely finite interpretation.  The matrix
+  $(w^{(n)}_{ab})_{0\le a,b<2^n}$ is the weighted adjacency matrix of a graph
+  on $2^n$ equally weighted vertices (loops are allowed), and
+  \[
+    t(C_m,W_n)
+    =\frac{1}{2^{nm}}
+    \sum_{a_1,\ldots,a_m=0}^{2^n-1}
+    w^{(n)}_{a_1a_2}w^{(n)}_{a_2a_3}\cdots
+    w^{(n)}_{a_ma_1}.
+  \]
+  The same finite structure can be seen directly at the operator level.  For
+  any function $f$, if $x\in I_{n,a}$, then
+  \[
+    (T_{W_n}f)(x)
+    =\int_0^1W_n(x,y)f(y)\dd y
+    =\sum_{b=0}^{2^n-1}w^{(n)}_{ab}
+    \int_{I_{n,b}}f(y)\dd y.
+  \]
+  Thus the output $T_{W_n}f$ is constant on each interval $I_{n,a}$, no
+  matter how complicated the input $f$ is.  Every such output is therefore a
+  linear combination of the $2^n$ indicator functions
+  $\one_{I_{n,0}},\ldots,\one_{I_{n,2^n-1}}$.  The set of all possible
+  outputs is called the \emph{range} of the operator, and its dimension is the
+  \emph{rank}.  Since the range is contained in a space of dimension $2^n$,
+  the rank is at most $2^n$.  This explains the term ``finite-rank
+  reduction.''
+
+  Two facts remain to be checked: the edge density is unchanged, and the cycle
+  density converges.  For the first, summing the averages in
+  \eqref{eq:dyadic-step-approximation} over all cells gives
+  \[
+    \int_{[0,1]^2}W_n(x,y)\dd x\dd y
+    =\sum_{a,b}|I_{n,a}|\,|I_{n,b}|\,w^{(n)}_{ab}
+    =\int_{[0,1]^2}W(x,y)\dd x\dd y=p.
+  \]
+  Thus $t(K_2,W_n)=p$ for every $n$, not merely in the limit.
+
+  Next we verify that $W_n\to W$ in $L^2([0,1]^2)$.  Dyadic rectangle
+  step functions are dense in this space.  Therefore, given $\varepsilon>0$,
+  we may choose an integer $N$ and a function $S$, constant on every
+  rectangle $I_{N,a}\times I_{N,b}$, such that
+  $\norm{W-S}_2<\varepsilon$.  For $n\ge N$, the function $S$ is also
+  constant on every level-$n$ rectangle.  Averaging is an $L^2$-contraction
+  (this is Jensen's inequality on each rectangle), so
+  \[
+    \norm{W_n-S}_2
+    =\norm{\E[W-S\mid\mathcal A_n\otimes\mathcal A_n]}_2
+    \le \norm{W-S}_2.
+  \]
+  Consequently
+  \[
+    \norm{W_n-W}_2
+    \le \norm{W_n-S}_2+\norm{S-W}_2
+    <2\varepsilon,
+  \]
+  which proves the asserted convergence.
+
+  Finally, cycle densities are continuous under this convergence.  Put $x_{m+1}=x_1$, and for a fixed
+  $(x_1,\ldots,x_m)$, write
+  \[
+    a_i=W_n(x_i,x_{i+1}),\qquad b_i=W(x_i,x_{i+1}).
+  \]
+  The telescoping identity
+  \[
+    \prod_{i=1}^m a_i-\prod_{i=1}^m b_i
+    =\sum_{j=1}^m
+    \left(\prod_{i<j}a_i\right)(a_j-b_j)
+    \left(\prod_{i>j}b_i\right)
+  \]
+  and the bounds $0\le a_i,b_i\le1$ show, after integration, that
+  \begin{align*}
+    \bigl|t(C_m,W_n)-t(C_m,W)\bigr|
+    &\le \sum_{j=1}^m
+    \int_{[0,1]^m}
+    |W_n(x_j,x_{j+1})-W(x_j,x_{j+1})|
+    \prod_{i=1}^m\dd x_i \\
+    &=m\norm{W_n-W}_1
+    \le m\norm{W_n-W}_2
+    \longrightarrow0.
+  \end{align*}
+  Here the equality in the second line follows because all variables other
+  than $x_j,x_{j+1}$ integrate out to $1$.
+
+  Now suppose \eqref{eq:main-goal} has been proved for every symmetric step
+  graphon.  Applying it to $W_n$, whose edge density is exactly $p$, gives
+  \[
+    t(C_m,W_n)\ge p^m-p(1-p)^{m-1}.
+  \]
+  Letting $n\to\infty$ proves the same inequality for $W$, as required.
+\end{proof}
+
+\subsection{Reading the power-series
+calculations}\label{subsec:analytic-reading}
+
+Several later arguments introduce an auxiliary variable $z$ and use the
+notation $[z^m]F(z)$; the exponent of $z$ is the length of a walk or cycle.
+We do not assign a value to $z$; every $F$ below is a formal power series,
+that is, a sequence of real coefficients $(c_j)_{j\ge0}$ written as
+$F=\sum_{j\ge0}c_jz^j$, and $[z^m]F=c_m$.  We say that two such series are
+equal when all their coefficients are equal.
+
+Four operations on these series are used below, and in each of them every
+coefficient of the result is computed from finitely many coefficients of the
+arguments.  Series are added coefficientwise.  They are multiplied by the
+Cauchy product,
+\[
+  [z^m](FG)=\sum_{i+j=m}\bigl([z^i]F\bigr)\bigl([z^j]G\bigr).
+\]
+A series with $c_0\ne0$ has an inverse, obtained by solving the equations
+for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a
+series.  Finally, if we write $\ord F$ for the order of $F$, that is the
+least $j$ with $c_j\ne0$, then the series
+\[
+  -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
+\]
+is defined whenever $\ord Y\ge1$: in that case $\ord Y^k\ge k$, so only the
+terms with $k\le m$ contribute to $[z^m]$.
+
+By \Cref{lem:step-reduction} we will work with a step graphon, whose operator
+is a finite matrix; this is made explicit in \Cref{sec:common-operator}.  We
+build our series from such matrices, using the two expansions in the next
+lemma.
+
+\begin{lemma}[Series expansions used below]\label{lem:analytic-reading}
+  Let $X$ be a real symmetric $N\times N$ matrix.  As formal power series
+  in $z$:
+  \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
+    \item \emph{(Resolvent.)}  The matrix $I-zX$ is invertible over $\R[[z]]$
+    and
+    \[
+      (I-zX)^{-1}=\sum_{j\ge0}z^jX^j,
+    \]
+    so that $[z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}$ for fixed vectors $u,v$.
+    \item \emph{(Log-determinant.)}  The polynomial $\det(I-zX)$ has constant
+    term $1$, and
+    \[
+      -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+    \]
+    so that $m\,[z^m]\bigl(-\log\det(I-zX)\bigr)=\Tr(X^m)$.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  (1)  The constant term of $I-zX$ is $I$, so the matrix is invertible over
+  $\R[[z]]$; multiplying $\sum_{j\ge0}z^jX^j$ by $I-zX$ cancels all positive
+  powers of $z$ and leaves $I$.
+
+  (2)  Both sides are unchanged under $X\mapsto Q^{\!\top}XQ$ with $Q$
+  orthogonal, so we may take $X$ diagonal with entries $\lambda_i$.  Then
+  $\det(I-zX)=\prod_i(1-z\lambda_i)$, and $-\log$ of a product is the sum of
+  the $-\log$s, whence
+  \[
+    -\log\det(I-zX)
+    =\sum_{i=1}^N\sum_{j\ge1}\frac{\lambda_i^j}{j}z^j
+    =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+  \]
+  the interchange being a finite sum in each coefficient.
+\end{proof}
+
+For an example of this formal series, take $X=T_W$ and $m=3$.  Item~(2)
+gives
+\[
+  -\log\det(I-zT_W)
+  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}{2}z^2+\frac{\Tr(T_W^3)}{3}z^3+\cdots,
+\]
+whence
+\[
+  3\,[z^3]\bigl(-\log\det(I-zT_W)\bigr)=\Tr(T_W^3)=t(C_3,W)
+\]
+by \eqref{eq:finite-trace-cycle}.
+
+Alternatively, one may read these series as functions.  If a series
+converges in a neighbourhood of the origin, its sum is a function there, and
+the coefficients are recovered from that function by differentiation,
+\begin{equation}\label{eq:coeff-def}
+  [z^m]F=\frac{F^{(m)}(0)}{m!}.
+\end{equation}
+The arguments below are the same under either reading.
+
+\subsection{The block decomposition and two spectral bounds}
+\label{subsec:block-decomposition}
+
+From here to the end of \Cref{sec:regionII-operator}, we assume $W$ to be a
+step graphon, which \Cref{lem:step-reduction} permits, and all determinants
+and traces are taken in the resulting finite-dimensional setting.  Fix a finite
 measurable partition
 \[
   [0,1]=B_1\sqcup\cdots\sqcup B_N
@@ -2740,7 +2744,7 @@ $k_m$,
   \eqref{eq:shift-payment} yields \eqref{eq:master-defect}.
 \end{proof}
 
-\section{Eliminating the frontier eigenfunction: a Huber envelope}
+\subsection{Eliminating the frontier eigenfunction: a Huber envelope}
 \label{sec:huber}
 
 The terminology refers to the same quadratic-versus-linear active-set
@@ -3071,7 +3075,7 @@ Two choices of $\lambda$ will be used throughout.
   \]
 \end{proof}
 
-\section{The dimensionless chart}\label{sec:chart}
+\subsection{The dimensionless chart}\label{sec:chart}
 
 Set
 \begin{equation}\label{eq:N-def}
@@ -3324,7 +3328,7 @@ Because $N+1$ is even,
   \eqref{eq:T-tangent-bound}.
 \end{proof}
 
-\section{The quadratic Huber branch}\label{sec:quadratic}
+\subsection{The quadratic Huber branch}\label{sec:quadratic}
 
 Assume
 \begin{equation}\label{eq:quadratic-branch}
@@ -3445,7 +3449,7 @@ In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
   the proposition.
 \end{proof}
 
-\section{The linear Huber branch}\label{sec:linear}
+\subsection{The linear Huber branch}\label{sec:linear}
 
 Assume
 \begin{equation}\label{eq:linear-branch}
