@@ -2411,22 +2411,30 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
 \end{theorem}
 
 \begin{proof}
-  Equivalently, $q\le1/3$.  By
-  \Cref{prop:dense-expansion,lem:dense-dirichlet}, it is enough to prove
-  \eqref{eq:dense-diagonal-target}.  If $\ell\le0$, this is
-  \Cref{lem:dense-ell-negative}.  If $\ell>0$,
-  \Cref{prop:dense-gamma-positive} makes every expectation in
-  \eqref{eq:dense-gamma-smoothing} nonnegative, and the remaining weight is
-  positive.  Hence $\widetilde P_{m,r}(q,\ell)\ge0$ for every admissible
-  $r,\ell$.  Therefore every integrand in \eqref{eq:dense-expansion} is
-  nonnegative, so $\Phi_m\ge0$.  Finally,
-  \eqref{eq:dense-defect}, \eqref{eq:dense-cycle-path}, and \eqref{eq:dense-Phi} give
+  Equivalently, $q\le1/3$.
+  \Cref{lem:dense-cancellation}, the bound of $t(C_m,U)$ by the path density
+  $x_{m-1}$, and the definition of $\Phi_m$ give
   \begin{align*}
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
     &=q^{m-1}+S_m-t(C_m,U)\\
-    &\ge q^{m-1}+S_m-x_{m-1}=\Phi_m\ge0.
+    &\ge q^{m-1}+S_m-x_{m-1}=\Phi_m,
   \end{align*}
-  The finite-rank reduction returns the conclusion to arbitrary graphons.
+  so the theorem follows from the nonnegativity of $\Phi_m$.  By the expansion
+  of \Cref{prop:dense-expansion}, it is enough to show that
+  $P_{m,r}\ge0$ on $[-1/2,1/2]^r$; and by \Cref{lem:dense-dirichlet}, which
+  presents $P_{m,r}$ as an expectation of the diagonal values
+  $\widetilde P_{m,r}(q,\ell)$ at points $\ell$ of $[-1/2,1/2]$, it is enough
+  to prove $\widetilde P_{m,r}(q,\ell)\ge0$ for $1\le r\le(m-1)/2$ and
+  $-1/2\le\ell\le1/2$.
+
+  When $\ell\le0$, \Cref{lem:dense-ell-negative} proves
+  $\widetilde P_{m,r}(q,\ell)\ge0$.  When $\ell>0$, the beta formula
+  \Cref{lem:dense-beta} and the Laplace--gamma representation
+  \Cref{lem:dense-gamma-smoothing} write $\widetilde P_{m,r}(q,\ell)$ as a
+  positive weight times an average of the expectations
+  $\E\rho_{n,m}(q+xY)$, each of which is nonnegative by
+  \Cref{prop:dense-gamma-positive}.  Hence $\widetilde P_{m,r}(q,\ell)\ge0$
+  throughout that range, so $\Phi_m\ge0$.
 \end{proof}
 
 \section{The intermediate region: the one-frontier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
