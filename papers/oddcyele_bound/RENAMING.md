@@ -48,6 +48,22 @@ Started 2026-08-06.
 | 4171 | prop "[Linear branch]" (`prop:linear-branch`) | "[The regime $2\rho\xi>1$]" |
 | 3554 | §"Two broad estimates for the linear payment" | "The cases $\zeta\ge N$ and $v\ge5/8$" |
 
+## A2. Symbol renames performed (2026-08-06, §5 and proof-map Part 3 only)
+
+| Old | New | Reason |
+|---|---|---|
+| `\alpha` (the one eigenvalue above `q`) | `\Lambda` | the largest eigenvalue; `\alpha` was arbitrary. Not renamed elsewhere: the dummy scalar in the block determinant identity (§4.1), the multi-indices in §4.3–4.4, the Laguerre parameter in §7 |
+| `L` (bound on the other eigenvalues) | `M` | `L` collided with the generating function `L_-(z)` two subsections earlier |
+| `A_m` | `\Lambda_m` | named after the eigenvalue it is evaluated at: `\Lambda_m = 2M^{m-2}+mk_m(\Lambda)` |
+| `B_m` | `M_m` | likewise `M_m = 2M^{m-2}+mk_m(M)`; the parallel structure is now visible |
+| `K_A` | `K_\Lambda` | follows `A_m → \Lambda_m` (its companion `K_L` became `K_M` automatically) |
+| `R_m` | unchanged | accepted as "residual" |
+| `C_m` | tbd | still collides with the cycle `C_m`; `\tk` note moved to its definition at `eq:C-xi-rho` |
+
+Labels not yet touched, to go in the batch below: `eq:Am-def`, `eq:Bm-def`, `eq:AB-order`,
+`eq:KA-def`, `eq:KA-sum`, `eq:L-def`, `eq:L-order`, `eq:alpha-frontier`, `eq:alpha-ceiling`,
+`eq:alpha-ceiling-poly`, `subsec:forced-variance`.
+
 Prose touch-ups tied to these: "the forced-variance lemma" → "the variance lower bound" (§5.2 end);
 "the forced-variance inequality" → "the variance lower bound" (Equality-and-stability remark).
 Typos fixed in the same pass: proof-map missing period; "contradicts with"; "gives"→"give";
