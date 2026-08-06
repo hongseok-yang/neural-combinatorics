@@ -173,7 +173,7 @@ first,
 \]
 is used from Part~2 on; the second,
 \[
-  \sum_i\lambda_i^2+2\norm g^2=\Tr(A^2)+2\norm g^2\le pq \qquad(\Cref{lem:HS-budget}),
+  \sum_i\lambda_i^2+2\norm g^2=\Tr(A^2)+2\norm g^2\le pq \qquad(\Cref{lem:plt23-HS-bound}),
 \]
 only in Part~3.
 
@@ -203,7 +203,7 @@ only in Part~3.
   where $R_{q,r}$ is a quartic in $\lambda$; \Cref{subsec:C7} writes it
   as an sum of squares, nonnegative for every real $\lambda$.
 
-  \item \Cref{sec:common-operator,sec:dense-region} prove all odd lengths
+  \item \Cref{sec:common-operator,sec:pge23} prove all odd lengths
   when $q\le1/3$.  We first show that the logarithm of a determinant
   generates the cycle densities: for any kernel $K$,
   \[
@@ -214,7 +214,7 @@ only in Part~3.
   We apply this to $U$ and to $W$, and factorize the two determinants by
   Schur complementation against the constant direction.  This produces two
   further generating functions $L_+(z)$ and $L_-(z)$, whose form is
-  recorded in \eqref{eq:dense-Lminus}--\eqref{eq:dense-Lplus}, and
+  recorded in \eqref{eq:pge23-Lminus}--\eqref{eq:pge23-Lplus}, and
   \begin{align*}
     t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\\
     t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).
@@ -222,7 +222,7 @@ only in Part~3.
   The two traces have opposite signs because the mean-zero part of $T_U$
   is $A$, that of $T_W=T_1-T_U$ is $-A$, and $m$ is odd.  Since neither
   lemma above controls the odd power sum $\Tr(A^m)=\sum_i\lambda_i^m$, we
-  add the two identities to remove it (\Cref{lem:dense-cancellation}):
+  add the two identities to remove it (\Cref{lem:pge23-two-sided-identity}):
   \[
     t(C_m,W)+t(C_m,U)=p^m+q^m+S_m,
     \qquad
@@ -236,7 +236,7 @@ only in Part~3.
 
   Expanding $L_\pm$ and $x_{m-1}$ gives $\Phi_m$ as an integral against
   $\dd\mu^{\otimes r}$ of a symmetric polynomial
-  (\Cref{prop:dense-expansion}): with $n=m-2r$,
+  (\Cref{prop:pge23-expansion}): with $n=m-2r$,
   \[
     \Phi_m=\sum_{r=1}^{(m-1)/2}\int\!\cdots\!\int
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
@@ -257,7 +257,7 @@ only in Part~3.
   polynomial is an expectation of a power of a random convex combination,
   so with $\Theta$ uniform on the simplex $\Delta^r$ and
   $\widetilde P_{m,r}(q,\ell)=P_{m,r}(q;\ell,\ldots,\ell)$
-  (\Cref{lem:dense-dirichlet}),
+  (\Cref{lem:pge23-dirichlet}),
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\E\,\widetilde P_{m,r}
@@ -268,7 +268,7 @@ only in Part~3.
   $\widetilde P_{m,r}(q,\ell)\ge0$ for $\ell\in[-1/2,1/2]$.  Second, the
   repeated variable turns the diagonal polynomial into a beta integral,
   which after a projective change of variable reads, for $\ell>0$
-  (\Cref{lem:dense-beta}),
+  (\Cref{lem:pge23-beta}),
   \begin{align*}
     \widetilde P_{m,r}(q,\ell) &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
     \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}
@@ -277,14 +277,14 @@ only in Part~3.
     \rho_{n,m}(u)&=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
   \end{align*}
   The case $\ell\le0$ is proved separately in
-  \Cref{lem:dense-ell-negative}, where the argument of $\rho_{n,m}$ stays
+  \Cref{lem:pge23-ell-negative}, where the argument of $\rho_{n,m}$ stays
   at most $q\le1/2$ and $\rho_{n,m}$ is nonnegative there.  As
   $\rho_{n,m}$ is not
   nonnegative at every real number, the integrand cannot be handled
   pointwise, and we estimate the average instead.  Third, the Laplace
   representation of
   $(\ell+s)^{-m}$ replaces that average by an expectation over a gamma
-  variable $Y\sim\GammaLaw(r,1)$ (\Cref{lem:dense-gamma-smoothing}):
+  variable $Y\sim\GammaLaw(r,1)$ (\Cref{lem:pge23-laplace-gamma}):
   \[
     \widetilde P_{m,r}(q,\ell)
     =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
@@ -299,26 +299,26 @@ only in Part~3.
     3j\,\E(zY-1)^{2j-1}\le(r+j)\,\E(zY-1)^{2j}
     \qquad(z\ge0),
   \]
-  proved in \Cref{lem:gamma-moment} from a Stein identity and the
+  proved in \Cref{lem:pge23-gamma-moment} from a Stein identity and the
   differential equation it induces.  The constant $3$ is where the
   assumption $p\ge2/3$ is used.
 
-  \item \Cref{sec:regionII-operator}
+  \item \Cref{sec:plt23}
   proves all odd $m\ge9$ when $1/2<p<2/3$.  The argument in this part is a
   spectral analysis of $A$.  We use two results, the identity for $W$ from
   Part~2,
   \[
     t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
   \]
-  and the nonnegativity of every coefficient of $L_-$; \Cref{lem:shift}
+  and the nonnegativity of every coefficient of $L_-$; \Cref{lem:plt23-one-sided-identity}
   states both.  Nothing cancels $\Tr(A^m)$ this time, so it must be bounded
   directly.
 
   We first consider the eigenvalues of $A$ larger than $q$.  If there were
   two of them, then $\sum_i\lambda_i^2>2q^2$, whereas
-  $\sum_i\lambda_i^2\le pq$ by \Cref{lem:HS-budget}, a contradiction because $2q^2 > pq$ when $q>1/3$.
+  $\sum_i\lambda_i^2\le pq$ by \Cref{lem:plt23-HS-bound}, a contradiction because $2q^2 > pq$ when $q>1/3$.
   Hence at most one eigenvalue exceeds $q$.  
-  If none does the theorem is immediate (\Cref{lem:no-frontier}), 
+  If none does the theorem is immediate (\Cref{lem:plt23-eigenvalues-above-q}), 
   so we may assume that exactly one does and write $\Lambda$ for it.  
   The same bound gives
   $|\lambda_i|\le M:=\sqrt{pq-\Lambda^2}$ for every other eigenvalue.  
@@ -328,14 +328,14 @@ only in Part~3.
   \[
     \norm g^2\ge\frac{\Lambda(\Lambda-q)^2}{2(1-2\Lambda)},
   \]
-  which with $2\norm g^2\le pq-\Lambda^2$, again from \Cref{lem:HS-budget},
-  gives $\Lambda^2+q\Lambda-q\le0$ (\Cref{lem:forced-variance}).
+  which with $2\norm g^2\le pq-\Lambda^2$, again from \Cref{lem:plt23-HS-bound},
+  gives $\Lambda^2+q\Lambda-q\le0$ (\Cref{lem:plt23-forced-variance}).
 
   Decomposing $g=\gamma\phi+g_s$ into its component along $\phi$ and its
   component in the remaining spectral subspace, the two nonconstant terms
   of the identity can be bounded.  For $\Tr(A^m)$, the eigenvalues other
   than $\Lambda$ satisfy $\sum\lambda_i^m\le M^{m-2}\sum\lambda_i^2$, so
-  \Cref{lem:HS-budget} gives
+  \Cref{lem:plt23-HS-bound} gives
   \[
     \Tr(A^m)\le\Lambda^m+M^m-2M^{m-2}\bigl(\gamma^2+\norm{g_s}^2\bigr).
   \]
@@ -348,7 +348,7 @@ only in Part~3.
     \qquad
     k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
   \]
-  Together they give (\Cref{prop:master-defect})
+  Together they give (\Cref{prop:plt23-splitting-lower-bound})
   \[
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
     \ge-R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2,
@@ -366,7 +366,7 @@ only in Part~3.
     \qquad k\perp\one,\phi,
   \]
   and set $K=\norm k^2$, so that $a_\phi^2+b^2+K=1$.  One can then show
-  (\Cref{lem:direct-channel,lem:safe-channel}) that
+  (\Cref{lem:plt23-gamma-upper-bound,lem:plt23-gs-lower-bound}) that
   \[
     \gamma\le\frac{a_\phi^2-2\Lambda(1+b)}{2a_\phi},
     \qquad
@@ -377,7 +377,7 @@ only in Part~3.
   the second inequality into a lower bound on $\norm{g_s}^2$.  We then solve the constrained minimization of
   $\Lambda_m\gamma^2+M_m\norm{g_s}^2$ under these two bounds.  Minimizing first
   in $\gamma$, and then over the three numbers $a_\phi,b,K$ that describe
-  $\phi$, gives (\Cref{thm:huber-elim})
+  $\phi$, gives (\Cref{thm:plt23-huber-elim})
   \[
     \Lambda_m\gamma^2+M_m\norm{g_s}^2\ge \Omega_m\psi(\xi,\rho),
     \qquad
@@ -395,13 +395,13 @@ only in Part~3.
   \]
   We interchange the minimum and the maximum by the strong duality of this
   problem and carry out the inner minimization in $v$, which gives
-  (\Cref{prop:huber-dual})
+  (\Cref{prop:plt23-huber-dual})
   \[
     \psi(\xi,\rho)=\max_{0\le\lambda\le1}
     \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\}.
   \]
   Two choices of $\lambda$ give the lower bounds
-  (\Cref{cor:two-witnesses}),
+  (\Cref{cor:plt23-two-witnesses}),
   \begin{align*}
     \psi(\xi,\rho)&\ge\rho\xi^2\,\frac{1+4\xi}{1+2\xi}
     &&(\lambda=2\rho\xi,\text{ admissible when }2\rho\xi\le1),\\
@@ -425,27 +425,27 @@ only in Part~3.
     \qquad
     \zeta(\zeta+v)\ge1
   \]
-  (\Cref{sec:chart}).  What has to be proved is that
+  (\Cref{subsec:plt23-chart}).  What has to be proved is that
   $R_m\le \Omega_m\psi(\xi,\rho)$ holds in that region for every odd $m\ge9$.
 
   This is done by the following case analysis on the region.
   \begin{itemize}[leftmargin=1.6em,topsep=2pt,itemsep=1pt]
-    \item The regime $2\rho\xi\le1$ (\Cref{prop:quadratic-branch}):
+    \item The regime $2\rho\xi\le1$ (\Cref{prop:plt23-quadratic-branch}):
     \begin{itemize}[leftmargin=1.4em,topsep=1pt,itemsep=0pt]
       \item $v\le3/5$ and $m\ge11$;
       \item $v\ge3/5$ and $m\ge11$;
       \item $m=9$.
     \end{itemize}
-    \item The regime $2\rho\xi>1$ (\Cref{sec:linear}):
+    \item The regime $2\rho\xi>1$ (\Cref{subsec:plt23-linear}):
     \begin{itemize}[leftmargin=1.4em,topsep=1pt,itemsep=0pt]
       \item $v\ge5/8$, for every odd $m\ge9$
-      (\Cref{lem:linear-large-v});
+      (\Cref{lem:plt23-linear-large-v});
       \item $v\le5/8$ and $\zeta\ge m-2$
-      (\Cref{lem:linear-high-zeta});
+      (\Cref{lem:plt23-linear-high-zeta});
       \item $\zeta\le m-2$ and $m\ge11$
-      (\Cref{lem:linear-low-zeta,lem:J-growth});
+      (\Cref{lem:plt23-linear-low-zeta,lem:plt23-J-growth});
       \item $m=9$ with $\zeta\le7$ and $v\le5/8$
-      (\Cref{lem:N7-small-v,lem:N7-middle-v}).
+      (\Cref{lem:plt23-N7-small-v,lem:plt23-N7-middle-v}).
     \end{itemize}
   \end{itemize}
   These can be proved by elementary analysis, except the last case, $m=9$, where we should show two polynomials are nonnegative on an interval.
@@ -1056,7 +1056,7 @@ is a finite matrix; this is made explicit in \Cref{sec:common-operator}.  We
 build our series from such matrices, using the two expansions in the next
 lemma.
 
-\begin{lemma}[Series expansions used below]\label{lem:analytic-reading}
+\begin{lemma}[Series expansions used below]\label{lem:series-expansions}
   Let $X$ be a real symmetric $N\times N$ matrix.  As formal power series
   in $z$:
   \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
@@ -1115,7 +1115,7 @@ The arguments below are the same under either reading.
 \subsection{The block decomposition and the support of the spectral measure}
 \label{subsec:block-decomposition}
 
-From here to the end of \Cref{sec:regionII-operator}, we assume $W$ to be a
+From here to the end of \Cref{sec:plt23}, we assume $W$ to be a
 step graphon, which \Cref{lem:step-reduction} permits, and all determinants
 and traces are taken in the resulting finite-dimensional setting.  Fix a finite
 measurable partition
@@ -1157,6 +1157,13 @@ Multiplying this matrix around a cycle shows, for every $r\ge2$, that
   K_{a_1a_2}\cdots K_{a_ra_1} \notag\\
   &=t(C_r,K). \label{eq:finite-trace-cycle}
 \end{align}
+
+\tk{TODO (structure): move the shared identities \eqref{eq:logdet-cycle} and
+\eqref{eq:block-determinant-identity}, currently stated inside
+\Cref{subsec:pge23-two-sided-schur}, into this section, next to the
+formal-series definitions, so that \Cref{sec:plt23} no longer depends on
+\Cref{sec:pge23}.  Their labels are deliberately kept unprefixed for this
+reason.}
 
 We now split $\mathcal E$ into the constant direction and its orthogonal
 complement, and decompose $T_U$ accordingly.  The constant function $\one$
@@ -1272,7 +1279,7 @@ orthogonality of the eigenspaces gives
 \]
 
 In particular, expanding $(I-zA)^{-1}=\sum_{j\ge0}z^jA^j$ by
-\Cref{lem:analytic-reading}\,(1) and taking $F(\lambda)=\lambda^j$ in each
+\Cref{lem:series-expansions}\,(1) and taking $F(\lambda)=\lambda^j$ in each
 coefficient,
 \begin{equation}\label{eq:resolvents-common}
   \ip g{(I-zA)^{-1}g}
@@ -1281,18 +1288,18 @@ coefficient,
 \end{equation}
 
 \section{Above the threshold \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet averages and gamma smoothing}
-\label{sec:dense-region}
+\label{sec:pge23}
 
 Throughout this section,
-\begin{equation}\label{eq:dense-q}
+\begin{equation}\label{eq:pge23-q}
   q = 1 - p, \qquad 0 \le q \le \frac{1}{3},
 \end{equation}
 and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
 
 \subsection{A two-sided Schur-complement identity and cancellation of the odd
-trace}\label{subsec:two-sided}
+trace}\label{subsec:pge23-two-sided-schur}
 
-By \Cref{lem:analytic-reading}\,(2) and \eqref{eq:finite-trace-cycle}, every
+By \Cref{lem:series-expansions}\,(2) and \eqref{eq:finite-trace-cycle}, every
 step kernel $K$ satisfies
 \begin{equation}\label{eq:logdet-cycle}
   -\log\det(I-zT_K)=\sum_{j\ge1}\frac{\Tr(T_K^j)}{j}z^j,
@@ -1306,32 +1313,32 @@ summands: one coming from the mean-zero block $\mp A$, one from the scalar
 entry, and the third coming from the Schur complement:
 \begin{align}
   L_-(z)&=-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right),
-  \label{eq:dense-Lminus}\\
+  \label{eq:pge23-Lminus}\\
   L_+(z)&=-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right).
-  \label{eq:dense-Lplus}
+  \label{eq:pge23-Lplus}
 \end{align}
 Writing
 \begin{align}
   R_-(z)&=\ip g{(I+zA)^{-1}g}
-  =\int\frac{\dd\mu(\lambda)}{1+\lambda z},\label{eq:dense-Rminus}\\
+  =\int\frac{\dd\mu(\lambda)}{1+\lambda z},\label{eq:pge23-Rminus}\\
   R_+(z)&=\ip g{(I-zA)^{-1}g}
-  =\int\frac{\dd\mu(\lambda)}{1-\lambda z},\label{eq:dense-Rplus}
+  =\int\frac{\dd\mu(\lambda)}{1-\lambda z},\label{eq:pge23-Rplus}
 \end{align}
 as in \eqref{eq:resolvents-common} with $A$ replaced by $\mp A$, the inner
 series of $L_\pm$ is $z^2R_\pm(z)/(1-cz)$, with $c=p$ or $q$.  It has order
 at least two, so $L_\pm$ are well defined formal power series, as discussed
 in \Cref{subsec:analytic-reading}.  For odd $m$, put
-\begin{equation}\label{eq:dense-Sm}
+\begin{equation}\label{eq:pge23-Sm}
   S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
 \end{equation}
 
-\begin{lemma}[Sum of the two cycle densities]\label{lem:dense-cancellation}
+\begin{lemma}[Sum of the two cycle densities]\label{lem:pge23-two-sided-identity}
   For every odd $m\ge3$,
-  \begin{equation}\label{eq:dense-cycle-sum}
+  \begin{equation}\label{eq:pge23-two-sided-identity}
     t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
   \end{equation}
   Consequently,
-  \begin{equation}\label{eq:dense-defect}
+  \begin{equation}\label{eq:pge23-one-sided-identity}
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
     =q^{m-1}+S_m-t(C_m,U).
   \end{equation}
@@ -1372,7 +1379,7 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
   has determinant one and makes the product block triangular; the determinant
   of the latter is the product of its diagonal-block determinants.  We may
   take $D=I\mp zA$ here: these blocks have constant term $I$, hence are
-  invertible over $\R[[z]]$ by \Cref{lem:analytic-reading}\,(1).  Applying
+  invertible over $\R[[z]]$ by \Cref{lem:series-expansions}\,(1).  Applying
   \eqref{eq:block-determinant-identity} with $D=I-zA$ and $v=-zg$, and then
   with $D=I+zA$ and $v=zg$, factorizes the determinants into three parts,
   \begin{align*}
@@ -1393,7 +1400,7 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
     \qquad
     m\,[z^m]\bigl(-\log\det(I-zT_W)\bigr)=t(C_m,W).
   \]
-  For the first summand on the right, \Cref{lem:analytic-reading}\,(2) gives,
+  For the first summand on the right, \Cref{lem:series-expansions}\,(2) gives,
   for odd $m$,
   \[
     m\,[z^m]\bigl(-\log\det(I-zA)\bigr)=\Tr(A^m),
@@ -1408,8 +1415,8 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
     m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m,
   \]
   and the third summands give $m[z^m]\bigl(L_-(z)+L_+(z)\bigr)=S_m$ by
-  \eqref{eq:dense-Sm}.  Adding the two identities therefore proves
-  \eqref{eq:dense-cycle-sum}.
+  \eqref{eq:pge23-Sm}.  Adding the two identities therefore proves
+  \eqref{eq:pge23-two-sided-identity}.
 
   To obtain the second identity, rearrange the first:
   \begin{align*}
@@ -1424,23 +1431,23 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
 \subsection{Replacing a complement cycle by a path}
 
 Let $P_j$ denote the path with $j$ edges and set
-\begin{equation}\label{eq:dense-xj}
+\begin{equation}\label{eq:pge23-xj}
   x_j=t(P_j,U)=\ip\one{T_U^j\one}.
 \end{equation}
 As in \Cref{sec:short-cycles}, deleting one edge from the $m$-cycle leaves a
 path with $m-1$ edges, so $0\le U\le1$ gives
-\begin{equation}\label{eq:dense-cycle-path}
+\begin{equation}\label{eq:pge23-cycle-path}
   t(C_m,U)\le x_{m-1}.
 \end{equation}
 
-By \eqref{eq:dense-defect} and \eqref{eq:dense-cycle-path}, it is enough to
+By \eqref{eq:pge23-one-sided-identity} and \eqref{eq:pge23-cycle-path}, it is enough to
 prove
-\begin{equation}\label{eq:dense-Phi}
+\begin{equation}\label{eq:pge23-Phi}
   \Phi_m:=q^{m-1}+S_m-x_{m-1}\ge0.
 \end{equation}
 Two of the three terms are already expressed through $q$ and $R_\pm$, so it
 remains to do the same for the path densities.  By
-\Cref{lem:analytic-reading}\,(1),
+\Cref{lem:series-expansions}\,(1),
 \[
   \sum_{j\ge0}x_jz^j
   =\sum_{j\ge0}z^j\ip\one{T_U^j\one}
@@ -1465,7 +1472,7 @@ becomes
   =\begin{pmatrix}1\\0\end{pmatrix}.
 \]
 Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
-\begin{equation}\label{eq:dense-path-gf}
+\begin{equation}\label{eq:pge23-path-gf}
   \sum_{j\ge0}x_jz^j=\frac{1}{1-qz-z^2R_+(z)}.
 \end{equation}
 
@@ -1483,15 +1490,15 @@ polynomial} of degree $d$ is
   \qquad h_0=1,
 \]
 the sum of all monomials of degree $d$ in $y_1,\ldots,y_k$.  Equivalently,
-\begin{equation}\label{eq:dense-h-gf}
+\begin{equation}\label{eq:pge23-h-gf}
   \prod_{i=1}^k\frac{1}{1-y_i z}
   =\sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d.
 \end{equation}
 The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
 
-\begin{proposition}[Exact coefficient expansion]\label{prop:dense-expansion}
+\begin{proposition}[Exact coefficient expansion]\label{prop:pge23-expansion}
   For odd $m\ge3$,
-  \begin{equation}\label{eq:dense-expansion}
+  \begin{equation}\label{eq:pge23-expansion}
     \Phi_m=\sum_{r=1}^{(m-1)/2}
     \int\!\cdots\!\int
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
@@ -1505,7 +1512,7 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
     +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)
     \Bigr]\notag\\
     &-h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
-    \label{eq:dense-Pmr}
+    \label{eq:pge23-Pmr}
   \end{align}
 \end{proposition}
 
@@ -1532,15 +1539,15 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
     \\
     \frac{R_-(z)^r}{(1-pz)^r} &= \int\!\cdots\!\int \frac{1}{(1-pz)^r} \prod_{i=1}^r \frac{1}{1+\lambda_i z} \prod_{i=1}^r \dd\mu(\lambda_i).
   \end{align*}
-  By \eqref{eq:dense-h-gf}, the $r$-th coefficient is 
+  By \eqref{eq:pge23-h-gf}, the $r$-th coefficient is 
   \[
     [z^{m-2r}] \frac{R_-(z)^r}{(1-pz)^r} = \int\!\cdots\!\int h_{m-2r}(p^{\times r}, -\lambda_1, \ldots, -\lambda_r) \prod_{i=1}^r \dd\mu(\lambda_i).
   \]
   The same argument for $L_+$ produces the second term in brackets in
-  \eqref{eq:dense-Pmr}.
+  \eqref{eq:pge23-Pmr}.
 
   On the other hand, factoring $1-qz$ out of the denominator of
-  \eqref{eq:dense-path-gf} and expanding the geometric series gives
+  \eqref{eq:pge23-path-gf} and expanding the geometric series gives
   \begin{align*}
     \sum_{j\ge0}x_jz^j
     &=\frac{1}{(1-qz)\left(1-\dfrac{z^2R_+(z)}{1-qz}\right)}
@@ -1552,7 +1559,7 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
     x_{m-1}=\sum_{r\ge0}[z^{m-1-2r}]\frac{R_+(z)^r}{(1-qz)^{r+1}}.
   \]
   The term $r=0$ is $[z^{m-1}](1-qz)^{-1}=q^{m-1}$, which cancels the first
-  term of \eqref{eq:dense-Phi}.  For $r\ge1$, the spectral representation of
+  term of \eqref{eq:pge23-Phi}.  For $r\ge1$, the spectral representation of
   $R_+(z)=\int\frac{\dd\mu(\lambda)}{1-\lambda z}$ gives, as above,
   \[
     \frac{R_+(z)^r}{(1-qz)^{r+1}}
@@ -1560,7 +1567,7 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
     \prod_{i=1}^r\frac{1}{1-\lambda_iz}
     \prod_{i=1}^r\dd\mu(\lambda_i),
   \]
-  and \eqref{eq:dense-h-gf}, applied now to the $r+1$ copies of $q$ together
+  and \eqref{eq:pge23-h-gf}, applied now to the $r+1$ copies of $q$ together
   with $\lambda_1,\ldots,\lambda_r$, yields
   \[
     [z^{m-1-2r}]\frac{R_+(z)^r}{(1-qz)^{r+1}}
@@ -1569,33 +1576,33 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
     \prod_{i=1}^r\dd\mu(\lambda_i),
   \]
   because $m-1-2r=n-1$.  Subtracting these terms from the contributions of
-  $L_-$ and $L_+$ gives \eqref{eq:dense-expansion}.  All three sums are
+  $L_-$ and $L_+$ gives \eqref{eq:pge23-expansion}.  All three sums are
   finite and stop at $r=(m-1)/2$, since their coefficients are zero once
   $2r>m-1$.
 \end{proof}
 
 \subsection{Diagonalization by a Dirichlet average}
 
-In this section, we will simplify the integrand $P_{m,r}$ of \eqref{eq:dense-expansion} by replacing the eigenvalues $\lambda_1,\ldots,\lambda_r$ by a single variable $\ell$.
+In this section, we will simplify the integrand $P_{m,r}$ of \eqref{eq:pge23-expansion} by replacing the eigenvalues $\lambda_1,\ldots,\lambda_r$ by a single variable $\ell$.
 Define the diagonal polynomial
-\begin{equation}\label{eq:dense-Ptilde}
+\begin{equation}\label{eq:pge23-Ptilde}
   \widetilde P_{m,r}(q,\ell)
   =P_{m,r}(q;\ell,\ldots,\ell).
 \end{equation}
 
-\begin{lemma}[Dirichlet diagonalization]\label{lem:dense-dirichlet}
+\begin{lemma}[Dirichlet diagonalization]\label{lem:pge23-dirichlet}
   Let $(\Theta_1,\ldots,\Theta_r)$ be uniformly distributed on the simplex
   \[
     \Theta_i\ge0,\qquad \sum_{i=1}^r\Theta_i=1.
   \]
   Then
-  \begin{equation}\label{eq:dense-dirichlet-identity}
+  \begin{equation}\label{eq:pge23-dirichlet-identity}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\E\,\widetilde P_{m,r}
     \left(q,\sum_{i=1}^r\Theta_i\lambda_i\right).
   \end{equation}
   Consequently,
-  \begin{equation}\label{eq:dense-diagonal-min}
+  \begin{equation}\label{eq:pge23-diagonal-min}
     \min_{\lambda_i\in[-1/2,1/2]}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\min_{\ell\in[-1/2,1/2]}\widetilde P_{m,r}(q,\ell).
@@ -1608,7 +1615,7 @@ Define the diagonal polynomial
 
   First, the moments of $S$ are the complete homogeneous polynomials, up to a
   constant:
-  \begin{equation}\label{eq:dense-dirichlet-moment}
+  \begin{equation}\label{eq:pge23-dirichlet-moment}
     \E\,S^j
     =\frac{h_j(\lambda_1,\ldots,\lambda_r)}
     {\binom{j+r-1}{r-1}}.
@@ -1640,7 +1647,7 @@ Define the diagonal polynomial
 
   Second, setting all variables equal in the definition of $h_j$ gives the
   diagonal value
-  \begin{equation}\label{eq:dense-h-diagonal}
+  \begin{equation}\label{eq:pge23-h-diagonal}
     h_j(\ell,\ldots,\ell)=\binom{j+r-1}{r-1}\ell^j,
   \end{equation}
   the binomial coefficient being the number of monomials of degree $j$ in $r$
@@ -1649,7 +1656,7 @@ Define the diagonal polynomial
   It remains to express the terms of
   $P_{m,r}$ through the
   $h_j(\lambda_1,\ldots,\lambda_r)$.  In the generating function
-  \eqref{eq:dense-h-gf} of the $h_d$, the $k$ equal variables and the
+  \eqref{eq:pge23-h-gf} of the $h_d$, the $k$ equal variables and the
   remaining ones give separate factors, so
   \[
     \sum_{d\ge0}h_d(a^{\times k},b_1,\ldots,b_r)z^d
@@ -1658,7 +1665,7 @@ Define the diagonal polynomial
     \Bigl(\sum_{j\ge0}h_j(b_1,\ldots,b_r)z^j\Bigr),
   \]
   and comparing the coefficients of $z^d$ gives the splitting identity
-  \begin{equation}\label{eq:dense-h-split}
+  \begin{equation}\label{eq:pge23-h-split}
     h_d(a^{\times k},b_1,\ldots,b_r)
     =\sum_{j=0}^d
     \binom{d-j+k-1}{k-1}a^{d-j}h_j(b_1,\ldots,b_r).
@@ -1674,22 +1681,22 @@ Define the diagonal polynomial
     \bigl((-1)^jp^{n-j}+q^{n-j}\bigr)
     h_j(\lambda_1,\ldots,\lambda_r) \notag\\
     &-\sum_{j=0}^{n-1}\binom{n-1-j+r}{r}q^{n-1-j}
-    h_j(\lambda_1,\ldots,\lambda_r). \label{eq:dense-P-in-h}
+    h_j(\lambda_1,\ldots,\lambda_r). \label{eq:pge23-P-in-h}
   \end{align}
 
-  Write the expansion \eqref{eq:dense-P-in-h} as
+  Write the expansion \eqref{eq:pge23-P-in-h} as
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\sum_{j=0}^nc_j\,h_j(\lambda_1,\ldots,\lambda_r),
   \]
   where $c_j$ subsumes the two coefficients of $h_j$ above, which do not
   involve the $\lambda_i$.  Setting $\lambda_1=\cdots=\lambda_r=\ell$ and
-  using the diagonal value \eqref{eq:dense-h-diagonal},
-  \begin{equation}\label{eq:dense-Ptilde-in-c}
+  using the diagonal value \eqref{eq:pge23-h-diagonal},
+  \begin{equation}\label{eq:pge23-Ptilde-in-c}
     \widetilde P_{m,r}(q,\ell)
     =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\ell^j.
   \end{equation}
-  On the other hand, the moment identity \eqref{eq:dense-dirichlet-moment}
+  On the other hand, the moment identity \eqref{eq:pge23-dirichlet-moment}
   gives
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
@@ -1701,13 +1708,13 @@ Define the diagonal polynomial
 
   For the second claim, if the $\lambda_i$ lie in $[-1/2,1/2]$ then so does every convex
   combination $S$, so the right side of the identity
-  \eqref{eq:dense-dirichlet-identity} is
+  \eqref{eq:pge23-dirichlet-identity} is
   at least $\min_\ell\widetilde P_{m,r}(q,\ell)$; conversely
   $\lambda_1=\cdots=\lambda_r=\ell$ attains each diagonal value.
 \end{proof}
 
-Thus \eqref{eq:dense-expansion} will be nonnegative once we prove
-\begin{equation}\label{eq:dense-diagonal-target}
+Thus \eqref{eq:pge23-expansion} will be nonnegative once we prove
+\begin{equation}\label{eq:pge23-diagonal-target}
   \widetilde P_{m,r}(q,\ell)\ge0
 \end{equation}
 for
@@ -1723,18 +1730,18 @@ polynomial is replaced by one scalar variable polynomial.
 
 In this section, we will further simplify the diagonal polynomial $\widetilde P_{m,r}$ by representing it as an expectation over a beta distribution.
 
-\begin{lemma}[Beta formula]\label{lem:dense-beta}
+\begin{lemma}[Beta formula]\label{lem:pge23-beta}
   Let $1\le r\le\frac{m-1}{2}$ and put
-  \begin{equation}\label{eq:dense-n}
+  \begin{equation}\label{eq:pge23-n}
     n=m-2r,
   \end{equation}
   so that $n\ge1$ is odd.  Let $X\sim\BetaLaw(r,r)$ and
-  \begin{equation}\label{eq:dense-rho}
+  \begin{equation}\label{eq:pge23-rho}
     \rho_{n,m}(u)
     =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
   \end{equation}
   Then
-  \begin{equation}\label{eq:dense-beta-second}
+  \begin{equation}\label{eq:pge23-beta-second}
     \widetilde P_{m,r}(q,\ell)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \E\left[
@@ -1742,7 +1749,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     \right].
   \end{equation}
   If $\ell>0$, then
-  \begin{equation}\label{eq:dense-beta-integral}
+  \begin{equation}\label{eq:pge23-beta-integral}
     \widetilde P_{m,r}(q,\ell)
     =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,
     \ell^{n+r}
@@ -1753,15 +1760,15 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
 
 \begin{proof}
   For arbitrary $a,b$ we first claim that
-  \begin{equation}\label{eq:dense-beta-h}
+  \begin{equation}\label{eq:pge23-beta-h}
     h_n(a^{\times r},b^{\times r})
     =\binom{n+2r-1}{2r-1}
     \E\bigl(aX+b(1-X)\bigr)^n.
   \end{equation}
   Both sides are polynomials in $a$ and $b$, so it suffices to compare the
   coefficient of $a^kb^{n-k}$.  On the left, the splitting identity
-  \eqref{eq:dense-h-split} and the diagonal value
-  \eqref{eq:dense-h-diagonal} give
+  \eqref{eq:pge23-h-split} and the diagonal value
+  \eqref{eq:pge23-h-diagonal} give
   \[
     h_n(a^{\times r},b^{\times r})
     =\sum_{k=0}^n h_k(a^{\times r})\,h_{n-k}(b^{\times r})
@@ -1787,9 +1794,9 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel against those of
   $\binom{n+2r-1}{2r-1}\binom nk$.
 
-  Next we differentiate both sides of \eqref{eq:dense-beta-h} with respect to $a$.
+  Next we differentiate both sides of \eqref{eq:pge23-beta-h} with respect to $a$.
   On the left, differentiating the generating function
-  \eqref{eq:dense-h-gf} in the form
+  \eqref{eq:pge23-h-gf} in the form
   $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d=(1-az)^{-r}(1-bz)^{-r}$
   gives
   \[
@@ -1802,22 +1809,22 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   =r\,h_{n-1}(a^{\times(r+1)},b^{\times r})$.
   On the right, $\partial_a\bigl(aX+b(1-X)\bigr)^n
   =nX\bigl(aX+b(1-X)\bigr)^{n-1}$.  Hence
-  \begin{equation}\label{eq:dense-beta-h-deriv}
+  \begin{equation}\label{eq:pge23-beta-h-deriv}
     h_{n-1}(a^{\times(r+1)},b^{\times r})
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \E\left[X\bigl(aX+b(1-X)\bigr)^{n-1}\right].
   \end{equation}
 
-  By the definition \eqref{eq:dense-Ptilde} of the diagonal polynomial,
+  By the definition \eqref{eq:pge23-Ptilde} of the diagonal polynomial,
   \[
     \widetilde P_{m,r}(q,\ell)
     =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
     +h_n(q^{\times r},\ell^{\times r})\bigr]
     -h_{n-1}(q^{\times(r+1)},\ell^{\times r}),
   \]
-  and we apply \eqref{eq:dense-beta-h} to the first two terms, with
+  and we apply \eqref{eq:pge23-beta-h} to the first two terms, with
   $(a,b)=(p,-\ell)$ and $(a,b)=(q,\ell)$, and
-  \eqref{eq:dense-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
+  \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
   Using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$, this gives
   \begin{align*}
     &\widetilde P_{m,r}(q,\ell)
@@ -1837,7 +1844,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     \qquad\text{so that } V_X+W_X=X,
   \]
   this simplifies to
-  \begin{equation}\label{eq:dense-beta-first}
+  \begin{equation}\label{eq:pge23-beta-first}
     \widetilde P_{m,r}(q,\ell)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \left[
@@ -1862,17 +1869,17 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     \qquad
     XV_X^{n-1}=X\cdot X^{n-1}u_X^{n-1}=X^nu_X^{n-1}.
   \]
-  By linearity, the two expectations in \eqref{eq:dense-beta-first} combine
+  By linearity, the two expectations in \eqref{eq:pge23-beta-first} combine
   into the expectation of
   \[
     \frac {m}{n}\bigl(V_X^n+W_X^n\bigr)-XV_X^{n-1}
     =X^n\left[\frac {m}{n}\bigl(u_X^n+(1-u_X)^n\bigr)-u_X^{n-1}\right]
     =X^n\rho_{n,m}(u_X),
   \]
-  by the definition \eqref{eq:dense-rho} of $\rho_{n,m}$, and this proves
-  \eqref{eq:dense-beta-second}.
+  by the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$, and this proves
+  \eqref{eq:pge23-beta-second}.
 
-  For $\ell>0$, expand the expectation in \eqref{eq:dense-beta-second} as an
+  For $\ell>0$, expand the expectation in \eqref{eq:pge23-beta-second} as an
   integral against the beta density,
   \[
     \E\left[X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)\right]
@@ -1904,7 +1911,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   \end{align*}
   where in the last line the minus sign has been used to interchange the
   endpoints of integration, and the exponent $n+2r$ has been replaced by
-  $m$ according to \eqref{eq:dense-n}.  Altogether
+  $m$ according to \eqref{eq:pge23-n}.  Altogether
   \[
     \widetilde P_{m,r}(q,\ell)
     =\binom{m-1}{2r-1}\frac {n}{r}\frac{\Gamma(2r)}{\Gamma(r)^2}\,
@@ -1919,27 +1926,27 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
      \cdot\frac{(2r-1)!}{((r-1)!)^2}
     =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2},
   \]
-  this proves \eqref{eq:dense-beta-integral}.
+  this proves \eqref{eq:pge23-beta-integral}.
 \end{proof}
 
 \subsection{The case \texorpdfstring{$\ell\le0$}{l<=0}: pointwise nonnegativity}
 
-\begin{lemma}\label{lem:dense-ell-negative}
+\begin{lemma}\label{lem:pge23-ell-negative}
   If $0\le q\le1/2$ and $\ell\le0$, then
   $\widetilde P_{m,r}(q,\ell)\ge0$.
 \end{lemma}
 
 \begin{proof}
-  From the definition \eqref{eq:dense-rho} of $\rho_{n,m}$,
+  From the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$,
   \begin{align*}
     \rho_{n,m}(u)
     &=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1} \nonumber \\
     &=\frac {m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)
-    +\left(\frac {m}{n}-1\right)u^{n-1}, \label{eq:dense-rho-pointwise}
+    +\left(\frac {m}{n}-1\right)u^{n-1},
   \end{align*}
   which can be shown by expanding
   $(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)=(1-u)^n-u^{n-1}+u^n$.  
-  Recall that $\frac{m}{n}-1=\frac{2r}{n}>0$ by \eqref{eq:dense-n}, and $n-1$ is even. 
+  Recall that $\frac{m}{n}-1=\frac{2r}{n}>0$ by \eqref{eq:pge23-n}, and $n-1$ is even. 
   The second term is therefore always nonnegative, and the first is
   nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, which hold for $u \le 1/2$.
 
@@ -1949,18 +1956,18 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     q+\ell\,\frac{1-X}{X}\le q\le\frac{1}{2}.
   \]
   Hence $X^n\rho_{n,m}\bigl(q+\ell(1-X)/X\bigr)\ge0$, and
-  \eqref{eq:dense-beta-second} gives $\widetilde P_{m,r}(q,\ell)\ge0$.
+  \eqref{eq:pge23-beta-second} gives $\widetilde P_{m,r}(q,\ell)\ge0$.
 \end{proof}
 
 So only the case $\ell>0$ remains.
-There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:dense-beta-integral} ranges over $[q,\infty)$, 
+There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, 
 and unlike the $\ell\le0$ case, $\rho_{n,m}$ can be negative on that range: for instance $\rho_{5,7}(0.7)<0$.
 The integrand can therefore no longer be handled pointwise, and nonnegativity has to be derived from the integral as a whole.
 
 \subsection{Laplace--gamma representation}
 
 Since the constant and the factor $\ell^{n+r}$ in
-\eqref{eq:dense-beta-integral} are positive, what has to be shown
+\eqref{eq:pge23-beta-integral} are positive, what has to be shown
 nonnegative for $\ell>0$ is
 \[
   \int_0^\infty
@@ -1970,16 +1977,16 @@ Here $\ell$ and $s$ are coupled through $(\ell+s)^{-m}$, which is what
 makes the integral difficult to handle.  They can be separated by an
 inverse Laplace transform: the inverse Laplace transform of
 $x\mapsto x^{-m}$ is $t\mapsto t^{m-1}/\Gamma(m)$, so that
-\begin{equation}\label{eq:laplace-kernel}
+\begin{equation}\label{eq:pge23-laplace-kernel}
   \frac{1}{(\ell+s)^m}
   =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t,
 \end{equation}
 which can be shown by evaluating the integral under the substitution
 $w=t(\ell+s)$.
 
-\begin{lemma}[Laplace--gamma representation]\label{lem:dense-gamma-smoothing}
+\begin{lemma}[Laplace--gamma representation]\label{lem:pge23-laplace-gamma}
   Let $Y\sim\GammaLaw(r,1)$.  If $\ell>0$, then
-  \begin{equation}\label{eq:dense-gamma-smoothing}
+  \begin{equation}\label{eq:pge23-laplace-gamma}
     \widetilde P_{m,r}(q,\ell)
     =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
     \int_0^\infty
@@ -1989,7 +1996,7 @@ $w=t(\ell+s)$.
 \end{lemma}
 
 \begin{proof}
-  Insert \eqref{eq:laplace-kernel} into \eqref{eq:dense-beta-integral} and
+  Insert \eqref{eq:pge23-laplace-kernel} into \eqref{eq:pge23-beta-integral} and
   exchange the two integrals:
   \begin{align*}
     \widetilde P_{m,r}(q,\ell)
@@ -2003,7 +2010,7 @@ $w=t(\ell+s)$.
   \end{align*}
   This exchange is justified by Fubini's theorem, given the absolute
   integrability of the double integral.  To verify absolute integrability,
-  integrate the absolute value in $t$ first: by \eqref{eq:laplace-kernel},
+  integrate the absolute value in $t$ first: by \eqref{eq:pge23-laplace-kernel},
   \[
     \int_0^\infty\!\!\int_0^\infty
     s^{r-1}t^{m-1}e^{-t(\ell+s)}\bigl|\rho_{n,m}(q+s)\bigr|\dd t\dd s
@@ -2014,7 +2021,7 @@ $w=t(\ell+s)$.
   $\rho_{n,m}$ is a polynomial of degree $n-1$, since the terms $u^n$ and
   $-u^n$ of $u^n+(1-u)^n$ cancel for odd $n$.  As $s\to\infty$, the
   integrand is therefore $O\bigl(s^{r+n-2-m}\bigr)=O\bigl(s^{-r-2}\bigr)$
-  by \eqref{eq:dense-n}, which is integrable at infinity.  As $s\to0$, the
+  by \eqref{eq:pge23-n}, which is integrable at infinity.  As $s\to0$, the
   integrand is $O\bigl(s^{r-1}\bigr)$, which is integrable because
   $r\ge1$.
 
@@ -2030,10 +2037,10 @@ $w=t(\ell+s)$.
   where the last equality holds because $Y$ has density
   $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.  Substituting this for the
   inner integral obtained after the exchange gives
-  \eqref{eq:dense-gamma-smoothing}.
+  \eqref{eq:pge23-laplace-gamma}.
 \end{proof}
 
-In \eqref{eq:dense-gamma-smoothing} the parameter $\ell$ occurs only in the
+In \eqref{eq:pge23-laplace-gamma} the parameter $\ell$ occurs only in the
 factor $\ell^{n+r}$ and in the weight $t^{m-r-1}e^{-\ell t}$, both of which
 are positive; the expectation $\E\rho_{n,m}(q+Y/t)$ does not involve $\ell$
 at all.  It is therefore enough to prove that this expectation is
@@ -2053,10 +2060,10 @@ In each of them, the even power has nonnegative expectation, while the odd power
 what is needed is therefore a bound of the odd moment by the even one. 
 The following lemma supplies such a bound, uniformly in the scaling of $Y$.
 
-\begin{lemma}[Uniform odd-to-even gamma moment bound]\label{lem:gamma-moment}
+\begin{lemma}[Uniform odd-to-even gamma moment bound]\label{lem:pge23-gamma-moment}
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.  For every
   $z\ge0$,
-  \begin{equation}\label{eq:gamma-moment}
+  \begin{equation}\label{eq:pge23-gamma-moment}
     3j\,\E(zY-1)^{2j-1}
     \le(r+j)\,\E(zY-1)^{2j}.
   \end{equation}
@@ -2064,10 +2071,10 @@ The following lemma supplies such a bound, uniformly in the scaling of $Y$.
 
 We postpone its proof to the next subsection and first show exactly how it proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 
-\begin{proposition}[Shifted-gamma positivity]\label{prop:dense-gamma-positive}
+\begin{proposition}[Shifted-gamma positivity]\label{prop:pge23-gamma-positive}
   Let $n\ge1$ be odd, $r\ge1$, and $m=n+2r$.  If $0\le q\le1/3$, then
   for every $x\ge0$,
-  \begin{equation}\label{eq:dense-shifted-positive}
+  \begin{equation}\label{eq:pge23-shifted-positive}
     \E\rho_{n,m}(q+xY)\ge0,
     \qquad Y\sim\GammaLaw(r,1).
   \end{equation}
@@ -2087,14 +2094,14 @@ We postpone its proof to the next subsection and first show exactly how it prove
     =nu^{n-1}-nA_n(u),
   \]
   that is, $u^{n-1}=A_n(u)+\frac1n(1-u)A_n'(u)$. 
-  Substituting this into the definition \eqref{eq:dense-rho} of $\rho_{n,m}$ and using $m-n=2r$,
-  \begin{equation}\label{eq:dense-rho-derivative}
+  Substituting this into the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$ and using $m-n=2r$,
+  \begin{equation}\label{eq:pge23-rho-derivative}
     n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
   \end{equation}
 
   Now expand around $u=1/2$. 
   With $u=\frac12+v$, the binomial theorem gives
-  \begin{equation}\label{eq:dense-even-expansion}
+  \begin{equation}\label{eq:pge23-even-expansion}
     A_n\left(\frac{1}{2}+v\right)
     =\left(\frac12+v\right)^n+\left(\frac12-v\right)^n
     =2\sum_{2j\le n}\binom n{2j}\left(\frac12\right)^{n-2j}v^{2j}
@@ -2102,7 +2109,7 @@ We postpone its proof to the next subsection and first show exactly how it prove
   \end{equation}
   where $a_j=2^{2j+1-n}\binom n{2j}>0$. 
   Differentiating in $v$, we also have $A_n'\bigl(\frac12+v\bigr)=\sum_{j\ge1}2ja_jv^{2j-1}$. 
-  Substituting both into \eqref{eq:dense-rho-derivative}, with $1-u=\frac12-v$, gives
+  Substituting both into \eqref{eq:pge23-rho-derivative}, with $1-u=\frac12-v$, gives
   \begin{align}
     n\rho_{n,m}\left(\frac{1}{2}+v\right)
     &=2r\sum_{j\ge0}a_jv^{2j}
@@ -2112,10 +2119,10 @@ We postpone its proof to the next subsection and first show exactly how it prove
      a_j\bigl(2rv^{2j}-jv^{2j-1}+2jv^{2j}\bigr) \nonumber \\
     &=2ra_0+
      \sum_{j=1}^{(n-1)/2}
-     a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).\label{eq:dense-rho-centered}
+     a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).\label{eq:pge23-rho-centered}
   \end{align}
   
-  At $u=q+xY$, the $v$ in \eqref{eq:dense-rho-centered} equals
+  At $u=q+xY$, the $v$ in \eqref{eq:pge23-rho-centered} equals
   \[
     v=q+xY-\frac{1}{2}=xY-\delta=\delta(zY-1),
     \quad \text{where} \quad
@@ -2123,8 +2130,8 @@ We postpone its proof to the next subsection and first show exactly how it prove
     \qquad
     z=\frac{x}{\delta},
   \]
-  which is the form occurring in \Cref{lem:gamma-moment}.  Taking
-  expectations in \eqref{eq:dense-rho-centered}, it suffices to bound each
+  which is the form occurring in \Cref{lem:pge23-gamma-moment}.  Taking
+  expectations in \eqref{eq:pge23-rho-centered}, it suffices to bound each
   summand.  For $j\ge1$,
   \begin{align*}
     &\E\left[
@@ -2140,30 +2147,30 @@ We postpone its proof to the next subsection and first show exactly how it prove
     \E(zY-1)^{2j}
     \ge0,
   \end{align*}
-  where the inequality is \Cref{lem:gamma-moment} and the last step uses
+  where the inequality is \Cref{lem:pge23-gamma-moment} and the last step uses
   $2\delta\ge1/3$ together with $\E(zY-1)^{2j}\ge0$.  Since every $a_j$ is
   positive, we conclude
   \[
     n\,\E\rho_{n,m}(q+xY)\ge2ra_0>0,
   \]
-  which proves \eqref{eq:dense-shifted-positive}.
+  which proves \eqref{eq:pge23-shifted-positive}.
 \end{proof}
 
-\begin{remark}[Tightness of the density requirement $p \ge 2/3$]\label{rem:dense-threshold}
+\begin{remark}[Tightness of the density requirement $p \ge 2/3$]\label{rem:pge23-threshold}
   This is the only place in the proof where the restriction $p\ge 2/3$ is used.
   As this inequality is tight, this proof only works for $p \ge 2/3$, and we require a different argument for $p<2/3$.
 \end{remark}
 
-\subsection{Proof of the gamma moment inequality}\label{subsec:gamma-moment-proof}
+\subsection{Proof of the gamma moment inequality}\label{subsec:pge23-gamma-moment-proof}
 
-It remains to prove \Cref{lem:gamma-moment}: for integers $r,j\ge1$, for
+It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for
 $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
 \begin{equation}
   3j\,\E(zY-1)^{2j-1}
-  \le(r+j)\,\E(zY-1)^{2j}. \label{eq:gamma-moment2}
+  \le(r+j)\,\E(zY-1)^{2j}. \label{eq:pge23-gamma-moment2}
 \end{equation}
 
-\begin{proof}[Proof of \Cref{lem:gamma-moment}]
+\begin{proof}[Proof of \Cref{lem:pge23-gamma-moment}]
   The case $z=0$ is immediate, since the left hand side equals $-3j < 0$ and the right hand side equals $r+j > 0$.
   
   Now assume $z>0$, put $b=1/z$, and define
@@ -2172,15 +2179,15 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     \qquad\text{so that}\qquad
     F'(b)=-2j\,\E(Y-b)^{2j-1}.
   \]
-  Since $zY-1=z(Y-b)$, dividing \eqref{eq:gamma-moment2} by $z^{2j}>0$ gives
+  Since $zY-1=z(Y-b)$, dividing \eqref{eq:pge23-gamma-moment2} by $z^{2j}>0$ gives
   the equivalent inequality
-  \begin{equation}\label{eq:gamma-H}
+  \begin{equation}\label{eq:pge23-gamma-H}
     H(b):=(r+j)F(b)+\frac{3b}{2}F'(b)\ge0.
   \end{equation}
 
   For $I_k(b)=\E(Y-b)^k$, apply the Stein identity of the gamma
   distribution $Y\sim\GammaLaw(r,1)$,
-  \begin{equation}\label{eq:gamma-Stein}
+  \begin{equation}\label{eq:pge23-gamma-Stein}
     \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr],
   \end{equation}
   to $f(y)=(y-b)^k$.  Its two sides are
@@ -2189,32 +2196,32 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     \E[(Y-r)f(Y)] &= \E\bigl[(Y-b)(Y-b)^k + (b-r)(Y-b)^k\bigr] = I_{k+1}(b)-(r-b)I_k(b),
   \end{align*}
   so that
-  \begin{equation}\label{eq:gamma-recurrence}
+  \begin{equation}\label{eq:pge23-gamma-recurrence}
     I_{k+1}(b)=(r+k-b)I_k(b)+kbI_{k-1}(b).
   \end{equation}
   Taking $k=2j-1$, and using $I_{k+1} = F$, $I_{k}=-\frac{F'}{2j}$ and
   $I_{k-1}=\frac{F''}{2j(2j-1)}$, gives the differential equation
-  \begin{equation}\label{eq:gamma-ODE}
+  \begin{equation}\label{eq:pge23-gamma-ODE}
     bF''(b)+(b-r-2j+1)F'(b)-2jF(b)=0.
   \end{equation}
 
   We next determine the sign of $H'$ at a zero of $H$.  Differentiating
-  \eqref{eq:gamma-H} and then eliminating $F''$ by \eqref{eq:gamma-ODE}, we obtain
+  \eqref{eq:pge23-gamma-H} and then eliminating $F''$ by \eqref{eq:pge23-gamma-ODE}, we obtain
   \[
     H'(b)=\left(r+j+\frac{3}{2}\right)F'(b)+\frac{3b}{2}F''(b)
     =3jF(b)+\left(\frac{5r}{2}+4j-\frac{3b}{2}\right)F'(b).
   \]
   At a zero of $H$ we have $F'(b)=-\frac{2(r+j)}{3b}F(b)$ by
-  \eqref{eq:gamma-H}, and substituting this leaves
-  \begin{equation}\label{eq:gamma-crossing}
+  \eqref{eq:pge23-gamma-H}, and substituting this leaves
+  \begin{equation}\label{eq:pge23-gamma-crossing}
     \frac{H'(b)}{F(b)}
     =\frac{3(r+4j)b-(r+j)(5r+8j)}{3b}.
   \end{equation}
   Set
-  \begin{equation}\label{eq:gamma-bstar}
+  \begin{equation}\label{eq:pge23-gamma-bstar}
     b_*:=\frac{(r+j)(5r+8j)}{3(r+4j)}.
   \end{equation}
-  Since $F(b)=\E(Y-b)^{2j}>0$, formula \eqref{eq:gamma-crossing} shows that
+  Since $F(b)=\E(Y-b)^{2j}>0$, formula \eqref{eq:pge23-gamma-crossing} shows that
   at a zero $b$ of $H$ we have $H'(b)>0$ if $b>b_*$, and $H'(b)<0$ if
   $b<b_*$.  Now
   \[
@@ -2228,25 +2235,25 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   where $H'\ge0$; the first therefore lies below $b_*$ and the second above
   it, so the interval where $H$ is negative would contain $b_*$.  It is
   therefore enough to prove
-  \begin{equation}\label{eq:gamma-Hbstar}
+  \begin{equation}\label{eq:pge23-gamma-Hbstar}
     H(b_*)\ge0.
   \end{equation}
 
   We first write $H(b_*)$ as an integral.  Since
-  $F'(b)=-2j\E(Y-b)^{2j-1}$, \eqref{eq:gamma-H} gives
+  $F'(b)=-2j\E(Y-b)^{2j-1}$, \eqref{eq:pge23-gamma-H} gives
   \[
     H(b_*)=(r+j)\E(Y-b_*)^{2j}-3jb_*\E(Y-b_*)^{2j-1}
     =(r+j)\,\E\bigl[(Y-b_*)^{2j-1}(Y-b_*-c)\bigr],
   \]
   where $c=\frac{3jb_*}{r+j}$. 
   Expanding the expectation as an integral and substituting $x=y-b_*$,
-  \begin{equation}\label{eq:gamma-H-integral}
+  \begin{equation}\label{eq:pge23-gamma-H-integral}
     H(b_*) =\frac{r+j}{\Gamma(r) e^{b_*}}\int_{-b_*}^{\infty}
     x^{2j-1}(x-c)(x+b_*)^{r-1}e^{-x}\dd x.
   \end{equation}
 
   Set
-  \begin{equation}\label{eq:gamma-G}
+  \begin{equation}\label{eq:pge23-gamma-G}
     G(x)=x^{2j}(x+b_*)^re^{-x},
     \qquad -b_*\le x<\infty,
   \end{equation}
@@ -2260,16 +2267,16 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     d=\frac{2jb_*}{c}=\frac{2(r+j)}{3}.
   \]
   Thus
-  \begin{equation}\label{eq:gamma-Gprime}
+  \begin{equation}\label{eq:pge23-gamma-Gprime}
     G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}(c-x)(x+d),
   \end{equation}
-  and the integrand of \eqref{eq:gamma-H-integral} is $-G'(x)/(x+d)$, whence
+  and the integrand of \eqref{eq:pge23-gamma-H-integral} is $-G'(x)/(x+d)$, whence
   \[
     \frac{\Gamma(r)e^{b_*}}{r+j}H(b_*)
     =-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x.
   \]
   While $-d$ lies inside the range of integration, the quotient
-  $-G'(x)/(x+d)$ is the integrand of \eqref{eq:gamma-H-integral} and is
+  $-G'(x)/(x+d)$ is the integrand of \eqref{eq:pge23-gamma-H-integral} and is
   therefore harmless there.
 
   We integrate by parts on the two sides of $-d$.  Away from $x=-d$,
@@ -2305,31 +2312,31 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x\right)\notag\\
     &=\frac{G(-d)}{b_*-d}
     -\int_{-b_*}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
-    \label{eq:gamma-ibp-max}
+    \label{eq:pge23-gamma-ibp-max}
   \end{align}
   Here $b_*-d=r(r+j)/(r+4j)>0$ and $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, so the
   first term is positive.  For the second term, $(x+d)^{-2}$ is positive as
   well, so its sign is decided by that of $G(x)-G(-d)$.
   Consequently, if $G(x)-G(-d)\le0$ for every $x\ge-b_*$, that is, if $G(-d)$
   is the global maximum of $G$, then the second term is nonnegative and
-  \eqref{eq:gamma-Hbstar} follows.
+  \eqref{eq:pge23-gamma-Hbstar} follows.
 
-  By \eqref{eq:gamma-Gprime}, the two nonzero local maxima occur at $-d$ and
+  By \eqref{eq:pge23-gamma-Gprime}, the two nonzero local maxima occur at $-d$ and
   $c$.  Their ratio is
-  \begin{equation}\label{eq:gamma-max-ratio}
+  \begin{equation}\label{eq:pge23-gamma-max-ratio}
     \frac{G(c)}{G(-d)}
     =\left(\frac {c}{d}\right)^{2j}
     \left(\frac{b_*+c}{b_*-d}\right)^r e^{-(c+d)}.
   \end{equation}
   Let $t=j/r>0$.  To see that $G$ attains its maximum at $-d$ we prove that
-  the logarithm of \eqref{eq:gamma-max-ratio}, divided by $r$, namely
+  the logarithm of \eqref{eq:pge23-gamma-max-ratio}, divided by $r$, namely
   \begin{align}
     L(t)={}&2t\log\left(
     \frac{3t(5+8t)}{2(1+t)(1+4t)}\right)
     +\log\left(
     \frac{(1+4t)(5+8t)}{3(1+t)}\right)\notag\\
     &-\frac{32t^2+25t+2}{3(1+4t)},
-    \label{eq:gamma-L}
+    \label{eq:pge23-gamma-L}
   \end{align}
   is negative for every $t>0$.  Direct differentiation gives, with
   $A(t)=\frac{3t(5+8t)}{2(1+t)(1+4t)}$,
@@ -2337,14 +2344,14 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     L'(t)
     &=2\log A(t)
     -\frac{(32t^2+16t-7)(32t^2+25t+2)}
-    {3(t+1)(4t+1)^2(8t+5)},\label{eq:gamma-Lprime}\\
+    {3(t+1)(4t+1)^2(8t+5)},\label{eq:pge23-gamma-Lprime}\\
     L''(t)
     &=-\frac{(32t^2+25t+2)
     (128t^4+224t^3+120t^2-28t-25)}
     {t(t+1)^2(4t+1)^3(8t+5)^2}.
-    \label{eq:gamma-Lsecond}
+    \label{eq:pge23-gamma-Lsecond}
   \end{align}
-  Every factor of \eqref{eq:gamma-Lsecond} other than the quartic
+  Every factor of \eqref{eq:pge23-gamma-Lsecond} other than the quartic
   $P(t)=128t^4+224t^3+120t^2-28t-25$ is positive for $t>0$, so $L''$ and $P$
   have opposite signs.  The coefficients of $P$ change sign once, so by
   Descartes' rule of signs $P$ has at most one positive root.
@@ -2352,7 +2359,7 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   $t_0$, and $L'$ increases on $(0,t_0)$ and decreases on $(t_0,\infty)$.
 
   We evaluate $L'$ at three places to see its sign changes.
-  As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:gamma-Lprime} tends to
+  As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:pge23-gamma-Lprime} tends to
   $-14/15$, so $L'(t)\to-\infty$.  At $t=1$ we have $A(1)=39/20$ and the
   rational term equals $2419/1950$, so the bound
   \[
@@ -2394,7 +2401,7 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     \log B\le\log13+\frac{B-13}{13}.
   \]
   Using $\log2<7/10$ and $\log13<13/5$, exact simplification gives
-  \begin{equation}\label{eq:gamma-L-rational}
+  \begin{equation}\label{eq:pge23-gamma-L-rational}
     L(t)<
     \frac{3(96t^3-191t^2-16t+46)}
     {130(t+1)(4t+1)}.
@@ -2403,27 +2410,27 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
   most $(96t-191)-16t+46=80t-145\le-25$, and $L(t)<0$ there as well.
 
   To summarize the proof: the signs of $L'$ and $L''$ in
-  \eqref{eq:gamma-Lprime} and \eqref{eq:gamma-Lsecond} leave two candidates for
+  \eqref{eq:pge23-gamma-Lprime} and \eqref{eq:pge23-gamma-Lsecond} leave two candidates for
   the supremum of $L$, namely its limit at $0$, which is negative, and a single
   local maximum, which lies in $[1,3/2]$.  Confined to that interval, $L$ is
-  bounded by the rational function \eqref{eq:gamma-L-rational}, which is
+  bounded by the rational function \eqref{eq:pge23-gamma-L-rational}, which is
   negative there; hence $L<0$ on all of $(0,\infty)$.  The ratio
-  \eqref{eq:gamma-max-ratio} is therefore smaller than $1$, so $G$ attains its
-  maximum at $-d$ and the integrand $G(x)-G(-d)$ in \eqref{eq:gamma-ibp-max} is
-  nonpositive.  The right side of \eqref{eq:gamma-ibp-max} is then positive,
+  \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$, so $G$ attains its
+  maximum at $-d$ and the integrand $G(x)-G(-d)$ in \eqref{eq:pge23-gamma-ibp-max} is
+  nonpositive.  The right side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
   giving $H(b_*)>0$, and the crossing argument yields $H(b)\ge0$ for every
-  $b>0$, which is \eqref{eq:gamma-H} and hence implies \eqref{eq:gamma-moment2}.
+  $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
 
 \subsection{Completion of the proof for \texorpdfstring{$p\ge2/3$}{p>=2/3}}
 
-\begin{theorem}[The theorem for $p\ge2/3$]\label{thm:dense-region}
+\begin{theorem}[The theorem for $p\ge2/3$]\label{thm:pge23-main}
   If $p\ge2/3$, then \eqref{eq:main-goal} holds for every odd $m\ge3$.
 \end{theorem}
 
 \begin{proof}
   Equivalently, $q\le1/3$.
-  \Cref{lem:dense-cancellation}, the bound of $t(C_m,U)$ by the path density
+  \Cref{lem:pge23-two-sided-identity}, the bound of $t(C_m,U)$ by the path density
   $x_{m-1}$, and the definition of $\Phi_m$ give
   \begin{align*}
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
@@ -2431,33 +2438,33 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
     &\ge q^{m-1}+S_m-x_{m-1}=\Phi_m,
   \end{align*}
   so the theorem follows from the nonnegativity of $\Phi_m$.  By the expansion
-  of \Cref{prop:dense-expansion}, it is enough to show that
-  $P_{m,r}\ge0$ on $[-1/2,1/2]^r$; and by \Cref{lem:dense-dirichlet}, which
+  of \Cref{prop:pge23-expansion}, it is enough to show that
+  $P_{m,r}\ge0$ on $[-1/2,1/2]^r$; and by \Cref{lem:pge23-dirichlet}, which
   presents $P_{m,r}$ as an expectation of the diagonal values
   $\widetilde P_{m,r}(q,\ell)$ at points $\ell$ of $[-1/2,1/2]$, it is enough
   to prove $\widetilde P_{m,r}(q,\ell)\ge0$ for $1\le r\le(m-1)/2$ and
   $-1/2\le\ell\le1/2$.
 
-  When $\ell\le0$, \Cref{lem:dense-ell-negative} proves
+  When $\ell\le0$, \Cref{lem:pge23-ell-negative} proves
   $\widetilde P_{m,r}(q,\ell)\ge0$.  When $\ell>0$, the beta formula
-  \Cref{lem:dense-beta} and the Laplace--gamma representation
-  \Cref{lem:dense-gamma-smoothing} write $\widetilde P_{m,r}(q,\ell)$ as a
+  \Cref{lem:pge23-beta} and the Laplace--gamma representation
+  \Cref{lem:pge23-laplace-gamma} write $\widetilde P_{m,r}(q,\ell)$ as a
   positive weight times an average of the expectations
   $\E\rho_{n,m}(q+xY)$, each of which is nonnegative by
-  \Cref{prop:dense-gamma-positive}.  Hence $\widetilde P_{m,r}(q,\ell)\ge0$
+  \Cref{prop:pge23-gamma-positive}.  Hence $\widetilde P_{m,r}(q,\ell)\ge0$
   throughout that range, so $\Phi_m\ge0$.
 \end{proof}
 
 \section{Below the threshold \texorpdfstring{$1/2<p<2/3$}{1/2<p<2/3}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
-\label{sec:regionII-operator}
+\label{sec:plt23}
 
 \tk{TODO (structure): make this section readable independently of
-\Cref{sec:dense-region}, so that a reader interested in one region need not
+\Cref{sec:pge23}, so that a reader interested in one region need not
 read the other.  Remaining dependencies: the generating function $L_-$ and the
 block determinant identity \eqref{eq:block-determinant-identity}.}
 
 From now on, we assume
-\begin{equation}\label{eq:regionII}
+\begin{equation}\label{eq:plt23-range}
   \frac{1}{2}<p<\frac{2}{3}, \qquad \frac{1}{3}<q<\frac{1}{2},
 \end{equation}
 and $m\ge9$ is odd. 
@@ -2466,8 +2473,8 @@ We continue with the block decomposition
 We will also use the following bound on the spectrum of $A$, in which
 $\Tr(A^2)=\sum_i\lambda_i^2$.
 
-\begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
-  \begin{equation}\label{eq:HS-budget}
+\begin{lemma}[Hilbert--Schmidt bound]\label{lem:plt23-HS-bound}
+  \begin{equation}\label{eq:plt23-HS-bound}
     \Tr(A^2)+2\norm g^2\le pq.
   \end{equation}
 \end{lemma}
@@ -2485,9 +2492,9 @@ $\Tr(A^2)=\sum_i\lambda_i^2$.
   Subtracting $q^2$ from the both sides proves the claim.
 \end{proof}
 
-\subsection{A one-sided Schur-complement identity}\label{subsec:shift}
+\subsection{A one-sided Schur-complement identity}\label{subsec:plt23-one-sided-schur}
 
-In \Cref{subsec:two-sided} we introduced the generating functions $L_-$ and
+In \Cref{subsec:pge23-two-sided-schur} we introduced the generating functions $L_-$ and
 $L_+$, attached to $W$ and to $U$.  Only $L_-$ is used here.
 
 By \eqref{eq:logdet-cycle},
@@ -2501,38 +2508,38 @@ and the block decomposition \eqref{eq:block-U} gives
 Applying the block determinant identity
 \eqref{eq:block-determinant-identity} with $D=I+zA$ and $v=zg$ factorizes
 this determinant into three parts,
-\begin{equation}\label{eq:shift-factorization}
+\begin{equation}\label{eq:plt23-one-sided-factorization}
   \det(I-zT_W)=\det(I+zA)\,(1-pz)\bigl(1-Y(z)\bigr),
   \qquad
   Y(z)=\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz},
 \end{equation}
 the last factor being the Schur complement, divided by $1-pz$.
 
-\begin{lemma}[One-sided identity]\label{lem:shift}
+\begin{lemma}[One-sided identity]\label{lem:plt23-one-sided-identity}
   For every odd $m\ge3$,
-  \begin{equation}\label{eq:shift}
+  \begin{equation}\label{eq:plt23-one-sided-identity}
     t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
   \end{equation}
   where
-  \begin{equation}\label{eq:L-series}
+  \begin{equation}\label{eq:plt23-Lminus-def}
     L_-(z)=-\log\bigl(1-Y(z)\bigr).
   \end{equation}
   Moreover, every coefficient of $L_-(z)$ is nonnegative.
 \end{lemma}
 
 \begin{proof}
-  Taking $-\log$ in \eqref{eq:shift-factorization} turns the product into a
+  Taking $-\log$ in \eqref{eq:plt23-one-sided-factorization} turns the product into a
   sum of three terms,
   \[
     -\log\det(I-zT_W)=-\log\det(I+zA)-\log(1-pz)+L_-(z),
   \]
-  and for odd $m$, \Cref{lem:analytic-reading}\,(2) gives
+  and for odd $m$, \Cref{lem:series-expansions}\,(2) gives
   \[
     m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
     \qquad
     m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
   \]
-  Together with the third summand this is \eqref{eq:shift}.
+  Together with the third summand this is \eqref{eq:plt23-one-sided-identity}.
 
   It remains to check nonnegativity of coefficients.  We first show that the
   coefficients of $Y$ are nonnegative, which implies the same for
@@ -2553,20 +2560,20 @@ the last factor being the Schur complement, divided by $1-pz$.
     \qquad(r\ge2).
   \]
   Summing the geometric series inside the integral,
-  \begin{equation}\label{eq:X-coeff}
+  \begin{equation}\label{eq:plt23-Y-coeff}
     [z^r]Y(z)
     =\int\frac{p^{r-1}-(-\lambda)^{r-1}}{p+\lambda}\dd\mu(\lambda).
   \end{equation}
   By \Cref{lem:half-norm}, the support of $\mu$ lies in $[-1/2,1/2]$, so
   $|\lambda|<p$ on the whole range of integration and both the numerator and
-  the denominator on the right of \eqref{eq:X-coeff} are positive.  The
+  the denominator on the right of \eqref{eq:plt23-Y-coeff} are positive.  The
   coefficients of $Y$ are therefore nonnegative.
 \end{proof}
 
 
 \subsection{At most one eigenvalue above \texorpdfstring{$q$}{q}}
 
-\begin{lemma}[Eigenvalues above $q$]\label{lem:no-frontier}
+\begin{lemma}[Eigenvalues above $q$]\label{lem:plt23-eigenvalues-above-q}
   There is at most one eigenvalue of $A$ that is larger than $q$.  If none of
   them is larger than $q$, then \eqref{eq:main-goal} holds.
 \end{lemma}
@@ -2577,7 +2584,7 @@ the last factor being the Schur complement, divided by $1-pz$.
     \Tr(A^2)=\sum_i\lambda_i^2>2q^2>pq,
   \]
   the last inequality because $2q>2/3>p$, which contradicts
-  \Cref{lem:HS-budget}.  This proves the first claim.
+  \Cref{lem:plt23-HS-bound}.  This proves the first claim.
 
   Assume now that no eigenvalue of $A$ is larger than $q$.  Then every
   eigenvalue $\lambda_i$ of $A$ satisfies
@@ -2589,8 +2596,8 @@ the last factor being the Schur complement, divided by $1-pz$.
   \[
     \Tr(A^m) = \sum_{i}\lambda_i^m\le q^{m-2} \sum_{i} \lambda_i^2 = q^{m-2} \Tr(A^2) \le q^{m-2} \bigl(\Tr(A^2) + 2\norm g^2\bigr) \le pq^{m-1},
   \]
-  where we used \Cref{lem:HS-budget} in the last inequality.
-  Since the coefficients of $L_-$ are nonnegative, \eqref{eq:shift} gives
+  where we used \Cref{lem:plt23-HS-bound} in the last inequality.
+  Since the coefficients of $L_-$ are nonnegative, \eqref{eq:plt23-one-sided-identity} gives
   \[
     t(C_m,W) = p^m - \Tr(A^m) + m[z^m]L_-(z) \ge p^m - pq^{m-1},
   \]
@@ -2598,57 +2605,57 @@ the last factor being the Schur complement, divided by $1-pz$.
 \end{proof}
 
 We henceforth assume that $A$ has exactly one eigenvalue
-\begin{equation}\label{eq:alpha-frontier}
+\begin{equation}\label{eq:plt23-Lambda-above-q}
   \Lambda>q.
 \end{equation}
 Define
-\begin{equation}\label{eq:L-def}
+\begin{equation}\label{eq:plt23-M-def}
   M=\sqrt{pq-\Lambda^2},
 \end{equation}
-which by \eqref{eq:HS-budget} controls the remaining eigenvalues:
+which by \eqref{eq:plt23-HS-bound} controls the remaining eigenvalues:
 \[
   \sum_{\lambda_i\ne\Lambda}\lambda_i^2\le pq-\Lambda^2=M^2,
 \]
 so in particular $|\lambda_i|\le M$ for every $\lambda_i\ne\Lambda$.
 
 These quantities are ordered as
-\begin{equation}\label{eq:L-order}
+\begin{equation}\label{eq:plt23-M-Lambda-order}
   0\le M<q<\Lambda<\frac{1}{2}<p,
 \end{equation}
 where $M<q$ because $M^2<pq-q^2=q(1-2q)<q^2$ for $q>1/3$, and
 $\Lambda<1/2$ comes from \Cref{lem:half-norm}.
 
 \subsection{A lower bound via splitting \texorpdfstring{$g$}{g} along the
-eigenfunction of \texorpdfstring{$\Lambda$}{Lambda}}\label{subsec:master-defect}
+eigenfunction of \texorpdfstring{$\Lambda$}{Lambda}}\label{subsec:plt23-splitting-lower-bound}
 
 Let $\phi$ be a unit eigenfunction of $A$ for $\Lambda$, which is determined up to sign. 
 We will choose the sign of $\phi$ later.  
 Split $g$ into its component along $\phi$ and the rest,
-\begin{equation}\label{eq:g-decomp}
+\begin{equation}\label{eq:plt23-g-decomp}
   g=\gamma\phi+g_s,
   \qquad \gamma=\ip g\phi,
   \qquad g_s\perp\phi,
 \end{equation}
 so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
 
-\begin{proposition}[Lower bound via splitting $g$ along the eigenfunction of $\Lambda$]\label{prop:master-defect}
+\begin{proposition}[Lower bound via splitting $g$ along the eigenfunction of $\Lambda$]\label{prop:plt23-splitting-lower-bound}
   For odd $m$, let
   \begin{align}
     k_m(\lambda)&=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda},
-    \label{eq:km-def}\\
-    \Lambda_m&=2M^{m-2}+mk_m(\Lambda),\label{eq:Am-def}\\
-    M_m&=2M^{m-2}+mk_m(M),\label{eq:Bm-def}\\
-    R_m&=\Lambda^m+M^m-pq^{m-1}.\label{eq:Rm-def}
+    \label{eq:plt23-km-def}\\
+    \Lambda_m&=2M^{m-2}+mk_m(\Lambda),\label{eq:plt23-Lambdam-def}\\
+    M_m&=2M^{m-2}+mk_m(M),\label{eq:plt23-Mm-def}\\
+    R_m&=\Lambda^m+M^m-pq^{m-1}.\label{eq:plt23-Rm-def}
   \end{align}
   Then
   \begin{align}
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
     &= pq^{m-1} - \Tr(A^m)+m[z^m]L_-(z) \nonumber
     \\
-    {} &\ge -R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2.\label{eq:master-defect}
+    {} &\ge -R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2.\label{eq:plt23-splitting-lower-bound}
   \end{align}
   Moreover,
-  \begin{equation}\label{eq:AB-order}
+  \begin{equation}\label{eq:plt23-Lambdam-Mm-positive}
     \Lambda_m>0,
     \qquad
     M_m>0.
@@ -2663,17 +2670,17 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
     m[z^m]L_-(z)&\ge m[z^m]Y(z)
     =m\int\frac{p^{m-1}-(-\lambda)^{m-1}}{p+\lambda}\dd\mu(\lambda)\notag\\
     &=m\int k_m(\lambda)\dd\mu(\lambda),
-    \label{eq:linear-shift-lower}
+    \label{eq:plt23-Lminus-linear-lower}
   \end{align}
-  where the first equality follows from \eqref{eq:X-coeff} and the second equality holds because $m-1$ is even.
+  where the first equality follows from \eqref{eq:plt23-Y-coeff} and the second equality holds because $m-1$ is even.
 
-  The decomposition \eqref{eq:g-decomp} can be expressed in terms of the spectral measure $\mu$ of $A$ as
+  The decomposition \eqref{eq:plt23-g-decomp} can be expressed in terms of the spectral measure $\mu$ of $A$ as
   \[
     \mu(\{\Lambda\})=\gamma^2,
     \qquad
     \int_{[-M,M]}\dd\mu(\lambda)=\norm{g_s}^2,
   \]
-  so \eqref{eq:linear-shift-lower} can be decomposed as
+  so \eqref{eq:plt23-Lminus-linear-lower} can be decomposed as
   \[
     m\int k_m(\lambda)\dd\mu(\lambda)
     =mk_m(\Lambda)\gamma^2
@@ -2694,12 +2701,12 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
   since every term of the numerator is nonnegative for $\lambda\ge0$ and
   $p^n>0$.
   Hence
-  \begin{equation}\label{eq:k-safe}
+  \begin{equation}\label{eq:plt23-km-min-at-M}
     k_m(\lambda)\ge k_m(M)
     \qquad\text{whenever }|\lambda|\le M,
   \end{equation}
   and altogether
-  \begin{equation}\label{eq:shift-payment}
+  \begin{equation}\label{eq:plt23-Lminus-lower}
     m[z^m]L_-(z)
     \ge mk_m(\Lambda)\gamma^2+mk_m(M)\norm{g_s}^2.
   \end{equation}
@@ -2713,7 +2720,7 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
     \sum_{\lambda_i\ne\Lambda}\lambda_i^m
     \le M^{m-2}\sum_{\lambda_i\ne\Lambda}\lambda_i^2.
   \]
-  From \eqref{eq:HS-budget},
+  From \eqref{eq:plt23-HS-bound},
   \[
     \Lambda^2+\sum_{\lambda_i\ne\Lambda}\lambda_i^2+2\norm g^2
     =\sum_i\lambda_i^2+2\norm g^2\le pq,
@@ -2725,17 +2732,17 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
     &\ge-\Lambda^m-M^{m-2}\sum_{\lambda_i\ne\Lambda}\lambda_i^2\notag\\
     &\ge-\Lambda^m-M^{m-2}\bigl(M^2-2\norm g^2\bigr)\notag\\
     &=-\Lambda^m-M^m+2M^{m-2}\bigl(\gamma^2+\norm{g_s}^2\bigr),
-    \label{eq:trace-payment}
+    \label{eq:plt23-trace-upper}
   \end{align}
-  where the last equality follows from \eqref{eq:g-decomp}.
+  where the last equality follows from \eqref{eq:plt23-g-decomp}.
   
   It remains to combine the two bounds.  
-  Subtracting $p^m-pq^{m-1}$ in \eqref{eq:shift} gives the first line of \eqref{eq:master-defect},
+  Subtracting $p^m-pq^{m-1}$ in \eqref{eq:plt23-one-sided-identity} gives the first line of \eqref{eq:plt23-splitting-lower-bound},
   \[
     t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
     =pq^{m-1}-\Tr(A^m)+m[z^m]L_-(z),
   \]
-  and substituting \eqref{eq:trace-payment} and \eqref{eq:shift-payment},
+  and substituting \eqref{eq:plt23-trace-upper} and \eqref{eq:plt23-Lminus-lower},
   \begin{align*}
     &pq^{m-1}-\Tr(A^m)+m[z^m]L_-(z)
     \\
@@ -2745,36 +2752,36 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
     +\underbrace{\bigl(2M^{m-2}+mk_m(\Lambda)\bigr)}_{\eqqcolon \Lambda_m}\gamma^2
     +\underbrace{\bigl(2M^{m-2}+mk_m(M)\bigr)}_{\eqqcolon M_m}\norm{g_s}^2,
   \end{align*}
-  which proves \eqref{eq:master-defect}.
+  which proves \eqref{eq:plt23-splitting-lower-bound}.
 
   Finally, since $k_m(p)=0$ and $k_m$ is strictly decreasing on $[0,p]$, $k_m$ is positive on $[0,p)$. 
-  From \eqref{eq:L-order}, we have $M, \Lambda \in [0, p)$, so both $k_m(\Lambda)$ and $k_m(M)$ are positive.
-  Since the other terms in the definitions of $\Lambda_m$ and $M_m$ are also positive, \eqref{eq:AB-order} holds.
+  From \eqref{eq:plt23-M-Lambda-order}, we have $M, \Lambda \in [0, p)$, so both $k_m(\Lambda)$ and $k_m(M)$ are positive.
+  Since the other terms in the definitions of $\Lambda_m$ and $M_m$ are also positive, \eqref{eq:plt23-Lambdam-Mm-positive} holds.
 \end{proof}
 
 \subsection{Minimizing
 \texorpdfstring{$\Lambda_m\gamma^2+M_m\norm{g_s}^2$}{Lambda\_m gamma\^{}2 + M\_m
 |g\_s|\^{}2}}
-\label{subsec:forced-variance}\label{sec:huber}\label{subsec:shape-elim}
+\label{subsec:plt23-minimization}
 
 For fixed $q$ and $\Lambda$, let $S$ be the set of pairs
 $(\gamma,\norm{g_s})$ that are realizable by some graphon satisfying the assumptions we made so far. 
 By deriving inequalities on $\gamma$ and $\norm{g_s}$, we construct a larger
 set $\overline S\supseteq S$, over which the minimum can be computed, and
-\begin{equation}\label{eq:overapprox}
+\begin{equation}\label{eq:plt23-overapprox}
   \Lambda_m\gamma^2+M_m\norm{g_s}^2
   \ge\min_{(\gamma,\norm{g_s})\in\overline S}
   \bigl(\Lambda_m\gamma^2+M_m\norm{g_s}^2\bigr).
 \end{equation}
-Specifically, \Cref{lem:direct-channel} bounds $\gamma$ from above and
-\Cref{lem:safe-channel} bounds $\norm{g_s}$ from below.  Both are linear in
+Specifically, \Cref{lem:plt23-gamma-upper-bound} bounds $\gamma$ from above and
+\Cref{lem:plt23-gs-lower-bound} bounds $\norm{g_s}$ from below.  Both are linear in
 $\gamma$ and $\norm{g_s}$, and $\Lambda_m\gamma^2+M_m\norm{g_s}^2$ is a
-convex quadratic in them by \eqref{eq:AB-order}, so the minimization in
-\eqref{eq:overapprox} is convex.
+convex quadratic in them by \eqref{eq:plt23-Lambdam-Mm-positive}, so the minimization in
+\eqref{eq:plt23-overapprox} is convex.
 
 Both lemmas bound $\gamma$ and $\norm{g_s}$ through the decomposition of
 $|\phi|$ along $\one$ and $\phi$,
-\begin{equation}\label{eq:shape-defs}
+\begin{equation}\label{eq:plt23-absphi-decomp}
   |\phi|=a_\phi\one+b\phi+\phi_\perp,
   \qquad
   a_\phi=\int|\phi|,
@@ -2782,16 +2789,16 @@ $|\phi|$ along $\one$ and $\phi$,
   b=\ip{|\phi|}\phi,
 \end{equation}
 where $\phi_\perp$ is orthogonal to $\one$ and $\phi$.  We fix the sign of
-$\phi$, left open in \Cref{subsec:master-defect}, so that $b\ge0$.
+$\phi$, left open in \Cref{subsec:plt23-splitting-lower-bound}, so that $b\ge0$.
 Note that
-\begin{equation}\label{eq:shape-budget}
+\begin{equation}\label{eq:plt23-absphi-normalization}
   a_\phi^2+b^2+\norm{\phi_\perp}^2=\norm{|\phi|}^2 = \norm{\phi}^2 = 1.
 \end{equation}
 Besides this identity, we will need a lower bound on $a_\phi$.  Let $\phi_+$
 and $\phi_-$ be the positive and negative parts of $\phi$, so that
 $\phi=\phi_+-\phi_-$ and $|\phi|=\phi_++\phi_-$.  Since $\phi\perp\one$, we
 have $\int\phi=0$, and therefore
-\begin{equation}\label{eq:phi-parts}
+\begin{equation}\label{eq:plt23-phi-parts}
   \int\phi_+=\int\phi_-=\frac{a_\phi}{2}.
 \end{equation}
 Expanding $\ip\phi{T_U\phi}$ in these two parts and dropping the cross term,
@@ -2806,13 +2813,13 @@ which is nonnegative because $U\ge0$,
   =\frac{a_\phi^2}{2},
 \end{align*}
 the last inequality because $U\le1$ and the last equality by
-\eqref{eq:phi-parts}.  Thus
-\begin{equation}\label{eq:aphi-lower}
+\eqref{eq:plt23-phi-parts}.  Thus
+\begin{equation}\label{eq:plt23-aphi-lower}
   a_\phi^2\ge2\Lambda.
 \end{equation}
 
-\begin{lemma}[Upper bound for $\gamma$]\label{lem:direct-channel}
-  \begin{equation}\label{eq:direct-channel}
+\begin{lemma}[Upper bound for $\gamma$]\label{lem:plt23-gamma-upper-bound}
+  \begin{equation}\label{eq:plt23-gamma-upper-bound}
     \gamma\le u_\gamma:=
     \frac{a_\phi^2-2\Lambda-2\Lambda b}{2a_\phi}.
   \end{equation}
@@ -2825,7 +2832,7 @@ the last inequality because $U\le1$ and the last equality by
   \]
   where we used $U \ge 0$ and $\phi \le \phi_+$ in the first inequality, and $U \le 1$ in the second.
   Taking the inner product of both sides with $\phi_+\ge0$ gives
-  \begin{equation}\label{eq:direct-pairing}
+  \begin{equation}\label{eq:plt23-phiplus-pairing}
     \ip{\phi_+}{T_U\phi}
     \le\frac{a_\phi}{2}\int\phi_+
     =\frac{a_\phi^2}{4}.
@@ -2839,8 +2846,8 @@ the last inequality because $U\le1$ and the last equality by
       0 \\ \phi
     \end{pmatrix}=\ip g\phi\,\one+A\phi=\gamma\one+\Lambda\phi,
   \]
-  using $\gamma=\ip g\phi$ from \eqref{eq:g-decomp} and $A\phi=\Lambda\phi$.
-  Hence, by \eqref{eq:phi-parts},
+  using $\gamma=\ip g\phi$ from \eqref{eq:plt23-g-decomp} and $A\phi=\Lambda\phi$.
+  Hence, by \eqref{eq:plt23-phi-parts},
   \[
     \ip{\phi_+}{T_U\phi}
     =\gamma\ip{\phi_+}\one+\Lambda\ip{\phi_+}\phi
@@ -2853,18 +2860,18 @@ the last inequality because $U\le1$ and the last equality by
     \norm{\phi_+}^2-\norm{\phi_-}^2=\ip{|\phi|}\phi=b,
   \]
   so $\ip{\phi_+}\phi=(1+b)/2$.
-  Substituting into \eqref{eq:direct-pairing} gives \eqref{eq:direct-channel}.
+  Substituting into \eqref{eq:plt23-phiplus-pairing} gives \eqref{eq:plt23-gamma-upper-bound}.
 \end{proof}
 
-\begin{lemma}[Lower bound for $\norm{g_s}$]\label{lem:safe-channel}
+\begin{lemma}[Lower bound for $\norm{g_s}$]\label{lem:plt23-gs-lower-bound}
   The following inequality holds:
-  \begin{equation}\label{eq:safe-channel}
+  \begin{equation}\label{eq:plt23-gs-inner-lower}
     b\gamma+\ip{g_s}{\phi_\perp}
     \ge\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
     \eqqcolon\cH.
   \end{equation}
   Consequently,
-  \begin{equation}\label{eq:gs-safe-lower}
+  \begin{equation}\label{eq:plt23-gs-norm-lower}
     \norm{g_s}\norm{\phi_\perp}\ge \ip{g_s}{\phi_\perp}\ge\cH-b\gamma.
   \end{equation}
 \end{lemma}
@@ -2899,11 +2906,11 @@ the last inequality because $U\le1$ and the last equality by
   \]
   since $T_U\phi=\gamma\one+\Lambda\phi$ and $\phi\perp\one$. 
   Hence
-  \begin{equation}\label{eq:absphi-lower}
+  \begin{equation}\label{eq:plt23-absphi-lower}
     \ip{|\phi|}{T_U|\phi|}\ge\ip\phi{T_U\phi}=\Lambda.
   \end{equation}
 
-  We expand the left side of \eqref{eq:absphi-lower}.  In
+  We expand the left side of \eqref{eq:plt23-absphi-lower}.  In
   $|\phi|=a_\phi\one+b\phi+\phi_\perp$ the last two terms are orthogonal to
   $\one$, so the block form \eqref{eq:block-U} gives
   \[
@@ -2952,28 +2959,28 @@ the last inequality because $U\le1$ and the last equality by
     \Lambda\le qa_\phi^2+2a_\phi\bigl(b\gamma+\ip{g_s}{\phi_\perp}\bigr)
     +\Lambda b^2+M\norm{\phi_\perp}^2.
   \]
-  By \eqref{eq:shape-budget},
+  By \eqref{eq:plt23-absphi-normalization},
   $\Lambda-\Lambda b^2=\Lambda\bigl(a_\phi^2+\norm{\phi_\perp}^2\bigr)$, 
   so rearranging gives
   \[
     (\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2
     \le2a_\phi\bigl(b\gamma+\ip{g_s}{\phi_\perp}\bigr),
   \]
-  which is \eqref{eq:safe-channel}. 
-  The consequence follows from \eqref{eq:safe-channel} and Cauchy--Schwarz,
+  which is \eqref{eq:plt23-gs-inner-lower}. 
+  The consequence follows from \eqref{eq:plt23-gs-inner-lower} and Cauchy--Schwarz,
   $\norm{g_s}\norm{\phi_\perp}\ge\ip{g_s}{\phi_\perp}\ge\cH-b\gamma$.
 \end{proof}
 
-By \eqref{eq:direct-channel} and \eqref{eq:gs-safe-lower}, the pair
+By \eqref{eq:plt23-gamma-upper-bound} and \eqref{eq:plt23-gs-norm-lower}, the pair
 $(\gamma,\norm{g_s})$ lies in
-\begin{equation}\label{eq:Sbar}
+\begin{equation}\label{eq:plt23-Sbar}
   \overline S=\bigl\{(t,s):
   t\le u_\gamma,\quad
   bt+s\norm{\phi_\perp}\ge\cH,\quad
   s\ge0\bigr\},
 \end{equation}
 a polyhedron determined by $a_\phi$, $b$ and $\norm{\phi_\perp}$.  Hence
-\begin{equation}\label{eq:Q-shape}
+\begin{equation}\label{eq:plt23-min-over-Sbar}
   \Lambda_m\gamma^2+M_m\norm{g_s}^2
   \ge\min_{(t,s)\in\overline S}
   \bigl(\Lambda_mt^2+M_ms^2\bigr),
@@ -2986,33 +2993,33 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
 
 \tk{Revised until here.}
 
-\begin{theorem}[Reduction to $\psi(\xi,\rho)$]\label{thm:huber-elim}
+\begin{theorem}[Reduction to $\psi(\xi,\rho)$]\label{thm:plt23-huber-elim}
   Let
   \begin{align}
     \Omega_m&=\frac{M_m(\Lambda-M)\sqrt{2\Lambda}\,(1-2\Lambda)^2}{4\Lambda^2},
-    \label{eq:C-xi-rho}\\
+    \label{eq:plt23-C-xi-rho}\\
     \xi&=\frac{4\Lambda^2(\Lambda-q)}{(1-2\Lambda)^2},
-    \label{eq:xi-def}\\
+    \label{eq:plt23-xi-def}\\
     \rho&=\frac{\Lambda_m}{M_m}\frac{\sqrt\Lambda}{2\sqrt2\,(\Lambda-M)},
-    \label{eq:rho-def}\\
+    \label{eq:plt23-rho-def}\\
     \psi(\xi,\rho)&=
     \min_{0\le v\le1}
     \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.
-    \label{eq:psi-def}
+    \label{eq:plt23-psi-def}
   \end{align}
   Then
-  \begin{equation}\label{eq:huber-payment}
+  \begin{equation}\label{eq:plt23-huber-payment}
     \Lambda_m\gamma^2+M_m\norm{g_s}^2
     \ge \Omega_m\psi(\xi,\rho).
   \end{equation}
 \end{theorem}
 
 \begin{proof}
-  We first evaluate the minimum in \eqref{eq:Q-shape} in the variable $s$.
+  We first evaluate the minimum in \eqref{eq:plt23-min-over-Sbar} in the variable $s$.
   The objective increases in $s$, so at a minimizer $s$ is as small as
   $\overline S$ allows, that is, $s\norm{\phi_\perp}=\pos{\cH-bt}$.  For
   $\phi_\perp\ne0$ this gives $s^2=\pos{\cH-bt}^2/\norm{\phi_\perp}^2$, and
-  \begin{equation}\label{eq:one-d-t}
+  \begin{equation}\label{eq:plt23-one-d-t}
     \min_{(t,s)\in\overline S}\bigl(\Lambda_mt^2+M_ms^2\bigr)
     =\min_{t\le u_\gamma}
     \left\{
@@ -3024,11 +3031,11 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
 
   Assume $\phi_\perp\ne0$.  Suppose first that $u_\gamma\le0$.  Every
   admissible $\gamma$ is nonpositive, so $\cH-b\gamma\ge\cH$, and the right
-  side of \eqref{eq:one-d-t} is at least
+  side of \eqref{eq:plt23-one-d-t} is at least
   \[
     M_m\frac{\cH^2}{\norm{\phi_\perp}^2}.
   \]
-  By \eqref{eq:safe-channel},
+  By \eqref{eq:plt23-gs-inner-lower},
   \[
     \frac{\cH^2}{\norm{\phi_\perp}^2}
     =\frac{\bigl((\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2}
@@ -3036,53 +3043,53 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
   \]
   because this inequality is equivalent to
   $\bigl((\Lambda-q)a_\phi^2-(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2\ge0$.  On
-  the other hand, taking $v=0$ in \eqref{eq:psi-def} gives
+  the other hand, taking $v=0$ in \eqref{eq:plt23-psi-def} gives
   \[
     \Omega_m\psi(\xi,\rho)
     \le \Omega_m\xi=M_m(\Lambda-M)(\Lambda-q)\sqrt{2\Lambda}
     \le M_m(\Lambda-M)(\Lambda-q).
   \]
-  Thus \eqref{eq:huber-payment} holds in this case.
+  Thus \eqref{eq:plt23-huber-payment} holds in this case.
 
-  Now suppose $u_\gamma>0$.  A minimizer in \eqref{eq:one-d-t} may be taken
+  Now suppose $u_\gamma>0$.  A minimizer in \eqref{eq:plt23-one-d-t} may be taken
   with $\gamma\ge0$: replacing a negative $\gamma$ by $0$ decreases both
-  terms.  The bound \eqref{eq:direct-channel} gives
+  terms.  The bound \eqref{eq:plt23-gamma-upper-bound} gives
   \[
     2\gamma a_\phi+2\Lambda b
     \le a_\phi^2-2\Lambda=1-2\Lambda-b^2-\norm{\phi_\perp}^2
     \le1-2\Lambda-b^2.
   \]
   Since $a_\phi^2\ge2\Lambda$,
-  \begin{equation}\label{eq:b-gamma-budget}
+  \begin{equation}\label{eq:plt23-b-gamma-budget}
     b^2+2\Lambda b+2\gamma\sqrt{2\Lambda}\le1-2\Lambda.
   \end{equation}
   It follows that
-  \begin{equation}\label{eq:beta-gamma}
+  \begin{equation}\label{eq:plt23-beta-gamma}
     0\le\gamma\le\frac{1-2\Lambda}{2\sqrt{2\Lambda}},
     \qquad
     b\le\beta(\gamma):=
     \sqrt{(1-\Lambda)^2-2\gamma\sqrt{2\Lambda}}-\Lambda.
   \end{equation}
   Rationalizing the square root,
-  \begin{equation}\label{eq:beta-rational}
+  \begin{equation}\label{eq:plt23-beta-rational}
     \beta(\gamma)
     \le\frac{1-2\Lambda-2\gamma\sqrt{2\Lambda}}{2\Lambda}.
   \end{equation}
   Also, since $2\Lambda\le a_\phi^2\le1$,
-  \begin{equation}\label{eq:H-lower}
+  \begin{equation}\label{eq:plt23-H-lower}
     \cH\ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
     +\frac{(\Lambda-M)\norm{\phi_\perp}^2}{2}.
   \end{equation}
   For every real $w$,
-  \begin{equation}\label{eq:K-AMGM}
+  \begin{equation}\label{eq:plt23-K-AMGM}
     \inf_{t>0}\frac{\pos{w+(\Lambda-M)t/2}^2}{t}=2(\Lambda-M)\pos w.
   \end{equation}
   Indeed, for $w\ge0$ this is the arithmetic--geometric mean inequality,
   with equality at $t=2w/(\Lambda-M)$; for $w<0$, both sides vanish after
-  choosing $0<t\le-2w/(\Lambda-M)$.  Using \eqref{eq:one-d-t},
-  \eqref{eq:H-lower}, and \eqref{eq:K-AMGM}, and then maximizing $b$ by
-  \eqref{eq:beta-gamma}, we obtain
-  \begin{equation}\label{eq:one-d-gamma}
+  choosing $0<t\le-2w/(\Lambda-M)$.  Using \eqref{eq:plt23-one-d-t},
+  \eqref{eq:plt23-H-lower}, and \eqref{eq:plt23-K-AMGM}, and then maximizing $b$ by
+  \eqref{eq:plt23-beta-gamma}, we obtain
+  \begin{equation}\label{eq:plt23-one-d-gamma}
     \Lambda_m\gamma^2+M_m\norm{g_s}^2
     \ge
     \min_{0\le\gamma\le(1-2\Lambda)/(2\sqrt{2\Lambda})}
@@ -3095,7 +3102,7 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
   \[
     v=\frac{2\gamma\sqrt{2\Lambda}}{1-2\Lambda}\in[0,1].
   \]
-  By \eqref{eq:beta-rational},
+  By \eqref{eq:plt23-beta-rational},
   \[
     \gamma\beta(\gamma)
     \le\frac{(1-2\Lambda)^2v(1-v)}{4\Lambda\sqrt{2\Lambda}}.
@@ -3113,16 +3120,16 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
     2M_m(\Lambda-M)\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
     =\Omega_m.
   \]
-  Substitution in \eqref{eq:one-d-gamma} proves
-  \eqref{eq:huber-payment}.
+  Substitution in \eqref{eq:plt23-one-d-gamma} proves
+  \eqref{eq:plt23-huber-payment}.
 
-  Finally suppose $\phi_\perp=0$.  The constraint in \eqref{eq:Sbar} then
+  Finally suppose $\phi_\perp=0$.  The constraint in \eqref{eq:plt23-Sbar} then
   reads $b\gamma\ge\cH$, that is,
   \[
     b\gamma\ge\frac{(\Lambda-q)a_\phi}{2}
     \ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}>0,
   \]
-  so $b,\gamma>0$ and \eqref{eq:b-gamma-budget} still applies.  With the
+  so $b,\gamma>0$ and \eqref{eq:plt23-b-gamma-budget} still applies.  With the
   same variable $v$,
   \[
     \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
@@ -3130,7 +3137,7 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
     \le\frac{(1-2\Lambda)^2v(1-v)}{4\Lambda\sqrt{2\Lambda}},
   \]
   which is equivalent to $\xi\le v-v^2$.  Thus the positive-part term in
-  \eqref{eq:psi-def} vanishes at this $v$, and
+  \eqref{eq:plt23-psi-def} vanishes at this $v$, and
   \[
     \Lambda_m\gamma^2=\Omega_m\rho v^2\ge \Omega_m\psi(\xi,\rho).
   \]
@@ -3140,18 +3147,18 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
 It remains to say which pairs $(q,\Lambda)$ can occur.  The eigenfunction
 $\phi$ restricts them further, through a lower bound on $\norm g$.
 
-\begin{lemma}[Variance lower bound]\label{lem:forced-variance}
+\begin{lemma}[Variance lower bound]\label{lem:plt23-forced-variance}
   One has
-  \begin{equation}\label{eq:forced-variance}
+  \begin{equation}\label{eq:plt23-forced-variance}
     \norm g^2\ge
     \frac{\Lambda(\Lambda-q)^2}{2(1-2\Lambda)}.
   \end{equation}
   Consequently,
-  \begin{equation}\label{eq:alpha-ceiling-poly}
+  \begin{equation}\label{eq:plt23-alpha-ceiling-poly}
     \Lambda^2+q\Lambda-q\le0,
   \end{equation}
   and hence
-  \begin{equation}\label{eq:alpha-ceiling}
+  \begin{equation}\label{eq:plt23-alpha-ceiling}
     q<\Lambda\le r(q):=
     \frac{\sqrt{q^2+4q}-q}{2}.
   \end{equation}
@@ -3167,7 +3174,7 @@ $\phi$ restricts them further, through a lower bound on $\norm g$.
   \]
   and bounding $\ip gh\le\norm g\norm h$ by Cauchy--Schwarz and
   $\ip h{Ah}\le\Lambda\norm h^2$ by the maximality of $\Lambda$,
-  \eqref{eq:absphi-lower} gives
+  \eqref{eq:plt23-absphi-lower} gives
   \[
     \Lambda\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
     +\Lambda(1-a_\phi^2).
@@ -3181,37 +3188,37 @@ $\phi$ restricts them further, through a lower bound on $\norm g$.
   \[
     \norm g^2\ge\frac{(\Lambda-q)^2}{4}\cdot\frac{t}{1-t},
   \]
-  and $t\mapsto t/(1-t)$ is increasing, so \eqref{eq:aphi-lower} allows $t$ to
-  be replaced by $2\Lambda$, which is \eqref{eq:forced-variance}.
+  and $t\mapsto t/(1-t)$ is increasing, so \eqref{eq:plt23-aphi-lower} allows $t$ to
+  be replaced by $2\Lambda$, which is \eqref{eq:plt23-forced-variance}.
 
-  For the second claim, \eqref{eq:HS-budget} gives
-  $2\norm g^2\le pq-\Lambda^2$, so \eqref{eq:forced-variance} and
+  For the second claim, \eqref{eq:plt23-HS-bound} gives
+  $2\norm g^2\le pq-\Lambda^2$, so \eqref{eq:plt23-forced-variance} and
   $1-2\Lambda>0$ give
   \[
     \Lambda(\Lambda-q)^2\le\bigl(pq-\Lambda^2\bigr)(1-2\Lambda).
   \]
   With $p=1-q$, the difference of the two sides is
   $-(1-\Lambda-q)(\Lambda^2+q\Lambda-q)$, and the factor $1-\Lambda-q$ is
-  positive by \eqref{eq:L-order}, so \eqref{eq:alpha-ceiling-poly} follows.
+  positive by \eqref{eq:plt23-M-Lambda-order}, so \eqref{eq:plt23-alpha-ceiling-poly} follows.
   The roots of $\Lambda^2+q\Lambda-q$ are $(-q\pm\sqrt{q^2+4q})/2$, whence
-  \eqref{eq:alpha-ceiling}.
+  \eqref{eq:plt23-alpha-ceiling}.
 
-  Finally, because $\Lambda>q$, the right side of \eqref{eq:forced-variance}
-  is strictly positive.  Thus $g\ne0$, and the bound \eqref{eq:HS-budget}
+  Finally, because $\Lambda>q$, the right side of \eqref{eq:plt23-forced-variance}
+  is strictly positive.  Thus $g\ne0$, and the bound \eqref{eq:plt23-HS-bound}
   gives $\Lambda^2<pq$.  Consequently $M>0$.
 \end{proof}
 
-Together, \Cref{thm:huber-elim} and \Cref{lem:forced-variance} show that
+Together, \Cref{thm:plt23-huber-elim} and \Cref{lem:plt23-forced-variance} show that
 \eqref{eq:main-goal} follows once
-\begin{equation}\label{eq:scalar-target}
+\begin{equation}\label{eq:plt23-scalar-target}
   R_m\le \Omega_m\psi(\xi,\rho)
 \end{equation}
-is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:regionII} and
-\eqref{eq:alpha-ceiling}.
+is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:plt23-range} and
+\eqref{eq:plt23-alpha-ceiling}.
 
-\begin{proposition}[Dual form of $\psi$]\label{prop:huber-dual}
+\begin{proposition}[Dual form of $\psi$]\label{prop:plt23-huber-dual}
   For $\xi\ge0$ and $\rho>0$,
-  \begin{equation}\label{eq:psi-dual}
+  \begin{equation}\label{eq:plt23-psi-dual}
     \psi(\xi,\rho)=
     \max_{0\le\lambda\le1}
     \left\{
@@ -3236,26 +3243,26 @@ is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:regionII} and
   \[
     v=\frac{\lambda}{2(\rho+\lambda)}\in[0,1/2],
   \]
-  and substitution gives \eqref{eq:psi-dual}.
+  and substitution gives \eqref{eq:plt23-psi-dual}.
 \end{proof}
 
 The function $\psi$ has the quadratic-versus-linear structure of Huber's
-robust loss~\cite{Huber1964}, and \eqref{eq:psi-dual} is an interchange of
+robust loss~\cite{Huber1964}, and \eqref{eq:plt23-psi-dual} is an interchange of
 the convex--concave type treated by Sion~\cite{Sion1958}; the special case
 needed here is the one proved above.
 
 Two choices of $\lambda$ will be used throughout.
 
-\begin{corollary}[Two lower bounds for $\psi$]\label{cor:two-witnesses}
+\begin{corollary}[Two lower bounds for $\psi$]\label{cor:plt23-two-witnesses}
   If $2\rho\xi\le1$, then
-  \begin{equation}\label{eq:witness-quadratic}
+  \begin{equation}\label{eq:plt23-witness-quadratic}
     \Omega_m\psi(\xi,\rho)
     \ge
     \frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}
     \frac{1+4\xi}{1+2\xi}.
   \end{equation}
   If $2\rho\xi>1$, then
-  \begin{equation}\label{eq:witness-linear}
+  \begin{equation}\label{eq:plt23-witness-linear}
     \Omega_m\psi(\xi,\rho)
     >M_m(\Lambda-M)\sqrt{2\Lambda}\,(\Lambda-q)
     \frac{1+4\xi}{2+4\xi}.
@@ -3264,12 +3271,12 @@ Two choices of $\lambda$ will be used throughout.
 
 \begin{proof}
   In the first case, take $\lambda=2\rho\xi$ in
-  \eqref{eq:psi-dual}.  This gives
+  \eqref{eq:plt23-psi-dual}.  This gives
   \[
     \psi(\xi,\rho)\ge
     \rho\xi^2\frac{1+4\xi}{1+2\xi}.
   \]
-  A direct calculation from \eqref{eq:C-xi-rho} gives
+  A direct calculation from \eqref{eq:plt23-C-xi-rho} gives
   \[
     \Omega_m\rho\xi^2=\frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}.
   \]
@@ -3291,18 +3298,18 @@ Two choices of $\lambda$ will be used throughout.
   \]
 \end{proof}
 
-\subsection{The dimensionless chart}\label{sec:chart}
+\subsection{The dimensionless chart}\label{subsec:plt23-chart}
 
 \tk{TODO (notation): $N$ defined below collides with the partition size $N$ of
 \Cref{subsec:block-decomposition} (the $N\times N$ matrices of
-\Cref{lem:analytic-reading}); several later subsection titles use this $N$,
+\Cref{lem:series-expansions}); several later subsection titles use this $N$,
 so rename one of the two.}
 Set
-\begin{equation}\label{eq:N-def}
+\begin{equation}\label{eq:plt23-N-def}
   N=m-2.
 \end{equation}
 Thus $N\ge7$ is odd.  Introduce
-\begin{equation}\label{eq:chart-basic}
+\begin{equation}\label{eq:plt23-chart-basic}
   a=\frac {q}{\Lambda},
   \qquad
   \ell=\frac {M}{\Lambda},
@@ -3314,23 +3321,23 @@ Thus $N\ge7$ is odd.  Introduce
   \sigma=\frac {p}{\Lambda}.
 \end{equation}
 The relation $M^2=pq-\Lambda^2$ is equivalent to
-\begin{equation}\label{eq:chart-inverse-1}
+\begin{equation}\label{eq:plt23-chart-inverse-1}
   \Lambda=\frac {a}{D},
   \qquad q=\frac{a^2}{D},
   \qquad \sigma=\frac{1+\ell^2}{a}.
 \end{equation}
 Moreover,
-\begin{equation}\label{eq:chart-d-e}
+\begin{equation}\label{eq:plt23-chart-d-e}
   \Lambda-q=\frac{au}{D},
   \qquad 1-2\Lambda=\frac{u^2+\ell^2}{D}.
 \end{equation}
 
-\begin{lemma}[Chart domain]\label{lem:chart-domain}
+\begin{lemma}[Chart domain]\label{lem:plt23-chart-domain}
   The admissible parameters satisfy
   \begin{align*}
       &0<\ell<a<1, \qquad D<3a^2, \qquad \ell^2\ge a(1-a)=au, \nonumber
       \\
-      &a>\frac{1+\sqrt{13}}{6}>\frac{3}{4}, \qquad 1<\sigma<2. \label{eq:chart-domain}
+      &a>\frac{1+\sqrt{13}}{6}>\frac{3}{4}, \qquad 1<\sigma<2. \label{eq:plt23-chart-domain}
   \end{align*}
 \end{lemma}
 
@@ -3338,7 +3345,7 @@ Moreover,
   The order $0<M<q<\Lambda$ gives $0<\ell<a<1$.  Since
   $q=a^2/D>1/3$, we have $D<3a^2$.  The ceiling
   $\Lambda^2+q\Lambda-q\le0$, after substitution from
-  \eqref{eq:chart-inverse-1}, is exactly
+  \eqref{eq:plt23-chart-inverse-1}, is exactly
   \[
     \ell^2\ge a-a^2=au.
   \]
@@ -3349,13 +3356,13 @@ Moreover,
 \end{proof}
 
 Now put
-\begin{equation}\label{eq:zeta-v-def}
+\begin{equation}\label{eq:plt23-zeta-v-def}
   \zeta=\frac{\ell^2}{u},
   \qquad v=\sigma-1,
   \qquad H_\zeta=\zeta+1+v.
 \end{equation}
 Solving these relations gives
-\begin{equation}\label{eq:zeta-v-inverse}
+\begin{equation}\label{eq:plt23-zeta-v-inverse}
   u=\frac {v}{H_\zeta},
   \qquad
   a=\frac{\zeta+1}{H_\zeta},
@@ -3363,37 +3370,37 @@ Solving these relations gives
   \ell^2=\frac{\zeta v}{H_\zeta}.
 \end{equation}
 The frontier ceiling $\ell^2\ge au$ becomes
-\begin{equation}\label{eq:zeta-domain}
+\begin{equation}\label{eq:plt23-zeta-domain}
   \zeta(\zeta+v)\ge1.
 \end{equation}
 Equivalently,
-\begin{equation}\label{eq:zeta-simple-lower}
+\begin{equation}\label{eq:plt23-zeta-simple-lower}
   \zeta\ge\frac{\sqrt{v^2+4}-v}{2}\ge1-\frac {v}{2}.
 \end{equation}
 In particular,
-\begin{equation}\label{eq:zeta-lower}
+\begin{equation}\label{eq:plt23-zeta-lower}
   \zeta\ge a>\frac{3}{4},
   \qquad 0<v<1.
 \end{equation}
 
 For later use, define
-\begin{equation}\label{eq:Q-chart}
+\begin{equation}\label{eq:plt23-Q-chart}
   Q=v^2+v\zeta+2v+2\zeta+2.
 \end{equation}
 A direct substitution gives
-\begin{equation}\label{eq:D-Q}
+\begin{equation}\label{eq:plt23-D-Q}
   D=\frac{(\zeta+1)Q}{H_\zeta^2}.
 \end{equation}
 Since $D<3a^2$,
-\begin{equation}\label{eq:Q-upper}
+\begin{equation}\label{eq:plt23-Q-upper}
   Q<3(\zeta+1).
 \end{equation}
 We shall repeatedly use the identity
-\begin{equation}\label{eq:H-identity}
+\begin{equation}\label{eq:plt23-H-identity}
   \zeta H_\zeta^2-(\zeta+1)(\zeta+v)^2
   =\zeta^2+\zeta-v^2>0.
 \end{equation}
-The positivity follows from \eqref{eq:zeta-domain}:
+The positivity follows from \eqref{eq:plt23-zeta-domain}:
 \[
   \zeta^2+\zeta-v^2
   \ge1+\zeta(1-v)-v^2
@@ -3403,21 +3410,21 @@ The positivity follows from \eqref{eq:zeta-domain}:
 \subsection{The normalized defect and finite quotients}
 
 Normalize $R_m$ by $\Lambda^m$:
-\begin{equation}\label{eq:F-def}
+\begin{equation}\label{eq:plt23-F-def}
   F_N:=\frac{R_m}{\Lambda^m}
   =1-a^N-\ell^2(a^N-\ell^N).
 \end{equation}
 Define
-\begin{equation}\label{eq:T-def}
+\begin{equation}\label{eq:plt23-T-def}
   T_N=N-\zeta(a^N-\ell^N).
 \end{equation}
 Since $1-a^N\le N(1-a)=Nu$,
-\begin{equation}\label{eq:F-T}
+\begin{equation}\label{eq:plt23-F-T}
   F_N\le uT_N.
 \end{equation}
 If $T_N\le0$, then $R_m\le0$, and the scalar target
-\eqref{eq:scalar-target} is immediate.  We may therefore assume
-\begin{equation}\label{eq:T-positive}
+\eqref{eq:plt23-scalar-target} is immediate.  We may therefore assume
+\begin{equation}\label{eq:plt23-T-positive}
   T_N>0
 \end{equation}
 whenever convenient.
@@ -3428,36 +3435,36 @@ The normalized versions of $\Lambda_m$ and $M_m$ are
   &=2\ell^N+(N+2)K_\Lambda,
   &
   K_\Lambda&=\frac{\sigma^{N+1}-1}{\sigma+1},
-  \label{eq:KA-def}\\
+  \label{eq:plt23-KA-def}\\
   \frac{M_m}{\Lambda^N}
   &=2\ell^N+(N+2)K_M,
   &
   K_M&=\frac{\sigma^{N+1}-\ell^{N+1}}{\sigma+\ell}.
-  \label{eq:KL-def}
+  \label{eq:plt23-KL-def}
 \end{align}
 Because $N+1$ is even,
 \begin{align}
   K_\Lambda&=(\sigma-1)
   \sum_{j=0}^{(N-1)/2}\sigma^{2j},
-  \label{eq:KA-sum}\\
+  \label{eq:plt23-KA-sum}\\
   K_M&=(\sigma-\ell)
   \sum_{j=0}^{(N-1)/2}
   \sigma^{N-1-2j}\ell^{2j}.
-  \label{eq:KL-sum}
+  \label{eq:plt23-KL-sum}
 \end{align}
 
 \subsection{Three elementary bounds for \texorpdfstring{$T_N$}{TN}}
 
-\begin{lemma}[Bounds for $T_N$]\label{lem:T-bounds}
+\begin{lemma}[Bounds for $T_N$]\label{lem:plt23-T-bounds}
   For every admissible chart point and every odd $N\ge7$,
   \begin{align}
     T_N&\le N(1+v)-\zeta(1-v^{N/2}),
-    \label{eq:T-bound-one}\\
+    \label{eq:plt23-T-bound-one}\\
     T_N&<N(1-\ell^{N+1}).
-    \label{eq:T-bound-two}
+    \label{eq:plt23-T-bound-two}
   \end{align}
   If $T_N>0$, then also
-  \begin{equation}\label{eq:T-tangent-bound}
+  \begin{equation}\label{eq:plt23-T-tangent-bound}
     \zeta T_N<\frac{3N(N+1)}{2}(1+v).
   \end{equation}
 \end{lemma}
@@ -3475,7 +3482,7 @@ Because $N+1$ is even,
     &\le N-\zeta+N\zeta u+\zeta v^{N/2}\\
     &\le N(1+v)-\zeta(1-v^{N/2}),
   \end{align*}
-  proving \eqref{eq:T-bound-one}.
+  proving \eqref{eq:plt23-T-bound-one}.
 
   Next, $D<3a^2$ gives
   \[
@@ -3486,10 +3493,10 @@ Because $N+1$ is even,
     a^N-\ell^N>N(a-\ell)\ell^{N-1}>Nu\ell^{N-1}.
   \]
   Multiplication by $\zeta=\ell^2/u$ gives
-  \eqref{eq:T-bound-two}.
+  \eqref{eq:plt23-T-bound-two}.
 
-  Assume now $T_N>0$.  From \eqref{eq:T-bound-one},
-  \begin{equation}\label{eq:zeta-upper-Z}
+  Assume now $T_N>0$.  From \eqref{eq:plt23-T-bound-one},
+  \begin{equation}\label{eq:plt23-zeta-upper-Z}
     \zeta<Z:=\frac{N(1+v)}{1-v^{N/2}}.
   \end{equation}
   Put $r=(N+1)/2$ and
@@ -3503,8 +3510,8 @@ Because $N+1$ is even,
   \]
   because $v^r\le1$ and Bernoulli's inequality gives
   $(1-\theta)^{-r}\ge1+r\theta$.  Therefore,
-  using \eqref{eq:T-bound-two} and \eqref{eq:zeta-upper-Z},
-  \begin{equation}\label{eq:gZ-step}
+  using \eqref{eq:plt23-T-bound-two} and \eqref{eq:plt23-zeta-upper-Z},
+  \begin{equation}\label{eq:plt23-gZ-step}
     \zeta T_N<N g(\zeta)<Ng(Z).
   \end{equation}
   Let
@@ -3544,96 +3551,96 @@ Because $N+1$ is even,
     1-f(\eta)
     \le\frac{3(N+1)}{2N}(1-\eta).
   \]
-  Substitution in \eqref{eq:gZ-step} proves
-  \eqref{eq:T-tangent-bound}.
+  Substitution in \eqref{eq:plt23-gZ-step} proves
+  \eqref{eq:plt23-T-tangent-bound}.
 \end{proof}
 
-\subsection{The regime \texorpdfstring{$2\rho\xi\le1$}{2 rho xi <= 1}}\label{sec:quadratic}
+\subsection{The regime \texorpdfstring{$2\rho\xi\le1$}{2 rho xi <= 1}}\label{subsec:plt23-quadratic}
 
 Assume
-\begin{equation}\label{eq:quadratic-branch}
+\begin{equation}\label{eq:plt23-quadratic-branch}
   2\rho\xi\le1.
 \end{equation}
-We shall prove \eqref{eq:scalar-target} for every odd $N\ge7$, hence for
+We shall prove \eqref{eq:plt23-scalar-target} for every odd $N\ge7$, hence for
 every odd $m\ge9$.
 
-By \eqref{eq:witness-quadratic}, discarding the factor
-$(1+4\xi)/(1+2\xi)>1$, and using \eqref{eq:KA-def},
-\begin{equation}\label{eq:quadratic-payment-start}
+By \eqref{eq:plt23-witness-quadratic}, discarding the factor
+$(1+4\xi)/(1+2\xi)>1$, and using \eqref{eq:plt23-KA-def},
+\begin{equation}\label{eq:plt23-quadratic-payment-start}
   \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
   \ge2(N+2)\Lambda\left(\frac {d}{e}\right)^2K_\Lambda.
 \end{equation}
-Since the summands in \eqref{eq:KA-sum} have geometric mean
+Since the summands in \eqref{eq:plt23-KA-sum} have geometric mean
 $\sigma^{(N-1)/2}$, AM--GM gives
-\begin{equation}\label{eq:KA-AMGM}
+\begin{equation}\label{eq:plt23-KA-AMGM}
   K_\Lambda\ge\frac{N+1}{2}
   v\sigma^{(N-1)/2}.
 \end{equation}
-Using \eqref{eq:chart-inverse-1}, \eqref{eq:chart-d-e}, and
+Using \eqref{eq:plt23-chart-inverse-1}, \eqref{eq:plt23-chart-d-e}, and
 $v=u(1+\zeta)/a$, the right side of
-\eqref{eq:quadratic-payment-start} is at least
-\begin{equation}\label{eq:quad-payment-M}
+\eqref{eq:plt23-quadratic-payment-start} is at least
+\begin{equation}\label{eq:plt23-quad-payment-M}
   u(N+2)(N+1)
   \frac{a^2(1+\zeta)}{D(u+\zeta)^2}
   \sigma^{(N-1)/2}.
 \end{equation}
 
-\begin{lemma}[Coefficient estimate]\label{lem:quad-coeff}
+\begin{lemma}[Coefficient estimate]\label{lem:plt23-quad-coeff}
   One has
-  \begin{equation}\label{eq:M-lower}
+  \begin{equation}\label{eq:plt23-M-lower}
     \frac{a^2(1+\zeta)}{D(u+\zeta)^2}
     >\frac{1}{3\zeta}.
   \end{equation}
 \end{lemma}
 
 \begin{proof}
-  Using \eqref{eq:zeta-v-inverse} and \eqref{eq:D-Q}, the left side is
+  Using \eqref{eq:plt23-zeta-v-inverse} and \eqref{eq:plt23-D-Q}, the left side is
   \[
     M=\frac{H_\zeta^2}{(\zeta+v)^2Q}.
   \]
-  By \eqref{eq:H-identity},
+  By \eqref{eq:plt23-H-identity},
   \[
     \frac{H_\zeta^2}{(\zeta+v)^2}
     >\frac{\zeta+1}{\zeta},
   \]
-  while \eqref{eq:Q-upper} gives $Q<3(\zeta+1)$.  Multiplication proves
-  \eqref{eq:M-lower}.
+  while \eqref{eq:plt23-Q-upper} gives $Q<3(\zeta+1)$.  Multiplication proves
+  \eqref{eq:plt23-M-lower}.
 \end{proof}
 
-Combining \eqref{eq:quad-payment-M} and \eqref{eq:M-lower},
-\begin{equation}\label{eq:quad-payment-final}
+Combining \eqref{eq:plt23-quad-payment-M} and \eqref{eq:plt23-M-lower},
+\begin{equation}\label{eq:plt23-quad-payment-final}
   \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
   >u\frac{(N+2)(N+1)}{3\zeta}
   (1+v)^{(N-1)/2}.
 \end{equation}
-In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
+In view of \eqref{eq:plt23-F-T}, it remains to pay for $uT_N$.
 
-\begin{proposition}[The regime $2\rho\xi\le1$]\label{prop:quadratic-branch}
-  For every odd $N\ge7$, assumption \eqref{eq:quadratic-branch} implies
+\begin{proposition}[The regime $2\rho\xi\le1$]\label{prop:plt23-quadratic-branch}
+  For every odd $N\ge7$, assumption \eqref{eq:plt23-quadratic-branch} implies
   \[
     R_m\le \Omega_m\psi(\xi,\rho).
   \]
 \end{proposition}
 
 \begin{proof}
-  If $T_N\le0$, the claim follows from \eqref{eq:F-T}.  Assume
+  If $T_N\le0$, the claim follows from \eqref{eq:plt23-F-T}.  Assume
   $T_N>0$.
 
-  First, \eqref{eq:T-bound-one} implies
+  First, \eqref{eq:plt23-T-bound-one} implies
   \[
     \zeta T_N
     \le N(1+v)\zeta-(1-v^{N/2})\zeta^2
     \le\frac{N^2(1+v)^2}{4(1-v^{N/2})}.
   \]
-  Thus \eqref{eq:quad-payment-final} is sufficient whenever
-  \begin{equation}\label{eq:E-N}
+  Thus \eqref{eq:plt23-quad-payment-final} is sufficient whenever
+  \begin{equation}\label{eq:plt23-E-N}
     E_N(v):=
     \frac{4(N+2)(N+1)}{3N^2}
     (1-v^{N/2})(1+v)^{(N-5)/2}\ge1.
   \end{equation}
-  Second, the tangent estimate \eqref{eq:T-tangent-bound} shows that
-  \eqref{eq:quad-payment-final} is sufficient whenever
-  \begin{equation}\label{eq:H-N}
+  Second, the tangent estimate \eqref{eq:plt23-T-tangent-bound} shows that
+  \eqref{eq:plt23-quad-payment-final} is sufficient whenever
+  \begin{equation}\label{eq:plt23-H-N}
     H_N(v):=
     \frac{2(N+2)}{9N}(1+v)^{(N-3)/2}\ge1.
   \end{equation}
@@ -3665,34 +3672,34 @@ In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
     H_7(v)\ge\frac{2}{7}\left(\frac{19}{10}\right)^2
     =\frac{361}{350}>1.
   \]
-  Thus either \eqref{eq:E-N} or \eqref{eq:H-N} holds in every case, proving
+  Thus either \eqref{eq:plt23-E-N} or \eqref{eq:plt23-H-N} holds in every case, proving
   the proposition.
 \end{proof}
 
-\subsection{The regime \texorpdfstring{$2\rho\xi>1$}{2 rho xi > 1}}\label{sec:linear}
+\subsection{The regime \texorpdfstring{$2\rho\xi>1$}{2 rho xi > 1}}\label{subsec:plt23-linear}
 
 Assume
-\begin{equation}\label{eq:linear-branch}
+\begin{equation}\label{eq:plt23-linear-branch}
   2\rho\xi>1.
 \end{equation}
 Abbreviate
-\begin{equation}\label{eq:varphi-cxi}
+\begin{equation}\label{eq:plt23-varphi-cxi}
   \varphi=\frac{1+4\xi}{2+4\xi},
   \qquad
   c_\xi=\sqrt{2\Lambda}\,\varphi.
 \end{equation}
-By \eqref{eq:witness-linear}, \eqref{eq:KL-def}, and
+By \eqref{eq:plt23-witness-linear}, \eqref{eq:plt23-KL-def}, and
 $\Lambda-M=\Lambda(1-\ell)$, $\Lambda-q=\Lambda u$,
-\begin{equation}\label{eq:linear-payment-start}
+\begin{equation}\label{eq:plt23-linear-payment-start}
   \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
   >u(N+2)c_\xi(1-\ell)K_M.
 \end{equation}
-From \eqref{eq:KL-sum},
-\begin{equation}\label{eq:KL-first-term}
+From \eqref{eq:plt23-KL-sum},
+\begin{equation}\label{eq:plt23-KL-first-term}
   K_M\ge(\sigma-\ell)\sigma^{N-1}.
 \end{equation}
-In view of \eqref{eq:F-T}, it is therefore enough to prove
-\begin{equation}\label{eq:linear-core}
+In view of \eqref{eq:plt23-F-T}, it is therefore enough to prove
+\begin{equation}\label{eq:plt23-linear-core}
   T_N\le
   (N+2)c_\xi(1-\ell)(\sigma-\ell)\sigma^{N-1}.
 \end{equation}
@@ -3700,19 +3707,19 @@ In view of \eqref{eq:F-T}, it is therefore enough to prove
 The factor $c_\xi$ may be small, but only where a short power of
 $\sigma$ compensates for it.
 
-\begin{lemma}[Compensation]\label{lem:compensation}
+\begin{lemma}[Compensation]\label{lem:plt23-compensation}
   On the whole admissible chart,
-  \begin{equation}\label{eq:compensation}
+  \begin{equation}\label{eq:plt23-compensation}
     c_\xi\sigma^{\zeta/4}\ge1-\ell^2.
   \end{equation}
 \end{lemma}
 
 \begin{proof}
   We first show
-  \begin{equation}\label{eq:sqrt-compensation}
+  \begin{equation}\label{eq:plt23-sqrt-compensation}
     \sqrt{2\Lambda}\ge1-\ell^2.
   \end{equation}
-  Using $\Lambda=a/D$, the square of \eqref{eq:sqrt-compensation} is
+  Using $\Lambda=a/D$, the square of \eqref{eq:plt23-sqrt-compensation} is
   \[
     2a\ge(1+a^2+y)(1-y)^2,
     \qquad y=\ell^2.
@@ -3725,21 +3732,21 @@ $\sigma$ compensates for it.
   \[
     (1-a)(a^4+a^2+2a-1)>0
   \]
-  because $a>3/4$.  This proves \eqref{eq:sqrt-compensation}.
+  because $a>3/4$.  This proves \eqref{eq:plt23-sqrt-compensation}.
 
   Next we show $\varphi\sigma^{\zeta/4}\ge1$.  From
-  \eqref{eq:C-xi-rho}, \eqref{eq:zeta-v-inverse}, and
-  \eqref{eq:D-Q},
-  \begin{equation}\label{eq:xi-zeta-v}
+  \eqref{eq:plt23-C-xi-rho}, \eqref{eq:plt23-zeta-v-inverse}, and
+  \eqref{eq:plt23-D-Q},
+  \begin{equation}\label{eq:plt23-xi-zeta-v}
     \xi=\frac{4H_\zeta^2}
     {v(\zeta+v)^2Q}.
   \end{equation}
-  Equations \eqref{eq:Q-upper} and \eqref{eq:H-identity} imply
-  \begin{equation}\label{eq:xi-comp-bound}
+  Equations \eqref{eq:plt23-Q-upper} and \eqref{eq:plt23-H-identity} imply
+  \begin{equation}\label{eq:plt23-xi-comp-bound}
     4\zeta v\xi>\frac{16}{3}.
   \end{equation}
   We claim that
-  \begin{equation}\label{eq:key-log-comp}
+  \begin{equation}\label{eq:plt23-key-log-comp}
     \zeta v(1+4\xi)>2(v+2).
   \end{equation}
   Indeed, the left side is larger than $\zeta v+16/3$.  If
@@ -3748,7 +3755,7 @@ $\sigma$ compensates for it.
     v(2-\zeta)<\frac{5}{4}<\frac{4}{3}
   \]
   because $v<1$ and $\zeta>3/4$, which again proves
-  \eqref{eq:key-log-comp}.
+  \eqref{eq:plt23-key-log-comp}.
 
   The elementary inequality
   \[
@@ -3765,22 +3772,22 @@ $\sigma$ compensates for it.
     1+\frac{1}{1+4\xi}
     =\frac{2+4\xi}{1+4\xi}=\frac{1}{\varphi}.
   \]
-  Together with \eqref{eq:sqrt-compensation}, this proves
-  \eqref{eq:compensation}.
+  Together with \eqref{eq:plt23-sqrt-compensation}, this proves
+  \eqref{eq:plt23-compensation}.
 \end{proof}
 
 \subsection{The cases \texorpdfstring{$\zeta\ge N$}{zeta >= N} and \texorpdfstring{$v\ge5/8$}{v >= 5/8}}
 
 We first dispose of the range $\zeta\ge N$ when $v$ is not large.
 
-\begin{lemma}[The regime $\zeta\ge N$]\label{lem:linear-high-zeta}
+\begin{lemma}[The regime $\zeta\ge N$]\label{lem:plt23-linear-high-zeta}
   If $\zeta\ge N$, $0<v\le5/8$, and $N\ge7$ is odd, then
-  \eqref{eq:linear-core} holds.
+  \eqref{eq:plt23-linear-core} holds.
 \end{lemma}
 
 \begin{proof}
-  By \eqref{eq:T-bound-one} and $\zeta\ge N$,
-  \begin{equation}\label{eq:T-high-zeta}
+  By \eqref{eq:plt23-T-bound-one} and $\zeta\ge N$,
+  \begin{equation}\label{eq:plt23-T-high-zeta}
     T_N\le N(v+v^{N/2}).
   \end{equation}
   Put $y=\sqrt v$.  Since $\ell^2<v$,
@@ -3790,11 +3797,11 @@ We first dispose of the range $\zeta\ge N$ when $v$ is not large.
   \]
   Also $q<\Lambda$ and $p=(1+v)\Lambda$ imply
   $\Lambda>1/(2+v)$, while $\varphi>1/2$.  Hence
-  \begin{equation}\label{eq:cxi-crude}
+  \begin{equation}\label{eq:plt23-cxi-crude}
     c_\xi>\frac{1}{\sqrt{2(2+v)}}.
   \end{equation}
   It is enough to show
-  \begin{equation}\label{eq:h-sufficient}
+  \begin{equation}\label{eq:plt23-h-sufficient}
     h(y):=
     \frac{(1-y)(1-y+y^2)(1+y^2)^5}{y^2}
     >\sqrt{2(2+y^2)}\,(1+y^{N-2}).
@@ -3848,24 +3855,24 @@ We first dispose of the range $\zeta\ge N$ when $v$ is not large.
   \]
   after squaring, the final difference is
   $52766011/351562500>0$.  This proves
-  \eqref{eq:h-sufficient} and hence \eqref{eq:linear-core}.
+  \eqref{eq:plt23-h-sufficient} and hence \eqref{eq:plt23-linear-core}.
 \end{proof}
 
 The next estimate handles all $\zeta$ once $v$ is large.
 
-\begin{lemma}[Large $v$]\label{lem:linear-large-v}
+\begin{lemma}[Large $v$]\label{lem:plt23-linear-large-v}
   If $v\ge5/8$ and $N\ge7$ is odd, then
-  \eqref{eq:linear-core} holds.
+  \eqref{eq:plt23-linear-core} holds.
 \end{lemma}
 
 \begin{proof}
-  By \eqref{eq:T-bound-two},
-  \begin{equation}\label{eq:T-geometric-cancel}
+  By \eqref{eq:plt23-T-bound-two},
+  \begin{equation}\label{eq:plt23-T-geometric-cancel}
     T_N<N(N+1)(1-\ell).
   \end{equation}
-  Using \eqref{eq:cxi-crude}, $\ell\le\sqrt v$, and
+  Using \eqref{eq:plt23-cxi-crude}, $\ell\le\sqrt v$, and
   $\sigma=1+v$, it is enough, after cancelling $1-\ell$, to prove
-  \begin{equation}\label{eq:large-v-target}
+  \begin{equation}\label{eq:plt23-large-v-target}
     \frac{N+2}{\sqrt{2(2+v)}}
     (1+v-\sqrt v)(1+v)^{N-1}
     \ge N(N+1).
@@ -3896,7 +3903,7 @@ The next estimate handles all $\zeta$ once $v$ is large.
     >56,
   \]
   the final excess being $24369203/6029312$.  Thus
-  \eqref{eq:large-v-target} holds.
+  \eqref{eq:plt23-large-v-target} holds.
 \end{proof}
 
 \subsection{The regime \texorpdfstring{$\zeta\le N$}{zeta<=N}: the growth lemma}
@@ -3904,13 +3911,13 @@ The next estimate handles all $\zeta$ once $v$ is large.
 It remains, except for $N=7$, to handle $\zeta\le N$.  The compensation
 lemma reduces this to one variable.
 
-\begin{lemma}[One-variable growth]\label{lem:J-growth}
+\begin{lemma}[One-variable growth]\label{lem:plt23-J-growth}
   Let $N\ge9$ be odd.  If $0\le x<1$ and
-  \begin{equation}\label{eq:J-domain}
+  \begin{equation}\label{eq:plt23-J-domain}
     1-x\ge\frac{2x^2}{N},
   \end{equation}
   then
-  \begin{equation}\label{eq:J-ineq}
+  \begin{equation}\label{eq:plt23-J-ineq}
     J_N(x):=
     \frac{N+2}{N}(1-x)^2(1+x^3)
     \left(\frac{N(1+x^2)}{N-x^2}\right)^{3N/4-1}
@@ -3923,14 +3930,14 @@ lemma reduces this to one variable.
 
   \smallskip
   \noindent\emph{Step 1: $0\le x\le2/5$.}
-  Taking logarithms in \eqref{eq:J-ineq}, and using
+  Taking logarithms in \eqref{eq:plt23-J-ineq}, and using
   \begin{align*}
     \log(1+2/N)&\ge\frac{2}{N}-\frac{2}{N^2},\\
     \log(1+x^2)&\ge x^2-\frac{x^4}{2},\\
     -\log(1-x^2/N)&\ge\frac{x^2}{N},
   \end{align*}
   together with
-  \begin{equation}\label{eq:log-shape-bound}
+  \begin{equation}\label{eq:plt23-log-shape-bound}
     2\log(1-x)+\log(1+x^3)
     \ge-2x-x^2-\frac{x^4}{1-x}-\frac{x^6}{2},
   \end{equation}
@@ -3939,9 +3946,9 @@ lemma reduces this to one variable.
     \log J_N(x)\ge\mathcal L_N(x):={}&
     \frac{2}{N}-\frac{2}{N^2}-2x \notag\\
     &+\left[A\left(1+\frac{1}{N}\right)-1\right]x^2
-    -\frac {A}{2}x^4-\frac{x^4}{1-x}-\frac{x^6}{2}. \label{eq:L-N-def}
+    -\frac {A}{2}x^4-\frac{x^4}{1-x}-\frac{x^6}{2}. \label{eq:plt23-L-N-def}
   \end{align}
-  For completeness, \eqref{eq:log-shape-bound} follows by writing
+  For completeness, \eqref{eq:plt23-log-shape-bound} follows by writing
   \[
     2\log(1-x)
     =-2x-x^2-\frac{2}{3}x^3-2\sum_{j\ge4}\frac{x^j}{j}
@@ -3968,7 +3975,7 @@ lemma reduces this to one variable.
     B_N=\frac{1116N^2-2003N-1536}{1536N}.
   \]
   For $N\ge9$, $B_N>0$, and
-  \begin{equation}\label{eq:discriminant-check}
+  \begin{equation}\label{eq:plt23-discriminant-check}
     B_Nc_N-1
     =\frac{348N^3-3119N^2+467N+1536}{768N^3}>0.
   \end{equation}
@@ -3982,7 +3989,7 @@ lemma reduces this to one variable.
     \ge\frac{93}{2048}-\frac{2}{81}>0.
   \]
   It is therefore enough to take $N=9$.  Direct differentiation gives
-  \begin{equation}\label{eq:L9-data}
+  \begin{equation}\label{eq:plt23-L9-data}
     \mathcal L_9(1/4)=\frac{11795}{663552},
     \qquad
     \mathcal L_9'(1/4)=\frac{1295}{3072},
@@ -4016,7 +4023,7 @@ lemma reduces this to one variable.
   has value $2503/625$ at $x=2/5$.  Thus
   $\mathcal L_9'''<0$.  Since $\mathcal L_9''(2/5)>0$, we have
   $\mathcal L_9''>0$ throughout the interval; the first two inequalities in
-  \eqref{eq:L9-data} then imply $\mathcal L_9>0$.
+  \eqref{eq:plt23-L9-data} then imply $\mathcal L_9>0$.
 
   \smallskip
   \noindent\emph{Step 2: $2/5\le x\le\beta_N$.}
@@ -4024,9 +4031,9 @@ lemma reduces this to one variable.
   \[
     1-\beta_N=\frac{2\beta_N^2}{N};
   \]
-  condition \eqref{eq:J-domain} is exactly $x\le\beta_N$.  Since
+  condition \eqref{eq:plt23-J-domain} is exactly $x\le\beta_N$.  Since
   $N/(N-x^2)>1$, it is enough to prove
-  \begin{equation}\label{eq:K-N-def}
+  \begin{equation}\label{eq:plt23-K-N-def}
     K_N(x):=
     \frac{N+2}{N}(1-x)^2(1+x^3)(1+x^2)^{3N/4-1}\ge1.
   \end{equation}
@@ -4035,7 +4042,7 @@ lemma reduces this to one variable.
     P_N(x)={}&3Nx^5-3Nx^4+3Nx^2-3Nx
     +6x^5-2x^4\\
     &+10x^3-6x^2+4x+4.
-    \label{eq:P-N}
+    \label{eq:plt23-P-N}
   \end{align}
   At $x=2/5$,
   \[
@@ -4141,22 +4148,22 @@ lemma reduces this to one variable.
     \left(\frac{7}{4}\right)^{3/2}>1.
   \]
   This completes all endpoint checks and the proof of
-  \eqref{eq:J-ineq}.
+  \eqref{eq:plt23-J-ineq}.
 \end{proof}
 
-\begin{lemma}[The regime $\zeta\le N$]\label{lem:linear-low-zeta}
+\begin{lemma}[The regime $\zeta\le N$]\label{lem:plt23-linear-low-zeta}
   If $\zeta\le N$ and $N\ge9$ is odd, then
-  \eqref{eq:linear-core} holds.
+  \eqref{eq:plt23-linear-core} holds.
 \end{lemma}
 
 \begin{proof}
-  By \Cref{lem:compensation},
+  By \Cref{lem:plt23-compensation},
   \begin{align}
     &(N+2)c_\xi(1-\ell)(\sigma-\ell)\sigma^{N-1}\notag\\
     &\quad\ge
     (N+2)(1-\ell)^2(1+\ell^3)
     \sigma^{N-1-\zeta/4}.
-    \label{eq:linear-comp-expanded}
+    \label{eq:plt23-linear-comp-expanded}
   \end{align}
   Indeed, $(1+\ell)(\sigma-\ell)\ge1+\ell^3$ because
   $\sigma\ge1+\ell^2$.
@@ -4168,35 +4175,35 @@ lemma reduces this to one variable.
     a\le\frac{N-\ell^2}{N}.
   \]
   Thus
-  \begin{equation}\label{eq:sigma-lower-J}
+  \begin{equation}\label{eq:plt23-sigma-lower-J}
     \sigma=\frac{1+\ell^2}{a}
     \ge\frac{N(1+\ell^2)}{N-\ell^2}.
   \end{equation}
   Also $N-1-\zeta/4\ge3N/4-1$.  Finally,
-  $\ell<2a-1$ from the proof of \eqref{eq:T-bound-two}, so
+  $\ell<2a-1$ from the proof of \eqref{eq:plt23-T-bound-two}, so
   \[
     1-\ell>2u=\frac{2\ell^2}{\zeta}
     \ge\frac{2\ell^2}{N}.
   \]
-  Applying \Cref{lem:J-growth} with $x=\ell$ to
-  \eqref{eq:linear-comp-expanded} shows that its right side is at least
-  $N$.  Since $T_N<N$, \eqref{eq:linear-core} follows.
+  Applying \Cref{lem:plt23-J-growth} with $x=\ell$ to
+  \eqref{eq:plt23-linear-comp-expanded} shows that its right side is at least
+  $N$.  Since $T_N<N$, \eqref{eq:plt23-linear-core} follows.
 \end{proof}
 
 \subsection{The exceptional case \texorpdfstring{$N=7$, i.e. $m=9$}{N=7, i.e. m=9}}
 
 The preceding lemmas already cover $N=7$ whenever either
 $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
-\eqref{eq:linear-core} under
-\begin{equation}\label{eq:N7-corner}
+\eqref{eq:plt23-linear-core} under
+\begin{equation}\label{eq:plt23-N7-corner}
   N=7,
   \qquad \zeta\le7,
   \qquad v\le\frac{5}{8}.
 \end{equation}
 
-\begin{lemma}[The small-$v$ part of $N=7$]\label{lem:N7-small-v}
-  Under \eqref{eq:N7-corner}, if $0<v\le1/4$, then
-  \eqref{eq:linear-core} holds.
+\begin{lemma}[The small-$v$ part of $N=7$]\label{lem:plt23-N7-small-v}
+  Under \eqref{eq:plt23-N7-corner}, if $0<v\le1/4$, then
+  \eqref{eq:plt23-linear-core} holds.
 \end{lemma}
 
 \begin{proof}
@@ -4206,15 +4213,15 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     \le\frac{7}{8+v}<\frac{7}{8}<\left(\frac{15}{16}\right)^2,
   \]
   we have
-  \begin{equation}\label{eq:ell-small-v}
+  \begin{equation}\label{eq:plt23-ell-small-v}
     \ell<\frac{15}{16}s.
   \end{equation}
 
   We next prove
-  \begin{equation}\label{eq:xi-small-v}
+  \begin{equation}\label{eq:plt23-xi-small-v}
     \xi\ge\frac{1}{4v}.
   \end{equation}
-  Let $t=\zeta+v$.  Formula \eqref{eq:xi-zeta-v} becomes
+  Let $t=\zeta+v$.  Formula \eqref{eq:plt23-xi-zeta-v} becomes
   \[
     4v\xi=
     \frac{16(t+1)^2}{t^2(t(v+2)+2)}.
@@ -4235,10 +4242,10 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   \[
     \frac{246413}{17424}<16.
   \]
-  This proves \eqref{eq:xi-small-v}.
+  This proves \eqref{eq:plt23-xi-small-v}.
 
   The function $(1+4\xi)/(2+4\xi)$ is increasing in $\xi$, so
-  \eqref{eq:xi-small-v} gives
+  \eqref{eq:plt23-xi-small-v} gives
   \[
     \varphi\ge\frac{1+v}{1+2v}.
   \]
@@ -4248,32 +4255,32 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     \ge\frac{(1+v)^7}{(1+2v)\sqrt{1+v/2}}.
   \]
   We shall use the elementary lower bound
-  \begin{equation}\label{eq:cxi-small-v-poly}
+  \begin{equation}\label{eq:plt23-cxi-small-v-poly}
     \frac{(1+v)^7}{(1+2v)\sqrt{1+v/2}}
     \ge\left(1-\frac{7v}{8}\right)(1+5v+11v^2).
   \end{equation}
   Both sides are positive.  If $M(v)$ and $R(v)$ denote respectively
-  the left and right sides of \eqref{eq:cxi-small-v-poly}, then exact
+  the left and right sides of \eqref{eq:plt23-cxi-small-v-poly}, then exact
   expansion gives
   \begin{align}
     &128(1+2v)^2(1+v/2)\bigl(M(v)^2-R(v)^2\bigr) \notag\\
     &\quad=v\bigl(128v^{13}+1792v^{12}+11648v^{11}+46592v^{10}
     +128128v^9 \notag\\
     &\qquad\quad+232540v^8+345884v^7+492971v^6+464196v^5 \notag\\
-    &\qquad\quad+258097v^4+86924v^3+18035v^2+2254v+160\bigr), \label{eq:small-v-square-diff}
+    &\qquad\quad+258097v^4+86924v^3+18035v^2+2254v+160\bigr), \label{eq:plt23-small-v-square-diff}
   \end{align}
   which is nonnegative.
 
-  For the defect, use \eqref{eq:zeta-simple-lower}.  From
-  \eqref{eq:T-bound-one},
+  For the defect, use \eqref{eq:plt23-zeta-simple-lower}.  From
+  \eqref{eq:plt23-T-bound-one},
   \begin{align*}
     T_7
     &\le7+7v-(1-v/2)(1-v^{7/2})\\
     &\le6+\frac{15}{2}v+\frac{1}{2}v^3,
   \end{align*}
   because $\sqrt v\le1/2$.  On the other hand,
-  \eqref{eq:ell-small-v} and \eqref{eq:cxi-small-v-poly} show that the right
-  side of \eqref{eq:linear-core} is at least
+  \eqref{eq:plt23-ell-small-v} and \eqref{eq:plt23-cxi-small-v-poly} show that the right
+  side of \eqref{eq:plt23-linear-core} is at least
   \[
     9\left(1-\frac{7}{8}s^2\right)
     \left(1-\frac{15}{16}s\right)
@@ -4286,15 +4293,15 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     +\frac{13635}{128}s^7+\frac{51005}{2048}s^6 \notag\\
     &-\frac{18765}{128}s^5+\frac{264969}{2048}s^4
     -\frac{4995}{64}s^3+\frac{11913}{256}s^2 \notag\\
-    &-\frac{135}{8}s+3. \label{eq:P9-small}
+    &-\frac{135}{8}s+3. \label{eq:plt23-P9-small}
   \end{align}
   By \Cref{lem:bernstein-P9}, $P_9(s)>0$ on $[0,1/2]$.  This proves
-  \eqref{eq:linear-core}.
+  \eqref{eq:plt23-linear-core}.
 \end{proof}
 
-\begin{lemma}[The middle-$v$ part of $N=7$]\label{lem:N7-middle-v}
-  Under \eqref{eq:N7-corner}, if $1/4\le v\le5/8$, then
-  \eqref{eq:linear-core} holds.
+\begin{lemma}[The middle-$v$ part of $N=7$]\label{lem:plt23-N7-middle-v}
+  Under \eqref{eq:plt23-N7-corner}, if $1/4\le v\le5/8$, then
+  \eqref{eq:plt23-linear-core} holds.
 \end{lemma}
 
 \begin{proof}
@@ -4303,7 +4310,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     \xi=\frac{4}{v}\frac{(t+1)^2}{t^2(t(v+2)+2)}.
   \]
   The quantity $vG(t,v)$, with $G$ as in the proof of
-  \Cref{lem:N7-small-v}, is increasing in both variables.  Indeed,
+  \Cref{lem:plt23-N7-small-v}, is increasing in both variables.  Indeed,
   \[
     \frac{\partial(vG)}{\partial t}=v\frac{\partial G}{\partial t}>0,
     \qquad
@@ -4316,33 +4323,33 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     \frac{26214445}{2437632}<12.
   \]
   Thus $\xi>1/3$, and hence
-  \begin{equation}\label{eq:varphi-7/10}
+  \begin{equation}\label{eq:plt23-varphi-7/10}
     \varphi\ge\frac{7}{10}.
   \end{equation}
 
   Put
-  \begin{equation}\label{eq:y-middle}
+  \begin{equation}\label{eq:plt23-y-middle}
     y^2=\frac{7v}{8+v}.
   \end{equation}
   Since $\zeta\le7$, we have $\ell\le y$.  The first half of the
-  compensation proof, \eqref{eq:sqrt-compensation}, gives
+  compensation proof, \eqref{eq:plt23-sqrt-compensation}, gives
   \[
     \sqrt{2\Lambda}\ge1-\ell^2\ge1-y^2.
   \]
   Also, $v^{7/2}\le v/2$ on $[1/4,5/8]$, because
   $v^{5/2}\le(5/8)^{5/2}<1/2$.  Together with
-  \eqref{eq:zeta-simple-lower}, \eqref{eq:T-bound-one} yields
-  \begin{equation}\label{eq:T7-middle}
+  \eqref{eq:plt23-zeta-simple-lower}, \eqref{eq:plt23-T-bound-one} yields
+  \begin{equation}\label{eq:plt23-T7-middle}
     T_7\le6+8v.
   \end{equation}
-  By \eqref{eq:varphi-7/10}, it is enough to prove
-  \begin{equation}\label{eq:middle-target}
+  By \eqref{eq:plt23-varphi-7/10}, it is enough to prove
+  \begin{equation}\label{eq:plt23-middle-target}
     \frac{63}{10}(1-y^2)(1-y)(1+v-y)(1+v)^6
     \ge6+8v.
   \end{equation}
 
   We verify that the ratio of the two sides is increasing.  Solving
-  \eqref{eq:y-middle} gives
+  \eqref{eq:plt23-y-middle} gives
   \[
     v=v(y)=\frac{8y^2}{7-y^2}.
   \]
@@ -4357,7 +4364,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     {6+8v(y)}.
   \]
   A direct logarithmic differentiation gives
-  \begin{equation}\label{eq:R-log-derivative}
+  \begin{equation}\label{eq:plt23-R-log-derivative}
     \frac{\mathcal R'(y)}{\mathcal R(y)}
     =\frac{2Q_{10}(y)}
     {(y-1)(y+1)(y^2-7)(y^2+1)(29y^2+21)
@@ -4367,9 +4374,9 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   \begin{align}
     Q_{10}(y)={}&58y^{10}+319y^9-1793y^8-11280y^7+9788y^6\\
     &-11354y^5+350y^4+5880y^3-6174y^2+5635y-1029.
-    \label{eq:Q10}
+    \label{eq:plt23-Q10}
   \end{align}
-  The denominator in \eqref{eq:R-log-derivative} is positive on
+  The denominator in \eqref{eq:plt23-R-log-derivative} is positive on
   $[9/20,5/7]$, and \Cref{lem:bernstein-Q10} gives
   $Q_{10}(y)>0$ there.  Thus $\mathcal R$ is increasing.
 
@@ -4382,12 +4389,12 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
     \left(\frac{5}{4}\right)^6
     =\frac{18834375}{2342912}>8.
   \end{align*}
-  This proves \eqref{eq:middle-target} at the left endpoint.  The monotonicity
+  This proves \eqref{eq:plt23-middle-target} at the left endpoint.  The monotonicity
   of $\mathcal R$ proves it throughout the interval.
 \end{proof}
 
-\begin{proposition}[The regime $2\rho\xi>1$]\label{prop:linear-branch}
-  For every odd $N\ge7$, assumption \eqref{eq:linear-branch} implies
+\begin{proposition}[The regime $2\rho\xi>1$]\label{prop:plt23-linear-branch}
+  For every odd $N\ge7$, assumption \eqref{eq:plt23-linear-branch} implies
   \[
     R_m\le \Omega_m\psi(\xi,\rho).
   \]
@@ -4395,17 +4402,17 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
 
 \begin{proof}
   For $N\ge9$, if $\zeta\le N$, use
-  \Cref{lem:linear-low-zeta}.  If $\zeta\ge N$, use
-  \Cref{lem:linear-high-zeta} when $v\le5/8$, and
-  \Cref{lem:linear-large-v} when $v\ge5/8$.
+  \Cref{lem:plt23-linear-low-zeta}.  If $\zeta\ge N$, use
+  \Cref{lem:plt23-linear-high-zeta} when $v\le5/8$, and
+  \Cref{lem:plt23-linear-large-v} when $v\ge5/8$.
 
   For $N=7$, the same two broad lemmas cover the cases
   $\zeta\ge7$ or $v\ge5/8$.  The remaining corner
-  \eqref{eq:N7-corner} is covered by
-  \Cref{lem:N7-small-v,lem:N7-middle-v}.
-  In every case \eqref{eq:linear-core} holds.  Combining it with
-  \eqref{eq:linear-payment-start}, \eqref{eq:KL-first-term}, and
-  \eqref{eq:F-T} proves the proposition.
+  \eqref{eq:plt23-N7-corner} is covered by
+  \Cref{lem:plt23-N7-small-v,lem:plt23-N7-middle-v}.
+  In every case \eqref{eq:plt23-linear-core} holds.  Combining it with
+  \eqref{eq:plt23-linear-payment-start}, \eqref{eq:plt23-KL-first-term}, and
+  \eqref{eq:plt23-F-T} proves the proposition.
 \end{proof}
 
 
@@ -4421,16 +4428,16 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
   \Cref{prop:C3,prop:C5,prop:C7}.  Let $m\ge9$ be odd.
 
   If $p\ge2/3$, or equivalently $q\le1/3$, the result is
-  \Cref{thm:dense-region}.  It remains to consider
+  \Cref{thm:pge23-main}.  It remains to consider
   $1/2<p<2/3$, equivalently $1/3<q<1/2$.
   By \Cref{lem:step-reduction}, it is enough to treat a step graphon.  If the
   compression $A$ has no eigenvalue above $q$,
-  \Cref{lem:no-frontier} proves the theorem.  Otherwise there is a unique
+  \Cref{lem:plt23-eigenvalues-above-q} proves the theorem.  Otherwise there is a unique
   frontier eigenvalue $\Lambda$, and
-  \Cref{prop:master-defect,thm:huber-elim} reduce the problem to the scalar
-  target \eqref{eq:scalar-target}.  If $2\rho\xi\le1$,
-  \Cref{prop:quadratic-branch} proves that target.  If $2\rho\xi>1$,
-  \Cref{prop:linear-branch} proves it.  The two alternatives are exhaustive.
+  \Cref{prop:plt23-splitting-lower-bound,thm:plt23-huber-elim} reduce the problem to the scalar
+  target \eqref{eq:plt23-scalar-target}.  If $2\rho\xi\le1$,
+  \Cref{prop:plt23-quadratic-branch} proves that target.  If $2\rho\xi>1$,
+  \Cref{prop:plt23-linear-branch} proves it.  The two alternatives are exhaustive.
   The step-graphon approximation returns the result to arbitrary graphons.
 \end{proof}
 
@@ -4465,7 +4472,7 @@ vector, and decompose
   K=\begin{pmatrix}a&h^*\\h&B\end{pmatrix}
   \quad\text{on}\quad \R e\oplus e^\perp.
 \]
-The same block inversion used in \eqref{eq:dense-path-gf} gives
+The same block inversion used in \eqref{eq:pge23-path-gf} gives
 \begin{equation}\label{eq:general-stripping}
   M_{K,e}(z):=\ip e{(I-zK)^{-1}e}
   =\frac{1}{1-az-z^2\ip h{(I-zB)^{-1}h}}.
@@ -4497,7 +4504,7 @@ is rigid but the tail is not.
 
 \subsection{First returns, irreducible excursions, and logarithmic cycles}
 
-Equation \eqref{eq:dense-path-gf} has the first-return form
+Equation \eqref{eq:pge23-path-gf} has the first-return form
 \[
   M(z)=\frac{1}{1-H(z)},
   \qquad H(z)=qz+z^2R_+(z).
@@ -4524,7 +4531,7 @@ This ``strip, assemble, cancel'' pattern is broader than graphons.
 
 \subsection{Dirichlet diagonalization as probabilistic polarization}
 
-The calculation in \Cref{lem:dense-dirichlet} is an instance of the following
+The calculation in \Cref{lem:pge23-dirichlet} is an instance of the following
 general lemma.
 
 \begin{proposition}[Dirichlet polarization]\label{prop:general-dirichlet}
@@ -4551,7 +4558,7 @@ general lemma.
 \end{proposition}
 
 \begin{proof}
-  This is exactly \eqref{eq:dense-dirichlet-moment}, followed by linearity.
+  This is exactly \eqref{eq:pge23-dirichlet-moment}, followed by linearity.
   The minimum statement follows because $\Theta\cdot\lambda\in I$, and the
   reverse inequality is obtained on the diagonal.
 \end{proof}
@@ -4568,8 +4575,8 @@ has this basis structure.
 
 \subsection{Beta--gamma algebra and Laplace positivity transfer}
 
-The passage from \eqref{eq:dense-beta-integral} to
-\eqref{eq:dense-gamma-smoothing} is an instance of a general positive
+The passage from \eqref{eq:pge23-beta-integral} to
+\eqref{eq:pge23-laplace-gamma} is an instance of a general positive
 transform.  For suitable $f$, integers $m>r\ge1$, and $\ell>0$,
 \begin{equation}\label{eq:general-laplace-transfer}
   \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}f(s)\dd s
@@ -4593,7 +4600,7 @@ powers occur together.
 
 \subsection{The gamma Stein identity and a hidden Laguerre equation}
 
-Equation \eqref{eq:gamma-Stein} is the standard gamma Stein identity; the
+Equation \eqref{eq:pge23-gamma-Stein} is the standard gamma Stein identity; the
 operator
 \[
   \mathcal A_rf(y)=yf'(y)+(r-y)f(y)
@@ -4613,15 +4620,15 @@ Expansion of the moment, or the Rodrigues formula, gives
 \end{equation}
 where $L_k^{(\alpha)}$ is the generalized Laguerre polynomial.  For
 $k=2j$, the Laguerre differential equation is exactly
-\eqref{eq:gamma-ODE}.  The parameter $-r-2j$ lies outside the classical
+\eqref{eq:pge23-gamma-ODE}.  The parameter $-r-2j$ lies outside the classical
 orthogonality range $\alpha>-1$, so we are using the algebraic differential
 and ladder structure of Laguerre polynomials, not a positive Laguerre
 orthogonality measure.  Standard background is in Szeg\H{o}
 \cite{Szego1975}.
 
-The function $G$ in \eqref{eq:gamma-G} is a weighted amplitude whose
+The function $G$ in \eqref{eq:pge23-gamma-G} is a weighted amplitude whose
 critical points factor explicitly.  Proving that its left maximum dominates
-its right maximum and then using \eqref{eq:gamma-ibp-max} is analogous in
+its right maximum and then using \eqref{eq:pge23-gamma-ibp-max} is analogous in
 spirit to Sonin--Sturm arguments for comparing successive extrema of
 solutions to second-order equations.  The important transferable move is:
 construct a first-order multiplier so that the desired linear combination
@@ -4673,13 +4680,13 @@ The same threshold appears for independent structural reasons.
 
 On the dense side, centering at $1/2$ gives
 $\delta=1/2-q$.  The gamma moment lemma pays for the odd term in
-\eqref{eq:dense-rho-centered} precisely when
+\eqref{eq:pge23-rho-centered} precisely when
 \[
   2\delta\ge\frac{1}{3},
   \qquad\text{i.e.}\qquad q\le\frac{1}{3}.
 \]
 On the intermediate side, two eigenvalues larger than $q$ would consume
-more than $2q^2$ of the bound \eqref{eq:HS-budget}, and uniqueness is guaranteed
+more than $2q^2$ of the bound \eqref{eq:plt23-HS-bound}, and uniqueness is guaranteed
 precisely when
 \[
   2q^2>pq=q(1-q),
@@ -4728,7 +4735,7 @@ Indeed,
 and substitution gives \eqref{eq:power-to-bernstein}.
 
 \begin{lemma}[The degree-nine certificate]\label{lem:bernstein-P9}
-  The polynomial in \eqref{eq:P9-small}, namely
+  The polynomial in \eqref{eq:plt23-P9-small}, namely
   \begin{align*}
     P_9(s)={}&
     \frac{10395}{128}s^9
@@ -4766,7 +4773,7 @@ and substitution gives \eqref{eq:power-to-bernstein}.
 \end{proof}
 
 \begin{lemma}[The degree-ten certificate]\label{lem:bernstein-Q10}
-  The polynomial $Q_{10}$ in \eqref{eq:Q10} is positive on
+  The polynomial $Q_{10}$ in \eqref{eq:plt23-Q10} is positive on
   $[9/20,5/7]$.
 \end{lemma}
 
