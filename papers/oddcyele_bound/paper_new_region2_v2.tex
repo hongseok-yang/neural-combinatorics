@@ -42,7 +42,6 @@
 \newcommand{\ord}{\operatorname{ord}}
 \newcommand{\pos}[1]{\left(#1\right)_{+}}
 \newcommand{\cH}{\mathcal H}
-\newcommand{\cQ}{\mathcal Q}
 \newcommand{\dd}{\,\mathrm d}
 \newcommand{\E}{\mathbb E}
 \newcommand{\GammaLaw}{\operatorname{Gamma}}
@@ -380,14 +379,14 @@ only in Part~3.
   in $\gamma$, and then over the three numbers $a_\phi,b,K$ that describe
   $\phi$, gives (\Cref{thm:huber-elim})
   \[
-    \Lambda_m\gamma^2+M_m\norm{g_s}^2\ge C_m\psi(\xi,\rho),
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2\ge \Omega_m\psi(\xi,\rho),
     \qquad
     \psi(\xi,\rho)=\min_{0\le v\le1}
     \bigl\{\rho v^2+\pos{\xi-v+v^2}\bigr\},
   \]
-  where $C_m$, $\xi$, and $\rho$ depend on $q$, $\Lambda$,
+  where $\Omega_m$, $\xi$, and $\rho$ depend on $q$, $\Lambda$,
   and $m$.  The theorem in this region is thereby reduced to the scalar
-  inequality $R_m\le C_m\psi(\xi,\rho)$.  Since
+  inequality $R_m\le \Omega_m\psi(\xi,\rho)$.  Since
   $\pos x=\max_{0\le\lambda\le1}\lambda x$, the definition of $\psi$ is a
   nested optimization,
   \[
@@ -411,7 +410,7 @@ only in Part~3.
   \end{align*}
   one for each of the regimes $2\rho\xi\le1$ and $2\rho\xi>1$.
 
-  The goal $R_m\le C_m\psi(\xi,\rho)$ involves only $q$, $\Lambda$, and $m$.
+  The goal $R_m\le \Omega_m\psi(\xi,\rho)$ involves only $q$, $\Lambda$, and $m$.
   From $p=1-q$ and $M^2=pq-\Lambda^2$, the two ratios
   \[
     v=\frac {p}{\Lambda}-1,
@@ -427,7 +426,7 @@ only in Part~3.
     \zeta(\zeta+v)\ge1
   \]
   (\Cref{sec:chart}).  What has to be proved is that
-  $R_m\le C_m\psi(\xi,\rho)$ holds in that region for every odd $m\ge9$.
+  $R_m\le \Omega_m\psi(\xi,\rho)$ holds in that region for every odd $m\ge9$.
 
   This is done by the following case analysis on the region.
   \begin{itemize}[leftmargin=1.6em,topsep=2pt,itemsep=1pt]
@@ -2468,7 +2467,6 @@ We will also use the following bound on the spectrum of $A$, in which
 $\Tr(A^2)=\sum_i\lambda_i^2$.
 
 \begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS-budget}
-  One has
   \begin{equation}\label{eq:HS-budget}
     \Tr(A^2)+2\norm g^2\le pq.
   \end{equation}
@@ -2620,8 +2618,8 @@ These quantities are ordered as
 where $M<q$ because $M^2<pq-q^2=q(1-2q)<q^2$ for $q>1/3$, and
 $\Lambda<1/2$ comes from \Cref{lem:half-norm}.
 
-\subsection{A lower bound via splitting $g$ along the eigenfunction of
-$\Lambda$}\label{subsec:master-defect}
+\subsection{A lower bound via splitting \texorpdfstring{$g$}{g} along the
+eigenfunction of \texorpdfstring{$\Lambda$}{Lambda}}\label{subsec:master-defect}
 
 Let $\phi$ be a unit eigenfunction of $A$ for $\Lambda$, which is determined up to sign. 
 We will choose the sign of $\phi$ later.  
@@ -2754,20 +2752,396 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
   Since the other terms in the definitions of $\Lambda_m$ and $M_m$ are also positive, \eqref{eq:AB-order} holds.
 \end{proof}
 
-\subsection{Minimizing $\Lambda_m\gamma^2+M_m\norm{g_s}^2$}
+\subsection{Minimizing
+\texorpdfstring{$\Lambda_m\gamma^2+M_m\norm{g_s}^2$}{Lambda\_m gamma\^{}2 + M\_m
+|g\_s|\^{}2}}
 \label{subsec:forced-variance}\label{sec:huber}\label{subsec:shape-elim}
 
-The lower bound of \Cref{prop:master-defect} is of use only once $\gamma$ and
-$\norm{g_s}$ are controlled, so we now minimize $\Lambda_m\gamma^2+M_m\norm{g_s}^2$
-over the values that these can take.  Two lemmas provide the constraints.  The
-first bounds $\Lambda$ from above, and the second bounds $\gamma$ from above and
-$\norm{g_s}$ from below, both in terms of the decomposition of $|\phi|$ along
-$\one$ and $\phi$.
+For fixed $q$ and $\Lambda$, let $S$ be the set of pairs
+$(\gamma,\norm{g_s})$ that are realizable by some graphon satisfying the assumptions we made so far. 
+By deriving inequalities on $\gamma$ and $\norm{g_s}$, we construct a larger
+set $\overline S\supseteq S$, over which the minimum can be computed, and
+\begin{equation}\label{eq:overapprox}
+  \Lambda_m\gamma^2+M_m\norm{g_s}^2
+  \ge\min_{(\gamma,\norm{g_s})\in\overline S}
+  \bigl(\Lambda_m\gamma^2+M_m\norm{g_s}^2\bigr).
+\end{equation}
+Specifically, \Cref{lem:direct-channel} bounds $\gamma$ from above and
+\Cref{lem:safe-channel} bounds $\norm{g_s}$ from below.  Both are linear in
+$\gamma$ and $\norm{g_s}$, and $\Lambda_m\gamma^2+M_m\norm{g_s}^2$ is a
+convex quadratic in them by \eqref{eq:AB-order}, so the minimization in
+\eqref{eq:overapprox} is convex.
 
-The first inequality restricts the admissible pair $(q,\Lambda)$.
+Both lemmas bound $\gamma$ and $\norm{g_s}$ through the decomposition of
+$|\phi|$ along $\one$ and $\phi$,
+\begin{equation}\label{eq:shape-defs}
+  |\phi|=a_\phi\one+b\phi+\phi_\perp,
+  \qquad
+  a_\phi=\int|\phi|,
+  \qquad
+  b=\ip{|\phi|}\phi,
+\end{equation}
+where $\phi_\perp$ is orthogonal to $\one$ and $\phi$.  We fix the sign of
+$\phi$, left open in \Cref{subsec:master-defect}, so that $b\ge0$.
+Note that
+\begin{equation}\label{eq:shape-budget}
+  a_\phi^2+b^2+\norm{\phi_\perp}^2=\norm{|\phi|}^2 = \norm{\phi}^2 = 1.
+\end{equation}
+Besides this identity, we will need a lower bound on $a_\phi$.  Let $\phi_+$
+and $\phi_-$ be the positive and negative parts of $\phi$, so that
+$\phi=\phi_+-\phi_-$ and $|\phi|=\phi_++\phi_-$.  Since $\phi\perp\one$, we
+have $\int\phi=0$, and therefore
+\begin{equation}\label{eq:phi-parts}
+  \int\phi_+=\int\phi_-=\frac{a_\phi}{2}.
+\end{equation}
+Expanding $\ip\phi{T_U\phi}$ in these two parts and dropping the cross term,
+which is nonnegative because $U\ge0$,
+\begin{align*}
+  \Lambda=\ip\phi{T_U\phi}
+  &=\iint U(x,y)\bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
+  &\qquad-2\iint U(x,y)\phi_+(x)\phi_-(y)\dd x\dd y\\
+  &\le\iint U(x,y)
+  \bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
+  &\le\left(\int\phi_+\right)^2+\left(\int\phi_-\right)^2
+  =\frac{a_\phi^2}{2},
+\end{align*}
+the last inequality because $U\le1$ and the last equality by
+\eqref{eq:phi-parts}.  Thus
+\begin{equation}\label{eq:aphi-lower}
+  a_\phi^2\ge2\Lambda.
+\end{equation}
+
+\begin{lemma}[Upper bound for $\gamma$]\label{lem:direct-channel}
+  \begin{equation}\label{eq:direct-channel}
+    \gamma\le u_\gamma:=
+    \frac{a_\phi^2-2\Lambda-2\Lambda b}{2a_\phi}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  For every $x$, the following holds
+  \[
+    (T_U \phi)(x) = \int U(x, y) \phi(y) \dd y \le \int U(x, y) \phi_+(y) \dd y \le \int \phi_+(y) \dd y = \frac{a_\phi}{2},
+  \]
+  where we used $U \ge 0$ and $\phi \le \phi_+$ in the first inequality, and $U \le 1$ in the second.
+  Taking the inner product of both sides with $\phi_+\ge0$ gives
+  \begin{equation}\label{eq:direct-pairing}
+    \ip{\phi_+}{T_U\phi}
+    \le\frac{a_\phi}{2}\int\phi_+
+    =\frac{a_\phi^2}{4}.
+  \end{equation}
+  To expand the left side, the block form \eqref{eq:block-U} gives
+  \[
+    T_U\phi=\begin{pmatrix}
+      q & g^* \\
+      g & A
+    \end{pmatrix} \begin{pmatrix}
+      0 \\ \phi
+    \end{pmatrix}=\ip g\phi\,\one+A\phi=\gamma\one+\Lambda\phi,
+  \]
+  using $\gamma=\ip g\phi$ from \eqref{eq:g-decomp} and $A\phi=\Lambda\phi$.
+  Hence, by \eqref{eq:phi-parts},
+  \[
+    \ip{\phi_+}{T_U\phi}
+    =\gamma\ip{\phi_+}\one+\Lambda\ip{\phi_+}\phi
+    =\frac{\gamma a_\phi}{2}+\Lambda\ip{\phi_+}\phi.
+  \]
+  Finally, from $\phi_+(x) \phi_-(x) = 0$, we have $\ip{\phi_+}\phi=\ip{\phi_+}{\phi_+} - \ip{\phi_+}{\phi_-} = \norm{\phi_+}^2$, and
+  \[
+    \norm{\phi_+}^2+\norm{\phi_-}^2=\norm\phi^2=1,
+    \qquad
+    \norm{\phi_+}^2-\norm{\phi_-}^2=\ip{|\phi|}\phi=b,
+  \]
+  so $\ip{\phi_+}\phi=(1+b)/2$.
+  Substituting into \eqref{eq:direct-pairing} gives \eqref{eq:direct-channel}.
+\end{proof}
+
+\begin{lemma}[Lower bound for $\norm{g_s}$]\label{lem:safe-channel}
+  The following inequality holds:
+  \begin{equation}\label{eq:safe-channel}
+    b\gamma+\ip{g_s}{\phi_\perp}
+    \ge\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
+    \eqqcolon\cH.
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:gs-safe-lower}
+    \norm{g_s}\norm{\phi_\perp}\ge \ip{g_s}{\phi_\perp}\ge\cH-b\gamma.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  From $|\phi|=\phi_++\phi_-$ and $\phi=\phi_+-\phi_-$, we have
+  \begin{align*}
+    \ip{|\phi|}{T_U|\phi|}
+    &=\ip{\phi_+}{T_U\phi_+}+\ip{\phi_-}{T_U\phi_-}
+    +\ip{\phi_+}{T_U\phi_-}+\ip{\phi_-}{T_U\phi_+},\\
+    \ip\phi{T_U\phi}
+    &=\ip{\phi_+}{T_U\phi_+}+\ip{\phi_-}{T_U\phi_-}
+    -\ip{\phi_+}{T_U\phi_-}-\ip{\phi_-}{T_U\phi_+},
+  \end{align*}
+  so the two inner products differ only in the sign of their cross terms. 
+  Since $T_U$ is self-adjoint, $\ip{\phi_-}{T_U\phi_+}=\ip{\phi_+}{T_U\phi_-}$, 
+  and therefore
+  \begin{align*}
+    \ip{|\phi|}{T_U|\phi|}-\ip\phi{T_U\phi}
+    &=2\ip{\phi_+}{T_U\phi_-}+2\ip{\phi_-}{T_U\phi_+}
+    \\
+    &=4\ip{\phi_+}{T_U\phi_-} 
+    \\
+    &= 4 \iint \phi_+(x) U(x, y) \phi_-(y) \dd x \dd y
+    \\
+    &\ge0,
+  \end{align*}
+  where the inequality holds because $U\ge0$ and $\phi_\pm\ge0$.  
+  We also have
+  \[
+    \ip{\phi}{T_U \phi} = \ip{\phi}{\gamma \one + \Lambda \phi} = \Lambda
+  \]
+  since $T_U\phi=\gamma\one+\Lambda\phi$ and $\phi\perp\one$. 
+  Hence
+  \begin{equation}\label{eq:absphi-lower}
+    \ip{|\phi|}{T_U|\phi|}\ge\ip\phi{T_U\phi}=\Lambda.
+  \end{equation}
+
+  We expand the left side of \eqref{eq:absphi-lower}.  In
+  $|\phi|=a_\phi\one+b\phi+\phi_\perp$ the last two terms are orthogonal to
+  $\one$, so the block form \eqref{eq:block-U} gives
+  \[
+    T_U|\phi|=\begin{pmatrix}
+      q & g^* \\
+      g & A
+    \end{pmatrix} \begin{pmatrix}
+      a_\phi \\ b\phi+\phi_\perp
+    \end{pmatrix}
+    =\bigl(a_\phi g+A(b\phi+\phi_\perp)\bigr)+\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr)\one
+    .
+  \]
+  Taking the inner product of this with $|\phi|$, and using
+  $\ip{|\phi|}\one=a_\phi$, $\one\perp g,\phi,\phi_\perp$, and that $A$ maps
+  into $\one^\perp$,
+  \begin{align*}
+    &\ip{|\phi|}{T_U|\phi|}
+    \\
+    {} = &\ip{a_\phi \one}{a_\phi g + A(b\phi + \phi_\perp)}+ \ip{b\phi+\phi_\perp}{a_\phi g+A(b\phi+\phi_\perp)}+\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr) \ip{|\phi|}\one
+    \\
+    {} =&\ip{b\phi+\phi_\perp}{a_\phi g+A(b\phi+\phi_\perp)}+\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr) \ip{|\phi|}\one
+    \\
+    {}=&\ip{b\phi+\phi_\perp}{a_\phi g+A(b\phi+\phi_\perp)}+a_\phi\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr)
+    \\
+    {} =&qa_\phi^2+2a_\phi\ip g{b\phi+\phi_\perp}
+    +\ip{b\phi+\phi_\perp}{A(b\phi+\phi_\perp)}.
+  \end{align*}
+  The two remaining terms expand by $g=\gamma\phi+g_s$, $A\phi=\Lambda\phi$
+  and $\phi_\perp\perp\phi$:
+  \begin{align*}
+    \ip g{b\phi+\phi_\perp}
+    &=b\ip g\phi+\ip{\gamma\phi+g_s}{\phi_\perp}
+    =b\gamma+\ip{g_s}{\phi_\perp},\\
+    \ip{b\phi+\phi_\perp}{A(b\phi+\phi_\perp)}
+    &=b^2\ip\phi{A\phi}+2b\Lambda\ip{\phi_\perp}\phi
+    +\ip{\phi_\perp}{A\phi_\perp}
+    =\Lambda b^2+\ip{\phi_\perp}{A\phi_\perp},
+  \end{align*}
+  which gives 
+  \[
+    \ip{|\phi|}{T_U |\phi|} = q a_\phi^2 + 2 a_\phi\bigl(b \gamma + \ip{g_s}{\phi_\perp}\bigr) + \Lambda b^2 + \ip{\phi_\perp}{A \phi_\perp}.
+  \]
+  Every eigenvalue of $A$ other than $\Lambda$ is at most $M$ in absolute value, 
+  so $\ip{\phi_\perp}{A\phi_\perp}\le M\norm{\phi_\perp}^2$, and therefore
+  \[
+    \Lambda\le qa_\phi^2+2a_\phi\bigl(b\gamma+\ip{g_s}{\phi_\perp}\bigr)
+    +\Lambda b^2+M\norm{\phi_\perp}^2.
+  \]
+  By \eqref{eq:shape-budget},
+  $\Lambda-\Lambda b^2=\Lambda\bigl(a_\phi^2+\norm{\phi_\perp}^2\bigr)$, 
+  so rearranging gives
+  \[
+    (\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2
+    \le2a_\phi\bigl(b\gamma+\ip{g_s}{\phi_\perp}\bigr),
+  \]
+  which is \eqref{eq:safe-channel}. 
+  The consequence follows from \eqref{eq:safe-channel} and Cauchy--Schwarz,
+  $\norm{g_s}\norm{\phi_\perp}\ge\ip{g_s}{\phi_\perp}\ge\cH-b\gamma$.
+\end{proof}
+
+By \eqref{eq:direct-channel} and \eqref{eq:gs-safe-lower}, the pair
+$(\gamma,\norm{g_s})$ lies in
+\begin{equation}\label{eq:Sbar}
+  \overline S=\bigl\{(t,s):
+  t\le u_\gamma,\quad
+  bt+s\norm{\phi_\perp}\ge\cH,\quad
+  s\ge0\bigr\},
+\end{equation}
+a polyhedron determined by $a_\phi$, $b$ and $\norm{\phi_\perp}$.  Hence
+\begin{equation}\label{eq:Q-shape}
+  \Lambda_m\gamma^2+M_m\norm{g_s}^2
+  \ge\min_{(t,s)\in\overline S}
+  \bigl(\Lambda_mt^2+M_ms^2\bigr),
+\end{equation}
+and the right side is the minimum of a convex quadratic over a polyhedron.
+
+That minimum still depends on $\phi$, through $a_\phi$, $b$ and
+$\norm{\phi_\perp}$.  The following theorem evaluates it and bounds it from
+below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
+
+\tk{Revised until here.}
+
+\begin{theorem}[Reduction to $\psi(\xi,\rho)$]\label{thm:huber-elim}
+  Let
+  \begin{align}
+    \Omega_m&=\frac{M_m(\Lambda-M)\sqrt{2\Lambda}\,(1-2\Lambda)^2}{4\Lambda^2},
+    \label{eq:C-xi-rho}\\
+    \xi&=\frac{4\Lambda^2(\Lambda-q)}{(1-2\Lambda)^2},
+    \label{eq:xi-def}\\
+    \rho&=\frac{\Lambda_m}{M_m}\frac{\sqrt\Lambda}{2\sqrt2\,(\Lambda-M)},
+    \label{eq:rho-def}\\
+    \psi(\xi,\rho)&=
+    \min_{0\le v\le1}
+    \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.
+    \label{eq:psi-def}
+  \end{align}
+  Then
+  \begin{equation}\label{eq:huber-payment}
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2
+    \ge \Omega_m\psi(\xi,\rho).
+  \end{equation}
+\end{theorem}
+
+\begin{proof}
+  We first evaluate the minimum in \eqref{eq:Q-shape} in the variable $s$.
+  The objective increases in $s$, so at a minimizer $s$ is as small as
+  $\overline S$ allows, that is, $s\norm{\phi_\perp}=\pos{\cH-bt}$.  For
+  $\phi_\perp\ne0$ this gives $s^2=\pos{\cH-bt}^2/\norm{\phi_\perp}^2$, and
+  \begin{equation}\label{eq:one-d-t}
+    \min_{(t,s)\in\overline S}\bigl(\Lambda_mt^2+M_ms^2\bigr)
+    =\min_{t\le u_\gamma}
+    \left\{
+    \Lambda_mt^2+\frac{M_m}{\norm{\phi_\perp}^2}\pos{\cH-bt}^2
+    \right\};
+  \end{equation}
+  for $\phi_\perp=0$ the constraint reads $bt\ge\cH$ instead, and that case
+  is treated at the end.  We write $\gamma$ for $t$ again below.
+
+  Assume $\phi_\perp\ne0$.  Suppose first that $u_\gamma\le0$.  Every
+  admissible $\gamma$ is nonpositive, so $\cH-b\gamma\ge\cH$, and the right
+  side of \eqref{eq:one-d-t} is at least
+  \[
+    M_m\frac{\cH^2}{\norm{\phi_\perp}^2}.
+  \]
+  By \eqref{eq:safe-channel},
+  \[
+    \frac{\cH^2}{\norm{\phi_\perp}^2}
+    =\frac{\bigl((\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2}
+    {4a_\phi^2\norm{\phi_\perp}^2}\ge(\Lambda-q)(\Lambda-M),
+  \]
+  because this inequality is equivalent to
+  $\bigl((\Lambda-q)a_\phi^2-(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2\ge0$.  On
+  the other hand, taking $v=0$ in \eqref{eq:psi-def} gives
+  \[
+    \Omega_m\psi(\xi,\rho)
+    \le \Omega_m\xi=M_m(\Lambda-M)(\Lambda-q)\sqrt{2\Lambda}
+    \le M_m(\Lambda-M)(\Lambda-q).
+  \]
+  Thus \eqref{eq:huber-payment} holds in this case.
+
+  Now suppose $u_\gamma>0$.  A minimizer in \eqref{eq:one-d-t} may be taken
+  with $\gamma\ge0$: replacing a negative $\gamma$ by $0$ decreases both
+  terms.  The bound \eqref{eq:direct-channel} gives
+  \[
+    2\gamma a_\phi+2\Lambda b
+    \le a_\phi^2-2\Lambda=1-2\Lambda-b^2-\norm{\phi_\perp}^2
+    \le1-2\Lambda-b^2.
+  \]
+  Since $a_\phi^2\ge2\Lambda$,
+  \begin{equation}\label{eq:b-gamma-budget}
+    b^2+2\Lambda b+2\gamma\sqrt{2\Lambda}\le1-2\Lambda.
+  \end{equation}
+  It follows that
+  \begin{equation}\label{eq:beta-gamma}
+    0\le\gamma\le\frac{1-2\Lambda}{2\sqrt{2\Lambda}},
+    \qquad
+    b\le\beta(\gamma):=
+    \sqrt{(1-\Lambda)^2-2\gamma\sqrt{2\Lambda}}-\Lambda.
+  \end{equation}
+  Rationalizing the square root,
+  \begin{equation}\label{eq:beta-rational}
+    \beta(\gamma)
+    \le\frac{1-2\Lambda-2\gamma\sqrt{2\Lambda}}{2\Lambda}.
+  \end{equation}
+  Also, since $2\Lambda\le a_\phi^2\le1$,
+  \begin{equation}\label{eq:H-lower}
+    \cH\ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    +\frac{(\Lambda-M)\norm{\phi_\perp}^2}{2}.
+  \end{equation}
+  For every real $w$,
+  \begin{equation}\label{eq:K-AMGM}
+    \inf_{t>0}\frac{\pos{w+(\Lambda-M)t/2}^2}{t}=2(\Lambda-M)\pos w.
+  \end{equation}
+  Indeed, for $w\ge0$ this is the arithmetic--geometric mean inequality,
+  with equality at $t=2w/(\Lambda-M)$; for $w<0$, both sides vanish after
+  choosing $0<t\le-2w/(\Lambda-M)$.  Using \eqref{eq:one-d-t},
+  \eqref{eq:H-lower}, and \eqref{eq:K-AMGM}, and then maximizing $b$ by
+  \eqref{eq:beta-gamma}, we obtain
+  \begin{equation}\label{eq:one-d-gamma}
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2
+    \ge
+    \min_{0\le\gamma\le(1-2\Lambda)/(2\sqrt{2\Lambda})}
+    \left\{
+    \Lambda_m\gamma^2+2M_m(\Lambda-M)
+    \pos{\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}-\gamma\beta(\gamma)}
+    \right\}.
+  \end{equation}
+  Set
+  \[
+    v=\frac{2\gamma\sqrt{2\Lambda}}{1-2\Lambda}\in[0,1].
+  \]
+  By \eqref{eq:beta-rational},
+  \[
+    \gamma\beta(\gamma)
+    \le\frac{(1-2\Lambda)^2v(1-v)}{4\Lambda\sqrt{2\Lambda}}.
+  \]
+  Therefore
+  \[
+    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}-\gamma\beta(\gamma)
+    \ge\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    (\xi-v+v^2).
+  \]
+  Furthermore,
+  \[
+    \Lambda_m\gamma^2=\Omega_m\rho v^2,
+    \qquad
+    2M_m(\Lambda-M)\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    =\Omega_m.
+  \]
+  Substitution in \eqref{eq:one-d-gamma} proves
+  \eqref{eq:huber-payment}.
+
+  Finally suppose $\phi_\perp=0$.  The constraint in \eqref{eq:Sbar} then
+  reads $b\gamma\ge\cH$, that is,
+  \[
+    b\gamma\ge\frac{(\Lambda-q)a_\phi}{2}
+    \ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}>0,
+  \]
+  so $b,\gamma>0$ and \eqref{eq:b-gamma-budget} still applies.  With the
+  same variable $v$,
+  \[
+    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    \le b\gamma
+    \le\frac{(1-2\Lambda)^2v(1-v)}{4\Lambda\sqrt{2\Lambda}},
+  \]
+  which is equivalent to $\xi\le v-v^2$.  Thus the positive-part term in
+  \eqref{eq:psi-def} vanishes at this $v$, and
+  \[
+    \Lambda_m\gamma^2=\Omega_m\rho v^2\ge \Omega_m\psi(\xi,\rho).
+  \]
+  This completes the proof.
+\end{proof}
+
+It remains to say which pairs $(q,\Lambda)$ can occur.  The eigenfunction
+$\phi$ restricts them further, through a lower bound on $\norm g$.
 
 \begin{lemma}[Variance lower bound]\label{lem:forced-variance}
-  Let $\phi\perp\one$ be a unit eigenvector with $A\phi=\Lambda\phi$.  Then
+  One has
   \begin{equation}\label{eq:forced-variance}
     \norm g^2\ge
     \frac{\Lambda(\Lambda-q)^2}{2(1-2\Lambda)}.
@@ -2781,311 +3155,61 @@ The first inequality restricts the admissible pair $(q,\Lambda)$.
     q<\Lambda\le r(q):=
     \frac{\sqrt{q^2+4q}-q}{2}.
   \end{equation}
+  Moreover $M>0$.
 \end{lemma}
 
 \begin{proof}
-  Put $a_\phi=\int|\phi|$.  Since $\int\phi=0$,
-  $\int\phi_+=\int\phi_-=a_\phi/2$.  As $0\le U\le1$,
-  \begin{align*}
-    \Lambda=\ip\phi{T_U\phi}
-    &\le\iint U(x,y)
-    \bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
-    &\le\frac{a_\phi^2}{2}.
-  \end{align*}
-  Thus $a_\phi^2\ge2\Lambda$.
-
-  Write $|\phi|=a_\phi\one+h$, where $h\perp\one$ and
-  $\norm h^2=1-a_\phi^2$.  Since $U\ge0$,
+  Write $|\phi|=a_\phi\one+h$ with $h\perp\one$, so that
+  $\norm h^2=1-a_\phi^2$.  The block form \eqref{eq:block-U} gives
   \[
-    \ip{|\phi|}{T_U|\phi|}\ge\ip\phi{T_U\phi}=\Lambda.
+    \ip{|\phi|}{T_U|\phi|}
+    =qa_\phi^2+2a_\phi\ip gh+\ip h{Ah},
   \]
-  Since $\Lambda$ is the largest eigenvalue of $A$,
-  \begin{align*}
-    \Lambda
-    &\le qa_\phi^2+2a_\phi\ip g h+\ip h{Ah}\\
-    &\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
+  and bounding $\ip gh\le\norm g\norm h$ by Cauchy--Schwarz and
+  $\ip h{Ah}\le\Lambda\norm h^2$ by the maximality of $\Lambda$,
+  \eqref{eq:absphi-lower} gives
+  \[
+    \Lambda\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
     +\Lambda(1-a_\phi^2).
-  \end{align*}
-  Therefore
+  \]
+  Subtracting $\Lambda(1-a_\phi^2)$ and dividing by $a_\phi>0$,
   \[
     (\Lambda-q)a_\phi
     \le2\norm g\sqrt{1-a_\phi^2}.
   \]
-  The function $t/(1-t)$ is increasing, and
-  $a_\phi^2\ge2\Lambda$; after squaring we obtain
-  \eqref{eq:forced-variance}.
-
-  Combining \eqref{eq:forced-variance} with
-  $\Lambda^2+2\norm g^2\le pq$, and multiplying by
-  $1-2\Lambda>0$, gives
+  Squaring and writing $t=a_\phi^2$,
   \[
-    (1-\Lambda-q)(\Lambda^2+q\Lambda-q)\le0.
+    \norm g^2\ge\frac{(\Lambda-q)^2}{4}\cdot\frac{t}{1-t},
   \]
-  The first factor is positive by \eqref{eq:L-order}, so
-  \eqref{eq:alpha-ceiling-poly} follows.  Solving the quadratic gives
-  \eqref{eq:alpha-ceiling}.  Finally, because $\Lambda>q$, the right side of
-  \eqref{eq:forced-variance} is strictly positive.  Thus $g\ne0$, and the
-  bound \eqref{eq:HS-budget} gives $\Lambda^2<pq$.  Consequently $M>0$.
+  and $t\mapsto t/(1-t)$ is increasing, so \eqref{eq:aphi-lower} allows $t$ to
+  be replaced by $2\Lambda$, which is \eqref{eq:forced-variance}.
+
+  For the second claim, \eqref{eq:HS-budget} gives
+  $2\norm g^2\le pq-\Lambda^2$, so \eqref{eq:forced-variance} and
+  $1-2\Lambda>0$ give
+  \[
+    \Lambda(\Lambda-q)^2\le\bigl(pq-\Lambda^2\bigr)(1-2\Lambda).
+  \]
+  With $p=1-q$, the difference of the two sides is
+  $-(1-\Lambda-q)(\Lambda^2+q\Lambda-q)$, and the factor $1-\Lambda-q$ is
+  positive by \eqref{eq:L-order}, so \eqref{eq:alpha-ceiling-poly} follows.
+  The roots of $\Lambda^2+q\Lambda-q$ are $(-q\pm\sqrt{q^2+4q})/2$, whence
+  \eqref{eq:alpha-ceiling}.
+
+  Finally, because $\Lambda>q$, the right side of \eqref{eq:forced-variance}
+  is strictly positive.  Thus $g\ne0$, and the bound \eqref{eq:HS-budget}
+  gives $\Lambda^2<pq$.  Consequently $M>0$.
 \end{proof}
 
-\tk{TODO (naming): ``Huber'' is to be dropped from display text (kept only as the
-historical remark below), but the replacement for ``envelope'' is not settled; also
-``frontier eigenfunction'' awaits the leading-vs-outlier decision.}
-
-The terminology refers to the same quadratic-versus-linear active-set
-geometry as Huber's robust loss~\cite{Huber1964}.  The exact dual formula
-below is a compact convex--concave minimax interchange of the type developed
-by Sion~\cite{Sion1958}; we nevertheless prove the required special case
-directly.
-
-The master defect still contains the coupling variables $\gamma$ and
-$g_s$.  We now eliminate them together with the shape of the frontier
-eigenfunction.
-
-Choose the sign of $\phi$ so that
-\[
-  b:=\ip{|\phi|}{\phi}\ge0.
-\]
-Set
-\begin{equation}\label{eq:shape-defs}
-  z=\left(\int|\phi|\right)^2,
-  \qquad
-  k=|\phi|-\sqrt z\,\one-b\phi,
-  \qquad
-  K=\norm k^2.
+Together, \Cref{thm:huber-elim} and \Cref{lem:forced-variance} show that
+\eqref{eq:main-goal} follows once
+\begin{equation}\label{eq:scalar-target}
+  R_m\le \Omega_m\psi(\xi,\rho)
 \end{equation}
-Then
-\begin{equation}\label{eq:shape-budget}
-  z+b^2+K=1,
-  \qquad z\ge2\Lambda.
-\end{equation}
+is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:regionII} and
+\eqref{eq:alpha-ceiling}.
 
-
-\tk{TODO (naming): ``channel'' and ``safe'' are to be dropped; the replacement for the
-quantity $\gamma=\ip{g}{\phi}$ (``coupling'' vs ``overlap'') is undecided.}
-
-\begin{lemma}[Direct channel]\label{lem:direct-channel}
-  The frontier coupling obeys
-  \begin{equation}\label{eq:direct-channel}
-    \gamma\le u_\gamma:=
-    \frac{z-2\Lambda-2\Lambda b}{2\sqrt z}.
-  \end{equation}
-\end{lemma}
-
-\begin{proof}
-  Since $T_U\phi=\gamma\one+\Lambda\phi$ and
-  \[
-    T_U\phi\le T_U\phi_+\le\int\phi_+=\frac{\sqrt z}{2}
-  \]
-  pointwise, pairing with $\phi_+$ gives
-  \[
-    \frac{\gamma\sqrt z}{2}
-    +\frac{\Lambda(1+b)}{2}
-    \le\frac {z}{4}.
-  \]
-  This is \eqref{eq:direct-channel}.
-\end{proof}
-
-\begin{lemma}[Safe channel]\label{lem:safe-channel}
-  Put
-  \begin{equation}\label{eq:H-shape}
-    \cH=\frac{(\Lambda-q)z+(\Lambda-M)K}{2\sqrt z}.
-  \end{equation}
-  Then
-  \begin{equation}\label{eq:safe-channel}
-    b\gamma+\ip{g_s}{k}\ge\cH.
-  \end{equation}
-  Consequently, if $K>0$,
-  \begin{equation}\label{eq:gs-safe-lower}
-    \norm{g_s}^2\ge
-    \frac{\pos{\cH-b\gamma}^2}{K}.
-  \end{equation}
-\end{lemma}
-
-\begin{proof}
-  Because $U\ge0$,
-  \[
-    \ip{|\phi|}{T_U|\phi|}-\ip\phi{T_U\phi}
-    =4\ip{\phi_+}{T_U\phi_-}\ge0.
-  \]
-  Expanding $|\phi|=\sqrt z\,\one+b\phi+k$, using
-  $k\perp\one,\phi$, and using that every safe eigenvalue is at most $M$,
-  we obtain
-  \begin{align*}
-    \Lambda
-    &\le qz+2\sqrt z\bigl(b\gamma+\ip{g_s}{k}\bigr)
-    +\Lambda b^2+\ip k{Ak}\\
-    &\le qz+2\sqrt z\bigl(b\gamma+\ip{g_s}{k}\bigr)
-    +\Lambda b^2+LK.
-  \end{align*}
-  Since $z+b^2+K=1$, this rearranges to
-  \eqref{eq:safe-channel}.  If $\cH-b\gamma>0$, Cauchy--Schwarz gives
-  $\norm{g_s}\sqrt K\ge\cH-b\gamma$; otherwise
-  \eqref{eq:gs-safe-lower} is trivial.
-\end{proof}
-
-For fixed shape variables, \Cref{prop:master-defect} and
-\Cref{lem:direct-channel,lem:safe-channel} reduce the payment to
-\begin{equation}\label{eq:Q-shape}
-  \cQ=
-  \min_{\gamma\le u_\gamma}
-  \left\{
-  \Lambda_m\gamma^2+\frac{M_m}{K}\pos{\cH-b\gamma}^2
-  \right\},
-\end{equation}
-with the natural limiting interpretation when $K=0$.
-
-\tk{TODO (naming): ``shape'' refers to the variables $(a_\phi,b,K)$ of the decomposition
-$|\phi|=a_\phi\one+b\phi+k$; shape and profile have both been rejected, and a name for
-these variables and for this optimization step is still to be found.}
-
-Define
-\begin{equation}\label{eq:dfe}
-  d=\Lambda-q,
-  \qquad f=\Lambda-M,
-  \qquad e=1-2\Lambda,
-\end{equation}
-so $d,f,e>0$.
-\tk{TODO (notation): $C_m$ collides with the cycle $C_m$; rename it.}
-Put
-\begin{equation}\label{eq:C-xi-rho}
-  C_m=\frac{M_mf\sqrt{2\Lambda}\,e^2}{4\Lambda^2},
-  \qquad
-  \xi=\frac{4\Lambda^2d}{e^2},
-  \qquad
-  \rho=\frac{\Lambda_m}{M_m}\frac{\sqrt\Lambda}{2\sqrt2\,f},
-\end{equation}
-and define
-\begin{equation}\label{eq:psi-def}
-  \psi(\xi,\rho)=
-  \min_{0\le v\le1}
-  \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.
-\end{equation}
-
-\begin{theorem}[Huber shape elimination]\label{thm:huber-elim}
-  For every admissible frontier configuration,
-  \begin{equation}\label{eq:huber-payment}
-    \Lambda_m\gamma^2+M_m\norm{g_s}^2
-    \ge C_m\psi(\xi,\rho).
-  \end{equation}
-  Consequently, \eqref{eq:main-goal} follows once
-  \begin{equation}\label{eq:scalar-target}
-    R_m\le C_m\psi(\xi,\rho)
-  \end{equation}
-  is proved for every pair $(q,\Lambda)$ satisfying
-  \eqref{eq:regionII} and \eqref{eq:alpha-ceiling}.
-\end{theorem}
-
-\begin{proof}
-  We first treat $K>0$.
-
-  Suppose $u_\gamma\le0$.  Every admissible $\gamma$ is nonpositive, so
-  $\cH-b\gamma\ge\cH$.  Hence
-  \[
-    \cQ\ge M_m\frac{\cH^2}{K}.
-  \]
-  By \eqref{eq:H-shape},
-  \[
-    \frac{\cH^2}{K}
-    =\frac{(dz+fK)^2}{4zK}\ge df,
-  \]
-  because this inequality is equivalent to $(dz-fK)^2\ge0$.  On the other
-  hand, taking $v=0$ in \eqref{eq:psi-def} gives
-  \[
-    C_m\psi(\xi,\rho)
-    \le C_m\xi=M_mfd\sqrt{2\Lambda}\le M_mfd.
-  \]
-  Thus \eqref{eq:huber-payment} holds in this case.
-
-  Now suppose $u_\gamma>0$.  A minimizer in \eqref{eq:Q-shape} may be taken
-  with $\gamma\ge0$: replacing a negative $\gamma$ by $0$ decreases both
-  terms.  The direct constraint gives
-  \[
-    2\gamma\sqrt z+2\Lambda b
-    \le z-2\Lambda=e-b^2-K\le e-b^2.
-  \]
-  Since $z\ge2\Lambda$,
-  \begin{equation}\label{eq:b-gamma-budget}
-    b^2+2\Lambda b+2\gamma\sqrt{2\Lambda}\le e.
-  \end{equation}
-  It follows that
-  \begin{equation}\label{eq:beta-gamma}
-    0\le\gamma\le\frac{e}{2\sqrt{2\Lambda}},
-    \qquad
-    b\le\beta(\gamma):=
-    \sqrt{\Lambda^2+e-2\gamma\sqrt{2\Lambda}}-\Lambda.
-  \end{equation}
-  Rationalizing the square root,
-  \begin{equation}\label{eq:beta-rational}
-    \beta(\gamma)
-    \le\frac{e-2\gamma\sqrt{2\Lambda}}{2\Lambda}.
-  \end{equation}
-  Also, since $z\ge2\Lambda$ and $z\le1$,
-  \begin{equation}\label{eq:H-lower}
-    \cH\ge\frac{d\sqrt{2\Lambda}}{2}+\frac{fK}{2}.
-  \end{equation}
-  For every real $w$,
-  \begin{equation}\label{eq:K-AMGM}
-    \inf_{K>0}\frac{\pos{w+fK/2}^2}{K}=2f\pos w.
-  \end{equation}
-  Indeed, for $w\ge0$ this is the arithmetic--geometric mean inequality,
-  with equality at $K=2w/f$; for $w<0$, both sides vanish after choosing
-  $0<K\le-2w/f$.  Using \eqref{eq:gs-safe-lower},
-  \eqref{eq:H-lower}, and \eqref{eq:K-AMGM}, and then maximizing $b$ by
-  \eqref{eq:beta-gamma}, we obtain
-  \begin{equation}\label{eq:one-d-gamma}
-    \cQ\ge
-    \min_{0\le\gamma\le e/(2\sqrt{2\Lambda})}
-    \left\{
-    \Lambda_m\gamma^2+2M_mf
-    \pos{\frac{d\sqrt{2\Lambda}}{2}-\gamma\beta(\gamma)}
-    \right\}.
-  \end{equation}
-  Set
-  \[
-    v=\frac{2\gamma\sqrt{2\Lambda}}{e}\in[0,1].
-  \]
-  By \eqref{eq:beta-rational},
-  \[
-    \gamma\beta(\gamma)
-    \le\frac{e^2v(1-v)}{4\Lambda\sqrt{2\Lambda}}.
-  \]
-  Therefore
-  \[
-    \frac{d\sqrt{2\Lambda}}{2}-\gamma\beta(\gamma)
-    \ge\frac{\sqrt{2\Lambda}\,e^2}{8\Lambda^2}
-    (\xi-v+v^2).
-  \]
-  Furthermore,
-  \[
-    \Lambda_m\gamma^2=C_m\rho v^2,
-    \qquad
-    2M_mf\frac{\sqrt{2\Lambda}\,e^2}{8\Lambda^2}=C_m.
-  \]
-  Substitution in \eqref{eq:one-d-gamma} proves
-  \eqref{eq:huber-payment}.
-
-  Finally suppose $K=0$.  The safe channel becomes
-  \[
-    b\gamma\ge\frac{d\sqrt z}{2}
-    \ge\frac{d\sqrt{2\Lambda}}{2}>0,
-  \]
-  so $b,\gamma>0$ and \eqref{eq:b-gamma-budget} still applies.  With the
-  same variable $v$,
-  \[
-    \frac{d\sqrt{2\Lambda}}{2}
-    \le b\gamma
-    \le\frac{e^2v(1-v)}{4\Lambda\sqrt{2\Lambda}},
-  \]
-  which is equivalent to $\xi\le v-v^2$.  Thus the positive-part term in
-  \eqref{eq:psi-def} vanishes at this $v$, and
-  \[
-    \Lambda_m\gamma^2=C_m\rho v^2\ge C_m\psi(\xi,\rho).
-  \]
-  This completes the proof.
-\end{proof}
-
-\begin{proposition}[Dual form of the Huber envelope]\label{prop:huber-dual}
+\begin{proposition}[Dual form of $\psi$]\label{prop:huber-dual}
   For $\xi\ge0$ and $\rho>0$,
   \begin{equation}\label{eq:psi-dual}
     \psi(\xi,\rho)=
@@ -3115,20 +3239,25 @@ and define
   and substitution gives \eqref{eq:psi-dual}.
 \end{proof}
 
+The function $\psi$ has the quadratic-versus-linear structure of Huber's
+robust loss~\cite{Huber1964}, and \eqref{eq:psi-dual} is an interchange of
+the convex--concave type treated by Sion~\cite{Sion1958}; the special case
+needed here is the one proved above.
+
 Two choices of $\lambda$ will be used throughout.
 
-\begin{corollary}[Quadratic and linear witnesses]\label{cor:two-witnesses}
+\begin{corollary}[Two lower bounds for $\psi$]\label{cor:two-witnesses}
   If $2\rho\xi\le1$, then
   \begin{equation}\label{eq:witness-quadratic}
-    C_m\psi(\xi,\rho)
+    \Omega_m\psi(\xi,\rho)
     \ge
-    \frac{2\Lambda^3\Lambda_md^2}{e^2}
+    \frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}
     \frac{1+4\xi}{1+2\xi}.
   \end{equation}
   If $2\rho\xi>1$, then
   \begin{equation}\label{eq:witness-linear}
-    C_m\psi(\xi,\rho)
-    >M_mf\sqrt{2\Lambda}\,d
+    \Omega_m\psi(\xi,\rho)
+    >M_m(\Lambda-M)\sqrt{2\Lambda}\,(\Lambda-q)
     \frac{1+4\xi}{2+4\xi}.
   \end{equation}
 \end{corollary}
@@ -3142,7 +3271,7 @@ Two choices of $\lambda$ will be used throughout.
   \]
   A direct calculation from \eqref{eq:C-xi-rho} gives
   \[
-    C_m\rho\xi^2=\frac{2\Lambda^3\Lambda_md^2}{e^2}.
+    \Omega_m\rho\xi^2=\frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}.
   \]
 
   In the second case, take $\lambda=1$.  Since
@@ -3158,7 +3287,7 @@ Two choices of $\lambda$ will be used throughout.
   \]
   Finally,
   \[
-    C_m\xi=M_mf\sqrt{2\Lambda}\,d.
+    \Omega_m\xi=M_m(\Lambda-M)\sqrt{2\Lambda}\,(\Lambda-q).
   \]
 \end{proof}
 
@@ -3192,8 +3321,8 @@ The relation $M^2=pq-\Lambda^2$ is equivalent to
 \end{equation}
 Moreover,
 \begin{equation}\label{eq:chart-d-e}
-  d=\frac{au}{D},
-  \qquad e=\frac{u^2+\ell^2}{D}.
+  \Lambda-q=\frac{au}{D},
+  \qquad 1-2\Lambda=\frac{u^2+\ell^2}{D}.
 \end{equation}
 
 \begin{lemma}[Chart domain]\label{lem:chart-domain}
@@ -3431,7 +3560,7 @@ every odd $m\ge9$.
 By \eqref{eq:witness-quadratic}, discarding the factor
 $(1+4\xi)/(1+2\xi)>1$, and using \eqref{eq:KA-def},
 \begin{equation}\label{eq:quadratic-payment-start}
-  \frac{C_m\psi(\xi,\rho)}{\Lambda^m}
+  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
   \ge2(N+2)\Lambda\left(\frac {d}{e}\right)^2K_\Lambda.
 \end{equation}
 Since the summands in \eqref{eq:KA-sum} have geometric mean
@@ -3473,7 +3602,7 @@ $v=u(1+\zeta)/a$, the right side of
 
 Combining \eqref{eq:quad-payment-M} and \eqref{eq:M-lower},
 \begin{equation}\label{eq:quad-payment-final}
-  \frac{C_m\psi(\xi,\rho)}{\Lambda^m}
+  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
   >u\frac{(N+2)(N+1)}{3\zeta}
   (1+v)^{(N-1)/2}.
 \end{equation}
@@ -3482,7 +3611,7 @@ In view of \eqref{eq:F-T}, it remains to pay for $uT_N$.
 \begin{proposition}[The regime $2\rho\xi\le1$]\label{prop:quadratic-branch}
   For every odd $N\ge7$, assumption \eqref{eq:quadratic-branch} implies
   \[
-    R_m\le C_m\psi(\xi,\rho).
+    R_m\le \Omega_m\psi(\xi,\rho).
   \]
 \end{proposition}
 
@@ -3553,9 +3682,9 @@ Abbreviate
   c_\xi=\sqrt{2\Lambda}\,\varphi.
 \end{equation}
 By \eqref{eq:witness-linear}, \eqref{eq:KL-def}, and
-$f=\Lambda(1-\ell)$, $d=\Lambda u$,
+$\Lambda-M=\Lambda(1-\ell)$, $\Lambda-q=\Lambda u$,
 \begin{equation}\label{eq:linear-payment-start}
-  \frac{C_m\psi(\xi,\rho)}{\Lambda^m}
+  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
   >u(N+2)c_\xi(1-\ell)K_M.
 \end{equation}
 From \eqref{eq:KL-sum},
@@ -4260,7 +4389,7 @@ $\zeta\ge7$ or $v\ge5/8$.  It remains to prove
 \begin{proposition}[The regime $2\rho\xi>1$]\label{prop:linear-branch}
   For every odd $N\ge7$, assumption \eqref{eq:linear-branch} implies
   \[
-    R_m\le C_m\psi(\xi,\rho).
+    R_m\le \Omega_m\psi(\xi,\rho).
   \]
 \end{proposition}
 
