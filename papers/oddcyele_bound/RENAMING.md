@@ -81,6 +81,69 @@ Prose touch-ups tied to these: "the forced-variance lemma" → "the variance low
 Typos fixed in the same pass: proof-map missing period; "contradicts with"; "gives"→"give";
 "seciton"; "the both side"; "only $\ell>0$ case"; "centre"→"center"; "the the".
 
+## A4. Shared material moved from §4.1 into §3.3 (2026-08-07)
+
+The generating-function apparatus common to both regions now lives at the end of
+`subsec:analytic-reading` (§3.3), which was itself swapped with the block-decomposition
+subsection so that it comes after it. Moved verbatim out of `subsec:pge23-two-sided-schur`:
+`eq:logdet-cycle`, `eq:block-determinant-identity` with its Schur-complement justification, and
+the definitions of `L_\pm`, `R_\pm`. `eq:resolvents-common` moved from the end of §3.2 to the end
+of §3.3, where the formal-series vocabulary it uses is already available.
+
+| Old label | New label |
+|---|---|
+| `eq:pge23-Lminus` | `eq:Lminus` |
+| `eq:pge23-Lplus` | `eq:Lplus` |
+| `eq:pge23-Rminus` | `eq:Rminus` |
+| `eq:pge23-Rplus` | `eq:Rplus` |
+
+Two `\tk{TODO (structure)}` notes are discharged by this move: the one in §3.3 requesting it, and
+the one opening §5 listing `L_-` and `eq:block-determinant-identity` as §5's remaining
+dependencies on §4. §5 now cites nothing defined in §4.
+
+## A5. The cycle density identities factored into §3.3 (2026-08-07)
+
+The two identities
+
+    t(C_m,U) =  Tr(A^m) + q^m + m[z^m] L_+(z)
+    t(C_m,W) = −Tr(A^m) + p^m + m[z^m] L_−(z)      (odd m ≥ 3)
+
+were being derived twice — once inside `lem:pge23-two-sided-identity` and once inside
+`lem:plt23-one-sided-identity`. They are now proved once, at the end of §3.3, by
+**`lem:cycle-identities`** / **`eq:cycle-identity-U`** / **`eq:cycle-identity-W`** (unprefixed,
+like the rest of the shared §3 material). The lemma statement carries the definitions of `L_∓`
+(`eq:Lminus`, `eq:Lplus`, with the resolvents written out as in the original §4.1 text, and with
+no well-definedness clause — owner's choice); its proof absorbed the block form of `T_W`, the
+block determinant identity `eq:block-determinant-identity` with its derivation, the two
+factorizations, and the coefficient extraction. The sign-flipped resolvent integral is now a
+numbered display **`eq:resolvent-plus`** under `eq:resolvents-common`, and
+`eq:Rminus`/`eq:Rplus` — pure abbreviations, first used in §4.2 — sit after the lemma's proof at
+the end of §3.3. Neither `eq:Rminus` nor `eq:Rplus` is `\eqref`'d anywhere.
+
+Consequences in the two regions:
+
+- §4.1 keeps its title and opening paragraph, and keeps `lem:pge23-two-sided-identity`, whose
+  proof is now three lines (add the two identities, then rearrange). The opening now points at
+  `lem:cycle-identities` for the three-summand splitting instead of at "the next lemma".
+- §5.1 keeps `eq:plt23-one-sided-identity` as a restatement (no proof) of
+  `eq:cycle-identity-W`; the lemma `lem:plt23-one-sided-identity` now states only that every
+  coefficient of `L_−` is nonnegative, and the subsection is titled "Nonnegativity of the
+  coefficients of $L_-$". **Both the lemma label and the subsection label still say
+  "one-sided"/"one-sided-schur"** — rename pending.
+- Removed labels: `eq:plt23-one-sided-factorization`, `eq:plt23-Lminus-def` (the factorization is
+  now in `lem:cycle-identities`'s proof). New: **`eq:plt23-Y-def`**, defining `Y(z)` and recording
+  `L_−=−\log(1−Y)`.
+
+## A6. Proof map turned into a section map (2026-08-07)
+
+The `enumerate` in §1.1 was labelled `\textbf{Part \arabic*.}` over three items (§2, §4, §5),
+which left §3 unaccounted for and forced cross-references of the form "the identity for $W$ from
+Part 2". It is now `label=\textbf{Section \arabic*.}, start=2` over four items — §2, §3, §4, §5 —
+each opening with an italic tagline instead of a `\Cref` to its own section (the label already
+names it). The new §3 item states outright that no case of the theorem is proved there and that
+it holds the machinery the two regions share. Both remaining occurrences of "Part~$n$" (in the
+two-elementary-lemmas paragraph) became `\Cref{sec:common-operator}` and `\Cref{sec:plt23}`.
+
 ## B. Label-key dictionary (original → current)
 
 ### Naming scheme (2026-08-07, region-prefix pass)
@@ -110,10 +173,12 @@ The scheme:
   `lem:pge23-two-sided-identity` — the rearrangement for $t(C_m,W)$ alone, former
   `eq:dense-defect` — is keyed `eq:pge23-one-sided-identity`, mirroring §5's one-sided identity
   (owner's choice, 2026-08-07). Display texts untouched (owner: pair the labels only).
-- Deliberately UNPREFIXED exceptions — defined in §4 but used by §5's proof (they are really §3
-  material): `eq:logdet-cycle`, `eq:block-determinant-identity`. A `\tk{TODO (structure)}` in
-  §3.3, after `eq:finite-trace-cycle`, marks the planned move into §3; the move itself is NOT
-  yet performed (owner's decision).
+- Deliberately UNPREFIXED — shared by both regions and now defined in §3.3
+  (`subsec:analytic-reading`): `eq:logdet-cycle`, `eq:block-determinant-identity`, and the four
+  generating-function displays `eq:Lminus`, `eq:Lplus`, `eq:Rminus`, `eq:Rplus`. The move out of
+  §4.1 was performed on 2026-08-07 (see A4); the last four were previously
+  `eq:pge23-Lminus`, `eq:pge23-Lplus`, `eq:pge23-Rminus`, `eq:pge23-Rplus`. §5 now contains no
+  reference into §4.
 - `sec:chart`, `sec:quadratic`, `sec:linear` were `\subsection`s carrying a wrong `sec:` type
   prefix; they are now `subsec:plt23-chart`, `subsec:plt23-quadratic`, `subsec:plt23-linear`.
 - Removed: `eq:dense-rho-pointwise` (dead label inside an unnumbered `align*`, never

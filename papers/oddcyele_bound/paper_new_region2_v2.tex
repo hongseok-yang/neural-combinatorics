@@ -49,6 +49,15 @@
 
 \newcommand*{\tk}[1]{\textcolor{blue}{\textbf{[TK: #1]}}}
 
+% Passages written or reordered in the 2026-08-07 pass, awaiting the author's
+% reading.  Delete the environment (or make it a no-op) once they are cleared.
+\definecolor{revised}{rgb}{0.56,0.30,0.30}
+\newenvironment{rev}{\color{revised}}{}
+\newcommand*{\rv}[1]{{\color{revised}#1}}
+% Text that was only moved, not rewritten: delimited rather than coloured.
+\newcommand*{\revbegin}{\textcolor{revised}{\textbf{[moved, text unchanged $\downarrow$]}}}
+\newcommand*{\revend}{\textcolor{revised}{\textbf{[$\uparrow$ end moved]}}}
+
 \title{A Complete Proof of the Goodman--Style Lower Bound\\
 for Odd-Cycle Densities in Graphons}
 \author{Consolidated working note for H.~Yang and collaborators}
@@ -165,19 +174,10 @@ $\lambda_i$.  We write
 \]
 for the associated measure on the spectrum of $A$, so that
 $\int\lambda^j\dd\mu(\lambda)=\ip g{A^jg}$ for every $j\ge0$ and
-$\mu(\R)=\norm g^2$.  Two elementary lemmas bound these eigenvalues.  The
-first,
-\[
-  |\lambda_i|\le\frac{1}{2}\quad\text{for every }i \qquad(\Cref{lem:half-norm}),
-\]
-is used from Part~2 on; the second,
-\[
-  \sum_i\lambda_i^2+2\norm g^2=\Tr(A^2)+2\norm g^2\le pq \qquad(\Cref{lem:plt23-HS-bound}),
-\]
-only in Part~3.
+$\mu(\R)=\norm g^2$. 
 
-\begin{enumerate}[label=\textbf{Part \arabic*.},leftmargin=3.4em]
-  \item \Cref{sec:short-cycles} considers $m=3,5,7$. We prove these cases so that when we consider the general odd $m$ in the later parts, we can assume $m\ge9$.
+\begin{enumerate}[label=\textbf{Section \arabic*.},leftmargin=4.6em,start=2]
+  \item \emph{The cases $m=3,5,7$.}  We prove these cases separately so that when we consider the general odd $m$ in the later sections, we can assume $m\ge9$.
   The case $m=3$ is Goodman's original bound, in graphon form.  For
   $m=5$ and $m=7$, the inclusion--exclusion principle applied to
   $\prod_{i=1}^m(1-U_i)$ expands $t(C_m,W)$ over the subsets of the
@@ -202,26 +202,26 @@ only in Part~3.
   where $R_{q,r}$ is a quartic in $\lambda$; \Cref{subsec:C7} writes it
   as an sum of squares, nonnegative for every real $\lambda$.
 
-  \item \Cref{sec:common-operator,sec:pge23} prove all odd lengths
-  when $q\le1/3$.  We first show that the logarithm of a determinant
-  generates the cycle densities: for any kernel $K$,
+  \item 
+  In this section we prove lemmas that are used throughout the remaining part
+  of this paper.  We first prove that, in proving \eqref{eq:main-goal}, it is
+  enough to consider step graphons, so that every computation below is finite
+  dimensional.  We then show that the logarithm of a determinant generates
+  the cycle densities: for any kernel $K$,
   \[
     -\log\det(I-zT_K)=\sum_{j\ge1}\frac{\Tr(T_K^j)}{j}z^j,
     \qquad
     \Tr(T_K^j)=t(C_j,K)\quad(j\ge2).
-  \]  
+  \]
   We apply this to $U$ and to $W$, and factorize the two determinants by
   Schur complementation against the constant direction.  This produces two
-  further generating functions $L_+(z)$ and $L_-(z)$, whose form is
-  recorded in \eqref{eq:pge23-Lminus}--\eqref{eq:pge23-Lplus}, and
+  further generating functions $L_-(z)$ and $L_+(z)$, which satisfy the
+  following two equalities (\Cref{lem:cycle-identities}):
   \begin{align*}
     t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\\
     t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).
   \end{align*}
-  The two traces have opposite signs because the mean-zero part of $T_U$
-  is $A$, that of $T_W=T_1-T_U$ is $-A$, and $m$ is odd.  Since neither
-  lemma above controls the odd power sum $\Tr(A^m)=\sum_i\lambda_i^m$, we
-  add the two identities to remove it (\Cref{lem:pge23-two-sided-identity}):
+  \item In this section, we prove \Cref{thm:main} for the case $p \ge 2/3$. We first eliminate the $\Tr(A^m)$ by addint the two identities:
   \[
     t(C_m,W)+t(C_m,U)=p^m+q^m+S_m,
     \qquad
@@ -302,16 +302,13 @@ only in Part~3.
   differential equation it induces.  The constant $3$ is where the
   assumption $p\ge2/3$ is used.
 
-  \item \Cref{sec:plt23}
-  proves all odd $m\ge9$ when $1/2<p<2/3$.  The argument in this part is a
-  spectral analysis of $A$.  We use two results, the identity for $W$ from
-  Part~2,
+  \item In this section, we prove \Cref{thm:main} for the case $1/2<p<2/3$ and odd $m\ge9$.
+  The main tool in this section is mostly spectral analysis of $A$.
+  We start from the identity for $W$:
   \[
     t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
   \]
-  and the nonnegativity of every coefficient of $L_-$; \Cref{lem:plt23-one-sided-identity}
-  states both.  Nothing cancels $\Tr(A^m)$ this time, so it must be bounded
-  directly.
+  together with the nonnegativity of every coefficient of $L_-$ (\Cref{lem:plt23-one-sided-identity}).
 
   We first consider the eigenvalues of $A$ larger than $q$.  If there were
   two of them, then $\sum_i\lambda_i^2>2q^2$, whereas
@@ -1023,94 +1020,6 @@ exactly $p$.
   Letting $n\to\infty$ proves the same inequality for $W$, as required.
 \end{proof}
 
-\subsection{Reading the power-series
-calculations}\label{subsec:analytic-reading}
-
-Several later arguments introduce an auxiliary variable $z$ and use the
-notation $[z^m]F(z)$; the exponent of $z$ is the length of a walk or cycle.
-We do not assign a value to $z$; every $F$ below is a formal power series,
-that is, a sequence of real coefficients $(c_j)_{j\ge0}$ written as
-$F=\sum_{j\ge0}c_jz^j$, and $[z^m]F=c_m$.  We say that two such series are
-equal when all their coefficients are equal.
-
-Four operations on these series are used below, and in each of them every
-coefficient of the result is computed from finitely many coefficients of the
-arguments.  Series are added coefficientwise.  They are multiplied by the
-Cauchy product,
-\[
-  [z^m](FG)=\sum_{i+j=m}\bigl([z^i]F\bigr)\bigl([z^j]G\bigr).
-\]
-A series with $c_0\ne0$ has an inverse, obtained by solving the equations
-for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a
-series.  Finally, if we write $\ord F$ for the order of $F$, that is the
-least $j$ with $c_j\ne0$, then the series
-\[
-  -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
-\]
-is defined whenever $\ord Y\ge1$: in that case $\ord Y^k\ge k$, so only the
-terms with $k\le m$ contribute to $[z^m]$.
-
-By \Cref{lem:step-reduction} we will work with a step graphon, whose operator
-is a finite matrix; this is made explicit in \Cref{sec:common-operator}.  We
-build our series from such matrices, using the two expansions in the next
-lemma.
-
-\begin{lemma}[Series expansions used below]\label{lem:series-expansions}
-  Let $X$ be a real symmetric $N\times N$ matrix.  As formal power series
-  in $z$:
-  \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
-    \item \emph{(Resolvent.)}  The matrix $I-zX$ is invertible over $\R[[z]]$
-    and
-    \[
-      (I-zX)^{-1}=\sum_{j\ge0}z^jX^j,
-    \]
-    so that $[z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}$ for fixed vectors $u,v$.
-    \item \emph{(Log-determinant.)}  The polynomial $\det(I-zX)$ has constant
-    term $1$, and
-    \[
-      -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
-    \]
-    so that $m\,[z^m]\bigl(-\log\det(I-zX)\bigr)=\Tr(X^m)$.
-  \end{enumerate}
-\end{lemma}
-
-\begin{proof}
-  (1)  The constant term of $I-zX$ is $I$, so the matrix is invertible over
-  $\R[[z]]$; multiplying $\sum_{j\ge0}z^jX^j$ by $I-zX$ cancels all positive
-  powers of $z$ and leaves $I$.
-
-  (2)  Both sides are unchanged under $X\mapsto Q^{\!\top}XQ$ with $Q$
-  orthogonal, so we may take $X$ diagonal with entries $\lambda_i$.  Then
-  $\det(I-zX)=\prod_i(1-z\lambda_i)$, and $-\log$ of a product is the sum of
-  the $-\log$s, whence
-  \[
-    -\log\det(I-zX)
-    =\sum_{i=1}^N\sum_{j\ge1}\frac{\lambda_i^j}{j}z^j
-    =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
-  \]
-  the interchange being a finite sum in each coefficient.
-\end{proof}
-
-For an example of this formal series, take $X=T_W$ and $m=3$.  Item~(2)
-gives
-\[
-  -\log\det(I-zT_W)
-  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}{2}z^2+\frac{\Tr(T_W^3)}{3}z^3+\cdots,
-\]
-whence
-\[
-  3\,[z^3]\bigl(-\log\det(I-zT_W)\bigr)=\Tr(T_W^3)=t(C_3,W)
-\]
-by \eqref{eq:finite-trace-cycle}.
-
-Alternatively, one may read these series as functions.  If a series
-converges in a neighbourhood of the origin, its sum is a function there, and
-the coefficients are recovered from that function by differentiation,
-\begin{equation}\label{eq:coeff-def}
-  [z^m]F=\frac{F^{(m)}(0)}{m!}.
-\end{equation}
-The arguments below are the same under either reading.
-
 \subsection{The block decomposition and the support of the spectral measure}
 \label{subsec:block-decomposition}
 
@@ -1156,13 +1065,6 @@ Multiplying this matrix around a cycle shows, for every $r\ge2$, that
   K_{a_1a_2}\cdots K_{a_ra_1} \notag\\
   &=t(C_r,K). \label{eq:finite-trace-cycle}
 \end{align}
-
-\tk{TODO (structure): move the shared identities \eqref{eq:logdet-cycle} and
-\eqref{eq:block-determinant-identity}, currently stated inside
-\Cref{subsec:pge23-two-sided-schur}, into this section, next to the
-formal-series definitions, so that \Cref{sec:plt23} no longer depends on
-\Cref{sec:pge23}.  Their labels are deliberately kept unprefixed for this
-reason.}
 
 We now split $\mathcal E$ into the constant direction and its orthogonal
 complement, and decompose $T_U$ accordingly.  The constant function $\one$
@@ -1277,7 +1179,85 @@ orthogonality of the eigenspaces gives
   =\int F(\lambda)\dd\mu(\lambda).
 \]
 
-In particular, expanding $(I-zA)^{-1}=\sum_{j\ge0}z^jA^j$ by
+\subsection{Reading the power-series
+calculations}\label{subsec:analytic-reading}
+
+Several later arguments introduce an auxiliary variable $z$ and use the
+notation $[z^m]F(z)$; the exponent of $z$ is the length of a walk or cycle.
+We do not assign a value to $z$; every $F$ below is a formal power series,
+that is, a sequence of real coefficients $(c_j)_{j\ge0}$ written as
+$F=\sum_{j\ge0}c_jz^j$, and $[z^m]F=c_m$.  We say that two such series are
+equal when all their coefficients are equal.
+
+Four operations on these series are used below, and in each of them every
+coefficient of the result is computed from finitely many coefficients of the
+arguments.  Series are added coefficientwise.  They are multiplied by the
+Cauchy product,
+\[
+  [z^m](FG)=\sum_{i+j=m}\bigl([z^i]F\bigr)\bigl([z^j]G\bigr).
+\]
+A series with $c_0\ne0$ has an inverse, obtained by solving the equations
+for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a
+series.  Finally, if we write $\ord F$ for the order of $F$, that is the
+least $j$ with $c_j\ne0$, then the series
+\[
+  -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
+\]
+is defined whenever $\ord Y\ge1$: in that case $\ord Y^k\ge k$, so only the
+terms with $k\le m$ contribute to $[z^m]$.
+
+We build our series from the finite matrices of
+\Cref{subsec:block-decomposition}, using the two expansions in the next lemma.
+
+\begin{lemma}[Series expansions used below]\label{lem:series-expansions}
+  Let $X$ be a real symmetric $N\times N$ matrix.  As formal power series
+  in $z$:
+  \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
+    \item \emph{(Resolvent.)}  The matrix $I-zX$ is invertible over $\R[[z]]$
+    and
+    \[
+      (I-zX)^{-1}=\sum_{j\ge0}z^jX^j,
+    \]
+    so that $[z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}$ for fixed vectors $u,v$.
+    \item \emph{(Log-determinant.)}  The polynomial $\det(I-zX)$ has constant
+    term $1$, and
+    \[
+      -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+    \]
+    so that $m\,[z^m]\bigl(-\log\det(I-zX)\bigr)=\Tr(X^m)$.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  (1)  The constant term of $I-zX$ is $I$, so the matrix is invertible over
+  $\R[[z]]$; multiplying $\sum_{j\ge0}z^jX^j$ by $I-zX$ cancels all positive
+  powers of $z$ and leaves $I$.
+
+  (2)  Both sides are unchanged under $X\mapsto Q^{\!\top}XQ$ with $Q$
+  orthogonal, so we may take $X$ diagonal with entries $\lambda_i$.  Then
+  $\det(I-zX)=\prod_i(1-z\lambda_i)$, and $-\log$ of a product is the sum of
+  the $-\log$s, whence
+  \[
+    -\log\det(I-zX)
+    =\sum_{i=1}^N\sum_{j\ge1}\frac{\lambda_i^j}{j}z^j
+    =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+  \]
+  the interchange being a finite sum in each coefficient.
+\end{proof}
+
+For a first example of these expansions, take $X=T_W$ and $m=3$.  Item~(2)
+gives
+\[
+  -\log\det(I-zT_W)
+  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}{2}z^2+\frac{\Tr(T_W^3)}{3}z^3+\cdots,
+\]
+whence
+\[
+  3\,[z^3]\bigl(-\log\det(I-zT_W)\bigr)=\Tr(T_W^3)=t(C_3,W)
+\]
+by \eqref{eq:finite-trace-cycle}.
+
+For a second example, expanding $(I-zA)^{-1}=\sum_{j\ge0}z^jA^j$ by
 \Cref{lem:series-expansions}\,(1) and taking $F(\lambda)=\lambda^j$ in each
 coefficient,
 \begin{equation}\label{eq:resolvents-common}
@@ -1285,18 +1265,11 @@ coefficient,
   =\sum_{j\ge0}z^j\int\lambda^j\dd\mu(\lambda)
   =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
 \end{equation}
-
-\section{Above the threshold \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet averages and gamma smoothing}
-\label{sec:pge23}
-
-Throughout this section,
-\begin{equation}\label{eq:pge23-q}
-  q = 1 - p, \qquad 0 \le q \le \frac{1}{3},
+Similarly, we have
+\begin{equation}\label{eq:resolvent-plus}
+  \ip g{(I+zA)^{-1}g}
+  =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1+\lambda z}.
 \end{equation}
-and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
-
-\subsection{A two-sided Schur-complement identity and cancellation of the odd
-trace}\label{subsec:pge23-two-sided-schur}
 
 By \Cref{lem:series-expansions}\,(2) and \eqref{eq:finite-trace-cycle}, every
 step kernel $K$ satisfies
@@ -1305,42 +1278,23 @@ step kernel $K$ satisfies
   \qquad
   m\,[z^m]\bigl(-\log\det(I-zT_K)\bigr)=t(C_m,K)
 \end{equation}
-for every $m\ge2$. We expand
-these two series along the block decomposition \eqref{eq:block-U}. 
-As the proof of the next lemma shows, each of them splits into three
-summands: one coming from the mean-zero block $\mp A$, one from the scalar
-entry, and the third coming from the Schur complement:
-\begin{align}
-  L_-(z)&=-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right),
-  \label{eq:pge23-Lminus}\\
-  L_+(z)&=-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right).
-  \label{eq:pge23-Lplus}
-\end{align}
-Writing
-\begin{align}
-  R_-(z)&=\ip g{(I+zA)^{-1}g}
-  =\int\frac{\dd\mu(\lambda)}{1+\lambda z},\label{eq:pge23-Rminus}\\
-  R_+(z)&=\ip g{(I-zA)^{-1}g}
-  =\int\frac{\dd\mu(\lambda)}{1-\lambda z},\label{eq:pge23-Rplus}
-\end{align}
-as in \eqref{eq:resolvents-common} with $A$ replaced by $\mp A$, the inner
-series of $L_\pm$ is $z^2R_\pm(z)/(1-cz)$, with $c=p$ or $q$.  It has order
-at least two, so $L_\pm$ are well defined formal power series, as discussed
-in \Cref{subsec:analytic-reading}.  For odd $m$, put
-\begin{equation}\label{eq:pge23-Sm}
-  S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
-\end{equation}
+for every $m\ge2$.
+One can now simplify this generating function by the
+block decomposition \eqref{eq:block-U}, as the following lemma states.
 
-\begin{lemma}[Sum of the two cycle densities]\label{lem:pge23-two-sided-identity}
-  For every odd $m\ge3$,
-  \begin{equation}\label{eq:pge23-two-sided-identity}
-    t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
-  \end{equation}
-  Consequently,
-  \begin{equation}\label{eq:pge23-one-sided-identity}
-    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
-    =q^{m-1}+S_m-t(C_m,U).
-  \end{equation}
+\begin{lemma}[Cycle densities of $U$ and $W$]\label{lem:cycle-identities}
+  For every odd $m\ge3$, let
+  \begin{align}
+    L_-(z)&=-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right),
+    \label{eq:Lminus}\\
+    L_+(z)&=-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right).
+    \label{eq:Lplus}
+  \end{align}
+  Then
+  \begin{align}
+    t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\label{eq:cycle-identity-U}\\
+    t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).\label{eq:cycle-identity-W}
+  \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -1366,26 +1320,41 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
     \begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
   \]
 
-  The determinants decompose along this block structure by the following
-  elementary identity.  If $D$ is invertible, then
+  Both determinants decompose along this block structure: if $D$ is
+  invertible, then
   \begin{equation}\label{eq:block-determinant-identity}
     \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
     =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr),
   \end{equation}
-  the scalar $\alpha-v^*D^{-1}v$ being the Schur complement of $D$.  
+  where the scalar $\alpha-v^*D^{-1}v$ is the Schur complement of $D$.
   To see this, multiply on the left by the block matrix
-  $\left(\begin{smallmatrix}1&-v^*D^{-1}\\0&I\end{smallmatrix}\right)$, which
-  has determinant one and makes the product block triangular; the determinant
-  of the latter is the product of its diagonal-block determinants.  We may
-  take $D=I\mp zA$ here: these blocks have constant term $I$, hence are
-  invertible over $\R[[z]]$ by \Cref{lem:series-expansions}\,(1).  Applying
-  \eqref{eq:block-determinant-identity} with $D=I-zA$ and $v=-zg$, and then
-  with $D=I+zA$ and $v=zg$, factorizes the determinants into three parts,
+  $\left(\begin{smallmatrix}1&-v^*D^{-1}\\0&I\end{smallmatrix}\right)$, whose
+  determinant is one:
   \begin{align*}
-    \det(I-zT_U)&=\det(I-zA)\bigl(1-qz-z^2R_+(z)\bigr) =\det(I-zA)\,(1-qz)
-    \left(1-\frac{z^2R_+(z)}{1-qz}\right),\\
-    \det(I-zT_W)&=\det(I+zA)\bigl(1-pz-z^2R_-(z)\bigr)=\det(I+zA)\,(1-pz)
-    \left(1-\frac{z^2R_-(z)}{1-pz}\right).
+    \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
+    &=\underbrace{\det\begin{pmatrix}1&-v^*D^{-1}\\0&I\end{pmatrix}}_{=1}
+      \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}\\
+    &=\det\left[\begin{pmatrix}1&-v^*D^{-1}\\0&I\end{pmatrix}
+                \begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}\right]\\
+    &=\det\begin{pmatrix}\alpha-v^*D^{-1}v&v^*-v^*D^{-1}D\\v&D\end{pmatrix}\\
+    &=\det\begin{pmatrix}\alpha-v^*D^{-1}v&0\\v&D\end{pmatrix}
+     =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr),
+  \end{align*}
+  where the last equality holds since the determinant of a block triangular
+  matrix is the product of its diagonal-block determinants.
+
+  To apply \eqref{eq:block-determinant-identity} to $I-zT_U$ and $I-zT_W$,
+  one needs to check that the lower right block $I\mp zA$ is invertible, and
+  this follows from \Cref{lem:series-expansions}\,(1) since both of these
+  terms have $I$ as their constant term.  Taking $D=I\mp zA$ and $v=\mp zg$
+  factorizes the two determinants into three parts,
+  \begin{align*}
+    \det(I-zT_U)&=\det(I-zA)\bigl(1-qz-z^2\ip g{(I-zA)^{-1}g}\bigr)\\
+    &=\det(I-zA)\,(1-qz)
+    \left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right),\\
+    \det(I-zT_W)&=\det(I+zA)\bigl(1-pz-z^2\ip g{(I+zA)^{-1}g}\bigr)\\
+    &=\det(I+zA)\,(1-pz)
+    \left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
   \end{align*}
   Taking $-\log$ turns each product into a sum of three series,
   \begin{align*}
@@ -1406,16 +1375,62 @@ in \Cref{subsec:analytic-reading}.  For odd $m$, put
     \qquad
     m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
   \]
-  so the two cancel when the identities for $U$ and $W$ are added.  For the
-  second summand,
+  and for the second summand,
   \[
     m\,[z^m]\bigl(-\log(1-qz)\bigr)=q^m,
     \qquad
-    m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m,
+    m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
   \]
-  and the third summands give $m[z^m]\bigl(L_-(z)+L_+(z)\bigr)=S_m$ by
-  \eqref{eq:pge23-Sm}.  Adding the two identities therefore proves
-  \eqref{eq:pge23-two-sided-identity}.
+  The last summands equal $m[z^m]L_\pm(z)$, which proves
+  \eqref{eq:cycle-identity-U} and \eqref{eq:cycle-identity-W}.
+\end{proof}
+
+\begin{remark} \label{rem:analytic-reading}
+  Alternatively, one may read these series as functions.  If a series
+  converges in a neighbourhood of the origin, its sum is a function there, and
+  the coefficients are recovered from that function by differentiation,
+  \begin{equation}\label{eq:coeff-def}
+    [z^m]F=\frac{F^{(m)}(0)}{m!}.
+  \end{equation}
+  The arguments below are the same under either interpretations.
+\end{remark}
+
+\section{Above the threshold \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet averages and gamma smoothing}
+\label{sec:pge23}
+
+Throughout this section,
+\begin{equation}\label{eq:pge23-q}
+  q = 1 - p, \qquad 0 \le q \le \frac{1}{3},
+\end{equation}
+and $m\ge3$ is odd.  We prove \eqref{eq:main-goal} for all such $m$.
+
+\subsection{A two-sided Schur-complement identity and cancellation of the odd
+trace}\label{subsec:pge23-two-sided-schur}
+
+\begin{lemma}[Sum of the two cycle densities]\label{lem:pge23-two-sided-identity}
+  For every odd $m\ge3$, let
+  \begin{equation}\label{eq:pge23-Sm}
+    S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:pge23-two-sided-identity}
+    t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:pge23-one-sided-identity}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    =q^{m-1}+S_m-t(C_m,U).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Adding \eqref{eq:cycle-identity-U} and \eqref{eq:cycle-identity-W} cancels
+  the two traces and leaves
+  \[
+    t(C_m,W)+t(C_m,U)=p^m+q^m+m[z^m]\bigl(L_-(z)+L_+(z)\bigr),
+  \]
+  which is \eqref{eq:pge23-two-sided-identity} by the definition
+  \eqref{eq:pge23-Sm} of $S_m$.
 
   To obtain the second identity, rearrange the first:
   \begin{align*}
@@ -1444,7 +1459,7 @@ prove
 \begin{equation}\label{eq:pge23-Phi}
   \Phi_m:=q^{m-1}+S_m-x_{m-1}\ge0.
 \end{equation}
-Two of the three terms are already expressed through $q$ and $R_\pm$, so it
+Two of the three terms are already expressed through $q$ and $A$, so it
 remains to do the same for the path densities.  By
 \Cref{lem:series-expansions}\,(1),
 \[
@@ -1466,13 +1481,17 @@ It fixes $\left(\begin{smallmatrix}1\\0\end{smallmatrix}\right)$ and
 produces the Schur complement in the upper left corner, so the system
 becomes
 \[
-  \begin{pmatrix}1-qz-z^2R_+(z)&0\\-zg&I-zA\end{pmatrix}
+  \begin{pmatrix}1-qz-z^2\ip g{(I-zA)^{-1}g}&0\\-zg&I-zA\end{pmatrix}
   \begin{pmatrix}a\\h\end{pmatrix}
   =\begin{pmatrix}1\\0\end{pmatrix}.
 \]
-Its first row shows $\bigl(1-qz-z^2R_+(z)\bigr)a=1$, whence
+Write
+\begin{equation}\label{eq:Rplus}
+  R_+(z):=\ip g{(I-zA)^{-1}g}=\sum_{j\ge0}z^j\ip g{A^jg} = \int \frac{\dd\mu(\lambda)}{1 - \lambda z},
+\end{equation}
+where the last equality follows from \eqref{eq:resolvents-common}.  The first row of the system shows
 \begin{equation}\label{eq:pge23-path-gf}
-  \sum_{j\ge0}x_jz^j=\frac{1}{1-qz-z^2R_+(z)}.
+  \sum_{j\ge0}x_jz^j=a=\frac{1}{1-qz-z^2R_+(z)}.
 \end{equation}
 
 \subsection{Expansion in complete homogeneous polynomials}
@@ -1516,34 +1535,30 @@ The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
 \end{proposition}
 
 \begin{proof}
-  Put
-  \[
-    Y_-(z)=\frac{z^2R_-(z)}{1-pz},
-    \qquad
-    Y_+(z)=\frac{z^2R_+(z)}{1-qz}.
-  \]
-  From $-\log(1-Y)=\sum_{r\ge1}Y^r/r$,
+  From \eqref{eq:Lplus},
   \begin{align*}
-    m[z^m]L_-(z) &=m[z^m] (- \log (1-Y_-(z)))
+    m[z^m]L_+(z)
+    &=m[z^m]\left(-\log\left(1-\frac{z^2R_+(z)}{1-qz}\right)\right)
     \\
-    {} &= m[z^m]\sum_{r\ge1}\frac{Y_-(z)^r}{r}
+    {}&=m[z^m]\sum_{r\ge1}\frac{1}{r}\left(\frac{z^2R_+(z)}{1-qz}\right)^r
     \\
-    {} &=\sum_{r\ge1}\frac {m}{r} [z^{m-2r}]\frac{R_-(z)^r}{(1-pz)^r}.
+    {}&=\sum_{r\ge1}\frac {m}{r} [z^{m-2r}]\frac{R_+(z)^r}{(1-qz)^r},
   \end{align*}
-  The spectral representation of $R_-(z) = \int \frac{d \mu(\lambda)}{1 + \lambda z}$ gives
+  where the second equality comes from $-\log(1-x)=\sum_{r\ge1}x^r/r$.
+  The spectral representation $R_+(z) = \int \frac{\dd\mu(\lambda)}{1 - \lambda z}$ gives
   \begin{align*}
-    R_-(z)^r &=\int\!\cdots\!\int
-    \prod_{i=1}^r\frac{1}{1+\lambda_i z}
+    R_+(z)^r &=\int\!\cdots\!\int
+    \prod_{i=1}^r\frac{1}{1-\lambda_i z}
     \prod_{i=1}^r\dd\mu(\lambda_i),
     \\
-    \frac{R_-(z)^r}{(1-pz)^r} &= \int\!\cdots\!\int \frac{1}{(1-pz)^r} \prod_{i=1}^r \frac{1}{1+\lambda_i z} \prod_{i=1}^r \dd\mu(\lambda_i).
+    \frac{R_+(z)^r}{(1-qz)^r} &= \int\!\cdots\!\int \frac{1}{(1-qz)^r} \prod_{i=1}^r \frac{1}{1-\lambda_i z} \prod_{i=1}^r \dd\mu(\lambda_i).
   \end{align*}
-  By \eqref{eq:pge23-h-gf}, the $r$-th coefficient is 
+  By \eqref{eq:pge23-h-gf}, the $r$-th coefficient is
   \[
-    [z^{m-2r}] \frac{R_-(z)^r}{(1-pz)^r} = \int\!\cdots\!\int h_{m-2r}(p^{\times r}, -\lambda_1, \ldots, -\lambda_r) \prod_{i=1}^r \dd\mu(\lambda_i).
+    [z^{m-2r}] \frac{R_+(z)^r}{(1-qz)^r} = \int\!\cdots\!\int h_{m-2r}(q^{\times r}, \lambda_1, \ldots, \lambda_r) \prod_{i=1}^r \dd\mu(\lambda_i),
   \]
-  The same argument for $L_+$ produces the second term in brackets in
-  \eqref{eq:pge23-Pmr}.
+  which is the second term in brackets in \eqref{eq:pge23-Pmr}.  The same
+  argument for $L_-$ with $R_-(z) = \langle g, (I + zA)^{-1} g \rangle$ produces the first term.
 
   On the other hand, factoring $1-qz$ out of the denominator of
   \eqref{eq:pge23-path-gf} and expanding the geometric series gives
@@ -2457,92 +2472,37 @@ $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
 \section{Below the threshold \texorpdfstring{$1/2<p<2/3$}{1/2<p<2/3}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
 \label{sec:plt23}
 
-\tk{TODO (structure): make this section readable independently of
-\Cref{sec:pge23}, so that a reader interested in one region need not
-read the other.  Remaining dependencies: the generating function $L_-$ and the
-block determinant identity \eqref{eq:block-determinant-identity}.}
-
 From now on, we assume
 \begin{equation}\label{eq:plt23-range}
   \frac{1}{2}<p<\frac{2}{3}, \qquad \frac{1}{3}<q<\frac{1}{2},
 \end{equation}
 and $m\ge9$ is odd. 
 We continue with the block decomposition
-\eqref{eq:block-U} and the operator norm bound of \Cref{lem:half-norm}.  
-We will also use the following bound on the spectrum of $A$, in which
-$\Tr(A^2)=\sum_i\lambda_i^2$.
+\eqref{eq:block-U} and the operator norm bound of \Cref{lem:half-norm}.
 
-\begin{lemma}[Hilbert--Schmidt bound]\label{lem:plt23-HS-bound}
-  \begin{equation}\label{eq:plt23-HS-bound}
-    \Tr(A^2)+2\norm g^2\le pq.
-  \end{equation}
-\end{lemma}
+\subsection{Nonnegativity of the coefficients of \texorpdfstring{$L_-$}{L-}}\label{subsec:plt23-one-sided-schur}
 
-\begin{proof}
-  Since $0\le U\le1$,
-  \[
-    \Tr(T_U^2)=\int_{[0,1]^2}U(x,y)^2\dd x\dd y
-    \le\int_{[0,1]^2}U(x,y)\dd x\dd y=q.
-  \]
-  Expanding $T_U^2$ in the block decomposition \eqref{eq:block-U},
-  \[
-    \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
-  \]
-  Subtracting $q^2$ from the both sides proves the claim.
-\end{proof}
-
-\subsection{A one-sided Schur-complement identity}\label{subsec:plt23-one-sided-schur}
-
-In \Cref{subsec:pge23-two-sided-schur} we introduced the generating functions $L_-$ and
-$L_+$, attached to $W$ and to $U$.  Only $L_-$ is used here.
-
-By \eqref{eq:logdet-cycle},
-\[
-  t(C_m,W)=m\,[z^m]\bigl(-\log\det(I-zT_W)\bigr),
-\]
-and the block decomposition \eqref{eq:block-U} gives
-\[
-  I-zT_W=\begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
-\]
-Applying the block determinant identity
-\eqref{eq:block-determinant-identity} with $D=I+zA$ and $v=zg$ factorizes
-this determinant into three parts,
-\begin{equation}\label{eq:plt23-one-sided-factorization}
-  \det(I-zT_W)=\det(I+zA)\,(1-pz)\bigl(1-Y(z)\bigr),
-  \qquad
-  Y(z)=\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz},
+Recall that
+\begin{equation}\label{eq:plt23-one-sided-identity}
+  t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
 \end{equation}
-the last factor being the Schur complement, divided by $1-pz$.
+as proven in \Cref{lem:cycle-identities}.  Throughout \Cref{sec:plt23} we
+bound these terms directly.
 
-\begin{lemma}[One-sided identity]\label{lem:plt23-one-sided-identity}
-  For every odd $m\ge3$,
-  \begin{equation}\label{eq:plt23-one-sided-identity}
-    t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
+\begin{lemma}[Nonnegative coefficients]\label{lem:plt23-one-sided-identity}
+  Every coefficient of $L_-(z)$ is nonnegative.  Moreover,
+  \begin{equation}\label{eq:plt23-Lminus-linear-lower}
+    [z^m]L_-(z)\ge\int\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}\dd\mu(\lambda).
   \end{equation}
-  where
-  \begin{equation}\label{eq:plt23-Lminus-def}
-    L_-(z)=-\log\bigl(1-Y(z)\bigr).
-  \end{equation}
-  Moreover, every coefficient of $L_-(z)$ is nonnegative.
 \end{lemma}
 
 \begin{proof}
-  Taking $-\log$ in \eqref{eq:plt23-one-sided-factorization} turns the product into a
-  sum of three terms,
+  We first show that the coefficients of
   \[
-    -\log\det(I-zT_W)=-\log\det(I+zA)-\log(1-pz)+L_-(z),
+    Y(z)=\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}
   \]
-  and for odd $m$, \Cref{lem:series-expansions}\,(2) gives
-  \[
-    m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
-    \qquad
-    m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
-  \]
-  Together with the third summand this is \eqref{eq:plt23-one-sided-identity}.
-
-  It remains to check nonnegativity of coefficients.  We first show that the
-  coefficients of $Y$ are nonnegative, which implies the same for
-  $L_-=-\log(1-Y)=\sum_{k\ge1}Y^k/k$.
+  are nonnegative, which implies the same for
+  $L_-=-\log(1-Y)=\sum_{k\ge1}Y^k/k$ by \eqref{eq:Lminus}.
 
   Expanding the two factors of $Y$,
   \[
@@ -2567,10 +2527,42 @@ the last factor being the Schur complement, divided by $1-pz$.
   $|\lambda|<p$ on the whole range of integration and both the numerator and
   the denominator on the right of \eqref{eq:plt23-Y-coeff} are positive.  The
   coefficients of $Y$ are therefore nonnegative.
+
+  For the second claim, the coefficients of
+  $L_-(z)-Y(z)=\sum_{k\ge2}Y(z)^k/k$ are nonnegative as well, so
+  \[
+    [z^m]L_-(z)\ge[z^m]Y(z)
+    =\int\frac{p^{m-1}-(-\lambda)^{m-1}}{p+\lambda}\dd\mu(\lambda)
+    =\int\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}\dd\mu(\lambda),
+  \]
+  where the first equality follows from \eqref{eq:plt23-Y-coeff} and the
+  second holds because $m-1$ is even.
 \end{proof}
 
 
 \subsection{At most one eigenvalue above \texorpdfstring{$q$}{q}}
+
+We first prove the following bound on the sum of the squared eigenvalues of
+$A$, in which $\Tr(A^2)=\sum_i\lambda_i^2$.
+
+\begin{lemma}[Hilbert--Schmidt bound]\label{lem:plt23-HS-bound}
+  \begin{equation}\label{eq:plt23-HS-bound}
+    \Tr(A^2)+2\norm g^2\le pq.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Since $0\le U\le1$,
+  \[
+    \Tr(T_U^2)=\int_{[0,1]^2}U(x,y)^2\dd x\dd y
+    \le\int_{[0,1]^2}U(x,y)\dd x\dd y=q.
+  \]
+  Expanding $T_U^2$ in the block decomposition \eqref{eq:block-U},
+  \[
+    \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
+  \]
+  Subtracting $q^2$ from the both sides proves the claim.
+\end{proof}
 
 \begin{lemma}[Eigenvalues above $q$]\label{lem:plt23-eigenvalues-above-q}
   There is at most one eigenvalue of $A$ that is larger than $q$.  If none of
@@ -2662,29 +2654,27 @@ so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
 \end{proposition}
 
 \begin{proof}
-  We first bound $m[z^m]L_-(z)$ from below.  The coefficients of $Y$ are
-  nonnegative, hence so are those of $L_-(z)-Y(z)=\sum_{k\ge2}Y(z)^k/k$.
-  Therefore
-  \begin{align}
-    m[z^m]L_-(z)&\ge m[z^m]Y(z)
-    =m\int\frac{p^{m-1}-(-\lambda)^{m-1}}{p+\lambda}\dd\mu(\lambda)\notag\\
-    &=m\int k_m(\lambda)\dd\mu(\lambda),
-    \label{eq:plt23-Lminus-linear-lower}
-  \end{align}
-  where the first equality follows from \eqref{eq:plt23-Y-coeff} and the second equality holds because $m-1$ is even.
-
-  The decomposition \eqref{eq:plt23-g-decomp} can be expressed in terms of the spectral measure $\mu$ of $A$ as
+  We first bound $m[z^m]L_-(z)$ from below.  Recall that
+  \[
+    \mu=\sum_i\norm{P_ig}^2\delta_{\lambda_i}
+  \]
+  by \eqref{eq:mu-def}, which decomposes $\norm g^2$ along the eigenfunctions
+  of $A$.  The eigenspace of $\Lambda$ is spanned by $\phi$, so it carries the
+  weight $\ip g\phi^2=\gamma^2$, and every other eigenvalue lies in $[-M,M]$
+  and carries the weight of $g_s$.  This allows us to write
+  \eqref{eq:plt23-g-decomp} in terms of $\mu$ as
   \[
     \mu(\{\Lambda\})=\gamma^2,
     \qquad
-    \int_{[-M,M]}\dd\mu(\lambda)=\norm{g_s}^2,
+    \int_{[-M,M]}\dd\mu(\lambda)=\norm{g_s}^2.
   \]
-  so \eqref{eq:plt23-Lminus-linear-lower} can be decomposed as
+  Then, we have 
   \[
-    m\int k_m(\lambda)\dd\mu(\lambda)
+    m[z^m]L_-(z)\ge m\int k_m(\lambda)\dd\mu(\lambda)
     =mk_m(\Lambda)\gamma^2
     +m\int_{[-M,M]}k_m(\lambda)\dd\mu(\lambda).
   \]
+  where the first equality follows from \eqref{eq:plt23-Lminus-linear-lower} and the second by splitting the integral at $\Lambda$.
   The remaining integral can be bounded from below by $k_m(M)\norm{g_s}^2$, because $k_m$ attains its minimum over $[-M,M]$ at $\lambda=M$. 
   To see this, for $0\le s<p$, we first have
   \[
