@@ -2963,26 +2963,24 @@ the last inequality because $U\le1$ and the last equality by
 By \eqref{eq:plt23-gamma-upper-bound} and \eqref{eq:plt23-gs-norm-lower}, the pair
 $(\gamma,\norm{g_s})$ lies in
 \begin{equation}\label{eq:plt23-Sbar}
-  \overline S=\bigl\{(t,s):
-  t\le u_\gamma,\quad
-  bt+s\norm{\phi_\perp}\ge\kappa,\quad
-  s\ge0\bigr\},
+  \overline S=\bigl\{(\overline\gamma,\overline{\norm{g_s}}):
+  \overline\gamma\le u_\gamma,\quad
+  b\overline\gamma+\overline{\norm{g_s}}\norm{\phi_\perp}\ge\kappa,\quad
+  \overline{\norm{g_s}}\ge0\bigr\},
 \end{equation}
 where $u_\gamma, b, \norm{\phi_\perp}$, and $\kappa$ do not depend on
 $\gamma$ or $\norm{g_s}$.
 Hence
 \begin{equation}\label{eq:plt23-min-over-Sbar}
   \Lambda_m\gamma^2+M_m\norm{g_s}^2
-  \ge\min_{(t,s)\in\overline S}
-  \bigl(\Lambda_mt^2+M_ms^2\bigr),
+  \ge\min_{(\overline\gamma,\overline{\norm{g_s}})\in\overline S}
+  \bigl(\Lambda_m\overline\gamma^2+M_m\overline{\norm{g_s}}^2\bigr),
 \end{equation}
 and the right side is the minimum of a convex quadratic over a polyhedron.
 
 That minimum still depends on $\phi$, through $a_\phi$, $b$ and
 $\norm{\phi_\perp}$.  The following theorem evaluates it and bounds it from
 below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
-
-\tk{Revised until here.}
 
 \begin{theorem}[Reduction to $\psi(\xi,\rho)$]\label{thm:plt23-huber-elim}
   Let
@@ -2998,6 +2996,8 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
     \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.
     \label{eq:plt23-psi-def}
   \end{align}
+  where $\Omega_m$, $\xi$ and $\rho$ are positive by
+  \eqref{eq:plt23-M-Lambda-order} and \eqref{eq:plt23-Lambdam-Mm-positive}.
   Then
   \begin{equation}\label{eq:plt23-huber-payment}
     \Lambda_m\gamma^2+M_m\norm{g_s}^2
@@ -3006,22 +3006,129 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
 \end{theorem}
 
 \begin{proof}
-  We first evaluate the minimum in \eqref{eq:plt23-min-over-Sbar} in the variable $s$.
-  The objective increases in $s$, so at a minimizer $s$ is as small as
-  $\overline S$ allows, that is, $s\norm{\phi_\perp}=\pos{\kappa-bt}$.  For
-  $\phi_\perp\ne0$ this gives $s^2=\pos{\kappa-bt}^2/\norm{\phi_\perp}^2$, and
+  We first minimize \eqref{eq:plt23-min-over-Sbar} in the variable
+  $\overline{\norm{g_s}}$.  Since the objective increases in $\overline{\norm{g_s}}$, one should choose $\overline{\norm{g_s}}$ as small as $\overline S$ allows.  When $\phi_\perp\ne0$, one should choose
+  $\overline{\norm{g_s}}\norm{\phi_\perp}=\pos{\kappa-b\overline\gamma}$, so that
+  $\overline{\norm{g_s}}^2=\pos{\kappa-b\overline\gamma}^2/\norm{\phi_\perp}^2$
+  and
   \begin{equation}\label{eq:plt23-one-d-t}
-    \min_{(t,s)\in\overline S}\bigl(\Lambda_mt^2+M_ms^2\bigr)
-    =\min_{t\le u_\gamma}
+    \min_{(\overline\gamma,\overline{\norm{g_s}})\in\overline S}
+    \bigl(\Lambda_m\overline\gamma^2+M_m\overline{\norm{g_s}}^2\bigr)
+    =\min_{\overline\gamma\le u_\gamma}
     \left\{
-    \Lambda_mt^2+\frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-bt}^2
-    \right\};
+    \Lambda_m\overline\gamma^2
+    +\frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-b\overline\gamma}^2
+    \right\}.
   \end{equation}
-  for $\phi_\perp=0$ the constraint reads $bt\ge\kappa$ instead, and that case
-  is treated at the end.  We write $\gamma$ for $t$ again below.
+  When $\phi_\perp=0$, the variable $\overline{\norm{g_s}}$ does not appear in
+  the constraint, so it should be $0$, and \eqref{eq:plt23-Sbar} becomes a
+  restriction on $\overline\gamma$ alone, $b\overline\gamma\ge\kappa$.  Then
+  \begin{equation}\label{eq:plt23-one-d-t-zero}
+    \min_{(\overline\gamma,\overline{\norm{g_s}})\in\overline S}
+    \bigl(\Lambda_m\overline\gamma^2+M_m\overline{\norm{g_s}}^2\bigr)
+    =\min_{\overline\gamma\le u_\gamma,\ b\overline\gamma\ge\kappa}
+    \Lambda_m\overline\gamma^2.
+  \end{equation}
 
-  Assume $\phi_\perp\ne0$.  Suppose first that $u_\gamma\le0$.  Every
-  admissible $\gamma$ is nonpositive, so $\kappa-b\gamma\ge\kappa$, and the right
+  Suppose for the moment that $\overline\gamma\ge0$.  Then
+  \eqref{eq:plt23-gamma-upper-bound} gives
+  \[
+    2\overline\gamma a_\phi+2\Lambda b
+    \le a_\phi^2-2\Lambda=1-2\Lambda-b^2-\norm{\phi_\perp}^2
+    \le1-2\Lambda-b^2,
+  \]
+  so, since $a_\phi\ge\sqrt{2\Lambda}$ by \eqref{eq:plt23-aphi-lower},
+  \begin{equation}\label{eq:plt23-b-gamma-budget}
+    b^2+2\Lambda b+2\overline\gamma\sqrt{2\Lambda}\le1-2\Lambda,
+  \end{equation}
+  where the assumed hypothesis $\overline\gamma\ge0$ is what makes
+  $2\overline\gamma a_\phi\ge2\overline\gamma\sqrt{2\Lambda}$.
+
+  We can use this inequality to obtain two bounds on $\overline\gamma$ and
+  $b$ separately.  First, since $\phi$ was chosen so that $b\ge0$, the first
+  two terms on the left of
+  \eqref{eq:plt23-b-gamma-budget} are nonnegative, so
+  \begin{equation}\label{eq:plt23-gamma-range}
+    0\le\overline\gamma\le\frac{1-2\Lambda}{2\sqrt{2\Lambda}}.
+  \end{equation}
+  Second, viewing \eqref{eq:plt23-b-gamma-budget} as a quadratic inequality
+  in $b$ gives
+  \[
+    b^2+2\Lambda b-\bigl(1-2\Lambda-2\overline\gamma\sqrt{2\Lambda}\bigr)\le0,
+  \]
+  whose discriminant is nonnegative by \eqref{eq:plt23-gamma-range}.  So the
+  larger root of this quadratic, which is
+  $\sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}-\Lambda$, upper bounds
+  $b$:
+  \begin{equation}\label{eq:plt23-beta-gamma}
+    b\le\beta(\overline\gamma):=
+    \sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}-\Lambda.
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:plt23-beta-rational}
+    \beta(\overline\gamma)
+    =\frac{1-2\Lambda-2\overline\gamma\sqrt{2\Lambda}}
+    {\sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}+\Lambda}
+    \le\frac{1-2\Lambda-2\overline\gamma\sqrt{2\Lambda}}{2\Lambda},
+  \end{equation}
+  holds, where the equality comes from rationalizing the square root, using
+  $(1-\Lambda)^2-\Lambda^2=1-2\Lambda$, and the inequality holds since the
+  numerator is nonnegative and the denominator is at least $2\Lambda$.
+  Set
+  \begin{equation}\label{eq:plt23-v-def}
+    \overline v=\frac{2\overline\gamma\sqrt{2\Lambda}}{1-2\Lambda},
+    \qquad\text{so that}\qquad
+    \overline\gamma=\frac{\overline v(1-2\Lambda)}{2\sqrt{2\Lambda}}
+    \quad\text{and}\quad
+    \Lambda_m\overline\gamma^2=\Omega_m\rho\overline v^2.
+  \end{equation}
+  Here $\overline v$ lies in $[0,1]$ by \eqref{eq:plt23-gamma-range}, the
+  interval over which the minimum in \eqref{eq:plt23-psi-def} is taken, and
+  the last identity follows by the definitions
+  \eqref{eq:plt23-C-xi-rho} and \eqref{eq:plt23-rho-def}.
+  Substituting in \eqref{eq:plt23-beta-rational}, we obtain the inequality
+  that holds under the assumption $\overline\gamma\ge0$,
+  \begin{equation}\label{eq:plt23-gamma-beta-v}
+    \overline\gamma\beta(\overline\gamma)
+    \le\frac{(1-2\Lambda)^2\overline v(1-\overline v)}{4\Lambda\sqrt{2\Lambda}}.
+  \end{equation}
+
+  Now suppose first that $\phi_\perp=0$.  Then the constraint
+  $b\overline\gamma\ge\kappa$ of \eqref{eq:plt23-one-d-t-zero} simplifies to
+  \[
+    b\overline\gamma\ge\kappa
+    =\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
+    =\frac{(\Lambda-q)a_\phi}{2}>0,
+  \]
+  where $\Lambda>q$ by \eqref{eq:plt23-M-Lambda-order} and
+  $a_\phi=\ip\one{|\phi|}>0$.  Since $\phi$ was chosen so that $b\ge0$, this
+  forces $\overline\gamma>0$, so
+  \eqref{eq:plt23-gamma-range}--\eqref{eq:plt23-gamma-beta-v} hold.  With
+  the upper bound $b\le\beta(\overline\gamma)$ of \eqref{eq:plt23-beta-gamma}, we have
+  \[
+    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    \le\frac{(\Lambda-q)a_\phi}{2}
+    \le b\overline\gamma
+    \le\overline\gamma\beta(\overline\gamma)
+    \le\frac{(1-2\Lambda)^2\overline v(1-\overline v)}{4\Lambda\sqrt{2\Lambda}},
+  \]
+  which simplifies to $\xi-\overline v+\overline v^2\le0$.  Thus the second
+  term in \eqref{eq:plt23-psi-def} is zero at $v=\overline v$, and every pair $(\overline\gamma,\overline{\norm{g_s}})$ in $\overline S$ satisfies
+  \[
+    \Lambda_m\overline\gamma^2
+    =\Omega_m\rho\overline v^2
+    =\Omega_m\bigl(\rho\overline v^2+\pos{\xi-\overline v+\overline v^2}\bigr)
+    \ge \Omega_m\psi(\xi,\rho),
+  \]
+  where the first equality is \eqref{eq:plt23-v-def}.  With
+  \eqref{eq:plt23-one-d-t-zero} this proves
+  \eqref{eq:plt23-huber-payment} in the case $\phi_\perp=0$.
+
+  \tk{Revised up to here.}
+
+  Now assume $\phi_\perp\ne0$.  Suppose first that $u_\gamma\le0$.  Every
+  admissible $\overline\gamma$ is nonpositive, so
+  $\kappa-b\overline\gamma\ge\kappa$, and the right
   side of \eqref{eq:plt23-one-d-t} is at least
   \[
     M_m\frac{\kappa^2}{\norm{\phi_\perp}^2}.
@@ -3043,29 +3150,10 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
   Thus \eqref{eq:plt23-huber-payment} holds in this case.
 
   Now suppose $u_\gamma>0$.  A minimizer in \eqref{eq:plt23-one-d-t} may be taken
-  with $\gamma\ge0$: replacing a negative $\gamma$ by $0$ decreases both
-  terms.  The bound \eqref{eq:plt23-gamma-upper-bound} gives
-  \[
-    2\gamma a_\phi+2\Lambda b
-    \le a_\phi^2-2\Lambda=1-2\Lambda-b^2-\norm{\phi_\perp}^2
-    \le1-2\Lambda-b^2.
-  \]
-  Since $a_\phi^2\ge2\Lambda$,
-  \begin{equation}\label{eq:plt23-b-gamma-budget}
-    b^2+2\Lambda b+2\gamma\sqrt{2\Lambda}\le1-2\Lambda.
-  \end{equation}
-  It follows that
-  \begin{equation}\label{eq:plt23-beta-gamma}
-    0\le\gamma\le\frac{1-2\Lambda}{2\sqrt{2\Lambda}},
-    \qquad
-    b\le\beta(\gamma):=
-    \sqrt{(1-\Lambda)^2-2\gamma\sqrt{2\Lambda}}-\Lambda.
-  \end{equation}
-  Rationalizing the square root,
-  \begin{equation}\label{eq:plt23-beta-rational}
-    \beta(\gamma)
-    \le\frac{1-2\Lambda-2\gamma\sqrt{2\Lambda}}{2\Lambda}.
-  \end{equation}
+  with $\overline\gamma\ge0$: replacing a negative $\overline\gamma$ by $0$
+  decreases both
+  terms, so \eqref{eq:plt23-gamma-range}--\eqref{eq:plt23-gamma-beta-v}
+  hold.
   Also, since $2\Lambda\le a_\phi^2\le1$,
   \begin{equation}\label{eq:plt23-H-lower}
     \kappa\ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
@@ -3077,62 +3165,88 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
   \end{equation}
   Indeed, for $w\ge0$ this is the arithmetic--geometric mean inequality,
   with equality at $t=2w/(\Lambda-M)$; for $w<0$, both sides vanish after
-  choosing $0<t\le-2w/(\Lambda-M)$.  Using \eqref{eq:plt23-one-d-t},
-  \eqref{eq:plt23-H-lower}, and \eqref{eq:plt23-K-AMGM}, and then maximizing $b$ by
-  \eqref{eq:plt23-beta-gamma}, we obtain
+  choosing $0<t\le-2w/(\Lambda-M)$.
+
+  We now bound the objective of \eqref{eq:plt23-one-d-t} from below at each
+  admissible $\overline\gamma\ge0$.  Abbreviate
+  \[
+    w=\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}-b\overline\gamma,
+  \]
+  so that $\kappa-b\overline\gamma\ge w+(\Lambda-M)\norm{\phi_\perp}^2/2$ by
+  \eqref{eq:plt23-H-lower}.  Since $x\mapsto\pos x^2$ is nondecreasing and
+  $\norm{\phi_\perp}^2>0$,
+  \[
+    \frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-b\overline\gamma}^2
+    \ge M_m\,
+    \frac{\pos{w+(\Lambda-M)\norm{\phi_\perp}^2/2}^2}{\norm{\phi_\perp}^2}
+    \ge2M_m(\Lambda-M)\pos w,
+  \]
+  the last step by \eqref{eq:plt23-K-AMGM} with $t=\norm{\phi_\perp}^2$.  This
+  removes $\norm{\phi_\perp}$ from the objective, and $b$ is removed next:
+  as $\overline\gamma\ge0$ and $b\le\beta(\overline\gamma)$ by
+  \eqref{eq:plt23-beta-gamma}, we have
+  $b\overline\gamma\le\overline\gamma\beta(\overline\gamma)$, so
+  \[
+    \pos w\ge
+    \pos{\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    -\overline\gamma\beta(\overline\gamma)}.
+  \]
+  Finally, \eqref{eq:plt23-gamma-range} bounds the admissible
+  $\overline\gamma$ by $(1-2\Lambda)/(2\sqrt{2\Lambda})$, and enlarging the
+  range of a minimum only decreases it.  Together with
+  \eqref{eq:plt23-min-over-Sbar} and \eqref{eq:plt23-one-d-t}, these three
+  steps give
   \begin{equation}\label{eq:plt23-one-d-gamma}
     \Lambda_m\gamma^2+M_m\norm{g_s}^2
     \ge
-    \min_{0\le\gamma\le(1-2\Lambda)/(2\sqrt{2\Lambda})}
+    \min_{0\le\overline\gamma\le(1-2\Lambda)/(2\sqrt{2\Lambda})}
     \left\{
-    \Lambda_m\gamma^2+2M_m(\Lambda-M)
-    \pos{\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}-\gamma\beta(\gamma)}
+    \Lambda_m\overline\gamma^2+2M_m(\Lambda-M)
+    \pos{\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    -\overline\gamma\beta(\overline\gamma)}
     \right\}.
   \end{equation}
-  Set
+  It remains to rewrite \eqref{eq:plt23-one-d-gamma} in the variable
+  $\overline v$ of \eqref{eq:plt23-v-def}, which runs over $[0,1]$ as
+  $\overline\gamma$ runs over $[0,(1-2\Lambda)/(2\sqrt{2\Lambda})]$.  For the
+  second term of the objective, \eqref{eq:plt23-gamma-beta-v} gives
   \[
-    v=\frac{2\gamma\sqrt{2\Lambda}}{1-2\Lambda}\in[0,1].
+    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    -\overline\gamma\beta(\overline\gamma)
+    \ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    -\frac{(1-2\Lambda)^2\overline v(1-\overline v)}{4\Lambda\sqrt{2\Lambda}}
+    =\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    \bigl(\xi-\overline v+\overline v^2\bigr),
   \]
-  By \eqref{eq:plt23-beta-rational},
+  where the equality collects the two terms using the definition
+  \eqref{eq:plt23-xi-def} of $\xi$ and
+  $1/(4\Lambda\sqrt{2\Lambda})=\sqrt{2\Lambda}/(8\Lambda^2)$.  The factor in
+  front is positive and $x\mapsto\pos x$ is nondecreasing, so
   \[
-    \gamma\beta(\gamma)
-    \le\frac{(1-2\Lambda)^2v(1-v)}{4\Lambda\sqrt{2\Lambda}}.
+    2M_m(\Lambda-M)
+    \pos{\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    -\overline\gamma\beta(\overline\gamma)}
+    \ge2M_m(\Lambda-M)\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    \pos{\xi-\overline v+\overline v^2}.
   \]
-  Therefore
+  For the first term, \eqref{eq:plt23-v-def} gives
+  $\Lambda_m\overline\gamma^2=\Omega_m\rho\overline v^2$, and the definitions
+  \eqref{eq:plt23-C-xi-rho} and \eqref{eq:plt23-rho-def} also give
   \[
-    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}-\gamma\beta(\gamma)
-    \ge\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
-    (\xi-v+v^2).
-  \]
-  Furthermore,
-  \[
-    \Lambda_m\gamma^2=\Omega_m\rho v^2,
-    \qquad
     2M_m(\Lambda-M)\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
     =\Omega_m.
   \]
-  Substitution in \eqref{eq:plt23-one-d-gamma} proves
-  \eqref{eq:plt23-huber-payment}.
-
-  Finally suppose $\phi_\perp=0$.  The constraint in \eqref{eq:plt23-Sbar} then
-  reads $b\gamma\ge\kappa$, that is,
+  Hence the objective of \eqref{eq:plt23-one-d-gamma} is at least
+  $\Omega_m\bigl(\rho\overline v^2+\pos{\xi-\overline v+\overline v^2}\bigr)$
+  at every admissible $\overline\gamma$, and minimizing over
+  $\overline v\in[0,1]$ gives
   \[
-    b\gamma\ge\frac{(\Lambda-q)a_\phi}{2}
-    \ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}>0,
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2
+    \ge\Omega_m\min_{0\le v\le1}
+    \bigl\{\rho v^2+\pos{\xi-v+v^2}\bigr\}
+    =\Omega_m\psi(\xi,\rho)
   \]
-  so $b,\gamma>0$ and \eqref{eq:plt23-b-gamma-budget} still applies.  With the
-  same variable $v$,
-  \[
-    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
-    \le b\gamma
-    \le\frac{(1-2\Lambda)^2v(1-v)}{4\Lambda\sqrt{2\Lambda}},
-  \]
-  which is equivalent to $\xi\le v-v^2$.  Thus the positive-part term in
-  \eqref{eq:plt23-psi-def} vanishes at this $v$, and
-  \[
-    \Lambda_m\gamma^2=\Omega_m\rho v^2\ge \Omega_m\psi(\xi,\rho).
-  \]
-  This completes the proof.
+  by \eqref{eq:plt23-psi-def}, which is \eqref{eq:plt23-huber-payment}.
 \end{proof}
 
 It remains to say which pairs $(q,\Lambda)$ can occur.  The eigenfunction
