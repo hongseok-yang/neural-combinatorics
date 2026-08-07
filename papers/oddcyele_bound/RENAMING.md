@@ -59,7 +59,18 @@ Started 2026-08-06; label batches executed 2026-08-07.
 | `B_m` | `M_m` | likewise `M_m = 2M^{m-2}+mk_m(M)`; the parallel structure is now visible |
 | `K_A` | `K_\Lambda` | follows `A_m → \Lambda_m` (its companion `K_L` became `K_M` automatically) |
 | `R_m` | unchanged | accepted as "residual" |
-| `C_m` | tbd | still collides with the cycle `C_m`; `\tk` note moved to its definition at `eq:C-xi-rho` |
+
+## A3. Symbol renames performed in §5.4 (2026-08-06/07, second pass)
+
+| Old | New | Reason |
+|---|---|---|
+| `C_m` | `\Omega_m` | collided with the cycle `C_m`. Ω, Π, Υ, Ψ are the only unused uppercase Greek; Ψ clashes visually with the adjacent ψ in `\Omega_m\psi(\xi,\rho)`, Π reads as a product |
+| `\cH` | `\kappa` | `\mathcal H` reads as a Hilbert space. κ is unused and — unlike τ — cannot be confused with the variable `t` of the polyhedron `\overline S`. Preamble macro `\cH` deleted |
+| `\cQ` | removed | every use was of the form "Q ≥ …", so the displays now carry the quantity they bound; also collided with the chart's `Q`. Preamble macro deleted |
+| `d = \Lambda-q`, `f = \Lambda-M`, `e = 1-2\Lambda` | written out | `f` and `d` are re-used as `f(\eta)` and `d = N+1-\eta` in the growth lemma; `e` collided with `e^t` in the compensation lemma. One gain: `\Lambda^2+e = (1-\Lambda)^2`, so `\beta(\gamma)=\sqrt{(1-\Lambda)^2-2\gamma\sqrt{2\Lambda}}-\Lambda` |
+| `z = a_\phi^2` | `a_\phi^2` | `z` was the formal variable of `L_-(z)`, `Y(z)` in §5.1–5.3; `\sqrt z` became `a_\phi` |
+| `K = \norm k^2` | `\norm{\phi_\perp}^2` | `K` collided with the kernel `K` of §3 and with `K_\Lambda`, `K_M`; the AM–GM step now uses a neutral bound variable `t` |
+| `k` (part of `|\phi|` orthogonal to `\one,\phi`) | `\phi_\perp` | `k` read as a constant, not a function, and collided with summation indices |
 
 Labels not yet touched, to go in the batch below: `eq:Am-def`, `eq:Bm-def`, `eq:AB-order`,
 `eq:KA-def`, `eq:KA-sum`, `eq:L-def`, `eq:L-order`, `eq:alpha-frontier`, `eq:alpha-ceiling`,

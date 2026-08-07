@@ -41,7 +41,6 @@
 \newcommand{\Tr}{\operatorname{Tr}}
 \newcommand{\ord}{\operatorname{ord}}
 \newcommand{\pos}[1]{\left(#1\right)_{+}}
-\newcommand{\cH}{\mathcal H}
 \newcommand{\dd}{\,\mathrm d}
 \newcommand{\E}{\mathbb E}
 \newcommand{\GammaLaw}{\operatorname{Gamma}}
@@ -2868,11 +2867,11 @@ the last inequality because $U\le1$ and the last equality by
   \begin{equation}\label{eq:plt23-gs-inner-lower}
     b\gamma+\ip{g_s}{\phi_\perp}
     \ge\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
-    \eqqcolon\cH.
+    \eqqcolon\kappa.
   \end{equation}
   Consequently,
   \begin{equation}\label{eq:plt23-gs-norm-lower}
-    \norm{g_s}\norm{\phi_\perp}\ge \ip{g_s}{\phi_\perp}\ge\cH-b\gamma.
+    \norm{g_s}\norm{\phi_\perp}\ge \ip{g_s}{\phi_\perp}\ge\kappa-b\gamma.
   \end{equation}
 \end{lemma}
 
@@ -2968,7 +2967,7 @@ the last inequality because $U\le1$ and the last equality by
   \]
   which is \eqref{eq:plt23-gs-inner-lower}. 
   The consequence follows from \eqref{eq:plt23-gs-inner-lower} and Cauchy--Schwarz,
-  $\norm{g_s}\norm{\phi_\perp}\ge\ip{g_s}{\phi_\perp}\ge\cH-b\gamma$.
+  $\norm{g_s}\norm{\phi_\perp}\ge\ip{g_s}{\phi_\perp}\ge\kappa-b\gamma$.
 \end{proof}
 
 By \eqref{eq:plt23-gamma-upper-bound} and \eqref{eq:plt23-gs-norm-lower}, the pair
@@ -2976,10 +2975,12 @@ $(\gamma,\norm{g_s})$ lies in
 \begin{equation}\label{eq:plt23-Sbar}
   \overline S=\bigl\{(t,s):
   t\le u_\gamma,\quad
-  bt+s\norm{\phi_\perp}\ge\cH,\quad
+  bt+s\norm{\phi_\perp}\ge\kappa,\quad
   s\ge0\bigr\},
 \end{equation}
-a polyhedron determined by $a_\phi$, $b$ and $\norm{\phi_\perp}$.  Hence
+where $u_\gamma, b, \norm{\phi_\perp}$, and $\kappa$ do not depend on
+$\gamma$ or $\norm{g_s}$.
+Hence
 \begin{equation}\label{eq:plt23-min-over-Sbar}
   \Lambda_m\gamma^2+M_m\norm{g_s}^2
   \ge\min_{(t,s)\in\overline S}
@@ -3017,27 +3018,27 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
 \begin{proof}
   We first evaluate the minimum in \eqref{eq:plt23-min-over-Sbar} in the variable $s$.
   The objective increases in $s$, so at a minimizer $s$ is as small as
-  $\overline S$ allows, that is, $s\norm{\phi_\perp}=\pos{\cH-bt}$.  For
-  $\phi_\perp\ne0$ this gives $s^2=\pos{\cH-bt}^2/\norm{\phi_\perp}^2$, and
+  $\overline S$ allows, that is, $s\norm{\phi_\perp}=\pos{\kappa-bt}$.  For
+  $\phi_\perp\ne0$ this gives $s^2=\pos{\kappa-bt}^2/\norm{\phi_\perp}^2$, and
   \begin{equation}\label{eq:plt23-one-d-t}
     \min_{(t,s)\in\overline S}\bigl(\Lambda_mt^2+M_ms^2\bigr)
     =\min_{t\le u_\gamma}
     \left\{
-    \Lambda_mt^2+\frac{M_m}{\norm{\phi_\perp}^2}\pos{\cH-bt}^2
+    \Lambda_mt^2+\frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-bt}^2
     \right\};
   \end{equation}
-  for $\phi_\perp=0$ the constraint reads $bt\ge\cH$ instead, and that case
+  for $\phi_\perp=0$ the constraint reads $bt\ge\kappa$ instead, and that case
   is treated at the end.  We write $\gamma$ for $t$ again below.
 
   Assume $\phi_\perp\ne0$.  Suppose first that $u_\gamma\le0$.  Every
-  admissible $\gamma$ is nonpositive, so $\cH-b\gamma\ge\cH$, and the right
+  admissible $\gamma$ is nonpositive, so $\kappa-b\gamma\ge\kappa$, and the right
   side of \eqref{eq:plt23-one-d-t} is at least
   \[
-    M_m\frac{\cH^2}{\norm{\phi_\perp}^2}.
+    M_m\frac{\kappa^2}{\norm{\phi_\perp}^2}.
   \]
   By \eqref{eq:plt23-gs-inner-lower},
   \[
-    \frac{\cH^2}{\norm{\phi_\perp}^2}
+    \frac{\kappa^2}{\norm{\phi_\perp}^2}
     =\frac{\bigl((\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2}
     {4a_\phi^2\norm{\phi_\perp}^2}\ge(\Lambda-q)(\Lambda-M),
   \]
@@ -3077,7 +3078,7 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
   \end{equation}
   Also, since $2\Lambda\le a_\phi^2\le1$,
   \begin{equation}\label{eq:plt23-H-lower}
-    \cH\ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    \kappa\ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
     +\frac{(\Lambda-M)\norm{\phi_\perp}^2}{2}.
   \end{equation}
   For every real $w$,
@@ -3124,7 +3125,7 @@ below by a quantity depending only on $q$, $\Lambda$, $M$ and $m$.
   \eqref{eq:plt23-huber-payment}.
 
   Finally suppose $\phi_\perp=0$.  The constraint in \eqref{eq:plt23-Sbar} then
-  reads $b\gamma\ge\cH$, that is,
+  reads $b\gamma\ge\kappa$, that is,
   \[
     b\gamma\ge\frac{(\Lambda-q)a_\phi}{2}
     \ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}>0,
