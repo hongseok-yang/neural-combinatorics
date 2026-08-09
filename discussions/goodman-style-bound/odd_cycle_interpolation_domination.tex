@@ -1,0 +1,1666 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{array}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{convention}[theorem]{Convention}
+
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\homn}{\operatorname{hom}}
+\newcommand{\tr}{\operatorname{Tr}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\Ct}{\mathcal{C}}
+\newcommand{\wtOmega}{\widetilde{\Omega}}
+\newcommand{\dd}{\,\mathrm{d}}
+
+\title{Even-Anchored Interpolation for Odd Cycles\\
+       and Consequences for Domination Exponents}
+\author{Detailed working note}
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $T$ be a finite simple target graph.  We prove that whenever $b$ is even,
+$n,m$ are odd, and $2\le b<n<m$, one has
+\[
+  t(\Ct_b,T)^{m-n}\,t(C_m,T)^{n-b}
+  \ge t(C_n,T)^{m-b},
+\]
+where $\Ct_2:=K_2$ and $\Ct_b:=C_b$ for $b\ge4$.
+The proof is obtained by rooting all three closed walks at a vertex, applying
+Sa\u{g}lam's same-parity power inequality to a nonnegative vector of the form
+$A^{b/2}e_x$, and then summing by H\"older's inequality.  In particular, this
+proves the cycle inequality posed as Problem~6 in Blekherman--Raymond--Razborov--Wei.
+Combining the edge-anchored case $b=2$ with their pruning argument yields
+\[
+ C(C_{2k+1},C_{2\ell+1})
+ \le
+ \frac{2k(2k-2\ell+1)-1}
+      {2\ell(2k-2\ell+1)-1}
+ \qquad (k>\ell),
+\]
+thereby extending their second upper-bound formula to the full parameter range.
+Every reduction after Sa\u{g}lam's theorem is written out explicitly, including
+zero cases, normalization from homomorphism numbers to densities, the pruning
+constants, the elimination of the edge density, and the tensor-power limit.
+A final section records a Lean-oriented dependency graph and theorem statements.
+\end{abstract}
+
+\tableofcontents
+
+\section{Scope, notation, and logical dependencies}
+
+All graphs in this note are finite, simple, undirected, and loopless.  A target
+graph is denoted by $T$, its vertex set by $V(T)$, and its number of vertices by
+\[
+  N:=|V(T)|.
+\]
+We always assume $N\ge1$.
+
+For finite graphs $F,T$, let
+\[
+  \homn(F,T):=|\Hom(F,T)|
+\]
+be the number of graph homomorphisms $F\to T$, and let
+\[
+  t(F,T):=\frac{\homn(F,T)}{N^{|V(F)|}}
+\]
+be the corresponding homomorphism density.
+
+\begin{convention}[The symbol $\Ct_2$]
+For the purpose of a uniform trace formula, define
+\[
+  \Ct_2:=K_2,
+  \qquad
+  \Ct_r:=C_r\quad(r\ge3).
+\]
+Thus $\Ct_2$ is not a two-edge multigraph.  This convention is valid for
+finite simple targets because the entries of their adjacency matrices are
+$0$ or $1$.
+\end{convention}
+
+The proof has one non-elementary external input.
+
+\begin{theorem}[Sa\u{g}lam's same-parity power inequality]\label{thm:saglam}
+Let $\Omega$ be a finite set.  Let $S\in\RR^{\Omega\times\Omega}$ be symmetric
+and entrywise nonnegative, and let $u,v\in\RR^\Omega$ be entrywise nonnegative
+unit vectors.  If $K,R$ are positive integers satisfying
+\[
+  K\ge R,
+  \qquad
+  K\equiv R\pmod 2,
+\]
+then
+\[
+  \langle v,S^K u\rangle^R
+  \ge
+  \langle v,S^R u\rangle^K.
+\]
+\end{theorem}
+
+This is Theorem~1.3 of Sa\u{g}lam~\cite{Saglam2018}.  We use only the special
+case $u=v$.  No regularity, stochasticity, or positive-semidefiniteness is
+assumed: symmetry and entrywise nonnegativity are the relevant hypotheses.
+
+\medskip
+\noindent
+\textbf{Dependency boundary.}
+The exact cycle-interpolation theorem below is completely proved from
+Theorem~\ref{thm:saglam}, finite-dimensional matrix algebra, and H\"older's
+inequality.  The domination-exponent corollary additionally uses a pruning
+argument, which is reproduced in Section~\ref{sec:pruning}, and the elementary
+even-cycle estimate proved in Lemma~\ref{lem:even-cycle-edge}.  Thus a formal
+proof assistant development may isolate Theorem~\ref{thm:saglam} as the only
+substantial imported theorem.  Every use of it below records the matrix,
+vectors, exponents, parity checks, zero-denominator case, and denominator
+clearing explicitly.
+
+\begin{remark}[Novelty status]
+The inequality proved here is exactly the inequality asked as Problem~6 in
+version~2 of Blekherman--Raymond--Razborov--Wei~\cite{BRRW2025}.  This note
+records a proof and its consequences; it does not make a priority claim.
+Independent verification should precede any claim of novelty.
+\end{remark}
+
+\section{Adjacency matrices and rooted closed walks}
+
+Let $A$ be the adjacency matrix of $T$, indexed by $V(T)$.  Thus
+\[
+  A_{xy}=\begin{cases}
+  1,&\{x,y\}\in E(T),\\
+  0,&\text{otherwise}.
+  \end{cases}
+\]
+The matrix $A$ is symmetric and entrywise nonnegative.  For $x\in V(T)$, let
+$e_x$ be the standard basis vector at $x$.  For every integer $r\ge0$, define
+\[
+  c_r(x):=(A^r)_{xx}=\langle e_x,A^r e_x\rangle.
+\]
+For $r\ge1$, $c_r(x)$ is the number of closed walks of length $r$ in $T$ that
+start and end at $x$.
+
+\begin{lemma}[Trace and homomorphism counts]\label{lem:trace-hom}
+For every integer $r\ge3$,
+\[
+  \homn(C_r,T)=\tr(A^r)=\sum_{x\in V(T)}c_r(x).
+\]
+Moreover,
+\[
+  \homn(K_2,T)=\tr(A^2)=\sum_{x\in V(T)}c_2(x)=2|E(T)|.
+\]
+Consequently, for every $r\ge2$,
+\[
+  \homn(\Ct_r,T)=\tr(A^r).
+\]
+\end{lemma}
+
+\begin{proof}
+Fix $r\ge3$, and write the vertices of $C_r$ cyclically as
+$0,1,\ldots,r-1$.  Expanding the $(x,x)$ entry of $A^r$ gives
+\[
+  (A^r)_{xx}
+  =
+  \sum_{x_1,\ldots,x_{r-1}\in V(T)}
+  A_{x x_1}A_{x_1x_2}\cdots A_{x_{r-2}x_{r-1}}A_{x_{r-1}x}.
+\]
+Because every factor is either $0$ or $1$, a summand equals $1$ exactly when
+\[
+  0\mapsto x,
+  \quad
+  1\mapsto x_1,
+  \quad\ldots,\quad
+  r-1\mapsto x_{r-1}
+\]
+defines a homomorphism $C_r\to T$.  Therefore $c_r(x)$ counts precisely the
+homomorphisms for which vertex $0$ is mapped to $x$.  Summing over $x$ counts
+every homomorphism exactly once, proving the first identity.
+
+For $r=2$,
+\[
+  (A^2)_{xx}=\sum_{y\in V(T)}A_{xy}A_{yx}
+  =\sum_y A_{xy}^2
+  =\sum_y A_{xy}
+  =\deg_T(x),
+\]
+where symmetry and $A_{xy}\in\{0,1\}$ were used.  Hence
+\[
+  \tr(A^2)=\sum_x\deg_T(x)=2|E(T)|.
+\]
+A homomorphism $K_2\to T$ is an ordered adjacent pair, so its number is also
+$2|E(T)|$.
+\end{proof}
+
+The next identity is the reason an even cycle can be used as an anchor.
+
+\begin{lemma}[Moving an even anchor to the endpoints]\label{lem:anchor-vector}
+Let $b\ge2$ be even, let $x\in V(T)$, and set
+\[
+  w_x:=A^{b/2}e_x.
+\]
+Then $w_x$ is entrywise nonnegative and, for every integer $r\ge b$,
+\[
+  \|w_x\|_2^2=c_b(x),
+  \qquad
+  \langle w_x,A^{r-b}w_x\rangle=c_r(x).
+\]
+\end{lemma}
+
+\begin{proof}
+Every entry of every nonnegative integer power of the entrywise nonnegative
+matrix $A$ is nonnegative, so $w_x\ge0$ coordinatewise.  Since $A$ is
+symmetric, so is $A^{b/2}$, and therefore
+\[
+  \|w_x\|_2^2
+  =\langle A^{b/2}e_x,A^{b/2}e_x\rangle
+  =\langle e_x,A^{b/2}A^{b/2}e_x\rangle
+  =\langle e_x,A^b e_x\rangle
+  =c_b(x).
+\]
+Similarly, for $r\ge b$,
+\[
+\begin{aligned}
+  \langle w_x,A^{r-b}w_x\rangle
+  &=\langle A^{b/2}e_x,A^{r-b}A^{b/2}e_x\rangle\\
+  &=\langle e_x,A^{b/2}A^{r-b}A^{b/2}e_x\rangle\\
+  &=\langle e_x,A^r e_x\rangle
+  =c_r(x).
+\end{aligned}
+\]
+All powers commute because they are powers of the same matrix.
+\end{proof}
+
+\section{The rooted interpolation inequality}
+
+\begin{lemma}[Rooted even-anchor interpolation]\label{lem:rooted-interpolation}
+Let $b,n,m$ be integers such that
+\[
+  2\le b<n<m,
+  \qquad
+  b\text{ is even},
+  \qquad
+  n,m\text{ are odd}.
+\]
+Then, for every $x\in V(T)$,
+\[
+  c_b(x)^{m-n}\,c_m(x)^{n-b}
+  \ge
+  c_n(x)^{m-b}.
+  \tag{3.1}\label{eq:rooted-interpolation}
+\]
+\end{lemma}
+
+\begin{proof}
+Fix $x\in V(T)$ and let $w_x=A^{b/2}e_x$ as in
+Lemma~\ref{lem:anchor-vector}.  We split into two cases.
+
+\smallskip
+\noindent
+\emph{Case 1: $c_b(x)=0$.}
+By Lemma~\ref{lem:anchor-vector},
+\[
+  \|w_x\|_2^2=c_b(x)=0.
+\]
+A vector in a real inner-product space has norm zero only when it is the zero
+vector, so $w_x=0$.  Again by Lemma~\ref{lem:anchor-vector},
+\[
+  c_n(x)=\langle w_x,A^{n-b}w_x\rangle=0,
+  \qquad
+  c_m(x)=\langle w_x,A^{m-b}w_x\rangle=0.
+\]
+All three exponents in \eqref{eq:rooted-interpolation} are positive, because
+$b<n<m$.  Thus both sides are zero, and the inequality holds.
+
+\smallskip
+\noindent
+\emph{Case 2: $c_b(x)>0$.}
+Define
+\[
+  u_x:=\frac{w_x}{\|w_x\|_2}.
+\]
+Then $u_x$ is an entrywise nonnegative unit vector.  Put
+\[
+  K:=m-b,
+  \qquad
+  R:=n-b.
+\]
+Since $b$ is even and $m,n$ are odd, both $K$ and $R$ are positive odd
+integers.  Moreover $K>R$.  The hypotheses of
+Theorem~\ref{thm:saglam} therefore hold with
+\[
+  S=A,
+  \qquad
+  u=v=u_x.
+\]
+Hence
+\[
+  \langle u_x,A^{m-b}u_x\rangle^{n-b}
+  \ge
+  \langle u_x,A^{n-b}u_x\rangle^{m-b}.
+  \tag{3.2}\label{eq:saglam-applied}
+\]
+By Lemma~\ref{lem:anchor-vector} and
+$\|w_x\|_2^2=c_b(x)$,
+\[
+  \langle u_x,A^{r-b}u_x\rangle
+  =\frac{\langle w_x,A^{r-b}w_x\rangle}{\|w_x\|_2^2}
+  =\frac{c_r(x)}{c_b(x)}
+  \qquad(r\in\{n,m\}).
+\]
+Substitution into \eqref{eq:saglam-applied} gives
+\[
+  \left(\frac{c_m(x)}{c_b(x)}\right)^{n-b}
+  \ge
+  \left(\frac{c_n(x)}{c_b(x)}\right)^{m-b}.
+\]
+Multiplying both sides by the positive number $c_b(x)^{m-b}$ yields
+\[
+  c_b(x)^{(m-b)-(n-b)}c_m(x)^{n-b}
+  \ge c_n(x)^{m-b}.
+\]
+Since $(m-b)-(n-b)=m-n$, this is exactly
+\eqref{eq:rooted-interpolation}.
+\end{proof}
+
+\section{Why the regular case is easy}
+\label{sec:regular}
+
+The ordinary regularity assumption corresponds to the special anchor $b=2$.
+Indeed,
+\[
+  c_2(x)=\deg_T(x).
+\]
+For $b>2$, ordinary regularity does not generally make $c_b(x)$ independent
+of $x$; that stronger property is usually called walk-regularity at length
+$b$.  Thus the regular-to-general interpretation below should first be read
+for the edge-anchored inequality.
+
+\begin{proposition}[Edge-anchored interpolation for a regular target]
+\label{prop:regular-edge-anchor}
+Let $2<n<m$ be odd, and let $T$ be a $d$-regular graph on $N$ vertices.  Then
+\[
+  t(K_2,T)^{m-n}\,t(C_m,T)^{n-2}
+  \ge
+  t(C_n,T)^{m-2}.
+  \tag{4.1}\label{eq:regular-density}
+\]
+\end{proposition}
+
+\begin{proof}
+Set
+\[
+  \alpha:=\frac{m-n}{m-2},
+  \qquad
+  \beta:=\frac{n-2}{m-2}.
+\]
+Because $2<n<m$, one has
+\[
+  0<\alpha<1,
+  \qquad
+  0<\beta<1,
+  \qquad
+  \alpha+\beta=1.
+\]
+Lemma~\ref{lem:rooted-interpolation}, with $b=2$, gives
+\[
+  d^{m-n}c_m(x)^{n-2}\ge c_n(x)^{m-2}.
+\]
+All quantities are nonnegative, so taking the $(m-2)$-th root gives
+\[
+  c_n(x)\le d^\alpha c_m(x)^\beta.
+\]
+Summing over $x$,
+\[
+  \homn(C_n,T)
+  =\sum_xc_n(x)
+  \le d^\alpha\sum_x c_m(x)^\beta.
+\]
+Since $0<\beta<1$, H\"older's inequality, equivalently the power-mean
+inequality, gives
+\[
+  \sum_xc_m(x)^\beta
+  \le
+  N^{1-\beta}\left(\sum_xc_m(x)\right)^\beta
+  =N^\alpha\homn(C_m,T)^\beta.
+\]
+Therefore
+\[
+  \homn(C_n,T)
+  \le
+  (Nd)^\alpha\homn(C_m,T)^\beta.
+\]
+For a $d$-regular graph,
+\[
+  \homn(K_2,T)=2|E(T)|=Nd.
+\]
+Thus
+\[
+  \homn(C_n,T)
+  \le
+  \homn(K_2,T)^\alpha\homn(C_m,T)^\beta.
+\]
+Raising to the power $m-2$ gives
+\[
+  \homn(K_2,T)^{m-n}\homn(C_m,T)^{n-2}
+  \ge
+  \homn(C_n,T)^{m-2}.
+  \tag{4.2}\label{eq:regular-hom}
+\]
+Finally, the total number of source vertices on the two sides agrees:
+\[
+  2(m-n)+m(n-2)=n(m-2).
+\]
+Dividing \eqref{eq:regular-hom} by $N^{n(m-2)}$ therefore gives
+\eqref{eq:regular-density}.
+\end{proof}
+
+The proof shows exactly what ordinary regularity contributed: it made the
+rooted anchor $c_2(x)=d$ constant, so it could be pulled out of the sum.  In
+the general case, the same rooted inequality remains true, and a two-factor
+H\"older inequality absorbs the variation of $d(x)$ exactly.  There is no
+uncontrolled additive error and therefore no need for a Schur complement in
+this problem.
+
+\section{Removing regularity by H\"older's inequality}
+
+We first isolate the precise finite H\"older statement used in the summation.
+
+\begin{lemma}[Integer-exponent form of two-factor H\"older]
+\label{lem:integer-holder}
+Let $I$ be a finite set.  Let $P,Q$ be positive integers and put $R=P+Q$.
+Suppose $a_i,b_i,c_i\ge0$ for every $i\in I$ and
+\[
+  a_i^R\le b_i^P c_i^Q
+  \qquad(i\in I).
+  \tag{5.1}\label{eq:pointwise-holder-hyp}
+\]
+Then
+\[
+  \left(\sum_{i\in I}a_i\right)^R
+  \le
+  \left(\sum_{i\in I}b_i\right)^P
+  \left(\sum_{i\in I}c_i\right)^Q.
+  \tag{5.2}\label{eq:integer-holder}
+\]
+\end{lemma}
+
+\begin{proof}
+Set
+\[
+  \alpha:=\frac{P}{R},
+  \qquad
+  \beta:=\frac{Q}{R}.
+\]
+Then $\alpha,\beta\in(0,1)$ and $\alpha+\beta=1$.  Since the map
+$x\mapsto x^{1/R}$ is increasing on $[0,\infty)$,
+\eqref{eq:pointwise-holder-hyp} implies
+\[
+  a_i\le b_i^\alpha c_i^\beta.
+\]
+Let
+\[
+  p_0:=\frac{1}{\alpha}=\frac{R}{P},
+  \qquad
+  q_0:=\frac{1}{\beta}=\frac{R}{Q}.
+\]
+Then $p_0,q_0>1$ and $1/p_0+1/q_0=1$.  H\"older's inequality gives
+\[
+\begin{aligned}
+  \sum_i a_i
+  &\le \sum_i b_i^\alpha c_i^\beta\\
+  &\le
+  \left(\sum_i(b_i^\alpha)^{p_0}\right)^{1/p_0}
+  \left(\sum_i(c_i^\beta)^{q_0}\right)^{1/q_0}\\
+  &=
+  \left(\sum_i b_i\right)^\alpha
+  \left(\sum_i c_i\right)^\beta.
+\end{aligned}
+\]
+Both sides are nonnegative.  Raising to the positive integer power $R$ gives
+\eqref{eq:integer-holder}.
+\end{proof}
+
+\begin{theorem}[Even-anchored interpolation for odd cycles]
+\label{thm:cycle-interpolation}
+Let $b,n,m$ satisfy
+\[
+  2\le b<n<m,
+  \qquad
+  b\text{ even},
+  \qquad
+  n,m\text{ odd}.
+\]
+Then every finite simple target graph $T$ satisfies
+\[
+  \homn(\Ct_b,T)^{m-n}\,
+  \homn(C_m,T)^{n-b}
+  \ge
+  \homn(C_n,T)^{m-b}.
+  \tag{5.3}\label{eq:main-hom}
+\]
+Equivalently,
+\[
+  t(\Ct_b,T)^{m-n}\,
+  t(C_m,T)^{n-b}
+  \ge
+  t(C_n,T)^{m-b}.
+  \tag{5.4}\label{eq:main-density}
+\]
+\end{theorem}
+
+\begin{proof}
+For each $x\in V(T)$, Lemma~\ref{lem:rooted-interpolation} gives
+\[
+  c_n(x)^{m-b}
+  \le
+  c_b(x)^{m-n}c_m(x)^{n-b}.
+\]
+Apply Lemma~\ref{lem:integer-holder} with
+\[
+  I=V(T),
+  \qquad
+  a_x=c_n(x),
+  \qquad
+  b_x=c_b(x),
+  \qquad
+  c_x=c_m(x),
+\]
+and with
+\[
+  P=m-n,
+  \qquad
+  Q=n-b,
+  \qquad
+  R=P+Q=m-b.
+\]
+The hypotheses $b<n<m$ ensure that $P,Q$ are positive.  We obtain
+\[
+  \left(\sum_xc_n(x)\right)^{m-b}
+  \le
+  \left(\sum_xc_b(x)\right)^{m-n}
+  \left(\sum_xc_m(x)\right)^{n-b}.
+\]
+By Lemma~\ref{lem:trace-hom}, this is exactly
+\eqref{eq:main-hom}.
+
+It remains to verify the equivalence with the density formulation.  Since
+$|V(\Ct_b)|=b$, $|V(C_n)|=n$, and $|V(C_m)|=m$, substituting
+\[
+  \homn(F,T)=N^{|V(F)|}t(F,T)
+\]
+into \eqref{eq:main-hom} introduces the power
+\[
+  N^{b(m-n)+m(n-b)}
+\]
+on the left and the power
+\[
+  N^{n(m-b)}
+\]
+on the right.  These exponents agree because
+\[
+\begin{aligned}
+  b(m-n)+m(n-b)
+  &=bm-bn+mn-mb\\
+  &=mn-bn\\
+  &=n(m-b).
+\end{aligned}
+\]
+Since $N>0$, the common power cancels, yielding
+\eqref{eq:main-density}.
+\end{proof}
+
+\begin{remark}[The exact regular-to-general mechanism]
+For $b=2$, the pointwise inequality is
+\[
+  \deg_T(x)^{m-n}c_m(x)^{n-2}
+  \ge c_n(x)^{m-2}.
+\]
+In a regular graph, $\deg_T(x)$ is constant and can be pulled out of the sum.
+In an arbitrary graph, H\"older's inequality replaces that step by
+\[
+  \sum_x\deg_T(x)^\alpha c_m(x)^\beta
+  \le
+  \left(\sum_x\deg_T(x)\right)^\alpha
+  \left(\sum_xc_m(x)\right)^\beta.
+\]
+Thus degree irregularity is not bounded perturbatively; it is integrated
+exactly.  This is why a Schur-complement correction is unnecessary here.
+\end{remark}
+
+\section{The cycle inequality posed as Problem 6}
+
+\begin{corollary}[Affirmative answer to Problem 6 of \cite{BRRW2025}]
+\label{cor:problem6}
+Let $i>j\ge1$.  Then every finite simple graph $T$ satisfies
+\[
+  t(C_{2j},T)^2
+  t(C_{2i+1},T)^{2i-1-2j}
+  \ge
+  t(C_{2i-1},T)^{2i+1-2j}.
+  \tag{6.1}\label{eq:problem6}
+\]
+Here, as in \cite{BRRW2025}, $C_2$ means $K_2$.
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:cycle-interpolation} with
+\[
+  b=2j,
+  \qquad
+  n=2i-1,
+  \qquad
+  m=2i+1.
+\]
+The condition $i>j$ implies
+\[
+  2j\le2i-2<2i-1,
+\]
+so $b<n<m$.  Also, $b$ is even while $n,m$ are odd.  The three exponents in
+\eqref{eq:main-density} become
+\[
+  m-n=2,
+\]
+\[
+  n-b=(2i-1)-2j=2i-1-2j,
+\]
+and
+\[
+  m-b=(2i+1)-2j=2i+1-2j.
+\]
+Substitution gives exactly \eqref{eq:problem6}.
+\end{proof}
+
+\begin{remark}[Tropicalization consequence]
+Blekherman--Raymond--Razborov--Wei state that an affirmative solution of their
+Problem~6 is equivalent to their proposed description of the tropicalization
+of the homomorphism-number profile of all cycles; see their Lemma~6.2.
+Corollary~\ref{cor:problem6}, combined with that equivalence, supplies the
+missing implication.  We do not reproduce their separate proof of the
+equivalence here.
+\end{remark}
+
+\section{Domination exponents}
+
+\begin{definition}[Homomorphism-density domination exponent]
+For graphs $G,H$, define
+\[
+  C(G,H)
+  :=
+  \min\bigl\{c\in\RR:
+  t(G,T)\ge t(H,T)^c\text{ for every finite simple }T\bigr\},
+\]
+whenever the set is nonempty.
+\end{definition}
+
+We next derive the domination-exponent bound announced in the abstract.  The
+argument uses the edge-anchored case of
+Theorem~\ref{thm:cycle-interpolation}, an explicit pruning reduction, and an
+elementary even-cycle estimate.
+
+\subsection{An even-cycle lower bound}
+
+\begin{lemma}[Even cycles dominate the appropriate edge power]
+\label{lem:even-cycle-edge}
+Let $r\ge2$.  Then every finite simple graph $T$ satisfies
+\[
+  t(C_{2r},T)\ge t(K_2,T)^{2r}.
+  \tag{7.1}\label{eq:even-cycle-edge}
+\]
+\end{lemma}
+
+\begin{proof}
+Let $A$ be the adjacency matrix of $T$, and let $p=t(K_2,T)$.  Let
+$\lambda_{\max}$ be the largest eigenvalue of $A$.  Since $A$ is real
+symmetric, the Rayleigh--Ritz principle and the vector $\1\in\RR^{V(T)}$ give
+\[
+  \lambda_{\max}
+  \ge
+  \frac{\langle\1,A\1\rangle}{\langle\1,\1\rangle}.
+\]
+Now
+\[
+  \langle\1,A\1\rangle=\homn(K_2,T)=N^2p,
+  \qquad
+  \langle\1,\1\rangle=N,
+\]
+so
+\[
+  \lambda_{\max}\ge Np.
+\]
+Let $\lambda_1,\ldots,\lambda_N$ be all eigenvalues of $A$, repeated with
+multiplicity.  Because $2r$ is even,
+\[
+  \homn(C_{2r},T)
+  =\tr(A^{2r})
+  =\sum_{a=1}^N\lambda_a^{2r}
+  \ge\lambda_{\max}^{2r}
+  \ge (Np)^{2r}.
+\]
+Dividing by $N^{2r}$ proves \eqref{eq:even-cycle-edge}.
+\end{proof}
+
+\subsection{A precise pruning reduction}
+\label{sec:pruning}
+
+For an integer $q\ge3$, give $C_q$ the cyclic vertex set
+$\mathbb{Z}/q\mathbb{Z}$ and distinguish the oriented edge $(0,1)$.  For an
+oriented target edge $(u,v)$, define
+\[
+  h_q^T(u,v)
+  :=
+  \bigl|\{\phi\in\Hom(C_q,T):\phi(0)=u,\ \phi(1)=v\}\bigr|.
+  \tag{7.2}\label{eq:rooted-edge-count}
+\]
+Let
+\[
+  \vec E(T):=\{(u,v)\in V(T)^2:\{u,v\}\in E(T)\}
+\]
+be the set of oriented edges.
+
+\begin{lemma}[Basic identities for edge-rooted cycle counts]
+\label{lem:edge-rooted-identities}
+For every $q\ge3$,
+\[
+  \sum_{(u,v)\in\vec E(T)}h_q^T(u,v)=\homn(C_q,T).
+  \tag{7.3}\label{eq:edge-rooted-sum}
+\]
+Moreover,
+\[
+  h_q^T(u,v)=h_q^T(v,u)
+  \qquad((u,v)\in\vec E(T)).
+  \tag{7.4}\label{eq:orientation-symmetry}
+\]
+\end{lemma}
+
+\begin{proof}
+Every homomorphism $\phi:C_q\to T$ maps the distinguished oriented edge
+$(0,1)$ to exactly one oriented edge $(u,v)$ of $T$.  Partitioning
+$\Hom(C_q,T)$ according to this image proves
+\eqref{eq:edge-rooted-sum}.
+
+The map $a\mapsto1-a$ on $\mathbb{Z}/q\mathbb{Z}$ is an automorphism of $C_q$
+that interchanges $0$ and $1$.  Precomposition with this automorphism is a
+bijection between the homomorphisms counted by $h_q^T(u,v)$ and those counted
+by $h_q^T(v,u)$.  This proves \eqref{eq:orientation-symmetry}.
+\end{proof}
+
+\begin{lemma}[Pruning to uniformly cycle-rich edges]
+\label{lem:pruning}
+Fix an integer $q\ge3$.  Let $T_0$ be a graph on $N\ge3$ vertices.  Put
+\[
+  H_0:=\homn(C_q,T_0).
+\]
+If $H_0>0$, then $T_0$ has a spanning subgraph $T\subseteq T_0$ such that,
+writing
+\[
+  M:=|E(T)|,
+  \qquad
+  H:=\homn(C_q,T),
+\]
+one has
+\[
+  H\ge \e^{-3/2}H_0,
+  \tag{7.5}\label{eq:pruning-preservation}
+\]
+and, for every oriented edge $(u,v)\in\vec E(T)$,
+\[
+  h_q^T(u,v)
+  >
+  \frac{H}{8qM\log N}.
+  \tag{7.6}\label{eq:uniform-rooted-edge}
+\]
+Here and below $\log$ is the natural logarithm.
+\end{lemma}
+
+\begin{proof}
+We construct a descending sequence of spanning subgraphs.  Suppose the current
+graph $T_i$ has exactly $i$ edges, and write
+\[
+  H_i:=\homn(C_q,T_i).
+\]
+For an edge $e\in E(T_i)$, let $L_i(e)$ be the number of homomorphisms
+$\phi:C_q\to T_i$ whose image uses $e$, meaning that at least one source edge
+of $C_q$ is mapped to $e$.
+
+If there is an edge $e\in E(T_i)$ satisfying
+\[
+  L_i(e)\le\frac{H_i}{4i\log N},
+  \tag{7.7}\label{eq:pruning-delete-rule}
+\]
+delete it and call the resulting graph $T_{i-1}$.  A homomorphism is lost
+exactly when its image uses $e$, so
+\[
+  H_{i-1}=H_i-L_i(e)
+  \ge H_i\left(1-\frac{1}{4i\log N}\right).
+  \tag{7.8}\label{eq:one-pruning-step}
+\]
+If no edge satisfies \eqref{eq:pruning-delete-rule}, stop and call the terminal
+graph $T$.  The terminal graph has at least one edge: throughout the process
+\eqref{eq:one-pruning-step} keeps $H_i>0$, while an edgeless graph admits no
+homomorphism from $C_q$.
+
+Let $M_0:=|E(T_0)|$ and $M:=|E(T)|$.  Iterating
+\eqref{eq:one-pruning-step} gives
+\[
+  H
+  \ge
+  H_0\prod_{i=M+1}^{M_0}
+  \left(1-\frac{1}{4i\log N}\right).
+  \tag{7.9}\label{eq:pruning-product}
+\]
+For $N\ge3$,
+\[
+  0\le\frac{1}{4i\log N}<\frac12.
+\]
+The elementary inequality
+\[
+  \log(1-x)\ge-2x
+  \qquad(0\le x\le1/2)
+\]
+therefore yields
+\[
+\begin{aligned}
+  \log\prod_{i=M+1}^{M_0}
+  \left(1-\frac{1}{4i\log N}\right)
+  &\ge
+  -\frac{1}{2\log N}\sum_{i=1}^{M_0}\frac1i\\
+  &\ge
+  -\frac{1+\log M_0}{2\log N}.
+\end{aligned}
+\]
+Since $M_0\le N^2/2<N^2$,
+\[
+  1+\log M_0\le1+2\log N\le3\log N,
+\]
+where the last inequality uses $\log N\ge1$ for $N\ge3$.  Hence the logarithm
+of the product is at least $-3/2$, which proves
+\eqref{eq:pruning-preservation}.
+
+It remains to prove \eqref{eq:uniform-rooted-edge}.  At termination, every
+edge $e=\{u,v\}$ satisfies
+\[
+  L_T(e)>\frac{H}{4M\log N}.
+  \tag{7.10}\label{eq:terminal-contained-count}
+\]
+For each $a\in\mathbb{Z}/q\mathbb{Z}$, let $I_a(e)$ be the number of
+homomorphisms $\phi:C_q\to T$ for which the source edge $\{a,a+1\}$ is mapped
+to $e$.  Every homomorphism counted by $L_T(e)$ contributes to at least one
+$I_a(e)$, so
+\[
+  \sum_{a\in\mathbb{Z}/q\mathbb{Z}}I_a(e)\ge L_T(e).
+  \tag{7.11}\label{eq:incidences-dominate-copies}
+\]
+By rotation symmetry of $C_q$, all $I_a(e)$ are equal.  For $a=0$,
+\[
+  I_0(e)=h_q^T(u,v)+h_q^T(v,u)=2h_q^T(u,v),
+\]
+where the second equality is \eqref{eq:orientation-symmetry}.  Thus
+\[
+  2q\,h_q^T(u,v)
+  =\sum_aI_a(e)
+  \ge L_T(e)
+  >\frac{H}{4M\log N}.
+\]
+Division by $2q$ proves \eqref{eq:uniform-rooted-edge}.
+\end{proof}
+
+\begin{lemma}[Gluing two edge-rooted cycles]
+\label{lem:cycle-gluing}
+Let $q,h\ge3$, and put
+\[
+  m:=q+h-2.
+\]
+Suppose a graph $T$ on $N\ge3$ vertices satisfies
+\eqref{eq:uniform-rooted-edge} for $C_q$.  Then, with
+\[
+  a:=t(C_q,T),
+  \qquad
+  z:=t(C_h,T),
+  \qquad
+  p:=t(K_2,T),
+  \qquad
+  y:=t(C_m,T),
+\]
+one has
+\[
+  y>\frac{1}{4q\log N}\frac{az}{p}.
+  \tag{7.12}\label{eq:gluing-density}
+\]
+\end{lemma}
+
+\begin{proof}
+The hypothesis \eqref{eq:uniform-rooted-edge} implies $E(T)\ne\varnothing$, so
+$p>0$.  We define the source graph explicitly.  Give $C_m$ the cyclic vertex set
+$\{0,1,\ldots,m-1\}$ and add the chord $\{0,q-1\}$.  Call the resulting graph
+$C_m^+$.  The chord together with
+\[
+  0,1,\ldots,q-1
+\]
+forms a $q$-cycle.  The same chord together with the outer path
+\[
+  q-1,q,\ldots,m-1,0
+\]
+forms a cycle of length
+\[
+  1+(m-q)+1=m-q+2=h,
+\]
+where the first and last $1$ count the chord and the edge $\{m-1,0\}$.
+Thus $C_m^+$ is exactly the union of a copy of $C_q$ and a copy of $C_h$
+with one distinguished oriented edge and both of its endpoints identified.
+
+Every homomorphism $C_m^+\to T$ is, after forgetting the chord constraint, a
+homomorphism $C_m\to T$.  Therefore
+\[
+  \homn(C_m,T)\ge\homn(C_m^+,T).
+  \tag{7.13}\label{eq:forget-chord}
+\]
+Condition on the oriented image $(u,v)$ of the identified edge.  Once $(u,v)$
+is fixed, the extensions over the two cycles are independent, and hence
+\[
+  \homn(C_m^+,T)
+  =
+  \sum_{(u,v)\in\vec E(T)}h_q^T(u,v)h_h^T(u,v).
+  \tag{7.14}\label{eq:gluing-exact}
+\]
+Using the uniform lower bound \eqref{eq:uniform-rooted-edge}, followed by
+\eqref{eq:edge-rooted-sum}, gives
+\[
+\begin{aligned}
+  \homn(C_m^+,T)
+  &>
+  \frac{\homn(C_q,T)}{8q|E(T)|\log N}
+  \sum_{(u,v)\in\vec E(T)}h_h^T(u,v)\\
+  &=
+  \frac{\homn(C_q,T)\homn(C_h,T)}
+       {8q|E(T)|\log N}.
+\end{aligned}
+\]
+Combining with \eqref{eq:forget-chord}, and using
+\[
+  |E(T)|=\frac12N^2p,
+  \quad
+  \homn(C_q,T)=N^q a,
+  \quad
+  \homn(C_h,T)=N^h z,
+  \quad
+  \homn(C_m,T)=N^m y,
+\]
+we obtain
+\[
+  N^my
+  >
+  \frac{N^{q+h}az}{4qN^2p\log N}.
+\]
+Since $q+h=m+2$, the powers of $N$ cancel and
+\eqref{eq:gluing-density} follows.
+\end{proof}
+
+\subsection{Eliminating the edge density}
+
+Fix integers $k>\ell\ge1$, and abbreviate
+\[
+  \Delta:=k-\ell,
+  \qquad
+  n:=2\ell+1,
+  \qquad
+  m:=2k+1,
+  \qquad
+  h:=2\Delta+2.
+\]
+Then
+\[
+  n+h-2=m.
+\]
+For a target graph $T$, write
+\[
+  a:=t(C_n,T),
+  \qquad
+  y:=t(C_m,T),
+  \qquad
+  p:=t(K_2,T).
+\]
+
+\begin{lemma}[The exact edge-anchored constraint]
+\label{lem:edge-anchored-constraint}
+For every target graph $T$,
+\[
+  p^{2\Delta}y^{2\ell-1}
+  \ge
+  a^{2k-1}.
+  \tag{7.15}\label{eq:edge-anchored-constraint}
+\]
+\end{lemma}
+
+\begin{proof}
+Apply Theorem~\ref{thm:cycle-interpolation} with
+\[
+  b=2,
+  \qquad
+  n=2\ell+1,
+  \qquad
+  m=2k+1.
+\]
+Then
+\[
+  m-n=2(k-\ell)=2\Delta,
+  \qquad
+  n-2=2\ell-1,
+  \qquad
+  m-2=2k-1,
+\]
+which gives \eqref{eq:edge-anchored-constraint}.
+\end{proof}
+
+\begin{lemma}[Polylogarithmic lower bound after pruning]
+\label{lem:polylog-combined}
+There are constants $c_0>0$ and $\gamma\ge0$, depending only on $k,\ell$, such
+that every graph $T_0$ on $N\ge3$ vertices satisfies
+\[
+  t(C_m,T_0)
+  \ge
+  c_0(\log N)^{-\gamma}
+  t(C_n,T_0)^{\eta},
+  \tag{7.16}\label{eq:polylog-final}
+\]
+where
+\[
+  \eta
+  :=
+  \frac{2k(2\Delta+1)-1}
+       {2\ell(2\Delta+1)-1}.
+  \tag{7.17}\label{eq:eta-definition}
+\]
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+  a_0:=t(C_n,T_0),
+  \qquad
+  y_0:=t(C_m,T_0).
+\]
+If $a_0=0$, then \eqref{eq:polylog-final} is immediate because $y_0\ge0$.
+Assume $a_0>0$.  Then $\homn(C_n,T_0)>0$, so
+Lemma~\ref{lem:pruning} gives a spanning subgraph $T\subseteq T_0$ satisfying
+\eqref{eq:pruning-preservation} and
+\eqref{eq:uniform-rooted-edge}.  Write
+\[
+  a:=t(C_n,T),
+  \qquad
+  y:=t(C_m,T),
+  \qquad
+  p:=t(K_2,T).
+\]
+Because $T$ is spanning, the density normalization uses the same $N$, and
+\eqref{eq:pruning-preservation} gives
+\[
+  a\ge \e^{-3/2}a_0.
+  \tag{7.18}\label{eq:a-preserved}
+\]
+Since $T\subseteq T_0$, every homomorphism to $T$ is also a homomorphism to
+$T_0$, and hence
+\[
+  y_0\ge y.
+  \tag{7.19}\label{eq:y-monotone}
+\]
+
+Apply Lemma~\ref{lem:cycle-gluing} with $q=n$ and the even integer
+$h=2\Delta+2$.  Then apply Lemma~\ref{lem:even-cycle-edge} to $C_h$.  We get
+\[
+\begin{aligned}
+  y
+  &>\frac{1}{4n\log N}
+      \frac{a\,t(C_h,T)}{p}\\
+  &\ge\frac{1}{4n\log N}a p^{h-1}\\
+  &=\frac{1}{4n\log N}a p^{2\Delta+1}.
+\end{aligned}
+\tag{7.20}\label{eq:pruned-lower}
+\]
+On the other hand, Lemma~\ref{lem:edge-anchored-constraint} gives
+\[
+  p^{2\Delta}y^{2\ell-1}\ge a^{2k-1}.
+  \tag{7.21}\label{eq:exact-constraint-repeated}
+\]
+
+To eliminate $p$, introduce the positive integers
+\[
+  A_0:=2\ell-1,
+  \qquad
+  B_0:=2\Delta,
+  \qquad
+  C_0:=2k-1=A_0+B_0,
+  \qquad
+  D_0:=2\Delta+1=B_0+1.
+\]
+Equations \eqref{eq:pruned-lower} and
+\eqref{eq:exact-constraint-repeated} become
+\[
+  y>\frac{1}{4n\log N}a p^{D_0},
+  \tag{7.22}\label{eq:two-ineq-one}
+\]
+and
+\[
+  p^{B_0}y^{A_0}\ge a^{C_0}.
+  \tag{7.23}\label{eq:two-ineq-two}
+\]
+Since $a>0$, \eqref{eq:two-ineq-two} implies $p>0$ and $y>0$.  Raise
+\eqref{eq:two-ineq-one} to the power $B_0$:
+\[
+  y^{B_0}
+  >
+  (4n\log N)^{-B_0}a^{B_0}p^{B_0D_0}.
+  \tag{7.24}\label{eq:raised-pruning}
+\]
+Raise \eqref{eq:two-ineq-two} to the power $D_0$ and rearrange:
+\[
+  p^{B_0D_0}
+  \ge
+  \frac{a^{C_0D_0}}{y^{A_0D_0}}.
+  \tag{7.25}\label{eq:p-elimination}
+\]
+Substitution of \eqref{eq:p-elimination} into
+\eqref{eq:raised-pruning} yields
+\[
+  y^{B_0+A_0D_0}
+  >
+  (4n\log N)^{-B_0}a^{B_0+C_0D_0}.
+  \tag{7.26}\label{eq:combined-power}
+\]
+Therefore
+\[
+  y
+  >
+  (4n)^{-\theta}(\log N)^{-\theta}
+  a^{\eta},
+  \tag{7.27}\label{eq:combined-root}
+\]
+where
+\[
+  \theta:=\frac{B_0}{B_0+A_0D_0}
+\]
+and
+\[
+  \eta:=\frac{B_0+C_0D_0}{B_0+A_0D_0}.
+\]
+We simplify the denominator:
+\[
+\begin{aligned}
+  B_0+A_0D_0
+  &=B_0+A_0(B_0+1)\\
+  &=(A_0+1)(B_0+1)-1\\
+  &=2\ell(2\Delta+1)-1.
+\end{aligned}
+\]
+Similarly,
+\[
+\begin{aligned}
+  B_0+C_0D_0
+  &=B_0+(A_0+B_0)(B_0+1)\\
+  &=(A_0+B_0+1)(B_0+1)-1\\
+  &=2k(2\Delta+1)-1.
+\end{aligned}
+\]
+This proves \eqref{eq:eta-definition}.  Finally combine
+\eqref{eq:a-preserved}, \eqref{eq:y-monotone}, and
+\eqref{eq:combined-root}:
+\[
+\begin{aligned}
+  y_0
+  &\ge y\\
+  &>(4n)^{-\theta}(\log N)^{-\theta}a^\eta\\
+  &\ge
+  (4n)^{-\theta}\e^{-3\eta/2}
+  (\log N)^{-\theta}a_0^\eta.
+\end{aligned}
+\]
+Thus \eqref{eq:polylog-final} holds with
+\[
+  c_0=(4n)^{-\theta}\e^{-3\eta/2},
+  \qquad
+  \gamma=\theta.
+\]
+\end{proof}
+
+\subsection{Removing the polylogarithmic loss}
+
+\begin{lemma}[Tensor-power removal of a polylogarithmic factor]
+\label{lem:tensor-trick}
+Let $H_1,H_2$ be fixed graphs and let $c\ge0$.  Suppose there are constants
+$K>0$ and $D\ge0$ such that, for every graph $T$ on $N\ge3$ vertices,
+\[
+  t(H_1,T)\ge K(\log N)^{-D}t(H_2,T)^c.
+  \tag{7.28}\label{eq:tensor-hypothesis}
+\]
+Then
+\[
+  t(H_1,T)\ge t(H_2,T)^c
+\]
+for every graph $T$ having at least three vertices.
+\end{lemma}
+
+\begin{proof}
+Fix a target graph $T$ with $N\ge3$ vertices.  For $r\ge1$, let
+$T^{\times r}$ be its $r$-fold categorical tensor product.  Its vertex set has
+size $N^r$.  For every fixed source graph $H$, a map
+$V(H)\to V(T)^r$ is a homomorphism to $T^{\times r}$ exactly when each of its
+$r$ coordinate maps is a homomorphism to $T$.  Hence
+\[
+  t(H,T^{\times r})=t(H,T)^r.
+  \tag{7.29}\label{eq:tensor-density}
+\]
+Apply \eqref{eq:tensor-hypothesis} to $T^{\times r}$:
+\[
+  t(H_1,T)^r
+  \ge
+  K\bigl(\log(N^r)\bigr)^{-D}t(H_2,T)^{cr}
+  =K(r\log N)^{-D}t(H_2,T)^{cr}.
+\]
+Taking the $r$-th root gives
+\[
+  t(H_1,T)
+  \ge
+  K^{1/r}(r\log N)^{-D/r}t(H_2,T)^c.
+\]
+As $r\to\infty$,
+\[
+  K^{1/r}\longrightarrow1,
+  \qquad
+  (r\log N)^{-D/r}
+  =\exp\left(-\frac{D\log(r\log N)}{r}\right)
+  \longrightarrow1.
+\]
+Therefore $t(H_1,T)\ge t(H_2,T)^c$.
+
+This proves the assertion for every target having at least three vertices.
+\end{proof}
+
+\begin{theorem}[Uniform upper bound for odd-cycle domination exponents]
+\label{thm:domination-bound}
+For all integers $k>\ell\ge1$,
+\[
+  C(C_{2k+1},C_{2\ell+1})
+  \le
+  \frac{2k(2k-2\ell+1)-1}
+       {2\ell(2k-2\ell+1)-1}.
+  \tag{7.30}\label{eq:domination-bound}
+\]
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:polylog-combined} gives, for every target $T$ with at least
+three vertices,
+\[
+  t(C_{2k+1},T)
+  \ge
+  c_0(\log |V(T)|)^{-\gamma}
+  t(C_{2\ell+1},T)^\eta
+\]
+with
+\[
+  \eta
+  =
+  \frac{2k(2(k-\ell)+1)-1}
+       {2\ell(2(k-\ell)+1)-1}.
+\]
+Lemma~\ref{lem:tensor-trick} removes the polylogarithmic factor and gives
+\[
+  t(C_{2k+1},T)\ge t(C_{2\ell+1},T)^\eta
+\]
+for every such target.
+
+It remains only to consider targets with at most two vertices.  Every finite
+simple graph on at most two vertices is bipartite.  A homomorphism from an odd
+cycle to a bipartite graph cannot exist: composing such a homomorphism with a
+proper two-colouring of the target would give a proper two-colouring of the
+odd cycle.  Hence both odd-cycle densities in the preceding inequality are
+zero, and the inequality is $0\ge0$.
+
+Finally, $2(k-\ell)+1=2k-2\ell+1$, so $\eta$ is exactly the right-hand side of
+\eqref{eq:domination-bound}.  The defining property of the domination exponent
+therefore gives the claimed upper bound.
+\end{proof}
+
+\begin{corollary}[Adjacent odd cycles]
+For every $i\ge2$,
+\[
+  C(C_{2i+1},C_{2i-1})
+  \le
+  \frac{6i-1}{6i-7}.
+\]
+\end{corollary}
+
+\begin{proof}
+Set $k=i$ and $\ell=i-1$ in
+Theorem~\ref{thm:domination-bound}.  Then
+$2k-2\ell+1=3$, so the numerator is $6i-1$ and the denominator is
+$6(i-1)-1=6i-7$.
+\end{proof}
+
+\subsection{Comparison with the previously stated piecewise upper bound}
+
+Blekherman--Raymond--Razborov--Wei~\cite{BRRW2025} prove the upper bound
+\[
+ C(C_{2k+1},C_{2\ell+1})
+ \le
+ \begin{cases}
+ \dfrac{2(k+1)}{2\ell+1},&k\le2\ell-1,\\[2mm]
+ \dfrac{2k(2k-2\ell+1)-1}
+       {2\ell(2k-2\ell+1)-1},&k\ge2\ell.
+ \end{cases}
+\]
+Theorem~\ref{thm:domination-bound} extends the second expression to all
+$k>\ell$.  In the former first-branch range, put
+\[
+  D:=2k-2\ell+1.
+\]
+A direct common-denominator calculation gives
+\[
+\begin{aligned}
+  \frac{2(k+1)}{2\ell+1}
+  -\frac{2kD-1}{2\ell D-1}
+  &=\frac{(4\ell-2k-1)D}
+  {(2\ell+1)(2\ell D-1)}.
+\end{aligned}
+\]
+If $k\le2\ell-1$, then $4\ell-2k-1\ge1$ and $D>0$, so the improvement is
+strict.
+
+Their projective-plane construction~\cite{BRRW2025} gives the lower bound
+\[
+  C(C_{2k+1},C_{2\ell+1})
+  \ge
+  \frac{4k^2-1}{4k\ell-1}.
+\]
+The remaining gap to \eqref{eq:domination-bound} simplifies to
+\[
+  \frac{2(k-\ell)(2\ell-1)}
+  {(4k\ell-1)\bigl(2\ell(2k-2\ell+1)-1\bigr)}.
+\]
+
+\section{Formalization blueprint for Lean}
+\label{sec:lean}
+
+This section separates the proof into statements whose formal dependencies are
+small and explicit.  It is not executable Lean code, but it is intended to
+remove mathematical ambiguity before implementation.
+
+\subsection{Recommended finite-dimensional setup}
+
+Use a finite type $V$ with decidable equality and a real matrix
+\[
+  A:V\to V\to\RR.
+\]
+For the matrix theorem, assume:
+\begin{enumerate}[label=(A\arabic*)]
+\item $A$ is symmetric:
+  \[
+    A_{xy}=A_{yx}\quad\text{for all }x,y.
+  \]
+\item $A$ is entrywise nonnegative:
+  \[
+    0\le A_{xy}\quad\text{for all }x,y.
+  \]
+\end{enumerate}
+The exact graph theorem is then obtained by specializing to the adjacency
+matrix, whose entries are $0$ or $1$.
+
+A suitable matrix-level statement of the imported theorem is:
+\begin{verbatim}
+theorem saglam_same_parity
+    {V : Type*} [Fintype V] [DecidableEq V]
+    (S : Matrix V V Real)
+    (hSsymm : S.IsHermitian)
+    (hSnonneg : forall i j, 0 <= S i j)
+    (u v : V -> Real)
+    (hu_nonneg : forall i, 0 <= u i)
+    (hv_nonneg : forall i, 0 <= v i)
+    (hu_norm : inner u u = 1)
+    (hv_norm : inner v v = 1)
+    (K R : Nat)
+    (hRpos : 0 < R)
+    (hRK : R <= K)
+    (hparity : K % 2 = R % 2) :
+    (inner v ((S ^ K).mulVec u)) ^ R >=
+    (inner v ((S ^ R).mulVec u)) ^ K
+\end{verbatim}
+The exact syntax will depend on the chosen matrix and Euclidean-space APIs.
+
+\subsection{Local lemmas and their proof obligations}
+
+A convenient dependency order is the following.
+
+\begin{enumerate}[label=\textbf{L\arabic*.},leftmargin=2.4em]
+\item \emph{Nonnegative powers.}
+If $A$ is entrywise nonnegative, then $A^r$ is entrywise nonnegative for every
+$r\in\NN$.  Prove by induction using the finite sum defining matrix
+multiplication.
+
+\item \emph{Symmetry of powers.}
+If $A$ is symmetric, then $A^r$ is symmetric.  This follows from
+$(A^r)^\top=(A^\top)^r=A^r$.
+
+\item \emph{Anchor-vector identities.}
+For even $b$, define $w_x=A^{b/2}e_x$.  Prove
+\[
+  \langle w_x,w_x\rangle=(A^b)_{xx}
+\]
+and
+\[
+  \langle w_x,A^{r-b}w_x\rangle=(A^r)_{xx}
+  \qquad(r\ge b).
+\]
+The arithmetic obligation is
+\[
+  \frac b2+(r-b)+\frac b2=r,
+\]
+which uses that $b$ is even.
+
+\item \emph{Zero anchor case.}
+From $\langle w_x,w_x\rangle=0$, conclude $w_x=0$.  Then both later rooted
+moments vanish.  This case should be split before normalizing $w_x$ so that no
+division by zero occurs.
+
+\item \emph{Positive anchor case.}
+Set $u_x=w_x/\sqrt{c_b(x)}$.  Prove coordinatewise nonnegativity and unit norm.
+Apply \texttt{saglam\_same\_parity} with
+\[
+  K=m-b,
+  \qquad
+  R=n-b.
+\]
+The parity obligations are
+\[
+  (m-b)\bmod2=1,
+  \qquad
+  (n-b)\bmod2=1.
+\]
+After substitution, clear the positive denominator $c_b(x)^{m-b}$.
+
+\item \emph{Rooted interpolation.}
+Package the preceding cases as
+\[
+  ((A^b)_{xx})^{m-n}((A^m)_{xx})^{n-b}
+  \ge((A^n)_{xx})^{m-b}.
+\]
+
+\item \emph{Finite two-factor H\"older.}
+Formalize Lemma~\ref{lem:integer-holder}.  The cleanest route uses
+\texttt{Real.rpow} and the standard finite-sum H\"older inequality with conjugate
+exponents
+\[
+  \frac{m-b}{m-n},
+  \qquad
+  \frac{m-b}{n-b}.
+\]
+An alternative is to prove precisely the rational-exponent specialization
+needed here and avoid a more general $L^p$ API.
+
+\item \emph{Trace summation.}
+Sum the rooted inequality by the H\"older lemma to obtain
+\[
+  \tr(A^b)^{m-n}\tr(A^m)^{n-b}
+  \ge\tr(A^n)^{m-b}.
+\]
+This matrix statement does not yet require that $A$ be a $0$--$1$ adjacency
+matrix.
+
+\item \emph{Trace equals cycle homomorphisms.}
+For a simple graph adjacency matrix, expand the finite matrix product and
+construct the explicit equivalence between:
+\begin{itemize}
+\item tuples contributing $1$ to $\tr(A^r)$, and
+\item graph homomorphisms $C_r\to T$.
+\end{itemize}
+Handle $r=2$ separately, proving
+\[
+  \tr(A^2)=\homn(K_2,T)
+\]
+from $A_{xy}^2=A_{xy}$.
+
+\item \emph{Density normalization.}
+Prove the natural-number identity
+\[
+  b(m-n)+m(n-b)=n(m-b).
+\]
+Use it to cancel the common power of $N=|V(T)|$.
+\end{enumerate}
+
+\subsection{Suggested main Lean theorem statements}
+
+The matrix statement is the most reusable one:
+\begin{verbatim}
+theorem trace_even_anchor_odd_interp
+    (A : Matrix V V Real)
+    (hA_symm : A.IsHermitian)
+    (hA_nonneg : forall i j, 0 <= A i j)
+    (b n m : Nat)
+    (hb_pos : 2 <= b)
+    (hbn : b < n)
+    (hnm : n < m)
+    (hb_even : Even b)
+    (hn_odd : Odd n)
+    (hm_odd : Odd m) :
+    (Matrix.trace (A ^ b)) ^ (m - n) *
+    (Matrix.trace (A ^ m)) ^ (n - b) >=
+    (Matrix.trace (A ^ n)) ^ (m - b)
+\end{verbatim}
+
+The graph statement can then be a corollary:
+\begin{verbatim}
+theorem cycle_density_even_anchor_odd_interp
+    {V : Type*} [Fintype V] [DecidableEq V]
+    (T : SimpleGraph V)
+    (b n m : Nat)
+    (hb_pos : 2 <= b)
+    (hbn : b < n)
+    (hnm : n < m)
+    (hb_even : Even b)
+    (hn_odd : Odd n)
+    (hm_odd : Odd m) :
+    tCycleLike b T ^ (m - n) *
+    tCycle m T ^ (n - b) >=
+    tCycle n T ^ (m - b)
+\end{verbatim}
+Here \texttt{tCycleLike 2 T} should be defined as $t(K_2,T)$, while for $b\ge3$ it
+is $t(C_b,T)$.
+
+\subsection{Formalization of the domination-exponent consequence}
+
+The exact interpolation theorem is substantially easier to formalize than the
+asymptotic domination-exponent corollary.  For the latter, separate the
+following components.
+
+\begin{enumerate}[label=\textbf{D\arabic*.},leftmargin=2.4em]
+\item The explicit edge-deletion process of
+Lemma~\ref{lem:pruning}, including a finite product lower bound.
+\item The bijections induced by rotations and reflection of a cycle, used in
+\eqref{eq:orientation-symmetry} and
+\eqref{eq:incidences-dominate-copies}.
+\item The exact gluing bijection
+\eqref{eq:gluing-exact}.
+\item The spectral proof of
+$t(C_{2r},T)\ge t(K_2,T)^{2r}$.
+\item The algebraic elimination
+\eqref{eq:two-ineq-one}--\eqref{eq:combined-power}.
+\item Multiplicativity of homomorphism densities under categorical tensor
+products and the real limit in Lemma~\ref{lem:tensor-trick}.
+\end{enumerate}
+
+No graphon compactness, cut metric, or graphon approximation theorem is needed
+anywhere in this development.
+
+\section{Further structural remarks}
+
+\subsection{Why a vertex Schur complement is not needed here}
+
+The Goodman-style odd-cycle problem and the present domination problem use
+regularity in different ways.  In the Goodman-style problem, complementation
+is a rank-one perturbation, and the failure of the constant function to be an
+eigenfunction creates additive mixed terms.  The constant/mean-zero block
+decomposition and its Schur complement are therefore natural tools for
+resumming those terms.
+
+Here, after rooting at a vertex, Sa\u{g}lam's theorem gives the pointwise
+multiplicative estimate
+\[
+  \deg_T(x)^{m-n}c_m(x)^{n-2}
+  \ge c_n(x)^{m-2}.
+\]
+The dependence on the nonconstant degree function is already separated into a
+single nonnegative factor.  H\"older's inequality performs the exact
+regularization
+\[
+  \sum_x d(x)^\alpha c_m(x)^\beta
+  \le
+  \left(\sum_xd(x)\right)^\alpha
+  \left(\sum_xc_m(x)\right)^\beta.
+\]
+There is no signed remainder to analyze.  Thus the appropriate general lesson
+is not that Schur complementation always removes regularity, but rather:
+
+\begin{quote}
+First expose how the regular quantity enters the rooted inequality.  If the
+irregularity appears multiplicatively and positively, H\"older may remove it
+exactly.  If it appears through additive coupling between the constant and
+mean-zero subspaces, a Schur complement is a more natural correction device.
+\end{quote}
+
+\subsection{Why the edge-anchored statement is not automatically a graphon inequality}
+
+For a finite simple target, $A_{xy}^2=A_{xy}$, and this is why
+\[
+  \tr(A^2)=\homn(K_2,T).
+\]
+For a general graphon $W$,
+\[
+  \tr(T_W^2)=\int_{[0,1]^2}W(x,y)^2\dd x\dd y,
+\]
+which is not generally equal to the edge density
+$\int W$.  Therefore the direct operator extension of
+Theorem~\ref{thm:cycle-interpolation} has the two-edge multigraph density as
+its $b=2$ anchor, not $t(K_2,W)$.  The finite simple-target theorem is exactly
+the statement needed for the domination exponent.
+
+\subsection{A possible edge-space Schur-complement direction}
+
+The pruning argument controls the distribution of cycle counts rooted at an
+edge, not merely the distribution of vertex degrees.  This suggests that any
+further improvement beyond Theorem~\ref{thm:domination-bound} should retain
+edge-rooted information.  For a graphon $W$ of positive edge density $p$, one
+may put the probability measure
+\[
+  \dd\eta(x,y)=\frac{W(x,y)}p\dd x\dd y
+\]
+on ordered edges and decompose edge-rooted path kernels into their constant
+and mean-zero parts in $L^2(\eta)$.  The gluing identity then contains an exact
+covariance term.  A Schur complement on this edge space, rather than on the
+original vertex space, is a plausible analogue of the constant/mean-zero
+method in the Goodman-style proof.  This observation is only a research
+direction and is not used in any theorem above.
+
+\begin{thebibliography}{9}
+
+\bibitem{Saglam2018}
+M.~Sa\u{g}lam,
+\emph{Near log-convexity of measured heat in (discrete) time and consequences},
+arXiv:1808.06717, 2018.
+
+\bibitem{BRwalks}
+G.~Blekherman and A.~Raymond,
+\emph{A new proof of the Erd\H{o}s--Simonovits conjecture on walks},
+Graphs and Combinatorics \textbf{39} (2023), Paper No.~53;
+arXiv:2009.10845.
+
+\bibitem{BRRW2025}
+G.~Blekherman, A.~Raymond, A.~Razborov, and F.~Wei,
+\emph{On domination exponents for pairs of graphs},
+arXiv:2506.12151v2, 24 August 2025.
+
+\end{thebibliography}
+
+\end{document}

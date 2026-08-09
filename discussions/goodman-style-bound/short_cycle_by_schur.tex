@@ -1,0 +1,208 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+
+\geometry{margin=1in}
+
+\title{Short-cycle Schur corrections in graphon theory}
+\author{Taeyoung Kim}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\subsection{The regular case and the short-cycle Schur corrections}
+\label{subsec:regular-short-schur}
+
+The elementary arguments of Section~2 are shorter than the general machinery developed here.
+The purpose of this subsection is different: it shows that the cases
+$m=3,5,7$ arise as the first three instances of the same regular-to-general
+mechanism used in the remainder of the proof.
+
+Suppose first that $U$ is $q$-regular, or equivalently that $W$ is
+$p$-regular. Then $g=0$, and hence $\mu=0$, $L_-=L_+=0$, and $S_m=0$.
+Moreover,
+\[
+ x_j=\langle \mathbf 1,T_U^j\mathbf 1\rangle=q^j
+ \qquad (j\ge 0).
+\]
+Consequently, the reduction of Sections~4.1--4.2 gives
+\[
+ t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+ \ge q^{m-1}-x_{m-1}=0.
+\]
+Thus the regular case is exactly the case in which no excursion from the
+constant direction to $\mathbf 1^\perp$ occurs.
+
+For a nonregular graphon, Proposition~4.2 writes the error term $\Phi_m$ as
+an integral of the kernels $P_{m,r}$ against the positive measures
+$d\mu^{\otimes r}$.  The index $r$ records the number of excursions from the
+constant direction into the compressed operator $A$ and back.  For the first
+three odd cycles, each of these excursion kernels is already pointwise
+nonnegative.
+
+\begin{proposition}[The excursion kernels for $C_3,C_5,C_7$]
+\label{prop:short-cycle-excursion-kernels}
+Although the standing assumption in this section is $q\le 1/3$, the
+identities of Sections~4.1--4.3 are algebraic and the following calculation
+is valid throughout the full nontrivial range $0\le q\le 1/2$.
+For $m\in\{3,5,7\}$, every
+$1\le r\le (m-1)/2$, and every choice of real
+$\lambda_1,\ldots,\lambda_r$, one has
+\[
+ P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge 0.
+\]
+Moreover, $P_{m,1}(q;\lambda)>0$ for every real $\lambda$.  Consequently,
+\[
+ t(C_m,W)\ge p^m-pq^{m-1}
+ \qquad (m=3,5,7),
+\]
+and the inequality is strict whenever $g\ne 0$, equivalently whenever $W$
+is not regular.
+\end{proposition}
+
+\begin{proof}
+For $m=3$, only $r=1$ occurs, and the definition of $P_{m,r}$ gives
+\[
+ \begin{aligned}
+ P_{3,1}(q;\lambda)
+ &=3\bigl[h_1(p,-\lambda)+h_1(q,\lambda)\bigr]-h_0(q,q,\lambda)\\
+ &=3\bigl[(p-\lambda)+(q+\lambda)\bigr]-1=2.
+ \end{aligned}
+\]
+Hence
+\[
+ \Phi_3=2\mu(\mathbb R)=2\lVert g\rVert_2^2.
+\]
+
+For $m=5$, the two possible excursion numbers give
+\[
+ P_{5,1}(q;\lambda)
+ =4\lambda^2+(8q-5)\lambda+12q^2-15q+5
+\]
+and
+\[
+ P_{5,2}(q;\lambda_1,\lambda_2)=4.
+\]
+The first polynomial has the sum-of-squares decomposition
+\[
+ P_{5,1}(q;\lambda)
+ =4\left(\lambda+q-\frac58\right)^2
+  +8\left(q-\frac58\right)^2+\frac5{16},
+\]
+so it is strictly positive for every $q$ and every real $\lambda$.  Therefore
+\[
+ \Phi_5
+ =\int P_{5,1}(q;\lambda)\,d\mu(\lambda)
+  +4\mu(\mathbb R)^2
+ \ge 0.
+\]
+
+For $m=7$, there are three possible excursion numbers.  For $r=1$ one
+obtains
+\[
+ \begin{aligned}
+ P_{7,1}(q;\lambda)={}&
+ 6\lambda^4+(12q-7)\lambda^3
+ +(18q^2-21q+7)\lambda^2\\
+ &+(24q^3-42q^2+28q-7)\lambda\\
+ &+30q^4-70q^3+70q^2-35q+7.
+ \end{aligned}
+\]
+This is exactly the quartic $P_q(\lambda)$ treated in Section~2.4.  The
+sum-of-squares decomposition established there shows that
+\[
+ P_{7,1}(q;\lambda)>0
+ \qquad
+ \left(0\le q\le\frac12,\ \lambda\in\mathbb R\right).
+\]
+For $r=2$, direct expansion gives
+\[
+ \begin{aligned}
+ P_{7,2}(q;\lambda_1,\lambda_2)={}&
+ 6(\lambda_1^2+\lambda_1\lambda_2+\lambda_2^2)
+ +\left(18q-\frac{21}{2}\right)(\lambda_1+\lambda_2)\\
+ &+36q^2-42q+14,
+ \end{aligned}
+\]
+and completing squares yields
+\[
+ \begin{aligned}
+ P_{7,2}(q;\lambda_1,\lambda_2)={}&
+ \frac32(\lambda_1-\lambda_2)^2
+ +\frac92\left(\lambda_1+\lambda_2+2q-\frac76\right)^2\\
+ &+18\left(q-\frac7{12}\right)^2+\frac74.
+ \end{aligned}
+\]
+Finally,
+\[
+ P_{7,3}(q;\lambda_1,\lambda_2,\lambda_3)=6.
+\]
+It follows that
+\[
+ \begin{aligned}
+ \Phi_7={}&
+ \int P_{7,1}(q;\lambda)\,d\mu(\lambda)\\
+ &+\iint P_{7,2}(q;\lambda_1,\lambda_2)
+ \,d\mu(\lambda_1)d\mu(\lambda_2)
+ +6\mu(\mathbb R)^3
+ \ge 0.
+ \end{aligned}
+\]
+
+In all three cases, if $g\ne0$, then $\mu(\mathbb R)=\lVert g\rVert_2^2>0$,
+and the strictly positive one-excursion kernel makes $\Phi_m>0$.
+Combining this with
+\[
+ t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)\ge \Phi_m
+\]
+proves all the assertions.
+\end{proof}
+
+The preceding calculation also identifies the elementary certificates of
+Section~2 as low-order Schur-complement expansions.  For example, since
+\[
+ T_Ug=\lVert g\rVert_2^2\mathbf 1+Ag,
+\]
+the formula for $\Phi_5$ above can be rearranged as
+\[
+ \Phi_5
+ =4\left\lVert T_Ug+\frac{8q-5}{8}g\right\rVert_2^2
+  +\left(8q^2-10q+\frac{55}{16}\right)\lVert g\rVert_2^2,
+\]
+which is exactly the completion of a square used in Section~2.3.
+Similarly, if
+\[
+ s_j=\int \lambda^j\,d\mu(\lambda),
+ \qquad s_0=\mu(\mathbb R),
+\]
+then integrating the two- and three-excursion kernels for $m=7$ gives
+\[
+ \begin{aligned}
+ &\iint P_{7,2}(q;\lambda_1,\lambda_2)
+ \,d\mu(\lambda_1)d\mu(\lambda_2)
+ +6s_0^3\\
+ &\qquad
+ =6s_1^2+\int\bigl(s_0B_q(\lambda)+6s_0^2\bigr)\,d\mu(\lambda),
+ \end{aligned}
+\]
+where
+\[
+ B_q(\lambda)
+ =12\lambda^2+(36q-21)\lambda+36q^2-42q+14.
+\]
+Together with $P_{7,1}=P_q$, this is precisely the representation used in
+Section~2.4.
+
+Thus the short-cycle proofs are not separate phenomena: they are the first
+three low-degree instances of the same Schur-complement correction.  What is
+special for $m=3,5,7$ is that the resulting low-degree kernels admit immediate
+sum-of-squares certificates.  For general odd $m$, direct multivariable
+completion of squares is no longer practical.  The next subsection replaces
+it by a uniform positive diagonalization through a Dirichlet average.
+\end{document}
