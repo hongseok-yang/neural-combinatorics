@@ -2984,6 +2984,10 @@ Together, \Cref{thm:plt23-huber-elim} and \Cref{lem:plt23-forced-variance} show 
 \end{equation}
 is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:plt23-range} and \eqref{eq:plt23-alpha-ceiling}.
 
+What is needed is a lower bound on $\psi(\xi,\rho)$, but \eqref{eq:plt23-psi-def} defines $\psi$ as a minimum, and bounding a minimum from below requires controlling the point at which it is attained.
+The next proposition writes $\psi$ instead as a maximum over a variable $\lambda\in[0,1]$.
+Substituting any particular $\lambda$ then gives a lower bound on $\psi$, so the value of $\lambda$ may be chosen to suit each situation.
+
 \begin{proposition}[Dual form of $\psi$]\label{prop:plt23-huber-dual}
   For $\xi\ge0$ and $\rho>0$,
   \begin{equation}\label{eq:plt23-psi-dual}
@@ -2996,24 +3000,25 @@ is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:plt23-range} and \eq
 \end{proposition}
 
 \begin{proof}
-  Use
+  Using the following equivalent form of the positive part,
   \[
     \pos x=\max_{0\le\lambda\le1}\lambda x.
   \]
-  The resulting function
+  the objective in \eqref{eq:plt23-psi-def} can be rewritten as
   \[
-    (\rho+\lambda)v^2-\lambda v+\lambda\xi
+    (\rho+\lambda)v^2-\lambda v+\lambda\xi.
   \]
-  is convex in $v$, affine in $\lambda$, and the two domains are compact convex intervals.
-  The elementary finite-dimensional minimax theorem (or Sion's theorem) permits the interchange of $\min_v$ and $\max_\lambda$.
-  For fixed $\lambda$, the minimizer is
+  Since the objective is convex in $v$ and linear in $\lambda$, and the two domains are compact convex intervals, one can apply the minmax theorem:
   \[
-    v=\frac{\lambda}{2(\rho+\lambda)}\in[0,1/2],
+    \min_{0\le v\le1}\max_{0\le\lambda\le1} \left\{ (\rho+\lambda)v^2-\lambda v+\lambda\xi \right\} = \max_{0\le\lambda\le1}\min_{0\le v\le1} \left\{ (\rho+\lambda)v^2-\lambda v+\lambda\xi \right\}.
+  \]
+  The inner optimization over $v$ is attained at
+  \[
+    v^*=\frac{\lambda}{2(\rho+\lambda)}\in[0,1/2],
   \]
   and substitution gives \eqref{eq:plt23-psi-dual}.
 \end{proof}
 
-The function $\psi$ has the quadratic-versus-linear structure of Huber's robust loss~\cite{Huber1964}, and \eqref{eq:plt23-psi-dual} is an interchange of the convex--concave type treated by Sion~\cite{Sion1958}; the special case needed here is the one proved above.
 
 \subsection{A global consequence of the dual formula}
 
