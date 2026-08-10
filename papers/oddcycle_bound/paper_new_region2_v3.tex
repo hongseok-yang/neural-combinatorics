@@ -3020,15 +3020,11 @@ Substituting any particular $\lambda$ then gives a lower bound on $\psi$, so the
 \end{proof}
 
 
-\subsection{A global consequence of the dual formula}
+\subsection{Reduction to a normalized inequality}\label{subsec:plt23-variables}
 
-We retain all notation from \Cref{thm:plt23-huber-elim} and \Cref{prop:plt23-huber-dual}, so that the remaining scalar target is \eqref{eq:plt23-scalar-target}, where
-\[
-  \psi(\xi,\rho)
-  =\max_{0\le \lambda\le 1}
-    \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\}.
-\]
-The point of the next normalization is to keep the two natural scales in this dual expression simultaneously, rather than choosing one value of $\lambda$ and then splitting the parameter region according to which value was chosen.
+We retain all notation from \Cref{thm:plt23-huber-elim} and \Cref{prop:plt23-huber-dual}.
+This subsection reduces the scalar target \eqref{eq:plt23-scalar-target} to a single inequality between two explicit quantities, stated as \Cref{prop:plt23-reduction} at the end.
+The point of the normalization is to keep the two natural scales of the dual expression simultaneously, rather than choosing one value of $\lambda$ and then splitting the parameter region according to which value was chosen.
 
 Define
 \begin{equation}\label{eq:plt23-AB-theta}
@@ -3036,54 +3032,21 @@ Define
   \qquad
   \mathcal B:=\frac{\Omega_m\xi}{\Lambda^m},
   \qquad
-  \theta:=\rho\xi=\frac{\mathcal A}{\mathcal B}.
+  \theta:=\rho\xi=\frac{\mathcal A}{\mathcal B},
+  \qquad
+  F_N:=\frac{R_m}{\Lambda^m}.
 \end{equation}
-All three quantities are positive.
-Dividing the dual objective by $\xi$ gives
-\begin{align}
-  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
-  &=\mathcal B
-    \max_{0\le\lambda\le 1}
-      \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}\notag\\
-  &\ge
-    \mathcal B
-    \max_{0\le\lambda\le 1}
-      \left\{\lambda-\frac{\lambda^2}{4\theta}\right\}.
-  \label{eq:plt23-dual-drop-xi}
-\end{align}
-The inequality holds because $\theta+\lambda\xi\ge\theta$, so replacing the denominator by $\theta$ makes the subtracted term larger.
-Put
-\begin{equation}\label{eq:plt23-dtheta-def}
-  d(\theta)
-  :=\max_{0\le\lambda\le1}
-       \left\{\lambda-\frac{\lambda^2}{4\theta}\right\}.
-\end{equation}
-The maximizer is $\lambda=2\theta$ when $2\theta\le1$, and $\lambda=1$ when $2\theta\ge1$.
-Hence
-\begin{equation}\label{eq:plt23-dtheta-formula}
-  d(\theta)
-  =
-  \begin{cases}
-    \theta, & 0<\theta\le\frac12,\\[1mm]
-    1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
-  \end{cases}
-\end{equation}
-Consequently,
-\begin{equation}\label{eq:plt23-master-dual-lower}
-  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
-  \ge \mathcal B\,d(\theta).
-\end{equation}
-The rest of the proof shows directly that $R_m/\Lambda^m$ is at most the right side of \eqref{eq:plt23-master-dual-lower}.
+The first three are positive.
+In these terms the target \eqref{eq:plt23-scalar-target} reads $F_N\le\Omega_m\psi(\xi,\rho)/\Lambda^m$.
 
-\subsection{Dimensionless variables}\label{subsec:plt23-variables}
-
+We now express $F_N$, $\mathcal A$, and $\mathcal B$ in variables adapted to the problem.
 Set
-\begin{equation}\label{eq:plt23-N-def}
-  N:=m-2.
-\end{equation}
-Thus $N\ge7$ is odd.
+\[
+  N:=m-2,
+\]
+so that $N\ge7$ is odd.
 Throughout the rest of this section a tilde denotes division by $\Lambda$:
-\begin{equation}\label{eq:plt23-chart-basic}
+\[
   \tilde q:=\frac q\Lambda,
   \qquad
   \tilde M:=\frac M\Lambda,
@@ -3091,21 +3054,21 @@ Throughout the rest of this section a tilde denotes division by $\Lambda$:
   \tilde p:=\frac p\Lambda,
   \qquad
   u:=1-\tilde q=\frac{\Lambda-q}{\Lambda}.
-\end{equation}
+\]
 The relation $M^2=pq-\Lambda^2$ gives
-\begin{equation}\label{eq:plt23-ptilde-formula}
+\[
   \tilde p=\frac{1+\tilde M^2}{\tilde q}.
-\end{equation}
+\]
 As in the preceding part of the manuscript,
 \[
   0<M<q<\Lambda<\frac12<p,
 \]
 so
-\begin{equation}\label{eq:plt23-basic-domain}
+\[
   0<\tilde M<\tilde q<1,
   \qquad
   1<\tilde p<2.
-\end{equation}
+\]
 We also need the consequence of the frontier ceiling $\Lambda^2+q\Lambda-q\le0$ from \Cref{lem:plt23-forced-variance}.
 Writing
 \[
@@ -3122,16 +3085,16 @@ Since $D\ge1+\tilde q$ by \eqref{eq:plt23-frontier-chart},
   3\tilde q^2-\tilde q-1>0,
 \]
 and hence
-\begin{equation}\label{eq:plt23-a-threequarters}
+\[
   \tilde q>\frac{1+\sqrt{13}}6>\frac34.
-\end{equation}
+\]
 
 We now use the two variables that will occur in the bounds below:
-\begin{equation}\label{eq:plt23-zeta-v-def}
+\[
   \zeta:=\frac{\tilde M^2}{u}=\frac{M^2}{\Lambda(\Lambda-q)},
   \qquad
   v:=\tilde p-1=\frac{p-\Lambda}{\Lambda}.
-\end{equation}
+\]
 Writing $H_\zeta:=\zeta+1+v$, the definitions solve explicitly as
 \begin{equation}\label{eq:plt23-zeta-v-inverse}
   u=\frac v{H_\zeta},
@@ -3142,9 +3105,9 @@ Writing $H_\zeta:=\zeta+1+v$, the definitions solve explicitly as
 \end{equation}
 Indeed, $\tilde M^2=\zeta u$, while $\tilde p=(1+\tilde M^2)/\tilde q$ and $\tilde q=1-u$ give $1+v=(1+\zeta u)/(1-u)$, which is equivalent to the first identity in \eqref{eq:plt23-zeta-v-inverse}; the other two follow immediately.
 The ceiling \eqref{eq:plt23-frontier-chart} becomes
-\begin{equation}\label{eq:plt23-zeta-domain}
+\[
   \zeta(\zeta+v)\ge1.
-\end{equation}
+\]
 In particular,
 \begin{equation}\label{eq:plt23-zeta-v-consequences}
   0<v<1,
@@ -3157,9 +3120,9 @@ The last inequality follows directly from $\tilde M^2=\zeta v/H_\zeta$ and $H_\z
 
 It is also useful to express $\Lambda$ without $\tilde q$.
 Put
-\begin{equation}\label{eq:plt23-Delta-def}
+\[
   \Delta:=\tilde p^2+1+\tilde M^2.
-\end{equation}
+\]
 Since $p+q=1$, $p=\tilde p\Lambda$, and $q=\tilde q\Lambda=(1+\tilde M^2)\Lambda/\tilde p$,
 \begin{equation}\label{eq:plt23-Delta-identities}
   \Lambda=\frac{\tilde p}{\Delta},
@@ -3185,21 +3148,15 @@ Finally, $q<\Lambda$ and $p=\tilde p\Lambda$ imply
   \Lambda>\frac1{v+2}.
 \end{equation}
 
-\subsection{Normalized defect and the two scales}
-
-Define the normalized defect
-\begin{equation}\label{eq:plt23-F-def}
-  F_N:=\frac{R_m}{\Lambda^m}.
-\end{equation}
 Since $m=N+2$, $M=\tilde M\Lambda$, $q=\tilde q\Lambda$, and $p=\tilde p\Lambda=(1+\tilde M^2)\Lambda/\tilde q$, the definition $R_m=\Lambda^m+M^m-pq^{m-1}$ gives
 \begin{equation}\label{eq:plt23-F-formula}
   F_N
   =1-\tilde q^N-\tilde M^2(\tilde q^N-\tilde M^N).
 \end{equation}
 Put
-\begin{equation}\label{eq:plt23-T-def}
+\[
   T_N:=N-\zeta(\tilde q^N-\tilde M^N).
-\end{equation}
+\]
 Because $1-\tilde q^N\le N(1-\tilde q)=Nu$ and $\tilde M^2=\zeta u$,
 \begin{equation}\label{eq:plt23-F-T}
   F_N\le uT_N.
@@ -3212,11 +3169,11 @@ Whenever convenient below we may therefore assume
 which by \eqref{eq:plt23-F-T} implies $T_N>0$.
 
 Next normalize the two coefficients $\Lambda_m$ and $M_m$ of \Cref{prop:plt23-splitting-lower-bound}:
-\begin{equation}\label{eq:plt23-normalized-coeffs}
+\[
   \widehat{\Lambda}_N:=\frac{\Lambda_m}{\Lambda^N},
   \qquad
   \widehat M_N:=\frac{M_m}{\Lambda^N}.
-\end{equation}
+\]
 A direct substitution into the definitions of $k_m$, $\Lambda_m$, and $M_m$ gives
 \begin{align}
   \widehat{\Lambda}_N
@@ -3244,26 +3201,26 @@ Since $N+1$ is even,
   \label{eq:plt23-KL-sum}
 \end{align}
 For brevity set
-\begin{equation}\label{eq:plt23-SN-def}
+\[
   S_N:=\sum_{j=0}^{(N-1)/2}\tilde p^{2j}.
-\end{equation}
+\]
 There are $(N+1)/2$ summands and their geometric mean is $\tilde p^{(N-1)/2}$.
 Hence the arithmetic--geometric mean inequality gives
 \begin{equation}\label{eq:plt23-SN-AMGM}
   S_N\ge \frac{N+1}{2}\tilde p^{(N-1)/2}.
 \end{equation}
 
-The definitions \eqref{eq:plt23-C-xi-rho}--\eqref{eq:plt23-rho-def} of $\Omega_m$, $\xi$, and $\rho$ give closed forms for the two quantities in \eqref{eq:plt23-AB-theta}.
+The definitions \eqref{eq:plt23-C-xi-rho}--\eqref{eq:plt23-rho-def} of $\Omega_m$, $\xi$, and $\rho$ now give closed forms for $\mathcal A$ and $\mathcal B$.
 Multiplying $\Omega_m$ by $\xi$ cancels the factor $(1-2\Lambda)^2/(4\Lambda^2)$, and multiplying $\Omega_m$ by $\rho$ cancels $M_m(\Lambda-M)$, so that
-\begin{equation}\label{eq:plt23-Omega-products}
+\[
   \Omega_m\xi=M_m(\Lambda-M)\sqrt{2\Lambda}\,(\Lambda-q),
   \qquad
   \Omega_m\rho=\frac{\Lambda_m(1-2\Lambda)^2}{8\Lambda},
-\end{equation}
+\]
 and hence, using $\xi^2=16\Lambda^4(\Lambda-q)^2/(1-2\Lambda)^4$,
-\begin{equation}\label{eq:plt23-Omega-rho-xi-squared}
+\[
   \Omega_m\rho\xi^2=\frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}.
-\end{equation}
+\]
 Substituting $\Lambda-q=\Lambda u$, $\Lambda-M=\Lambda(1-\tilde M)$, $\Lambda_m=\Lambda^N\widehat{\Lambda}_N$, $M_m=\Lambda^N\widehat M_N$, and $m=N+2$ turns these into
 \begin{equation}\label{eq:plt23-AB-formulas}
   \mathcal A
@@ -3272,21 +3229,57 @@ Substituting $\Lambda-q=\Lambda u$, $\Lambda-M=\Lambda(1-\tilde M)$, $\Lambda_m=
   \mathcal B
   =u(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_N.
 \end{equation}
-
-Finally define
-\begin{equation}\label{eq:plt23-GXY-def}
+Each of $F_N$, $\mathcal A$, and $\mathcal B$ carries a factor $u$, so we also set
+\[
   G:=\frac{F_N}{u},
   \qquad
   X:=\frac{\mathcal A}{u},
   \qquad
-  Y:=\frac{\mathcal B}{u}.
-\end{equation}
-Thus
+  Y:=\frac{\mathcal B}{u},
+\]
+and note that
 \begin{equation}\label{eq:plt23-GXY-ratios}
   \frac{F_N}{\mathcal A}=\frac GX,
   \qquad
   \frac{F_N}{\mathcal B}=\frac GY.
 \end{equation}
+
+The reduction can now be stated.
+
+\begin{proposition}[Reduction to a normalized inequality]\label{prop:plt23-reduction}
+  Let
+  \begin{equation}\label{eq:plt23-dtheta}
+    d(\theta):=
+    \begin{cases}
+      \theta, & 0<\theta\le\frac12,\\[1mm]
+      1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
+    \end{cases}
+  \end{equation}
+  If $F_N\le\mathcal B\,d(\theta)$, then the scalar target \eqref{eq:plt23-scalar-target} holds.
+\end{proposition}
+
+\begin{proof}
+  Dividing the objective in \eqref{eq:plt23-psi-dual} by $\xi$ gives
+  \begin{align*}
+    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
+    &=\mathcal B
+      \max_{0\le\lambda\le 1}
+        \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}\\
+    &\ge
+      \mathcal B
+      \max_{0\le\lambda\le 1}
+        \left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
+  \end{align*}
+  because $\theta+\lambda\xi\ge\theta$, so replacing the denominator by $\theta$ makes the subtracted term larger.
+  In the last maximum the unconstrained maximizer is $\lambda=2\theta$, so the maximum is attained at $\lambda=2\theta$ when $2\theta\le1$ and at $\lambda=1$ when $2\theta\ge1$, and its value is $d(\theta)$ in both cases.
+  Hence
+  \[
+    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
+    \ge\mathcal B\,d(\theta)
+    \ge F_N,
+  \]
+  and multiplying by $\Lambda^m$ gives \eqref{eq:plt23-scalar-target}.
+\end{proof}
 
 \subsection{Two elementary bounds for the defect}
 
@@ -3320,9 +3313,9 @@ We only need two of the bounds used in the former proof.
     \tilde M^2<2\tilde q^2-1<(2\tilde q-1)^2,
   \]
   so $\tilde M<2\tilde q-1$, equivalently
-  \begin{equation}\label{eq:plt23-qtilde-minus-Mtilde}
+  \[
     \tilde q-\tilde M>1-\tilde q=u.
-  \end{equation}
+  \]
   Convexity of $x\mapsto x^N$ on $[0,\infty)$ gives
   \[
     \tilde q^N-\tilde M^N
@@ -3364,13 +3357,13 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
     :=\log\bigl((1-y)(1-y+y^2)\bigr)+2y+\frac{y^2}{8}.
   \]
   A direct differentiation gives
-  \begin{equation}\label{eq:plt23-hprime}
+  \[
     h'(y)
     =\frac{y\,\mathcal Q(y)}
            {4(y-1)(y^2-y+1)},
     \qquad
     \mathcal Q(y):=y^3+6y^2-2y-1.
-  \end{equation}
+  \]
   On $(0,1)$ the denominator is negative.
   The cubic $\mathcal Q$ has exactly one positive zero: its derivative $3y^2+12y-2$ has exactly one positive zero, so $\mathcal Q$ first decreases and then increases, while $\mathcal Q(0)=-1$ and $\mathcal Q(1/\sqrt2)>0$.
   Consequently $h$ first increases and then decreases on $[0,1/\sqrt2]$, and its minimum occurs at an endpoint.
@@ -3394,12 +3387,12 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
   Thus \eqref{eq:plt23-log-product} holds.
 
   Write $\mathcal H_N$ for the quotient of the two sides of \eqref{eq:plt23-product},
-  \begin{equation}\label{eq:plt23-Hcal-def}
+  \[
     \mathcal H_N(y)
     :=\frac{N+2}{N}
       \frac{(1-y)(1-y+y^2)(1+y^2)^{N-2}}
            {\sqrt{1+y^2/2}},
-  \end{equation}
+  \]
   so that \eqref{eq:plt23-product} is the statement $\log\mathcal H_N(y)\ge0$.
   Using $\log(1+t)\ge t-t^2/2$ and $\log(1+t)\le t$ for $t\ge0$, together with \eqref{eq:plt23-log-product},
   \begin{equation}\label{eq:plt23-Psi-lower}
@@ -3414,13 +3407,13 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
 
   First suppose $0\le y\le1/4$.
   Then $y^4\le y^2/16$, so
-  \begin{equation}\label{eq:plt23-Psi-small-y}
+  \[
     \Psi_N(y)
     \ge
     \frac{2(N-1)}{N^2}-2y+\alpha_Ny^2,
     \qquad
     \alpha_N:=\frac{31N-74}{32}.
-  \end{equation}
+  \]
   The quadratic on the right has global minimum $2(N-1)/N^2-1/\alpha_N$.
   This is nonnegative because
   \begin{align*}
@@ -3434,10 +3427,10 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
 
   It remains to consider $1/4\le y\le1/\sqrt2$.
   For odd $N\ge7$,
-  \begin{equation}\label{eq:plt23-Hcal-ratio}
+  \[
     \frac{\mathcal H_{N+2}(y)}{\mathcal H_N(y)}
     =\frac{N(N+4)}{(N+2)^2}(1+y^2)^2.
-  \end{equation}
+  \]
   When $y\ge1/4$, the right side is at least
   \[
     \frac{N(N+4)}{(N+2)^2}\left(\frac{17}{16}\right)^2>1,
@@ -3449,9 +3442,9 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
     \qquad (N\ge7).
   \]
   Thus it is enough to prove the claim for $N=7$, where \eqref{eq:plt23-Psi-lower} reads
-  \begin{equation}\label{eq:plt23-Psi-seven}
+  \[
     \Psi_7(y)=\frac{12}{49}-2y+\frac{37}{8}y^2-\frac52y^4.
-  \end{equation}
+  \]
   Now
   \[
     \Psi_7'(y)=-2+\frac{37}{4}y-10y^3,
@@ -3493,15 +3486,15 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
   If $F_N\le0$, both inequalities are immediate.
   Assume \eqref{eq:plt23-F-positive}.
   Put
-  \begin{equation}\label{eq:plt23-z-c-def}
+  \[
     z:=\frac\zeta{\tilde p},
     \qquad
     c:=1-v^{N/2}.
-  \end{equation}
+  \]
   Since $\zeta>3/4$ and $\tilde p\le3/2$,
-  \begin{equation}\label{eq:plt23-z-half}
+  \[
     z>\frac12.
-  \end{equation}
+  \]
   Because $\zeta=\tilde pz$ and $1+v=\tilde p$, \eqref{eq:plt23-zeta-v-inverse} becomes
   \begin{equation}\label{eq:plt23-low-v-u-Mtilde}
     u=\frac{v}{\tilde p(1+z)},
@@ -3518,13 +3511,12 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
 
   We first bound $X$ from below.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, and \eqref{eq:plt23-low-v-u-Mtilde},
-  \begin{align}
+  \begin{align*}
     X
-    &=\frac{2\Lambda^3u}{(1-2\Lambda)^2}\,\widehat{\Lambda}_N\notag\\
+    &=\frac{2\Lambda^3u}{(1-2\Lambda)^2}\,\widehat{\Lambda}_N\\
     &=\frac{2\tilde p^2(1+z)}
             {\Delta\,v\,(v+\tilde pz)^2}\,\widehat{\Lambda}_N.
-    \label{eq:plt23-X-low-v}
-  \end{align}
+  \end{align*}
   Indeed,
   \[
     v^2+\tilde M^2
@@ -3539,10 +3531,10 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
             {(v+2)(v+\tilde pz)^2}.
   \end{equation}
   We claim
-  \begin{equation}\label{eq:plt23-low-v-denominator}
+  \[
     (v+2)(v+\tilde pz)^2
     \le2\tilde p^3z(1+z).
-  \end{equation}
+  \]
   The difference between the right and left sides is
   \[
     v\tilde p^2z^2+2\tilde pz-v^2(v+2),
@@ -3586,14 +3578,13 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     \frac GX\le\frac{2z}{N+2}.
   \end{equation}
   For $Y$, \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, and the first term of the sum in \eqref{eq:plt23-KL-sum} give
-  \begin{align}
+  \begin{align*}
     Y
-    &=(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_N\notag\\
+    &=(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_N\\
     &\ge
     (N+2)(1-\tilde M)(\tilde p-\tilde M)\tilde p^{N-1}
     \sqrt{\frac2{v+2}},
-    \label{eq:plt23-Y-low-v}
-  \end{align}
+  \end{align*}
   where we used \eqref{eq:plt23-Lambda-lower}.
   Consequently,
   \begin{equation}\label{eq:plt23-2G-over-Y}
@@ -3615,9 +3606,9 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
    \label{eq:plt23-product-applied}
   \end{align}
   Also
-  \begin{equation}\label{eq:plt23-c-lower}
+  \[
     c=1-v^{N/2}\ge\frac{N}{N+2}.
-  \end{equation}
+  \]
   Indeed, $v^{N/2}\le2^{-N/2}\le2/(N+2)$ for $N\ge7$.
   Therefore
   \begin{equation}\label{eq:plt23-P-bound}
@@ -3626,10 +3617,10 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     =\frac{N+2-z}{N+2}.
   \end{equation}
   Substitution of \eqref{eq:plt23-product-applied} and \eqref{eq:plt23-P-bound} into \eqref{eq:plt23-2G-over-Y} gives
-  \begin{equation}\label{eq:plt23-2G-over-Y-final}
+  \[
     \frac{2G}{Y}
     \le\frac{2(N+2-z)}{N+2}.
-  \end{equation}
+  \]
   Adding this to \eqref{eq:plt23-G-over-X-z} proves
   \[
     \frac GX+2\frac GY\le2,
@@ -3643,18 +3634,18 @@ The second half is even more direct.
 Here the admissibility condition $q>1/3$ forces $\tilde M$ to be sufficiently close to $\sqrt v$; this is exactly what compensates for the apparently weak factors in $\mathcal A$ and $\mathcal B$.
 
 Put
-\begin{equation}\label{eq:plt23-tau-def}
+\[
   \tau:=\frac{\tilde M^2}{v},
   \qquad 0<\tau<1.
-\end{equation}
+\]
 Since $\tilde M^2=v\tau$, the inequality \eqref{eq:plt23-Delta-upper-three} gives
 \[
   (1+v)^2+1+v\tau<3(1+v\tau),
 \]
 so
-\begin{equation}\label{eq:plt23-tau-lower}
+\[
   \tau>\frac{v^2+2v-1}{2v}\ge v^2.
-\end{equation}
+\]
 The last inequality follows from
 \[
   v^2+2v-1-2v^3
@@ -3681,13 +3672,13 @@ for
 \begin{proof}
   Again the claim is immediate if $F_N\le0$, so assume \eqref{eq:plt23-F-positive}.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, $u=v(1-\tau)/\tilde p$, and \eqref{eq:plt23-KA-def}--\eqref{eq:plt23-KA-sum},
-  \begin{equation}\label{eq:plt23-X-high-v}
+  \[
     X
     =\frac{2\tilde p^2(1-\tau)}{\Delta(v+\tau)^2}
      \left(
        \frac{2\tilde M^N}{v}+(N+2)S_N
      \right).
-  \end{equation}
+  \]
   Using \eqref{eq:plt23-Delta-upper-sigma} and \eqref{eq:plt23-vtau-square}, and dropping the positive first term in parentheses,
   \begin{equation}\label{eq:plt23-X-high-v-lower}
     X>
@@ -3700,16 +3691,16 @@ for
     (1+\tilde M^2)\tilde q^N<1+\tilde M^{N+2},
   \]
   so
-  \begin{equation}\label{eq:plt23-aN-upper}
+  \[
     \tilde q^N
     <1-\frac{\tilde M^2}{1+\tilde M^2}(1-\tilde M^N).
-  \end{equation}
+  \]
   On the other hand, Bernoulli gives $\tilde q^N=(1-u)^N\ge1-Nu$.
   Comparing the two inequalities, and substituting $u=v(1-\tau)/\tilde p$ and $\tilde M^2=v\tau$, yields
-  \begin{equation}\label{eq:plt23-one-minus-tau}
+  \[
     N(1+\tilde M^2)(1-\tau)
     >\tau\tilde p(1-\tilde M^N).
-  \end{equation}
+  \]
   Therefore \eqref{eq:plt23-X-high-v-lower} gives
   \begin{equation}\label{eq:plt23-X-high-v-final}
     X>
@@ -3780,14 +3771,14 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
     \frac{N+2}{2N}>\frac12.
   \]
   Hence the left side of \eqref{eq:plt23-geometric-sum} is greater than
-  \begin{equation}\label{eq:plt23-geometric-lhs}
+  \[
     \frac3{10}C^2.
-  \end{equation}
+  \]
   On the other hand, since $1+x\le2$ and $y\ge1/2$,
-  \begin{equation}\label{eq:plt23-geometric-rhs}
+  \[
     (1+x)\bigl(C-(k-1)y\bigr)
     \le2C-(k-1).
-  \end{equation}
+  \]
   It remains to show
   \begin{equation}\label{eq:plt23-C-quadratic}
     \frac3{10}C^2\ge2C-(k-1).
@@ -3846,11 +3837,11 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
 \begin{proof}
   The claim is trivial if $F_N\le0$, so assume $F_N>0$.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, \eqref{eq:plt23-KL-sum}, and \eqref{eq:plt23-Lambda-lower},
-  \begin{equation}\label{eq:plt23-Y-high-v}
+  \[
     Y\ge
     (N+2)(1-\tilde M)(\tilde p-\tilde M)\tilde p^{N-1}
     \sqrt{\frac2{v+2}}.
-  \end{equation}
+  \]
   Together with \eqref{eq:plt23-G-high-v}, it is enough to prove
   \begin{equation}\label{eq:plt23-high-v-B-sufficient}
     \frac{N+2}{2N}
@@ -3885,45 +3876,35 @@ We can now finish without any further subdivision of the admissible region.
 \begin{proof}
   If $F_N=R_m/\Lambda^m\le0$, the claim is immediate.
   Assume $F_N>0$, and recall $\theta=\mathcal A/\mathcal B$.
+  By \Cref{prop:plt23-reduction} it is enough to prove $F_N\le\mathcal B\,d(\theta)$.
 
   Suppose first $0<v\le1/2$.
   \Cref{prop:plt23-low-v} gives
-  \begin{equation}\label{eq:plt23-low-v-min}
+  \[
     \frac{F_N}{\mathcal B}
     \le
     \min\left\{
       \frac\theta2,
       \frac{2\theta}{1+2\theta}
     \right\}.
-  \end{equation}
+  \]
   If $\theta\le1/2$, the first term on the right is at most $\theta=d(\theta)$.
   If $\theta\ge1/2$, the second term is at most $d(\theta)$, because
-  \begin{equation}\label{eq:plt23-dtheta-compare}
+  \[
     1-\frac1{4\theta}-\frac{2\theta}{1+2\theta}
     =\frac{2\theta-1}{4\theta(1+2\theta)}\ge0.
-  \end{equation}
-  Thus in all cases
-  \begin{equation}\label{eq:plt23-F-Bd}
-    F_N\le\mathcal B\,d(\theta).
-  \end{equation}
+  \]
+  Thus $F_N\le\mathcal B\,d(\theta)$ in this range.
 
   Now suppose $1/2\le v<1$.
   \Cref{prop:plt23-high-v-A,prop:plt23-high-v-B} give
-  \begin{equation}\label{eq:plt23-high-v-min}
+  \[
     \frac{F_N}{\mathcal B}
     \le\min\{\theta,1/2\}.
-  \end{equation}
+  \]
   If $\theta\le1/2$, the right side is at most $\theta=d(\theta)$.
   If $\theta\ge1/2$, it is at most $1/2\le d(\theta)$.
-  Hence \eqref{eq:plt23-F-Bd} again holds.
-
-  Finally, \eqref{eq:plt23-master-dual-lower} gives
-  \[
-    F_N
-    \le\mathcal B\,d(\theta)
-    \le\frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}.
-  \]
-  Multiplying by $\Lambda^m$ proves \eqref{eq:plt23-scalar-target}.
+  Hence $F_N\le\mathcal B\,d(\theta)$ again, and \Cref{prop:plt23-reduction} proves \eqref{eq:plt23-scalar-target}.
 \end{proof}
 
 \subsection{Completion of the intermediate-density region}
