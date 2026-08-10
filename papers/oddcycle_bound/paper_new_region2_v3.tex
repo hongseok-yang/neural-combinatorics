@@ -1,0 +1,4194 @@
+﻿\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+% The environments above share the theorem counter, so cleveref would name
+% them all "Theorem"; these aliases restore the correct names.
+\usepackage{etoolbox}
+\AtBeginEnvironment{proposition}{\crefalias{theorem}{proposition}}
+\AtBeginEnvironment{lemma}{\crefalias{theorem}{lemma}}
+\AtBeginEnvironment{corollary}{\crefalias{theorem}{corollary}}
+\AtBeginEnvironment{definition}{\crefalias{theorem}{definition}}
+\AtBeginEnvironment{remark}{\crefalias{theorem}{remark}}
+
+\numberwithin{equation}{section}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\pos}[1]{\left(#1\right)_{+}}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\E}{\mathbb E}
+\newcommand{\GammaLaw}{\operatorname{Gamma}}
+\newcommand{\BetaLaw}{\operatorname{Beta}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\newcommand*{\tk}[1]{\textcolor{blue}{\textbf{[TK: #1]}}}
+
+% Passages written or reordered in the 2026-08-07 pass, awaiting the author's
+% reading.  Delete the environment (or make it a no-op) once they are cleared.
+\definecolor{revised}{rgb}{0.56,0.30,0.30}
+\newenvironment{rev}{\color{revised}}{}
+\newcommand*{\rv}[1]{{\color{revised}#1}}
+% Text that was only moved, not rewritten: delimited rather than coloured.
+\newcommand*{\revbegin}{\textcolor{revised}{\textbf{[moved, text unchanged $\downarrow$]}}}
+\newcommand*{\revend}{\textcolor{revised}{\textbf{[$\uparrow$ end moved]}}}
+
+\title{A Complete Proof of the Goodman--Style Lower Bound\\
+for Odd-Cycle Densities in Graphons}
+\author{Consolidated working note for H.~Yang and collaborators}
+\date{July 2026}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  Let $W:[0,1]^2\to[0,1]$ be a graphon of edge density $p$, and let $m\ge3$ be odd.
+  We prove the conjectured Goodman--style inequality
+  \[
+    t(C_m,W)\ge p^m-p(1-p)^{m-1}
+  \]
+  for every $p\in[0,1]$.
+  The proof is divided at $p=2/3$, or equivalently at the complement density $q=1/3$.
+
+  For $p\ge2/3$, a two-sided Schur-complement identity cancels the unknown odd moments of the compressed complement operator.
+  Expansion in complete homogeneous symmetric polynomials is then diagonalized by a Dirichlet average, converted to a beta integral, and smoothed by a Laplace transform into expectations of a shifted gamma random variable.
+  The remaining positivity follows from a uniform odd-to-even gamma moment inequality.
+
+  For $1/2<p<2/3$, the Hilbert--Schmidt bound allows at most one compression eigenvalue above $q=1-p$.
+  Isolating this frontier eigenvalue and retaining both its direct coupling and the coupling forced into the safe spectral subspace leads to a one-dimensional Huber-type envelope.
+  Its dual form is bounded below by a single function of one dimensionless ratio, and the resulting scalar inequality is settled by a division of the parameter region into two halves.
+  The cycles $C_3,C_5,C_7$ are also given separate elementary proofs.
+
+  A final section extracts the reusable mechanisms: one-step Jacobi coefficient stripping, first-return and cyclic excursion expansions, Dirichlet probabilistic polarization, beta--gamma/Laplace positivity transfer, the Laguerre differential equation hidden in the gamma moment lemma, and the one-dangerous-mode/Huber principle.
+  It also explains why the same threshold $q=1/3$ emerges independently from the two sides.
+\end{abstract}
+
+\tableofcontents
+
+\section{The theorem, notation, and proof map}\label{sec:intro}
+
+For a finite graph $F$ and a graphon $W$, write
+\[
+  t(F,W)=\int_{[0,1]^{V(F)}}
+  \prod_{ij\in E(F)}W(x_i,x_j)
+  \prod_{i\in V(F)}\dd x_i.
+\]
+In particular,
+\[
+  p=t(K_2,W)=\int_{[0,1]^2}W(x,y)\dd x\dd y
+\]
+is the edge density.
+We prove the following theorem.
+
+\begin{theorem}[Odd-cycle Goodman bound]\label{thm:main}
+  Let $W$ be a graphon of edge density $p\in[0,1]$.
+  For every odd integer $m\ge3$,
+  \begin{equation}\label{eq:main-goal}
+    t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+  \end{equation}
+\end{theorem}
+
+Put
+\[
+  U=1-W,\qquad q=t(K_2,U)=1-p.
+\]
+If $p\le1/2$, then
+\[
+  p^m-pq^{m-1}=p\bigl(p^{m-1}-q^{m-1}\bigr)\le0,
+\]
+whereas $t(C_m,W)\ge0$.
+Thus only $p>1/2$, or $q<1/2$, needs proof.
+The nontrivial range splits into
+\[
+  \underbrace{0\le q\le\frac{1}{3}}_{p\ge2/3}
+  \qquad\text{and}\qquad
+  \underbrace{\frac{1}{3}<q<\frac{1}{2}}_{1/2<p<2/3}.
+\]
+
+\begin{corollary} \label{cor:main}
+  For every graphon $W$ of edge density $p = 1 - 1 / k$ for some integer $k \ge 2$, and for every odd integer $m \ge 3$, the balanced complete $k$-partite graphon
+  \[
+    W_k(x, y) = \begin{cases}
+      1 & \text{if } \lfloor kx \rfloor \neq \lfloor ky \rfloor,
+      \\
+      0 & \text{otherwise}.
+    \end{cases}
+  \]
+  is the minimiser of $t(C_m, W)$ among all graphons of edge density $p$.
+\end{corollary}
+
+\subsection{Proof map}
+
+Every part of the proof works with the same few quantities, so we introduce them first.
+Let $T_U$ be the integral operator with kernel $U=1-W$, and split it against the constant function $\one$.
+The constant direction contributes the scalar $q$, and the remainder is the mean-zero function
+\[
+  g=T_U\one-q\one
+  =p-d_W,\qquad d_W(x)=\int_0^1W(x,y)\dd y,
+\]
+that is, the mean $p$ minus the degree function of $W$.
+We also restrict $T_U$ to the mean-zero subspace $\one^\perp$, and write $A$ for the resulting self-adjoint operator, so that $\ip f{Ah}=\ip f{T_Uh}$ for all $f,h\perp\one$.
+
+Throughout the paper, $\lambda_1,\lambda_2,\ldots$ denote the eigenvalues of $A$, and $P_i$ the orthogonal projection onto the eigenspace of $\lambda_i$.
+We write
+\[
+  \mu=\sum_i\norm{P_ig}^2\delta_{\lambda_i}
+\]
+for the associated measure on the spectrum of $A$, so that $\int\lambda^j\dd\mu(\lambda)=\ip g{A^jg}$ for every $j\ge0$ and $\mu(\R)=\norm g^2$.
+
+\begin{enumerate}[label=\textbf{Section \arabic*.},leftmargin=4.6em,start=2]
+  \item \emph{The cases $m=3,5,7$.}
+  We prove these cases separately so that when we consider the general odd $m$ in the later sections, we can assume $m\ge9$.
+  The case $m=3$ is Goodman's original bound, in graphon form.
+  For $m=5$ and $m=7$, the inclusion--exclusion principle applied to $\prod_{i=1}^m(1-U_i)$ expands $t(C_m,W)$ over the subsets of the $m$ edges.
+  A proper subset selects a disjoint union of paths, and therefore contributes a product of the path densities
+  \[
+    x_j=t(P_j,U)=\ip\one{T_U^j\one},
+  \]
+  while the full subset contributes $t(C_m,U)$, for which $t(C_m,U)\le x_{m-1}$ because $0\le U\le1$.
+  Each $x_j$ can in turn be written as a polynomial in $q$ and the moments
+  \[
+    s_j=\ip g{A^jg}=\int\lambda^j\dd\mu(\lambda).
+  \]
+  For $m=5$, the quantity to be shown nonnegative is a quadratic form in $g$ and $T_Ug$, which \Cref{subsec:C5} writes as a sum of two squares.
+  For $m=7$ it becomes
+  \[
+    6s_1^2+\int R_{q,r}(\lambda)\dd\mu(\lambda),
+    \qquad r=\norm g^2,
+  \]
+  where $R_{q,r}$ is a quartic in $\lambda$; \Cref{subsec:C7} writes it as an sum of squares, nonnegative for every real $\lambda$.
+
+  \item In this section we prove lemmas that are used throughout the remaining part of this paper.
+  We first prove that, in proving \eqref{eq:main-goal}, it is enough to consider step graphons, so that every computation below is finite dimensional.
+  We then show that the logarithm of a determinant generates the cycle densities: for any kernel $K$,
+  \[
+    -\log\det(I-zT_K)=\sum_{j\ge1}\frac{\Tr(T_K^j)}{j}z^j,
+    \qquad
+    \Tr(T_K^j)=t(C_j,K)\quad(j\ge2).
+  \]
+  We apply this to $U$ and to $W$, and factorize the two determinants by Schur complementation against the constant direction.
+  This produces two further generating functions $L_-(z)$ and $L_+(z)$, which satisfy the following two equalities (\Cref{lem:cycle-identities}):
+  \begin{align*}
+    t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\\
+    t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).
+  \end{align*}
+  \item In this section, we prove \Cref{thm:main} for the case $p \ge 2/3$.
+  We first eliminate the $\Tr(A^m)$ by addint the two identities:
+  \[
+    t(C_m,W)+t(C_m,U)=p^m+q^m+S_m,
+    \qquad
+    S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
+  \]
+  Bounding $t(C_m,U)$ by the path density $x_{m-1}$, everything reduces to the nonnegativity of
+  \[
+    \Phi_m=q^{m-1}+S_m-x_{m-1}.
+  \]
+
+  Expanding $L_\pm$ and $x_{m-1}$ gives $\Phi_m$ as an integral against $\dd\mu^{\otimes r}$ of a symmetric polynomial (\Cref{prop:pge23-expansion}): with $n=m-2r$,
+  \[
+    \Phi_m=\sum_{r=1}^{(m-1)/2}\int\!\cdots\!\int
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    \prod_{i=1}^r\dd\mu(\lambda_i),
+  \]
+  \[
+    P_{m,r}=\frac {m}{r}\Bigl[
+    h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
+    +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)\Bigr]
+    -h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r),
+  \]
+  where $h_d$ is the complete homogeneous symmetric polynomial of degree $d$ and $a^{\times k}$ means $a$ repeated $k$ times.
+  It therefore suffices to prove $P_{m,r}\ge0$ on $[-1/2,1/2]^r$.
+
+  That polynomial is then simplified three times until it can be shown nonnegative with elementary methods.
+  First, using the fact that a complete homogeneous polynomial is an expectation of a power of a random convex combination, so with $\Theta$ uniform on the simplex $\Delta^r$ and $\widetilde P_{m,r}(q,\ell)=P_{m,r}(q;\ell,\ldots,\ell)$ (\Cref{lem:pge23-dirichlet}),
+  \[
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    =\E\,\widetilde P_{m,r}
+    \Bigl(q,\sum_{i=1}^r\Theta_i\lambda_i\Bigr).
+  \]
+  Every such convex combination again lies in $[-1/2,1/2]$, so the $r$ variables collapse to one and it suffices to prove $\widetilde P_{m,r}(q,\ell)\ge0$ for $\ell\in[-1/2,1/2]$.
+  Second, once we obtain this diagonal polynomial, we can simplify it further to an integral against a beta distribution, which for $\ell>0$ becomes (\Cref{lem:pge23-beta})
+  \begin{align*}
+    \widetilde P_{m,r}(q,\ell) &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
+    \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}
+    \rho_{n,m}(q+s)\dd s,
+    \\
+    \rho_{n,m}(u)&=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+  \end{align*}
+  The case $\ell\le0$ is proved separately in \Cref{lem:pge23-ell-negative}, where the argument of $\rho_{n,m}$ stays at most $q\le1/2$ and $\rho_{n,m}$ is nonnegative there.
+  As $\rho_{n,m}$ is not nonnegative at every real number, the integrand cannot be handled pointwise, and we estimate the average instead.
+  Third, the Laplace representation of $(\ell+s)^{-m}$ replaces that average by an expectation over a gamma variable $Y\sim\GammaLaw(r,1)$ (\Cref{lem:pge23-laplace-gamma}):
+  \[
+    \widetilde P_{m,r}(q,\ell)
+    =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
+    \int_0^\infty t^{m-r-1}e^{-\ell t}\,
+    \E\,\rho_{n,m}\Bigl(q+\frac {Y}{t}\Bigr)\dd t.
+  \]
+  As all the remaining terms are nonnegative, it is enough to prove that $\E\rho_{n,m}(q+xY)\ge0$ for every $x\ge0$.
+  Centering at $u=1/2$ and using that $n$ is odd, this reduces to a single inequality comparing consecutive shifted gamma moments,
+  \[
+    3j\,\E(zY-1)^{2j-1}\le(r+j)\,\E(zY-1)^{2j}
+    \qquad(z\ge0),
+  \]
+  proved in \Cref{lem:pge23-gamma-moment} from a Stein identity and the differential equation it induces.
+  The constant $3$ is where the assumption $p\ge2/3$ is used.
+
+  \item In this section, we prove \Cref{thm:main} for the case $1/2<p<2/3$ and odd $m\ge9$.
+  The main tool in this section is mostly spectral analysis of $A$.
+  We start from the identity for $W$:
+  \[
+    t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
+  \]
+  together with the nonnegativity of every coefficient of $L_-$ (\Cref{lem:plt23-one-sided-identity}).
+
+  We first consider the eigenvalues of $A$ larger than $q$.
+  If there were two of them, then $\sum_i\lambda_i^2>2q^2$, whereas $\sum_i\lambda_i^2\le pq$ by \Cref{lem:plt23-HS-bound}, a contradiction because $2q^2 > pq$ when $q>1/3$.
+  Hence at most one eigenvalue exceeds $q$.
+  If none does the theorem is immediate (\Cref{lem:plt23-eigenvalues-above-q}), so we may assume that exactly one does and write $\Lambda$ for it.
+  The same bound gives $|\lambda_i|\le M:=\sqrt{pq-\Lambda^2}$ for every other eigenvalue.
+  One can also derive an upper bound on $\Lambda$ by using its eigenfunction $\phi$: since $U\ge0$, replacing $\phi$ by $|\phi|$ can only increase $\ip\phi{T_U\phi}$, and expanding $|\phi|$ along $\one$ and $\phi$ gives
+  \[
+    \norm g^2\ge\frac{\Lambda(\Lambda-q)^2}{2(1-2\Lambda)},
+  \]
+  which with $2\norm g^2\le pq-\Lambda^2$, again from \Cref{lem:plt23-HS-bound}, gives $\Lambda^2+q\Lambda-q\le0$ (\Cref{lem:plt23-forced-variance}).
+
+  Decomposing $g=\gamma\phi+g_s$ into its component along $\phi$ and its component in the remaining spectral subspace, the two nonconstant terms of the identity can be bounded.
+  For $\Tr(A^m)$, the eigenvalues other than $\Lambda$ satisfy $\sum\lambda_i^m\le M^{m-2}\sum\lambda_i^2$, so \Cref{lem:plt23-HS-bound} gives
+  \[
+    \Tr(A^m)\le\Lambda^m+M^m-2M^{m-2}\bigl(\gamma^2+\norm{g_s}^2\bigr).
+  \]
+  For the generating function, keeping only the first term of $-\log(1-X)=\sum_{k\ge1}X^k/k$ discards nonnegative coefficients, and leaves
+  \[
+    m[z^m]L_-(z)\ge m\int k_m\dd\mu
+    \ge mk_m(\Lambda)\gamma^2+mk_m(M)\norm{g_s}^2,
+    \qquad
+    k_m(\lambda)=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}.
+  \]
+  Together they give (\Cref{prop:plt23-splitting-lower-bound})
+  \[
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    \ge-R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2,
+  \]
+  where $R_m=\Lambda^m+M^m-pq^{m-1}$, $\Lambda_m=2M^{m-2}+mk_m(\Lambda)$ and $M_m=2M^{m-2}+mk_m(M)$, with $0<\Lambda_m<M_m$ because $k_m$ decreases and $M<\Lambda$.
+  It therefore suffices to prove $\Lambda_m\gamma^2+M_m\norm{g_s}^2\ge R_m$.
+
+  To prove this lower bound, we first derive bounds on $\gamma$ and $\norm{g_s}$ from the eigenfunction $\phi$.
+  Decompose
+  \[
+    |\phi|=a_\phi\one+b\phi+k,
+    \qquad a_\phi=\int_0^1|\phi|,
+    \qquad k\perp\one,\phi,
+  \]
+  and set $K=\norm k^2$, so that $a_\phi^2+b^2+K=1$.
+  One can then show (\Cref{lem:plt23-gamma-upper-bound,lem:plt23-gs-lower-bound}) that
+  \[
+    \gamma\le\frac{a_\phi^2-2\Lambda(1+b)}{2a_\phi},
+    \qquad
+    b\gamma+\ip{g_s}k\ge
+    \frac{(\Lambda-q)a_\phi^2+(\Lambda-M)K}{2a_\phi},
+  \]
+  and the Cauchy--Schwarz inequality $\ip{g_s}k\le\norm{g_s}\sqrt K$ turns the second inequality into a lower bound on $\norm{g_s}^2$.
+  We then solve the constrained minimization of $\Lambda_m\gamma^2+M_m\norm{g_s}^2$ under these two bounds.
+  Minimizing first in $\gamma$, and then over the three numbers $a_\phi,b,K$ that describe $\phi$, gives (\Cref{thm:plt23-huber-elim})
+  \[
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2\ge \Omega_m\psi(\xi,\rho),
+    \qquad
+    \psi(\xi,\rho)=\min_{0\le v\le1}
+    \bigl\{\rho v^2+\pos{\xi-v+v^2}\bigr\},
+  \]
+  where $\Omega_m$, $\xi$, and $\rho$ depend on $q$, $\Lambda$, and $m$.
+  The theorem in this region is thereby reduced to the scalar inequality $R_m\le \Omega_m\psi(\xi,\rho)$.
+  Since $\pos x=\max_{0\le\lambda\le1}\lambda x$, the definition of $\psi$ is a nested optimization,
+  \[
+    \psi(\xi,\rho)=\min_{0\le v\le1}\ \max_{0\le\lambda\le1}
+    \bigl\{\rho v^2+\lambda(\xi-v+v^2)\bigr\}.
+  \]
+  We interchange the minimum and the maximum by the strong duality of this problem and carry out the inner minimization in $v$, which gives (\Cref{prop:plt23-huber-dual})
+  \[
+    \psi(\xi,\rho)=\max_{0\le\lambda\le1}
+    \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\}.
+  \]
+  Rather than choosing one value of $\lambda$, we keep both scales that occur in this maximum.
+  Write
+  \[
+    \mathcal A=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
+    \qquad
+    \mathcal B=\frac{\Omega_m\xi}{\Lambda^m},
+    \qquad
+    \theta=\rho\xi=\frac{\mathcal A}{\mathcal B}.
+  \]
+  Dividing the objective by $\xi$ and discarding $\lambda\xi$ from the denominator leaves a maximum in which only $\theta$ occurs,
+  \[
+    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}\ge\mathcal B\,d(\theta),
+    \qquad
+    d(\theta)=\max_{0\le\lambda\le1}\left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
+  \]
+  and $d(\theta)$ equals $\theta$ for $\theta\le1/2$ and $1-1/(4\theta)$ for $\theta\ge1/2$.
+
+  The goal $R_m\le \Omega_m\psi(\xi,\rho)$ involves only $q$, $\Lambda$, and $m$.
+  From $p=1-q$ and $M^2=pq-\Lambda^2$, the two ratios
+  \[
+    v=\frac {p}{\Lambda}-1,
+    \qquad
+    \zeta=\frac{M^2}{\Lambda(\Lambda-q)}
+  \]
+  determine $q$, $p$, $\Lambda$, and $M$, so we may replace $q$ and $\Lambda$ by $v$ and $\zeta$.
+  For every $m$, the pairs $(v,\zeta)$ to be considered are those satisfying
+  \[
+    0<v<1,
+    \qquad
+    \zeta(\zeta+v)\ge1
+  \]
+  (\Cref{subsec:plt23-variables}).
+  Writing $F_N=R_m/\Lambda^m$, what has to be proved is that $F_N\le\mathcal B\,d(\theta)$ holds in that region for every odd $m\ge9$.
+
+  The region is divided only at $v=1/2$, and on each half two bounds are proved at once.
+  \begin{itemize}[leftmargin=1.6em,topsep=2pt,itemsep=1pt]
+    \item For $v\le1/2$: $2F_N\le\mathcal A$ and $F_N/\mathcal A+2F_N/\mathcal B\le2$ (\Cref{prop:plt23-low-v}).
+    \item For $v\ge1/2$: $F_N\le\mathcal A$ and $2F_N\le\mathcal B$ (\Cref{prop:plt23-high-v-A,prop:plt23-high-v-B}).
+  \end{itemize}
+  In both halves the first bound settles $\theta\le1/2$ and the second settles $\theta\ge1/2$, which gives $F_N\le\mathcal B\,d(\theta)$ (\Cref{prop:plt23-scalar}).
+  All four bounds are proved by elementary analysis; the only inputs are two upper bounds for $F_N$, one bound for a product of elementary factors, and one comparison between a geometric sum and a power.
+\end{enumerate}
+
+We prove \Cref{thm:main} in \Cref{sec:assembly}, combining the parts above.
+Separately from the proof, \Cref{sec:transferable} discusses the possible applicability of the methods used here to other problems in extremal combinatorics.
+
+\section{The elementary cases \texorpdfstring{$m=3,5,7$}{m=3,5,7}}\label{sec:short-cycles}
+
+Throughout this section, $W$ is any graphon, $p=t(K_2,W)$,
+\[
+  U=1-W,\qquad q=t(K_2,U)=1-p,
+\]
+and $T=T_U$ is the integral operator of $U$.
+When $q>1/2$, the right side of \eqref{eq:main-goal} is nonpositive, so the result is trivial.
+We may therefore assume
+\begin{equation}\label{eq:q-short}
+  0\le q\le\frac{1}{2}.
+\end{equation}
+The arguments below actually prove the three cases at every edge density.
+
+\subsection{The triangle: Goodman's one-line argument}\label{subsec:C3}
+
+The following is the graphon form of Goodman's classical counting argument~\cite{Goodman1959}.
+
+\begin{proposition}\label{prop:C3}
+  For every graphon $W$ with edge density $p=t(K_2,W)$,
+  \[
+    t(C_3,W)\ge p^3-p(1-p)^2.
+  \]
+\end{proposition}
+
+\begin{proof}
+  The target polynomial is
+  \[
+    p^3-p(1-p)^2=2p^2-p.
+  \]
+  Let $d_W(x)=\int_0^1W(x,y)\dd y$.
+  Since $ab\ge a+b-1$ for $a,b\in[0,1]$,
+  \[
+    \int_0^1W(x,z)W(y,z)\dd z\ge d_W(x)+d_W(y)-1.
+  \]
+  Multiplying by $W(x,y)\ge0$, integrating in $(x,y)$, and applying Jensen's inequality gives
+  \begin{align*}
+    t(C_3,W)
+    &\ge \int W(x,y)\bigl(d_W(x)+d_W(y)-1\bigr)\dd x\dd y\\
+    &=2\int_0^1d_W(x)^2\dd x-p
+    \ge2p^2-p,
+  \end{align*}
+  as desired.
+\end{proof}
+
+\subsection{Path moments in the complement}\label{subsec:path-moments}
+
+Write
+\begin{equation}\label{eq:T1-decomp}
+  T\one=q\one+g,
+  \qquad g\perp\one.
+\end{equation}
+This decomposition has the explicit pointwise form
+\[
+  g(x)=\int_0^1U(x,y)\dd y-q
+  =\bigl(1-d_W(x)\bigr)-(1-p)
+  =p-d_W(x).
+\]
+Thus $g$ is the negative of the deviation of the $W$-degree from its mean $p$.
+For $j\ge1$, let $P_j$ denote the path with $j$ edges and put
+\[
+  x_j=t(P_j,U)=\ip{\one}{T^j\one}.
+\]
+Thus $x_1=q$.
+The following first moments will be used for $C_5$.
+Note that $T$ is a symmetric operator, so $\ip{f}{Tg}=\ip{Tf}{g}$ for all $f,g$.
+
+\begin{lemma}\label{lem:path-to-4}
+  With \eqref{eq:T1-decomp},
+  \begin{align*}
+    x_2&=q^2+\norm g^2,\\
+    x_3&=q^3+2q\norm g^2+\ip g{Tg},\\
+    x_4&=q^4+3q^2\norm g^2+2q\ip g{Tg}+\norm{Tg}^2.
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  The first identity is
+  \[
+    x_2 = \langle T\one, T\one\rangle = \langle q\one + g, q\one + g\rangle = q^2 \norm{\one}^2 + \norm{g}^2 = q^2 + \norm{g}^2.
+  \]
+  Next, $T^2\one=T(q \one + g) = q^2\one + qg + Tg$, while
+  \[
+    \ip{\one}{Tg}=\ip{T\one}{g}= \ip{q\one + g}{g}=\norm g^2.
+  \]
+  Expanding $x_3$ and $x_4$ similarly gives the other two identities:
+  \begin{align*}
+    x_3 &= \ip{T^2\one}{T\one} = \ip{q^2\one + qg + Tg}{q\one + g} \\
+    {} &= \ip{q^2\one}{q\one} + \ip{q^2\one}{g} + \ip{qg}{q\one} + \ip{qg}{g} + \ip{Tg}{q\one} + \ip{Tg}{g} \\
+    {} &= q^3 + q \norm{g}^2 + q \ip{g}{T \one} + \ip{Tg}{g} \\
+    {} &= q^3 + q \norm{g}^2 + q \ip{g}{q \one + g} + \ip{Tg}{g} \\
+    {} &= q^3 + 2q \norm{g}^2 + \ip{g}{Tg},
+    \\
+    x_4 &= \ip{T^2 \one}{T^2 \one} = \ip{q^2\one + qg + Tg}{q^2\one + qg + Tg} \\
+    {} &= \ip{q^2\one}{q^2\one} + 2 \ip{q^2\one}{qg} + 2 \ip{q^2\one}{Tg} + \ip{qg}{qg} + 2 \ip{qg}{Tg} + \ip{Tg}{Tg} \\
+    {} &= q^4 + 2q^2 \ip{T \one}{g} + q^2 \norm{g}^2 + 2q \ip{g}{Tg} + \norm{Tg}^2 \\
+    {} &= q^4 + 2q^2 \ip{q \one + g}{g} + q^2 \norm{g}^2 + 2q \ip{g}{Tg} + \norm{Tg}^2 \\
+    {} &= q^4 + 3q^2 \norm{g}^2 + 2q \ip{g}{Tg} + \norm{Tg}^2.
+  \end{align*}
+\end{proof}
+
+For $C_7$, let $H_0=\one^\perp$ and
+\[
+  A=P_{H_0}TP_{H_0}.
+\]
+Concretely, $H_0$ is the space of mean-zero functions, and its orthogonal projection is the centering operation
+\[
+  (P_{H_0}f)(x)=f(x)-\int_0^1f(y)\dd y.
+\]
+Thus $P_{H_0}$ removes the constant part of $f$, and $A$ is the restriction of $T$ to $H_0$, in the sense that $\ip f{Ah}=\ip f{Th}$ for all $f,h\in H_0$.
+Define
+\begin{equation}\label{eq:sj-def}
+  s_j=\ip g{A^jg}\qquad(j\ge0).
+\end{equation}
+The kernel of $T$ is square-integrable, so $A$ is a compact self-adjoint operator and $H_0$ has an orthonormal basis of its eigenfunctions.
+Write $\lambda_i$ for the distinct eigenvalues of $A$ and $P_i$ for the orthogonal projection onto the eigenspace of $\lambda_i$, so that $\sum_iP_i$ is the identity on $H_0$ and $A^j=\sum_i\lambda_i^jP_i$.
+Then
+\[
+  s_j=\sum_i\lambda_i^j\norm{P_ig}^2,
+\]
+which is the $j$-th moment of the finite positive measure
+\begin{equation}\label{eq:mu-short}
+  \mu=\sum_i\norm{P_ig}^2\,\delta_{\lambda_i}.
+\end{equation}
+Rewriting $s_j$ in terms of this measure,
+\begin{equation}\label{eq:sj-moment}
+  s_j=\int\lambda^j\dd\mu(\lambda),
+  \qquad s_0=\norm g^2=\mu(\R).
+\end{equation}
+
+We now express the path densities $x_j$ through $q$ and the moments $s_j$.
+Split $T^n\one$ into its constant and mean-zero parts.
+The constant part is $\ip\one{T^n\one}\one=x_n\one$, so
+\[
+  T^n\one=x_n\one+h_n,\qquad h_n\perp\one,
+\]
+where $x_0=1$ and $h_0=0$.
+Now \eqref{eq:T1-decomp} and the definition of $A$ give the recursive formulas
+\begin{equation}\label{eq:path-recursion}
+  x_{n+1}=qx_n+\ip g{h_n},
+  \qquad h_{n+1}=x_ng+Ah_n.
+\end{equation}
+For clarity, iterating the second recursion first gives
+\begin{align*}
+  h_1={}&g,\\
+  h_2={}&qg+Ag,\\
+  h_3={}&x_2g+qAg+A^2g,\\
+  h_4={}&x_3g+x_2Ag+qA^2g+A^3g,\\
+  h_5={}&x_4g+x_3Ag+x_2A^2g+qA^3g+A^4g,\\
+  h_6={}&x_5g+x_4Ag+x_3A^2g+x_2A^3g
+  +qA^4g+A^5g.
+\end{align*}
+More generally,
+\[
+  h_n=\sum_{j=0}^{n-1}x_{n-1-j}A^jg.
+\]
+If we take the inner product with $g$ and use the definition \eqref{eq:sj-def} of $s_j$,
+\[
+  \ip g{h_n}
+  =\sum_{j=0}^{n-1}x_{n-1-j}\ip g{A^jg}
+  =\sum_{j=0}^{n-1}x_{n-1-j}s_j.
+\]
+Substituting this into the first recursion of \eqref{eq:path-recursion} eliminates $h_n$, and leaves a recursion for the path densities alone,
+\begin{equation}\label{eq:path-scalar-recursion}
+  x_{n+1}=qx_n+\sum_{j=0}^{n-1}x_{n-1-j}s_j
+  \qquad(n\ge1).
+\end{equation}
+We expand the next few terms that are used in the $C_5$ and $C_7$ calculations:
+\begin{align}
+  x_2={}& q^2+s_0, \notag\\
+  x_3={}& q^3+2qs_0+s_1, \notag\\
+  x_4={}& q^4+3q^2s_0+2qs_1+s_0^2+s_2, \notag\\
+  x_5={}& q^5+4q^3s_0+3q^2s_1+3qs_0^2+2qs_2+2s_0s_1+s_3, \notag\\
+  x_6={}& q^6+5q^4s_0+4q^3s_1+6q^2s_0^2+3q^2s_2
+  +6qs_0s_1+2qs_3 \notag\\
+  &\qquad{}+s_0^3+2s_0s_2+s_1^2+s_4. \label{eq:path-2-6}
+\end{align}
+
+\subsection{The pentagon: one completion of a square}\label{subsec:C5}
+
+\begin{proposition}\label{prop:C5}
+  For every graphon $W$ with edge density $p=t(K_2,W)$,
+  \[
+    t(C_5,W)\ge p^5-p(1-p)^4.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Assume \eqref{eq:q-short}.
+  Label the integration variables cyclically by $z_1,\ldots,z_5$, put $z_6=z_1$, and abbreviate
+  \[
+    U_i=U(z_i,z_{i+1})\qquad(1\le i\le5).
+  \]
+  Since $W=1-U$, the integrand defining $t(C_5,W)$ is $\prod_{i=1}^5(1-U_i)$.
+  Ordinary inclusion--exclusion gives the exact pointwise expansion
+  \begin{align*}
+    \prod_{i=1}^5(1-U_i)
+    ={}&1-\sum_{i=1}^5U_i
+    +\sum_{1\le i<j\le5}U_iU_j
+    -\sum_{1\le i<j<k\le5}U_iU_jU_k\\
+    &+\sum_{i=1}^5\prod_{j\ne i}U_j
+    -\prod_{i=1}^5U_i.
+  \end{align*}
+  We now integrate this identity over $(z_1,\ldots,z_5)$.
+  Each single-edge term has integral $q=x_1$, so the first sum contributes $5q$.
+  Among the $\binom52=10$ pairs of edges, five pairs are adjacent around the cycle; each forms a two-edge path and hence has integral $x_2$.
+  The other five pairs are disjoint edges.
+  Their variables separate, so each has integral $x_1^2=q^2$.
+  Therefore
+  \[
+    \int\sum_{i<j}U_iU_j=5x_2+5q^2.
+  \]
+
+  Similarly, among the $\binom53=10$ triples, five consist of three consecutive edges and form a path with three edges, contributing $x_3$ each.
+  Each of the other five consists of a two-edge path together with one disjoint edge.
+  Homomorphism density is multiplicative over disjoint unions, so each of these contributes $x_2x_1=qx_2$.
+  Thus
+  \[
+    \int\sum_{i<j<k}U_iU_jU_k=5x_3+5qx_2.
+  \]
+  There are five ways to select four edges; deleting any one edge from the cycle leaves a four-edge path, so every corresponding integral is $x_4$.
+  Finally, selecting all five edges gives $c_5:=t(C_5,U)$.
+  Combining these contributions with their alternating signs yields
+  \begin{align*}
+    t(C_5,1-U)
+    ={}&1-5q+5x_2+5q^2-5x_3-5qx_2+5x_4-c_5.
+  \end{align*}
+  Since $0\le U\le1$, deleting one edge from the cycle integrand gives $c_5\le x_4$.
+  Therefore
+  \begin{equation}\label{eq:C5-IE}
+    t(C_5,W)\ge1-5q+5q^2+5(1-q)x_2-5x_3+4x_4.
+  \end{equation}
+  Subtracting the lower bound
+  \[
+    (1-q)^5-(1-q)q^4=1-5q+10q^2-10q^3+4q^4
+  \]
+  from \eqref{eq:C5-IE} and using \Cref{lem:path-to-4} gives
+  \begin{align}
+    \Phi_5={}&4\norm{Tg}^2+(8q-5)\ip g{Tg}
+    +(12q^2-15q+5)\norm g^2 \notag\\
+    ={}&4\left\|Tg+\frac{8q-5}{8}g\right\|^2
+    +\left(8q^2-10q+\frac{55}{16}\right)\norm g^2. \label{eq:Phi5}
+  \end{align}
+  The quadratic coefficient $8q^2-10q+\frac{55}{16}$ has discriminant
+  \[
+    100-4\cdot8\cdot\frac{55}{16}=-10<0
+  \]
+  and positive leading coefficient, so it is positive for every $q$.
+  Thus $\Phi_5\ge0$, proving the claim.
+\end{proof}
+
+\subsection{The heptagon: a univariate sum of squares}\label{subsec:C7}
+
+\begin{proposition}\label{prop:C7}
+  For every graphon $W$ with edge density $p=t(K_2,W)$,
+  \[
+    t(C_7,W)\ge p^7-p(1-p)^6.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Write $U=1-W$ and $q=1-p=t(K_2,U)$, and let $x_j=t(P_j,U)$ be the path densities of \eqref{eq:sj-def} above, so that $x_1=q$.
+  If $p<1/2$, the right side of the claim is nonpositive and there is nothing to prove, so assume $p\ge1/2$, that is $q\le1/2$.
+  As in the proof for $C_5$, label the integration variables cyclically by $z_1,\ldots,z_7$, put $z_8=z_1$, and write
+  \[
+    U_i=U(z_i,z_{i+1})\qquad(1\le i\le7).
+  \]
+  Expanding the seven factors $1-U_i$ gives the exact inclusion--exclusion identity
+  \begin{equation}\label{eq:C7-subset-expansion}
+    t(C_7,W)
+    =\sum_{S\subseteq\{1,\ldots,7\}}(-1)^{|S|}
+    \int_{[0,1]^7}\prod_{i\in S}U_i\prod_{j=1}^7\dd z_j.
+  \end{equation}
+  A proper subset $S$ selects a disjoint union of paths around the cycle, and its variables separate between the components, so its term is the corresponding product of path densities; the full subset gives $c_7=t(C_7,U)$.
+  Collecting the subsets of each size, \eqref{eq:C7-subset-expansion} expands to
+  \begin{align*}
+    t(C_7,W)={}&1\\
+    &-7x_1\\
+    &+7x_2+14x_1^2\\
+    &-7x_3-21x_1x_2-7x_1^3\\
+    &+7x_4+14x_1x_3+7x_2^2+7x_1^2x_2\\
+    &-7x_5-7x_1x_4-7x_2x_3\\
+    &+7x_6\\
+    &-c_7.
+  \end{align*}
+  The seven subsets of size one each contribute $x_1$; of the $21$ subsets of size two, seven consist of two adjacent edges and contribute $x_2$ while the other fourteen contribute $x_1^2$; and so on, the coefficients in each line summing to $\binom7k$.
+  Because $0\le U_i\le1$, deleting one factor from the integrand of $c_7$ can only increase it; the remaining six factors form a six-edge path.
+  Hence
+  \[
+    c_7=\int\prod_{i=1}^7U_i
+    \le\int\prod_{i=1}^6U_i=x_6.
+  \]
+  Replacing $-c_7$ by $-x_6$ in the preceding identity and collecting the coefficients of the same path densities gives
+  \begin{align}
+    t(C_7,W)\ge{}&6x_6-7x_5+7(1-q)x_4+7(2q-1)x_3 \notag\\
+    &+7(q^2-3q+1)x_2+7x_2^2-7x_2x_3 \notag\\
+    &+1-7q+14q^2-7q^3. \label{eq:C7-IE}
+  \end{align}
+  Since
+  \[
+    (1-q)^7-(1-q)q^6
+    =1-7q+21q^2-35q^3+35q^4-21q^5+6q^6,
+  \]
+  substitution of \eqref{eq:path-2-6} reduces the desired inequality to the nonnegativity of the polynomial
+  \begin{align}
+    \Phi_7={}&6s_4+(12q-7)s_3+(18q^2-21q+7)s_2 \notag\\
+    &+(24q^3-42q^2+28q-7)s_1 \notag\\
+    &+(30q^4-70q^3+70q^2-35q+7)s_0 \notag\\
+    &+12s_0s_2+(36q-21)s_0s_1
+    +(36q^2-42q+14)s_0^2+6s_0^3+6s_1^2. \label{eq:Phi7-expanded}
+  \end{align}
+  Write $r$ for the total mass $s_0=\mu(\R)$.
+  Keeping one factor $r$ in each product and expressing every remaining $s_j$ by \eqref{eq:sj-moment} as an integral against $\mu$, the polynomial \eqref{eq:Phi7-expanded} becomes
+  \begin{equation}\label{eq:Phi7-integral}
+    \Phi_7=6s_1^2+\int R_{q,r}(\lambda)\dd\mu(\lambda),
+  \end{equation}
+  where
+  \[
+    R_{q,r}(\lambda)=P_q(\lambda)+rB_q(\lambda)+6r^2,
+  \]
+  \begin{align*}
+    P_q(\lambda)={}&6\lambda^4+(12q-7)\lambda^3
+    +(18q^2-21q+7)\lambda^2\\
+    &+(24q^3-42q^2+28q-7)\lambda
+    +30q^4-70q^3+70q^2-35q+7,\\
+    B_q(\lambda)={}&12\lambda^2+(36q-21)\lambda+36q^2-42q+14.
+  \end{align*}
+  We show that both $P_q$ and $B_q$ are nonnegative.
+
+  The minimum of $B_q$ as a quadratic in $\lambda$ occurs at $\lambda_*=(7-12q)/8$, and
+  \[
+    B_q(\lambda_*)=\frac{144q^2-168q+77}{16}\ge\frac{29}{16},
+  \]
+  because
+  \[
+    144q^2-168q+48=144\left(q-\frac{1}{2}\right)
+    \left(q-\frac{2}{3}\right)\ge0
+  \]
+  on $[0,1/2]$.
+
+  For $P_q$, set
+  \begin{align*}
+    D(q)&=288q^2-336q+119,\\
+    C(q)&=24q^3-42q^2+28q-7,\\
+    N(q)&=5184q^6-18144q^5+28602q^4-25802q^3\\
+    &\qquad+13874q^2-4165q+539.
+  \end{align*}
+  Direct expansion gives the exact identity
+  \begin{align}
+    P_q(\lambda)
+    ={}&6\left(\lambda^2+\left(q-\frac{7}{12}\right)\lambda\right)^2 \notag\\
+    &+\frac{D(q)}{24}
+    \left(\lambda+\frac{12C(q)}{D(q)}\right)^2
+    +\frac{N(q)}{D(q)}. \label{eq:Pq-SOS}
+  \end{align}
+  Writing $y=1/2-q\ge0$,
+  \[
+    D(q)=288y^2+48y+23>0
+  \]
+  and
+  \begin{align*}
+    8N(q)={}&41472y^6+20736y^5+21456y^4+7984y^3\\
+    &+2032y^2+316y+11>0.
+  \end{align*}
+  Thus $P_q(\lambda)\ge0$ for every real $\lambda$.
+  Since $r\ge0$, $R_{q,r}(\lambda)\ge0$, and \eqref{eq:Phi7-integral} yields $\Phi_7\ge0$.
+\end{proof}
+
+The identity \eqref{eq:Pq-SOS} is an explicit sum-of-squares certificate for $P_q$.
+For background on positivity of one-variable polynomials and on such certificates, see Powers--Reznick~\cite{PowersReznick2000}.
+
+\iffalse
+\begin{remark}[Pointwise nonnegativity versus operator positivity]
+  The $C_5$ and $C_7$ arguments do not require the kernel operator $T_U$ to be positive semidefinite.
+  Such positivity would mean that
+  \[
+    \ip f{T_Uf}
+    =\int_{[0,1]^2}U(x,y)f(x)f(y)\dd x\dd y\ge0
+    \qquad\text{for every }f\in L^2([0,1]).
+  \]
+  Although $U(x,y)\ge0$ pointwise, this condition need not hold, because $f(x)f(y)$ may be negative.
+  For example, let $U$ be the balanced complete bipartite graphon, equal to $1$ between the two halves of $[0,1]$ and to $0$ within each half.
+  If $f$ equals $1$ on the first half and $-1$ on the second, then $T_Uf=-\tfrac{1}{2}f$, and hence $\ip f{T_Uf}=-\tfrac{1}{2}\norm f^2<0$.
+
+  What the proofs use instead is self-adjointness, which follows from the symmetry of $U$.
+  The spectral theorem then associates with $g$ a nonnegative measure $\mu$ satisfying $s_j=\int\lambda^j\dd\mu(\lambda)$.
+  Here nonnegative refers to the weights of the measure; its support may still contain negative eigenvalues $\lambda$.
+  This is why the proof above shows that the relevant polynomials are nonnegative for every real $\lambda$, rather than only for $\lambda\ge0$.
+  No positive-semidefiniteness assumption on $T_U$ is needed.
+\end{remark}
+
+\fi
+
+\section{Reductions and notation used in both regions}\label{sec:common-operator}
+
+\subsection{Step-graphon reduction}\label{subsec:step-reduction}
+
+As described in the proof map above, the cycle densities appear as the coefficients of $-\log\det(I-zT_W)$.
+To avoid taking determinants of operators on an infinite-dimensional space, we reduce the theorem to step graphons, whose operators have finite rank.
+The approximation is the dyadic conditional expectation of \cite[Appendix~A.3.6]{Lovasz2012}, which has the property we need here: the approximating graphons have edge density exactly $p$.
+
+\begin{lemma}[Finite-rank reduction]\label{lem:step-reduction}
+  For each fixed odd $m\ge3$, it is enough to prove \eqref{eq:main-goal} for symmetric step graphons.
+\end{lemma}
+
+\begin{proof}
+  For $n\ge1$, divide $[0,1]$ into the $2^n$ dyadic intervals
+  \[
+    I_{n,a}=\left[\frac{a}{2^n},\frac{a+1}{2^n}\right),
+    \qquad 0\le a<2^n,
+  \]
+  with the convention that the last interval contains the endpoint $1$.
+  Let $\mathcal A_n$ be the finite sigma-algebra consisting of all unions of these intervals.
+  Thus the atoms of the product sigma-algebra $\mathcal A_n\otimes\mathcal A_n$ are precisely the dyadic rectangles $I_{n,a}\times I_{n,b}$.
+  The partitions refine as $n$ increases, and dyadic intervals generate the Borel sigma-algebra.
+
+  On each such rectangle, replace $W$ by its average.
+  More explicitly, set
+  \begin{equation}\label{eq:dyadic-step-approximation}
+    w^{(n)}_{ab}
+    =2^{2n}\int_{I_{n,a}\times I_{n,b}}W(x,y)\dd x\dd y,
+    \qquad
+    W_n(x,y)=w^{(n)}_{ab}
+    \quad\text{if }(x,y)\in I_{n,a}\times I_{n,b}.
+  \end{equation}
+  This cell-averaging operation is the standard conditional expectation operation with respect to the sigma algebra $\mathcal A_n\otimes\mathcal A_n$, and is denoted by the notation $\E[\,-\, \mid\mathcal A_n\otimes\mathcal A_n]$.
+  So, $W_n = \E[W\mid\mathcal A_n\otimes\mathcal A_n] $.
+  Since $0\le W\le1$, every cell average lies in $[0,1]$.
+  Moreover, symmetry of $W$ gives $w^{(n)}_{ab}=w^{(n)}_{ba}$.
+  Hence $W_n$ is a symmetric step graphon.
+
+  There is also a completely finite interpretation.
+  The matrix $(w^{(n)}_{ab})_{0\le a,b<2^n}$ is the weighted adjacency matrix of a graph on $2^n$ equally weighted vertices (loops are allowed), and
+  \[
+    t(C_m,W_n)
+    =\frac{1}{2^{nm}}
+    \sum_{a_1,\ldots,a_m=0}^{2^n-1}
+    w^{(n)}_{a_1a_2}w^{(n)}_{a_2a_3}\cdots
+    w^{(n)}_{a_ma_1}.
+  \]
+  The same finite structure can be seen directly at the operator level.
+  For any function $f$, if $x\in I_{n,a}$, then
+  \[
+    (T_{W_n}f)(x)
+    =\int_0^1W_n(x,y)f(y)\dd y
+    =\sum_{b=0}^{2^n-1}w^{(n)}_{ab}
+    \int_{I_{n,b}}f(y)\dd y.
+  \]
+  Thus the output $T_{W_n}f$ is constant on each interval $I_{n,a}$, no matter how complicated the input $f$ is.
+  Every such output is therefore a linear combination of the $2^n$ indicator functions $\one_{I_{n,0}},\ldots,\one_{I_{n,2^n-1}}$.
+  The set of all possible outputs is called the \emph{range} of the operator, and its dimension is the \emph{rank}.
+  Since the range is contained in a space of dimension $2^n$, the rank is at most $2^n$.
+  This explains the term ``finite-rank reduction.''
+
+  Two facts remain to be checked: the edge density is unchanged, and the cycle density converges.
+  For the first, summing the averages in \eqref{eq:dyadic-step-approximation} over all cells gives
+  \[
+    \int_{[0,1]^2}W_n(x,y)\dd x\dd y
+    =\sum_{a,b}|I_{n,a}|\,|I_{n,b}|\,w^{(n)}_{ab}
+    =\int_{[0,1]^2}W(x,y)\dd x\dd y=p.
+  \]
+  Thus $t(K_2,W_n)=p$ for every $n$, not merely in the limit.
+
+  Next we verify that $W_n\to W$ in $L^2([0,1]^2)$.
+  Dyadic rectangle step functions are dense in this space.
+  Therefore, given $\varepsilon>0$, we may choose an integer $N$ and a function $S$, constant on every rectangle $I_{N,a}\times I_{N,b}$, such that $\norm{W-S}_2<\varepsilon$.
+  For $n\ge N$, the function $S$ is also constant on every level-$n$ rectangle.
+  Averaging is an $L^2$-contraction (this is Jensen's inequality on each rectangle), so
+  \[
+    \norm{W_n-S}_2
+    =\norm{\E[W-S\mid\mathcal A_n\otimes\mathcal A_n]}_2
+    \le \norm{W-S}_2.
+  \]
+  Consequently
+  \[
+    \norm{W_n-W}_2
+    \le \norm{W_n-S}_2+\norm{S-W}_2
+    <2\varepsilon,
+  \]
+  which proves the asserted convergence.
+
+  Finally, cycle densities are continuous under this convergence.
+  Put $x_{m+1}=x_1$, and for a fixed $(x_1,\ldots,x_m)$, write
+  \[
+    a_i=W_n(x_i,x_{i+1}),\qquad b_i=W(x_i,x_{i+1}).
+  \]
+  The telescoping identity
+  \[
+    \prod_{i=1}^m a_i-\prod_{i=1}^m b_i
+    =\sum_{j=1}^m
+    \left(\prod_{i<j}a_i\right)(a_j-b_j)
+    \left(\prod_{i>j}b_i\right)
+  \]
+  and the bounds $0\le a_i,b_i\le1$ show, after integration, that
+  \begin{align*}
+    \bigl|t(C_m,W_n)-t(C_m,W)\bigr|
+    &\le \sum_{j=1}^m
+    \int_{[0,1]^m}
+    |W_n(x_j,x_{j+1})-W(x_j,x_{j+1})|
+    \prod_{i=1}^m\dd x_i \\
+    &=m\norm{W_n-W}_1
+    \le m\norm{W_n-W}_2
+    \longrightarrow0.
+  \end{align*}
+  Here the equality in the second line follows because all variables other than $x_j,x_{j+1}$ integrate out to $1$.
+
+  Now suppose \eqref{eq:main-goal} has been proved for every symmetric step graphon.
+  Applying it to $W_n$, whose edge density is exactly $p$, gives
+  \[
+    t(C_m,W_n)\ge p^m-p(1-p)^{m-1}.
+  \]
+  Letting $n\to\infty$ proves the same inequality for $W$, as required.
+\end{proof}
+
+\subsection{The block decomposition and the support of the spectral measure}
+\label{subsec:block-decomposition}
+
+From here to the end of \Cref{sec:plt23}, we assume $W$ to be a step graphon, which \Cref{lem:step-reduction} permits, and all determinants and traces are taken in the resulting finite-dimensional setting.
+Fix a finite measurable partition
+\[
+  [0,1]=B_1\sqcup\cdots\sqcup B_N
+\]
+into sets of positive measure such that $W$, and hence $U=1-W$, is constant on each rectangle $B_a\times B_b$.
+
+Let
+\[
+  \mathcal E=\operatorname{span}
+  \{\one_{B_1},\ldots,\one_{B_N}\}\subseteq L^2([0,1]).
+\]
+This is the $N$-dimensional space of functions that are constant on every part $B_a$.
+If a step kernel $K$ has value $K_{ab}$ on $B_a\times B_b$, then, for $x\in B_a$,
+\begin{equation}\label{eq:step-operator-action}
+  (T_Kf)(x)=\sum_{b=1}^N K_{ab}\int_{B_b}f(y)\dd y.
+\end{equation}
+Consequently, $T_Kf\in\mathcal E$ for every $f\in L^2$.
+Moreover, if $f\in\mathcal E^\perp$, then every integral in \eqref{eq:step-operator-action} is zero, so $T_Kf=0$.
+Hence $T_K$ is determined by its restriction to the finite-dimensional space $\mathcal E$.
+
+The cycle densities of $K$ are computed from this finite matrix as follows.
+In the orthonormal basis $e_a=\one_{B_a}/\sqrt{|B_a|}$, the matrix of $T_K|_{\mathcal E}$ has entries
+\[
+  \ip{e_a}{T_Ke_b}=K_{ab}\sqrt{|B_a||B_b|}.
+\]
+Here $|B_a|$ denotes the measure of $B_a$.
+Multiplying this matrix around a cycle shows, for every $r\ge2$, that
+\begin{align}
+  \Tr(T_K^r)
+  &=\sum_{a_1,\ldots,a_r=1}^N
+  |B_{a_1}|\cdots|B_{a_r}|
+  K_{a_1a_2}\cdots K_{a_ra_1} \notag\\
+  &=t(C_r,K). \label{eq:finite-trace-cycle}
+\end{align}
+
+We now split $\mathcal E$ into the constant direction and its orthogonal complement, and decompose $T_U$ accordingly.
+The constant function $\one$ lies in $\mathcal E$ and has norm one, because the underlying probability space has total mass one, so setting
+\[
+  \mathcal E_0=\mathcal E\cap\one^\perp
+\]
+gives the orthogonal decomposition $\mathcal E=\R\one\oplus\mathcal E_0$.
+Put
+\[
+  g=T_U\one-q\one\in\mathcal E_0,
+  \qquad
+  A=P_{\mathcal E_0}T_UP_{\mathcal E_0},
+\]
+so that $A$ is a self-adjoint map on $\mathcal E_0$, equivalently a real symmetric matrix in an orthonormal basis of that space.
+These two determine $T_U$: for $f=a\one+h$ with $h\in\mathcal E_0$,
+\[
+  T_Uf=\bigl(aq+\ip gh\bigr)\one+\bigl(ag+Ah\bigr),
+\]
+since $\ip\one{T_Uh}=\ip{T_U\one}h=\ip gh$ and $P_{\mathcal E_0}T_Uh=Ah$.
+In block form,
+\begin{equation}\label{eq:block-U}
+  T_U=
+  \begin{pmatrix}
+    q&g^*\\
+    g&A
+  \end{pmatrix},
+\end{equation}
+where $g^*$ denotes the linear functional $h\mapsto\ip gh$.
+This $A$ plays the role of the operator in \Cref{subsec:path-moments}: for a step graphon, the compression $P_{\one^\perp}T_UP_{\one^\perp}$ used there is zero on $\mathcal E^\perp$, and its restriction to $\mathcal E_0$ is $A$.
+
+
+\begin{lemma}[Operator norm bound]\label{lem:half-norm}
+  The spectrum of $A$ lies in $[-1/2,1/2]$; equivalently,
+  \begin{equation}\label{eq:A-half}
+    \norm A_{\mathrm{op}}\le\frac{1}{2}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Let $f\in\mathcal E_0$ with $\norm f=1$, and write $f=f_+-f_-$ for nonnegative functions $f_+$ and $f_-$ on $[0,1]$.
+  Since $\int f=0$,
+  \[
+    \int f_+=\int f_-=:a,
+    \qquad 2a=\lVert f\rVert_1\le\lVert f\rVert_2=1.
+  \]
+  We also have
+  \begin{align*}
+    \ip f{T_Uf}
+    ={}&\ip {f_+}{T_Uf_+}+\ip {f_-}{T_Uf_-}
+    -2\ip {f_+}{T_Uf_-}.
+  \end{align*}
+  Each of the three inner products on the right is nonnegative.
+  Moreover,
+  \begin{align*}
+    \ip {f_+}{T_Uf_+} &= \int_{[0,1]^2}U(x,y)f_+(x)f_+(y)\dd x\dd y \le \int_{[0,1]^2}f_+(x)f_+(y)\dd x\dd y = \left(\int f_+\right)^2,
+    \\
+    \ip {f_-}{T_Uf_-} &= \int_{[0,1]^2}U(x,y)f_-(x)f_-(y)\dd x\dd y \le \int_{[0,1]^2}f_-(x)f_-(y)\dd x\dd y = \left(\int f_-\right)^2,
+    \\
+    \ip {f_+}{T_Uf_-} &= \int_{[0,1]^2}U(x,y)f_+(x)f_-(y)\dd x\dd y \le \int_{[0,1]^2}f_+(x)f_-(y)\dd x\dd y = \left(\int f_+\right)\left(\int f_-\right).
+  \end{align*}
+  because $f_+$ and $f_-$ are nonnegative and so replacing $U(x,y)$ by $1$ in each of the above three cases gives the corresponding product of integrals.
+  For the upper bound, we discard the nonpositive cross term and bound the two diagonal terms; hence
+  \[
+    \ip f{T_Uf}
+    \le\left(\int f_+\right)^2+\left(\int f_-\right)^2
+    =2a^2\le\frac{1}{2}.
+  \]
+  For the lower bound, we instead discard the two nonnegative diagonal terms and bound the cross term, obtaining
+  \[
+    \ip f{T_Uf}
+    \ge-2\left(\int f_+\right)\left(\int f_-\right)
+    =-2a^2\ge-\frac{1}{2}.
+  \]
+  The upper and lower bounds just proved concern the quadratic form of $T_U$ on $\mathcal E_0$, and this is also the quadratic form of $A$: since $P_{\mathcal E_0}f=f$,
+  \[
+    \ip f{Af}=\ip f{P_{\mathcal E_0}T_UP_{\mathcal E_0}f}=\ip f{T_Uf},
+  \]
+  so $\bigl|\ip f{Af}\bigr|\le\tfrac{1}{2}$ for every unit $f\in\mathcal E_0$.
+  As $A$ is self-adjoint, its operator norm is the supremum of $\bigl|\ip f{Af}\bigr|$ over such $f$, whence $\norm A_{\mathrm{op}}\le\tfrac{1}{2}$.
+\end{proof}
+
+In the remaining section, $A$ and $g$ will appear through the quantities of the form $\ip g{F(A)g}$, which can be expressed as an integral against a measure supported on the spectrum of $A$.
+Specifically, since $A$ is a finite real symmetric matrix, it has an orthogonal eigenspace decomposition
+\[
+  A=\sum_i\lambda_iP_i,
+\]
+where the distinct $\lambda_i$ are its eigenvalues and $P_i$ is the orthogonal projection onto the corresponding eigenspace.
+Define the finite positive measure
+\begin{equation}\label{eq:mu-def}
+  \mu=\sum_i\norm{P_i g}^2\,\delta_{\lambda_i},
+\end{equation}
+where $\delta_{\lambda_i}$ denotes a unit point mass at $\lambda_i$; thus $\mu$ assigns to each eigenvalue the weight measuring how much of $g$ lies in its eigenspace, and by \Cref{lem:half-norm} it is supported on $[-1/2,1/2]$.
+For any function $F$ defined on the eigenvalues of $A$, orthogonality of the eigenspaces gives
+\[
+  \ip g{F(A)g}
+  =\sum_i F(\lambda_i)\norm{P_i g}^2
+  =\int F(\lambda)\dd\mu(\lambda).
+\]
+
+\subsection{Interpreting the power-series
+calculations}\label{subsec:analytic-reading}
+
+Several later arguments introduce an auxiliary variable $z$ and use the notation $[z^m]F(z)$; the exponent of $z$ is the length of a walk or cycle.
+We do not assign a value to $z$; every $F$ below is a formal power series, that is, a sequence of real coefficients $(c_j)_{j\ge0}$ written as $F=\sum_{j\ge0}c_jz^j$, and $[z^m]F=c_m$.
+We say that two such series are equal when all their coefficients are equal.
+
+Four operations on these series are used below, and in each of them every coefficient of the result is computed from finitely many coefficients of the arguments.
+Series are added coefficientwise.
+They are multiplied by the Cauchy product,
+\[
+  [z^m](FG)=\sum_{i+j=m}\bigl([z^i]F\bigr)\bigl([z^j]G\bigr).
+\]
+A series with $c_0\ne0$ has an inverse, obtained by solving the equations for the coefficients of $FF^{-1}=1$ recursively, so we may divide by such a series.
+Finally, if we write $\ord F$ for the order of $F$, that is the least $j$ with $c_j\ne0$, then the series
+\[
+  -\log(1-Y)=\sum_{k\ge1}\frac{Y^k}{k}
+\]
+is defined whenever $\ord Y\ge1$: in that case $\ord Y^k\ge k$, so only the terms with $k\le m$ contribute to $[z^m]$.
+
+We build our series from the finite matrices of \Cref{subsec:block-decomposition}, using the two expansions in the next lemma.
+
+\begin{lemma}[Series expansions used below]\label{lem:series-expansions}
+  Let $X$ be a real symmetric $N\times N$ matrix.
+  As formal power series in $z$:
+  \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.6em]
+    \item \emph{(Resolvent.)}
+    The matrix $I-zX$ is invertible over $\R[[z]]$ and
+    \[
+      (I-zX)^{-1}=\sum_{j\ge0}z^jX^j,
+    \]
+    so that $[z^j]\ip u{(I-zX)^{-1}v}=\ip u{X^jv}$ for fixed vectors $u,v$.
+    \item \emph{(Log-determinant.)}
+    The polynomial $\det(I-zX)$ has constant term $1$, and
+    \[
+      -\log\det(I-zX)=\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+    \]
+    so that $m\,[z^m]\bigl(-\log\det(I-zX)\bigr)=\Tr(X^m)$.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  (1)  The constant term of $I-zX$ is $I$, so the matrix is invertible over $\R[[z]]$; multiplying $\sum_{j\ge0}z^jX^j$ by $I-zX$ cancels all positive powers of $z$ and leaves $I$.
+
+  (2)  Both sides are unchanged under $X\mapsto Q^{\!\top}XQ$ with $Q$ orthogonal, so we may take $X$ diagonal with entries $\lambda_i$.
+  Then $\det(I-zX)=\prod_i(1-z\lambda_i)$, and $-\log$ of a product is the sum of the $-\log$s, whence
+  \[
+    -\log\det(I-zX)
+    =\sum_{i=1}^N\sum_{j\ge1}\frac{\lambda_i^j}{j}z^j
+    =\sum_{j\ge1}\frac{\Tr(X^j)}{j}z^j,
+  \]
+  the interchange being a finite sum in each coefficient.
+\end{proof}
+
+For a first example of these expansions, take $X=T_W$ and $m=3$.
+Item~(2) gives
+\[
+  -\log\det(I-zT_W)
+  =\Tr(T_W)\,z+\frac{\Tr(T_W^2)}{2}z^2+\frac{\Tr(T_W^3)}{3}z^3+\cdots,
+\]
+whence
+\[
+  3\,[z^3]\bigl(-\log\det(I-zT_W)\bigr)=\Tr(T_W^3)=t(C_3,W)
+\]
+by \eqref{eq:finite-trace-cycle}.
+
+For a second example, expanding $(I-zA)^{-1}=\sum_{j\ge0}z^jA^j$ by \Cref{lem:series-expansions}\,(1) and taking $F(\lambda)=\lambda^j$ in each coefficient,
+\begin{equation}\label{eq:resolvents-common}
+  \ip g{(I-zA)^{-1}g}
+  =\sum_{j\ge0}z^j\int\lambda^j\dd\mu(\lambda)
+  =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1-\lambda z}.
+\end{equation}
+Similarly, we have
+\begin{equation}\label{eq:resolvent-plus}
+  \ip g{(I+zA)^{-1}g}
+  =\int_{-1/2}^{1/2}\frac{\dd\mu(\lambda)}{1+\lambda z}.
+\end{equation}
+
+By \Cref{lem:series-expansions}\,(2) and \eqref{eq:finite-trace-cycle}, every step kernel $K$ satisfies
+\begin{equation}\label{eq:logdet-cycle}
+  -\log\det(I-zT_K)=\sum_{j\ge1}\frac{\Tr(T_K^j)}{j}z^j,
+  \qquad
+  m\,[z^m]\bigl(-\log\det(I-zT_K)\bigr)=t(C_m,K)
+\end{equation}
+for every $m\ge2$.
+One can now simplify this generating function by the block decomposition \eqref{eq:block-U}, as the following lemma states.
+
+\begin{lemma}[Cycle densities of $U$ and $W$]\label{lem:cycle-identities}
+  For every odd $m\ge3$, let
+  \begin{align}
+    L_-(z)&=-\log\left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right),
+    \label{eq:Lminus}\\
+    L_+(z)&=-\log\left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right).
+    \label{eq:Lplus}
+  \end{align}
+  Then
+  \begin{align}
+    t(C_m,U)&=\phantom{-}\Tr(A^m)+q^m+m[z^m]L_+(z),\label{eq:cycle-identity-U}\\
+    t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).\label{eq:cycle-identity-W}
+  \end{align}
+\end{lemma}
+
+\begin{proof}
+  We first put the two matrices $I-zT_U$ and $I-zT_W$ in block form.
+  The operator $T_1$ of the constant kernel $1$ sends $a\one+h$, with $h\in\mathcal E_0$, to $a\one$, because $\int h=0$; thus $T_1$ has block matrix $\left(\begin{smallmatrix}1&0\\0&0\end{smallmatrix}\right)$ and $T_W=T_1-T_U$ has block matrix
+  \[
+    T_W=
+    \begin{pmatrix}1&0\\0&0\end{pmatrix}
+    -
+    \begin{pmatrix}q&g^*\\g&A\end{pmatrix}
+    =
+    \begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix}.
+  \]
+  Consequently
+  \[
+    I-zT_U=
+    \begin{pmatrix}1-qz&-zg^*\\-zg&I-zA\end{pmatrix},
+    \qquad
+    I-zT_W=
+    \begin{pmatrix}1-pz&zg^*\\zg&I+zA\end{pmatrix}.
+  \]
+
+  Both determinants decompose along this block structure: if $D$ is invertible, then
+  \begin{equation}\label{eq:block-determinant-identity}
+    \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
+    =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr),
+  \end{equation}
+  where the scalar $\alpha-v^*D^{-1}v$ is the Schur complement of $D$.
+  To see this, multiply on the left by the block matrix $\left(\begin{smallmatrix}1&-v^*D^{-1}\\0&I\end{smallmatrix}\right)$, whose determinant is one:
+  \begin{align*}
+    \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}
+    &=\underbrace{\det\begin{pmatrix}1&-v^*D^{-1}\\0&I\end{pmatrix}}_{=1}
+      \det\begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}\\
+    &=\det\left[\begin{pmatrix}1&-v^*D^{-1}\\0&I\end{pmatrix}
+                \begin{pmatrix}\alpha&v^*\\v&D\end{pmatrix}\right]\\
+    &=\det\begin{pmatrix}\alpha-v^*D^{-1}v&v^*-v^*D^{-1}D\\v&D\end{pmatrix}\\
+    &=\det\begin{pmatrix}\alpha-v^*D^{-1}v&0\\v&D\end{pmatrix}
+     =\det(D)\bigl(\alpha-v^*D^{-1}v\bigr),
+  \end{align*}
+  where the last equality holds since the determinant of a block triangular matrix is the product of its diagonal-block determinants.
+
+  To apply \eqref{eq:block-determinant-identity} to $I-zT_U$ and $I-zT_W$, one needs to check that the lower right block $I\mp zA$ is invertible, and this follows from \Cref{lem:series-expansions}\,(1) since both of these terms have $I$ as their constant term.
+  Taking $D=I\mp zA$ and $v=\mp zg$ factorizes the two determinants into three parts,
+  \begin{align*}
+    \det(I-zT_U)&=\det(I-zA)\bigl(1-qz-z^2\ip g{(I-zA)^{-1}g}\bigr)\\
+    &=\det(I-zA)\,(1-qz)
+    \left(1-\frac{z^2\ip g{(I-zA)^{-1}g}}{1-qz}\right),\\
+    \det(I-zT_W)&=\det(I+zA)\bigl(1-pz-z^2\ip g{(I+zA)^{-1}g}\bigr)\\
+    &=\det(I+zA)\,(1-pz)
+    \left(1-\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}\right).
+  \end{align*}
+  Taking $-\log$ turns each product into a sum of three series,
+  \begin{align*}
+    -\log\det(I-zT_U)&=-\log\det(I-zA)-\log(1-qz)+L_+(z),\\
+    -\log\det(I-zT_W)&=-\log\det(I+zA)-\log(1-pz)+L_-(z),
+  \end{align*}
+  and we extract the coefficient of $z^m$ from each summand.
+  On the left, \eqref{eq:logdet-cycle} gives
+  \[
+    m\,[z^m]\bigl(-\log\det(I-zT_U)\bigr)=t(C_m,U),
+    \qquad
+    m\,[z^m]\bigl(-\log\det(I-zT_W)\bigr)=t(C_m,W).
+  \]
+  For the first summand on the right, \Cref{lem:series-expansions}\,(2) gives, for odd $m$,
+  \[
+    m\,[z^m]\bigl(-\log\det(I-zA)\bigr)=\Tr(A^m),
+    \qquad
+    m\,[z^m]\bigl(-\log\det(I+zA)\bigr)=\Tr\bigl((-A)^m\bigr)=-\Tr(A^m),
+  \]
+  and for the second summand,
+  \[
+    m\,[z^m]\bigl(-\log(1-qz)\bigr)=q^m,
+    \qquad
+    m\,[z^m]\bigl(-\log(1-pz)\bigr)=p^m.
+  \]
+  The last summands equal $m[z^m]L_\pm(z)$, which proves \eqref{eq:cycle-identity-U} and \eqref{eq:cycle-identity-W}.
+\end{proof}
+
+\begin{remark} \label{rem:analytic-reading}
+  Alternatively, one may interpret these series as functions.
+  If a series converges in a neighbourhood of the origin, its sum is a function there, and the coefficients are recovered from that function by differentiation,
+  \begin{equation}\label{eq:coeff-def}
+    [z^m]F=\frac{F^{(m)}(0)}{m!}.
+  \end{equation}
+  The arguments below are the same under either interpretations.
+\end{remark}
+
+\section{Above the threshold \texorpdfstring{$p\ge2/3$}{p>=2/3}: Dirichlet averages and gamma smoothing}
+\label{sec:pge23}
+
+Throughout this section,
+\begin{equation}\label{eq:pge23-q}
+  q = 1 - p, \qquad 0 \le q \le \frac{1}{3},
+\end{equation}
+and $m\ge3$ is odd.
+We prove \eqref{eq:main-goal} for all such $m$.
+
+\subsection{A two-sided Schur-complement identity and cancellation of the odd
+trace}\label{subsec:pge23-two-sided-schur}
+
+\begin{lemma}[Sum of the two cycle densities]\label{lem:pge23-two-sided-identity}
+  For every odd $m\ge3$, let
+  \begin{equation}\label{eq:pge23-Sm}
+    S_m=m[z^m]\bigl(L_-(z)+L_+(z)\bigr).
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:pge23-two-sided-identity}
+    t(C_m,W)+t(C_m,U)=p^m+q^m+S_m.
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:pge23-one-sided-identity}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    =q^{m-1}+S_m-t(C_m,U).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Adding \eqref{eq:cycle-identity-U} and \eqref{eq:cycle-identity-W} cancels the two traces and leaves
+  \[
+    t(C_m,W)+t(C_m,U)=p^m+q^m+m[z^m]\bigl(L_-(z)+L_+(z)\bigr),
+  \]
+  which is \eqref{eq:pge23-two-sided-identity} by the definition \eqref{eq:pge23-Sm} of $S_m$.
+
+  To obtain the second identity, rearrange the first:
+  \begin{align*}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    &=q^m+S_m-t(C_m,U)+pq^{m-1}\\
+    &=(p+q)q^{m-1}+S_m-t(C_m,U)\\
+    &=q^{m-1}+S_m-t(C_m,U),
+  \end{align*}
+  using $p+q=1$.
+\end{proof}
+
+\subsection{Replacing a complement cycle by a path}
+
+Let $P_j$ denote the path with $j$ edges and set
+\begin{equation}\label{eq:pge23-xj}
+  x_j=t(P_j,U)=\ip\one{T_U^j\one}.
+\end{equation}
+As in \Cref{sec:short-cycles}, deleting one edge from the $m$-cycle leaves a path with $m-1$ edges, so $0\le U\le1$ gives
+\begin{equation}\label{eq:pge23-cycle-path}
+  t(C_m,U)\le x_{m-1}.
+\end{equation}
+
+By \eqref{eq:pge23-one-sided-identity} and \eqref{eq:pge23-cycle-path}, it is enough to prove
+\begin{equation}\label{eq:pge23-Phi}
+  \Phi_m:=q^{m-1}+S_m-x_{m-1}\ge0.
+\end{equation}
+Two of the three terms are already expressed through $q$ and $A$, so it remains to do the same for the path densities.
+By \Cref{lem:series-expansions}\,(1),
+\[
+  \sum_{j\ge0}x_jz^j
+  =\sum_{j\ge0}z^j\ip\one{T_U^j\one}
+  =\ip\one{(I-zT_U)^{-1}\one}.
+\]
+Write $(I-zT_U)^{-1}\one=a\one+h$ with $h\in\mathcal E_0$, so that $\ip\one{(I-zT_U)^{-1}\one}=a$.
+In the block form of $I-zT_U$ this is
+\[
+  \begin{pmatrix}1-qz&-zg^*\\-zg&I-zA\end{pmatrix}
+  \begin{pmatrix}a\\h\end{pmatrix}
+  =\begin{pmatrix}1\\0\end{pmatrix}.
+\]
+Multiply on the left by the triangular matrix of \eqref{eq:block-determinant-identity}, here $\left(\begin{smallmatrix}1&zg^*(I-zA)^{-1}\\0&I\end{smallmatrix}\right)$.
+It fixes $\left(\begin{smallmatrix}1\\0\end{smallmatrix}\right)$ and produces the Schur complement in the upper left corner, so the system becomes
+\[
+  \begin{pmatrix}1-qz-z^2\ip g{(I-zA)^{-1}g}&0\\-zg&I-zA\end{pmatrix}
+  \begin{pmatrix}a\\h\end{pmatrix}
+  =\begin{pmatrix}1\\0\end{pmatrix}.
+\]
+Write
+\begin{equation}\label{eq:Rplus}
+  R_+(z):=\ip g{(I-zA)^{-1}g}=\sum_{j\ge0}z^j\ip g{A^jg} = \int \frac{\dd\mu(\lambda)}{1 - \lambda z},
+\end{equation}
+where the last equality follows from \eqref{eq:resolvents-common}.
+The first row of the system shows
+\begin{equation}\label{eq:pge23-path-gf}
+  \sum_{j\ge0}x_jz^j=a=\frac{1}{1-qz-z^2R_+(z)}.
+\end{equation}
+
+\subsection{Expansion in complete homogeneous polynomials}
+
+In this section, we will give the explicit form of $\Phi_m$ as an integral of a polynomial in $q$ and the eigenvalues of $A$.
+
+For variables $y_1,\ldots,y_k$, the \emph{complete homogeneous symmetric polynomial} of degree $d$ is
+\[
+  h_d(y_1,\ldots,y_k)
+  =\sum_{\substack{\alpha_1,\ldots,\alpha_k\ge0\\
+  \alpha_1+\cdots+\alpha_k=d}}
+  y_1^{\alpha_1}\cdots y_k^{\alpha_k},
+  \qquad h_0=1,
+\]
+the sum of all monomials of degree $d$ in $y_1,\ldots,y_k$.
+Equivalently,
+\begin{equation}\label{eq:pge23-h-gf}
+  \prod_{i=1}^k\frac{1}{1-y_i z}
+  =\sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d.
+\end{equation}
+The notation $a^{\times r}$ means that $a$ is repeated $r$ times.
+
+\begin{proposition}[Exact coefficient expansion]\label{prop:pge23-expansion}
+  For odd $m\ge3$,
+  \begin{equation}\label{eq:pge23-expansion}
+    \Phi_m=\sum_{r=1}^{(m-1)/2}
+    \int\!\cdots\!\int
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    \prod_{i=1}^r\dd\mu(\lambda_i),
+  \end{equation}
+  where $n=m-2r$ and
+  \begin{align}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac {m}{r}\Bigl[
+    h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
+    +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r)
+    \Bigr]\notag\\
+    &-h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+    \label{eq:pge23-Pmr}
+  \end{align}
+\end{proposition}
+
+\begin{proof}
+  From \eqref{eq:Lplus},
+  \begin{align*}
+    m[z^m]L_+(z)
+    &=m[z^m]\left(-\log\left(1-\frac{z^2R_+(z)}{1-qz}\right)\right)
+    \\
+    {}&=m[z^m]\sum_{r\ge1}\frac{1}{r}\left(\frac{z^2R_+(z)}{1-qz}\right)^r
+    \\
+    {}&=\sum_{r\ge1}\frac {m}{r} [z^{m-2r}]\frac{R_+(z)^r}{(1-qz)^r},
+  \end{align*}
+  where the second equality comes from $-\log(1-x)=\sum_{r\ge1}x^r/r$.
+  The spectral representation $R_+(z) = \int \frac{\dd\mu(\lambda)}{1 - \lambda z}$ gives
+  \begin{align*}
+    R_+(z)^r &=\int\!\cdots\!\int
+    \prod_{i=1}^r\frac{1}{1-\lambda_i z}
+    \prod_{i=1}^r\dd\mu(\lambda_i),
+    \\
+    \frac{R_+(z)^r}{(1-qz)^r} &= \int\!\cdots\!\int \frac{1}{(1-qz)^r} \prod_{i=1}^r \frac{1}{1-\lambda_i z} \prod_{i=1}^r \dd\mu(\lambda_i).
+  \end{align*}
+  By \eqref{eq:pge23-h-gf}, the $r$-th coefficient is
+  \[
+    [z^{m-2r}] \frac{R_+(z)^r}{(1-qz)^r} = \int\!\cdots\!\int h_{m-2r}(q^{\times r}, \lambda_1, \ldots, \lambda_r) \prod_{i=1}^r \dd\mu(\lambda_i),
+  \]
+  which is the second term in brackets in \eqref{eq:pge23-Pmr}.
+  The same argument for $L_-$ with $R_-(z) = \langle g, (I + zA)^{-1} g \rangle$ produces the first term.
+
+  On the other hand, factoring $1-qz$ out of the denominator of \eqref{eq:pge23-path-gf} and expanding the geometric series gives
+  \begin{align*}
+    \sum_{j\ge0}x_jz^j
+    &=\frac{1}{(1-qz)\left(1-\dfrac{z^2R_+(z)}{1-qz}\right)}
+    \\
+    {}&=\sum_{r\ge0}\frac{z^{2r}R_+(z)^r}{(1-qz)^{r+1}},
+  \end{align*}
+  so that
+  \[
+    x_{m-1}=\sum_{r\ge0}[z^{m-1-2r}]\frac{R_+(z)^r}{(1-qz)^{r+1}}.
+  \]
+  The term $r=0$ is $[z^{m-1}](1-qz)^{-1}=q^{m-1}$, which cancels the first term of \eqref{eq:pge23-Phi}.
+  For $r\ge1$, the spectral representation of $R_+(z)=\int\frac{\dd\mu(\lambda)}{1-\lambda z}$ gives, as above,
+  \[
+    \frac{R_+(z)^r}{(1-qz)^{r+1}}
+    =\int\!\cdots\!\int\frac{1}{(1-qz)^{r+1}}
+    \prod_{i=1}^r\frac{1}{1-\lambda_iz}
+    \prod_{i=1}^r\dd\mu(\lambda_i),
+  \]
+  and \eqref{eq:pge23-h-gf}, applied now to the $r+1$ copies of $q$ together with $\lambda_1,\ldots,\lambda_r$, yields
+  \[
+    [z^{m-1-2r}]\frac{R_+(z)^r}{(1-qz)^{r+1}}
+    =\int\!\cdots\!\int
+    h_{n-1}(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r)
+    \prod_{i=1}^r\dd\mu(\lambda_i),
+  \]
+  because $m-1-2r=n-1$.
+  Subtracting these terms from the contributions of $L_-$ and $L_+$ gives \eqref{eq:pge23-expansion}.
+  All three sums are finite and stop at $r=(m-1)/2$, since their coefficients are zero once $2r>m-1$.
+\end{proof}
+
+\subsection{Diagonalization by a Dirichlet average}
+
+In this section, we will simplify the integrand $P_{m,r}$ of \eqref{eq:pge23-expansion} by replacing the eigenvalues $\lambda_1,\ldots,\lambda_r$ by a single variable $\ell$.
+Define the diagonal polynomial
+\begin{equation}\label{eq:pge23-Ptilde}
+  \widetilde P_{m,r}(q,\ell)
+  =P_{m,r}(q;\ell,\ldots,\ell).
+\end{equation}
+
+\begin{lemma}[Dirichlet diagonalization]\label{lem:pge23-dirichlet}
+  Let $(\Theta_1,\ldots,\Theta_r)$ be uniformly distributed on the simplex
+  \[
+    \Theta_i\ge0,\qquad \sum_{i=1}^r\Theta_i=1.
+  \]
+  Then
+  \begin{equation}\label{eq:pge23-dirichlet-identity}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    =\E\,\widetilde P_{m,r}
+    \left(q,\sum_{i=1}^r\Theta_i\lambda_i\right).
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:pge23-diagonal-min}
+    \min_{\lambda_i\in[-1/2,1/2]}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    =\min_{\ell\in[-1/2,1/2]}\widetilde P_{m,r}(q,\ell).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Write $S=\sum_{i=1}^r\Theta_i\lambda_i$.
+  The proof rests on two properties of $h_j$.
+
+  First, the moments of $S$ are the complete homogeneous polynomials, up to a constant:
+  \begin{equation}\label{eq:pge23-dirichlet-moment}
+    \E\,S^j
+    =\frac{h_j(\lambda_1,\ldots,\lambda_r)}
+    {\binom{j+r-1}{r-1}}.
+  \end{equation}
+  To see this, expand
+  \[
+    S^j=\Bigl(\sum_{i=1}^r\Theta_i\lambda_i\Bigr)^j
+    =\sum_{\alpha_1+\cdots+\alpha_r=j}
+    \frac{j!}{\alpha_1!\cdots\alpha_r!}
+    \prod_{i=1}^r\Theta_i^{\alpha_i}\lambda_i^{\alpha_i},
+  \]
+  and take expectations.
+  From
+  \[
+    \E\prod_{i=1}^r\Theta_i^{\alpha_i}
+    =\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!},
+    \qquad \alpha_1+\cdots+\alpha_r=j,
+  \]
+  we obtain
+  \begin{align*}
+    \E\,S^j
+    &=\sum_{\alpha_1+\cdots+\alpha_r=j}
+    \frac{j!}{\alpha_1!\cdots\alpha_r!}
+    \cdot\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!}
+    \prod_{i=1}^r\lambda_i^{\alpha_i}\\
+    &=\frac{j!\,(r-1)!}{(j+r-1)!}
+    \sum_{\alpha_1+\cdots+\alpha_r=j}\prod_{i=1}^r\lambda_i^{\alpha_i}
+    =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
+  \end{align*}
+
+  Second, setting all variables equal in the definition of $h_j$ gives the diagonal value
+  \begin{equation}\label{eq:pge23-h-diagonal}
+    h_j(\ell,\ldots,\ell)=\binom{j+r-1}{r-1}\ell^j,
+  \end{equation}
+  the binomial coefficient being the number of monomials of degree $j$ in $r$ variables.
+
+  It remains to express the terms of $P_{m,r}$ through the $h_j(\lambda_1,\ldots,\lambda_r)$.
+  In the generating function \eqref{eq:pge23-h-gf} of the $h_d$, the $k$ equal variables and the remaining ones give separate factors, so
+  \[
+    \sum_{d\ge0}h_d(a^{\times k},b_1,\ldots,b_r)z^d
+    =\frac{1}{(1-az)^k}\prod_{i=1}^r\frac{1}{1-b_iz}
+    =\Bigl(\sum_{s\ge0}\binom{s+k-1}{k-1}a^sz^s\Bigr)
+    \Bigl(\sum_{j\ge0}h_j(b_1,\ldots,b_r)z^j\Bigr),
+  \]
+  and comparing the coefficients of $z^d$ gives the splitting identity
+  \begin{equation}\label{eq:pge23-h-split}
+    h_d(a^{\times k},b_1,\ldots,b_r)
+    =\sum_{j=0}^d
+    \binom{d-j+k-1}{k-1}a^{d-j}h_j(b_1,\ldots,b_r).
+  \end{equation}
+  Apply this to the three terms of $P_{m,r}$, the first two with $k=r$ and $a=p$ or $q$, the third with $k=r+1$ and $a=q$.
+  Since $h_j$ is homogeneous of degree $j$, we have $h_j(-\lambda_1,\ldots,-\lambda_r)=(-1)^jh_j(\lambda_1,\ldots,\lambda_r)$, and therefore
+  \begin{align}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac {m}{r}\sum_{j=0}^{n}\binom{n-j+r-1}{r-1}
+    \bigl((-1)^jp^{n-j}+q^{n-j}\bigr)
+    h_j(\lambda_1,\ldots,\lambda_r) \notag\\
+    &-\sum_{j=0}^{n-1}\binom{n-1-j+r}{r}q^{n-1-j}
+    h_j(\lambda_1,\ldots,\lambda_r). \label{eq:pge23-P-in-h}
+  \end{align}
+
+  Write the expansion \eqref{eq:pge23-P-in-h} as
+  \[
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    =\sum_{j=0}^nc_j\,h_j(\lambda_1,\ldots,\lambda_r),
+  \]
+  where $c_j$ subsumes the two coefficients of $h_j$ above, which do not involve the $\lambda_i$.
+  Setting $\lambda_1=\cdots=\lambda_r=\ell$ and using the diagonal value \eqref{eq:pge23-h-diagonal},
+  \begin{equation}\label{eq:pge23-Ptilde-in-c}
+    \widetilde P_{m,r}(q,\ell)
+    =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\ell^j.
+  \end{equation}
+  On the other hand, the moment identity \eqref{eq:pge23-dirichlet-moment} gives
+  \[
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\E\,S^j
+    =\E\sum_{j=0}^nc_j\binom{j+r-1}{r-1}S^j
+    =\E\,\widetilde P_{m,r}(q,S),
+  \]
+  the last equality being $\widetilde P_{m,r}$ with $\ell$ replaced by $S$.
+
+  For the second claim, if the $\lambda_i$ lie in $[-1/2,1/2]$ then so does every convex combination $S$, so the right side of the identity \eqref{eq:pge23-dirichlet-identity} is at least $\min_\ell\widetilde P_{m,r}(q,\ell)$; conversely $\lambda_1=\cdots=\lambda_r=\ell$ attains each diagonal value.
+\end{proof}
+
+Thus \eqref{eq:pge23-expansion} will be nonnegative once we prove
+\begin{equation}\label{eq:pge23-diagonal-target}
+  \widetilde P_{m,r}(q,\ell)\ge0
+\end{equation}
+for
+\[
+  0\le q\le\frac{1}{3},
+  \quad 1\le r\le\frac{m-1}{2},
+  \quad -\frac{1}{2}\le\ell\le\frac{1}{2}.
+\]
+This is the first major simplification: an $r$-variable symmetric polynomial is replaced by one scalar variable polynomial.
+
+\subsection{A beta representation}
+
+In this section, we will further simplify the diagonal polynomial $\widetilde P_{m,r}$ by representing it as an expectation over a beta distribution.
+
+\begin{lemma}[Beta formula]\label{lem:pge23-beta}
+  Let $1\le r\le\frac{m-1}{2}$ and put
+  \begin{equation}\label{eq:pge23-n}
+    n=m-2r,
+  \end{equation}
+  so that $n\ge1$ is odd.
+  Let $X\sim\BetaLaw(r,r)$ and
+  \begin{equation}\label{eq:pge23-rho}
+    \rho_{n,m}(u)
+    =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+  \end{equation}
+  Then
+  \begin{equation}\label{eq:pge23-beta-second}
+    \widetilde P_{m,r}(q,\ell)
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}
+    \E\left[
+    X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)
+    \right].
+  \end{equation}
+  If $\ell>0$, then
+  \begin{equation}\label{eq:pge23-beta-integral}
+    \widetilde P_{m,r}(q,\ell)
+    =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,
+    \ell^{n+r}
+    \int_0^\infty
+    \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  For arbitrary $a,b$ we first claim that
+  \begin{equation}\label{eq:pge23-beta-h}
+    h_n(a^{\times r},b^{\times r})
+    =\binom{n+2r-1}{2r-1}
+    \E\bigl(aX+b(1-X)\bigr)^n.
+  \end{equation}
+  Both sides are polynomials in $a$ and $b$, so it suffices to compare the coefficient of $a^kb^{n-k}$.
+  On the left, the splitting identity \eqref{eq:pge23-h-split} and the diagonal value \eqref{eq:pge23-h-diagonal} give
+  \[
+    h_n(a^{\times r},b^{\times r})
+    =\sum_{k=0}^n h_k(a^{\times r})\,h_{n-k}(b^{\times r})
+    =\sum_{k=0}^n\binom{k+r-1}{r-1}\binom{n-k+r-1}{r-1}a^kb^{n-k}.
+  \]
+  On the right, the binomial theorem and the beta moments
+  \[
+    \E\bigl[X^k(1-X)^{n-k}\bigr]
+    =\frac{\Gamma(2r)}{\Gamma(r)^2}
+    \cdot\frac{\Gamma(r+k)\,\Gamma(r+n-k)}{\Gamma(2r+n)}
+    =\frac{(2r-1)!}{((r-1)!)^2}
+    \cdot\frac{(k+r-1)!\,(n-k+r-1)!}{(n+2r-1)!}
+  \]
+  give
+  \[
+    \binom{n+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^n
+    =\sum_{k=0}^n\binom{n+2r-1}{2r-1}\binom nk
+    \E\bigl[X^k(1-X)^{n-k}\bigr]a^kb^{n-k}.
+  \]
+  The two coefficients agree, since writing every factor in factorials turns both into $(r+k-1)!\,(r+n-k-1)!/\bigl(k!\,(n-k)!\,((r-1)!)^2\bigr)$; on the right the factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel against those of $\binom{n+2r-1}{2r-1}\binom nk$.
+
+  Next we differentiate both sides of \eqref{eq:pge23-beta-h} with respect to $a$.
+  On the left, differentiating the generating function \eqref{eq:pge23-h-gf} in the form $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d=(1-az)^{-r}(1-bz)^{-r}$ gives
+  \[
+    \sum_{d\ge0}\frac{\partial h_d(a^{\times r},b^{\times r})}{\partial a}z^d
+    =rz\,(1-az)^{-(r+1)}(1-bz)^{-r}
+    =r\sum_{d\ge0}h_d(a^{\times(r+1)},b^{\times r})z^{d+1},
+  \]
+  so that $\partial_a h_n(a^{\times r},b^{\times r}) =r\,h_{n-1}(a^{\times(r+1)},b^{\times r})$.
+  On the right, $\partial_a\bigl(aX+b(1-X)\bigr)^n =nX\bigl(aX+b(1-X)\bigr)^{n-1}$.
+  Hence
+  \begin{equation}\label{eq:pge23-beta-h-deriv}
+    h_{n-1}(a^{\times(r+1)},b^{\times r})
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}
+    \E\left[X\bigl(aX+b(1-X)\bigr)^{n-1}\right].
+  \end{equation}
+
+  By the definition \eqref{eq:pge23-Ptilde} of the diagonal polynomial,
+  \[
+    \widetilde P_{m,r}(q,\ell)
+    =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
+    +h_n(q^{\times r},\ell^{\times r})\bigr]
+    -h_{n-1}(q^{\times(r+1)},\ell^{\times r}),
+  \]
+  and we apply \eqref{eq:pge23-beta-h} to the first two terms, with $(a,b)=(p,-\ell)$ and $(a,b)=(q,\ell)$, and \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
+  Using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$, this gives
+  \begin{align*}
+    &\widetilde P_{m,r}(q,\ell)
+    \\
+    {} = &\binom{n+2r-1}{2r-1}\frac {n}{r}
+    \left[
+    \frac {m}{n}\E\Bigl(\bigl(pX-\ell(1-X)\bigr)^n
+                       +\bigl(qX+\ell(1-X)\bigr)^n\Bigr)
+    -\E\Bigl(X\bigl(qX+\ell(1-X)\bigr)^{n-1}\Bigr)
+    \right].
+  \end{align*}
+  Abbreviating the two linear forms by
+  \[
+    V_X=qX+\ell(1-X),
+    \qquad
+    W_X=pX-\ell(1-X),
+    \qquad\text{so that } V_X+W_X=X,
+  \]
+  this simplifies to
+  \begin{equation}\label{eq:pge23-beta-first}
+    \widetilde P_{m,r}(q,\ell)
+    =\binom{n+2r-1}{2r-1}\frac {n}{r}
+    \left[
+    \frac {m}{n}\E\bigl(V_X^n+W_X^n\bigr)
+    -\E\bigl(X V_X^{n-1}\bigr)
+    \right].
+  \end{equation}
+
+  The three terms $V_X^n$, $W_X^n$, and $XV_X^{n-1}$ all have degree $n$ in $(V_X,W_X,X)$, and $V_X+W_X=X$.
+  They therefore depend on $X$ only through the proportion of $X$ taken by $V_X$.
+  Writing that proportion as
+  \[
+    u_X=\frac{V_X}{X}=q+\ell\,\frac{1-X}{X},
+    \qquad
+    V_X=Xu_X,
+    \qquad
+    W_X=X(1-u_X),
+  \]
+  the last equality again because $V_X+W_X=X$, we obtain
+  \[
+    V_X^n+W_X^n=X^n\bigl(u_X^n+(1-u_X)^n\bigr),
+    \qquad
+    XV_X^{n-1}=X\cdot X^{n-1}u_X^{n-1}=X^nu_X^{n-1}.
+  \]
+  By linearity, the two expectations in \eqref{eq:pge23-beta-first} combine into the expectation of
+  \[
+    \frac {m}{n}\bigl(V_X^n+W_X^n\bigr)-XV_X^{n-1}
+    =X^n\left[\frac {m}{n}\bigl(u_X^n+(1-u_X)^n\bigr)-u_X^{n-1}\right]
+    =X^n\rho_{n,m}(u_X),
+  \]
+  by the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$, and this proves \eqref{eq:pge23-beta-second}.
+
+  For $\ell>0$, expand the expectation in \eqref{eq:pge23-beta-second} as an integral against the beta density,
+  \[
+    \E\left[X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)\right]
+    =\frac{\Gamma(2r)}{\Gamma(r)^2}
+    \int_0^1 x^{n+r-1}(1-x)^{r-1}
+    \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x,
+  \]
+  and apply the change of variable
+  \[
+    s=\ell\frac{1-x}{x},
+    \qquad x=\frac{\ell}{\ell+s},
+    \qquad 1-x=\frac {s}{\ell+s},
+    \qquad \dd x=-\frac{\ell}{(\ell+s)^2}\dd s,
+  \]
+  under which $x=1$ corresponds to $s=0$, and $x\to0^+$ to $s\to\infty$.
+  Thus
+  \begin{align*}
+    &\int_0^1 x^{n+r-1}(1-x)^{r-1}
+     \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x\\
+    &\qquad=\int_\infty^0
+     \left(\frac{\ell}{\ell+s}\right)^{n+r-1}
+     \left(\frac{s}{\ell+s}\right)^{r-1}
+     \rho_{n,m}(q+s)
+     \left(-\frac{\ell}{(\ell+s)^2}\right)\dd s\\
+    &\qquad=\int_0^\infty
+     \frac{\ell^{n+r}s^{r-1}}{(\ell+s)^{n+2r}}\rho_{n,m}(q+s)\dd s
+     =\ell^{n+r}\int_0^\infty
+     \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
+  \end{align*}
+  where in the last line the minus sign has been used to interchange the endpoints of integration, and the exponent $n+2r$ has been replaced by $m$ according to \eqref{eq:pge23-n}.
+  Altogether
+  \[
+    \widetilde P_{m,r}(q,\ell)
+    =\binom{m-1}{2r-1}\frac {n}{r}\frac{\Gamma(2r)}{\Gamma(r)^2}\,
+     \ell^{n+r}\int_0^\infty
+     \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
+  \]
+  and since
+  \[
+    \binom{m-1}{2r-1}\frac {n}{r}
+    \frac{\Gamma(2r)}{\Gamma(r)^2}
+    =\frac{(m-1)!}{(2r-1)!\,n!}\cdot\frac {n}{r}
+     \cdot\frac{(2r-1)!}{((r-1)!)^2}
+    =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2},
+  \]
+  this proves \eqref{eq:pge23-beta-integral}.
+\end{proof}
+
+\subsection{The case \texorpdfstring{$\ell\le0$}{l<=0}: pointwise nonnegativity}
+
+\begin{lemma}\label{lem:pge23-ell-negative}
+  If $0\le q\le1/2$ and $\ell\le0$, then $\widetilde P_{m,r}(q,\ell)\ge0$.
+\end{lemma}
+
+\begin{proof}
+  From the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$,
+  \begin{align*}
+    \rho_{n,m}(u)
+    &=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1} \nonumber \\
+    &=\frac {m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)
+    +\left(\frac {m}{n}-1\right)u^{n-1},
+  \end{align*}
+  which can be shown by expanding $(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)=(1-u)^n-u^{n-1}+u^n$.
+  Recall that $\frac{m}{n}-1=\frac{2r}{n}>0$ by \eqref{eq:pge23-n}, and $n-1$ is even.
+  The second term is therefore always nonnegative, and the first is nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, which hold for $u \le 1/2$.
+
+  Since $X\sim\BetaLaw(r,r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\ell\le0$ gives
+  \[
+    q+\ell\,\frac{1-X}{X}\le q\le\frac{1}{2}.
+  \]
+  Hence $X^n\rho_{n,m}\bigl(q+\ell(1-X)/X\bigr)\ge0$, and \eqref{eq:pge23-beta-second} gives $\widetilde P_{m,r}(q,\ell)\ge0$.
+\end{proof}
+
+So only the case $\ell>0$ remains.
+There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, and unlike the $\ell\le0$ case, $\rho_{n,m}$ can be negative on that range: for instance $\rho_{5,7}(0.7)<0$.
+The integrand can therefore no longer be handled pointwise, and nonnegativity has to be derived from the integral as a whole.
+
+\subsection{Laplace--gamma representation}
+
+Since the constant and the factor $\ell^{n+r}$ in \eqref{eq:pge23-beta-integral} are positive, what has to be shown nonnegative for $\ell>0$ is
+\[
+  \int_0^\infty
+  \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s.
+\]
+Here $\ell$ and $s$ are coupled through $(\ell+s)^{-m}$, which is what makes the integral difficult to handle.
+They can be separated by an inverse Laplace transform: the inverse Laplace transform of $x\mapsto x^{-m}$ is $t\mapsto t^{m-1}/\Gamma(m)$, so that
+\begin{equation}\label{eq:pge23-laplace-kernel}
+  \frac{1}{(\ell+s)^m}
+  =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t,
+\end{equation}
+which can be shown by evaluating the integral under the substitution $w=t(\ell+s)$.
+
+\begin{lemma}[Laplace--gamma representation]\label{lem:pge23-laplace-gamma}
+  Let $Y\sim\GammaLaw(r,1)$.
+  If $\ell>0$, then
+  \begin{equation}\label{eq:pge23-laplace-gamma}
+    \widetilde P_{m,r}(q,\ell)
+    =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
+    \int_0^\infty
+    t^{m-r-1}e^{-\ell t}
+    \E\rho_{n,m}\left(q+\frac {Y}{t}\right)\dd t.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Insert \eqref{eq:pge23-laplace-kernel} into \eqref{eq:pge23-beta-integral} and exchange the two integrals:
+  \begin{align*}
+    \widetilde P_{m,r}(q,\ell)
+    &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
+      \int_0^\infty s^{r-1}\rho_{n,m}(q+s)
+      \left(\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t\right)
+      \dd s\\
+    &=\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)^2}
+      \int_0^\infty t^{m-1}e^{-\ell t}
+      \left(\int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s\right)\dd t.
+  \end{align*}
+  This exchange is justified by Fubini's theorem, given the absolute integrability of the double integral.
+  To verify absolute integrability, integrate the absolute value in $t$ first: by \eqref{eq:pge23-laplace-kernel},
+  \[
+    \int_0^\infty\!\!\int_0^\infty
+    s^{r-1}t^{m-1}e^{-t(\ell+s)}\bigl|\rho_{n,m}(q+s)\bigr|\dd t\dd s
+    =\Gamma(m)\int_0^\infty \frac{s^{r-1}}{(\ell+s)^m}
+    \bigl|\rho_{n,m}(q+s)\bigr|\dd s.
+  \]
+  It remains to show that the integral on the right is finite.
+  Recall that $\rho_{n,m}$ is a polynomial of degree $n-1$, since the terms $u^n$ and $-u^n$ of $u^n+(1-u)^n$ cancel for odd $n$.
+  As $s\to\infty$, the integrand is therefore $O\bigl(s^{r+n-2-m}\bigr)=O\bigl(s^{-r-2}\bigr)$ by \eqref{eq:pge23-n}, which is integrable at infinity.
+  As $s\to0$, the integrand is $O\bigl(s^{r-1}\bigr)$, which is integrable because $r\ge1$.
+
+  It remains to compute the inner integral.
+  Substituting $y=ts$, so that $s=y/t$ and $\dd s=\dd y/t$, gives
+  \[
+    \int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s
+    =t^{-r}\int_0^\infty y^{r-1}e^{-y}
+     \rho_{n,m}\left(q+\frac {y}{t}\right)\dd y
+    =\Gamma(r)\,t^{-r}
+     \E\rho_{n,m}\left(q+\frac {Y}{t}\right),
+  \]
+  where the last equality holds because $Y$ has density $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.
+  Substituting this for the inner integral obtained after the exchange gives \eqref{eq:pge23-laplace-gamma}.
+\end{proof}
+
+In \eqref{eq:pge23-laplace-gamma} the parameter $\ell$ occurs only in the factor $\ell^{n+r}$ and in the weight $t^{m-r-1}e^{-\ell t}$, both of which are positive; the expectation $\E\rho_{n,m}(q+Y/t)$ does not involve $\ell$ at all.
+It is therefore enough to prove that this expectation is nonnegative for every $t>0$, and the conclusion then follows for all $\ell>0$ at once.
+This is what the next two subsections do.
+
+\subsection{The shifted-gamma moment inequality}
+
+To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we center $\rho_{n,m}$ at $u=1/2$ and expand.
+This produces the terms with positive constant factors
+\[
+  2(r+j)v^{2j}-jv^{2j-1},
+  \qquad j\ge1,
+\]
+evaluated at the random $v=q+xY-1/2$.
+In each of them, the even power has nonnegative expectation, while the odd power has no definite sign; what is needed is therefore a bound of the odd moment by the even one.
+The following lemma supplies such a bound, uniformly in the scaling of $Y$.
+
+\begin{lemma}[Uniform odd-to-even gamma moment bound]\label{lem:pge23-gamma-moment}
+  Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
+  For every $z\ge0$,
+  \begin{equation}\label{eq:pge23-gamma-moment}
+    3j\,\E(zY-1)^{2j-1}
+    \le(r+j)\,\E(zY-1)^{2j}.
+  \end{equation}
+\end{lemma}
+
+We postpone its proof to the next subsection and first show exactly how it proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
+
+\begin{proposition}[Shifted-gamma positivity]\label{prop:pge23-gamma-positive}
+  Let $n\ge1$ be odd, $r\ge1$, and $m=n+2r$.
+  If $0\le q\le1/3$, then for every $x\ge0$,
+  \begin{equation}\label{eq:pge23-shifted-positive}
+    \E\rho_{n,m}(q+xY)\ge0,
+    \qquad Y\sim\GammaLaw(r,1).
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  Set
+  \[
+    A_n(u)=u^n+(1-u)^n.
+  \]
+  We rewrite $\rho_{n,m}$ through $A_n$ and $A_n'$.
+  From $A_n'(u)=n\bigl(u^{n-1}-(1-u)^{n-1}\bigr)$,
+  \[
+    (1-u)A_n'(u)
+    =n(1-u)u^{n-1}-n(1-u)^n
+    =nu^{n-1}-nu^n-n(1-u)^n
+    =nu^{n-1}-nA_n(u),
+  \]
+  that is, $u^{n-1}=A_n(u)+\frac1n(1-u)A_n'(u)$.
+  Substituting this into the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$ and using $m-n=2r$,
+  \begin{equation}\label{eq:pge23-rho-derivative}
+    n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
+  \end{equation}
+
+  Now expand around $u=1/2$.
+  With $u=\frac12+v$, the binomial theorem gives
+  \begin{equation}\label{eq:pge23-even-expansion}
+    A_n\left(\frac{1}{2}+v\right)
+    =\left(\frac12+v\right)^n+\left(\frac12-v\right)^n
+    =2\sum_{2j\le n}\binom n{2j}\left(\frac12\right)^{n-2j}v^{2j}
+    =\sum_{j=0}^{(n-1)/2}a_jv^{2j},
+  \end{equation}
+  where $a_j=2^{2j+1-n}\binom n{2j}>0$.
+  Differentiating in $v$, we also have $A_n'\bigl(\frac12+v\bigr)=\sum_{j\ge1}2ja_jv^{2j-1}$.
+  Substituting both into \eqref{eq:pge23-rho-derivative}, with $1-u=\frac12-v$, gives
+  \begin{align}
+    n\rho_{n,m}\left(\frac{1}{2}+v\right)
+    &=2r\sum_{j\ge0}a_jv^{2j}
+     -\left(\frac12-v\right)\sum_{j\ge1}2ja_jv^{2j-1} \nonumber \\
+    &=2ra_0+
+     \sum_{j=1}^{(n-1)/2}
+     a_j\bigl(2rv^{2j}-jv^{2j-1}+2jv^{2j}\bigr) \nonumber \\
+    &=2ra_0+
+     \sum_{j=1}^{(n-1)/2}
+     a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).\label{eq:pge23-rho-centered}
+  \end{align}
+
+  At $u=q+xY$, the $v$ in \eqref{eq:pge23-rho-centered} equals
+  \[
+    v=q+xY-\frac{1}{2}=xY-\delta=\delta(zY-1),
+    \quad \text{where} \quad
+    \delta=\frac{1}{2}-q\ge\frac{1}{2}-\frac{1}{3}=\frac{1}{6},
+    \qquad
+    z=\frac{x}{\delta},
+  \]
+  which is the form occurring in \Cref{lem:pge23-gamma-moment}.
+  Taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to bound each summand.
+  For $j\ge1$,
+  \begin{align*}
+    &\E\left[
+    2(r+j)\bigl(\delta(zY-1)\bigr)^{2j}
+    -j\bigl(\delta(zY-1)\bigr)^{2j-1}
+    \right]\\
+    &\qquad=2(r+j)\delta^{2j}\E(zY-1)^{2j}
+      -j\delta^{2j-1}\E(zY-1)^{2j-1}\\
+    &\qquad\ge2(r+j)\delta^{2j}\E(zY-1)^{2j}
+      -\frac{r+j}{3}\delta^{2j-1}\E(zY-1)^{2j}\\
+    &\qquad=\delta^{2j}(r+j)
+    \left(2-\frac{1}{3\delta}\right)
+    \E(zY-1)^{2j}
+    \ge0,
+  \end{align*}
+  where the inequality is \Cref{lem:pge23-gamma-moment} and the last step uses $2\delta\ge1/3$ together with $\E(zY-1)^{2j}\ge0$.
+  Since every $a_j$ is positive, we conclude
+  \[
+    n\,\E\rho_{n,m}(q+xY)\ge2ra_0>0,
+  \]
+  which proves \eqref{eq:pge23-shifted-positive}.
+\end{proof}
+
+\begin{remark}[Tightness of the density requirement $p \ge 2/3$]\label{rem:pge23-threshold}
+  This is the only place in the proof where the restriction $p\ge 2/3$ is used.
+  As this inequality is tight, this proof only works for $p \ge 2/3$, and we require a different argument for $p<2/3$.
+\end{remark}
+
+\subsection{Proof of the gamma moment inequality}\label{subsec:pge23-gamma-moment-proof}
+
+It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
+\begin{equation}
+  3j\,\E(zY-1)^{2j-1}
+  \le(r+j)\,\E(zY-1)^{2j}. \label{eq:pge23-gamma-moment2}
+\end{equation}
+
+\begin{proof}[Proof of \Cref{lem:pge23-gamma-moment}]
+  The case $z=0$ is immediate, since the left hand side equals $-3j < 0$ and the right hand side equals $r+j > 0$.
+
+  Now assume $z>0$, put $b=1/z$, and define
+  \[
+    F(b)=\E(Y-b)^{2j},
+    \qquad\text{so that}\qquad
+    F'(b)=-2j\,\E(Y-b)^{2j-1}.
+  \]
+  Since $zY-1=z(Y-b)$, dividing \eqref{eq:pge23-gamma-moment2} by $z^{2j}>0$ gives the equivalent inequality
+  \begin{equation}\label{eq:pge23-gamma-H}
+    H(b):=(r+j)F(b)+\frac{3b}{2}F'(b)\ge0.
+  \end{equation}
+
+  For $I_k(b)=\E(Y-b)^k$, apply the Stein identity of the gamma distribution $Y\sim\GammaLaw(r,1)$,
+  \begin{equation}\label{eq:pge23-gamma-Stein}
+    \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr],
+  \end{equation}
+  to $f(y)=(y-b)^k$.
+  Its two sides are
+  \begin{align*}
+    \E[Y f'(Y)] &= k\E\bigl[(Y-b)(Y-b)^{k-1}+b(Y-b)^{k-1}\bigr] = kI_k(b)+kbI_{k-1}(b),\\
+    \E[(Y-r)f(Y)] &= \E\bigl[(Y-b)(Y-b)^k + (b-r)(Y-b)^k\bigr] = I_{k+1}(b)-(r-b)I_k(b),
+  \end{align*}
+  so that
+  \begin{equation}\label{eq:pge23-gamma-recurrence}
+    I_{k+1}(b)=(r+k-b)I_k(b)+kbI_{k-1}(b).
+  \end{equation}
+  Taking $k=2j-1$, and using $I_{k+1} = F$, $I_{k}=-\frac{F'}{2j}$ and $I_{k-1}=\frac{F''}{2j(2j-1)}$, gives the differential equation
+  \begin{equation}\label{eq:pge23-gamma-ODE}
+    bF''(b)+(b-r-2j+1)F'(b)-2jF(b)=0.
+  \end{equation}
+
+  We next determine the sign of $H'$ at a zero of $H$.
+  Differentiating \eqref{eq:pge23-gamma-H} and then eliminating $F''$ by \eqref{eq:pge23-gamma-ODE}, we obtain
+  \[
+    H'(b)=\left(r+j+\frac{3}{2}\right)F'(b)+\frac{3b}{2}F''(b)
+    =3jF(b)+\left(\frac{5r}{2}+4j-\frac{3b}{2}\right)F'(b).
+  \]
+  At a zero of $H$ we have $F'(b)=-\frac{2(r+j)}{3b}F(b)$ by \eqref{eq:pge23-gamma-H}, and substituting this leaves
+  \begin{equation}\label{eq:pge23-gamma-crossing}
+    \frac{H'(b)}{F(b)}
+    =\frac{3(r+4j)b-(r+j)(5r+8j)}{3b}.
+  \end{equation}
+  Set
+  \begin{equation}\label{eq:pge23-gamma-bstar}
+    b_*:=\frac{(r+j)(5r+8j)}{3(r+4j)}.
+  \end{equation}
+  Since $F(b)=\E(Y-b)^{2j}>0$, formula \eqref{eq:pge23-gamma-crossing} shows that at a zero $b$ of $H$ we have $H'(b)>0$ if $b>b_*$, and $H'(b)<0$ if $b<b_*$.
+  Now
+  \[
+    H(0)=(r+j)\E Y^{2j}>0,
+    \qquad
+    H(b)=(r+4j)b^{2j}+O(b^{2j-1})
+    \qquad(b\to\infty),
+  \]
+  so $H$ is positive at both ends of $[0,\infty)$.
+  If $H$ were negative somewhere, it would have a first zero, where $H'\le0$, and a later zero, where $H'\ge0$; the first therefore lies below $b_*$ and the second above it, so the interval where $H$ is negative would contain $b_*$.
+  It is therefore enough to prove
+  \begin{equation}\label{eq:pge23-gamma-Hbstar}
+    H(b_*)\ge0.
+  \end{equation}
+
+  We first write $H(b_*)$ as an integral.
+  Since $F'(b)=-2j\E(Y-b)^{2j-1}$, \eqref{eq:pge23-gamma-H} gives
+  \[
+    H(b_*)=(r+j)\E(Y-b_*)^{2j}-3jb_*\E(Y-b_*)^{2j-1}
+    =(r+j)\,\E\bigl[(Y-b_*)^{2j-1}(Y-b_*-c)\bigr],
+  \]
+  where $c=\frac{3jb_*}{r+j}$.
+  Expanding the expectation as an integral and substituting $x=y-b_*$,
+  \begin{equation}\label{eq:pge23-gamma-H-integral}
+    H(b_*) =\frac{r+j}{\Gamma(r) e^{b_*}}\int_{-b_*}^{\infty}
+    x^{2j-1}(x-c)(x+b_*)^{r-1}e^{-x}\dd x.
+  \end{equation}
+
+  Set
+  \begin{equation}\label{eq:pge23-gamma-G}
+    G(x)=x^{2j}(x+b_*)^re^{-x},
+    \qquad -b_*\le x<\infty,
+  \end{equation}
+  so that
+  \[
+    G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}
+    \bigl(-x^2+(r+2j-b_*)x+2jb_*\bigr).
+  \]
+  The quadratic factor here factors further as $(c-x)(x+d)$, where
+  \[
+    d=\frac{2jb_*}{c}=\frac{2(r+j)}{3}.
+  \]
+  Thus
+  \begin{equation}\label{eq:pge23-gamma-Gprime}
+    G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}(c-x)(x+d),
+  \end{equation}
+  and the integrand of \eqref{eq:pge23-gamma-H-integral} is $-G'(x)/(x+d)$, whence
+  \[
+    \frac{\Gamma(r)e^{b_*}}{r+j}H(b_*)
+    =-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x.
+  \]
+  While $-d$ lies inside the range of integration, the quotient $-G'(x)/(x+d)$ is the integrand of \eqref{eq:pge23-gamma-H-integral} and is therefore harmless there.
+
+  We integrate by parts on the two sides of $-d$.
+  Away from $x=-d$,
+  \[
+    \frac{\dd}{\dd x}\left(-\frac{G(x)-G(-d)}{x+d}\right)
+    =-\frac{G'(x)}{x+d}+\frac{G(x)-G(-d)}{(x+d)^2}
+  \]
+  holds, so for $0<\varepsilon<b_*-d$ we have
+  \begin{align*}
+    -\int_{-b_*}^{-d-\varepsilon}\frac{G'(x)}{x+d}\dd x
+    &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d-\varepsilon}
+    -\int_{-b_*}^{-d-\varepsilon}\frac{G(x)-G(-d)}{(x+d)^2}\dd x,\\
+    -\int_{-d+\varepsilon}^{\infty}\frac{G'(x)}{x+d}\dd x
+    &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}
+    -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
+  \end{align*}
+  Here $G(-b_*)=0$ and $G(x)$ converges to zero as $x\to\infty$, so the boundary terms at $-b_*$ and at $\infty$ contribute $G(-d)/(b_*-d)$; the boundary terms at $-d-\varepsilon$ and at $-d+\varepsilon$ vanish as $\varepsilon\downarrow0$, because $G(-d\pm\varepsilon)-G(-d) =O(\varepsilon^2)$ by $G'(-d)=0$; and $(G(x)-G(-d))/(x+d)^2$ extends continuously to $x=-d$ for the same reason, combining the two remaining integrals.
+  Hence
+  \begin{align}
+    -\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x
+    &=\lim_{\varepsilon\downarrow0}
+    \left(-\int_{-b_*}^{-d-\varepsilon}\frac{G'(x)}{x+d}\dd x
+    -\int_{-d+\varepsilon}^{\infty}\frac{G'(x)}{x+d}\dd x\right)\notag\\
+    &=\lim_{\varepsilon\downarrow0}
+    \left(\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d-\varepsilon}
+    +\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}\right.\notag\\
+    &\qquad\left.-\int_{-b_*}^{-d-\varepsilon}\frac{G(x)-G(-d)}{(x+d)^2}\dd x
+    -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x\right)\notag\\
+    &=\frac{G(-d)}{b_*-d}
+    -\int_{-b_*}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
+    \label{eq:pge23-gamma-ibp-max}
+  \end{align}
+  Here $b_*-d=r(r+j)/(r+4j)>0$ and $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, so the first term is positive.
+  For the second term, $(x+d)^{-2}$ is positive as well, so its sign is decided by that of $G(x)-G(-d)$.
+  Consequently, if $G(x)-G(-d)\le0$ for every $x\ge-b_*$, that is, if $G(-d)$ is the global maximum of $G$, then the second term is nonnegative and \eqref{eq:pge23-gamma-Hbstar} follows.
+
+  By \eqref{eq:pge23-gamma-Gprime}, the two nonzero local maxima occur at $-d$ and $c$.
+  Their ratio is
+  \begin{equation}\label{eq:pge23-gamma-max-ratio}
+    \frac{G(c)}{G(-d)}
+    =\left(\frac {c}{d}\right)^{2j}
+    \left(\frac{b_*+c}{b_*-d}\right)^r e^{-(c+d)}.
+  \end{equation}
+  Let $t=j/r>0$.
+  To see that $G$ attains its maximum at $-d$ we prove that the logarithm of \eqref{eq:pge23-gamma-max-ratio}, divided by $r$, namely
+  \begin{align}
+    L(t)={}&2t\log\left(
+    \frac{3t(5+8t)}{2(1+t)(1+4t)}\right)
+    +\log\left(
+    \frac{(1+4t)(5+8t)}{3(1+t)}\right)\notag\\
+    &-\frac{32t^2+25t+2}{3(1+4t)},
+    \label{eq:pge23-gamma-L}
+  \end{align}
+  is negative for every $t>0$.
+  Direct differentiation gives, with $A(t)=\frac{3t(5+8t)}{2(1+t)(1+4t)}$,
+  \begin{align}
+    L'(t)
+    &=2\log A(t)
+    -\frac{(32t^2+16t-7)(32t^2+25t+2)}
+    {3(t+1)(4t+1)^2(8t+5)},\label{eq:pge23-gamma-Lprime}\\
+    L''(t)
+    &=-\frac{(32t^2+25t+2)
+    (128t^4+224t^3+120t^2-28t-25)}
+    {t(t+1)^2(4t+1)^3(8t+5)^2}.
+    \label{eq:pge23-gamma-Lsecond}
+  \end{align}
+  Every factor of \eqref{eq:pge23-gamma-Lsecond} other than the quartic $P(t)=128t^4+224t^3+120t^2-28t-25$ is positive for $t>0$, so $L''$ and $P$ have opposite signs.
+  The coefficients of $P$ change sign once, so by Descartes' rule of signs $P$ has at most one positive root.
+  Since $P(0) = -25 < 0$ and $P(t)\to\infty$, it has exactly one positive root $t_0$, and $L'$ increases on $(0,t_0)$ and decreases on $(t_0,\infty)$.
+
+  We evaluate $L'$ at three places to see its sign changes.
+  As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:pge23-gamma-Lprime} tends to $-14/15$, so $L'(t)\to-\infty$.
+  At $t=1$ we have $A(1)=39/20$ and the rational term equals $2419/1950$, so the bound
+  \[
+    \log x\ge\frac{2(x-1)}{x+1}\qquad(x\ge1)
+  \]
+  gives $2\log A(1)\ge\frac{76}{59}$ and
+  \[
+    L'(1)\ge\frac{76}{59}-\frac{2419}{1950} \approxeq 0.047622... >0.
+  \]
+  At $t=3/2$ we have $A(3/2)=153/70$ and the rational term equals $19847/12495$; concavity of the logarithm at $x=2$ gives
+  \[
+    \log\frac{153}{70}\le\log2+\frac{1}{2}\left(\frac{153}{70}-2\right)
+    =\log2+\frac{13}{140},
+  \]
+  so with $2 \log 2 < 7/5$,
+  \[
+    L'\left(\frac{3}{2}\right)
+    <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}\approxeq -0.002681... <0.
+  \]
+
+  Since $L'$ increases and then decreases, and is negative near $0$, positive at $t=1$ and negative at $t=3/2$, it has two roots: at some $t_1\in(0,1)$ with $L''(t_1) > 0$, and at some $t_2\in(1,3/2)$ with $L''(t_2) < 0$.
+  Thus $L$ decreases on $(0,t_1)$, increases on $(t_1,t_2)$ and decreases on $(t_2,\infty)$, so its supremum over $(0,\infty)$ is the larger of $L(t_2)$ and the limit of $L$ at $0$.
+  The latter is negative,
+  \[
+    \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0,
+  \]
+  and $t_2$ lies in $[1,3/2]$, so it remains to control $L$ on $[1,3/2]$.
+  Let
+  \[
+    B(t)=\frac{(1+4t)(5+8t)}{3(1+t)}
+  \]
+  so that $L(t)=2t\log A(t)+\log B(t)-(32t^2+25t+2)/(3(4t+1))$.
+  By concavity of $\log$,
+  \[
+    \log A\le\log2+\frac{A-2}{2},
+    \qquad
+    \log B\le\log13+\frac{B-13}{13}.
+  \]
+  Using $\log2<7/10$ and $\log13<13/5$, exact simplification gives
+  \begin{equation}\label{eq:pge23-gamma-L-rational}
+    L(t)<
+    \frac{3(96t^3-191t^2-16t+46)}
+    {130(t+1)(4t+1)}.
+  \end{equation}
+  On $[1,3/2]$ we have $96t-191<0$ and $t^2\ge1$, so the cubic numerator is at most $(96t-191)-16t+46=80t-145\le-25$, and $L(t)<0$ there as well.
+
+  To summarize the proof: the signs of $L'$ and $L''$ in \eqref{eq:pge23-gamma-Lprime} and \eqref{eq:pge23-gamma-Lsecond} leave two candidates for the supremum of $L$, namely its limit at $0$, which is negative, and a single local maximum, which lies in $[1,3/2]$.
+  Confined to that interval, $L$ is bounded by the rational function \eqref{eq:pge23-gamma-L-rational}, which is negative there; hence $L<0$ on all of $(0,\infty)$.
+  The ratio \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$, so $G$ attains its maximum at $-d$ and the integrand $G(x)-G(-d)$ in \eqref{eq:pge23-gamma-ibp-max} is nonpositive.
+  The right side of \eqref{eq:pge23-gamma-ibp-max} is then positive, giving $H(b_*)>0$, and the crossing argument yields $H(b)\ge0$ for every $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies \eqref{eq:pge23-gamma-moment2}.
+\end{proof}
+
+\subsection{Completion of the proof for \texorpdfstring{$p\ge2/3$}{p>=2/3}}
+
+\begin{theorem}[The theorem for $p\ge2/3$]\label{thm:pge23-main}
+  If $p\ge2/3$, then \eqref{eq:main-goal} holds for every odd $m\ge3$.
+\end{theorem}
+
+\begin{proof}
+  Equivalently, $q\le1/3$.
+  \Cref{lem:pge23-two-sided-identity}, the bound of $t(C_m,U)$ by the path density $x_{m-1}$, and the definition of $\Phi_m$ give
+  \begin{align*}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    &=q^{m-1}+S_m-t(C_m,U)\\
+    &\ge q^{m-1}+S_m-x_{m-1}=\Phi_m,
+  \end{align*}
+  so the theorem follows from the nonnegativity of $\Phi_m$.
+  By the expansion of \Cref{prop:pge23-expansion}, it is enough to show that $P_{m,r}\ge0$ on $[-1/2,1/2]^r$; and by \Cref{lem:pge23-dirichlet}, which presents $P_{m,r}$ as an expectation of the diagonal values $\widetilde P_{m,r}(q,\ell)$ at points $\ell$ of $[-1/2,1/2]$, it is enough to prove $\widetilde P_{m,r}(q,\ell)\ge0$ for $1\le r\le(m-1)/2$ and $-1/2\le\ell\le1/2$.
+
+  When $\ell\le0$, \Cref{lem:pge23-ell-negative} proves $\widetilde P_{m,r}(q,\ell)\ge0$.
+  When $\ell>0$, the beta formula \Cref{lem:pge23-beta} and the Laplace--gamma representation \Cref{lem:pge23-laplace-gamma} write $\widetilde P_{m,r}(q,\ell)$ as a positive weight times an average of the expectations $\E\rho_{n,m}(q+xY)$, each of which is nonnegative by \Cref{prop:pge23-gamma-positive}.
+  Hence $\widetilde P_{m,r}(q,\ell)\ge0$ throughout that range, so $\Phi_m\ge0$.
+\end{proof}
+
+\section{Below the threshold \texorpdfstring{$1/2<p<2/3$}{1/2<p<2/3}: the single-outlier reduction for \texorpdfstring{$m\ge9$}{m>=9}}
+\label{sec:plt23}
+
+From now on, we assume
+\begin{equation}\label{eq:plt23-range}
+  \frac{1}{2}<p<\frac{2}{3}, \qquad \frac{1}{3}<q<\frac{1}{2},
+\end{equation}
+and $m\ge9$ is odd.
+We continue with the block decomposition \eqref{eq:block-U} and the operator norm bound of \Cref{lem:half-norm}.
+
+\subsection{Nonnegativity of the coefficients of \texorpdfstring{$L_-$}{L-}}\label{subsec:plt23-one-sided-schur}
+
+Recall that
+\begin{equation}\label{eq:plt23-one-sided-identity}
+  t(C_m,W)=p^m-\Tr(A^m)+m[z^m]L_-(z),
+\end{equation}
+as proven in \Cref{lem:cycle-identities}.
+Throughout \Cref{sec:plt23} we bound these terms directly.
+
+\begin{lemma}[Nonnegative coefficients]\label{lem:plt23-one-sided-identity}
+  Every coefficient of $L_-(z)$ is nonnegative.
+  Moreover,
+  \begin{equation}\label{eq:plt23-Lminus-linear-lower}
+    [z^m]L_-(z)\ge\int\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}\dd\mu(\lambda).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  We first show that the coefficients of
+  \[
+    Y(z)=\frac{z^2\ip g{(I+zA)^{-1}g}}{1-pz}
+  \]
+  are nonnegative, which implies the same for $L_-=-\log(1-Y)=\sum_{k\ge1}Y^k/k$ by \eqref{eq:Lminus}.
+
+  Expanding the two factors of $Y$,
+  \[
+    \ip g{(I+zA)^{-1}g}=\sum_{j\ge0}z^j\int(-\lambda)^j\dd\mu(\lambda),
+    \qquad
+    \frac{1}{1-pz}=\sum_{k\ge0}p^kz^k,
+  \]
+  where the first follows from \eqref{eq:resolvents-common} with $A$ replaced by $-A$ and $\mu=\sum_i\norm{P_ig}^2\delta_{\lambda_i}$ is the measure \eqref{eq:mu-def}, gives the coefficients of $Y$ as
+  \[
+    [z^r]Y(z)
+    =\int\sum_{j+k=r-2}p^k(-\lambda)^j\dd\mu(\lambda)
+    \qquad(r\ge2).
+  \]
+  Summing the geometric series inside the integral,
+  \begin{equation}\label{eq:plt23-Y-coeff}
+    [z^r]Y(z)
+    =\int\frac{p^{r-1}-(-\lambda)^{r-1}}{p+\lambda}\dd\mu(\lambda).
+  \end{equation}
+  By \Cref{lem:half-norm}, the support of $\mu$ lies in $[-1/2,1/2]$, so $|\lambda|<p$ on the whole range of integration and both the numerator and the denominator on the right of \eqref{eq:plt23-Y-coeff} are positive.
+  The coefficients of $Y$ are therefore nonnegative.
+
+  For the second claim, the coefficients of $L_-(z)-Y(z)=\sum_{k\ge2}Y(z)^k/k$ are nonnegative as well, so
+  \[
+    [z^m]L_-(z)\ge[z^m]Y(z)
+    =\int\frac{p^{m-1}-(-\lambda)^{m-1}}{p+\lambda}\dd\mu(\lambda)
+    =\int\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda}\dd\mu(\lambda),
+  \]
+  where the first equality follows from \eqref{eq:plt23-Y-coeff} and the second holds because $m-1$ is even.
+\end{proof}
+
+
+\subsection{At most one eigenvalue above \texorpdfstring{$q$}{q}}
+
+We first prove the following bound on the sum of the squared eigenvalues of $A$, in which $\Tr(A^2)=\sum_i\lambda_i^2$.
+
+\begin{lemma}[Hilbert--Schmidt bound]\label{lem:plt23-HS-bound}
+  \begin{equation}\label{eq:plt23-HS-bound}
+    \Tr(A^2)+2\norm g^2\le pq.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Since $0\le U\le1$,
+  \[
+    \Tr(T_U^2)=\int_{[0,1]^2}U(x,y)^2\dd x\dd y
+    \le\int_{[0,1]^2}U(x,y)\dd x\dd y=q.
+  \]
+  Expanding $T_U^2$ in the block decomposition \eqref{eq:block-U},
+  \[
+    \Tr(T_U^2)=\Tr\begin{pmatrix}q^2 + \norm g^2 & q g^* + g^* A \\ qg + Ag & g g^* + A^2\end{pmatrix}=q^2+2\norm g^2+\Tr(A^2).
+  \]
+  Subtracting $q^2$ from the both sides proves the claim.
+\end{proof}
+
+\begin{lemma}[Eigenvalues above $q$]\label{lem:plt23-eigenvalues-above-q}
+  There is at most one eigenvalue of $A$ that is larger than $q$.
+  If none of them is larger than $q$, then \eqref{eq:main-goal} holds.
+\end{lemma}
+
+\begin{proof}
+  If two eigenvalues of $A$ were larger than $q$, then
+  \[
+    \Tr(A^2)=\sum_i\lambda_i^2>2q^2>pq,
+  \]
+  the last inequality because $2q>2/3>p$, which contradicts \Cref{lem:plt23-HS-bound}.
+  This proves the first claim.
+
+  Assume now that no eigenvalue of $A$ is larger than $q$.
+  Then every eigenvalue $\lambda_i$ of $A$ satisfies
+  \[
+    \lambda_i^m\le q^{m-2}\lambda_i^2,
+  \]
+  which is immediate for $0\le\lambda_i\le q$, while for $\lambda_i<0$ the left side is negative and the right side is positive.
+  Therefore,
+  \[
+    \Tr(A^m) = \sum_{i}\lambda_i^m\le q^{m-2} \sum_{i} \lambda_i^2 = q^{m-2} \Tr(A^2) \le q^{m-2} \bigl(\Tr(A^2) + 2\norm g^2\bigr) \le pq^{m-1},
+  \]
+  where we used \Cref{lem:plt23-HS-bound} in the last inequality.
+  Since the coefficients of $L_-$ are nonnegative, \eqref{eq:plt23-one-sided-identity} gives
+  \[
+    t(C_m,W) = p^m - \Tr(A^m) + m[z^m]L_-(z) \ge p^m - pq^{m-1},
+  \]
+  proving \eqref{eq:main-goal} in this case.
+\end{proof}
+
+We henceforth assume that $A$ has exactly one eigenvalue
+\begin{equation}\label{eq:plt23-Lambda-above-q}
+  \Lambda>q.
+\end{equation}
+Define
+\begin{equation}\label{eq:plt23-M-def}
+  M=\sqrt{pq-\Lambda^2},
+\end{equation}
+which by \eqref{eq:plt23-HS-bound} controls the remaining eigenvalues:
+\[
+  \sum_{\lambda_i\ne\Lambda}\lambda_i^2\le pq-\Lambda^2=M^2,
+\]
+so in particular $|\lambda_i|\le M$ for every $\lambda_i\ne\Lambda$.
+
+These quantities are ordered as
+\begin{equation}\label{eq:plt23-M-Lambda-order}
+  0\le M<q<\Lambda<\frac{1}{2}<p,
+\end{equation}
+where $M<q$ because $M^2<pq-q^2=q(1-2q)<q^2$ for $q>1/3$, and $\Lambda<1/2$ comes from \Cref{lem:half-norm}.
+
+\subsection{A lower bound via splitting \texorpdfstring{$g$}{g} along the
+eigenfunction of \texorpdfstring{$\Lambda$}{Lambda}}\label{subsec:plt23-splitting-lower-bound}
+
+Let $\phi$ be a unit eigenfunction of $A$ for $\Lambda$, which is determined up to sign.
+We will choose the sign of $\phi$ later.
+Split $g$ into its component along $\phi$ and the rest,
+\begin{equation}\label{eq:plt23-g-decomp}
+  g=\gamma\phi+g_s,
+  \qquad \gamma=\ip g\phi,
+  \qquad g_s\perp\phi,
+\end{equation}
+so that $\norm g^2=\gamma^2+\norm{g_s}^2$.
+
+\begin{proposition}[Lower bound via splitting $g$ along the eigenfunction of $\Lambda$]\label{prop:plt23-splitting-lower-bound}
+  For odd $m$, let
+  \begin{align}
+    k_m(\lambda)&=\frac{p^{m-1}-\lambda^{m-1}}{p+\lambda},
+    \label{eq:plt23-km-def}\\
+    \Lambda_m&=2M^{m-2}+mk_m(\Lambda),\label{eq:plt23-Lambdam-def}\\
+    M_m&=2M^{m-2}+mk_m(M),\label{eq:plt23-Mm-def}\\
+    R_m&=\Lambda^m+M^m-pq^{m-1}.\label{eq:plt23-Rm-def}
+  \end{align}
+  Then
+  \begin{align}
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    &= pq^{m-1} - \Tr(A^m)+m[z^m]L_-(z) \nonumber
+    \\
+    {} &\ge -R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2.\label{eq:plt23-splitting-lower-bound}
+  \end{align}
+  Moreover,
+  \begin{equation}\label{eq:plt23-Lambdam-Mm-positive}
+    \Lambda_m>0,
+    \qquad
+    M_m>0.
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  We first bound $m[z^m]L_-(z)$ from below.
+  Recall that
+  \[
+    \mu=\sum_i\norm{P_ig}^2\delta_{\lambda_i}
+  \]
+  by \eqref{eq:mu-def}, which decomposes $\norm g^2$ along the eigenfunctions of $A$.
+  The eigenspace of $\Lambda$ is spanned by $\phi$, so it carries the weight $\ip g\phi^2=\gamma^2$, and every other eigenvalue lies in $[-M,M]$ and carries the weight of $g_s$.
+  This allows us to write \eqref{eq:plt23-g-decomp} in terms of $\mu$ as
+  \[
+    \mu(\{\Lambda\})=\gamma^2,
+    \qquad
+    \int_{[-M,M]}\dd\mu(\lambda)=\norm{g_s}^2.
+  \]
+  Then, we have
+  \[
+    m[z^m]L_-(z)\ge m\int k_m(\lambda)\dd\mu(\lambda)
+    =mk_m(\Lambda)\gamma^2
+    +m\int_{[-M,M]}k_m(\lambda)\dd\mu(\lambda).
+  \]
+  where the first equality follows from \eqref{eq:plt23-Lminus-linear-lower} and the second by splitting the integral at $\Lambda$.
+  The remaining integral can be bounded from below by $k_m(M)\norm{g_s}^2$, because $k_m$ attains its minimum over $[-M,M]$ at $\lambda=M$.
+  To see this, for $0\le s<p$, we first have
+  \[
+    k_m(-s)=\frac{p^{m-1}-s^{m-1}}{p-s}
+    >\frac{p^{m-1}-s^{m-1}}{p+s}=k_m(s),
+  \]
+  so it suffices to minimize over $0\le\lambda\le M$.
+  In this range, $k_m$ is strictly decreasing: with $n=m-1\ge2$,
+  \[
+    k_m'(\lambda)
+    =-\frac{p^n+np\lambda^{n-1}+(n-1)\lambda^n}{(p+\lambda)^2}<0,
+  \]
+  since every term of the numerator is nonnegative for $\lambda\ge0$ and $p^n>0$.
+  Hence
+  \begin{equation}\label{eq:plt23-km-min-at-M}
+    k_m(\lambda)\ge k_m(M)
+    \qquad\text{whenever }|\lambda|\le M,
+  \end{equation}
+  and altogether
+  \begin{equation}\label{eq:plt23-Lminus-lower}
+    m[z^m]L_-(z)
+    \ge mk_m(\Lambda)\gamma^2+mk_m(M)\norm{g_s}^2.
+  \end{equation}
+
+  We next bound $\Tr(A^m)$.
+  Splitting off the eigenvalue $\Lambda$,
+  \[
+    \Tr(A^m)=\Lambda^m+\sum_{\lambda_i\ne\Lambda}\lambda_i^m,
+  \]
+  where $|\lambda_i|\le M$ gives
+  \[
+    \sum_{\lambda_i\ne\Lambda}\lambda_i^m
+    \le M^{m-2}\sum_{\lambda_i\ne\Lambda}\lambda_i^2.
+  \]
+  From \eqref{eq:plt23-HS-bound},
+  \[
+    \Lambda^2+\sum_{\lambda_i\ne\Lambda}\lambda_i^2+2\norm g^2
+    =\sum_i\lambda_i^2+2\norm g^2\le pq,
+  \]
+  so $M^2=pq-\Lambda^2$ gives $\sum_{\lambda_i\ne\Lambda}\lambda_i^2\le M^2-2\norm g^2$.
+  Summing up,
+  \begin{align}
+    -\Tr(A^m)
+    &\ge-\Lambda^m-M^{m-2}\sum_{\lambda_i\ne\Lambda}\lambda_i^2\notag\\
+    &\ge-\Lambda^m-M^{m-2}\bigl(M^2-2\norm g^2\bigr)\notag\\
+    &=-\Lambda^m-M^m+2M^{m-2}\bigl(\gamma^2+\norm{g_s}^2\bigr),
+    \label{eq:plt23-trace-upper}
+  \end{align}
+  where the last equality follows from \eqref{eq:plt23-g-decomp}.
+
+  It remains to combine the two bounds.
+  Subtracting $p^m-pq^{m-1}$ in \eqref{eq:plt23-one-sided-identity} gives the first line of \eqref{eq:plt23-splitting-lower-bound},
+  \[
+    t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+    =pq^{m-1}-\Tr(A^m)+m[z^m]L_-(z),
+  \]
+  and substituting \eqref{eq:plt23-trace-upper} and \eqref{eq:plt23-Lminus-lower},
+  \begin{align*}
+    &pq^{m-1}-\Tr(A^m)+m[z^m]L_-(z)
+    \\
+    \ge{}&pq^{m-1}-\Lambda^m-M^m
+    +2M^{m-2}\bigl(\gamma^2+\norm{g_s}^2\bigr) +mk_m(\Lambda)\gamma^2+mk_m(M)\norm{g_s}^2\\
+    ={}&-\underbrace{(\Lambda^m+M^m-pq^{m-1})}_{\eqqcolon R_m}
+    +\underbrace{\bigl(2M^{m-2}+mk_m(\Lambda)\bigr)}_{\eqqcolon \Lambda_m}\gamma^2
+    +\underbrace{\bigl(2M^{m-2}+mk_m(M)\bigr)}_{\eqqcolon M_m}\norm{g_s}^2,
+  \end{align*}
+  which proves \eqref{eq:plt23-splitting-lower-bound}.
+
+  Finally, since $k_m(p)=0$ and $k_m$ is strictly decreasing on $[0,p]$, $k_m$ is positive on $[0,p)$.
+  From \eqref{eq:plt23-M-Lambda-order}, we have $M, \Lambda \in [0, p)$, so both $k_m(\Lambda)$ and $k_m(M)$ are positive.
+  Since the other terms in the definitions of $\Lambda_m$ and $M_m$ are also positive, \eqref{eq:plt23-Lambdam-Mm-positive} holds.
+\end{proof}
+
+\subsection{Minimizing
+\texorpdfstring{$\Lambda_m\gamma^2+M_m\norm{g_s}^2$}{Lambda\_m gamma\^{}2 + M\_m |g\_s|\^{}2}}
+\label{subsec:plt23-minimization}
+
+For fixed $q$ and $\Lambda$, let $S$ be the set of pairs $(\gamma,\norm{g_s})$ that are realizable by some graphon satisfying the assumptions we made so far.
+By deriving inequalities on $\gamma$ and $\norm{g_s}$, we construct a larger set $\overline S\supseteq S$, over which the minimum can be computed, and
+\begin{equation}\label{eq:plt23-overapprox}
+  \Lambda_m\gamma^2+M_m\norm{g_s}^2
+  \ge\min_{(\gamma,\norm{g_s})\in\overline S}
+  \bigl(\Lambda_m\gamma^2+M_m\norm{g_s}^2\bigr).
+\end{equation}
+Specifically, \Cref{lem:plt23-gamma-upper-bound} bounds $\gamma$ from above and \Cref{lem:plt23-gs-lower-bound} bounds $\norm{g_s}$ from below.
+Both are linear in $\gamma$ and $\norm{g_s}$, and $\Lambda_m\gamma^2+M_m\norm{g_s}^2$ is a convex quadratic in them by \eqref{eq:plt23-Lambdam-Mm-positive}, so the minimization in \eqref{eq:plt23-overapprox} is convex.
+
+Both lemmas bound $\gamma$ and $\norm{g_s}$ through the decomposition of $|\phi|$ along $\one$ and $\phi$,
+\begin{equation}\label{eq:plt23-absphi-decomp}
+  |\phi|=a_\phi\one+b\phi+\phi_\perp,
+  \qquad
+  a_\phi=\int|\phi|,
+  \qquad
+  b=\ip{|\phi|}\phi,
+\end{equation}
+where $\phi_\perp$ is orthogonal to $\one$ and $\phi$.
+We fix the sign of $\phi$, left open in \Cref{subsec:plt23-splitting-lower-bound}, so that $b\ge0$.
+Note that
+\begin{equation}\label{eq:plt23-absphi-normalization}
+  a_\phi^2+b^2+\norm{\phi_\perp}^2=\norm{|\phi|}^2 = \norm{\phi}^2 = 1.
+\end{equation}
+Besides this identity, we will need a lower bound on $a_\phi$.
+Let $\phi_+$ and $\phi_-$ be the positive and negative parts of $\phi$, so that $\phi=\phi_+-\phi_-$ and $|\phi|=\phi_++\phi_-$.
+Since $\phi\perp\one$, we have $\int\phi=0$, and therefore
+\begin{equation}\label{eq:plt23-phi-parts}
+  \int\phi_+=\int\phi_-=\frac{a_\phi}{2}.
+\end{equation}
+Expanding $\ip\phi{T_U\phi}$ in these two parts and dropping the cross term, which is nonnegative because $U\ge0$,
+\begin{align*}
+  \Lambda=\ip\phi{T_U\phi}
+  &=\iint U(x,y)\bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
+  &\qquad-2\iint U(x,y)\phi_+(x)\phi_-(y)\dd x\dd y\\
+  &\le\iint U(x,y)
+  \bigl(\phi_+(x)\phi_+(y)+\phi_-(x)\phi_-(y)\bigr)\dd x\dd y\\
+  &\le\left(\int\phi_+\right)^2+\left(\int\phi_-\right)^2
+  =\frac{a_\phi^2}{2},
+\end{align*}
+the last inequality because $U\le1$ and the last equality by \eqref{eq:plt23-phi-parts}.
+Thus
+\begin{equation}\label{eq:plt23-aphi-lower}
+  a_\phi^2\ge2\Lambda.
+\end{equation}
+
+\begin{lemma}[Upper bound for $\gamma$]\label{lem:plt23-gamma-upper-bound}
+  \begin{equation}\label{eq:plt23-gamma-upper-bound}
+    \gamma\le u_\gamma:=
+    \frac{a_\phi^2-2\Lambda-2\Lambda b}{2a_\phi}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  For every $x$, the following holds
+  \[
+    (T_U \phi)(x) = \int U(x, y) \phi(y) \dd y \le \int U(x, y) \phi_+(y) \dd y \le \int \phi_+(y) \dd y = \frac{a_\phi}{2},
+  \]
+  where we used $U \ge 0$ and $\phi \le \phi_+$ in the first inequality, and $U \le 1$ in the second.
+  Taking the inner product of both sides with $\phi_+\ge0$ gives
+  \begin{equation}\label{eq:plt23-phiplus-pairing}
+    \ip{\phi_+}{T_U\phi}
+    \le\frac{a_\phi}{2}\int\phi_+
+    =\frac{a_\phi^2}{4}.
+  \end{equation}
+  To expand the left side, the block form \eqref{eq:block-U} gives
+  \[
+    T_U\phi=\begin{pmatrix}
+      q & g^* \\
+      g & A
+    \end{pmatrix} \begin{pmatrix}
+      0 \\ \phi
+    \end{pmatrix}=\ip g\phi\,\one+A\phi=\gamma\one+\Lambda\phi,
+  \]
+  using $\gamma=\ip g\phi$ from \eqref{eq:plt23-g-decomp} and $A\phi=\Lambda\phi$.
+  Hence, by \eqref{eq:plt23-phi-parts},
+  \[
+    \ip{\phi_+}{T_U\phi}
+    =\gamma\ip{\phi_+}\one+\Lambda\ip{\phi_+}\phi
+    =\frac{\gamma a_\phi}{2}+\Lambda\ip{\phi_+}\phi.
+  \]
+  Finally, from $\phi_+(x) \phi_-(x) = 0$, we have $\ip{\phi_+}\phi=\ip{\phi_+}{\phi_+} - \ip{\phi_+}{\phi_-} = \norm{\phi_+}^2$, and
+  \[
+    \norm{\phi_+}^2+\norm{\phi_-}^2=\norm\phi^2=1,
+    \qquad
+    \norm{\phi_+}^2-\norm{\phi_-}^2=\ip{|\phi|}\phi=b,
+  \]
+  so $\ip{\phi_+}\phi=(1+b)/2$.
+  Substituting into \eqref{eq:plt23-phiplus-pairing} gives \eqref{eq:plt23-gamma-upper-bound}.
+\end{proof}
+
+\begin{lemma}[Lower bound for $\norm{g_s}$]\label{lem:plt23-gs-lower-bound}
+  The following inequality holds:
+  \begin{equation}\label{eq:plt23-gs-inner-lower}
+    b\gamma+\ip{g_s}{\phi_\perp}
+    \ge\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
+    \eqqcolon\kappa\ge0,
+  \end{equation}
+  where the last inequality holds because $q<\Lambda$ and $M<\Lambda$ by \eqref{eq:plt23-M-Lambda-order}, and $a_\phi=\ip\one{|\phi|}>0$.
+  Consequently,
+  \begin{equation}\label{eq:plt23-gs-norm-lower}
+    \norm{g_s}\norm{\phi_\perp}\ge \ip{g_s}{\phi_\perp}\ge\kappa-b\gamma.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  From $|\phi|=\phi_++\phi_-$ and $\phi=\phi_+-\phi_-$, we have
+  \begin{align*}
+    \ip{|\phi|}{T_U|\phi|}
+    &=\ip{\phi_+}{T_U\phi_+}+\ip{\phi_-}{T_U\phi_-}
+    +\ip{\phi_+}{T_U\phi_-}+\ip{\phi_-}{T_U\phi_+},\\
+    \ip\phi{T_U\phi}
+    &=\ip{\phi_+}{T_U\phi_+}+\ip{\phi_-}{T_U\phi_-}
+    -\ip{\phi_+}{T_U\phi_-}-\ip{\phi_-}{T_U\phi_+},
+  \end{align*}
+  so the two inner products differ only in the sign of their cross terms.
+  Since $T_U$ is self-adjoint, $\ip{\phi_-}{T_U\phi_+}=\ip{\phi_+}{T_U\phi_-}$, and therefore
+  \begin{align*}
+    \ip{|\phi|}{T_U|\phi|}-\ip\phi{T_U\phi}
+    &=2\ip{\phi_+}{T_U\phi_-}+2\ip{\phi_-}{T_U\phi_+}
+    \\
+    &=4\ip{\phi_+}{T_U\phi_-}
+    \\
+    &= 4 \iint \phi_+(x) U(x, y) \phi_-(y) \dd x \dd y
+    \\
+    &\ge0,
+  \end{align*}
+  where the inequality holds because $U\ge0$ and $\phi_\pm\ge0$.
+  We also have
+  \[
+    \ip{\phi}{T_U \phi} = \ip{\phi}{\gamma \one + \Lambda \phi} = \Lambda
+  \]
+  since $T_U\phi=\gamma\one+\Lambda\phi$ and $\phi\perp\one$.
+  Hence
+  \begin{equation}\label{eq:plt23-absphi-lower}
+    \ip{|\phi|}{T_U|\phi|}\ge\ip\phi{T_U\phi}=\Lambda.
+  \end{equation}
+
+  We expand the left side of \eqref{eq:plt23-absphi-lower}.
+  In $|\phi|=a_\phi\one+b\phi+\phi_\perp$ the last two terms are orthogonal to $\one$, so the block form \eqref{eq:block-U} gives
+  \[
+    T_U|\phi|=\begin{pmatrix}
+      q & g^* \\
+      g & A
+    \end{pmatrix} \begin{pmatrix}
+      a_\phi \\ b\phi+\phi_\perp
+    \end{pmatrix}
+    =\bigl(a_\phi g+A(b\phi+\phi_\perp)\bigr)+\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr)\one
+    .
+  \]
+  Taking the inner product of this with $|\phi|$, and using $\ip{|\phi|}\one=a_\phi$, $\one\perp g,\phi,\phi_\perp$, and that $A$ maps into $\one^\perp$,
+  \begin{align*}
+    &\ip{|\phi|}{T_U|\phi|}
+    \\
+    {} = &\ip{a_\phi \one}{a_\phi g + A(b\phi + \phi_\perp)}+ \ip{b\phi+\phi_\perp}{a_\phi g+A(b\phi+\phi_\perp)}+\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr) \ip{|\phi|}\one
+    \\
+    {} =&\ip{b\phi+\phi_\perp}{a_\phi g+A(b\phi+\phi_\perp)}+\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr) \ip{|\phi|}\one
+    \\
+    {}=&\ip{b\phi+\phi_\perp}{a_\phi g+A(b\phi+\phi_\perp)}+a_\phi\bigl(qa_\phi+\ip g{b\phi+\phi_\perp}\bigr)
+    \\
+    {} =&qa_\phi^2+2a_\phi\ip g{b\phi+\phi_\perp}
+    +\ip{b\phi+\phi_\perp}{A(b\phi+\phi_\perp)}.
+  \end{align*}
+  The two remaining terms expand by $g=\gamma\phi+g_s$, $A\phi=\Lambda\phi$ and $\phi_\perp\perp\phi$:
+  \begin{align*}
+    \ip g{b\phi+\phi_\perp}
+    &=b\ip g\phi+\ip{\gamma\phi+g_s}{\phi_\perp}
+    =b\gamma+\ip{g_s}{\phi_\perp},\\
+    \ip{b\phi+\phi_\perp}{A(b\phi+\phi_\perp)}
+    &=b^2\ip\phi{A\phi}+2b\Lambda\ip{\phi_\perp}\phi
+    +\ip{\phi_\perp}{A\phi_\perp}
+    =\Lambda b^2+\ip{\phi_\perp}{A\phi_\perp},
+  \end{align*}
+  which gives
+  \[
+    \ip{|\phi|}{T_U |\phi|} = q a_\phi^2 + 2 a_\phi\bigl(b \gamma + \ip{g_s}{\phi_\perp}\bigr) + \Lambda b^2 + \ip{\phi_\perp}{A \phi_\perp}.
+  \]
+  Every eigenvalue of $A$ other than $\Lambda$ is at most $M$ in absolute value, so $\ip{\phi_\perp}{A\phi_\perp}\le M\norm{\phi_\perp}^2$, and therefore
+  \[
+    \Lambda\le qa_\phi^2+2a_\phi\bigl(b\gamma+\ip{g_s}{\phi_\perp}\bigr)
+    +\Lambda b^2+M\norm{\phi_\perp}^2.
+  \]
+  By \eqref{eq:plt23-absphi-normalization}, $\Lambda-\Lambda b^2=\Lambda\bigl(a_\phi^2+\norm{\phi_\perp}^2\bigr)$, so rearranging gives
+  \[
+    (\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2
+    \le2a_\phi\bigl(b\gamma+\ip{g_s}{\phi_\perp}\bigr),
+  \]
+  which is \eqref{eq:plt23-gs-inner-lower}.
+  The consequence follows from \eqref{eq:plt23-gs-inner-lower} and Cauchy--Schwarz, $\norm{g_s}\norm{\phi_\perp}\ge\ip{g_s}{\phi_\perp}\ge\kappa-b\gamma$.
+\end{proof}
+
+By \eqref{eq:plt23-gamma-upper-bound} and \eqref{eq:plt23-gs-norm-lower}, the pair $(\gamma,\norm{g_s})$ lies in
+\begin{equation}\label{eq:plt23-Sbar}
+  \overline S=\bigl\{(\overline\gamma,\overline{\norm{g_s}}):
+  \overline\gamma\le u_\gamma,\quad
+  b\overline\gamma+\overline{\norm{g_s}}\norm{\phi_\perp}\ge\kappa,\quad
+  \overline{\norm{g_s}}\ge0\bigr\},
+\end{equation}
+where $u_\gamma, b, \norm{\phi_\perp}$, and $\kappa$ do not depend on $\gamma$ or $\norm{g_s}$.
+Hence
+\begin{equation}\label{eq:plt23-min-over-Sbar}
+  \Lambda_m\gamma^2+M_m\norm{g_s}^2
+  \ge\min_{(\overline\gamma,\overline{\norm{g_s}})\in\overline S}
+  \bigl(\Lambda_m\overline\gamma^2+M_m\overline{\norm{g_s}}^2\bigr),
+\end{equation}
+and the right side is the minimum of a convex quadratic over a polyhedron.
+
+Recall that by \eqref{eq:plt23-splitting-lower-bound} it suffices to prove $\Lambda_m\gamma^2+M_m\norm{g_s}^2\ge R_m$ for \eqref{eq:main-goal}, and that $R_m$ depends only on the eigenvalues $\Lambda$ and $M$, together with $q$ and $m$.
+However, the right side of \eqref{eq:plt23-min-over-Sbar} depends on the eigenfunction $\phi$, through the polyhedron $\overline S$, that is through $a_\phi$, $b$, $\norm{\phi_\perp}$ and $u_\gamma$.
+To obtain a lower bound comparable with $R_m$, we eliminate all of these eigenfunction quantities in the following theorem.
+
+\begin{theorem}[Reduction to $\psi(\xi,\rho)$]\label{thm:plt23-huber-elim}
+  Let
+  \begin{align}
+    \Omega_m&=\frac{M_m(\Lambda-M)\sqrt{2\Lambda}\,(1-2\Lambda)^2}{4\Lambda^2},
+    \label{eq:plt23-C-xi-rho}\\
+    \xi&=\frac{4\Lambda^2(\Lambda-q)}{(1-2\Lambda)^2},
+    \label{eq:plt23-xi-def}\\
+    \rho&=\frac{\Lambda_m}{M_m}\frac{\sqrt\Lambda}{2\sqrt2\,(\Lambda-M)},
+    \label{eq:plt23-rho-def}\\
+    \psi(\xi,\rho)&=
+    \min_{0\le v\le1}
+    \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.
+    \label{eq:plt23-psi-def}
+  \end{align}
+  where $\Omega_m$, $\xi$ and $\rho$ are positive by \eqref{eq:plt23-M-Lambda-order} and \eqref{eq:plt23-Lambdam-Mm-positive}.
+  Then
+  \begin{equation}\label{eq:plt23-huber-payment}
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2
+    \ge \Omega_m\psi(\xi,\rho).
+  \end{equation}
+\end{theorem}
+
+\begin{proof}
+  We will first remove the dependence on $\overline{\norm{g_s}}$ by minimizing \eqref{eq:plt23-min-over-Sbar} over it.
+  Since the objective increases in $\overline{\norm{g_s}}$, one should choose $\overline{\norm{g_s}}$ as small as $\overline S$ allows.
+  When $\phi_\perp\ne0$, one should choose $\overline{\norm{g_s}}\norm{\phi_\perp}=\pos{\kappa-b\overline\gamma}$, so that $\overline{\norm{g_s}}^2=\pos{\kappa-b\overline\gamma}^2/\norm{\phi_\perp}^2$ and
+  \begin{equation}\label{eq:plt23-one-d-t}
+    \min_{(\overline\gamma,\overline{\norm{g_s}})\in\overline S}
+    \bigl(\Lambda_m\overline\gamma^2+M_m\overline{\norm{g_s}}^2\bigr)
+    =\min_{\overline\gamma\le u_\gamma}
+    \left\{
+    \Lambda_m\overline\gamma^2
+    +\frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-b\overline\gamma}^2
+    \right\}.
+  \end{equation}
+  When $\phi_\perp=0$, the variable $\overline{\norm{g_s}}$ does not appear in the constraint, so it should be $0$, and \eqref{eq:plt23-Sbar} becomes a restriction on $\overline\gamma$ alone, $b\overline\gamma\ge\kappa$.
+  Then
+  \begin{equation}\label{eq:plt23-one-d-t-zero}
+    \min_{(\overline\gamma,\overline{\norm{g_s}})\in\overline S}
+    \bigl(\Lambda_m\overline\gamma^2+M_m\overline{\norm{g_s}}^2\bigr)
+    =\min_{\overline\gamma\le u_\gamma,\ b\overline\gamma\ge\kappa}
+    \Lambda_m\overline\gamma^2.
+  \end{equation}
+
+  Under the assumption that $\overline\gamma\ge0$, we now provide bounds on $\overline\gamma$ and $b$ that are independent of the eigenfunction.
+  First, from \eqref{eq:plt23-gamma-upper-bound} we have
+  \[
+    2\overline\gamma a_\phi+2\Lambda b
+    \le a_\phi^2-2\Lambda=1-2\Lambda-b^2-\norm{\phi_\perp}^2
+    \le1-2\Lambda-b^2,
+  \]
+  and since $a_\phi\ge\sqrt{2\Lambda}$ by \eqref{eq:plt23-aphi-lower}, the assumed hypothesis $\overline\gamma\ge0$ gives $2\overline\gamma a_\phi\ge2\overline\gamma\sqrt{2\Lambda}$, so
+  \begin{equation}\label{eq:plt23-b-gamma-budget}
+    b^2+2\Lambda b+2\overline\gamma\sqrt{2\Lambda}\le1-2\Lambda.
+  \end{equation}
+
+  We can use this inequality to obtain two bounds on $\overline\gamma$ and $b$ separately.
+  For $\overline\gamma$, since $\phi$ was chosen so that $b\ge0$, the first two terms on the left of \eqref{eq:plt23-b-gamma-budget} are nonnegative, so
+  \begin{equation}\label{eq:plt23-gamma-range}
+    0\le\overline\gamma\le\frac{1-2\Lambda}{2\sqrt{2\Lambda}}.
+  \end{equation}
+  For $b$, viewing \eqref{eq:plt23-b-gamma-budget} as a quadratic inequality in $b$ gives
+  \[
+    b^2+2\Lambda b-\bigl(1-2\Lambda-2\overline\gamma\sqrt{2\Lambda}\bigr)\le0,
+  \]
+  whose discriminant is nonnegative by \eqref{eq:plt23-gamma-range}.
+  So the larger root of this quadratic, which is $\sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}-\Lambda$, upper bounds $b$:
+  \begin{equation}\label{eq:plt23-beta-gamma}
+    b\le\beta(\overline\gamma):=
+    \sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}-\Lambda.
+  \end{equation}
+  Therefore, whenever $b$ occurs with a nonnegative coefficient, we can replace it by $\beta(\overline\gamma)$.
+  To simplify the optimization further, we now change the optimization variable from $\overline\gamma$ to $\overline v$, which allows us to change the constraint into $\overline v\in[0,1]$: define
+  \begin{equation}\label{eq:plt23-v-def}
+    \overline v=\frac{2\overline\gamma\sqrt{2\Lambda}}{1-2\Lambda},
+    \qquad\text{so that}\qquad
+    \overline\gamma=\frac{\overline v(1-2\Lambda)}{2\sqrt{2\Lambda}}
+    \quad\text{and}\quad
+    \Lambda_m\overline\gamma^2=\Omega_m\rho\overline v^2.
+  \end{equation}
+  Here $\overline v \in [0,1]$ by \eqref{eq:plt23-gamma-range}, the interval over which the minimum in \eqref{eq:plt23-psi-def} is taken, and the last identity can be shown by expanding the definitions in \eqref{eq:plt23-C-xi-rho} and \eqref{eq:plt23-rho-def}.
+  Using the inequality $b\le\beta(\overline\gamma)$ of \eqref{eq:plt23-beta-gamma}, we can also bound $b\overline\gamma$:
+  \begin{align}
+    b\overline\gamma
+    &\le\overline\gamma\beta(\overline\gamma)
+    =\frac{\overline v(1-2\Lambda)}{2\sqrt{2\Lambda}}
+      \left(\sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}-\Lambda\right)
+    \notag\\
+    &=\frac{\overline v(1-2\Lambda)}{2\sqrt{2\Lambda}}
+      \cdot\frac{1-2\Lambda-2\overline\gamma\sqrt{2\Lambda}}
+      {\sqrt{(1-\Lambda)^2-2\overline\gamma\sqrt{2\Lambda}}+\Lambda}
+    \notag\\
+    &\le\frac{\overline v(1-2\Lambda)}{2\sqrt{2\Lambda}}
+      \cdot\frac{1-2\Lambda-2\overline\gamma\sqrt{2\Lambda}}{2\Lambda}
+    \notag\\
+    &=\frac{(1-2\Lambda)^2\overline v(1-\overline v)}{4\Lambda\sqrt{2\Lambda}},
+    \label{eq:plt23-gamma-beta-v}
+  \end{align}
+  where the first inequality uses $\overline\gamma\ge0$, the second equality follows from rationalizing the numerator, using $(1-\Lambda)^2-\Lambda^2=1-2\Lambda$, and the second inequality holds since the numerator is nonnegative and the denominator is at least $2\Lambda$.
+
+  With these conditional bounds in hand, we now drop the assumption $\overline\gamma\ge0$ and prove \eqref{eq:plt23-huber-payment} by a case analysis on $\phi_\perp$ and $u_\gamma$.
+
+  \textbf{Case 1: $\phi_\perp=0$.}
+  The constraint $b\overline\gamma\ge\kappa$ of \eqref{eq:plt23-one-d-t-zero} simplifies to
+  \[
+    b\overline\gamma\ge\kappa
+    =\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
+    =\frac{(\Lambda-q)a_\phi}{2}>0,
+  \]
+  where the last inequality holds since $\Lambda>q$ by \eqref{eq:plt23-M-Lambda-order} and $a_\phi=\ip\one{|\phi|}>0$.
+  Since $\phi$ was chosen so that $b\ge0$, this forces $\overline\gamma>0$, so \eqref{eq:plt23-gamma-range}--\eqref{eq:plt23-gamma-beta-v} hold.
+  With \eqref{eq:plt23-gamma-beta-v}, we have
+  \[
+    \frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    \le\frac{(\Lambda-q)a_\phi}{2}
+    \le b\overline\gamma
+    \le\frac{(1-2\Lambda)^2\overline v(1-\overline v)}{4\Lambda\sqrt{2\Lambda}},
+  \]
+  which simplifies to $\xi-\overline v+\overline v^2\le0$.
+  Thus the second term in \eqref{eq:plt23-psi-def} is zero at $v=\overline v$, and every pair $(\overline\gamma,\overline{\norm{g_s}})$ in $\overline S$ satisfies
+  \[
+    \Lambda_m\overline\gamma^2
+    =\Omega_m\rho\overline v^2
+    =\Omega_m\bigl(\rho\overline v^2+\pos{\xi-\overline v+\overline v^2}\bigr)
+    \ge \Omega_m\psi(\xi,\rho),
+  \]
+  where the first equality is \eqref{eq:plt23-v-def}.
+  With \eqref{eq:plt23-one-d-t-zero} this proves \eqref{eq:plt23-huber-payment} in the case $\phi_\perp=0$.
+
+  \textbf{Case 2: $\phi_\perp\ne0$ and $u_\gamma\le0$.}
+  Every pair $(\overline\gamma,\overline{\norm{g_s}})$ in $\overline S$ satisfies $\overline\gamma\le u_\gamma\le0$, which implies $\kappa-b\overline\gamma\ge\kappa\ge0$ together with \eqref{eq:plt23-gs-inner-lower} and $b\ge0$, giving the lower bound on the right side of \eqref{eq:plt23-one-d-t}:
+  \[
+    \min_{\overline\gamma\le u_\gamma}
+    \left\{
+    \Lambda_m\overline\gamma^2
+    +\frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-b\overline\gamma}^2
+    \right\}
+    \ge\frac{M_m}{\norm{\phi_\perp}^2}\kappa^2.
+  \]
+  Expanding the definition of $\kappa$, we have
+  \[
+    \frac{\kappa^2}{\norm{\phi_\perp}^2}
+    =\frac{\bigl((\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2}
+    {4a_\phi^2\norm{\phi_\perp}^2}\ge(\Lambda-q)(\Lambda-M),
+  \]
+  where the inequality is equivalent to $\bigl((\Lambda-q)a_\phi^2-(\Lambda-M)\norm{\phi_\perp}^2\bigr)^2\ge0$.
+  On the other hand, taking $v=0$ in \eqref{eq:plt23-psi-def} gives
+  \[
+    \Omega_m\psi(\xi,\rho)
+    \le \Omega_m\xi=M_m(\Lambda-M)(\Lambda-q)\sqrt{2\Lambda}
+    \le M_m(\Lambda-M)(\Lambda-q),
+  \]
+  where the last inequality comes from $\Lambda\le1/2$ in \eqref{eq:plt23-M-Lambda-order}.
+  Thus \eqref{eq:plt23-huber-payment} holds in this case.
+
+  \textbf{Case 3: $\phi_\perp\ne0$ and $u_\gamma>0$.}
+  In the minimization of \eqref{eq:plt23-one-d-t}, any $\overline\gamma<0$ has a larger objective value than at $\overline\gamma=0$, hence we may assume that $\overline\gamma\ge0$, and \eqref{eq:plt23-gamma-range}--\eqref{eq:plt23-gamma-beta-v} hold.
+  We now bound the objective on the right of \eqref{eq:plt23-one-d-t} from below at each $\overline\gamma$ with $0\le\overline\gamma\le u_\gamma$.
+  Its first term already has the form required in \eqref{eq:plt23-psi-def},
+  \[
+    \Lambda_m\overline\gamma^2=\Omega_m\rho\overline v^2,
+  \]
+  by \eqref{eq:plt23-v-def}, so it is enough to consider the second term, which involves $\phi$ through $\kappa$, $b$ and $\norm{\phi_\perp}$.
+
+  Since $2\Lambda\le a_\phi^2\le1$ by \eqref{eq:plt23-aphi-lower} and \eqref{eq:plt23-absphi-normalization},
+  \begin{align}
+    \kappa
+    &=\frac{(\Lambda-q)a_\phi^2+(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}
+    =\frac{(\Lambda-q)a_\phi}{2}+\frac{(\Lambda-M)\norm{\phi_\perp}^2}{2a_\phi}\notag\\
+    &\ge\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    +\frac{(\Lambda-M)\norm{\phi_\perp}^2}{2},\label{eq:plt23-H-lower}
+  \end{align}
+  and in this lower bound for $\kappa$, only the second term involves $\phi_\perp$.
+  Define
+  \[
+    w=\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}-b\overline\gamma, \qquad \text{ so that } \kappa-b\overline\gamma\ge w+ \frac{(\Lambda-M)\norm{\phi_\perp}^2}{2}.
+  \]
+  where the inequality follows from \eqref{eq:plt23-H-lower}.
+  Since $x\mapsto\pos x^2$ is nondecreasing,
+  \[
+    \frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-b\overline\gamma}^2
+    \ge M_m\,\frac{\pos{w+(\Lambda-M)\norm{\phi_\perp}^2/2}^2}{\norm{\phi_\perp}^2},
+  \]
+  and the right side involves $\phi_\perp$ only through $\norm{\phi_\perp}^2$.
+  Bounding it below by its infimum over all positive values of $\norm{\phi_\perp}$ therefore removes $\phi_\perp$, and for every $w$ that infimum is
+  \begin{equation}\label{eq:plt23-K-AMGM}
+    \inf_{\norm{\phi_\perp}>0}
+    \frac{\pos{w+(\Lambda-M)\norm{\phi_\perp}^2/2}^2}{\norm{\phi_\perp}^2}
+    =2(\Lambda-M)\pos w.
+  \end{equation}
+  To see this, consider the two cases $w>0$ and $w\le0$ separately.
+  When $w>0$, multiplying by $\norm{\phi_\perp}^2$ turns the inequality $\ge$ in \eqref{eq:plt23-K-AMGM} into
+  \[
+    \pos{w+\frac{(\Lambda-M)\norm{\phi_\perp}^2}{2}}^2
+    \ge2(\Lambda-M)\pos w\norm{\phi_\perp}^2,
+  \]
+  which is the arithmetic--geometric mean inequality, with equality at $\norm{\phi_\perp}^2=2w/(\Lambda-M)$.
+  When $w\le0$, the right side of \eqref{eq:plt23-K-AMGM} is zero since $\pos w=0$, and the left side is also zero: since $w+(\Lambda-M)\norm{\phi_\perp}^2/2\le(\Lambda-M)\norm{\phi_\perp}^2/2$ and $x\mapsto\pos x^2$ is nondecreasing,
+  \[
+    0\le\frac{\pos{w+(\Lambda-M)\norm{\phi_\perp}^2/2}^2}{\norm{\phi_\perp}^2}
+    \le\frac{(\Lambda-M)^2\norm{\phi_\perp}^2}{4},
+  \]
+  and the right side tends to $0$ as $\norm{\phi_\perp}\to0$.
+  Hence the second term of the objective is at least $2M_m(\Lambda-M)\pos w$.
+
+  Now the remaining dependence on the eigenfunction is $b$ in $w$, which can be removed with \eqref{eq:plt23-gamma-beta-v}:
+  \begin{align}
+    \pos w
+    &\ge\pos{\frac{(\Lambda-q)\sqrt{2\Lambda}}{2}
+    -\frac{(1-2\Lambda)^2\overline v(1-\overline v)}{4\Lambda\sqrt{2\Lambda}}}\notag\\
+    &=\pos{\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    \left(\frac{4\Lambda^2(\Lambda-q)}{(1-2\Lambda)^2}-\overline v(1-\overline v)\right)}\notag\\
+    &=\pos{\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    \bigl(\xi-\overline v+\overline v^2\bigr)}\notag\\
+    &=\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    \pos{\xi-\overline v+\overline v^2},\label{eq:plt23-one-d-gamma}
+  \end{align}
+  where the second equality is the definition \eqref{eq:plt23-xi-def} of $\xi$.
+  Hence the second term of the objective is at least
+  \[
+    2M_m(\Lambda-M)\frac{\sqrt{2\Lambda}\,(1-2\Lambda)^2}{8\Lambda^2}
+    \pos{\xi-\overline v+\overline v^2}
+    =\Omega_m\pos{\xi-\overline v+\overline v^2}
+  \]
+  by the definition \eqref{eq:plt23-C-xi-rho} of $\Omega_m$.
+  Both terms of the objective are now bounded from below, so
+  \begin{align*}
+    \Lambda_m\gamma^2+M_m\norm{g_s}^2
+    &\ge\min_{0\le\overline\gamma\le u_\gamma}
+    \left\{
+    \Lambda_m\overline\gamma^2
+    +\frac{M_m}{\norm{\phi_\perp}^2}\pos{\kappa-b\overline\gamma}^2
+    \right\}\\
+    &\ge\min_{0\le\overline\gamma\le u_\gamma}
+    \Omega_m\bigl(\rho\overline v^2+\pos{\xi-\overline v+\overline v^2}\bigr),
+  \end{align*}
+  where the first inequality combines \eqref{eq:plt23-min-over-Sbar} and \eqref{eq:plt23-one-d-t} with the reduction to $\overline\gamma\ge0$.
+
+  By \eqref{eq:plt23-gamma-range} the range of this minimum lies in $[0,(1-2\Lambda)/(2\sqrt{2\Lambda})]$, which \eqref{eq:plt23-v-def} carries onto $[0,1]$, so
+  \begin{align*}
+    \min_{0\le\overline\gamma\le u_\gamma}
+    \Omega_m\bigl(\rho\overline v^2+\pos{\xi-\overline v+\overline v^2}\bigr)
+    &\ge\min_{0\le\overline\gamma\le\frac{1-2\Lambda}{2\sqrt{2\Lambda}}}
+    \Omega_m\bigl(\rho\overline v^2+\pos{\xi-\overline v+\overline v^2}\bigr)\\
+    &=\Omega_m\min_{0\le v\le1}
+    \bigl\{\rho v^2+\pos{\xi-v+v^2}\bigr\}
+    =\Omega_m\psi(\xi,\rho)
+  \end{align*}
+  by \eqref{eq:plt23-psi-def}, which proves \eqref{eq:plt23-huber-payment} in this final case.
+\end{proof}
+
+It remains to say which pairs $(q,\Lambda)$ can occur.
+The eigenfunction $\phi$ restricts them further, through a lower bound on $\norm g$.
+
+\begin{lemma}[Variance lower bound]\label{lem:plt23-forced-variance}
+  One has
+  \begin{equation}\label{eq:plt23-forced-variance}
+    \norm g^2\ge
+    \frac{\Lambda(\Lambda-q)^2}{2(1-2\Lambda)}.
+  \end{equation}
+  Consequently,
+  \begin{equation}\label{eq:plt23-alpha-ceiling-poly}
+    \Lambda^2+q\Lambda-q\le0,
+  \end{equation}
+  and hence
+  \begin{equation}\label{eq:plt23-alpha-ceiling}
+    q<\Lambda\le r(q):=
+    \frac{\sqrt{q^2+4q}-q}{2}.
+  \end{equation}
+  Moreover $M>0$.
+\end{lemma}
+
+\begin{proof}
+  Write $|\phi|=a_\phi\one+h$ with $h\perp\one$, so that $\norm h^2=1-a_\phi^2$.
+  The block form \eqref{eq:block-U} gives
+  \[
+    \ip{|\phi|}{T_U|\phi|}
+    =qa_\phi^2+2a_\phi\ip gh+\ip h{Ah},
+  \]
+  and bounding $\ip gh\le\norm g\norm h$ by Cauchy--Schwarz and $\ip h{Ah}\le\Lambda\norm h^2$ by the maximality of $\Lambda$, \eqref{eq:plt23-absphi-lower} gives
+  \[
+    \Lambda\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
+    +\Lambda(1-a_\phi^2).
+  \]
+  Subtracting $\Lambda(1-a_\phi^2)$ and dividing by $a_\phi>0$,
+  \[
+    (\Lambda-q)a_\phi
+    \le2\norm g\sqrt{1-a_\phi^2}.
+  \]
+  Squaring and writing $t=a_\phi^2$,
+  \[
+    \norm g^2\ge\frac{(\Lambda-q)^2}{4}\cdot\frac{t}{1-t},
+  \]
+  and $t\mapsto t/(1-t)$ is increasing, so \eqref{eq:plt23-aphi-lower} allows $t$ to be replaced by $2\Lambda$, which is \eqref{eq:plt23-forced-variance}.
+
+  For the second claim, \eqref{eq:plt23-HS-bound} gives $2\norm g^2\le pq-\Lambda^2$, so \eqref{eq:plt23-forced-variance} and $1-2\Lambda>0$ give
+  \[
+    \Lambda(\Lambda-q)^2\le\bigl(pq-\Lambda^2\bigr)(1-2\Lambda).
+  \]
+  With $p=1-q$, the difference of the two sides is $-(1-\Lambda-q)(\Lambda^2+q\Lambda-q)$, and the factor $1-\Lambda-q$ is positive by \eqref{eq:plt23-M-Lambda-order}, so \eqref{eq:plt23-alpha-ceiling-poly} follows.
+  The roots of $\Lambda^2+q\Lambda-q$ are $(-q\pm\sqrt{q^2+4q})/2$, whence \eqref{eq:plt23-alpha-ceiling}.
+
+  Finally, because $\Lambda>q$, the right side of \eqref{eq:plt23-forced-variance} is strictly positive.
+  Thus $g\ne0$, and the bound \eqref{eq:plt23-HS-bound} gives $\Lambda^2<pq$.
+  Consequently $M>0$.
+\end{proof}
+
+Together, \Cref{thm:plt23-huber-elim} and \Cref{lem:plt23-forced-variance} show that \eqref{eq:main-goal} follows once
+\begin{equation}\label{eq:plt23-scalar-target}
+  R_m\le \Omega_m\psi(\xi,\rho)
+\end{equation}
+is proved for every pair $(q,\Lambda)$ satisfying \eqref{eq:plt23-range} and \eqref{eq:plt23-alpha-ceiling}.
+
+\begin{proposition}[Dual form of $\psi$]\label{prop:plt23-huber-dual}
+  For $\xi\ge0$ and $\rho>0$,
+  \begin{equation}\label{eq:plt23-psi-dual}
+    \psi(\xi,\rho)=
+    \max_{0\le\lambda\le1}
+    \left\{
+    \lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}
+    \right\}.
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  Use
+  \[
+    \pos x=\max_{0\le\lambda\le1}\lambda x.
+  \]
+  The resulting function
+  \[
+    (\rho+\lambda)v^2-\lambda v+\lambda\xi
+  \]
+  is convex in $v$, affine in $\lambda$, and the two domains are compact convex intervals.
+  The elementary finite-dimensional minimax theorem (or Sion's theorem) permits the interchange of $\min_v$ and $\max_\lambda$.
+  For fixed $\lambda$, the minimizer is
+  \[
+    v=\frac{\lambda}{2(\rho+\lambda)}\in[0,1/2],
+  \]
+  and substitution gives \eqref{eq:plt23-psi-dual}.
+\end{proof}
+
+The function $\psi$ has the quadratic-versus-linear structure of Huber's robust loss~\cite{Huber1964}, and \eqref{eq:plt23-psi-dual} is an interchange of the convex--concave type treated by Sion~\cite{Sion1958}; the special case needed here is the one proved above.
+
+\subsection{A global consequence of the dual formula}
+
+We retain all notation from \Cref{thm:plt23-huber-elim} and \Cref{prop:plt23-huber-dual}, so that the remaining scalar target is \eqref{eq:plt23-scalar-target}, where
+\[
+  \psi(\xi,\rho)
+  =\max_{0\le \lambda\le 1}
+    \left\{\lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}\right\}.
+\]
+The point of the next normalization is to keep the two natural scales in this dual expression simultaneously, rather than choosing one value of $\lambda$ and then splitting the parameter region according to which value was chosen.
+
+Define
+\begin{equation}\label{eq:plt23-AB-theta}
+  \mathcal A:=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
+  \qquad
+  \mathcal B:=\frac{\Omega_m\xi}{\Lambda^m},
+  \qquad
+  \theta:=\rho\xi=\frac{\mathcal A}{\mathcal B}.
+\end{equation}
+All three quantities are positive.
+Dividing the dual objective by $\xi$ gives
+\begin{align}
+  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
+  &=\mathcal B
+    \max_{0\le\lambda\le 1}
+      \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}\notag\\
+  &\ge
+    \mathcal B
+    \max_{0\le\lambda\le 1}
+      \left\{\lambda-\frac{\lambda^2}{4\theta}\right\}.
+  \label{eq:plt23-dual-drop-xi}
+\end{align}
+The inequality holds because $\theta+\lambda\xi\ge\theta$, so replacing the denominator by $\theta$ makes the subtracted term larger.
+Put
+\begin{equation}\label{eq:plt23-dtheta-def}
+  d(\theta)
+  :=\max_{0\le\lambda\le1}
+       \left\{\lambda-\frac{\lambda^2}{4\theta}\right\}.
+\end{equation}
+The maximizer is $\lambda=2\theta$ when $2\theta\le1$, and $\lambda=1$ when $2\theta\ge1$.
+Hence
+\begin{equation}\label{eq:plt23-dtheta-formula}
+  d(\theta)
+  =
+  \begin{cases}
+    \theta, & 0<\theta\le\frac12,\\[1mm]
+    1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
+  \end{cases}
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:plt23-master-dual-lower}
+  \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
+  \ge \mathcal B\,d(\theta).
+\end{equation}
+The rest of the proof shows directly that $R_m/\Lambda^m$ is at most the right side of \eqref{eq:plt23-master-dual-lower}.
+
+\subsection{Dimensionless variables}\label{subsec:plt23-variables}
+
+Set
+\begin{equation}\label{eq:plt23-N-def}
+  N:=m-2.
+\end{equation}
+Thus $N\ge7$ is odd.
+Introduce
+\begin{equation}\label{eq:plt23-chart-basic}
+  a:=\frac q\Lambda,
+  \qquad
+  \ell:=\frac M\Lambda,
+  \qquad
+  u:=1-a,
+  \qquad
+  \sigma:=\frac p\Lambda.
+\end{equation}
+The relation $M^2=pq-\Lambda^2$ gives
+\begin{equation}\label{eq:plt23-sigma-a-ell}
+  \sigma=\frac{1+\ell^2}{a}.
+\end{equation}
+As in the preceding part of the manuscript,
+\[
+  0<M<q<\Lambda<\frac12<p,
+\]
+so
+\begin{equation}\label{eq:plt23-basic-domain}
+  0<\ell<a<1,
+  \qquad
+  1<\sigma<2.
+\end{equation}
+We also need the consequence of the frontier ceiling $\Lambda^2+q\Lambda-q\le0$ from \Cref{lem:plt23-forced-variance}.
+Writing
+\[
+  D:=1+a^2+\ell^2,
+\]
+one has $\Lambda=a/D$ and $q=a^2/D$.
+Therefore the frontier ceiling is equivalent to
+\begin{equation}\label{eq:plt23-frontier-chart}
+  \ell^2\ge a(1-a)=au.
+\end{equation}
+Moreover, $q>1/3$ gives $D<3a^2$.
+Since $D\ge1+a$ by \eqref{eq:plt23-frontier-chart},
+\[
+  3a^2-a-1>0,
+\]
+and hence
+\begin{equation}\label{eq:plt23-a-threequarters}
+  a>\frac{1+\sqrt{13}}6>\frac34.
+\end{equation}
+
+We now use the two variables that will occur in the bounds below:
+\begin{equation}\label{eq:plt23-zeta-v-def}
+  \zeta:=\frac{\ell^2}{u},
+  \qquad
+  v:=\sigma-1.
+\end{equation}
+Writing $H_\zeta:=\zeta+1+v$, the definitions solve explicitly as
+\begin{equation}\label{eq:plt23-zeta-v-inverse}
+  u=\frac v{H_\zeta},
+  \qquad
+  a=\frac{\zeta+1}{H_\zeta},
+  \qquad
+  \ell^2=\frac{\zeta v}{H_\zeta}.
+\end{equation}
+Indeed, $\ell^2=\zeta u$, while $\sigma=(1+\ell^2)/a$ and $a=1-u$ give $1+v=(1+\zeta u)/(1-u)$, which is equivalent to the first identity in \eqref{eq:plt23-zeta-v-inverse}; the other two follow immediately.
+The ceiling \eqref{eq:plt23-frontier-chart} becomes
+\begin{equation}\label{eq:plt23-zeta-domain}
+  \zeta(\zeta+v)\ge1.
+\end{equation}
+In particular,
+\begin{equation}\label{eq:plt23-zeta-v-consequences}
+  0<v<1,
+  \qquad
+  \zeta\ge a>\frac34,
+  \qquad
+  \ell^2<v.
+\end{equation}
+The last inequality follows directly from $\ell^2=\zeta v/H_\zeta$ and $H_\zeta>\zeta$.
+
+It is also useful to express $\Lambda$ without $a$.
+Put
+\begin{equation}\label{eq:plt23-Delta-def}
+  \Delta:=\sigma^2+1+\ell^2.
+\end{equation}
+Since $p+q=1$, $p=\sigma\Lambda$, and $q=a\Lambda=(1+\ell^2)\Lambda/\sigma$,
+\begin{equation}\label{eq:plt23-Delta-identities}
+  \Lambda=\frac{\sigma}{\Delta},
+  \qquad
+  q=\frac{1+\ell^2}{\Delta},
+  \qquad
+  1-2\Lambda=\frac{v^2+\ell^2}{\Delta}.
+\end{equation}
+Two elementary consequences will be used repeatedly.
+First,
+\begin{equation}\label{eq:plt23-Delta-upper-sigma}
+  \Delta<\sigma(v+2),
+\end{equation}
+for this is equivalent to $1+\ell^2<\sigma$, that is, to $\ell^2<v$.
+Second, since $q>1/3$,
+\begin{equation}\label{eq:plt23-Delta-upper-three}
+  \Delta<3(1+\ell^2).
+\end{equation}
+Finally, $q<\Lambda$ and $p=\sigma\Lambda$ imply
+\begin{equation}\label{eq:plt23-Lambda-lower}
+  1=p+q<(\sigma+1)\Lambda=(v+2)\Lambda,
+  \qquad\text{so}\qquad
+  \Lambda>\frac1{v+2}.
+\end{equation}
+
+\subsection{Normalized defect and the two scales}
+
+Define the normalized defect
+\begin{equation}\label{eq:plt23-F-def}
+  F_N:=\frac{R_m}{\Lambda^m}.
+\end{equation}
+Since $m=N+2$, $M=\ell\Lambda$, $q=a\Lambda$, and $p=\sigma\Lambda=(1+\ell^2)\Lambda/a$, the definition $R_m=\Lambda^m+M^m-pq^{m-1}$ gives
+\begin{equation}\label{eq:plt23-F-formula}
+  F_N
+  =1-a^N-\ell^2(a^N-\ell^N).
+\end{equation}
+Put
+\begin{equation}\label{eq:plt23-T-def}
+  T_N:=N-\zeta(a^N-\ell^N).
+\end{equation}
+Because $1-a^N\le N(1-a)=Nu$ and $\ell^2=\zeta u$,
+\begin{equation}\label{eq:plt23-F-T}
+  F_N\le uT_N.
+\end{equation}
+Thus $F_N\le0$ already proves \eqref{eq:plt23-scalar-target}, because $\psi(\xi,\rho)\ge0$.
+Whenever convenient below we may therefore assume
+\begin{equation}\label{eq:plt23-F-positive}
+  F_N>0,
+\end{equation}
+which by \eqref{eq:plt23-F-T} implies $T_N>0$.
+
+Next normalize the two coefficients $\Lambda_m$ and $M_m$ of \Cref{prop:plt23-splitting-lower-bound}:
+\begin{equation}\label{eq:plt23-normalized-coeffs}
+  \widehat{\Lambda}_N:=\frac{\Lambda_m}{\Lambda^N},
+  \qquad
+  \widehat M_N:=\frac{M_m}{\Lambda^N}.
+\end{equation}
+A direct substitution into the definitions of $k_m$, $\Lambda_m$, and $M_m$ gives
+\begin{align}
+  \widehat{\Lambda}_N
+  &=2\ell^N+(N+2)K_\Lambda,
+  &
+  K_\Lambda
+  &:=\frac{\sigma^{N+1}-1}{\sigma+1},
+  \label{eq:plt23-KA-def}\\
+  \widehat M_N
+  &=2\ell^N+(N+2)K_M,
+  &
+  K_M
+  &:=\frac{\sigma^{N+1}-\ell^{N+1}}{\sigma+\ell}.
+  \label{eq:plt23-KL-def}
+\end{align}
+Since $N+1$ is even,
+\begin{align}
+  K_\Lambda
+  &=v\sum_{j=0}^{(N-1)/2}\sigma^{2j},
+  \label{eq:plt23-KA-sum}\\
+  K_M
+  &=(\sigma-\ell)
+    \sum_{j=0}^{(N-1)/2}
+      \sigma^{N-1-2j}\ell^{2j}.
+  \label{eq:plt23-KL-sum}
+\end{align}
+For brevity set
+\begin{equation}\label{eq:plt23-SN-def}
+  S_N:=\sum_{j=0}^{(N-1)/2}\sigma^{2j}.
+\end{equation}
+There are $(N+1)/2$ summands and their geometric mean is $\sigma^{(N-1)/2}$.
+Hence the arithmetic--geometric mean inequality gives
+\begin{equation}\label{eq:plt23-SN-AMGM}
+  S_N\ge \frac{N+1}{2}\sigma^{(N-1)/2}.
+\end{equation}
+
+The definitions \eqref{eq:plt23-C-xi-rho}--\eqref{eq:plt23-rho-def} of $\Omega_m$, $\xi$, and $\rho$ give closed forms for the two quantities in \eqref{eq:plt23-AB-theta}.
+Multiplying $\Omega_m$ by $\xi$ cancels the factor $(1-2\Lambda)^2/(4\Lambda^2)$, and multiplying $\Omega_m$ by $\rho$ cancels $M_m(\Lambda-M)$, so that
+\begin{equation}\label{eq:plt23-Omega-products}
+  \Omega_m\xi=M_m(\Lambda-M)\sqrt{2\Lambda}\,(\Lambda-q),
+  \qquad
+  \Omega_m\rho=\frac{\Lambda_m(1-2\Lambda)^2}{8\Lambda},
+\end{equation}
+and hence, using $\xi^2=16\Lambda^4(\Lambda-q)^2/(1-2\Lambda)^4$,
+\begin{equation}\label{eq:plt23-Omega-rho-xi-squared}
+  \Omega_m\rho\xi^2=\frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}.
+\end{equation}
+Substituting $\Lambda-q=\Lambda u$, $\Lambda-M=\Lambda(1-\ell)$, $\Lambda_m=\Lambda^N\widehat{\Lambda}_N$, $M_m=\Lambda^N\widehat M_N$, and $m=N+2$ turns these into
+\begin{equation}\label{eq:plt23-AB-formulas}
+  \mathcal A
+  =\frac{2\Lambda^3u^2}{(1-2\Lambda)^2}\,\widehat{\Lambda}_N,
+  \qquad
+  \mathcal B
+  =u(1-\ell)\sqrt{2\Lambda}\,\widehat M_N.
+\end{equation}
+
+Finally define
+\begin{equation}\label{eq:plt23-GXY-def}
+  G:=\frac{F_N}{u},
+  \qquad
+  X:=\frac{\mathcal A}{u},
+  \qquad
+  Y:=\frac{\mathcal B}{u}.
+\end{equation}
+Thus
+\begin{equation}\label{eq:plt23-GXY-ratios}
+  \frac{F_N}{\mathcal A}=\frac GX,
+  \qquad
+  \frac{F_N}{\mathcal B}=\frac GY.
+\end{equation}
+
+\subsection{Two elementary bounds for the defect}
+
+We only need two of the bounds used in the former proof.
+
+\begin{lemma}[Defect bounds]\label{lem:plt23-T-bounds}
+  For every admissible point and every odd $N\ge7$,
+  \begin{align}
+    T_N
+    &\le N(1+v)-\zeta\bigl(1-v^{N/2}\bigr),
+    \label{eq:plt23-T-bound-one}\\
+    T_N
+    &<N(1-\ell^{N+1}).
+    \label{eq:plt23-T-bound-two}
+  \end{align}
+\end{lemma}
+
+\begin{proof}
+  For the first inequality, Bernoulli gives $a^N=(1-u)^N\ge1-Nu$.
+  Also $\ell^2<v$ by \eqref{eq:plt23-zeta-v-consequences}, hence $\ell^N<v^{N/2}$ and $\zeta u=\ell^2<v$.
+  Therefore
+  \begin{align*}
+    T_N
+    &=N-\zeta(a^N-\ell^N)\\
+    &\le N-\zeta+N\zeta u+\zeta\ell^N\\
+    &\le N(1+v)-\zeta\bigl(1-v^{N/2}\bigr).
+  \end{align*}
+
+  For the second inequality, $D<3a^2$ gives
+  \[
+    \ell^2<2a^2-1<(2a-1)^2,
+  \]
+  so $\ell<2a-1$, equivalently
+  \begin{equation}\label{eq:plt23-a-minus-ell}
+    a-\ell>1-a=u.
+  \end{equation}
+  Convexity of $x\mapsto x^N$ on $[0,\infty)$ gives
+  \[
+    a^N-\ell^N
+    \ge N\ell^{N-1}(a-\ell)
+    >Nu\ell^{N-1}.
+  \]
+  Multiplying by $\zeta=\ell^2/u$ yields
+  \[
+    \zeta(a^N-\ell^N)>N\ell^{N+1},
+  \]
+  which is exactly \eqref{eq:plt23-T-bound-two}.
+\end{proof}
+
+\subsection{An elementary product bound}
+
+The next lemma replaces all of the polynomial positivity checks that appeared in the former small-$v$ analysis.
+
+\begin{lemma}[Uniform product bound]\label{lem:plt23-product}
+  Let $N\ge7$ be odd.
+  For every $0\le y\le1/\sqrt2$,
+  \begin{equation}\label{eq:plt23-product}
+    (1-y)(1-y+y^2)(1+y^2)^{N-2}
+    \ge
+    \frac{N}{N+2}\sqrt{1+\frac{y^2}{2}}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  We first prove the elementary logarithmic bound
+  \begin{equation}\label{eq:plt23-log-product}
+    \log\bigl((1-y)(1-y+y^2)\bigr)
+    \ge -2y-\frac{y^2}{8}
+    \qquad
+    \left(0\le y\le\frac1{\sqrt2}\right).
+  \end{equation}
+  Set
+  \[
+    h(y)
+    :=\log\bigl((1-y)(1-y+y^2)\bigr)+2y+\frac{y^2}{8}.
+  \]
+  A direct differentiation gives
+  \begin{equation}\label{eq:plt23-hprime}
+    h'(y)
+    =\frac{y\,\mathcal Q(y)}
+           {4(y-1)(y^2-y+1)},
+    \qquad
+    \mathcal Q(y):=y^3+6y^2-2y-1.
+  \end{equation}
+  On $(0,1)$ the denominator is negative.
+  The cubic $\mathcal Q$ has exactly one positive zero: its derivative $3y^2+12y-2$ has exactly one positive zero, so $\mathcal Q$ first decreases and then increases, while $\mathcal Q(0)=-1$ and $\mathcal Q(1/\sqrt2)>0$.
+  Consequently $h$ first increases and then decreases on $[0,1/\sqrt2]$, and its minimum occurs at an endpoint.
+  Clearly $h(0)=0$.
+  At the other endpoint, write $s=1/\sqrt2$, so that
+  \[
+    (1-s)(1-s+s^2)=2-\frac{5\sqrt2}{4}.
+  \]
+  To verify $h(s)>0$, it is enough to show
+  \[
+    \left(2-\frac{5\sqrt2}{4}\right)
+    e^{\sqrt2+1/16}>1.
+  \]
+  Since $e^x\ge\sum_{j=0}^5x^j/j!$ for $x\ge0$, direct expansion gives
+  \begin{align*}
+   &\left(2-\frac{5\sqrt2}{4}\right)
+    \sum_{j=0}^5\frac{(\sqrt2+1/16)^j}{j!}-1\\
+   &\hspace{2cm}
+    =\frac{-9799832+11426027\sqrt2}{503316480}>0.
+  \end{align*}
+  Thus \eqref{eq:plt23-log-product} holds.
+
+  Write $\mathcal H_N$ for the quotient of the two sides of \eqref{eq:plt23-product},
+  \begin{equation}\label{eq:plt23-Hcal-def}
+    \mathcal H_N(y)
+    :=\frac{N+2}{N}
+      \frac{(1-y)(1-y+y^2)(1+y^2)^{N-2}}
+           {\sqrt{1+y^2/2}},
+  \end{equation}
+  so that \eqref{eq:plt23-product} is the statement $\log\mathcal H_N(y)\ge0$.
+  Using $\log(1+t)\ge t-t^2/2$ and $\log(1+t)\le t$ for $t\ge0$, together with \eqref{eq:plt23-log-product},
+  \begin{equation}\label{eq:plt23-Psi-lower}
+    \log\mathcal H_N(y)
+    \ge
+    \Psi_N(y):=
+    \frac{2(N-1)}{N^2}
+    -2y
+    +\left(N-\frac{19}{8}\right)y^2
+    -\frac{N-2}{2}y^4.
+  \end{equation}
+
+  First suppose $0\le y\le1/4$.
+  Then $y^4\le y^2/16$, so
+  \begin{equation}\label{eq:plt23-Psi-small-y}
+    \Psi_N(y)
+    \ge
+    \frac{2(N-1)}{N^2}-2y+\alpha_Ny^2,
+    \qquad
+    \alpha_N:=\frac{31N-74}{32}.
+  \end{equation}
+  The quadratic on the right has global minimum $2(N-1)/N^2-1/\alpha_N$.
+  This is nonnegative because
+  \begin{align*}
+    \frac{2(N-1)}{N^2}\ge\frac1{\alpha_N}
+    &\iff
+    2(N-1)(31N-74)\ge32N^2\\
+    &\iff
+    15N^2-105N+74\ge0,
+  \end{align*}
+  and the last expression is positive at $N=7$ and increasing for $N\ge7$.
+
+  It remains to consider $1/4\le y\le1/\sqrt2$.
+  For odd $N\ge7$,
+  \begin{equation}\label{eq:plt23-Hcal-ratio}
+    \frac{\mathcal H_{N+2}(y)}{\mathcal H_N(y)}
+    =\frac{N(N+4)}{(N+2)^2}(1+y^2)^2.
+  \end{equation}
+  When $y\ge1/4$, the right side is at least
+  \[
+    \frac{N(N+4)}{(N+2)^2}\left(\frac{17}{16}\right)^2>1,
+  \]
+  because
+  \[
+    289N(N+4)-256(N+2)^2
+    =33N^2+132N-1024>0
+    \qquad (N\ge7).
+  \]
+  Thus it is enough to prove the claim for $N=7$, where \eqref{eq:plt23-Psi-lower} reads
+  \begin{equation}\label{eq:plt23-Psi-seven}
+    \Psi_7(y)=\frac{12}{49}-2y+\frac{37}{8}y^2-\frac52y^4.
+  \end{equation}
+  Now
+  \[
+    \Psi_7'(y)=-2+\frac{37}{4}y-10y^3,
+    \qquad
+    \Psi_7''(y)=\frac{37}{4}-30y^2.
+  \]
+  Hence $\Psi_7'$ first increases and then decreases on our interval, so its minimum there occurs at an endpoint.
+  We have
+  \[
+    \Psi_7'\left(\frac14\right)=\frac5{32}>0,
+    \qquad
+    \Psi_7'\left(\frac1{\sqrt2}\right)
+    =-2+\frac{17}{4\sqrt2}>0.
+  \]
+  Therefore $\Psi_7$ is increasing on $[1/4,1/\sqrt2]$, and
+  \[
+    \Psi_7(y)\ge\Psi_7\left(\frac14\right)=\frac{607}{25088}>0.
+  \]
+  This completes the proof.
+\end{proof}
+
+\subsection{The range \texorpdfstring{$0<v\le1/2$}{0<v<=1/2}}
+
+We now prove two simultaneous bounds.
+The first controls the quadratic scale $\mathcal A$, while the second keeps both $\mathcal A$ and $\mathcal B$ at once.
+
+\begin{proposition}[The low-$v$ bounds]\label{prop:plt23-low-v}
+  Suppose $0<v\le1/2$.
+  Then
+  \begin{align}
+    2F_N&\le\mathcal A,
+    \label{eq:plt23-low-v-A}\\
+    \frac{F_N}{\mathcal A}+2\frac{F_N}{\mathcal B}&\le2.
+    \label{eq:plt23-low-v-both}
+  \end{align}
+\end{proposition}
+
+\begin{proof}
+  If $F_N\le0$, both inequalities are immediate.
+  Assume \eqref{eq:plt23-F-positive}.
+  Put
+  \begin{equation}\label{eq:plt23-z-c-def}
+    z:=\frac\zeta\sigma,
+    \qquad
+    c:=1-v^{N/2}.
+  \end{equation}
+  Since $\zeta>3/4$ and $\sigma\le3/2$,
+  \begin{equation}\label{eq:plt23-z-half}
+    z>\frac12.
+  \end{equation}
+  Because $\zeta=\sigma z$ and $1+v=\sigma$, \eqref{eq:plt23-zeta-v-inverse} becomes
+  \begin{equation}\label{eq:plt23-low-v-uell}
+    u=\frac{v}{\sigma(1+z)},
+    \qquad
+    \ell^2=\frac{vz}{1+z}.
+  \end{equation}
+  By \eqref{eq:plt23-F-T} and \eqref{eq:plt23-T-bound-one},
+  \begin{equation}\label{eq:plt23-G-low-v}
+    G\le T_N\le\sigma P,
+    \qquad
+    P:=N-cz.
+  \end{equation}
+  Since $F_N>0$, the left side is positive, so $P>0$.
+
+  We first bound $X$ from below.
+  From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, and \eqref{eq:plt23-low-v-uell},
+  \begin{align}
+    X
+    &=\frac{2\Lambda^3u}{(1-2\Lambda)^2}\,\widehat{\Lambda}_N\notag\\
+    &=\frac{2\sigma^2(1+z)}
+            {\Delta\,v\,(v+\sigma z)^2}\,\widehat{\Lambda}_N.
+    \label{eq:plt23-X-low-v}
+  \end{align}
+  Indeed,
+  \[
+    v^2+\ell^2
+    =v\left(v+\frac{z}{1+z}\right)
+    =\frac{v(v+\sigma z)}{1+z}.
+  \]
+  By \eqref{eq:plt23-KA-def} and \eqref{eq:plt23-KA-sum}, $\widehat{\Lambda}_N\ge(N+2)vS_N$.
+  Using also \eqref{eq:plt23-Delta-upper-sigma},
+  \begin{equation}\label{eq:plt23-X-low-v-1}
+    X
+    >\frac{2\sigma(N+2)S_N(1+z)}
+            {(v+2)(v+\sigma z)^2}.
+  \end{equation}
+  We claim
+  \begin{equation}\label{eq:plt23-low-v-denominator}
+    (v+2)(v+\sigma z)^2
+    \le2\sigma^3z(1+z).
+  \end{equation}
+  The difference between the right and left sides is
+  \[
+    v\sigma^2z^2+2\sigma z-v^2(v+2),
+  \]
+  which is positive because $z\ge1/2$, hence $2\sigma z\ge1$, while $v^2(v+2)\le5/8$.
+  Thus \eqref{eq:plt23-X-low-v-1} implies
+  \begin{equation}\label{eq:plt23-X-low-v-2}
+    X\ge\frac{(N+2)S_N}{\sigma^2z}.
+  \end{equation}
+  Combining \eqref{eq:plt23-G-low-v}, \eqref{eq:plt23-X-low-v-2}, and \eqref{eq:plt23-SN-AMGM}, with $k=(N-1)/2\ge3$, gives
+  \begin{equation}\label{eq:plt23-G-over-X}
+    \frac GX
+    \le
+    \frac{\sigma^3zP}{(N+2)S_N}
+    \le
+    \frac{2\sigma^{3-k}zP}{(N+1)(N+2)}
+    \le
+    \frac{2zP}{(N+1)(N+2)}.
+  \end{equation}
+  Since $zP=z(N-cz)\le N^2/(4c)$,
+  \begin{equation}\label{eq:plt23-G-over-X-c}
+    \frac GX
+    \le\frac{N^2}{2c(N+1)(N+2)}.
+  \end{equation}
+  Now $v\le1/2$ gives $c\ge1-2^{-N/2}$.
+  For $N\ge7$, $2^{N/2}\ge N$, and
+  \[
+    \frac1N\le\frac{3N+2}{(N+1)(N+2)}.
+  \]
+  Hence
+  \[
+    c\ge
+    1-\frac{3N+2}{(N+1)(N+2)}
+    =\frac{N^2}{(N+1)(N+2)}.
+  \]
+  Substitution into \eqref{eq:plt23-G-over-X-c} gives $G/X\le1/2$, which is \eqref{eq:plt23-low-v-A}.
+
+  We next retain both scales.
+  From \eqref{eq:plt23-G-over-X} and $P\le N$,
+  \begin{equation}\label{eq:plt23-G-over-X-z}
+    \frac GX\le\frac{2z}{N+2}.
+  \end{equation}
+  For $Y$, \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, and the first term of the sum in \eqref{eq:plt23-KL-sum} give
+  \begin{align}
+    Y
+    &=(1-\ell)\sqrt{2\Lambda}\,\widehat M_N\notag\\
+    &\ge
+    (N+2)(1-\ell)(\sigma-\ell)\sigma^{N-1}
+    \sqrt{\frac2{v+2}},
+    \label{eq:plt23-Y-low-v}
+  \end{align}
+  where we used \eqref{eq:plt23-Lambda-lower}.
+  Consequently,
+  \begin{equation}\label{eq:plt23-2G-over-Y}
+    \frac{2G}{Y}
+    \le
+    \frac{2P}{N+2}
+    \frac{\sqrt{(v+2)/2}}
+         {(1-\ell)(\sigma-\ell)\sigma^{N-2}}.
+  \end{equation}
+  Put $y=\sqrt v$, so $0<y\le1/\sqrt2$.
+  Since $\ell\le y$ and $x\mapsto(1-x)(\sigma-x)$ is decreasing on $[0,y]$, \Cref{lem:plt23-product} gives
+  \begin{align}
+   (1-\ell)(\sigma-\ell)\sigma^{N-2}
+   &\ge
+   (1-y)(1-y+y^2)(1+y^2)^{N-2}\notag\\
+   &\ge
+   \frac{N}{N+2}\sqrt{1+\frac{y^2}{2}}
+   =\frac{N}{N+2}\sqrt{\frac{v+2}{2}}.
+   \label{eq:plt23-product-applied}
+  \end{align}
+  Also
+  \begin{equation}\label{eq:plt23-c-lower}
+    c=1-v^{N/2}\ge\frac{N}{N+2}.
+  \end{equation}
+  Indeed, $v^{N/2}\le2^{-N/2}\le2/(N+2)$ for $N\ge7$.
+  Therefore
+  \begin{equation}\label{eq:plt23-P-bound}
+    \frac PN=1-\frac{cz}{N}
+    \le1-\frac{z}{N+2}
+    =\frac{N+2-z}{N+2}.
+  \end{equation}
+  Substitution of \eqref{eq:plt23-product-applied} and \eqref{eq:plt23-P-bound} into \eqref{eq:plt23-2G-over-Y} gives
+  \begin{equation}\label{eq:plt23-2G-over-Y-final}
+    \frac{2G}{Y}
+    \le\frac{2(N+2-z)}{N+2}.
+  \end{equation}
+  Adding this to \eqref{eq:plt23-G-over-X-z} proves
+  \[
+    \frac GX+2\frac GY\le2,
+  \]
+  which is \eqref{eq:plt23-low-v-both} by \eqref{eq:plt23-GXY-ratios}.
+\end{proof}
+
+\subsection{The range \texorpdfstring{$1/2\le v<1$}{1/2<=v<1}}
+
+The second half is even more direct.
+Here the admissibility condition $q>1/3$ forces $\ell$ to be sufficiently close to $\sqrt v$; this is exactly what compensates for the apparently weak factors in $\mathcal A$ and $\mathcal B$.
+
+Put
+\begin{equation}\label{eq:plt23-tau-def}
+  \tau:=\frac{\ell^2}{v},
+  \qquad 0<\tau<1.
+\end{equation}
+Since $\ell^2=v\tau$, the inequality \eqref{eq:plt23-Delta-upper-three} gives
+\[
+  (1+v)^2+1+v\tau<3(1+v\tau),
+\]
+so
+\begin{equation}\label{eq:plt23-tau-lower}
+  \tau>\frac{v^2+2v-1}{2v}\ge v^2.
+\end{equation}
+The last inequality follows from
+\[
+  v^2+2v-1-2v^3
+  =(1-v)(1+v)(2v-1)\ge0.
+\]
+Hence
+\begin{equation}\label{eq:plt23-vtau-square}
+  (v+\tau)^2\le\tau(1+v)^2=\tau\sigma^2,
+\end{equation}
+for
+\[
+  \tau\sigma^2-(v+\tau)^2
+  =(1-\tau)(\tau-v^2)\ge0.
+\]
+
+\begin{proposition}[The high-$v$ quadratic bound]\label{prop:plt23-high-v-A}
+  Suppose $1/2\le v<1$.
+  Then
+  \begin{equation}\label{eq:plt23-high-v-A}
+    F_N\le\mathcal A.
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  Again the claim is immediate if $F_N\le0$, so assume \eqref{eq:plt23-F-positive}.
+  From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, $u=v(1-\tau)/\sigma$, and \eqref{eq:plt23-KA-def}--\eqref{eq:plt23-KA-sum},
+  \begin{equation}\label{eq:plt23-X-high-v}
+    X
+    =\frac{2\sigma^2(1-\tau)}{\Delta(v+\tau)^2}
+     \left(
+       \frac{2\ell^N}{v}+(N+2)S_N
+     \right).
+  \end{equation}
+  Using \eqref{eq:plt23-Delta-upper-sigma} and \eqref{eq:plt23-vtau-square}, and dropping the positive first term in parentheses,
+  \begin{equation}\label{eq:plt23-X-high-v-lower}
+    X>
+    \frac{2(N+2)S_N(1-\tau)}{\tau\sigma(v+2)}.
+  \end{equation}
+
+  The positivity of $F_N$ supplies a useful lower bound on $1-\tau$.
+  From \eqref{eq:plt23-F-formula},
+  \[
+    (1+\ell^2)a^N<1+\ell^{N+2},
+  \]
+  so
+  \begin{equation}\label{eq:plt23-aN-upper}
+    a^N
+    <1-\frac{\ell^2}{1+\ell^2}(1-\ell^N).
+  \end{equation}
+  On the other hand, Bernoulli gives $a^N=(1-u)^N\ge1-Nu$.
+  Comparing the two inequalities, and substituting $u=v(1-\tau)/\sigma$ and $\ell^2=v\tau$, yields
+  \begin{equation}\label{eq:plt23-one-minus-tau}
+    N(1+\ell^2)(1-\tau)
+    >\tau\sigma(1-\ell^N).
+  \end{equation}
+  Therefore \eqref{eq:plt23-X-high-v-lower} gives
+  \begin{equation}\label{eq:plt23-X-high-v-final}
+    X>
+    \frac{2(N+2)S_N}{N(1+\ell^2)(v+2)}
+    (1-\ell^N).
+  \end{equation}
+
+  By \eqref{eq:plt23-F-T} and \eqref{eq:plt23-T-bound-two},
+  \begin{equation}\label{eq:plt23-G-high-v}
+    G<T_N<N(1-\ell^{N+1}).
+  \end{equation}
+  For $0\le x<1$,
+  \begin{equation}\label{eq:plt23-ratio-powers}
+    \frac{1-x^N}{1-x^{N+1}}\ge\frac{N}{N+1}.
+  \end{equation}
+  Indeed, after clearing denominators this is $1-(N+1)x^N+Nx^{N+1}\ge0$, whose derivative is $-N(N+1)x^{N-1}(1-x)\le0$ and whose value at $x=1$ is zero.
+  Combining \eqref{eq:plt23-X-high-v-final}, \eqref{eq:plt23-SN-AMGM}, and \eqref{eq:plt23-ratio-powers}, and using $1+\ell^2\le\sigma$, it is enough for $X\ge G$ that
+  \begin{equation}\label{eq:plt23-high-v-condition}
+    \sigma^{(N-3)/2}
+    \ge\frac{N(v+2)}{N+2}.
+  \end{equation}
+  For $N\ge9$, the left side is at least $(3/2)^3=27/8>3$, whereas the right side is less than $3$.
+  For $N=7$, \eqref{eq:plt23-high-v-condition} is
+  \[
+    (1+v)^2\ge\frac{7(v+2)}9.
+  \]
+  It holds at $v=1/2$, and the difference has derivative $2(1+v)-7/9>0$ thereafter.
+  Thus $G\le X$, which is exactly \eqref{eq:plt23-high-v-A}.
+\end{proof}
+
+We next prove the bound for $\mathcal B$.
+The only auxiliary fact is a simple comparison between a geometric sum and a power of $1+x^2$.
+
+\begin{lemma}[A geometric-sum bound]\label{lem:plt23-geometric-sum}
+  Let $N\ge7$ be odd and $1/\sqrt2\le x<1$.
+  Then
+  \begin{equation}\label{eq:plt23-geometric-sum}
+    \frac{N+2}{2N}
+    \sqrt{\frac2{2+x^2}}
+    (1-x+x^2)(1+x^2)^{N-1}
+    \ge
+    \sum_{j=0}^N x^j.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Write $N=2k+1$, so $k\ge3$, and put
+  \[
+    y:=x^2,
+    \qquad
+    C:=(1+y)^k.
+  \]
+  Then
+  \begin{equation}\label{eq:plt23-geometric-sum-bound}
+    \sum_{j=0}^N x^j
+    =(1+x)\sum_{j=0}^k y^j
+    \le (1+x)\bigl(C-(k-1)y\bigr).
+  \end{equation}
+  Indeed, $(1+y)^k-(k-1)y=1+y+\sum_{j=2}^k\binom{k}{j}y^j$, and every remaining binomial coefficient is at least one.
+
+  Suppose first $k\ge4$, equivalently $N\ge9$.
+  Since $x<1$,
+  \[
+    \sqrt{\frac2{2+x^2}}>\frac45,
+    \qquad
+    1-x+x^2\ge\frac34,
+    \qquad
+    \frac{N+2}{2N}>\frac12.
+  \]
+  Hence the left side of \eqref{eq:plt23-geometric-sum} is greater than
+  \begin{equation}\label{eq:plt23-geometric-lhs}
+    \frac3{10}C^2.
+  \end{equation}
+  On the other hand, since $1+x\le2$ and $y\ge1/2$,
+  \begin{equation}\label{eq:plt23-geometric-rhs}
+    (1+x)\bigl(C-(k-1)y\bigr)
+    \le2C-(k-1).
+  \end{equation}
+  It remains to show
+  \begin{equation}\label{eq:plt23-C-quadratic}
+    \frac3{10}C^2\ge2C-(k-1).
+  \end{equation}
+  Here $C\ge(3/2)^k$.
+  The left side minus the right side has derivative $3C/5-2$ in $C$, which is positive throughout this range because $C\ge(3/2)^4>10/3$; it is therefore enough to check \eqref{eq:plt23-C-quadratic} at $C=(3/2)^k$.
+  At $k=4$ and $C=(3/2)^4$, the difference is
+  \[
+    \frac{1443}{2560}>0.
+  \]
+  Moreover, if $C=(3/2)^k$, the change in this difference under $k\mapsto k+1$ is
+  \[
+    \frac38C^2-C+1>0.
+  \]
+  Thus \eqref{eq:plt23-C-quadratic} holds for all $k\ge4$.
+
+  It remains to take $k=3$, that is $N=7$.
+  Define
+  \[
+    f(x):=\sqrt{\frac2{2+x^2}}(1-x+x^2).
+  \]
+  A direct differentiation gives
+  \[
+    f'(x)
+    =\frac{\sqrt2\,(x^3+3x-2)}{(x^2+2)^{3/2}}>0
+    \qquad\left(x\ge\frac1{\sqrt2}\right).
+  \]
+  At the left endpoint,
+  \[
+    f\left(\frac1{\sqrt2}\right)^2-\frac{49}{100}
+    =\frac{171}{100}-\frac{6\sqrt2}{5}>0,
+  \]
+  because $171^2>2\cdot120^2$.
+  Hence $f(x)>7/10$ on the whole interval.
+  Therefore the left side of \eqref{eq:plt23-geometric-sum} is at least
+  \[
+    \frac9{14}\cdot\frac7{10}\,C^2
+    =\frac9{20}C^2.
+  \]
+  By \eqref{eq:plt23-geometric-sum-bound}, the right side is at most $2(C-1)$.
+  The difference $\frac9{20}C^2-2(C-1)$ has derivative $9C/10-2$, which is positive since $C\ge(3/2)^3=27/8$, and at $C=27/8$ the difference is
+  \[
+    \frac{481}{1280}>0.
+  \]
+  Hence the claim holds also for $N=7$.
+\end{proof}
+
+\begin{proposition}[The high-$v$ linear bound]\label{prop:plt23-high-v-B}
+  Suppose $1/2\le v<1$.
+  Then
+  \begin{equation}\label{eq:plt23-high-v-B}
+    2F_N\le\mathcal B.
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  The claim is trivial if $F_N\le0$, so assume $F_N>0$.
+  From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, \eqref{eq:plt23-KL-sum}, and \eqref{eq:plt23-Lambda-lower},
+  \begin{equation}\label{eq:plt23-Y-high-v}
+    Y\ge
+    (N+2)(1-\ell)(\sigma-\ell)\sigma^{N-1}
+    \sqrt{\frac2{v+2}}.
+  \end{equation}
+  Together with \eqref{eq:plt23-G-high-v}, it is enough to prove
+  \begin{equation}\label{eq:plt23-high-v-B-sufficient}
+    \frac{N+2}{2N}
+    \sqrt{\frac2{v+2}}
+    (\sigma-\ell)\sigma^{N-1}
+    \ge
+    \sum_{j=0}^N\ell^j,
+  \end{equation}
+  where we cancelled the positive factor $1-\ell$ using $1-\ell^{N+1}=(1-\ell)\sum_{j=0}^N\ell^j$.
+
+  For fixed $v$, the left side of \eqref{eq:plt23-high-v-B-sufficient} decreases with $\ell$, while the right side increases.
+  Since $\ell^2<v$, it is enough to put
+  \[
+    x:=\sqrt v,
+    \qquad
+    \ell=x,
+    \qquad
+    \sigma=1+x^2.
+  \]
+  Then \eqref{eq:plt23-high-v-B-sufficient} becomes exactly \eqref{eq:plt23-geometric-sum}.
+  This proves \eqref{eq:plt23-high-v-B}.
+\end{proof}
+
+\subsection{Completion of the scalar inequality}
+
+We can now finish without any further subdivision of the admissible region.
+
+\begin{proposition}[The scalar target]\label{prop:plt23-scalar}
+  For every admissible pair $(q,\Lambda)$ in the intermediate-density region $1/3<q<1/2$, and every odd $m\ge9$, the scalar target \eqref{eq:plt23-scalar-target} holds.
+\end{proposition}
+
+\begin{proof}
+  If $F_N=R_m/\Lambda^m\le0$, the claim is immediate.
+  Assume $F_N>0$, and recall $\theta=\mathcal A/\mathcal B$.
+
+  Suppose first $0<v\le1/2$.
+  \Cref{prop:plt23-low-v} gives
+  \begin{equation}\label{eq:plt23-low-v-min}
+    \frac{F_N}{\mathcal B}
+    \le
+    \min\left\{
+      \frac\theta2,
+      \frac{2\theta}{1+2\theta}
+    \right\}.
+  \end{equation}
+  If $\theta\le1/2$, the first term on the right is at most $\theta=d(\theta)$.
+  If $\theta\ge1/2$, the second term is at most $d(\theta)$, because
+  \begin{equation}\label{eq:plt23-dtheta-compare}
+    1-\frac1{4\theta}-\frac{2\theta}{1+2\theta}
+    =\frac{2\theta-1}{4\theta(1+2\theta)}\ge0.
+  \end{equation}
+  Thus in all cases
+  \begin{equation}\label{eq:plt23-F-Bd}
+    F_N\le\mathcal B\,d(\theta).
+  \end{equation}
+
+  Now suppose $1/2\le v<1$.
+  \Cref{prop:plt23-high-v-A,prop:plt23-high-v-B} give
+  \begin{equation}\label{eq:plt23-high-v-min}
+    \frac{F_N}{\mathcal B}
+    \le\min\{\theta,1/2\}.
+  \end{equation}
+  If $\theta\le1/2$, the right side is at most $\theta=d(\theta)$.
+  If $\theta\ge1/2$, it is at most $1/2\le d(\theta)$.
+  Hence \eqref{eq:plt23-F-Bd} again holds.
+
+  Finally, \eqref{eq:plt23-master-dual-lower} gives
+  \[
+    F_N
+    \le\mathcal B\,d(\theta)
+    \le\frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}.
+  \]
+  Multiplying by $\Lambda^m$ proves \eqref{eq:plt23-scalar-target}.
+\end{proof}
+
+\subsection{Completion of the intermediate-density region}
+
+We state explicitly how the preceding scalar argument reconnects to the graphon proof.
+Assume
+\[
+  \frac12<p<\frac23,
+  \qquad
+  \frac13<q<\frac12,
+\]
+and let $m\ge9$ be odd.
+If the compression $A$ has no eigenvalue above $q$, \Cref{lem:plt23-eigenvalues-above-q} already proves the desired odd-cycle inequality.
+Otherwise there is a unique frontier eigenvalue $\Lambda$.
+\Cref{prop:plt23-splitting-lower-bound} gives
+\[
+  t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
+  \ge -R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2,
+\]
+while \Cref{thm:plt23-huber-elim} gives
+\[
+  \Lambda_m\gamma^2+M_m\norm{g_s}^2
+  \ge\Omega_m\psi(\xi,\rho).
+\]
+\Cref{prop:plt23-scalar} proves $R_m\le\Omega_m\psi(\xi,\rho)$.
+Therefore
+\[
+  t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+This completes the intermediate-density proof for every odd $m\ge9$.
+
+
+\section{Assembly of the complete proof}\label{sec:assembly}
+
+\begin{proof}[Proof of \Cref{thm:main}]
+  Put $q=1-p$.
+
+  If $p\le1/2$, the right side of \eqref{eq:main-goal} is nonpositive, so the claim follows from $t(C_m,W)\ge0$.
+  Assume henceforth $p>1/2$.
+
+  The cases $m=3,5,7$ follow at every density from \Cref{prop:C3,prop:C5,prop:C7}.
+  Let $m\ge9$ be odd.
+
+  If $p\ge2/3$, or equivalently $q\le1/3$, the result is \Cref{thm:pge23-main}.
+  It remains to consider $1/2<p<2/3$, equivalently $1/3<q<1/2$.
+  By \Cref{lem:step-reduction}, it is enough to treat a step graphon.
+  If the compression $A$ has no eigenvalue above $q$, \Cref{lem:plt23-eigenvalues-above-q} proves the theorem.
+  Otherwise there is a unique frontier eigenvalue $\Lambda$, and \Cref{prop:plt23-splitting-lower-bound,thm:plt23-huber-elim} reduce the problem to the scalar target \eqref{eq:plt23-scalar-target}, which is proved in \Cref{prop:plt23-scalar}.
+  The step-graphon approximation returns the result to arbitrary graphons.
+\end{proof}
+
+\begin{remark}[What is finite and what is uniform]
+  The dense-region argument is uniform in every odd $m\ge3$.
+  The intermediate-region argument is uniform in every odd $m\ge9$, the only division of the parameter region being $v\le1/2$ against $v\ge1/2$.
+  There is no length-by-length computation for $m=11,13$, and no adaptive interval subdivision anywhere in the proof.
+\end{remark}
+
+\begin{remark}[Equality and stability]
+  The manuscript is organized to prove the inequality rather than classify all equality cases.
+  A stability analysis would require tracking near-equality in the cycle-to-path deletion, the gamma moment inequality, the Hilbert--Schmidt bound, the variance lower bound, and the active Huber witness.
+  The reductions here identify those loci but do not pursue the classification.
+\end{remark}
+
+\section{Transferable mechanisms and the orthogonal-polynomial viewpoint}
+\label{sec:transferable}
+
+This section is not needed for logical completeness.
+Its purpose is to extract methods that may be useful in other spectral extremal problems.
+
+\subsection{One-step stripping: the Schur complement as a Jacobi recursion}
+
+Let $K$ be a finite-dimensional self-adjoint operator, let $e$ be a unit vector, and decompose
+\[
+  K=\begin{pmatrix}a&h^*\\h&B\end{pmatrix}
+  \quad\text{on}\quad \R e\oplus e^\perp.
+\]
+The same block inversion used in \eqref{eq:pge23-path-gf} gives
+\begin{equation}\label{eq:general-stripping}
+  M_{K,e}(z):=\ip e{(I-zK)^{-1}e}
+  =\frac{1}{1-az-z^2\ip h{(I-zB)^{-1}h}}.
+\end{equation}
+If $h\ne0$, let $\nu$ be the probability spectral measure of $B$ at $h/\norm h$.
+Then
+\begin{equation}\label{eq:general-stripping-normalized}
+  M_{K,e}(z)^{-1}
+  =1-az-\norm h^2z^2M_\nu(z).
+\end{equation}
+This is exactly the first step of the Jacobi continued fraction.
+Iterating on the cyclic Krylov space generated by $e$ produces a tridiagonal Jacobi matrix and its full J-fraction.
+In the centered, variance-one normalization, \eqref{eq:general-stripping-normalized} becomes
+\[
+  1-M_\mu(z)^{-1}=z^2M_\nu(z),
+\]
+the classical once-stripped moment relation emphasized by Anshelevich~\cite{Anshelevich2009}; coefficient stripping for scalar and matrix Jacobi operators is surveyed by Damanik--Pushnitski--Simon \cite{DamanikPushnitskiSimon2008}.
+
+In our graphon proof, $e=\one$, $a=q$, $h=g$, and $B=A$.
+Thus the complement degree fluctuation $g$ is the first off-diagonal Jacobi coefficient, while $A$ is the once-stripped tail.
+The proof does not need to tridiagonalize the tail; it retains its spectral measure $\mu$ directly.
+This is useful in infinite-dimensional problems where the first Jacobi step is rigid but the tail is not.
+
+\subsection{First returns, irreducible excursions, and logarithmic cycles}
+
+Equation \eqref{eq:pge23-path-gf} has the first-return form
+\[
+  M(z)=\frac{1}{1-H(z)},
+  \qquad H(z)=qz+z^2R_+(z).
+\]
+Combinatorially, a closed walk from the distinguished state is a sequence of irreducible returns: either a level step of weight $q$, or a departure into the orthogonal tail followed by a return, encoded by $z^2R_+$.
+This is the same structural decomposition that underlies Flajolet's continued fraction for weighted Motzkin paths~\cite{Flajolet1980} and Lehner's use of Jacobi matrices, lattice paths, and irreducible paths in cumulant expansions~\cite{Lehner2003}.
+
+The logarithms $-\log(1-Y_\pm)=\sum_{r\ge1}Y_\pm^r/r$ perform a related but cyclic assembly: $r$ excursions are concatenated with the cyclic weight $1/r$.
+The two-sided identity then applies a parity projection: for odd coefficients, the stripped-tail terms from $A$ and $-A$ cancel.
+A general design principle suggested by this proof is:
+\begin{quote}
+  Separate a distinguished state, encode returns by a Schur complement, and combine a model with a signed or complemented companion so that the uncontrolled tail moments cancel in the desired parity class.
+\end{quote}
+This ``strip, assemble, cancel'' pattern is broader than graphons.
+
+\subsection{Dirichlet diagonalization as probabilistic polarization}
+
+The calculation in \Cref{lem:pge23-dirichlet} is an instance of the following general lemma.
+
+\begin{proposition}[Dirichlet polarization]\label{prop:general-dirichlet}
+  Fix $r\ge1$.
+  Suppose
+  \[
+    F(\lambda_1,\ldots,\lambda_r)
+    =\sum_{j=0}^d c_jh_j(\lambda_1,\ldots,\lambda_r),
+  \]
+  and define
+  \[
+    \widetilde F(\ell)
+    =\sum_{j=0}^d c_j\binom{j+r-1}{r-1}\ell^j.
+  \]
+  If $\Theta\sim\operatorname{Dirichlet}(1,\ldots,1)$, then
+  \[
+    F(\lambda_1,\ldots,\lambda_r)
+    =\E\widetilde F(\Theta\cdot\lambda).
+  \]
+  Consequently, for every interval $I\subset\R$,
+  \[
+    \min_{\lambda\in I^r}F(\lambda)
+    =\min_{\ell\in I}\widetilde F(\ell).
+  \]
+\end{proposition}
+
+\begin{proof}
+  This is exactly \eqref{eq:pge23-dirichlet-moment}, followed by linearity.
+  The minimum statement follows because $\Theta\cdot\lambda\in I$, and the reverse inequality is obtained on the diagonal.
+\end{proof}
+
+This lemma may be viewed as a positive, probabilistic version of polarization: the complete homogeneous basis is precisely the basis for which restriction to the diagonal can be inverted by averaging over a simplex.
+The law of $\Theta\cdot\lambda$ is a Dirichlet average and, in one dimension, is closely related to B-splines and the Hermite--Genocchi formula for divided differences; see de~Boor~\cite{deBoor2005}.
+The key extremal consequence is unusually strong: positivity on a whole spectral cube is equivalent to positivity on the diagonal whenever the polynomial has this basis structure.
+
+\subsection{Beta--gamma algebra and Laplace positivity transfer}
+
+The passage from \eqref{eq:pge23-beta-integral} to \eqref{eq:pge23-laplace-gamma} is an instance of a general positive transform.
+For suitable $f$, integers $m>r\ge1$, and $\ell>0$,
+\begin{equation}\label{eq:general-laplace-transfer}
+  \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}f(s)\dd s
+  =\frac{\Gamma(r)}{\Gamma(m)}
+  \int_0^\infty t^{m-r-1}e^{-\ell t}
+  \E f(Y/t)\dd t,
+  \qquad Y\sim\GammaLaw(r,1).
+\end{equation}
+The proof is just the Laplace representation of $(\ell+s)^{-m}$, followed by $y=ts$.
+Its value is conceptual: a parameter-dependent rational kernel becomes a positive mixture of expectations under a fixed probability family.
+Therefore any pointwise-in-$t$ expectation inequality for $f(Y/t)$ transfers automatically to every $\ell$.
+
+In the present proof, the repeated variables in the complete homogeneous polynomials first produce a beta distribution; the projective coordinate $s=\ell(1-x)/x$ turns the beta density into a beta-prime kernel; and the Laplace transform reveals a gamma variable.
+This beta--gamma route is a useful search heuristic whenever repeated spectral parameters and rational powers occur together.
+
+\subsection{The gamma Stein identity and a hidden Laguerre equation}
+
+Equation \eqref{eq:pge23-gamma-Stein} is the standard gamma Stein identity; the operator
+\[
+  \mathcal A_rf(y)=yf'(y)+(r-y)f(y)
+\]
+characterizes the $\GammaLaw(r,1)$ law and is widely used in Stein's method; see, for example, Gaunt~\cite{Gaunt2016}.
+Here it is used not for distributional approximation but as a ladder relation for shifted moments.
+
+There is an exact orthogonal-polynomial shadow.
+For an integer $k\ge0$, put
+\[
+  F_k(b)=\E(Y-b)^k.
+\]
+Expansion of the moment, or the Rodrigues formula, gives
+\begin{equation}\label{eq:Laguerre-identity}
+  F_k(b)=(-1)^k k!\,L_k^{(-r-k)}(-b),
+\end{equation}
+where $L_k^{(\alpha)}$ is the generalized Laguerre polynomial.
+For $k=2j$, the Laguerre differential equation is exactly \eqref{eq:pge23-gamma-ODE}.
+The parameter $-r-2j$ lies outside the classical orthogonality range $\alpha>-1$, so we are using the algebraic differential and ladder structure of Laguerre polynomials, not a positive Laguerre orthogonality measure.
+Standard background is in Szeg\H{o} \cite{Szego1975}.
+
+The function $G$ in \eqref{eq:pge23-gamma-G} is a weighted amplitude whose critical points factor explicitly.
+Proving that its left maximum dominates its right maximum and then using \eqref{eq:pge23-gamma-ibp-max} is analogous in spirit to Sonin--Sturm arguments for comparing successive extrema of solutions to second-order equations.
+The important transferable move is: construct a first-order multiplier so that the desired linear combination of a polynomial solution and its derivative becomes an integral of a factored derivative; positivity is then reduced to a global maximum comparison.
+
+This explains the connection with the orthogonal-polynomial techniques suggested by the two cited papers.
+Anshelevich's once-stripped moment identity is literally our first Schur step, while Lehner's Jacobi-matrix and Motzkin-path picture explains the return decomposition of the moment series.
+The later gamma lemma lands in a different classical family---Laguerre---but uses the same general philosophy: a recurrence or differential equation is more effective than coefficientwise estimation of high moments.
+
+\subsection{The one-dangerous-mode principle and Huber duality}
+
+The intermediate region exhibits a complementary mechanism.
+The square bound says that two eigenvalues above $q$ would cost more than $pq$ when $q>1/3$, so there is at most one dangerous mode.
+Entrywise constraints on the corresponding eigenfunction force a choice: either $g$ couples substantially to that mode, or a quantitatively controlled part of $g$ must lie in the safe subspace.
+Retaining both alternatives leads to
+\[
+  \rho v^2+(\xi-v+v^2)_+,
+\]
+and minimization over the shape variable $v$ produces the Huber envelope $\psi(\xi,\rho)$.
+Its dual variable $\lambda\in[0,1]$ is an active-set multiplier.
+The interior optimum $\lambda=2\rho\xi$ and the saturated value $\lambda=1$ are the quadratic and linear regimes, and keeping both at once removes the need to split the parameter region according to which of them is active.
+
+This suggests a general recipe for constrained spectral inequalities:
+\begin{enumerate}[leftmargin=2.2em]
+  \item use a trace or energy bound to isolate a finite set of dangerous modes;
+  \item derive geometric constraints that force compensation either in direct coupling or in the safe complement;
+  \item keep the channels simultaneously rather than estimating them separately;
+  \item eliminate the shape by convex duality, and choose dual witnesses adapted to small and large activation.
+\end{enumerate}
+The method should extend to several dangerous modes, where the scalar Huber envelope is replaced by a low-dimensional convex program.
+
+\subsection{Why \texorpdfstring{$q=1/3$}{q=1/3} is the natural interface}
+
+The same threshold appears for independent structural reasons.
+
+On the dense side, centering at $1/2$ gives $\delta=1/2-q$.
+The gamma moment lemma pays for the odd term in \eqref{eq:pge23-rho-centered} precisely when
+\[
+  2\delta\ge\frac{1}{3},
+  \qquad\text{i.e.}\qquad q\le\frac{1}{3}.
+\]
+On the intermediate side, two eigenvalues larger than $q$ would consume more than $2q^2$ of the bound \eqref{eq:plt23-HS-bound}, and uniqueness is guaranteed precisely when
+\[
+  2q^2>pq=q(1-q),
+  \qquad\text{i.e.}\qquad q>\frac{1}{3}.
+\]
+Thus the two mechanisms meet without overlap or gap.
+This matching strongly suggests that $q=1/3$ is an intrinsic phase boundary of the proof problem, not an artifact of constants chosen later in the argument.
+
+\begin{thebibliography}{99}
+
+  \bibitem{Anshelevich2009} M.~Anshelevich, \newblock Appell polynomials and their relatives III: conditionally free theory, \newblock \emph{Illinois Journal of Mathematics} \textbf{53} (2009), 39--66; \newblock arXiv:0803.4279.
+
+  \bibitem{deBoor2005} C.~de~Boor, \newblock Divided differences, \newblock \emph{Surveys in Approximation Theory} \textbf{1} (2005), 46--69.
+
+  \bibitem{DamanikPushnitskiSimon2008} D.~Damanik, A.~Pushnitski, and B.~Simon, \newblock The analytic theory of matrix orthogonal polynomials, \newblock \emph{Surveys in Approximation Theory} \textbf{4} (2008), 1--85.
+
+  \bibitem{Flajolet1980} P.~Flajolet, \newblock Combinatorial aspects of continued fractions, \newblock \emph{Discrete Mathematics} \textbf{32} (1980), 125--161.
+
+  \bibitem{Gaunt2016} R.~E. Gaunt, \newblock Products of normal, beta and gamma random variables: Stein operators and distributional theory, \newblock \emph{Brazilian Journal of Probability and Statistics} \textbf{32} (2018), 437--466; \newblock arXiv:1507.07696.
+
+  \bibitem{Goodman1959} A.~W. Goodman, \newblock On sets of acquaintances and strangers at any party, \newblock \emph{American Mathematical Monthly} \textbf{66} (1959), 778--783.
+
+  \bibitem{Huber1964} P.~J. Huber, \newblock Robust estimation of a location parameter, \newblock \emph{Annals of Mathematical Statistics} \textbf{35} (1964), 73--101.
+
+  \bibitem{Lehner2003} F.~Lehner, \newblock Cumulants, lattice paths, and orthogonal polynomials, \newblock \emph{Discrete Mathematics} \textbf{270} (2003), 177--191; \newblock arXiv:math/0110031.
+
+  \bibitem{Lovasz2012} L.~Lov\'asz, \newblock \emph{Large Networks and Graph Limits}, \newblock American Mathematical Society Colloquium Publications, vol.~60, American Mathematical Society, Providence, RI, 2012.
+
+  \bibitem{PowersReznick2000} V.~Powers and B.~Reznick, \newblock Polynomials that are positive on an interval, \newblock \emph{Transactions of the American Mathematical Society} \textbf{352} (2000), 4677--4692.
+
+  \bibitem{Sion1958} M.~Sion, \newblock On general minimax theorems, \newblock \emph{Pacific Journal of Mathematics} \textbf{8} (1958), 171--176.
+
+  \bibitem{Szego1975} G.~Szeg\H{o}, \newblock \emph{Orthogonal Polynomials}, fourth edition, \newblock American Mathematical Society Colloquium Publications, vol.~23, American Mathematical Society, Providence, RI, 1975.
+
+\end{thebibliography}
+
+\end{document}
