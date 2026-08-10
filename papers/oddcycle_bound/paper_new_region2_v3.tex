@@ -2922,8 +2922,8 @@ To obtain a lower bound comparable with $R_m$, we eliminate all of these eigenfu
   by \eqref{eq:plt23-psi-def}, which proves \eqref{eq:plt23-huber-payment} in this final case.
 \end{proof}
 
-It remains to say which pairs $(q,\Lambda)$ can occur.
-The eigenfunction $\phi$ restricts them further, through a lower bound on $\norm g$.
+By \Cref{thm:plt23-huber-elim}, it is now enough to show that $\Omega_m\psi(\xi,\rho)\ge R_m$ for every triple $(q,\Lambda,M)$ that a graphon realizes.
+Since $M=\sqrt{pq-\Lambda^2}$ is determined by $q$ and $\Lambda$, we now restrict the pairs $(q,\Lambda)$ that can occur, by the following lower bound on $\norm g$.
 
 \begin{lemma}[Variance lower bound]\label{lem:plt23-forced-variance}
   One has
@@ -2935,7 +2935,7 @@ The eigenfunction $\phi$ restricts them further, through a lower bound on $\norm
   \begin{equation}\label{eq:plt23-alpha-ceiling-poly}
     \Lambda^2+q\Lambda-q\le0,
   \end{equation}
-  and hence
+  and by solving this inequality, we have
   \begin{equation}\label{eq:plt23-alpha-ceiling}
     q<\Lambda\le r(q):=
     \frac{\sqrt{q^2+4q}-q}{2}.
@@ -2944,37 +2944,37 @@ The eigenfunction $\phi$ restricts them further, through a lower bound on $\norm
 \end{lemma}
 
 \begin{proof}
-  Write $|\phi|=a_\phi\one+h$ with $h\perp\one$, so that $\norm h^2=1-a_\phi^2$.
-  The block form \eqref{eq:block-U} gives
-  \[
-    \ip{|\phi|}{T_U|\phi|}
-    =qa_\phi^2+2a_\phi\ip gh+\ip h{Ah},
-  \]
-  and bounding $\ip gh\le\norm g\norm h$ by Cauchy--Schwarz and $\ip h{Ah}\le\Lambda\norm h^2$ by the maximality of $\Lambda$, \eqref{eq:plt23-absphi-lower} gives
-  \[
-    \Lambda\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
-    +\Lambda(1-a_\phi^2).
-  \]
-  Subtracting $\Lambda(1-a_\phi^2)$ and dividing by $a_\phi>0$,
+  Recall from \eqref{eq:plt23-absphi-lower} that $\ip{|\phi|}{T_U|\phi|}\ge\Lambda$.
+  In the decomposition $|\phi| = a_\phi \one + b \phi + \phi_\perp$ of \eqref{eq:plt23-absphi-decomp}, the term $b\phi+\phi_\perp$ is orthogonal to $\one$ and has squared norm $b^2+\norm{\phi_\perp}^2=1-a_\phi^2$ by \eqref{eq:plt23-absphi-normalization}.
+  Therefore
+  \begin{align*}
+    \Lambda
+    &\le\ip{|\phi|}{T_U|\phi|}\\
+    &=qa_\phi^2+2a_\phi\ip g{b\phi+\phi_\perp}
+    +\ip{b\phi+\phi_\perp}{A(b\phi+\phi_\perp)}\\
+    &\le qa_\phi^2+2a_\phi\norm g\sqrt{1-a_\phi^2}
+    +\Lambda(1-a_\phi^2),
+  \end{align*}
+  where the last inequality bounds $\ip g{b\phi+\phi_\perp}$ by Cauchy--Schwarz and $\ip{b\phi+\phi_\perp}{A(b\phi+\phi_\perp)}$ by the maximality of $\Lambda$.
+  Subtracting $\Lambda(1-a_\phi^2)$ and dividing by $a_\phi>0$ gives
   \[
     (\Lambda-q)a_\phi
     \le2\norm g\sqrt{1-a_\phi^2}.
   \]
-  Squaring and writing $t=a_\phi^2$,
+  Squaring both sides proves \eqref{eq:plt23-forced-variance}:
   \[
-    \norm g^2\ge\frac{(\Lambda-q)^2}{4}\cdot\frac{t}{1-t},
+    \norm g^2\ge\frac{(\Lambda-q)^2}{4}\cdot\frac{a_\phi^2}{1-a_\phi^2} \ge \frac{\Lambda(\Lambda-q)^2}{2(1 - 2\Lambda)},
   \]
-  and $t\mapsto t/(1-t)$ is increasing, so \eqref{eq:plt23-aphi-lower} allows $t$ to be replaced by $2\Lambda$, which is \eqref{eq:plt23-forced-variance}.
+  where we used $a_\phi^2 \ge 2\Lambda$ by \eqref{eq:plt23-aphi-lower} and that $x \mapsto x/(1-x)$ is increasing on $(0,1)$.
 
   For the second claim, \eqref{eq:plt23-HS-bound} gives $2\norm g^2\le pq-\Lambda^2$, so \eqref{eq:plt23-forced-variance} and $1-2\Lambda>0$ give
   \[
     \Lambda(\Lambda-q)^2\le\bigl(pq-\Lambda^2\bigr)(1-2\Lambda).
   \]
-  With $p=1-q$, the difference of the two sides is $-(1-\Lambda-q)(\Lambda^2+q\Lambda-q)$, and the factor $1-\Lambda-q$ is positive by \eqref{eq:plt23-M-Lambda-order}, so \eqref{eq:plt23-alpha-ceiling-poly} follows.
-  The roots of $\Lambda^2+q\Lambda-q$ are $(-q\pm\sqrt{q^2+4q})/2$, whence \eqref{eq:plt23-alpha-ceiling}.
+  With $p=1-q$, this is equivalent to $(\Lambda+q-1)(\Lambda^2+q\Lambda-q)\ge0$, and since $\Lambda+q-1<0$ by \eqref{eq:plt23-M-Lambda-order}, this proves \eqref{eq:plt23-alpha-ceiling-poly}.
 
   Finally, because $\Lambda>q$, the right side of \eqref{eq:plt23-forced-variance} is strictly positive.
-  Thus $g\ne0$, and the bound \eqref{eq:plt23-HS-bound} gives $\Lambda^2<pq$.
+  Thus $g\ne0$, and since $\Lambda$ is an eigenvalue of $A$, the bound \eqref{eq:plt23-HS-bound} gives $\Lambda^2\le \Tr(A^2) < \Tr(A^2) + 2\norm{g}^2 \le pq$.
   Consequently $M>0$.
 \end{proof}
 
