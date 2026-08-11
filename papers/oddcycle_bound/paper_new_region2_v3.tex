@@ -323,7 +323,7 @@ for the associated measure on the spectrum of $A$, so that $\int\lambda^j\dd\mu(
     \bigl\{\rho v^2+\pos{\xi-v+v^2}\bigr\},
   \]
   where $\Omega_m$, $\xi$, and $\rho$ depend on $q$, $\Lambda$, and $m$.
-  The theorem in this region is thereby reduced to the scalar inequality $R_m\le \Omega_m\psi(\xi,\rho)$.
+  The theorem in this region is thereby reduced to the inequality $R_m\le \Omega_m\psi(\xi,\rho)$.
   Since $\pos x=\max_{0\le\lambda\le1}\lambda x$, the definition of $\psi$ is a nested optimization,
   \[
     \psi(\xi,\rho)=\min_{0\le v\le1}\ \max_{0\le\lambda\le1}
@@ -3023,10 +3023,7 @@ Substituting any particular $\lambda$ then gives a lower bound on $\psi$, so the
 \subsection{Reduction to a normalized inequality}\label{subsec:plt23-variables}
 
 We retain all notation from \Cref{thm:plt23-huber-elim} and \Cref{prop:plt23-huber-dual}.
-This subsection reduces the scalar target \eqref{eq:plt23-scalar-target} to a single inequality between two explicit quantities, stated as \Cref{prop:plt23-reduction} at the end.
-The point of the normalization is to keep the two natural scales of the dual expression simultaneously, rather than choosing one value of $\lambda$ and then splitting the parameter region according to which value was chosen.
-
-Define
+Dividing both sides of \eqref{eq:plt23-scalar-target} by $\Lambda^m$ and separating the two terms of the dual expression, define
 \begin{equation}\label{eq:plt23-AB-theta}
   \mathcal A:=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
   \qquad
@@ -3034,12 +3031,47 @@ Define
   \qquad
   \theta:=\rho\xi=\frac{\mathcal A}{\mathcal B},
   \qquad
-  F_N:=\frac{R_m}{\Lambda^m}.
+  F_N:=\frac{R_m}{\Lambda^m},
 \end{equation}
-The first three are positive.
-In these terms the target \eqref{eq:plt23-scalar-target} reads $F_N\le\Omega_m\psi(\xi,\rho)/\Lambda^m$.
+of which the first three are positive.
+Keeping $\mathcal A$ and $\mathcal B$ simultaneously, rather than choosing one value of $\lambda$ in \eqref{eq:plt23-psi-dual} and then splitting the parameter region according to which value was chosen, already reduces \eqref{eq:plt23-scalar-target} to a single inequality.
 
-We now express $F_N$, $\mathcal A$, and $\mathcal B$ in variables adapted to the problem.
+\begin{proposition}[Reduction to a normalized inequality]\label{prop:plt23-reduction}
+  Let
+  \begin{equation}\label{eq:plt23-dtheta}
+    d(\theta):=
+    \begin{cases}
+      \theta, & 0<\theta\le\frac12,\\[1mm]
+      1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
+    \end{cases}
+  \end{equation}
+  If $F_N\le\mathcal B\,d(\theta)$, then \eqref{eq:plt23-scalar-target} holds.
+\end{proposition}
+
+\begin{proof}
+  Dividing the objective in \eqref{eq:plt23-psi-dual} by $\xi$ gives
+  \begin{align*}
+    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
+    &=\mathcal B
+      \max_{0\le\lambda\le 1}
+        \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}\\
+    &\ge
+      \mathcal B
+      \max_{0\le\lambda\le 1}
+        \left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
+  \end{align*}
+  because $\theta+\lambda\xi\ge\theta$, so replacing the denominator by $\theta$ makes the subtracted term larger.
+  In the last maximum the unconstrained maximizer is $\lambda=2\theta$, so the maximum is attained at $\lambda=2\theta$ when $2\theta\le1$ and at $\lambda=1$ when $2\theta\ge1$, and its value is $d(\theta)$ in both cases.
+  Hence
+  \[
+    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
+    \ge\mathcal B\,d(\theta)
+    \ge F_N,
+  \]
+  and multiplying by $\Lambda^m$ gives \eqref{eq:plt23-scalar-target}.
+\end{proof}
+
+The remaining subsections verify the hypothesis $F_N\le\mathcal B\,d(\theta)$, and for that we express $F_N$, $\mathcal A$, and $\mathcal B$ in variables adapted to the problem.
 Set
 \[
   N:=m-2,
@@ -3059,7 +3091,7 @@ The relation $M^2=pq-\Lambda^2$ gives
 \[
   \tilde p=\frac{1+\tilde M^2}{\tilde q}.
 \]
-As in the preceding part of the manuscript,
+By \eqref{eq:plt23-M-Lambda-order} and \Cref{lem:plt23-forced-variance},
 \[
   0<M<q<\Lambda<\frac12<p,
 \]
@@ -3069,13 +3101,13 @@ so
   \qquad
   1<\tilde p<2.
 \]
-We also need the consequence of the frontier ceiling $\Lambda^2+q\Lambda-q\le0$ from \Cref{lem:plt23-forced-variance}.
+We also need the consequence of the upper bound \eqref{eq:plt23-alpha-ceiling-poly} on $\Lambda$.
 Writing
 \[
   D:=1+\tilde q^2+\tilde M^2,
 \]
 one has $\Lambda=\tilde q/D$ and $q=\tilde q^2/D$.
-Therefore the frontier ceiling is equivalent to
+Therefore \eqref{eq:plt23-alpha-ceiling-poly} is equivalent to
 \begin{equation}\label{eq:plt23-frontier-chart}
   \tilde M^2\ge \tilde q(1-\tilde q)=\tilde qu.
 \end{equation}
@@ -3104,7 +3136,7 @@ Writing $H_\zeta:=\zeta+1+v$, the definitions solve explicitly as
   \tilde M^2=\frac{\zeta v}{H_\zeta}.
 \end{equation}
 Indeed, $\tilde M^2=\zeta u$, while $\tilde p=(1+\tilde M^2)/\tilde q$ and $\tilde q=1-u$ give $1+v=(1+\zeta u)/(1-u)$, which is equivalent to the first identity in \eqref{eq:plt23-zeta-v-inverse}; the other two follow immediately.
-The ceiling \eqref{eq:plt23-frontier-chart} becomes
+The bound \eqref{eq:plt23-frontier-chart} becomes
 \[
   \zeta(\zeta+v)\ge1.
 \]
@@ -3243,43 +3275,6 @@ and note that
   \qquad
   \frac{F_N}{\mathcal B}=\frac GY.
 \end{equation}
-
-The reduction can now be stated.
-
-\begin{proposition}[Reduction to a normalized inequality]\label{prop:plt23-reduction}
-  Let
-  \begin{equation}\label{eq:plt23-dtheta}
-    d(\theta):=
-    \begin{cases}
-      \theta, & 0<\theta\le\frac12,\\[1mm]
-      1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
-    \end{cases}
-  \end{equation}
-  If $F_N\le\mathcal B\,d(\theta)$, then the scalar target \eqref{eq:plt23-scalar-target} holds.
-\end{proposition}
-
-\begin{proof}
-  Dividing the objective in \eqref{eq:plt23-psi-dual} by $\xi$ gives
-  \begin{align*}
-    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
-    &=\mathcal B
-      \max_{0\le\lambda\le 1}
-        \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}\\
-    &\ge
-      \mathcal B
-      \max_{0\le\lambda\le 1}
-        \left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
-  \end{align*}
-  because $\theta+\lambda\xi\ge\theta$, so replacing the denominator by $\theta$ makes the subtracted term larger.
-  In the last maximum the unconstrained maximizer is $\lambda=2\theta$, so the maximum is attained at $\lambda=2\theta$ when $2\theta\le1$ and at $\lambda=1$ when $2\theta\ge1$, and its value is $d(\theta)$ in both cases.
-  Hence
-  \[
-    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
-    \ge\mathcal B\,d(\theta)
-    \ge F_N,
-  \]
-  and multiplying by $\Lambda^m$ gives \eqref{eq:plt23-scalar-target}.
-\end{proof}
 
 \subsection{Two elementary bounds for the defect}
 
@@ -3441,7 +3436,7 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
     =33N^2+132N-1024>0
     \qquad (N\ge7).
   \]
-  Thus it is enough to prove the claim for $N=7$, where \eqref{eq:plt23-Psi-lower} reads
+  Thus it is enough to prove the claim for $N=7$, where \eqref{eq:plt23-Psi-lower} gives
   \[
     \Psi_7(y)=\frac{12}{49}-2y+\frac{37}{8}y^2-\frac52y^4.
   \]
@@ -3865,12 +3860,12 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
   This proves \eqref{eq:plt23-high-v-B}.
 \end{proof}
 
-\subsection{Completion of the scalar inequality}
+\subsection{Completion of the bound \texorpdfstring{$R_m\le\Omega_m\psi(\xi,\rho)$}{Rm <= Omega\_m psi}}
 
 We can now finish without any further subdivision of the admissible region.
 
-\begin{proposition}[The scalar target]\label{prop:plt23-scalar}
-  For every admissible pair $(q,\Lambda)$ in the intermediate-density region $1/3<q<1/2$, and every odd $m\ge9$, the scalar target \eqref{eq:plt23-scalar-target} holds.
+\begin{proposition}[The bound $R_m\le\Omega_m\psi(\xi,\rho)$]\label{prop:plt23-scalar}
+  For every admissible pair $(q,\Lambda)$ in the intermediate-density region $1/3<q<1/2$, and every odd $m\ge9$, the inequality \eqref{eq:plt23-scalar-target} holds.
 \end{proposition}
 
 \begin{proof}
@@ -3918,7 +3913,7 @@ Assume
 \]
 and let $m\ge9$ be odd.
 If the compression $A$ has no eigenvalue above $q$, \Cref{lem:plt23-eigenvalues-above-q} already proves the desired odd-cycle inequality.
-Otherwise there is a unique frontier eigenvalue $\Lambda$.
+Otherwise there is a unique eigenvalue $\Lambda>q$.
 \Cref{prop:plt23-splitting-lower-bound} gives
 \[
   t(C_m,W)-\bigl(p^m-pq^{m-1}\bigr)
@@ -3952,7 +3947,7 @@ This completes the intermediate-density proof for every odd $m\ge9$.
   It remains to consider $1/2<p<2/3$, equivalently $1/3<q<1/2$.
   By \Cref{lem:step-reduction}, it is enough to treat a step graphon.
   If the compression $A$ has no eigenvalue above $q$, \Cref{lem:plt23-eigenvalues-above-q} proves the theorem.
-  Otherwise there is a unique frontier eigenvalue $\Lambda$, and \Cref{prop:plt23-splitting-lower-bound,thm:plt23-huber-elim} reduce the problem to the scalar target \eqref{eq:plt23-scalar-target}, which is proved in \Cref{prop:plt23-scalar}.
+  Otherwise there is a unique eigenvalue $\Lambda>q$, and \Cref{prop:plt23-splitting-lower-bound,thm:plt23-huber-elim} reduce the problem to \eqref{eq:plt23-scalar-target}, which is proved in \Cref{prop:plt23-scalar}.
   The step-graphon approximation returns the result to arbitrary graphons.
 \end{proof}
 
