@@ -337,15 +337,15 @@ for the associated measure on the spectrum of $A$, so that $\int\lambda^j\dd\mu(
   Rather than choosing one value of $\lambda$, we keep both scales that occur in this maximum.
   Write
   \[
-    \mathcal A=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
+    \widehat Q_m=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
     \qquad
-    \mathcal B=\frac{\Omega_m\xi}{\Lambda^m},
+    \widehat L_m=\frac{\Omega_m\xi}{\Lambda^m},
     \qquad
-    \theta=\rho\xi=\frac{\mathcal A}{\mathcal B}.
+    \theta=\rho\xi=\frac{\widehat Q_m}{\widehat L_m}.
   \]
   Dividing the objective by $\xi$ and discarding $\lambda\xi$ from the denominator leaves a maximum in which only $\theta$ occurs,
   \[
-    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}\ge\mathcal B\,d(\theta),
+    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}\ge\widehat L_m\,d(\theta),
     \qquad
     d(\theta)=\max_{0\le\lambda\le1}\left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
   \]
@@ -354,27 +354,27 @@ for the associated measure on the spectrum of $A$, so that $\int\lambda^j\dd\mu(
   The goal $R_m\le \Omega_m\psi(\xi,\rho)$ involves only $q$, $\Lambda$, and $m$.
   From $p=1-q$ and $M^2=pq-\Lambda^2$, the two ratios
   \[
-    v=\frac {p}{\Lambda}-1,
+    \delta_{\tilde p}=\frac {p}{\Lambda}-1,
     \qquad
-    \zeta=\frac{M^2}{\Lambda(\Lambda-q)}
+    \zeta_q=\frac{M^2}{\Lambda(\Lambda-q)}
   \]
-  determine $q$, $p$, $\Lambda$, and $M$, so we may replace $q$ and $\Lambda$ by $v$ and $\zeta$.
-  For every $m$, the pairs $(v,\zeta)$ to be considered are those satisfying
+  determine $q$, $p$, $\Lambda$, and $M$, so we may replace $q$ and $\Lambda$ by $\delta_{\tilde p}$ and $\zeta_q$.
+  For every $m$, the pairs $(\delta_{\tilde p},\zeta_q)$ to be considered are those satisfying
   \[
-    0<v<1,
+    0<\delta_{\tilde p}<1,
     \qquad
-    \zeta(\zeta+v)\ge1
+    \zeta_q(\zeta_q+\delta_{\tilde p})\ge1
   \]
   (\Cref{subsec:plt23-variables}).
-  Writing $F_m=R_m/\Lambda^m$, what has to be proved is that $F_m\le\mathcal B\,d(\theta)$ holds in that region for every odd $m\ge9$.
+  Writing $\widehat R_m=R_m/\Lambda^m$, what has to be proved is that $\widehat R_m\le\widehat L_m\,d(\theta)$ holds in that region for every odd $m\ge9$.
 
-  The region is divided only at $v=1/2$, and on each half two bounds are proved at once.
+  The region is divided only at $\delta_{\tilde p}=1/2$, and on each half two bounds are proved at once.
   \begin{itemize}[leftmargin=1.6em,topsep=2pt,itemsep=1pt]
-    \item For $v\le1/2$: $2F_m\le\mathcal A$ and $F_m/\mathcal A+2F_m/\mathcal B\le2$ (\Cref{prop:plt23-low-v}).
-    \item For $v\ge1/2$: $F_m\le\mathcal A$ and $2F_m\le\mathcal B$ (\Cref{prop:plt23-high-v-A,prop:plt23-high-v-B}).
+    \item For $\delta_{\tilde p}\le1/2$: $2\widehat R_m\le\widehat Q_m$ and $\widehat R_m/\widehat Q_m+2\widehat R_m/\widehat L_m\le2$ (\Cref{prop:plt23-low-v}).
+    \item For $\delta_{\tilde p}\ge1/2$: $\widehat R_m\le\widehat Q_m$ and $2\widehat R_m\le\widehat L_m$ (\Cref{prop:plt23-high-v-A,prop:plt23-high-v-B}).
   \end{itemize}
-  In both halves the first bound settles $\theta\le1/2$ and the second settles $\theta\ge1/2$, which gives $F_m\le\mathcal B\,d(\theta)$ (\Cref{prop:plt23-scalar}).
-  All four bounds are proved by elementary analysis; the only inputs are two upper bounds for $F_m$, one bound for a product of elementary factors, and one comparison between a geometric sum and a power.
+  In both halves the first bound settles $\theta\le1/2$ and the second settles $\theta\ge1/2$, which gives $\widehat R_m\le\widehat L_m\,d(\theta)$ (\Cref{prop:plt23-scalar}).
+  All four bounds are proved by elementary analysis; the only inputs are two upper bounds for $\widehat R_m$, one bound for a product of elementary factors, and one comparison between a geometric sum and a power.
 \end{enumerate}
 
 We prove \Cref{thm:main} in \Cref{sec:assembly}, combining the parts above.
@@ -3022,22 +3022,33 @@ Substituting any particular $\lambda$ then gives a lower bound on $\psi$, so the
 
 \subsection{Reduction to a normalized inequality}\label{subsec:plt23-variables}
 
-We retain all notation from \Cref{thm:plt23-huber-elim} and \Cref{prop:plt23-huber-dual}.
-Dividing both sides of \eqref{eq:plt23-scalar-target} by $\Lambda^m$ and separating the two terms of the dual expression, define
+Two normalizations are used throughout this subsection.
+On the quantities to be compared, $\widehat\bullet$ denotes $\bullet/\Lambda^m$:
 \begin{equation}\label{eq:plt23-AB-theta}
-  \mathcal A:=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
+  \widehat R_m:=\frac{R_m}{\Lambda^m},
   \qquad
-  \mathcal B:=\frac{\Omega_m\xi}{\Lambda^m},
+  \widehat Q_m:=\frac{\Omega_m\rho\xi^2}{\Lambda^m},
   \qquad
-  \theta:=\rho\xi=\frac{\mathcal A}{\mathcal B},
+  \widehat L_m:=\frac{\Omega_m\xi}{\Lambda^m},
   \qquad
-  F_m:=\frac{R_m}{\Lambda^m},
+  \theta:=\rho\xi=\frac{\widehat Q_m}{\widehat L_m}.
 \end{equation}
-of which the first three are positive.
-Keeping $\mathcal A$ and $\mathcal B$ simultaneously, rather than choosing one value of $\lambda$ in \eqref{eq:plt23-psi-dual} and then splitting the parameter region according to which value was chosen, already reduces \eqref{eq:plt23-scalar-target} to a single inequality.
+On the quantities with the same scale as $\Lambda$, $\tilde\bullet$ denotes $\bullet/\Lambda$:
+\begin{equation}\label{eq:plt23-tilde-def}
+  \tilde q:=\frac q\Lambda,
+  \qquad
+  \tilde M:=\frac M\Lambda,
+  \qquad
+  \tilde p:=\frac p\Lambda,
+  \qquad
+  \delta_{\tilde q}:=1-\tilde q=\frac{\Lambda-q}{\Lambda},
+  \qquad
+  \delta_{\tilde p}:=\tilde p-1=\frac{p-\Lambda}{\Lambda}.
+\end{equation}
+These normalizations rewrite the maximum in \eqref{eq:plt23-psi-dual} as $\widehat L_m$ times a maximum over $\lambda$ in which the parameters enter only through $\theta$ and $\xi$; discarding $\xi$ there reduces \eqref{eq:plt23-scalar-target} to a single inequality.
 
 \begin{proposition}[Reduction to a normalized inequality]\label{prop:plt23-reduction}
-  Let $m\ge9$ be odd, let $q$ and $\Lambda$ satisfy \eqref{eq:plt23-range} and \eqref{eq:plt23-Lambda-above-q}, and let
+  Let
   \begin{equation}\label{eq:plt23-dtheta}
     d(\theta):=
     \begin{cases}
@@ -3045,69 +3056,71 @@ Keeping $\mathcal A$ and $\mathcal B$ simultaneously, rather than choosing one v
       1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
     \end{cases}
   \end{equation}
-  If $F_m\le\mathcal B\,d(\theta)$, then \eqref{eq:plt23-scalar-target} holds.
+  If $\widehat R_m\le\widehat L_m\,d(\theta)$, then \eqref{eq:plt23-scalar-target} holds.
 \end{proposition}
 
 \begin{proof}
+  Here $\xi$ and $\rho$ are positive by \eqref{eq:plt23-M-Lambda-order} and \eqref{eq:plt23-Lambdam-Mm-positive}, hence so are $\widehat Q_m$, $\widehat L_m$, and $\theta$.
   Dividing the objective in \eqref{eq:plt23-psi-dual} by $\xi$ gives
-  \begin{align*}
-    \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
-    &=\mathcal B
-      \max_{0\le\lambda\le 1}
-        \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}\\
-    &\ge
-      \mathcal B
-      \max_{0\le\lambda\le 1}
-        \left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
-  \end{align*}
-  because $\theta+\lambda\xi\ge\theta$, so replacing the denominator by $\theta$ makes the subtracted term larger.
-  In the last maximum the unconstrained maximizer is $\lambda=2\theta$, so the maximum is attained at $\lambda=2\theta$ when $2\theta\le1$ and at $\lambda=1$ when $2\theta\ge1$, and its value is $d(\theta)$ in both cases.
-  Hence
   \[
     \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
-    \ge\mathcal B\,d(\theta)
-    \ge F_m,
+    =\widehat L_m
+      \max_{0\le\lambda\le 1}
+        \left\{\lambda-\frac{\lambda^2}{4(\theta+\lambda\xi)}\right\}
+    \ge
+      \widehat L_m
+      \max_{0\le\lambda\le 1}
+        \left\{\lambda-\frac{\lambda^2}{4\theta}\right\},
+  \]
+  because $\theta+\lambda\xi\ge\theta$, so replacing $4(\theta+\lambda\xi)$ by $4\theta$ makes the subtracted term larger.
+  Solving the last maximization over $\lambda$ shows that when $2\theta \le 1$, the maximum is attained at $\lambda=2\theta$ and equals $\theta$, while when $2\theta \ge 1$, the maximum is attained at $\lambda=1$ and equals $1-1/(4\theta)$; in both cases it is $d(\theta)$.
+  Together with the hypothesis this gives
+  \[
+    \widehat R_m
+    \le\widehat L_m\,d(\theta)
+    \le\frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m},
   \]
   and multiplying by $\Lambda^m$ gives \eqref{eq:plt23-scalar-target}.
 \end{proof}
 
-The remaining subsections verify the hypothesis $F_m\le\mathcal B\,d(\theta)$, and for that we express $F_m$, $\mathcal A$, and $\mathcal B$ in variables adapted to the problem.
-Throughout the rest of this section a tilde denotes division by $\Lambda$:
-\[
-  \tilde q:=\frac q\Lambda,
-  \qquad
-  \tilde M:=\frac M\Lambda,
-  \qquad
-  \tilde p:=\frac p\Lambda,
-  \qquad
-  u:=1-\tilde q=\frac{\Lambda-q}{\Lambda}.
-\]
-The relation $M^2=pq-\Lambda^2$ gives
-\[
-  \tilde p=\frac{1+\tilde M^2}{\tilde q}.
-\]
-By \eqref{eq:plt23-M-Lambda-order} and \Cref{lem:plt23-forced-variance},
-\[
-  0<M<q<\Lambda<\frac12<p,
-\]
-so
+We first translate the existing relations between $p$, $q$, $\Lambda$, $M$ to after normalization.
+The ordering $M<q<\Lambda<\frac12<p$ of \eqref{eq:plt23-M-Lambda-order}, together with $0<M$ from \Cref{lem:plt23-forced-variance}, gives
 \[
   0<\tilde M<\tilde q<1,
   \qquad
-  1<\tilde p<2.
+  1<\tilde p<2,
 \]
-We also need the consequence of the upper bound \eqref{eq:plt23-alpha-ceiling-poly} on $\Lambda$.
-Since $p+q=1$, $q=\tilde q\Lambda$, and $p=(1+\tilde M^2)\Lambda/\tilde q$,
+where the upper bound on $\tilde p$ holds because $q>1/3$ and $\Lambda>q$ give $q+2\Lambda>3q>1$, that is, $p<2\Lambda$.
+For $\delta_{\tilde p}$, these give
+\begin{equation}\label{eq:plt23-zeta-v-consequences}
+  0<\delta_{\tilde p}<1,
+  \qquad
+  \tilde M^2<\delta_{\tilde p},
+\end{equation}
+the first because $1<\tilde p<2$, the second because
+\[
+  \delta_{\tilde p}-\tilde M^2
+  =\frac{(p\Lambda-\Lambda^2)-(pq-\Lambda^2)}{\Lambda^2}
+  =\frac{p(\Lambda-q)}{\Lambda^2}>0.
+\]
+
+For $\tilde M$, the relation $M^2=pq-\Lambda^2$ gives
+\[
+  \tilde p=\frac{1+\tilde M^2}{\tilde q},
+  \qquad\text{so that}\qquad
+  p=\frac{(1+\tilde M^2)\Lambda}{\tilde q},
+\]
+so $1=p+q=(1+\tilde q^2+\tilde M^2)\Lambda/\tilde q$, that is,
 \[
   \Lambda=\frac{\tilde q}{1+\tilde q^2+\tilde M^2},
   \qquad
   q=\frac{\tilde q^2}{1+\tilde q^2+\tilde M^2},
 \]
-so \eqref{eq:plt23-alpha-ceiling-poly} is equivalent to
+so the quadratic inequality \eqref{eq:plt23-alpha-ceiling-poly} in $\Lambda$ is equivalent to
 \begin{equation}\label{eq:plt23-frontier-chart}
-  \tilde M^2\ge \tilde q(1-\tilde q)=\tilde qu,
+  \tilde M^2\ge \tilde q(1-\tilde q)=\tilde q\delta_{\tilde q}.
 \end{equation}
-while $q>1/3$ is equivalent to $1+\tilde q^2+\tilde M^2<3\tilde q^2$, that is, to
+Likewise, since $q=\tilde q^2/(1+\tilde q^2+\tilde M^2)$, the bound $q>1/3$ is equivalent to $1+\tilde q^2+\tilde M^2<3\tilde q^2$, that is, to
 \begin{equation}\label{eq:plt23-Mtilde-upper}
   \tilde M^2<2\tilde q^2-1.
 \end{equation}
@@ -3116,129 +3129,18 @@ Together, \eqref{eq:plt23-frontier-chart} and \eqref{eq:plt23-Mtilde-upper} give
   \tilde q>\frac{1+\sqrt{13}}6>\frac34.
 \]
 
-We now use the two variables that will occur in the bounds below:
-\[
-  \zeta:=\frac{\tilde M^2}{u}=\frac{M^2}{\Lambda(\Lambda-q)},
-  \qquad
-  v:=\tilde p-1=\frac{p-\Lambda}{\Lambda}.
-\]
-Writing $H_\zeta:=\zeta+1+v$, the definitions solve explicitly as
-\begin{equation}\label{eq:plt23-zeta-v-inverse}
-  u=\frac v{H_\zeta},
-  \qquad
-  \tilde q=\frac{\zeta+1}{H_\zeta},
-  \qquad
-  \tilde M^2=\frac{\zeta v}{H_\zeta}.
-\end{equation}
-Indeed, $\tilde M^2=\zeta u$, while $\tilde p=(1+\tilde M^2)/\tilde q$ and $\tilde q=1-u$ give $1+v=(1+\zeta u)/(1-u)$, which is equivalent to the first identity in \eqref{eq:plt23-zeta-v-inverse}; the other two follow immediately.
-The bound \eqref{eq:plt23-frontier-chart} becomes
-\[
-  \zeta(\zeta+v)\ge1.
-\]
-In particular,
-\begin{equation}\label{eq:plt23-zeta-v-consequences}
-  0<v<1,
-  \qquad
-  \zeta\ge \tilde q>\frac34,
-  \qquad
-  \tilde M^2<v.
-\end{equation}
-The last inequality follows directly from $\tilde M^2=\zeta v/H_\zeta$ and $H_\zeta>\zeta$.
+\tk{Revised up to here. }
 
-It is also useful to express $\Lambda$ without $\tilde q$.
-Put
-\[
-  \Delta:=\tilde p^2+1+\tilde M^2.
-\]
-Since $p+q=1$, $p=\tilde p\Lambda$, and $q=\tilde q\Lambda=(1+\tilde M^2)\Lambda/\tilde p$,
-\begin{equation}\label{eq:plt23-Delta-identities}
-  \Lambda=\frac{\tilde p}{\Delta},
-  \qquad
-  q=\frac{1+\tilde M^2}{\Delta},
-  \qquad
-  1-2\Lambda=\frac{v^2+\tilde M^2}{\Delta}.
-\end{equation}
-Two elementary consequences will be used repeatedly.
-First,
-\begin{equation}\label{eq:plt23-Delta-upper-sigma}
-  \Delta<\tilde p(v+2),
-\end{equation}
-for this is equivalent to $1+\tilde M^2<\tilde p$, that is, to $\tilde M^2<v$.
-Second, since $q>1/3$,
-\begin{equation}\label{eq:plt23-Delta-upper-three}
-  \Delta<3(1+\tilde M^2).
-\end{equation}
-Finally, $q<\Lambda$ and $p=\tilde p\Lambda$ imply
-\begin{equation}\label{eq:plt23-Lambda-lower}
-  1=p+q<(\tilde p+1)\Lambda=(v+2)\Lambda,
-  \qquad\text{so}\qquad
-  \Lambda>\frac1{v+2}.
-\end{equation}
-
-Since $M=\tilde M\Lambda$, $q=\tilde q\Lambda$, and $p=\tilde p\Lambda=(1+\tilde M^2)\Lambda/\tilde q$, the definition $R_m=\Lambda^m+M^m-pq^{m-1}$ gives
+We now express $\widehat R_m$, $\widehat Q_m$, and $\widehat L_m$ in the normalized variables $\tilde q$, $\tilde M$, and $\tilde p$.
+For $\widehat R_m$, the definition $R_m=\Lambda^m+M^m-pq^{m-1}$ with $M=\tilde M\Lambda$, $q=\tilde q\Lambda$, and $p=\tilde p\Lambda=(1+\tilde M^2)\Lambda/\tilde q$ gives
 \begin{equation}\label{eq:plt23-F-formula}
-  F_m
+  \widehat R_m
   =1-\tilde q^{m-2}-\tilde M^2\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr).
 \end{equation}
-Put
-\[
-  T_m:=(m-2)-\zeta\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr).
-\]
-Because $1-\tilde q^{m-2}\le(m-2)(1-\tilde q)=(m-2)u$ and $\tilde M^2=\zeta u$,
-\begin{equation}\label{eq:plt23-F-T}
-  F_m\le uT_m.
-\end{equation}
-Thus $F_m\le0$ already proves \eqref{eq:plt23-scalar-target}, because $\psi(\xi,\rho)\ge0$.
-Whenever convenient below we may therefore assume
-\begin{equation}\label{eq:plt23-F-positive}
-  F_m>0,
-\end{equation}
-which by \eqref{eq:plt23-F-T} implies $T_m>0$.
 
-Next normalize the two coefficients $\Lambda_m$ and $M_m$ of \Cref{prop:plt23-splitting-lower-bound}:
-\[
-  \widehat{\Lambda}_m:=\frac{\Lambda_m}{\Lambda^{m-2}},
-  \qquad
-  \widehat M_m:=\frac{M_m}{\Lambda^{m-2}}.
-\]
-A direct substitution into the definitions of $k_m$, $\Lambda_m$, and $M_m$ gives
-\begin{align}
-  \widehat{\Lambda}_m
-  &=2\tilde M^{m-2}+mK_\Lambda,
-  &
-  K_\Lambda
-  &:=\frac{\tilde p^{m-1}-1}{\tilde p+1},
-  \label{eq:plt23-KA-def}\\
-  \widehat M_m
-  &=2\tilde M^{m-2}+mK_M,
-  &
-  K_M
-  &:=\frac{\tilde p^{m-1}-\tilde M^{m-1}}{\tilde p+\tilde M}.
-  \label{eq:plt23-KL-def}
-\end{align}
-Since $m-1$ is even,
-\begin{align}
-  K_\Lambda
-  &=v\sum_{j=0}^{(m-3)/2}\tilde p^{2j},
-  \label{eq:plt23-KA-sum}\\
-  K_M
-  &=(\tilde p-\tilde M)
-    \sum_{j=0}^{(m-3)/2}
-      \tilde p^{m-3-2j}\tilde M^{2j}.
-  \label{eq:plt23-KL-sum}
-\end{align}
-For brevity set
-\[
-  S_m:=\sum_{j=0}^{(m-3)/2}\tilde p^{2j}.
-\]
-There are $(m-1)/2$ summands and their geometric mean is $\tilde p^{(m-3)/2}$.
-Hence the arithmetic--geometric mean inequality gives
-\begin{equation}\label{eq:plt23-SN-AMGM}
-  S_m\ge \frac{m-1}{2}\tilde p^{(m-3)/2}.
-\end{equation}
-
-The definitions \eqref{eq:plt23-C-xi-rho}--\eqref{eq:plt23-rho-def} of $\Omega_m$, $\xi$, and $\rho$ now give closed forms for $\mathcal A$ and $\mathcal B$.
-Multiplying $\Omega_m$ by $\xi$ cancels the factor $(1-2\Lambda)^2/(4\Lambda^2)$, and multiplying $\Omega_m$ by $\rho$ cancels $M_m(\Lambda-M)$, so that
+For $\widehat Q_m$ and $\widehat L_m$ we need two further ingredients.
+The first is that $\Lambda$ itself does not disappear from them.
+Multiplying $\Omega_m$ by $\xi$ cancels the factor $(1-2\Lambda)^2/(4\Lambda^2)$ in \eqref{eq:plt23-C-xi-rho}, and multiplying $\Omega_m$ by $\rho$ cancels $M_m(\Lambda-M)$, so that
 \[
   \Omega_m\xi=M_m(\Lambda-M)\sqrt{2\Lambda}\,(\Lambda-q),
   \qquad
@@ -3248,27 +3150,126 @@ and hence, using $\xi^2=16\Lambda^4(\Lambda-q)^2/(1-2\Lambda)^4$,
 \[
   \Omega_m\rho\xi^2=\frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}.
 \]
-Substituting $\Lambda-q=\Lambda u$, $\Lambda-M=\Lambda(1-\tilde M)$, $\Lambda_m=\Lambda^{m-2}\widehat{\Lambda}_m$, and $M_m=\Lambda^{m-2}\widehat M_m$ turns these into
+Substituting $\Lambda-q=\Lambda\delta_{\tilde q}$ and $\Lambda-M=\Lambda(1-\tilde M)$ turns these into
 \begin{equation}\label{eq:plt23-AB-formulas}
-  \mathcal A
-  =\frac{2\Lambda^3u^2}{(1-2\Lambda)^2}\,\widehat{\Lambda}_m,
+  \widehat Q_m
+  =\frac{2\Lambda^3\delta_{\tilde q}^2}{(1-2\Lambda)^2}\,
+   \frac{\Lambda_m}{\Lambda^{m-2}},
   \qquad
-  \mathcal B
-  =u(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_m.
+  \widehat L_m
+  =\delta_{\tilde q}(1-\tilde M)\sqrt{2\Lambda}\,
+   \frac{M_m}{\Lambda^{m-2}},
 \end{equation}
-Each of $F_m$, $\mathcal A$, and $\mathcal B$ carries a factor $u$, so we also set
+in which $\Lambda$ and $1-2\Lambda$ still occur.
+Writing
 \[
-  G:=\frac{F_m}{u},
+  \Delta:=\tilde p^2+1+\tilde M^2,
+\]
+and using $p+q=1$, $p=\tilde p\Lambda$, and $q=(1+\tilde M^2)\Lambda/\tilde p$, they are
+\begin{equation}\label{eq:plt23-Delta-identities}
+  \Lambda=\frac{\tilde p}{\Delta},
   \qquad
-  X:=\frac{\mathcal A}{u},
+  q=\frac{1+\tilde M^2}{\Delta},
   \qquad
-  Y:=\frac{\mathcal B}{u},
+  1-2\Lambda=\frac{\delta_{\tilde p}^2+\tilde M^2}{\Delta}.
+\end{equation}
+Two bounds on $\Delta$ will be used repeatedly.
+First,
+\begin{equation}\label{eq:plt23-Delta-upper-sigma}
+  \Delta<\tilde p(\delta_{\tilde p}+2),
+\end{equation}
+which is equivalent to $1+\tilde M^2<\tilde p$, that is, to $\tilde M^2<\delta_{\tilde p}$; with $\Lambda=\tilde p/\Delta$ it gives
+\begin{equation}\label{eq:plt23-Lambda-lower}
+  \Lambda>\frac1{\delta_{\tilde p}+2}.
+\end{equation}
+Second, since $q>1/3$,
+\begin{equation}\label{eq:plt23-Delta-upper-three}
+  \Delta<3(1+\tilde M^2).
+\end{equation}
+
+The second ingredient is the two coefficients of \Cref{prop:plt23-splitting-lower-bound}.
+A direct substitution into the definitions of $k_m$, $\Lambda_m$, and $M_m$ gives
+\begin{align}
+  \frac{\Lambda_m}{\Lambda^{m-2}}
+  &=2\tilde M^{m-2}+mK_\Lambda,
+  &
+  K_\Lambda
+  &:=\frac{\tilde p^{m-1}-1}{\tilde p+1},
+  \label{eq:plt23-KA-def}\\
+  \frac{M_m}{\Lambda^{m-2}}
+  &=2\tilde M^{m-2}+mK_M,
+  &
+  K_M
+  &:=\frac{\tilde p^{m-1}-\tilde M^{m-1}}{\tilde p+\tilde M}.
+  \label{eq:plt23-KL-def}
+\end{align}
+Since $m-1$ is even,
+\begin{align}
+  K_\Lambda
+  &=\delta_{\tilde p}S_m,
+  &
+  S_m
+  &:=\sum_{j=0}^{(m-3)/2}\tilde p^{2j},
+  \label{eq:plt23-KA-sum}\\
+  K_M
+  &=(\tilde p-\tilde M)
+    \sum_{j=0}^{(m-3)/2}
+      \tilde p^{m-3-2j}\tilde M^{2j}.
+  &&
+  \label{eq:plt23-KL-sum}
+\end{align}
+There are $(m-1)/2$ summands in $S_m$ and their geometric mean is $\tilde p^{(m-3)/2}$, so the arithmetic--geometric mean inequality gives
+\begin{equation}\label{eq:plt23-SN-AMGM}
+  S_m\ge \frac{m-1}{2}\tilde p^{(m-3)/2}.
+\end{equation}
+
+It remains to record the three quantities the two ranges actually compare.
+The first is the ratio
+\[
+  \zeta_q:=\frac{\tilde M^2}{\delta_{\tilde q}}=\frac{M^2}{\Lambda(\Lambda-q)},
+\]
+in terms of which the tilde variables solve explicitly as
+\begin{equation}\label{eq:plt23-zeta-v-inverse}
+  \delta_{\tilde q}=\frac{\delta_{\tilde p}}{\zeta_q+1+\delta_{\tilde p}},
+  \qquad
+  \tilde q=\frac{\zeta_q+1}{\zeta_q+1+\delta_{\tilde p}},
+  \qquad
+  \tilde M^2=\frac{\zeta_q\delta_{\tilde p}}{\zeta_q+1+\delta_{\tilde p}}.
+\end{equation}
+Indeed, $\tilde M^2=\zeta_q\delta_{\tilde q}$, while $\tilde p=(1+\tilde M^2)/\tilde q$ and $\tilde q=1-\delta_{\tilde q}$ give $1+\delta_{\tilde p}=(1+\zeta_q\delta_{\tilde q})/(1-\delta_{\tilde q})$, which is equivalent to the first identity in \eqref{eq:plt23-zeta-v-inverse}; the other two follow immediately.
+Dividing \eqref{eq:plt23-frontier-chart} by $\delta_{\tilde q}$ gives $\zeta_q\ge\tilde q>3/4$, and substituting \eqref{eq:plt23-zeta-v-inverse} into it gives
+\begin{equation}\label{eq:plt23-zeta-domain}
+  \zeta_q(\zeta_q+\delta_{\tilde p})\ge1.
+\end{equation}
+
+The second is
+\[
+  T_m:=(m-2)-\zeta_q\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr).
+\]
+Because $1-\tilde q^{m-2}\le(m-2)(1-\tilde q)=(m-2)\delta_{\tilde q}$ and $\tilde M^2=\zeta_q\delta_{\tilde q}$, \eqref{eq:plt23-F-formula} gives
+\begin{equation}\label{eq:plt23-F-T}
+  \widehat R_m\le \delta_{\tilde q}T_m.
+\end{equation}
+Thus $\widehat R_m\le0$ already proves \eqref{eq:plt23-scalar-target}, because $\psi(\xi,\rho)\ge0$.
+Whenever convenient below we may therefore assume
+\begin{equation}\label{eq:plt23-F-positive}
+  \widehat R_m>0,
+\end{equation}
+which by \eqref{eq:plt23-F-T} implies $T_m>0$.
+
+The third is a common factor: each of $\widehat R_m$, $\widehat Q_m$, and $\widehat L_m$ carries a factor $\delta_{\tilde q}$, by \eqref{eq:plt23-F-T} and \eqref{eq:plt23-AB-formulas}, so we set
+\[
+  G:=\frac{\widehat R_m}{\delta_{\tilde q}},
+  \qquad
+  X:=\frac{\widehat Q_m}{\delta_{\tilde q}},
+  \qquad
+  Y:=\frac{\widehat L_m}{\delta_{\tilde q}},
 \]
 and note that
 \begin{equation}\label{eq:plt23-GXY-ratios}
-  \frac{F_m}{\mathcal A}=\frac GX,
+  \frac{\widehat R_m}{\widehat Q_m}=\frac GX,
   \qquad
-  \frac{F_m}{\mathcal B}=\frac GY.
+  \frac{\widehat R_m}{\widehat L_m}=\frac GY.
 \end{equation}
 
 \subsection{Two elementary bounds for the defect}
@@ -3279,7 +3280,7 @@ We only need two of the bounds used in the former proof.
   For every admissible point and every odd $m\ge9$,
   \begin{align}
     T_m
-    &\le (m-2)(1+v)-\zeta\bigl(1-v^{(m-2)/2}\bigr),
+    &\le (m-2)(1+\delta_{\tilde p})-\zeta_q\bigl(1-\delta_{\tilde p}^{(m-2)/2}\bigr),
     \label{eq:plt23-T-bound-one}\\
     T_m
     &<(m-2)\bigl(1-\tilde M^{m-1}\bigr).
@@ -3288,14 +3289,14 @@ We only need two of the bounds used in the former proof.
 \end{lemma}
 
 \begin{proof}
-  For the first inequality, Bernoulli gives $\tilde q^{m-2}=(1-u)^{m-2}\ge1-(m-2)u$.
-  Also $\tilde M^2<v$ by \eqref{eq:plt23-zeta-v-consequences}, hence $\tilde M^{m-2}<v^{(m-2)/2}$ and $\zeta u=\tilde M^2<v$.
+  For the first inequality, Bernoulli gives $\tilde q^{m-2}=(1-\delta_{\tilde q})^{m-2}\ge1-(m-2)\delta_{\tilde q}$.
+  Also $\tilde M^2<\delta_{\tilde p}$ by \eqref{eq:plt23-zeta-v-consequences}, hence $\tilde M^{m-2}<\delta_{\tilde p}^{(m-2)/2}$ and $\zeta_q\delta_{\tilde q}=\tilde M^2<\delta_{\tilde p}$.
   Therefore
   \begin{align*}
     T_m
-    &=(m-2)-\zeta\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr)\\
-    &\le (m-2)-\zeta+(m-2)\zeta u+\zeta\tilde M^{m-2}\\
-    &\le (m-2)(1+v)-\zeta\bigl(1-v^{(m-2)/2}\bigr).
+    &=(m-2)-\zeta_q\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr)\\
+    &\le (m-2)-\zeta_q+(m-2)\zeta_q\delta_{\tilde q}+\zeta_q\tilde M^{m-2}\\
+    &\le (m-2)(1+\delta_{\tilde p})-\zeta_q\bigl(1-\delta_{\tilde p}^{(m-2)/2}\bigr).
   \end{align*}
 
   For the second inequality, \eqref{eq:plt23-Mtilde-upper} gives
@@ -3304,24 +3305,24 @@ We only need two of the bounds used in the former proof.
   \]
   so $\tilde M<2\tilde q-1$, equivalently
   \[
-    \tilde q-\tilde M>1-\tilde q=u.
+    \tilde q-\tilde M>1-\tilde q=\delta_{\tilde q}.
   \]
   Convexity of $x\mapsto x^{m-2}$ on $[0,\infty)$ gives
   \[
     \tilde q^{m-2}-\tilde M^{m-2}
     \ge (m-2)\tilde M^{m-3}(\tilde q-\tilde M)
-    >(m-2)u\tilde M^{m-3}.
+    >(m-2)\delta_{\tilde q}\tilde M^{m-3}.
   \]
-  Multiplying by $\zeta=\tilde M^2/u$ yields
+  Multiplying by $\zeta_q=\tilde M^2/\delta_{\tilde q}$ yields
   \[
-    \zeta\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr)>(m-2)\tilde M^{m-1},
+    \zeta_q\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr)>(m-2)\tilde M^{m-1},
   \]
   which is exactly \eqref{eq:plt23-T-bound-two}.
 \end{proof}
 
 \subsection{An elementary product bound}
 
-The next lemma replaces all of the polynomial positivity checks that appeared in the former small-$v$ analysis.
+The next lemma replaces all of the polynomial positivity checks that appeared in the former small-$\delta_{\tilde p}$ analysis.
 
 \begin{lemma}[Uniform product bound]\label{lem:plt23-product}
   Let $m\ge9$ be odd.
@@ -3456,40 +3457,40 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
   This completes the proof.
 \end{proof}
 
-\subsection{The range \texorpdfstring{$0<v\le1/2$}{0<v<=1/2}}
+\subsection{The range \texorpdfstring{$0<\delta_{\tilde p}\le1/2$}{0<delta\_p<=1/2}}
 
 We now prove two simultaneous bounds.
-The first controls the quadratic scale $\mathcal A$, while the second keeps both $\mathcal A$ and $\mathcal B$ at once.
+The first controls the quadratic scale $\widehat Q_m$, while the second keeps both $\widehat Q_m$ and $\widehat L_m$ at once.
 
-\begin{proposition}[The low-$v$ bounds]\label{prop:plt23-low-v}
-  Suppose $0<v\le1/2$.
+\begin{proposition}[The low-$\delta_{\tilde p}$ bounds]\label{prop:plt23-low-v}
+  Suppose $0<\delta_{\tilde p}\le1/2$.
   Then
   \begin{align}
-    2F_m&\le\mathcal A,
+    2\widehat R_m&\le\widehat Q_m,
     \label{eq:plt23-low-v-A}\\
-    \frac{F_m}{\mathcal A}+2\frac{F_m}{\mathcal B}&\le2.
+    \frac{\widehat R_m}{\widehat Q_m}+2\frac{\widehat R_m}{\widehat L_m}&\le2.
     \label{eq:plt23-low-v-both}
   \end{align}
 \end{proposition}
 
 \begin{proof}
-  If $F_m\le0$, both inequalities are immediate.
+  If $\widehat R_m\le0$, both inequalities are immediate.
   Assume \eqref{eq:plt23-F-positive}.
   Put
   \[
-    z:=\frac\zeta{\tilde p},
+    z:=\frac{\zeta_q}{\tilde p},
     \qquad
-    c:=1-v^{(m-2)/2}.
+    c:=1-\delta_{\tilde p}^{(m-2)/2}.
   \]
-  Since $\zeta>3/4$ and $\tilde p\le3/2$,
+  Since $\zeta_q>3/4$ and $\tilde p\le3/2$,
   \[
     z>\frac12.
   \]
-  Because $\zeta=\tilde pz$ and $1+v=\tilde p$, \eqref{eq:plt23-zeta-v-inverse} becomes
+  Because $\zeta_q=\tilde pz$ and $1+\delta_{\tilde p}=\tilde p$, \eqref{eq:plt23-zeta-v-inverse} becomes
   \begin{equation}\label{eq:plt23-low-v-u-Mtilde}
-    u=\frac{v}{\tilde p(1+z)},
+    \delta_{\tilde q}=\frac{\delta_{\tilde p}}{\tilde p(1+z)},
     \qquad
-    \tilde M^2=\frac{vz}{1+z}.
+    \tilde M^2=\frac{\delta_{\tilde p}z}{1+z}.
   \end{equation}
   By \eqref{eq:plt23-F-T} and \eqref{eq:plt23-T-bound-one},
   \begin{equation}\label{eq:plt23-G-low-v}
@@ -3497,39 +3498,39 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     \qquad
     P:=(m-2)-cz.
   \end{equation}
-  Since $F_m>0$, the left side is positive, so $P>0$.
+  Since $\widehat R_m>0$, the left side is positive, so $P>0$.
 
   We first bound $X$ from below.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, and \eqref{eq:plt23-low-v-u-Mtilde},
   \begin{align*}
     X
-    &=\frac{2\Lambda^3u}{(1-2\Lambda)^2}\,\widehat{\Lambda}_m\\
+    &=\frac{2\Lambda^3\delta_{\tilde q}}{(1-2\Lambda)^2}\,\widehat{\Lambda}_m\\
     &=\frac{2\tilde p^2(1+z)}
-            {\Delta\,v\,(v+\tilde pz)^2}\,\widehat{\Lambda}_m.
+            {\Delta\,\delta_{\tilde p}\,(\delta_{\tilde p}+\tilde pz)^2}\,\widehat{\Lambda}_m.
   \end{align*}
   Indeed,
   \[
-    v^2+\tilde M^2
-    =v\left(v+\frac{z}{1+z}\right)
-    =\frac{v(v+\tilde pz)}{1+z}.
+    \delta_{\tilde p}^2+\tilde M^2
+    =\delta_{\tilde p}\left(\delta_{\tilde p}+\frac{z}{1+z}\right)
+    =\frac{\delta_{\tilde p}(\delta_{\tilde p}+\tilde pz)}{1+z}.
   \]
-  By \eqref{eq:plt23-KA-def} and \eqref{eq:plt23-KA-sum}, $\widehat{\Lambda}_m\ge mvS_m$.
+  By \eqref{eq:plt23-KA-def} and \eqref{eq:plt23-KA-sum}, $\widehat{\Lambda}_m\ge m\delta_{\tilde p}S_m$.
   Using also \eqref{eq:plt23-Delta-upper-sigma},
   \begin{equation}\label{eq:plt23-X-low-v-1}
     X
     >\frac{2\tilde pmS_m(1+z)}
-            {(v+2)(v+\tilde pz)^2}.
+            {(\delta_{\tilde p}+2)(\delta_{\tilde p}+\tilde pz)^2}.
   \end{equation}
   We claim
   \[
-    (v+2)(v+\tilde pz)^2
+    (\delta_{\tilde p}+2)(\delta_{\tilde p}+\tilde pz)^2
     \le2\tilde p^3z(1+z).
   \]
   The difference between the right and left sides is
   \[
-    v\tilde p^2z^2+2\tilde pz-v^2(v+2),
+    \delta_{\tilde p}\tilde p^2z^2+2\tilde pz-\delta_{\tilde p}^2(\delta_{\tilde p}+2),
   \]
-  which is positive because $z\ge1/2$, hence $2\tilde pz\ge1$, while $v^2(v+2)\le5/8$.
+  which is positive because $z\ge1/2$, hence $2\tilde pz\ge1$, while $\delta_{\tilde p}^2(\delta_{\tilde p}+2)\le5/8$.
   Thus \eqref{eq:plt23-X-low-v-1} implies
   \begin{equation}\label{eq:plt23-X-low-v-2}
     X\ge\frac{mS_m}{\tilde p^2z}.
@@ -3549,7 +3550,7 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     \frac GX
     \le\frac{(m-2)^2}{2c(m-1)m}.
   \end{equation}
-  Now $v\le1/2$ gives $c\ge1-2^{-(m-2)/2}$.
+  Now $\delta_{\tilde p}\le1/2$ gives $c\ge1-2^{-(m-2)/2}$.
   For $m\ge9$, $2^{(m-2)/2}\ge m-2$, and
   \[
     \frac1{m-2}\le\frac{3m-4}{(m-1)m}.
@@ -3573,7 +3574,7 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     &=(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_m\\
     &\ge
     m(1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-3}
-    \sqrt{\frac2{v+2}},
+    \sqrt{\frac2{\delta_{\tilde p}+2}},
   \end{align*}
   where we used \eqref{eq:plt23-Lambda-lower}.
   Consequently,
@@ -3581,10 +3582,10 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     \frac{2G}{Y}
     \le
     \frac{2P}{m}
-    \frac{\sqrt{(v+2)/2}}
+    \frac{\sqrt{(\delta_{\tilde p}+2)/2}}
          {(1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-4}}.
   \end{equation}
-  Put $y=\sqrt v$, so $0<y\le1/\sqrt2$.
+  Put $y=\sqrt{\delta_{\tilde p}}$, so $0<y\le1/\sqrt2$.
   Since $\tilde M\le y$ and $x\mapsto(1-x)(\tilde p-x)$ is decreasing on $[0,y]$, \Cref{lem:plt23-product} gives
   \begin{align}
    (1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-4}
@@ -3592,14 +3593,14 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
    (1-y)(1-y+y^2)(1+y^2)^{m-4}\notag\\
    &\ge
    \frac{m-2}{m}\sqrt{1+\frac{y^2}{2}}
-   =\frac{m-2}{m}\sqrt{\frac{v+2}{2}}.
+   =\frac{m-2}{m}\sqrt{\frac{\delta_{\tilde p}+2}{2}}.
    \label{eq:plt23-product-applied}
   \end{align}
   Also
   \[
-    c=1-v^{(m-2)/2}\ge\frac{m-2}{m}.
+    c=1-\delta_{\tilde p}^{(m-2)/2}\ge\frac{m-2}{m}.
   \]
-  Indeed, $v^{(m-2)/2}\le2^{-(m-2)/2}\le2/m$ for $m\ge9$.
+  Indeed, $\delta_{\tilde p}^{(m-2)/2}\le2^{-(m-2)/2}\le2/m$ for $m\ge9$.
   Therefore
   \begin{equation}\label{eq:plt23-P-bound}
     \frac P{m-2}=1-\frac{cz}{m-2}
@@ -3618,64 +3619,65 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
   which is \eqref{eq:plt23-low-v-both} by \eqref{eq:plt23-GXY-ratios}.
 \end{proof}
 
-\subsection{The range \texorpdfstring{$1/2\le v<1$}{1/2<=v<1}}
+\subsection{The range \texorpdfstring{$1/2\le\delta_{\tilde p}<1$}{1/2<=delta\_p<1}}
 
 The second half is even more direct.
-Here the admissibility condition $q>1/3$ forces $\tilde M$ to be sufficiently close to $\sqrt v$; this is exactly what compensates for the apparently weak factors in $\mathcal A$ and $\mathcal B$.
+Here the admissibility condition $q>1/3$ forces $\tilde M$ to be sufficiently close to $\sqrt{\delta_{\tilde p}}$; this is exactly what compensates for the apparently weak factors in $\widehat Q_m$ and $\widehat L_m$.
 
 Put
 \[
-  \tau:=\frac{\tilde M^2}{v},
-  \qquad 0<\tau<1.
+  \zeta_p:=\frac{\tilde M^2}{\delta_{\tilde p}},
+  \qquad 0<\zeta_p<1,
 \]
-Since $\tilde M^2=v\tau$, the inequality \eqref{eq:plt23-Delta-upper-three} gives
+the same ratio as $\zeta_q$ but over the other gap.
+Since $\tilde M^2=\delta_{\tilde p}\zeta_p$, the inequality \eqref{eq:plt23-Delta-upper-three} gives
 \[
-  (1+v)^2+1+v\tau<3(1+v\tau),
+  (1+\delta_{\tilde p})^2+1+\delta_{\tilde p}\zeta_p<3(1+\delta_{\tilde p}\zeta_p),
 \]
 so
 \[
-  \tau>\frac{v^2+2v-1}{2v}\ge v^2.
+  \zeta_p>\frac{\delta_{\tilde p}^2+2\delta_{\tilde p}-1}{2\delta_{\tilde p}}\ge \delta_{\tilde p}^2.
 \]
 The last inequality follows from
 \[
-  v^2+2v-1-2v^3
-  =(1-v)(1+v)(2v-1)\ge0.
+  \delta_{\tilde p}^2+2\delta_{\tilde p}-1-2\delta_{\tilde p}^3
+  =(1-\delta_{\tilde p})(1+\delta_{\tilde p})(2\delta_{\tilde p}-1)\ge0.
 \]
 Hence
 \begin{equation}\label{eq:plt23-vtau-square}
-  (v+\tau)^2\le\tau(1+v)^2=\tau\tilde p^2,
+  (\delta_{\tilde p}+\zeta_p)^2\le\zeta_p(1+\delta_{\tilde p})^2=\zeta_p\tilde p^2,
 \end{equation}
 for
 \[
-  \tau\tilde p^2-(v+\tau)^2
-  =(1-\tau)(\tau-v^2)\ge0.
+  \zeta_p\tilde p^2-(\delta_{\tilde p}+\zeta_p)^2
+  =(1-\zeta_p)(\zeta_p-\delta_{\tilde p}^2)\ge0.
 \]
 
-\begin{proposition}[The high-$v$ quadratic bound]\label{prop:plt23-high-v-A}
-  Suppose $1/2\le v<1$.
+\begin{proposition}[The high-$\delta_{\tilde p}$ quadratic bound]\label{prop:plt23-high-v-A}
+  Suppose $1/2\le\delta_{\tilde p}<1$.
   Then
   \begin{equation}\label{eq:plt23-high-v-A}
-    F_m\le\mathcal A.
+    \widehat R_m\le\widehat Q_m.
   \end{equation}
 \end{proposition}
 
 \begin{proof}
-  Again the claim is immediate if $F_m\le0$, so assume \eqref{eq:plt23-F-positive}.
-  From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, $u=v(1-\tau)/\tilde p$, and \eqref{eq:plt23-KA-def}--\eqref{eq:plt23-KA-sum},
+  Again the claim is immediate if $\widehat R_m\le0$, so assume \eqref{eq:plt23-F-positive}.
+  From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, $\delta_{\tilde q}=\delta_{\tilde p}(1-\zeta_p)/\tilde p$, and \eqref{eq:plt23-KA-def}--\eqref{eq:plt23-KA-sum},
   \[
     X
-    =\frac{2\tilde p^2(1-\tau)}{\Delta(v+\tau)^2}
+    =\frac{2\tilde p^2(1-\zeta_p)}{\Delta(\delta_{\tilde p}+\zeta_p)^2}
      \left(
-       \frac{2\tilde M^{m-2}}{v}+mS_m
+       \frac{2\tilde M^{m-2}}{\delta_{\tilde p}}+mS_m
      \right).
   \]
   Using \eqref{eq:plt23-Delta-upper-sigma} and \eqref{eq:plt23-vtau-square}, and dropping the positive first term in parentheses,
   \begin{equation}\label{eq:plt23-X-high-v-lower}
     X>
-    \frac{2mS_m(1-\tau)}{\tau\tilde p(v+2)}.
+    \frac{2mS_m(1-\zeta_p)}{\zeta_p\tilde p(\delta_{\tilde p}+2)}.
   \end{equation}
 
-  The positivity of $F_m$ supplies a useful lower bound on $1-\tau$.
+  The positivity of $\widehat R_m$ supplies a useful lower bound on $1-\zeta_p$.
   From \eqref{eq:plt23-F-formula},
   \[
     (1+\tilde M^2)\tilde q^{m-2}<1+\tilde M^{m},
@@ -3685,16 +3687,16 @@ for
     \tilde q^{m-2}
     <1-\frac{\tilde M^2}{1+\tilde M^2}\bigl(1-\tilde M^{m-2}\bigr).
   \]
-  On the other hand, Bernoulli gives $\tilde q^{m-2}=(1-u)^{m-2}\ge1-(m-2)u$.
-  Comparing the two inequalities, and substituting $u=v(1-\tau)/\tilde p$ and $\tilde M^2=v\tau$, yields
+  On the other hand, Bernoulli gives $\tilde q^{m-2}=(1-\delta_{\tilde q})^{m-2}\ge1-(m-2)\delta_{\tilde q}$.
+  Comparing the two inequalities, and substituting $\delta_{\tilde q}=\delta_{\tilde p}(1-\zeta_p)/\tilde p$ and $\tilde M^2=\delta_{\tilde p}\zeta_p$, yields
   \[
-    (m-2)(1+\tilde M^2)(1-\tau)
-    >\tau\tilde p\bigl(1-\tilde M^{m-2}\bigr).
+    (m-2)(1+\tilde M^2)(1-\zeta_p)
+    >\zeta_p\tilde p\bigl(1-\tilde M^{m-2}\bigr).
   \]
   Therefore \eqref{eq:plt23-X-high-v-lower} gives
   \begin{equation}\label{eq:plt23-X-high-v-final}
     X>
-    \frac{2mS_m}{(m-2)(1+\tilde M^2)(v+2)}
+    \frac{2mS_m}{(m-2)(1+\tilde M^2)(\delta_{\tilde p}+2)}
     \bigl(1-\tilde M^{m-2}\bigr).
   \end{equation}
 
@@ -3710,18 +3712,18 @@ for
   Combining \eqref{eq:plt23-X-high-v-final}, \eqref{eq:plt23-SN-AMGM}, and \eqref{eq:plt23-ratio-powers}, and using $1+\tilde M^2\le\tilde p$, it is enough for $X\ge G$ that
   \begin{equation}\label{eq:plt23-high-v-condition}
     \tilde p^{(m-5)/2}
-    \ge\frac{(m-2)(v+2)}{m}.
+    \ge\frac{(m-2)(\delta_{\tilde p}+2)}{m}.
   \end{equation}
   For $m\ge11$, the left side is at least $(3/2)^3=27/8>3$, whereas the right side is less than $3$.
   For $m=9$, \eqref{eq:plt23-high-v-condition} is
   \[
-    (1+v)^2\ge\frac{7(v+2)}9.
+    (1+\delta_{\tilde p})^2\ge\frac{7(\delta_{\tilde p}+2)}9.
   \]
-  It holds at $v=1/2$, and the difference has derivative $2(1+v)-7/9>0$ thereafter.
+  It holds at $\delta_{\tilde p}=1/2$, and the difference has derivative $2(1+\delta_{\tilde p})-7/9>0$ thereafter.
   Thus $G\le X$, which is exactly \eqref{eq:plt23-high-v-A}.
 \end{proof}
 
-We next prove the bound for $\mathcal B$.
+We next prove the bound for $\widehat L_m$.
 The only auxiliary fact is a simple comparison between a geometric sum and a power.
 
 \begin{lemma}[A geometric-sum bound]\label{lem:plt23-geometric-sum}
@@ -3816,36 +3818,36 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
   Hence the claim holds also for $m=9$.
 \end{proof}
 
-\begin{proposition}[The high-$v$ linear bound]\label{prop:plt23-high-v-B}
-  Suppose $1/2\le v<1$.
+\begin{proposition}[The high-$\delta_{\tilde p}$ linear bound]\label{prop:plt23-high-v-B}
+  Suppose $1/2\le\delta_{\tilde p}<1$.
   Then
   \begin{equation}\label{eq:plt23-high-v-B}
-    2F_m\le\mathcal B.
+    2\widehat R_m\le\widehat L_m.
   \end{equation}
 \end{proposition}
 
 \begin{proof}
-  The claim is trivial if $F_m\le0$, so assume $F_m>0$.
+  The claim is trivial if $\widehat R_m\le0$, so assume $\widehat R_m>0$.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, \eqref{eq:plt23-KL-sum}, and \eqref{eq:plt23-Lambda-lower},
   \[
     Y\ge
     m(1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-3}
-    \sqrt{\frac2{v+2}}.
+    \sqrt{\frac2{\delta_{\tilde p}+2}}.
   \]
   Together with \eqref{eq:plt23-G-high-v}, it is enough to prove
   \begin{equation}\label{eq:plt23-high-v-B-sufficient}
     \frac{m}{2(m-2)}
-    \sqrt{\frac2{v+2}}
+    \sqrt{\frac2{\delta_{\tilde p}+2}}
     (\tilde p-\tilde M)\tilde p^{m-3}
     \ge
     \sum_{j=0}^{m-2}\tilde M^j,
   \end{equation}
   where we cancelled the positive factor $1-\tilde M$ using $1-\tilde M^{m-1}=(1-\tilde M)\sum_{j=0}^{m-2}\tilde M^j$.
 
-  For fixed $v$, the left side of \eqref{eq:plt23-high-v-B-sufficient} decreases with $\tilde M$, while the right side increases.
-  Since $\tilde M^2<v$, it is enough to put
+  For fixed $\delta_{\tilde p}$, the left side of \eqref{eq:plt23-high-v-B-sufficient} decreases with $\tilde M$, while the right side increases.
+  Since $\tilde M^2<\delta_{\tilde p}$, it is enough to put
   \[
-    x:=\sqrt v,
+    x:=\sqrt{\delta_{\tilde p}},
     \qquad
     \tilde M=x,
     \qquad
@@ -3864,14 +3866,14 @@ We can now finish without any further subdivision of the admissible region.
 \end{proposition}
 
 \begin{proof}
-  If $F_m=R_m/\Lambda^m\le0$, the claim is immediate.
-  Assume $F_m>0$, and recall $\theta=\mathcal A/\mathcal B$.
-  By \Cref{prop:plt23-reduction} it is enough to prove $F_m\le\mathcal B\,d(\theta)$.
+  If $\widehat R_m=R_m/\Lambda^m\le0$, the claim is immediate.
+  Assume $\widehat R_m>0$, and recall $\theta=\widehat Q_m/\widehat L_m$.
+  By \Cref{prop:plt23-reduction} it is enough to prove $\widehat R_m\le\widehat L_m\,d(\theta)$.
 
-  Suppose first $0<v\le1/2$.
+  Suppose first $0<\delta_{\tilde p}\le1/2$.
   \Cref{prop:plt23-low-v} gives
   \[
-    \frac{F_m}{\mathcal B}
+    \frac{\widehat R_m}{\widehat L_m}
     \le
     \min\left\{
       \frac\theta2,
@@ -3884,17 +3886,17 @@ We can now finish without any further subdivision of the admissible region.
     1-\frac1{4\theta}-\frac{2\theta}{1+2\theta}
     =\frac{2\theta-1}{4\theta(1+2\theta)}\ge0.
   \]
-  Thus $F_m\le\mathcal B\,d(\theta)$ in this range.
+  Thus $\widehat R_m\le\widehat L_m\,d(\theta)$ in this range.
 
-  Now suppose $1/2\le v<1$.
+  Now suppose $1/2\le\delta_{\tilde p}<1$.
   \Cref{prop:plt23-high-v-A,prop:plt23-high-v-B} give
   \[
-    \frac{F_m}{\mathcal B}
+    \frac{\widehat R_m}{\widehat L_m}
     \le\min\{\theta,1/2\}.
   \]
   If $\theta\le1/2$, the right side is at most $\theta=d(\theta)$.
   If $\theta\ge1/2$, it is at most $1/2\le d(\theta)$.
-  Hence $F_m\le\mathcal B\,d(\theta)$ again, and \Cref{prop:plt23-reduction} proves \eqref{eq:plt23-scalar-target}.
+  Hence $\widehat R_m\le\widehat L_m\,d(\theta)$ again, and \Cref{prop:plt23-reduction} proves \eqref{eq:plt23-scalar-target}.
 \end{proof}
 
 \subsection{Completion of the intermediate-density region}
