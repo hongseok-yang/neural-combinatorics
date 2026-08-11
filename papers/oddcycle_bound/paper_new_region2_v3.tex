@@ -366,15 +366,15 @@ for the associated measure on the spectrum of $A$, so that $\int\lambda^j\dd\mu(
     \zeta(\zeta+v)\ge1
   \]
   (\Cref{subsec:plt23-variables}).
-  Writing $F_N=R_m/\Lambda^m$, what has to be proved is that $F_N\le\mathcal B\,d(\theta)$ holds in that region for every odd $m\ge9$.
+  Writing $F_m=R_m/\Lambda^m$, what has to be proved is that $F_m\le\mathcal B\,d(\theta)$ holds in that region for every odd $m\ge9$.
 
   The region is divided only at $v=1/2$, and on each half two bounds are proved at once.
   \begin{itemize}[leftmargin=1.6em,topsep=2pt,itemsep=1pt]
-    \item For $v\le1/2$: $2F_N\le\mathcal A$ and $F_N/\mathcal A+2F_N/\mathcal B\le2$ (\Cref{prop:plt23-low-v}).
-    \item For $v\ge1/2$: $F_N\le\mathcal A$ and $2F_N\le\mathcal B$ (\Cref{prop:plt23-high-v-A,prop:plt23-high-v-B}).
+    \item For $v\le1/2$: $2F_m\le\mathcal A$ and $F_m/\mathcal A+2F_m/\mathcal B\le2$ (\Cref{prop:plt23-low-v}).
+    \item For $v\ge1/2$: $F_m\le\mathcal A$ and $2F_m\le\mathcal B$ (\Cref{prop:plt23-high-v-A,prop:plt23-high-v-B}).
   \end{itemize}
-  In both halves the first bound settles $\theta\le1/2$ and the second settles $\theta\ge1/2$, which gives $F_N\le\mathcal B\,d(\theta)$ (\Cref{prop:plt23-scalar}).
-  All four bounds are proved by elementary analysis; the only inputs are two upper bounds for $F_N$, one bound for a product of elementary factors, and one comparison between a geometric sum and a power.
+  In both halves the first bound settles $\theta\le1/2$ and the second settles $\theta\ge1/2$, which gives $F_m\le\mathcal B\,d(\theta)$ (\Cref{prop:plt23-scalar}).
+  All four bounds are proved by elementary analysis; the only inputs are two upper bounds for $F_m$, one bound for a product of elementary factors, and one comparison between a geometric sum and a power.
 \end{enumerate}
 
 We prove \Cref{thm:main} in \Cref{sec:assembly}, combining the parts above.
@@ -3031,13 +3031,13 @@ Dividing both sides of \eqref{eq:plt23-scalar-target} by $\Lambda^m$ and separat
   \qquad
   \theta:=\rho\xi=\frac{\mathcal A}{\mathcal B},
   \qquad
-  F_N:=\frac{R_m}{\Lambda^m},
+  F_m:=\frac{R_m}{\Lambda^m},
 \end{equation}
 of which the first three are positive.
 Keeping $\mathcal A$ and $\mathcal B$ simultaneously, rather than choosing one value of $\lambda$ in \eqref{eq:plt23-psi-dual} and then splitting the parameter region according to which value was chosen, already reduces \eqref{eq:plt23-scalar-target} to a single inequality.
 
 \begin{proposition}[Reduction to a normalized inequality]\label{prop:plt23-reduction}
-  Let
+  Let $m\ge9$ be odd, let $q$ and $\Lambda$ satisfy \eqref{eq:plt23-range} and \eqref{eq:plt23-Lambda-above-q}, and let
   \begin{equation}\label{eq:plt23-dtheta}
     d(\theta):=
     \begin{cases}
@@ -3045,7 +3045,7 @@ Keeping $\mathcal A$ and $\mathcal B$ simultaneously, rather than choosing one v
       1-\dfrac{1}{4\theta}, & \theta\ge\frac12.
     \end{cases}
   \end{equation}
-  If $F_N\le\mathcal B\,d(\theta)$, then \eqref{eq:plt23-scalar-target} holds.
+  If $F_m\le\mathcal B\,d(\theta)$, then \eqref{eq:plt23-scalar-target} holds.
 \end{proposition}
 
 \begin{proof}
@@ -3066,17 +3066,12 @@ Keeping $\mathcal A$ and $\mathcal B$ simultaneously, rather than choosing one v
   \[
     \frac{\Omega_m\psi(\xi,\rho)}{\Lambda^m}
     \ge\mathcal B\,d(\theta)
-    \ge F_N,
+    \ge F_m,
   \]
   and multiplying by $\Lambda^m$ gives \eqref{eq:plt23-scalar-target}.
 \end{proof}
 
-The remaining subsections verify the hypothesis $F_N\le\mathcal B\,d(\theta)$, and for that we express $F_N$, $\mathcal A$, and $\mathcal B$ in variables adapted to the problem.
-Set
-\[
-  N:=m-2,
-\]
-so that $N\ge7$ is odd.
+The remaining subsections verify the hypothesis $F_m\le\mathcal B\,d(\theta)$, and for that we express $F_m$, $\mathcal A$, and $\mathcal B$ in variables adapted to the problem.
 Throughout the rest of this section a tilde denotes division by $\Lambda$:
 \[
   \tilde q:=\frac q\Lambda,
@@ -3102,21 +3097,21 @@ so
   1<\tilde p<2.
 \]
 We also need the consequence of the upper bound \eqref{eq:plt23-alpha-ceiling-poly} on $\Lambda$.
-Writing
+Since $p+q=1$, $q=\tilde q\Lambda$, and $p=(1+\tilde M^2)\Lambda/\tilde q$,
 \[
-  D:=1+\tilde q^2+\tilde M^2,
+  \Lambda=\frac{\tilde q}{1+\tilde q^2+\tilde M^2},
+  \qquad
+  q=\frac{\tilde q^2}{1+\tilde q^2+\tilde M^2},
 \]
-one has $\Lambda=\tilde q/D$ and $q=\tilde q^2/D$.
-Therefore \eqref{eq:plt23-alpha-ceiling-poly} is equivalent to
+so \eqref{eq:plt23-alpha-ceiling-poly} is equivalent to
 \begin{equation}\label{eq:plt23-frontier-chart}
-  \tilde M^2\ge \tilde q(1-\tilde q)=\tilde qu.
+  \tilde M^2\ge \tilde q(1-\tilde q)=\tilde qu,
 \end{equation}
-Moreover, $q>1/3$ gives $D<3\tilde q^2$.
-Since $D\ge1+\tilde q$ by \eqref{eq:plt23-frontier-chart},
-\[
-  3\tilde q^2-\tilde q-1>0,
-\]
-and hence
+while $q>1/3$ is equivalent to $1+\tilde q^2+\tilde M^2<3\tilde q^2$, that is, to
+\begin{equation}\label{eq:plt23-Mtilde-upper}
+  \tilde M^2<2\tilde q^2-1.
+\end{equation}
+Together, \eqref{eq:plt23-frontier-chart} and \eqref{eq:plt23-Mtilde-upper} give $\tilde q-\tilde q^2<2\tilde q^2-1$, hence $3\tilde q^2-\tilde q-1>0$ and
 \[
   \tilde q>\frac{1+\sqrt{13}}6>\frac34.
 \]
@@ -3180,66 +3175,66 @@ Finally, $q<\Lambda$ and $p=\tilde p\Lambda$ imply
   \Lambda>\frac1{v+2}.
 \end{equation}
 
-Since $m=N+2$, $M=\tilde M\Lambda$, $q=\tilde q\Lambda$, and $p=\tilde p\Lambda=(1+\tilde M^2)\Lambda/\tilde q$, the definition $R_m=\Lambda^m+M^m-pq^{m-1}$ gives
+Since $M=\tilde M\Lambda$, $q=\tilde q\Lambda$, and $p=\tilde p\Lambda=(1+\tilde M^2)\Lambda/\tilde q$, the definition $R_m=\Lambda^m+M^m-pq^{m-1}$ gives
 \begin{equation}\label{eq:plt23-F-formula}
-  F_N
-  =1-\tilde q^N-\tilde M^2(\tilde q^N-\tilde M^N).
+  F_m
+  =1-\tilde q^{m-2}-\tilde M^2\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr).
 \end{equation}
 Put
 \[
-  T_N:=N-\zeta(\tilde q^N-\tilde M^N).
+  T_m:=(m-2)-\zeta\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr).
 \]
-Because $1-\tilde q^N\le N(1-\tilde q)=Nu$ and $\tilde M^2=\zeta u$,
+Because $1-\tilde q^{m-2}\le(m-2)(1-\tilde q)=(m-2)u$ and $\tilde M^2=\zeta u$,
 \begin{equation}\label{eq:plt23-F-T}
-  F_N\le uT_N.
+  F_m\le uT_m.
 \end{equation}
-Thus $F_N\le0$ already proves \eqref{eq:plt23-scalar-target}, because $\psi(\xi,\rho)\ge0$.
+Thus $F_m\le0$ already proves \eqref{eq:plt23-scalar-target}, because $\psi(\xi,\rho)\ge0$.
 Whenever convenient below we may therefore assume
 \begin{equation}\label{eq:plt23-F-positive}
-  F_N>0,
+  F_m>0,
 \end{equation}
-which by \eqref{eq:plt23-F-T} implies $T_N>0$.
+which by \eqref{eq:plt23-F-T} implies $T_m>0$.
 
 Next normalize the two coefficients $\Lambda_m$ and $M_m$ of \Cref{prop:plt23-splitting-lower-bound}:
 \[
-  \widehat{\Lambda}_N:=\frac{\Lambda_m}{\Lambda^N},
+  \widehat{\Lambda}_m:=\frac{\Lambda_m}{\Lambda^{m-2}},
   \qquad
-  \widehat M_N:=\frac{M_m}{\Lambda^N}.
+  \widehat M_m:=\frac{M_m}{\Lambda^{m-2}}.
 \]
 A direct substitution into the definitions of $k_m$, $\Lambda_m$, and $M_m$ gives
 \begin{align}
-  \widehat{\Lambda}_N
-  &=2\tilde M^N+(N+2)K_\Lambda,
+  \widehat{\Lambda}_m
+  &=2\tilde M^{m-2}+mK_\Lambda,
   &
   K_\Lambda
-  &:=\frac{\tilde p^{N+1}-1}{\tilde p+1},
+  &:=\frac{\tilde p^{m-1}-1}{\tilde p+1},
   \label{eq:plt23-KA-def}\\
-  \widehat M_N
-  &=2\tilde M^N+(N+2)K_M,
+  \widehat M_m
+  &=2\tilde M^{m-2}+mK_M,
   &
   K_M
-  &:=\frac{\tilde p^{N+1}-\tilde M^{N+1}}{\tilde p+\tilde M}.
+  &:=\frac{\tilde p^{m-1}-\tilde M^{m-1}}{\tilde p+\tilde M}.
   \label{eq:plt23-KL-def}
 \end{align}
-Since $N+1$ is even,
+Since $m-1$ is even,
 \begin{align}
   K_\Lambda
-  &=v\sum_{j=0}^{(N-1)/2}\tilde p^{2j},
+  &=v\sum_{j=0}^{(m-3)/2}\tilde p^{2j},
   \label{eq:plt23-KA-sum}\\
   K_M
   &=(\tilde p-\tilde M)
-    \sum_{j=0}^{(N-1)/2}
-      \tilde p^{N-1-2j}\tilde M^{2j}.
+    \sum_{j=0}^{(m-3)/2}
+      \tilde p^{m-3-2j}\tilde M^{2j}.
   \label{eq:plt23-KL-sum}
 \end{align}
 For brevity set
 \[
-  S_N:=\sum_{j=0}^{(N-1)/2}\tilde p^{2j}.
+  S_m:=\sum_{j=0}^{(m-3)/2}\tilde p^{2j}.
 \]
-There are $(N+1)/2$ summands and their geometric mean is $\tilde p^{(N-1)/2}$.
+There are $(m-1)/2$ summands and their geometric mean is $\tilde p^{(m-3)/2}$.
 Hence the arithmetic--geometric mean inequality gives
 \begin{equation}\label{eq:plt23-SN-AMGM}
-  S_N\ge \frac{N+1}{2}\tilde p^{(N-1)/2}.
+  S_m\ge \frac{m-1}{2}\tilde p^{(m-3)/2}.
 \end{equation}
 
 The definitions \eqref{eq:plt23-C-xi-rho}--\eqref{eq:plt23-rho-def} of $\Omega_m$, $\xi$, and $\rho$ now give closed forms for $\mathcal A$ and $\mathcal B$.
@@ -3253,17 +3248,17 @@ and hence, using $\xi^2=16\Lambda^4(\Lambda-q)^2/(1-2\Lambda)^4$,
 \[
   \Omega_m\rho\xi^2=\frac{2\Lambda^3\Lambda_m(\Lambda-q)^2}{(1-2\Lambda)^2}.
 \]
-Substituting $\Lambda-q=\Lambda u$, $\Lambda-M=\Lambda(1-\tilde M)$, $\Lambda_m=\Lambda^N\widehat{\Lambda}_N$, $M_m=\Lambda^N\widehat M_N$, and $m=N+2$ turns these into
+Substituting $\Lambda-q=\Lambda u$, $\Lambda-M=\Lambda(1-\tilde M)$, $\Lambda_m=\Lambda^{m-2}\widehat{\Lambda}_m$, and $M_m=\Lambda^{m-2}\widehat M_m$ turns these into
 \begin{equation}\label{eq:plt23-AB-formulas}
   \mathcal A
-  =\frac{2\Lambda^3u^2}{(1-2\Lambda)^2}\,\widehat{\Lambda}_N,
+  =\frac{2\Lambda^3u^2}{(1-2\Lambda)^2}\,\widehat{\Lambda}_m,
   \qquad
   \mathcal B
-  =u(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_N.
+  =u(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_m.
 \end{equation}
-Each of $F_N$, $\mathcal A$, and $\mathcal B$ carries a factor $u$, so we also set
+Each of $F_m$, $\mathcal A$, and $\mathcal B$ carries a factor $u$, so we also set
 \[
-  G:=\frac{F_N}{u},
+  G:=\frac{F_m}{u},
   \qquad
   X:=\frac{\mathcal A}{u},
   \qquad
@@ -3271,9 +3266,9 @@ Each of $F_N$, $\mathcal A$, and $\mathcal B$ carries a factor $u$, so we also s
 \]
 and note that
 \begin{equation}\label{eq:plt23-GXY-ratios}
-  \frac{F_N}{\mathcal A}=\frac GX,
+  \frac{F_m}{\mathcal A}=\frac GX,
   \qquad
-  \frac{F_N}{\mathcal B}=\frac GY.
+  \frac{F_m}{\mathcal B}=\frac GY.
 \end{equation}
 
 \subsection{Two elementary bounds for the defect}
@@ -3281,29 +3276,29 @@ and note that
 We only need two of the bounds used in the former proof.
 
 \begin{lemma}[Defect bounds]\label{lem:plt23-T-bounds}
-  For every admissible point and every odd $N\ge7$,
+  For every admissible point and every odd $m\ge9$,
   \begin{align}
-    T_N
-    &\le N(1+v)-\zeta\bigl(1-v^{N/2}\bigr),
+    T_m
+    &\le (m-2)(1+v)-\zeta\bigl(1-v^{(m-2)/2}\bigr),
     \label{eq:plt23-T-bound-one}\\
-    T_N
-    &<N(1-\tilde M^{N+1}).
+    T_m
+    &<(m-2)\bigl(1-\tilde M^{m-1}\bigr).
     \label{eq:plt23-T-bound-two}
   \end{align}
 \end{lemma}
 
 \begin{proof}
-  For the first inequality, Bernoulli gives $\tilde q^N=(1-u)^N\ge1-Nu$.
-  Also $\tilde M^2<v$ by \eqref{eq:plt23-zeta-v-consequences}, hence $\tilde M^N<v^{N/2}$ and $\zeta u=\tilde M^2<v$.
+  For the first inequality, Bernoulli gives $\tilde q^{m-2}=(1-u)^{m-2}\ge1-(m-2)u$.
+  Also $\tilde M^2<v$ by \eqref{eq:plt23-zeta-v-consequences}, hence $\tilde M^{m-2}<v^{(m-2)/2}$ and $\zeta u=\tilde M^2<v$.
   Therefore
   \begin{align*}
-    T_N
-    &=N-\zeta(\tilde q^N-\tilde M^N)\\
-    &\le N-\zeta+N\zeta u+\zeta\tilde M^N\\
-    &\le N(1+v)-\zeta\bigl(1-v^{N/2}\bigr).
+    T_m
+    &=(m-2)-\zeta\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr)\\
+    &\le (m-2)-\zeta+(m-2)\zeta u+\zeta\tilde M^{m-2}\\
+    &\le (m-2)(1+v)-\zeta\bigl(1-v^{(m-2)/2}\bigr).
   \end{align*}
 
-  For the second inequality, $D<3\tilde q^2$ gives
+  For the second inequality, \eqref{eq:plt23-Mtilde-upper} gives
   \[
     \tilde M^2<2\tilde q^2-1<(2\tilde q-1)^2,
   \]
@@ -3311,15 +3306,15 @@ We only need two of the bounds used in the former proof.
   \[
     \tilde q-\tilde M>1-\tilde q=u.
   \]
-  Convexity of $x\mapsto x^N$ on $[0,\infty)$ gives
+  Convexity of $x\mapsto x^{m-2}$ on $[0,\infty)$ gives
   \[
-    \tilde q^N-\tilde M^N
-    \ge N\tilde M^{N-1}(\tilde q-\tilde M)
-    >Nu\tilde M^{N-1}.
+    \tilde q^{m-2}-\tilde M^{m-2}
+    \ge (m-2)\tilde M^{m-3}(\tilde q-\tilde M)
+    >(m-2)u\tilde M^{m-3}.
   \]
   Multiplying by $\zeta=\tilde M^2/u$ yields
   \[
-    \zeta(\tilde q^N-\tilde M^N)>N\tilde M^{N+1},
+    \zeta\bigl(\tilde q^{m-2}-\tilde M^{m-2}\bigr)>(m-2)\tilde M^{m-1},
   \]
   which is exactly \eqref{eq:plt23-T-bound-two}.
 \end{proof}
@@ -3329,12 +3324,12 @@ We only need two of the bounds used in the former proof.
 The next lemma replaces all of the polynomial positivity checks that appeared in the former small-$v$ analysis.
 
 \begin{lemma}[Uniform product bound]\label{lem:plt23-product}
-  Let $N\ge7$ be odd.
+  Let $m\ge9$ be odd.
   For every $0\le y\le1/\sqrt2$,
   \begin{equation}\label{eq:plt23-product}
-    (1-y)(1-y+y^2)(1+y^2)^{N-2}
+    (1-y)(1-y+y^2)(1+y^2)^{m-4}
     \ge
-    \frac{N}{N+2}\sqrt{1+\frac{y^2}{2}}.
+    \frac{m-2}{m}\sqrt{1+\frac{y^2}{2}}.
   \end{equation}
 \end{lemma}
 
@@ -3381,82 +3376,82 @@ The next lemma replaces all of the polynomial positivity checks that appeared in
   \end{align*}
   Thus \eqref{eq:plt23-log-product} holds.
 
-  Write $\mathcal H_N$ for the quotient of the two sides of \eqref{eq:plt23-product},
+  Write $\mathcal H_m$ for the quotient of the two sides of \eqref{eq:plt23-product},
   \[
-    \mathcal H_N(y)
-    :=\frac{N+2}{N}
-      \frac{(1-y)(1-y+y^2)(1+y^2)^{N-2}}
+    \mathcal H_m(y)
+    :=\frac{m}{m-2}
+      \frac{(1-y)(1-y+y^2)(1+y^2)^{m-4}}
            {\sqrt{1+y^2/2}},
   \]
-  so that \eqref{eq:plt23-product} is the statement $\log\mathcal H_N(y)\ge0$.
+  so that \eqref{eq:plt23-product} is the statement $\log\mathcal H_m(y)\ge0$.
   Using $\log(1+t)\ge t-t^2/2$ and $\log(1+t)\le t$ for $t\ge0$, together with \eqref{eq:plt23-log-product},
   \begin{equation}\label{eq:plt23-Psi-lower}
-    \log\mathcal H_N(y)
+    \log\mathcal H_m(y)
     \ge
-    \Psi_N(y):=
-    \frac{2(N-1)}{N^2}
+    \Psi_m(y):=
+    \frac{2(m-3)}{(m-2)^2}
     -2y
-    +\left(N-\frac{19}{8}\right)y^2
-    -\frac{N-2}{2}y^4.
+    +\left(m-\frac{35}{8}\right)y^2
+    -\frac{m-4}{2}y^4.
   \end{equation}
 
   First suppose $0\le y\le1/4$.
   Then $y^4\le y^2/16$, so
   \[
-    \Psi_N(y)
+    \Psi_m(y)
     \ge
-    \frac{2(N-1)}{N^2}-2y+\alpha_Ny^2,
+    \frac{2(m-3)}{(m-2)^2}-2y+\alpha_my^2,
     \qquad
-    \alpha_N:=\frac{31N-74}{32}.
+    \alpha_m:=\frac{31m-136}{32}.
   \]
-  The quadratic on the right has global minimum $2(N-1)/N^2-1/\alpha_N$.
+  The quadratic on the right has global minimum $2(m-3)/(m-2)^2-1/\alpha_m$.
   This is nonnegative because
   \begin{align*}
-    \frac{2(N-1)}{N^2}\ge\frac1{\alpha_N}
+    \frac{2(m-3)}{(m-2)^2}\ge\frac1{\alpha_m}
     &\iff
-    2(N-1)(31N-74)\ge32N^2\\
+    2(m-3)(31m-136)\ge32(m-2)^2\\
     &\iff
-    15N^2-105N+74\ge0,
+    15m^2-165m+344\ge0,
   \end{align*}
-  and the last expression is positive at $N=7$ and increasing for $N\ge7$.
+  and the last expression is positive at $m=9$ and increasing for $m\ge9$.
 
   It remains to consider $1/4\le y\le1/\sqrt2$.
-  For odd $N\ge7$,
+  For odd $m\ge9$,
   \[
-    \frac{\mathcal H_{N+2}(y)}{\mathcal H_N(y)}
-    =\frac{N(N+4)}{(N+2)^2}(1+y^2)^2.
+    \frac{\mathcal H_{m+2}(y)}{\mathcal H_m(y)}
+    =\frac{m^2-4}{m^2}(1+y^2)^2.
   \]
   When $y\ge1/4$, the right side is at least
   \[
-    \frac{N(N+4)}{(N+2)^2}\left(\frac{17}{16}\right)^2>1,
+    \frac{m^2-4}{m^2}\left(\frac{17}{16}\right)^2>1,
   \]
   because
   \[
-    289N(N+4)-256(N+2)^2
-    =33N^2+132N-1024>0
-    \qquad (N\ge7).
+    289\bigl(m^2-4\bigr)-256m^2
+    =33m^2-1156>0
+    \qquad (m\ge9).
   \]
-  Thus it is enough to prove the claim for $N=7$, where \eqref{eq:plt23-Psi-lower} gives
+  Thus it is enough to prove the claim for $m=9$, where \eqref{eq:plt23-Psi-lower} gives
   \[
-    \Psi_7(y)=\frac{12}{49}-2y+\frac{37}{8}y^2-\frac52y^4.
+    \Psi_9(y)=\frac{12}{49}-2y+\frac{37}{8}y^2-\frac52y^4.
   \]
   Now
   \[
-    \Psi_7'(y)=-2+\frac{37}{4}y-10y^3,
+    \Psi_9'(y)=-2+\frac{37}{4}y-10y^3,
     \qquad
-    \Psi_7''(y)=\frac{37}{4}-30y^2.
+    \Psi_9''(y)=\frac{37}{4}-30y^2.
   \]
-  Hence $\Psi_7'$ first increases and then decreases on our interval, so its minimum there occurs at an endpoint.
+  Hence $\Psi_9'$ first increases and then decreases on our interval, so its minimum there occurs at an endpoint.
   We have
   \[
-    \Psi_7'\left(\frac14\right)=\frac5{32}>0,
+    \Psi_9'\left(\frac14\right)=\frac5{32}>0,
     \qquad
-    \Psi_7'\left(\frac1{\sqrt2}\right)
+    \Psi_9'\left(\frac1{\sqrt2}\right)
     =-2+\frac{17}{4\sqrt2}>0.
   \]
-  Therefore $\Psi_7$ is increasing on $[1/4,1/\sqrt2]$, and
+  Therefore $\Psi_9$ is increasing on $[1/4,1/\sqrt2]$, and
   \[
-    \Psi_7(y)\ge\Psi_7\left(\frac14\right)=\frac{607}{25088}>0.
+    \Psi_9(y)\ge\Psi_9\left(\frac14\right)=\frac{607}{25088}>0.
   \]
   This completes the proof.
 \end{proof}
@@ -3470,21 +3465,21 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
   Suppose $0<v\le1/2$.
   Then
   \begin{align}
-    2F_N&\le\mathcal A,
+    2F_m&\le\mathcal A,
     \label{eq:plt23-low-v-A}\\
-    \frac{F_N}{\mathcal A}+2\frac{F_N}{\mathcal B}&\le2.
+    \frac{F_m}{\mathcal A}+2\frac{F_m}{\mathcal B}&\le2.
     \label{eq:plt23-low-v-both}
   \end{align}
 \end{proposition}
 
 \begin{proof}
-  If $F_N\le0$, both inequalities are immediate.
+  If $F_m\le0$, both inequalities are immediate.
   Assume \eqref{eq:plt23-F-positive}.
   Put
   \[
     z:=\frac\zeta{\tilde p},
     \qquad
-    c:=1-v^{N/2}.
+    c:=1-v^{(m-2)/2}.
   \]
   Since $\zeta>3/4$ and $\tilde p\le3/2$,
   \[
@@ -3498,19 +3493,19 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
   \end{equation}
   By \eqref{eq:plt23-F-T} and \eqref{eq:plt23-T-bound-one},
   \begin{equation}\label{eq:plt23-G-low-v}
-    G\le T_N\le\tilde pP,
+    G\le T_m\le\tilde pP,
     \qquad
-    P:=N-cz.
+    P:=(m-2)-cz.
   \end{equation}
-  Since $F_N>0$, the left side is positive, so $P>0$.
+  Since $F_m>0$, the left side is positive, so $P>0$.
 
   We first bound $X$ from below.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, and \eqref{eq:plt23-low-v-u-Mtilde},
   \begin{align*}
     X
-    &=\frac{2\Lambda^3u}{(1-2\Lambda)^2}\,\widehat{\Lambda}_N\\
+    &=\frac{2\Lambda^3u}{(1-2\Lambda)^2}\,\widehat{\Lambda}_m\\
     &=\frac{2\tilde p^2(1+z)}
-            {\Delta\,v\,(v+\tilde pz)^2}\,\widehat{\Lambda}_N.
+            {\Delta\,v\,(v+\tilde pz)^2}\,\widehat{\Lambda}_m.
   \end{align*}
   Indeed,
   \[
@@ -3518,11 +3513,11 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
     =v\left(v+\frac{z}{1+z}\right)
     =\frac{v(v+\tilde pz)}{1+z}.
   \]
-  By \eqref{eq:plt23-KA-def} and \eqref{eq:plt23-KA-sum}, $\widehat{\Lambda}_N\ge(N+2)vS_N$.
+  By \eqref{eq:plt23-KA-def} and \eqref{eq:plt23-KA-sum}, $\widehat{\Lambda}_m\ge mvS_m$.
   Using also \eqref{eq:plt23-Delta-upper-sigma},
   \begin{equation}\label{eq:plt23-X-low-v-1}
     X
-    >\frac{2\tilde p(N+2)S_N(1+z)}
+    >\frac{2\tilde pmS_m(1+z)}
             {(v+2)(v+\tilde pz)^2}.
   \end{equation}
   We claim
@@ -3537,47 +3532,47 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
   which is positive because $z\ge1/2$, hence $2\tilde pz\ge1$, while $v^2(v+2)\le5/8$.
   Thus \eqref{eq:plt23-X-low-v-1} implies
   \begin{equation}\label{eq:plt23-X-low-v-2}
-    X\ge\frac{(N+2)S_N}{\tilde p^2z}.
+    X\ge\frac{mS_m}{\tilde p^2z}.
   \end{equation}
-  Combining \eqref{eq:plt23-G-low-v}, \eqref{eq:plt23-X-low-v-2}, and \eqref{eq:plt23-SN-AMGM}, with $k=(N-1)/2\ge3$, gives
+  Combining \eqref{eq:plt23-G-low-v}, \eqref{eq:plt23-X-low-v-2}, and \eqref{eq:plt23-SN-AMGM}, with $k=(m-3)/2\ge3$, gives
   \begin{equation}\label{eq:plt23-G-over-X}
     \frac GX
     \le
-    \frac{\tilde p^3zP}{(N+2)S_N}
+    \frac{\tilde p^3zP}{mS_m}
     \le
-    \frac{2\tilde p^{3-k}zP}{(N+1)(N+2)}
+    \frac{2\tilde p^{3-k}zP}{(m-1)m}
     \le
-    \frac{2zP}{(N+1)(N+2)}.
+    \frac{2zP}{(m-1)m}.
   \end{equation}
-  Since $zP=z(N-cz)\le N^2/(4c)$,
+  Since $zP=z\bigl((m-2)-cz\bigr)\le(m-2)^2/(4c)$,
   \begin{equation}\label{eq:plt23-G-over-X-c}
     \frac GX
-    \le\frac{N^2}{2c(N+1)(N+2)}.
+    \le\frac{(m-2)^2}{2c(m-1)m}.
   \end{equation}
-  Now $v\le1/2$ gives $c\ge1-2^{-N/2}$.
-  For $N\ge7$, $2^{N/2}\ge N$, and
+  Now $v\le1/2$ gives $c\ge1-2^{-(m-2)/2}$.
+  For $m\ge9$, $2^{(m-2)/2}\ge m-2$, and
   \[
-    \frac1N\le\frac{3N+2}{(N+1)(N+2)}.
+    \frac1{m-2}\le\frac{3m-4}{(m-1)m}.
   \]
   Hence
   \[
     c\ge
-    1-\frac{3N+2}{(N+1)(N+2)}
-    =\frac{N^2}{(N+1)(N+2)}.
+    1-\frac{3m-4}{(m-1)m}
+    =\frac{(m-2)^2}{(m-1)m}.
   \]
   Substitution into \eqref{eq:plt23-G-over-X-c} gives $G/X\le1/2$, which is \eqref{eq:plt23-low-v-A}.
 
   We next retain both scales.
-  From \eqref{eq:plt23-G-over-X} and $P\le N$,
+  From \eqref{eq:plt23-G-over-X} and $P\le m-2$,
   \begin{equation}\label{eq:plt23-G-over-X-z}
-    \frac GX\le\frac{2z}{N+2}.
+    \frac GX\le\frac{2z}{m}.
   \end{equation}
   For $Y$, \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, and the first term of the sum in \eqref{eq:plt23-KL-sum} give
   \begin{align*}
     Y
-    &=(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_N\\
+    &=(1-\tilde M)\sqrt{2\Lambda}\,\widehat M_m\\
     &\ge
-    (N+2)(1-\tilde M)(\tilde p-\tilde M)\tilde p^{N-1}
+    m(1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-3}
     \sqrt{\frac2{v+2}},
   \end{align*}
   where we used \eqref{eq:plt23-Lambda-lower}.
@@ -3585,36 +3580,36 @@ The first controls the quadratic scale $\mathcal A$, while the second keeps both
   \begin{equation}\label{eq:plt23-2G-over-Y}
     \frac{2G}{Y}
     \le
-    \frac{2P}{N+2}
+    \frac{2P}{m}
     \frac{\sqrt{(v+2)/2}}
-         {(1-\tilde M)(\tilde p-\tilde M)\tilde p^{N-2}}.
+         {(1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-4}}.
   \end{equation}
   Put $y=\sqrt v$, so $0<y\le1/\sqrt2$.
   Since $\tilde M\le y$ and $x\mapsto(1-x)(\tilde p-x)$ is decreasing on $[0,y]$, \Cref{lem:plt23-product} gives
   \begin{align}
-   (1-\tilde M)(\tilde p-\tilde M)\tilde p^{N-2}
+   (1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-4}
    &\ge
-   (1-y)(1-y+y^2)(1+y^2)^{N-2}\notag\\
+   (1-y)(1-y+y^2)(1+y^2)^{m-4}\notag\\
    &\ge
-   \frac{N}{N+2}\sqrt{1+\frac{y^2}{2}}
-   =\frac{N}{N+2}\sqrt{\frac{v+2}{2}}.
+   \frac{m-2}{m}\sqrt{1+\frac{y^2}{2}}
+   =\frac{m-2}{m}\sqrt{\frac{v+2}{2}}.
    \label{eq:plt23-product-applied}
   \end{align}
   Also
   \[
-    c=1-v^{N/2}\ge\frac{N}{N+2}.
+    c=1-v^{(m-2)/2}\ge\frac{m-2}{m}.
   \]
-  Indeed, $v^{N/2}\le2^{-N/2}\le2/(N+2)$ for $N\ge7$.
+  Indeed, $v^{(m-2)/2}\le2^{-(m-2)/2}\le2/m$ for $m\ge9$.
   Therefore
   \begin{equation}\label{eq:plt23-P-bound}
-    \frac PN=1-\frac{cz}{N}
-    \le1-\frac{z}{N+2}
-    =\frac{N+2-z}{N+2}.
+    \frac P{m-2}=1-\frac{cz}{m-2}
+    \le1-\frac{z}{m}
+    =\frac{m-z}{m}.
   \end{equation}
   Substitution of \eqref{eq:plt23-product-applied} and \eqref{eq:plt23-P-bound} into \eqref{eq:plt23-2G-over-Y} gives
   \[
     \frac{2G}{Y}
-    \le\frac{2(N+2-z)}{N+2}.
+    \le\frac{2(m-z)}{m}.
   \]
   Adding this to \eqref{eq:plt23-G-over-X-z} proves
   \[
@@ -3660,65 +3655,65 @@ for
   Suppose $1/2\le v<1$.
   Then
   \begin{equation}\label{eq:plt23-high-v-A}
-    F_N\le\mathcal A.
+    F_m\le\mathcal A.
   \end{equation}
 \end{proposition}
 
 \begin{proof}
-  Again the claim is immediate if $F_N\le0$, so assume \eqref{eq:plt23-F-positive}.
+  Again the claim is immediate if $F_m\le0$, so assume \eqref{eq:plt23-F-positive}.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-Delta-identities}, $u=v(1-\tau)/\tilde p$, and \eqref{eq:plt23-KA-def}--\eqref{eq:plt23-KA-sum},
   \[
     X
     =\frac{2\tilde p^2(1-\tau)}{\Delta(v+\tau)^2}
      \left(
-       \frac{2\tilde M^N}{v}+(N+2)S_N
+       \frac{2\tilde M^{m-2}}{v}+mS_m
      \right).
   \]
   Using \eqref{eq:plt23-Delta-upper-sigma} and \eqref{eq:plt23-vtau-square}, and dropping the positive first term in parentheses,
   \begin{equation}\label{eq:plt23-X-high-v-lower}
     X>
-    \frac{2(N+2)S_N(1-\tau)}{\tau\tilde p(v+2)}.
+    \frac{2mS_m(1-\tau)}{\tau\tilde p(v+2)}.
   \end{equation}
 
-  The positivity of $F_N$ supplies a useful lower bound on $1-\tau$.
+  The positivity of $F_m$ supplies a useful lower bound on $1-\tau$.
   From \eqref{eq:plt23-F-formula},
   \[
-    (1+\tilde M^2)\tilde q^N<1+\tilde M^{N+2},
+    (1+\tilde M^2)\tilde q^{m-2}<1+\tilde M^{m},
   \]
   so
   \[
-    \tilde q^N
-    <1-\frac{\tilde M^2}{1+\tilde M^2}(1-\tilde M^N).
+    \tilde q^{m-2}
+    <1-\frac{\tilde M^2}{1+\tilde M^2}\bigl(1-\tilde M^{m-2}\bigr).
   \]
-  On the other hand, Bernoulli gives $\tilde q^N=(1-u)^N\ge1-Nu$.
+  On the other hand, Bernoulli gives $\tilde q^{m-2}=(1-u)^{m-2}\ge1-(m-2)u$.
   Comparing the two inequalities, and substituting $u=v(1-\tau)/\tilde p$ and $\tilde M^2=v\tau$, yields
   \[
-    N(1+\tilde M^2)(1-\tau)
-    >\tau\tilde p(1-\tilde M^N).
+    (m-2)(1+\tilde M^2)(1-\tau)
+    >\tau\tilde p\bigl(1-\tilde M^{m-2}\bigr).
   \]
   Therefore \eqref{eq:plt23-X-high-v-lower} gives
   \begin{equation}\label{eq:plt23-X-high-v-final}
     X>
-    \frac{2(N+2)S_N}{N(1+\tilde M^2)(v+2)}
-    (1-\tilde M^N).
+    \frac{2mS_m}{(m-2)(1+\tilde M^2)(v+2)}
+    \bigl(1-\tilde M^{m-2}\bigr).
   \end{equation}
 
   By \eqref{eq:plt23-F-T} and \eqref{eq:plt23-T-bound-two},
   \begin{equation}\label{eq:plt23-G-high-v}
-    G<T_N<N(1-\tilde M^{N+1}).
+    G<T_m<(m-2)\bigl(1-\tilde M^{m-1}\bigr).
   \end{equation}
   For $0\le x<1$,
   \begin{equation}\label{eq:plt23-ratio-powers}
-    \frac{1-x^N}{1-x^{N+1}}\ge\frac{N}{N+1}.
+    \frac{1-x^{m-2}}{1-x^{m-1}}\ge\frac{m-2}{m-1}.
   \end{equation}
-  Indeed, after clearing denominators this is $1-(N+1)x^N+Nx^{N+1}\ge0$, whose derivative is $-N(N+1)x^{N-1}(1-x)\le0$ and whose value at $x=1$ is zero.
+  Indeed, after clearing denominators this is $1-(m-1)x^{m-2}+(m-2)x^{m-1}\ge0$, whose derivative is $-(m-2)(m-1)x^{m-3}(1-x)\le0$ and whose value at $x=1$ is zero.
   Combining \eqref{eq:plt23-X-high-v-final}, \eqref{eq:plt23-SN-AMGM}, and \eqref{eq:plt23-ratio-powers}, and using $1+\tilde M^2\le\tilde p$, it is enough for $X\ge G$ that
   \begin{equation}\label{eq:plt23-high-v-condition}
-    \tilde p^{(N-3)/2}
-    \ge\frac{N(v+2)}{N+2}.
+    \tilde p^{(m-5)/2}
+    \ge\frac{(m-2)(v+2)}{m}.
   \end{equation}
-  For $N\ge9$, the left side is at least $(3/2)^3=27/8>3$, whereas the right side is less than $3$.
-  For $N=7$, \eqref{eq:plt23-high-v-condition} is
+  For $m\ge11$, the left side is at least $(3/2)^3=27/8>3$, whereas the right side is less than $3$.
+  For $m=9$, \eqref{eq:plt23-high-v-condition} is
   \[
     (1+v)^2\ge\frac{7(v+2)}9.
   \]
@@ -3730,19 +3725,19 @@ We next prove the bound for $\mathcal B$.
 The only auxiliary fact is a simple comparison between a geometric sum and a power.
 
 \begin{lemma}[A geometric-sum bound]\label{lem:plt23-geometric-sum}
-  Let $N\ge7$ be odd and $1/\sqrt2\le x<1$.
+  Let $m\ge9$ be odd and $1/\sqrt2\le x<1$.
   Then
   \begin{equation}\label{eq:plt23-geometric-sum}
-    \frac{N+2}{2N}
+    \frac{m}{2(m-2)}
     \sqrt{\frac2{2+x^2}}
-    (1-x+x^2)(1+x^2)^{N-1}
+    (1-x+x^2)(1+x^2)^{m-3}
     \ge
-    \sum_{j=0}^N x^j.
+    \sum_{j=0}^{m-2} x^j.
   \end{equation}
 \end{lemma}
 
 \begin{proof}
-  Write $N=2k+1$, so $k\ge3$, and put
+  Write $m=2k+3$, so $k\ge3$, and put
   \[
     y:=x^2,
     \qquad
@@ -3750,20 +3745,20 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
   \]
   Then
   \begin{equation}\label{eq:plt23-geometric-sum-bound}
-    \sum_{j=0}^N x^j
+    \sum_{j=0}^{m-2} x^j
     =(1+x)\sum_{j=0}^k y^j
     \le (1+x)\bigl(C-(k-1)y\bigr).
   \end{equation}
   Indeed, $(1+y)^k-(k-1)y=1+y+\sum_{j=2}^k\binom{k}{j}y^j$, and every remaining binomial coefficient is at least one.
 
-  Suppose first $k\ge4$, equivalently $N\ge9$.
+  Suppose first $k\ge4$, equivalently $m\ge11$.
   Since $x<1$,
   \[
     \sqrt{\frac2{2+x^2}}>\frac45,
     \qquad
     1-x+x^2\ge\frac34,
     \qquad
-    \frac{N+2}{2N}>\frac12.
+    \frac{m}{2(m-2)}>\frac12.
   \]
   Hence the left side of \eqref{eq:plt23-geometric-sum} is greater than
   \[
@@ -3790,7 +3785,7 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
   \]
   Thus \eqref{eq:plt23-C-quadratic} holds for all $k\ge4$.
 
-  It remains to take $k=3$, that is $N=7$.
+  It remains to take $k=3$, that is $m=9$.
   Define
   \[
     f(x):=\sqrt{\frac2{2+x^2}}(1-x+x^2).
@@ -3818,34 +3813,34 @@ The only auxiliary fact is a simple comparison between a geometric sum and a pow
   \[
     \frac{481}{1280}>0.
   \]
-  Hence the claim holds also for $N=7$.
+  Hence the claim holds also for $m=9$.
 \end{proof}
 
 \begin{proposition}[The high-$v$ linear bound]\label{prop:plt23-high-v-B}
   Suppose $1/2\le v<1$.
   Then
   \begin{equation}\label{eq:plt23-high-v-B}
-    2F_N\le\mathcal B.
+    2F_m\le\mathcal B.
   \end{equation}
 \end{proposition}
 
 \begin{proof}
-  The claim is trivial if $F_N\le0$, so assume $F_N>0$.
+  The claim is trivial if $F_m\le0$, so assume $F_m>0$.
   From \eqref{eq:plt23-AB-formulas}, \eqref{eq:plt23-KL-def}, \eqref{eq:plt23-KL-sum}, and \eqref{eq:plt23-Lambda-lower},
   \[
     Y\ge
-    (N+2)(1-\tilde M)(\tilde p-\tilde M)\tilde p^{N-1}
+    m(1-\tilde M)(\tilde p-\tilde M)\tilde p^{m-3}
     \sqrt{\frac2{v+2}}.
   \]
   Together with \eqref{eq:plt23-G-high-v}, it is enough to prove
   \begin{equation}\label{eq:plt23-high-v-B-sufficient}
-    \frac{N+2}{2N}
+    \frac{m}{2(m-2)}
     \sqrt{\frac2{v+2}}
-    (\tilde p-\tilde M)\tilde p^{N-1}
+    (\tilde p-\tilde M)\tilde p^{m-3}
     \ge
-    \sum_{j=0}^N\tilde M^j,
+    \sum_{j=0}^{m-2}\tilde M^j,
   \end{equation}
-  where we cancelled the positive factor $1-\tilde M$ using $1-\tilde M^{N+1}=(1-\tilde M)\sum_{j=0}^N\tilde M^j$.
+  where we cancelled the positive factor $1-\tilde M$ using $1-\tilde M^{m-1}=(1-\tilde M)\sum_{j=0}^{m-2}\tilde M^j$.
 
   For fixed $v$, the left side of \eqref{eq:plt23-high-v-B-sufficient} decreases with $\tilde M$, while the right side increases.
   Since $\tilde M^2<v$, it is enough to put
@@ -3869,14 +3864,14 @@ We can now finish without any further subdivision of the admissible region.
 \end{proposition}
 
 \begin{proof}
-  If $F_N=R_m/\Lambda^m\le0$, the claim is immediate.
-  Assume $F_N>0$, and recall $\theta=\mathcal A/\mathcal B$.
-  By \Cref{prop:plt23-reduction} it is enough to prove $F_N\le\mathcal B\,d(\theta)$.
+  If $F_m=R_m/\Lambda^m\le0$, the claim is immediate.
+  Assume $F_m>0$, and recall $\theta=\mathcal A/\mathcal B$.
+  By \Cref{prop:plt23-reduction} it is enough to prove $F_m\le\mathcal B\,d(\theta)$.
 
   Suppose first $0<v\le1/2$.
   \Cref{prop:plt23-low-v} gives
   \[
-    \frac{F_N}{\mathcal B}
+    \frac{F_m}{\mathcal B}
     \le
     \min\left\{
       \frac\theta2,
@@ -3889,22 +3884,22 @@ We can now finish without any further subdivision of the admissible region.
     1-\frac1{4\theta}-\frac{2\theta}{1+2\theta}
     =\frac{2\theta-1}{4\theta(1+2\theta)}\ge0.
   \]
-  Thus $F_N\le\mathcal B\,d(\theta)$ in this range.
+  Thus $F_m\le\mathcal B\,d(\theta)$ in this range.
 
   Now suppose $1/2\le v<1$.
   \Cref{prop:plt23-high-v-A,prop:plt23-high-v-B} give
   \[
-    \frac{F_N}{\mathcal B}
+    \frac{F_m}{\mathcal B}
     \le\min\{\theta,1/2\}.
   \]
   If $\theta\le1/2$, the right side is at most $\theta=d(\theta)$.
   If $\theta\ge1/2$, it is at most $1/2\le d(\theta)$.
-  Hence $F_N\le\mathcal B\,d(\theta)$ again, and \Cref{prop:plt23-reduction} proves \eqref{eq:plt23-scalar-target}.
+  Hence $F_m\le\mathcal B\,d(\theta)$ again, and \Cref{prop:plt23-reduction} proves \eqref{eq:plt23-scalar-target}.
 \end{proof}
 
 \subsection{Completion of the intermediate-density region}
 
-We state explicitly how the preceding scalar argument reconnects to the graphon proof.
+We state explicitly how the preceding argument reconnects to the graphon proof.
 Assume
 \[
   \frac12<p<\frac23,
