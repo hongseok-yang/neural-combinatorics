@@ -18,8 +18,6 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\one}{\mathbf{1}}
 \newcommand{\tr}{\operatorname{Tr}}
-\newcommand{\supp}{\operatorname{supp}}
-\newcommand{\ee}{\mathrm{e}}
 
 \title{The Exact Commonality Region of Adjacent Even and Odd Cycles}
 \author{}
@@ -29,8 +27,9 @@
 \maketitle
 
 \begin{abstract}
-For an integer $k\ge 2$, we determine exactly the parameters for which the pair
-$(C_{2k},C_{2k+1})$ is off-diagonally common.  Let $a_k^\star\in(1/2,1)$ be the
+For an integer $k\ge 2$, we determine exactly the parameters for which
+$(C_{2k},C_{2k+1})$ is a common pair of graphs in the sense of Behague,
+Morrison, and Noel.  Let $a_k^\star\in(1/2,1)$ be the
 unique solution of
 \[
   \frac{(a_k^\star)^{2k-1}(a_k^\star+2k)}{2k+1}=2^{1-2k}.
@@ -60,9 +59,11 @@ $W$ is
   \prod_{uv\in E(H)} W(x_u,x_v)
   \prod_{u\in V(H)}dx_u.
 \]
-Write $e(H)=|E(H)|$.
+Write $e(H)=|E(H)|$.  For background on graphons and homomorphism densities
+we refer to Lov\'asz~\cite{Lovasz}.
 
-Following Behague, Morrison, and Noel~\cite{BMN}, for $a,b\in(0,1)$ with
+Following Behague, Morrison, and Noel~\cite[Definition~1.1]{BMN}, for
+$a,b\in(0,1)$ with
 $a+b=1$, a pair $(H_1,H_2)$ is said to be \emph{$(a,b)$-common} if
 \begin{equation}
   \frac{t(H_1,W)}{e(H_1)a^{e(H_1)-1}}
@@ -127,9 +128,13 @@ compactness theorem for graphons is needed.
 
 \begin{lemma}[Step-graphon reduction]
   \label{lem:step-reduction}
-  Fix positive integers $r_1,r_2$.  Suppose that an inequality involving only
-  $t(C_{r_1},W)$ and $t(C_{r_2},1-W)$ holds for every symmetric step graphon
-  $W$.  Then it holds for every graphon $W$.
+  Fix integers $r_1,r_2\ge3$ and a continuous function
+  $\Phi\colon\R^2\to\R$.  Suppose that
+  \[
+    \Phi\bigl(t(C_{r_1},W),t(C_{r_2},1-W)\bigr)\ge0
+  \]
+  for every symmetric step graphon $W$.  Then the same inequality holds for
+  every graphon $W$.
 \end{lemma}
 
 \begin{proof}
@@ -139,20 +144,29 @@ compactness theorem for graphons is needed.
   \[
     W_m:=\mathbb E[W\mid \mathcal A_m\otimes\mathcal A_m].
   \]
-  Then $W_m$ is a symmetric step graphon.  Since conditional expectation is an
-  $L^2$-contraction and dyadic rectangle step functions are dense in
-  $L^2([0,1]^2)$,
+  Conditional expectation preserves the bounds $0\le W\le1$, and symmetry is
+  preserved because $\mathcal A_m\otimes\mathcal A_m$ is invariant under
+  interchanging the two coordinates.  Thus $W_m$ is a symmetric step graphon.
+
+  The spaces of dyadic rectangle step functions are nested and their union is
+  dense in $L^2([0,1]^2)$.  Given $\varepsilon>0$, choose such a step function
+  $G$, measurable with respect to $\mathcal A_M\otimes\mathcal A_M$, for which
+  $\|W-G\|_2<\varepsilon$.  For $m\ge M$, the $L^2$-contraction property of
+  conditional expectation gives
   \[
-    \|W_m-W\|_2\longrightarrow0.
+    \|W_m-G\|_2
+    =\|\mathbb E[W-G\mid\mathcal A_m\otimes\mathcal A_m]\|_2
+    \le\|W-G\|_2<\varepsilon.
   \]
-  In particular, $\|W_m-W\|_1\to0$.  Also
+  Hence $\|W_m-W\|_2<2\varepsilon$ for all $m\ge M$, so
+  $\|W_m-W\|_2\to0$.  In particular, $\|W_m-W\|_1\to0$.  Also
   \[
     1-W_m
     =\mathbb E[1-W\mid\mathcal A_m\otimes\mathcal A_m],
   \]
   so $\|(1-W_m)-(1-W)\|_1\to0$.
 
-  We claim that for every fixed integer $r\ge2$,
+  We claim that for every fixed integer $r\ge3$,
   \begin{equation}
     |t(C_r,W_m)-t(C_r,W)|
     \le r\|W_m-W\|_1.
@@ -174,8 +188,8 @@ compactness theorem for graphons is needed.
   \]
   and using $0\le a_i,b_i\le1$, integration gives
   \eqref{eq:cycle-continuity}.  The same argument applies to $1-W_m$ and
-  $1-W$.  Thus both cycle densities in the asserted inequality converge, and
-  the step-graphon inequality passes to the limit.
+  $1-W$.  Thus both cycle densities in the asserted inequality converge.
+  Continuity of $\Phi$ now lets the step-graphon inequality pass to the limit.
 \end{proof}
 
 Now let $K$ be a symmetric step kernel, constant on every rectangle
@@ -205,7 +219,7 @@ where $K_{ij}$ is the value of $K$ on $B_i\times B_j$.
 
 \begin{lemma}[Cycle densities are traces]
   \label{lem:trace-density}
-  For every integer $r\ge2$,
+  For every integer $r\ge3$,
   \begin{equation}
     t(C_r,K)=\tr(T_K^r),
     \label{eq:trace-density}
@@ -250,8 +264,8 @@ $x\prec y$, if
   \qquad
   \sum_{i=1}^N x_i=\sum_{i=1}^N y_i.
 \]
-Karamata's inequality says that if $x\prec y$ and $\varphi\colon\R\to\R$ is
-convex, then
+Karamata's inequality (see, e.g., \cite[Chapter~4]{MOA}) says that if
+$x\prec y$ and $\varphi\colon\R\to\R$ is convex, then
 \begin{equation}
   \sum_{i=1}^N\varphi(x_i)
   \le
@@ -260,7 +274,9 @@ convex, then
 \end{equation}
 
 The next lemma is the special rank-one form of Lidskii's additive
-majorization theorem that we need.  We include its proof.
+majorization theorem that we need; for the general form see
+\cite[Chapter~III]{Bhatia} or \cite[Chapter~9]{MOA}.  We include a
+self-contained proof.
 
 \begin{lemma}[Rank-one lower majorization]
   \label{lem:rank-one-majorization}
@@ -290,7 +306,7 @@ majorization theorem that we need.  We include its proof.
   \end{equation}
   and also $\mu_N\ge\alpha_N$.  This follows directly from the
   Courant--Fischer min--max principle; equivalently, it is the rank-one case of
-  Weyl interlacing.
+  Weyl interlacing (see, e.g., \cite[Chapter~III]{Bhatia}).
 
   Set
   \[
@@ -309,12 +325,12 @@ majorization theorem that we need.  We include its proof.
   by the first inequality in \eqref{eq:rank-one-interlace}.
 
   If $N\in S$, then
-  \[
+  \begin{equation}
     \sum_{i\in S}v_i
     \le
     1+\alpha_N+\sum_{i=1}^{j-1}\alpha_i.
     \label{eq:subset-with-N}
-  \]
+  \end{equation}
   Since $\tr(A+P)=\tr(A)+1$ and
   $\mu_{i+1}\le\alpha_i$ for $j\le i<N$, we have
   \begin{align*}
@@ -372,7 +388,9 @@ They do not assume that $T_U$ is positive semidefinite.
 
 \begin{lemma}[Perron domination and the tail square budget]
   \label{lem:spectral-budget}
-  Let $U$ be a symmetric step graphon, let $T=T_U|_E$, and let
+  Let $U$ be a symmetric step graphon, choose a finite partition on which $U$
+  is constant, let $E$ be its associated step-function space, and let
+  $T=T_U|_E$.  Let
   \[
     \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N
   \]
@@ -380,9 +398,6 @@ They do not assume that $T_U$ is positive semidefinite.
   \begin{align}
     &0\le\lambda_1\le1,
     \label{eq:lambda1-range}\\
-    &-\frac12\le\lambda_i\le\lambda_1
-    \quad(1\le i\le N),
-    \label{eq:half-lower}\\
     &|\lambda_i|\le\lambda_1
     \quad(1\le i\le N),
     \label{eq:perron-domination}\\
@@ -394,65 +409,30 @@ They do not assume that $T_U$ is positive semidefinite.
 \end{lemma}
 
 \begin{proof}
-  Let $f$ be a real unit vector in $E$, and write
-  \[
-    f=f_+-f_-,
-  \]
-  where $f_+,f_-\ge0$ have disjoint supports.  Set
-  \[
-    x=\|f_+\|_2,
-    \qquad
-    y=\|f_-\|_2,
-  \]
-  and let $\alpha$ and $\beta$ be the measures of the supports of $f_+$ and
-  $f_-$, respectively.  Then
-  \[
-    x^2+y^2=1,
-    \qquad
-    \alpha+\beta\le1.
-  \]
-  Since $0\le U\le1$, Cauchy--Schwarz gives
-  \begin{align*}
-    \langle f_+,Tf_-\rangle
-    &\le
-    \left(\int_0^1f_+\right)
-    \left(\int_0^1f_-\right)\\
-    &\le
-    xy\sqrt{\alpha\beta}\\
-    &\le
-    \frac12\cdot\frac12
-    =\frac14.
-  \end{align*}
-  The diagonal terms
-  $\langle f_+,Tf_+\rangle$ and $\langle f_-,Tf_-\rangle$ are nonnegative.
-  Therefore
-  \[
-    \langle f,Tf\rangle
-    \ge-2\langle f_+,Tf_-\rangle
-    \ge-\frac12.
-  \]
-  Taking the infimum over unit $f$ proves the lower bound in
-  \eqref{eq:half-lower}.
-
-  Pointwise nonnegativity also gives
+  Let $f$ be a real unit vector in $E$.  Since the elements of $E$ are
+  constant on every cell of the partition, $|f|$ is again a unit vector in
+  $E$.  Pointwise nonnegativity of $U$ gives
   \begin{equation}
     |\langle f,Tf\rangle|
     \le
-    \langle |f|,T|f|\rangle.
+    \langle |f|,T|f|\rangle,
     \label{eq:absolute-rayleigh}
   \end{equation}
-  Since $|f|$ is again a unit vector, the right side is at most $\lambda_1$.
-  Thus every eigenvalue satisfies $|\lambda_i|\le\lambda_1$, proving
-  \eqref{eq:perron-domination}.  Moreover,
+  and by the Rayleigh principle the right side is at most $\lambda_1$.
+  Applying \eqref{eq:absolute-rayleigh} to a unit eigenvector of $\lambda_i$
+  shows that $|\lambda_i|\le\lambda_1$, proving
+  \eqref{eq:perron-domination}.
+
+  Next, the pointwise bound $U\le1$ gives
   \[
     \langle |f|,T|f|\rangle
     \le
-    \left(\int_0^1|f|\right)^2
-    \le\|f\|_2^2=1,
+    \left(\int_0^1|f|\right)^2,
   \]
-  so $\lambda_1\le1$.  Also $\lambda_1\ge0$, for example by testing the
-  nonnegative unit vector $\one$.  This proves \eqref{eq:lambda1-range} and
-  the remaining part of \eqref{eq:half-lower}.
+  and the Cauchy--Schwarz inequality on the probability space $[0,1]$ gives
+  $\int_0^1|f|\le\|f\|_2=1$.  Hence $\lambda_1\le1$.  Also $\lambda_1\ge0$,
+  for example by testing the nonnegative unit vector $\one$.  This proves
+  \eqref{eq:lambda1-range}.
 
   Finally, put
   \[
@@ -542,9 +522,9 @@ Moreover,
 
 \begin{lemma}[The critical point]
   \label{lem:critical-point}
-  There is a unique $a_n^\star\in(1/2,1)$ such that
+  There is a unique $\alpha_n^\star\in(1/2,1)$ such that
   \begin{equation}
-    \rho_n(a_n^\star)=2^{1-n}.
+    \rho_n(\alpha_n^\star)=2^{1-n}.
     \label{eq:critical-n}
   \end{equation}
 \end{lemma}
@@ -571,11 +551,11 @@ needed in the proof.
 
 \begin{lemma}[Bounds on the normalized coefficient]
   \label{lem:kappa-bounds}
-  Let $a_n^\star$ be as in Lemma~\ref{lem:critical-point}, and put
+  Let $\alpha_n^\star$ be as in Lemma~\ref{lem:critical-point}, and put
   \[
-    b_n^\star:=1-a_n^\star,
+    b_n^\star:=1-\alpha_n^\star,
     \qquad
-    \kappa_n^\star:=\kappa_n(a_n^\star).
+    \kappa_n^\star:=\kappa_n(\alpha_n^\star).
   \]
   Then
   \begin{equation}
@@ -584,7 +564,7 @@ needed in the proof.
     \kappa_n^\star<\frac{27}{13}<2\sqrt2.
     \label{eq:kappa-star-bounds}
   \end{equation}
-  Consequently, for every $0<a\le a_n^\star$, with $b=1-a$ and
+  Consequently, for every $0<a\le\alpha_n^\star$, with $b=1-a$ and
   $\kappa=\kappa_n(a)$,
   \begin{equation}
     \boxed{\kappa b<1,
@@ -597,7 +577,7 @@ needed in the proof.
 \begin{proof}
   Write
   \[
-    a_n^\star=\frac{1+\delta}{2},
+    \alpha_n^\star=\frac{1+\delta}{2},
     \qquad
     b_n^\star=\frac{1-\delta}{2},
     \qquad
@@ -669,18 +649,20 @@ needed in the proof.
     =\frac{n}{n+1}
     \left(\frac{a}{1-a}\right)^{n-1}.
   \]
-  Therefore the endpoint bounds remain valid for every $a\le a_n^\star$.
+  Therefore the endpoint bounds remain valid for every $a\le\alpha_n^\star$.
 \end{proof}
 
 \section{Proof of the lower bound}
 
 We now prove that \eqref{eq:scaled-target} holds whenever
-$a\le a_n^\star$.
+$a\le\alpha_n^\star$.
 
 \begin{proposition}[Spectral reduction]
   \label{prop:spectral-reduction}
   Let $n\ge4$ be even, let $\kappa>0$, and let $W$ be a symmetric step
-  graphon.  Put $U=1-W$, let $T=T_U|_E$, and order its eigenvalues as
+  graphon.  Choose a finite partition on which $W$ is constant, let $E$ be its
+  associated step-function space, put $U=1-W$, and let $T=T_U|_E$.  Order the
+  eigenvalues of $T$ as
   \[
     \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N.
   \]
@@ -696,11 +678,13 @@ $a\le a_n^\star$.
 \end{proposition}
 
 \begin{proof}
-  By \eqref{eq:complement-operator}, Lemma~\ref{lem:trace-density}, and
-  Corollary~\ref{cor:rank-one-trace},
+  Let $P:=J|_E$.  Since $\one\in E$ and $\|\one\|_2=1$, the operator $P$ is a
+  rank-one orthogonal projection on $E$.  Moreover,
+  $T_W|_E=P-T$ by \eqref{eq:complement-operator}.  Therefore, by
+  Lemma~\ref{lem:trace-density} and Corollary~\ref{cor:rank-one-trace},
   \[
     t(C_n,W)
-    =\tr(J-T)^n
+    =\tr(P-T)^n
     \ge
     (1-\lambda_1)^n+
     \sum_{i=2}^N|\lambda_i|^n.
@@ -723,7 +707,7 @@ $a\le a_n^\star$.
 
 \begin{proposition}[Commonality up to the critical point]
   \label{prop:lower-bound}
-  Let $n\ge4$ be even and $0<a\le a_n^\star$.  Put $b=1-a$ and let
+  Let $n\ge4$ be even and $0<a\le\alpha_n^\star$.  Put $b=1-a$ and let
   $\kappa$ be as in \eqref{eq:kappa-rho}.  Then every graphon $W$ satisfies
   \begin{equation}
     t(C_n,W)+\kappa t(C_{n+1},1-W)
@@ -733,9 +717,11 @@ $a\le a_n^\star$.
 \end{proposition}
 
 \begin{proof}
-  By Lemma~\ref{lem:step-reduction}, it is enough to prove the assertion for a
-  symmetric step graphon.  Set $U=1-W$, let $T=T_U|_E$, and write its
-  eigenvalues as
+  Apply Lemma~\ref{lem:step-reduction} with
+  $\Phi(x,y)=x+\kappa y-\rho_n(a)$.  It is enough to prove the assertion for a
+  symmetric step graphon.  Choose a finite partition on which $W$ is constant,
+  let $E$ be its associated step-function space, set $U=1-W$, and let
+  $T=T_U|_E$.  Write its eigenvalues as
   \[
     \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N.
   \]
@@ -797,6 +783,10 @@ $a\le a_n^\star$.
     \beta>\frac1\kappa>b.
     \label{eq:beta-above-b}
   \end{equation}
+  By \eqref{eq:perron-pays} and \eqref{eq:lambda1-range},
+  \[
+    0<\beta\le\lambda_1\le1.
+  \]
   Since $f_\kappa$ is strictly convex and minimized at $b$, it is increasing
   on $[b,1]$.  Hence, by \eqref{eq:perron-pays} and
   \eqref{eq:beta-above-b},
@@ -814,17 +804,16 @@ $a\le a_n^\star$.
     &=
     (1-\beta)^n+\beta^n.
   \end{align*}
-  Since $0\le\beta\le1$ and $n$ is even, convexity of $x\mapsto x^n$
-  gives
+  Since $n$ is even, convexity of $x\mapsto x^n$ gives
   \begin{equation}
     (1-\beta)^n+\beta^n
     \ge2\left(\frac12\right)^n
     =2^{1-n}.
     \label{eq:two-point-convexity}
   \end{equation}
-  Finally, $a\le a_n^\star$ and the monotonicity of $\rho_n$ imply
+  Finally, $a\le\alpha_n^\star$ and the monotonicity of $\rho_n$ imply
   \[
-    \rho_n(a)\le\rho_n(a_n^\star)=2^{1-n}.
+    \rho_n(a)\le\rho_n(\alpha_n^\star)=2^{1-n}.
   \]
   Combining this with \eqref{eq:two-point-convexity} proves
   \eqref{eq:lower-bound-final}.
@@ -865,23 +854,24 @@ Thus
   \label{eq:obstruction-value}
 \end{equation}
 
-If $a>a_n^\star$, then strict monotonicity of $\rho_n$ gives
+If $a>\alpha_n^\star$, then strict monotonicity of $\rho_n$ gives
 \[
-  \rho_n(a)>\rho_n(a_n^\star)=2^{1-n}.
+  \rho_n(a)>\rho_n(\alpha_n^\star)=2^{1-n}.
 \]
 Therefore $W_{\mathrm{cl}}$ violates the scaled commonality inequality
 \eqref{eq:scaled-target}.  It follows that
 \[
-  \pi(C_n,C_{n+1})\subseteq(0,a_n^\star].
+  \pi(C_n,C_{n+1})\subseteq(0,\alpha_n^\star].
 \]
 Proposition~\ref{prop:lower-bound} gives the reverse inclusion.  Taking
-$n=2k$ proves Theorem~\ref{thm:main}.
+$n=2k$, the number $\alpha_{2k}^\star$ is exactly the number
+$a_k^\star$ defined in Theorem~\ref{thm:main}, so the theorem follows.
 
 \begin{remark}[The endpoint transition]
   For every $a\in(0,1)$, the constant graphon $W\equiv a$ attains equality in
-  the defining commonality inequality.  At $a=a_n^\star$, the balanced
+  the defining commonality inequality.  At $a=\alpha_n^\star$, the balanced
   two-clique graphon also attains equality because
-  $\rho_n(a_n^\star)=2^{1-n}$.  Thus the endpoint is exactly the point where
+  $\rho_n(\alpha_n^\star)=2^{1-n}$.  Thus the endpoint is exactly the point where
   the constant branch meets the balanced two-clique branch.
 \end{remark}
 
@@ -892,6 +882,10 @@ $n=2k$ proves Theorem~\ref{thm:main}.
   constant state and the orthogonal directions at once.  The tail square
   budget then leaves at most one negative mode for which
   $1+\kappa\lambda<0$, and the Perron eigenvalue compensates for that mode.
+  For the balanced two-clique graphon the spectrum of $T_{1-W}|_E$ is
+  $\{\tfrac12,-\tfrac12\}$ and \eqref{eq:rank-one-trace-bound} holds with
+  equality, so Corollary~\ref{cor:rank-one-trace} is tight exactly at the
+  extremal point.
 \end{remark}
 
 \begin{thebibliography}{9}
