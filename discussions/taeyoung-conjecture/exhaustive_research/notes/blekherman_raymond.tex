@@ -1,0 +1,624 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\dd}{\,\mathrm d}
+
+\title{The $(3,5)$ Odd-Walk Inequality\\
+Entropy on Finite Graphs, and Relative Entropy on Graphons}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Section~\ref{sec:finite} is the Blekherman--Raymond entropy proof of
+$t(P_5,W)^3\geq t(P_3,W)^5$ for finite host graphs.  Section~\ref{sec:graphon}
+transcribes the same argument --- the same three folds of $P_5$ onto $P_3$, the
+same edge multiplicities $(5,5,5)$ and internal-vertex multiplicities
+$(1,5,5,1)$ --- directly into the graphon setting, with Shannon entropy against
+counting measure replaced by relative entropy against $\mu$.  The transcription
+needs no finite host, no sampling and no approximation step, and it is valid on
+an arbitrary probability space.  That is what the catalogue requires, and it is
+what the Lean formalization follows.
+\end{abstract}
+
+\section{The finite case}
+\label{sec:finite}
+
+\begin{proposition}[Blekherman--Raymond, $P_3$--$P_5$ case]
+Let $P_k$ denote the path with $k$ edges. Then, for every graphon $W$,
+\[
+    t(P_5,W)^3 \ge t(P_3,W)^5.
+\]
+\end{proposition}
+
+\begin{proof}
+We first prove the inequality for a finite graph $G$ on $n$ vertices.
+Write
+\[
+    \hom(P_k,G):=|\Hom(P_k,G)|.
+\]
+The desired inequality
+\[
+    t(P_5,G)^3\ge t(P_3,G)^5
+\]
+is equivalent to
+\[
+    n^2 \hom(P_5,G)^3\ge \hom(P_3,G)^5,
+\]
+since $P_5$ has $6$ vertices and $P_3$ has $4$ vertices.
+
+If $G$ has no edges, then both sides vanish, so there is nothing to prove.
+Assume henceforth that $G$ has at least one edge.
+
+Let
+\[
+    X=(X_0,X_1,X_2,X_3)
+\]
+be a uniformly random homomorphism from $P_3$ to $G$.
+Thus $X$ is a uniformly random walk of length $3$ in $G$, and therefore
+\[
+    H(X_0,X_1,X_2,X_3)
+    =
+    \log |\Hom(P_3,G)|.
+\]
+The base of the logarithm is irrelevant.
+
+We shall construct a random homomorphism from
+\[
+    F:=P_0\sqcup P_0\sqcup P_5\sqcup P_5\sqcup P_5
+\]
+to $G$ whose entropy is exactly $5H(X)$.
+Since
+\[
+    |\Hom(F,G)|
+    =
+    n^2\hom(P_5,G)^3,
+\]
+the entropy bound
+\[
+    H(Y)\le \log|\Hom(F,G)|
+\]
+will then give the result.
+
+\medskip
+
+\noindent
+\textbf{Step 1: the Markov property of the uniform random walk.}
+
+The law of $X$ is uniform on all quadruples
+$(x_0,x_1,x_2,x_3)$ satisfying
+\[
+    x_0x_1,\ x_1x_2,\ x_2x_3\in E(G).
+\]
+Consequently, conditioned on $X_i$, the variables on the two sides of
+$X_i$ are conditionally independent.  In particular,
+\[
+    X_0 \perp (X_2,X_3)\mid X_1,
+    \qquad
+    (X_0,X_1)\perp X_3\mid X_2.
+\]
+Hence the entropy of $X$ satisfies the tree entropy identity
+\begin{equation}\label{eq:tree-entropy-P3}
+\begin{aligned}
+    H(X)
+    &=
+    H(X_0,X_1)
+    +H(X_1,X_2)
+    +H(X_2,X_3)  \\
+    &\qquad
+    -H(X_1)-H(X_2).
+\end{aligned}
+\end{equation}
+
+Indeed, by the chain rule and the conditional independences,
+\[
+\begin{aligned}
+H(X_0,X_1,X_2,X_3)
+&=
+H(X_1)
++H(X_0\mid X_1)
++H(X_2\mid X_1)
++H(X_3\mid X_2) \\
+&=
+H(X_0,X_1)+H(X_1,X_2)+H(X_2,X_3)
+-H(X_1)-H(X_2).
+\end{aligned}
+\]
+
+\medskip
+
+\noindent
+\textbf{Step 2: three folds of $P_5$ onto $P_3$.}
+
+Label the vertices of $P_3$ by
+\[
+    0,1,2,3
+\]
+in their natural order.
+
+Consider the following three graph homomorphisms
+$\phi_i:P_5\to P_3$, specified by the images of the six consecutive
+vertices of $P_5$:
+\[
+\begin{aligned}
+    \phi_1 &: (0,1,0,1,2,3),\\
+    \phi_2 &: (0,1,2,1,2,3),\\
+    \phi_3 &: (0,1,2,3,2,3).
+\end{aligned}
+\]
+Thus $\phi_i$ traverses every edge of $P_3$ once, except for the
+$i$th edge, which it traverses three times.
+
+We now explain how to ``pull back'' the distribution of $X$ along
+each $\phi_i$.
+
+More generally, suppose
+\[
+    a_0,a_1,\dots,a_5\in\{0,1,2,3\}
+\]
+form a walk in $P_3$.  Define a random walk
+\[
+    Y=(Y_0,\dots,Y_5)
+\]
+in $G$ as follows.  First sample $Y_0$ with the same distribution as
+$X_{a_0}$.  Having sampled $Y_j$, sample $Y_{j+1}$ according to the
+conditional distribution
+\[
+    \mathbb P(Y_{j+1}=v\mid Y_j=u)
+    :=
+    \mathbb P(X_{a_{j+1}}=v\mid X_{a_j}=u).
+\]
+Then
+\[
+    Y_j\stackrel{d}{=}X_{a_j}
+\]
+for every $j$, and
+\[
+    (Y_j,Y_{j+1})
+    \stackrel{d}{=}
+    (X_{a_j},X_{a_{j+1}})
+\]
+for every $j$.
+Moreover, $Y$ is supported on $\Hom(P_5,G)$.
+
+Applying this construction to the three walks $\phi_1,\phi_2,\phi_3$
+gives random homomorphisms
+\[
+    Y^{(1)},Y^{(2)},Y^{(3)}\in\Hom(P_5,G).
+\]
+We take these three random homomorphisms independently.
+
+Finally, let $Z_0$ and $Z_3$ be independent random vertices having,
+respectively, the distributions of $X_0$ and $X_3$, and independent
+of all the $Y^{(i)}$.
+
+Altogether,
+\[
+    Y:=(Z_0,Z_3,Y^{(1)},Y^{(2)},Y^{(3)})
+\]
+is a random element of $\Hom(F,G)$.
+
+\medskip
+
+\noindent
+\textbf{Step 3: compute the entropy.}
+
+For any Markov distribution on a path
+$v_0v_1\cdots v_m$, one has
+\begin{equation}\label{eq:tree-entropy}
+    H(V_0,\dots,V_m)
+    =
+    \sum_{j=0}^{m-1}H(V_j,V_{j+1})
+    -
+    \sum_{j=1}^{m-1}H(V_j).
+\end{equation}
+This follows immediately from the chain rule:
+\[
+\begin{aligned}
+H(V_0,\dots,V_m)
+&=
+H(V_0)+\sum_{j=0}^{m-1}H(V_{j+1}\mid V_j)\\
+&=
+H(V_0)+\sum_{j=0}^{m-1}
+    \bigl(H(V_j,V_{j+1})-H(V_j)\bigr).
+\end{aligned}
+\]
+
+We apply \eqref{eq:tree-entropy} to the three copies of $P_5$.
+
+Across the three maps $\phi_1,\phi_2,\phi_3$, each edge
+\[
+    01,\qquad 12,\qquad 23
+\]
+of $P_3$ occurs exactly five times:
+each occurs once in each $\phi_i$, and twice more in the unique
+$\phi_i$ which backtracks over that edge.
+
+Hence the positive edge contribution to
+\[
+    H(Y^{(1)})+H(Y^{(2)})+H(Y^{(3)})
+\]
+is
+\[
+    5H(X_0,X_1)
+    +5H(X_1,X_2)
+    +5H(X_2,X_3).
+\]
+
+It remains to count the internal vertices of the three copies of
+$P_5$.  Their images under the three $\phi_i$ are
+\[
+\begin{array}{c|c}
+\phi_1 & 1,0,1,2\\
+\phi_2 & 1,2,1,2\\
+\phi_3 & 1,2,3,2.
+\end{array}
+\]
+Thus, among all internal vertices,
+\[
+    0\text{ occurs once},\qquad
+    1\text{ occurs five times},\qquad
+    2\text{ occurs five times},\qquad
+    3\text{ occurs once}.
+\]
+Therefore
+\begin{align*}
+\sum_{i=1}^3 H(Y^{(i)})
+&=
+5H(X_0,X_1)+5H(X_1,X_2)+5H(X_2,X_3)\\
+&\qquad
+-H(X_0)-5H(X_1)-5H(X_2)-H(X_3).
+\end{align*}
+
+The two isolated vertices contribute
+\[
+    H(Z_0)+H(Z_3)=H(X_0)+H(X_3).
+\]
+Since all five components were chosen independently,
+\[
+\begin{aligned}
+H(Y)
+&=
+H(Z_0)+H(Z_3)+\sum_{i=1}^3H(Y^{(i)})\\
+&=
+5\Bigl(
+H(X_0,X_1)+H(X_1,X_2)+H(X_2,X_3)
+-H(X_1)-H(X_2)
+\Bigr).
+\end{aligned}
+\]
+By \eqref{eq:tree-entropy-P3},
+\[
+    H(Y)=5H(X).
+\]
+Since $X$ is uniform on $\Hom(P_3,G)$,
+\[
+    H(Y)
+    =
+    5\log\hom(P_3,G).
+\]
+
+On the other hand, $Y$ is supported on $\Hom(F,G)$, so the
+maximum-entropy bound gives
+\[
+\begin{aligned}
+    5\log\hom(P_3,G)
+    &=H(Y)\\
+    &\le \log|\Hom(F,G)|\\
+    &=\log\bigl(n^2\hom(P_5,G)^3\bigr).
+\end{aligned}
+\]
+Exponentiating,
+\[
+    \hom(P_3,G)^5
+    \le
+    n^2\hom(P_5,G)^3.
+\]
+Dividing by $n^{20}$ yields
+\[
+    t(P_3,G)^5
+    \le
+    t(P_5,G)^3.
+\]
+
+Finally, the inequality extends from finite graphs to graphons by the
+standard approximation of graphons by finite graphs together with
+continuity of homomorphism densities.  Hence, for every graphon $W$,
+\[
+    \boxed{t(P_5,W)^3\ge t(P_3,W)^5}.
+\]
+\end{proof}
+\section{The same argument on graphons}
+\label{sec:graphon}
+
+The proof of Section~\ref{sec:finite} ends by transferring the finite
+inequality to graphons ``by the standard approximation of graphons by finite
+graphs together with continuity of homomorphism densities''.  That step is
+delicate at the generality the catalogue needs: its graphons live on an
+arbitrary probability space, not necessarily atomless or standard Borel, and
+the usual step-function approximation is not available there.  The honest
+finite-to-graphon route is the $W$-random sampling argument of
+\texttt{notes/triangle\_three\_edge\_tail.tex}, which needs a product space, a
+conditional Bernoulli construction, a second-moment estimate and convergence in
+probability.
+
+None of that is necessary.  The entropy proof transcribes directly.  What
+disappears is exactly the appeal to a uniform distribution on a finite set:
+Shannon entropy is replaced by relative entropy with respect to $\mu$, the
+maximum-entropy bound $H(Y)\leq\log|\Hom(F,G)|$ becomes Gibbs' inequality, and
+the two isolated vertices --- present in Section~\ref{sec:finite} only to
+supply the factor $n^2$ --- become two applications of the nonnegativity of
+relative entropy.
+
+\subsection{Setting}
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and $W\colon\Omega^2\to[0,1]$
+a symmetric measurable graphon.  Write $T_Wh(x)=\int W(x,y)h(y)\dd\mu(y)$ and
+\[
+ d=T_W\mathbf1,\qquad A=T_W^2\mathbf1,\qquad B=T_W^3\mathbf1,
+\]
+\[
+ a_3=t(P_3,W)=\langle\mathbf1,T_W^3\mathbf1\rangle,\qquad
+ a_5=t(P_5,W)=\langle\mathbf1,T_W^5\mathbf1\rangle .
+\]
+Assume until Section~\ref{sec:limit} that $W\geq\varepsilon$ pointwise for some
+$\varepsilon>0$; then $d,A,B\geq\varepsilon$, every density below is bounded
+above and below by positive constants, and every logarithm appearing is
+bounded.  All integrability hypotheses are therefore automatic, and we do not
+comment on them again.
+
+\subsection{The $P_3$ measure and its marginals}
+
+Let
+\[
+ f(x_0,x_1,x_2,x_3)
+ =\frac{W(x_0,x_1)W(x_1,x_2)W(x_2,x_3)}{a_3},
+\]
+a probability density on $\Omega^4$ with respect to $\mu^4$.  This is the
+graphon counterpart of ``a uniformly random homomorphism $P_3\to G$''.
+Integrating out coordinates gives its one- and two-dimensional marginal
+densities in closed form:
+\begin{equation}
+\begin{gathered}
+ m_0=m_3=\frac{B}{a_3},\qquad m_1=m_2=\frac{d\,A}{a_3},\\[2pt]
+ M_{01}(u,v)=\frac{W(u,v)A(v)}{a_3},\qquad
+ M_{12}(u,v)=\frac{W(u,v)d(u)d(v)}{a_3},\qquad
+ M_{23}(u,v)=\frac{W(u,v)A(u)}{a_3}.
+\end{gathered}
+\label{eq:marginals}
+\end{equation}
+Each is a probability density: for instance
+$\iint M_{01}=a_3^{-1}\int d(v)A(v)\dd\mu(v)
+=a_3^{-1}\langle T_W\mathbf1,T_W^2\mathbf1\rangle=1$.
+For a reversed orientation write $M_{10}(u,v)=M_{01}(v,u)$, and similarly for
+the other edges.
+
+The Markov property of Step~1 of Section~\ref{sec:finite} becomes the exact
+factorization
+\begin{equation}
+ f=\frac{M_{01}M_{12}M_{23}}{m_1\,m_2},
+ \label{eq:tree-factorization}
+\end{equation}
+which one checks by substituting \eqref{eq:marginals} and cancelling
+$d(x_1)A(x_1)d(x_2)A(x_2)$.
+
+\subsection{The one analytic input}
+
+\begin{lemma}[Gibbs]
+\label{lem:gibbs}
+Let $\nu$ be a measure and let $f,g>0$ be probability densities with respect to
+$\nu$.  Then $\int f\log(g/f)\dd\nu\leq0$.
+\end{lemma}
+
+\begin{proof}
+Pointwise $\log u\leq u-1$, so
+$f\log(g/f)\leq f\,(g/f-1)=g-f$, and $\int(g-f)\dd\nu=0$.
+\end{proof}
+
+Taking $g\equiv1$ gives the only other fact we need:
+\begin{equation}
+ \int m\log m\dd\nu\ \geq\ 0
+ \qquad\text{for every probability density $m$.}
+ \label{eq:rel-entropy-nonneg}
+\end{equation}
+This is what replaces ``$H(Z_0)\leq\log n$'' in Section~\ref{sec:finite}.
+
+\subsection{The three folds}
+
+Let $a=(a_0,\dots,a_5)$ be a walk in $P_3$ and put
+\begin{equation}
+ q_a(y_0,\dots,y_5)
+ =\frac{\prod_{j=0}^{4}M_{a_ja_{j+1}}(y_j,y_{j+1})}
+        {\prod_{j=1}^{4}m_{a_j}(y_j)} .
+ \label{eq:fold-density}
+\end{equation}
+
+\begin{lemma}
+\label{lem:fold}
+$q_a$ is a probability density on $\Omega^6$; its marginal on the coordinate
+pair $(j,j+1)$ is $M_{a_ja_{j+1}}$, and its marginal on the coordinate $j$ is
+$m_{a_j}$.
+\end{lemma}
+
+\begin{proof}
+Integrate out $y_5$ first: $\int M_{a_4a_5}(y_4,y_5)\dd\mu(y_5)=m_{a_4}(y_4)$,
+which cancels the factor $m_{a_4}(y_4)$ in the denominator and leaves the same
+expression for the walk $(a_0,\dots,a_4)$.  Iterating down to a single
+coordinate leaves $m_{a_0}$, of total mass one.  The same computation performed
+from either end gives the stated marginals.
+\end{proof}
+
+This is \eqref{eq:fold-density} written out; no conditional-probability
+machinery is used, which is what makes the argument valid on an arbitrary
+probability space.  Set
+\[
+ E_e=\iint M_e\,\bigl(\log W-\log M_e\bigr)\dd\mu^2
+ \quad(e\in\{01,12,23\}),
+ \qquad
+ V_k=\int m_k\log m_k\dd\mu .
+\]
+Note $E_e$ does not depend on the orientation of $e$, because $W$ is symmetric.
+
+\begin{lemma}[Tree-entropy identity]
+\label{lem:identity}
+$E_{01}+E_{12}+E_{23}+V_1+V_2=\log a_3 .$
+\end{lemma}
+
+\begin{proof}
+Compute $\int f\log f$ in two ways.  From $f=W_{01}W_{12}W_{23}/a_3$ and
+Lemma~\ref{lem:fold} applied to the walk $(0,1,2,3)$,
+\[
+ \int f\log f
+ =\sum_e\iint M_e\log W-\log a_3 .
+\]
+From the factorization \eqref{eq:tree-factorization},
+\[
+ \int f\log f=\sum_e\iint M_e\log M_e-V_1-V_2 .
+\]
+Subtract.
+\end{proof}
+
+\begin{lemma}[Per-fold bound]
+\label{lem:perfold}
+For every walk $a$ in $P_3$ of length five,
+\[
+ \log a_5\ \geq\ \sum_{j=0}^{4}E_{\{a_j,a_{j+1}\}}+\sum_{j=1}^{4}V_{a_j}.
+\]
+\end{lemma}
+
+\begin{proof}
+Apply Lemma~\ref{lem:gibbs} on $\Omega^6$ with $f=q_a$ and
+$g=a_5^{-1}\prod_{j=0}^4W(y_j,y_{j+1})$, both probability densities.  Expanding
+$\log(g/q_a)$ by \eqref{eq:fold-density} and integrating term by term with
+Lemma~\ref{lem:fold},
+\[
+ 0\ \geq\ \int q_a\log\frac{g}{q_a}
+ =\sum_{j=0}^{4}\iint M_{a_ja_{j+1}}\bigl(\log W-\log M_{a_ja_{j+1}}\bigr)
+ +\sum_{j=1}^{4}\int m_{a_j}\log m_{a_j}
+ -\log a_5 . \qedhere
+\]
+\end{proof}
+
+\subsection{Summation}
+
+Take the three folds of Section~\ref{sec:finite},
+\[
+ \phi_1=(0,1,0,1,2,3),\qquad
+ \phi_2=(0,1,2,1,2,3),\qquad
+ \phi_3=(0,1,2,3,2,3),
+\]
+and add the three instances of Lemma~\ref{lem:perfold}.  The multiplicities are
+those already counted there: each edge of $P_3$ is traversed $3+1+1=5$ times in
+total, and among the twelve internal vertices the labels $0,1,2,3$ occur
+$1,5,5,1$ times.  Hence
+\[
+ 3\log a_5
+ \ \geq\ 5\bigl(E_{01}+E_{12}+E_{23}\bigr)+V_0+5V_1+5V_2+V_3
+ \ =\ 5\log a_3+V_0+V_3
+\]
+by Lemma~\ref{lem:identity}, and $V_0,V_3\geq0$ by
+\eqref{eq:rel-entropy-nonneg}.  Therefore
+\begin{equation}
+ a_5^3\ \geq\ a_3^5
+ \qquad\text{whenever }W\geq\varepsilon>0 .
+ \label{eq:regularized}
+\end{equation}
+
+\subsection{Removing the regularization}
+\label{sec:limit}
+
+For a general graphon $W$ and $0<\varepsilon<1$ put
+$W_\varepsilon=(1-\varepsilon)W+\varepsilon$, again a graphon, with
+$W_\varepsilon\geq\varepsilon$.  Since
+$\lVert W_\varepsilon-W\rVert_\infty\leq2\varepsilon$ and a homomorphism
+density with $m$ edges is $m$-Lipschitz in the supremum norm,
+\[
+ |t(P_k,W_\varepsilon)-t(P_k,W)|\leq2k\varepsilon .
+\]
+Applying \eqref{eq:regularized} to $W_\varepsilon$ and letting
+$\varepsilon\downarrow0$ gives $t(P_5,W)^3\geq t(P_3,W)^5$ for every graphon
+$W$ on every probability space.  \qed
+
+\begin{remark}
+The two isolated vertices of $F=P_0\sqcup P_0\sqcup P_5\sqcup P_5\sqcup P_5$ do
+not appear above.  In Section~\ref{sec:finite} they contribute the factor $n^2$
+that compensates $-H(X_0)-H(X_3)$; here $\mu$ is already a probability measure,
+$t(P_0,W)=1$, and the same compensation is supplied by $V_0,V_3\geq0$.  This is
+the only structural difference between the two proofs.
+\end{remark}
+
+\begin{remark}
+Every step above is finite-dimensional integration against explicit densities
+built from $W$, $d$, $A$, $B$ and $a_3$, together with one scalar inequality
+(Lemma~\ref{lem:gibbs}) and one limit.  In the Lean development
+Lemma~\ref{lem:gibbs} is \texttt{integral\_mul\_log\_div\_nonpos} of
+\texttt{Methods/PureChordal/Gibbs.lean}, the limit of
+Section~\ref{sec:limit} uses \texttt{Methods/PureChordal/Regularization.lean},
+and the coordinate integrations of Lemma~\ref{lem:fold} use the
+assignment-integral peeling ladder.  The same combination already carries the
+entropy proof of the pure-chordal theorem in
+\texttt{Methods/PureChordal/EntropyGluing.lean}.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Section~\ref{sec:graphon} is formalized in full, as
+\texttt{a3\_pow\_five\_le\_a5\_pow\_three} in
+\texttt{lean/Taeyoung/Methods/OddWalk/}, axiom-clean.  One difference of
+substance.
+
+\subsection*{No measure on $\Omega^4$ or $\Omega^6$ is constructed}
+
+The argument above is written against the probability density
+\eqref{eq:tree-factorization} on $\Omega^4$, and Lemma~\ref{lem:fold}
+integrates a six-coordinate quantity.  Neither space is built.  Everything is
+phrased instead inside $\Omega$, through the iterate
+$T_W^{\,n}\mathbf1$, with $a_3=\int B$ and $a_5=\int AB$ by self-adjointness of
+$T_W$.  Three consequences:
+
+\begin{itemize}
+\item The marginals \eqref{eq:marginals} are supplied as four closed-form
+ functions --- $P_3$ has two kinds of vertex and two kinds of edge --- rather
+ than as marginals of anything.  The remaining two are these with their
+ arguments interchanged.
+\item The step inequality of Lemma~\ref{lem:perfold} is applied
+ \emph{pointwise in the outer variable}: for fixed $y$ the conditional density
+ $z\mapsto K(y,z)/u(y)$ is a probability density, which is the Markov property
+ of the folded walk, so each step is one application of Lemma~\ref{lem:gibbs}
+ on $\Omega$ and one Fubini on $\Omega^2$.  This is what replaces the six-fold
+ construction that Section~\ref{sec:finite} performs when it samples a random
+ homomorphism.
+\item The tree-entropy identity of Lemma~\ref{lem:identity} is not obtained by
+ evaluating $\int f\log f$ in two ways.  Because the marginals are explicit
+ quotients, every logarithm splits and the identity becomes scalar algebra in
+ \[
+  P_d=\int_\Omega\frac{dA}{a_3}\log d,\qquad
+  P_A=\int_\Omega\frac{dA}{a_3}\log A :
+ \]
+ the $\log W$ cancels inside each edge term, leaving
+ $E_{01}=E_{23}=\log a_3-P_A$, $E_{12}=\log a_3-2P_d$ and
+ $V_1=V_2=P_d+P_A-\log a_3$, whose combination is $\log a_3$.
+\end{itemize}
+
+Accordingly the closing remark of Section~\ref{sec:limit} is corrected on one
+point: the coordinate integrations of Lemma~\ref{lem:fold} do \emph{not} use
+the assignment-integral peeling ladder, which the development never invokes.
+
+\end{document}

@@ -1,0 +1,833 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+\begin{document}
+
+\section{Closure under vertex and edge self-amalgamation}
+
+For a finite graph $H$ and $0\le p<1$, define
+\[
+    \Phi_H(p)
+    :=
+    (1-p)^{v(H)}
+    \chi_H\!\left(\frac{1}{1-p}\right),
+\]
+with the continuous extension at $p=1$.
+
+Since $\chi_H$ is monic of degree $v(H)$, this extension has value
+$\Phi_H(1)=1$.  Throughout, a graphon means a symmetric, jointly
+measurable function $W:\Omega^2\to[0,1]$ on an arbitrary probability
+space $(\Omega,\mathcal A,\mu)$.  We write
+\[
+    p=t(K_2,W).
+\]
+
+\subsection{Definitions}
+
+\begin{definition}[Vertex self-amalgam]
+Let $F$ be a finite graph with a distinguished vertex $a\in V(F)$,
+and let $N\ge1$.
+
+Take $N$ disjoint labelled copies
+\[
+    F_1,\dots,F_N
+\]
+of the rooted graph $(F,a)$ and identify all $N$ copies of the
+distinguished vertex $a$, making no other identifications.
+
+The resulting graph is denoted by
+\[
+    B_N^{(1)}(F,a)
+\]
+and is called the $N$-fold vertex self-amalgam of $(F,a)$.
+\end{definition}
+
+\begin{definition}[Edge self-amalgam]
+Let $F$ be a finite graph with a distinguished ordered edge
+\[
+    (a,b),
+    \qquad ab\in E(F),
+\]
+and let $N\ge1$.
+
+Take $N$ disjoint labelled copies of the rooted graph $(F,a,b)$.
+Identify all copies of $a$ with one another and all copies of $b$
+with one another, respecting the order of the distinguished edge,
+and make no other identifications.
+
+The resulting graph is denoted by
+\[
+    B_N^{(2)}(F,a,b)
+\]
+and is called the $N$-fold edge self-amalgam of $(F,a,b)$.
+\end{definition}
+
+The ordering of the distinguished edge is only used to specify
+unambiguously how the copies are glued. It is important when the two
+endpoints of the distinguished edge are not interchangeable by an
+automorphism of the rooted graph.
+
+\subsection{The graphon gluing inequalities}
+
+We first prove the analytic part directly in graphon space.
+
+\begin{lemma}[Vertex self-amalgamation inequality]
+Let $F$ be rooted at a vertex $a$, and let $N\ge1$. Then for every
+graphon $W$ on every probability space,
+\[
+    t(B_N^{(1)}(F,a),W)
+    \ge
+    t(F,W)^N.
+\]
+\end{lemma}
+
+\begin{proof}
+For $x\in\Omega$, define the rooted homomorphism density
+\[
+    f(x)
+    :=
+    \int_{\Omega^{V(F)\setminus\{a\}}}
+       \prod_{uv\in E(F)}
+       W(z_u,z_v)
+       \prod_{v\in V(F)\setminus\{a\}}d\mu(z_v),
+\]
+where
+\[
+    z_a=x.
+\]
+By Fubini's theorem,
+\[
+    t(F,W)=\int_\Omega f(x)\,d\mu(x).
+\]
+
+In the graph $B_N^{(1)}(F,a)$, the $N$ copies of
+$F\setminus\{a\}$ are pairwise vertex-disjoint once the image of the
+common root is fixed. Hence their integrations factor, giving
+\[
+    t(B_N^{(1)}(F,a),W)
+    =
+    \int_\Omega f(x)^N\,d\mu(x).
+\]
+Since $f\ge0$ and $u\mapsto u^N$ is convex on $[0,\infty)$,
+Jensen's inequality gives
+\[
+\begin{aligned}
+    t(B_N^{(1)}(F,a),W)
+    &=
+    \int_\Omega f(x)^N\,d\mu(x)
+    \\
+    &\ge
+    \left(\int_\Omega f(x)\,d\mu(x)\right)^N
+    \\
+    &=
+    t(F,W)^N.
+\end{aligned}
+\]
+All integrands are measurable and bounded between $0$ and $1$.
+Thus Tonelli--Fubini applies, including on probability spaces that are
+not atomless or standard Borel.
+\end{proof}
+
+\begin{lemma}[Edge self-amalgamation inequality]
+Let $F$ have a distinguished ordered edge $(a,b)$, let $N\ge1$, and
+let $W$ be a graphon on an arbitrary probability space with
+\[
+    p=t(K_2,W)>0.
+\]
+Then
+\[
+    t(B_N^{(2)}(F,a,b),W)
+    \ge
+    \frac{t(F,W)^N}{p^{N-1}}.
+\]
+\end{lemma}
+
+\begin{proof}
+For $(x,y)\in\Omega^2$, define
+\[
+    g(x,y)
+    :=
+    \int_{\Omega^{V(F)\setminus\{a,b\}}}
+       \prod_{uv\in E(F)\setminus\{ab\}}
+       W(z_u,z_v)
+       \prod_{v\in V(F)\setminus\{a,b\}}d\mu(z_v),
+\]
+where
+\[
+    z_a=x,
+    \qquad
+    z_b=y.
+\]
+The distinguished edge $ab$ has deliberately been omitted from the
+product defining $g$. Therefore
+\begin{equation}\label{eq:tF-edge-rooted}
+    t(F,W)
+    =
+    \int_{\Omega^2}
+       W(x,y)g(x,y)\,d\mu(x)d\mu(y).
+\end{equation}
+
+In the $N$-fold edge self-amalgam the distinguished edge is a single
+edge of the resulting simple graph, rather than $N$ parallel edges.
+Once the images $x,y$ of the two common root vertices have been fixed,
+all remaining vertices in the $N$ copies are independent. Consequently,
+\begin{equation}\label{eq:edge-amalgam-density}
+    t(B_N^{(2)}(F,a,b),W)
+    =
+    \int_{\Omega^2}
+       W(x,y)g(x,y)^N\,d\mu(x)d\mu(y).
+\end{equation}
+
+Since
+\[
+    p=\int_{\Omega^2}W(x,y)\,d\mu(x)d\mu(y)>0,
+\]
+the formula
+\[
+    d\rho(x,y)
+    :=
+    \frac{W(x,y)}{p}\,d(\mu\otimes\mu)(x,y)
+\]
+defines a probability measure on $\Omega^2$.
+Equations \eqref{eq:tF-edge-rooted} and
+\eqref{eq:edge-amalgam-density} become
+\[
+    t(F,W)
+    =
+    p\int g\,d\rho
+\]
+and
+\[
+    t(B_N^{(2)}(F,a,b),W)
+    =
+    p\int g^N\,d\rho.
+\]
+Applying Jensen's inequality to $g\ge0$ gives
+\[
+\begin{aligned}
+    t(B_N^{(2)}(F,a,b),W)
+    &=
+    p\int g^N\,d\rho
+    \\
+    &\ge
+    p\left(\int g\,d\rho\right)^N
+    \\
+    &=
+    p\left(\frac{t(F,W)}{p}\right)^N
+    \\
+    &=
+    \frac{t(F,W)^N}{p^{N-1}}.
+\end{aligned}
+\]
+As above, the finite products are measurable and bounded, so all
+factorizations and changes in integration order are justified by
+Tonelli--Fubini.
+\end{proof}
+
+\subsection{Chromatic-polynomial identities}
+
+The preceding analytic inequalities exactly match the
+chromatic-polynomial target because the densities of $K_1$ and $K_2$
+are completely determined by the edge density.
+
+\begin{lemma}[Chromatic polynomial of a vertex self-amalgam]
+Let
+\[
+    H=B_N^{(1)}(F,a).
+\]
+Then
+\[
+    \chi_H(x)
+    =
+    \frac{\chi_F(x)^N}{x^{N-1}}.
+\]
+Consequently,
+\[
+    \Phi_H(p)=\Phi_F(p)^N.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix an integer $k\ge1$. By symmetry under permutations of the $k$
+colours, the number of proper $k$-colourings of $F$ in which the
+distinguished vertex $a$ is assigned any prescribed colour is
+\[
+    \frac{\chi_F(k)}{k}.
+\]
+To colour $H$, first choose the colour of the common root, and then
+colour the remaining vertices in each of the $N$ copies independently.
+Thus
+\[
+\begin{aligned}
+    \chi_H(k)
+    &=
+    k
+    \left(\frac{\chi_F(k)}{k}\right)^N
+    \\
+    &=
+    \frac{\chi_F(k)^N}{k^{N-1}}.
+\end{aligned}
+\]
+Because $F$ is nonempty, $\chi_F(0)=0$, so the factor theorem shows
+that $x$ divides $\chi_F(x)$.  Hence the quotient below is a
+polynomial.  The counting identity holds for every positive
+integer $k$, so equality at infinitely many values gives the polynomial
+identity
+\[
+    \chi_H(x)
+    =
+    \frac{\chi_F(x)^N}{x^{N-1}}.
+\]
+
+Let
+\[
+    n=v(F),
+    \qquad
+    q=1-p.
+\]
+Since the $N$ copies share exactly one vertex,
+\[
+    v(H)
+    =
+    Nn-(N-1).
+\]
+Therefore, for $p<1$,
+\[
+\begin{aligned}
+    \Phi_H(p)
+    &=
+    q^{Nn-(N-1)}
+    \frac{\chi_F(q^{-1})^N}
+         {(q^{-1})^{N-1}}
+    \\
+    &=
+    q^{Nn}
+    \chi_F(q^{-1})^N
+    \\
+    &=
+    \bigl(q^n\chi_F(q^{-1})\bigr)^N
+    \\
+    &=
+    \Phi_F(p)^N.
+\end{aligned}
+\]
+The identity at $p=1$ follows by continuity; both sides equal $1$.
+\end{proof}
+
+\begin{lemma}[Chromatic polynomial of an edge self-amalgam]
+Let
+\[
+    H=B_N^{(2)}(F,a,b).
+\]
+Then
+\[
+    \chi_H(x)
+    =
+    \frac{\chi_F(x)^N}{(x)_2^{N-1}},
+\]
+where
+\[
+    (x)_2=x(x-1).
+\]
+Consequently, for $p>0$ (including $p=1$ by continuous extension),
+\[
+    \Phi_H(p)
+    =
+    \frac{\Phi_F(p)^N}{p^{N-1}}.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix an integer $k\ge2$. Since $a$ and $b$ are adjacent, every proper
+colouring assigns them two distinct colours.
+
+The permutation group of the $k$ colours acts transitively on the
+ordered pairs of distinct colours. Hence, for any prescribed ordered
+pair $(c_1,c_2)$ with $c_1\ne c_2$, the number of proper colourings
+of $F$ satisfying
+\[
+    a\mapsto c_1,
+    \qquad
+    b\mapsto c_2
+\]
+is
+\[
+    \frac{\chi_F(k)}{(k)_2},
+    \qquad
+    (k)_2=k(k-1).
+\]
+There are $(k)_2$ choices for the ordered pair of colours on the
+common root edge, after which the $N$ copies may be coloured
+independently. Thus
+\[
+\begin{aligned}
+    \chi_H(k)
+    &=
+    (k)_2
+    \left(
+      \frac{\chi_F(k)}{(k)_2}
+    \right)^N
+    \\
+    &=
+    \frac{\chi_F(k)^N}{(k)_2^{N-1}}.
+\end{aligned}
+\]
+Because $ab$ is an edge, $\chi_F(0)=\chi_F(1)=0$.  The factor theorem
+therefore shows that $(x)_2=x(x-1)$ divides $\chi_F(x)$.  Thus the
+quotient below is a polynomial.  Since the
+counting identity holds for every integer $k\ge2$, equality at
+infinitely many values gives
+\[
+    \chi_H(x)
+    =
+    \frac{\chi_F(x)^N}{(x)_2^{N-1}}.
+\]
+
+Let
+\[
+    n=v(F),
+    \qquad
+    q=1-p.
+\]
+The $N$ copies share exactly two vertices, so
+\[
+    v(H)
+    =
+    Nn-2(N-1).
+\]
+Moreover,
+\[
+\begin{aligned}
+    (q^{-1})_2
+    &=
+    q^{-1}(q^{-1}-1)
+    \\
+    &=
+    \frac1q\frac{1-q}{q}
+    \\
+    &=
+    \frac{p}{q^2}.
+\end{aligned}
+\]
+For $0<p<1$, therefore
+\[
+\begin{aligned}
+    \Phi_H(p)
+    &=
+    q^{Nn-2(N-1)}
+    \frac{\chi_F(q^{-1})^N}
+         {(q^{-1})_2^{N-1}}
+    \\
+    &=
+    q^{Nn-2(N-1)}
+    \chi_F(q^{-1})^N
+    \left(\frac{q^2}{p}\right)^{N-1}
+    \\
+    &=
+    \frac{
+      q^{Nn}\chi_F(q^{-1})^N
+    }{
+      p^{N-1}
+    }
+    \\
+    &=
+    \frac{\Phi_F(p)^N}{p^{N-1}}.
+\end{aligned}
+\]
+At $p=1$, the same identity follows by continuity, and both sides are
+$1$.  No claim involving the displayed quotient is needed at $p=0$.
+\end{proof}
+
+\subsection{Closure theorem}
+
+\begin{theorem}[Closure under vertex and edge self-amalgamation]
+Let $F$ be a finite graph, let $W$ be a graphon, and put
+\[
+    p=t(K_2,W).
+\]
+Assume
+\[
+    t(F,W)\ge \Phi_F(p)
+\]
+and
+\[
+    \Phi_F(p)\ge0.
+\]
+
+Then the following hold.
+
+\begin{enumerate}
+    \item
+    For every distinguished vertex $a\in V(F)$ and every $N\ge1$,
+    \[
+        t(B_N^{(1)}(F,a),W)
+        \ge
+        \Phi_{B_N^{(1)}(F,a)}(p).
+    \]
+
+    \item
+    If $p>0$, then for every distinguished ordered edge
+    $(a,b)$ of $F$ and every $N\ge1$,
+    \[
+        t(B_N^{(2)}(F,a,b),W)
+        \ge
+        \Phi_{B_N^{(2)}(F,a,b)}(p).
+    \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For the vertex self-amalgam,
+\[
+\begin{aligned}
+    t(B_N^{(1)}(F,a),W)
+    &\ge
+    t(F,W)^N
+    \\
+    &\ge
+    \Phi_F(p)^N
+    \\
+    &=
+    \Phi_{B_N^{(1)}(F,a)}(p).
+\end{aligned}
+\]
+The second inequality uses
+\[
+    t(F,W)\ge\Phi_F(p)\ge0.
+\]
+
+For the edge self-amalgam,
+\[
+\begin{aligned}
+    t(B_N^{(2)}(F,a,b),W)
+    &\ge
+    \frac{t(F,W)^N}{p^{N-1}}
+    \\
+    &\ge
+    \frac{\Phi_F(p)^N}{p^{N-1}}
+    \\
+    &=
+    \Phi_{B_N^{(2)}(F,a,b)}(p).
+\end{aligned}
+\]
+Again the passage to the $N$th power is justified by
+$\Phi_F(p)\ge0$.
+\end{proof}
+
+\begin{remark}[Why the nonnegativity assumption is needed]
+The condition
+\[
+    \Phi_F(p)\ge0
+\]
+cannot simply be omitted from this abstract argument. From
+\[
+    t(F,W)\ge\Phi_F(p)
+\]
+with $\Phi_F(p)<0$, one cannot conclude
+\[
+    t(F,W)^N\ge\Phi_F(p)^N
+\]
+when $N$ is even.
+
+In the applications relevant to the Goodman-type problem this causes
+no difficulty. For example, the target for an odd cycle is nonnegative
+for $p\ge1/2$, and the pure-chordal target is nonnegative throughout
+the range in which the clique-ratio proof applies.
+\end{remark}
+
+\begin{corollary}[Preservation of the required chromatic threshold]
+Let
+\[
+    r:=\chi(F)\ge3.
+\]
+Suppose that for every graphon $W$ with
+\[
+    p=t(K_2,W)\ge1-\frac1{r-1}
+\]
+one has
+\[
+    t(F,W)\ge\Phi_F(p)\ge0.
+\]
+Then every vertex self-amalgam
+\[
+    B_N^{(1)}(F,a)
+\]
+and every edge self-amalgam
+\[
+    B_N^{(2)}(F,a,b)
+\]
+satisfies
+\[
+    t(H,W)\ge\Phi_H(p)
+\]
+throughout the same range
+\[
+    p\ge1-\frac1{r-1}.
+\]
+Moreover,
+\[
+    \chi(H)=r
+\]
+for both kinds of self-amalgam.
+\end{corollary}
+
+\begin{proof}
+Because $r\ge3$, the displayed density range has $p\ge1/2>0$.
+The density inequalities therefore follow immediately from the preceding
+theorem, including its edge-amalgamation part.
+It remains only to verify the chromatic number.
+
+Every self-amalgam contains a copy of $F$, and therefore
+\[
+    \chi(H)\ge\chi(F)=r.
+\]
+
+For a vertex self-amalgam, take a proper $r$-colouring of each copy.
+By permuting the $r$ colour labels separately in each copy, we may
+arrange that the distinguished vertex has the same colour in every
+copy. These colourings then combine into a proper $r$-colouring of the
+amalgam. Thus
+\[
+    \chi(H)\le r.
+\]
+
+For an edge self-amalgam, the two endpoints of the distinguished edge
+receive distinct colours. The symmetric group on the $r$ colours is
+transitive on ordered pairs of distinct colours. Hence, after
+permuting the colour labels independently in each copy, we may arrange
+that the ordered pair of colours on the distinguished edge is the
+same in every copy. The colourings then combine to give a proper
+$r$-colouring of the amalgam.
+
+Thus in either case
+\[
+    \chi(H)=r.
+\]
+Consequently the threshold
+\[
+    p\ge1-\frac1{\chi(H)-1}
+\]
+is exactly the original threshold
+\[
+    p\ge1-\frac1{\chi(F)-1}.
+\]
+\end{proof}
+
+\subsection{The six-vertex Atlas application}
+
+\begin{corollary}[Atlas 115]\label{cor:atlas115}
+NetworkX Atlas graph $115$, with graph6 code \texttt{E`Xg}, is positive:
+for every graphon $W$ of edge density $p\in[1/2,1]$,
+\[
+    t(F_{115},W)\geq p^3(2p-1)^2
+    =\Phi_{F_{115}}(p).
+\]
+Its order, size, and chromatic number are respectively $6$, $7$, and $3$,
+and
+\[
+    \chi_{F_{115}}(x)=x(x-1)^3(x-2)^2.
+\]
+\end{corollary}
+
+\begin{proof}
+Atlas 15 is the paw, with edge list
+\[
+  03,\ 12,\ 13,\ 23,
+\]
+where $123$ is its triangle and $0$ is the leaf at $3$.  Its
+chromatic polynomial and target are
+\[
+  \chi_{F_{15}}(x)=x(x-1)^2(x-2),
+  \qquad
+  \Phi_{F_{15}}(p)=p^2(2p-1).
+\]
+The rooted triangle--tree theorem (the case $L_1$) proves
+$t(F_{15},W)\geq\Phi_{F_{15}}(p)$ for every $p\in[1/2,1]$; the target
+is nonnegative on this interval.
+
+Take two copies of the paw and identify, in order, the endpoints of the
+triangle edge $12$, the edge opposite the leaf-bearing vertex $3$.
+The result is $B_2^{(2)}(F_{15},1,2)$.  One convenient edge labelling of
+this amalgam is
+\[
+  01,\ 03,\ 05,\ 13,\ 15,\ 23,\ 45.
+\]
+It is isomorphic to Atlas 115, whose NetworkX edge list is
+\[
+  01,\ 14,\ 15,\ 23,\ 24,\ 25,\ 45.
+\]
+For example, the first list is carried to the second by
+\[
+  0\mapsto4,\quad 1\mapsto5,\quad 2\mapsto0,\quad
+  3\mapsto1,\quad 4\mapsto3,\quad 5\mapsto2.
+\]
+The edge-amalgamation identities give
+\[
+  \chi_{F_{115}}(x)
+  =\frac{\chi_{F_{15}}(x)^2}{x(x-1)}
+  =x(x-1)^3(x-2)^2
+\]
+and, since $p\geq1/2>0$,
+\[
+  t(F_{115},W)
+  \geq\frac{t(F_{15},W)^2}{p}
+  \geq\frac{\Phi_{F_{15}}(p)^2}{p}
+  =p^3(2p-1)^2.
+\]
+The amalgam contains the paw and is $3$-colourable by matching the
+ordered colours on the common edge, so its chromatic number is $3$.
+At $p=1/2$ the target is $0$; at $p=1$ both the target and the density
+are $1$.  This proves the complete required interval.
+\end{proof}
+
+The other two edge orbits of the paw give Atlas 111 and Atlas 117:
+gluing on a triangle edge incident with the leaf-bearing vertex gives
+the former, while gluing on the pendant edge gives the latter.  Both
+were already positive by the cone-over-forest theorem.  Exact
+enumeration of the scoped Atlas graphs with at most six vertices shows
+that Atlas 115 is the only formerly uncovered row added by vertex or
+edge self-amalgamation of the accepted smaller positive bases; the
+explicit isomorphism above supplies the proof-relevant identification.
+
+\begin{remark}[Why only $K_1$ and $K_2$ give an automatic closure]
+There is a useful reason that vertex and edge amalgamation are
+particularly clean.
+
+Suppose instead that copies of $F$ are amalgamated along a rooted
+clique $K_s$. Provided $t(K_s,W)>0$, the same normalized-measure
+argument gives
+\[
+    t(H,W)
+    \ge
+    \frac{t(F,W)^N}{t(K_s,W)^{N-1}}.
+\]
+On the chromatic-polynomial side, whenever $\Phi_{K_s}(p)>0$, one obtains
+\[
+    \Phi_H(p)
+    =
+    \frac{\Phi_F(p)^N}{\Phi_{K_s}(p)^{N-1}}.
+\]
+For $s=1$ and $s=2$,
+\[
+    t(K_1,W)=1=\Phi_{K_1}(p),
+    \qquad
+    t(K_2,W)=p=\Phi_{K_2}(p),
+\]
+so the analytic and chromatic denominators agree exactly.
+
+For $s\ge3$, however, $t(K_s,W)$ is not determined by the edge
+density $p$. Consequently the same argument does not by itself imply
+the Goodman-type target. This is precisely where additional
+clique-density or clique-ratio information is required.
+\end{remark}
+
+\subsection{Inputs, endpoint audit, and exact limitations}
+
+The closure theorem itself uses only Tonelli--Fubini, Jensen's
+inequality on a probability space, and the elementary colouring counts
+above.  Corollary~\ref{cor:atlas115} additionally uses exactly the
+accepted rooted triangle--tree bound for the paw $L_1$; it does not use
+universal-vertex lifting, a finite-step reduction, or a regularity
+assumption.
+
+The division by $p^{N-1}$ in edge amalgamation is made only when
+$p>0$.  This is automatic in the catalogue application and in the
+required threshold corollary because $\chi(F)\ge3$.  The endpoint
+$p=1$ is not obtained by substituting $q^{-1}$ with $q=0$: the target
+identities there follow from their polynomial continuations, while the
+graphon inequality itself follows directly from Jensen.  Vanishing
+rooted densities cause no division, since the normalized measure
+$d\rho=W\,d(\mu\otimes\mu)/p$ depends only on $p>0$.
+
+Equality in the analytic vertex-amalgamation inequality occurs precisely
+when the rooted density $f$ is constant almost everywhere (apart from
+the tautological case $N=1$).  Equality in the edge version occurs when
+$g$ is constant $\rho$-almost everywhere.  These observations are not
+needed for positivity but identify the only possible slack in the
+closure step.
+
+Finally, the theorem applies only to copies that meet in exactly the
+specified root vertex or root edge and have no other vertices or edges
+between different copies.  It proves neither amalgamation along a
+larger subgraph nor an operation in which different root types are mixed.
+The clique discussion above explains why the same one-line comparison
+does not automatically extend to $K_s$ for $s\ge3$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/SelfAmalgam.lean}, ending at
+\texttt{satisfiesLowerBound\_115}.
+
+\paragraph{Scope: the single instance, not the closure theorem.}
+Corollary~\ref{cor:atlas115} is proved in full, on all of $p\in[1/2,1]$.  The
+general statements are \emph{not} formalized: neither the vertex
+self-amalgamation inequality, nor the edge one at general $N$, nor the two
+chromatic-polynomial identities, nor the closure theorem, nor the
+threshold-preservation corollary.  What is formalized is the $N=2$ edge
+amalgam of the paw, which is the only member of the family inside the
+six-vertex catalogue.
+
+\paragraph{The rooted factor was already in the project.}
+The function $g(x,y)$ of the edge self-amalgamation proof --- the paw density
+with its distinguished edge deleted --- is, for the paw,
+\[
+ g(x,y)=\int_\Omega W(x,z)W(y,z)d(z)\,d\mu(z),
+\]
+and that is exactly \texttt{Link.pageOp W 1}, built earlier for the page-rooted
+book-leaf family.  So both identities the proof needs are existing lemmas:
+\eqref{eq:tF-edge-rooted} is \texttt{Link.integral\_edge\_pageOp} at $s=1$
+(\texttt{SelfAmalgam.integral\_edge\_page\_eq}), and
+\eqref{eq:edge-amalgam-density} is one six-coordinate peeling
+(\texttt{SelfAmalgam.homDensity\_amalgam}).  Nothing about amalgamation as such
+is formalized; the two densities are computed directly.
+
+\paragraph{The departure: no measure $\rho$, and no hypothesis $p>0$ on the
+analytic step.}
+At $N=2$ Jensen against the probability measure
+$\,d\rho=W\,d\mu^2/p$ \emph{is} Cauchy--Schwarz, so the formalization never
+constructs $\rho$.  It applies the project's own
+\texttt{PureChordal.integral\_mul\_sq\_le\_integral\_mul\_integral\_mul\_sq} to
+the \emph{unnormalised} weight $W$ on $\mu\otimes\mu$, giving
+\[
+ \left(\int_{\Omega^2}Wg\right)^2
+ \leq\left(\int_{\Omega^2}W\right)\left(\int_{\Omega^2}Wg^2\right)
+ =p\;t(A_{115},W)
+ \qquad(\texttt{SelfAmalgam.sq\_edge\_page\_le}),
+\]
+with no hypothesis on $p$ at all.  The division by $p$ happens once, at the very
+end, where $p\geq1/2>0$ is already available.  Consequently the note's standing
+assumption $p=t(K_2,W)>0$ in the edge self-amalgamation lemma is not needed in
+the form used here.
+
+\paragraph{The chromatic polynomial does not come from the amalgamation
+identity.}
+The note derives
+$\chi_{F_{115}}=\chi_{F_{15}}^2/\bigl(x(x-1)\bigr)$ from the general identity
+for $\chi_{B_N^{(2)}}$.  The formalization instead builds
+$\chi_{F_{115}}(x)=x(x-1)^3(x-2)^2$ from an \texttt{attachVertex} tower, the way
+every other catalogue row builds its chromatic polynomial: $K_3$ on $\{0,1,2\}$,
+then the leaf $3$ on $\{2\}$, then the second apex $4$ on the glued edge
+$\{0,1\}$, then the leaf $5$ on $\{4\}$.  The root list $[0,1,1,1,2,2]$ then
+gives $\Phi=p^3(2p-1)^2$ through \texttt{chromaticTarget\_affineProd}, with no
+per-row polynomial computation --- and it is the same root list as Atlas 119.
+
+\paragraph{The paw input.}
+$t(F_{15},W)\geq p^2(2p-1)$ is
+\texttt{RootedTriangleTree.rootedTree\_bound} at $r=1$, applied to
+\texttt{Chromatic.pawGraph} through \texttt{paw\_factorization}.  That lemma is
+stated for $\Omega:\mathrm{Type}$ rather than $\mathrm{Type}^*$, which is why
+this file fixes $\Omega:\mathrm{Type}$ throughout; \texttt{SatisfiesLowerBound}
+quantifies over $\mathrm{Type}$ as well, so nothing is lost.
+
+\end{document}

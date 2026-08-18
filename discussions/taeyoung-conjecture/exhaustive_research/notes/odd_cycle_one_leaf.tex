@@ -1,0 +1,423 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Odd Cycles with One Pendant Leaf:\\
+Fractional Degree Bias and H\"older Compression}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $m\geq3$ be odd and let $C_m^+$ be obtained from the odd cycle $C_m$
+by attaching one pendant leaf at one cycle vertex.  We prove that every
+graphon $W$ of edge density $p\geq1/2$ satisfies
+\[
+ t(C_m^+,W)
+ \geq p\bigl(p^m-p(1-p)^{m-1}\bigr)
+ =\Phi_{C_m^+}(p).
+\]
+The proof averages the leaf root over the cycle, applies the arithmetic--
+geometric mean inequality, and changes the underlying probability measure
+by the fractional degree weight $d^{1/m}$.  A sharp three-factor H\"older
+inequality controls the new edge density, while a one-variable monotonicity
+lemma transfers the accepted odd-cycle bound without loss.  The case $m=5$
+classifies the formerly open NetworkX Atlas graph $104$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definitions and the exact target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+For odd $m\geq3$, label the vertices of $C_m$ cyclically by
+$0,\ldots,m-1$.  Let $C_m^+$ be the graph obtained by adding one new leaf
+adjacent to vertex $0$.  The chromatic polynomial of an odd cycle is
+\[
+ \chi_{C_m}(x)=(x-1)^m-(x-1).
+\]
+The leaf has $x-1$ choices after its neighbour is coloured, so
+\begin{equation}
+ \chi_{C_m^+}(x)
+ =(x-1)^{m+1}-(x-1)^2,
+ \qquad \chi(C_m^+)=3.
+ \label{eq:chromatic}
+\end{equation}
+Consequently, with $q=1-p$,
+\begin{align}
+ \Phi_{C_m^+}(p)
+ &=p\bigl(p^m-pq^{m-1}\bigr)
+ \notag\\
+ &=p^{m+1}-p^2(1-p)^{m-1}.
+ \label{eq:target}
+\end{align}
+This formula is polynomial and gives the continued value one at $p=1$.
+
+We use the accepted odd-cycle graphon theorem in the following exact form:
+for every odd $m\geq3$, every graphon $K$ on every probability space, and
+its edge density $s$,
+\begin{equation}
+ t(C_m,K)\geq\varphi_m(s),
+ \qquad
+ \varphi_m(s):=s^m-s(1-s)^{m-1}.
+ \label{eq:odd-cycle-input}
+\end{equation}
+This is proved in \texttt{notes/paper\_new\_region2\_v3.tex}.  We do not
+assume any rooted strengthening of it.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fractional edge H\"older inequality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The next lemma is useful independently of cycles.
+
+\begin{lemma}[Fractionally degree-weighted edge]\label{lem:fractional-edge}
+Let $0<\alpha\leq1$ and put
+\[
+ N_\alpha
+ =\int_{\Omega^2}W(x,y)d(x)^\alpha d(y)^\alpha
+ \dd\mu(x)\dd\mu(y).
+\]
+Then
+\[
+ N_\alpha\geq p^{1+2\alpha}.
+\]
+In particular, for $\alpha=1/m$,
+\[
+ N_{1/m}\geq p^{1+2/m}.
+\]
+\end{lemma}
+
+\begin{proof}
+On the set where $d(x)=0$, one has $W(x,y)=0$ for almost every $y$.
+Define $W(x,y)/d(x)$ to be zero there.  Put
+\[
+ \theta=\frac1{1+2\alpha},
+ \qquad
+ \eta=\frac{\alpha}{1+2\alpha}.
+\]
+Then $\theta+2\eta=1$, and almost everywhere on the support of $W$,
+\[
+ W(x,y)
+ =\bigl(W(x,y)d(x)^\alpha d(y)^\alpha\bigr)^\theta
+  \left(\frac{W(x,y)}{d(x)}\right)^\eta
+  \left(\frac{W(x,y)}{d(y)}\right)^\eta.
+\]
+Weighted H\"older gives
+\[
+ p\leq N_\alpha^\theta
+ \left(\int\frac{W(x,y)}{d(x)}\dd\mu^2\right)^\eta
+ \left(\int\frac{W(x,y)}{d(y)}\dd\mu^2\right)^\eta.
+\]
+Each quotient integral is at most one: integrating first in the other
+variable gives one on $\{d>0\}$ and zero on $\{d=0\}$.  Hence
+$p\leq N_\alpha^\theta$, which is the claimed inequality.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The scalar transfer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Odd-cycle rescaling]\label{lem:scalar}
+Let $m\geq3$, $p\in[1/2,1]$, and $0<z\leq p$.  Set
+\[
+ s_0=p\left(\frac pz\right)^{2/m}.
+\]
+If $s_0\leq1$, then
+\[
+ z\,\varphi_m(s_0)\geq p\,\varphi_m(p).
+\]
+\end{lemma}
+
+\begin{proof}
+For $s\in(0,1]$, put
+\[
+ \psi_m(s)=\frac{\varphi_m(s)}{s^{m/2}}
+ =s^{m/2}-s^{1-m/2}(1-s)^{m-1}.
+\]
+Differentiation gives
+\begin{align*}
+ \psi_m'(s)={}&\frac m2s^{m/2-1}
+ +(m-1)s^{1-m/2}(1-s)^{m-2}\\
+ &+\left(\frac m2-1\right)s^{-m/2}(1-s)^{m-1}>0.
+\end{align*}
+Thus $\psi_m$ is strictly increasing.  Write $r=z/p\leq1$.  Then
+$s_0=pr^{-2/m}\geq p$ and $r=(p/s_0)^{m/2}$.  Therefore
+\[
+ z\varphi_m(s_0)
+ =p^{1+m/2}\psi_m(s_0)
+ \geq p^{1+m/2}\psi_m(p)
+ =p\varphi_m(p).
+\]
+\end{proof}
+
+We shall also use that $\varphi_m$ is increasing on $[1/2,1]$.  Indeed,
+\[
+ \varphi_m'(s)
+ =ms^{m-1}-(1-s)^{m-1}
+ +(m-1)s(1-s)^{m-2}>0
+\]
+there, since $ms^{m-1}\geq m(1-s)^{m-1}$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The one-leaf odd-cycle theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[One leaf on an odd cycle]\label{thm:main}
+For every odd integer $m\geq3$ and every graphon $W$ of edge density
+$p\in[1/2,1]$,
+\[
+ \boxed{
+ t(C_m^+,W)
+ \geq p\bigl(p^m-p(1-p)^{m-1}\bigr)
+ =\Phi_{C_m^+}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+ F(x_0,\ldots,x_{m-1})
+ =\prod_{i=0}^{m-1}W(x_i,x_{i+1}),
+ \qquad x_m=x_0.
+\]
+Integrating the pendant leaf first gives
+\[
+ t(C_m^+,W)=\int F\,d(x_0)\dd\mu^m.
+\]
+Cyclic relabelling shows that the same density results when the degree
+factor is placed at any $x_i$.  Averaging these $m$ equal integrals and
+applying arithmetic--geometric mean pointwise gives
+\begin{equation}
+ t(C_m^+,W)
+ \geq\int F\prod_{i=0}^{m-1}d(x_i)^{1/m}\dd\mu^m.
+ \label{eq:agm}
+\end{equation}
+
+Put
+\[
+ M=\int_\Omega d(x)^{1/m}\dd\mu(x).
+\]
+Since $p\geq1/2$, one has $M>0$.  Define the probability measure
+\[
+ \dd\nu(x)=\frac{d(x)^{1/m}}M\dd\mu(x).
+\]
+The right side of \eqref{eq:agm} is
+\begin{equation}
+ M^m t(C_m,W;\nu),
+ \label{eq:measure-change}
+\end{equation}
+where the notation means that all vertex variables are integrated using
+$\nu$.  The edge density of $W$ on this new probability space is
+\[
+ s=\frac{N_{1/m}}{M^2}.
+\]
+
+Set $z=M^m$.  Concavity of $r\mapsto r^{1/m}$ gives
+\[
+ M\leq p^{1/m},
+ \qquad 0<z\leq p.
+\]
+Lemma~\ref{lem:fractional-edge} gives
+\[
+ s\geq\frac{p^{1+2/m}}{M^2}
+ =p\left(\frac pz\right)^{2/m}=:s_0.
+\]
+Since $W\leq1$ and $\nu$ is a probability measure, $s\leq1$; hence also
+$s_0\leq1$.  In particular $s\geq s_0\geq p\geq1/2$.
+
+Apply the accepted odd-cycle theorem \eqref{eq:odd-cycle-input} on
+$(\Omega,\nu)$, monotonicity of $\varphi_m$, and
+Lemma~\ref{lem:scalar}:
+\begin{align*}
+ t(C_m^+,W)
+ &\geq M^m t(C_m,W;\nu)\\
+ &\geq z\varphi_m(s)
+ \geq z\varphi_m(s_0)
+ \geq p\varphi_m(p).
+\end{align*}
+The last expression is exactly \eqref{eq:target}.
+\end{proof}
+
+At $p=1/2$ the target is zero, while every step remains valid.  At $p=1$,
+$W=1$ almost everywhere and both sides equal one.  No division by
+$2p-1$ or by a cycle density occurs.
+
+Every balanced complete $k$-partite graphon, $k\geq2$, is regular of degree
+$p=1-1/k$.  Then $M=p^{1/m}$, $z=p$, $s=p$, and equality holds in every
+step precisely when it holds in the accepted odd-cycle theorem.  Thus the
+new theorem has the expected chromatic equality examples.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Catalogue consequence and formalization boundary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 104]\label{cor:atlas104}
+NetworkX Atlas graph $104$, with graph6 code \texttt{Ehd?}, is positive.  It
+has order six, size six, chromatic number three, and
+\[
+ \chi_{F_{104}}(x)=(x-1)^6-(x-1)^2.
+\]
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{104},W)
+ \geq p^6-p^2(1-p)^4
+ =p^2(2p-1)(2p^2-2p+1).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 01,\ 04,\ 12,\ 15,\ 23,\ 34.
+\]
+Vertices $0,1,2,3,4$ induce the cycle
+$0-1-2-3-4-0$, and vertex $5$ is a single leaf adjacent to vertex $1$.
+Thus it is $C_5^+$, and Theorem~\ref{thm:main} applies.
+\end{proof}
+
+The proof uses ordinary, non-injective homomorphism densities.  All
+integrands are bounded and measurable, so Tonelli--Fubini applies on an
+arbitrary probability space.  The quotient $W/d$ is explicitly defined to
+be zero on $\{d=0\}$, where $W$ vanishes in the relevant sections almost
+everywhere.  No finite-step reduction, injective-copy interpretation,
+regularity, or minimum-degree assumption is used.
+
+For formal verification, the reusable new input is
+Lemma~\ref{lem:fractional-edge}, followed by the measure change
+\eqref{eq:measure-change} and the elementary scalar Lemma~\ref{lem:scalar}.
+The existing odd-cycle theorem is used with the same graphon but the biased
+probability measure $\nu$.  The graph-specific module awaiting inspection is
+\texttt{lean/Taeyoung/Examples/Graph104.lean}.
+
+The method covers exactly one pendant leaf on an odd cycle.  With two or
+more leaves, averaging gives a different fractional degree product and the
+present scalar transfer does not apply automatically.  It also does not
+prove leaf attachment to an arbitrary positive graph: cyclic symmetry is
+used essentially in \eqref{eq:agm}.
+
+The chromatic and scalar identities, the fractional H\"older exponents, and
+the Atlas identification are audited exactly by
+\begin{verbatim}
+python codes/verify_odd_cycle_one_leaf.py
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is \texttt{lean/Taeyoung/Methods/OddLeaf/},
+ending at \texttt{satisfiesLowerBound\_104}.
+
+\paragraph{Scope: $m=5$ only.}
+Theorem~\ref{thm:main} is \emph{not} formalized for general odd $m$.  What is
+proved is Corollary~\ref{cor:atlas104}, on all of $p\in[1/2,1]$, and it is the
+only member of the family inside the six-vertex catalogue.  The reason is
+\eqref{eq:odd-cycle-input}: the project's checked odd-cycle input is the
+five-cycle theorem \texttt{OddCycleC5.c5\_homDensity\_bound}, not a general odd
+$m$.  The degree-bias construction is nonetheless parametric --- the file
+\texttt{OddLeaf/Bias.lean} builds $d^{1/m}$, $M=\int d^{1/m}$, the tilted
+measure $\nu$ and the reread kernel for every $m\geq1$ --- while
+\texttt{OddLeaf/Holder.lean} and the scalar rescaling are specialized to $m=5$.
+
+\paragraph{The departure: the rescaling carries no derivative.}
+Lemma~\ref{lem:scalar} is proved here by differentiating
+$\psi_m(s)=\varphi_m(s)s^{-m/2}$, a function with two half-integer powers.  The
+formalization forms no half-integer power and differentiates nothing.  Write
+\[
+ \varphi_5(u)=u^5-u(1-u)^4=u\,h(u),
+ \qquad h(u)=(2u-1)(2u^2-2u+1),
+\]
+which is \texttt{OddLeaf.phi\_eq}, a \texttt{ring} identity.  All of
+Lemma~\ref{lem:scalar} then reduces to the polynomial statement
+\begin{equation}
+ s^3h(p)^2\leq p^3h(s)^2
+ \qquad\bigl(\tfrac12\leq p\leq s\bigr),
+ \label{eq:lean-oddleaf-mono}
+\end{equation}
+which is \texttt{OddLeaf.scalar\_mono}.  Substituting $p=\frac12+a^2$ and
+$s=\frac12+a^2+b^2$ --- legitimate because the two hypotheses are exactly
+$p-\frac12\geq0$ and $s-p\geq0$, so both differences are squares of their own
+square roots --- the cleared form $8\bigl(p^3h(s)^2-s^3h(p)^2\bigr)$ becomes a
+polynomial in $a,b$ with $36$ terms, every coefficient positive and every
+exponent even.  One \texttt{ring} identity and \texttt{positivity} finish it.
+
+\paragraph{Monotonicity of $\varphi_m$ is never used.}
+The unnumbered remark after Lemma~\ref{lem:scalar} --- that $\varphi_m'>0$ on
+$[1/2,1]$, used in the proof of Theorem~\ref{thm:main} to pass from $s$ to
+$s_0$ --- is not formalized.  It is not needed.  Writing $K=M^5$ and letting $s$
+be the biased edge density, \texttt{OddLeaf.transfer} proves
+\[
+ p\,\varphi_5(p)\leq K\,\varphi_5(s)
+\]
+directly from the three facts $0<K\leq p$, $p^7\leq K^2s^5$ and
+\eqref{eq:lean-oddleaf-mono}, by comparing squares:
+\[
+ \bigl(K\varphi_5(s)\bigr)^2s^5p^5
+ =\bigl(K^2s^5\bigr)\bigl(p^5\varphi_5(s)^2\bigr)
+ \geq p^7\bigl(s^5\varphi_5(p)^2\bigr)
+ =\bigl(p\varphi_5(p)\bigr)^2s^5p^5 .
+\]
+The intermediate quantity $s_0=p(p/z)^{2/m}$ therefore never appears, and
+neither does the hypothesis $s_0\leq1$.  The inequality $p\leq s$, which the
+note gets from $z\leq p$ and the definition of $s_0$, is obtained instead from
+$p^7\leq K^2s^5\leq p^2s^5$.
+
+\paragraph{Two statements are kept polynomial on purpose.}
+Lemma~\ref{lem:fractional-edge} is formalized as
+\[
+ p^7\leq N^5
+ \qquad(\texttt{OddLeaf.pow\_seven\_le\_pow\_rootEdge}),
+\]
+not as $N\geq p^{7/5}$, so that no real power of $p$ is ever formed; the
+$\mathbb{R}_{\geq0}^\infty$ Hölder step itself is exactly the note's, at
+exponents $(5/7,1/7,1/7)$, and it reuses the scaffolding of
+\texttt{Methods/PathSidorenko.lean} --- the pushforwards \texttt{edgeE},
+\texttt{degE}, the two bounds $\int\!\!\int W/d\leq1$, and the null set where
+the factorization breaks --- verbatim.  Likewise the concavity bound
+$M\leq p^{1/m}$ of the main proof is formalized as $M^m\leq p$
+(\texttt{OddLeaf.pow\_rootMean\_le}), by Jensen against the \emph{convex}
+$t\mapsto t^m$ rather than by concavity of $r\mapsto r^{1/m}$.  This is why the
+exponent is fixed to a reciprocal integer: it keeps both $(d^{1/m})^m=d$ and
+$M^m\leq p$ as ordinary $\mathbb{N}$-powers.
+
+\paragraph{The cyclic averaging is a measure-preserving permutation.}
+``Cyclic relabelling shows that the same density results when the degree factor
+is placed at any $x_i$'' is discharged by
+\texttt{Methods/Peeling.integral\_assignment\_perm}, a new general lemma
+extracting the measure-preserving half of \texttt{homDensity\_iso} so that it
+applies to an integrand which is \emph{not} a graph weight --- here the cycle
+weight multiplied by a degree at one coordinate.  It is applied to the rotation
+$j\mapsto j+i$, checked to be an automorphism of $C_5$ by \texttt{decide}.  The
+arithmetic--geometric mean step \eqref{eq:agm} is Mathlib's
+\texttt{Real.geom\_mean\_le\_arith\_mean\_weighted} at the five equal weights
+$1/5$, and the measure change \eqref{eq:measure-change} goes through
+\texttt{Foundation/TiltTransfer.lean}, the same route as the $d$- and
+$\sqrt d$-biases already in the project.
+
+\end{document}

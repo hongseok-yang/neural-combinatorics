@@ -1,0 +1,353 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\join}{\mathbin{\vee}}
+
+\title{Six Explicit Verified-Base Cone Cases}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove a conditional cone lemma from first principles and apply it to
+six explicitly verified five-vertex bases.  The bases are Atlas 33, 34,
+36, 40, 45, and 49.  Each already has an accepted graphon lower bound,
+and its exact chromatic target is explicitly factorized and checked to
+be nonnegative, increasing, and convex from its chromatic threshold.
+The result proves the previously open cone graphs Atlas 177, 179, 183,
+192, 200, and 205.  No general universal-vertex closure is asserted.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A conditional cone lemma}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon on a
+probability space $(\Omega,\mu)$.  For a finite graph $G$, write
+\[
+t(G,W)=
+\int_{\Omega^{V(G)}}
+\prod_{uv\in E(G)}W(x_u,x_v)
+\prod_{u\in V(G)}\dd\mu(x_u).
+\]
+Put
+\[
+p=t(K_2,W),
+\qquad
+d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+Define
+\[
+\tau(x)=
+\int_{\Omega^2}W(x,y)W(x,z)W(y,z)
+\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Weighted rooted-triangle inequality]
+\label{lem:weighted}
+If $p>0$, then for every integer $h\geq0$,
+\[
+\int_\Omega d(x)^h\tau(x)\dd\mu(x)
+\geq
+\frac{2p-1}{p}
+\int_\Omega d(x)^{h+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $M_j=\int d^j$, let $T_W$ be the graphon operator, and write
+\[
+I_h=\int d^h\tau,
+\qquad
+J_h=\ip{d^h}{T_Wd}.
+\]
+Applying $ab\geq a+b-1$ to $W(x,y),W(x,z)$, multiplying by
+$d(x)^hW(y,z)$, and integrating gives
+\begin{equation}
+I_h\geq2J_h-pM_h.
+\label{eq:I-J}
+\end{equation}
+Set $U=1-W$, $u=T_U\one=1-d$, and $q=1-p$.  Then
+\[
+T_Wd=d-q\one+T_Uu,
+\]
+so
+\begin{equation}
+J_h=M_{h+1}-qM_h+\ip{d^h}{T_Uu}.
+\label{eq:J}
+\end{equation}
+By symmetry of $U$, twice
+\[
+\ip{d^h}{T_Uu}-\int d^hu^2
+\]
+equals
+\[
+\int_{\Omega^2}U(x,y)
+\bigl(u(y)-u(x)\bigr)
+\bigl(d(x)^h-d(y)^h\bigr)
+\dd\mu(x)\dd\mu(y)\geq0,
+\]
+because $d=1-u$.  Therefore \eqref{eq:J} gives
+\[
+J_h\geq M_{h+2}-M_{h+1}+pM_h.
+\]
+Using this in \eqref{eq:I-J}, and then subtracting
+$(2p-1)M_{h+2}/p$, leaves exactly
+\[
+\frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+\end{proof}
+
+For $d(x)>0$, define
+\[
+\dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y),
+\]
+and let $W_x$ denote $W$ on $(\Omega,\mu_x)$.  Its edge density is
+$z_x=\tau(x)/d(x)^2$.  Put $z_x=0$ when $d(x)=0$.
+
+\begin{corollary}[Weighted link average]
+\label{cor:average}
+For every integer $N\geq2$,
+\[
+\int_\Omega d(x)^Nz_x\dd\mu(x)
+\geq
+\left(2-\frac1p\right)
+\int_\Omega d(x)^N\dd\mu(x).
+\]
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:weighted} with $h=N-2$.
+\end{proof}
+
+\begin{lemma}[Verified-base cone lemma]
+\label{lem:cone}
+Let $F$ be a graph on $N\geq2$ vertices and let
+\[
+\phi(z)=\Phi_F(z).
+\]
+Assume that for some $a\in[0,1)$:
+\begin{enumerate}
+\item every graphon $V$ of edge density $z\geq a$ satisfies
+$t(F,V)\geq\phi(z)$;
+\item on $[a,1]$, one has $\phi\geq0$, $\phi'\geq0$, and
+$\phi''\geq0$;
+\item $\phi(a)=0$.
+\end{enumerate}
+Then every graphon $W$ of edge density
+\[
+p\geq b:=\frac1{2-a}
+\]
+satisfies
+\[
+t(K_1\join F,W)\geq\Phi_{K_1\join F}(p).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $c=2-1/p$.  The assumption $p\geq1/(2-a)$ is exactly $c\geq a$.
+Convexity shows that every graphon $V$ of arbitrary edge density $z$
+satisfies the tangent bound
+\[
+t(F,V)\geq\phi(c)+\phi'(c)(z-c).
+\]
+Indeed, for $z\geq a$ this follows from the assumed graphon bound and
+convexity.  For $z<a$, the tangent is nonpositive because it is at most
+$\phi(a)=0$ at $a$ and has nonnegative slope, whereas $t(F,V)\geq0$.
+
+Conditioning on the image $x$ of the new cone vertex gives
+\[
+t(K_1\join F,W)=\int_\Omega d(x)^N t(F,W_x)\dd\mu(x).
+\]
+Let $M_N=\int d^N$.  Applying the tangent bound in every link,
+\begin{align*}
+t(K_1\join F,W)
+&\geq M_N\phi(c)
+\\
+&\quad+
+\phi'(c)\left(\int d(x)^Nz_x\dd\mu(x)-cM_N\right).
+\end{align*}
+The second line is nonnegative by Corollary~\ref{cor:average}.  Jensen
+then gives
+\[
+t(K_1\join F,W)\geq p^N\phi(c).
+\]
+
+If $q=1-p$, then $1-c=q/p$.  Since
+$\chi_{K_1\join F}(x)=x\chi_F(x-1)$,
+\begin{align*}
+\Phi_{K_1\join F}(p)
+&=q^N\chi_F\!\left(\frac pq\right)
+\\
+&=p^N\left(\frac qp\right)^N
+\chi_F\!\left(\frac p q\right)
+=p^N\phi(c).
+\end{align*}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The six verified bases}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $F_j$ denote NetworkX Atlas graph $j$.  The following table gives
+the complete input verification.  The graphon bound column records the
+accepted reason already present in the catalogue before this theorem.
+
+\begin{center}
+\begin{tabular}{cclll}
+\hline
+$j$ & graph6 & accepted bound & $a$ & $\phi_j(z)=\Phi_{F_j}(z)$ \\
+\hline
+33 & \texttt{Dn?} & diamond plus isolate product & $1/2$ & $z(2z-1)^2$ \\
+34 & \texttt{D@\char123} & rooted common leaves & $1/2$ & $z^3(2z-1)$ \\
+36 & \texttt{DJc} & rooted two-edge tail & $1/2$ & $z^3(2z-1)$ \\
+40 & \texttt{DjW} & forest-cone theorem & $1/2$ & $z^2(2z-1)^2$ \\
+45 & \texttt{DJ\char123} & clique common leaf & $2/3$ & $z^2(2z-1)(3z-2)$ \\
+49 & \texttt{Df\char123} & special paw cone & $2/3$ & $z(2z-1)^2(3z-2)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+The chromatic polynomials, obtained either from the displayed structures
+or by deletion--contraction, are
+\begin{align*}
+\chi_{F_{33}}(x)&=x^2(x-1)(x-2)^2,\\
+\chi_{F_{34}}(x)=\chi_{F_{36}}(x)&=x(x-1)^3(x-2),\\
+\chi_{F_{40}}(x)&=x(x-1)^2(x-2)^2,\\
+\chi_{F_{45}}(x)&=x(x-1)^2(x-2)(x-3),\\
+\chi_{F_{49}}(x)&=x(x-1)(x-2)^2(x-3).
+\end{align*}
+Substitution in the definition of $\Phi$ gives exactly the table.
+
+For completeness, the required shape conditions are also checked
+explicitly.  For the first four rows, every displayed factor is
+nonnegative and nondecreasing on $[1/2,1]$; for the last two, on
+$[2/3,1]$.  A product of nonnegative nondecreasing affine factors is
+nonnegative, nondecreasing, and convex: its first and second derivatives
+are sums of products of nonnegative factors and positive constant
+slopes.  Repeated factors cause no problem.  Each polynomial vanishes
+at its displayed $a$.  Thus every hypothesis of
+Lemma~\ref{lem:cone} is verified, not inferred from tests.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{New positive cases}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Six explicit cones]
+\label{thm:six}
+For
+\[
+j\in\{33,34,36,40,45,49\},
+\]
+the cone $K_1\join F_j$ satisfies
+\[
+t(K_1\join F_j,W)\geq\Phi_{K_1\join F_j}(p)
+\]
+for every graphon throughout its full required density interval.
+\end{theorem}
+
+\begin{proof}
+For $j=33,34,36,40$, the verified-base threshold is $a=1/2$, so
+Lemma~\ref{lem:cone} gives the cone threshold
+\[
+b=\frac1{2-1/2}=\frac23.
+\]
+Each base is $3$-chromatic, so each cone is $4$-chromatic and this is
+the exact required threshold.
+
+For $j=45,49$, one has $a=2/3$, and the cone threshold is
+\[
+b=\frac1{2-2/3}=\frac34.
+\]
+Each base is $4$-chromatic, so each cone is $5$-chromatic and this is
+again the exact required threshold.
+\end{proof}
+
+\begin{corollary}[Catalogue IDs]
+The newly positive Atlas graphs are
+\[
+\begin{array}{c|c|c|c}
+\text{Atlas ID}&\text{graph6}&\text{base Atlas}&\text{threshold}\\
+\hline
+177&\texttt{En\char123 G}&33&2/3\\
+179&\texttt{E\_\char126 w}&34&2/3\\
+183&\texttt{EjvG}&36&2/3\\
+192&\texttt{E\char126 Xo}&40&2/3\\
+200&\texttt{E\char126\char123 W}&45&3/4\\
+205&\texttt{E\char126\char126 G}&49&3/4
+\end{array}
+\]
+\end{corollary}
+
+At the threshold the target vanishes, and the balanced complete
+$(\chi(H)-1)$-partite graphon attains equality.  At $p=1$, both sides
+equal $1$.  At every balanced multipartite grid point in between,
+equality follows from the chromatic-polynomial identity.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scope and hidden assumptions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The proof applies Lemma~\ref{lem:cone} only to the six bases whose exact
+graphon inequalities and analytic target properties were verified in
+the table.  It does not treat arbitrary positive bases and does not
+assert a general universal-vertex or join closure.
+
+Individual graphon links may have density below the base threshold; the
+tangent proof handles those links by a nonpositive lower bound.  The
+argument uses ordinary homomorphism densities directly and assumes no
+regularity, step structure, injectivity, minimum degree, or pointwise
+degree lower bound.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Theorem~\ref{thm:six} is formalized for all six cones; Atlas $177$, $179$,
+$183$, $192$, $200$ and $205$ are \texttt{verified}.  The development is
+\texttt{lean/Taeyoung/Methods/BaseCone/}, over the abstract
+\texttt{Methods/ConeBound.lean}; Atlas $192$ is in
+\texttt{Methods/ForestCone/Rows.lean} instead, because its base bound is the
+forest-cone theorem.  One difference of substance.
+
+\subsection*{Hypothesis (2) of Lemma~\ref{lem:cone} is replaced, not verified}
+
+The convexity hypothesis $\phi\geq0$, $\phi'\geq0$, $\phi''\geq0$ on $[a,1]$ is
+not checked for the six targets.  It is replaced by an algebraic one: each
+$\Phi_{F_j}$ is a product of affine factors
+\[
+ \phi(z)=\prod_i\bigl(1-k_i(1-z)\bigr),\qquad k_i\geq0,
+\]
+and the cone lemma is stated in Lean for that class
+(\texttt{satisfiesLowerBound\_of\_baseCone}).  The six applications then reduce
+to naming a list of slopes $k_i$, with no second derivative and no convexity
+theory anywhere in the development.
+
+The affine form also improves the last step.  Lemma~\ref{lem:cone} bounds
+$p^{N}\phi(2-1/p)$ below by $\Phi_{K_1\join F}(p)$; in the affine form the two
+are \emph{equal}, which is \texttt{pow\_mul\_affineProd\_shift}, so the cone's
+own target is reached exactly rather than through an estimate.
+
+One base needs no separate input: Atlas $33$ is the diamond together with an
+isolated vertex, which is itself the cone over $K_{1,2}$ with target $z^2$, so
+the same theorem supplies its bound.
+
+\end{document}

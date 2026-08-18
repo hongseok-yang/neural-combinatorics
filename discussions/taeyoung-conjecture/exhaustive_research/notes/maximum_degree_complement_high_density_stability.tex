@@ -1,0 +1,506 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,d}
+
+\begin{document}
+
+\section{Purpose and result}
+
+For a finite graph $H$ and a graphon $W$ on an arbitrary probability space,
+write
+\[
+ \Gamma_H(W)=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p)=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right).
+\]
+This note develops only the high-density and complete-multipartite
+perturbation test.  It removes the exact-regularity hypothesis from the
+previous regular-complement theorem.  Put $V=1-W$ and
+\[
+ q=\int_{\Omega^2}V,
+ \qquad d(x)=\int_\Omega V(x,y)\dd y,
+ \qquad \Delta=\lVert d\rVert_\infty.
+\]
+The sole analytic hypothesis is that the \emph{complement degree} is
+uniformly small.  The complement itself may be arbitrary, nonregular,
+non-step, and may take the value one.
+
+Define the two universal nonregularity defects
+\begin{equation}
+ X_V=\int_Omega(d-q)^2
+     =t(P_3,V)-q^2,
+ \qquad
+ Y_V=\int_{Omega^3}V_{12}V_{23}(1-V_{13})
+     =t(P_3,V)-t(K_3,V).
+ \label{eq:defects}
+\end{equation}
+Both are nonnegative.  The main theorem gives explicit graph constants
+$c_H,\Lambda_H,N_3(H),\Omega_H$ such that
+\begin{equation}
+ \Gamma_H(1-V)\geq
+ (c_H-\Lambda_H\Delta)X_V
+ +(N_3(H)-\Omega_H\Delta)Y_V.
+ \label{eq:main-preview}
+\end{equation}
+It follows that every one of the $29$ currently open rows is nonnegative in
+an explicit, genuinely nonregular graphon neighbourhood of $p=1$.
+
+
+\section{Tree densities with nonconstant degrees}
+
+The first issue is that forest densities cease to equal $q^{e(F)}$ when
+$d$ is nonconstant.  The following quantitative replacement is the needed
+coercive estimate.
+
+\begin{lemma}[Tree between the constant and the star]
+\label{lem:tree-star}
+Let $T$ be a tree with $e\geq1$ edges.  Then
+\begin{equation}
+ q^e\leq t(T,V)\leq\int_Omega d(x)^e\dd x.
+ \label{eq:tree-star}
+\end{equation}
+Consequently, for $e\geq2$,
+\begin{equation}
+ 0\leq t(T,V)-q^e
+ \leq \binom e2\Delta^{e-2}X_V.
+ \label{eq:tree-variance}
+\end{equation}
+For $e=1$ the difference is zero.
+\end{lemma}
+
+\begin{proof}
+The result is immediate if $q=0$, so suppose $q>0$.  Let
+\[
+ \pi(\dd x)=\frac{d(x)}q\,\mu(\dd x),
+ \qquad
+ K(x,\dd y)=\frac{V(x,y)}{d(x)}\,\mu(\dd y)
+\]
+on the set $d(x)>0$, and define $K$ arbitrarily on the null set for $\pi$
+where $d=0$.  Symmetry of $V$ shows that $K$ is reversible with stationary
+law $\pi$.  Root $T$, sample the root from $\pi$, and independently sample
+each child from $K$ conditional on its parent.  Every vertex variable $Z_u$
+has marginal law $\pi$.  Comparing the joint density with the product
+defining $t(T,V)$ gives the exact identity
+\begin{equation}
+ t(T,V)=q\,\mathbb E
+ \prod_{u\in V(T)}d(Z_u)^{\deg_T(u)-1}.
+ \label{eq:tree-markov}
+\end{equation}
+The exponents are nonnegative and sum to
+$2e-(e+1)=e-1$.
+
+For the lower bound, Jensen's inequality applied to the exponential gives
+\[
+ \mathbb E\prod_ud(Z_u)^{\deg_T(u)-1}
+ \geq
+ \exp\!\left((e-1)\int\log d\dd\pi\right).
+\]
+Moreover
+\[
+ \int\log(d/q)\dd\pi
+ =\int \frac dq\log\frac dq\dd\mu\geq0,
+\]
+because $z\log z-z+1\geq0$ and $\int d/q=1$.  Thus the last display is at
+least $q^{e-1}$.  Values where $d=0$ have zero $\pi$-mass; alternatively all
+logarithms may first be truncated and then treated by monotone convergence.
+
+For the upper bound, H\"older's inequality under the same joint law, using
+exponent $(e-1)/(\deg_T(u)-1)$ whenever $\deg_T(u)>1$, gives
+\[
+ \mathbb E\prod_ud(Z_u)^{\deg_T(u)-1}
+ \leq\prod_u
+ \left(\mathbb E d(Z_u)^{e-1}\right)^{(\deg_T(u)-1)/(e-1)}
+ =\int d^{e-1}\dd\pi.
+\]
+After multiplication by $q$, this is $\int d^e$.  This proves
+\eqref{eq:tree-star} without a finite-graph approximation.
+
+For $z,q\in[0,\Delta]$, Taylor's theorem and the upper bound
+$e(e-1)\Delta^{e-2}$ on the second derivative of $z^e$ give
+\[
+ z^e\leq q^e+eq^{e-1}(z-q)
+       +\binom e2\Delta^{e-2}(z-q)^2.
+\]
+Integrating, the linear term vanishes and the quadratic integral is $X_V$.
+Combine this with \eqref{eq:tree-star}.
+\end{proof}
+
+
+\section{Every long failed closure is controlled by a triangle failure}
+
+For $\ell\geq3$, define the open-cycle defect
+\[
+ Z_\ell(V)=\int_{\Omega^\ell}
+ \left(\prod_{i=0}^{\ell-2}V(x_i,x_{i+1})\right)
+ (1-V(x_0,x_{\ell-1}))\dd\mu^\ell.
+\]
+Thus $Z_3(V)=Y_V$.
+
+\begin{lemma}[Path-to-triangle telescoping]
+\label{lem:path-triangle}
+For every $\ell\geq3$,
+\begin{equation}
+ 0\leq Z_\ell(V)\leq(\ell-2)\Delta^{\ell-3}Y_V.
+ \label{eq:path-triangle}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For any $a_1,\ldots,a_s\in[0,1]$,
+\begin{equation}
+ a_1(1-a_s)\leq\sum_{i=1}^{s-1}a_i(1-a_{i+1}).
+ \label{eq:scalar-chain}
+\end{equation}
+Indeed, the two-step inequality
+\[
+ a(1-c)\leq a(1-b)+b(1-c)
+\]
+has remainder $b(1-a-c)+ac$.  If $a+c\leq1$ it is visibly nonnegative;
+if $a+c\geq1$, its minimum over $b\in[0,1]$ is
+$(1-a)(1-c)$.  Iteration proves \eqref{eq:scalar-chain}.
+
+Apply it pointwise with $a_i=V(x_0,x_i)$ for
+$1\leq i\leq\ell-1$, and multiply by the remaining consecutive path-edge
+factors.  Each of the $\ell-2$ resulting terms contains precisely the
+triangle-failure factor
+\[
+ V(x_0,x_i)V(x_i,x_{i+1})(1-V(x_0,x_{i+1})).
+\]
+The other $\ell-3$ vertices lie in two tree branches attached to this
+triple.  Integrating them successively from their leaves contributes at most
+$\Delta^{\ell-3}$.  The remaining triple integral is $Y_V$.
+\end{proof}
+
+Let $C$ be a connected graph.  For a spanning tree $T\subseteq C$, put
+\[
+ \kappa_T(C)=\sum_{uv\in E(C)\setminus E(T)}
+ \bigl(\operatorname{dist}_T(u,v)-1\bigr),
+ \qquad
+ \kappa(C)=\min_T\kappa_T(C).
+\]
+For a tree, $\kappa(C)=0$.
+
+\begin{lemma}[Connected-component defect]
+\label{lem:connected}
+If $C$ is connected on $v\geq3$ vertices and $r=v-1$, then
+\begin{equation}
+ \left|t(C,V)-q^r\right|
+ \leq \binom r2\Delta^{r-2}X_V
+      +\kappa(C)\Delta^{r-2}Y_V.
+ \label{eq:connected}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Choose a spanning tree $T$ attaining $\kappa(C)$.  Since $0\leq V\leq1$,
+$t(C,V)\leq t(T,V)$.  Also
+\[
+ t(T,V)-t(C,V)
+ \leq\sum_{uv\in E(C)\setminus E(T)}
+ \int\left(\prod_{ab\in E(T)}V_{ab}\right)(1-V_{uv}).
+\]
+For a fixed extra edge $uv$, its path in $T$ closes a cycle of length
+$\operatorname{dist}_T(u,v)+1$.  Integrate every branch off that path by the
+degree bound $d\leq\Delta$, and apply Lemma~\ref{lem:path-triangle}.  The term
+is at most
+\[
+ \bigl(\operatorname{dist}_T(u,v)-1\bigr)
+ \Delta^{v-3}Y_V.
+\]
+Summing gives
+$t(T,V)-t(C,V)\leq\kappa(C)\Delta^{r-2}Y_V$.
+Lemma~\ref{lem:tree-star} bounds
+$t(T,V)-q^r$ by the first term of \eqref{eq:connected}.  Both $t(C,V)$ and
+$q^r$ are at most $t(T,V)$, so their absolute difference is at most the sum
+of these two upper defects.
+\end{proof}
+
+
+\section{Graphic-rank expansion and the coercive theorem}
+
+For $A\subseteq E(H)$, let $H_A=(V(H),A)$ and
+\[
+ r_H(A)=v(H)-c(H_A).
+\]
+For every nontrivial connected component $C$ of $H_A$, put
+\[
+ \lambda(C)=\binom{|V(C)|-1}{2}.
+\]
+Define
+\[
+ \lambda(A)=\sum_C\lambda(C),
+ \qquad
+ \omega(A)=\sum_C\kappa(C),
+\]
+where isolated vertices contribute zero, and finally
+\begin{equation}
+ \Lambda_H=\sum_{A:r_H(A)\geq3}\lambda(A),
+ \qquad
+ \Omega_H=\sum_{A:r_H(A)\geq3}\omega(A).
+ \label{eq:global-constants}
+\end{equation}
+
+\begin{lemma}[Arbitrary edge-subset defect]
+\label{lem:subset}
+If $R=r_H(A)\geq2$, then
+\begin{equation}
+ \left|t(H_A,V)-q^R\right|
+ \leq\lambda(A)\Delta^{R-2}X_V
+     +\omega(A)\Delta^{R-2}Y_V.
+ \label{eq:subset}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Both $t(H_A,V)$ and $q^R$ factor over the nontrivial components.  A connected
+component of rank $r$ has density at most that of a spanning tree, hence at
+most $\Delta^r$ by leaf integration; also $q^r\leq\Delta^r$.  Telescope the
+difference of the two component products.  Lemma~\ref{lem:connected} bounds
+the selected component, and all unchanged factors contribute at most
+$\Delta^{R-r}$.  Summing over components proves \eqref{eq:subset}.  Components
+of order two are exact because $t(K_2,V)=q$.
+\end{proof}
+
+Whitney's edge-subset expansion and inclusion--exclusion give, for $q>0$,
+\begin{equation}
+ \Gamma_H(1-V)=\sum_{A\subseteq E(H)}(-1)^{|A|}
+ \bigl(t(H_A,V)-q^{r_H(A)}\bigr).
+ \label{eq:rank-expansion}
+\end{equation}
+Indeed,
+$q^{v(H)}\chi_H(1/q)=\sum_A(-1)^{|A|}q^{r_H(A)}$.
+The identity is polynomial in $q$, so its $q=0$ endpoint is obtained directly
+or by continuity.
+
+Let $N_3(H)$ be the number of triangles and let
+\[
+ c_H=\sum_{x\in V(H)}\binom{\deg_H(x)}2-N_3(H).
+\]
+
+\begin{theorem}[Maximum-degree complement stability]
+\label{thm:main}
+For every finite simple graph $H$ and every graphon $V$,
+\begin{equation}
+ \Gamma_H(1-V)\geq
+ (c_H-\Lambda_H\Delta)X_V
+ +(N_3(H)-\Omega_H\Delta)Y_V.
+ \label{eq:main}
+\end{equation}
+Consequently, if all four graph constants are positive and
+\begin{equation}
+ \Delta<\eta_H:=
+ \min\left\{\frac{c_H}{\Lambda_H},
+             \frac{N_3(H)}{\Omega_H}\right\},
+ \label{eq:radius}
+\end{equation}
+then $\Gamma_H(1-V)\geq0$.  Equality can occur only when $V=0$ almost
+everywhere or when $1-V$ is a balanced Turan graphon.
+\end{theorem}
+
+\begin{proof}
+The rank-zero and rank-one summands in \eqref{eq:rank-expansion} vanish.  At
+rank two, every pair of disjoint edges also vanishes.  Every adjacent pair
+contributes $X_V$.  A triangle contributes
+\[
+ -\bigl(t(K_3,V)-q^2\bigr)=-X_V+Y_V.
+\]
+There are $\sum_x\binom{\deg_H(x)}2$ adjacent pairs and $N_3(H)$ triangles,
+so the complete rank-two contribution is
+$c_HX_V+N_3(H)Y_V$.
+
+For $R\geq3$, Lemma~\ref{lem:subset} and $0\leq\Delta\leq1$ give
+\[
+ \left|t(H_A,V)-q^R\right|
+ \leq\lambda(A)\Delta X_V+\omega(A)\Delta Y_V.
+\]
+Discard every sign and sum.  This proves \eqref{eq:main}.
+
+Under the strict condition \eqref{eq:radius}, equality forces $X_V=Y_V=0$.
+If $X_V=0$, then $d=q$ almost everywhere.  If also $Y_V=0$, then
+\[
+ V(x,y)V(y,z)>0\quad\Longrightarrow\quad V(x,z)=1
+\]
+for almost every triple.  Here is the support-class argument explicitly.
+For typical $x$, let $N_x=\{z:V(x,z)>0\}$.  Then
+$\mu(N_x)\geq d(x)=q$.  For almost every $y\in N_x$, transitivity applied to
+$y,x,z$ gives $V(y,z)=1$ for almost every $z\in N_x$.  Hence
+\[
+ q=d(y)\geq\mu(N_x)\geq q.
+\]
+All inequalities are equalities, so $\mu(N_x)=q$, $V=1$ almost everywhere
+on $N_x^2$, and the degree identity forces $V=0$ from $N_x$ to its
+complement.  Therefore two typical positive-support neighbourhoods are
+either equal modulo null sets or disjoint.  They partition the probability
+space into blocks of mass $q$.  Thus their number is $r=1/q$, an integer,
+and $1-V=T_r$ up to null sets.  The case $q=0$ is $V=0$ and $W=1$.
+\end{proof}
+
+
+\section{The 29 exact certificates}
+
+The graphs use the NetworkX Atlas labelling and vertex set
+$\{0,\ldots,n-1\}$.  The following data identify them independently of the
+drawings in the catalogue.  The final column points to the exact chromatic
+polynomial and target type in the next table.
+
+\scriptsize
+\begin{longtable}{r@{\quad}lrrr@{\quad}p{8.2cm}}
+Atlas&graph6&$n$&$m$&type&edge set\\ \hline
+43&\verb|Dlc|&5&6&1&01,03,04,12,23,34\\
+118&\verb|Eht?|&6&7&2&01,04,12,14,15,23,34\\
+122&\verb|Eld?|&6&7&2&01,03,04,12,15,23,34\\
+124&\verb|Exd?|&6&7&2&01,02,04,12,15,23,34\\
+126&\verb|ERUO|&6&7&2&02,05,13,14,23,34,35\\
+127&\verb|EZEG|&6&7&3&02,05,12,13,23,34,45\\
+130&\verb|E{CW|&6&7&4&01,02,03,12,34,35,45\\
+137&\verb|EjsG|&6&8&5&01,04,12,13,14,23,34,45\\
+139&\verb|Eju?|&6&8&5&01,04,05,12,13,14,23,34\\
+145&\verb|Exe_|&6&8&6&01,02,04,05,12,23,25,34\\
+147&\verb|EhMg|&6&8&6&01,05,12,23,24,25,34,45\\
+148&\verb|EyUG|&6&8&6&01,02,05,12,13,14,34,45\\
+151&\verb|EhdW|&6&8&7&01,04,12,15,23,34,35,45\\
+152&\verb|EhNG|&6&8&6&01,05,12,15,23,24,34,45\\
+153&\verb|Ehf_|&6&8&8&01,04,05,12,15,23,25,34\\
+157&\verb|E~`_|&6&9&9&01,02,03,04,12,13,15,23,25\\
+160&\verb|E~@g|&6&9&9&01,02,03,12,13,15,23,25,45\\
+168&\verb|E^MG|&6&9&10&02,03,05,12,13,23,24,34,45\\
+169&\verb|Exf_|&6&9&11&01,02,04,05,12,15,23,25,34\\
+171&\verb|Ehew|&6&9&12&01,04,05,12,23,25,34,35,45\\
+174&\verb|EtTg|&6&9&13&01,02,03,14,15,23,25,34,45\\
+178&\verb|En}?|&6&10&14&01,03,04,05,12,13,14,23,24,34\\
+181&\verb|E^mG|&6&10&15&02,03,04,05,12,13,23,24,34,45\\
+185&\verb|Exv_|&6&10&16&01,02,04,05,12,14,15,23,25,34\\
+188&\verb|EzNG|&6&10&17&01,02,05,12,13,15,23,24,34,45\\
+194&\verb|E~wW|&6&11&18&01,02,03,04,12,13,14,23,24,35,45\\
+196&\verb|ER~g|&6&11&18&02,04,05,13,14,15,23,24,25,34,45\\
+199&\verb|El^g|&6&11&19&01,03,05,12,14,15,23,24,25,34,45\\
+203&\verb|E~^G|&6&12&20&01,02,03,05,12,13,14,15,23,24,34,45
+\end{longtable}
+\normalsize
+
+All rows of types $1$--$8$, $10$, $12$, $13$, and $17$ have chromatic
+number three; types $9$, $11$, $14$--$16$, and $18$--$20$ have chromatic
+number four.  This follows both from the first nonzero positive integer of
+the displayed polynomial and from the explicit triangle or $K_4$ visible in
+the edge list.  Deletion--contraction gives the following exact expressions.
+
+\scriptsize
+\begin{longtable}{r@{\quad}p{7.1cm}p{7.1cm}}
+type&$\chi_H(x)$&$\Phi_H(p)$\\ \hline
+1&$x(x-1)(x-2)(x^2-3x+3)$&$p(2p-1)(3p^2-3p+1)$\\
+2&$x(x-1)^2(x-2)(x^2-3x+3)$&$p^2(2p-1)(3p^2-3p+1)$\\
+3&$x(x-1)(x-2)^2(x^2-2x+2)$&$p(2p-1)^2(2p^2-2p+1)$\\
+4&$x(x-1)^3(x-2)^2$&$p^3(2p-1)^2$\\
+5&$x(x-1)^2(x-2)^3$&$p^2(2p-1)^3$\\
+6&$x(x-1)(x-2)^2(x^2-3x+3)$&$p(2p-1)^2(3p^2-3p+1)$\\
+7&$x(x-1)(x-2)^2(x^2-3x+4)$&$p(2p-1)^2(4p^2-5p+2)$\\
+8&$x(x-1)(x-2)(x^3-5x^2+9x-7)$&$p(2p-1)(7p^3-12p^2+8p-2)$\\
+9&$x(x-1)^2(x-2)^2(x-3)$&$p^2(2p-1)^2(3p-2)$\\
+10&$x(x-1)(x-2)^2(x^2-4x+5)$&$p(2p-1)^2(5p^2-6p+2)$\\
+11&$x(x-1)(x-2)(x-3)(x^2-3x+3)$&$p(2p-1)(3p-2)(3p^2-3p+1)$\\
+12&$x(x-1)(x-2)(x^3-6x^2+13x-11)$&$p(2p-1)(11p^3-20p^2+13p-3)$\\
+13&$x(x-1)(x-2)(x^3-6x^2+14x-13)$&$p(2p-1)(13p^3-25p^2+17p-4)$\\
+14&$x(x-1)^2(x-2)(x-3)^2$&$p^2(2p-1)(3p-2)^2$\\
+15&$x(x-1)(x-2)^3(x-3)$&$p(2p-1)^3(3p-2)$\\
+16&$x(x-1)(x-2)(x-3)(x^2-4x+5)$&$p(2p-1)(3p-2)(5p^2-6p+2)$\\
+17&$x(x-1)(x-2)(x^3-7x^2+18x-17)$&$p(2p-1)(17p^3-33p^2+22p-5)$\\
+18&$x(x-1)(x-2)(x-3)(x^2-5x+7)$&$p(2p-1)(3p-2)(7p^2-9p+3)$\\
+19&$x(x-1)(x-2)(x-3)(x^2-5x+8)$&$p(2p-1)(3p-2)(8p^2-11p+4)$\\
+20&$x(x-1)(x-2)(x-3)(x^2-6x+10)$&$p(2p-1)(3p-2)(10p^2-14p+5)$
+\end{longtable}
+\normalsize
+
+Exact enumeration of every edge subset and every spanning tree in its
+nontrivial components gives the following theorem constants.  No decimal
+rounding is involved.
+
+\scriptsize
+\begin{longtable}{r|rrrr|c@{\qquad}r|rrrr|c}
+$H$&$c_H$&$\Lambda_H$&$N_3$&$\Omega_H$&$\eta_H$&
+$H$&$c_H$&$\Lambda_H$&$N_3$&$\Omega_H$&$\eta_H$\\ \hline
+43&8&161&1&18&$8/161$&118&11&481&1&37&$11/481$\\
+122&10&461&1&37&$10/461$&124&10&464&1&37&$5/232$\\
+126&10&454&1&31&$5/227$&127&9&454&1&31&$9/454$\\
+130&8&376&2&30&$1/47$&137&14&1173&3&131&$14/1173$\\
+139&13&1134&3&131&$13/1134$&145&14&1211&2&131&$2/173$\\
+147&13&1184&2&126&$13/1184$&148&13&1207&2&122&$13/1207$\\
+151&13&1237&1&138&$1/138$&152&12&1159&2&122&$12/1159$\\
+153&12&1174&2&128&$6/587$&157&17&2725&5&423&$17/2725$\\
+160&16&2638&5&423&$8/1319$&168&17&2893&3&421&$17/2893$\\
+169&16&2778&4&406&$8/1389$&171&16&2903&3&413&$16/2903$\\
+174&16&2972&2&436&$1/218$&178&20&6138&7&1213&$10/3069$\\
+181&20&6482&6&1123&$10/3241$&185&20&6598&5&1193&$10/3299$\\
+188&20&6775&4&1215&$4/1355$&194&24&14648&7&3229&$3/1831$\\
+196&24&14852&7&3091&$6/3713$&199&24&14992&6&3276&$3/1874$\\
+203&28&32316&9&8052&$7/8079$&&&&&&
+\end{longtable}
+\normalsize
+
+\begin{corollary}[All current open rows]
+For every graph $H$ in the tables and every graphon $W$, if
+\[
+ \operatorname*{ess\,sup}_{x}\int(1-W(x,y))\dd y<\eta_H,
+\]
+then $t(H,W)\geq\Phi_H(p(W))$.  These densities lie inside the required
+range: every $\eta_H\leq8/161<1/3$, whereas
+$1/(\chi(H)-1)$ is $1/2$ or $1/3$.
+\end{corollary}
+
+At $p=1$, the complement has $q=0$ and hence $V=0$ almost everywhere.
+Thus $W=1$, $t(H,W)=1$, and the polynomial continuation of the monic
+chromatic polynomial gives $\Phi_H(1)=1$.  This handles the endpoint without
+dividing by $q$.
+
+
+\section{Hidden-assumption audit and limitations}
+
+All integrations above concern bounded measurable functions, so Tonelli and
+Fubini apply.  The tree-indexed Markov law is constructed directly on the
+original probability space; no finite graph, step approximation, compactness
+argument, or regularity lemma is used.  The proof never assumes that $d$ is
+constant.  The only pointwise hypothesis is the explicitly displayed bound
+$d\leq\Delta$ almost everywhere.  There is no conditioning on an event of
+possibly zero mass: the case $q=0$ is separated before the Markov kernel is
+defined.
+
+This theorem by itself does not cover all graphons of small \emph{average}
+complement density: a small exceptional set may still have large complement
+degree.  The companion
+\path{notes/arbitrary_graphon_high_density_stability.tex} applies the present
+theorem to the low-degree residual after splitting off exactly that
+high-degree set; its quantitative complete-core margin absorbs the mixed
+target error.  The combination closes the high-density endpoint for every
+graphon.  It still does not prove any catalogue row on its complete density
+interval, so no status is changed.  The constants here are deliberately
+obtained by taking absolute values of every graphic-rank-at-least-three
+summand, and further cancellation could enlarge the final endpoint radii.
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The line headed
+``maximum-degree complement graphon high-density theorem'' reconstructs
+$c_H,\Lambda_H,N_3(H),\Omega_H$, and $\eta_H$ for all $29$ rows from their
+edge sets.  It enumerates every relevant edge subset and every spanning tree
+using exact integer and rational arithmetic.
+
+For formal verification, the reusable analytic layer should contain
+Lemma~\ref{lem:tree-star}, Lemma~\ref{lem:path-triangle}, the component-product
+telescoping lemma, and Theorem~\ref{thm:main}.  The finite layer should then
+certify the four integer constants for the $29$ Atlas modules.  Since this is
+a restricted high-density theorem and not a full classification, none of the
+Atlas status modules should be changed.
+
+\end{document}

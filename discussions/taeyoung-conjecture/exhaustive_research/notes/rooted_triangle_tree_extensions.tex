@@ -1,0 +1,489 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+
+\title{Rooted Triangle--Tree Extensions:\\
+Two Positive Families for the Chromatic-Polynomial Graphon Bound}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+For a finite graph $H$, put
+\[
+\Phi_H(p)=(1-p)^{v(H)}
+\chi_H\!\left(\frac{1}{1-p}\right),
+\]
+with the value at $p=1$ understood by continuity.  We prove the bound
+$t(H,W)\geq\Phi_H(p)$, throughout the full required interval
+$p\geq 1/2$, for two infinite families.  The first is obtained from a
+triangle by attaching any number of leaves to one triangle vertex.  The
+second is obtained by attaching any number of pairwise disjoint two-edge
+tails to one triangle vertex.  The proof is valid for every graphon and
+uses a weighted rooted-triangle inequality and a separate one-variable
+convexity argument.  In the six-vertex catalogue the new cases are Atlas
+34, 36, and 92.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphons and the two graph families}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be a probability space.  A graphon is a symmetric
+measurable function $W\colon\Omega^2\to[0,1]$.  For a finite simple graph
+$H$, its homomorphism density is
+\[
+t(H,W)
+=
+\int_{\Omega^{V(H)}}
+\prod_{uv\in E(H)}W(x_u,x_v)
+\prod_{u\in V(H)}\dd\mu(x_u).
+\]
+No injectivity is imposed on the maps represented by this integral.  Write
+\[
+p=t(K_2,W)
+\quad\text{and}\quad
+d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+Thus $0\leq d\leq1$ and $\int d=p$.
+
+Fix a triangle on vertices $o,a,b$, with $o$ distinguished as its root.
+
+\begin{itemize}
+\item For an integer $r\geq0$, let $L_r$ be obtained by adding vertices
+$u_1,\ldots,u_r$ and precisely the additional edges $ou_i$.  Thus $L_r$
+is a triangle with $r$ leaves having the same neighbour $o$.
+
+\item For an integer $s\geq0$, let $Q_s$ be obtained by adding vertices
+$y_1,z_1,\ldots,y_s,z_s$ and precisely the additional edges
+$oy_i,y_iz_i$.  Thus $Q_s$ is a triangle with $s$ internally disjoint
+two-edge tails having the same initial vertex $o$.
+\end{itemize}
+
+In particular, $L_0=Q_0=K_3$, while $L_1$ is the paw graph.
+
+Every new vertex belongs to a tree attached to the triangle.  Once the
+triangle is properly coloured, each new vertex has exactly $x-1$ choices
+after the colour of its parent has been fixed.  Hence
+\begin{align}
+\chi_{L_r}(x)
+&=x(x-1)^{r+1}(x-2),
+&v(L_r)&=r+3,
+\label{eq:chrom-L}
+\\
+\chi_{Q_s}(x)
+&=x(x-1)^{2s+1}(x-2),
+&v(Q_s)&=2s+3.
+\label{eq:chrom-Q}
+\end{align}
+Both families have chromatic number $3$.  If $q=1-p$, direct substitution
+in the definition of $\Phi$ gives
+\begin{align}
+\Phi_{L_r}(p)
+&=
+q^{r+3}\frac1q
+\left(\frac pq\right)^{r+1}
+\left(\frac{2p-1}{q}\right)
+=p^{r+1}(2p-1),
+\label{eq:target-L}
+\\
+\Phi_{Q_s}(p)
+&=
+q^{2s+3}\frac1q
+\left(\frac pq\right)^{2s+1}
+\left(\frac{2p-1}{q}\right)
+=p^{2s+1}(2p-1).
+\label{eq:target-Q}
+\end{align}
+These polynomial identities also hold at $p=1$ by continuity.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A weighted rooted-triangle inequality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define the rooted triangle density
+\[
+\tau(x)
+:=
+\int_{\Omega^2}
+W(x,y)W(x,z)W(y,z)
+\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Weighted rooted Goodman inequality]
+\label{lem:weighted-rooted}
+Let $W$ have edge density $p>0$.  For every integer $k\geq0$,
+\[
+\int_\Omega d(x)^k\tau(x)\dd\mu(x)
+\geq
+\frac{2p-1}{p}
+\int_\Omega d(x)^{k+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+For $j\geq0$, put
+\[
+M_j=\int_\Omega d(x)^j\dd\mu(x).
+\]
+Let $T_W$ be the integral operator with kernel $W$, and set
+\begin{align*}
+I_k&=\int_\Omega d(x)^k\tau(x)\dd\mu(x),\\
+J_k&=\int_{\Omega^2}d(x)^kW(x,y)d(y)
+\dd\mu(x)\dd\mu(y)
+=\ip{d^k}{T_Wd}.
+\end{align*}
+For $A,B\in[0,1]$ one has $AB\geq A+B-1$.  Apply this to
+$W(x,y)$ and $W(x,z)$, multiply by the nonnegative quantity
+$d(x)^kW(y,z)$, and integrate.  Tonelli's theorem gives
+\begin{equation}
+I_k\geq 2J_k-pM_k.
+\label{eq:I-J}
+\end{equation}
+
+Put $U=1-W$, let $T_U$ be its integral operator, and write
+\[
+u=T_U\one=1-d,
+\qquad q=1-p.
+\]
+Since $T_Ud=T_U(\one-u)=u-T_Uu$, we have
+\[
+T_Wd
+=p\one-T_Ud
+=d-q\one+T_Uu.
+\]
+Consequently,
+\begin{equation}
+J_k=M_{k+1}-qM_k+\ip{d^k}{T_Uu}.
+\label{eq:J-decomp}
+\end{equation}
+
+We next prove
+\begin{equation}
+\ip{d^k}{T_Uu}
+\geq
+\int_\Omega d(x)^ku(x)^2\dd\mu(x).
+\label{eq:opposite-order}
+\end{equation}
+By the symmetry of $U$, twice the difference between the left- and
+right-hand sides of \eqref{eq:opposite-order} equals
+\[
+\int_{\Omega^2}
+U(x,y)
+\bigl(u(y)-u(x)\bigr)
+\bigl(d(x)^k-d(y)^k\bigr)
+\dd\mu(x)\dd\mu(y).
+\]
+This integrand is nonnegative: $d=1-u$, so $u$ and
+$d^k=(1-u)^k$ are oppositely ordered.  This proves
+\eqref{eq:opposite-order}.  Since $u=1-d$, equations
+\eqref{eq:J-decomp} and \eqref{eq:opposite-order} yield
+\begin{align*}
+J_k
+&\geq
+M_{k+1}-qM_k
++\int d^k(1-d)^2
+\\
+&=
+M_{k+2}-M_{k+1}+pM_k.
+\end{align*}
+Using this in \eqref{eq:I-J},
+\[
+I_k\geq 2M_{k+2}-2M_{k+1}+pM_k.
+\]
+Finally,
+\begin{align*}
+&2M_{k+2}-2M_{k+1}+pM_k
+-\frac{2p-1}{p}M_{k+2}
+\\
+&\qquad=
+\frac1p
+\left(M_{k+2}-2pM_{k+1}+p^2M_k\right)
+\\
+&\qquad=
+\frac1p\int_\Omega d(x)^k(d(x)-p)^2\dd\mu(x)
+\geq0.
+\end{align*}
+The claimed inequality follows.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A local inequality for two-edge tails}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Set
+\[
+A(x):=(T_Wd)(x)=\int_\Omega W(x,y)d(y)\dd\mu(y).
+\]
+The quantity $A(x)$ is the rooted homomorphism density of a two-edge tail
+whose initial vertex is fixed at $x$.  Notice that $0\leq A\leq1$ and
+\begin{equation}
+\int_\Omega A(x)\dd\mu(x)
+=\int_\Omega d(x)^2\dd\mu(x)
+\geq p^2.
+\label{eq:mean-A}
+\end{equation}
+The equality is symmetry and Fubini; the inequality is Jensen.
+
+\begin{lemma}[Pointwise rooted triangle bound]
+\label{lem:pointwise}
+For almost every $x\in\Omega$,
+\[
+\tau(x)\geq \max\{2A(x)-p,0\}.
+\]
+\end{lemma}
+
+\begin{proof}
+The inequality
+$W(x,y)W(x,z)\geq W(x,y)+W(x,z)-1$, multiplied by
+$W(y,z)\geq0$ and integrated in $y,z$, gives
+\[
+\tau(x)
+\geq
+2\int_\Omega W(x,y)d(y)\dd\mu(y)-p
+=2A(x)-p.
+\]
+Also $\tau(x)\geq0$ by definition.  Taking the larger of the two lower
+bounds proves the assertion.
+\end{proof}
+
+\begin{lemma}[Tail convexity]
+\label{lem:tail-convexity}
+Fix $p>0$ and an integer $s\geq0$.  The function
+\[
+f_{p,s}(a)=a^s\max\{2a-p,0\},
+\qquad 0\leq a\leq1,
+\]
+where $a^0=1$, is convex and nondecreasing.
+\end{lemma}
+
+\begin{proof}
+For $s=0$ this is the maximum of the two affine functions $0$ and
+$2a-p$.  Suppose $s\geq1$.  The function vanishes on $[0,p/2]$, while
+on $[p/2,1]$ it is
+\[
+2a^{s+1}-pa^s.
+\]
+Its first derivative on the latter interval is
+\[
+a^{s-1}\bigl(2(s+1)a-ps\bigr)>0,
+\]
+and its second derivative there is
+\[
+s a^{s-2}\bigl(2(s+1)a-p(s-1)\bigr)\geq0.
+\]
+At $a=p/2$ the right derivative is
+$p(p/2)^{s-1}>0$, whereas the left derivative is $0$.  Thus the
+one-sided derivatives increase across the joining point, proving both
+convexity and monotonicity on the whole interval.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The positive theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Rooted triangle--tree extensions]
+\label{thm:main}
+Let $W$ be an arbitrary graphon with edge density $p$.  For every
+$p\in[1/2,1]$ the following statements hold.
+
+\begin{enumerate}
+\item For every integer $r\geq0$,
+\[
+t(L_r,W)
+\geq p^{r+1}(2p-1)
+=\Phi_{L_r}(p).
+\]
+
+\item For every integer $s\geq0$,
+\[
+t(Q_s,W)
+\geq p^{2s+1}(2p-1)
+=\Phi_{Q_s}(p).
+\]
+\end{enumerate}
+
+Since $\chi(L_r)=\chi(Q_s)=3$, the interval $p\geq1/2$ is exactly the
+full required interval
+\[
+p\geq1-\frac1{\chi(H)-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Integrating out the $r$ leaves of $L_r$, conditional on the image $x$ of
+the root $o$, gives
+\[
+t(L_r,W)=\int_\Omega d(x)^r\tau(x)\dd\mu(x).
+\]
+Lemma~\ref{lem:weighted-rooted}, followed by Jensen's inequality, gives
+for $p\geq1/2$
+\begin{align*}
+t(L_r,W)
+&\geq
+\frac{2p-1}{p}\int_\Omega d(x)^{r+2}\dd\mu(x)
+\\
+&\geq
+\frac{2p-1}{p}p^{r+2}
+=p^{r+1}(2p-1).
+\end{align*}
+Here multiplication by $(2p-1)/p$ preserves the Jensen inequality
+because this factor is nonnegative on the stated interval.
+
+For $Q_s$, integrating out its $s$ disjoint two-edge tails gives
+\[
+t(Q_s,W)=\int_\Omega \tau(x)A(x)^s\dd\mu(x).
+\]
+By Lemma~\ref{lem:pointwise}, Lemma~\ref{lem:tail-convexity}, Jensen's
+inequality, \eqref{eq:mean-A}, and monotonicity of $f_{p,s}$,
+\begin{align*}
+t(Q_s,W)
+&\geq
+\int_\Omega f_{p,s}(A(x))\dd\mu(x)
+\\
+&\geq
+f_{p,s}\!\left(\int_\Omega A(x)\dd\mu(x)\right)
+\\
+&\geq f_{p,s}(p^2).
+\end{align*}
+For $p\geq1/2$ one has $p^2\geq p/2$, and therefore
+\[
+f_{p,s}(p^2)
+=p^{2s}(2p^2-p)
+=p^{2s+1}(2p-1).
+\]
+The target identifications are exactly \eqref{eq:target-L} and
+\eqref{eq:target-Q}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Endpoints and equality examples}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At the threshold $p=1/2$, both targets in
+\eqref{eq:target-L}--\eqref{eq:target-Q} vanish, and the conclusion also
+follows directly from nonnegativity of homomorphism densities.  Thus no
+division by a vanishing quantity occurs.  At $p=1$, the condition
+$0\leq W\leq1$ and $\int W=1$ forces $W=1$ almost everywhere, so both the
+homomorphism density and the target equal $1$.
+
+There are equality examples throughout the interval at all multipartite
+grid points.  For an integer $k\geq2$, let $T_k$ be the balanced complete
+$k$-partite graphon.  It has edge density $p_k=1-1/k$, and for every finite
+graph $H$,
+\[
+t(H,T_k)=\frac{\chi_H(k)}{k^{v(H)}}=\Phi_H(p_k).
+\]
+In particular, this applies to every $L_r$ and $Q_s$.  For $k=2$ it gives
+the threshold equality $0=0$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Catalogue consequences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[New six-vertex catalogue cases]
+\label{cor:atlas}
+The following previously open Atlas graphs satisfy
+$t(H,W)\geq\Phi_H(p)$ for every graphon $W$ throughout the full required
+density interval $p\geq1/2$:
+\[
+\begin{array}{c|c|c|c}
+\text{Atlas ID}&\text{graph6}&\text{family member}&\chi_H(x)\\
+\hline
+34&\texttt{D@\char123}&L_2&x(x-1)^3(x-2)\\
+36&\texttt{DJc}&Q_1&x(x-1)^3(x-2)\\
+92&\texttt{E?Fw}&L_3&x(x-1)^4(x-2)
+\end{array}
+\]
+Their targets are, respectively,
+\[
+p^3(2p-1),\qquad p^3(2p-1),\qquad p^4(2p-1).
+\]
+\end{corollary}
+
+\begin{proof}
+Atlas 34 is a triangle with two leaves adjacent to the same triangle
+vertex, so it is $L_2$.  Atlas 36 is a triangle with one two-edge tail,
+so it is $Q_1$.  Atlas 92 is a triangle with three leaves adjacent to the
+same triangle vertex, so it is $L_3$.  The graph6 codes give independent
+machine-readable identifiers.  The conclusions follow from
+Theorem~\ref{thm:main}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Inputs and scope of the argument}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The proof above is self-contained apart from Tonelli--Fubini and Jensen's
+inequality.  In particular, it does not invoke the odd-cycle theorem, the
+pure-chordal theorem, clique--odd-cycle cases, universal-vertex lifting, an
+arbitrary join closure, or any counterexample calculation.  The weighted
+rooted-triangle inequality also appears as an ingredient in the separate
+clique--odd-cycle note, but Lemma~\ref{lem:weighted-rooted} proves it here
+in full.
+
+All arguments use the ordinary (non-injective) graphon homomorphism
+integrals directly.  They require neither a finite-step approximation nor
+regularity of $W$, and they never replace the average edge-density
+hypothesis by a minimum-degree or pointwise degree assumption.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Corollary~\ref{cor:atlas} is formalized: Atlas $34$, $36$ and $92$ are
+\texttt{verified}, as is $L_1$ itself, the paw, which is Atlas $15$ and which
+several later notes consume.  The development is
+\texttt{lean/Taeyoung/Methods/RootedTriangleTree/}.  One difference of
+substance.
+
+\subsection*{Lemma~\ref{lem:tail-convexity} is not formalized}
+
+The piecewise function $a\mapsto a^s\max\{2a-p,0\}$ does not occur, and neither
+family goes through it.
+
+For the leaf family $L_s$ the density factors as $\int d^s\tau$, and
+Lemma~\ref{lem:weighted-rooted} sends that to $\frac{2p-1}{p}\int d^{s+2}$
+directly; all that is then needed is $M_j\geq p^j$, which is Jensen for the
+convex $t\mapsto t^j$ against the degree function.  The maximum with $0$ never
+enters, because the weighted inequality has already been applied.
+
+For the tail family $Q_s$, whose density is $\int\tau\cdot A$ with $A=T_Wd$ and
+which does not factor as $\int d^r\tau$, the piecewise Jensen argument is
+replaced by algebra.  The pointwise bound $\tau\geq2A-p$ of
+Lemma~\ref{lem:pointwise} and $A\geq0$ give
+\[
+ \int\tau A\ \geq\ 2\!\int\!A^2-p\!\int\!A
+ \ =\ 2M_2^2-pM_2+\Bigl(\int A^2-M_2^2\Bigr)
+ \ \geq\ 2M_2^2-pM_2 ,
+\]
+the last step being Cauchy--Schwarz, and $m\mapsto2m^2-pm$ is increasing beyond
+$m=p^2$ when $p\geq1/2$, so the bound descends to $2p^4-p^3=p^3(2p-1)$.  No
+convexity of a piecewise function, and no one-sided derivatives at a joining
+point.
+
+\end{document}

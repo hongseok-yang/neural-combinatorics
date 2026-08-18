@@ -1,0 +1,700 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\Gap}{\Gamma_H}
+
+\begin{document}
+
+\section{Purpose}
+
+This note treats a singular high-density deformation outside the uniform
+bounded-complement theorem.  Let $S$ be a measurable
+set of mass $s$ and put
+\[
+ W_s(x,y)=1-\mathbf 1_S(x)\mathbf 1_S(y).
+ \tag{1.1}\label{eq:hole}
+\]
+Thus one deletes all edges inside one concentrating set.  Its edge density is
+$p_s=1-s^2$, and its normalized complement is
+\[
+ U_s=\frac{1-W_s}{1-p_s}=s^{-2}\mathbf 1_{S\times S}.
+\]
+Consequently $\lVert U_s\rVert_\infty=s^{-2}=(1-p_s)^{-1}$ diverges at
+exactly the scale excluded by the bounded-complement theorem.
+
+For all $29$ currently open Atlas rows, the exact comparison with the
+chromatic target is nonnegative on the whole required density interval, and
+is strict except at $p=1$.  Thus the most basic concentrating complement---a
+single deleted clique---does not supply a negative construction.  This is a
+one-parameter structural calculation, not an optimization or template
+search.  A later theorem extends the high-density conclusion uniformly to
+every finite or countable complete-multipartite partition, including the
+critical number of parts and arbitrary part imbalances.  A second exact
+ full-interval theorem treats every finite or countable union of clique
+ blocks with arbitrary dust, including the canonical nonregular complete-cut
+ and persistent-hub boundary examples.  The independent note
+ \path{notes/two_block_hub_high_density_stability.tex} further fills the
+ entire constant two-block hub cube of exceptional mass at most $1/3$; the
+ further note
+ \path{notes/arbitrary_fibre_hub_high_density_stability.tex} first permits
+ arbitrary cut fibres and exceptional-square kernels under an adaptive
+ $L^2$-energy condition, then gives a uniform exact radius with no restriction
+ on either kernel whenever the complementary core is complete.  Finally,
+ \path{notes/arbitrary_graphon_high_density_stability.tex} uses a
+ high-degree-set decomposition to close the endpoint for every graphon.
+These results change no catalogue status.
+
+\section{Independent-set identity}
+
+Let $\mathcal I(H)$ denote the independent vertex subsets of a finite simple
+graph $H$, including the empty set.  Write $n=v(H)$ and
+\[
+ \Phi_H(p)=(1-p)^n\chi_H\!\left(\frac1{1-p}\right),
+ \qquad
+ \Gap(W)=t(H,W)-\Phi_H(p(W)).
+\]
+
+\begin{lemma}[Exact one-clique-hole density]\label{lem:independent}
+For the graphon \eqref{eq:hole},
+\begin{equation}
+ t(H,W_s)=
+ \sum_{I\in\mathcal I(H)}s^{|I|}(1-s)^{n-|I|}.
+ \label{eq:independent}
+\end{equation}
+Hence
+\begin{equation}
+ \Gap(W_s)=
+ \sum_{I\in\mathcal I(H)}s^{|I|}(1-s)^{n-|I|}
+ -s^{2n}\chi_H(s^{-2}),
+ \label{eq:gap}
+\end{equation}
+where the second term is interpreted by its polynomial continuation at
+$s=0$.
+\end{lemma}
+
+\begin{proof}
+A map $f:V(H)\to\Omega$ contributes one to the integrand of $t(H,W_s)$
+unless some edge of $H$ has both endpoints mapped into $S$.  Therefore it
+survives precisely when $f^{-1}(S)$ is independent.  The events
+$f^{-1}(S)=I$ are disjoint and have probabilities
+$s^{|I|}(1-s)^{n-|I|}$, proving \eqref{eq:independent}.  Since
+$p(W_s)=1-s^2$, substitution into the definition of $\Phi_H$ gives
+\eqref{eq:gap}.  Both sides are polynomials in $s$, so the formula at $s=0$
+follows without a limiting interchange.
+\end{proof}
+
+This identity is valid on an arbitrary probability space.  Only the mass of
+$S$ is used; no atomlessness, regularity, or finite-step approximation is
+assumed.
+
+\section{Exact Bernstein certificate}
+
+For a polynomial $R$ of degree $d$ and a rational endpoint $b>0$, define its
+Bernstein coefficients $\beta_0,\ldots,\beta_d$ by
+\begin{equation}
+ R(bx)=\sum_{i=0}^d\beta_i\binom di x^i(1-x)^{d-i}.
+ \label{eq:bernstein}
+\end{equation}
+If all $\beta_i>0$, then $R(s)>0$ throughout $0\leq s\leq b$, because the
+Bernstein basis functions are nonnegative and sum to one.
+
+Exact independent-set enumeration and deletion--contraction for the
+chromatic polynomial give, on every current open row,
+\begin{equation}
+ \Gap(W_s)=s^3(1-s)^\ell R_H(s).
+ \label{eq:factor}
+\end{equation}
+For chromatic number three we certify $R_H>0$ on $[0,3/4]$; for chromatic
+number four we use $[0,3/5]$.  These rational intervals contain the required
+ones since
+\[
+ \frac1{\sqrt2}<\frac34,
+ \qquad
+ \frac1{\sqrt3}<\frac35.
+\]
+The following table lists every certificate.  The entries in the last
+column are the complete native-degree coefficient vector
+$(\beta_0,\ldots,\beta_d)$ from \eqref{eq:bernstein}; no coefficients are
+omitted and no degree elevation is used.
+
+\scriptsize
+\[
+\begin{array}{c|c|c|c|c|l}
+\text{Atlas}&\text{graph6}&n&e&\chi(H),\ell&(\beta_0,\ldots,\beta_d)\\ \hline
+43&\texttt{Dlc}&5&6&3,1&(8,101/16,121/32,133/128,79/128)\\
+118&\texttt{Eht?}&6&7&3,2&(11,52/5,703/80,3863/640,889/320,937/512)\\
+122&\texttt{Eld?}&6&7&3,2&(10,191/20,647/80,3511/640,761/320,809/512)\\
+124&\texttt{Exd?}&6&7&3,2&(10,191/20,647/80,3511/640,761/320,809/512)\\
+126&\texttt{ERUO}&6&7&3,2&(10,191/20,647/80,3511/640,761/320,809/512)\\
+127&\texttt{EZEG}&6&7&3,1&(9,61/8,113/20,273/80,127/80,223/256,123/512)\\
+130&\texttt{E\char`\{CW}&6&7&3,3&(8,19/2,41/4,575/64,203/64)\\
+137&\texttt{EjsG}&6&8&3,2&(14,131/10,217/20,1133/160,211/80,163/128)\\
+139&\texttt{Eju?}&6&8&3,2&(13,49/4,203/20,209/32,179/80,131/128)\\
+145&\texttt{Exe\_}&6&8&3,1&(14,91/8,643/80,719/160,281/160,445/512,305/1024)\\
+147&\texttt{EhMg}&6&8&3,1&(13,85/8,15/2,661/160,49/32,381/512,241/1024)\\
+148&\texttt{EyUG}&6&8&3,1&(13,85/8,15/2,661/160,49/32,381/512,241/1024)\\
+151&\texttt{EhdW}&6&8&3,1&(13,21/2,577/80,1193/320,393/320,109/128,55/256)\\
+152&\texttt{EhNG}&6&8&3,1&(12,79/8,557/80,603/160,209/160,317/512,177/1024)\\
+153&\texttt{Ehf\_}&6&8&3,1&(12,79/8,557/80,4851/1280,1807/1280,877/1024,165/2048)\\
+157&\texttt{E\char`\~`\_}&6&9&4,2&(17,398/25,1711/125,6386/625,18889/3125,10186/3125)\\
+160&\texttt{E\char`\~@g}&6&9&4,2&(16,376/25,1616/125,5986/625,17264/3125,8936/3125)\\
+168&\texttt{E\char`\^MG}&6&9&3,1&(17,27/2,145/16,1423/320,75/64,371/512,215/1024)\\
+169&\texttt{Exf\_}&6&9&4,1&(16,27/2,52/5,17641/2500,12846/3125,7051/3125,18208/15625)\\
+171&\texttt{Ehew}&6&9&3,1&(16,51/4,341/40,1051/256,1347/1280,857/1024,113/2048)\\
+174&\texttt{EtTg}&6&9&3,1&(16,101/8,659/80,4739/1280,959/1280,967/1024,71/2048)\\
+178&\texttt{En\char`\}?}&6&10&4,2&(20,461/25,1921/125,13399/1250,16756/3125,7804/3125)\\
+181&\texttt{E\char`\^mG}&6&10&4,1&(20,83/5,312/25,5072/625,13628/3125,6693/3125,15944/15625)\\
+185&\texttt{Exv\_}&6&10&4,1&(20,33/2,1532/125,19493/2500,12738/3125,52/25,3256/3125)\\
+188&\texttt{EzNG}&6&10&3,1&(20,31/2,49/5,5143/1280,499/1280,947/1024,19/2048)\\
+194&\texttt{E\char`\~wW}&6&11&4,1&(24,39/2,1764/125,4269/500,2526/625,5949/3125,14352/15625)\\
+196&\texttt{ER\char`\~g}&6&11&4,1&(24,39/2,1764/125,4269/500,2526/625,5949/3125,14352/15625)\\
+199&\texttt{El\char`\^g}&6&11&4,1&(24,97/5,1736/125,411/50,2348/625,5756/3125,14688/15625)\\
+203&\texttt{E\char`\~\char`\^G}&6&12&4,1&(28,112/5,1968/125,11201/1250,11632/3125,1041/625,2552/3125)
+\end{array}
+\]
+\normalsize
+
+\begin{theorem}[One-clique-hole no-hit theorem]\label{thm:no-hit}
+Let $H$ be any graph in the table and let $W_s$ be \eqref{eq:hole}.  If
+\[
+ 0\leq s\leq\frac1{\sqrt{\chi(H)-1}},
+\]
+equivalently if $p(W_s)$ lies in the conjectured density range, then
+\[
+ t(H,W_s)\geq\Phi_H(p(W_s)).
+\]
+Equality holds within this family only at $s=0$, or $p=1$.
+\end{theorem}
+
+\begin{proof}
+The table gives $R_H(s)>0$ on a rational interval containing the required
+interval.  That interval has $s<1$, so every factor in
+\eqref{eq:factor} is positive for $s>0$.  Thus the gap is strictly positive
+there.  At $s=0$, $W_s=1$ almost everywhere and both sides equal one; this
+also handles the polynomially continued endpoint $p=1$ without division.
+\end{proof}
+
+\section{Arbitrary unions of clique blocks, with dust}
+
+The regular-complement theorem leaves open highly nonregular singular
+shapes.  A broad canonical family is a union of clique blocks, possibly with
+an arbitrary dust remainder.  Let $(S_i)$ be finite or countably many
+pairwise disjoint measurable sets, put $s_i=\mu(S_i)$, and define
+\[
+ U_{\boldsymbol s}=\sum_i\mathbf1_{S_i\times S_i}.
+ \label{eq:clique-union}
+\]
+No assumption that $\bigcup_iS_i$ has full measure is made; $U_{\boldsymbol s}$
+is zero on every cell incident to the leftover set.  Then
+\[
+ p(U_{\boldsymbol s})=\sum_i s_i^2.
+\]
+Every graph in the current open list is connected.  Hence all vertices of a
+surviving homomorphism lie in one block and
+\begin{equation}
+ t(H,U_{\boldsymbol s})=\sum_i s_i^{v(H)}.
+ \label{eq:clique-union-density}
+\end{equation}
+
+Let $m=\max_i s_i$; a positive summable sequence attains its supremum.
+Since $\sum_i s_i\leq1$,
+\begin{equation}
+ p=\sum_i s_i^2
+ \leq m^2+\left(\sum_{i:s_i\ne m}s_i\right)^2
+ \leq m^2+(1-m)^2,
+ \qquad p\leq m.
+ \label{eq:max-mass}
+\end{equation}
+Throughout the required interval $p\geq1/2$, so $m\geq1/2$.  Put
+$z=(1-m)/m\in[0,1]$.  The first inequality in \eqref{eq:max-mass} becomes
+\[
+ p\leq p_{max}(z):=\frac{1+z^2}{(1+z)^2},
+ \qquad
+ t(H,U_{\boldsymbol s})\geq m^n=\frac1{(1+z)^n}.
+ \label{eq:clique-union-lower}
+\]
+For $\chi(H)=3$, the possible range is $0\leq z\leq1$.  For $\chi(H)=4$,
+the condition $p_{\max}(z)\geq2/3$ is, on $[0,1]$, equivalent to
+$0\leq z\leq2-\sqrt3$.
+
+Write $p_{min}=1-1/(\chi(H)-1)$ and parametrize every possible density
+between the required threshold and the upper bound in
+\eqref{eq:clique-union-lower} by
+\begin{equation}
+ p(z,\rho)=p_{min}+\rho\bigl(p_{max}(z)-p_{min}\bigr),
+ \qquad0\leq\rho\leq1.
+ \label{eq:clique-density-parameter}
+\end{equation}
+Define the rational-coefficient polynomial
+\begin{equation}
+ M_H(z,\rho)=(1+z)^{2n}
+ \left(\frac1{(1+z)^n}-\Phi_H(p(z,\rho))\right).
+ \label{eq:clique-union-polynomial}
+\end{equation}
+The apparent denominators cancel; multiplying by the positive constant
+$(\chi(H)-1)^n$ makes all coefficients integral.
+
+\begin{theorem}[Clique-union-with-dust full-interval theorem]
+\label{thm:clique-union}
+For every current open Atlas graph $H$, every finite or countable union of
+clique blocks $U_{\boldsymbol s}$, and every arbitrary leftover dust set on
+which the graphon is zero, if the density lies in the conjectured range then
+\[
+ t(H,U_{\boldsymbol s})\geq
+ \Phi_H(p(U_{\boldsymbol s})).
+\]
+Equality holds only for the single full-measure clique, at $p=1$.
+\end{theorem}
+
+\begin{proof}
+Let $b=1$ when $\chi(H)=3$ and $b=2-\sqrt3$ when $\chi(H)=4$.  Expand
+$M_H(bx,y)$ in the native bivariate Bernstein basis on $[0,1]^2$:
+\begin{equation}
+ M_H(bx,y)=
+ \sum_{i=0}^{d_z}\sum_{j=0}^{d_\rho}
+ \beta_{H,i,j}\binom{d_z}{i}\binom{d_\rho}{j}
+ x^i(1-x)^{d_z-i}y^j(1-y)^{d_\rho-j}.
+ \label{eq:clique-union-bernstein}
+\end{equation}
+Exact deletion--contraction and expansion of
+\eqref{eq:clique-union-polynomial} give $20$ distinct coefficient arrays for
+the $29$ rows.  Every coefficient is nonnegative in $\mathbb Q$ for
+$\chi=3$ or in $\mathbb Q(\sqrt3)$ for $\chi=4$.  There is exactly one zero
+coefficient in each array, namely $(i,j)=(0,d_\rho)$, corresponding to
+$z=0$, $p=1$.  Positivity in the quadratic field is checked without
+decimals: for $a+b\sqrt3$ with opposite signs, compare $a^2$ with $3b^2$
+after recording the sign of the positive term.  The complete grouping,
+degrees, and corner coefficients are
+\[
+\begin{array}{c|l|c|c|c}
+\chi&\text{Atlas IDs}&(d_z,d_\rho)&\beta_{0,0}&\beta_{d_z,d_\rho}\\ \hline
+3&43&(10,4)&8&256\\
+3&118,122,124,126&(12,5)&16&1024\\
+3&127&(12,5)&4&256\\
+3&130&(12,5)&8&512\\
+3&137,139&(12,5)&4&256\\
+3&145,147,148,152&(12,5)&8&512\\
+3&151&(12,5)&4&256\\
+3&153&(12,5)&16&1024\\
+3&168&(12,5)&8&512\\
+3&171,174,188&(12,5)&16&1024\\ \hline
+4&157,160&(12,5)&81&454896-262440\sqrt3\\
+4&169,178&(12,5)&27&151632-87480\sqrt3\\
+4&181,185&(12,5)&81&454896-262440\sqrt3\\
+4&194,196&(12,5)&81&454896-262440\sqrt3\\
+4&199&(12,5)&81&454896-262440\sqrt3\\
+4&203&(12,5)&81&454896-262440\sqrt3
+\end{array}
+\]
+For example,
+$454896^2-3(262440)^2=306110016>0$ and
+$151632^2-3(87480)^2=34012224>0$.  The verifier makes the corresponding
+exact comparison for every intermediate coefficient.  Bivariate Bernstein
+nonnegativity proves $M_H\geq0$ on the whole rectangle.  Moreover equality
+can occur only at $x=0,y=1$: otherwise some Bernstein basis function whose
+coefficient is strictly positive is nonzero.  Combine
+this with \eqref{eq:clique-union-lower} and
+\eqref{eq:clique-density-parameter}.  The exceptional corner is precisely
+$m=p=1$, where both sides equal one.
+\end{proof}
+
+The two-clique union, whose complement is a complete bipartite cut, is a
+special case.  Taking one clique block $B$ and dust $A$ gives
+$W=\mathbf1_{B\times B}$; equivalently, its complement is one on every pair
+incident to the exceptional hub set $A$.  Thus the theorem excludes the
+canonical persistent-hub complement on the whole admissible interval.  More
+generally it excludes every finite or countable clique-union-with-dust shape,
+rather than only asymptotically.  These graphons are generally nonregular, so
+this is independent of the regular- and maximum-degree-complement theorems.
+
+\section{A subcritical number of deleted cliques}
+
+The one-hole identity extends asymptotically and uniformly to a subcritical
+number of deleted diagonal cliques.  Let $S_1,\ldots,S_r$ be disjoint
+measurable sets of masses $s_1,\ldots,s_r$, and put
+\[
+ W=1-\sum_{i=1}^r\mathbf 1_{S_i\times S_i},
+ \qquad \sigma_j=\sum_{i=1}^r s_i^j,
+ \qquad q=1-p(W)=\sigma_2.
+ \tag{4.1}\label{eq:many-holes}
+\]
+For $A\subseteq E(H)$, let $r_H(A)=v(H)-c(V(H),A)$ be its graphic-matroid
+rank.  If $C$ runs through the nontrivial connected components of $(V(H),A)$,
+define
+\[
+ Z(A)=\prod_C\sigma_{v(C)}.
+\]
+Let
+\[
+ P_2(H)=\sum_{x\in V(H)}\binom{d_H(x)}2,
+ \qquad N_3(H)=\#\{\text{triangles of }H\},
+\]
+and let $N_{\geq3}(H)$ be the number of edge subsets $A$ with
+$r_H(A)\geq3$.
+
+\begin{lemma}[Exact cluster-rank identity]\label{lem:cluster-rank}
+For \eqref{eq:many-holes},
+\begin{equation}
+ \Gap(W)=
+ \bigl(P_2(H)-N_3(H)\bigr)(\sigma_3-q^2)
+ +\sum_{r_H(A)\geq3}(-1)^{|A|}
+ \bigl(Z(A)-q^{r_H(A)}\bigr).
+ \label{eq:cluster-rank}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Expand the product defining $t(H,W)$.  For a selected edge set $A$, every
+nontrivial connected component must be mapped wholly into one $S_i$; the
+components choose their indices independently.  Its contribution is
+therefore $Z(A)$.  Whitney's expansion gives
+\[
+ \Phi_H(1-q)=\sum_{A\subseteq E(H)}(-1)^{|A|}q^{r_H(A)}.
+\]
+The rank-zero and rank-one differences vanish.  A rank-two edge set is
+either two disjoint edges, two adjacent edges, or a triangle.  Disjoint
+edges again give zero.  Each adjacent pair gives $\sigma_3-q^2$, while each
+triangle has the opposite sign and gives $-(\sigma_3-q^2)$.  There are
+$P_2(H)$ adjacent pairs and $N_3(H)$ triangles.  Collecting them proves
+\eqref{eq:cluster-rank}.
+\end{proof}
+
+\begin{theorem}[Uniform subcritical clique-hole stability]
+Put $c_H=P_2(H)-N_3(H)$ and suppose $c_H>0$.  For any $r\geq1$, every
+graphon of the form \eqref{eq:many-holes} satisfies $\Gap(W)>0$ whenever
+\begin{equation}
+ 0<q<\frac{c_H^2}
+ {r\bigl(c_H+2N_{\geq3}(H)\bigr)^2}.
+ \label{eq:many-hole-range}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Because $s_i\leq\sqrt q$, for every $j\geq2$,
+\[
+ \sigma_j=\sum_i s_i^2s_i^{j-2}\leq q^{j/2}.
+\]
+If $r_H(A)\geq3$, and its nontrivial components have orders
+$j_1,\ldots,j_k$, then
+$\sum(j_a-1)=r_H(A)\geq3$, whence $\sum j_a\geq4$.  As $q\leq1$, this gives
+\[
+ 0\leq Z(A)\leq q^2,
+ \qquad 0\leq q^{r_H(A)}\leq q^2.
+\]
+Thus the absolute value of the remainder in
+\eqref{eq:cluster-rank} is at most $2N_{\geq3}(H)q^2$.  The power-mean
+inequality gives
+\[
+ \sigma_3\geq\frac{q^{3/2}}{\sqrt r}.
+\]
+Consequently
+\[
+ \Gap(W)\geq
+ q^{3/2}\left(
+ \frac{c_H}{\sqrt r}
+ -\bigl(c_H+2N_{\geq3}(H)\bigr)\sqrt q
+ \right),
+\]
+which is strict under \eqref{eq:many-hole-range}.
+\end{proof}
+
+For the current open rows, exact enumeration gives $c_H>0$, ranging from
+$8$ to $28$, so the theorem applies to all $29$ rows.  It is uniform over
+the cluster masses.  Equivalently, if
+\[
+ \alpha_H=\frac{c_H^2}{(c_H+2N_{\geq3}(H))^2},
+\]
+then the conclusion holds whenever $rq<\alpha_H$.  It therefore covers not
+only every fixed number of clusters, but every family with
+$r=o(1/q)$ as $q\downarrow0$.
+
+The dependence on $r$ can in fact be removed.  This is important at the
+critical Turan scale $r\asymp1/q$.
+
+\begin{lemma}[Power-sum defect propagation]\label{lem:defect}
+Let $(s_i)$ be a finite or countable sequence of nonnegative numbers with
+$\sum_i s_i\leq1$.  Put
+\[
+ \sigma_j=\sum_i s_i^j,\qquad q=\sigma_2,\qquad
+ m=\sup_i s_i,\qquad D=\sigma_3-q^2.
+\]
+Then $q\leq m\leq\sqrt q$, $D\geq0$, and for every integer $j\geq3$,
+\begin{equation}
+ 0\leq \sigma_j-q^{j-1}
+ \leq \binom{j-1}{2}m^{j-3}D.
+ \label{eq:defect}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $S=\sigma_1$.  Then $q\leq mS\leq m$ and $m^2\leq q$.
+Interpolation between the first and $j$th power sums gives
+\[
+ q^{j-1}\leq S^{j-2}\sigma_j\leq\sigma_j,
+\]
+which proves every lower bound, including $D\geq0$.
+
+For the upper bound, first note the exact decompositions
+\[
+ D=(1-S)\sigma_3+
+ \sum_{i<k}s_i s_k(s_i-s_k)^2
+\]
+and, for $j\geq3$,
+\[
+ \sigma_{j+1}-q\sigma_j
+ =(1-S)\sigma_{j+1}
+ +\sum_{i<k}s_i s_k(s_i-s_k)
+       (s_i^{j-1}-s_k^{j-1}).
+\]
+The quotient
+$(s_i^{j-1}-s_k^{j-1})/(s_i-s_k)$ is a sum of $j-1$
+monomials, each at most $m^{j-2}$.  Also
+$\sigma_{j+1}\leq m^{j-2}\sigma_3$.  Hence
+\begin{equation}
+ 0\leq\sigma_{j+1}-q\sigma_j
+ \leq(j-1)m^{j-2}D.
+ \label{eq:recurrence}
+\end{equation}
+Starting from \eqref{eq:defect} at $j=3$, use
+\[
+ \sigma_{j+1}-q^j
+ =\sigma_{j+1}-q\sigma_j
+  +q(\sigma_j-q^{j-1})
+\]
+and $q\leq m$.  The constants obey
+$B_3=1$ and $B_{j+1}=j-1+B_j$, hence
+$B_j=\binom{j-1}{2}$.  This proves \eqref{eq:defect}.
+All sums are absolutely convergent; the same identities for a countable
+sequence follow directly, or by truncation.
+\end{proof}
+
+For an edge subset $A$, let its nontrivial connected components have orders
+$j_1,\ldots,j_k$ and rank $R=\sum_a(j_a-1)$.  Define
+\[
+ b(A)=\sum_{a:j_a\geq3}\binom{j_a-1}{2},
+ \qquad
+ \Lambda_H=\sum_{A:r_H(A)\geq3}b(A).
+\]
+
+\begin{lemma}[Uniform component-product defect]\label{lem:product-defect}
+If $r_H(A)=R\geq3$, then
+\begin{equation}
+ 0\leq Z(A)-q^R\leq b(A)mD.
+ \label{eq:product-defect}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Telescope the difference between
+$Z(A)=\prod_a\sigma_{j_a}$ and
+$q^R=\prod_a q^{j_a-1}$.  A factor with $j_a=2$ has zero difference.  For
+$j_a\geq3$, Lemma~\ref{lem:defect} bounds its difference by
+$\binom{j_a-1}{2}m^{j_a-3}D$.  Every unchanged factor, of either type,
+is at most
+\[
+ \sigma_j\leq m^{j-2}q,
+ \qquad q^{j-1}\leq m^{j-2}q.
+\]
+The corresponding telescoping term is therefore at most
+\[
+ \binom{j_a-1}{2}
+ Dq^{k-1}m^{R-k-1}
+ \leq \binom{j_a-1}{2}Dm^{R-2}
+ \leq \binom{j_a-1}{2}Dm,
+\]
+because $q\leq m$, $R\geq3$, and $m\leq1$.  Summing the terms proves
+\eqref{eq:product-defect}.
+\end{proof}
+
+\begin{theorem}[All-part-count complete-multipartite stability]
+Let $H$ satisfy $c_H=P_2(H)-N_3(H)>0$.  Let $(S_i)$ be any finite or
+countable family of disjoint measurable sets, and set
+\[
+ W=1-\sum_i\mathbf1_{S_i\times S_i},
+ \qquad q=1-p(W)=\sum_i\mu(S_i)^2.
+\]
+If
+\begin{equation}
+ 0<q<\left(\frac{c_H}{\Lambda_H}\right)^2,
+ \label{eq:all-parts-range}
+\end{equation}
+then
+\begin{equation}
+ \Gap(W)\geq(c_H-\Lambda_H\sqrt q)D\geq0.
+ \label{eq:all-parts-bound}
+\end{equation}
+Equality occurs only when all positive part masses are equal and cover the
+whole probability space; then $q=1/k$ for an integer $k$ and $W=T_k$ up to
+null sets.  Every other such graphon has strict inequality.
+\end{theorem}
+
+\begin{proof}
+Combine the exact cluster-rank identity \eqref{eq:cluster-rank} with
+Lemma~\ref{lem:product-defect}; signs can only decrease the rank-at-least
+three remainder by $\Lambda_HmD$.  Since $m\leq\sqrt q$, this proves
+\eqref{eq:all-parts-bound}, and \eqref{eq:all-parts-range} makes its first
+coefficient positive.
+
+It remains to identify $D=0$.  Equality in
+$q^2\leq S\sigma_3\leq\sigma_3$ forces $S=1$ and equality in Cauchy's
+inequality.  Hence all positive $s_i$ are equal.  Conversely such a
+partition is the balanced complete $k$-partite graphon and every parenthesis
+in \eqref{eq:cluster-rank} vanishes.
+\end{proof}
+
+For the $29$ current open rows, the exact signatures $(c_H,\Lambda_H)$ are
+\[
+\begin{array}{c|rrrrr}
+H&43&118&122&124&126\\
+(c_H,\Lambda_H)&(8,161)&(11,481)&(10,461)&(10,464)&(10,454)\\ \hline
+H&127&130&137&139&145\\
+(c_H,\Lambda_H)&(9,454)&(8,376)&(14,1173)&(13,1134)&(14,1211)\\ \hline
+H&147&148&151&152&153\\
+(c_H,\Lambda_H)&(13,1184)&(13,1207)&(13,1237)&(12,1159)&(12,1174)\\ \hline
+H&157&160&168&169&171\\
+(c_H,\Lambda_H)&(17,2725)&(16,2638)&(17,2893)&(16,2778)&(16,2903)\\ \hline
+H&174&178&181&185&188\\
+(c_H,\Lambda_H)&(16,2972)&(20,6138)&(20,6482)&(20,6598)&(20,6775)\\ \hline
+H&194&196&199&203&\\
+(c_H,\Lambda_H)&(24,14648)&(24,14852)&(24,14992)&(28,32316)&
+\end{array}
+\]
+Thus the theorem covers all $29$ rows without any restriction on the number
+of multipartite classes.  In particular it reaches the critical
+$r\asymp1/q$ scale and includes arbitrary unbalanced part sizes.
+
+\section{Universal rank-two complement defect}
+
+There is also an exact statement for a completely arbitrary complement,
+before any multipartite assumption is imposed.  Let $V=1-W$ and
+$q=\int V=1-p(W)$.  Write
+\[
+ a=t(P_3,V)=\int d_V(x)^2\,dx,
+ \qquad b=t(K_3,V).
+\]
+
+\begin{theorem}[Universal rank-two defect]\label{thm:rank-two}
+The complete contribution of graphic ranks at most two to $\Gap(W)$ is
+\begin{equation}
+ \bigl(P_2(H)-N_3(H)\bigr)(a-q^2)+N_3(H)(a-b).
+ \label{eq:rank-two-defect}
+\end{equation}
+Both defects in \eqref{eq:rank-two-defect} are nonnegative for every
+graphon $V$.  If both coefficients are positive and $0<q<1$, the expression
+vanishes exactly when $V$ is, up to null sets, the union of equal diagonal
+clique blocks of mass $q$.  Necessarily $q=1/k$ for an integer $k$, and
+$W=T_k$.
+\end{theorem}
+
+\begin{proof}
+Direct inclusion--exclusion and Whitney's formula give
+\[
+ \Gap(W)=\sum_{A\subseteq E(H)}(-1)^{|A|}
+ \bigl(t(H_A,V)-q^{r_H(A)}\bigr).
+\]
+Ranks zero and one vanish.  A two-edge forest contributes zero if its edges
+are disjoint and contributes $a-q^2$ if they are adjacent.  There are
+$P_2(H)$ adjacent pairs.  A triangle has rank two, sign minus, and contributes
+$-(b-q^2)$.  This proves \eqref{eq:rank-two-defect}.
+
+Moreover
+\[
+ a-q^2=\int(d_V-q)^2\geq0,
+\]
+while, since $0\leq V\leq1$,
+\[
+ a-b=\int V(x,y)V(y,z)(1-V(x,z))\,dx\,dy\,dz\geq0.
+\]
+
+Suppose both vanish.  Then $d_V=q$ almost everywhere, and for almost every
+triple
+\begin{equation}
+ V(x,y)V(y,z)>0\quad\Longrightarrow\quad V(x,z)=1.
+ \label{eq:transitivity}
+\end{equation}
+For a typical $x$, let $N_x=\{z:V(x,z)>0\}$.  If $y\in N_x$ is typical,
+apply \eqref{eq:transitivity} to $(z,x,y)$: for almost every $z\in N_x$,
+$V(z,y)=1$.  Hence
+\[
+ q=d_V(x)\leq\mu(N_x)\leq d_V(y)=q.
+\]
+All inequalities are equalities.  Thus $V(x,\cdot)=1$ almost everywhere on
+$N_x$, and for almost every $y\in N_x$ one has $N_y=N_x$ modulo null sets.
+The positive-support relation therefore partitions the probability space
+into clique blocks, each of measure $q$.  Constant degree leaves no positive
+measure outside the blocks, so their number is $1/q$ and they are balanced.
+The converse is immediate.
+\end{proof}
+
+For every current open row, both coefficients in
+\eqref{eq:rank-two-defect} are strict:
+\[
+ 8\leq P_2(H)-N_3(H)\leq28,
+ \qquad 1\leq N_3(H)\leq9.
+\]
+At the level of this rank-two theorem alone, an arbitrary high-density
+negative sequence would have to make both universal defects small enough for
+graphic-rank-at-least-three terms to compete.  The exact common zero set is
+precisely the balanced Turan family, and the preceding all-part-count theorem
+controls every exact complete-multipartite complement near that set.
+
+The independent note
+\path{notes/stochastic_block_high_density_stability.tex} goes further: its
+operator-spectral cycle-defect estimate controls every arbitrary measurable
+complement of constant degree $q$, proving strict positivity uniformly for
+sufficiently small $q$.  No equal-cell or finite-step assumption is needed.
+Symmetric doubly stochastic equal-cell matrices are a corollary; on their
+canonical segment from $I_r$ to $J_r/r$, an exact bivariate Bernstein theorem
+removes the high-density restriction and works for every
+$r\geq\chi(H)-1$.
+
+\section{Interpretation, assumptions, and limitations}
+
+The leading factor $s^3=(1-p)^{3/2}$ is consistent with the triangle term in
+the cycle-rank expansion, but the proof above is exact on the full admissible
+interval rather than merely asymptotic.  It closes the simplest singular
+escape left by bounded normalized complements: one cluster carries all the
+missing edges at amplitude one.
+
+The exact full-interval calculation covers one deleted cluster.  The final
+multi-cluster theorem covers every finite or countable complete-multipartite
+partition, including the critical scale $r\asymp1/q$, but only in its
+explicit high-density interval.  The independent bivariate theorem covers
+the complementary family of every finite or countable union of clique blocks
+on the full interval.  These statements alone do not cover arbitrary shapes
+outside both cluster families.  The later note
+\path{notes/arbitrary_graphon_high_density_stability.tex} avoids a structural
+classification: it splits at the high-degree set and combines the
+complete-core and maximum-degree margins.  This closes a uniform endpoint
+interval for every arbitrary graphon.  Balanced complete multipartite
+graphons remain equality cases, as required.  The results are endpoint
+no-hit tests and do not prove any Atlas row on its full density interval.
+
+The only inputs are the exact identity of Lemma~\ref{lem:independent}, the
+maximum-mass bound \eqref{eq:max-mass}, exact independent-set enumeration,
+exact deletion--contraction for $\chi_H$, and the elementary univariate and
+bivariate Bernstein positivity criteria.  There is no numerical root claim,
+optimization, graphon approximation, conditioning, or unsafe denominator.
+The graph6 codes identify every graph unambiguously; the verifier also checks
+its order, size, chromatic number, factor multiplicities, and every rational
+coefficient displayed above.
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The line headed ``singular
+one-clique-complement full-interval certificates'' reconstructs all $29$
+factorizations and the $25$ distinct Bernstein vectors.  The line headed
+``nonregular clique-union'' reconstructs the
+$20$ bivariate coefficient classes over $\mathbb Q$ and
+$\mathbb Q(\sqrt3)$.  The same run reconstructs all $29$
+subcritical-cluster, all-part-count, and regular-complement signatures using
+exact arithmetic.
+
+\end{document}

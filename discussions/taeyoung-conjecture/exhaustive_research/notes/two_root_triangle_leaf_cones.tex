@@ -1,0 +1,651 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\join}{\mathbin{\vee}}
+
+\title{Two-Root Book-Edge Leaves and Their Cones:\\
+A Geometric-Mean Graphon Bound}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+For integers $m,a,b\geq1$, let $B_{m,a,b}$ be a book of $m$ triangles
+sharing one edge, with $a$ pendant leaves at one end of that edge and $b$
+pendant leaves at the other.  We prove, for every graphon $W$ of edge
+density $p\geq1/2$,
+\[
+ t(B_{m,a,b},W)
+ \geq p^{a+b+1}(2p-1)^m
+ =\Phi_{B_{m,a,b}}(p).
+\]
+The proof replaces a previously unsuccessful signed-moment argument by a
+geometric-mean compression under the edge-biased probability measure.  A
+normalized-edge Cauchy--Schwarz estimate gives the exact mean needed for
+Jensen's inequality.  We then prove the corresponding cone theorem for
+$K_1\join B_{m,a,b}$ on the full interval $p\geq2/3$.  In the catalogue on
+at most six vertices, the newly positive graphs are Atlas 35, 93, 112, and
+180.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphons and the book-edge families}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space.  A graphon is a
+symmetric measurable function $W\colon\Omega^2\to[0,1]$.  For every finite
+simple graph $F$, its ordinary, non-injective homomorphism density is
+\[
+ t(F,W)
+ =
+ \int_{\Omega^{V(F)}}
+ \prod_{uv\in E(F)}W(x_u,x_v)
+ \prod_{u\in V(F)}\dd\mu(x_u).
+\]
+All integrands below are measurable and bounded, so Tonelli--Fubini applies.
+Write
+\[
+ p=t(K_2,W),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+Fix an edge $rs$.  For integers $m,a,b\geq1$, define $B_{m,a,b}$ by
+adjoining pairwise distinct page vertices $t_1,\ldots,t_m$, each adjacent
+precisely to $r$ and $s$, then adjoining leaves $u_1,\ldots,u_a$ adjacent
+only to $r$ and leaves $v_1,\ldots,v_b$ adjacent only to $s$.  Thus the
+triangles $rst_i$ form an $m$-page book with spine $rs$, and both ends of
+the spine receive a nonempty pendant-leaf set.  Interchanging $a$ and $b$
+gives an isomorphic graph.  The earlier two-root triangle-leaf family is
+the special case $m=1$.
+
+The second family consists of the cones
+\[
+ C_{m,a,b}:=K_1\join B_{m,a,b}.
+\]
+Thus the new cone vertex is adjacent to every vertex of $B_{m,a,b}$, including
+all of its pendant leaves.
+
+Put $n=a+b$.  Once the spine has been properly coloured, every leaf has
+$x-1$ independent colour choices, while every page vertex has $x-2$
+choices after the spine has been coloured.  Hence
+\begin{equation}
+ \chi_{B_{m,a,b}}(x)=x(x-1)^{n+1}(x-2)^m,
+ \qquad
+ \chi(B_{m,a,b})=3.
+ \label{eq:base-chromatic}
+\end{equation}
+For the cone, colouring the cone vertex first gives
+\begin{equation}
+ \chi_{C_{m,a,b}}(x)
+ =x\chi_{B_{m,a,b}}(x-1)
+ =x(x-1)(x-2)^{n+1}(x-3)^m,
+ \qquad
+ \chi(C_{m,a,b})=4.
+ \label{eq:cone-chromatic}
+\end{equation}
+
+For $q=1-p>0$, direct substitution in the definition of the chromatic
+target gives
+\begin{align}
+ \Phi_{B_{m,a,b}}(p)
+ &=q^{n+m+2}\frac1q
+   \left(\frac pq\right)^{n+1}
+   \left(\frac{2p-1}{q}\right)^m
+ =p^{n+1}(2p-1)^m,
+ \label{eq:base-target}
+ \\
+ \Phi_{C_{m,a,b}}(p)
+ &=q^{n+m+3}\frac1q\frac pq
+   \left(\frac{2p-1}{q}\right)^{n+1}
+   \left(\frac{3p-2}{q}\right)^m
+ \notag\\
+ &=p(2p-1)^{n+1}(3p-2)^m.
+ \label{eq:cone-target}
+\end{align}
+Both right-hand sides are polynomials and therefore give the continued
+values at $p=1$, namely $1$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The normalized-edge geometric-mean estimate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The following lemma is the new analytic ingredient.
+
+\begin{lemma}[Geometric mean of endpoint degrees]
+\label{lem:edge-geometric-mean}
+Suppose $p>0$, and put
+\[
+ Z(x,y):=\sqrt{d(x)d(y)}.
+\]
+Then
+\begin{equation}
+ \int_{\Omega^2}W(x,y)Z(x,y)\dd\mu(x)\dd\mu(y)\geq p^2.
+ \label{eq:geometric-mean}
+\end{equation}
+Equivalently, under the edge-biased probability measure
+\[
+ \dd\rho(x,y)=\frac{W(x,y)}p\dd\mu(x)\dd\mu(y),
+\]
+one has $\mathbb E_\rho Z\geq p$.
+\end{lemma}
+
+\begin{proof}
+If $d(x)=0$, then $W(x,y)=0$ for almost every $y$, because $W\geq0$ and
+$d(x)=\int W(x,y)\dd\mu(y)$.  Thus all quotients below may be defined as
+zero when one of their degree denominators vanishes.
+
+Cauchy--Schwarz first gives
+\begin{align*}
+ \int_{\Omega^2}\frac{W(x,y)}{Z(x,y)}\dd\mu(x)\dd\mu(y)
+ &=\int_{\Omega^2}
+   \sqrt{\frac{W(x,y)}{d(x)}}
+   \sqrt{\frac{W(x,y)}{d(y)}}
+   \dd\mu(x)\dd\mu(y)
+ \\
+ &\leq
+ \left(\int_{\Omega^2}\frac{W(x,y)}{d(x)}\dd\mu^2\right)^{1/2}
+ \left(\int_{\Omega^2}\frac{W(x,y)}{d(y)}\dd\mu^2\right)^{1/2}
+ \leq1.
+\end{align*}
+Indeed, the first integral in the product equals
+$\mu\{x:d(x)>0\}\leq1$, and the second is identical after exchanging
+$x$ and $y$.
+
+Apply Cauchy--Schwarz a second time to
+$\sqrt{WZ}$ and $\sqrt{W/Z}$.  The zero-degree observation justifies the
+pointwise factorization on the support of $W$, and hence
+\[
+ p^2
+ =\left(\int_{\Omega^2}W\dd\mu^2\right)^2
+ \leq
+ \left(\int_{\Omega^2}WZ\dd\mu^2\right)
+ \left(\int_{\Omega^2}\frac WZ\dd\mu^2\right)
+ \leq\int_{\Omega^2}WZ\dd\mu^2.
+\]
+This is \eqref{eq:geometric-mean}.
+\end{proof}
+
+\begin{lemma}[Convex book truncation]
+\label{lem:convex-truncation}
+For all integers $n\geq0$ and $m\geq1$, the function
+\[
+ f_{n,m}(z):=z^n\max\{2z-1,0\}^m,
+ \qquad 0\leq z\leq1,
+\]
+where $z^0=1$, is convex and nondecreasing.
+\end{lemma}
+
+\begin{proof}
+The function vanishes on $[0,1/2]$.  On $[1/2,1]$ it is a product of
+$n$ copies of the nonnegative increasing affine factor $z$ and $m$ copies
+of the nonnegative increasing affine factor $2z-1$.  Its first derivative
+is a sum of products of nonnegative factors and positive slopes; its second
+derivative is a sum over ordered pairs of differentiated factors, again
+with only nonnegative factors and positive slopes.  It is therefore
+nondecreasing and convex on $[1/2,1]$.  Its value at $1/2$ is zero and its
+right derivative there is nonnegative (positive when $m=1$, zero when
+$m\geq2$), whereas the left derivative is zero.  The one-sided derivatives
+thus increase across the joining point, proving the assertion on all of
+$[0,1]$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Triangle books with leaves at both spine ends}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Two-root book-edge leaf theorem]
+\label{thm:two-root}
+For every $m,a,b\geq1$ and every graphon $W$ of edge density
+$p\in[1/2,1]$,
+\[
+ \boxed{
+ t(B_{m,a,b},W)
+ \geq p^{a+b+1}(2p-1)^m
+ =\Phi_{B_{m,a,b}}(p).
+ }
+\]
+This is the complete interval required by $\chi(B_{m,a,b})=3$.
+\end{theorem}
+
+\begin{proof}
+The case $p=1$ is treated separately below, so assume first that
+$1/2\leq p<1$.  Integrate out all leaves, and then independently integrate
+out the $m$ page vertices.  With
+\[
+ c(x,y):=\int_\Omega W(x,z)W(y,z)\dd\mu(z),
+\]
+one obtains the exact identity
+\begin{equation}
+ t(B_{m,a,b},W)
+ =\int_{\Omega^2}W(x,y)d(x)^a d(y)^b c(x,y)^m\dd\mu^2.
+ \label{eq:two-root-identity}
+\end{equation}
+For numbers $A,B\in[0,1]$, one has $AB\geq A+B-1$.  Applying this to
+$W(x,z)$ and $W(y,z)$ and integrating in $z$ gives, almost everywhere,
+\[
+ c(x,y)\geq d(x)+d(y)-1.
+\]
+Also $c\geq0$, and arithmetic--geometric mean gives
+\[
+ c(x,y)
+ \geq\max\{d(x)+d(y)-1,0\}
+ \geq\max\{2\sqrt{d(x)d(y)}-1,0\}.
+ \label{eq:common-neighbour-lower}
+\]
+
+The factors $W$ and $c^m$ are symmetric in $x,y$.  Consequently,
+\eqref{eq:two-root-identity} is unchanged if $a$ and $b$ are exchanged,
+and it equals the average of the two resulting integrals.  Since all
+factors are nonnegative, \eqref{eq:common-neighbour-lower} and the
+arithmetic--geometric mean inequality imply, with $n=a+b$ and
+$Z=\sqrt{d(x)d(y)}$,
+\begin{align*}
+ t(B_{m,a,b},W)
+ &\geq\int_{\Omega^2}W(x,y)
+ \frac{d(x)^a d(y)^b+d(x)^b d(y)^a}{2}
+ \max\{2Z-1,0\}^m\dd\mu^2
+ \\
+ &\geq\int_{\Omega^2}W(x,y)
+ (d(x)d(y))^{(a+b)/2}\max\{2Z-1,0\}^m\dd\mu^2
+ \\
+ &=p\,\mathbb E_\rho f_{n,m}(Z).
+\end{align*}
+Lemma~\ref{lem:convex-truncation}, Jensen's inequality,
+Lemma~\ref{lem:edge-geometric-mean}, and monotonicity of $f_{n,m}$ now give
+\[
+ t(B_{m,a,b},W)
+ \geq p f_{n,m}(\mathbb E_\rho Z)
+ \geq p f_{n,m}(p)
+ =p^{n+1}(2p-1)^m.
+\]
+The last expression is the target in \eqref{eq:base-target}.
+
+If $p=1$, then $0\leq W\leq1$ and $\int W=1$ force $W=1$ almost
+everywhere.  Hence $t(B_{m,a,b},W)=1$, which equals the polynomially
+continued target.
+\end{proof}
+
+At the threshold $p=1/2$, the target is zero; no division by this factor or
+by a triangle density occurs.  The proof above remains valid because the
+edge-biased measure is well-defined.  Alternatively, the threshold statement
+follows immediately from nonnegativity of homomorphism densities.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A self-contained conditional cone lemma}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We reproduce the accepted link argument in the exact form needed for the
+new family.  This makes clear why the next result is a conditional theorem,
+not a general universal-vertex closure.
+
+Define the rooted triangle density
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Weighted rooted-triangle inequality]
+\label{lem:weighted-triangle}
+If $p>0$, then for every integer $h\geq0$,
+\[
+ \int_\Omega d(x)^h\tau(x)\dd\mu(x)
+ \geq\frac{2p-1}{p}\int_\Omega d(x)^{h+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $M_j=\int d^j$, let $T_W$ be the integral operator with kernel $W$,
+and set
+\[
+ I_h=\int d^h\tau,
+ \qquad
+ J_h=\ip{d^h}{T_Wd}.
+\]
+The inequality $AB\geq A+B-1$, applied to $W(x,y),W(x,z)$ and
+multiplied by $d(x)^hW(y,z)$, gives
+\begin{equation}
+ I_h\geq2J_h-pM_h.
+ \label{eq:I-J}
+\end{equation}
+Put $U=1-W$, $u=T_U\one=1-d$, and $q=1-p$.  Since
+\[
+ T_Wd=d-q\one+T_Uu,
+\]
+we have
+\begin{equation}
+ J_h=M_{h+1}-qM_h+\ip{d^h}{T_Uu}.
+ \label{eq:J-decomposition}
+\end{equation}
+By symmetry of $U$, twice the difference
+\[
+ \ip{d^h}{T_Uu}-\int d^hu^2
+\]
+equals
+\[
+ \int_{\Omega^2}U(x,y)
+ \bigl(u(y)-u(x)\bigr)
+ \bigl(d(x)^h-d(y)^h\bigr)\dd\mu^2\geq0,
+\]
+because $d=1-u$, so $u$ and $d^h$ are oppositely ordered.  Substitution
+in \eqref{eq:J-decomposition} gives
+\[
+ J_h\geq M_{h+2}-M_{h+1}+pM_h.
+\]
+Together with \eqref{eq:I-J},
+\[
+ I_h\geq2M_{h+2}-2M_{h+1}+pM_h.
+\]
+Finally, subtracting $(2p-1)M_{h+2}/p$ from the right-hand side leaves
+\[
+ \frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+\end{proof}
+
+For $d(x)>0$, define the probability measure
+\[
+ \dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y),
+\]
+and regard $W$ as a graphon $W_x$ on $(\Omega,\mu_x)$.  Its edge density
+is $z_x=\tau(x)/d(x)^2$.  Put $z_x=0$ when $d(x)=0$.  The preceding
+lemma immediately yields, for every integer $N\geq2$,
+\begin{equation}
+ \int_\Omega d(x)^N z_x\dd\mu(x)
+ \geq\left(2-\frac1p\right)\int_\Omega d(x)^N\dd\mu(x).
+ \label{eq:weighted-link-average}
+\end{equation}
+
+\begin{lemma}[Conditional cone lemma]
+\label{lem:conditional-cone}
+Let $F$ have $N\geq2$ vertices, put $\phi(z)=\Phi_F(z)$, and suppose
+that for some $\alpha\in[0,1)$:
+\begin{enumerate}
+\item every graphon $V$ of edge density $z\geq\alpha$ satisfies
+$t(F,V)\geq\phi(z)$;
+\item $\phi\geq0$, $\phi'\geq0$, and $\phi''\geq0$ on $[\alpha,1]$;
+\item $\phi(\alpha)=0$.
+\end{enumerate}
+Then every graphon $W$ of edge density
+\[
+ p\geq\frac1{2-\alpha}
+\]
+satisfies
+\[
+ t(K_1\join F,W)\geq\Phi_{K_1\join F}(p).
+\]
+\end{lemma}
+
+\begin{proof}
+The endpoint $p=1$ is immediate, so assume $p<1$ and put
+$c=2-1/p$.  The density hypothesis is exactly $c\geq\alpha$, and
+$c\leq1$.  Convexity shows that every graphon $V$ of arbitrary edge
+density $z\in[0,1]$ satisfies the global tangent bound
+\[
+ t(F,V)\geq\phi(c)+\phi'(c)(z-c).
+\]
+Indeed, for $z\geq\alpha$ this follows from the assumed graphon bound and
+convexity.  For $z<\alpha$, the tangent is nonpositive: it is at most
+$\phi(\alpha)=0$ at $\alpha$ and has nonnegative slope.  Nonnegativity of
+homomorphism densities handles this second range.
+
+Conditioning on the image of the cone vertex gives the exact identity
+\[
+ t(K_1\join F,W)=\int_\Omega d(x)^N t(F,W_x)\dd\mu(x).
+\]
+There is no division issue on $\{d=0\}$, because its contribution is zero.
+Let $M_N=\int d^N$.  The tangent bound and
+\eqref{eq:weighted-link-average} give
+\begin{align*}
+ t(K_1\join F,W)
+ &\geq M_N\phi(c)
+ +\phi'(c)\left(\int d(x)^Nz_x\dd\mu(x)-cM_N\right)
+ \\
+ &\geq M_N\phi(c)
+ \geq p^N\phi(c),
+\end{align*}
+where the last step is Jensen and uses $\phi(c)\geq0$.
+
+For $q=1-p>0$, one has $1-c=q/p$ and
+$\chi_{K_1\join F}(x)=x\chi_F(x-1)$.  Therefore
+\[
+ p^N\phi(c)
+ =q^N\chi_F\left(\frac pq\right)
+ =q^{N+1}\chi_{K_1\join F}\left(\frac1q\right)
+ =\Phi_{K_1\join F}(p).
+\]
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Cones over the two-root book family}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Two-root book-edge leaf cones]
+\label{thm:cones}
+For every $m,a,b\geq1$ and every graphon $W$ of edge density
+$p\in[2/3,1]$,
+\[
+ \boxed{
+ t(C_{m,a,b},W)
+ \geq p(2p-1)^{a+b+1}(3p-2)^m
+ =\Phi_{C_{m,a,b}}(p).
+ }
+\]
+This is the complete interval required by $\chi(C_{m,a,b})=4$.
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:two-root}, the base $B_{m,a,b}$ has the graphon lower
+bound
+\[
+ \phi_{n,m}(z)=z^{n+1}(2z-1)^m,
+ \qquad n=a+b,
+\]
+throughout $z\geq1/2$.  On $[1/2,1]$, this polynomial is a product of
+$n+1$ copies of the nonnegative increasing affine factor $z$ and $m$
+copies of the nonnegative increasing affine factor $2z-1$.  Its first and
+second derivatives are sums of products of nonnegative factors and
+positive slopes.  Thus $\phi_{n,m}\geq0$, $\phi_{n,m}'\geq0$, and
+$\phi_{n,m}''\geq0$ there, while $\phi_{n,m}(1/2)=0$.
+
+Lemma~\ref{lem:conditional-cone}, with $\alpha=1/2$, applies for
+\[
+ p\geq\frac1{2-1/2}=\frac23.
+\]
+It proves the required graphon inequality.  Formula
+\eqref{eq:cone-target} identifies the exact target.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Endpoints, equality examples, and catalogue consequences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At $p=1/2$, the base target vanishes, and the balanced complete bipartite
+graphon attains equality because $B_{m,a,b}$ contains a triangle.  At $p=2/3$,
+the cone target vanishes, and the balanced complete tripartite graphon
+attains equality because $C_{m,a,b}$ contains a $K_4$.  At $p=1$, the argument
+given above shows that $W=1$ almost everywhere and both sides equal $1$.
+
+More generally, for an integer $k\geq2$, the balanced complete $k$-partite
+graphon $T_k$ has edge density $p=1-1/k$ and satisfies
+\[
+ t(F,T_k)=\frac{\chi_F(k)}{k^{v(F)}}=\Phi_F(p).
+\]
+This applies to $B_{m,a,b}$ for $k\geq2$, and to $C_{m,a,b}$ for $k\geq3$.
+No claim is made here that these are all equality cases.
+
+\begin{corollary}[New positive Atlas cases]
+\label{cor:atlas}
+The following formerly open catalogue rows satisfy the desired inequality
+throughout their complete required intervals:
+\[
+\begin{array}{c|c|c|c|c|c|l}
+\text{Atlas}&\text{graph6}&v&e&\chi&\text{structure}&\Phi_H(p)\\
+\hline
+35&\texttt{Dx\_}&5&5&3&B_{1,1,1}&p^3(2p-1)\\
+93&\texttt{EC\char123 O}&6&6&3&B_{1,1,2}&p^4(2p-1)\\
+112&\texttt{EhX\_}&6&7&3&B_{2,1,1}&p^3(2p-1)^2\\
+180&\texttt{EjtW}&6&10&4&C_{1,1,1}&p(2p-1)^3(3p-2)
+\end{array}
+\]
+Their chromatic polynomials are, respectively,
+\[
+ x(x-1)^3(x-2),
+ \qquad
+ x(x-1)^4(x-2),
+ \qquad
+ x(x-1)^3(x-2)^2,
+ \qquad
+ x(x-1)(x-2)^3(x-3).
+\]
+\end{corollary}
+
+\begin{proof}
+For unambiguous identification, the NetworkX Atlas edge lists are
+\begin{align*}
+35:\quad&
+\{01,02,04,12,23\},\\
+93:\quad&
+\{03,04,14,24,34,35\},\\
+112:\quad&
+\{01,12,14,15,23,24,25\},\\
+180:\quad&
+\{01,04,12,13,14,15,23,34,35,45\}.
+\end{align*}
+In Atlas 35, $012$ is a triangle with one leaf at $0$ and one at $2$.
+In Atlas 93, $034$ is a triangle with one leaf at $3$ and two at $4$.
+In Atlas 112, the edge $12$ is shared by the triangles $124$ and $125$,
+with one leaf at each end of $12$.  Thus Theorem~\ref{thm:two-root}
+applies.  In Atlas 180, vertex $1$ is universal; deleting it leaves a copy
+of $B_{1,1,1}$ on the other five
+vertices, so Theorem~\ref{thm:cones} applies.  The orders, sizes, chromatic
+polynomials, and targets follow from
+\eqref{eq:base-chromatic}--\eqref{eq:cone-target}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Repair of the earlier obstruction and hidden-assumption audit}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The earlier direct attempt for $B_{1,1,1}$ used
+$W(x,z)W(y,z)\geq W(x,z)+W(y,z)-1$ and produced a difference of moments
+with a negative coefficient.  Substituting a lower bound into that negative
+term reverses the useful direction, so that proof cannot be repaired by
+further algebra of the same two moments.
+
+The proof here repairs precisely that step.  It keeps the positive part of
+the common-neighbour estimate, symmetrizes the two rooted degree powers, and
+compresses them to $Z=\sqrt{d(x)d(y)}$.  Lemma
+\ref{lem:edge-geometric-mean} then supplies the missing exact lower bound
+$\mathbb E_\rho Z\geq p$, and the convex function $f_{n,m}$ has no coefficient
+with the wrong sign.
+
+Theorems~\ref{thm:two-root} and \ref{thm:cones} apply directly to arbitrary
+graphons on arbitrary probability spaces.  Quotients on zero-degree sets
+are assigned zero only after proving that $W$ vanishes there almost
+everywhere.  Every integral is of a bounded nonnegative measurable function,
+apart from explicitly integrable normalized quotients.  The proof uses no
+regularity, finite-step representation, finite-graph approximation,
+injective-copy count, minimum-degree condition, pointwise lower bound on
+$d$, or assumption that a conditioning event has positive mass.
+
+The only standard analytic inputs are Tonelli--Fubini, arithmetic--geometric
+mean, Cauchy--Schwarz, and Jensen.  The weighted link mechanism in
+Section~4 is also the conditional cone lemma accepted in
+\texttt{notes/six\_verified\_base\_cones.tex}; it was reproved here in full.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Exact limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The base theorem requires a book of triangles with one common spine edge,
+and every remaining vertex must be a pendant leaf at one of the two spine
+ends; both leaf sets must be nonempty in the catalogue predicate.  It does
+not cover a leaf at a page vertex, a two-edge tail, a tree branching away
+from the book, or attachments to unrelated core graphs.  The cone theorem
+covers only $K_1\join B_{m,a,b}$ and depends on the explicitly verified
+convex target $z^{a+b+1}(2z-1)^m$.  It is not a
+general universal-vertex theorem and proves no arbitrary graph join.
+
+No conclusion is asserted for graphs merely resembling these families, and
+no numerical experiment or finite sampling is used in either proof.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/GeometricMean.lean} together with
+\texttt{lean/Taeyoung/Methods/TwoRoot/\{Core,Rows\}.lean}, ending at
+\texttt{satisfiesLowerBound\_\{35,93,112,180\}}.  It follows this note except at
+one place.
+
+\paragraph{The departure: Lemma~\ref{lem:convex-truncation} is not formalized.}
+This note establishes that $f_{n,m}(z)=z^n\max\{2z-1,0\}^m$ is convex and
+nondecreasing on $[0,1]$, by comparing one-sided derivatives across $z=1/2$, and
+then applies Jensen.  The formalization never mentions convexity, derivatives,
+or \texttt{ConvexOn}.  It instead proves the affine minorant that Jensen would
+have produced, directly:
+\begin{equation}
+ f_{n,m}(p)+f_{n,m}'(p)(w-p)\leq f_{n,m}(w)
+ \qquad\text{for all }w\geq0,\ p\geq1/2,
+ \label{eq:lean-tangent}
+\end{equation}
+as \texttt{TwoRoot.tangent\_trunc}, where $f_{n,m}$ and $f_{n,m}'$ are the
+formal product and product-rule derivative of the root list $1^n2^m$ in
+\texttt{Methods/AffineProduct.lean}.  For $w\geq1/2$ the truncation is inactive
+and \eqref{eq:lean-tangent} is the existing tangent lemma
+\texttt{affineProd\_tangent} for products of nonnegative affine factors.  For
+$w<1/2$ the right-hand side is zero, while the left-hand side is at most its
+value at $w=1/2$, because the slope $f_{n,m}'(p)$ is nonnegative; and that value
+is at most $f_{n,m}(1/2)=0$ by the same tangent lemma.  So the case split on the
+sign of $2w-1$ happens once, pointwise in a lemma about real numbers, and never
+inside an integral.
+
+Integrating \eqref{eq:lean-tangent} against the edge-biased measure needs only
+that the slope is nonnegative and that $\mathbb{E}_\rho[Z]\geq p$, which is
+Lemma~\ref{lem:edge-geometric-mean}.  The result is the same bound this note obtains
+from Jensen.  The two routes agree in strength; the formal one avoids
+\texttt{ConvexOn}, one-sided derivatives, and the second-derivative argument in
+the proof of Lemma~\ref{lem:convex-truncation}, none of which have a convenient
+Mathlib interface for a truncated product.
+
+\paragraph{Everything else transcribes directly.}
+The geometric-mean estimate is
+\texttt{GeometricMean.sq\_le\_integral\_geoIntegrand}, proved by the two
+Cauchy--Schwarz steps of this note, carried out in $[0,\infty]$ so that the
+unbounded quotients $W/d$ need no integrability side condition; the pointwise
+factorizations there hold almost everywhere, and the null set is handled by the
+same argument as in \texttt{notes/whiskering.tex}.  The two-vertex page bound
+$H_0\geq d(x)+d(y)-1$ is \texttt{Link.le\_pageOp\_zero} and the
+arithmetic--geometric mean step is \texttt{GeometricMean.two\_mul\_geoMean\_le}.
+The symmetrization for $a\neq b$, needed only for Atlas 93, is
+\texttt{MeasureTheory.integral\_prod\_swap} followed by
+$d(x)d(y)^2+d(x)^2d(y)=Z^2(d(x)+d(y))\geq2Z^3$.  The cone (Atlas 180) uses the
+already-formalized conditional cone lemma rather than the reproved version in
+Section~4 of this note.
+
+\end{document}

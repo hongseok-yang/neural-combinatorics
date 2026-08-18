@@ -1,0 +1,489 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Atlas 160: A Weighted $K_4$ Supporting Plane}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $H$ be obtained from $K_4$ by adjoining a vertex on one clique edge
+and then attaching a pendant leaf to that new vertex.  We prove, for every
+graphon of edge density $p\in[2/3,1]$,
+\[
+ t(H,W)\ge p^2(2p-1)^2(3p-2).
+\]
+This is the exact chromatic target and the full required interval.  An
+elementary two-factor inequality reduces the graph to the signed expression
+$2t(J,W)-p\,t(K_4,W)$, where $J$ is $K_4$ with a two-edge tail.  We prove the
+needed strengthening of the earlier $J$ bound directly.  After conditioning
+at the tail-bearing clique vertex, upper and lower triangle estimates in its
+link give a piecewise scalar function of $d$ and $A=T_Wd$.  A sharp
+supporting plane integrates exactly because $\int A=\int d^2$.  All
+remaining signs are certified by explicit rational Bernstein expansions.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph, target, and graph reduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and
+\[
+ A(x)=(T_Wd)(x)=\int_\Omega W(x,y)d(y)\dd\mu(y).
+\]
+
+Take clique vertices $0,1,2,3$, a page vertex $z$, and a leaf $u$.
+The graph $H$ has all six edges of the $K_4$, the edges $1z,2z$, and
+$zu$.  Its chromatic polynomial and target are
+\begin{align}
+ \chi_H(x)&=x(x-1)^2(x-2)^2(x-3),\label{eq:chromatic}\\
+ \Phi_H(p)&=p^2(2p-1)^2(3p-2).\label{eq:target}
+\end{align}
+Indeed, after colouring the $K_4$, the page has $x-2$ choices and the leaf
+has $x-1$ choices.  Thus $\chi(H)=4$ and the required interval is
+$p\in[2/3,1]$.
+
+For $x,y\in\Omega$, put
+\[
+ B(x,y)=\int_\Omega W(x,z)W(y,z)d(z)\dd\mu(z).
+\]
+Let $\kappa_4(x_0,x_1,x_2,x_3)$ be the product of the six clique-edge
+factors.  Integrating first over $u$ and $z$ gives
+\[
+ t(H,W)=\int_{\Omega^4}\kappa_4 B(x_1,x_2)\dd\mu^4.
+\]
+The identity
+\[
+ rs=r+s-1+(1-r)(1-s)
+\]
+and nonnegativity imply
+\[
+ B(x,y)\ge A(x)+A(y)-p.
+\]
+Consequently, by symmetry among the four clique coordinates,
+\begin{equation}
+ t(H,W)\ge 2J-p t_4,
+ \label{eq:graph-reduction}
+\end{equation}
+where $t_4=t(K_4,W)$ and
+\[
+ J=\int_{\Omega^4}\kappa_4 A(x_1)\dd\mu^4.
+\]
+The latter is the density of $K_4$ with an otherwise disjoint path of
+length two attached at one clique vertex.  The bound for $J$ alone from the
+earlier $K_4$ two-edge-tail theorem is not enough in
+\eqref{eq:graph-reduction}; the signed combination must be kept intact.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The rooted scalar reduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define the rooted triangle density
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+When $d(x)>0$, let
+\[
+ \dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y)
+\]
+and regard $W$ as a graphon $W_x$ on this probability space.  Its edge
+density is
+\[
+ z_x=\frac{\tau(x)}{d(x)^2}.
+\]
+Rooting the $K_4$ at the vertex carrying the $A$ weight gives the exact
+identity
+\begin{equation}
+ 2J-pt_4
+ =\int_\Omega d(x)^3(2A(x)-p)t(K_3,W_x)\dd\mu(x).
+ \label{eq:rooted-identity}
+\end{equation}
+
+We use three elementary facts.  First, triangle Goodman says that a graphon
+of edge density $z$ has triangle density at least
+\[
+ f(z)=z(2z-1)_+.
+\]
+This function is nondecreasing.  Second,
+\begin{equation}
+ \tau(x)\ge(2A(x)-p)_+.
+ \label{eq:tau-lower}
+\end{equation}
+Indeed, apply $rs\ge r+s-1$ to $W(x,y),W(x,z)$ and multiply by
+$W(y,z)$.  Third, every triangle density is at most $1$.
+
+For $d>0$, put $s=2a-p$ and define
+\begin{equation}
+ \mathcal F_p(d,a)=
+ \begin{cases}
+  d^3s,&s<0,\\[2pt]
+  0,&0\le s\le d^2/2,\\[2pt]
+  \dfrac{s^2(2s-d^2)}d,&s\ge d^2/2.
+ \end{cases}
+ \label{eq:F}
+\end{equation}
+At $d=0$, set $\mathcal F_p(0,0)=0$.  If $s<0$, the upper bound
+$t(K_3,W_x)\le1$ reverses in the correct direction after multiplication by
+$s$.  If $0\le s\le d^2/2$, nonnegativity suffices.  In the last region,
+\eqref{eq:tau-lower}, monotonicity of $f$, and Goodman give
+\[
+ d^3s\,t(K_3,W_x)
+ \ge d^3s f(s/d^2)
+ =\frac{s^2(2s-d^2)}d.
+\]
+The actual rooted variables satisfy $s\le d^2$ whenever $s\ge0$, since
+$\tau\le d^2$; hence the argument of $f$ lies in $[0,1]$.
+Thus \eqref{eq:rooted-identity} implies
+\begin{equation}
+ 2J-pt_4\ge\int_\Omega\mathcal F_p(d(x),A(x))\dd\mu(x).
+ \label{eq:scalar-reduction}
+\end{equation}
+
+The coarse feasible information that will make the supporting plane
+integrate is
+\begin{equation}
+ 0\le A(x)\le d(x),
+ \qquad A(x)\ge d(x)+p-1,
+ \label{eq:region}
+\end{equation}
+and
+\begin{equation}
+ \int d=p,
+ \qquad \int A=\int d^2.
+ \label{eq:moments}
+\end{equation}
+For the lower pointwise bound in \eqref{eq:region}, apply
+$rs\ge r+s-1$ to $W(x,y),d(y)$ and integrate.  The moment identity follows
+from symmetry and Tonelli.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The supporting plane}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Put
+\begin{align}
+ T_p&=p^2(2p-1)^2(3p-2),\label{eq:T}\\
+ \gamma_p&=4p(2p-1)(5p-3),\label{eq:gamma}\\
+ \beta_p&=p(2p-1)(30p^2-15p-2),\label{eq:beta}
+\end{align}
+and define
+\begin{equation}
+ L_p(d,a)=T_p+\beta_p(d-p)+\gamma_p(a-d^2).
+ \label{eq:L}
+\end{equation}
+These are exactly the value and the derivatives, in coordinates
+$(d,a-d^2)$, of the active expression in \eqref{eq:F} at
+$(d,a)=(p,p^2)$.
+
+\begin{lemma}[Sharp scalar support]\label{lem:scalar}
+Let $p\in[2/3,1]$.  If $0\le d\le1$ and
+\[
+ \max\{0,d+p-1\}\le a\le d,
+\]
+then, on every portion of the region relevant to \eqref{eq:F},
+\begin{equation}
+ \mathcal F_p(d,a)\ge L_p(d,a).
+ \label{eq:support}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $d=0$, feasibility gives $a=0$ and
+\[
+ L_p(0,0)=-4p^2(2p-1)(6p^2-2p-1)\le0.
+\]
+Assume $d>0$.  Notice that $\gamma_p>0$.
+
+We first handle $a<p/2$.  Here the scalar lower bound is
+$d^3(2a-p)$.  Its difference from $L_p(d,a)$ is affine in $a$ on the
+interval
+\[
+ \max\{0,d+p-1\}\le a\le\min\{d,p/2\}.
+\]
+It is therefore enough to check the four possible boundary faces
+\[
+ a=0,\qquad a=d+p-1,\qquad a=d,\qquad a=p/2.
+\]
+Write $p=(u+2)/3$, with $0\le u\le1$, and parameterize their respective
+$d$ intervals by
+\[
+ d=(1-p)v,quad
+ d=1-p+\frac p2v,quad
+ d=\frac p2v,quad
+ d=\frac p2+(1-p)v,qquad 0\le v\le1.
+\]
+In the native tensor-product Bernstein bases, the four residuals have the
+following integer coefficient matrices after multiplication by the positive
+denominators displayed on the left:
+\[
+\begin{array}{c|c}
+7290&
+\begin{pmatrix}
+1440&1200&1040&780\\
+4032&3420&2976&2610\\
+9828&8595&7614&6858\\
+21708&19764&18036&16524\\
+44712&42606&40500&38394\\
+87480&87480&87480&87480
+\end{pmatrix}
+\\[18pt]
+116640&
+\begin{pmatrix}
+12480&7200&2560&0&3840\\
+41760&29304&18144&9648&9216\\
+109728&80406&54396&32724&22032\\
+264384&197640&139050&88857&55080\\
+614304&468504&341172&231093&147744\\
+1399680&1093500&826200&594135&408240
+\end{pmatrix}
+\\[18pt]
+116640&
+\begin{pmatrix}
+23040&17280&12160&6960&3840\\
+64512&48816&34848&21600&12096\\
+157248&119880&86688&56268&32832\\
+347328&266814&195588&131706&81000\\
+715392&554040&412128&286983&186624\\
+1399680&1093500&826200&594135&408240
+\end{pmatrix}
+\\[18pt]
+4860&
+\begin{pmatrix}
+160&80&160\\
+504&276&384\\
+1368&891&918\\
+3375&2619&2295\\
+7776&6966&6156\\
+17010&17010&17010
+\end{pmatrix}.
+\end{array}
+\]
+Every coefficient is nonnegative.  Since the Bernstein basis functions are
+nonnegative and sum to one, all four boundary residuals are nonnegative.
+Affineness in $a$ proves the whole negative-coefficient region.
+
+Now put
+\[
+ a_0=\frac p2+\frac{d^2}{4}.
+\]
+At this switching point, direct expansion gives
+\begin{equation}
+ -L_p(d,a_0)=p(2p-1)S_p(d),
+ \label{eq:switch}
+\end{equation}
+where
+\[
+ S_p(d)=(15p-9)d^2+(-30p^2+15p+2)d
+          +24p^3-18p^2+2p.
+\]
+Its leading coefficient is positive, while
+\[
+ \operatorname{disc}_d S_p
+ =-(3p-2)^2(60p^2-36p-1)\le0.
+\]
+The last factor is positive at $p=2/3$ and increasing thereafter.  Hence
+$S_p(d)\ge0$.  Since $L_p$ is increasing in $a$, this proves
+$0\ge L_p(d,a)$ throughout $p/2\le a\le a_0$, which is the middle region
+of \eqref{eq:F}.
+
+It remains to treat $a\ge a_0$.  Let
+\[
+ G_{p,d}(a)=d\bigl(\mathcal F_p(d,a)-L_p(d,a)\bigr),
+\]
+using the active expression from \eqref{eq:F}.  This is a cubic in $a$ with
+positive leading coefficient.  Exact calculation gives
+\begin{equation}
+ \operatorname{disc}_aG_{p,d}
+ =-256d^2p(d-p)^2(2p-1)K(p,d),
+ \label{eq:active-disc}
+\end{equation}
+where
+\begin{align*}
+K(p,d)={}&-20d^5p+12d^5-10d^4p^2+9d^4p-2d^4
+ -24d^3p^3+24d^3p^2-6d^3p\\
+&+17912d^2p^4-30476d^2p^3+17222d^2p^2-3231d^2p\\
+&-23552dp^5+34064dp^4-12080dp^3-1908dp^2+1188dp\\
+&+31104p^6-62208p^5+46008p^4-15228p^3+2160p^2-108p.
+\end{align*}
+To certify its sign, put $p=(u+2)/3$ and $d=v$.  In the degree-$(6,5)$
+tensor-product Bernstein basis,
+\[
+ K((u+2)/3,v)=\frac1{72900}
+ \sum_{i=0}^6\sum_{j=0}^5M_{ij}B_i^6(u)B_j^5(v),
+\]
+where
+\[
+M=\begin{pmatrix}
+194400&76800&20940&23580&75000&61800\\
+729000&326480&117745&97125&248960&369400\\
+2468880&1239888&554634&403722&763176&1335240\\
+7479540&4182732&2230929&1609389&2283120&3856680\\
+20586960&12747888&7847280&5863104&6746328&9999720\\
+52488000&35630280&24545025&19200645&19530720&24931800\\
+125971200&92612160&69655950&57058830&54733320&61965000
+\end{pmatrix}.
+\]
+Every entry is positive, so $K(p,d)>0$ on the entire unit box.
+
+If $d\ne p$, equation \eqref{eq:active-disc} says that the cubic has
+exactly one real root.  Equation \eqref{eq:switch} is strict in this case:
+for $p>2/3$ the quadratic discriminant is negative, while at $p=2/3$,
+\[
+ S_{2/3}(d)=\frac{(3d-2)^2}{9},
+\]
+whose only zero is $d=p$.  Thus $G_{p,d}(a_0)>0$.  A real cubic with
+positive leading coefficient and exactly one real root is positive to the
+right of that root, so $G_{p,d}(a)>0$ for every $a\ge a_0$.
+
+If $d=p$, direct factorization gives instead
+\[
+ G_{p,p}(a)=4(a-p^2)^2(4a+7p^2-6p).
+\]
+At $a\ge a_0$, the last factor is at least $4p(2p-1)>0$.  Hence this
+expression is nonnegative too.  Division by $d>0$ completes the active
+case and the proof.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graphon theorem and Atlas identification}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Atlas 160]\label{thm:main}
+Every graphon $W$ of edge density $p\in[2/3,1]$ satisfies
+\[
+ \boxed{
+ t(H,W)\ge p^2(2p-1)^2(3p-2)=\Phi_H(p).
+ }
+\]
+Thus NetworkX Atlas graph $160$, with graph6 code \texttt{E\char126 @g},
+is positive on its complete required interval.
+\end{theorem}
+
+\begin{proof}
+Combine \eqref{eq:graph-reduction}, \eqref{eq:scalar-reduction}, and
+Lemma~\ref{lem:scalar}, then use \eqref{eq:moments}:
+\begin{align*}
+ t(H,W)
+ &\ge\int\mathcal F_p(d,A)\\
+ &\ge T_p+\beta_p\left(\int d-p\right)
+       +\gamma_p\left(\int A-\int d^2\right)\\
+ &=T_p.
+\end{align*}
+Equation \eqref{eq:target} identifies this with the chromatic target.
+\end{proof}
+
+At $p=2/3$ the target vanishes, and at $p=1$ the graphon is $1$ almost
+everywhere.  The proof nevertheless includes both endpoints.  Every
+integrand is a bounded measurable finite product, so Tonelli--Fubini applies
+on an arbitrary probability space.  Zero-degree fibres are handled before
+division.  No regularity, minimum-degree, finite-step, or injectivity
+hypothesis is used.
+
+The graph identification, chromatic target, graph reduction, supporting
+plane, discriminants, factorizations, and all $144$ displayed Bernstein
+coefficients are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_atlas160_k4_paw_edge_supporting_plane.py
+\end{verbatim}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Theorem~\ref{thm:main} is formalized in full, on $p\in[2/3,1]$, so the closing
+sentence above is superseded.  The development is
+\texttt{lean/Taeyoung/Methods/Atlas160/}, the catalogue theorem is
+\texttt{satisfiesLowerBound\_160}, and every declaration depends on exactly
+\texttt{[propext, Classical.choice, Quot.sound]}.  Atlas $160$ is
+\texttt{verified}.
+
+Sections~1 and~2 are followed as written.  Lemma~\ref{lem:scalar} is not: of
+the $144$ Bernstein coefficients it rests on, the formalization uses $42$, and
+those only on one face.
+
+\subsection{The active region is one factorization}
+
+The discriminant \eqref{eq:active-disc}, the $7\times6$ integer matrix
+certifying $K(p,d)>0$, and the argument that a real cubic with positive leading
+coefficient and a single real root is positive to the right of it, are all
+replaced.  In the coordinate $w=4a-2p-d^{2}$ the cubic is factored explicitly:
+with $M=11p-6$ and
+\[
+ R=2d(3p^{2}-7p+3)+p(27p^{2}-26p+6),
+\]
+\[
+ M^{3}\cdot4\bigl(s^{2}w-d\,L_p\bigr)
+ =(Mw-R)^{2}\bigl(Mw+2R+2Md^{2}\bigr)
+ +M(d-p)^{2}\,\mathrm{LIN}\cdot w
+ +(d-p)^{2}\,\mathrm{CON},
+\]
+a polynomial identity, where $R/M$ is the tangent line at $d=p$ of the double
+root of \eqref{eq:switch}.  The two remainder coefficients are nonnegative for
+elementary reasons: $\mathrm{LIN}=\bigl(Md+23p^{2}-34p+12\bigr)^{2}
++2(829p^{4}-1324p^{3}+646p^{2}-60p-18)$ is a square plus a quartic in $p$
+alone, and $\mathrm{CON}=Ad^{2}+Bd+C$ has $A\leq0$, so $d^{2}\leq d$ and then
+$d\geq p/2$ reduce it to $(A+B)p/2+C$, again a polynomial in $p$ alone.  Every
+one-variable fact left over has all coefficients nonnegative after
+$p=2/3+u$.
+
+This is the same device that carries the $K_4$ two-edge-tail row in
+\texttt{Methods/K4Tail/Scalar.lean}; only the coefficients differ.
+
+\subsection{The negative region needs two faces, not four}
+
+The residual $d^{3}s-L_p$ is affine in $a$ with slope $2d^{3}-\gamma_p$, and the
+feasible interval \eqref{eq:region} supplies both $a\leq p/2$ and
+$a\geq d+p-1$.  So the face $a=p/2$ settles the slope-nonpositive case and the
+face $a=d+p-1$ the slope-nonnegative one; the faces $a=0$ and $a=d$ are never
+needed.
+
+The first face is $p(2p-1)Q_1(d)$ with $Q_1$ a quadratic of positive leading
+coefficient and nonpositive discriminant, so no certificate is required.  Only
+the second needs one, and the slope hypothesis confines it: $2d^{3}\geq\gamma_p$
+forces $d\geq1/2$ and $p\leq5/6$, and on that box a degree-$(6,5)$ Bernstein
+expansion has all $42$ coefficients positive.  On the full box the same
+expansion does not, because $d^{3}s-L_p$ vanishes at $(p,d)=(1,1)$ --- a corner
+the slope hypothesis excludes.
+
+\subsection{Two pointwise facts the note leaves implicit}
+
+The reduction \eqref{eq:graph-reduction} is carried out with only two
+coordinates moving.  Peeling the leaf and the page from the six-fold integral
+leaves $\iint \mathrm{pairK}(a_0,a_1)\,B(a_0,a_1)$, where $\mathrm{pairK}$ is
+the $K_4$ weight with the two page-bearing coordinates fixed; it is nonnegative
+and symmetric, so the monotonicity step is a two-level \texttt{integral\_mono}
+and the identification of the two tail placements is one Fubini swap rather
+than a relabelling of a four-fold integral.
+
+Two estimates on $\kappa_4$ are used that the note states only in passing.  The
+$s<0$ branch of \eqref{eq:F} needs $\kappa_4(x)\leq d(x)^{3}$, which is
+$t(K_3,W_x)\leq1$ off the degenerate set and the almost-everywhere vanishing of
+$W(x,\cdot)$ on it; and the lower feasibility bound of \eqref{eq:region} is
+$(1-W(x,y))(1-d(y))\geq0$ integrated.  Both are proved, so the degenerate
+fibres need no convention.
+
+\end{document}

@@ -1,0 +1,576 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+\begin{document}
+
+\section{Closure under full whiskering}
+
+For a finite graph $H$ and $0\le p<1$, define
+\[
+    \Phi_H(p)
+    :=
+    (1-p)^{v(H)}
+    \chi_H\!\left(\frac{1}{1-p}\right).
+\]
+Since $\chi_H$ is monic of degree $v(H)$, the right-hand side is
+a polynomial in $1-p$, and therefore extends continuously to $p=1$.
+We use this continuous extension when $p=1$.
+
+Throughout, a graphon means a symmetric, jointly measurable function
+$W:\Omega^2\to[0,1]$ on an arbitrary probability space
+$(\Omega,\mathcal A,\mu)$.  Write
+\[
+    p=t(K_2,W)
+      =
+      \int_{\Omega^2}W(x,y)\,d\mu(x)d\mu(y)
+\]
+and
+\[
+    d_W(x):=\int_\Omega W(x,y)\,d\mu(y)
+\]
+for its degree function.
+
+\begin{definition}[Full whiskering]
+Let $F$ be a finite graph with vertex set $V(F)$.
+The \emph{full whiskering} of $F$, denoted by $\operatorname{Wh}(F)$,
+is obtained by adjoining, for each $v\in V(F)$, a new vertex $v'$
+and the single new edge $vv'$.
+Thus the newly added vertices are pairwise distinct and each of them
+has degree one.
+
+If $n=v(F)$, then
+\[
+    v(\operatorname{Wh}(F))=2n.
+\]
+\end{definition}
+
+We first record the elementary path inequality needed in the proof.
+
+\begin{lemma}\label{lem:P4}
+Let $W$ be a graphon of edge density $p$. Let $P_4$ denote the path
+on four vertices, hence with three edges. Then
+\[
+    t(P_4,W)\ge p^3.
+\]
+Equivalently,
+\[
+    \int_{\Omega^2}
+        W(x,y)d_W(x)d_W(y)\,d\mu(x)d\mu(y)
+    \ge p^3.
+\]
+\end{lemma}
+
+\begin{proof}
+Write $d=d_W$. Since $W\ge0$, if $d(x)=0$, then
+\[
+    W(x,y)=0
+\]
+for almost every $y$.  Tonelli and symmetry therefore show that the
+set of pairs $(x,y)$ for which $W(x,y)>0$ but $d(x)d(y)=0$ has
+$(\mu\otimes\mu)$-measure zero.  Hence, with the convention that
+quotients by $d(x)=0$ are set equal to zero, we have almost everywhere
+\[
+\begin{aligned}
+    W(x,y)
+    &=
+    \bigl(W(x,y)d(x)d(y)\bigr)^{1/3}
+    \left(\frac{W(x,y)}{d(x)}\right)^{1/3}
+    \left(\frac{W(x,y)}{d(y)}\right)^{1/3}.
+\end{aligned}
+\]
+H\"older's inequality therefore gives
+\[
+\begin{aligned}
+    p^3
+    &=
+    \left(\int_{\Omega^2}W(x,y)\,d\mu(x)d\mu(y)\right)^3
+    \\
+    &\le
+    \left(
+      \int_{\Omega^2}
+      W(x,y)d(x)d(y)\,d\mu(x)d\mu(y)
+    \right)
+    \left(
+      \int_{\Omega^2}
+      \frac{W(x,y)}{d(x)}\,d\mu(x)d\mu(y)
+    \right)
+    \left(
+      \int_{\Omega^2}
+      \frac{W(x,y)}{d(y)}\,d\mu(x)d\mu(y)
+    \right).
+\end{aligned}
+\]
+For the second factor,
+\[
+\begin{aligned}
+    \int_{\Omega^2}
+      \frac{W(x,y)}{d(x)}\,d\mu(x)d\mu(y)
+    &=
+    \int_{\{x:d(x)>0\}}
+       \frac{1}{d(x)}
+       \left(\int_\Omega W(x,y)\,d\mu(y)\right)\,d\mu(x)
+    \\
+    &=
+    \mu\{x:d(x)>0\}
+    \le 1.
+\end{aligned}
+\]
+The third factor is bounded by $1$ in the same way. Hence
+\[
+    p^3
+    \le
+    \int_{\Omega^2}
+      W(x,y)d(x)d(y)\,d\mu(x)d\mu(y).
+\]
+Finally, integrating the two endpoints of a three-edge path first gives
+\[
+    t(P_4,W)
+    =
+    \int_{\Omega^2}
+      W(x,y)d(x)d(y)\,d\mu(x)d\mu(y),
+\]
+which proves the claim.
+\end{proof}
+
+The key observation is that full whiskering naturally changes the
+underlying vertex measure to the degree-biased measure.
+
+\begin{theorem}[Full-whiskering closure]\label{thm:whiskering}
+Let $F$ be a finite graph with
+\[
+    n=v(F),
+\]
+and let $p_0>0$. Assume the following two properties.
+
+\begin{enumerate}
+    \item For every graphon $V$ on every probability space whose edge
+    density $s$ satisfies
+    \[
+        s\in[p_0,1],
+    \]
+    one has
+    \[
+        t(F,V)\ge \Phi_F(s).
+    \]
+
+    \item The function
+    \[
+        s\longmapsto \Phi_F(s)
+    \]
+    is nondecreasing on $[p_0,1]$.
+\end{enumerate}
+
+Then, for every graphon $W$ of edge density
+\[
+    p=t(K_2,W)\ge p_0,
+\]
+one has
+\[
+    t(\operatorname{Wh}(F),W)
+    \ge
+    \Phi_{\operatorname{Wh}(F)}(p).
+\]
+More precisely,
+\[
+    t(\operatorname{Wh}(F),W)
+    \ge
+    p^n\Phi_F(p),
+\]
+and
+\[
+    \Phi_{\operatorname{Wh}(F)}(p)
+    =
+    p^n\Phi_F(p).
+\]
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+    d(x):=d_W(x)=\int_\Omega W(x,y)\,d\mu(y).
+\]
+Since
+\[
+    \int_\Omega d(x)\,d\mu(x)=p>0,
+\]
+the formula
+\[
+    d\nu(x):=\frac{d(x)}{p}\,d\mu(x)
+\]
+defines a probability measure on $(\Omega,\mathcal A)$.
+
+Let $V(F)=\{1,\dots,n\}$. In the homomorphism-density integral for
+$\operatorname{Wh}(F)$, integrate first over the $n$ newly added leaves.
+For a fixed value $x_i$ of the original vertex $i$, its private leaf
+contributes the factor
+\[
+    \int_\Omega W(x_i,y)\,d\mu(y)=d(x_i).
+\]
+Consequently,
+\[
+\begin{aligned}
+    t(\operatorname{Wh}(F),W)
+    &=
+    \int_{\Omega^n}
+       \left(
+         \prod_{ij\in E(F)}W(x_i,x_j)
+       \right)
+       \left(
+         \prod_{i=1}^n d(x_i)
+       \right)
+       d\mu(x_1)\cdots d\mu(x_n)
+    \\
+    &=
+    p^n
+    \int_{\Omega^n}
+       \prod_{ij\in E(F)}W(x_i,x_j)
+       \,d\nu(x_1)\cdots d\nu(x_n).
+\end{aligned}
+\]
+Define
+\[
+    t_\nu(F,W)
+    :=
+    \int_{\Omega^{V(F)}}
+       \prod_{ij\in E(F)}W(x_i,x_j)
+       \prod_{i\in V(F)}d\nu(x_i).
+\]
+Thus
+\begin{equation}\label{eq:whisker-weighted}
+    t(\operatorname{Wh}(F),W)
+    =
+    p^n t_\nu(F,W).
+\end{equation}
+
+We next compute the edge density of $W$ with respect to the
+probability measure $\nu$. Put
+\[
+    p_\nu
+    :=
+    \int_{\Omega^2}W(x,y)\,d\nu(x)d\nu(y).
+\]
+Then
+\[
+\begin{aligned}
+    p_\nu
+    &=
+    \frac{1}{p^2}
+    \int_{\Omega^2}
+       W(x,y)d(x)d(y)\,d\mu(x)d\mu(y)
+    \\
+    &=
+    \frac{t(P_4,W)}{p^2}.
+\end{aligned}
+\]
+By Lemma~\ref{lem:P4},
+\[
+    t(P_4,W)\ge p^3,
+\]
+and hence
+\begin{equation}\label{eq:pnu-ge-p}
+    p_\nu\ge p.
+\end{equation}
+In particular,
+\[
+    1\ge p_\nu\ge p\ge p_0,
+\]
+where $p_\nu\le1$ follows from $0\le W\le1$ and the fact that $\nu$
+is a probability measure.
+
+The same measurable kernel $W$ is a graphon on the probability space
+$(\Omega,\mathcal A,\nu)$: changing the measure does not alter its
+measurability, symmetry, or pointwise range.  Its edge density on this
+space is $p_\nu$, and its $F$-density is exactly $t_\nu(F,W)$.
+The arbitrary-probability-space hypothesis for $F$ therefore applies
+directly and gives
+\[
+    t_\nu(F,W)
+    \ge
+    \Phi_F(p_\nu).
+\]
+Since $\Phi_F$ is nondecreasing on $[p_0,1]$ and
+$p_\nu\ge p$, we obtain
+\[
+    t_\nu(F,W)
+    \ge
+    \Phi_F(p_\nu)
+    \ge
+    \Phi_F(p).
+\]
+Together with \eqref{eq:whisker-weighted}, this yields
+\begin{equation}\label{eq:whisker-main}
+    t(\operatorname{Wh}(F),W)
+    \ge
+    p^n\Phi_F(p).
+\end{equation}
+
+It remains to identify the right-hand side with the chromatic-polynomial
+target for $\operatorname{Wh}(F)$.
+
+Fix a positive integer $k$. Once a proper $k$-colouring of $F$ has
+been chosen, each newly added leaf has exactly $k-1$ available colours,
+independently of all other leaves. Hence
+\[
+    \chi_{\operatorname{Wh}(F)}(k)
+    =
+    \chi_F(k)(k-1)^n.
+\]
+Since this holds for every positive integer $k$, it is a polynomial
+identity:
+\begin{equation}\label{eq:whisker-chromatic}
+    \chi_{\operatorname{Wh}(F)}(x)
+    =
+    \chi_F(x)(x-1)^n.
+\end{equation}
+
+Put
+\[
+    q:=1-p.
+\]
+For $p<1$, using
+$v(\operatorname{Wh}(F))=2n$ and
+\eqref{eq:whisker-chromatic}, we obtain
+\[
+\begin{aligned}
+    \Phi_{\operatorname{Wh}(F)}(p)
+    &=
+    q^{2n}
+    \chi_{\operatorname{Wh}(F)}(q^{-1})
+    \\
+    &=
+    q^{2n}
+    \chi_F(q^{-1})
+    (q^{-1}-1)^n
+    \\
+    &=
+    q^{2n}
+    \chi_F(q^{-1})
+    \left(\frac{p}{q}\right)^n
+    \\
+    &=
+    p^n q^n \chi_F(q^{-1})
+    \\
+    &=
+    p^n\Phi_F(p).
+\end{aligned}
+\]
+The same identity holds at $p=1$ by continuity. Combining this with
+\eqref{eq:whisker-main} gives
+\[
+    t(\operatorname{Wh}(F),W)
+    \ge
+    \Phi_{\operatorname{Wh}(F)}(p),
+\]
+as required.
+\end{proof}
+
+\begin{corollary}[Preservation of the chromatic threshold]
+Let $F$ be a graph with
+\[
+    r:=\chi(F)\ge3.
+\]
+Assume that
+\[
+    t(F,W)\ge\Phi_F(p)
+\]
+for every graphon $W$ with
+\[
+    p=t(K_2,W)\ge 1-\frac1{r-1},
+\]
+and assume that $\Phi_F$ is nondecreasing on
+\[
+    \left[1-\frac1{r-1},1\right].
+\]
+Then
+\[
+    t(\operatorname{Wh}(F),W)
+    \ge
+    \Phi_{\operatorname{Wh}(F)}(p)
+\]
+for every graphon $W$ with
+\[
+    p\ge1-\frac1{r-1}.
+\]
+Moreover,
+\[
+    \chi(\operatorname{Wh}(F))=\chi(F)=r.
+\]
+Thus full whiskering preserves both the Goodman-type inequality and
+the required threshold $p\ge1-1/(\chi(F)-1)$.
+\end{corollary}
+
+\begin{proof}
+The density inequality follows from
+Theorem~\ref{thm:whiskering} with
+\[
+    p_0=1-\frac1{r-1}>0.
+\]
+
+Since $F$ is a subgraph of $\operatorname{Wh}(F)$,
+\[
+    \chi(\operatorname{Wh}(F))\ge\chi(F)=r.
+\]
+Conversely, take any proper $r$-colouring of $F$. Since $r\ge2$, each
+new leaf can be assigned any colour different from the colour of its
+unique neighbour. Hence this colouring extends to a proper $r$-colouring
+of $\operatorname{Wh}(F)$, so
+\[
+    \chi(\operatorname{Wh}(F))\le r.
+\]
+Therefore
+\[
+    \chi(\operatorname{Wh}(F))=r.
+\]
+\end{proof}
+
+\begin{corollary}[Atlas 94]\label{cor:atlas94}
+NetworkX Atlas graph $94$, with graph6 code \texttt{E@dW}, is positive:
+for every graphon $W$ of edge density $p\in[1/2,1]$,
+\[
+  t(F_{94},W)\geq p^4(2p-1)=\Phi_{F_{94}}(p).
+\]
+Its order, size, and chromatic number are respectively $6$, $6$, and $3$,
+and
+\[
+  \chi_{F_{94}}(x)=x(x-1)^4(x-2).
+\]
+\end{corollary}
+
+\begin{proof}
+Let $F=K_3$.  The accepted triangle (equivalently, length-three
+odd-cycle) bound states that, on every probability space,
+\[
+  t(K_3,W)\geq p(2p-1)=\Phi_{K_3}(p)
+  \qquad (1/2\leq p\leq1).
+\]
+The polynomial $p(2p-1)$ is nonnegative and strictly increasing on
+$[1/2,1]$, since its derivative is $4p-1>0$ there.  Thus
+Theorem~\ref{thm:whiskering} applies with $n=3$ and $p_0=1/2$.
+
+In the labelling with triangle edges $01,02,12$ and private leaf edges
+$03,14,25$, the result is $\operatorname{Wh}(K_3)$.  Atlas 94 has
+NetworkX edge list
+\[
+  04,\ 15,\ 23,\ 34,\ 35,\ 45.
+\]
+The relabelling
+\[
+  0\mapsto4,\quad 1\mapsto3,\quad 2\mapsto5,\quad
+  3\mapsto0,\quad 4\mapsto2,\quad 5\mapsto1
+\]
+carries the first edge list to the second.  Hence Atlas 94 is exactly
+the full whiskering of the triangle.  The chromatic identity gives
+\[
+  \chi_{F_{94}}(x)
+  =x(x-1)(x-2)(x-1)^3
+  =x(x-1)^4(x-2),
+\]
+and the density and target identities give
+\[
+  t(F_{94},W)\geq p^3\Phi_{K_3}(p)=p^4(2p-1)
+  =\Phi_{F_{94}}(p).
+\]
+At $p=1/2$, the target vanishes (and the balanced bipartite graphon
+gives equality because the graph contains a triangle).  At $p=1$,
+$W=1$ almost everywhere and both sides equal $1$.
+\end{proof}
+
+This is exhaustive for the scoped Atlas catalogue on at most six
+vertices.  A full whiskering in that range has a base of order at most
+three.  If its result is non-bipartite, then the base is non-bipartite;
+among graphs of order at most three this forces a triangle component.
+Any additional isolated base vertex would become an excluded isolated
+edge component.  Thus $K_3$ is the only eligible base and Atlas 94 is
+the only scoped full-whiskering row.
+
+\begin{remark}[Iteration]
+Suppose, in addition, that $\Phi_F\ge0$ and is nondecreasing on the
+relevant interval. Since
+\[
+    \Phi_{\operatorname{Wh}(F)}(p)=p^{v(F)}\Phi_F(p),
+\]
+the same two properties hold for $\Phi_{\operatorname{Wh}(F)}$.
+Consequently the operation may be iterated.
+
+If
+\[
+    F_0:=F,
+    \qquad
+    F_{j+1}:=\operatorname{Wh}(F_j),
+\]
+then
+\[
+    v(F_j)=2^jv(F)
+\]
+and
+\[
+    \Phi_{F_j}(p)
+    =
+    p^{(2^j-1)v(F)}\Phi_F(p).
+\]
+Thus every iterated full whiskering satisfies the same
+Goodman-type inequality on the same edge-density interval.
+\end{remark}
+
+\subsection{Inputs, hidden-assumption audit, and exact limitations}
+
+The general closure theorem uses only Tonelli--Fubini, the three-edge
+path inequality proved above, degree-biasing of the original probability
+measure, and the assumed inequality and monotonicity for $F$.
+Corollary~\ref{cor:atlas94} additionally uses exactly the accepted
+triangle bound.  No regularity, minimum-degree hypothesis, finite-step
+representation, or injective-copy interpretation is used.  Points with
+$d_W(x)=0$ are handled by an almost-everywhere convention justified
+before H\"older is applied, and the proof never divides by $d_W(x)$
+pointwise outside that convention.
+
+The hypothesis $p_0>0$ is essential to the degree-biased probability
+measure as written.  It is automatic for the required threshold when
+$\chi(F)\ge3$.  The endpoint $p=1$ is handled by the polynomial
+continuation and directly by the same measure-change proof; no
+substitution of $1/(1-p)$ is made there.
+
+Full whiskering means one distinct private leaf at every vertex of
+$F$.  The theorem does not cover a leaf at only some vertices, several
+leaves at a vertex, shared leaves, or arbitrary pendant-tree attachment.
+It also requires monotonicity of $\Phi_F$ on the whole density interval;
+positivity of $F$ alone does not imply that monotonicity.  Consequently
+this note is not a general leaf-attachment closure theorem.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Corollary~\ref{cor:atlas94} is formalized: Atlas $94$ is \texttt{verified},
+as \texttt{satisfiesLowerBound\_94} in
+\texttt{lean/Taeyoung/Methods/Whisker94.lean}.  One difference of substance.
+
+\subsection*{Theorem~\ref{thm:whiskering} is not stated in general}
+
+The change of measure is formalized in full and in general
+(\texttt{Methods/DegreeBias.lean}): $d\nu=(d_W/p)\,d\mu$ is a probability
+measure, $W$ reread on $(\Omega,\nu)$ is a graphon, its densities are the
+degree-weighted integrals \eqref{eq:whisker-weighted}, and
+\eqref{eq:pnu-ge-p} --- the biased edge density is at least $p$, by
+Lemma~\ref{lem:P4} --- is \texttt{le\_cliqueDensity\_degreeGraphon}.  That is
+the whole analytic content of the theorem.
+
+What is not formalized is the combinatorial half: $\operatorname{Wh}(F)$ is not
+constructed as a graph operation, so the identity
+$t(\operatorname{Wh}(F),W)=p^{n}\,t(F,W_\nu)$ is not available for a general
+$F$.  It is supplied per row, by the peeling identity for that row's own
+graph, run on both sides --- six coordinates and three for Atlas $94$.  The
+hypotheses of Theorem~\ref{thm:whiskering} are then discharged concretely:
+Goodman for $F=K_3$, and monotonicity of $z\mapsto z(2z-1)$ on $[1/2,1]$ in
+place of the abstract hypothesis (2).
+
+\end{document}

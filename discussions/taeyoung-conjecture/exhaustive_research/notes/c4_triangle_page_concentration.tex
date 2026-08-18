@@ -1,0 +1,333 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Atlas 145: Concentrating Two Triangle Pages on an Edge of a $4$-Cycle}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We prove the chromatic-polynomial lower bound for NetworkX Atlas graph 145
+on the full interval $p\in[1/2,1]$ and for every graphon.  The graph is a
+$4$-cycle with two triangle pages on one edge.  Moving one page to the
+adjacent cycle edge produces Atlas 148, whose full-interval theorem is known.
+The difference of the two homomorphism densities is exactly one half of a
+square under the $4$-cycle homomorphism measure.  This gives a short,
+division-free transfer valid on arbitrary probability spaces.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The two page placements}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mathcal A,\mu)$ be a probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and jointly measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu^2,
+ \qquad
+ S(x,y)=\int_\Omega W(x,z)W(y,z)\dd\mu(z).
+\]
+
+On labelled vertices $0,1,2,3,4,5$, let $H_{\rm same}$ have edges
+\begin{equation}
+ 01,12,23,30,04,14,05,15.
+ \label{eq:same-edges}
+\end{equation}
+Thus $0$--$1$--$2$--$3$--$0$ is a $4$-cycle and vertices $4,5$ are two triangle pages on
+the same cycle edge $01$.  This graph is NetworkX Atlas 145, with graph6
+code \texttt{Exe\_}.  Let $H_{\rm adj}$ instead have edges
+\begin{equation}
+ 01,12,23,30,04,14,05,35.
+ \label{eq:adjacent-edges}
+\end{equation}
+It has one triangle page on each of the adjacent cycle edges $01$ and $03$.
+This is Atlas 148, with graph6 code \texttt{EyUG}.  The exact isomorphism
+checks are reproduced by the verifier cited below.
+
+The triangle in $H_{\rm same}$ forces chromatic number at least three.  A
+proper three-colouring has colour classes
+\[
+ \{0,2\},\qquad \{1,3\},\qquad \{4,5\}.
+\]
+Hence the chromatic number is three and the admissible density interval is
+$p\in[1/2,1]$.
+
+To count its proper $r$-colourings, first colour the page-bearing edge $01$.
+Each page then has $r-2$ choices.  Conditional on the two distinct endpoint
+colours, the length-three path $0$--$3$--$2$--$1$ has
+\[
+ (r-1)+(r-2)^2=r^2-3r+3
+\]
+proper internal colourings.  Consequently
+\begin{equation}
+ \chi_{H_{\rm same}}(r)
+ =r(r-1)(r-2)^2(r^2-3r+3).
+ \label{eq:chromatic}
+\end{equation}
+The same polynomial holds for $H_{\rm adj}$, either by the analogous direct
+count or by the computation in the Atlas 148 theorem.  Substitution into the
+chromatic target gives
+\begin{equation}
+ \Phi_{H_{\rm same}}(p)
+ =(1-p)^6\chi_{H_{\rm same}}\!\left(\frac1{1-p}\right)
+ =p(2p-1)^2(3p^2-3p+1).
+ \label{eq:target}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The page-concentration square}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $x_0,x_1,x_2,x_3\in\Omega$, define the finite nonnegative measure
+\begin{equation}
+ \dd\Lambda
+ =W(x_0,x_1)W(x_1,x_2)W(x_2,x_3)W(x_3,x_0)
+   \dd\mu(x_0)\dd\mu(x_1)\dd\mu(x_2)\dd\mu(x_3).
+ \label{eq:cycle-measure}
+\end{equation}
+No normalization is imposed; its total mass may be zero.  Put
+\[
+ A=S(x_0,x_1),\qquad B=S(x_0,x_3).
+\]
+
+\begin{lemma}[Adjacent-page concentration]
+\label{lem:concentration}
+For every graphon on every probability space,
+\begin{equation}
+ t(H_{\rm same},W)-t(H_{\rm adj},W)
+ =\frac12\int_{\Omega^4}(A-B)^2\dd\Lambda\geq0.
+ \label{eq:square}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Integrating the two page vertices in \eqref{eq:same-edges} and
+\eqref{eq:adjacent-edges} gives, respectively,
+\[
+ t(H_{\rm same},W)=\int A^2\dd\Lambda,
+ \qquad
+ t(H_{\rm adj},W)=\int AB\dd\Lambda.
+\]
+The reflection of the $4$-cycle that interchanges $x_1$ and $x_3$ while
+fixing $x_0,x_2$ preserves \eqref{eq:cycle-measure}.  Therefore
+\[
+ \int A^2\dd\Lambda=\int B^2\dd\Lambda.
+\]
+Expanding the square now gives
+\[
+ \frac12\int(A-B)^2\dd\Lambda
+ =\int A^2\dd\Lambda-\int AB\dd\Lambda,
+\]
+which is \eqref{eq:square}.  Every integrand is bounded and measurable, so
+Tonelli--Fubini and the measure-preserving variable permutation are valid on
+an arbitrary probability space.  No quotient or positivity assumption on
+$t(C_4,W)$ is used.
+\end{proof}
+
+The identity also records its precise equality condition: the two rooted
+common-neighbour values agree $\Lambda$-almost everywhere.  We do not need to
+classify the graphons satisfying that condition.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Atlas 145 bound}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We use the following already established result.
+
+\begin{theorem}[Atlas 148 theorem \cite{Atlas148}]
+\label{thm:atlas148}
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(H_{\rm adj},W)
+ \geq p(2p-1)^2(3p^2-3p+1).
+\]
+\end{theorem}
+
+That theorem is an arbitrary-graphon result.  Its low-density half uses the
+$K_3$ case of Reiher's clique density theorem \cite{ReiherCliqueDensity}; its
+high-density half uses a two-coordinate Hilbert projection and exact rational
+Bernstein certificates.  No finite-step or regularity hypothesis is imported
+here.
+
+\begin{corollary}[Atlas 145, graph6 \texttt{Exe\_}]
+Every graphon $W$ of edge density $p\in[1/2,1]$ satisfies
+\[
+ \boxed{
+ t(H_{\rm same},W)
+ \geq p(2p-1)^2(3p^2-3p+1)
+ =\Phi_{H_{\rm same}}(p).
+ }
+\]
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:concentration} and Theorem~\ref{thm:atlas148} give
+\[
+ t(H_{\rm same},W)\geq t(H_{\rm adj},W)
+ \geq\Phi_{H_{\rm same}}(p),
+\]
+where the last target equality follows from \eqref{eq:target}.  At $p=1/2$
+the target is zero, and at $p=1$ the graphon is one almost everywhere and
+both sides are one, so the endpoint cases require no limiting argument.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Audit and limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The comparison is an exact relocation theorem for these two page placements:
+two pages on one edge of a $4$-cycle dominate one page on each of two adjacent
+edges.  It does not assert arbitrary triangle-page concentration on an
+arbitrary base graph; the reflection symmetry of the $4$-cycle is the exact
+hypothesis used.  In particular, putting the two pages on opposite cycle
+edges gives Atlas 152 (graph6 \texttt{EhNG}), which has an accepted exact
+counterexample; the present one-sided concentration inequality cannot prove
+a lower bound for that placement.  The argument also does not revive the
+false product comparison
+\[
+ p\,t(H_{\rm same},W)\geq t(K_4-e,W)t(C_4,W)
+\]
+recorded in the failed-attempt ledger.
+
+The Atlas identifications, graph6 codes, chromatic polynomials, targets,
+density decompositions, and exact square identity on 503 rational step
+graphons are independently reconstructed by
+\begin{verbatim}
+python codes/verify_c4_triangle_page_concentration.py
+\end{verbatim}
+
+No Lean file is changed.  A future formalization needs the finite-measure
+square identity above and the existing Atlas 148 theorem as its only
+graph-specific inputs.  The latter still carries the formal dependency on
+the sharp triangle-density theorem.
+
+\begin{thebibliography}{2}
+\bibitem{Atlas148}
+Atlas 148 proof note,
+\path{notes/atlas148_paw_bias_hilbert_projection.tex}.
+
+\bibitem{ReiherCliqueDensity}
+C.~Reiher,
+\emph{The clique density theorem},
+Annals of Mathematics \textbf{184} (2016), 683--707;
+\url{https://annals.math.princeton.edu/2016/184-3/p01}.
+\end{thebibliography}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The corollary is formalized in full, on $p\in[1/2,1]$.  The development is
+\texttt{lean/Taeyoung/Methods/Atlas145.lean}, the catalogue theorem is
+\texttt{satisfiesLowerBound\_145}, and every declaration depends on exactly
+\texttt{[propext, Classical.choice, Quot.sound]}.  Theorem~\ref{thm:atlas148}
+is no longer quoted from outside: it is
+\texttt{Methods.Atlas148.homDensity\_graph148\_bound}, itself formalized, so
+the closing remark of Section~4 is superseded on both counts.
+
+\subsection{The square identity becomes one Cauchy--Schwarz}
+\label{sec:app145-cs}
+
+Lemma~\ref{lem:concentration} is proved above by reflecting the four-fold
+integral \eqref{eq:cycle-measure} in the map $x_1\leftrightarrow x_3$.  A
+choice of labelling removes the reflection entirely.
+
+Integrate the two \emph{opposite} corners $x_0,x_2$ of the $4$-cycle
+outermost.  The remaining cycle vertices $x_1$ and $x_3$ then appear in
+disjoint factors of $\dd\Lambda$, so for fixed $x_0,x_2$ everything
+factorizes through the three arm integrals
+\[
+ P=\int_\Omega W(x_0,u)W(u,x_2)\dd\mu(u),\quad
+ Q=\int_\Omega W(x_0,u)W(u,x_2)S(x_0,u)\dd\mu(u),
+\]
+\[
+ R=\int_\Omega W(x_0,u)W(u,x_2)S(x_0,u)^2\dd\mu(u),
+\]
+in the form
+\[
+ t(H_{\rm adj},W)=\int\!\!\int Q^2,
+ \qquad
+ t(H_{\rm same},W)=\int\!\!\int P\cdot R .
+\]
+The comparison is then the pointwise weighted Cauchy--Schwarz
+\[
+ Q^2\leq P\cdot R,
+\]
+that is $(\int A\eta)^2\leq(\int A)(\int A\eta^2)$ at weight
+$A(u)=W(x_0,u)W(u,x_2)$ and $\eta(u)=S(x_0,u)$ --- the same inequality this
+project uses throughout, and the only inequality in the whole file.  Note that
+$P=S(x_0,x_2)$ is the codegree of the opposite corners, so all three arms are
+instances of one operator.
+
+The two formulations agree, of course; \eqref{eq:square} is the same
+statement with the Cauchy--Schwarz deficit written as a square.  What the
+relabelling buys is that no permutation of a four-fold integral has to be
+justified, and no measure-preserving change of variables is needed: the
+factorization is ordinary Fubini through the peeling the project already
+performs for every row.
+
+\subsection{Transporting the Atlas 148 bound}
+\label{sec:app145-transport}
+
+Both graphs are laid out on that frame --- vertices $0,1$ the opposite
+corners, $2,3$ the other two cycle vertices, $4,5$ the pages --- so the Lean
+copy of Atlas 148 used here is
+\[
+ 02,\;03,\;04,\;05,\;12,\;13,\;24,\;35,
+\]
+which is \texttt{Methods.Atlas148.graph148} relabelled.  The two densities are
+identified by \texttt{Foundation.homDensity\_iso}, so the Atlas 148 theorem
+applies to the frame copy without being reproved.
+
+\subsection{Chromatic data}
+\label{sec:app145-chromatic}
+
+The polynomial \eqref{eq:chromatic} is proved, not assumed.  Its factor
+$r^2-3r+3$ is irreducible over the rationals, so no clique-attachment tower
+produces it, and the route is the same as for Atlas 148: the six surjective
+colouring counts
+\[
+ 0,\;0,\;0,\;18,\;264,\;840,\;720
+\]
+are checked by kernel reduction, the top one through
+$\mathrm{surj}(n)=n!$, and the target \eqref{eq:target} follows by one
+\texttt{field\_simp}.  The counts coincide with Atlas 148's, as they must,
+but they are checked again: the two graphs are not isomorphic, so nothing
+transports.
+
+\subsection{Scope}
+\label{sec:app145-scope}
+
+The formalization asserts exactly the corollary: the two stated page
+placements on a $4$-cycle, in that direction.  It does not formalize the
+general relocation principle discussed in Section~4, and --- as that section
+records --- the opposite-edge placement is Atlas 152, which has a verified
+counterexample in this project
+(\texttt{Methods.Negative.Atlas152.violatesLowerBound\_152}), so no
+one-sided concentration inequality could cover it.
+
+With this row the catalogue reaches $93$ verified rows: every Atlas graph
+whose status is currently accepted, positive or negative, is proved in Lean
+with no \texttt{sorry}.
+
+\end{document}

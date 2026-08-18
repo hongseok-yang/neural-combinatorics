@@ -1,0 +1,701 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+
+\title{Atlas 148: Sharp Paw Bias and a Two-Dimensional Hilbert Projection}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We prove the chromatic-polynomial lower bound for NetworkX Atlas graph 148
+on the full interval $p\in[1/2,1]$ and for every graphon.  On
+$[1/2,3/5]$, a Hilbert projection reduces its density to the square of a
+paw density.  Symmetrizing the paw leaf, biasing by $d^{1/3}$, and applying
+the sharp triangle-density theorem gives the required strengthened paw
+bound.  On $[3/5,1]$, a two-dimensional projection retains the covariance
+term that is lost by the false product comparison with two triangles and a
+$4$-cycle.  The remaining scalar supporting line is certified exactly on
+four rational Bernstein boxes.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph, kernels, and target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mathcal A,\mu)$ be a probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and jointly measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu^2,
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and define the common-neighbour and triangle-edge kernels
+\[
+ S(x,y)=\int_\Omega W(x,z)W(y,z)\dd\mu(z),
+ \qquad K(x,y)=W(x,y)S(x,y).
+\]
+
+NetworkX Atlas 148, with graph6 code \texttt{EyUG}, has edge list
+\[
+ 01,02,05,12,13,14,34,45.
+\]
+It consists of the triangles $012$ and $134$, which share vertex $1$,
+together with the two-edge path $0$--$5$--$4$ between the indicated outer
+vertices.  The triangle gives chromatic number at least three, while the
+color classes $\{0,3\},\{1,5\},\{2,4\}$ give a proper three-colouring.
+Thus its chromatic number is three and the admissible interval is
+$p\in[1/2,1]$.
+
+With $x=1$, $a=0$, and $b=4$, integrating vertices $2,3,5$ gives
+the exact identity
+\begin{equation}
+ t(F_{148},W)
+ =\int_{\Omega^3}K(x,a)K(x,b)S(a,b)\dd\mu(x)\dd\mu(a)\dd\mu(b).
+ \label{eq:density-kernels}
+\end{equation}
+To count proper $r$-colourings, first colour $x$, then the two outer vertices
+$a,b$, then the remaining vertex of each triangle, and finally the midpoint
+of the outer path.  If $a,b$ have the same colour, the last vertex has
+$r-1$ choices; if they have distinct colours, it has $r-2$ choices.  Hence
+the count is
+$r(r-2)^2\bigl((r-1)^2+(r-1)(r-2)^2\bigr)$, and the chromatic polynomial
+and target are
+\begin{align}
+ \chi_{F_{148}}(r)
+ &=r(r-1)(r-2)^2(r^2-3r+3),
+ \label{eq:chromatic}\\
+ \Phi_{F_{148}}(p)
+ &=p(2p-1)^2(3p^2-3p+1).
+ \label{eq:target}
+\end{align}
+Write
+\[
+ q=1-p,\qquad c=2p-1,\qquad f=3p^2-3p+1=p^3+q^3.
+\]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The normalized sharp triangle profile}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We use the graphon form of the clique density theorem for triangles.  Define
+$g\colon[0,1]\to[0,1]$ as follows.  Choose an integer $k\geq1$ and
+$u\in[1/(k+1),1/k]$ such that
+\begin{equation}
+ s=1-ku^2-(1-ku)^2,
+ \label{eq:triangle-parameter}
+\end{equation}
+put
+\begin{equation}
+ g(s)=1-3\bigl(ku^2+(1-ku)^2\bigr)
+       +2\bigl(ku^3+(1-ku)^3\bigr),
+ \label{eq:triangle-profile}
+\end{equation}
+and set $g(1)=1$.  The definitions agree at the common endpoints.
+
+\begin{theorem}[Sharp triangle density]
+\label{thm:clique-density}
+Every graphon $V$ of edge density $s$ satisfies
+\[
+ t(K_3,V)\geq g(s).
+\]
+\end{theorem}
+
+This is the $K_3$ instance of the clique density theorem.  Its usual finite
+asymptotic and standard-graphon forms imply the stated arbitrary-probability-
+space form by sampling independent points from the given space and then
+independent Bernoulli edges.  Edge and triangle densities converge in
+probability to their graphon values, so no atomlessness assumption is needed.
+
+The feature needed here is an elementary consequence of the explicit sharp
+profile.
+
+\begin{lemma}[Normalized triangle monotonicity]
+\label{lem:normalized-triangle}
+The function $g(s)/s^{3/2}$ is nondecreasing on $(0,1]$.
+\end{lemma}
+
+\begin{proof}
+On the branch \eqref{eq:triangle-parameter}, differentiate with respect to
+$u$.  Direct cancellation gives
+\[
+ s^{5/2}\frac{\dd}{\dd s}\left(\frac{g(s)}{s^{3/2}}\right)
+ =\frac32 k(k-1)u^2\geq0.
+\]
+The profile and the normalized ratio are continuous at every branch
+endpoint.  This proves the claim globally.  For $k=1$, both sides vanish on
+the triangle-free interval.  Since $g\geq0$ and $s^{3/2}$ is increasing, the
+lemma also shows that $g$ itself is nondecreasing.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A sharp paw lower bound}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z),
+ \qquad G=\int_\Omega d(x)\tau(x)\dd\mu(x).
+\]
+Thus $G$ is the paw homomorphism density.
+
+\begin{lemma}[Fractionally degree-weighted edge]
+\label{lem:fractional-edge}
+For $0<\alpha\leq1$,
+\[
+ N_\alpha:=\int_{\Omega^2}W(x,y)d(x)^\alpha d(y)^\alpha\dd\mu^2
+ \geq p^{1+2\alpha}.
+\]
+\end{lemma}
+
+\begin{proof}
+Put $\theta=1/(1+2\alpha)$ and
+$\eta=\alpha/(1+2\alpha)$.  On the support of $W$,
+\[
+ W=(Wd(x)^\alpha d(y)^\alpha)^\theta
+    (W/d(x))^\eta(W/d(y))^\eta.
+\]
+H\"older's inequality applies after defining the quotients to be zero on
+zero-degree fibres.  Each quotient integral is at most one, and hence
+$p\leq N_\alpha^\theta$.
+\end{proof}
+
+\begin{lemma}[Sharp paw bias]
+\label{lem:sharp-paw}
+Every graphon of edge density $p\geq1/2$ satisfies
+\begin{equation}
+ G\geq p\,g(p).
+ \label{eq:sharp-paw}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Average the three equal representations obtained by putting the paw leaf at
+each triangle vertex.  Arithmetic--geometric mean gives
+\[
+ G\geq
+ \int_{\Omega^3}W(x,y)W(x,z)W(y,z)
+       (d(x)d(y)d(z))^{1/3}\dd\mu^3.
+\]
+Put $M=\int d^{1/3}$, $z=M^3$, and use the probability measure
+$\dd\nu=d^{1/3}\dd\mu/M$.  The right side is
+\[
+ z\,t(K_3,W;\nu).
+\]
+The edge density $s$ under $\nu$ obeys, by
+Lemma~\ref{lem:fractional-edge} with $\alpha=1/3$,
+\[
+ s\geq s_0:=p\left(\frac pz\right)^{2/3}.
+\]
+Concavity of $d^{1/3}$ gives $z\leq p$, while $s\leq1$ implies
+$s_0\leq1$; moreover $z\leq p$ gives $s_0\geq p$.  The sharp triangle
+theorem, monotonicity of $g$, and
+Lemma~\ref{lem:normalized-triangle} yield
+\begin{align*}
+ G&\geq z g(s_0)
+ =p^{5/2}\frac{g(s_0)}{s_0^{3/2}}\\
+ &\geq p^{5/2}\frac{g(p)}{p^{3/2}}
+ =p g(p).
+\end{align*}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The low-density interval}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $p\in[1/2,2/3]$, write the sharp triangle profile using part masses
+$( (1-y)/2,(1-y)/2,y )$:
+\begin{equation}
+ p=\frac{1+2y-3y^2}{2},\qquad
+ g(p)=\frac32y(1-y)^2.
+ \label{eq:low-parameter}
+\end{equation}
+The relation in \eqref{eq:low-parameter} is increasing for
+$0\leq y\leq1/3$, and its value at $y=1/8$ is $77/128>3/5$.
+Consequently $p\leq3/5$ gives $0\leq y\leq1/8$.
+
+\begin{lemma}[Low-interval scalar comparison]
+\label{lem:low-scalar}
+For $p\in[1/2,3/5]$,
+\[
+ p\,g(p)^2\geq c^2f.
+\]
+\end{lemma}
+
+\begin{proof}
+Substitution from \eqref{eq:low-parameter} gives
+\[
+ p g(p)^2-c^2f=\frac{y^2}{8}R(y),
+\]
+where
+\[
+ R(y)=1+6y-159y^2+756y^3-1521y^4+1422y^5-513y^6.
+\]
+After $y=u/8$, its degree-six Bernstein coefficients on $0\leq u\leq1$
+are
+\[
+ 1,\ \frac98,\ \frac{347}{320},\ \frac{2437}{2560},
+ \frac{15909}{20480},\ \frac{19349}{32768},
+ \frac{108079}{262144}.
+\]
+They are all positive.
+Since the Bernstein basis is nonnegative on $[0,1]$, this proves
+$R(y)>0$ throughout the required interval.
+\end{proof}
+
+For fixed $x$, put $F_x(a)=K(x,a)$.  Since $S$ is the kernel of
+$T_W^2$, equation \eqref{eq:density-kernels} gives
+\begin{equation}
+ t(F_{148},W)=\int_\Omega\lVert T_WF_x\rVert_2^2\dd\mu(x).
+ \label{eq:hilbert-density}
+\end{equation}
+Projection onto the constant function, followed by Jensen, gives
+\begin{equation}
+ t(F_{148},W)
+ \geq\int_\Omega
+ \left(\int_\Omega d(a)K(x,a)\dd\mu(a)\right)^2\dd\mu(x)
+ \geq G^2.
+ \label{eq:paw-square}
+\end{equation}
+Lemma~\ref{lem:sharp-paw} and Lemma~\ref{lem:low-scalar} therefore prove
+\[
+ t(F_{148},W)\geq p^2g(p)^2\geq pc^2f
+\]
+throughout $p\in[1/2,3/5]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The two-dimensional projection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For each $x$, put
+\begin{align*}
+ s(x)&=\int W(x,a)^2\dd\mu(a),
+ &v(x)&=s(x)-d(x)^2,\\
+ g(x)&=\int d(a)K(x,a)\dd\mu(a),
+ &h(x)&=\int W(x,a)S(x,a)^2\dd\mu(a).
+\end{align*}
+The functions $\one$ and $W(x,\cdot)-d(x)\one$ are orthogonal, with
+squared norms $1$ and $v(x)$.  Their inner products with $T_WF_x$ are
+$g(x)$ and $h(x)-d(x)g(x)$.  Bessel's inequality gives
+\begin{equation}
+ \lVert T_WF_x\rVert_2^2
+ \geq g(x)^2+\frac{(h(x)-d(x)g(x))^2}{v(x)},
+ \label{eq:bessel}
+\end{equation}
+where the quotient is zero when $v(x)=0$; its numerator then also vanishes.
+
+Set
+\begin{align*}
+ D&=\int_{\Omega^2}W(x,y)S(x,y)^2\dd\mu^2,\\
+ L&=\int_{\Omega^2}W(x,y)S(x,y)d(x)d(y)\dd\mu^2,\\
+ \Delta&=D-L,
+ &V&=\int_\Omega v(x)\dd\mu(x).
+\end{align*}
+Then $\int g=G$ and $\int(h-dg)=\Delta$.  Two applications of
+Cauchy--Schwarz in \eqref{eq:bessel} give
+\begin{equation}
+t(F_{148},W)\geq G^2+\frac{\Delta^2}{V}.
+\label{eq:global-projection}
+\end{equation}
+Here and below the quotient is defined to be zero when $V=0$; in that
+case $\Delta=0$ by the preceding fibrewise observation.
+Moreover
+\[
+ V=\int W^2-\int d^2\leq p-p^2=pq.
+\]
+Thus, for $p<1$,
+\begin{equation}
+ t(F_{148},W)\geq G^2+\frac{\Delta^2}{pq}.
+ \label{eq:coarse-projection}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The high-density supporting line}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[High-density linear estimate]
+\label{lem:linear}
+If $p\in[3/5,1]$, then
+\begin{equation}
+ p^2G-q\Delta\geq pcf.
+ \label{eq:linear}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Symmetry and arithmetic--geometric mean give
+\[
+ G=\int WS\frac{d(x)+d(y)}2\geq\int WSZ,
+ \qquad Z=\sqrt{d(x)d(y)}.
+\]
+Also $L=\int WSZ^2$ and $D=\int WS^2$.  Hence the left side of
+\eqref{eq:linear} is at least
+\begin{equation}
+ \int_{\Omega^2}W(x,y)F_p(Z,S)\dd\mu^2,
+ \qquad
+ F_p(z,s)=s(p^2z+qz^2-qs).
+ \label{eq:F}
+\end{equation}
+Cauchy--Schwarz and the product union bound give
+\[
+ (2z-1)_+\leq S\leq z.
+\]
+For fixed $z$, $F_p(z,s)$ is concave in $s$, so it is bounded below by
+the smaller of its endpoint values
+\begin{align*}
+ A_p(z)&=(2z-1)_+
+ \bigl(p^2z+qz^2-q(2z-1)_+\bigr),\\
+ B_p(z)&=z^2(p^2-q+qz).
+\end{align*}
+
+For $z\geq1/2$, put
+\[
+ \ell_p(z)=cf+m_p(z-p),
+ \qquad m_p=-2p^3+15p^2-14p+4.
+\]
+On $p\in[3/5,1]$, one has $m_p\geq0$: after substituting
+$p=3/5+2a/5$, its degree-three Bernstein coefficients on
+$0\leq a\leq1$ are
+\[
+ \frac{71}{125},\quad \frac{61}{75},\quad \frac53,\quad 3.
+\]
+Also
+\[
+ \ell_p(1/2)=\frac{c^2}{2}(p^2-4p+2)\leq0.
+\]
+Furthermore
+\[
+ A_p(z)-\ell_p(z)
+ =-(z-p)^2\bigl(2p^2+2pz-9p-2z+5\bigr)\geq0,
+\]
+because the bracket is decreasing in $z$ and at $z=1/2$ equals
+$2(p^2-4p+2)\leq0$.  Indeed, $p^2-4p+2$ is decreasing on this
+interval and has value $-1/25$ at $p=3/5$.
+
+The remaining polynomial $B_p(z)-\ell_p(z)$ is nonnegative on the full
+rectangle $3/5\leq p\leq1$, $0\leq z\leq1$.  For completeness, substitute
+$p=3/5+2a/5$ and affinely map each of the four $z$-intervals
+\[
+ [0,1/2],\quad[1/2,2/3],\quad[2/3,3/4],\quad[3/4,1]
+\]
+to $0\leq b\leq1$.  Its native bidegree is $(4,3)$, and its four exact
+Bernstein coefficient matrices are
+\[
+\begin{pmatrix}
+178/625&713/3750&691/7500&51/1250\\
+48/125&97/375&89/600&181/2000\\
+2/3&23/50&13/45&107/600\\
+6/5&13/15&71/120&31/80\\
+2&3/2&13/12&3/4
+\end{pmatrix},
+\]
+\[
+\begin{pmatrix}
+51/1250&533/22500&397/33750&116/16875\\
+181/2000&641/9000&13/225&58/1125\\
+107/600&191/1350&451/4050&4/45\\
+31/80&23/72&7/27&28/135\\
+3/4&23/36&29/54&4/9
+\end{pmatrix},
+\]
+\[
+\begin{pmatrix}
+116/16875&299/67500&337/90000&101/20000\\
+58/1125&109/2250&1697/36000&153/3200\\
+4/45&629/8100&41/600&293/4800\\
+28/135&49/270&227/1440&87/640\\
+4/9&43/108&17/48&5/16
+\end{pmatrix},
+\]
+\[
+\begin{pmatrix}
+101/20000&269/30000&77/2500&48/625\\
+153/3200&299/6000&209/3000&14/125\\
+293/4800&47/1200&8/225&4/75\\
+87/640&17/240&1/40&0\\
+5/16&3/16&1/12&0
+\end{pmatrix}.
+\]
+Every entry is nonnegative.
+The tensor-product Bernstein basis is nonnegative and sums to one on each
+box, so these matrices prove $B_p(z)\geq\ell_p(z)$ on the full rectangle.
+Thus $F_p(z,s)\geq\ell_p(z)$ also when
+$z<1/2$, since $A_p(z)=0\geq\ell_p(z)$ there.
+
+Finally use the edge-biased probability measure
+$W(x,y)\dd\mu^2/p$.  The edge geometric-mean inequality gives
+\[
+ \mathbb E\sqrt{d(x)d(y)}\geq p.
+\]
+Indeed, after defining zero-degree quotients to be zero,
+Cauchy--Schwarz applied to
+$\sqrt{W/d(x)}$ and $\sqrt{W/d(y)}$ gives
+$\int W/Z\leq1$.  A second application of Cauchy--Schwarz gives
+$p^2\leq(\int WZ)(\int W/Z)$.  Since $m_p\geq0$, integration of the
+supporting line proves
+\[
+ \int WF_p(Z,S)\geq p\ell_p(\mathbb E Z)\geq pcf.
+\]
+\end{proof}
+
+\begin{lemma}[Projection closes the high interval]
+For $p\in[3/5,1]$,
+\[
+ t(F_{148},W)\geq pc^2f.
+\]
+\end{lemma}
+
+\begin{proof}
+The case $p=1$ is immediate.  For $p<1$, put
+\[
+ G_0=p^2c,\qquad \Delta_0=-pcq^2.
+\]
+Then
+\[
+ G_0^2+\frac{\Delta_0^2}{pq}=pc^2(p^3+q^3)=pc^2f.
+\]
+Lemma~\ref{lem:linear} is precisely
+\[
+ GG_0+\frac{\Delta\Delta_0}{pq}\geq pc^2f.
+\]
+Cauchy--Schwarz in this weighted two-dimensional Euclidean space and
+\eqref{eq:coarse-projection} finish the proof.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion and scope}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Atlas 148, graph6 \texttt{EyUG}]
+Every graphon $W$ of edge density $p\in[1/2,1]$ satisfies
+\[
+ \boxed{
+ t(F_{148},W)\geq p(2p-1)^2(3p^2-3p+1)
+ =\Phi_{F_{148}}(p).
+ }
+\]
+\end{theorem}
+
+The low- and high-density arguments meet at $p=3/5$.  At $p=1/2$ the
+target is zero (with equality on the balanced complete bipartite graphon),
+and at $p=1$ both sides are one.  No classification of all interior equality
+cases is asserted.  All integral identities use
+bounded nonnegative measurable functions, except for ordinary Hilbert-space
+inner products of bounded kernels, so Tonelli--Fubini applies on an arbitrary
+probability space.  Zero-degree and zero-variance fibres were handled before
+division.
+
+This proof does not use the false comparison
+$p^2t(F_{148})\geq t(K_3)^2t(C_4)$.  The two-coordinate projection retains
+exactly the covariance term that comparison discards.  The use of the sharp
+triangle-density theorem is confined to the paw estimate on
+$[1/2,3/5]$; the high interval uses arithmetic--geometric mean,
+Cauchy--Schwarz, and the displayed rational Bernstein certificate.
+
+The Atlas identification, chromatic target, normalized-profile derivative,
+low-interval factorization, projection identities, and all Bernstein
+coefficients are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_atlas148_paw_bias_hilbert_projection.py
+\end{verbatim}
+
+No Lean file is changed.  Any future formalization would need either the
+graphon triangle-density theorem as an imported analytic input or a separate
+formal proof of its $K_3$ case, as well as the two-dimensional Bessel and
+Bernstein steps above.
+
+\begin{thebibliography}{1}
+\bibitem{ReiherCliqueDensity}
+C.~Reiher,
+\emph{The clique density theorem},
+Annals of Mathematics \textbf{184} (2016), 683--707;
+\url{https://annals.math.princeton.edu/2016/184-3/p01}.
+\end{thebibliography}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The theorem above is formalized in full, on the whole interval $p\in[1/2,1]$.
+The development is \texttt{lean/Taeyoung/Methods/Atlas148/}, the catalogue
+theorem is \texttt{satisfiesLowerBound\_148}, and every declaration depends on
+exactly \texttt{[propext, Classical.choice, Quot.sound]}.  This supersedes the
+closing remark of Section~7: no Lean file was left unchanged, and the two
+steps flagged there as obstacles turned out not to be needed in the stated
+form.  This appendix says where the formalization departs from the argument
+above.
+
+\subsection{Only Fisher's band of the clique density theorem is used}
+\label{sec:app148-fisher}
+
+Section~2 imports the full clique density theorem, and the paw estimate applies
+it at the tilted edge density $s$, which ranges over all of $[p,1]$.  Only the
+$k=2$ branch is needed.  Split at $s=2/3$:
+
+\begin{itemize}
+ \item for $s\leq2/3$ the sharp profile is Fisher's 1989 theorem, whose
+ parameter $c=(1-\sqrt{4-6s})/3$ is exactly the $y$ of
+ \eqref{eq:low-parameter};
+ \item for $s\geq2/3$ the crude Goodman bound $t(K_3)\geq s(2s-1)$ already
+ suffices.  Fed through the same substitution $z=p^{5/2}s^{-3/2}$ it gives
+ $p^{5/2}s^{-1/2}(2s-1)$, increasing in $s$, so its minimum over $[2/3,1]$ is
+ at $s=2/3$; and there it clears the requirement $p\,g(p)$ by a factor of at
+ least $1.34$ on $[1/2,3/5]$.
+\end{itemize}
+The two agree at $s=2/3$, where both equal $2/9$, so no case is lost.  The
+Goodman branch reduces to $6g(p)^2\leq p^3$, i.e.\ $108y^2(1-y)\leq(1+3y)^3$,
+whose difference factors as $(3y-1)^2(15y+1)$.
+
+Fisher's theorem is nevertheless unavoidable: the triangle input must be
+within $3.5\%$--$6\%$ of sharp, the required ratio $c\sqrt{f/p}\,/\,g(p)$
+peaking at $0.9656$ at $p=3/5$ and equalling $0.9428$ at $p=1/2$, whereas
+Goodman alone runs $0.667$--$0.848$ of sharp.  The Lean proof imports it from
+\texttt{lean/Taeyoung/Fisher/}, a copy of the sibling project
+\texttt{discussions/goodman-style-bound/fisher\_lean} restricted to the closure
+of its target; \texttt{Methods/TriangleDensity.lean} restates it for this
+project's bundled graphons.
+
+\subsection{The fractional edge lemma needs no three-factor H\"older}
+\label{sec:app148-holder}
+
+Lemma~\ref{lem:fractional-edge} is proved above by H\"older at three factors,
+with the unbounded quotients $W/d(x)$.  One \emph{two}-factor Cauchy--Schwarz
+does it.  With $u=d^{1/3}$,
+\[
+ p^2=\Bigl(\int\!\!\int W\Bigr)^2
+ \leq\Bigl(\int\!\!\int \frac{W}{u_xu_y}\Bigr)
+      \Bigl(\int\!\!\int W u_xu_y\Bigr)
+ \leq M\cdot N_{1/3},
+\]
+the first factor being at most $M=\int d^{1/3}$ by arithmetic--geometric mean
+and Fubini.  Combined with $M\leq p^{1/3}$ — Jensen for the concave cube root
+— this gives $p^2\leq p^{1/3}N_{1/3}$, hence $p^5\leq N_{1/3}^3$.
+
+Unboundedness is handled by shifting the degree to $d+\delta^3$, so that
+$(d+\delta^3)^{1/3}\leq d^{1/3}+\delta$, and letting $\delta\to0$; the same
+device gives the edge geometric mean $\int\!\!\int W\sqrt{d(x)d(y)}\geq p^2$
+of Section~6, which the note proves through the unbounded $\int\!\!\int W/Z$.
+
+Everything downstream is kept polynomial: the tilt sends $z=M^3$ and
+$s=N_{1/3}/M^2$, so the hypothesis $p^5\leq z^2s^3$ that the scalar lemmas
+consume is \emph{identically} $p^5\leq N_{1/3}^3$, the $M$'s cancelling.
+
+\subsection{Bessel without division, and the final Cauchy--Schwarz for free}
+\label{sec:app148-bessel}
+
+The quotient form \eqref{eq:bessel} is never used.  Keeping the multiplier
+free, for every real $\lambda$,
+\[
+ \lVert T_WF_x\rVert^2\geq g(x)^2+2\lambda\bigl(h(x)-d(x)g(x)\bigr)
+ -\lambda^2v(x),
+\]
+which needs neither a division nor the separate treatment of the degenerate
+fibres $v(x)=0$.  In that form Bessel is not a Hilbert-space statement at all:
+putting $w=T_WF_x-\lambda(W(x,\cdot)-d(x))$, the centred function has mean
+zero, so $\int w=g(x)$, and plain Jensen $(\int w)^2\leq\int w^2$ is the whole
+content.
+
+The same free $\lambda$ removes the two-dimensional Cauchy--Schwarz of
+Section~7.  Integrating gives $T\geq G^2+2\lambda\Delta-\lambda^2V$ with
+$V\leq pq$; taking $\lambda=-cq$ and inserting the linear estimate
+\eqref{eq:linear} turns the target into
+\[
+ T-pc^2f\geq(G-cp^2)^2\geq0,
+\]
+because $f-q^3=p^3$.  So the vector $(G_0,\Delta_0)$, the weighted inner
+product, and the division by $V$ all disappear; $V\leq pq$ survives only as a
+coefficient bound.
+
+\subsection{Less Bernstein data, and no permuted triple integral}
+\label{sec:app148-bernstein}
+
+The note certifies three scalar facts with $91$ Bernstein coefficients: seven
+for Lemma~\ref{lem:low-scalar}, four for the slope $m_p\geq0$, and eighty for
+$B_p\geq\ell_p$ on four $z$-boxes.  The formalization uses $40$.
+
+\begin{itemize}
+ \item Lemma~\ref{lem:low-scalar} and the normalized monotonicity of
+ Lemma~\ref{lem:normalized-triangle} are closed directly by \texttt{nlinarith}
+ in the coordinate $y$, the latter after cross-multiplying and squaring into a
+ two-variable polynomial inequality on $0\leq y_1\leq y_2\leq1/3$.  The
+ normalized-profile derivative also collapses: on the $k=2$ branch,
+ $g(s)^2/s^3=18y^2(1-y)/(1+3y)^3$, with derivative
+ $36y(1-3y)/(1+3y)^4$.
+ \item For $B_p\geq\ell_p$ the subdivision is genuinely necessary — a single
+ box fails at every bidegree up to $(10,12)$, because the Bernstein
+ coefficients converge only like $O(1/n)$ along the edge $p=3/5$, where the
+ function's minimum is a shallow $0.0044$; and a linear-programming search over
+ all products of the four box constraints, with $(z-p)^2$ multiples adjoined,
+ is infeasible.  But \emph{two} boxes suffice, split at $z=7/10$ and kept at
+ the native bidegree $(4,3)$.  Each is discharged by \texttt{linarith} against
+ the twenty products $a^i(1-a)^{4-i}b^j(1-b)^{3-j}$, so no certificate
+ datatype is involved.
+\end{itemize}
+
+The leaf symmetrization of Lemma~\ref{lem:sharp-paw} needs no permutation of a
+triple integral.  Integrating the third vertex first turns each of the three
+degree weights into a page operator
+$H_s(x,y)=\int W(x,z)W(y,z)d(z)^s$, so arithmetic--geometric mean becomes the
+pointwise estimate
+\[
+ d(x)^{1/3}d(y)^{1/3}H_{1/3}(x,y)
+ \leq\frac{d(x)+d(y)}{3}H_0(x,y)+\frac{H_1(x,y)}{3},
+\]
+and one monotone step over the spine pair finishes it; the three terms on the
+right are all $G$, two by symmetry of $W\!\cdot\!H_0$ and the third because
+$\int\!\!\int W H_1$ and $G$ both collapse to $\int d\,\tau$.
+
+\subsection{Two things that are load-bearing}
+\label{sec:app148-sharp}
+
+\begin{itemize}
+ \item \textbf{The collapse to $Z=\sqrt{d(x)d(y)}$.}  Keeping $d(x)$ and
+ $d(y)$ separate and replacing $Z$ by $(d(x)+d(y))/2$ in the supporting line
+ makes it \emph{false}: it is violated by $-0.014$ at $p=3/5$, $d(x)=0.28$,
+ $d(y)=1$.  What forces $Z$ is that $L=\int\!\!\int W S Z^2$ holds exactly,
+ whereas $d(x)d(y)\leq\bar d^2$ points the wrong way.
+ \item \textbf{The split point.}  The high-density argument needs
+ $\ell_p(1/2)\leq0$, that is $p^2-4p+2\leq0$, so it cannot reach below
+ $p=2-\sqrt2\approx0.5858$.  The window $[1/2,2-\sqrt2]$ is irreducibly
+ Fisher-dependent; a supporting line valid down to $p=1/2$ would remove the
+ triangle-density input from the catalogue entirely.
+\end{itemize}
+
+\subsection{What is checked}
+\label{sec:app148-scope}
+
+The Lean graph is labelled for peeling — centre $0$, the two joined outer
+vertices $1$ and $2$, the triangle apexes $3$ and $4$, the path middle $5$ —
+and \texttt{Examples/Graph148.lean} transports the bound to the Atlas edge list
+along an explicit relabelling whose adjacency correspondence is checked by
+kernel computation.  The chromatic polynomial \eqref{eq:chromatic} is proved,
+not assumed: its last factor $r^2-3r+3$ is irreducible over the rationals, so
+no clique-attachment tower produces it, and the six surjective colouring counts
+$0,0,0,18,264,840,720$ are checked by kernel reduction instead, the top one
+through the identity $\mathrm{surj}(n)=n!$.
+
+\end{document}

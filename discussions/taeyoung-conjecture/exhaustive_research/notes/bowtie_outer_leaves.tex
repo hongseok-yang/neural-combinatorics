@@ -1,0 +1,432 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Pendant Leaves on the Outer Orbit of a Bowtie:\\
+Double Symmetrization and Fractional Triangle Bias}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $B$ be the bowtie graph, the vertex amalgam of two triangles.  Its four
+noncentral vertices form one automorphism orbit.  We attach $h$ pendant
+leaves arbitrarily among those four vertices and prove the
+chromatic-polynomial graphon bound for $1\leq h\leq6$ and every
+$p\geq1/2$.  Averaging over the outer orbit gives degree exponent $h/4$ at
+each outer vertex.  Conditioning on the shared center then factorizes the
+density as the integral of a square.  Cauchy--Schwarz and a second
+symmetrization inside a triangle produce the uniform fractional weight
+$d^{h/6}$, which is controlled by a biased-measure H\"older argument and the
+accepted triangle bound.  The case $h=1$ proves the formerly open NetworkX
+Atlas graph $119$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bowtie family and exact target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+Let $B$ have center $o$ and outer vertices $a,b,c,d$, with triangles
+$oab$ and $ocd$.  The automorphism group fixes $o$ and is transitive on
+$\{a,b,c,d\}$: it may swap the two triangles and independently swap the
+endpoints within either outer edge.
+
+For nonnegative integers $n_a,n_b,n_c,n_d$, put
+\[
+ h=n_a+n_b+n_c+n_d
+\]
+and let $B(n_a,n_b,n_c,n_d)$ be obtained by attaching $n_v$ private
+pendant leaves to outer vertex $v$.  We assume
+\[
+ 1\leq h\leq6.
+\]
+
+The bowtie is the vertex amalgam of two triangles, so
+\[
+ \chi_B(x)=\frac{\chi_{K_3}(x)^2}{x}
+ =x(x-1)^2(x-2)^2.
+\]
+Each leaf supplies a further factor $x-1$.  Therefore
+\begin{equation}
+ \chi_{B(\boldsymbol n)}(x)
+ =x(x-1)^{h+2}(x-2)^2,
+ \qquad \chi(B(\boldsymbol n))=3.
+ \label{eq:chromatic}
+\end{equation}
+If
+\[
+ A_3(p):=p(2p-1),
+\]
+then direct substitution in \eqref{eq:chromatic} gives
+\begin{equation}
+ \Phi_{B(\boldsymbol n)}(p)
+ =p^hA_3(p)^2
+ =p^{h+2}(2p-1)^2.
+ \label{eq:target}
+\end{equation}
+This includes the polynomial continuation at $p=1$; at the required
+threshold $p=1/2$, it vanishes.
+
+We use the accepted triangle bound in the form
+\begin{equation}
+ t(K_3,V)\geq A_3(s)=s(2s-1)
+ \label{eq:triangle-input}
+\end{equation}
+for every graphon $V$ of edge density $s\geq1/2$, on an arbitrary
+probability space.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fractional triangle bias}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Fractionally degree-weighted edge]
+\label{lem:fractional-edge}
+For $0<\beta\leq1$, define
+\[
+ N_\beta=\int_{\Omega^2}W(x,y)d(x)^\beta d(y)^\beta
+ \dd\mu(x)\dd\mu(y).
+\]
+Then
+\[
+ N_\beta\geq p^{1+2\beta}.
+\]
+\end{lemma}
+
+\begin{proof}
+On $\{d(x)=0\}$, define $W(x,y)/d(x)$ to be zero.  Fubini implies that
+$W(x,y)=0$ for almost every $y$ there.  Put
+\[
+ \theta=\frac1{1+2\beta},
+ \qquad
+ \eta=\frac\beta{1+2\beta}.
+\]
+Then $\theta+2\eta=1$, and weighted H\"older applied to
+\[
+ W
+ =\bigl(Wd(x)^\beta d(y)^\beta\bigr)^\theta
+  \left(\frac W{d(x)}\right)^\eta
+  \left(\frac W{d(y)}\right)^\eta
+\]
+gives
+\[
+ p\leq N_\beta^\theta
+ \left(\int\frac W{d(x)}\dd\mu^2\right)^\eta
+ \left(\int\frac W{d(y)}\dd\mu^2\right)^\eta.
+\]
+The quotient integrals are at most one, proving the claim.
+\end{proof}
+
+\begin{lemma}[Triangle rescaling]
+\label{lem:scalar}
+Let $0<h\leq6$, let $p\in(1/2,1]$, and suppose
+$0<z\leq p^{h/2}$.  Put
+\[
+ s_0=p\left(\frac{p^{h/2}}z\right)^{2/3}.
+\]
+If $s_0\leq1$, then
+\[
+ zA_3(s_0)\geq p^{h/2}A_3(p).
+\]
+\end{lemma}
+
+\begin{proof}
+For $s\in[1/2,1]$, set
+\[
+ \psi(s)=\frac{A_3(s)}{s^{3/2}}
+ =2\sqrt{s}-\frac1{\sqrt{s}}.
+\]
+Then
+\[
+ \psi'(s)=\frac1{\sqrt{s}}+\frac1{2s^{3/2}}>0.
+\]
+The definition of $s_0$ is equivalent to
+\[
+ z=p^{h/2}\left(\frac p{s_0}\right)^{3/2}.
+\]
+Since $s_0\geq p$, monotonicity gives
+\[
+ zA_3(s_0)
+ =p^{(h+3)/2}\psi(s_0)
+ \geq p^{(h+3)/2}\psi(p)
+ =p^{h/2}A_3(p).
+\]
+\end{proof}
+
+The function $A_3(s)=s(2s-1)$ is nondecreasing on $[1/2,1]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The outer-leaf theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Leaves on the bowtie's outer orbit]
+\label{thm:main}
+Let $1\leq h\leq6$ and let
+$n_a+n_b+n_c+n_d=h$.  Every graphon $W$ of edge density
+$p\in[1/2,1]$ satisfies
+\[
+ \boxed{
+ t\bigl(B(n_a,n_b,n_c,n_d),W\bigr)
+ \geq p^hA_3(p)^2
+ =\Phi_{B(\boldsymbol n)}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+The threshold $p=1/2$ follows from nonnegativity, and at $p=1$ both sides
+equal one.  Assume $p\in(1/2,1)$.
+
+Integrating the leaves first gives the bowtie core integrand multiplied by
+\[
+ d(x_a)^{n_a}d(x_b)^{n_b}d(x_c)^{n_c}d(x_d)^{n_d}.
+\]
+Average over the automorphism group of the bowtie.  Its action is transitive
+on the four outer vertices, so each exponent has group average $h/4$.
+The arithmetic--geometric mean inequality therefore gives the lower bound
+in which every outer variable has exponent
+\[
+ \alpha=\frac h4.
+\]
+
+For a fixed image $x$ of the center, define
+\[
+ R_\alpha(x)
+ =\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)d(y)^\alpha d(z)^\alpha
+ \dd\mu(y)\dd\mu(z).
+\]
+The two outer edges $ab$ and $cd$ use disjoint variables.  Hence the
+symmetrized lower bound factorizes exactly as
+\begin{equation}
+ t(B(\boldsymbol n),W)
+ \geq\int_\Omega R_\alpha(x)^2\dd\mu(x)
+ \geq\left(\int_\Omega R_\alpha(x)\dd\mu(x)\right)^2,
+ \label{eq:square}
+\end{equation}
+where the second inequality is Cauchy--Schwarz.
+
+The last integral is a triangle density with weight $d^\alpha$ at two of
+its three vertices.  By triangle symmetry, the three choices of unweighted
+vertex give equal integrals.  Average those three representations and apply
+the arithmetic--geometric mean inequality again.  Every triangle vertex then
+has exponent
+\[
+ \beta=\frac{2\alpha}{3}=\frac h6\in(0,1].
+\]
+Consequently
+\begin{equation}
+ \int R_\alpha
+ \geq\int_{\Omega^3}
+ W(x,y)W(y,z)W(z,x)
+ d(x)^\beta d(y)^\beta d(z)^\beta\dd\mu^3.
+ \label{eq:triangle-symmetry}
+\end{equation}
+
+Put
+\[
+ M=\int_\Omega d(x)^\beta\dd\mu(x),
+ \qquad z=M^3,
+ \qquad
+ \dd\nu(x)=\frac{d(x)^\beta}{M}\dd\mu(x).
+\]
+Here $M>0$ because $p>0$.  The right side of
+\eqref{eq:triangle-symmetry} is $z\,t(K_3,W;\nu)$.  The edge density on
+$(\Omega,\nu)$ is
+\[
+ s=\frac{N_\beta}{M^2}.
+\]
+Concavity of $u^\beta$ and Lemma~\ref{lem:fractional-edge} give
+\[
+ 0<z\leq p^{3\beta}=p^{h/2},
+\]
+and
+\[
+ s\geq\frac{p^{1+2\beta}}{M^2}
+ =p\left(\frac{p^{h/2}}z\right)^{2/3}
+ =:s_0.
+\]
+Since $s\leq1$, also $s_0\leq1$; moreover $s\geq s_0\geq p>1/2$.
+
+Apply the accepted triangle bound \eqref{eq:triangle-input}, its
+monotonicity, and Lemma~\ref{lem:scalar}:
+\[
+ \int R_\alpha
+ \geq zA_3(s)
+ \geq zA_3(s_0)
+ \geq p^{h/2}A_3(p).
+\]
+Substitution in \eqref{eq:square} gives
+\[
+ t(B(\boldsymbol n),W)
+ \geq p^hA_3(p)^2,
+\]
+which is \eqref{eq:target}.
+\end{proof}
+
+Every balanced complete $\ell$-partite graphon, $\ell\geq2$, realizes
+equality.  Its degree is constant, the rooted weighted-triangle function is
+constant by class symmetry, and the accepted triangle bound is sharp.  At
+$\ell=2$, both sides vanish.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas 119, formalization audit, and limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 119]\label{cor:atlas119}
+NetworkX Atlas graph $119$, with graph6 code \texttt{EtoO}, is positive.  It
+has order six, size seven, chromatic number three, and
+\[
+ \chi_{F_{119}}(x)=x(x-1)^3(x-2)^2.
+\]
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{119},W)\geq p^3(2p-1)^2=\Phi_{F_{119}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 01,\ 02,\ 03,\ 04,\ 14,\ 23,\ 35.
+\]
+The triangles $014$ and $023$ share center $0$, and vertex $5$ is a leaf at
+the outer vertex $3$.  Thus Theorem~\ref{thm:main} applies with $h=1$.
+\end{proof}
+
+All uses of Tonelli--Fubini concern bounded nonnegative measurable
+integrands.  The proof explicitly handles $\{d=0\}$ and proves the biased
+normalization positive before dividing.  It uses ordinary homomorphism
+densities and assumes no regularity, finite-step model, minimum degree, or
+injectivity.  The only accepted density input is the triangle theorem with
+exactly matching edge-density range.
+
+The leaves must attach only to the four-vertex outer orbit.  The shared
+center carries no leaf in this theorem.  The bound $h\leq6$ is the exact
+limit of this proof, because the second symmetrization produces exponent
+$h/6$ and the needed concavity reverses beyond one.  The result does not
+cover arbitrary leaves on a vertex-amalgam, tails of length two, or a general
+mixed-chordal graph.
+
+The graph identities, both symmetrized exponents, scalar derivative, and
+Atlas identification are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_bowtie_outer_leaves.py
+\end{verbatim}
+For formal verification, the new pieces are the outer-orbit
+arithmetic--geometric symmetrization, conditional square factorization,
+Cauchy--Schwarz step, and the second triangle symmetrization.  The
+graph-specific module awaiting inspection is
+\texttt{lean/Taeyoung/Examples/Graph119.lean}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is \texttt{lean/Taeyoung/Methods/BowtieLeaf.lean},
+ending at \texttt{satisfiesLowerBound\_119}.
+
+\paragraph{Scope: $h=1$ only.}
+Theorem~\ref{thm:main} is \emph{not} formalized for $1\leq h\leq6$.  What is
+proved is Corollary~\ref{cor:atlas119}, on all of $p\in[1/2,1]$, and it is the
+only member of the family inside the six-vertex catalogue: the bowtie already
+has five vertices, so $h=1$.  The two symmetrisation exponents are therefore
+$\alpha=1/4$ and $\beta=1/6$, both \emph{reciprocal integers}, which is what
+lets the pre-existing \texttt{Methods/OddLeaf/Bias.lean} apply unchanged at
+$m=6$: it builds $d^{1/m}$, $M=\int d^{1/m}$, the tilted measure $\nu$ and the
+reread kernel for every $m\geq1$, and both $(d^{1/m})^m=d$ and $M^m\leq p$ stay
+$\mathbb{N}$-powers.  A general $h$ would need $d^{h/6}$ with $h\nmid6$, hence
+genuine \texttt{Real.rpow} arithmetic in those two places.
+
+\paragraph{Lemma~\ref{lem:fractional-edge} was already available.}
+It is the same statement as \texttt{odd\_cycle\_one\_leaf.tex} Lemma~2.1 at
+$\beta=1/m$, and is formalized once, for every $m$, as
+\texttt{OddLeaf.pow\_le\_pow\_rootEdge}:
+\[
+ p^{m+2}\leq N^m .
+\]
+The polynomial form is deliberate --- no real power of $p$ appears in any
+statement.  Atlas 119 uses the $m=6$ instance
+\texttt{OddLeaf.pow\_eight\_le\_pow\_rootEdge}, $p^8\leq N^6$.
+
+\paragraph{The departure: the rescaling carries no derivative and no
+square root.}
+Lemma~\ref{lem:scalar} is proved here by differentiating
+$\psi(s)=A_3(s)s^{-3/2}=2\sqrt s-1/\sqrt s$, and at $h=1$ its statement contains
+$p^{h/2}=\sqrt p$.  The formalization forms no square root at all.  The
+observation is that the quantity the proof actually feeds into \eqref{eq:square}
+is the \emph{square} $(\int R_\alpha)^2$, so with $K=M^6=z^2$ the whole
+rescaling can be stated squared,
+\[
+ p\,A_3(p)^2\leq K\,A_3(s)^2
+ \qquad(\texttt{BowtieLeaf.transfer}),
+\]
+and its hypotheses are the two polynomial facts $K\leq p$ (Jensen,
+\texttt{OddLeaf.pow\_rootMean\_le}) and $p^8\leq K^2s^6$ (the fractional
+Hölder, through $N=M^2s$).  Clearing $s^3$ and dividing by $p^2s^2$ reduces it
+to
+\begin{equation}
+ p(2s-1)^2-s(2p-1)^2=(s-p)(4ps-1)\geq0
+ \qquad\bigl(\tfrac12\leq p\leq s\bigr),
+ \label{eq:lean-bowtie}
+\end{equation}
+a single \texttt{ring} factorisation --- the same factor as the rescaling in
+\texttt{Methods/CliqueDist/Diamond.lean}.  The intermediate $s_0$ never appears,
+and neither does the hypothesis $s_0\leq1$; the inequality $p\leq s$, which the
+note gets from $z\leq p^{h/2}$ and the definition of $s_0$, is obtained instead
+from $p^8\leq K^2s^6\leq p^2s^6$ (\texttt{BowtieLeaf.le\_biased}).  The
+monotonicity of $A_3$ on $[1/2,1]$, stated after Lemma~\ref{lem:scalar}, is not
+formalized and is not needed.
+
+\paragraph{Both symmetrisations are measure-preserving permutations.}
+``Average over the automorphism group of the bowtie'' and ``by triangle
+symmetry, the three choices of unweighted vertex give equal integrals'' are
+discharged by \texttt{Methods/Peeling.integral\_assignment\_perm}, a general
+lemma extracting the measure-preserving half of \texttt{homDensity\_iso} so
+that it applies to an integrand which is \emph{not} a graph weight.  For the
+outer orbit the three nontrivial automorphisms are given explicitly
+(\texttt{aut2}, \texttt{aut3}, \texttt{aut4}, each checked by \texttt{decide});
+for the triangle they are the two rotations.  Only transitivity on
+$\{a,b,c,d\}$ is used, never the full group.  The two arithmetic--geometric
+mean steps are Mathlib's
+\texttt{Real.geom\_mean\_le\_arith\_mean\_weighted} at four equal weights $1/4$
+and at three equal weights $1/3$; the second one carries the exponent
+bookkeeping $\bigl(d^{1/4}d^{1/4}\bigr)^{1/3}\rightsquigarrow d^{1/6}$
+(\texttt{BowtieLeaf.prod\_pair\_rootDegree}).
+
+\paragraph{The factorisation \eqref{eq:square} is an identity, not an
+estimate.}
+\texttt{BowtieLeaf.integral\_outer\_factor} proves
+$\int_{\Omega^5}=\int_\Omega R_\alpha^2$ exactly, by peeling the two triangles
+into disjoint variable blocks; the Cauchy--Schwarz step
+$\int R^2\geq(\int R)^2$ is separate
+(\texttt{BowtieLeaf.sq\_integral\_pairTri\_le}, the project's
+\texttt{BookTail.sq\_integral\_mul\_le} against the constant $1$).  The
+accepted triangle input \eqref{eq:triangle-input} is
+\texttt{K4Tail.goodman}, applied on $(\Omega,\nu)$ with no hypothesis on the
+biased density.
+
+\end{document}

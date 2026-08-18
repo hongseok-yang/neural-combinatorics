@@ -1,0 +1,1190 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.02in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\Tail}{\operatorname{Tail}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\title{The Chromatic-Polynomial Graphon Bound for Pure Chordal Graphs}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We give a graphon-direct proof of the chromatic-polynomial lower bound for
+chordal graphs whose maximal cliques have one common size.  Every analytic
+inequality is stated in denominator-free form until positivity has been
+proved.  The proof uses only finite-product integration, an elementary Gibbs
+inequality, the regularization
+\(W_\varepsilon=\varepsilon+(1-\varepsilon)W\), a direct graphon proof of the
+Moon--Moser recurrence, and finite clique-tree combinatorics.  It uses no
+finite-graph approximation, graphon regularity, cut metric, injective-copy
+count, minimum-degree assumption, or pointwise degree lower bound.
+
+The organization and dependency boundaries mirror the machine-checked Lean
+development in \path{lean/Taeyoung/Methods/PureChordal}.  In particular, the
+primary analytic result is a polynomial certificate inequality; the
+chromatic-polynomial identity is proved separately.
+\end{abstract}
+
+\section{Graphons and the theorem}
+
+Let \((\Omega,\mu)\) be a probability space.  A graphon is a symmetric
+measurable function
+\[
+    W\colon\Omega^2\longrightarrow[0,1].
+\]
+For a finite simple graph \(F\), define
+\[
+    t(F,W)
+    :=
+    \int_{\Omega^{V(F)}}
+       \prod_{uv\in E(F)}W(x_u,x_v)
+       \prod_{u\in V(F)}d\mu(x_u).
+\]
+All integrands are measurable, nonnegative, and at most \(1\), so every
+displayed integral exists and belongs to \([0,1]\).  Write
+\[
+    p:=t(K_2,W),
+    \qquad
+    t_s:=t(K_s,W),
+    \qquad
+    t_0=t_1:=1.
+\]
+
+For an integer \(s\ge0\), put
+\[
+    A_s(p)
+    :=
+    \prod_{a=0}^{s-1}\bigl(1-a(1-p)\bigr),
+    \qquad A_0(p)=A_1(p)=1.
+\]
+For \(0\le s\le r\), also put
+\[
+    \Tail_{s,r}(p)
+    :=
+    \prod_{a=s}^{r-1}\bigl(1-a(1-p)\bigr).
+\]
+The empty product is \(1\), and the exact factorization
+\begin{equation}\label{eq:A-tail}
+    A_s(p)\Tail_{s,r}(p)=A_r(p)
+\end{equation}
+holds as a polynomial identity, without any division.
+
+\begin{theorem}[Pure-chordal graphon inequality]\label{thm:main}
+Let \(H\) be a finite chordal graph all of whose maximal cliques have the
+same cardinality \(r\ge3\).  Connectivity is not required.  Then
+\[
+    \chi(H)=r.
+\]
+For every graphon \(W\) of edge density \(p\) satisfying
+\[
+    p\ge1-\frac1{r-1},
+\]
+one has, for \(p<1\),
+\[
+    \boxed{
+    t(H,W)
+    \ge
+    (1-p)^{v(H)}
+    \chi_H\!\left(\frac1{1-p}\right).
+    }
+\]
+At \(p=1\), the right-hand side is interpreted by its polynomial
+continuation in \(p\); that continuation equals \(1\), and the same inequality
+holds with equality.
+\end{theorem}
+
+The remainder of the paper proves every component of this statement.
+
+\section{The rooted pure clique-tree certificate}
+
+The analytic proof uses explicit finite certificate data.  This avoids hiding
+the running-intersection property inside informal clique-tree language.
+
+\begin{definition}[Rooted pure clique-tree presentation]\label{def:certificate}
+Let \(m\ge1\).  A rooted \(r\)-pure clique-tree presentation of \(H\) consists
+of distinct bags
+\[
+    C_0,C_1,\dots,C_{m-1}\subseteq V(H)
+\]
+and, for each \(i>0\), a parent index \(\pi(i)<i\), such that:
+\begin{enumerate}
+    \item every \(C_i\) has cardinality \(r\) and induces a clique in \(H\);
+    \item the bags cover every vertex and every edge of \(H\);
+    \item for every \(i>0\),
+    \begin{equation}\label{eq:old-separator}
+        C_i\cap\bigcup_{j<i}C_j
+        =
+        C_i\cap C_{\pi(i)}.
+    \end{equation}
+\end{enumerate}
+Set
+\[
+    S_0:=\varnothing,
+    \qquad
+    S_i:=C_i\cap C_{\pi(i)}\quad(i>0),
+    \qquad
+    s_i:=|S_i|,
+\]
+and let
+\[
+    N_i:=C_i\setminus S_i
+\]
+be the vertices introduced at step \(i\).
+\end{definition}
+
+For a chordal graph, the standard maximal-clique-tree theorem supplies a tree
+on the maximal cliques with the running-intersection property.  Rooting that
+tree and listing parents before children gives
+Definition~\ref{def:certificate}.  For a disconnected chordal graph, take a
+clique tree in each component and join those trees by artificial tree edges;
+their separators are empty.  Thus Theorem~\ref{thm:main} reduces to the
+certificate theorem proved below.  Conversely, the Lean development uses the
+existence of this maximal-clique presentation as its formal definition of
+chordality, so no unrecorded graph-theoretic implication occurs in the formal
+theorem.
+
+\begin{lemma}[Strict separator size]\label{lem:separator-size}
+For every bag index \(i\),
+\[
+    0\le s_i<r.
+\]
+\end{lemma}
+
+\begin{proof}
+For the root, \(s_0=0<r\).  If \(i>0\), then \(S_i\subseteq C_i\), so
+\(s_i\le r\).  Equality would give \(S_i=C_i\), hence
+\(C_i\subseteq C_{\pi(i)}\).  The parent also has \(r\) vertices, so this
+would force \(C_i=C_{\pi(i)}\), contradicting distinctness of the bags.
+\end{proof}
+
+\begin{lemma}[Introduced-vertex partition]\label{lem:new-partition}
+The sets \(N_0,\dots,N_{m-1}\) are pairwise disjoint and their union is
+\(V(H)\).  Consequently,
+\begin{equation}\label{eq:vertex-count}
+    v(H)
+    =
+    \sum_{i=0}^{m-1}(r-s_i)
+    =
+    mr-\sum_{i=0}^{m-1}s_i.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let \(v\in V(H)\), and choose the least index \(i\) for which \(v\in C_i\).
+Then \(v\notin\bigcup_{j<i}C_j\), so
+\eqref{eq:old-separator} implies \(v\notin S_i\).  Hence \(v\in N_i\), proving
+that the \(N_i\) cover \(V(H)\).
+
+If \(i<j\) and \(v\in N_i\cap N_j\), then \(v\in C_i\) shows that \(v\) is
+already present before step \(j\).  Since also \(v\in C_j\),
+\eqref{eq:old-separator} gives \(v\in S_j\), contrary to \(v\in N_j\).
+Thus the sets are pairwise disjoint.  Finally,
+\(|N_i|=|C_i|-|S_i|=r-s_i\), and summing the cardinalities proves
+\eqref{eq:vertex-count}.
+\end{proof}
+
+For a finite set \(A\subseteq V(H)\), let \(\binom A2\) be the set of
+unordered pairs of distinct elements of \(A\).  For an assignment
+\(x\in\Omega^{V(H)}\), define
+\[
+    \kappa_A(x)
+    :=
+    \prod_{\{u,v\}\in\binom A2}W(x_u,x_v),
+    \qquad
+    \kappa_H(x)
+    :=
+    \prod_{uv\in E(H)}W(x_u,x_v).
+\]
+
+\begin{lemma}[Edge-weight multiplicity]\label{lem:edge-multiplicity}
+For every graphon \(W\) and every assignment \(x\),
+\begin{equation}\label{eq:edge-weight}
+    \prod_{i=0}^{m-1}\kappa_{C_i}(x)
+    =
+    \kappa_H(x)
+    \prod_{i=0}^{m-1}\kappa_{S_i}(x).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+First observe that
+\begin{equation}\label{eq:pairs-overlap}
+    \binom{C_i}{2}
+    \cap
+    \bigcup_{j<i}\binom{C_j}{2}
+    =
+    \binom{S_i}{2}.
+\end{equation}
+For the nontrivial inclusion, if both endpoints of a pair lie in \(C_i\) and
+also in an earlier bag, then each endpoint lies in
+\(C_i\cap\bigcup_{j<i}C_j=S_i\).  Conversely, when \(i>0\), every pair in
+\(S_i\) also lies in the earlier parent bag; for \(i=0\), both sides are
+empty.
+
+Now insert the bags one at a time.  For any commuting family of weights,
+the product over a set \(A\), times the product over a set \(B\), is the
+product over \(A\cup B\), times the product over \(A\cap B\).  Applying this
+identity at step \(i\) and using \eqref{eq:pairs-overlap} shows inductively
+that the product of all bag-pair weights equals the product over the union of
+all bag pairs, times the product of the separator-pair weights.  The union of
+the bag pairs is exactly \(E(H)\): bag cliquehood gives one inclusion, and
+edge coverage gives the other.  This is precisely \eqref{eq:edge-weight}.
+\end{proof}
+
+\section{Chromatic polynomial and the exact target}
+
+Write
+\[
+    (x)_d:=x(x-1)\cdots(x-d+1),
+    \qquad (x)_0:=1.
+\]
+
+\begin{lemma}[Chromatic factorization]\label{lem:chromatic}
+For a graph with a rooted \(r\)-pure clique-tree presentation,
+\begin{equation}\label{eq:chromatic-product}
+    \chi_H(x)
+    =
+    \prod_{i=0}^{m-1}(x-s_i)_{r-s_i}.
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:chromatic-quotient}
+    \chi_H(x)
+    =
+    \frac{(x)_r^m}{\prod_{i=0}^{m-1}(x)_{s_i}},
+\end{equation}
+where \eqref{eq:chromatic-product}, not division, is the primary polynomial
+identity.  Moreover, \(\chi(H)=r\).
+\end{lemma}
+
+\begin{proof}
+Fix an integer \(k\ge r\) and expose bags in index order.  A completed
+assignment is a proper \(k\)-colouring of \(H\) if and only if its restriction
+to every bag is injective.  Indeed, properness implies injectivity on each
+clique, while injectivity on all bags separates the endpoints of every edge
+because every edge lies in a bag.
+
+At step \(i\), the already exposed vertices of \(C_i\) are exactly \(S_i\).
+Their \(s_i\) colours are distinct because, for \(i>0\), they lie in the
+parent bag.  The \(r-s_i\) vertices of \(N_i\) must receive distinct colours
+from the remaining \(k-s_i\) colours, which can be done in exactly
+\[
+    (k-s_i)_{r-s_i}
+\]
+ways.  This choice makes the current bag injective.  It cannot create a
+future obstruction: the old vertices of every future bag form its separator
+inside an already injectively coloured parent bag.  Induction therefore gives
+\[
+    \chi_H(k)
+    =
+    \prod_{i=0}^{m-1}(k-s_i)_{r-s_i}
+    \qquad(k\ge r).
+\]
+Both sides are polynomials in \(k\), and they agree at infinitely many
+integers, proving \eqref{eq:chromatic-product}.  The identity
+\((x-s)_{r-s}(x)_s=(x)_r\) gives the cross-multiplied form of
+\eqref{eq:chromatic-quotient}.
+
+Every bag contains a copy of \(K_r\), so \(\chi(H)\ge r\).  At \(k=r\), every
+factor \((r-s_i)_{r-s_i}\) is positive by
+Lemma~\ref{lem:separator-size}; hence \(H\) has an \(r\)-colouring.  Thus
+\(\chi(H)=r\).
+\end{proof}
+
+\begin{lemma}[Polynomial certificate equals the target]\label{lem:target}
+Define
+\begin{equation}\label{eq:certificate}
+    B_H(p)
+    :=
+    \prod_{i=0}^{m-1}\Tail_{s_i,r}(p).
+\end{equation}
+For \(p\ne1\),
+\begin{equation}\label{eq:target-identity}
+    B_H(p)
+    =
+    (1-p)^{v(H)}
+    \chi_H\!\left(\frac1{1-p}\right).
+\end{equation}
+Thus \(B_H\) is the polynomial continuation of the target to \(p=1\), and
+\[
+    B_H(1)=1.
+\]
+Also,
+\begin{equation}\label{eq:certificate-cross}
+    \left(\prod_{i=0}^{m-1}A_{s_i}(p)\right)B_H(p)
+    =
+    A_r(p)^m.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put \(q=1-p\ne0\).  For every \(s\le r\),
+\[
+\begin{aligned}
+    q^{r-s}\left(\frac1q-s\right)_{r-s}
+    &=
+    \prod_{a=s}^{r-1}q\left(\frac1q-a\right)\\
+    &=
+    \prod_{a=s}^{r-1}(1-aq)
+    =\Tail_{s,r}(p).
+\end{aligned}
+\]
+Multiply this identity over all bags.  The exponent of \(q\) is
+\(\sum_i(r-s_i)=v(H)\) by \eqref{eq:vertex-count}, and
+Lemma~\ref{lem:chromatic} supplies the remaining product.  This proves
+\eqref{eq:target-identity}.  At \(p=1\), every factor in
+\eqref{eq:certificate} equals \(1\).  Finally, multiplying
+\eqref{eq:A-tail} over all \(i\) gives
+\eqref{eq:certificate-cross}.
+\end{proof}
+
+\section{Clique-tree gluing directly in graphon space}
+
+The main analytic statement in this section is the cross-multiplied inequality
+\begin{equation}\label{eq:gluing-goal}
+    t_r^m
+    \le
+    t(H,W)\prod_{i=0}^{m-1}t_{s_i}.
+\end{equation}
+Because \(s_0=0\) and \(t_0=1\), the root factor is harmless.  The
+cross-multiplied form remains meaningful when a clique density is zero.
+
+\subsection{A local Gibbs lemma}
+
+\begin{lemma}[Gibbs inequality]\label{lem:gibbs}
+Let \(f,g\) be strictly positive measurable probability densities on a
+probability space.  Suppose \(f,g\), their reciprocals, and the logarithmic
+integrand below are bounded.  Then
+\[
+    \int f\log\frac{g}{f}\,d\mu\le0.
+\]
+\end{lemma}
+
+\begin{proof}
+For \(u>0\), \(\log u\le u-1\).  Substitute \(u=g/f\), multiply by
+the positive function \(f\), and integrate:
+\[
+    \int f\log\frac{g}{f}
+    \le
+    \int(g-f)
+    =1-1=0.
+\]
+The boundedness assumptions justify integrability; in the application they
+follow from a uniform positive lower bound on \(W\).
+\end{proof}
+
+\subsection{Uniformly positive graphons}
+
+Assume temporarily that there is a number \(\delta>0\) such that
+\begin{equation}\label{eq:positive-W}
+    \delta\le W(x,y)\le1
+    \qquad\text{for every }x,y\in\Omega.
+\end{equation}
+Every finite graph weight and every clique density is then strictly positive.
+
+For each bag \(C_i\), define its unnormalized marginal over the new
+coordinates by
+\[
+    R_i(x_{S_i})
+    :=
+    \int_{\Omega^{N_i}}
+       \kappa_{C_i}(x_{S_i},y_{N_i})
+       \prod_{v\in N_i}d\mu(y_v).
+\]
+For the root this is the constant \(R_0=t_r\).  Define
+\[
+    q_i(x_{S_i}):=\frac{R_i(x_{S_i})}{t_r},
+    \qquad
+    K_i(y_{N_i}\mid x_{S_i})
+    :=
+    \frac{\kappa_{C_i}(x_{S_i},y_{N_i})}{R_i(x_{S_i})}.
+\]
+Then \(q_i\) is the separator marginal of the normalized \(K_r\)-weight,
+and, for every fixed \(x_{S_i}\),
+\begin{equation}\label{eq:conditional-one}
+    \int_{\Omega^{N_i}}K_i(y_{N_i}\mid x_{S_i})\,d\mu^{N_i}(y)=1.
+\end{equation}
+All quantities are measurable by finite-product Fubini/Tonelli.  Moreover,
+\eqref{eq:positive-W} bounds every numerator and denominator between explicit
+positive powers of \(\delta\) and \(1\), so all quotients and logarithms used
+below are bounded.
+
+\begin{lemma}[Equal-size clique marginal]\label{lem:equal-marginal}
+Let \(C,D\) be two \(r\)-element sets and let \(S\subseteq C\cap D\), with
+\(C\cap D=S\).  The marginal on the coordinates \(S\) of the normalized
+clique weight \(\kappa_C/t_r\) is equal to the corresponding marginal of
+\(\kappa_D/t_r\).
+\end{lemma}
+
+\begin{proof}
+Choose a bijection from \(C\setminus S\) to \(D\setminus S\), and extend it by
+the identity on \(S\).  This is possible because both complements have
+cardinality \(r-|S|\).  Under the resulting coordinate relabeling, the
+complete set of unordered pairs in \(C\) is carried bijectively to the
+complete set of unordered pairs in \(D\).  Symmetry of \(W\) identifies the
+two integrands, while invariance of a finite product measure under coordinate
+permutation identifies the integrals over the complementary coordinates.
+The normalizing mass is \(t_r\) for both cliques.
+\end{proof}
+
+Define the completed junction density on \(\Omega^{V(H)}\) by
+\begin{equation}\label{eq:junction}
+    P(x)
+    :=
+    \prod_{i=0}^{m-1}K_i(x_{N_i}\mid x_{S_i}).
+\end{equation}
+
+\begin{lemma}[Junction invariant]\label{lem:junction}
+The function \(P\) is a strictly positive probability density.  For every
+bag \(C_i\), its \(C_i\)-marginal is
+\[
+    \frac{\kappa_{C_i}}{t_r},
+\]
+and for every separator \(S_i\), its \(S_i\)-marginal is \(q_i\).
+\end{lemma}
+
+\begin{proof}
+Consider the partial products in \eqref{eq:junction}, adding the factors in
+the order \(0,1,\dots,m-1\).  We prove inductively that the partial product
+has total mass one and that every already inserted bag has normalized
+clique-weight marginal.
+
+At the root, \(S_0=\varnothing\), \(R_0=t_r\), and
+\(K_0=\kappa_{C_0}/t_r\), so the claim is immediate.
+
+Suppose now that bags before \(i\) have been inserted.  The variables in
+\(N_i\) are fresh by Lemma~\ref{lem:new-partition}.  Consequently,
+integrating the new factor over \(N_i\) removes it by
+\eqref{eq:conditional-one}; this preserves total mass and every earlier bag
+marginal.  If \(i>0\), the separator \(S_i\) lies in the parent bag, whose
+marginal is \(\kappa_{C_{\pi(i)}}/t_r\) by induction.  By
+Lemma~\ref{lem:equal-marginal}, its marginal on \(S_i\) is exactly
+\(q_i=R_i/t_r\).  For the root, the same statement is \(1=1\).
+Multiplication by \(K_i=\kappa_{C_i}/R_i\) therefore gives the new bag
+marginal
+\[
+    q_i\frac{\kappa_{C_i}}{R_i}
+    =
+    \frac{R_i}{t_r}\frac{\kappa_{C_i}}{R_i}
+    =
+    \frac{\kappa_{C_i}}{t_r}.
+\]
+This completes the induction.  Taking its separator marginal gives \(q_i\).
+Strict positivity follows from \eqref{eq:positive-W}.
+\end{proof}
+
+For every \(i\), define the normalized separator clique density
+\[
+    \nu_i(x_{S_i})
+    :=
+    \frac{\kappa_{S_i}(x_{S_i})}{t_{s_i}}.
+\]
+The root case is \(\nu_0=1\).  Lift this separator law to a density on all
+assignments by
+\[
+    G_i(x)
+    :=
+    P(x)\frac{\nu_i(x_{S_i})}{q_i(x_{S_i})}.
+\]
+Lemma~\ref{lem:junction} shows that \(\int G_i=1\): integrating outside
+\(S_i\) replaces \(P\) by \(q_i\), after which the quotient cancels and
+\(\int\nu_i=1\).  Also define the normalized graph-weight density
+\[
+    Q_H(x):=\frac{\kappa_H(x)}{t(H,W)}.
+\]
+All of \(P,G_i,Q_H\) are strictly positive bounded probability densities.
+
+\begin{lemma}[Constant Gibbs-ratio identity]\label{lem:constant-ratio}
+Under \eqref{eq:positive-W}, for every assignment \(x\),
+\begin{equation}\label{eq:constant-ratio}
+    \frac{Q_H(x)}{P(x)}
+    \prod_{i=0}^{m-1}\frac{G_i(x)}{P(x)}
+    =
+    \frac{t_r^m}
+    {t(H,W)\prod_{i=0}^{m-1}t_{s_i}}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+By definition,
+\[
+    P(x)=\frac{\prod_i\kappa_{C_i}(x)}{\prod_iR_i(x_{S_i})}.
+\]
+Lemma~\ref{lem:edge-multiplicity} changes the numerator to
+\(\kappa_H\prod_i\kappa_{S_i}\).  Furthermore,
+\[
+    \frac{G_i}{P}
+    =
+    \frac{\nu_i}{q_i}
+    =
+    \frac{\kappa_{S_i}t_r}{t_{s_i}R_i}.
+\]
+Substituting these formulas into the left-hand side of
+\eqref{eq:constant-ratio} cancels, pointwise, \(\kappa_H\), every
+\(\kappa_{S_i}\), and every \(R_i\).  What remains is exactly the constant
+on the right-hand side.
+\end{proof}
+
+\begin{proposition}[Gluing for a uniformly positive graphon]
+Under \eqref{eq:positive-W}, inequality \eqref{eq:gluing-goal} holds.
+\end{proposition}
+
+\begin{proof}
+Apply Lemma~\ref{lem:gibbs} once to \(f=P,g=Q_H\), and once for each \(i\)
+to \(f=P,g=G_i\).  Adding the resulting nonpositive quantities gives
+\[
+\begin{aligned}
+    0
+    &\ge
+    \int P\log\frac{Q_H}{P}
+    +
+    \sum_{i=0}^{m-1}\int P\log\frac{G_i}{P}\\
+    &=
+    \int P\log\left(
+      \frac{Q_H}{P}\prod_i\frac{G_i}{P}
+    \right).
+\end{aligned}
+\]
+By Lemma~\ref{lem:constant-ratio}, the logarithm is constant, and
+\(\int P=1\).  Therefore
+\[
+    \log\left(
+      \frac{t_r^m}{t(H,W)\prod_i t_{s_i}}
+    \right)
+    \le0.
+\]
+The argument of the logarithm is positive, so it is at most \(1\).  This is
+exactly \eqref{eq:gluing-goal}.
+\end{proof}
+
+\subsection{Removing strict positivity}
+
+\begin{lemma}[Finite-product difference]\label{lem:product-difference}
+If \(a_e,b_e\in[0,1]\) for every element of a finite set \(E\), then
+\[
+    \left|\prod_{e\in E}a_e-\prod_{e\in E}b_e\right|
+    \le
+    \sum_{e\in E}|a_e-b_e|.
+\]
+\end{lemma}
+
+\begin{proof}
+Order the finite set and replace the factors one at a time.  The resulting
+telescoping sum has one factor \(a_e-b_e\) in each term, while all other
+factors lie in \([0,1]\).  The triangle inequality gives the result.
+\end{proof}
+
+For \(0<\varepsilon\le1\), define
+\[
+    W_\varepsilon
+    :=
+    \varepsilon+(1-\varepsilon)W.
+\]
+Then \(\varepsilon\le W_\varepsilon\le1\) pointwise and
+\(|W_\varepsilon-W|\le\varepsilon\).  Applying
+Lemma~\ref{lem:product-difference} inside the homomorphism-density integral
+gives, for every finite graph \(F\),
+\begin{equation}\label{eq:regularization-error}
+    |t(F,W_\varepsilon)-t(F,W)|
+    \le
+    e(F)\varepsilon.
+\end{equation}
+
+\begin{theorem}[Cross-multiplied clique-tree gluing]\label{thm:gluing}
+For every graphon \(W\), with no positivity assumption,
+\[
+    t_r^m
+    \le
+    t(H,W)\prod_{i=0}^{m-1}t_{s_i}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+    L(W):=t_r^m,
+    \qquad
+    R(W):=t(H,W)\prod_i t_{s_i}.
+\]
+All densities in these products lie in \([0,1]\).  Applying
+Lemma~\ref{lem:product-difference} to the \(m\) identical factors in \(L\),
+and then using \eqref{eq:regularization-error} for \(K_r\), gives
+\[
+    |L(W_\varepsilon)-L(W)|
+    \le
+    m\binom r2\varepsilon.
+\]
+Applying the same product lemma to \(R\) gives
+\[
+    |R(W_\varepsilon)-R(W)|
+    \le
+    \left(e(H)+\sum_i\binom{s_i}{2}\right)\varepsilon.
+\]
+Set
+\[
+    C:=m\binom r2+e(H)+\sum_i\binom{s_i}{2}.
+\]
+For every \(\eta>0\), choose
+\[
+    0<\varepsilon\le
+    \min\left\{1,\frac{\eta}{C+1}\right\}.
+\]
+The uniformly positive case applies to \(W_\varepsilon\), so
+\(L(W_\varepsilon)\le R(W_\varepsilon)\).  Hence
+\[
+\begin{aligned}
+    L(W)
+    &\le L(W_\varepsilon)+m\binom r2\varepsilon\\
+    &\le R(W_\varepsilon)+m\binom r2\varepsilon\\
+    &\le R(W)+C\varepsilon\\
+    &\le R(W)+\eta.
+\end{aligned}
+\]
+Since this holds for every \(\eta>0\), \(L(W)\le R(W)\).  This is an
+elementary epsilon argument, not an invocation of graphon approximation or
+cut-distance continuity.
+\end{proof}
+
+\section{A direct graphon Moon--Moser inequality}
+
+We next prove the clique-density inequalities needed to compare
+Theorem~\ref{thm:gluing} with the polynomial certificate.
+
+\begin{lemma}[Weighted Cauchy--Schwarz]\label{lem:weighted-cs}
+If \(A\ge0\) and \(A,A\eta,A\eta^2\) are integrable, then
+\[
+    \left(\int A\eta\right)^2
+    \le
+    \left(\int A\right)\left(\int A\eta^2\right).
+\]
+\end{lemma}
+
+\begin{proof}
+This is Cauchy--Schwarz applied to \(\sqrt A\) and \(\sqrt A\,\eta\).
+All functions below are bounded finite products, so the integrability
+hypotheses hold automatically.
+\end{proof}
+
+Fix an integer \(j\ge2\).  On \(\Omega^{j-1}\), put
+\[
+    A(z_1,\dots,z_{j-1})
+    :=
+    \prod_{1\le a<b\le j-1}W(z_a,z_b)
+\]
+and
+\[
+    \eta(z_1,\dots,z_{j-1})
+    :=
+    \int_\Omega\prod_{a=1}^{j-1}W(x,z_a)\,d\mu(x).
+\]
+Then
+\[
+    \int A=t_{j-1},
+    \qquad
+    \int A\eta=t_j.
+\]
+Let
+\[
+    J_j:=\int A\eta^2.
+\]
+This is the homomorphism density of \(K_{j+1}\) with the edge between two
+distinguished vertices deleted.  Lemma~\ref{lem:weighted-cs} gives
+\begin{equation}\label{eq:clique-cs}
+    t_j^2\le t_{j-1}J_j.
+\end{equation}
+
+\begin{lemma}[Finite cube inequality]\label{lem:cube}
+Assign a number \(a_e\in[0,1]\) to every edge of the complete graph on
+\(j+1\) labelled vertices.  Define
+\[
+    K:=\prod_ea_e,
+    \qquad
+    B:=\sum_e\prod_{f\ne e}a_f,
+\]
+and
+\[
+    S:=\sum_v
+       \prod_{e\subseteq [j+1]\setminus\{v\}}a_e.
+\]
+Then
+\begin{equation}\label{eq:cube}
+    2B\le S+(j^2-1)K.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The difference between the right- and left-hand sides is affine in each
+variable \(a_e\) separately.  By induction over the finite edge set, a
+multiaffine function that is nonnegative on all Boolean assignments is
+nonnegative on the whole cube \([0,1]^E\): for one selected coordinate,
+its value is the convex combination
+\[
+    (1-a_e)F(a_e=0)+a_eF(a_e=1).
+\]
+
+It remains to check Boolean assignments.  If at least two edge variables are
+zero, then \(B=K=0\) and \(S\ge0\).  If exactly one edge variable is zero,
+then \(B=1\), \(K=0\), and precisely the two deletions of its endpoints
+contribute to \(S\), so \(S=2\).  If no variable is zero, then
+\[
+    B=\binom{j+1}{2},
+    \qquad S=j+1,
+    \qquad K=1,
+\]
+and both sides of \eqref{eq:cube} equal \(j(j+1)\).
+\end{proof}
+
+\begin{lemma}[Second-moment symmetrization]\label{lem:second-moment}
+For every integer \(j\ge2\),
+\begin{equation}\label{eq:second-moment}
+    jJ_j\le t_j+(j-1)t_{j+1}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+In Lemma~\ref{lem:cube}, substitute
+\(a_{\{u,v\}}=W(x_u,x_v)\) and integrate over
+\(\Omega^{j+1}\).  Every edge-deleted term has density \(J_j\), by a
+permutation of the \(j+1\) coordinates; there are
+\(\binom{j+1}{2}\) such terms.  Every vertex-deleted term has density \(t_j\),
+and there are \(j+1\) of them.  The complete term has density \(t_{j+1}\).
+Thus \eqref{eq:cube} integrates to
+\[
+    2\binom{j+1}{2}J_j
+    \le
+    (j+1)t_j+(j^2-1)t_{j+1}.
+\]
+Both sides have the positive factor \(j+1\); cancellation gives
+\eqref{eq:second-moment}.
+\end{proof}
+
+\begin{theorem}[Graphon Moon--Moser recurrence]\label{thm:moon-moser}
+For every graphon \(W\) and every integer \(j\ge2\),
+\begin{equation}\label{eq:moon-moser}
+    j t_j^2
+    \le
+    t_{j-1}t_j+(j-1)t_{j-1}t_{j+1}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Multiply \eqref{eq:clique-cs} by \(j\), then use
+Lemma~\ref{lem:second-moment} and \(t_{j-1}\ge0\):
+\[
+\begin{aligned}
+    jt_j^2
+    &\le jt_{j-1}J_j\\
+    &\le t_{j-1}\bigl(t_j+(j-1)t_{j+1}\bigr),
+\end{aligned}
+\]
+which expands to \eqref{eq:moon-moser}.
+\end{proof}
+
+\section{Clique polynomials and denominator-free ratios}
+
+For \(j\ge1\), define
+\[
+    c_j(p):=1-(j-1)(1-p).
+\]
+Then \(c_1=1\), \(c_2=p\), and
+\[
+    A_j(p)=\prod_{h=1}^{j}c_h(p).
+\]
+
+\begin{lemma}[Signs at the required threshold]\label{lem:factor-signs}
+Assume \(r\ge3\) and \(p\ge1-1/(r-1)\).  Then
+\[
+    c_j(p)>0\quad(1\le j<r),
+    \qquad
+    c_r(p)\ge0.
+\]
+Consequently,
+\[
+    A_s(p)>0\quad(0\le s<r),
+    \qquad
+    A_r(p)\ge0.
+\]
+\end{lemma}
+
+\begin{proof}
+The density hypothesis is equivalent to
+\(1-p\le1/(r-1)\).  If \(j<r\), then
+\[
+    (j-1)(1-p)
+    \le
+    \frac{j-1}{r-1}<1.
+\]
+For \(j=r\), the strict inequality becomes a weak one.  The product
+statements follow.
+\end{proof}
+
+\begin{theorem}[Adjacent clique step]\label{thm:clique-step}
+Assume \(r\ge3\) and \(p=t_2\ge1-1/(r-1)\).  For every
+\(2\le j\le r\),
+\begin{equation}\label{eq:clique-step}
+    t_j\ge c_j(p)t_{j-1}.
+\end{equation}
+For every \(j<r\), one also has \(t_j>0\).
+\end{theorem}
+
+\begin{proof}
+The base case is
+\[
+    t_2=p=c_2(p)t_1.
+\]
+It is positive because \(p\ge1-1/(r-1)>0\).
+
+Suppose \(2\le j<r\), the estimate
+\(t_j\ge c_jt_{j-1}\) is known, and \(t_j,t_{j-1}>0\).  Rearranging
+Theorem~\ref{thm:moon-moser} gives
+\begin{equation}\label{eq:mm-rearranged}
+    (j-1)t_{j-1}t_{j+1}
+    \ge
+    t_j(jt_j-t_{j-1}).
+\end{equation}
+The induction hypothesis implies
+\[
+\begin{aligned}
+    jt_j-t_{j-1}
+    &\ge (jc_j-1)t_{j-1}\\
+    &=(j-1)c_{j+1}t_{j-1},
+\end{aligned}
+\]
+where the final equality is the elementary identity
+\(jc_j-1=(j-1)c_{j+1}\).  Substitute this in
+\eqref{eq:mm-rearranged}.  The factor \((j-1)t_{j-1}\) is strictly positive,
+so cancellation yields
+\[
+    t_{j+1}\ge c_{j+1}t_j.
+\]
+If \(j+1<r\), Lemma~\ref{lem:factor-signs} makes the right-hand side
+strictly positive.  This proves both claims by induction.  Notice that no
+positivity of \(t_r\) is asserted at the boundary; the last coefficient can
+be zero.
+\end{proof}
+
+\begin{corollary}[Clique polynomial and cross-ratio bounds]
+Under the hypotheses of Theorem~\ref{thm:clique-step}, for \(0\le j\le r\),
+\begin{equation}\label{eq:clique-poly-lower}
+    t_j\ge A_j(p).
+\end{equation}
+Moreover, whenever \(0\le s\le j\le r\),
+\begin{equation}\label{eq:cross-ratio}
+    t_sA_j(p)\le t_jA_s(p).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Iterate \eqref{eq:clique-step}, using \(t_0=t_1=A_0=A_1=1\), to obtain
+\eqref{eq:clique-poly-lower}.  More generally, iteration from \(s\) to \(j\)
+gives
+\[
+    t_j
+    \ge
+    t_s\prod_{h=s+1}^{j}c_h(p).
+\]
+Multiplying by \(A_s(p)\ge0\) and using
+\(A_j=A_s\prod_{h=s+1}^{j}c_h\) proves
+\eqref{eq:cross-ratio}.  For \(s=0\), the identical values at indices \(0\)
+and \(1\) reduce the statement to the same calculation.  This proof never
+divides by a possibly vanishing clique density or polynomial factor.
+\end{proof}
+
+\section{The certificate inequality}
+
+\begin{theorem}[Pure clique-tree certificate bound]\label{thm:certificate}
+Let \(H\) have a rooted \(r\)-pure clique-tree presentation, where \(r\ge3\).
+For every graphon \(W\) with
+\[
+    p=t(K_2,W)\ge1-\frac1{r-1},
+\]
+one has
+\begin{equation}\label{eq:certificate-bound}
+    t(H,W)\ge B_H(p)
+    =\prod_{i=0}^{m-1}\Tail_{s_i,r}(p).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+    S:=\prod_{i=0}^{m-1}t_{s_i},
+    \qquad
+    A:=\prod_{i=0}^{m-1}A_{s_i}(p).
+\]
+By Lemmas~\ref{lem:separator-size} and \ref{lem:factor-signs}, every
+\(A_{s_i}(p)>0\).  By \eqref{eq:clique-poly-lower},
+\(t_{s_i}\ge A_{s_i}(p)>0\).  Hence
+\begin{equation}\label{eq:SA-positive}
+    S>0,
+    \qquad A>0.
+\end{equation}
+
+Apply \eqref{eq:cross-ratio} with \(s=s_i\) and \(j=r\), then multiply the
+\(m\) resulting nonnegative inequalities.  This gives
+\begin{equation}\label{eq:ratio-product}
+    S A_r(p)^m
+    \le
+    t_r^m A.
+\end{equation}
+The gluing theorem gives \(t_r^m\le t(H,W)S\).  Since \(A\ge0\),
+\[
+    S A_r(p)^m
+    \le
+    t_r^mA
+    \le
+    t(H,W)SA.
+\]
+Cancel the strictly positive factor \(S\) to obtain
+\begin{equation}\label{eq:cross-certificate}
+    A_r(p)^m\le t(H,W)A.
+\end{equation}
+By \eqref{eq:certificate-cross}, the left-hand side is \(AB_H(p)\).
+Cancel the strictly positive factor \(A\) from
+\eqref{eq:cross-certificate}.  The result is
+\(B_H(p)\le t(H,W)\).
+
+This argument includes the exact threshold
+\(p=1-1/(r-1)\), where \(A_r(p)=0\), and \(p=1\).  No division by \(A_r\)
+or \(t_r\) occurs.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Choose a rooted maximal-clique-tree presentation.  Purity makes every bag
+have size \(r\), so Theorem~\ref{thm:certificate} applies.  By
+Lemma~\ref{lem:chromatic}, \(\chi(H)=r\), and hence its density hypothesis is
+exactly the required interval
+\[
+    p\ge1-\frac1{\chi(H)-1}.
+\]
+For \(p<1\), Lemma~\ref{lem:target} identifies the certificate with the
+stated chromatic expression.  At \(p=1\), the certificate equals \(1\), so
+Theorem~\ref{thm:certificate} gives \(t(H,W)\ge1\); the universal bound
+\(t(H,W)\le1\) gives equality.
+\end{proof}
+
+\section{Concrete consequences and checks}
+
+\begin{corollary}[Generalized books]
+Let \(B_{r,m}=K_{r-1}\vee\overline{K_m}\), namely \(m\) copies of \(K_r\)
+sharing one \(K_{r-1}\).  Then, for
+\(p\ge1-1/(r-1)\),
+\[
+    t(B_{r,m},W)
+    \ge
+    A_{r-1}(p)\bigl(1-(r-1)(1-p)\bigr)^m.
+\]
+For \(r=3\), this is
+\[
+    t(B_{3,m},W)\ge p(2p-1)^m,
+    \qquad p\ge\frac12.
+\]
+\end{corollary}
+
+\begin{proof}
+Use one root bag and \(m-1\) non-root bags, each with separator size \(r-1\).
+The certificate is
+\[
+    A_r(p)
+    \left(\frac{A_r(p)}{A_{r-1}(p)}\right)^{m-1}
+    =
+    A_{r-1}(p)c_r(p)^m.
+\]
+The displayed quotient is only shorthand for the explicit tail factor
+\(c_r(p)\); the proof itself uses no division.
+\end{proof}
+
+\begin{corollary}[Clique windmills]
+Let \(F_{r,s,m}\) consist of \(m\) copies of \(K_r\), all sharing the same
+\(K_s\), with no other overlap.  Then
+\[
+    t(F_{r,s,m},W)
+    \ge
+    A_s(p)\left(\frac{A_r(p)}{A_s(p)}\right)^m
+\]
+for \(p\ge1-1/(r-1)\), where every quotient again denotes the polynomial
+tail \(\Tail_{s,r}(p)\).  For \(r=3,s=1\), this is the friendship bound
+\[
+    t(F_{3,1,m},W)
+    \ge
+    \bigl[p(2p-1)\bigr]^m,
+    \qquad p\ge\frac12.
+\]
+\end{corollary}
+
+\begin{corollary}[Pure triangle trees]
+Let \(H\) be connected and suppose all maximal cliques are triangles.  If
+there are \(m\) triangle bags and exactly \(a\) non-root separators are
+edges, then
+\[
+    t(H,W)
+    \ge
+    p^{m-a}(2p-1)^m,
+    \qquad p\ge\frac12.
+\]
+\end{corollary}
+
+\begin{proof}
+Here
+\[
+    A_3(p)=p(2p-1),
+    \qquad
+    \Tail_{2,3}(p)=2p-1,
+    \qquad
+    \Tail_{1,3}(p)=p(2p-1).
+\]
+The root contributes \(A_3\), the \(a\) edge separators contribute
+\(2p-1\), and the remaining \(m-1-a\) separators have size \(1\) and
+contribute \(p(2p-1)\).  Multiplication gives the formula.
+\end{proof}
+
+The one-bag case reduces to \(t_r\ge A_r(p)\).  With two bags glued along
+\(K_s\), Theorem~\ref{thm:gluing} reduces to
+\[
+    t(K_r\cup_{K_s}K_r,W)t_s\ge t_r^2,
+\]
+which can independently be checked by weighted Cauchy--Schwarz.  These are
+useful regression cases for both the paper proof and its formalization.
+
+\section{Correspondence with the Lean verification}
+
+The directory \path{lean/Taeyoung/Methods/PureChordal} contains a Lean
+4/Mathlib proof with
+no \texttt{sorry}, \texttt{admit}, declared custom axiom, or
+\texttt{native\_decide}.  The mathematical correspondence is as follows.
+
+The important standard supplied by that project is the public theorem shape.
+In the eventual integrated project described in
+\texttt{LEAN\_VERIFICATION\_ARCHITECTURE.md}, the shared foundation should
+define \texttt{chromaticTarget} with its polynomial value at \(p=1\), and the
+method-level file \texttt{Methods/PureChordal/Main.lean} should export a
+statement of the following form.
+
+\begin{verbatim}
+theorem pureChordal_satisfiesLowerBound
+    (hchordal : IsChordal H)
+    (hpure : HasPureMaximalCliques H r)
+    (hr : 3 <= r) :
+    SatisfiesLowerBound H
+\end{verbatim}
+
+After unfolding the shared predicate, this means: for every probability space
+and every graphon on it, the admissible edge-density hypothesis implies
+\texttt{chromaticTarget H p <= homDensity H W}.  Internal certificate,
+junction-density, regularization, and Moon--Moser lemmas need not be visible to
+an Atlas example.  An example file should import only this method's
+\texttt{Main.lean}, prove the graph is pure chordal, and apply the theorem.
+
+\begin{center}
+\begin{tabular}{p{0.39\textwidth}p{0.53\textwidth}}
+\hline
+This paper & Lean declaration or module \\
+\hline
+Definition~\ref{def:certificate} &
+\texttt{PureCliqueTreeDecomp} in \texttt{Certificate.lean} \\
+Lemmas~\ref{lem:separator-size}--\ref{lem:edge-multiplicity} &
+\texttt{Certificate.lean} and \texttt{CliqueTreeCombinatorics.lean} \\
+Lemma~\ref{lem:chromatic} &
+\texttt{properAssignmentCount\_eq\_product} and
+\texttt{chromaticPolynomial} in \texttt{ChromaticFactorization.lean} \\
+Lemma~\ref{lem:target} &
+\texttt{certificateBound\_eq\_eval\_chromaticPolynomial} \\
+Lemma~\ref{lem:gibbs} &
+\texttt{integral\_mul\_log\_div\_nonpos} in \texttt{Gibbs.lean} \\
+Lemmas~\ref{lem:equal-marginal}--\ref{lem:constant-ratio} &
+\texttt{CliqueMarginals.lean}, \texttt{JunctionDensity.lean}, and
+\texttt{EntropyGluing.lean} \\
+Theorem~\ref{thm:gluing} &
+\texttt{homDensity\_mul\_sep\_ge\_cliqueDensity\_pow} \\
+Regularization estimate \eqref{eq:regularization-error} &
+\texttt{abs\_homDensity\_regularize\_sub\_le} in
+\texttt{Regularization.lean} \\
+Theorem~\ref{thm:moon-moser} &
+\texttt{cliqueDensity\_moonMoser\_succ} in \texttt{MoonMoser.lean} \\
+Theorem~\ref{thm:clique-step} and \eqref{eq:cross-ratio} &
+\texttt{cliqueDensity\_step\_lower} and
+\texttt{cliqueDensity\_mul\_cliquePoly\_le} \\
+Theorem~\ref{thm:certificate} &
+\texttt{certificateBound\_le\_homDensity} \\
+Theorem~\ref{thm:main} &
+\texttt{pureChordal\_chromaticPolynomial\_lower\_bound} in
+\texttt{Main.lean} \\
+Common catalogue proposition &
+\texttt{pureChordal\_satisfiesLowerBound} in \texttt{Main.lean} \\
+\hline
+\end{tabular}
+\end{center}
+
+The low-level Lean chromatic-expression theorem assumes \(p\ne1\), exactly
+because the literal real expression \(1/(1-p)\) is undefined at \(p=1\).
+The Lean certificate theorem has no such restriction and proves the
+endpoint value directly.  The catalogue-facing theorem
+\texttt{pureChordal\_satisfiesLowerBound} performs this split explicitly:
+it uses the certificate/polynomial identity only for \(p\ne1\), and proves
+the value (1) at (p=1) from the certificate bound.  Thus no division by
+zero is hidden in the common formal interface.
+
+The soundness module
+\path{lean/Taeyoung/Methods/PureChordal/CheckComplete.lean} prints the axiom
+dependencies of the two user-facing theorems.  The reported list is
+\[
+    \{\texttt{propext},\ \texttt{Classical.choice},\
+      \texttt{Quot.sound}\},
+\]
+the standard Mathlib classical axioms, and contains no \texttt{sorryAx}.
+
+\section{Dependency and hidden-assumption audit}
+
+The proof uses the following ingredients, all proved above or isolated in the
+Lean development:
+\begin{enumerate}
+    \item the maximal-clique-tree characterization of finite chordal graphs;
+    \item finite set, finite product, and finite colouring identities;
+    \item finite-product measure invariance under coordinate relabeling;
+    \item Tonelli/Fubini for bounded nonnegative functions;
+    \item \(\log u\le u-1\) for \(u>0\);
+    \item Cauchy--Schwarz and the elementary multiaffine cube lemma;
+    \item the explicit regularization error
+    \(|t(F,W_\varepsilon)-t(F,W)|\le e(F)\varepsilon\).
+\end{enumerate}
+
+It does not assume that \(W\) is regular, a finite step graphon, or a limit of
+finite graphs.  It never replaces homomorphism density by injective density.
+It uses no lower bound on the pointwise degree function and no minimum-degree
+hypothesis.  Purity is essential in Lemma~\ref{lem:equal-marginal}: uniform
+clique laws of different bag sizes need not have compatible separator
+marginals.  Therefore this proof does not establish the theorem for chordal
+graphs with mixed maximal-clique sizes.
+
+\begin{thebibliography}{9}
+
+\bibitem{MoonMoser}
+J. W. Moon and L. Moser,
+\emph{On a problem of Tur\'{a}n},
+Magyar Tud. Akad. Mat. Kutat\'{o} Int. K\"ozl. \textbf{7} (1962), 283--286.
+
+\bibitem{Agnarsson}
+G. Agnarsson,
+\emph{On chordal graphs and their chromatic polynomials},
+Mathematica Scandinavica \textbf{93} (2003), 240--246.
+
+\end{thebibliography}
+
+\end{document}

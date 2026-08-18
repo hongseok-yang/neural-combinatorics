@@ -1,0 +1,389 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+
+\title{Triangles with Mixed Rooted Branches:\\
+A Degree-Biased Jensen Bound}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+For integers $r,s\geq0$, let $R_{r,s}$ be a triangle with a distinguished
+vertex $o$, with $r$ pendant edges and $s$ internally disjoint two-edge
+paths attached at $o$.  We prove that every graphon of edge density
+$p\geq1/2$ satisfies
+\[
+ t(R_{r,s},W)\geq p^{r+2s+1}(2p-1)=\Phi_{R_{r,s}}(p).
+\]
+The cases $s=0$ and $r=0$ were known separately.  The new point is that the
+two branch types may occur simultaneously.  A complement-kernel
+symmetrization proves that the mean two-edge-tail density under the measure
+biased by $d^r$ is at least $p^2$.  A single convex Jensen step then treats
+all $s$ tails at once.  In the six-vertex catalogue this proves the formerly
+open Atlas graph $95$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definitions and the target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space, and let
+$W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon.  Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and put
+\[
+ A(x)=(T_Wd)(x)=\int_\Omega W(x,y)d(y)\dd\mu(y).
+\]
+Thus $A(x)$ is the rooted density of a two-edge path whose initial vertex
+is fixed at $x$.  Define the rooted triangle density
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+
+For $r,s\geq0$, construct $R_{r,s}$ from a triangle rooted at $o$ by
+adjoining $r$ distinct leaves adjacent to $o$, and $s$ pairwise
+vertex-disjoint paths $o-u_i-v_i$.  No other vertices are identified and no
+other edges are added.  Integrating the branch vertices first gives the
+exact identity
+\begin{equation}
+ t(R_{r,s},W)=\int_\Omega \tau(x)d(x)^rA(x)^s\dd\mu(x).
+ \label{eq:density-identity}
+\end{equation}
+
+The graph has $3+r+2s$ vertices and the same number of edges.  Once the
+triangle is properly coloured, every branch vertex has $x-1$ choices after
+its parent is coloured.  Hence
+\[
+ \chi_{R_{r,s}}(x)=x(x-1)^{r+2s+1}(x-2),
+ \qquad \chi(R_{r,s})=3.
+\]
+For $q=1-p>0$, direct substitution gives
+\begin{align}
+ \Phi_{R_{r,s}}(p)
+ &=q^{3+r+2s}\frac1q
+   \left(\frac pq\right)^{r+2s+1}
+   \left(\frac{2p-1}{q}\right)
+ \notag\\
+ &=p^{r+2s+1}(2p-1).
+ \label{eq:target}
+\end{align}
+This polynomial also gives the continued value $1$ at $p=1$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The weighted tail mean}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Put $M_j=\int_\Omega d(x)^j\dd\mu(x)$ for $j\geq0$.  The next lemma is the
+ingredient that permits the two branch types to be mixed.
+
+\begin{lemma}[Degree-biased two-edge-tail mean]
+\label{lem:biased-tail}
+For every integer $r\geq0$ and every graphon of edge density
+$p\in[1/2,1]$,
+\[
+ \int_\Omega d(x)^rA(x)\dd\mu(x)\geq p^2M_r.
+\]
+Equivalently, under the probability measure
+\[
+ \dd\nu_r(x)=\frac{d(x)^r}{M_r}\dd\mu(x),
+\]
+one has $\mathbb E_{\nu_r}A\geq p^2$.
+\end{lemma}
+
+\begin{proof}
+The denominator $M_r$ is positive because $M_r\geq p^r>0$ for $r\geq1$
+by Jensen, while $M_0=1$.  Let $U=1-W$, let $T_U$ be its integral operator,
+and put $u=T_U\mathbf1=1-d$ and $q=1-p$.  Since
+\[
+ T_Ud=T_U(\mathbf1-u)=u-T_Uu,
+\]
+we have
+\[
+ A=T_Wd=p\mathbf1-T_Ud=d-q\mathbf1+T_Uu.
+\]
+Consequently, if $J_r=\int d^rA$, then
+\begin{equation}
+ J_r=M_{r+1}-qM_r+\ip{d^r}{T_Uu}.
+ \label{eq:J-decomposition}
+\end{equation}
+
+Symmetry of $U$ gives
+\begin{align*}
+ 2\left(\ip{d^r}{T_Uu}-\int d^ru^2\right)
+ ={}&\int_{\Omega^2}U(x,y)
+ \bigl(u(y)-u(x)\bigr)
+ \bigl(d(x)^r-d(y)^r\bigr)\dd\mu^2.
+\end{align*}
+The integrand is nonnegative: $d=1-u$, so $u$ and $d^r$ are oppositely
+ordered.  Thus \eqref{eq:J-decomposition} implies
+\begin{equation}
+ J_r\geq M_{r+2}-M_{r+1}+pM_r.
+ \label{eq:J-moments}
+\end{equation}
+
+Set $m=M_{r+1}/M_r$.  Cauchy--Schwarz gives
+$M_{r+2}/M_r\geq m^2$.  Also $m\geq p$: for $r=0$ this is equality, while
+for $r\geq1$ it follows from
+\[
+ M_{r+1}-pM_r
+ =\frac12\int_{\Omega^2}
+ (d(x)^r-d(y)^r)(d(x)-d(y))\dd\mu(x)\dd\mu(y)\geq0.
+\]
+Since $p\geq1/2$ in the application, $m\geq p\geq1-p$, and therefore
+\[
+ \frac{J_r}{M_r}-p^2
+ \geq m^2-m+p-p^2
+ =(m-p)(m-(1-p))\geq0.
+\]
+This proves the assertion.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Rooted triangle inputs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We record the two elementary estimates needed for the main proof.
+
+\begin{lemma}[Pointwise rooted triangle]
+\label{lem:pointwise-triangle}
+For almost every $x$,
+\[
+ \tau(x)\geq\max\{2A(x)-p,0\}.
+\]
+\end{lemma}
+
+\begin{proof}
+The elementary inequality $ab\geq a+b-1$ for $a,b\in[0,1]$, applied to
+$W(x,y)$ and $W(x,z)$ and multiplied by $W(y,z)\geq0$, gives after
+integration
+\[
+ \tau(x)\geq2\int_\Omega W(x,y)d(y)\dd\mu(y)-p=2A(x)-p.
+\]
+Also $\tau(x)\geq0$.
+\end{proof}
+
+\begin{lemma}[Weighted rooted triangle]
+\label{lem:weighted-triangle}
+For every integer $r\geq0$ and every graphon of edge density $p>0$,
+\[
+ \int_\Omega d(x)^r\tau(x)\dd\mu(x)
+ \geq\frac{2p-1}{p}M_{r+2}.
+\]
+\end{lemma}
+
+\begin{proof}
+Put $I_r=\int d^r\tau$ and $J_r=\int d^rA$.  Applying
+$ab\geq a+b-1$ to the two edges incident with the fixed root, multiplying
+by $d(x)^rW(y,z)$, and integrating yields
+\[
+ I_r\geq2J_r-pM_r.
+\]
+Using \eqref{eq:J-moments},
+\[
+ I_r\geq2M_{r+2}-2M_{r+1}+pM_r.
+\]
+Subtracting $(2p-1)M_{r+2}/p$ from the right-hand side leaves
+\[
+ \frac1p\left(M_{r+2}-2pM_{r+1}+p^2M_r\right)
+ =\frac1p\int_\Omega d(x)^r(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+\end{proof}
+
+\begin{lemma}[Tail convexity]
+\label{lem:tail-convexity}
+For $p>0$ and every integer $s\geq1$, the function
+\[
+ f_{p,s}(a)=a^s\max\{2a-p,0\},\qquad 0\leq a\leq1,
+\]
+is convex and nondecreasing.
+\end{lemma}
+
+\begin{proof}
+It vanishes on $[0,p/2]$.  On $[p/2,1]$ it is
+$2a^{s+1}-pa^s$, whose first derivative is
+$a^{s-1}(2(s+1)a-ps)>0$ and whose second derivative is
+$sa^{s-2}(2(s+1)a-p(s-1))\geq0$.  At $p/2$ the right derivative is
+nonnegative and no smaller than the zero left derivative.  This proves both
+claims on the whole interval.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The mixed-branch theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Mixed rooted triangle branches]
+\label{thm:main}
+For all integers $r,s\geq0$ and every graphon $W$ whose edge density lies in
+$p\in[1/2,1]$,
+\[
+ \boxed{
+ t(R_{r,s},W)
+ \geq p^{r+2s+1}(2p-1)
+ =\Phi_{R_{r,s}}(p).
+ }
+\]
+This is the complete interval required by $\chi(R_{r,s})=3$.
+\end{theorem}
+
+\begin{proof}
+First suppose $s=0$.  By \eqref{eq:density-identity},
+Lemma~\ref{lem:weighted-triangle}, and Jensen,
+\[
+ t(R_{r,0},W)
+ \geq\frac{2p-1}{p}M_{r+2}
+ \geq p^{r+1}(2p-1).
+\]
+
+Now suppose $s\geq1$.  Under the probability measure $\nu_r$ from
+Lemma~\ref{lem:biased-tail}, \eqref{eq:density-identity} and
+Lemma~\ref{lem:pointwise-triangle} give
+\[
+ t(R_{r,s},W)\geq M_r\,\mathbb E_{\nu_r} f_{p,s}(A).
+\]
+By Lemmas~\ref{lem:tail-convexity} and \ref{lem:biased-tail},
+\[
+ \mathbb E_{\nu_r} f_{p,s}(A)
+ \geq f_{p,s}(\mathbb E_{\nu_r}A)
+ \geq f_{p,s}(p^2).
+\]
+Since $p\geq1/2$, one has $p^2\geq p/2$, and hence
+\[
+ f_{p,s}(p^2)=p^{2s}(2p^2-p)=p^{2s+1}(2p-1).
+\]
+Finally $M_r\geq p^r$ by Jensen (including the identity $M_0=1$), so
+\[
+ t(R_{r,s},W)\geq p^{r+2s+1}(2p-1),
+\]
+which equals \eqref{eq:target}.
+\end{proof}
+
+At $p=1/2$ the target vanishes and every step remains valid.  At $p=1$,
+$0\leq W\leq1$ and $\int W=1$ imply $W=1$ almost everywhere, so the density
+and target both equal $1$.  No division by $2p-1$ occurs.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Catalogue consequence}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 95]
+NetworkX Atlas graph $95$, with graph6 code \texttt{EG\char125?}, is
+positive.  It has order and size six, chromatic number three, and
+\[
+ \chi_{F_{95}}(x)=x(x-1)^4(x-2).
+\]
+For every graphon $W$ of edge density $p\in[1/2,1]$,
+\[
+ t(F_{95},W)\geq p^4(2p-1)=\Phi_{F_{95}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Atlas $95$ has NetworkX edge list
+\[
+ 04,\ 05,\ 12,\ 14,\ 24,\ 34.
+\]
+The vertices $1,2,4$ form a triangle.  Root it at $4$: vertex $3$ is a
+direct leaf, while $4-0-5$ is a two-edge path, and there are no other edges.
+Thus the graph is $R_{1,1}$, and Theorem~\ref{thm:main} applies.  The
+chromatic polynomial and target follow from the formulas in Section~1.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Formalization boundary and exact limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The proof uses ordinary, non-injective graphon homomorphism densities on an
+arbitrary probability space.  All integrands are bounded and measurable, so
+Tonelli--Fubini applies.  The only analytic inputs are Jensen,
+Cauchy--Schwarz, and the displayed opposite-order symmetrization for $U$.
+No finite-step reduction, regularity assumption, minimum-degree hypothesis,
+or injective-copy interpretation is present.
+
+For a Lean formalization, the new reusable statement is
+Lemma~\ref{lem:biased-tail}.  Its clean signature should include
+$p\geq1/2$ explicitly.  The remaining ingredients already occur in the
+rooted triangle--tree development: the density factorization, pointwise
+rooted-triangle bound, tail convexity, weighted rooted-triangle inequality,
+and moment Jensen bound.  The graph-specific layer need only exhibit Atlas
+$95\cong R_{1,1}$ and transport the generic result.
+
+The theorem covers only a bouquet at one triangle root whose branches have
+length one or two and are internally disjoint.  It does not cover a
+three-edge path, two length-two paths sharing their intermediate vertex,
+branches at different triangle vertices, or attachments to a larger clique
+or triangle book.  In particular it does not classify Atlas $97$, $100$, or
+$102$.  The false stronger assertion
+$t(F+\text{leaf},W)\geq p\,t(F,W)$ is explicitly refuted in
+\texttt{FAILED\_PROOF\_ATTEMPTS.md}; it is not used here.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/MixedBranch.lean}, ending at
+\texttt{satisfiesLowerBound\_95}.  It proves the single case
+$(r,s)=(1,1)$ --- the only one of six vertices --- and it does so by an
+argument that is \emph{not} the one above.
+
+\paragraph{The departure: no symmetrization, no Jensen.}
+This note handles general $(r,s)$ by a complement-kernel symmetrization,
+showing that the mean two-edge-tail density under the $d^{r}$-biased measure is
+at least $p^{2}$, and then disposes of all $s$ tails with one convex Jensen
+step.  At $(1,1)$ neither is needed.  Peeling gives
+\[
+ t(R_{1,1},W)=\int\tau\,A\,d,\qquad A=T_Wd,
+\]
+and the pointwise Goodman bound $\tau\geq2A-p$, weighted by $Ad\geq0$, already
+reduces the problem to two moments of the single weight $d\cdot A$:
+\[
+ t\geq2C-pB,\qquad B=\int dA,\quad C=\int dA^{2}.
+\]
+The weighted Cauchy--Schwarz $B^{2}\leq pC$ and path Sidorenko $B\geq p^{3}$
+then close it through
+\begin{equation}
+ p\,(2C-pB)-p\,(2p^{5}-p^{4})\;\geq\;(B-p^{3})\bigl(2(B+p^{3})-p^{2}\bigr)\;\geq\;0,
+ \label{eq:lean-mixed}
+\end{equation}
+both factors being nonnegative because $B\geq p^{3}>0$ and $2p^{3}\geq p^{2}$ on
+$p\geq1/2$.  Every input predates the row:
+\texttt{Link.rootedTriangle\_ge},
+\texttt{PureChordal.integral\_mul\_sq\_le\_integral\_mul\_integral\_mul\_sq}
+with weight $d$, and \texttt{PathSidorenko.pow\_three\_le\_pathIntegral}.
+
+So the two proofs agree on $(1,1)$ and diverge in generality: this note's is
+the one that scales in $r$ and $s$, while \eqref{eq:lean-mixed} is specific to
+one tail and one leaf.  If a seven-vertex member ever enters scope, the
+symmetrization is the thing to formalize.
+
+\paragraph{Everything else transcribes directly.}
+The peeling is `Methods/Peeling.lean`'s generic ladder plus three collapses;
+$\tau$ appears as its own definition, so the triangle needs no separate lemma.
+
+\end{document}

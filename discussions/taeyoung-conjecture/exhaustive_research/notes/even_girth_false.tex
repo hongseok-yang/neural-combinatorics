@@ -1,0 +1,580 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\PhiH}{\Phi_H}
+
+\title{Even Girth Gives Infinitely Many Tensor--Tur\'{a}n Violations}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Statement and conventions}
+
+All finite graphs in this note are simple.  Let \(H\) be a finite graph,
+and put
+\[
+    n=v(H)=|V(H)|,
+    \qquad
+    m=e(H)=|E(H)|.
+\]
+Its chromatic polynomial is denoted by \(\chi_H\).  If \(H\) contains a
+cycle, its \emph{girth} \(g\) is the minimum length of a cycle in \(H\),
+and \(c_g(H)\) is the number of edge sets of \(H\) that form a cycle of
+length \(g\).
+
+A graphon is a symmetric measurable function
+\[
+    W\colon \Omega^2\longrightarrow[0,1]
+\]
+on a probability space \((\Omega,\mu)\).  Its edge density and its
+homomorphism densities are
+\[
+    p(W):=t(K_2,W)=\int_{\Omega^2}W(x,y)\,d\mu(x)d\mu(y)
+\]
+and
+\[
+    t(F,W)
+    :=
+    \int_{\Omega^{V(F)}}
+       \prod_{uv\in E(F)}W(x_u,x_v)
+       \prod_{u\in V(F)}d\mu(x_u).
+\]
+This probability-space formulation is equivalent to the usual
+\([0,1]\)-formulation for the graphons used below.  In particular, a
+finite product of copies of \([0,1]\) is an atomless standard probability
+space and can be transported to \([0,1]\) by a measure-space isomorphism,
+without changing any homomorphism density.
+
+For \(0\le p<1\), define the target
+\[
+    \PhiH(p)
+    :=
+    (1-p)^n
+    \chi_H\!\left(\frac{1}{1-p}\right).
+\]
+
+The purpose of this note is to prove the following statement.  It is
+phrased directly as a violation of the target inequality, rather than
+only as non-optimality of a Tur\'{a}n graphon.
+
+\begin{theorem}[Even-girth obstruction]\label{thm:main}
+Let \(H\) be a finite simple graph of finite even girth.  There exists an
+integer \(k_0=k_0(H)\ge \max\{2,\chi(H)-1\}\) such that, for every integer
+\(k\ge k_0\), there are an integer \(Q\ge1\) and a graphon \(W_{k,Q}\)
+such that
+\[
+    p(W_{k,Q})=1-\frac1k
+    \ge
+    1-\frac{1}{\chi(H)-1}
+\]
+and
+\[
+    t(H,W_{k,Q})
+    <
+    \PhiH\!\left(1-\frac1k\right).
+\]
+Consequently the proposed inequality fails for \(H\) at infinitely many
+edge densities in its required density interval.
+\end{theorem}
+
+No numerical search is used.  The graphons \(W_{k,Q}\) are explicit
+finite tensor products of balanced Tur\'{a}n graphons.
+
+\section{Balanced Tur\'{a}n graphons}
+
+\begin{definition}[Balanced Tur\'{a}n graphon]
+For an integer \(q\ge2\), partition \([0,1]\) into measurable intervals
+\(I_1,\dots,I_q\), each of measure \(1/q\), and set
+\[
+    T_q(x,y)
+    :=
+    \begin{cases}
+        0,&x,y\in I_i\text{ for some }i,\\
+        1,&x\in I_i,\ y\in I_j,\ i\ne j.
+    \end{cases}
+\]
+\end{definition}
+
+\begin{lemma}[Densities in \(T_q\)]\label{lem:turan-density}
+For every finite simple graph \(F\) and every integer \(q\ge2\),
+\[
+    p(T_q)=1-\frac1q,
+    \qquad
+    t(F,T_q)=\frac{\chi_F(q)}{q^{v(F)}}.
+\]
+In particular,
+\[
+    t(H,T_q)=\PhiH\!\left(1-\frac1q\right).
+\]
+\end{lemma}
+
+\begin{proof}
+For independent uniform points \(X,Y\in[0,1]\), the two points lie in
+different parts with probability \(1-1/q\).  This proves the first
+identity.  For a family of independent uniform points
+\((X_u)_{u\in V(F)}\), let \(a(u)\in[q]\) be the index of the part
+containing \(X_u\).  The vector \(a\colon V(F)\to[q]\) is uniform among
+all \(q^{v(F)}\) maps, and
+\[
+    \prod_{uv\in E(F)}T_q(X_u,X_v)=1
+\]
+exactly when \(a\) is a proper \(q\)-colouring of \(F\).  Thus the
+integral defining \(t(F,T_q)\) is
+\(\chi_F(q)/q^{v(F)}\).  The last identity follows by substituting
+\(1-p=1/q\) into the definition of \(\Phi_H\).
+\end{proof}
+
+Define, for integers \(q\ge2\),
+\[
+    F_H(q)
+    :=
+    \frac{t(H,T_q)}{p(T_q)^m}
+    =
+    \frac{\chi_H(q)}{q^n}
+    \left(1-\frac1q\right)^{-m}.
+\]
+Equivalently,
+\[
+    t(H,T_q)
+    =
+    \left(1-\frac1q\right)^m F_H(q).
+\]
+
+\section{The first non-forest coefficient}
+
+The next proof is expanded down to finite-set and polynomial statements
+that can be formalized independently of asymptotic graph theory.
+
+For \(A\subseteq E(H)\), let \(c(A)\) be the number of connected
+components of the spanning graph \((V(H),A)\), including isolated
+vertices, and define
+\[
+    r(A):=n-c(A).
+\]
+
+\begin{lemma}[Whitney expansion]\label{lem:whitney}
+For every positive integer \(q\),
+\[
+    \chi_H(q)
+    =
+    \sum_{A\subseteq E(H)}(-1)^{|A|}q^{n-r(A)}.
+\]
+Hence the equality holds as a polynomial identity in \(q\).
+\end{lemma}
+
+\begin{proof}
+For each edge \(e=uv\), let \(B_e\) be the event that a map
+\(f\colon V(H)\to[q]\) satisfies \(f(u)=f(v)\).  Proper colourings are
+the maps outside \(\bigcup_{e\in E(H)}B_e\).  Inclusion--exclusion gives
+\[
+    \chi_H(q)
+    =
+    \sum_{A\subseteq E(H)}(-1)^{|A|}
+      \left|\bigcap_{e\in A}B_e\right|.
+\]
+A map in the intersection is constant on each connected component of
+\((V(H),A)\), and these component values are arbitrary.  The cardinality
+of the intersection is therefore \(q^{c(A)}=q^{n-r(A)}\).  This proves
+the formula for every positive integer \(q\); two integer polynomials
+agree identically when they agree at infinitely many integers.
+\end{proof}
+
+\begin{lemma}[Rank classification below the girth]\label{lem:rank-classification}
+Assume \(H\) has finite girth \(g\).  Then:
+\begin{enumerate}
+    \item if \(0\le j\le g-2\) and \(r(A)=j\), then \(A\) is a forest,
+    so \(|A|=j\);
+    \item if \(r(A)=g-1\), then either \(A\) is a forest with
+    \(|A|=g-1\), or \(A\) is exactly the edge set of one \(g\)-cycle.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Rank is monotone under inclusion.  A cycle of length \(\ell\) has rank
+\(\ell-1\).  Thus, if \(A\) is cyclic and \(C\subseteq A\) is a cycle,
+then
+\[
+    r(A)\ge r(C)=|C|-1\ge g-1.
+\]
+This proves the first assertion, since every forest has rank equal to its
+number of edges.
+
+Now suppose \(A\) is cyclic and \(r(A)=g-1\).  The displayed inequalities
+force every cycle \(C\subseteq A\) to have length \(g\) and
+\(r(C)=r(A)\).  Fix one such \(C\), and consider the connected components of
+the spanning graph \((V(H),A)\).  From the definition \(r(A)=n-c(A)\), its
+rank is the sum of \(|V(D)|-1\) over its connected components \(D\).  The
+component containing the \(g\) vertices
+of \(C\) already contributes \(g-1\) to the rank.  If it contained any
+additional nonisolated vertex, then its contribution would be at least \(g\).
+Any other component containing an edge would contribute at least \(1\).
+Both alternatives contradict \(r(A)=g-1\).  Therefore every edge of \(A\)
+has both endpoints in \(V(C)\).  An edge in \(A\setminus E(C)\) would then join
+two nonconsecutive vertices of \(C\).  It is a chord and, together with either
+of the two paths between its endpoints on \(C\), creates a cycle shorter than
+\(g\).  This contradicts the definition of girth.  Hence \(A=E(C)\).
+\end{proof}
+
+\begin{lemma}[First correction term]\label{lem:first-correction}
+If \(H\) has finite girth \(g\), then there is a constant \(C_H\ge0\)
+such that, for every sufficiently large integer \(q\),
+\[
+    \left|
+      F_H(q)-1-
+      (-1)^g\frac{c_g(H)}{(q-1)^{g-1}}
+    \right|
+    \le
+    \frac{C_H}{(q-1)^g}.
+\]
+In particular, if \(g\) is even, then \(F_H(q)>1\) for every sufficiently
+large integer \(q\).
+\end{lemma}
+
+\begin{proof}
+Group the Whitney expansion by rank.  By
+Lemma~\ref{lem:rank-classification}, the coefficient of \(q^{n-j}\) is
+\[
+    (-1)^j\binom{m}{j}
+    \qquad(0\le j\le g-2),
+\]
+because every rank-\(j\) set is a \(j\)-edge forest.  At rank \(g-1\),
+the forests contribute
+\[
+    (-1)^{g-1}\binom{m}{g-1},
+\]
+and the \(c_g(H)\) girth cycles contribute
+\[
+    (-1)^g c_g(H).
+\]
+On the other hand, the binomial theorem gives
+\[
+    q^n\left(1-\frac1q\right)^m
+    =
+    \sum_{j=0}^{m}(-1)^j\binom{m}{j}q^{n-j}.
+\]
+Consequently there is a polynomial \(R_H(q)\) of degree at most \(n-g\)
+such that
+\[
+    \chi_H(q)
+    =
+    q^n\left(1-\frac1q\right)^m
+    +(-1)^g c_g(H)q^{n-g+1}
+    +R_H(q).
+\]
+(If the displayed degree bound is negative, \(R_H=0\).)
+
+Because \(R_H\) has finitely many coefficients, there is \(C_0\ge0\)
+such that \(|R_H(q)|\le C_0q^{n-g}\) for \(q\ge1\).  Dividing by
+\(q^n(1-1/q)^m\), and using
+\((1-1/q)^{-m}\le2^m\) for \(q\ge2\), gives a constant \(C_1\) with
+\[
+    F_H(q)
+    =
+    1+(-1)^g c_g(H)q^{-(g-1)}+\varepsilon_q,
+    \qquad
+    |\varepsilon_q|\le C_1q^{-g}.
+\]
+The exact identity
+\[
+    q^{-(g-1)}
+    =(q-1)^{-(g-1)}
+      \left(1-\frac1q\right)^{g-1}
+\]
+and the finite binomial expansion of
+\((1-1/q)^{g-1}\) show that
+\[
+    \left|q^{-(g-1)}-(q-1)^{-(g-1)}\right|
+    \le C_2(q-1)^{-g}
+\]
+for a constant \(C_2\) depending only on \(g\).  Enlarging the constant
+proves the asserted error bound.
+
+If \(g\) is even, then \(c_g(H)\ge1\).  For every \(q\) with
+\(q-1>C_H/c_g(H)\), the positive leading term is strictly larger than
+the absolute value of the error.  Therefore \(F_H(q)>1\).
+\end{proof}
+
+\section{Tensor products and the telescoping construction}
+
+\begin{definition}[Tensor product]
+If \(U\colon\Omega_1^2\to[0,1]\) and
+\(W\colon\Omega_2^2\to[0,1]\) are graphons, define their tensor product
+on the product probability space by
+\[
+    (U \otimes W)((x_1,x_2),(y_1,y_2))
+    :=U(x_1,y_1)W(x_2,y_2).
+\]
+\end{definition}
+
+\begin{lemma}[Tensor multiplicativity]\label{lem:tensor}
+For every finite graph \(F\),
+\[
+    p(U \otimes W)=p(U)p(W),
+    \qquad
+    t(F,U \otimes W)=t(F,U)t(F,W).
+\]
+The same identities hold for every finite iterated tensor product.
+\end{lemma}
+
+\begin{proof}
+Insert the definition of \(U \otimes W\) into the relevant integral.
+The integrand becomes the product of one function of all
+\(\Omega_1\)-coordinates and one function of all
+\(\Omega_2\)-coordinates.  Tonelli's theorem applies because the
+integrand is nonnegative and bounded.  The integral over the product
+space therefore factors into the two defining homomorphism-density
+integrals.  The edge identity is the special case \(F=K_2\), and finite
+iteration follows by induction on the number of factors.
+\end{proof}
+
+\begin{lemma}[A finite-product estimate]\label{lem:product-estimate}
+Let \(a_{Q,1},\dots,a_{Q,Q}\) be real numbers.  If
+\[
+    S_Q:=\sum_{j=1}^{Q}|a_{Q,j}|\longrightarrow0,
+\]
+then
+\[
+    \prod_{j=1}^{Q}(1+a_{Q,j})\longrightarrow1.
+\]
+\end{lemma}
+
+\begin{proof}
+Expanding the product and taking absolute values term by term gives
+\[
+    \left|\prod_{j=1}^{Q}(1+a_{Q,j})-1\right|
+    \le
+    \prod_{j=1}^{Q}(1+|a_{Q,j}|)-1.
+\]
+Since \(1+x\le e^x\) for \(x\ge0\), the right-hand side is at most
+\(e^{S_Q}-1\), which tends to zero.
+\end{proof}
+
+\begin{lemma}[Telescoping tensor products]\label{lem:telescoping}
+Fix an integer \(k\ge2\).  For every integer \(Q\ge1\), set
+\[
+    W_{k,Q}
+    :=
+    \bigotimes_{j=1}^{Q} T_{Q(k-1)+j}.
+\]
+If \(H\) has finite girth, then
+\[
+    p(W_{k,Q})=1-\frac1k
+\]
+for every \(Q\), and
+\[
+    \lim_{Q\to\infty}t(H,W_{k,Q})
+    =
+    \left(1-\frac1k\right)^m.
+\]
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:tensor} and the definition of \(T_q\),
+\[
+\begin{aligned}
+    p(W_{k,Q})
+    &=
+    \prod_{j=1}^{Q}
+       \left(1-\frac{1}{Q(k-1)+j}\right)\\
+    &=
+    \prod_{a=Q(k-1)+1}^{Qk}\frac{a-1}{a}\\
+    &=
+    \frac{Q(k-1)}{Qk}
+    =1-\frac1k.
+\end{aligned}
+\]
+This is an exact telescoping identity for each \(Q\).
+
+Again by tensor multiplicativity,
+\[
+\begin{aligned}
+    t(H,W_{k,Q})
+    &=
+    \prod_{j=1}^{Q}t\!\left(H,T_{Q(k-1)+j}\right)\\
+    &=
+    \left(1-\frac1k\right)^m
+      \prod_{j=1}^{Q}F_H(Q(k-1)+j).
+\end{aligned}
+\]
+Lemma~\ref{lem:first-correction} implies that there are constants
+\(C\) and \(M\), depending only on \(H\), such that
+\[
+    |F_H(a)-1|\le Ca^{-(g-1)}
+    \qquad(a\ge M).
+\]
+For all sufficiently large \(Q\), every
+\(a=Q(k-1)+j\) is at least \(M\), and
+\[
+\begin{aligned}
+    \sum_{j=1}^{Q}|F_H(Q(k-1)+j)-1|
+    &\le
+    C\sum_{j=1}^{Q}(Q(k-1)+j)^{-(g-1)}\\
+    &\le
+    C Q\,[Q(k-1)]^{-(g-1)}\\
+    &=
+    C(k-1)^{-(g-1)}Q^{2-g}.
+\end{aligned}
+\]
+Every finite simple graph has \(g\ge3\), so the last expression tends
+to zero.  Lemma~\ref{lem:product-estimate} now shows that the product of
+the \(F_H\)-terms tends to \(1\), proving the claimed limit.
+\end{proof}
+
+\section{Proof of the obstruction theorem}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let \(g\) be the even girth of \(H\).  By
+Lemma~\ref{lem:first-correction}, there is \(k_1\) such that
+\[
+    F_H(k)>1
+    \qquad(k\ge k_1).
+\]
+Set
+\[
+    k_0:=\max\{2,k_1,\chi(H)-1\}.
+\]
+Fix \(k\ge k_0\).  Lemma~\ref{lem:turan-density} and the definition of
+\(F_H\) give
+\[
+\begin{aligned}
+    \PhiH\!\left(1-\frac1k\right)
+    &=t(H,T_k)\\
+    &=\left(1-\frac1k\right)^mF_H(k)\\
+    &>\left(1-\frac1k\right)^m.
+\end{aligned}
+\]
+By Lemma~\ref{lem:telescoping}, every \(W_{k,Q}\) has edge density
+\(1-1/k\), and its \(H\)-density converges to the strictly smaller last
+quantity.  By the definition of convergence, there is \(Q\ge1\) for
+which
+\[
+    t(H,W_{k,Q})
+    <
+    \PhiH\!\left(1-\frac1k\right).
+\]
+Finally, \(k\ge\chi(H)-1>0\) implies
+\[
+    1-\frac1k
+    \ge
+    1-\frac{1}{\chi(H)-1}.
+\]
+Thus the violation lies in the required density interval.  Since this
+works for every integer \(k\ge k_0\), it gives infinitely many distinct
+edge densities.
+\end{proof}
+
+\begin{corollary}
+Every non-bipartite finite graph of even girth violates the proposed
+chromatic-polynomial lower bound at infinitely many admissible edge
+densities.  The same construction also applies to bipartite graphs of
+finite even girth; non-bipartiteness is not used in the proof.
+\end{corollary}
+
+\section{Formalization dependency map}
+
+In the integrated Lean project, this still-unformalized public theorem will
+belong in \path{lean/Taeyoung/Methods/EvenGirthTensor/Main.lean}.  With the
+common predicates from \path{lean/Taeyoung/Foundation/Status.lean}, its
+intended interface is:
+
+\begin{verbatim}
+theorem evenGirth_violatesLowerBound
+    (hgirth : HasFiniteEvenGirth H)
+    (heven : Even hgirth.girth) :
+    ViolatesLowerBound H
+\end{verbatim}
+
+Here \texttt{ViolatesLowerBound H} packages an admissible edge density, an
+explicit graphon certificate, and a strict comparison with the shared
+polynomially continued chromatic target.  Thus an Atlas example imports the
+method's \texttt{Main.lean}, verifies the finite graph hypothesis, and applies
+one theorem; it does not reproduce the asymptotic or tensor calculation.
+The project-level organization is specified in
+\path{LEAN_VERIFICATION_ARCHITECTURE.md}.
+
+The proof above deliberately separates the ingredients that a Lean
+verification must supply.
+
+\begin{enumerate}
+    \item \textbf{Finite graph layer.}  Define \(c(A)\), rank
+    \(r(A)=n-c(A)\), forests, cycles, and girth.  Prove rank monotonicity,
+    rank of a forest, and rank of a cycle.  Lemma~\ref{lem:rank-classification}
+    is then finite combinatorics.
+    \item \textbf{Chromatic-polynomial layer.}  Formalize finite
+    inclusion--exclusion to prove Lemma~\ref{lem:whitney}.  Coefficient
+    extraction below girth is a finite sum calculation; no analytic
+    theorem is involved.
+    \item \textbf{Elementary real analysis.}  Bound a fixed polynomial
+    by a constant times its leading power, prove the displayed conversion
+    from \(q^{-g+1}\) to \((q-1)^{-g+1}\), and use the
+    epsilon definition of convergence.  Lemma~\ref{lem:product-estimate}
+    avoids taking logarithms or assuming the factors are positive.
+    \item \textbf{Measure layer.}  Homomorphism density is a finite
+    product integral of bounded measurable functions.  Tensor
+    multiplicativity is one application of Tonelli/Fubini followed by
+    induction over the finite edge set.
+    \item \textbf{Transport to \([0,1]\).}  Either define graphons over
+    arbitrary probability spaces, as above, or transport each finite
+    product space to \([0,1]\).  Only invariance of finite product
+    integrals under a measure-preserving isomorphism is needed.
+\end{enumerate}
+
+There is no appeal to regularity, injective subgraph counts, minimum
+degree, pointwise degree bounds, or a limiting infinite tensor product.
+For each counterexample, \(Q\) is finite.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Nineteen catalogue rows are \texttt{negative} on the strength of this note, each
+with a \texttt{ViolatesLowerBound} theorem in
+\texttt{lean/Taeyoung/Methods/Negative/}, over
+\texttt{Methods/Negative/Tensor.lean}.  One difference of substance.
+
+\subsection*{Theorem~\ref{thm:main} is not formalized; nineteen witnesses are}
+
+The theorem asserts the \emph{existence} of $k_0$ and $Q$, and its proof is
+asymptotic: Lemmas~\ref{lem:whitney}, \ref{lem:rank-classification},
+\ref{lem:first-correction}, \ref{lem:product-estimate} and
+\ref{lem:telescoping} together produce a $k$ beyond which the first correction
+term dominates.  None of that is formalized.  What the catalogue needs is not
+existence but a witness, and every row here is settled by a single explicit
+\emph{two}-factor product $T_a\otimes T_b$ --- $Q=2$ throughout --- found by
+that asymptotic analysis and then checked directly.
+
+For such a witness the whole argument is the identity
+\[
+ t(H,T_a\otimes T_b)=\frac{\chi_H(a)\,\chi_H(b)}{(ab)^{v(H)}},
+ \qquad
+ p=\Bigl(1-\frac1a\Bigr)\Bigl(1-\frac1b\Bigr),
+\]
+which is Lemma~\ref{lem:turan-density} together with Lemma~\ref{lem:tensor},
+followed by exact rational arithmetic against $\PhiH(p)$.  Both $\chi_H(a)$ and
+$\chi_H(b)$ are evaluated as counts of proper assignments by kernel reduction,
+so no chromatic polynomial has to be known in advance.
+
+The tensor product itself is built without any measure-theoretic product.  On
+$\mathrm{Fin}\,a\times\mathrm{Fin}\,b$ with the uniform measure two points are
+adjacent exactly when they differ in both coordinates, homomorphism density is
+a finite sum, and an assignment is proper for the product exactly when both of
+its coordinate projections are proper --- so the factorization is
+$\mathtt{Equiv.arrowProdEquivProdArrow}$ and a product of sums.  The transport
+to $[0,1]$ discussed at the end of Section~5 is therefore not needed either.
+
+\end{document}

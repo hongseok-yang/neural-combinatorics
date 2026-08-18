@@ -1,0 +1,732 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,d}
+\newcommand{\Gap}{\Gamma_H}
+
+\begin{document}
+
+\section{Purpose}
+
+For a finite graph $H$, define
+\[
+ \Gamma_H(W)=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p)=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right).
+\]
+This note answers the local part of the requested perturbation test at every
+interior balanced Turan graphon and at the critical-threshold Turan graphon
+for every one of the $28$ current open rows.  Strict tangent slopes,
+coercive critical-addition Hessians, a graphon-independent negative-target
+strip, and a positive two-defect-colouring subintegral cover the four
+possible branches.  The perturbing kernel may be arbitrary measurable and
+small in $L^\infty$; it need not be constant, stepwise, regular, or symmetric
+under the Turan classes.  These are local no-hit theorems and do not change a
+catalogue status.
+
+Let $T_k$ be the balanced complete $k$-partite graphon on equal measurable
+classes $\Omega_1,\ldots,\Omega_k$.  We take $k\geq\chi(H)$, so its density
+$p_k=1-1/k$ is strictly inside the required interval
+\[
+ p\geq p_{\min}:=1-\frac1{\chi(H)-1}.
+\]
+
+\section{Exact first variation}
+
+Write $n=v(H)$, $m=e(H)$, and
+\[
+ \chi_H(x)=\sum_{j=0}^n a_jx^j,
+ \qquad
+ J_H(x)=\sum_{j=0}^n a_j(j-n)x^j.
+\]
+For each edge $e$, $H/e$ denotes the simple graph obtained by contracting
+$e$ and deleting the resulting loop.  Define
+\begin{align}
+ A_H(x)&=\sum_{e\in E(H)}\chi_{H/e}(x)-J_H(x),
+ \label{eq:A}\\
+ B_H(x)&=2J_H(x)-\frac{2m\chi_H(x)}{x-1}.
+ \label{eq:B}
+\end{align}
+The second expression is a polynomial because $x(x-1)$ divides the
+chromatic polynomial of every graph with an edge.
+
+Let
+\[
+ \mathcal D=\bigcup_{i=1}^k\Omega_i^2,
+ \qquad
+ \mathcal O=\Omega^2\setminus\mathcal D.
+\]
+If $W=T_k+U$ is a graphon, then automatically $U\geq0$ on $\mathcal D$ and
+$U\leq0$ on $\mathcal O$.  Put
+\[
+ D=\int_{\mathcal D}U,
+ \qquad O=-\int_{\mathcal O}U,
+ \qquad N=D+O=\lVert U\rVert_1.
+\]
+
+\begin{proposition}[Arbitrary-kernel first variation]
+\label{prop:first}
+At $T_k$, the complete first variation of the gap is
+\begin{equation}
+ L_{H,k}(U)=
+ \frac{A_H(k)}{k^{n-1}}D
+ +\frac{B_H(k)}{2k^{n-1}}O.
+ \label{eq:first}
+\end{equation}
+In particular, if $A_H(k),B_H(k)>0$, then
+\begin{equation}
+ L_{H,k}(U)\geq c_{H,k}N,
+ \qquad
+ c_{H,k}:=\frac1{k^{n-1}}
+ \min\left\{A_H(k),\frac{B_H(k)}2\right\}>0.
+ \label{eq:slope}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The derivative kernel is constant on each orbit of cells.  Adding constant
+unit weight on one diagonal cell differentiates an edge of $H$, contracts
+its endpoints, and counts the remaining proper $k$-colourings.  After the
+edge-density derivative of $\Phi_H$ is subtracted, the result is
+$A_H(k)/k^{n+1}$.  That cell has measure $1/k^2$, so the derivative per unit
+integral is $A_H(k)/k^{n-1}$.
+
+Deleting constant unit weight on both orientations of one unordered
+off-diagonal cell gives $B_H(k)/k^{n+1}$.  Its measure is $2/k^2$.  Hence the
+coefficient per unit missing-edge integral is
+\[
+ \frac{B_H(k)}{2k^{n-1}}.
+\]
+Linearity and approximation of a bounded measurable kernel by simple
+functions give \eqref{eq:first}; alternatively the same formula follows
+directly from Fubini because the derivative kernel is constant on every
+cell.  Equation \eqref{eq:slope} is immediate.
+\end{proof}
+
+\section{A uniform measurable Taylor remainder}
+
+Expand the target at $p_k$ as
+\begin{equation}
+ \Phi_H(p_k+h)=\sum_{j=0}^n c_{H,k,j}h^j.
+ \label{eq:target-taylor}
+\end{equation}
+Set
+\begin{equation}
+ C_{H,k}=2^m-m-1+\sum_{j=2}^n|c_{H,k,j}|.
+ \label{eq:C}
+\end{equation}
+
+\begin{proposition}[Exact remainder bound]
+\label{prop:remainder}
+If $\lVert U\rVert_\infty\leq\varepsilon\leq1$, then
+\begin{equation}
+ \left|
+ \Gamma_H(T_k+U)-L_{H,k}(U)
+ \right|
+ \leq C_{H,k}\varepsilon\lVert U\rVert_1.
+ \label{eq:remainder}
+\end{equation}
+Here the constant and linear terms at $T_k$ are understood to have been
+removed; in particular $\Gamma_H(T_k)=0$.
+\end{proposition}
+
+\begin{proof}
+Multilinearity gives
+\[
+ t(H,T_k+U)=
+ \sum_{S\subseteq E(H)}
+ \int\prod_{e\in S}U_e\prod_{e\notin S}(T_k)_e.
+\]
+For $|S|=j\geq2$, retain one factor $|U_e|$, bound the other $j-1$ factors
+by $\varepsilon$, and integrate all unused variables.  The absolute value
+of this term is at most
+$\varepsilon^{j-1}\lVert U\rVert_1$.  Summing over $S$ and using
+$\varepsilon\leq1$ bounds the homomorphism-density remainder by
+\[
+ (2^m-m-1)\varepsilon\lVert U\rVert_1.
+\]
+
+The edge-density displacement $h=\int U$ satisfies
+$|h|\leq\lVert U\rVert_1\leq\varepsilon$.  Hence, for $j\geq2$,
+\[
+ |h|^j\leq\lVert U\rVert_1\varepsilon^{j-1}
+ \leq\varepsilon\lVert U\rVert_1.
+\]
+Apply this to \eqref{eq:target-taylor} and add the two remainder bounds.
+All integrands are bounded, so Fubini and the finite expansion require no
+additional limiting argument.
+\end{proof}
+
+\section{Strict local stability theorem}
+
+\begin{theorem}[Arbitrary measurable $L^\infty$ stability]
+\label{thm:local}
+Suppose $k\geq\chi(H)$ and $A_H(k),B_H(k)>0$.  Define
+\begin{equation}
+ \eta_{H,k}=\min\left\{
+ 1,\frac{c_{H,k}}{2C_{H,k}},
+ \frac{p_k-p_{\min}}2
+ \right\}.
+ \label{eq:radius}
+\end{equation}
+If $W$ is any graphon with
+$\lVert W-T_k\rVert_\infty\leq\eta_{H,k}$, then $p(W)$ lies in the required
+density interval and
+\begin{equation}
+ \Gamma_H(W)\geq
+ \frac{c_{H,k}}2\lVert W-T_k\rVert_1\geq0.
+ \label{eq:strict-local}
+\end{equation}
+Equality holds only when $W=T_k$ almost everywhere.
+\end{theorem}
+
+\begin{proof}
+The density changes by at most $\lVert W-T_k\rVert_1\leq\eta_{H,k}$; the
+last term in \eqref{eq:radius} therefore keeps it strictly above
+$p_{\min}$.  Combine Proposition~\ref{prop:first} with
+Proposition~\ref{prop:remainder}.  The first two terms of
+\eqref{eq:radius} make the error at most
+$c_{H,k}\lVert U\rVert_1/2$.  This proves \eqref{eq:strict-local}, which is
+strict unless $\lVert U\rVert_1=0$.
+\end{proof}
+
+\section{Strict stability at the critical threshold}
+
+Now put $r=\chi(H)-1$, so $p_r=p_{\min}$.  Retain the definitions of
+$D,O,N$ above.  The density constraint on a nearby graphon in the conjectured
+interval is exactly
+\[
+ p(T_r+U)-p_r=D-O\geq0.
+\]
+Write $h=D-O$.  Proposition~\ref{prop:first} becomes
+\[
+ L_{H,r}(U)
+ =\frac{A_H(r)}{r^{n-1}}h
+ +\frac{2A_H(r)+B_H(r)}{2r^{n-1}}O.
+\]
+Since $N=h+2O$, strictness on this tangent cone is quantified by
+\begin{equation}
+ c^{\partial}_{H,r}
+ =\frac1{r^{n-1}}
+ \min\left\{A_H(r),\frac{2A_H(r)+B_H(r)}4\right\}.
+ \label{eq:threshold-slope}
+\end{equation}
+
+\begin{theorem}[Arbitrary measurable threshold $L^\infty$ stability]
+\label{thm:threshold-local}
+Suppose
+\[
+ A_H(r)>0,\qquad 2A_H(r)+B_H(r)>0,
+\]
+and define
+\begin{equation}
+ \eta^{\partial}_{H,r}
+ =\min\left\{1,\frac{c^{\partial}_{H,r}}{2C_{H,r}}\right\}.
+ \label{eq:threshold-radius}
+\end{equation}
+If $W$ is any graphon satisfying
+\[
+ p(W)\geq p_{\min},\qquad
+ \lVert W-T_r\rVert_\infty\leq\eta^{\partial}_{H,r},
+\]
+then
+\[
+ \Gamma_H(W)\geq
+ \frac{c^{\partial}_{H,r}}2\lVert W-T_r\rVert_1\geq0.
+\]
+Equality holds only when $W=T_r$ almost everywhere.
+\end{theorem}
+
+\begin{proof}
+The density hypothesis gives $h\geq0$.  Equation
+\eqref{eq:threshold-slope} and $N=h+2O$ imply
+$L_{H,r}(U)\geq c^{\partial}_{H,r}N$.  Proposition~\ref{prop:remainder}
+applies without change at $T_r$, and
+\eqref{eq:threshold-radius} bounds its absolute value by
+$c^{\partial}_{H,r}N/2$.
+\end{proof}
+
+\section{Exact certificates for the 29-row audit snapshot}
+
+For every row in the pre-Atlas-152 open snapshot, the exact shifted polynomials
+\[
+ A_H(y+\chi(H)),\qquad B_H(y+\chi(H))
+\]
+have nonnegative integer coefficients, while their constant terms in the
+following table are strictly positive.  Hence Theorem~\ref{thm:local}
+applies at every integer $k\geq\chi(H)$, not only at the first interior
+point.  Atlas $152$ was subsequently classified negative by a threshold
+fractional-fibre perturbation; the theorem here remains valid near every
+interior $T_k$.  The other $28$ rows are the current open set.  The displayed
+radius is \eqref{eq:radius} at $k=\chi(H)$.
+
+\begin{center}
+\begin{tabular}{r|c|r|r|c}
+Atlas&graph6&$A_H(\chi)$&$B_H(\chi)$&$\eta_{H,\chi}$\\ \hline
+43&\verb|Dlc|&3&18&$1/3942$\\
+118&\verb|Eht?|&6&36&$1/11943$\\
+122&\verb|Eld?|&6&36&$1/11943$\\
+124&\verb|Exd?|&6&36&$1/11943$\\
+126&\verb|ERUO|&12&36&$2/11943$\\
+127&\verb|EZEG|&21&84&$7/24072$\\
+130&\verb|E{CW|&24&96&$4/11715$\\
+137&\verb|EjsG|&30&72&$5/22836$\\
+139&\verb|Eju?|&30&72&$5/22836$\\
+145&\verb|Exe_|&15&54&$5/46314$\\
+147&\verb|EhMg|&21&54&$7/46314$\\
+148&\verb|EyUG|&9&54&$1/15438$\\
+151&\verb|EhdW|&6&36&$1/23478$\\
+152&\verb|EhNG|&9&54&$1/15438$\\
+153&\verb|Ehf_|&36&108&$1/3875$\\
+157&\verb|E~`_|&312&768&$39/144224$\\
+160&\verb|E~@g|&312&768&$39/144224$\\
+168&\verb|E^MG|&18&24&$2/44967$\\
+169&\verb|Exf_|&256&736&$2/9141$\\
+171&\verb|Ehew|&27&84&$3/30040$\\
+174&\verb|EtTg|&6&60&$1/45381$\\
+178&\verb|En}?|&336&624&$13/93296$\\
+181&\verb|E^mG|&256&576&$1/8810$\\
+185&\verb|Exv_|&200&528&$25/283952$\\
+188&\verb|EzNG|&3&42&$1/175854$\\
+194&\verb|E~wW|&192&384&$1/23030$\\
+196&\verb|ER~g|&168&384&$1/26320$\\
+199&\verb|El^g|&112&320&$7/277376$\\
+203&\verb|E~^G|&128&224&$7/542832$
+\end{tabular}
+\end{center}
+
+The radii are intentionally conservative.  Their role is to turn the exact
+positive first variation into a fully quantified neighbourhood theorem;
+they are not claimed optimal.
+
+At the threshold, Theorem~\ref{thm:threshold-local} applies to the following
+$14$ current open rows.  The entries $A_H(r),B_H(r)$ and the radius
+\eqref{eq:threshold-radius} are all exact.
+
+\begin{center}
+\begin{tabular}{r|c|r|r|c}
+Atlas&graph6&$A_H(r)$&$B_H(r)$&$\eta^{\partial}_{H,r}$\\ \hline
+126&\verb|ERUO|&2&8&$1/4304$\\
+127&\verb|EZEG|&2&0&$1/8640$\\
+147&\verb|EhMg|&2&0&$1/17056$\\
+151&\verb|EhdW|&2&0&$1/17152$\\
+157&\verb|E~`_|&48&72&$7/44325$\\
+160&\verb|E~@g|&48&72&$7/44325$\\
+168&\verb|E^MG|&2&0&$1/33888$\\
+169&\verb|Exf_|&48&108&$8/44739$\\
+178&\verb|En}?|&36&0&$1/28926$\\
+181&\verb|E^mG|&30&36&$1/21798$\\
+185&\verb|Exv_|&30&72&$5/87606$\\
+194&\verb|E~wW|&18&36&$1/57315$\\
+196&\verb|ER~g|&12&36&$2/171945$\\
+199&\verb|El^g|&12&72&$2/172359$
+\end{tabular}
+\end{center}
+
+\subsection{Coercive critical-addition faces}
+
+Five current rows fail the strict hypothesis of
+Theorem~\ref{thm:threshold-local} only because $A_H(r)=0$; their deletion
+slope $B_H(r)$ remains strictly positive.  A first-order estimate alone cannot
+handle a pure diagonal addition.  The complete arbitrary-kernel Hessian is,
+however, coercive on precisely that face.  We now turn this observation into
+a genuine neighbourhood theorem, including simultaneous off-diagonal
+deletions.
+
+Write an arbitrary admissible perturbation as
+\[
+ U=F-V,
+ \qquad F=U\mathbf 1_{\mathcal D}\geq0,
+ \qquad V=-U\mathbf 1_{\mathcal O}\geq0.
+\]
+Pull the restriction of $F$ to each diagonal cell back to a probability
+space, and put
+\[
+ d_i=\iint F_i(x,y)\,dx\,dy,
+ \qquad
+ s_i=\int\left(\int F_i(x,y)\,dy\right)^2dx,
+ \qquad S=\sum_{i=1}^r s_i.
+\]
+Symmetry of a graphon makes the left and right rooted moments identical, and
+Jensen gives $d_i^2\leq s_i$.  The global added-edge mass is
+$D=r^{-2}\sum_i d_i$, so
+\begin{equation}
+ D^2\leq \frac{S}{r^3}.
+ \label{eq:critical-pair-disjoint}
+\end{equation}
+
+Let
+\[
+ \Phi_H(p_r+h)=\sum_{j=0}^n c_jh^j,
+ \qquad p_r=1-\frac1r,
+\]
+and let $Q_H(F)$ denote the exact quadratic term in
+$\Gamma_H(T_r+F)$.  Define
+\begin{align}
+ K_D&=\frac1{r^3}\left(
+ 2^m-1-m-\binom m2+\sum_{j=3}^n|c_j|
+ \right),
+ \label{eq:critical-KD}\\
+ K_O&=3^m-2^m-m+\sum_{j=2}^n j|c_j|,
+ \label{eq:critical-KO}\\
+ \beta_H&=\frac{B_H(r)}{2r^{n-1}}.
+ \label{eq:critical-beta}
+\end{align}
+
+\begin{proposition}[Pair-energy remainder]
+\label{prop:critical-pair-remainder}
+Suppose $\lVert F\rVert_\infty,\lVert V\rVert_\infty\leq\eta\leq1$.
+Then
+\begin{align}
+ \left|\Gamma_H(T_r+F)-Q_H(F)\right|
+ &\leq K_D\eta S,
+ \label{eq:pure-diagonal-remainder}\\
+ \left|\Gamma_H(T_r+F-V)-\Gamma_H(T_r+F)-\beta_H\int V\right|
+ &\leq K_O\eta\int V.
+ \label{eq:deletion-remainder}
+\end{align}
+Here \eqref{eq:pure-diagonal-remainder} assumes $A_H(r)=0$.
+\end{proposition}
+
+\begin{proof}
+Consider a term containing $j\geq3$ copies of $F$ in the multilinear
+expansion of $t(H,T_r+F)$.  Retain any two of those copies and bound the
+remaining $j-2$ by $\eta$.  If the retained edges are adjacent, both copies
+of $F$ force their three endpoints into one Turan class, and their integral
+is at most $r^{-3}S$.  If they are disjoint, their integral is $D^2$, which
+has the same upper bound by \eqref{eq:critical-pair-disjoint}.  Dropping every
+remaining $T_r$ factor can only increase the integral.  There are
+$2^m-1-m-\binom m2$ edge subsets of size at least three.  Moreover
+$D^j\leq\eta^{j-2}D^2\leq\eta S/r^3$ for $j\geq3$.  These observations give
+\eqref{eq:pure-diagonal-remainder} and \eqref{eq:critical-KD}.
+
+For the second estimate, expand every edge factor into one of $T_r,F,-V$.
+There are $3^m-2^m-m$ terms which contain $V$ and at least one further
+perturbation factor.  Retaining one $V$ factor and bounding all other
+perturbations by $\eta$ bounds each such term by $\eta\int V$.  The omitted
+$m$ terms with exactly one $V$ and no $F$ form the homomorphism-density part
+of the linear deletion derivative.  Finally, for $j\geq2$ the mean-value
+theorem and $D,\int V,|D-\int V|\leq\eta$ give
+\[
+ \left|(D-\textstyle\int V)^j-D^j\right|
+ \leq j\eta^{j-1}\int V
+ \leq j\eta\int V.
+\]
+Adding the linear target contribution produces $\beta_H\int V$ and proves
+\eqref{eq:deletion-remainder}.
+\end{proof}
+
+\begin{theorem}[Critical-addition arbitrary-kernel stability]
+\label{thm:critical-addition-local}
+Suppose $A_H(r)=0$, $B_H(r)>0$, and, for every nonnegative measurable
+diagonal kernel $F$,
+\[
+ Q_H(F)\geq q_HS
+\]
+with $q_H>0$.  Set
+\begin{equation}
+ \eta_H^{\mathrm{add}}
+ =\min\left\{1,\frac{q_H}{2K_D},
+                    \frac{\beta_H}{2K_O}\right\}.
+ \label{eq:critical-addition-radius}
+\end{equation}
+If $W$ is any graphon satisfying
+\[
+ p(W)\geq p_r,
+ \qquad \lVert W-T_r\rVert_\infty
+       \leq\eta_H^{\mathrm{add}},
+\]
+then
+\begin{equation}
+ \Gamma_H(W)\geq\frac{q_H}{2}S
+       +\frac{\beta_H}{2}\int V\geq0.
+ \label{eq:critical-addition-bound}
+\end{equation}
+Equality holds only when $W=T_r$ almost everywhere.
+\end{theorem}
+
+\begin{proof}
+Apply Proposition~\ref{prop:critical-pair-remainder} and the definition of
+\eqref{eq:critical-addition-radius}.  If equality holds, then
+$\int V=0$ and every $s_i=0$.  Nonnegativity gives $V=0$ and $F=0$ almost
+everywhere.
+\end{proof}
+
+For the four bipartite rows, write $a,b$ for the two conditional diagonal
+means and $u,v$ for the variances of their rooted degrees.  Thus
+$s_1=a^2+u$ and $s_2=b^2+v$.  The exact Hessians are
+\begin{center}
+\begin{tabular}{r|c|c}
+Atlas&$Q_H(F)$&valid $q_H$\\ \hline
+43&$\dfrac{a^2+b^2}{32}+\dfrac{u+v}{16}$&$1/32$\\[4pt]
+118&$\dfrac{a^2+b^2}{64}+\dfrac{3(u+v)}{64}$&$1/64$\\[4pt]
+122&$\dfrac{a^2+b^2}{64}+\dfrac{u+v}{32}$&$1/64$\\[4pt]
+124&$\dfrac{a^2-ab+b^2}{32}+\dfrac{u+v}{16}$&$1/64$
+\end{tabular}
+\end{center}
+The last bound follows from
+\[
+ Q_H(F)-\frac{s_1+s_2}{64}
+ =\frac{(a-b)^2+3u+3v}{64}\geq0;
+\]
+the other three are immediate.  For Atlas 203, with three diagonal means
+$d_i$ and rooted-degree variances $u_i$, exact enumeration gives
+\[
+ Q_H(F)=\frac{11\sum_i d_i^2
+ +12\sum_{i<j}d_id_j+12\sum_i u_i}{729}
+ \geq\frac{11}{729}\sum_i(d_i^2+u_i).
+\]
+Consequently Theorem~\ref{thm:critical-addition-local} gives the following
+fully explicit radii.
+
+\begin{center}
+\begin{tabular}{r|c|c|c|c|c|c}
+Atlas&graph6&$B_H(r)$&$q_H$&$K_D$&$K_O$&$\eta_H^{\mathrm{add}}$\\ \hline
+43&\verb|Dlc|&8&$1/32$&$51/8$&693&$1/5544$\\
+118&\verb|Eht?|&8&$1/64$&$113/8$&2113&$1/33808$\\
+122&\verb|Eld?|&8&$1/64$&$113/8$&2113&$1/33808$\\
+124&\verb|Exd?|&8&$1/64$&$113/8$&2113&$1/33808$\\
+203&\verb|E~^G|&36&$11/729$&$4127/27$&$4750463/9$&$1/14251389$
+\end{tabular}
+\end{center}
+
+Thus five of the formerly excluded critical rows now have a strict
+arbitrary-measurable $L^\infty$ neighbourhood theorem.  We next close the
+nine all-direction or density-neutral rows by two arguments which avoid an
+absolute Taylor remainder.
+
+\subsection{A graphon-independent negative-target strip}
+
+For Atlas $153,171,174$, and $188$, the chromatic target has the form
+\begin{equation}
+ \Phi_H(p)=p(2p-1)C_H(p).
+ \label{eq:negative-target-factor}
+\end{equation}
+The following exact table records the cubic factor, its value at $7/12$,
+and the discriminant of its quadratic derivative.
+\begin{center}
+\begin{tabular}{r|l|c|r}
+Atlas&$C_H(p)$&$C_H(7/12)$&$\operatorname{disc}(C_H')$\\ \hline
+153&$7p^3-12p^2+8p-2$&$-47/1728$&$-96$\\
+171&$11p^3-20p^2+13p-3$&$-67/1728$&$-116$\\
+174&$13p^3-25p^2+17p-4$&$-17/1728$&$-152$\\
+188&$17p^3-33p^2+22p-5$&$-37/1728$&$-132$
+\end{tabular}
+\end{center}
+In every row the leading coefficient of $C_H'$ is positive.  The negative
+discriminant therefore proves $C_H'(p)>0$ for every real $p$.  Since the
+displayed endpoint value is negative,
+\begin{equation}
+ C_H(p)<0\qquad(1/2\leq p\leq7/12).
+ \label{eq:negative-target-strip}
+\end{equation}
+
+\begin{theorem}[Negative-target threshold strip]
+\label{thm:negative-target-strip}
+For $H$ equal to Atlas $153,171,174$, or $188$, every graphon of density
+\[
+ \frac12\leq p\leq\frac7{12}
+\]
+satisfies $t(H,W)\geq\Phi_H(p)$.  Consequently, if
+$p(W)\geq1/2$ and
+\[
+ \lVert W-T_2\rVert_\infty\leq\frac1{12},
+\]
+then the desired inequality holds.
+\end{theorem}
+
+\begin{proof}
+On the stated density interval, $p\geq0$, $2p-1\geq0$, and
+\eqref{eq:negative-target-strip} makes
+\eqref{eq:negative-target-factor} nonpositive.  Homomorphism densities of
+nonnegative kernels are nonnegative, so
+$t(H,W)\geq0\geq\Phi_H(p)$.  For the last assertion,
+$|p(W)-1/2|\leq\lVert W-T_2\rVert_1
+\leq\lVert W-T_2\rVert_\infty$.
+\end{proof}
+
+This is stronger than a Turan-local calculation: the density strip has no
+structural hypothesis on $W$ at all.
+
+\subsection{A positive two-defect-colouring lower bound}
+
+It remains to treat Atlas $130,137,139,145$, and $148$, whose targets are
+positive immediately above $1/2$.  Let $A,B$ be the two balanced parts of
+$T_2$, pull both cells back to probability spaces, and write
+\[
+ W|_{A^2}=F_0,\qquad W|_{B^2}=F_1,\qquad
+ W|_{A\times B}=1-G.
+\]
+If $\lVert W-T_2\rVert_\infty\leq\eta$, then
+$0\leq F_0,F_1,G\leq\eta$.  Put
+\[
+ a=\int F_0,\qquad b=\int F_1,\qquad g=\int G,
+ \qquad s=a+b,
+\]
+and let
+\[
+ a_2=\int\left(\int F_0(x,y)\,dy\right)^2dx=a^2+u,
+ \qquad
+ b_2=\int\left(\int F_1(x,y)\,dy\right)^2dx=b^2+v,
+\]
+where $u,v\geq0$ by Jensen.  The edge-density increment is exactly
+\begin{equation}
+ \delta:=p(W)-\frac12=\frac{s-2g}{4}.
+ \label{eq:two-defect-density}
+\end{equation}
+Thus threshold feasibility gives
+\begin{equation}
+ 0\leq\delta\leq\frac{s}{4}\leq\frac\eta2,
+ \qquad p\leq\frac{1+\eta}{2}.
+ \label{eq:two-defect-scalar-bounds}
+\end{equation}
+
+For a two-colouring $c:V(H)\to\{0,1\}$, let $M(c)$ be its set of
+monochromatic edges.  Define the nonnegative two-defect functional
+\[
+ R_H(F_0,F_1)=2^{-v(H)}
+ \sum_{c:\,|M(c)|=2}
+ \int\prod_{xy\in M(c)}F_{c(x)}(x_x,x_y)\,d\boldsymbol{x}.
+\]
+Every other edge in such a colouring crosses $A,B$ and has value at least
+$1-\eta$.  Keeping only these nonnegative terms in the complete
+homomorphism integral gives the pointwise lower bound
+\begin{equation}
+ t(H,W)\geq(1-\eta)^{e(H)-2}R_H(F_0,F_1).
+ \label{eq:two-defect-hom-lower}
+\end{equation}
+Exact enumeration of the two-colourings gives
+\begin{center}
+\begin{tabular}{r|l|c}
+Atlas&$R_H(F_0,F_1)$&lower bound\\ \hline
+130&$(2a^2+5ab+2b^2)/32$&$s^2/16$\\
+137,139&$(s^2+u+v)/32$&$s^2/32$\\
+145&$(2a^2+3ab+2b^2+2u+2v)/32$&$7s^2/128$\\
+148&$(3a^2+4ab+3b^2+2u+2v)/64$&$5s^2/128$
+\end{tabular}
+\end{center}
+The residuals after subtracting the last column are respectively
+\[
+ \frac{ab}{32},\quad
+ \frac{u+v}{32},\quad
+ \frac{u+v}{32},\quad
+ \frac{(a-b)^2+8(u+v)}{128},\quad
+ \frac{(a-b)^2+4(u+v)}{128},
+\]
+so these inequalities use no regularity or finite-step assumption.
+
+The five exact targets are
+\[
+\begin{array}{c|c}
+130&p^3(2p-1)^2\\
+137,139&p^2(2p-1)^3\\
+145,148&p(2p-1)^2(3p^2-3p+1).
+\end{array}
+\]
+Using \eqref{eq:two-defect-scalar-bounds}, they are at most, in the same
+three row groups,
+\begin{equation}
+ \frac{(1+\eta)^3s^2}{32},\qquad
+ \frac{\eta(1+\eta)^2s^2}{16},\qquad
+ \frac{(1+\eta)(1+3\eta^2)s^2}{32}.
+ \label{eq:two-defect-target-upper}
+\end{equation}
+Here the middle estimate also uses $s\leq2\eta$, and the last uses
+$3p^2-3p+1=1/4+3(p-1/2)^2$.
+
+\begin{theorem}[Two-defect-colouring $L^\infty$ stability]
+\label{thm:two-defect-local}
+For the following rows, let $\eta_H$ be the displayed radius.
+\begin{center}
+\begin{tabular}{r|c|c|c}
+Atlas&$q_H$ in $R_H\geq q_Hs^2$&$\eta_H$&exact radius slack\\ \hline
+130&$1/16$&$1/16$&$130511/524288$\\
+137&$1/32$&$1/8$&$34705/262144$\\
+139&$1/32$&$1/8$&$34705/262144$\\
+145&$7/128$&$1/16$&$7595623/16777216$\\
+148&$5/128$&$1/40$&$153726161/819200000$
+\end{tabular}
+\end{center}
+If $p(W)\geq1/2$ and
+$\lVert W-T_2\rVert_\infty\leq\eta_H$, then
+\[
+ t(H,W)\geq\Phi_H(p(W)).
+\]
+Equality holds only when $W=T_2$ almost everywhere.
+\end{theorem}
+
+\begin{proof}
+Combine \eqref{eq:two-defect-hom-lower}, the lower-bound column of the
+two-defect table, and \eqref{eq:two-defect-target-upper}.  After removing
+the common factor $s^2$, the required four scalar inequalities are
+\[
+\begin{array}{c|l}
+130&2(1-\eta)^5-(1+\eta)^3\geq0,\\
+137,139&(1-\eta)^6-2\eta(1+\eta)^2\geq0,\\
+145&7(1-\eta)^6-4(1+\eta)(1+3\eta^2)\geq0,\\
+148&5(1-\eta)^6-4(1+\eta)(1+3\eta^2)\geq0.
+\end{array}
+\]
+At the displayed radii their left sides are exactly the positive slacks in
+the table.  Each left side is decreasing on $[0,\eta_H]$: this is immediate
+term by term after differentiating.  Hence the inequalities hold throughout
+the claimed balls.  If $s=0$, nonnegativity gives $F_0=F_1=0$ almost
+everywhere, and \eqref{eq:two-defect-density} with $\delta\geq0$ gives
+$g=0$, hence $G=0$ almost everywhere.  If $s>0$, the displayed radius slack
+makes the comparison strict.
+\end{proof}
+
+Theorems~\ref{thm:threshold-local},
+\ref{thm:critical-addition-local}, \ref{thm:negative-target-strip}, and
+\ref{thm:two-defect-local} together give a complete arbitrary-measurable
+$L^\infty$ threshold neighbourhood for every one of the $28$ current open
+rows.
+
+\section{Assumptions and limitations}
+
+The theorem is for arbitrary bounded measurable kernels on an arbitrary
+probability space, with a fixed equal $k$-partition.  It uses no regularity,
+finite-step assumption for $U$, finite-graph approximation, or numerical
+optimization.  The sign of $U$ on saturated Turan cells follows from the
+graphon range $0\leq W\leq1$ and is not an extra assumption.
+
+The $L^\infty$ topology does not include a literal displacement of a part
+boundary: that operation differs from $T_k$ by one on a thin strip.  Such
+part-size changes are instead controlled to second order by the independent
+part-size Hessian calculation.  At the threshold,
+Theorem~\ref{thm:threshold-local} assumes the full strict tangent-cone
+inequalities.  The three subsequent arguments cover every critical current
+row: pair-energy absorption handles the five critical-addition faces, the
+target sign handles the four density-neutral rows, and the positive
+two-defect subintegral handles the five all-direction rows.  On the
+historical fifteenth row, Atlas $152$,
+the residual arbitrary-fibre cone is now known to be negative; see
+\path{notes/atlas_152_fractional_fibre_local_counterexample.tex}.  Consequently
+these local theorems alone prove no row positive on its entire density
+interval.
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The line headed
+\texttt{arbitrary-kernel interior L-infinity} reconstructs the shifted
+first-variation certificates, the exact Taylor constants, and every interior
+rational radius.  The line headed
+\texttt{strict-threshold arbitrary-kernel L-infinity} reconstructs the $14$
+threshold records and their exact radii.  The lines headed
+\texttt{negative-target threshold strip} and
+\texttt{two-defect-colouring arbitrary-kernel L-infinity} reconstruct the
+four scalar target certificates, the five exact two-defect functionals, and
+all nine new rational radii or radius slacks.
+
+\end{document}

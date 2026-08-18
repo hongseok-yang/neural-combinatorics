@@ -1,0 +1,686 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+
+\title{The Sidorenko Inequality for Forests}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $F$ be a finite forest with $e\geq 1$ edges, and let $V$ be a
+$[0,1]$-valued symmetric measurable kernel on an arbitrary probability
+space.  We prove from first principles that
+\[
+t(F,V)\geq t(K_2,V)^e.
+\]
+The connected case is proved by a leaf-removal induction which constructs
+a probability density on the assignments of a tree.  Its one-vertex
+marginals are the degree-biased measure.  Two explicit applications of
+Jensen's inequality then give the desired bound.  Disjoint components,
+isolated vertices, and zero edge density are treated separately.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definitions and elementary reductions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be a probability space, with no further assumptions
+on its measurable structure.  Let
+\[
+V\colon \Omega^2\longrightarrow[0,1]
+\]
+be measurable with respect to the product sigma-algebra and symmetric.
+For a finite simple graph $G$, define its ordinary, non-injective
+homomorphism density by
+\begin{equation}
+t(G,V)
+=
+\int_{\Omega^{V(G)}}
+\prod_{uv\in E(G)}V(x_u,x_v)
+\prod_{u\in V(G)}\dd\mu(x_u).
+\label{eq:hom-density}
+\end{equation}
+The integrand is measurable, nonnegative, and at most $1$.  Consequently
+all integrals in \eqref{eq:hom-density} exist and are finite.  Every
+reordering or partial evaluation of these finite product integrals below
+is justified by the Fubini--Tonelli theorem; its applicability follows
+either from nonnegativity or, more strongly, from boundedness by $1$.
+
+Set
+\begin{equation}
+d(x):=\int_\Omega V(x,y)\dd\mu(y),
+\qquad
+z:=t(K_2,V)=\int_\Omega d(x)\dd\mu(x).
+\label{eq:degree}
+\end{equation}
+Tonelli's theorem shows that $d$ is measurable and gives the second
+identity.  Since $0\leq V\leq1$ and $\mu(\Omega)=1$, one has
+$0\leq d\leq1$ and $0\leq z\leq1$.
+
+We first record precisely how vertices and components that do not
+interact in the graph behave in the homomorphism integral.
+
+\begin{lemma}[Isolated vertices and disjoint unions]
+\label{lem:components}
+Let $G_1$ and $G_2$ be finite simple graphs with disjoint vertex sets.
+Then
+\begin{equation}
+t(G_1\sqcup G_2,V)=t(G_1,V)t(G_2,V).
+\label{eq:multiplicativity}
+\end{equation}
+In particular, adjoining or deleting an isolated vertex does not change
+homomorphism density.
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+f_i((x_u)_{u\in V(G_i)})
+:=\prod_{uv\in E(G_i)}V(x_u,x_v)
+\qquad (i=1,2).
+\]
+The integrand for $G_1\sqcup G_2$ is $f_1(x)f_2(y)$.  The finite product
+measure on its vertex set is the product of the finite product measures
+on $V(G_1)$ and $V(G_2)$.  Fubini--Tonelli applies because
+$f_1f_2$ is measurable, nonnegative, and bounded by $1$, and gives
+\begin{align*}
+t(G_1\sqcup G_2,V)
+&=\int_{\Omega^{V(G_1)}}\int_{\Omega^{V(G_2)}}
+f_1(x)f_2(y)\prod_{v\in V(G_2)}\dd\mu(y_v)
+\prod_{u\in V(G_1)}\dd\mu(x_u)
+\\
+&=\int_{\Omega^{V(G_1)}}
+f_1(x)t(G_2,V)\prod_{u\in V(G_1)}\dd\mu(x_u)
+\\
+&=t(G_1,V)t(G_2,V),
+\end{align*}
+which is \eqref{eq:multiplicativity}.  For the one-vertex graph $K_1$,
+the edge product is the empty product $1$, so
+\[
+t(K_1,V)=\int_\Omega1\dd\mu=\mu(\Omega)=1.
+\]
+Applying \eqref{eq:multiplicativity} with $G_2=K_1$ proves the last
+assertion.
+\end{proof}
+
+The case of zero edge density will not require division by $z$.
+
+\begin{lemma}[Zero edge density]
+\label{lem:zero}
+If $z=0$ and $G$ has at least one edge, then $t(G,V)=0$.
+\end{lemma}
+
+\begin{proof}
+Fix an edge $ab\in E(G)$.  Every factor in the integrand of
+\eqref{eq:hom-density} lies in $[0,1]$, so pointwise
+\[
+0\leq \prod_{uv\in E(G)}V(x_u,x_v)\leq V(x_a,x_b).
+\]
+Integrating this inequality over $\Omega^{V(G)}$ is legitimate by
+monotonicity of the integral.  Fubini--Tonelli applies to the right-hand
+side because it is nonnegative and bounded, and the integrations in all
+coordinates other than $a,b$ contribute the factor
+$\mu(\Omega)^{|V(G)|-2}=1$.  Hence
+\[
+0\leq t(G,V)\leq
+\int_{\Omega^2}V(x_a,x_b)\dd\mu(x_a)\dd\mu(x_b)=z=0.
+\]
+Thus $t(G,V)=0$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A probability density attached to a tree}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For this section assume $z>0$.  Define a probability measure $\nu$ on
+$\Omega$ by
+\begin{equation}
+\dd\nu(x)=\frac{d(x)}{z}\dd\mu(x).
+\label{eq:nu}
+\end{equation}
+Indeed, $d/z$ is nonnegative and measurable, and
+\eqref{eq:degree} gives $\int(d/z)\dd\mu=1$.  Notice also that
+\begin{equation}
+\nu(\{x:d(x)=0\})
+=\frac1z\int_{\{d=0\}}d(x)\dd\mu(x)=0.
+\label{eq:positive-degree-nu}
+\end{equation}
+
+Let $T$ be a finite tree with $m\geq1$ edges.  Every vertex of $T$ has
+positive degree.  Define a nonnegative measurable function
+$g_T$ on $\Omega^{V(T)}$ by
+\begin{equation}
+g_T((x_v)_{v\in V(T)})
+:=
+\frac{\displaystyle\prod_{uv\in E(T)}V(x_u,x_v)}
+{\displaystyle z\prod_{v\in V(T)}d(x_v)^{\deg_T(v)-1}}
+\label{eq:tree-density}
+\end{equation}
+when every factor in the denominator having a positive exponent is
+positive, and set $g_T=0$ otherwise.  Exponents equal to zero contribute
+the factor $1$, including when $d(x_v)=0$.
+
+The next proposition is the inductive part of the proof.  It establishes
+both the normalization of $g_T$ and every marginal that will be needed
+later.
+
+\begin{proposition}[Tree-walk normalization and marginals]
+\label{prop:tree-density}
+For every finite tree $T$ with at least one edge,
+\begin{equation}
+\int_{\Omega^{V(T)}}g_T\prod_{v\in V(T)}\dd\mu(x_v)=1.
+\label{eq:normalization}
+\end{equation}
+Moreover, for every vertex $a\in V(T)$ and every measurable set
+$B\subseteq\Omega$,
+\begin{equation}
+\int_{\Omega^{V(T)}}
+\one_B(x_a)g_T(x)
+\prod_{v\in V(T)}\dd\mu(x_v)
+=\nu(B).
+\label{eq:marginal}
+\end{equation}
+Thus the probability measure with density $g_T$ relative to
+$\mu^{V(T)}$ has one-vertex marginal $\nu$ at every vertex.
+\end{proposition}
+
+\begin{proof}
+We use induction on the positive integer
+\[
+m=|E(T)|.
+\]
+The precise induction assertion $P(m)$ is: for every finite tree with
+exactly $m$ edges, the function in \eqref{eq:tree-density} satisfies
+\eqref{eq:normalization} and \eqref{eq:marginal} for every one of its
+vertices and every measurable $B\subseteq\Omega$.  The measure is the
+number of edges; in the induction step it decreases from $m$ to $m-1$,
+so the induction is well-founded on the positive integers.
+
+For the base case $m=1$, let the endpoints be $a,b$.  Both degrees are
+$1$, and hence
+\[
+g_T(x_a,x_b)=\frac{V(x_a,x_b)}{z}.
+\]
+Its integral is $1$ by the definition of $z$.  For a measurable
+$B\subseteq\Omega$, Fubini--Tonelli applies because the following
+integrands are nonnegative, and gives
+\begin{align*}
+\int_{\Omega^2}\one_B(x_a)g_T(x_a,x_b)
+\dd\mu(x_a)\dd\mu(x_b)
+&=\frac1z\int_B d(x_a)\dd\mu(x_a)
+=\nu(B).
+\end{align*}
+The same computation for $b$ uses symmetry of $V$:
+\begin{align*}
+\int_{\Omega^2}\one_B(x_b)g_T(x_a,x_b)
+\dd\mu(x_a)\dd\mu(x_b)
+&=\frac1z\int_B
+\left(\int_\Omega V(x_a,x_b)\dd\mu(x_a)\right)\dd\mu(x_b)
+\\
+&=\frac1z\int_B d(x_b)\dd\mu(x_b)
+=\nu(B).
+\end{align*}
+This proves $P(1)$.
+
+Now let $m\geq2$ and assume $P(m-1)$.  Choose a longest simple path in
+$T$, let $\ell$ be one of its endpoints, and let $p$ be the vertex next
+to $\ell$ on that path.  The endpoint $\ell$ has no neighbour outside
+the path: such a neighbour would extend the path without repeating a
+vertex, contrary to maximality.  Thus $\ell$ is a leaf and $p$ is its
+unique neighbour.  Delete $\ell$ and its incident edge $p\ell$, and
+call the resulting graph $T'$.  Deleting a leaf preserves connectedness
+among the remaining vertices and cannot create a cycle.  Therefore
+$T'$ is a tree with exactly $m-1\geq1$ edges, so $P(m-1)$ applies to it.
+
+Define
+\begin{equation}
+R(x,y):=
+\begin{cases}
+V(x,y)/d(x),&d(x)>0,\\
+0,&d(x)=0.
+\end{cases}
+\label{eq:transition-density}
+\end{equation}
+This is a nonnegative measurable function.  Direct substitution of
+the degrees
+\[
+\deg_T(p)=\deg_{T'}(p)+1,
+\qquad
+\deg_T(v)=\deg_{T'}(v)\quad(v\in V(T')\setminus\{p\}),
+\qquad
+\deg_T(\ell)=1
+\]
+into \eqref{eq:tree-density} gives the leaf factorization
+\begin{equation}
+g_T(x)=g_{T'}(x|_{V(T')})R(x_p,x_\ell).
+\label{eq:leaf-factorization}
+\end{equation}
+If $d(x_p)>0$, this is cancellation of exactly one additional factor
+$d(x_p)$ in the denominator.  If $d(x_p)=0$, both sides are zero by
+the definitions of $g_T$ and $R$.  Thus \eqref{eq:leaf-factorization}
+holds pointwise.
+
+For every $x\in\Omega$, the definition of $d$ gives
+\begin{equation}
+\int_\Omega R(x,y)\dd\mu(y)=\one_{\{d>0\}}(x).
+\label{eq:R-mass}
+\end{equation}
+Using \eqref{eq:leaf-factorization}, Tonelli's theorem for the
+nonnegative integrand, \eqref{eq:R-mass}, and then the induction
+hypothesis for the $p$-marginal, we obtain
+\begin{align*}
+\int_{\Omega^{V(T)}}g_T\dd\mu^{V(T)}
+&=\int_{\Omega^{V(T')}}g_{T'}(x)
+\left(\int_\Omega R(x_p,y)\dd\mu(y)\right)
+\dd\mu^{V(T')}(x)
+\\
+&=\int_{\Omega^{V(T')}}g_{T'}(x)
+\one_{\{d>0\}}(x_p)\dd\mu^{V(T')}(x)
+\\
+&=\nu(\{d>0\})=1,
+\end{align*}
+where the last equality is \eqref{eq:positive-degree-nu}.  This proves
+normalization.
+
+Let $a\in V(T')$ and let $B\subseteq\Omega$ be measurable.  The same
+calculation, with the factor $\one_B(x_a)$ retained, gives
+\begin{align}
+\int_{\Omega^{V(T)}}\one_B(x_a)g_T\dd\mu^{V(T)}
+&=\int_{\Omega^{V(T')}}\one_B(x_a)g_{T'}(x)
+\one_{\{d>0\}}(x_p)\dd\mu^{V(T')}(x).
+\label{eq:old-marginal-first}
+\end{align}
+The part of the last integral on $\{d(x_p)=0\}$ is zero: by the
+induction hypothesis, its value without the factor
+$\one_B(x_a)\leq1$ is the $p$-marginal mass
+$\nu(\{d=0\})=0$.  Removing $\one_{\{d>0\}}(x_p)$ from
+\eqref{eq:old-marginal-first} and applying the induction hypothesis to
+the $a$-marginal therefore gives
+\[
+\int_{\Omega^{V(T)}}\one_B(x_a)g_T\dd\mu^{V(T)}=\nu(B).
+\]
+
+It remains to calculate the new leaf marginal.  Define
+\[
+\psi_B(x):=\int_B R(x,y)\dd\mu(y).
+\]
+Tonelli's theorem applies at each step below because all integrands are
+nonnegative.  The factorization \eqref{eq:leaf-factorization}, followed
+by the induction hypothesis for the $p$-marginal, yields
+\begin{align}
+\int_{\Omega^{V(T)}}\one_B(x_\ell)g_T\dd\mu^{V(T)}
+&=\int_{\Omega^{V(T')}}g_{T'}(x)\psi_B(x_p)
+\dd\mu^{V(T')}(x)
+\\
+&=\int_\Omega\psi_B(x)\dd\nu(x)
+\\
+&=\frac1z\int_{\{d>0\}}\int_B V(x,y)\dd\mu(y)\dd\mu(x).
+\label{eq:leaf-marginal-intermediate}
+\end{align}
+The omitted part with $d(x)=0$ has integral zero, because
+\[
+0\leq\int_{\{d=0\}}\int_B V(x,y)\dd\mu(y)\dd\mu(x)
+\leq\int_{\{d=0\}}d(x)\dd\mu(x)=0.
+\]
+After adding that zero part to \eqref{eq:leaf-marginal-intermediate},
+symmetry of $V$ and Fubini--Tonelli give
+\begin{align*}
+\int_{\Omega^{V(T)}}\one_B(x_\ell)g_T\dd\mu^{V(T)}
+&=\frac1z\int_B\int_\Omega V(x,y)\dd\mu(x)\dd\mu(y)
+\\
+&=\frac1z\int_B d(y)\dd\mu(y)
+=\nu(B).
+\end{align*}
+Thus every vertex marginal is $\nu$, completing the proof of $P(m)$
+and the induction.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The inequality for a tree}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We now compare the tree-walk probability measure with the original
+homomorphism integral.  The logarithms used below are harmless even when
+$d$ approaches zero; the required integrability is verified before
+Jensen's inequality is applied.
+
+\begin{theorem}[Tree case]
+\label{thm:tree}
+If $T$ is a finite tree with $m\geq1$ edges, then
+\[
+t(T,V)\geq z^m.
+\]
+\end{theorem}
+
+\begin{proof}
+The conclusion for $z=0$ is Lemma~\ref{lem:zero}, so suppose $z>0$.
+Let $Q_T$ be the probability measure on $\Omega^{V(T)}$ whose density
+with respect to $\mu^{V(T)}$ is $g_T$; it is a probability measure by
+Proposition~\ref{prop:tree-density}.
+
+Define
+\begin{equation}
+A_T(x):=z\prod_{v\in V(T)}d(x_v)^{\deg_T(v)-1}.
+\label{eq:A}
+\end{equation}
+We claim that
+\begin{equation}
+t(T,V)=\int_{\Omega^{V(T)}}A_T(x)\dd Q_T(x).
+\label{eq:t-as-expectation}
+\end{equation}
+On the set on which all positive-exponent factors in \eqref{eq:A} are
+positive, the identity
+\[
+A_T(x)g_T(x)=\prod_{uv\in E(T)}V(x_u,x_v)
+\]
+is immediate from \eqref{eq:tree-density}.  On the complementary set,
+choose a vertex $a$ such that $\deg_T(a)-1>0$ and $d(x_a)=0$.  The
+integral of the homomorphism integrand over this set is zero: choose an
+edge $ab$ incident to $a$ and use
+\begin{align*}
+0
+&\leq
+\int_{\Omega^{V(T)}}
+\one_{\{d(x_a)=0\}}
+\prod_{uv\in E(T)}V(x_u,x_v)\dd\mu^{V(T)}(x)
+\\
+&\leq
+\int_{\Omega^{V(T)}}
+\one_{\{d(x_a)=0\}}V(x_a,x_b)\dd\mu^{V(T)}(x)
+\\
+&=\int_{\{d=0\}}d(x_a)\dd\mu(x_a)=0.
+\end{align*}
+Here the inequality uses $0\leq V\leq1$, and the final evaluation uses
+Fubini--Tonelli for a bounded nonnegative integrand.  There are only
+finitely many possible vertices $a$, so the union of these exceptional
+sets also contributes zero.  On that union, $A_Tg_T=0$ by definition.
+This proves \eqref{eq:t-as-expectation}.
+
+For $s\in[0,1]$, set $0\log0:=0$.  The elementary bound
+$0\leq-s\log s\leq1/\mathrm{e}$ shows that $d\log d$ is integrable with
+respect to $\mu$.  By the marginal assertion in
+Proposition~\ref{prop:tree-density},
+\begin{equation}
+\int_\Omega |\log d(x)|\dd\nu(x)
+=\frac1z\int_\Omega -d(x)\log d(x)\dd\mu(x)
+<\infty,
+\label{eq:log-integrable}
+\end{equation}
+where the integrand is assigned value $0$ at $d=0$; this assignment is
+valid because $\nu(\{d=0\})=0$.  Since every exponent in
+\eqref{eq:A} is nonnegative, \eqref{eq:log-integrable} and the
+one-vertex marginals show that $\log A_T$ is integrable with respect to
+$Q_T$.  Moreover, $0<A_T\leq z\leq1$ holds $Q_T$-almost everywhere:
+positive-exponent zero factors form a $Q_T$-null set by the marginals,
+and all degree values are at most $1$.  In particular,
+$\exp(\log A_T)=A_T$ is $Q_T$-integrable.
+
+Apply Jensen's inequality to the convex function
+$r\mapsto\exp(r)$ with respect to the probability measure $Q_T$.
+The preceding paragraph verifies that both $\log A_T$ and its
+exponential are integrable.  Using \eqref{eq:t-as-expectation}, we get
+\begin{equation}
+t(T,V)=\int A_T\dd Q_T
+=\int\exp(\log A_T)\dd Q_T
+\geq\exp\left(\int\log A_T\dd Q_T\right).
+\label{eq:exp-jensen}
+\end{equation}
+Every one-vertex marginal of $Q_T$ is $\nu$, so
+\begin{align}
+\int\log A_T\dd Q_T
+&=\log z+
+\sum_{v\in V(T)}(\deg_T(v)-1)
+\int_\Omega\log d(x)\dd\nu(x)
+\notag\\
+&=\log z+
+\left(\sum_{v\in V(T)}(\deg_T(v)-1)\right)
+\frac1z\int_\Omega d(x)\log d(x)\dd\mu(x).
+\label{eq:logA}
+\end{align}
+All terms are finite by \eqref{eq:log-integrable}, which also justifies
+the finite sum and the marginal substitutions.
+
+We next apply Jensen's inequality to the function
+\[
+\phi(s)=
+\begin{cases}
+s\log s,&s>0,\\
+0,&s=0.
+\end{cases}
+\]
+This function is continuous and convex on $[0,1]$: on $(0,1]$ one has
+$\phi''(s)=1/s>0$, and continuity at $0$ extends convexity to the closed
+interval.  The measure in this application is the original probability
+measure $\mu$.  The random variable $d$ takes values in $[0,1]$, and
+$\phi(d)$ is integrable because $|d\log d|\leq1/\mathrm{e}$.  Hence
+Jensen gives
+\begin{equation}
+\int_\Omega d(x)\log d(x)\dd\mu(x)
+\geq
+\left(\int_\Omega d(x)\dd\mu(x)\right)
+\log\left(\int_\Omega d(x)\dd\mu(x)\right)
+=z\log z.
+\label{eq:xlogx-jensen}
+\end{equation}
+
+A finite tree with $m$ edges has $m+1$ vertices, and the handshake
+identity gives $\sum_v\deg_T(v)=2m$.  Therefore
+\begin{equation}
+\sum_{v\in V(T)}(\deg_T(v)-1)
+=2m-(m+1)=m-1.
+\label{eq:degree-sum}
+\end{equation}
+The coefficient $m-1$ is nonnegative.  Dividing
+\eqref{eq:xlogx-jensen} by $z>0$, substituting it and
+\eqref{eq:degree-sum} into \eqref{eq:logA}, and then using the fact that
+the exponential function is increasing, we obtain
+\begin{align*}
+\int\log A_T\dd Q_T
+&\geq\log z+(m-1)\log z=m\log z,
+\\
+\exp\left(\int\log A_T\dd Q_T\right)
+&\geq\exp(m\log z)=z^m.
+\end{align*}
+Combining this with \eqref{eq:exp-jensen} proves the theorem.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Forests}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Sidorenko inequality for forests]
+\label{thm:forest}
+Let $F$ be a finite forest with $e=e(F)\geq1$ edges.  On every
+probability space $(\Omega,\mu)$, every symmetric measurable kernel
+$V\colon\Omega^2\to[0,1]$ satisfies
+\[
+\boxed{t(F,V)\geq z^e,\qquad z=t(K_2,V).}
+\]
+\end{theorem}
+
+\begin{proof}
+If $z=0$, the forest $F$ has at least one edge by assumption, so
+Lemma~\ref{lem:zero} gives $t(F,V)=0=z^e$.
+
+Suppose now that $z>0$.  Decompose $F$ into its finitely many connected
+components.  Let $T_1,\ldots,T_k$ be exactly the components containing
+an edge, and let $r$ be the number of isolated-vertex components.  The
+assumption $e\geq1$ implies $k\geq1$.  Since $F$ is acyclic, every
+connected component containing an edge is a finite tree.  Write
+$e_i=|E(T_i)|\geq1$.  Every edge belongs to exactly one component, so
+\begin{equation}
+e=\sum_{i=1}^k e_i.
+\label{eq:edge-decomposition}
+\end{equation}
+
+Repeated application of Lemma~\ref{lem:components}, including its
+isolated-vertex assertion, gives
+\begin{equation}
+t(F,V)=\left(\prod_{i=1}^k t(T_i,V)\right)t(K_1,V)^r
+=\prod_{i=1}^k t(T_i,V).
+\label{eq:forest-factorization}
+\end{equation}
+Theorem~\ref{thm:tree} gives $t(T_i,V)\geq z^{e_i}$ for each $i$.
+All quantities are nonnegative, so multiplying these finitely many
+inequalities and then using \eqref{eq:edge-decomposition} yields
+\[
+t(F,V)
+=\prod_{i=1}^k t(T_i,V)
+\geq\prod_{i=1}^k z^{e_i}
+=z^{\sum_{i=1}^k e_i}
+=z^e.
+\]
+This proves the stated inequality for disconnected forests and shows
+explicitly that isolated vertices affect neither side: they contribute
+a multiplicative factor $1$ to the left and no edges to the exponent on
+the right.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scope and external inputs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The proof is self-contained apart from the following facts, listed in
+the precise forms in which they are used.
+
+\small
+
+\begin{itemize}
+\item \textbf{Finite product measures and Fubini--Tonelli.}
+Finite products of a probability measure exist on the corresponding
+product sigma-algebras, may be regrouped according to a partition of
+the finite coordinate set, and are again probability measures.
+For a nonnegative measurable function on such a finite product, iterated
+integrals may be taken in any order and equal the product-space integral;
+the partial integral is measurable.  The same conclusion holds for an
+integrable function.  We use the nonnegative form for homomorphism
+integrands, the densities $g_T$, their indicator-weighted versions, and
+the leaf factor $R$.  All homomorphism integrands are also bounded by
+$1$, so their integrability is automatic.
+
+\item \textbf{Elementary integration facts.}
+The integral is monotone on nonnegative measurable functions; a
+nonnegative measurable function with integral zero vanishes almost
+everywhere; finite unions of null sets are null; and functions equal
+almost everywhere have equal integrals when either is nonnegative or
+integrable.  A measurable density $g$ of integral $1$ defines a
+probability measure $Q$ by $\dd Q=g\dd P$, with
+$\int h\dd Q=\int hg\dd P$.  Equality on all measurable-set indicators
+identifies two measures, which then integrate every nonnegative
+measurable or integrable function equally.  These facts are used in the
+zero-density argument, on degree-zero sets, and for $g_T$ and $Q_T$.
+
+\item \textbf{Jensen's inequality.}
+If $P$ is a probability measure, $X$ and $\varphi(X)$ are integrable,
+and $\varphi$ is convex on an interval containing the range of $X$, then
+\[
+\varphi\!\left(\int X\dd P\right)
+\leq\int\varphi(X)\dd P.
+\]
+It is used first with $P=Q_T$, $X=\log A_T$, and
+$\varphi(r)=e^r$, after integrability is verified in
+\eqref{eq:log-integrable}; it is used second with $P=\mu$, $X=d$, and
+$\varphi(s)=s\log s$ with $\varphi(0)=0$, after boundedness and
+integrability are verified immediately before
+\eqref{eq:xlogx-jensen}.  No application of Cauchy--Schwarz or
+H\"older's inequality is used.
+
+\item \textbf{Elementary calculus and real arithmetic.}
+The exponential function is convex and increasing; the function
+$s\mapsto s\log s$, extended by $0$ at $s=0$, is continuous and convex
+on $[0,1]$; $0\leq-s\log s\leq1/\mathrm{e}$ on $[0,1]$; and the usual
+finite-sum, power, logarithm, and exponential identities hold for
+positive real numbers.  These are used only in the two Jensen steps and
+the displayed algebra following them.  We also use that finite products
+of nonnegative inequalities may be multiplied without reversing the
+inequality, and that a product of numbers in $[0,1]$ lies in $[0,1]$
+and is at most any selected factor.
+
+\item \textbf{Elementary finite graph facts.}
+Every finite graph is the disjoint union of its connected components;
+every edge lies in exactly one component; a connected acyclic finite
+graph with an edge is a tree; a finite tree with $m$ edges has $m+1$
+vertices; and the handshake identity is
+$\sum_v\deg(v)=2m$.  A longest simple path in a finite tree has leaf
+endpoints, and deleting one endpoint and its incident edge leaves a tree
+with one fewer edge.  These facts are used respectively in the forest
+reduction, \eqref{eq:degree-sum}, and the induction in
+Proposition~\ref{prop:tree-density}.  We also use the well-founded
+induction principle on the positive integers.
+
+\item \textbf{Measurability closure.}
+Coordinate projections, finite products and quotients on measurable
+positive-denominator sets of real-valued measurable functions are
+measurable.  Together with Fubini--Tonelli, this ensures that the degree
+function $d$, the homomorphism integrands, $R$, $g_T$, and $A_T$ are
+measurable.
+\end{itemize}
+
+For the requested scope check: (a) no step assumes that $\Omega$ is
+atomless, standard Borel, separable, or countably generated; only its
+probability measure and finite product measures are used.  (b) No step
+assumes that $V$ or $d$ is bounded away from zero; degree-zero sets are
+handled explicitly in \eqref{eq:positive-degree-nu},
+\eqref{eq:transition-density}, and \eqref{eq:t-as-expectation}.
+(c) The induction is on the positive integer $|E(T)|$, decreases by one
+after leaf removal, terminates at $|E(T)|=1$, and that base case is
+computed explicitly.  (d) Disconnected forests and isolated vertices
+are covered by Lemma~\ref{lem:components} and
+\eqref{eq:forest-factorization}.  (e) The case $z=0$ is proved in
+Lemma~\ref{lem:zero} and invoked at the start of both
+Theorem~\ref{thm:tree} and Theorem~\ref{thm:forest}.  No finite-graph
+limit, regularity lemma, weak-regularity argument, compactness argument,
+or graphon limit theory is used.
+
+\normalsize
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Neither Theorem~\ref{thm:tree} nor Theorem~\ref{thm:forest} is formalized.  The
+leaf-removal induction, the density \eqref{eq:tree-density} on tree
+assignments, and its marginal computation have no counterpart in the Lean
+development.
+
+What the catalogue needs from forest Sidorenko is only the instances that the
+cone-over-a-forest rows consume, and each is available by an elementary route
+that avoids the induction:
+
+\begin{itemize}
+\item stars $K_{1,n}$, where $t(K_{1,n},V)=M_n\geq z^n$ is Jensen for
+ $t\mapsto t^n$ against the degree function;
+\item disjoint unions of single edges, by multiplicativity, with equality;
+\item $P_4$, and only $P_4$, which is
+ \texttt{Methods/PathSidorenko.lean}: three-factor H\"older on the
+ almost-everywhere factorization
+ $W=(Wdd')^{1/3}(W/d)^{1/3}(W/d')^{1/3}$, the second and third factors
+ integrating to $\mu\{d>0\}\leq1$.
+\end{itemize}
+
+So the general theorem is stated nowhere in Lean, and a row needing a tree
+other than a star or $P_4$ would need it proved first.
+
+\end{document}

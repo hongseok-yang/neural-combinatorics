@@ -1,0 +1,472 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,d}
+\newcommand{\Gap}{\Gamma_H}
+
+\begin{document}
+
+\section{Purpose and the perturbation families}
+
+For a finite graph $H$, put
+\[
+ \Gamma_H(W)=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p)=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right).
+\]
+This note combines the two tests requested in the accompanying research:
+arbitrary changes around a complete multipartite graphon and the
+high-density limit $p\uparrow1$.  Its main theorem controls every arbitrary
+measurable complement graphon of constant degree $q$ when $q$ is
+sufficiently small.  It gives a no-hit theorem, not a proof of the
+conjecture for all graphons.
+
+Let $V=1-W$ be the complement.  We first assume only
+\begin{equation}
+ 0\leq V\leq1,
+ \qquad d_V(x)=\int V(x,y)\dd y=q
+ \quad\hbox{for almost every }x.
+ \label{eq:regular}
+\end{equation}
+Thus $V$ may be non-step and the underlying probability space arbitrary.
+The balanced Turan complements are singular equality cases of this class.
+
+Fix an integer $r\geq2$ and split the probability space into $r$ sets of
+measure $1/r$.  Let $B=(B_{ij})$ be an arbitrary symmetric doubly stochastic
+$r\times r$ matrix, and define the complement graphon $V_B$ and graphon
+$W_B$ by
+\[
+ V_B(x,y)=B_{ij},\qquad W_B=1-V_B
+ \quad (x\in\Omega_i,\ y\in\Omega_j).
+\]
+Every row sum of $B$ is one, so $V_B$ is a special case of
+\eqref{eq:regular}, of degree
+$q=1/r$ and $p(W_B)=1-1/r$.  The choice $B=I_r$ is the balanced Turan
+graphon complement.  The choice $B=J_r/r$ makes $W_B$ constant.  More
+generally this family contains every feasible degree-preserving coarse
+perturbation of $I_r$, and the whole segment
+$(1-\theta)I_r+\theta J_r/r$, $0\leq\theta\leq1$.  Thus the test is neither
+restricted to one infinitesimal direction nor to multipartite graphons.
+
+\section{Exact graphic-rank expansion}
+
+For $A\subseteq E(H)$, write $H_A=(V(H),A)$ and let
+$r_H(A)=v(H)-c(H_A)$ be its graphic-matroid rank.  Inclusion--exclusion and
+Whitney's expansion of the chromatic polynomial give
+\begin{equation}
+ \Gamma_H(1-V)=
+ \sum_{A\subseteq E(H)}(-1)^{|A|}
+ \bigl(t(H_A,V)-q^{r_H(A)}\bigr)
+ \label{eq:rank-expansion}
+\end{equation}
+whenever $\int V=q$.
+
+\begin{lemma}[Forests are exact]\label{lem:forest}
+If $V$ is regular of degree $q$, then
+$t(F,V)=q^{e(F)}$ for every forest $F$.  If $C$ is a connected graph on
+$v$ vertices, then
+\[
+ 0\leq q^{v-1}-t(C,V).
+\]
+\end{lemma}
+
+\begin{proof}
+Repeatedly integrate a leaf to obtain a factor $q$; isolated vertices give
+factor one.  For the second assertion, choose a spanning tree $T$ of $C$.
+Since $0\leq V\leq1$, deleting the edges outside $T$ can only increase the
+density, so $t(C,V)\leq t(T,V)=q^{v-1}$.
+\end{proof}
+
+For any regular $V$, define the exact transitivity defect
+\begin{equation}
+ D_V:=t(P_3,V)-t(K_3,V)=q^2-t(K_3,V)\geq0.
+ \label{eq:D}
+\end{equation}
+Nonnegativity follows pointwise from
+\[
+ D_V=\int V(x,y)V(y,z)(1-V(x,z))
+       \dd x\dd y\dd z.
+\]
+For the stochastic-block specialization,
+\begin{equation}
+ D_{V_B}=\frac{r-\operatorname{tr}(B^3)}{r^3}.
+ \label{eq:block-D}
+\end{equation}
+
+\section{A spectral bound for every cyclic component}
+
+\begin{lemma}[Cycle defect]\label{lem:cycle}
+For every integer $\ell\geq3$,
+\begin{equation}
+ 0\leq q^{\ell-1}-t(C_\ell,V)
+ \leq (\ell-2)q^{\ell-3}D_V.
+ \label{eq:cycle-defect}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $q=0$, then $V=0$ almost everywhere and the assertion is immediate.
+Suppose $q>0$.  Let $T_V$ be the self-adjoint Hilbert--Schmidt integral
+operator with kernel $V$.  The Schur test and \eqref{eq:regular} give
+$\lVert T_V\rVert_{2\to2}\leq q$.  The constant function is an eigenvector
+of eigenvalue $q$; write the remaining eigenvalues as $q\lambda_i$, where
+$\lambda_i\in[-1,1]$.  Moreover
+\[
+ 1+\sum_i\lambda_i^2
+ =\frac{\lVert T_V\rVert_{\rm HS}^2}{q^2}
+ =\frac{\int V^2}{q^2}
+ \leq\frac1q.
+\]
+Put
+$E=1/q-1-\sum_i\lambda_i^2\geq0$.  The trace formula for powers of a
+Hilbert--Schmidt kernel gives
+\[
+ \frac{q^{\ell-1}-t(C_\ell,V)}{q^\ell}
+ =E+\sum_i(\lambda_i^2-\lambda_i^\ell),
+\]
+and
+\[
+ \frac{D_V}{q^3}=E+\sum_i(\lambda_i^2-\lambda_i^3).
+\]
+For $\lambda\in[-1,1]$,
+\[
+ 0\leq\lambda^2-\lambda^\ell
+ \leq(\ell-2)(\lambda^2-\lambda^3).
+\]
+After division by $\lambda^2$ when nonzero, this is the elementary
+geometric-series inequality
+$0\leq(1-\lambda^{\ell-2})/(1-\lambda)\leq\ell-2$; the endpoint cases
+follow by continuity.  Since $\ell-2\geq1$, summing this inequality and
+retaining $E$ proves \eqref{eq:cycle-defect}.  The trace sums converge
+absolutely in every power at least two.
+\end{proof}
+
+For a connected graph $C$, let
+$\beta(C)=e(C)-v(C)+1$ be its cyclomatic number.
+
+\begin{lemma}[Connected cyclic defect]\label{lem:connected}
+If $C$ is connected, has $v\geq3$ vertices, and $\beta(C)>0$, then
+\begin{equation}
+ 0\leq q^{v-1}-t(C,V)
+ \leq v\,\beta(C)q^{v-3}D_V.
+ \label{eq:connected-defect}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Choose a spanning tree $T$.  Since
+\[
+ 1-\prod_{e\in E(C)\setminus E(T)}V_e
+ \leq\sum_{e\in E(C)\setminus E(T)}(1-V_e),
+\]
+the defect from $t(T,V)=q^{v-1}$ is at most the sum of one term for each
+of the $\beta(C)$ extra edges.  For such an edge, its endpoints are joined
+in $T$ by a path with $\ell-1$ edges, where $3\leq\ell\leq v$ after the
+extra edge closes the path to a cycle $C_\ell$.  Integrating every tree
+branch off this path gives the factor $q^{v-\ell}$.  The remaining integral
+is exactly
+\[
+ q^{v-\ell}\bigl(q^{\ell-1}-t(C_\ell,V)\bigr)
+ \leq (\ell-2)q^{v-3}D_V
+ \leq vq^{v-3}D_V
+\]
+by Lemma~\ref{lem:cycle}.  Sum over the extra edges.
+\end{proof}
+
+For a possibly disconnected $H_A$, define
+\[
+ c(A)=\sum_{C}v(C)\beta(C),
+\]
+where the sum is over its nontrivial cyclic components.  Tree components
+make no contribution.
+
+\begin{lemma}[Arbitrary edge-subset defect]\label{lem:subset}
+If $R=r_H(A)\geq2$, then
+\begin{equation}
+ 0\leq q^R-t(H_A,V)
+ \leq c(A)q^{R-2}D_V.
+ \label{eq:subset-defect}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The density and the comparison monomial factor over the nontrivial
+components.  Telescope the difference of these two products.  Lemma
+\ref{lem:forest} makes every tree-component difference zero and bounds
+every unchanged component density by its forest value.  If a cyclic
+component $C$ has $v$ vertices, Lemma~\ref{lem:connected} bounds its
+difference by $v\beta(C)q^{v-3}D_V$.  The comparison powers from all other
+components contribute $q^{R-(v-1)}$.  Their product is
+$v\beta(C)q^{R-2}D_V$.  Summing over cyclic components gives
+\eqref{eq:subset-defect}.
+\end{proof}
+
+\section{Uniform regular-complement theorem}
+
+Let $N_3(H)$ be the number of triangles of $H$ and put
+\begin{equation}
+ \Xi_H=\sum_{A\subseteq E(H):\ r_H(A)\geq3}c(A).
+ \label{eq:Xi}
+\end{equation}
+
+\begin{theorem}[Arbitrary regular-complement stability]
+\label{thm:regular}
+Let $V$ be any graphon satisfying \eqref{eq:regular}, and put $W=1-V$.
+Then
+\begin{equation}
+ \Gamma_H(W)\geq
+ \bigl(N_3(H)-\Xi_Hq\bigr)D_V.
+ \label{eq:main-bound}
+\end{equation}
+Consequently, if $N_3(H)>0$ and
+\begin{equation}
+ 0<q<\frac{N_3(H)}{\Xi_H},
+ \label{eq:q-range}
+\end{equation}
+then $\Gamma_H(W)\geq0$.  Equality occurs precisely when $V$ is a union of
+equal diagonal clique blocks of mass $q$; necessarily $q=1/r$ for an
+integer $r$, and $W=T_r$ up to null sets.  Every other regular complement
+has strict inequality.
+\end{theorem}
+
+\begin{proof}
+In \eqref{eq:rank-expansion}, ranks zero and one vanish by
+Lemma~\ref{lem:forest}.  The two-edge forests at rank two also vanish.  Each
+triangle has three edges and contributes exactly $D_V$, so the full
+rank-two contribution is $N_3(H)D_V$.
+
+For every $A$ of rank $R\geq3$, Lemma~\ref{lem:subset} bounds the absolute
+value of its summand by
+\[
+ c(A)q^{R-2}D_V\leq c(A)qD_V,
+\]
+because $q\leq1$ and $R\geq3$.  Discarding every sign and summing these
+bounds proves \eqref{eq:main-bound}.
+
+Under \eqref{eq:q-range}, the coefficient in \eqref{eq:main-bound} is
+positive.  Thus equality requires $D_V=0$.  The universal transitivity
+identity in \eqref{eq:D} then gives, for almost every triple,
+\[
+ V(x,y)V(y,z)>0\quad\Longrightarrow\quad V(x,z)=1.
+\]
+For a typical $x$, put $N_x=\{z:V(x,z)>0\}$.  If $y\in N_x$ is typical,
+apply the implication to $(z,x,y)$: $V(z,y)=1$ for almost every
+$z\in N_x$.  Regularity and $0\leq V\leq1$ now give
+\[
+ q=d_V(x)\leq\mu(N_x)\leq d_V(y)=q.
+\]
+Thus the positive-support classes are clique blocks of measure $q$.
+They cover the probability space up to a null set, so their number is
+$r=1/q$.  Hence $V$ is the balanced clique-block complement and $W=T_r$.
+The converse is immediate from the exact Turan equality.
+\end{proof}
+
+The theorem controls every exactly regular measurable complement, not just
+a matrix family or a neighbourhood of a Turan graphon.  Specializing to
+$V_B$ and $q=1/r$ gives
+\begin{equation}
+ \Gamma_H(W_B)\geq
+ \left(N_3(H)-\frac{\Xi_H}{r}\right)D_{V_B}.
+ \label{eq:block-bound}
+\end{equation}
+Thus every symmetric doubly stochastic coarse perturbation is nonnegative
+when $r>\Xi_H/N_3(H)$, and equality forces $B=I_r$.
+
+\section{The full Turan-to-constant segment}
+
+The most canonical path inside the preceding matrix family admits a much
+stronger, full-range certificate.  Put
+\[
+ B_\theta=(1-\theta)I_r+\frac{\theta}{r}J_r,
+ \qquad 0\leq\theta\leq1.
+\]
+Then $B_0=I_r$, while $B_1=J_r/r$.  Thus $W_{B_0}=T_r$ and
+$W_{B_1}$ is the constant graphon of density $1-1/r$.  Every intermediate
+graphon has the same density.  Its two cell values are
+\[
+ W_{B_\theta}(x,y)=
+ \begin{cases}
+  \theta(1-1/r),&x,y\text{ in the same cell},\\
+  1-\theta/r,&x,y\text{ in different cells}.
+ \end{cases}
+\]
+
+Let $m=e(H)$ and $\beta(A)=|A|-r_H(A)$.  Expanding each edge factor according
+to whether its endpoint colours agree gives the exact polynomial
+\begin{align}
+ G_H(r,\theta)
+ &:=r^m\Gamma_H(W_{B_\theta}) \notag\\
+ &=\sum_{A\subseteq E(H)}(-1)^{|A|}
+ \left[
+ r^{\beta(A)}(r-\theta)^{m-|A|}(1-\theta)^{|A|}
+ -r^{m-r_H(A)}
+ \right].
+ \label{eq:interpolation-polynomial}
+\end{align}
+Indeed, before multiplication by $r^m$, fixing the edges in $A$ to have
+equal endpoint colours leaves $r^{c(H_A)}$ colour assignments out of
+$r^{v(H)}$, hence the factor $r^{-r_H(A)}$.  Equation
+\eqref{eq:interpolation-polynomial} then follows.  At $\theta=0$ it vanishes
+term by term, so $\theta$ divides $G_H$ in $\mathbb Z[r,\theta]$.
+
+\begin{theorem}[Exact interpolation certificates]
+\label{thm:interpolation}
+For each of the $29$ currently open Atlas graphs $H$, every integer
+$r\geq\chi(H)-1$, and every $\theta\in[0,1]$,
+\[
+ \Gamma_H(W_{B_\theta})\geq0.
+\]
+Equality holds at $\theta=0$.  The inequality is strict for
+$0<\theta\leq1$.
+\end{theorem}
+
+\begin{proof}
+Put $k=\chi(H)-1$, $y=r-k$, and
+\[
+ Q_H(y,\theta)=\frac{G_H(y+k,\theta)}{\theta}.
+\]
+If $d=\deg_\theta Q_H$, write its native-degree Bernstein expansion
+\begin{equation}
+ Q_H(y,\theta)=
+ \sum_{i=0}^d b_{H,i}(y)\binom di
+ \theta^i(1-\theta)^{d-i}.
+ \label{eq:interpolation-bernstein}
+\end{equation}
+Exact expansion of \eqref{eq:interpolation-polynomial} shows, for $28$ of
+the rows, that every $b_{H,i}(y)$ has nonnegative rational monomial
+coefficients.  None is the zero polynomial.  For Atlas $188$, the same is
+true except for the first Bernstein coefficient, which factors as
+\[
+ b_{188,0}(y)=
+ y(y+1)(y+2)^4(12y^2-21y+17).
+\]
+Its final quadratic is nevertheless strictly positive, since
+\[
+ 12y^2-21y+17
+ =12\left(y-\frac78\right)^2+\frac{125}{16}.
+\]
+Thus every Bernstein coefficient is nonnegative for $y\geq0$.  Moreover,
+the last coefficient $b_{H,d}(y)$ has nonnegative monomial coefficients and
+a strictly positive constant term on every row.  Therefore
+$Q_H(y,\theta)>0$ for $0<\theta\leq1$: in the open interval the last
+Bernstein basis function is positive, and at $\theta=1$ its coefficient is
+the value of the polynomial.  Multiplication by $\theta/r^m$ proves the
+claim.  At $\theta=0$ the graphon is $T_r$, giving equality.
+\end{proof}
+
+The exact degrees in \eqref{eq:interpolation-bernstein} are
+\[
+\begin{array}{c|l}
+d&\text{Atlas IDs}\\ \hline
+5&43,118,122,124,130\\
+6&126,127,137,139\\
+7&145,147,148,151,152,153,157,160\\
+8&168,169,171,174,178\\
+9&181,185,188\\
+10&194,196,199\\
+11&203.
+\end{array}
+\]
+Thus the constant-versus-Turan comparison is not hiding a negative point on
+their natural fixed-density segment, even at the smallest admissible Turan
+grid.  This result is exact on the whole segment and does not use the
+high-density estimate in Theorem~\ref{thm:regular}.
+
+\section{Exact audit of the 29 open rows}
+
+For the current open Atlas rows, exact edge-subset enumeration gives the
+following signatures.  The last entry is the least integer $r_0$ for which
+the stochastic-block corollary \eqref{eq:block-bound} is strict for every
+$r\geq r_0$.
+\[
+\begin{array}{c|rrrrr}
+H&43&118&122&124&126\\
+(N_3,\Xi,r_0)&(1,55,56)&(1,126,127)&(1,123,124)&(1,125,126)&(1,112,113)\\ \hline
+H&127&130&137&139&145\\
+(N_3,\Xi,r_0)&(1,99,100)&(2,126,64)&(3,563,188)&(3,556,186)&(2,484,243)\\ \hline
+H&147&148&151&152&153\\
+(N_3,\Xi,r_0)&(2,470,236)&(2,456,229)&(1,415,416)&(2,442,222)&(2,444,223)\\ \hline
+H&157&160&168&169&171\\
+(N_3,\Xi,r_0)&(5,1875,376)&(5,1849,370)&(3,1609,537)&(4,1654,414)&(3,1538,513)\\ \hline
+H&174&178&181&185&188\\
+(N_3,\Xi,r_0)&(2,1434,718)&(7,5426,776)&(6,5022,838)&(5,4839,968)&(4,4626,1157)\\ \hline
+H&194&196&199&203&\\
+(N_3,\Xi,r_0)&(7,13586,1941)&(7,13377,1912)&(6,13182,2198)&(9,35258,3918)&
+\end{array}
+\]
+Every constant is an integer obtained directly from \eqref{eq:Xi}; no
+floating-point comparison is used.
+
+In the same order, the graph6 codes are
+\begin{center}
+\begin{tabular}{c|c@{\qquad}c|c}
+43&\verb|Dlc|&118&\verb|Eht?|\\
+122&\verb|Eld?|&124&\verb|Exd?|\\
+126&\verb|ERUO|&127&\verb|EZEG|\\
+130&\verb|E{CW|&137&\verb|EjsG|\\
+139&\verb|Eju?|&145&\verb|Exe_|\\
+147&\verb|EhMg|&148&\verb|EyUG|\\
+151&\verb|EhdW|&152&\verb|EhNG|\\
+153&\verb|Ehf_|&157&\verb|E~`_|\\
+160&\verb|E~@g|&168&\verb|E^MG|\\
+169&\verb|Exf_|&171&\verb|Ehew|\\
+174&\verb|EtTg|&178&\verb|En}?|\\
+181&\verb|E^mG|&185&\verb|Exv_|\\
+188&\verb|EzNG|&194&\verb|E~wW|\\
+196&\verb|ER~g|&199&\verb|El^g|\\
+203&\verb|E~^G|&&
+\end{tabular}
+\end{center}
+Since every $r_0$ above exceeds the required $\chi(H)-1$, all displayed
+densities lie in the conjecture's admissible interval.  At the limiting
+endpoint $p=1$, the edge density forces $W=1$ almost everywhere, while the
+monicity of $\chi_H$ gives $\Phi_H(1)=1$ by polynomial continuation; hence
+$t(H,W)=\Phi_H(1)=1$ separately.
+
+\section{Assumptions and limitations}
+
+The proof uses only finite graphic-rank sums, leaf integration for a regular
+graphon, the spectral theorem and trace identities for a self-adjoint
+Hilbert--Schmidt integral operator, the elementary scalar inequality in
+Lemma~\ref{lem:cycle}, and bounded convergence implicit in finite graphon
+integrals.  No finite-graph approximation, optimization, regularity lemma,
+or tensor search is used.
+
+Exact degree regularity is essential to the stated spectral proof, but
+no equal-cell, finite-step, or discrete-density assumption remains.  The
+independent argument in
+\path{notes/maximum_degree_complement_high_density_stability.tex} now covers
+arbitrary nonregular complements whenever their maximum degree is uniformly
+small, using degree variance and transitivity defect rather than the spectral
+identity.  Complements with persistent high-degree hubs remain outside both
+theorems.  The interpolation theorem removes the
+high-density restriction only on the one-dimensional equal-cell segment
+$B_\theta$.  The explicit general thresholds are deliberately coarse
+because every higher-rank sign is discarded.  Other directions are partly
+covered by the independent local and complete-multipartite theorems, but not
+by this result.  No catalogue status changes.
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The line headed
+\begin{center}
+\texttt{regular-complement graphon high-density theorem}
+\end{center}
+reconstructs all $29$ pairs $(N_3(H),\Xi_H)$ by exact enumeration and
+compares them with the hard-coded table in the verifier.  The line headed
+\texttt{full Turan-to-constant interpolation} reconstructs
+\eqref{eq:interpolation-polynomial}, all Bernstein certificates, and the
+Atlas $188$ quadratic sum-of-squares repair.
+
+\end{document}

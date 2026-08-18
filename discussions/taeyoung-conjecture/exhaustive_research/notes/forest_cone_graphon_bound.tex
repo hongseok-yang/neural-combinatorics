@@ -1,0 +1,425 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\join}{\mathbin{\vee}}
+
+\title{Cones over Forests and the Chromatic-Polynomial Graphon Bound}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $F$ be a forest with $n$ vertices, $e\geq1$ edges, and $c$ connected
+components, so $n=c+e$.  We prove that its cone
+$H=K_1\join F$ satisfies
+\[
+t(H,W)\geq p^c(2p-1)^e=\Phi_H(p)
+\]
+for every graphon $W$ of edge density $p\geq1/2$.  Since
+$\chi(H)=3$, this is the complete required density interval.  The proof
+uses the accepted Sidorenko inequality for forests inside the graphon
+links and a fully proved weighted rooted-triangle estimate.  It is a
+special forest-cone theorem, not a general universal-vertex or join
+closure.  In the catalogue on at most six vertices it proves the
+previously open Atlas graphs 40, 135, and 136.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definitions, chromatic polynomial, and target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be a probability space.  A graphon is a symmetric
+measurable function $W\colon\Omega^2\to[0,1]$.  For a finite simple
+graph $G$, write
+\[
+t(G,W)
+=
+\int_{\Omega^{V(G)}}
+\prod_{uv\in E(G)}W(x_u,x_v)
+\prod_{u\in V(G)}\dd\mu(x_u).
+\]
+This is the ordinary, non-injective homomorphism density.  Put
+\[
+p=t(K_2,W),
+\qquad
+d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+Let $F$ be a forest with $n$ vertices, $e\geq1$ edges, and $c$
+connected components, including isolated vertices as one-vertex
+components.  Each tree component on $v_i$ vertices has chromatic
+polynomial $x(x-1)^{v_i-1}$.  Therefore
+\[
+\chi_F(x)=x^c(x-1)^e,
+\qquad
+n=c+e.
+\]
+
+Define the cone
+\[
+H=K_1\join F
+\]
+by adding a new vertex $o$ adjacent to every vertex of $F$.  Colouring
+$o$ first gives
+\begin{equation}
+\chi_H(x)
+=x\chi_F(x-1)
+=x(x-1)^c(x-2)^e.
+\label{eq:chromatic}
+\end{equation}
+Because $F$ has an edge, $H$ contains a triangle and is $3$-colourable;
+hence $\chi(H)=3$.
+
+Let $q=1-p$.  Substitution in the definition of the target yields
+\begin{align}
+\Phi_H(p)
+&=
+q^{n+1}
+\chi_H\!\left(\frac1q\right)
+\notag\\
+&=
+q^{n+1}\frac1q
+\left(\frac pq\right)^c
+\left(\frac{2p-1}{q}\right)^e
+\notag\\
+&=p^c(2p-1)^e,
+\label{eq:target}
+\end{align}
+because $n=c+e$.  The identity holds at $p=1$ by continuous extension.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The accepted forest input}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We use the following standard, previously accepted positive result.
+
+\begin{theorem}[Sidorenko inequality for forests]
+\label{thm:forest-sidorenko}
+Let $F$ be a forest with $e$ edges.  Every graphon $V$ of edge density
+$z$ satisfies
+\[
+t(F,V)\geq z^e.
+\]
+\end{theorem}
+
+Isolated vertices make no change to homomorphism density, disjoint
+unions multiply, and the connected case is the classical tree
+Sidorenko inequality.  This theorem is the only previously accepted
+graph-density result used below.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Weighted density in graphon links}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define the rooted triangle density
+\[
+\tau(x)
+=
+\int_{\Omega^2}
+W(x,y)W(x,z)W(y,z)
+\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Weighted rooted-triangle inequality]
+\label{lem:weighted-triangle}
+If $p>0$, then for every integer $h\geq0$,
+\[
+\int_\Omega d(x)^h\tau(x)\dd\mu(x)
+\geq
+\frac{2p-1}{p}
+\int_\Omega d(x)^{h+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+For $j\geq0$, put $M_j=\int_\Omega d(x)^j\dd\mu(x)$.  Let $T_W$
+be the integral operator with kernel $W$, and define
+\[
+I_h=\int_\Omega d(x)^h\tau(x)\dd\mu(x),
+\qquad
+J_h=\ip{d^h}{T_Wd}.
+\]
+For $a,b\in[0,1]$, one has $ab\geq a+b-1$.  Apply this to
+$W(x,y)$ and $W(x,z)$, multiply by the nonnegative quantity
+$d(x)^hW(y,z)$, and integrate.  This gives
+\begin{equation}
+I_h\geq2J_h-pM_h.
+\label{eq:I-J}
+\end{equation}
+
+Set $U=1-W$, let $T_U$ be its integral operator, and put
+\[
+u=T_U\one=1-d,
+\qquad q=1-p.
+\]
+Since $T_Ud=T_U(\one-u)=u-T_Uu$, we have
+\[
+T_Wd=p\one-T_Ud=d-q\one+T_Uu.
+\]
+Consequently,
+\begin{equation}
+J_h=M_{h+1}-qM_h+\ip{d^h}{T_Uu}.
+\label{eq:J}
+\end{equation}
+
+By symmetry of $U$, twice the difference
+\[
+\ip{d^h}{T_Uu}-\int_\Omega d(x)^hu(x)^2\dd\mu(x)
+\]
+equals
+\[
+\int_{\Omega^2}U(x,y)
+\bigl(u(y)-u(x)\bigr)
+\bigl(d(x)^h-d(y)^h\bigr)
+\dd\mu(x)\dd\mu(y).
+\]
+This is nonnegative, because $d=1-u$, so $u$ and $d^h$ are oppositely
+ordered.  Hence \eqref{eq:J} implies
+\begin{align*}
+J_h
+&\geq
+M_{h+1}-qM_h+\int d^h(1-d)^2
+\\
+&=M_{h+2}-M_{h+1}+pM_h.
+\end{align*}
+Using this in \eqref{eq:I-J},
+\[
+I_h\geq2M_{h+2}-2M_{h+1}+pM_h.
+\]
+Finally,
+\begin{align*}
+&2M_{h+2}-2M_{h+1}+pM_h
+-\frac{2p-1}{p}M_{h+2}
+\\
+&\qquad=
+\frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)
+\geq0.
+\end{align*}
+\end{proof}
+
+For $d(x)>0$, define a probability measure
+\[
+\dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y)
+\]
+and let $W_x$ denote the same kernel $W$ on this probability space.
+Its edge density is
+\[
+z_x=t(K_2,W_x)=\frac{\tau(x)}{d(x)^2}.
+\]
+If $d(x)=0$, set $z_x=0$.
+
+\begin{corollary}[Weighted average link density]
+\label{cor:link-average}
+For every integer $N\geq2$ and every $p>0$,
+\[
+\frac{\int_\Omega d(x)^Nz_x\dd\mu(x)}
+{\int_\Omega d(x)^N\dd\mu(x)}
+\geq2-\frac1p.
+\]
+\end{corollary}
+
+\begin{proof}
+The numerator is $\int d^{N-2}\tau$.  Apply
+Lemma~\ref{lem:weighted-triangle} with $h=N-2$.  The denominator is
+positive because $p>0$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The forest-cone theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Cones over forests]
+\label{thm:main}
+Let $F$ be a forest with $n$ vertices, $e\geq1$ edges, and $c$
+connected components.  Let $H=K_1\join F$.  Every graphon $W$ with
+edge density $p\geq1/2$ satisfies
+\[
+\boxed{
+t(H,W)
+\geq p^c(2p-1)^e
+=\Phi_H(p).
+}
+\]
+Since $\chi(H)=3$, the interval $p\geq1/2$ is exactly the full required
+interval $p\geq1-1/(\chi(H)-1)$.
+\end{theorem}
+
+\begin{proof}
+Condition on the image $x$ of the cone vertex $o$.  Directly from the
+homomorphism integral,
+\begin{equation}
+t(H,W)
+=\int_\Omega d(x)^n t(F,W_x)\dd\mu(x).
+\label{eq:link-identity}
+\end{equation}
+At points where $d(x)=0$, both the original conditional integral and
+the displayed integrand vanish.  Thus no pointwise positive-degree
+assumption is being made.
+
+By Theorem~\ref{thm:forest-sidorenko},
+\[
+t(F,W_x)\geq z_x^e.
+\]
+Put $M_n=\int d^n$.  Since $e\geq1$, the function $z\mapsto z^e$ is
+convex and nondecreasing on $[0,1]$.  Jensen's inequality with respect
+to the probability measure $d(x)^n\dd\mu(x)/M_n$, followed by
+Corollary~\ref{cor:link-average}, gives
+\begin{align*}
+t(H,W)
+&\geq\int_\Omega d(x)^nz_x^e\dd\mu(x)
+\\
+&\geq
+M_n
+\left(
+\frac{\int d(x)^nz_x\dd\mu(x)}{M_n}
+\right)^e
+\\
+&\geq
+M_n\left(2-\frac1p\right)^e.
+\end{align*}
+The last step uses $p\geq1/2$, so the lower bound on the weighted mean
+is nonnegative.  A second application of Jensen gives $M_n\geq p^n$.
+Therefore
+\begin{align*}
+t(H,W)
+&\geq
+p^n\left(\frac{2p-1}{p}\right)^e
+\\
+&=p^{n-e}(2p-1)^e
+=p^c(2p-1)^e.
+\end{align*}
+This is exactly \eqref{eq:target}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Endpoints and equality examples}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At $p=1/2$, the target is zero because $e\geq1$, so the conclusion
+also follows directly from nonnegativity.  The balanced complete
+bipartite graphon has no triangle and attains equality.  At $p=1$, one
+has $W=1$ almost everywhere, and both sides equal $1$.
+
+For every integer $k\geq2$, the balanced complete $k$-partite graphon
+$T_k$ has edge density $p=1-1/k$ and satisfies
+\[
+t(H,T_k)=\frac{\chi_H(k)}{k^{v(H)}}=\Phi_H(p).
+\]
+Thus the bound has the expected equality examples at every multipartite
+grid point in the required interval.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Catalogue consequences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[New positive Atlas cases]
+The following previously open graphs satisfy the desired inequality for
+every graphon throughout the full interval $p\geq1/2$:
+
+\begin{center}
+\begin{tabular}{cclll}
+\hline
+Atlas ID & graph6 & $(c,e)$ for $F$ & $\chi_H(x)$ & $\Phi_H(p)$ \\
+\hline
+40  & \texttt{DjW}  & $(2,2)$ & $x(x-1)^2(x-2)^2$ & $p^2(2p-1)^2$ \\
+135 & \texttt{EzW\_} & $(2,3)$ & $x(x-1)^2(x-2)^3$ & $p^2(2p-1)^3$ \\
+136 & \texttt{Ejt?} & $(2,3)$ & $x(x-1)^2(x-2)^3$ & $p^2(2p-1)^3$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{corollary}
+
+\begin{proof}
+Deleting the universal vertex from Atlas 40 leaves a three-vertex path
+and one isolated vertex, so $(c,e)=(2,2)$.  Deleting the universal
+vertex from either Atlas 135 or Atlas 136 leaves a four-vertex tree and
+one isolated vertex, so $(c,e)=(2,3)$.  The two four-vertex trees are
+nonisomorphic, but Theorem~\ref{thm:main} applies to every forest and
+depends only on $c$ and $e$.  The graph6 codes are independent
+machine-readable identifiers.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scope and accepted input}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The only previously accepted graph-density result used is the forest
+Sidorenko inequality, Theorem~\ref{thm:forest-sidorenko}.  The weighted
+link estimate is proved here in full.
+
+The theorem does not say that $K_1\join G$ is positive whenever $G$ is
+positive.  Its proof depends specifically on the forest inequality
+$t(F,V)\geq z^{e(F)}$ and on the convexity of the monomial $z^e$.
+Consequently, it establishes exactly cones over forests and no general
+universal-vertex or arbitrary-join closure.
+
+The argument applies directly to arbitrary graphons and ordinary
+homomorphism densities.  It uses no finite-step approximation,
+regularity, injectivity, minimum-degree assumption, or pointwise lower
+bound on the degree function.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The development is \texttt{lean/Taeyoung/Methods/ForestCone/Rows.lean}, over
+\texttt{Methods/ConeBound.lean}.  All five Atlas rows this methodology is
+credited with --- $40$, $111$, $117$, $135$, $136$ --- are
+\texttt{verified}, as is $192$, the cone over $40$.  One difference of
+substance.
+
+\subsection*{Theorem~\ref{thm:forest-sidorenko} is never assumed}
+
+The note takes the forest Sidorenko inequality as an accepted input.  Nothing
+in the catalogue may rest on an accepted input, so Theorem~\ref{thm:main} is
+formalized in the conditional form
+\texttt{satisfiesLowerBound\_coneGraph\_of\_sidorenko}, with $t(F,V)\geq z^e$
+a hypothesis, and that hypothesis is discharged separately for each row.  Four
+of the five rows turn out not to need anything of the kind: deleting the
+universal vertex leaves
+
+\begin{center}
+\begin{tabular}{r|l|l}
+Atlas & base $F$ & why $t(F,V)\geq z^{e(F)}$\\\hline
+$40$ & $K_{1,2}\sqcup K_1$ & $t(K_{1,n},V)=M_n\geq z^n$, Jensen\\
+$111$ & $K_{1,2}\sqcup2K_1$ & the same\\
+$117$ & $K_2\sqcup K_2\sqcup K_1$ & multiplicativity, with equality\\
+$135$ & $K_{1,3}\sqcup K_1$ & Jensen again\\
+$136$ & $P_4\sqcup K_1$ & \textbf{not} a star: needs $t(P_4,V)\geq z^3$
+\end{tabular}
+\end{center}
+
+so only Atlas $136$ uses a genuine tree inequality, and only the single case
+$P_4$.  That case is proved outright in \texttt{Methods/PathSidorenko.lean}, by
+three-factor H\"older on the almost-everywhere factorization
+$W=(Wdd')^{1/3}(W/d)^{1/3}(W/d')^{1/3}$.  Tree Sidorenko in general, and hence
+Theorem~\ref{thm:forest-sidorenko} in general, is not formalized and is not
+needed.
+
+Lemma~\ref{lem:weighted-triangle} is formalized as stated, and is shared with
+the clique common-leaf and cone families.
+
+\end{document}

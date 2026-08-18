@@ -1,0 +1,558 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Triangle Books with a Page-Rooted Triangle--Leaf Branch}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $B_m^{\rm new}$ and $B_m^{\rm page}$ be obtained from a book of
+$m\geq1$ triangles on a common spine by attaching a new triangle along the
+edge from one fixed spine endpoint to one exceptional page.  Attach one
+leaf either to the new triangle vertex or to the exceptional page,
+respectively.  We prove that every graphon of edge density
+$p\in[1/2,1]$ satisfies, for either graph,
+\[
+ t(B_m^\star,W)\geq p^2(2p-1)^{m+1}
+ =\Phi_{B_m^\star}(p).
+\]
+The proof symmetrizes the exceptional branch over the book pages.  Two
+fractional edge-rooted estimates follow from edge Jensen and the
+real-exponent weighted rooted-triangle inequality; one of them also uses a
+H\"older compression.  The cases $m=2$ prove NetworkX Atlas graphs $137$
+and $139$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph family and its target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mathcal A,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and jointly measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+For $m\geq1$, define two graphs as follows.  Their spine vertices are
+$a,b$, their page vertices are $z_1,\ldots,z_m$, and their two additional
+vertices are $u,v$.  Their common edges are
+\[
+ ab,\qquad az_i,bz_i\quad(1\leq i\leq m),
+ \qquad au,z_1u,
+\]
+together with $uv$ for $B_m^{\rm new}$ and with $z_1v$ for
+$B_m^{\rm page}$.  Thus $a,z_1,u$ is the added triangle; the superscript
+records whether $v$ is a leaf at its new vertex $u$ or at the old page
+vertex $z_1$.
+
+After the ordered spine has been properly coloured, each book page and the
+new triangle vertex have $x-2$ choices, while the leaf has $x-1$ choices.
+Consequently
+\begin{equation}
+ \chi_{B_m^\star}(x)=x(x-1)^2(x-2)^{m+1},
+ \qquad \chi(B_m^\star)=3.
+ \label{eq:chromatic}
+\end{equation}
+For $q=1-p>0$, substitution in the chromatic target gives
+\begin{equation}
+ \Phi_{B_m^\star}(p)
+ =q^{m+4}\chi_{B_m^\star}(1/q)
+ =p^2(2p-1)^{m+1}.
+ \label{eq:target}
+\end{equation}
+The right side is polynomial and supplies the continued value at $p=1$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Real weighted triangles}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define the rooted triangle density
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z)
+\]
+and, for every real $s\geq0$,
+\[
+ M_s=\int_\Omega d(x)^s\dd\mu(x),
+\]
+with $d^0=1$ also on the zero-degree set.
+
+\begin{lemma}[Weighted rooted triangle]
+\label{lem:weighted-triangle}
+If $p>0$, then for every real $h\geq0$,
+\begin{equation}
+ \int_\Omega d(x)^h\tau(x)\dd\mu(x)
+ \geq\frac{2p-1}{p}M_{h+2}.
+ \label{eq:weighted-triangle}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For a bounded kernel $K$, write
+$(T_Kf)(x)=\int K(x,y)f(y)\dd\mu(y)$ and use the usual $L^2$ inner
+product.  Set
+\[
+ I_h=\int d^h\tau,
+ \qquad J_h=\langle d^h,T_Wd\rangle.
+\]
+The inequality $rs\geq r+s-1$ on $[0,1]^2$, applied to the two edges
+from the root of the triangle and multiplied by $d(x)^hW(y,z)$, yields
+\begin{equation}
+ I_h\geq2J_h-pM_h.
+ \label{eq:first-reduction}
+\end{equation}
+
+Put $U=1-W$, $u=T_U\mathbf1=1-d$, and $q=1-p$.  Since
+\[
+ T_Wd=d-q\mathbf1+T_Uu,
+\]
+we have
+\begin{equation}
+ J_h=M_{h+1}-qM_h+\langle d^h,T_Uu\rangle.
+ \label{eq:J}
+\end{equation}
+Symmetry of $U$ gives
+\begin{align*}
+ &2\left(\langle d^h,T_Uu\rangle-\int d^hu^2\right)\\
+ &\quad=
+ \int_{\Omega^2}U(x,y)
+ \bigl(u(y)-u(x)\bigr)
+ \bigl(d(x)^h-d(y)^h\bigr)\dd\mu^2.
+\end{align*}
+The integrand is nonnegative because $d=1-u$ and $t\mapsto t^h$ is
+nondecreasing.  Therefore
+\[
+ \langle d^h,T_Uu\rangle
+ \geq M_h-2M_{h+1}+M_{h+2}.
+\]
+Substitution into \eqref{eq:J} and \eqref{eq:first-reduction} gives
+\[
+ I_h\geq2M_{h+2}-2M_{h+1}+pM_h.
+\]
+After subtracting the right side of \eqref{eq:weighted-triangle}, the
+remaining quantity is exactly
+\[
+ \frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+No integrality of $h$ was used.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A fractional edge-rooted paw estimate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $x,y\in\Omega$ and real $s\geq0$, put
+\[
+ H_s(x,y)=\int_\Omega W(x,z)W(y,z)d(z)^s\dd\mu(z).
+\]
+Thus $H_0$ is the common-neighbour kernel, while $H_1$ is the rooted
+density obtained by putting one leaf at the new common neighbour.
+
+\begin{lemma}[Fractional edge-rooted paw]
+\label{lem:fractional-paw}
+Let $p\in[1/2,1]$ and $0<\alpha\leq1$.  Then
+\begin{equation}
+ \int_{\Omega^2}W(x,y)H_0(x,y)H_1(x,y)^\alpha\dd\mu^2
+ \geq \bigl(p(2p-1)\bigr)^{1+\alpha}.
+ \label{eq:fractional-paw}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put $s=\alpha/(1+\alpha)$.  H\"older's inequality applied to the measure
+$W(x,z)W(y,z)\dd\mu(z)$ gives, pointwise in $(x,y)$,
+\[
+ H_s\leq H_0^{1-s}H_1^s.
+\]
+Since $(1-s)(1+\alpha)=1$ and $s(1+\alpha)=\alpha$, this is equivalent to
+\begin{equation}
+ H_0H_1^\alpha\geq H_s^{1+\alpha}.
+ \label{eq:holder-compression}
+\end{equation}
+
+Because $p\geq1/2>0$, the measure $W(x,y)\dd\mu^2/p$ is a probability
+measure.  Jensen's inequality and \eqref{eq:holder-compression} imply
+\begin{align}
+ \int W H_0H_1^\alpha
+ &\geq\int W H_s^{1+\alpha}\notag\\
+ &\geq p^{-\alpha}\left(\int W H_s\right)^{1+\alpha}.
+ \label{eq:edge-jensen}
+\end{align}
+Fubini gives the exact identity
+\[
+ \int_{\Omega^2}W(x,y)H_s(x,y)\dd\mu^2
+ =\int_\Omega d(z)^s\tau(z)\dd\mu(z).
+\]
+By Lemma~\ref{lem:weighted-triangle} and Jensen for the convex power
+$t\mapsto t^{s+2}$,
+\[
+ \int W H_s
+ \geq\frac{2p-1}{p}M_{s+2}
+ \geq p^{s+1}(2p-1).
+\]
+Insert this in \eqref{eq:edge-jensen}.  The choice of $s$ gives
+\[
+ -\alpha+(s+1)(1+\alpha)=1+\alpha,
+\]
+and hence the claimed lower bound.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A fractional exceptional-page estimate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Fractional exceptional page]
+\label{lem:fractional-page}
+Let $p\in[1/2,1]$ and $0<\alpha\leq1$.  Then
+\begin{equation}
+ \int_{\Omega^2}W(x,y)d(y)^\alpha H_0(x,y)^{1+\alpha}\dd\mu^2
+ \geq \bigl(p(2p-1)\bigr)^{1+\alpha}.
+ \label{eq:fractional-page}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put $s=\alpha/(1+\alpha)$.  Since
+\[
+ d(y)^\alpha H_0(x,y)^{1+\alpha}
+ =\bigl(d(y)^sH_0(x,y)\bigr)^{1+\alpha},
+\]
+Jensen under the edge-biased probability measure gives
+\[
+ \int Wd(y)^\alpha H_0^{1+\alpha}
+ \geq p^{-\alpha}
+ \left(\int W(x,y)d(y)^sH_0(x,y)\dd\mu^2\right)^{1+\alpha}.
+\]
+Fubini gives
+\[
+ \int_{\Omega^2}W(x,y)d(y)^sH_0(x,y)\dd\mu^2
+ =\int_\Omega d(y)^s\tau(y)\dd\mu(y).
+\]
+The final two lines of the proof of Lemma~\ref{lem:fractional-paw} now
+apply verbatim and give \eqref{eq:fractional-page}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The two branch orientations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Triangle books with one page-rooted triangle--leaf branch]
+\label{thm:main}
+For every integer $m\geq1$, every graphon $W$ of edge density
+$p\in[1/2,1]$, and $\star\in\{\mathrm{new},\mathrm{page}\}$,
+\[
+ \boxed{
+ t(B_m^\star,W)\geq p^2(2p-1)^{m+1}
+ =\Phi_{B_m^\star}(p).
+ }
+\]
+This is the complete interval required by $\chi(B_m^\star)=3$.
+\end{theorem}
+
+\begin{proof}
+First take $B_m^{\rm new}$.  Integrating the added leaf and then its
+neighbour gives the factor $H_1(x,z_1)$ on the exceptional book page.  The
+$m$ page variables form one orbit in the underlying book.  Average the $m$
+equal integral representations obtained by moving the exceptional factor
+among the pages, and apply arithmetic--geometric mean pointwise.  With
+$x,y$ denoting the spine images, this gives
+\begin{equation}
+ t(B_m^{\rm new},W)
+ \geq\int_{\Omega^2}W(x,y)R(x,y)^m\dd\mu^2,
+ \label{eq:page-factorization}
+\end{equation}
+where
+\[
+ R(x,y)=\int_\Omega
+ W(x,z)W(y,z)H_1(x,z)^{1/m}\dd\mu(z).
+\]
+The pages factor independently after symmetrization, which justifies
+\eqref{eq:page-factorization}.
+
+Jensen under the edge-biased probability measure gives
+\begin{equation}
+ t(B_m^{\rm new},W)
+ \geq p^{1-m}\left(\int_{\Omega^2}W(x,y)R(x,y)\dd\mu^2\right)^m.
+ \label{eq:outer-jensen}
+\end{equation}
+Fubini and the definition of $H_0$ show that the inner integral is
+\[
+ \int_{\Omega^2}W(x,z)H_0(x,z)H_1(x,z)^{1/m}\dd\mu(x)\dd\mu(z).
+\]
+Lemma~\ref{lem:fractional-paw} with $\alpha=1/m$ bounds this by
+\[
+ \bigl(p(2p-1)\bigr)^{1+1/m}.
+\]
+Substitution into \eqref{eq:outer-jensen} yields
+\[
+ t(B_m^{\rm new},W)
+ \geq p^{1-m}\bigl(p(2p-1)\bigr)^{m+1}
+ =p^2(2p-1)^{m+1},
+\]
+which is \eqref{eq:target}.
+
+For $B_m^{\rm page}$, integrating the leaf at $z_1$ and the new triangle
+vertex $u$ gives the exceptional factor $d(z_1)H_0(x,z_1)$.  The identical
+page-orbit symmetrization and outer edge Jensen give
+\[
+ t(B_m^{\rm page},W)
+ \geq p^{1-m}\left(\int_{\Omega^2}W(x,y)S(x,y)\dd\mu^2\right)^m,
+\]
+where
+\[
+ S(x,y)=\int_\Omega W(x,z)W(y,z)
+ \bigl(d(z)H_0(x,z)\bigr)^{1/m}\dd\mu(z).
+\]
+Fubini turns the integral in parentheses into
+\[
+ \int_{\Omega^2}W(x,z)d(z)^{1/m}H_0(x,z)^{1+1/m}
+ \dd\mu(x)\dd\mu(z).
+\]
+Lemma~\ref{lem:fractional-page} with $\alpha=1/m$ bounds this by
+$\bigl(p(2p-1)\bigr)^{1+1/m}$.  The same exponent calculation therefore
+proves the asserted bound for $B_m^{\rm page}$.
+\end{proof}
+
+At $p=1/2$ the target is zero and all divisions above are only by the
+positive number $p$.  At $p=1$, $W=1$ almost everywhere and both sides are
+one.  For every balanced complete $k$-partite graphon, $k\geq2$, one has
+$d=p$ and $H_s=p^s(2p-1)$ on every supported edge; hence all H\"older,
+Jensen, and symmetrization steps are equalities, as required.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas 137, Atlas 139, and scope}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 137 and 139]
+NetworkX Atlas graphs $137$ and $139$, with graph6 codes \texttt{EjsG} and
+\texttt{Eju?}, respectively, are positive.  Each has order six, size eight,
+chromatic number three, and
+\[
+ \chi_{F_{139}}(x)=x(x-1)^2(x-2)^3.
+\]
+For $i\in\{137,139\}$, every graphon of edge density $p\in[1/2,1]$
+satisfies
+\[
+ t(F_{139},W)\geq p^2(2p-1)^3=\Phi_{F_{139}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+For Atlas $137$, use spine $13$, ordinary page $2$, exceptional page $4$,
+added triangle vertex $0$, and leaf $5$ at page $4$.  Its edge list is
+\[
+ 01,04,12,13,14,23,34,45,
+\]
+so it is $B_2^{\rm page}$.  For Atlas $139$, use the same roles but put the
+leaf at the new vertex $0$.  Its edge list is
+\[
+ 01,04,05,12,13,14,23,34,
+\]
+so it is $B_2^{\rm new}$.  Theorem~\ref{thm:main} applies to both.
+\end{proof}
+
+All integrands in the proof are bounded, nonnegative, and measurable, so
+Tonelli--Fubini applies directly on an arbitrary probability space.  The
+argument concerns ordinary homomorphism densities; it uses no finite-step
+reduction, injective-copy interpretation, regularity, atomlessness, or
+minimum-degree hypothesis.  Zero degrees cause no quotient.
+
+The theorem requires one triangle--leaf branch rooted at a page and one
+fixed spine endpoint of a single triangle book, in either of the two stated
+leaf orientations.  It does not assert arbitrary leaf,
+triangle-page, edge-gluing, or mixed-chordal closure.  In particular, its
+proof uses both page-orbit symmetrization and the specific edge-rooted
+H\"older compression \eqref{eq:holder-compression}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The Lean development formalizes the case $m=2$, which is the only case the
+catalogue needs.  The modules are
+\texttt{lean/Taeyoung/Methods/PagePawBranch/Core.lean} and
+\texttt{Rows.lean}; the two catalogue theorems are
+\texttt{satisfiesLowerBound\_bookNew} (Atlas $139$) and
+\texttt{satisfiesLowerBound\_bookPage} (Atlas $137$).  The formalization
+departs from the argument above at two places, and this appendix says where.
+
+
+\subsection{The page-orbit symmetrization is a H\"older inequality}
+\label{sec:app-symmetrization}
+
+The proof of Theorem~\ref{thm:main} obtains \eqref{eq:page-factorization} by
+averaging $m$ integral representations obtained by moving the exceptional
+factor among the pages, and applying arithmetic--geometric mean pointwise.
+Those $m$ representations are indeed equal, but for a trivial reason: the $m$
+page factors are $m$ factors of one product, so naming which of them carries
+the exceptional weight changes nothing, and the average is the same single
+quantity.  Symmetrization therefore contributes no inequality, and the step
+from that product to $\int\!\!\int WR^m$ is carried entirely by the pointwise
+bound $R^m\leq GH_0^{m-1}$ below, which is H\"older, not
+arithmetic--geometric mean.
+
+Peeling the leaf and the glued vertex gives the exact identity
+\begin{equation}
+ t(B_m^{\rm new},W)
+ =\int_{\Omega^2}W(x,y)\,H_0(x,y)^{m-1}\,G(x,y)\dd\mu^2,
+ \qquad
+ G(x,y)=\int_\Omega W(x,z)W(y,z)H_1(x,z)\dd\mu(z),
+ \label{eq:app-peel}
+\end{equation}
+with no inequality yet used.  H\"older on the finite measure
+$W(x,z)W(y,z)\dd\mu(z)$, applied to the pair of exponents $m$ and $m/(m-1)$,
+gives
+\begin{equation}
+ R(x,y)=\int_\Omega W(x,z)W(y,z)H_1(x,z)^{1/m}\dd\mu(z)
+ \leq G(x,y)^{1/m}H_0(x,y)^{(m-1)/m},
+ \label{eq:app-holder}
+\end{equation}
+that is $R^m\leq GH_0^{m-1}$, which together with \eqref{eq:app-peel} is
+exactly \eqref{eq:page-factorization}.  At $m=2$ the two exponents are both
+$2$ and \eqref{eq:app-holder} is Cauchy--Schwarz.  The same remark applies
+verbatim to $B_m^{\rm page}$, with $H_1(x,z)$ replaced by $d(z)H_0(x,z)$.
+
+The Lean proof therefore never symmetrizes.  It works with the
+\emph{branch operator}
+\[
+ \Lambda_h(x,y)=\int_\Omega W(x,z)W(y,z)h(x,z)\dd\mu(z),
+\]
+of which $H_0=\Lambda_1$ is the special case $h\equiv1$, proves
+\eqref{eq:app-peel} in the form
+\[
+ t=\int_{\Omega^2}W\cdot H_0\cdot\Lambda_h,
+ \qquad
+ h=H_1\ \ (B_2^{\rm new}),
+ \qquad
+ h(x,z)=d(z)H_0(x,z)\ \ (B_2^{\rm page}),
+\]
+and replaces \eqref{eq:app-holder} by
+\[
+ \Lambda_{\sqrt h}(x,y)^2\leq H_0(x,y)\,\Lambda_h(x,y)
+ \qquad\text{(\texttt{sq\_branchOp\_le}),}
+\]
+one application of the weighted Cauchy--Schwarz inequality
+$(\int A\eta)^2\leq(\int A)(\int A\eta^2)$ with $A=W(x,\cdot)W(y,\cdot)$ and
+$\eta=\sqrt{h(x,\cdot)}$.  This is the project's
+\texttt{PureChordal.WeightedCauchySchwarz}, already used for the page
+compression $H_{s/2}^2\leq H_0H_s$.
+
+
+\subsection{Edge Jensen at exponent $3/2$, without convexity}
+\label{sec:app-jensen}
+
+Both fractional estimates of Sections~3 and~4 use Jensen for the convex power
+$t\mapsto t^{1+\alpha}$ under the edge-biased probability measure
+$W\dd\mu^2/p$.  At $\alpha=1/2$ the exponent is $3/2$, and the development has
+no lemma for Jensen at a fractional power on a biased measure.  It is not
+needed: writing
+\[
+ A=\int_{\Omega^2}WF,
+ \qquad
+ S=\int_{\Omega^2}W\sqrt F,
+ \qquad
+ T=\int_{\Omega^2}WF\sqrt F
+\]
+for a measurable $F$ with values in $[0,1]$, two applications of the same
+weighted Cauchy--Schwarz inequality --- at weight $W$ with $\eta=\sqrt F$, and
+at weight $W\sqrt F$ with the same $\eta$ --- give
+\[
+ S^2\leq pA,
+ \qquad
+ A^2\leq ST.
+\]
+Eliminating $S$ yields $A^4\leq S^2T^2\leq pAT^2$, hence
+\begin{equation}
+ A^3\leq pT^2
+ \qquad\text{(\texttt{cube\_edge\_le}),}
+ \label{eq:app-cube}
+\end{equation}
+which is the $\alpha=1/2$ case of \eqref{eq:edge-jensen} after clearing
+denominators.  The case $A=0$ is separate and immediate.  So the whole
+formalization uses one inequality, weighted Cauchy--Schwarz, at four different
+weights, and no genuine H\"older inequality and no convexity lemma anywhere.
+
+
+\subsection{The two comparison kernels}
+\label{sec:app-kernels}
+
+With \eqref{eq:app-cube} in hand, each row supplies a kernel $F$ with two
+properties: the pointwise compression $F\sqrt F\leq\sqrt h\,H_0$, and the
+scalar bound $\int\!\!\int WF\geq p^{4/3}(2p-1)$.  The generic conclusion
+\[
+ t\geq p^{-2}\Bigl(\int_{\Omega^2}WF\Bigr)^{3}\geq p^2(2p-1)^3
+ \qquad\text{(\texttt{branch\_bound})}
+\]
+then holds for both rows at once.  The two choices are:
+\begin{itemize}
+ \item $B_2^{\rm new}$: $F=H_{1/3}$.  The compression squares to
+ $H_{1/3}^3\leq H_0^2H_1$, which is \eqref{eq:holder-compression} at
+ $\alpha=1/2$ and is already in the development as
+ \texttt{Link.cube\_pageOp\_le}, itself two staggered Cauchy--Schwarz steps.
+ The scalar bound is $\int\!\!\int WH_{1/3}=\int d^{1/3}\tau$
+ (\texttt{Link.integral\_edge\_pageOp}) together with
+ Lemma~\ref{lem:weighted-triangle} at $h=1/3$ and Jensen at exponent $7/3$.
+ \item $B_2^{\rm page}$: $F(x,z)=d(z)^{1/3}H_0(x,z)$.  The compression is an
+ \emph{identity}, both sides being $d(z)^{1/2}H_0(x,z)^{3/2}$.  The scalar
+ bound needs the Fubini identity
+ \[
+  \int_{\Omega^2}W(x,y)\,d(y)^{s}H_0(x,y)\dd\mu^2=\int_\Omega d(z)^s\tau(z)\dd\mu(z),
+ \]
+ the counterpart of \texttt{integral\_edge\_pageOp} with the leaf weight
+ carried by a spine endpoint rather than by the page vertex.  It is proved as
+ \texttt{integral\_edge\_degree\_pageOp}.
+\end{itemize}
+In both cases the only fractional exponent surviving to the end is the
+$p^{4/3}$ of the scalar bound, and it is cubed back to $p^4$ exactly as in the
+three-page row \texttt{PageBook.Atlas138}.
+
+
+\subsection{Scope of the formalization}
+\label{sec:app-scope}
+
+Only $m=2$ is formalized.  The general-$m$ theorem is not: the two ingredients
+that would have to be generalized are \eqref{eq:app-holder} at $m$ factors and
+\eqref{eq:app-cube} at exponent $1+1/m$, and both are stated in the Lean
+development at the square root only.
+
+The Lean graphs use their own labelling, chosen so that peeling produces
+\eqref{eq:app-peel} directly: spine $0,1$; exceptional page $2$; ordinary page
+$3$; glued vertex $4$ on the page edge $0$--$2$; leaf $5$, at the glued vertex
+for $B_2^{\rm new}$ and at the exceptional page for $B_2^{\rm page}$.  The
+generated Atlas modules \texttt{Examples/Graph139.lean} and
+\texttt{Examples/Graph137.lean} carry the bound to the Atlas edge lists along
+an explicit relabelling whose adjacency correspondence is checked by kernel
+computation.  The chromatic data \eqref{eq:chromatic} is proved, not assumed,
+by a three-step clique-attachment tower over $K_3$: pages attach to the
+$2$-cliques $\{a,b\}$ and $\{a,z_1\}$, and the leaf to a single vertex, giving
+$x(x-1)^2(x-2)^3$ with chromatic number three.
+
+Both catalogue theorems, and the twenty-one supporting lemmas listed in
+\texttt{Taeyoung/CheckVerified.lean}, depend on exactly
+\texttt{[propext, Classical.choice, Quot.sound]}.
+
+\end{document}

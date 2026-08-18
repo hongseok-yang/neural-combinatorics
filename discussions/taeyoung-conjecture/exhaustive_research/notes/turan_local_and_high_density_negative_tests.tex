@@ -1,0 +1,1992 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,d}
+\newcommand{\Gap}{\Gamma_H}
+
+\begin{document}
+
+\section{Purpose and scope}
+
+For a finite graph $H$, define
+\[
+ \Gamma_H(W):=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p):=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right).
+\]
+This note develops two systematic negative tests and no others:
+\begin{enumerate}
+ \item the complete first variation and part-size Hessian, together with the
+ complete measurable-kernel Hessian on each critical face of a balanced
+ Tur\'an graphon and the coupled part-size/cell expansion through the first
+ nonzero coefficient on each flat quadratic ray, plus the complete
+ first-order small-support one-microclass test at the threshold and first
+ interior Tur\'an grids, its exact Boolean threshold expansion through the
+ first nonzero order, and the exact continuum zero set and full
+ second-order mass cone at the first interior grid, together with the full
+ second-order interaction of arbitrary mixtures of coarse continuum-flat
+ threshold profiles and an audit of the extra fibre-overlap moments needed
+ beyond the coarse setting;
+ \item the exact high-density comparison between the balanced complete
+ $k$-partite graphon and the constant graphon, together with its
+ cycle-rank interpretation.
+\end{enumerate}
+The calculations apply to the $43$ catalogue rows that remained open after
+the positive page-rooted-book theorem and before the present tests.  Every
+final counterexample below is checked by an exact finite sum and rational
+arithmetic.  No tensor search is used, and no accepted sign claim relies on
+numerical optimization.  The constant-graphon comparison is retained on the
+29-row pre-Atlas-152 snapshot, whose other $28$ rows are the current open
+set.  The higher-order needle audit retains the preceding $32$-row snapshot,
+including the now-positive Atlas $120$, $123$, and $142$ and the now-negative
+Atlas $152$, so its aggregate certificate counts remain reproducible.
+
+Throughout, $n=v(H)$, $m=e(H)$, and
+\[
+ \chi_H(x)=\sum_{j=0}^n a_jx^j.
+\]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The full coarse-cell first variation at $T_k$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Partition the probability space into $k$ equal classes
+$\Omega_1,\ldots,\Omega_k$.  The balanced Tur\'an graphon $T_k$ is zero
+on every diagonal cell $\Omega_i^2$ and one on every off-diagonal cell.
+Consequently a feasible one-sided perturbation adds a nonnegative kernel on
+a diagonal cell or deletes a nonnegative kernel from an off-diagonal cell.
+
+Set
+\[
+ J_H(k):=\sum_{j=0}^n a_j(j-n)k^j
+\]
+and, with every edge contraction simplified to an ordinary simple graph,
+\[
+ A_H(k):=\sum_{e\in E(H)}\chi_{H/e}(k)-J_H(k),
+\]
+\[
+ B_H(k):=2J_H(k)-\frac{2m\chi_H(k)}{k-1}.
+\]
+The expression defining $B_H$ is a polynomial because
+$k(k-1)$ divides $\chi_H(k)$.
+
+\begin{proposition}[Exact cell derivatives]\label{prop:first}
+At $T_k$, the derivative of $\Gamma_H$ obtained by adding unit weight on
+one diagonal cell is
+\[
+ \frac{A_H(k)}{k^{n+1}}.
+\]
+The derivative obtained by deleting unit weight on one unordered
+off-diagonal cell is
+\[
+ \frac{B_H(k)}{k^{n+1}}.
+\]
+These two numbers exhaust the coarse $k\times k$ cell-value first
+variation, by permutation symmetry of the classes.
+\end{proposition}
+
+\begin{proof}
+Differentiate $t(H,W)$ with respect to one cell value.  On a diagonal cell,
+the differentiated edge has both ends in one prescribed colour.  After
+contracting that edge, the number of compatible colourings is
+$\chi_{H/e}(k)/k$.  Summing over the differentiated edge and multiplying by
+the assignment probability $k^{-n}$ gives
+\[
+ \frac1{k^{n+1}}\sum_{e\in E(H)}\chi_{H/e}(k).
+\]
+On one unordered off-diagonal cell, both orientations of two fixed distinct
+colours occur.  Colour symmetry gives
+\[
+ \frac{2m\chi_H(k)}{k^{n+1}(k-1)}
+\]
+for the derivative of $t(H,W)$ with respect to increasing that cell.
+
+Writing $q=1-p$, direct differentiation of
+$\Phi_H(p)=\sum_j a_jq^{n-j}$ gives
+\[
+ \Phi_H'\!\left(1-\frac1k\right)
+ =\frac{J_H(k)}{k^{n-1}}.
+\]
+A diagonal cell has measure $k^{-2}$ and an unordered off-diagonal cell has
+measure $2k^{-2}$.  Subtracting the derivative of the target, and reversing
+the sign for an off-diagonal deletion, gives the displayed formulas.
+Every coarse cell belongs to one of the two orbits under $S_k$.
+\end{proof}
+
+If $k\geq\chi(H)$, then $T_k$ is an interior point of the required density
+interval, so first-order stability requires $A_H(k),B_H(k)\geq0$.  At the
+threshold $k=\chi(H)-1$, let $D$ be the total diagonal addition amplitude
+and $O$ the total off-diagonal deletion amplitude.  Feasibility of the
+density constraint is
+\[
+ D-2O\geq0.
+\]
+Hence first-order stability at the threshold is equivalent to
+\begin{equation}
+ A_H(k)\geq0,
+ \qquad
+ 2A_H(k)+B_H(k)\geq0.
+ \label{eq:threshold-kkt}
+\end{equation}
+This is the exact tangent-cone, or KKT, test; no direction has been selected
+in advance.
+
+For every one of the $43$ tested rows, the coefficients of
+\[
+ A_H(y+\chi(H)),\qquad B_H(y+\chi(H))
+\]
+are nonnegative.  Thus every interior Tur\'an point $T_k$ passes the complete
+coarse-cell first-order test for every integer $k\geq\chi(H)$.  On the
+pre-Atlas-152 snapshot of $29$ rows, the two values are in fact strict at
+$k=\chi(H)$, and hence at every larger integer.  The independent note
+\path{notes/turan_arbitrary_linfty_local_stability.tex} combines this strict
+functional with a uniform multilinear Taylor bound.  It proves that every
+$T_k$, $k\geq\chi(H)$, is a strict local minimizer against completely
+arbitrary measurable $L^\infty$-small cell kernels, and gives an explicit
+rational neighbourhood radius.  This upgrades the formal first variation
+to a genuine graphon-local theorem; it does not assume that the perturbation
+is constant on any cell.
+
+The same Taylor argument applies at the critical threshold whenever both
+tangent-cone inequalities are strict.  Writing $r=\chi(H)-1$, it gives the
+exact slope
+\[
+ \frac1{r^{v(H)-1}}
+ \min\left\{A_H(r),\frac{2A_H(r)+B_H(r)}4\right\}
+\]
+and hence an explicit arbitrary-kernel $L^\infty$ radius.  Among the snapshot
+rows this settles the complete threshold neighbourhood for the following
+$14$ rows, all of which remain current:
+\[
+126,127,147,151,157,160,168,169,178,181,185,194,196,199.
+\]
+The full exact table is in
+\path{notes/turan_arbitrary_linfty_local_stability.tex}.  The other $15$
+snapshot rows have a genuine first-order critical face and are not claimed by
+this strict theorem; one of them, Atlas $152$, is now negative.
+
+The same note now closes five of the $14$ current critical rows by a second,
+coercive argument.  Atlas $43,118,122,124$, and $203$ have
+$A_H(r)=0<B_H(r)$, so only diagonal addition is first-order flat.  Splitting
+an arbitrary perturbation as $U=F-V$ on diagonal and off-diagonal cells, the
+exact pure-$F$ Hessian controls the sum $S$ of all conditional rooted-degree
+squares:
+\[
+ Q_H(F)\geq q_HS,
+ \qquad
+ q_H\in\left\{\frac1{32},\frac1{64},\frac{11}{729}\right\}.
+\]
+Every pure-$F$ term of order at least three is bounded by $K_D\eta S$, while
+every nonlinear term containing $V$ is bounded by
+$K_O\eta\int V$ and is absorbed by the strict deletion derivative.  This
+gives explicit arbitrary-measurable $L^\infty$ radii from $1/14251389$ to
+$1/5544$.
+
+The remaining nine critical rows are now closed by two sign-preserving
+arguments rather than an absolute Taylor remainder.  For Atlas
+$153,171,174,188$ the exact target factors as
+$p(2p-1)C_H(p)$, where $C_H$ is strictly increasing but still negative at
+$p=7/12$.  Hence every graphon---with no structural hypothesis---satisfies
+the desired inequality throughout $1/2\leq p\leq7/12$, giving the common
+$L^\infty$ radius $1/12$ about $T_2$.
+
+For Atlas $130,137,139,145,148$, write $F_0,F_1$ for the two diagonal
+additions and $G$ for the cross deletion, all bounded by $\eta$.  If
+$s=\int F_0+\int F_1$, threshold feasibility gives
+$0\leq p-1/2\leq s/4\leq\eta/2$.  Retain only those homomorphisms whose
+two-colouring has exactly two monochromatic edges.  All other edges cross
+the Turan partition and contribute at least $1-\eta$ pointwise.  The exact
+two-defect functionals are bounded below by
+\[
+ \frac{s^2}{16},\quad\frac{s^2}{32},\quad\frac{s^2}{32},
+ \quad\frac{7s^2}{128},\quad\frac{5s^2}{128},
+\]
+in the displayed Atlas order, including all arbitrary-kernel rooted-degree
+variance terms.  Comparing these positive subintegrals directly with the
+five scalar targets gives respective radii
+\[
+ \frac1{16},\quad\frac18,\quad\frac18,\quad\frac1{16},\quad\frac1{40}.
+\]
+Thus every one of the $28$ current open rows now has a complete
+arbitrary-measurable threshold $L^\infty$ neighbourhood theorem.  The exact
+proof, radius inequalities, and audit constants are in
+\path{notes/turan_arbitrary_linfty_local_stability.tex}.
+
+Four of those nine nevertheless admit a complete hierarchical concentration
+certificate.  For Atlas $137,139,145,148$, the normalized repaired needle is
+respectively $4u^2v^2,4u^2v^2,8u^2v^2,4u^2v^2$, so its zero set is exactly the
+two profile axes.  If $x,y$ are the nonzero coordinates of any two axis
+profiles, the full arbitrary-fibre pair kernel---on the same axis or opposite
+axes, for every feasible overlap and every mutual cell value---is
+\[
+ \kappa_H(1-x)(1-y),
+ \qquad
+ \kappa_H=\frac12,\frac12,1,\frac34,
+\]
+in the same row order.  Hence every probability mixture on the residual axes
+has nonnegative quadratic coefficient
+$\kappa_H(\int(1-x))^2$.  This closes the entire second-order concentration
+cone for those four rows.  This hierarchical statement remains distinct
+from the $L^\infty$ theorem above: it allows order-one changes on a set of
+vanishing measure, whereas an $L^\infty$ ball allows only uniformly small
+changes.
+At the endpoint $x=1$, a further reduction of the arbitrary exceptional
+square to its scalar mean is false: two exact kernels of mean $1/2$ give
+different cubic coefficients on every one of the four rows.  This obstruction
+is recorded in Attempt 28 of \path{FAILED_PROOF_ATTEMPTS.md}; it prevents a
+constant-cell endpoint calculation from being mistaken for an
+arbitrary-kernel theorem.  Retaining the rooted moments resolves the endpoint
+uniformly.  If $R_0,R_1$ are the arbitrary internal graphons on the
+two endpoint types, exact coloured-moment enumeration gives a positive
+combination of $t(P_3,R_i)$ and $t(K_3,R_i)$, independent of the cross-type
+kernel.  A below-threshold raw density is repaired exactly to $1/2$; an
+above-threshold raw density forces a rooted cubic of at least a fixed multiple
+of the squared density excess.  Keeping only the corresponding positive
+three-exceptional-vertex colourings gives uniform endpoint support radii
+$1/10,1/10,1/20,1/32$.  A good-set refinement closes the whole
+arbitrary-fibre zero-axis cone, including profiles and kernels depending on
+the support scale: Markov's inequality discards large rooted fibre deficits,
+the two-edge-path inequality controls the restricted internal kernel, and a
+union bound retains half of the required fibre product.  The resulting
+common support radius is $1/100$.  Finally, projecting every two-sided
+profile to its nearer zero axis gives a complete dichotomy.  If the deleted
+fibre mass is large, the positive one-exceptional-vertex
+$\int u^2v^2$ subintegral dominates; if it is small, the projected
+rooted-moment subintegral survives with a controlled good-set loss.  This
+settles every measurable profile with the common support radius $1/10000$.
+The follow-up four-microclass Boolean self-amalgam scan found no negative
+example on its finite quarter-mass grid, but it is numerical and is recorded
+only as the superseded no-hit Attempt 29, not as a theorem.
+
+At the threshold, all rows satisfy \eqref{eq:threshold-kkt} except Atlas
+$206$:
+\[
+ A_{206}(3)=-12,
+ \qquad
+ B_{206}(3)=36.
+\]
+Therefore Atlas $206$ has a genuine first-order instability inside a
+diagonal class of $T_3$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The complete part-size Hessian mode}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Cell-value perturbations keep the class measures fixed.  We next test all
+infinitesimal imbalances of the part measures.  By $S_k$ symmetry, the
+zero-sum part-size space is one irreducible standard representation, so it
+has a single Hessian eigenvalue.  It is therefore enough, and exhaustive, to
+replace two masses by
+\[
+ \frac1k+\varepsilon,\qquad \frac1k-\varepsilon
+\]
+and leave the other $k-2$ masses equal to $1/k$.
+
+For a proper $k$-colouring $c$, let $n_i(c)$ denote the size of colour class
+$i$.  Define
+\[
+ S_H(k):=
+ \sum_{c\text{ proper}}
+ \left[
+  \binom{n_1(c)}2+\binom{n_2(c)}2-n_1(c)n_2(c)
+ \right].
+\]
+This is an exact polynomial in $k$.  A form convenient for computation and
+independent review is
+\[
+ S_H(k)
+ =2\sum_{\{u,v\}\notin E(H)}\frac{\chi_{H/uv}(k)}k
+ -2\sum_{\{u,v\}\subseteq V(H)}
+      \frac{\chi_{H+uv}(k)}{k(k-1)}.
+\]
+Put
+\[
+ C_H(k):=kS_H(k)+2J_H(k).
+\]
+
+\begin{proposition}[Part-size eigenvalue]\label{prop:part-size}
+For the part-size perturbation above,
+\[
+ \Gamma_H(W_\varepsilon)
+ =\frac{C_H(k)}{k^{n-1}}\varepsilon^2+O(\varepsilon^3).
+\]
+For all $43$ tested rows and every real $k\geq\chi(H)$, this coefficient is
+strictly positive.
+\end{proposition}
+
+\begin{proof}
+For a fixed proper colouring, expand
+\[
+ \left(\frac1k+\varepsilon\right)^{n_1}
+ \left(\frac1k-\varepsilon\right)^{n_2}
+ \left(\frac1k\right)^{n-n_1-n_2}.
+\]
+Its quadratic coefficient is $k^{2-n}$ times the summand defining $S_H(k)$.
+Also
+\[
+ p(W_\varepsilon)=1-\sum_i\mu(\Omega_i)^2
+ =1-\frac1k-2\varepsilon^2.
+\]
+Using the formula for $\Phi_H'$ in the proof of
+Proposition~\ref{prop:first}, the quadratic gap coefficient is
+\[
+ k^{2-n}S_H(k)+2\frac{J_H(k)}{k^{n-1}}
+ =\frac{C_H(k)}{k^{n-1}}.
+\]
+
+For each tested graph, exact polynomial arithmetic shows that every
+coefficient of $C_H(y+\chi(H))$ is nonnegative and its constant coefficient
+is positive.  Therefore $C_H(k)>0$ throughout the asserted range.
+\end{proof}
+
+Thus unequal complete-partite blow-ups do not yield a local negative case
+among these rows.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Coupling part sizes and cell values}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The preceding two calculations must not simply be read separately.  A part
+imbalance and a cell perturbation may occur at the same time, and their mixed
+second derivative can have either sign.  We now include that term exactly.
+For $T_2$, write
+\[
+ \mu(A)=\frac12+\varepsilon z,\qquad
+ \mu(B)=\frac12-\varepsilon z
+\]
+and put $\varepsilon F,\varepsilon K,1-\varepsilon G$ on
+$A^2,B^2,A\times B$, respectively, where $a,b,g$ are the three conditional
+cell means.  Direct expansion of the finite macro-colouring sum gives
+\begin{equation}
+ p(W_\varepsilon)
+ =\frac12+\frac{a+b-2g}{4}\varepsilon
+  +z(a-b-2z)\varepsilon^2+O(\varepsilon^3).
+ \label{eq:coupled-density}
+\end{equation}
+
+We use the following names for the three critical first-order faces:
+type I means $A_H(2)=0<B_H(2)$ and hence $g=0$; type II means
+$A_H(2)=B_H(2)=0$; and type III means
+$A_H(2)>0$, $2A_H(2)+B_H(2)=0$, and hence $a+b=2g$.
+On a type-I critical face, $g=0$, and the four mean-only quadratic
+certificates become
+\[
+\begin{array}{c|l}
+43&32Q=a^2+b^2-4(a-b)z+16z^2\\
+118,122&64Q=a^2+b^2-4(a-b)z+16z^2\\
+124&32Q=a^2-ab+b^2-4(a-b)z+8z^2.
+\end{array}
+\]
+They are positive definite; the omitted rooted-degree variance terms are
+nonnegative.  On every type-II face, the formulas in the preceding table are
+unchanged: the mixed $z$-terms cancel.  On a type-III face, where $b=2g-a$,
+they acquire the following terms:
+\[
+\begin{array}{c|l}
+153&32Q=3ab+2g^2+8z(a-g-z)\\
+171&16Q=ab+4z(a-g-z)\\
+174&32Q=3ab+8z(a-g-z)\\
+188&32Q=ab+8z(a-g-z).
+\end{array}
+\]
+By \eqref{eq:coupled-density}, feasibility through second order requires
+$z(a-g-z)\geq0$.  Thus all four expressions remain nonnegative.
+
+There are two higher-order boundary issues.  They can also be closed for
+arbitrary bounded measurable cell kernels, rather than only for constant
+coarse cells.  We first record the elementary tree inequality needed for
+the only nonzero type-II flat ray.
+
+\begin{lemma}[Three-edge path inequality]\label{lem:path-three}
+If $F$ is a bounded symmetric nonnegative kernel on a probability space and
+$a=\int F$, then
+\[
+ t(P_4,F)\geq a^3,
+\]
+where $P_4$ denotes the path with three edges.
+\end{lemma}
+
+\begin{proof}
+This is the three-edge instance of the tree homomorphism inequality.  For
+completeness, the standard entropy proof works for every finite tree $T$.
+After replacing $F$ by $F+\delta$ and passing to the limit, assume that its
+degree function $d$ is positive almost everywhere.  Root $T$, give the root
+density $d/a$, and, independently down the oriented tree, use transition
+density $F(x,y)/d(x)$.  The resulting probability density is
+\[
+ P_T(\boldsymbol{x})
+ =\frac1a\prod_{uv\in E(T)}F(x_u,x_v)
+   \prod_{v\in V(T)}d(x_v)^{1-\deg_T(v)}.
+\]
+Every vertex marginal is $d/a$.  Comparing $P_T$ by relative entropy with
+the probability density
+$\prod_{uv\in E(T)}F(x_u,x_v)/t(T,F)$ gives
+\[
+ \log t(T,F)
+ \geq \log a+\bigl(e(T)-1\bigr)
+       \frac1a\int d\log d.
+\]
+Convexity of $s\mapsto s\log s$ gives
+$a^{-1}\int d\log d\geq\log a$, and hence
+$t(T,F)\geq a^{e(T)}$.  Taking $T=P_4$ proves the claim.  The
+$\delta\downarrow0$ passage follows by monotone convergence.
+\end{proof}
+
+For Atlas $152$, every nonzero Hessian-flat type-II direction has, up to
+exchanging the two parts, $K=G=0$.  Let $F$ be the remaining diagonal
+kernel, let $a=\int F$, and allow an arbitrary simultaneous part displacement
+$z$.  Exact macro-colouring enumeration shows that the quadratic selected
+edges form $2K_2$ in exactly two colourings, while the cubic selected edges
+form $P_4$ in exactly four colourings.  Consequently its full cubic gap is
+\[
+ \frac{4t(P_4,F)-a^3-8a^2z+32az^2}{64}.
+\]
+By Lemma~\ref{lem:path-three}, this is at least
+\[
+ \frac{a}{64}
+ \left(32\left(z-\frac a8\right)^2+\frac52a^2\right)>0
+ \qquad(a>0).
+\]
+Thus the cubic conclusion for Atlas $152$ is not a regular-kernel
+assumption.
+
+For the type-III quadratic zero rays of Atlas $171,174,188$, exchange the
+parts if necessary so that $a=0$, $b=2g$.  Feasibility and vanishing of the
+quadratic coefficient leave exactly $z=0$ and $z=-g$.  At $z=0$, the edge
+density is identically $1/2$, so the target is zero and the homomorphism
+density is nonnegative.  At $z=-g$, exact mean calculation gives
+\[
+ p(W_\varepsilon)=\frac12+4g^3\varepsilon^3.
+\]
+For each of these three graphs,
+\[
+ \Phi_H'(1/2)=-\frac18.
+\]
+The full first and second coefficients of $t(H,W_\varepsilon)$ vanish on
+this flat ray.  Since that density is nonnegative for all sufficiently small
+$\varepsilon\geq0$, its first possible, cubic coefficient is nonnegative.
+The cubic gap is therefore at least $g^3/2>0$ when $g>0$.  This proves the
+arbitrary-kernel endpoint statement without replacing $K$ or $G$ by their
+means.  The displayed constant-cell cubic pairs
+\[
+ (1/2,1)g^3,\qquad(3/4,5/4)g^3,\qquad(1/4,3/4)g^3
+\]
+remain useful exact checks, but are no longer the justification for the
+general conclusion.
+
+Second, a pure part imbalance has no first-order cell direction and lowers
+the density by $2z^2\varepsilon^2$.  Normalize $z=1$ and repair it using
+arbitrary bounded diagonal kernels of means
+$c_0\varepsilon^2,c_1\varepsilon^2$ and an arbitrary bounded cross-deletion
+kernel of mean $h\varepsilon^2$.  Feasibility requires
+\[
+ c_0+c_1-2h\geq8.
+\]
+For every type-II face other than the two already negative rows, exact
+quartic expansion followed by $c_0c_1\leq(c_0+c_1)^2/4$ or
+$c_0c_1\geq0$ gives a strictly positive polynomial after writing
+$c_0+c_1=2h+8+\delta$, $\delta\geq0$.  For reference, the certified
+type-II lower numerators (with denominators respectively
+$64,32,32,32,32,64,32$) are
+\[
+\begin{array}{c|l}
+119&\frac52\delta^2+18\delta h+72\delta+18h^2+144h+288\\
+130&\delta^2+8\delta h+32\delta+8h^2+64h+128\\
+137,139&\delta^2+4\delta h+16\delta+4h^2+32h+64\\
+145&\frac34\delta^2+7\delta h+28\delta+7h^2+56h+112\\
+148&\frac12\delta^2+10\delta h+40\delta+10h^2+80h+160\\
+152&4\delta h+16\delta+4h^2+32h+64.
+\end{array}
+\]
+On a type-III face, equality in the linear KKT condition forces the same
+displayed equality.  The cubic density displacement is proportional to
+$c_0-c_1$, and feasibility forces it to be nonnegative; the gap has the
+same-sign cubic term $(c_0-c_1)/8$.  When this also vanishes,
+$c_0=c_1=h+4$, and the four quartic coefficients for Atlas
+$153,171,174,188$ are
+\[
+ \frac{5h^2+56h+112}{32},\quad
+ \frac{h^2+16h+32}{16},\quad
+ \frac{3h^2+40h+80}{32},\quad
+ \frac{h^2+24h+48}{32},
+\]
+all strictly positive.
+
+The displayed quartic lower bounds remain valid for these arbitrary repair
+kernels.  Indeed, two repair edges contribute exactly the full
+measurable-kernel Hessian from the next section, while every term involving
+the part displacement and at most one repair edge depends only on the three
+cell means.  Relative to the constant-cell expressions above, the only
+additional terms on the type-II faces are
+\[
+\begin{array}{c|c}
+119&(u+v)/16\\
+130&0\\
+137,139&(u+v)/32\\
+145&(u+v)/16\\
+148&(u+v)/32\\
+152&0,
+\end{array}
+\]
+where $u,v$ are rooted-degree variances and hence nonnegative.  On the
+type-III critical face all rooted-moment terms cancel exactly, as shown by
+the full Hessian table below.  Therefore the density-repaired quartic checks
+also cover arbitrary bounded measurable repair kernels.
+
+At the three-part faces, minimize the same joint calculation exactly over
+the two free part-size displacements.  For Atlas $203$ at the threshold, the
+residual mean-only quadratic form is
+\[
+ \frac{35\sum_i d_i^2+57\sum_{i<j}d_id_j}{2916}>0
+\]
+unless every $d_i$ vanishes.  Atlas $172$ at the interior point $T_3$ is the
+only additional zero diagonal first derivative for any tested integer
+$k\geq\chi(H)$; its residual is
+\[
+ \frac{197\sum_i d_i^2+243\sum_{i<j}d_id_j}{14580}>0.
+\]
+Thus coupling the symmetry-complete part-size mode to all critical cell
+modes produces no new negative row.  The Hessian and the first nonzero
+cubic or density-repaired quartic coefficient on every flat ray above are
+valid for arbitrary bounded measurable kernels.  This remains a
+finite-order statement for perturbations represented relative to the fixed
+Tur\'an partition; it is not a proof of local minimality in cut distance or
+in any other topology on the full graphon quotient space.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The complete measurable-kernel threshold Hessian}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+When the first variation vanishes, a coarse constant-cell test can miss
+inhomogeneous modes inside a Tur\'an class.  We now compute the full Hessian
+for arbitrary measurable perturbation kernels, rather than selecting a
+finite-step direction.
+
+First let $\chi(H)=3$ and work at $T_2$.  Regard each of its two parts as a
+copy of an arbitrary probability space.  Every feasible first-order
+perturbation has the form
+\begin{equation}
+ W_\varepsilon|_{A^2}=\varepsilon F,\qquad
+ W_\varepsilon|_{B^2}=\varepsilon K,\qquad
+ W_\varepsilon|_{A\times B}=1-\varepsilon G,
+ \label{eq:full-perturbation}
+\end{equation}
+where $F,K,G\geq0$ are bounded measurable kernels, $F$ and $K$ are
+symmetric, and the cross-cell formula is transposed on $B\times A$.
+Write
+\[
+ a=\int F,\qquad b=\int K,\qquad g=\int G,
+ \qquad s=a+b.
+\]
+The threshold constraint is exactly
+\begin{equation}
+ s\geq2g.
+ \label{eq:hessian-feasible}
+\end{equation}
+If $f=T_F\mathbf1$ and $k=T_K\mathbf1$, put
+\[
+ u=\int f^2-a^2\geq0,
+ \qquad
+ v=\int k^2-b^2\geq0.
+\]
+
+The coefficient of $\varepsilon^2$ can be computed without any step
+approximation.  Choose the two differentiated edges of $H$.  If they are
+disjoint, their integral is a product of cell means.  If they share a
+vertex, their integral is an inner product of the appropriate rooted degree
+functions.  These are the only possibilities.  Thus the full Hessian uses
+the three means above and the six rooted moments
+\[
+ \int f^2,\quad \int k^2,\quad
+ \int g_A^2,\quad\int g_B^2,\quad
+ \int f g_A,\quad\int k g_B,
+\]
+where $g_A,g_B$ are the two rooted degree functions of the cross kernel.
+The accompanying script enumerates the two selected graph edges and their
+macro-colourings exactly, before making any critical-face substitution.
+
+There are three kinds of nonzero critical face.  In the first,
+$A_H(2)=0<B_H(2)$, so criticality forces $G=0$.  In the second,
+$A_H(2)=B_H(2)=0$, and only \eqref{eq:hessian-feasible} remains.  In the
+third, $A_H(2)>0$ and $2A_H(2)+B_H(2)=0$, so criticality forces $s=2g$.
+After the exact full-kernel calculation, all rooted moments reduce to the
+following certificates.  Here $Q_H$ denotes the quadratic coefficient of
+$\Gamma_H(W_\varepsilon)$.
+
+\[
+\begin{array}{c|c|l}
+\text{critical type}&\text{Atlas}&\text{exact certificate}\\ \hline
+I&43&32Q_H=a^2+b^2+2(u+v)\\
+ &118&64Q_H=a^2+b^2+3(u+v)\\
+ &122&64Q_H=a^2+b^2+2(u+v)\\
+ &124&32Q_H=a^2-ab+b^2+2(u+v)\\ \hline
+II&119&64Q_H=3(a^2+b^2)+4ab+8g(s-g)+4(u+v)\\
+ &130&32Q_H=a^2+b^2+3ab+4g(s-g)\\
+ &137,139&32Q_H=s^2+u+v\\
+ &145&32Q_H=a^2+b^2+ab+4g(s-g)+2(u+v)\\
+ &148&64Q_H=a^2+b^2+8g(s-g)+2(u+v)\\
+ &152&32Q_H=ab+4g(s-g)\\
+ &166&32Q_H=4g(s-g)-ab+u+v\\
+ &172&64Q_H=8g(s-g)-s^2\\ \hline
+III&153&32Q_H=3ab+2g^2\\
+ &171&16Q_H=ab\\
+ &174&32Q_H=3ab\\
+ &188&32Q_H=ab
+\end{array}
+\]
+For type III, $b=2g-a$ in the displayed formulas.  Every expression in the
+table is nonnegative on its critical face except the two explicitly marked
+by their signs: Atlas $166$ and $172$.  Indeed,
+$g(s-g)\geq0$ under \eqref{eq:hessian-feasible}, and
+$a^2-ab+b^2\geq0$.  For Atlas $166$ and $172$, take regular $F,K$ with
+$a=b>0$ and $G=0$; their quadratic coefficients are strictly negative.
+
+The only $4$-chromatic baseline row with a critical threshold face is Atlas
+$203$, and only diagonal additions are critical at $T_3$.  If $d_i$ is the
+mean in diagonal cell $i$, and $u_i\geq0$ is the variance of its rooted
+degree function, the complete calculation gives
+\[
+ 729Q_{203}
+ =11\sum_{i=1}^3d_i^2
+  +12\sum_{1\leq i<j\leq3}d_id_j
+  +12\sum_{i=1}^3u_i
+ \geq0.
+\]
+Consequently the complete threshold Hessian has no negative mode beyond
+Atlas $166$ and $172$.  This is a second-order no-hit statement only; it
+does not promote any catalogue row to positive status.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Small-support, order-one needle perturbations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The preceding derivatives scale the value change on each fixed Tur\'an cell
+by $\varepsilon$.  Smallness in $L^1$ or cut distance permits a different
+regime: change edge values by order one on a vertex set of measure
+$\varepsilon$.  Several changed edges incident with the same exceptional
+vertex then contribute already at order $\varepsilon$, so this regime is not
+contained in the ordinary edge-by-edge first variation.  We now test it
+without choosing a connection direction in advance.
+
+Fix $k\geq2$.  Split a set $S_\varepsilon$ of measure $\varepsilon$ from
+part zero of $T_k$.  For $x\in S_\varepsilon$, let
+$w_i(x)\in[0,1]$ be the conditional mean of its connections to the bulk of
+part $i$.  Connections inside $S_\varepsilon$ affect only terms of order
+$\varepsilon^2$.  Put
+\[
+ D(\boldsymbol w):=\sum_{i=0}^{k-1}w_i-(k-1).
+\]
+For a vertex $v\in V(H)$ and a proper $k$-colouring $c$ of $H-v$, define
+\[
+ R_{v,k}(\boldsymbol w)
+ :=\sum_{c:H-v\longrightarrow[k]\ {m proper}}
+   \prod_{u\in N_H(v)}w_{c(u)},
+ \qquad
+ R_{H,k}:=\sum_{v\in V(H)}R_{v,k}.
+\]
+Finally, with $J_H$ as in Section~2, set
+\begin{equation}
+ Q_{H,k}(\boldsymbol w)
+ :=kR_{H,k}(\boldsymbol w)-n\chi_H(k)
+   -2J_H(k)D(\boldsymbol w).
+ \label{eq:needle-Q}
+\end{equation}
+
+\begin{proposition}[Exact needle coefficient]\label{prop:needle}
+For the perturbation above,
+\[
+ p(W_\varepsilon)
+ =1-\frac1k+\frac{2\varepsilon}{k}
+   \int_{S_\varepsilon}D(\boldsymbol w(x))
+       \frac{d\mu(x)}{\varepsilon}
+   +O(\varepsilon^2),
+\]
+and
+\[
+ \Gamma_H(W_\varepsilon)
+ =\frac{\varepsilon}{k^n}
+   \int_{S_\varepsilon}Q_{H,k}(\boldsymbol w(x))
+       \frac{d\mu(x)}{\varepsilon}
+   +O(\varepsilon^2).
+\]
+These formulas allow arbitrary measurable connections from the exceptional
+set to the bulk; only their $k$ conditional means enter at first order.
+\end{proposition}
+
+\begin{proof}
+The ordered pairs with exactly one endpoint in $S_\varepsilon$ give the
+displayed density coefficient.  For the $H$-density, first consider maps
+with no vertex in $S_\varepsilon$.  Decreasing the mass of bulk part zero by
+$\varepsilon$ contributes
+\[
+ -\frac{n\chi_H(k)}{k^n}.
+\]
+If exactly $v$ maps into $S_\varepsilon$, the other vertices must give a
+proper colouring of $H-v$.  For any one such colouring, all surviving bulk
+edges have value one.  The variables assigned to a common colour class are
+independent and that class is an independent set, so integration of the
+edges from the exceptional point gives precisely
+$\prod_{u\in N_H(v)}w_{c(u)}$.  Summing over $v$ and $c$ gives
+$k^{1-n}R_{H,k}$.  Maps using at least two exceptional vertices have measure
+$O(\varepsilon^2)$.
+
+The derivative of the target at $p=1-1/k$ is
+$J_H(k)/k^{n-1}$ by Proposition~\ref{prop:first}.  Multiplying it by the
+edge-density coefficient and subtracting proves
+\eqref{eq:needle-Q}.  The same calculation applies pointwise in the
+exceptional variable and then integrates, proving the measurable-kernel
+statement.
+\end{proof}
+
+At the threshold $k=\chi(H)-1$, abbreviate $A=A_H(k)$.  If the averaged
+density direction $\overline D$ is negative, it can be repaired to first
+order by adding uniform weight
+$-2k\overline D\,\varepsilon$ on one diagonal bulk cell.  By
+Proposition~\ref{prop:first}, the resulting addition to the scaled gap
+coefficient is $-2A\overline D$.  Hence either of the pointwise certificates
+\begin{equation}
+ Q_{H,k}(\boldsymbol w)\geq0
+ \quad\hbox{or}\quad
+ Q_{H,k}(\boldsymbol w)-2A_H(k)D(\boldsymbol w)\geq0
+ \qquad(\boldsymbol w\in[0,1]^k)
+ \label{eq:needle-threshold-supports}
+\end{equation}
+proves nonnegativity after averaging and after the necessary density repair.
+Indeed, the first certificate has multiplier zero and the second has
+multiplier $2A$; these are the two endpoints of the relevant KKT multiplier
+interval.  This use of a single global multiplier is essential: separate
+certificates on $D\geq0$ and $D\leq0$ would not justify mixing heterogeneous
+profiles.
+
+The certificates in this section are exact coefficient certificates.  On a
+box, write a polynomial in the tensor-product Bernstein basis of its exact
+coordinatewise degrees.  Nonnegative Bernstein coefficients prove
+nonnegativity on the whole box.  For the first interior point
+$k=\chi(H)$, the polynomial $Q_{H,k}$ is symmetric in all $w_i$.  It is
+therefore enough to use the ordered simplex
+\[
+ 0\leq w_0\leq w_1\leq\cdots\leq w_{k-1}\leq1,
+\]
+whose vertices have respectively $0,1,\ldots,k$ trailing coordinates equal
+to one.  Pull back to barycentric coordinates
+$\lambda_0,\ldots,\lambda_k$, homogenize, and multiply by
+$(\lambda_0+\cdots+\lambda_k)^N$.  This multiplication does not change the
+polynomial on the simplex.  Nonnegative monomial coefficients of the
+resulting homogeneous polynomial give an exact rational certificate.
+
+\begin{proposition}[Needle no-hit certificates]\label{prop:needle-no-hit}
+Every row in the $32$-row open snapshot preceding the two triangle-book
+two-edge-tail theorems passes the complete first-order
+one-microclass needle test at both
+\[
+ T_{\chi(H)-1}\quad\hbox{and}\quad T_{\chi(H)}.
+\]
+At the threshold, the direct certificate in
+\eqref{eq:needle-threshold-supports} works alone for Atlas
+$126,147,168$, the density-repaired certificate works alone for Atlas
+$153,171,174,188$, and both work for the other $25$ rows.
+At $T_{\chi(H)}$, the required barycentric degree elevations are
+\[
+\begin{array}{c|l}
+N&\text{Atlas IDs}\\ \hline
+1&139,142,171\\
+2&120,123,130,137,153,157,160,169,178,181,194,196\\
+3&127,185,203\\
+4&145,147,148,188\\
+5&152,174,199\\
+8&43\\
+9&168\\
+10&126\\
+11&122,124,151\\
+12&118.
+\end{array}
+\]
+All coefficients referred to here are exact nonnegative rationals.
+\end{proposition}
+
+The script reconstructs every polynomial from proper colourings and checks
+every displayed coefficient.  As a check that this test is capable of
+detecting a genuine instability, it rediscovers Atlas $206$ at its threshold
+$T_3$: the exact profile
+$(w_0,w_1,w_2)=(1/2,1,1)$ has $D=1/2$ and
+$Q_{206,3}=-6$.
+
+Proposition~\ref{prop:needle-no-hit} is strictly a first-order statement in
+the exceptional mass.  It does not analyze a profile on which the certified
+coefficient vanishes to higher order, and its interior certificate has only
+been carried out at $T_{\chi(H)}$, not at every $T_k$ with
+$k>\chi(H)$.  It therefore does not establish local minimality in cut
+distance and does not classify any additional row as positive.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Higher-order Boolean boundary needles}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The zero directions left by Proposition~\ref{prop:needle-no-hit} require
+rooted two-vertex rather than rooted one-vertex data.  We make two exact
+extensions.  They remain local tests around balanced complete multipartite
+graphons and choose no graph-specific rewiring direction.
+
+First consider the threshold $k=\chi(H)-1$.  Restrict the exceptional
+connection profile to a cube vertex
+\[
+ \boldsymbol w\in\{0,1\}^k
+\]
+and let $r\in\{0,1\}$ be the value on the exceptional diagonal cell.  Give
+the exceptional class mass $\varepsilon$, reduce the mass of bulk part zero
+from $1/k$ to $1/k-\varepsilon$, and retain the remaining Tur\'an cells.
+Every Boolean profile and both extreme internal values are tested.
+
+If the resulting exact edge density $p_{\varepsilon}$ leaves the admissible
+interval, use an unchanged bulk part of mass $1/k$ and put the exact diagonal
+weight
+\begin{equation}
+ y_{\varepsilon}
+ :=k^2\left(\frac{k-1}{k}-p_{\varepsilon}\right)
+ \label{eq:boolean-exact-repair}
+\end{equation}
+on that part.  Whenever repair is invoked, the first nonzero coefficient of
+$y_{\varepsilon}$ is positive.  Thus $0\leq y_{\varepsilon}\leq1$ for all
+sufficiently small positive $\varepsilon$, and
+\eqref{eq:boolean-exact-repair} restores the threshold density exactly, not
+merely through a truncated order.
+
+For each Boolean profile on which the admissible first-order coefficient is
+zero, the script reconstructs the full polynomial
+\[
+ \Gamma_H(W_{\varepsilon})
+ =t(H,W_{\varepsilon})-\Phi_H(p(W_{\varepsilon})).
+\]
+There are $174$ choices after including $r=0,1$.  Of these, $106$ require
+the exact density repair.  The first-nonzero-order distribution is
+\[
+\begin{array}{c|rrrrr}
+\text{first order}&\text{identically zero}&2&3&4&6\\ \hline
+\text{number of cases}&32&105&21&13&3.
+\end{array}
+\]
+Every displayed first nonzero coefficient is strictly positive.  Hence no
+threshold Boolean boundary profile produces a sufficiently small local
+counterexample.  The identically zero cases are harmless refinements or
+relabelings of the Tur\'an construction.
+
+The Boolean audit can be extended over every continuum-flat one-profile
+threshold face.  The nonnegative tensor-product Bernstein supports show that
+only six rows have a supporting polynomial vanishing on a positive-dimensional
+region.  For Atlas $130,152$, the direct coefficient is identically zero and
+the admissible flat region is
+\[
+ 0\leq w_0,w_1\leq1,
+ \qquad w_0+w_1\geq1.
+\]
+For Atlas $153,171,174,188$, the repaired coefficient is identically zero and
+the flat region is the opposite triangle $w_0+w_1\leq1$.  Every other
+supporting zero face either is finite or lies in the wrong density branch and
+reduces to an endpoint after the required repair.
+
+For each of the six rows and both $r=0,1$, reconstruct the exact coefficient
+$C_{H,r}(w_0,w_1)$ of $\varepsilon^2$.  On the first two rows no repair is
+used.  On the other four, equation~\eqref{eq:boolean-exact-repair} is imposed
+as a polynomial identity before extracting the coefficient.  Pulling each
+$C_{H,r}$ back to its triangle gives nonnegative homogeneous barycentric
+coefficients with degree elevation zero.  Thus all $12$ exact triangle
+certificates prove
+\[
+ C_{H,r}(w_0,w_1)\geq0
+\]
+throughout the appropriate continuum-flat region.  Affinity in the internal
+cell value extends the conclusion from $r=0,1$ to every $r\in[0,1]$.  No
+one-profile continuum threshold direction is negative at second order.
+
+This one-profile statement can be upgraded without selecting finitely many
+connection profiles, provided each exceptional-to-bulk fibre is constant on
+each bulk part.  Put
+\[
+ \Delta_+=\{(u,v)\in[0,1]^2:u+v\geq1\},
+ \qquad
+ \Delta_-=\{(u,v)\in[0,1]^2:u+v\leq1\}.
+\]
+For Atlas $130,152$ use $\Delta_+$ with no repair; for Atlas
+$153,171,174,188$ use $\Delta_-$ and one common exact repair in an
+unchanged bulk diagonal cell.  If two exceptional points have profiles
+$z=(u,v)$ and $z'=(u',v')$, and their mutual cell has value $r$, direct
+two-root enumeration gives a symmetric mixed quadratic kernel
+$K_{H,r}(z,z')$.  Its diagonal is exactly the one-profile quadratic
+coefficient already certified above.
+
+The dependence on $r$ is affine, so it is enough to take $r=0,1$.
+For each of the six rows and each endpoint, pull $K_{H,r}$ back to
+$\Delta_\pm\times\Delta_\pm$ using two independent triples of barycentric
+coordinates and bihomogenize separately in the two triples.  Every
+coefficient is nonnegative without degree elevation.  These $12$ exact
+product-triangle certificates prove
+\[
+ K_{H,r}(z,z')\geq0
+ \qquad
+ (z,z'\in\Delta_\pm,\ 0\leq r\leq1).
+\]
+For direct reproducibility, the certificate signatures are
+\[
+\begin{array}{c|c|c|c|c}
+H&r&\text{bidegree}&\text{zero coefficients}&
+ \text{least positive coefficient}\\ \hline
+130&0&(3,3)&36&1/2\\
+130&1&(3,3)&36&3/4\\
+152&0&(3,3)&40&1/4\\
+152&1&(3,3)&36&1/4\\
+153&0&(3,3)&36&1/4\\
+153&1&(3,3)&36&1/4\\
+171&0&(4,4)&157&1/8\\
+171&1&(4,4)&147&1/8\\
+174&0&(3,3)&86&3/8\\
+174&1&(3,3)&81&3/8\\
+188&0&(4,4)&157&1/16\\
+188&1&(4,4)&148&1/16
+\end{array}
+\]
+Here ``zero coefficients'' counts zeros among all homogeneous monomials of
+the stated bidegree; the remaining coefficients are positive.
+Consequently, after integrating in both exceptional variables, the complete
+quadratic coefficient is nonnegative for an arbitrary measurable
+distribution of such coarse profiles and an arbitrary measurable internal
+exceptional kernel.  In the four repaired rows the repair is computed from
+the aggregate density displacement and applied once; the calculation does
+not repair different profiles separately.
+
+The coarse restriction can be removed completely for five of the six rows.
+For arbitrary measurable exceptional-to-bulk fibres, a two-root term also
+depends on the overlaps
+\[
+ h_0(z,z')=\int_A f_zf_{z'},
+ \qquad
+ h_1(z,z')=\int_B g_zg_{z'},
+\]
+not only on the means $u,v,u',v'$.  These satisfy the sharp Fr\'echet bounds
+\[
+ \max(0,u+u'-1)\leq h_0\leq\min(u,u'),
+ \quad
+ \max(0,v+v'-1)\leq h_1\leq\min(v,v').
+\]
+They cannot simply be replaced by $uu'$ and $vv'$.  Nevertheless, for Atlas
+$130,153,171,174,188$, every positive-degree coefficient in $h_0,h_1$ is
+itself coefficientwise nonnegative in the four profile means.  The worst
+case is therefore the sharp Fr\'echet lower endpoint.  The two switches
+partition $\Delta_\pm^2$ into six explicit four-simplices.  For each of the
+five rows and $r=0,1$, the pullback to every simplex has nonnegative
+homogeneous coefficients without degree elevation.  These $60$ exact
+certificates prove pointwise nonnegativity of the full arbitrary-fibre pair
+kernel, and hence nonnegativity of the integrated quadratic coefficient.
+The complete construction, simplex vertices, barycentric proof of the
+partition, and coefficient signatures are given independently in
+\path{notes/turan_threshold_arbitrary_fibre_second_order.tex}.
+
+Atlas $152$ is the exact boundary.  For $r=0$, the two flat profiles
+\[
+ (u,v)=\left(\frac16,1\right),
+ \qquad
+ (u',v')=\left(\frac56,\frac23\right)
+\]
+can be realized by indicator fibres with
+$h_0=0$ and $h_1=2/3$.  The exact mixed kernel is then
+\[
+ K_{152,0}(z,z')=-\frac1{324}.
+\]
+Thus pointwise nonnegativity of the full arbitrary-fibre kernel is false.
+This is not a negative mass direction: for these two indicator profiles the
+entire two-type matrix is
+\[
+ \begin{pmatrix}
+  5/288&-1/324\\
+  -1/324&2/9
+ \end{pmatrix},
+ \qquad
+ \det=\frac{101}{26244}>0.
+\]
+The example precisely separates the five proved arbitrary-fibre cones from
+what was then the unresolved integrated Atlas $152$ problem; it is not a counterexample to
+the graph inequality.  The seven positive terms of the exact integrated
+functional do factor jointly as
+\[
+ \int \mathcal A(z,z')\mathcal A(z',z)\,dz\,dz',
+ \qquad
+ \mathcal A(z,z')=v(z)h_0(z,z')+u(z)h_1(z,z')+u(z)v(z).
+\]
+However, the natural contraction of this quantity by
+$(\int\mathcal A)^2$ is false: an exact two-atom fibre example misses it by
+$101/46656$, while retaining positive true Atlas $152$ quadratic gap
+$1543/11664$.  A stronger-looking geometric-mean contraction of the two
+kernel orientations also fails, by $3/32$ on a second exact two-atom fibre
+example, while its true quadratic gap remains $9/256>0$.  The full
+independent relaxation obtained by minimizing every diagonal Jensen bound
+and off-diagonal Frechet bound also has an exact noncopositive two-profile
+matrix, but those minima are not jointly realizable by common fibres; the
+compatible indicator-fibre matrix is positive definite.  The full
+identities, examples, and precise safe lessons are in the companion note
+and Failed Attempts~24--27.
+
+Common-fibre consistency in fact settles every mixture supported on at most
+two profiles when both fibre families are indicators.  The diagonal entry is
+\[
+ D(u,v)=\frac{9u^2v^2-4(u+v-1)^2}{8}\geq0.
+\]
+The mixed entry is overlap-monotone, so its lower envelope occurs at the two
+sharp Frechet lower intersections.  On the six resulting four-simplices,
+the exact determinant has nonnegative homogeneous coefficients with
+signatures
+\[
+ (8,365,9/64),(8,365,9/64),(8,410,9/64),
+ (8,474,9/64),(8,244,21/64),(8,244,21/64).
+\]
+If the actual mixed entry is negative, monotonicity moves it toward zero and
+preserves the determinant bound; if it is nonnegative, copositivity is
+immediate.  Hence arbitrary masses, crossing indicator sets, and an arbitrary
+exceptional--exceptional kernel are all safe in the two-profile cone.
+
+There is no profile-count restriction on the two axes.  Zero-displacement
+profiles may first be deleted because the unpaired joint-kernel integrand is
+nonnegative and both sides then scale quadratically.  If every remaining
+profile has $u=1$ or $v=1$, the exact same-axis and cross-axis kernels are
+\[
+ \frac{h(h+2x+2y)}8,
+ \qquad
+ \frac{xy(xy+2x+2y)}8,
+\]
+respectively.  Both are pointwise nonnegative.  Thus arbitrary mixtures of
+axis profiles, with arbitrary crossings of their unconstrained fibres, are
+safe.  A residual indicator construction must contain at least three
+crossing profiles and positive mass on the strict interior
+$u<1,v<1,u+v>1$.
+
+Arbitrary fractional fibres are also safe when the mean-profile support is a
+coordinatewise chain.  For comparable profiles $u\leq u'$, $v\leq v'$, put
+\[
+ u=1-d-y,\quad v=1-c-x,
+ \quad u'=1-d,\quad v'=1-c.
+\]
+Then $c,d,x,y\geq0$, $c+d+x+y\leq1$, and the two lower overlaps are
+$(1-2d-y)_+$ and $(1-2c-x)_+$.  The switch regions triangulate into seven
+central four-simplices and two side simplices, with the both-zero region
+reduced to one boundary point.  The nine lower-envelope kernels have exact
+degree-four coefficientwise nonnegative certificates, with $53$--$68$
+nonzero coefficients and least positive coefficient at least $1/128$ except
+for two stronger entries.  An exact active-facet audit also checks that all
+$36$ simplex pairs meet face-to-face, with shared-vertex incidence counts
+$1:3$, $2:9$, $3:13$, and $4:11$.  Hence every comparable pair kernel is
+pointwise nonnegative.  No nesting or indicator assumption is placed on the
+actual fibres.  A residual construction must therefore give positive product
+measure to incomparable mean-profile pairs.
+
+The complete transverse antichain at one density displacement is safe as
+well.  If every profile has $u+v-1=t$, orient a pair by $u\leq u'$ and write
+\[
+ (u,v)=(t+a,1-a),\qquad
+ (u',v')=(t+a+b,1-a-b).
+\]
+The domain $t,a,b\geq0$, $t+a+b\leq1$ is cut by the two lower-overlap
+switches into four tetrahedra.  Their lower-envelope kernels have exact
+degree-four signatures
+\[
+ (4,22,1/128),(4,26,1/16),(4,27,1/128),(4,22,1/128).
+\]
+All six tetrahedron pairs are certified face-to-face by exact rational
+active-facet enumeration.
+Hence arbitrary fractional and crossing fibres are nonnegative on every
+constant-displacement profile line.  Any residual construction must combine
+incomparable profiles with genuinely varying density displacement.
+
+There is a complementary arbitrary-fractional theorem with one fixed mean
+profile.  If $u(z)=u$ and $v(z)=v$ almost everywhere, the joint kernel is
+symmetric.  Jensen and the two Gram identities give
+\[
+ \mathbb E\mathcal A^2\geq(\mathbb E\mathcal A)^2
+ \geq\bigl(uv(u+v+1)\bigr)^2\geq4(u+v-1)^2,
+\]
+because
+\[
+ uv(u+v+1)-2(u+v-1)
+ =uv(u+v-1)+2(1-u)(1-v)\geq0.
+\]
+Thus the fibres may be arbitrary fractional functions and cross without
+restriction when their mean profile is fixed.  A residual fractional
+construction must vary the mean profile.
+
+This has an explicit dispersion extension.  For
+$\bar u=\mathbb E u$, $\bar v=\mathbb E v$, and
+$\bar d=\bar u+\bar v-1$, put
+\[
+ \mathcal G(\bar u,\bar v)
+ =\bigl(\bar u\bar v(\bar u+\bar v+1)\bigr)^2-4\bar d^2.
+\]
+Freezing the scalar coefficients in $\mathcal A$ bounds the integrated
+product loss by
+$12(\mathbb E|u-\bar u|+\mathbb E|v-\bar v|)$.  Therefore the full
+arbitrary-fibre quadratic coefficient is nonnegative whenever
+\[
+ 12\bigl(\mathbb E|u-\bar u|+\mathbb E|v-\bar v|\bigr)
+ \leq\mathcal G(\bar u,\bar v).
+\]
+Cauchy--Schwarz gives the simpler sufficient bound
+$12(\sigma_u+\sigma_v)\leq\mathcal G$.  The earlier uniform radius also
+follows: if both coordinates lie within $\varepsilon$ of their averages, it
+is enough that $\varepsilon\leq\mathcal G/24$.  These radii are positive
+except at the two zero-displacement vertices $(1,0),(0,1)$.
+
+A tempting strengthening of the joint contraction is also exactly false.
+With profile masses $3/5,2/5$, profiles $(9/10,1/10),(1/4,3/4)$, constant
+first-bulk fibres $9/10,1/4$, and second-bulk fibres
+$(2/5,0,0,0),(0,1,1,1)$ on four equal atoms, the joint matrix is
+\[
+ \begin{pmatrix}207/1000&9/80\\57/160&27/64\end{pmatrix}.
+\]
+Writing $C=\mathbb E[uv]$, its integrated product is
+$25255881/400000000$, while $C=129/1000$ and the difference from $4C^2$ is
+$-1369719/400000000$.  The true density displacement is zero, so this is a
+failed proof inequality rather than a negative Atlas direction; it is
+recorded in Failed Attempt~27.
+
+The same consistency perspective does settle an infinite-dimensional
+subcone.  If the two families of fibres are each comonotone, their overlaps
+are $\min\{u,u'\}$ and $\min\{v,v'\}$.  Concavity on the upper profile
+triangle reduces the required bound to its three vertices and proves each
+orientation of the joint kernel is at least twice its density displacement.
+Hence the Atlas $152$ pair kernel is pointwise nonnegative for every mixture
+of nested indicator fibres.  Together with the two-profile, axis-profile,
+comparable-mean, equal-displacement, and bounded-dispersion theorems, this
+showed that any remaining obstruction had to put positive mass on
+strict-interior profiles, give positive measure to incomparable profiles
+with varying displacement, and use genuinely fractional fibres unless at
+least three indicator profiles crossed.
+
+That residual cone contains an exact counterexample.  Take profile masses
+$1/10,9/10$, mean profiles
+\[
+ (624/625,1/16),\qquad(1/625,1),
+\]
+complementary indicator fibres in the first bulk part, and constant fibres
+$1/16,1$ in the second.  The exact eightfold quadratic matrix is
+\[
+ \begin{pmatrix}
+ 34569/20000000&-111/625000\\
+ -111/625000&1/78125
+ \end{pmatrix},
+\]
+with determinant $-2943/312500000000$ and quadratic value
+$-8631/2000000000$ on the displayed mass vector.  The companion proof is the
+standalone Atlas 152 fractional-fibre note in the \texttt{notes} directory.  It
+evaluates the complete five-step graphon at $\varepsilon=1/3000$, where
+\[
+ p=\frac{18750093281}{37500000000}>\frac12,
+\]
+and the full gap is strictly negative.  Hence
+Atlas $152$ is negative; this conclusion uses neither an asymptotic truncation
+nor a tensor construction.
+
+The next extension treats the full zero set at the first interior point
+$k=\chi(H)$.  Recall that $Q_{H,k}$ is symmetric.  Pull it back to the
+ordered simplex
+\[
+ 0\leq w_0\leq\cdots\leq w_{k-1}\leq1
+\]
+and use the nonnegative homogeneous barycentric certificate from
+Proposition~\ref{prop:needle-no-hit}.  Because every monomial coefficient is
+nonnegative, a point is a zero precisely when every positive monomial
+vanishes there.  The exact support audit gives only the barycentric vertex
+corresponding to
+\[
+ (0,1,\ldots,1).
+\]
+After unfolding by symmetry, the continuum cube zero set is therefore
+exactly the $k$ permutations of this vector.  Across the same historical
+$32$-row snapshot this gives $107$ profiles in total; there is no additional
+interior zero face.
+
+Give these $k$ exceptional types arbitrary masses
+$a_1\varepsilon,\ldots,a_k\varepsilon$, where every $a_i\geq0$.  Allow an
+arbitrary self-cell value for each type and an arbitrary mutual-cell value
+for every pair.  The coefficient of $\varepsilon^2$ is a quadratic form
+\begin{equation}
+ \boldsymbol a^{\mathsf T}B\boldsymbol a.
+ \label{eq:full-profile-copositive}
+\end{equation}
+
+The coefficients are computed without finite-$\varepsilon$ sampling.  A map
+of $H$ contributing to second order uses zero, one, or two exceptional
+vertices.  Proper bulk colourings give the zero-exception term; the rooted
+polynomials from Proposition~\ref{prop:needle} give the one-exception term;
+and proper colourings of $H-\{u,v\}$ give the ordered two-exception term,
+including the mutual exceptional-cell value when $uv\in E(H)$.  Subtracting
+the exact first two derivatives of the chromatic target yields
+$B$.  Dependence on every exceptional--exceptional cell value is affine, so
+it is enough to test the vertices of that cell-value cube.
+
+There are $21$ rows with $k=3$ and $11$ with $k=4$.  Thus the full audit has
+\[
+ 21\cdot2^6+11\cdot2^{10}=12608
+\]
+exact matrices $B$.  Copositivity is checked on every coordinate face of the
+mass simplex.  At an interior stationary point of a face $S$, exact linear
+algebra gives
+\[
+ B_S\boldsymbol a=t\boldsymbol1,
+ \qquad \boldsymbol1^{\mathsf T}\boldsymbol a=1,
+\]
+and the quadratic value is $t$.  No system with positive masses has $t<0$.
+The $441$ singular augmented systems are all exactly inconsistent, rather
+than omitted.  Hence all $12608$ matrices are copositive and this complete
+second-order zero-profile test gives no new negative row.
+
+The same stationary-point enumeration also identifies every zero of these
+quadratic forms on the mass simplex.  There are $6304$ zero stationary
+faces, and every one is the singleton profile $(0,1,\ldots,1)$ with zero
+internal self-cell.  This merely splits one Tur\'an part into two
+indistinguishable measurable pieces.  There is no other flat mass-cone
+direction hidden by the word ``copositive.''
+
+This also covers measurable exceptional-to-bulk kernels in a fixed zero
+direction.  A $[0,1]$-valued function with conditional mean zero or one is
+respectively zero or one almost everywhere, so the Boolean zero profiles
+force the relevant bulk cells themselves.  Only the averaged internal cells
+remain, and their affine dependence was tested above.
+
+This is a genuine higher-order no-hit result, but it still does not prove a
+cut-distance neighbourhood of local minimality.  An
+$\varepsilon$-dependent profile may approach the finite zero set while its
+small positive linear coefficient competes with the quadratic term.  The
+exact zero mass-cone directions at the first interior point are only
+Tur\'an refinements, and multiple coarse profiles at the threshold are now
+coupled with one common exact density repair.  What remains is uniform
+control of profiles depending on $\varepsilon$ and approaching the interior
+zero set, and the analogous threshold mixture problem for arbitrary
+exceptional-to-bulk fibres.  The negative Atlas $152$ mixed kernel above
+shows that the latter cannot be closed by pointwise kernel nonnegativity.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Exact two-scale realizations of the negative modes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $k=2$, one canonical critical mode places the same added weight
+$\varepsilon$ between the two halves of each original class.  Explicitly,
+partition the space into four sets
+\[
+ A_0,A_1,B_0,B_1
+\]
+of measure $1/4$.  Put weight one between every $A$-set and every $B$-set,
+weight $\varepsilon$ on $A_0\times A_1$ and $B_0\times B_1$ and their
+transposes, and zero elsewhere.  Call the resulting graphon
+$U_\varepsilon$.  Then
+\[
+ p(U_\varepsilon)=\frac12+\frac\varepsilon4.
+\]
+
+This is a regular-kernel realization of the two negative modes isolated by
+the complete Hessian above.  The final one-variable identities are given
+below and are independently sufficient as exact counterexamples.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Four exact local counterexamples}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The relevant finite graph data are
+\[
+\begin{array}{c|c|c|c|c|l}
+\text{Atlas}&\text{graph6}&n&m&\chi(H)&E(H)\\ \hline
+152&\texttt{EhNG}&6&8&3&
+01,05,12,15,23,24,34,45\\
+166&\texttt{ElfO}&6&9&3&
+01,03,04,05,12,15,23,34,35\\
+172&\texttt{Elf\_}&6&9&3&
+01,03,04,05,12,15,23,25,34\\
+206&\texttt{E\char126 nW}&6&13&4&
+01,02,03,04,05,12,13,15,23,24,34,35,45
+\end{array}
+\]
+The Atlas $152$ counterexample is the five-step fractional-fibre graphon
+constructed and evaluated in the preceding section and independently in
+\path{notes/atlas_152_fractional_fibre_local_counterexample.tex}.
+
+Both Atlas $166$ and $172$ have
+\[
+ \chi_H(x)=x(x-1)(x-2)^2(x^2-4x+5).
+\]
+Direct enumeration of the $4^6$ assignments to the four equal parts of
+$U_\varepsilon$ gives
+\[
+ t(F_{166},U_\varepsilon)
+ =\frac{\varepsilon^2
+ (\varepsilon^3+4\varepsilon^2+4\varepsilon+6)}{256},
+\]
+\[
+ t(F_{172},U_\varepsilon)
+ =\frac{\varepsilon^2(4\varepsilon^2+7\varepsilon+4)}{256}.
+\]
+For either graph,
+\[
+ \Phi_H\!\left(\frac12+\frac\varepsilon4\right)
+ =\frac{\varepsilon^2(\varepsilon+2)
+ (5\varepsilon^2-4\varepsilon+4)}{256}.
+\]
+Consequently
+\[
+ \Gamma_{166}(U_\varepsilon)
+ =-\frac{\varepsilon^2(\varepsilon-1)
+ (2\varepsilon^2+3\varepsilon-1)}{128},
+\]
+\[
+ \Gamma_{172}(U_\varepsilon)
+ =-\frac{\varepsilon^2(\varepsilon-1)
+ (5\varepsilon^2+7\varepsilon-4)}{256}.
+\]
+At $\varepsilon=1/4$, the edge density is $9/16$ and
+\[
+ t(F_{166},U_{1/4})
+ =\frac{465}{262144}
+ <\frac{477}{262144}
+ =\Phi_{F_{166}}(9/16),
+\]
+\[
+ t(F_{172},U_{1/4})
+ =\frac{384}{262144}
+ <\frac{477}{262144}
+ =\Phi_{F_{172}}(9/16).
+\]
+
+For Atlas $206$,
+\[
+ \chi_{F_{206}}(x)
+ =x(x-1)(x-2)(x-3)(x^2-7x+13).
+\]
+Partition into three equal classes, retain weight one between distinct
+classes, put weight $\varepsilon$ inside the first class, and put weight zero
+inside the other two.  Denote this graphon by $V_\varepsilon$.  Then
+\[
+ p(V_\varepsilon)=\frac23+\frac\varepsilon9
+\]
+and exact enumeration of $3^6$ assignments gives
+\[
+ t(F_{206},V_\varepsilon)
+ =\frac{\varepsilon}{729}
+ \left(
+ \varepsilon^{12}+8\varepsilon^8+4\varepsilon^7
+ +8\varepsilon^5+24\varepsilon^4+2\varepsilon^3
+ +8\varepsilon^2+8\varepsilon+2
+ \right).
+\]
+The exact gap is
+\[
+ \frac{\varepsilon}{19683}
+ \left(
+ 27\varepsilon^{12}+216\varepsilon^8+108\varepsilon^7
+ +216\varepsilon^5+622\varepsilon^4-111\varepsilon^3
+ +189\varepsilon^2+351\varepsilon-108
+ \right).
+\]
+At $\varepsilon=1/4$, one has $p=25/36$ and, over a common denominator,
+\[
+ t(F_{206},V_{1/4})
+ =\frac{2098759707}{1320903770112}
+ <\frac{2224947200}{1320903770112}
+ =\Phi_{F_{206}}(25/36).
+\]
+All four densities lie in the complete required intervals.  Therefore
+Atlas $152$, $166$, $172$, and $206$ are negative cases.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{High density: Tur\'an versus the constant graphon}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Put $p=1-1/x$.  The constant graphon has density
+\[
+ t(H,p)=p^m=\frac{(x-1)^m}{x^m},
+\]
+whereas the target is $\chi_H(x)/x^n$.  Hence the constant graphon is a
+strict counterexample exactly when
+\begin{equation}
+ R_H(x):=x^{m-n}\chi_H(x)-(x-1)^m>0.
+ \label{eq:R}
+\end{equation}
+
+The exact test gives a strong no-hit result for the baseline rows.
+
+\begin{proposition}[Leading high-density coefficient]\label{prop:girth-leading}
+Let $g$ be the girth of $H$ and let $N_g(H)$ be its number of (unoriented)
+$g$-cycles.  Then
+\[
+ R_H(x)=(-1)^gN_g(H)x^{m-g+1}+O(x^{m-g}).
+\]
+Consequently the constant graphon is an asymptotic counterexample whenever
+$g$ is even, while for odd $g$ it lies on the non-counterexample side for
+all sufficiently large $x$.
+\end{proposition}
+
+\begin{proof}
+Whitney's rank expansion gives
+\[
+ x^{m-n}\chi_H(x)
+ =\sum_{A\subseteq E(H)}(-1)^{|A|}x^{m-r(A)}.
+\]
+For every $j<g$, each $j$-edge subset is a forest and has rank $j$; these
+terms cancel the corresponding binomial terms in $(x-1)^m$.  At rank
+$g-1$, all $(g-1)$-edge subsets are still forests, but there are in addition
+exactly the $N_g(H)$ edge sets of the shortest cycles, each of size $g$.
+Their combined contribution is $(-1)^gN_g(H)x^{m-g+1}$.  All remaining
+terms have smaller degree.
+\end{proof}
+
+\begin{proposition}[Constant comparison for all baseline open rows]
+For every one of the $43$ tested rows and every real
+$x\geq\chi(H)-1$,
+\[
+ R_H(x)<0.
+\]
+Thus the constant graphon has strictly larger $H$-density than the target
+throughout the full required interval and cannot be a negative witness for
+any of these rows.
+\end{proposition}
+
+\begin{proof}
+For every tested graph, exact expansion gives
+\[
+ R_H(y+\chi(H)-1)=\sum_{j=0}^{d}r_jy^j
+\]
+with every $r_j<0$.  There are $24$ distinct coefficient vectors among the
+$43$ graphs.  Therefore the polynomial is strictly negative for every
+$y\geq0$.  The script accompanying this note computes the chromatic
+polynomials independently and checks every coefficient as an integer.  It
+also verifies Proposition~\ref{prop:girth-leading} graph by graph: $42$ rows
+have girth three, and Atlas $104$ has girth five.  Thus their asymptotic
+leading signs are negative before the stronger full-interval coefficient
+test is applied.
+\end{proof}
+
+In the current catalogue, the historical set has been reduced to the
+following $29$ open rows:
+\[
+\begin{gathered}
+43,118,122,124,126,127,130,137,139,\\
+145,147,148,151,152,153,157,160,168,169,171,174,178,181,185,\\
+188,194,196,199,203.
+\end{gathered}
+\]
+The script reruns the strict coefficient test on exactly this current set;
+all $29$ shifted polynomials are coefficientwise strictly negative, in $20$
+distinct coefficient classes.  Thus the conclusion is independent of the
+historical status of rows subsequently resolved by other arguments and the
+three local witnesses in this note.
+
+This explains why the even-girth method does not directly produce further
+witnesses here.  Its conceptual form can be seen by writing
+\[
+ W=1-qU,
+ \qquad
+ \int U=1,
+ \qquad q=1-p.
+\]
+For $A\subseteq E(H)$, let $r(A)$ be its graphic-matroid rank and
+$\beta(A)=|A|-r(A)$.  Inclusion--exclusion for $t(H,W)$ and Whitney's
+formula for the chromatic polynomial give the exact identity
+\begin{equation}
+ \Gamma_H(W)
+ =\sum_{A\subseteq E(H)}(-1)^{|A|}q^{r(A)}
+ \left(q^{\beta(A)}t((V(H),A),U)-1\right).
+ \label{eq:cycle-rank}
+\end{equation}
+If $U$ is regular of degree one, every forest term vanishes.  The first
+nonzero contribution is therefore controlled by the first cyclic matroid
+rank.  The normalized complement of $T_k$ makes every parenthesis in
+\eqref{eq:cycle-rank} zero.  For the constant graphon, $U=1$, and the first
+cycle has sign determined by its parity.  This recovers the even-girth
+obstruction and also explains the opposite sign for the triangle-containing
+rows considered here.
+
+The two endpoint comparison also extends to every bounded normalized
+complement direction.  The complete quadratic coefficient in
+\eqref{eq:cycle-rank} is
+\[
+ P_2(H)\bigl(t(P_3,U)-1\bigr)+N_3(H),
+\]
+where $P_2(H)=\sum_v\binom{d_H(v)}2$ and $N_3(H)$ is the triangle count.
+Cauchy's inequality gives $t(P_3,U)\geq1$.  Every row in the 29-row audit
+snapshot has a
+triangle, so this coefficient is strict.  More precisely, if $0\leq U\leq
+M$ for a fixed $M$, the explicit remainder estimate in
+\path{notes/bounded_complement_high_density_stability.tex} gives
+\[
+ \Gamma_H(1-qU)\geq q^2\bigl(N_3(H)-qC_H(M)\bigr)>0
+\]
+for an explicit interval $0<q<N_3(H)/C_H(M)$.  Thus all $29$ snapshot rows,
+and in particular all $28$ current open rows, pass not only the constant
+endpoint but every fixed bounded complement shape.  The Tur\'an complements
+have norm $1/q$ and therefore lie exactly
+outside this fixed-$M$ regime.
+
+The simplest such singular shape can also be excluded on the entire
+admissible interval.  If $W_s=1-\mathbf 1_{S\times S}$ with $\mu(S)=s$,
+then a homomorphism survives exactly when the vertices mapped into $S$ form
+an independent set.  Thus
+\[
+ t(H,W_s)=\sum_{I\in\mathcal I(H)}s^{|I|}(1-s)^{v(H)-|I|}.
+\]
+For every row in that snapshot, exact factorization and strictly positive
+Bernstein coefficients prove
+$\Gamma_H(W_s)=s^3(1-s)^\ell R_H(s)>0$ for every nonzero $s$ in the full
+required interval.  The $29$ certificates, in $25$ coefficient classes,
+are listed independently in
+\path{notes/singular_clique_complement_high_density_test.tex}.  Hence a
+single concentrating deleted clique is also a no-hit direction.  The same
+note uses the exact cluster-rank expansion to prove that $r$ deleted diagonal
+cliques are uniformly positive whenever $rq<\alpha_H$ for an explicit
+constant: their leading term is
+\[
+ (P_2(H)-N_3(H))\left(\sum_{i=1}^r s_i^3-q^2\right),
+ \qquad q=\sum_{i=1}^r s_i^2,
+\]
+and power mean makes the first sum at least $q^{3/2}/\sqrt r$, while the
+remaining graphic-rank terms are $O_H(q^2)$.  Every snapshot row has
+$P_2(H)-N_3(H)>0$.  This covers every $r=o(1/q)$ family.  Thus only the
+critical $r\asymp1/q$ scale or a non-clique/moving singular complement
+would remain under that estimate alone.
+
+An entire canonical nonregular family is also excluded on the full interval.
+If $W$ is a finite or countable union of clique blocks of masses $s_i$,
+possibly together with a leftover dust set on which $W$ is zero, then,
+because every open $H$ is connected,
+\[
+ t(H,W)=\sum_i s_i^{v(H)}.
+\]
+If $m=\max_i s_i$, then
+$p=\sum_i s_i^2\leq m^2+(1-m)^2$ and
+$t(H,W)\geq m^{v(H)}$.  Exact bivariate Bernstein certificates compare this
+lower bound with $\Phi_H(p)$ simultaneously over every feasible pair
+$(m,p)$, in $20$ coefficient classes.  They are nonnegative on the complete
+required intervals for all $29$ rows, with equality only at $p=1$.  Thus no
+finite or countable clique-union-with-dust graphon supplies a counterexample.
+A union of two cliques, whose complement is a complete bipartite cut, is
+included.  One clique plus dust is the canonical persistent-hub complement:
+the complement equals one on every pair incident to the dust set.
+
+The companion note removes the part-count restriction by propagating the
+single power-sum defect
+\[
+ D=\sum_i s_i^3-q^2.
+\]
+If $m=\max_i s_i$, every higher component power-sum defect is at most an
+explicit combinatorial coefficient times $mD$.  The exact cluster-rank
+identity consequently yields
+\[
+ \Gamma_H(W)\geq(c_H-\Lambda_H\sqrt q)D,
+ \qquad c_H=P_2(H)-N_3(H)>0.
+\]
+This proves nonnegativity sufficiently near $p=1$ for every finite or
+countable complete-multipartite graphon, with no restriction on the number
+or imbalance of its parts.  Equality is exactly the balanced Turan family.
+All $29$ snapshot rows pass, with exact $\Lambda_H$ values listed in the
+companion note.  Thus only a non-clique or otherwise moving singular
+complement remains possible within the high-density methodology.
+
+Even there, the complete graphic-rank-two contribution is universally
+nonnegative.  For $V=1-W$, $q=\int V$,
+\[
+ (P_2(H)-N_3(H))(t(P_3,V)-q^2)
+ +N_3(H)(t(P_3,V)-t(K_3,V))\geq0.
+\]
+The two defects are respectively degree variance and failure of transitivity.
+Their common zero set is exactly a union of equal clique blocks, hence a
+balanced Turan complement.  Both coefficients are strict on all $29$
+snapshot rows.  The unresolved high-density step is therefore a quantitative
+stability theorem showing that simultaneous smallness of these defects
+controls every higher-rank term.
+
+The entire exactly regular slice of that stability problem can also be
+closed.  If the arbitrary measurable complement $V$ has constant degree
+$q$, let
+\[
+ D_V=q^2-t(K_3,V).
+\]
+The normalized self-adjoint operator $T_V/q$ is a contraction.  Its spectrum
+proves that $D_V$ controls every cycle defect; a spanning-tree telescoping
+argument then controls every connected cyclic subgraph.  The independent
+theorem in \path{notes/stochastic_block_high_density_stability.tex} gives
+the uniform bound
+\[
+ \Gamma_H(1-V)\geq\bigl(N_3(H)-\Xi_Hq\bigr)D_V.
+\]
+All $29$ open rows have $N_3(H)>0$ and exact finite $\Xi_H$, so every regular
+complement graphon is strictly positive for sufficiently small $q$, except
+at the balanced clique-block complements, where it is the exact Turan
+equality.  No equal-cell, finite-step, or discrete-density assumption is
+used.  A symmetric doubly stochastic $r$-cell matrix is the special case
+$q=1/r$ and includes every degree-preserving coarse perturbation of $T_r$.
+Nonregular complements remain outside this spectral theorem, but the
+independent maximum-degree theorem closes a broad nonregular neighbourhood.
+For an arbitrary complement put
+\[
+ X_V=t(P_3,V)-q^2,
+ \qquad Y_V=t(P_3,V)-t(K_3,V),
+ \qquad \Delta=\lVert d_V\rVert_\infty.
+\]
+The tree-indexed Markov representation, H\"older, and relative entropy give
+the sharp comparison
+\[
+ q^{e(T)}\leq t(T,V)\leq\int d_V^{e(T)}
+\]
+for every tree.  A pointwise path telescoping reduces every failed long-cycle
+closure to at most its length minus two triangle failures.  Consequently the
+graphic-rank expansion satisfies
+\[
+ \Gamma_H(1-V)\geq
+ (c_H-\Lambda_H\Delta)X_V
+ +(N_3(H)-\Omega_H\Delta)Y_V.
+\]
+The exact constants and proof are in the independent note
+{\small\path{notes/maximum_degree_complement_high_density_stability.tex}}.
+All $29$ open rows have an explicit positive radius
+\[
+ \Delta<\min\{c_H/\Lambda_H,N_3(H)/\Omega_H\};
+\]
+the radii range from $7/8079$ to $8/161$.  Thus neither regularity nor a
+finite-step representation is required.  By itself this theorem leaves only
+families retaining vertices of complement degree bounded away from zero while
+the average complement density tends to zero; the later high-degree-set
+decomposition closes that residual regime as well.
+
+The complementary persistent-hub regime also admits a full finite-dimensional
+theorem.  Split off an exceptional set of mass $s$ and put
+\[
+ W_{BB}=1,
+ \qquad W_{AB}=1-a,
+ \qquad W_{AA}=1-r,
+ \qquad0\leq a,r\leq1.
+\]
+Here the complement degree on $A$ converges to $a$, so the preceding
+maximum-degree theorem gives no information when $a$ stays positive.  The
+exact vertex-subset expansion in
+\path{notes/two_block_hub_high_density_stability.tex} gives a polynomial gap
+$G_H(s,a,r)$.  After dividing by $s$ and writing $s=x/3$, every native
+trivariate Bernstein coefficient on $[0,1]^3$ is nonnegative for all $29$
+open rows.  Hence the entire cube $0\leq s\leq1/3$, $0\leq a,r\leq1$ is
+nonnegative.  This simultaneously contains the one-clique hole, one clique
+plus dust, and every constant two-block interpolation between their singular
+shapes.  The next theorem removes the remaining fibre restriction near the
+high-density endpoint.
+
+Nonconstant fibres with genuinely persistent cross defect are also excluded.
+Suppose $W=1$ on the square of the core $B$, while both $W|_{A\times B}$ and
+$W|_{A^2}$ are arbitrary measurable kernels and $\mu(A)=s$.  If
+\[
+ a(z)=\int_B(1-W(z,y))\,d\mu_B(y),
+ \qquad E_2=\int_Aa(z)^2\,d\mu_A(z),
+\]
+then the zero- and one-exceptional-vertex contributions, together with the
+scalar convexity inequality
+\[
+ 2e(H)u-v(H)+\sum_x(1-u)^{\deg_H(x)}
+ \geq(2e(H)-v(H))u^2,
+\]
+give
+\[
+ \Gamma_H(W)\geq
+ s(2e(H)-v(H))E_2-K_Hs^2.
+\]
+The exact theorem and constants are in
+\path{notes/arbitrary_fibre_hub_high_density_stability.tex}.  Thus
+$s\leq\rho_HE_2$ is sufficient, with exact radii $9/817\leq\rho_H\leq7/172$
+for the $29$ open rows.  The cross fibres may cross arbitrarily, and the
+kernel on $A^2$ is unrestricted.
+
+A sharper comparison with the global union bound gives
+\[
+ \Gamma_H(W)\geq
+ s(1-s)^{v(H)-1}(2e(H)-v(H))E_2-C_Hq^2.
+\]
+If $A^2$ is also complete, then
+$q^2\leq4s^2(1-s)^2E_2$, and the whole energy range, including
+$E_2=o(s)$, is nonnegative for $s\leq\sigma_H$.  The exact fixed radii range
+from $9/817$ to $1/22$.
+
+Finally, the union-bound remainder is superadditive between the cut and
+internal defect-edge families.  Apply the maximum-degree theorem to the
+internal-only graphon, whose complement degree is at most $s$.  Its variance
+term supplies an $s^3\bar r^2$ gap, which absorbs the mixed target remainder
+$s^3\bar r\sqrt{E_2}$ by Young's inequality.  This proves nonnegativity for
+\emph{every} measurable graphon satisfying $W=1$ on a core $B^2$ of measure
+$1-s$, with no restrictions on the two remaining cells, whenever
+$s\leq\tau_H$.  Exact radii range from $63/1963067$ to $7/9825$.  This covers
+any number of interacting hubs contained in the same exceptional set.
+
+The apparent complete-core boundary can itself be removed.  For an arbitrary
+complement $V$, fix half the maximum-degree radius $\delta_H$ and split at
+$A=\{d_V>\delta_H\}$.  The residual on $B^2$ has maximum degree at most
+$\delta_H$.  Markov gives $\mu(A)\leq q/\delta_H$; once $q$ is small, every
+point of $A$ retains cross-defect energy at least $\delta_H^2/4$.  The
+quantitative complete-core margin is linear in $\mu(A)$ and absorbs the mixed
+chromatic-target error with the residual.  The exact proof in
+\path{notes/arbitrary_graphon_high_density_stability.tex} gives
+\[
+ \varepsilon_H=\min\left\{
+ \frac{\delta_H^2}{2},\frac{\delta_H\tau_H}{2},
+ \frac{(2e(H)-v(H))\delta_H^2}{16J_H}
+ \right\}>0,
+ \qquad
+ J_H=\sum_{j\geq2}j(j-1)|b_j|.
+\]
+Thus \emph{every} graphon is nonnegative when $1-p\leq\varepsilon_H$.
+For the $29$ rows the exact radii range from $49/895333652544$ to
+$1/703570$.  There is no surviving high-density construction of any shape.
+
+On the canonical segment
+\[
+ B_\theta=(1-\theta)I_r+\theta J_r/r,
+ \qquad0\leq\theta\leq1,
+\]
+the large-$r$ restriction can be removed completely.  An exact
+graphic-rank expansion gives an integer bivariate polynomial for
+$r^{e(H)}\Gamma_H(W_{B_\theta})$.  After its Turan equality factor $\theta$
+is removed and $r$ is shifted by $\chi(H)-1$, the native Bernstein
+coefficients in $\theta$ are monomial-positive in the shift for all $29$
+rows.  The sole raw exception, the first coefficient for Atlas $188$, is
+still positive by the factorization
+\[
+ y(y+1)(y+2)^4(12y^2-21y+17),
+ \qquad
+ 12y^2-21y+17=12(y-7/8)^2+125/16.
+\]
+Consequently the complete fixed-density path from $T_r$ to the constant
+graphon is strictly on the non-counterexample side for every
+$r\geq\chi(H)-1$ and every $0<\theta\leq1$, with equality only at its Turan
+endpoint.  This is a full-interval result in $\theta$, rather than a local
+directional calculation.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reproducibility and limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+python codes/needle_higher_order_tests.py --full
+\end{verbatim}
+from the repository root.  The script performs only the two methodologies in
+this note.  The explicit \texttt{--full} mode includes the historical
+$12608$-matrix symbolic copositivity audit and can use substantial resources.
+For the four-row critical-axis family alone, the bounded-memory default is
+\begin{verbatim}
+python codes/needle_higher_order_tests.py
+\end{verbatim}
+and is the appropriate command for the endpoint, full-axis, and
+arbitrary-profile support theorems.  The full suite verifies:
+\begin{itemize}
+ \item all $43$ high-density shifted polynomials, in $24$ coefficient classes;
+ \item the 29-row pre-Atlas-152 high-density snapshot, in $20$ coefficient
+ classes;
+ \item the bounded normalized-complement theorem for all $29$ snapshot rows,
+ including exact wedge counts, triangle counts, and remainder
+ polynomials;
+ \item the exact full-interval one-clique-hole certificates for all $29$
+ snapshot rows, in $25$ Bernstein coefficient classes, and the uniform
+ all-part-count complete-multipartite high-density theorem;
+ \item the exact bivariate full-interval certificates for every finite or
+ countable union of clique blocks with arbitrary dust, in $20$ coefficient
+ classes, including the canonical persistent-hub complement;
+ \item the universal nonnegative rank-two complement defect and its exact
+ balanced-Turan equality characterization;
+ \item the $29$ exact regular-complement constants proving uniform
+ high-density stability for every measurable constant-degree complement
+ graphon, with stochastic block matrices as a corollary;
+ \item the $29$ exact maximum-degree-complement constants proving the
+ nonregular graphon bound
+ $(c_H-\Lambda_H\Delta)X_V+(N_3-\Omega_H\Delta)Y_V$, including minimum
+ spanning-tree closure costs and rational radii $7/8079$ through $8/161$;
+ \item all $29$ exact native trivariate Bernstein arrays proving
+ nonnegativity of the full two-block persistent-hub cube
+ $0\leq s\leq1/3$, $0\leq a,r\leq1$;
+ \item the arbitrary-fibre complete-core hub theorem for all $29$ rows,
+ including exact adaptive radii $s\leq\rho_H\int_Aa^2$ and completely
+ unrestricted measurable cut fibres and exceptional-square kernels, plus
+ fixed radii $9/817$ through $1/22$ covering every energy scale when the
+ complement is supported only on the cut, and the superadditive combination
+ proving a uniform fully arbitrary single-hub radius $\tau_H$ for every row;
+ \item the high-degree-set decomposition combining the complete-core margin
+ with maximum-degree stability, giving exact arbitrary-graphon endpoint
+ radii $49/895333652544$ through $1/703570$ for all $29$ rows;
+ \item the full bivariate Bernstein certificates on the $29$
+ Turan-to-constant interpolation segments, including the Atlas $188$
+ quadratic sum-of-squares repair;
+ \item the exact first-order cell polynomials for every interior $T_k$ and the
+ threshold tangent-cone conditions;
+ \item the explicit arbitrary-measurable-kernel $L^\infty$ local stability
+  radii at every interior $T_k$ for all $29$ snapshot rows, and the
+  strict-tangent threshold radii for $14$ of those rows;
+ \item the coercive critical-addition $L^\infty$ theorem for Atlas
+  $43,118,122,124,203$, including the pair-energy remainder lemma and exact
+  radii $1/14251389$ through $1/5544$;
+ \item the graphon-independent negative-target strip
+  $1/2\leq p\leq7/12$ for Atlas $153,171,174,188$, giving the common
+  threshold $L^\infty$ radius $1/12$;
+ \item the positive two-defect-colouring lower bound for Atlas
+  $130,137,139,145,148$, including its arbitrary-kernel rooted-moment
+  functionals and exact radii $1/40$ through $1/8$;
+ \item the exact part-size Hessian polynomials for all real
+ $k\geq\chi(H)$;
+ \item the complete measurable-kernel Hessian on all $18$ critical threshold
+ faces, including the Atlas $203$ diagonal face at $T_3$;
+ \item the joint part-size/cell Hessian, its density-repaired quartic rays,
+ and the additional interior critical face of Atlas $172$ at $T_3$;
+ \item the arbitrary-kernel Atlas $152$ cubic via the three-edge path
+ inequality, and the arbitrary-kernel type-III endpoint analysis;
+ \item the Atlas $152$ fractional-fibre negative matrix and the full exact
+ five-step witness at $\varepsilon=1/3000$;
+ \item the two-scale regular-kernel realizations of the two negative Hessian
+ modes; and
+ \item the exact one-diagonal witness for Atlas $206$;
+ \item the exact small-support needle polynomials, their global threshold
+ supporting multipliers, and the barycentric coefficient certificates at
+ $T_{\chi(H)}$;
+ \item all $174$ first-order-flat Boolean threshold boundary polynomials
+ through their first nonzero order, including $106$ exact density repairs;
+ \item the $12$ exact simplex certificates covering all six continuum-flat
+ one-profile threshold regions;
+ \item the $12$ exact product-triangle certificates for arbitrary mixtures
+ of coarse continuum-flat threshold profiles, including one common exact
+ repair on the four repaired faces;
+ \item the $60$ exact four-simplex certificates proving the full
+  arbitrary-fibre pair-kernel inequality for Atlas $130,153,171,174,188$;
+ \item the exact axis-zero-set theorem for Atlas $137,139,145,148$: four
+  $u^2v^2$ needle identities and all $24$ same-axis/opposite-axis,
+  mutual-cell endpoint identities
+  $K_{H,r}=\kappa_H(1-x)(1-y)$ for arbitrary fibres;
+ \item the arbitrary-kernel axis-endpoint cubic theorem for the same four
+  rows, expressed exactly through $t(P_3,R_i)$ and $t(K_3,R_i)$ and
+  independent of the cross-type kernel, together with uniform support radii
+  $1/10,1/10,1/20,1/32$;
+ \item the good-set extension to the complete arbitrary-fibre zero-axis cone,
+  with uniform support radius $1/100$, including scale-dependent profiles,
+  fibres, and exceptional-internal kernels;
+ \item the arbitrary-profile gluing theorem for the same four rows, combining
+  the one-exceptional-vertex and projected rooted-moment subintegrals to give
+  the common support radius $1/10000$ for the whole profile square;
+ \item the exact critical-axis mean-contraction obstruction, comparing two
+  equal-mean exceptional-square kernels and obtaining distinct cubic
+  coefficients on all four rows;
+ \item for Atlas $152$, the exact arbitrary-fibre overlap obstruction
+ $K_{152,0}=-1/324$, the associated positive matrix, the joint
+ factorization, the failed contractions based on $uv$, total mass,
+ geometric means, and independent overlaps, the two-profile indicator theorem,
+ the arbitrary-mixture axis-profile theorem, the nine exact comparable-mean
+ simplex certificates, the four exact equal-displacement certificates, the
+ bounded-dispersion arbitrary-fibre theorem with
+ explicit $L^1$, $L^2$, and $L^\infty$ radii, and the positive
+ comonotone-fibre subtheorem, followed by the exact five-step
+ fractional-fibre counterexample;
+ and
+ \item the exact continuum zero-set certificates at $T_{\chi(H)}$ and all
+ $12608$ full-profile mass-cone copositivity matrices, including the $441$
+ inconsistent singular stationary systems and the identification of all
+ $6304$ zero stationary faces as Tur\'an refinements.
+\end{itemize}
+
+The first-order cell calculation, the part-size Hessian, and the threshold
+Hessian are complete in their stated variation spaces.  In particular, the
+threshold computation includes arbitrary measurable rooted-degree
+fluctuations; it is not limited to the displayed two-scale step graphon.  The
+arbitrary-kernel cubic and repaired-quartic arguments now settle every flat
+ray found by that Hessian calculation through its first nonzero coefficient.
+The needle calculation additionally permits order-one changes supported on
+an exceptional vertex set of vanishing measure, with arbitrary measurable
+connections from that set to the Tur\'an bulk.  The higher-order extension
+settles all Boolean and continuum-flat one-profile threshold directions,
+arbitrary mixtures of the coarse flat threshold profiles with a common
+repair, and the full continuum zero-profile cone at the first interior point.
+It does not settle uniform profiles approaching the interior zero set.  For
+Atlas $152$, every two-profile indicator mixture, every axis-profile mixture,
+every coordinatewise-chain
+mean-profile mixture, every constant-displacement mixture, every sufficiently
+low-dispersion arbitrary-fibre mixture, and every comonotone indicator
+mixture remains nonnegative.  The complementary residual cone is now settled
+negatively by the exact two-profile fractional-fibre witness above.  The other
+five full arbitrary-fibre threshold cones are settled at quadratic order.
+For Atlas $137,139,145,148$, the only zero profiles of the strict needle
+margin are the two axes, and their full arbitrary-fibre mixture cone is now
+also settled at quadratic order by the factor
+$\kappa_H(1-x)(1-y)$.  The exact positive rooted-moment functional first
+settles the endpoint uniformly; the good-set extension then settles the
+complete arbitrary-fibre zero-axis cone with common support radius $1/100$.
+Projecting a general profile to its nearer axis and comparing its deleted
+fibre mass with the endpoint density coefficient then settles the complete
+profile square with common support radius $1/10000$.  Thus no
+scale-dependent profile or kernel family remains in the single-exceptional-
+set hierarchy.
+The higher-order needle audit has only been certified at the threshold and
+$T_{\chi(H)}$.  The independent arbitrary-kernel theorem establishes an
+explicit $L^\infty$ neighbourhood of strict local minimality at every
+interior $T_k$, $k\geq\chi(H)$, and at the threshold for the $14$ rows with
+strict constrained first variation.  Pair-energy absorption adds the five
+critical-addition rows; the negative-target strip adds the four
+density-neutral rows; and the positive two-defect subintegral adds the five
+all-direction rows.  Thus all $28$ current open rows have a complete
+arbitrary-measurable threshold $L^\infty$ neighbourhood result.
+None of these $L^\infty$ theorems
+extends to the weaker cut or $L^1$ topologies.
+At high density, the high-degree-set decomposition now settles every
+arbitrary graphon, without a normalized $L^\infty$ bound, regularity,
+finite-step structure, or complete-core hypothesis.  The conservative exact
+radii are positive on the 29-row pre-Atlas-152 snapshot and hence on all $28$
+current open rows.  Consequently neither the high-density endpoint nor a
+fixed-representative $L^\infty$ neighbourhood of the critical Turan graphon
+has a remaining constructional regime; unresolved work lies at intermediate
+density and in weaker local topologies.
+
+No absence result in this note is used to classify a row as positive.  Only
+the four displayed strict rational inequalities change catalogue status.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+All four rows that this note classifies are \texttt{negative} in Lean:
+$166$, $172$ and $206$ in
+\texttt{lean/Taeyoung/Methods/Negative/LocalTuran.lean}, and $152$ in
+\texttt{Methods/Negative/Atlas152.lean}, which needs a weighted rather than a
+uniform finite measure because its five parts have unequal masses.  One
+difference of substance.
+
+\subsection*{Only Section~9 is formalized}
+
+The catalogue takes from this note exactly the four strict rational
+inequalities, and nothing else.  The first-variation computation, the part-size
+and measurable-kernel Hessians, the needle perturbations of Sections~7 and~8,
+the high-density comparison of Section~10, and every absence result, are not
+formalized.  They are what locates the negative modes; once located, each
+witness is a rational step graphon and the classification is arithmetic.  This
+matches the note's own accounting --- no absence result classifies a row --- so
+nothing is lost, but the formalized part is a small fraction of the note.
+
+Two smaller points follow from that.  The one-parameter families
+$U_\varepsilon$ are not formalized as families: $\varepsilon=1/4$ is fixed from
+the start, so the polynomials in $\varepsilon$ above are replaced by one kernel
+evaluation of a sum of naturals over the $4^6$ or $3^6$ assignments.  And the
+chromatic polynomials are proved from counts of surjective colourings rather
+than quoted, since \texttt{ViolatesLowerBound} must exhibit them.
+
+\end{document}

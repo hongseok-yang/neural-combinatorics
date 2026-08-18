@@ -1,0 +1,222 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Gap}{\Gamma_H}
+
+\begin{document}
+
+\section{Purpose}
+
+This note strengthens the high-density comparison between the constant
+graphon and balanced complete multipartite graphons.  Instead of testing one
+fixed endpoint, it treats every bounded normalized complement direction
+\[
+ W_q=1-qU,
+ \qquad \int U=1,
+ \qquad 0\leq U\leq M.
+\]
+For every graph containing a triangle, the chromatic lower-bound gap is
+strictly positive for all sufficiently small $q>0$, uniformly over every
+such $U$ with the fixed bound $M$.  An explicit sufficient range is given.
+
+The theorem is asymptotic in $p=1-q\to1$ and does not assert global
+positivity.  It is nevertheless a full infinite-dimensional test: $U$ is an
+arbitrary bounded measurable symmetric kernel, not a step graphon or a
+selected rewiring direction.
+
+\section{Cycle-rank expansion}
+
+Let $H$ be a finite simple graph with $n$ vertices and $m$ edges.  For
+$A\subseteq E(H)$, let $H_A=(V(H),A)$, let
+\[
+ r(A)=n-c(H_A),\qquad \beta(A)=|A|-r(A),
+\]
+where isolated vertices count as components.  Thus $r$ is the graphic-matroid
+rank and $\beta$ is its nullity.  Define
+\[
+ \Gamma_H(W)=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p)=(1-p)^n\chi_H\!\left(\frac1{1-p}\right).
+\]
+
+\begin{lemma}[Exact normalized-complement identity]
+Let $U$ be a bounded nonnegative symmetric kernel on a probability space
+with $\int U=1$.  If $W_q=1-qU$ is a graphon, then
+\begin{equation}
+ \Gamma_H(W_q)
+ =\sum_{A\subseteq E(H)}(-1)^{|A|}q^{r(A)}
+ \left(q^{\beta(A)}t(H_A,U)-1\right).
+ \label{eq:cycle-rank}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Expanding one factor $1-qU$ on every edge gives
+\[
+ t(H,1-qU)=
+ \sum_{A\subseteq E(H)}(-1)^{|A|}q^{|A|}t(H_A,U).
+\]
+Whitney's rank expansion gives
+\[
+ q^n\chi_H(1/q)
+ =\sum_{A\subseteq E(H)}(-1)^{|A|}q^{r(A)}.
+\]
+Since $p(W_q)=1-q$, subtracting the second identity from the first and using
+$|A|=r(A)+\beta(A)$ proves \eqref{eq:cycle-rank}.  Both sums are finite, so
+no interchange or convergence argument is involved.
+\end{proof}
+
+Let
+\[
+ P_2(H)=\sum_{v\in V(H)}\binom{d_H(v)}2
+\]
+be the number of unordered adjacent edge pairs, and let $N_3(H)$ be the
+number of unoriented triangles.  If
+$d_U(x)=\int U(x,y)\,dy$, then
+\[
+ t(P_3,U)=\int d_U(x)^2\,dx\geq
+ \left(\int d_U\right)^2=1.
+ \label{eq:path-cauchy}
+\]
+
+\begin{lemma}[Complete quadratic coefficient]
+For every fixed bounded $U$ as above,
+\begin{equation}
+ \Gamma_H(1-qU)
+ =q^2\left(
+ P_2(H)(t(P_3,U)-1)+N_3(H)
+ \right)+O_{H,U}(q^3).
+ \label{eq:quadratic}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+All rank-zero and rank-one terms in \eqref{eq:cycle-rank} vanish because
+$t(\varnothing,U)=1$ and $t(K_2,U)=\int U=1$.  A rank-two forest with two
+edges is either $P_3$ or $2K_2$.  The latter has density one, while each
+adjacent edge pair contributes $t(P_3,U)-1$.  The only cyclic simple graph
+of rank two is a triangle.  Its contribution is
+\[
+ -q^2(qt(K_3,U)-1)=q^2-q^3t(K_3,U).
+\]
+Every other edge set has rank at least three.  Collecting the displayed
+terms proves \eqref{eq:quadratic}.
+\end{proof}
+
+The strict triangle contribution is important.  Degree irregularity of $U$
+can only add the nonnegative term in \eqref{eq:path-cauchy}; regularity is
+not assumed.
+
+\section{An explicit uniform remainder}
+
+For $M\geq1$, define
+\begin{equation}
+ C_H(M)=
+ \sum_{j=3}^{m}\binom mj M^j
+ +\sum_{j=3}^{m}\binom mj-N_3(H).
+ \label{eq:remainder-constant}
+\end{equation}
+The first sum bounds all cyclic and rank-at-least-three density terms.  The
+second counts the rank-at-least-three edge sets: every set with at least four
+edges has rank at least three in a simple graph, while among three-edge sets
+exactly the triangles have rank two.
+
+\begin{theorem}[Bounded-complement high-density stability]
+Let $H$ contain a triangle, let $M\geq1$, and let $U$ be any measurable
+symmetric kernel satisfying
+\[
+ 0\leq U\leq M,\qquad \int U=1.
+\]
+If
+\begin{equation}
+ 0<q<\min\left\{\frac1M,
+ \frac{N_3(H)}{C_H(M)}\right\},
+ \label{eq:q-range}
+\end{equation}
+then $W_q=1-qU$ is a graphon of edge density $1-q$ and
+\[
+ \Gamma_H(W_q)>0.
+\]
+More precisely,
+\begin{equation}
+ \Gamma_H(W_q)
+ \geq q^2\bigl(N_3(H)-qC_H(M)\bigr)>0.
+ \label{eq:explicit-lower}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The condition $qM<1$ ensures $0\leq W_q\leq1$.  The quadratic forest term
+is nonnegative by \eqref{eq:path-cauchy}.  The order-three part of each
+triangle has absolute value at most $q^3M^3$.  For every $A$ of rank at
+least three, $q\leq1$ and $t(H_A,U)\leq M^{|A|}$ give
+\[
+ \left|q^{r(A)}
+ \left(q^{\beta(A)}t(H_A,U)-1\right)\right|
+ \leq q^3\left(M^{|A|}+1\right).
+\]
+There are $\binom mj$ edge subsets of size $j$.  Separating the
+$N_3(H)$ triangles from the rank-at-least-three sets yields exactly
+\eqref{eq:remainder-constant}.  Subtracting this absolute remainder from the
+quadratic triangle contribution proves \eqref{eq:explicit-lower}, and
+\eqref{eq:q-range} makes it strict.
+\end{proof}
+
+\begin{corollary}[All current open rows]
+Every one of the current $29$ open Atlas rows satisfies the conclusion of
+the theorem for each fixed $M\geq1$.  Their Atlas IDs are
+\[
+\begin{gathered}
+43,118,122,124,126,127,130,137,139,145,147,148,151,152,153,\\
+157,160,168,169,171,174,178,181,185,188,194,196,199,203.
+\end{gathered}
+\]
+Their triangle counts range from one to nine.
+\end{corollary}
+
+\begin{proof}
+Exact finite enumeration verifies that every displayed graph contains a
+triangle.  The verifier independently counts adjacent edge pairs and
+triangles and reconstructs $C_H(M)$ for every row.
+\end{proof}
+
+\section{Relation to the two endpoint comparisons}
+
+The constant graphon is $U\equiv1$, hence is covered with $M=1$.  The exact
+constant-versus-target polynomial in the companion note is stronger for that
+one direction because it proves the correct sign on the entire admissible
+density interval.
+
+The normalized complement of the balanced complete $k$-partite graphon has
+value $k$ on its diagonal blocks and zero elsewhere.  Along
+$q=1/k\to0$, its bound is $M=k=1/q$, not a fixed constant.  It therefore
+lies exactly outside the uniform regime of this theorem, as it must: those
+graphons attain equality.  Any unresolved high-density construction must
+similarly concentrate its complement so that
+$\|(1-W)/(1-p)\|_\infty$ diverges.  A fixed bounded complement shape cannot
+be negative for a triangle-containing graph.
+
+\section{Limitations and reproducibility}
+
+The theorem requires $N_3(H)>0$ and a fixed $L^\infty$ bound $M$.  It does
+not cover even-girth graphs, whose first cyclic term can have the opposite
+sign, or $q$-dependent normalized complements with unbounded amplitude.  It
+does not classify any row by itself.
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The bounded-complement audit uses only exact
+finite graph enumeration and integer polynomials; it reports all $29$ rows
+and the triangle-count range $1\ldots9$.
+
+\end{document}

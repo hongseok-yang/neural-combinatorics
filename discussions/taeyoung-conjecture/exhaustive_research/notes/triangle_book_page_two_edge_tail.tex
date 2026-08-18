@@ -1,0 +1,356 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Triangle Books with a Page-Rooted Two-Edge Tail:\\
+Fractional Tail Convexity}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $P_m$ be a book of $m\geq1$ triangles on a common spine edge, with
+one otherwise disjoint path of length two attached to a page vertex.  We
+prove the chromatic-polynomial graphon bound for every $P_m$ and every
+$p\geq1/2$.  Symmetrization over the page orbit distributes the rooted
+two-edge-path density $A=T_Wd$ with exponent $1/m$.  Conditional
+factorization over the pages and Jensen's inequality reduce the problem to
+the convex scalar function
+\[
+ a^{1/m}\max\{2a-p,0\}.
+\]
+This yields the sharp target directly from $\int A=\int d^2\geq p^2$.
+The case $m=2$ proves the formerly open NetworkX Atlas graph $123$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The family and its target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and define
+\[
+ A(x)=(T_Wd)(x)=\int_\Omega W(x,y)d(y)\dd\mu(y).
+\]
+The rooted triangle density is
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+All integrands used below are bounded, nonnegative, and measurable.
+
+For an integer $m\geq1$, let $P_m$ have spine vertices $a,b$, page
+vertices $z_1,\ldots,z_m$, and tail vertices $u,v$.  Its edge set is
+\[
+ ab,\qquad az_i,bz_i\quad(1\leq i\leq m),
+ \qquad z_1u,uv.
+\]
+Thus the two-edge tail is rooted at one page, not at a spine endpoint.
+
+After the ordered spine is properly coloured, each page has $x-2$ choices.
+The two successive tail vertices each have $x-1$ choices.  Consequently
+\begin{equation}
+ \chi_{P_m}(x)=x(x-1)^3(x-2)^m,
+ \qquad \chi(P_m)=3.
+ \label{eq:chromatic}
+\end{equation}
+For $q=1-p$, direct substitution gives the polynomial target
+\begin{equation}
+ \Phi_{P_m}(p)
+ =q^{m+4}\chi_{P_m}(1/q)
+ =p^3(2p-1)^m.
+ \label{eq:target}
+\end{equation}
+The required density interval is therefore $p\in[1/2,1]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fractional tail convexity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The elementary inequality $rs\geq r+s-1$ for $r,s\in[0,1]$, applied to
+$W(x,y),W(x,z)$ and multiplied by $W(y,z)$, gives
+\begin{equation}
+ \tau(x)\geq2A(x)-p.
+ \label{eq:pointwise}
+\end{equation}
+Since $\tau\geq0$, we may use the stronger combined statement
+\begin{equation}
+ \tau(x)\geq\max\{2A(x)-p,0\}.
+ \label{eq:positive-part}
+\end{equation}
+
+\begin{lemma}[Fractional tail convexity]
+\label{lem:convexity}
+Let $p>0$ and $0<\alpha\leq1$.  The function
+\[
+ f_{p,\alpha}(a)
+ =a^\alpha\max\{2a-p,0\},
+ \qquad 0\leq a\leq1,
+\]
+is convex and nondecreasing.
+\end{lemma}
+
+\begin{proof}
+The function vanishes on $[0,p/2]$.  On $[p/2,1]$ it equals
+\[
+ 2a^{\alpha+1}-pa^\alpha.
+\]
+Its first two derivatives on that interval are
+\begin{align*}
+ f_{p,\alpha}'(a)
+ &=a^{\alpha-1}\bigl(2(\alpha+1)a-p\alpha\bigr),\\
+ f_{p,\alpha}''(a)
+ &=\alpha a^{\alpha-2}
+ \bigl(2(\alpha+1)a-p(\alpha-1)\bigr).
+\end{align*}
+For $a\geq p/2$, the first bracket is at least $p>0$.  The second bracket
+is positive because $\alpha\leq1$.  At $a=p/2$, the right derivative is
+$p(p/2)^{\alpha-1}>0$, whereas the left derivative is zero.  Thus the
+one-sided derivatives increase across the junction, proving both claims.
+\end{proof}
+
+\begin{lemma}[Fractionally weighted rooted triangle]
+\label{lem:weighted-triangle}
+If $p\in[1/2,1]$ and $0<\alpha\leq1$, then
+\begin{equation}
+ \int_\Omega A(x)^\alpha\tau(x)\dd\mu(x)
+ \geq p^{1+2\alpha}(2p-1).
+ \label{eq:weighted-triangle}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Symmetry and Fubini give
+\[
+ \int_\Omega A(x)\dd\mu(x)
+ =\int_\Omega d(x)^2\dd\mu(x)
+ \geq p^2,
+\]
+where the inequality is Jensen.  By
+\eqref{eq:positive-part}, Lemma~\ref{lem:convexity}, Jensen's inequality,
+and monotonicity,
+\begin{align*}
+ \int A^\alpha\tau
+ &\geq\int f_{p,\alpha}(A)\\
+ &\geq f_{p,\alpha}\!\left(\int A\right)\\
+ &\geq f_{p,\alpha}(p^2).
+\end{align*}
+The condition $p\geq1/2$ is exactly what is needed for $p^2\geq p/2$.
+Therefore
+\[
+ f_{p,\alpha}(p^2)
+ =p^{2\alpha}(2p^2-p)
+ =p^{1+2\alpha}(2p-1),
+\]
+which proves \eqref{eq:weighted-triangle}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The page-tail theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Page-rooted two-edge tails on triangle books]
+\label{thm:main}
+Let $m\geq1$.  Every graphon $W$ of edge density $p\in[1/2,1]$ satisfies
+\[
+ \boxed{
+ t(P_m,W)\geq p^3(2p-1)^m=\Phi_{P_m}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+Integrating the two tail vertices first gives the book integrand multiplied
+by $A(x_{z_1})$.  The $m$ pages form one automorphism orbit.  Average the
+$m$ representations in which the tail is rooted at page $z_j$ and apply
+the arithmetic--geometric mean inequality.  This gives
+\begin{align}
+ t(P_m,W)
+ &\geq
+ \int_{\Omega^{m+2}}W(x,y)
+ \prod_{j=1}^m
+ \left[
+ W(x,z_j)W(y,z_j)A(z_j)^{1/m}
+ \right]
+ \dd\mu^{m+2}.
+ \label{eq:symmetrized}
+\end{align}
+For fixed $x,y$, put
+\[
+ R(x,y)=\int_\Omega
+ W(x,z)W(y,z)A(z)^{1/m}\dd\mu(z).
+\]
+The page variables in \eqref{eq:symmetrized} are independent, so
+\begin{equation}
+ t(P_m,W)\geq\int_{\Omega^2}W(x,y)R(x,y)^m\dd\mu^2.
+ \label{eq:factorization}
+\end{equation}
+
+Here $p\geq1/2>0$.  Normalize $W(x,y)\dd\mu^2/p$ to a probability
+measure and apply Jensen to the convex function $r\mapsto r^m$:
+\begin{equation}
+ \int W R^m
+ \geq p^{1-m}\left(\int W R\right)^m.
+ \label{eq:edge-jensen}
+\end{equation}
+Fubini and the definition of $\tau$ give the exact identity
+\begin{equation}
+ \int_{\Omega^2}W(x,y)R(x,y)\dd\mu^2
+ =\int_\Omega A(z)^{1/m}\tau(z)\dd\mu(z).
+ \label{eq:rooted-identity}
+\end{equation}
+Apply Lemma~\ref{lem:weighted-triangle} with $\alpha=1/m$ and substitute
+into \eqref{eq:factorization}--\eqref{eq:edge-jensen}:
+\begin{align*}
+ t(P_m,W)
+ &\geq p^{1-m}
+ \left[p^{1+2/m}(2p-1)\right]^m\\
+ &=p^3(2p-1)^m.
+\end{align*}
+This is precisely \eqref{eq:target}.
+\end{proof}
+
+At $p=1/2$, the target vanishes and every displayed step remains valid;
+no division by $2p-1$ occurs.  At $p=1$, $W=1$ almost everywhere and both
+sides equal one.  Every balanced complete $k$-partite graphon, $k\geq2$,
+realizes equality: $d=p$, $A=p^2$, and $\tau=p(2p-1)$ almost everywhere,
+so all symmetrization, factorization, and scalar inequalities are sharp.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas 123 and the formalization boundary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 123]
+NetworkX Atlas graph $123$, with graph6 code \texttt{EJy?}, is positive.
+It has order six, size seven, chromatic number three, and
+\[
+ \chi_{F_{123}}(x)=x(x-1)^3(x-2)^2.
+\]
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{123},W)\geq p^3(2p-1)^2=\Phi_{F_{123}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 04,\ 05,\ 12,\ 13,\ 14,\ 23,\ 24.
+\]
+Take spine $12$, pages $3,4$, and tail $4-0-5$.  This is exactly $P_2$,
+so Theorem~\ref{thm:main} applies.
+\end{proof}
+
+The proof uses ordinary homomorphism densities on an arbitrary probability
+space.  All uses of Tonelli--Fubini involve bounded nonnegative integrands.
+For formal verification, the reusable analytic statement is
+Lemma~\ref{lem:weighted-triangle} for real $0<\alpha\leq1$, built from the
+positive-part rooted-triangle bound, fractional scalar convexity, and
+$\int A=\int d^2$.  The remaining ingredients are finite orbit averaging,
+arithmetic--geometric mean, conditional page factorization, and Jensen under
+the normalized edge measure.  The graph-specific module awaiting inspection
+is \texttt{lean/Taeyoung/Examples/Graph123.lean}.
+
+The tail must be rooted at a page vertex of a single triangle book.  The
+theorem does not cover a tail at a spine endpoint (handled separately in
+\texttt{triangle\_book\_two\_edge\_tail.tex}), a two-edge tail on $K_4$
+(Atlas 142), or attachments to a general mixed-chordal graph.
+
+The graph, target, fractional exponents, scalar derivatives, and Atlas
+identification are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_triangle_book_page_two_edge_tail.py
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/PageTail/\{Core,Rows\}.lean}, ending at
+\texttt{satisfiesLowerBound\_123}.  It follows this note except at one place,
+and covers only the scoped case $m=2$.
+
+\paragraph{The departure: Lemma~\ref{lem:convexity} is not formalized.}
+This note proves that $f_{p,\alpha}(a)=a^\alpha\max\{2a-p,0\}$ is convex and
+nondecreasing on $[0,1]$ --- by computing $f'$ and $f''$ on $(p/2,1]$ and
+comparing one-sided derivatives at $a=p/2$ --- and then applies Jensen at
+$\int A\geq p^2$ to obtain Lemma~\ref{lem:weighted-triangle}.  The
+formalization never differentiates anything and never mentions
+\texttt{ConvexOn}.  At $\alpha=1/2$ it proves the affine minorant that Jensen
+would have produced, directly:
+\begin{equation}
+ p^2(2p-1)+\Bigl(3p-\tfrac12\Bigr)(a-p^2)
+ \leq\sqrt a\,\max\{2a-p,0\}
+ \qquad (a\geq0,\ \tfrac12\leq p\leq1),
+ \label{eq:lean-tangent-sqrt}
+\end{equation}
+as \texttt{PageTail.tangent\_sqrt}.  Substituting $a=s^2$ with $s=\sqrt a\geq0$
+makes both cases polynomial: for $2a\geq p$ the difference of the two sides is
+\[
+ 2(s-p)^2\Bigl(s+\tfrac p2+\tfrac14\Bigr)\geq0,
+\]
+a double root at $s=p$ times a positive factor, which is exactly the tangency
+this note obtains by differentiating; and for $2a<p$ the right-hand side is
+zero while the left-hand side, increasing in $a$ because $3p-\frac12>0$, is at
+most its value at $a=p/2$, namely $-p\bigl(p-\frac12\bigr)^2\leq0$.
+
+Integrating \eqref{eq:lean-tangent-sqrt} needs only $\int A\geq p^2$ and the
+positive-part bound \eqref{eq:positive-part}, and yields
+Lemma~\ref{lem:weighted-triangle} at $\alpha=1/2$, which is
+\texttt{PageTail.sqrt\_weighted\_rootedTriangle}.  The general $\alpha$ is not
+formalized; the same substitution $a=s^{1/\alpha}$ would not stay polynomial,
+so a different certificate would be needed there.
+
+\paragraph{Scope: only $m=2$ is formalized.}
+Theorem~\ref{thm:main} is proved here for every $m\geq1$, by orbit averaging,
+arithmetic--geometric mean and Jensen for $r\mapsto r^m$.  At $m=2$ each of
+those three steps collapses to a Cauchy--Schwarz, and the Lean file does
+exactly that:
+\[
+ R(x,y)^2\leq S(x,y)G(x,y),\qquad
+ \Bigl(\int\!\!\int WR\Bigr)^{2}\leq p\int\!\!\int WR^2,
+\]
+with $R=\int W(x,\cdot)W(y,\cdot)\sqrt A$.  The first is the weighted
+Cauchy--Schwarz of \texttt{PureChordal/WeightedCauchySchwarz.lean} applied
+inside the page with weight $W(x,\cdot)W(y,\cdot)$; the second is the same
+lemma on $\mu\otimes\mu$ with weight $W$.  Nothing is lost for the catalogue:
+$P_1$ is the five-vertex triangle with a two-edge tail, already
+\texttt{verified}, and $P_3$ has seven vertices.
+
+\paragraph{Everything else transcribes directly.}
+The pointwise bound \eqref{eq:pointwise} is \texttt{Link.rootedTriangle\_ge};
+\eqref{eq:positive-part} is \texttt{max\_le} against
+\texttt{rootedTriangle\_nonneg}; $\int A=\int d^2$ is
+\texttt{BookTail.integral\_pathOp}; and \eqref{eq:rooted-identity} is
+\texttt{PageTail.integral\_edge\_pageWeightOp}, a weight-parametrized clone of
+the existing \texttt{Link.integral\_edge\_pageOp} --- the page operator had to
+gain an arbitrary vertex weight, since the page carrying the tail weighs $A$
+and the Cauchy--Schwarz that splits it weighs $\sqrt A$.  The final division by
+$p$ is \texttt{le\_of\_mul\_le\_mul\_left}, so the argument never divides by
+$2p-1$.
+
+\end{document}

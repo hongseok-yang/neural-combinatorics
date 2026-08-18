@@ -1,0 +1,376 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\dd}{\,d}
+\newcommand{\GammaH}{\Gamma_H}
+
+\title{Arbitrary-Graphon Stability at the High-Density Endpoint}
+\author{Exact certificate note for the remaining Atlas rows}
+\date{August 14, 2026}
+
+\begin{document}
+\maketitle
+
+\section{Result and relation to the two endpoint regimes}
+
+Let $H$ be a finite simple graph with $n$ vertices and $m$ edges.  For a
+graphon $W$ put
+\[
+ p(W)=\int_{\Omega^2}W,
+ \qquad
+ \Phi_H(p)=(1-p)^n\chi_H\!\left(\frac1{1-p}\right),
+ \qquad
+ \GammaH(W)=t(H,W)-\Phi_H(p(W)).
+\]
+Write $V=1-W$ and $q=\int V=1-p(W)$.  The preceding maximum-degree theorem
+proves $\GammaH(1-V)\geq0$ when the complement degree is uniformly small.
+The preceding complete-core theorem proves the same conclusion when every
+defect is incident to one small exceptional set.  The purpose of this note is
+to combine those regimes by applying the decomposition to the high-degree set
+of an arbitrary complement.
+
+The outcome is a universal endpoint theorem on the 29-row pre-Atlas-152
+audit snapshot: for each row there is an explicit rational
+$\varepsilon_H>0$ such that
+\[
+ p(W)\geq1-\varepsilon_H
+ \quad\Longrightarrow\quad
+ t(H,W)\geq\Phi_H(p(W))
+\]
+for every graphon on every probability space.  There is no regularity,
+finite-step, pointwise kernel, or exact complete-core assumption.  The radii
+are deliberately conservative; their role is to prove a genuine uniform
+neighbourhood, not to estimate the optimal endpoint.
+Atlas $152$ was subsequently classified negative near the threshold; the
+other $28$ rows are the current open set and inherit this endpoint theorem.
+
+\section{Constants from the two component theorems}
+
+Expand the chromatic target at the endpoint as
+\begin{equation}
+ \Phi_H(1-q)=1-mq+R_H(q),
+ \qquad
+ R_H(q)=\sum_{j=2}^{n}b_jq^j.
+ \label{eq:target}
+\end{equation}
+Let
+\[
+ a_H=2m-n,
+ \qquad
+ g_H=\sum_{x\in V(H)}\binom{\deg_H(x)}2-N_3(H),
+\]
+and let $\Lambda_H,\Omega_H$ be the exact higher-rank constants from
+\path{notes/maximum_degree_complement_high_density_stability.tex}.  Thus, if
+$F$ is a graphon with complement density $u$, maximum complement degree
+$\Delta_F$, and
+\[
+ X_F=t(P_3,F)-u^2,
+ \qquad
+ Y_F=t(P_3,F)-t(K_3,F),
+\]
+then
+\begin{equation}
+ \GammaH(1-F)\geq
+ (g_H-\Lambda_H\Delta_F)X_F
+ +(N_3(H)-\Omega_H\Delta_F)Y_F.
+ \label{eq:max-degree}
+\end{equation}
+
+Define also
+\begin{align}
+ D_H&=\sum_{j=2}^{n}j|b_j|,\\
+ J_H&=\sum_{j=2}^{n}j(j-1)|b_j|,\label{eq:J}\\
+ \eta_H&=\min\left\{\frac{g_H}{\Lambda_H},
+                       \frac{N_3(H)}{\Omega_H}\right\},
+ \qquad
+ \delta_H=\frac{\eta_H}{2},\label{eq:delta}\\
+ \tau_H&=\min\left\{
+ \frac12,
+ \frac{g_H}{2\Lambda_H},
+ \frac{N_3(H)}{\Omega_H},
+ \frac{a_Hg_H}
+ {a_Hg_H(n-1)+4D_Hg_H+8D_H^2}
+ \right\}.\label{eq:tau}
+\end{align}
+All denominators in these formulas are positive for the $29$ rows considered
+below.
+
+\section{Two elementary interaction lemmas}
+
+\begin{lemma}[Mixed chromatic-target remainder]
+\label{lem:target}
+If $x,y\geq0$ and $x+y\leq1$, then
+\[
+ |R_H(x+y)-R_H(x)-R_H(y)|\leq J_Hxy.
+\]
+\end{lemma}
+
+\begin{proof}
+For every $j\geq2$, two integrations of the mixed derivative give
+\[
+ (x+y)^j-x^j-y^j
+ =j(j-1)\int_0^x\int_0^y(u+v)^{j-2}\dd v\dd u.
+\]
+The integrand is at most one because $u+v\leq x+y\leq1$.  Multiply by
+$|b_j|$ and sum.
+\end{proof}
+
+For a finite collection $\mathcal E$ of numbers in $[0,1]$, put
+\[
+ \mathcal F(\mathcal E)=
+ \prod_{z\in\mathcal E}(1-z)-1+\sum_{z\in\mathcal E}z.
+\]
+
+\begin{lemma}[Superadditive union remainder]
+\label{lem:union}
+For disjoint collections $\mathcal E_0,\mathcal E_1$,
+\[
+ \mathcal F(\mathcal E_0\cup\mathcal E_1)
+ \geq\mathcal F(\mathcal E_0)+\mathcal F(\mathcal E_1).
+\]
+Consequently, if graphons $V_0,V_1$ have disjoint pointwise supports and
+$q_i=\int V_i$, then
+\begin{equation}
+ \GammaH(1-V_0-V_1)
+ \geq\GammaH(1-V_0)+\GammaH(1-V_1)
+ -J_Hq_0q_1.
+ \label{eq:split}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $P_i=\prod_{z\in\mathcal E_i}(1-z)$, direct expansion gives
+\[
+ \mathcal F(\mathcal E_0\cup\mathcal E_1)
+ =\mathcal F(\mathcal E_0)+\mathcal F(\mathcal E_1)
+ +(1-P_0)(1-P_1).
+\]
+Apply this identity pointwise to the edge factors in $t(H,1-V_0-V_1)$ and
+integrate.  The linear terms cancel.  Subtracting the target leaves
+$R_H(q_0)+R_H(q_1)-R_H(q_0+q_1)$, which is bounded below by
+Lemma~\ref{lem:target}.
+\end{proof}
+
+\section{A quantitative margin for a complete core}
+
+Suppose $\Omega=A\sqcup B$, $\mu(A)=s$, and $V_A$ is supported on pairs with
+at least one endpoint in $A$.  Thus $1-V_A=1$ on $B^2$.  Normalize the
+restrictions of the measure and define
+\[
+ a(z)=\int_BV_A(z,y)\dd\mu_B(y),
+ \qquad
+ E_2=\int_Aa(z)^2\dd\mu_A(z).
+\]
+
+\begin{lemma}[Quantitative complete-core margin]
+\label{lem:hub-margin}
+Assume that $H$ has no isolated vertices and $a_H,g_H,N_3(H)>0$.
+If $0<s\leq\tau_H/2$, then
+\begin{equation}
+ \GammaH(1-V_A)\geq\frac{a_H}{2}sE_2.
+ \label{eq:hub-margin}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The proof of the complete-core theorem, reproduced at the level needed here,
+splits $V_A$ into its $A^2$ and cut parts.  If
+\[
+ \bar r=\int_{A^2}V_A\dd\mu_A^2,
+\]
+the maximum-degree theorem on the $A^2$ part, the exact
+one-exceptional-vertex cut gain, and Young's inequality give
+\begin{align*}
+ \GammaH(1-V_A)
+ &\geq \frac{g_H}{4}s^3(1-s)\bar r^2\\
+ &\quad+sE_2\left[
+ a_H(1-s)^{n-1}-4D_Hs
+ -\frac{4D_H^2s^2}{g_H(1-s)}
+ \right].
+\end{align*}
+The first three restrictions in \eqref{eq:tau} justify the maximum-degree
+input.  For $s\leq1/2$, Bernoulli's inequality and
+$(1-s)^{-1}\leq2$ bound the bracket below by
+\[
+ a_H-\left(a_H(n-1)+4D_H+\frac{8D_H^2}{g_H}\right)s.
+\]
+The final restriction in \eqref{eq:tau}, together with
+$s\leq\tau_H/2$, makes this at least $a_H/2$.  Discard the nonnegative
+$\bar r^2$ term.
+\end{proof}
+
+\section{Universal arbitrary-graphon endpoint theorem}
+
+Define
+\begin{equation}
+ \varepsilon_H=\min\left\{
+ \frac{\delta_H^2}{2},
+ \frac{\delta_H\tau_H}{2},
+ \frac{a_H\delta_H^2}{16J_H}
+ \right\}.
+ \label{eq:epsilon}
+\end{equation}
+
+\begin{theorem}[Universal endpoint]
+\label{thm:universal}
+Suppose
+\[
+ a_H,g_H,N_3(H),\Lambda_H,\Omega_H,J_H>0.
+\]
+Assume also that $H$ has no isolated vertices.  For every graphon $W$,
+\[
+ 1-p(W)\leq\varepsilon_H
+ \quad\Longrightarrow\quad
+ t(H,W)\geq\Phi_H(p(W)).
+\]
+\end{theorem}
+
+\begin{proof}
+Put $V=1-W$, $q=\int V$, and $\delta=\delta_H$.  The case $q=0$ is
+immediate.  Otherwise let
+\[
+ A=\{x:d_V(x)>\delta\},
+ \qquad B=\Omega\setminus A,
+ \qquad s=\mu(A).
+\]
+Markov's inequality gives
+\begin{equation}
+ s\leq\frac q\delta.
+ \label{eq:markov}
+\end{equation}
+Split
+\[
+ V_A=V\mathbf1_{(A\times\Omega)\cup(\Omega\times A)},
+ \qquad
+ V_B=V\mathbf1_{B^2},
+ \qquad q_A=\int V_A,\quad q_B=\int V_B.
+\]
+These kernels have disjoint supports and $q_A+q_B=q$.
+If $s=0$, then $V_A=0$ almost everywhere and the maximum-degree estimate
+applied to $V_B=V$ proves the result.  Hence assume $s>0$.
+
+The first two restrictions in \eqref{eq:epsilon} and \eqref{eq:markov} give
+\[
+ s\leq\frac\delta2,
+ \qquad
+ s\leq\frac{\tau_H}{2}.
+\]
+For almost every $z\in A$, write
+\[
+ d_V(z)=s r(z)+(1-s)a(z),
+ \qquad 0\leq r(z)\leq1.
+\]
+Since $d_V(z)>\delta$ and $s\leq\delta/2$,
+\[
+ a(z)>\frac{\delta-s}{1-s}\geq\frac\delta2.
+\]
+Consequently $E_2\geq\delta^2/4$, and
+Lemma~\ref{lem:hub-margin} yields
+\begin{equation}
+ \GammaH(1-V_A)\geq\frac{a_H\delta^2}{8}s.
+ \label{eq:A-margin}
+\end{equation}
+
+On $B$, the degree of $V_B$ is at most the degree of $V$, hence at most
+$\delta=\eta_H/2$.  Equation~\eqref{eq:max-degree} therefore gives
+\begin{equation}
+ \GammaH(1-V_B)\geq0.
+ \label{eq:B-gap}
+\end{equation}
+Also $q_A\leq2s$ and $q_B\leq q$.  Lemma~\ref{lem:union},
+\eqref{eq:A-margin}, and \eqref{eq:B-gap} now imply
+\[
+ \GammaH(W)
+ \geq \frac{a_H\delta^2}{8}s-J_Hq_Aq_B
+ \geq \left(\frac{a_H\delta^2}{8}-2J_Hq\right)s.
+\]
+The final restriction in \eqref{eq:epsilon} makes the last expression
+nonnegative.
+\end{proof}
+
+\section{Exact certificates for the 29-row audit snapshot}
+
+The following table records the four new quantities.  The graph identities,
+edge lists, chromatic polynomials, and the constants
+$g_H,\Lambda_H,N_3(H),\Omega_H$ are independently recorded in
+\path{notes/maximum_degree_complement_high_density_stability.tex}; the exact
+$\tau_H$ reconstruction is recorded in
+\path{notes/arbitrary_fibre_hub_high_density_stability.tex}.  Thus the table
+does not depend on a drawing or a numerical graph match.
+
+\small
+\begin{longtable}{r@{\quad}r@{\quad}c@{\quad}c@{\quad}c}
+Atlas&$J_H$&$\delta_H$&$\tau_H$&$\varepsilon_H$\\ \hline
+43&190&$4/161$&$7/9825$&$1/703570$\\
+118&586&$11/962$&$22/118923$&$121/1084620368$\\
+122&586&$5/461$&$5/29668$&$25/249074612$\\
+124&586&$5/464$&$5/29668$&$25/252326912$\\
+126&586&$5/454$&$5/29668$&$25/241567952$\\
+127&668&$9/908$&$9/71998$&$81/1101483904$\\
+130&460&$1/94$&$8/39637$&$1/8129120$\\
+137&774&$7/1173$&$35/204311$&$245/8519752368$\\
+139&774&$13/2268$&$13/81593$&$845/31850558208$\\
+145&982&$1/173$&$1/8629$&$5/235122224$\\
+147&982&$13/2368$&$13/120647$&$845/44051922944$\\
+148&982&$13/2414$&$13/120647$&$845/45780022976$\\
+151&1190&$1/276$&$65/836593$&$1/145039104$\\
+152&982&$6/1159$&$3/30122$&$45/2638203884$\\
+153&1064&$3/587$&$3/34127$&$45/2932971328$\\
+157&1088&$17/5450$&$17/128700$&$51/7603840000$\\
+160&1088&$4/1319$&$8/64275$&$3/473214992$\\
+168&1504&$17/5786$&$17/222218$&$867/201402420736$\\
+169&1378&$4/1389$&$8/94731$&$2/443100723$\\
+171&1586&$8/2903$&$2/30209$&$24/6682935337$\\
+174&1794&$1/436$&$8/150115$&$1/454709632$\\
+178&1528&$5/3069$&$35/363759$&$175/115134934464$\\
+181&1818&$5/3241$&$35/485959$&$25/21824479152$\\
+185&2108&$5/3299$&$35/625831$&$175/183537674464$\\
+188&2316&$2/1355$&$7/147950$&$7/8504467800$\\
+194&2838&$3/3662$&$48/1100605$&$3/12686090824$\\
+196&2838&$3/3713$&$48/1100605$&$3/13041905074$\\
+199&3128&$3/3748$&$16/435551$&$9/43940592512$\\
+203&3858&$7/16158$&$63/1963067$&$49/895333652544$\\
+\end{longtable}
+\normalsize
+
+Every entry is positive.  The radii range from
+$49/895333652544$ to $1/703570$.  Therefore no arbitrary graphon sequence for
+any of these rows can be a counterexample while $p\to1$.
+
+\section{Reproducibility and formalization boundary}
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The line headed ``arbitrary-graphon universal
+high-density theorem'' reconstructs $J_H,\delta_H,\tau_H,\varepsilon_H$ from
+the exact chromatic polynomial and the two independently audited component
+tables.  It asserts exact equality with every row above.
+
+A formalization can be separated into the following reusable layers.
+\begin{enumerate}
+ \item Prove Lemma~\ref{lem:target} for a finite polynomial and
+ Lemma~\ref{lem:union} for finite products.
+ \item Import or restate the maximum-degree inequality
+ \eqref{eq:max-degree} and the quantitative complete-core margin
+ \eqref{eq:hub-margin}.
+ \item Define the measurable high-degree set $A$ and use
+ $\mu(A)\leq q/\delta$.
+ \item Verify the elementary bounds $E_2\geq\delta^2/4$,
+ $q_A\leq2s$, and $q_B\leq q$.
+ \item Reduce the analytic theorem to the rational inequalities in
+ \eqref{eq:epsilon}; certify the finite table separately.
+\end{enumerate}
+All integrations involve bounded nonnegative kernels, so Tonelli applies
+directly.  No approximation, compactness, or limiting passage is used.
+
+This endpoint theorem alone does not settle any full row: intermediate edge
+densities remain open.  Accordingly, no catalogue status changes.
+
+\end{document}

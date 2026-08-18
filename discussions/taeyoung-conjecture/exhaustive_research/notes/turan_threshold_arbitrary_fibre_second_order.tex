@@ -1,0 +1,1746 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Gap}{\Gamma_H}
+
+\begin{document}
+
+\section{Purpose}
+
+For a finite graph $H$, put
+\[
+ \Gamma_H(W)=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p)=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right).
+\]
+This note proves a full arbitrary-fibre second-order result on five flat
+threshold faces at the balanced bipartite graphon $T_2$, proves the complete
+residual axis-profile interaction theorem and then a uniform
+arbitrary-profile small-support theorem for four further critical rows, and
+resolves the sixth fully flat row, Atlas $152$, by an exact fractional-fibre
+counterexample.  It strengthens the
+coarse-profile calculation in
+\path{notes/turan_local_and_high_density_negative_tests.tex}:
+the connections from the exceptional set to either Turan part may now be
+arbitrary measurable functions, rather than constants on the bulk parts.
+
+The positive conclusions are local: the five flat faces are controlled at
+second order, while one-vertex and rooted-moment positive subintegrals give
+a uniform small-support radius for every measurable profile on the four
+critical rows.  They prove neither positivity of the graphs nor a
+cut-distance neighbourhood theorem.  The
+Atlas $152$ conclusion is stronger, because the negative quadratic direction
+is realized by one fixed rational five-step graphon and hence gives a full
+counterexample rather than merely an infinitesimal obstruction.
+
+\section{The five graphs and their targets}
+
+All graphs have vertex set $\{0,1,2,3,4,5\}$ and chromatic number three.
+Their identifying data are as follows.
+\[
+\begin{array}{c|c|c|l}
+\text{Atlas}&\text{graph6}&e(H)&E(H)\\ \hline
+130&\texttt{E\char`\{CW}&7&01,02,03,12,34,35,45\\
+153&\texttt{Ehf\_}&8&01,04,05,12,15,23,25,34\\
+171&\texttt{Ehew}&9&01,04,05,12,23,25,34,35,45\\
+174&\texttt{EtTg}&9&01,02,03,14,15,23,25,34,45\\
+188&\texttt{EzNG}&10&01,02,05,12,13,15,23,24,34,45
+\end{array}
+\]
+Deletion--contraction, or the exact finite colouring enumeration in the
+verifier, gives
+\[
+\begin{array}{c|l|l}
+H&\chi_H(x)&\Phi_H(p)\\ \hline
+130&x(x-1)^3(x-2)^2&p^3(2p-1)^2\\
+153&x(x-1)(x-2)(x^3-5x^2+9x-7)&
+ p(2p-1)(7p^3-12p^2+8p-2)\\
+171&x(x-1)(x-2)(x^3-6x^2+13x-11)&
+ p(2p-1)(11p^3-20p^2+13p-3)\\
+174&x(x-1)(x-2)(x^3-6x^2+14x-13)&
+ p(2p-1)(13p^3-25p^2+17p-4)\\
+188&x(x-1)(x-2)(x^3-7x^2+18x-17)&
+ p(2p-1)(17p^3-33p^2+22p-5).
+\end{array}
+\]
+In particular $\Phi_H(1/2)=0$.  For the last four rows,
+\begin{equation}
+ \Phi_H'(1/2)=-\frac18.
+ \label{eq:negative-slope}
+\end{equation}
+
+\section{Arbitrary-fibre perturbations}
+
+Let $A,B,S$ be probability spaces.  For small $\varepsilon>0$, give their
+copies masses $1/2-\varepsilon$, $1/2$, and $\varepsilon$, respectively.
+Keep the value one on $A\times B$ and zero on $A^2$.  Let
+\[
+ F:S\times A\longrightarrow[0,1],\qquad
+ G:S\times B\longrightarrow[0,1],\qquad
+ R:S^2\longrightarrow[0,1]
+\]
+be measurable, with $R$ symmetric.  These are the exceptional-to-bulk and
+exceptional-internal parts of the graphon.  Define, for almost every $z\in S$,
+\[
+ u(z)=\int_A F(z,a)\,da,
+ \qquad
+ v(z)=\int_B G(z,b)\,db.
+\]
+For a pair $z,z'\in S$, the two shared-neighbour moments are
+\[
+ h_0(z,z')=\int_A F(z,a)F(z',a)\,da,
+ \qquad
+ h_1(z,z')=\int_B G(z,b)G(z',b)\,db.
+\]
+The sharp Frechet bounds are
+\begin{equation}
+ \max(0,u+u'-1)\leq h_0\leq\min(u,u'),
+ \qquad
+ \max(0,v+v'-1)\leq h_1\leq\min(v,v').
+ \label{eq:frechet}
+\end{equation}
+Indeed, the lower bound follows by integrating
+$(1-F(z,\cdot))(1-F(z',\cdot))\geq0$, and the upper bound follows from
+$FF'\leq F,F'$.  The proof for $G$ is identical.
+
+For Atlas 130 the flat admissible face is
+\[
+ \Delta_+=\{(u,v)\in[0,1]^2:u+v\geq1\}.
+\]
+For Atlas 153, 171, 174, and 188 the repaired flat face is
+\[
+ \Delta_-=\{(u,v)\in[0,1]^2:u+v\leq1\}.
+\]
+These are exactly the zero faces of the supporting first variation.  In the
+normalization of the exact audit, the density direction is
+$D(u,v)=u+v-1$.  The direct supporting polynomial is identically zero for
+Atlas 130.  For the other four rows it is $8D$, while the repaired supporting
+polynomial is identically zero.  Thus the displayed triangles exhaust the
+flat branches; no profile has been selected within them.
+
+On the four repaired rows, put a single constant weight $y_\varepsilon$ on
+$B^2$, chosen from the aggregate edge density so that $p=1/2$.  When the
+average first-order density displacement is negative,
+$y_\varepsilon\geq0$ and $y_\varepsilon=O(\varepsilon)$, hence this is a
+valid graphon for all sufficiently small $\varepsilon$.  If that average is
+zero and the uncorrected second-order displacement is positive, no repair is
+needed: by \eqref{eq:negative-slope}, $\Phi_H(p)<0$ just above $1/2$, so
+$t(H,W)\geq0$ already excludes a negative direction.  Atlas 130 has zero
+diagonal first variation, so an $O(\varepsilon^2)$ density repair on its
+boundary does not alter the quadratic coefficient.
+
+\section{The exact pair kernel}
+
+We give a finite definition that is convenient both for review and for
+formalization.  Temporarily replace two infinitesimal portions of $S$ by
+classes $L,R$ of masses $s,t$.  The bulk masses are
+\[
+ m_A=\frac12-s-t,\qquad m_B=\frac12.
+\]
+The macro-cell values are
+\[
+ W_{AB}=1,\quad W_{AA}=0,\quad
+ W_{LA}=u,\quad W_{LB}=v,\quad
+ W_{RA}=u',\quad W_{RB}=v',\quad W_{LR}=r.
+\]
+For a bulk vertex adjacent to both exceptional classes, replace the formal
+product $uu'$ by $h_0$ on $A$ and $vv'$ by $h_1$ on $B$.  This is exactly
+the integral over that shared bulk variable.  On a repaired row, set
+\[
+ W_{BB}=4\left(\frac12-p_{\rm raw}(s,t)\right),
+\]
+which is the one common repair for the combined two-class perturbation.
+
+For each map $c:V(H)\to\{A,B,L,R\}$ using each of $L,R$ at most once,
+multiply its class masses and its edge-cell factors, using the preceding
+shared-neighbour rule, and sum.  Let $P_H(s,t)$ be the resulting exact
+polynomial after subtracting the chromatic target.  Define
+\begin{equation}
+ K_{H,r}(u,v,u',v',h_0,h_1)
+ :=\frac12[st]P_H(s,t).
+ \label{eq:pair-kernel}
+\end{equation}
+The factor $1/2$ is the usual polarization factor.  If $z=z'$ and
+$h_0=\int F(z,a)^2da$, $h_1=\int G(z,b)^2db$, then
+$K_{H,r}(z,z)$ is exactly the one-profile quadratic coefficient with
+self-cell value $r$.
+
+Because a term of order $\varepsilon^2$ uses at most two exceptional
+vertices, Fubini's theorem and polarization give the full coefficient
+\begin{equation}
+ [\varepsilon^2]\Gamma_H(W_\varepsilon)
+ =\int_{S^2}K_{H,R(z,z')}
+ \bigl(u(z),v(z),u(z'),v(z'),h_0(z,z'),h_1(z,z')\bigr)
+ \,dz\,dz'.
+ \label{eq:integrated-kernel}
+\end{equation}
+All functions are bounded, so every integral is absolutely integrable and
+there is no limiting or denominator issue.  Formula \eqref{eq:pair-kernel}
+is reconstructed by exact rational arithmetic in
+\path{codes/needle_higher_order_tests.py}; the implementation multiplies
+only the four bidegrees $1,s,t,st$, so discarded higher powers cannot affect
+the result.
+
+\section{Frechet triangulation and certificates}
+
+The coefficient of every positive-degree monomial in $h_0,h_1$ in each of
+the ten endpoint kernels ($r=0,1$ for five graphs) is a polynomial in
+$u,v,u',v'$ with nonnegative coefficients.  Hence every kernel is
+coordinatewise nondecreasing in the two overlaps.  By
+\eqref{eq:frechet}, it is enough to substitute their sharp lower endpoints.
+
+Both $\Delta_-^2$ and, after the deficit substitution
+\[
+ a=1-v,\quad b=1-u,\quad c=1-v',\quad d=1-u',
+\]
+$\Delta_+^2$ become
+\[
+ \mathcal D=\{a,b,c,d\geq0:a+b\leq1,\ c+d\leq1\}.
+\]
+The two Frechet switches cut $\mathcal D$ into six four-simplices.  Put
+\[
+\begin{array}{lll}
+q_0=(0,0,0,0),&q_1=(0,0,0,1),&q_2=(0,0,1,0),\\
+q_3=(0,1,0,0),&q_4=(0,1,1,0),&q_5=(1,0,0,0),\\
+q_6=(1,0,0,1).
+\end{array}
+\]
+The central region $a+c\leq1$, $b+d\leq1$ is the union of
+\[
+ (q_1,q_2,q_4,q_5,q_6),\quad
+ (q_1,q_3,q_4,q_5,q_6),\quad
+ (q_1,q_2,q_3,q_4,q_5),\quad
+ (q_0,q_1,q_2,q_3,q_5).
+\]
+The two side regions are the simplices
+\[
+\begin{split}
+ &(0,0,1,0),(0,1,1,0),(1,0,0,0),(1,0,0,1),(1,0,1,0),\\
+ &(0,0,0,1),(1,0,0,1),(0,1,0,0),(0,1,1,0),(0,1,0,1).
+\end{split}
+\]
+This list really is a partition.  For example, the barycentric coordinates
+of the four central simplices, in the vertex orders displayed above, are
+\[
+\begin{array}{l}
+(1-a-c,c-b,b,1-c-d,a+c+d-1),\\
+(1-a-b,b-c,c,1-b-d,a+b+d-1),\\
+(d,1-a-b-d,1-a-c-d,a+b+c+d-1,a),\\
+(1-a-b-c-d,d,c,b,a).
+\end{array}
+\]
+If $a+b+c+d\leq1$, the fourth row applies.  Otherwise, either both middle
+partial sums are at most one and the third row applies, or comparison of
+$b,c$ selects the first or second row.  The side barycentric coordinates are
+\[
+ (1-a-b,b,1-c-d,d,a+c-1)
+\]
+and its simultaneous $a\leftrightarrow b$, $c\leftrightarrow d$ image.
+Thus all coordinates are nonnegative precisely on the asserted regions.
+
+On each simplex substitute its five barycentric coordinates and homogenize
+to the total degree.  The following table records, for the six simplices in
+the order above, the total degree, number of nonzero coefficients, and least
+positive coefficient.  Every omitted homogeneous coefficient is zero; there
+are no negative coefficients and no degree elevation is used.
+\[
+\begin{array}{c|c|c|c|c}
+H&r&\deg&(\#_1,\ldots,\#_6)&(m_1,\ldots,m_6)\\ \hline
+130&0&4&(51,51,57,66,37,37)&(1/4,1/4,1/4,1/2,1/4,1/4)\\
+130&1&4&(51,51,57,66,37,37)&(1/2,1/2,1/2,3/4,1/2,1/2)\\
+153&0&4&(50,50,57,66,36,36)&(1/4,1/4,1/4,1/4,1/8,1/8)\\
+153&1&4&(50,50,57,66,36,36)&(1/4,1/4,1/4,1/4,1/4,1/4)\\
+171&0&5&(49,53,39,24,24,43)&(3/8,3/8,3/8,3/8,3/8,3/8)\\
+171&1&5&(49,53,39,24,37,49)&(3/8,3/8,3/8,3/8,1/8,1/8)\\
+174&0&4&(14,15,10,6,6,12)&(3/4,3/4,3/4,3/4,3/4,3/4)\\
+174&1&4&(19,21,14,7,13,19)&(3/8,3/8,3/8,3/8,3/8,3/8)\\
+188&0&5&(49,53,39,24,24,43)&(1/8,1/8,1/8,1/8,1/8,1/8)\\
+188&1&5&(49,53,39,24,37,49)&(1/8,1/8,1/8,1/8,1/16,1/16)
+\end{array}
+\]
+The four central simplex volumes sum to $1/6$; each side simplex has volume
+$1/24$.  Their total $1/4$ is the volume of the product of two unit
+triangles, providing an additional exact partition check.
+
+\begin{theorem}[Five arbitrary-fibre flat threshold cones]
+For $H$ equal to Atlas $130,153,171,174$, or $188$, let
+$W_\varepsilon$ be an arbitrary-fibre perturbation described above, lying
+almost everywhere in the corresponding flat profile triangle.  Whenever the
+raw density is below $1/2$, use the one common aggregate density repair; on
+the Atlas $130$ boundary this does not change the quadratic coefficient.
+Then
+\[
+ [\varepsilon^2]\Gamma_H(W_\varepsilon)\geq0.
+\]
+More strongly, the integrand in \eqref{eq:integrated-kernel} is nonnegative
+for almost every pair of exceptional points in the formal repaired
+expansion.  On the last four rows, if a boundary perturbation instead has raw
+density above $1/2$, it already satisfies $\Gamma_H(W_\varepsilon)\geq0$ for
+all sufficiently small $\varepsilon$ because $\Phi_H$ is then negative.
+\end{theorem}
+
+\begin{proof}
+The endpoint certificates prove $K_{H,0}\geq0$ and $K_{H,1}\geq0$ after
+the worst feasible overlap substitution on every one of the six Frechet
+regions.  Monotonicity in $h_0,h_1$ extends this to every feasible overlap.
+The kernel is affine in $r$, so it is nonnegative for every
+$r\in[0,1]$.  Apply this pointwise with $r=R(z,z')$ and integrate
+\eqref{eq:integrated-kernel}.
+\end{proof}
+
+\section{Four critical rows with an axis zero set}
+
+Atlas $137,139,145$, and $148$ are not fully flat.  Instead, their complete
+one-microclass threshold variation has a simple exact zero set.  In the
+preceding exceptional-class model, let one class of mass $\varepsilon$ have connection
+means $(u,v)\in[0,1]^2$, and use the least constant diagonal repair whenever
+$u+v<1$.  With the $2^{v(H)}$ normalization of the exact needle audit, both
+the direct and repaired first variations are
+\begin{equation}
+ 2^{v(H)}[\varepsilon]\Gamma_H(W_\varepsilon)
+ =\lambda_Hu^2v^2,
+ \label{eq:axis-needle}
+\end{equation}
+where
+\[
+\begin{array}{c|c|c|c}
+H&\text{graph6}&\lambda_H&\kappa_H\\ \hline
+137&\texttt{EjsG}&4&1/2\\
+139&\texttt{Eju?}&4&1/2\\
+145&\texttt{Exe\_}&8&1\\
+148&\texttt{EyUG}&4&3/4
+\end{array}
+\]
+Thus the only first-order concentration profiles are the two axes $u=0$ and
+$v=0$.  These axes include the exact Turan relocations $(0,1)$ and $(1,0)$,
+but also arbitrary partial deletion profiles.
+
+The full arbitrary-fibre interaction on this zero set has an equally simple
+form.  For a profile on either axis, let $x\in[0,1]$ denote its nonzero
+coordinate.  Fibres belonging to two profiles may be arbitrary measurable
+functions with those means.  On the same axis their feasible overlap may be
+any value in its full Frechet interval; on opposite axes the relevant overlap
+is zero.  The mutual exceptional-cell value $r$ may also be any element of
+$[0,1]$.
+
+\begin{theorem}[Arbitrary-fibre axis cone]
+\label{thm:axis-cone}
+For $H$ equal to Atlas $137,139,145$, or $148$, take any two zero profiles,
+on either the same or opposite axes, with nonzero coordinates $x,y$.  For
+every feasible fibre overlap and every $r\in[0,1]$, the exact repaired pair
+kernel is
+\begin{equation}
+ K_{H,r}=\kappa_H(1-x)(1-y)\geq0.
+ \label{eq:axis-kernel}
+\end{equation}
+Consequently, for an arbitrary probability distribution of axis profiles and
+an arbitrary measurable symmetric exceptional-internal kernel,
+\begin{equation}
+ [\varepsilon^2]\Gamma_H(W_\varepsilon)
+ =\kappa_H\left(\int_S(1-x(z))\,dz\right)^2\geq0.
+ \label{eq:axis-integrated}
+\end{equation}
+The coefficient vanishes only when $x=1$ almost everywhere.  At the level of
+connections to the bulk, these are the exact Turan refinement or relocation
+profiles; an arbitrary exceptional-internal kernel can still make the full
+perturbation nontrivial at higher order.
+\end{theorem}
+
+\begin{proof}
+Exact enumeration of maps using each of two exceptional roots at most once
+gives \eqref{eq:axis-kernel} for $r=0$ and $r=1$, separately for the two
+same-axis placements and the opposite-axis placement.  In all $24$ cases the
+answer is independent of the shared-neighbour overlap.  The pair kernel is
+affine in $r$, so the identity holds on the whole interval.  Substitute
+$r=R(z,z')$ in \eqref{eq:integrated-kernel} and apply Fubini:
+\[
+ \int_{S^2}\kappa_H(1-x(z))(1-x(z'))\,dz\,dz'
+ =\kappa_H\left(\int_S(1-x)\right)^2.
+\]
+Equation \eqref{eq:axis-needle} identifies the asserted zero set.  Finally,
+the integral in \eqref{eq:axis-integrated} is zero exactly when $x=1$ almost
+everywhere; the qualification about the exceptional-internal kernel follows
+because it first appears beyond this quadratic coefficient on that face.
+\end{proof}
+
+This theorem closes the entire second-order concentration cone left by the
+needle test for these four rows: genuinely two-sided profiles have the strict
+first-order margin \eqref{eq:axis-needle}, while every arbitrary mixture on
+its zero axes has the nonnegative pair kernel \eqref{eq:axis-kernel}.  It is
+still a hierarchical small-support statement.  The independent
+two-defect-colouring theorem in
+\path{notes/turan_arbitrary_linfty_local_stability.tex} now gives a uniform
+$L^\infty$ neighbourhood by a different argument; that theorem controls
+uniformly small amplitudes, while the present result permits order-one
+changes on a set of vanishing measure.
+
+The only quadratic zero point is the endpoint $x=1$.  Its next coefficient
+can also be computed without contracting an arbitrary kernel to its mean.
+Split the exceptional set of mass $\varepsilon$ into endpoint types
+$S_0,S_1$ of relative masses $\alpha$ and
+$\beta=1-\alpha$.  Their bulk profiles are respectively $(0,1)$ and
+$(1,0)$.  Let $R_0,R_1$ be arbitrary symmetric graphons inside the two
+types, and let $C$ be an arbitrary cross-type kernel.  Write
+\[
+ r_i=\int R_i,\qquad
+ P_i=t(P_3,R_i)=\int d_{R_i}(x)^2\,dx,
+ \qquad T_i=t(K_3,R_i).
+\]
+If $c=\int C$, the raw density is
+\begin{equation}
+ p_{\rm raw}=\frac12+\varepsilon^2D,
+ \qquad
+ D=\alpha^2r_0+\beta^2r_1+2\alpha\beta c-2\beta.
+ \label{eq:axis-endpoint-density}
+\end{equation}
+When $D\leq0$, putting the constant value
+$-4\varepsilon^2D$ on the bulk $B^2$ cell repairs the density exactly to
+$1/2$ and is feasible for all sufficiently small $\varepsilon$.
+
+\begin{theorem}[Arbitrary-kernel axis-endpoint cubic]
+\label{thm:axis-endpoint-cubic}
+For the endpoint construction above, the raw cubic coefficient and the
+cubic coefficient after the formal $B^2$ repair are equal.  They are
+independent of the cross kernel $C$ and equal to
+\begin{equation}
+ [\varepsilon^3]\,t(H,W_\varepsilon)=
+ \begin{cases}
+ \dfrac{\alpha^3(T_0+2P_0)+\beta^3(T_1+2P_1)}8,
+      &H=137,139,\\[6pt]
+ \dfrac{\alpha^3P_0+\beta^3P_1}{2},&H=145,\\[6pt]
+ \dfrac{\alpha^3P_0+\beta^3P_1}{4},&H=148.
+ \end{cases}
+ \label{eq:axis-endpoint-cubic}
+\end{equation}
+In particular this coefficient is nonnegative for arbitrary measurable
+$R_0,R_1,C$.  Every fixed endpoint mixture satisfies the desired inequality
+for all sufficiently small $\varepsilon$; if $D\leq0$, this holds after the
+exact nonnegative repair just described, and if $D>0$, it holds for the raw
+graphon.
+\end{theorem}
+
+\begin{proof}
+At cubic order, direct macro-colouring enumeration has three possible
+exceptional vertices.  When they all lie in $S_i$, the surviving internal
+selected-edge graphs are one triangle and two copies of the two-edge path
+for Atlas $137,139$, two copies of the path for Atlas $145$, and one copy of
+the path for Atlas $148$, with the normalization displayed in
+\eqref{eq:axis-endpoint-cubic}.  Every mixed-type nonlinear moment has zero
+coefficient.  Terms involving only one internal edge depend on
+$r_0,r_1,c$; exact expansion of
+\eqref{eq:axis-endpoint-density} shows that they cancel.  An edge in the
+$B^2$ repair has order $\varepsilon^2$, and its only possible cubic terms
+also cancel, proving that the raw and repaired cubics agree.  This finite
+coloured-moment enumeration is reconstructed exactly in
+\path{codes/needle_higher_order_tests.py}.
+
+All terms on the right of \eqref{eq:axis-endpoint-cubic} are nonnegative.
+Suppose first that $D\leq0$.  The repaired graphon has density exactly
+$1/2$, so its target is zero and its homomorphism density is nonnegative for
+every sufficiently small $\varepsilon$ for which the repair lies in
+$[0,1]$.
+
+Suppose now that $D>0$.  The cross term alone cannot cause this inequality:
+$2\alpha\beta c\leq2\beta$.  Hence at least one $r_i$ with positive type
+mass is nonzero.  Jensen gives $P_i\geq r_i^2>0$, so
+\eqref{eq:axis-endpoint-cubic} is strictly positive.  On the other hand,
+$p_{\rm raw}-1/2=D\varepsilon^2$; the targets of Atlas $137,139$ vanish to
+third order in this density increment and those of Atlas $145,148$ vanish
+to second order.  They are therefore respectively $O(\varepsilon^6)$ and
+$O(\varepsilon^4)$, while the homomorphism density has a positive
+$\varepsilon^3$ coefficient.  The desired inequality follows for all
+sufficiently small positive $\varepsilon$.
+\end{proof}
+
+The cubic margin can be made uniform, including kernels which depend on
+$\varepsilon$.  Indeed, if $D>0$, then
+\begin{equation}
+ \alpha^2r_0-D-\beta^2
+ =\beta^2(1-r_1)+2\alpha\beta(1-c)\geq0.
+ \label{eq:axis-endpoint-density-coercivity}
+\end{equation}
+Thus $\alpha^2r_0\geq D$, and Jensen gives
+$P_0\geq r_0^2$.  The cubic functional in
+\eqref{eq:axis-endpoint-cubic} is consequently at least $q_HD^2$, where
+\[
+ q_{137}=q_{139}=q_{148}=\frac14,
+ \qquad q_{145}=\frac12.
+\]
+
+\begin{corollary}[Uniform arbitrary-kernel endpoint support]
+\label{cor:axis-endpoint-uniform}
+The endpoint construction is nonnegative uniformly over every choice of
+$\alpha,R_0,R_1,C$, even when these data depend on $\varepsilon$, at the
+following support radii:
+\begin{center}
+\begin{tabular}{r|c|c|c}
+Atlas&$q_H$&support radius&exact scalar slack\\ \hline
+137&$1/4$&$1/10$&$899/15625$\\
+139&$1/4$&$1/10$&$899/15625$\\
+145&$1/2$&$1/20$&$131441/2000000$\\
+148&$1/4$&$1/32$&$3002017/67108864$
+\end{tabular}
+\end{center}
+More precisely, when $D\leq0$ use the exact nonnegative $B^2$ repair to
+density $1/2$; when $D>0$, leave the raw graphon unchanged.  In both cases
+the desired inequality holds for every positive $\varepsilon$ at most the
+displayed radius.
+\end{corollary}
+
+\begin{proof}
+The terms producing \eqref{eq:axis-endpoint-cubic} come from colourings with
+exactly three exceptional vertices.  Retain precisely those nonnegative
+terms in the full homomorphism integral.  Every bulk-$A$ mass is
+$1/2-\varepsilon=(1/2)(1-2\varepsilon)$, while every bulk-$B$ mass is
+$1/2$.  Since $v(H)=6$, their total contribution is at least
+\begin{equation}
+ t(H,W_{\rm raw})
+ \geq \varepsilon^3(1-2\varepsilon)^6q_HD^2.
+ \label{eq:axis-endpoint-positive-subintegral}
+\end{equation}
+This is a positive subintegral, so no signed Taylor remainder is being
+discarded.
+
+For Atlas $137,139$, use $0<D\leq1$ and $0\leq p\leq1$ to obtain
+\[
+ \Phi_H\!\left(\frac12+D\varepsilon^2\right)
+ \leq8D^2\varepsilon^6.
+\]
+For Atlas $145,148$, the factor
+$p(3p^2-3p+1)$ is at most one on $[0,1]$, and hence
+\[
+ \Phi_H\!\left(\frac12+D\varepsilon^2\right)
+ \leq4D^2\varepsilon^4.
+\]
+After removing $D^2\varepsilon^3$, the required scalar margins are
+\[
+ q_H(1-2\varepsilon)^6-8\varepsilon^3
+ \quad(H=137,139),
+ \qquad
+ q_H(1-2\varepsilon)^6-4\varepsilon
+ \quad(H=145,148).
+\]
+They are decreasing in $\varepsilon$, and at the table radii they equal the
+displayed positive rational slacks.  This proves the raw $D>0$ branch.
+
+If $D\leq0$, then $-D\leq2$ and the repair value
+$-4\varepsilon^2D$ lies in $[0,1]$ throughout all four displayed ranges.
+The repaired density is exactly $1/2$, its target is zero, and its
+homomorphism density is nonnegative.  This proves the other branch.
+\end{proof}
+
+The same idea closes the profiles which approach the endpoint with the
+support scale.  On type $S_0$ let
+$F_0:S_0\times B\to[0,1]$ be the arbitrary nonzero fibre, and on type $S_1$
+let $F_1:S_1\times A\to[0,1]$ be its counterpart.  In normalized
+coordinates put
+\[
+ d_0=\alpha\iint(1-F_0),\qquad
+ d_1=\beta\iint(1-F_1),\qquad d=d_0+d_1.
+\]
+Retain $r_0,r_1,c$ for the three internal-kernel means and put
+\[
+ J=\alpha^2r_0+\beta^2r_1+2\alpha\beta c,
+ \qquad D_0=J-2\beta.
+\]
+Direct edge-density integration gives
+\begin{equation}
+ p_{\rm raw}=\frac12+\varepsilon^2E,
+ \qquad
+ E=D_0+2d_1-\frac d\varepsilon.
+ \label{eq:full-axis-density}
+\end{equation}
+If $E>0$ and $\varepsilon\leq1/2$, then
+\begin{equation}
+ E\leq D_0,
+ \qquad
+ d\leq\frac{\varepsilon D_0}{1-2\varepsilon},
+ \qquad
+ D_0\leq\alpha^2r_0.
+ \label{eq:full-axis-coercivity}
+\end{equation}
+The first two statements follow by rearranging
+\[
+ D_0-E=\frac{d_0}{\varepsilon}
+       +d_1\left(\frac1\varepsilon-2\right),
+\]
+and the last is \eqref{eq:axis-endpoint-density-coercivity}.
+
+\begin{theorem}[Uniform arbitrary-fibre full-axis support]
+\label{thm:full-axis-uniform}
+For Atlas $137,139,145$, or $148$, take an arbitrary measurable distribution
+of profiles on the two zero axes, arbitrary exceptional-to-bulk fibres with
+those means, and an arbitrary symmetric exceptional-internal kernel.  Split
+a set of mass $\varepsilon$ from the first part of $T_2$ as above.  If the
+raw density is at least $1/2$, leave the graphon unchanged; otherwise put the
+unique constant nonnegative repair on the unchanged bulk $B^2$ cell which
+restores density $1/2$.  For every
+\[
+ 0<\varepsilon\leq\frac1{100},
+\]
+the resulting graphon satisfies the desired inequality.  This radius is
+uniform over all profiles and kernels, including data depending on
+$\varepsilon$.
+\end{theorem}
+
+\begin{proof}
+If $E\leq0$, the repair value is $-4\varepsilon^2E$.  Since
+$d\leq1$, $J\geq0$, and $2\int_{S_1}x\leq2$, it is at most
+$4\varepsilon+8\varepsilon^2<1$ in the asserted range.  The repaired
+density is $1/2$, so the target is zero and nonnegativity of the homomorphism
+density proves the claim.
+
+Suppose $E>0$.  On the normalized type-$S_0$ space define its rooted fibre
+deficit
+\[
+ \ell(z)=\int_B(1-F_0(z,b))\,db
+\]
+and take the good set $G_0=\{z:\ell(z)\leq\tau\}$ with
+$\tau=1/16$.  Markov's inequality and
+\eqref{eq:full-axis-coercivity} give
+\[
+ \mu(S_0\setminus G_0)
+ \leq\frac{d_0}{\alpha\tau}
+ \leq\frac{\varepsilon\alpha r_0}
+              {(1-2\varepsilon)\tau}.
+\]
+Deleting the bad vertices removes at most twice their measure from the mean
+of $R_0$.  Hence, for
+$R_0'=R_0\mathbf1_{G_0\times G_0}$,
+\[
+ \int R_0'
+ \geq r_0\left(1-\frac{32\varepsilon}{1-2\varepsilon}\right).
+\]
+The two-edge path inequality gives
+\[
+ t(P_3,R_0')\geq\left(\int R_0'\right)^2.
+\]
+
+Retain only the endpoint colourings which produced the $P_0$ part of
+\eqref{eq:axis-endpoint-cubic}, and restrict all three exceptional vertices
+to $G_0$.  At most eight exceptional-to-bulk fibre factors occur.  For fixed
+good exceptional vertices, the union bound
+$1-\prod_jf_j\leq\sum_j(1-f_j)$ shows that their integrated product is at
+least $1-8\tau=1/2$, even when several factors share a bulk variable.  The
+shrinking bulk-$A$ masses cost at most $(1-2\varepsilon)^6$.  Finally,
+$\alpha^3r_0^2\geq D_0^2\geq E^2$.  Consequently
+\begin{equation}
+ t(H,W_{\rm raw})
+ \geq q_HE^2\varepsilon^3\,
+ \frac12(1-2\varepsilon)^4(1-34\varepsilon)^2,
+ \label{eq:full-axis-positive-subintegral}
+\end{equation}
+where $q_H=1/4,1/4,1/2,1/4$ in Atlas order.
+
+The target bounds used in Corollary~\ref{cor:axis-endpoint-uniform} apply
+with $D$ replaced by $E$.  After removing $E^2\varepsilon^3$, the four
+scalar margins at $\varepsilon=1/100$ are respectively
+\[
+ \frac{6276868289}{125000000000},\quad
+ \frac{6276868289}{125000000000},\quad
+ \frac{3777868289}{62500000000},\quad
+ \frac{1277868289}{125000000000}.
+\]
+Each margin decreases with $\varepsilon$ on $[0,1/100]$, so all are
+positive throughout the claimed range.  This proves the raw branch and the
+theorem.
+\end{proof}
+
+We can now remove the zero-axis restriction completely.  For an arbitrary
+profile put
+\[
+ w(z)=\min\{u(z),v(z)\},\qquad x(z)=\max\{u(z),v(z)\},
+\]
+and abbreviate
+\[
+ m=\int_Sw,\qquad n=\int_S(1-x),\qquad
+ B_1=\int_Suv,\qquad A_2=\int_Su^2v^2.
+\]
+Partition $S_0=\{u\leq v\}$ and $S_1=\{v<u\}$, with masses
+$\alpha,\beta$, and write
+\[
+ m_0=\int_{S_0}u,\quad m_1=\int_{S_1}v,\qquad
+ d_0=\int_{S_0}(1-v),\quad d_1=\int_{S_1}(1-u).
+\]
+Thus $m=m_0+m_1$ and $n=d_0+d_1$.  Zeroing the smaller fibre at every
+point projects the construction to the full axis cone treated above.  If
+$r=\int_{S^2}R$ and $D_0=r-2\beta$, then the same internal-kernel
+decomposition as before gives $D_0\leq\alpha^2r_0$.  Direct density
+integration gives
+\begin{equation}
+ \delta:=p_{\rm raw}-\frac12
+ =\varepsilon(m-n)
+  +\varepsilon^2(D_0+2d_1-2m_0).
+ \label{eq:full-profile-density}
+\end{equation}
+
+\begin{theorem}[Uniform arbitrary-profile small-support theorem]
+\label{thm:full-profile-uniform}
+Let $H$ be Atlas $137,139,145$, or $148$.  In the arbitrary-fibre
+construction of Section~2, allow every profile $(u(z),v(z))\in[0,1]^2$ and
+an arbitrary symmetric exceptional-internal kernel.  If
+$p_{\rm raw}\geq1/2$, leave the graphon unchanged.  Otherwise put the unique
+constant nonnegative repair on $B^2$ which restores density $1/2$.  For
+\[
+ 0<\varepsilon\leq\frac1{10000},
+\]
+the resulting graphon satisfies $t(H,W)\geq\Phi_H(p(W))$.  The radius is
+uniform over all profiles, fibres, and kernels, including data depending on
+$\varepsilon$.
+\end{theorem}
+
+\begin{proof}
+If $\delta\leq0$, then
+$-\delta\leq\varepsilon+2\varepsilon^2$.  The required value on $B^2$ is
+$-4\delta\leq4\varepsilon+8\varepsilon^2<1$, so the repair is feasible.
+Its density is $1/2$, its target is zero, and $t(H,W)\geq0$ proves the claim.
+
+Suppose $\delta>0$.  Since $d_1\leq n$ and $m_0\geq0$,
+\eqref{eq:full-profile-density} implies
+\begin{equation}
+ (1-2\varepsilon)n<m+\varepsilon D_0.
+ \label{eq:full-profile-deficit}
+\end{equation}
+The exact shifted targets are
+\[
+\begin{array}{c|c}
+H&\Phi_H(1/2+\delta)\\ \hline
+137,139&2\delta^3(1+2\delta)^2\\
+145,148&\delta^2(1+2\delta)(1+12\delta^2)/2.
+\end{array}
+\]
+For $0\leq\delta\leq1/2$, both are at most $4\delta^2$: the respective
+differences from $4\delta^2$ factor as
+\begin{equation}
+ -2\delta^2(2\delta-1)(2\delta^2+3\delta+2),
+ \qquad
+ -\frac{\delta^2}{2}(2\delta-1)(12\delta^2+12\delta+7).
+ \label{eq:full-profile-target-bound}
+\end{equation}
+
+The macro-colourings with exactly one exceptional vertex form a
+nonnegative subintegral.  The exact needle identity
+\eqref{eq:axis-needle} and independence of the five bulk variables give
+\begin{equation}
+ t(H,W_{\rm raw})
+ \geq c_H\varepsilon(1-2\varepsilon)^5A_2,
+ \qquad
+ (c_{137},c_{139},c_{145},c_{148})
+ =\left(\frac1{16},\frac1{16},\frac18,\frac1{16}\right).
+ \label{eq:full-profile-one-vertex}
+\end{equation}
+No constancy of a fibre is used: conditional on $z$, its incident bulk
+variables are integrated independently, giving powers of the fibre means.
+
+First suppose
+\begin{equation}
+ m\geq2\varepsilon D_0.
+ \label{eq:full-profile-one-case}
+\end{equation}
+Put
+\[
+ P=\int_S(w+x-1)_+,\qquad N=\int_S(1-w-x)_+.
+\]
+Pointwise,
+\[
+ (w+x-1)_+\leq wx=uv,\qquad
+ w\leq2wx+(1-w-x)_+.
+\]
+For the second inequality, if $w+x\geq1$, then $x\geq1/2$ and hence
+$w\leq2wx$; when $w+x<1$, its difference is
+$(1-x)(1-2w)\geq0$.  Hence
+\[
+ P\leq B_1,\qquad m\leq2B_1+N.
+\]
+Also $P-N=m-n$, while positivity of
+\eqref{eq:full-profile-density} gives
+$N-P<\varepsilon(D_0+2n)$.  Combining these inequalities with
+\eqref{eq:full-profile-deficit} yields
+\[
+ (1-4\varepsilon)m
+ <3(1-2\varepsilon)B_1+\varepsilon D_0.
+\]
+Under \eqref{eq:full-profile-one-case} and
+$\varepsilon\leq1/100$, this implies $m\leq7B_1$.  By
+Cauchy--Schwarz, $B_1^2\leq A_2$.  A second use of
+\eqref{eq:full-profile-deficit} gives
+\[
+ \delta
+ \leq\varepsilon m+\varepsilon^2(D_0+2n)
+ \leq\frac{3\varepsilon m}{2(1-2\varepsilon)}
+ \leq\frac{75}{49}\varepsilon m.
+\]
+Consequently
+\[
+ \Phi_H(1/2+\delta)
+ \leq4\delta^2
+ \leq\frac{22500}{49}\varepsilon^2A_2.
+\]
+After removing $\varepsilon A_2$ from
+\eqref{eq:full-profile-one-vertex}, the smallest scalar margin at
+$\varepsilon=1/10000$ is
+\begin{equation}
+ \frac1{16}(1-2\varepsilon)^5-\frac{22500}{49}\varepsilon
+ =\frac{40471936237751224951}
+        {2450000000000000000000}>0.
+ \label{eq:full-profile-one-slack}
+\end{equation}
+The first term decreases and the subtracted term increases with
+$\varepsilon$, so the margin is positive throughout the asserted interval.
+If $A_2=0$, the same density relations make this case incompatible with
+$\delta>0$; equivalently the bound follows by continuity without division
+by $A_2$.
+
+It remains to suppose $m<2\varepsilon D_0$, so $D_0>0$.  Equation
+\eqref{eq:full-profile-deficit} gives
+\begin{equation}
+ n<\frac{3\varepsilon D_0}{1-2\varepsilon}.
+ \label{eq:full-profile-internal-deficit}
+\end{equation}
+Project each profile to its nearer axis by deleting its smaller fibre.  The
+original graphon dominates this projection pointwise.  On $S_0$, take the
+good set where the rooted deficit of the remaining $B$-fibre is at most
+$1/16$.  By \eqref{eq:full-profile-internal-deficit}, Markov's inequality,
+and $D_0\leq\alpha^2r_0$, its relative bad-set measure is at most
+\[
+ \frac{48\varepsilon\alpha r_0}{1-2\varepsilon}.
+\]
+Deleting bad endpoints from the internal kernel therefore leaves edge mean
+at least
+\[
+ r_0\left(1-\frac{96\varepsilon}{1-2\varepsilon}\right)
+ =r_0\frac{1-98\varepsilon}{1-2\varepsilon}.
+\]
+The same two-edge-path inequality and eight-factor union bound used in
+Theorem~\ref{thm:full-axis-uniform} now give
+\begin{equation}
+ t(H,W_{\rm raw})\geq
+ q_HD_0^2\varepsilon^3
+ \frac12(1-2\varepsilon)^4(1-98\varepsilon)^2,
+ \qquad
+ (q_{137},q_{139},q_{145},q_{148})
+ =\left(\frac14,\frac14,\frac12,\frac14\right).
+ \label{eq:full-profile-internal}
+\end{equation}
+Here $\alpha^3r_0^2\geq D_0^2$, because
+$D_0\leq\alpha^2r_0$ and $\alpha\leq1$.
+Only colourings compatible with the projected axis graphon were retained,
+so pointwise domination justifies this subintegral in the original graphon.
+
+Finally, \eqref{eq:full-profile-density},
+\eqref{eq:full-profile-internal-deficit}, and
+$m<2\varepsilon D_0$ give
+\[
+ \delta<\frac{3\varepsilon^2D_0}{1-2\varepsilon}.
+\]
+Thus the target is at most
+$36\varepsilon^4D_0^2/(1-2\varepsilon)^2$.  After removing
+$\varepsilon^3D_0^2$ from \eqref{eq:full-profile-internal}, the smallest
+scalar margin at $\varepsilon=1/10000$ is
+\begin{equation}
+ \frac18(1-2\varepsilon)^4(1-98\varepsilon)^2
+ -\frac{36\varepsilon}{(1-2\varepsilon)^2}
+ =\frac{371296887848737563915027482401}
+        {3123750125000000000000000000000}>0.
+ \label{eq:full-profile-internal-slack}
+\end{equation}
+Again the first term decreases and the subtracted term increases, so the
+margin is positive on the whole interval.  This proves the second case.
+\end{proof}
+
+Thus the complete single-exceptional-set small-support model is settled for
+these four rows, including arbitrary two-sided profiles approaching either
+zero axis at any rate.  This remains a fixed-representative hierarchical
+statement and is not a cut-distance theorem.
+
+\begin{remark}[Higher-order mean contraction is invalid]
+At the endpoint $x=1$, the exceptional-internal kernel is invisible to
+\eqref{eq:axis-integrated}, but it cannot be replaced by its mean at cubic
+order.  Give each endpoint type mass $\varepsilon/2$, split the first type
+into two equal atoms, set the second-type and cross-type kernels to zero, and
+put the exact repair $7\varepsilon^2/2$ on $B^2$.  The two first-type kernels
+\[
+R_{\rm const}\equiv\frac12,\qquad
+ R_{\rm var}=\begin{pmatrix}1&1/2\\1/2&0\end{pmatrix}
+\]
+have the same mean.  Nevertheless their exact cubic coefficients are
+\[
+\begin{array}{c|cc}
+H&R_{\rm const}&R_{\rm var}\\ \hline
+137,139&5/512&27/2048\\
+145&1/64&5/256\\
+148&1/128&5/512.
+\end{array}
+\]
+Thus a higher-order proof must retain rooted-degree and mixed internal
+moments.  This is a failed contraction, not a negative direction; all eight
+displayed coefficients are positive.  The full warning is recorded as
+Attempt 28 in \path{FAILED_PROOF_ATTEMPTS.md}.
+\end{remark}
+
+\section{Exact boundary: Atlas 152}
+
+The same pointwise method is false for the sixth flat row, Atlas 152.
+For mutual cell $r=0$, profiles
+\[
+ (u,v)=\left(\frac16,1\right),\qquad
+ (u',v')=\left(\frac56,\frac23\right)
+\]
+and indicator fibres with $h_0=0$, $h_1=2/3$ give exactly
+\[
+ K_{152,0}(z,z')=-\frac1{324}.
+\]
+This is only an off-diagonal failure.  The full two-profile matrix is
+\[
+ \begin{pmatrix}5/288&-1/324\\-1/324&2/9\end{pmatrix},
+ \qquad \det=\frac{101}{26244}>0.
+\]
+Thus it is not a negative quadratic direction.  Atlas 152 requires an
+integrated copositivity or Gram-moment inequality; pointwise pair-kernel
+nonnegativity cannot prove it.
+
+For reference, the hard integrated inequality has a compact exact
+Hilbert-space form.  Write $\mathbb E$ for integration over the normalized
+exceptional space and set
+\[
+\begin{array}{ll}
+ P(a,a')=\mathbb E[vF(a)F(a')],&
+ Q(b,b')=\mathbb E[uG(b)G(b')],\\
+ X(a)=\mathbb E[uvF(a)],&Y(a)=\mathbb E[vF(a)],\\
+ Z(b)=\mathbb E[uvG(b)],&T(b)=\mathbb E[uG(b)],\\
+ L(a,b)=\mathbb E[uF(a)G(b)],&
+ M(a,b)=\mathbb E[vF(a)G(b)],
+\end{array}
+\]
+and
+\[
+ C=\mathbb E[uv],\qquad
+ \delta=\mathbb E[u+v-1].
+\]
+Direct integration of the exact pair kernel at the worst mutual value
+$R=0$ gives
+\begin{equation}
+ 8[\varepsilon^2]\Gamma_{152}(W_\varepsilon)
+ =\|P\|_2^2+\|Q\|_2^2
+ +2\langle X,Y\rangle+2\langle Z,T\rangle
+ +2\langle L,M\rangle+C^2-4\delta^2.
+ \label{eq:atlas152-hilbert}
+\end{equation}
+An arbitrary internal kernel only adds
+$\frac14\int R(z,z')u(z)v(z)u(z')v(z')\,dz\,dz'\geq0$ to the quadratic
+coefficient, so \eqref{eq:atlas152-hilbert} is the exact hard case.
+
+There is a useful joint factorization which shows exactly what geometry is
+still missing.  Put
+\[
+ h_F(z,z')=\int_A F_zF_{z'},\qquad
+ h_G(z,z')=\int_B G_zG_{z'}
+\]
+and define the generally nonsymmetric nonnegative kernel
+\[
+ \mathcal A(z,z')=
+ v(z)h_F(z,z')+u(z)h_G(z,z')+u(z)v(z).
+\]
+Expanding the product gives the exact identity
+\begin{equation}
+ \|P\|_2^2+\|Q\|_2^2+2\langle X,Y\rangle
+ +2\langle Z,T\rangle+2\langle L,M\rangle+C^2
+ =\int_{S^2}\mathcal A(z,z')\mathcal A(z',z)\,dz\,dz'.
+ \label{eq:joint-factor}
+\end{equation}
+Thus the positive terms are one structured joint kernel, not six unrelated
+moments.
+
+A tempting completion of this observation is nevertheless false.  With
+$A=\mathbb E[u^2v]$ and $B=\mathbb E[uv^2]$, the integral of
+$\mathcal A$ is $A+B+C$.  Moreover
+\[
+ uv(u+v+1)\geq2(u+v-1)\qquad (u+v\geq1).
+\]
+For example, after homogenizing on the triangle with vertices
+$(1,0),(0,1),(1,1)$, the six degree-three barycentric coefficients of the
+difference are $(2,2,3,1,1,1)$.  Hence $A+B+C\geq2\delta$.  It would
+therefore suffice to prove
+\begin{equation}
+ \int\mathcal A(z,z')\mathcal A(z',z)\,dz\,dz'
+ \geq(A+B+C)^2.
+ \label{eq:false-joint-contraction}
+\end{equation}
+But \eqref{eq:false-joint-contraction} is not a valid inequality even for
+the structured kernel above.  Give $S$ two atoms of mass $1/2$, $A$ two
+atoms of mass $1/2$, and $B$ one atom.  Take
+\[
+ F_1=(0,1/3),\quad F_2=(1,1/3),\qquad
+ G_1=1,\quad G_2=1/3.
+\]
+Then
+\[
+ (u_1,v_1)=(1/6,1),\qquad (u_2,v_2)=(2/3,1/3),
+\]
+so both profiles lie in $\Delta_+$.  Exact evaluation gives
+\[
+ A=\frac{19}{216},\quad B=\frac{13}{108},\quad C=\frac7{36},
+ \quad \delta=\frac1{12},
+\]
+and
+\[
+ \int\mathcal A(z,z')\mathcal A(z',z)=\frac{1867}{11664},
+ \qquad
+ \frac{1867}{11664}-(A+B+C)^2=-\frac{101}{46656}.
+\]
+This does not give a negative Atlas 152 direction: the true remainder is
+\[
+ \frac{1867}{11664}-4\delta^2=\frac{1543}{11664}>0.
+\]
+It does show that even retaining the joint factorization is insufficient if
+one then applies an unrestricted ``trace versus total mass'' contraction.
+The required lower bound must depend directly on the density displacement
+$\delta$, and must exploit more than the total mass of $\mathcal A$.
+
+A pointwise symmetrization of the two orientations also loses essential
+information.  Indeed, it would be enough to prove
+\begin{equation}
+ \int\sqrt{\mathcal A(z,z')\mathcal A(z',z)}\,dz\,dz'
+ \geq2\delta,
+ \label{eq:false-geometric-contraction}
+\end{equation}
+because Cauchy--Schwarz would then give the desired lower bound for
+$\int\mathcal A\mathcal A^T$.  But
+\eqref{eq:false-geometric-contraction} is false even for exact admissible
+fibres.  Give $S$, $A$, and $B$ two equal atoms each and take
+\[
+ F_1=(0,0),\quad F_2=(0,1/2),\qquad
+ G_1=(1,1),\quad G_2=(1,1).
+\]
+The mean profiles are $(0,1)$ and $(1/4,1)$, and
+\[
+ \bigl(\mathcal A(i,j)\bigr)_{i,j=1}^2
+ =\begin{pmatrix}0&0\\[2pt]1/2&5/8\end{pmatrix},
+ \qquad \delta=\frac18.
+\]
+Thus the left side of \eqref{eq:false-geometric-contraction} is $5/32$,
+short of $2\delta=1/4$ by $3/32$.  Nevertheless the actual positive joint
+integral is $25/256$, so the true eightfold remainder is
+\[
+ \frac{25}{256}-4\delta^2=\frac9{256}>0.
+\]
+This second obstruction rules out a symmetrized scalar contraction, not the
+structured Atlas 152 functional itself.
+
+Nor may the overlap variables be minimized independently.  For the two
+profiles
+\[
+ (u_1,v_1)=(49/50,2/5),\qquad (u_2,v_2)=(1/50,1),
+\]
+substituting the individually sharp diagonal bounds
+$h_F(i,i)\geq u_i^2$, $h_G(i,i)\geq v_i^2$ and the off-diagonal Frechet
+bounds produces
+\[
+ M_{\rm rel}=
+ \begin{pmatrix}
+ 11438061/312500000&-33/31250\\
+ -33/31250&201/50000000
+ \end{pmatrix},
+ \qquad
+ \det M_{\rm rel}=-\frac{15124949739}{15625000000000000}<0.
+\]
+This relaxed matrix is not copositive.  However, the bounds used in it are
+not jointly realizable.  Complementary indicator $F$ fibres attain the
+off-diagonal overlap zero, but then their diagonal overlaps are $u_i$, not
+$u_i^2$.  Together with constant $G$ fibres, the resulting compatible
+matrix is
+\[
+ M_{\rm comp}=
+ \begin{pmatrix}
+ 120119/3125000&-33/31250\\
+ -33/31250&1/4000
+ \end{pmatrix},
+ \qquad
+ \det M_{\rm comp}=\frac{530899}{62500000000}>0.
+\]
+Thus this is not a negative direction.  It proves instead that common-fibre
+Gram consistency is essential and cannot be replaced by independent
+pairwise overlap intervals.
+
+\subsection{Every two-profile indicator mixture is nonnegative}
+
+The preceding compatible example is a special case of a complete exact
+two-profile theorem.  Suppose the exceptional space has at most two profile
+classes and, in each class, both fibres are indicators of measurable sets.
+Write their mean profiles as
+\[
+ (u,v),(u',v')\in\Delta_+,
+\]
+their mixed intersections as $h_F,h_G$, and let $K$ be the mutual-cell-zero
+pair kernel.  On a diagonal, the indicator identities
+$h_F=u$, $h_G=v$ give
+\begin{equation}
+ D(u,v)=
+ \frac{9u^2v^2-4(u+v-1)^2}{8}
+ =\frac{(3uv-2u-2v+2)(3uv+2u+2v-2)}8.
+ \label{eq:indicator-diagonal}
+\end{equation}
+Since $uv\geq u+v-1\geq0$, one has
+$D(u,v)\geq5(u+v-1)^2/8\geq0$.
+
+Every positive-degree coefficient of the mixed kernel in $h_F,h_G$ is
+nonnegative.  Hence its smallest feasible value $K_{\min}$ is obtained at
+\[
+ h_F=\max\{0,u+u'-1\},\qquad
+ h_G=\max\{0,v+v'-1\}.
+\]
+The two Fr\'echet switches cut $\Delta_+^2$ into the same six exact
+four-simplices used above.  On each simplex, pull back the degree-eight
+determinant polynomial
+\begin{equation}
+ D(u,v)D(u',v')-K_{\min}(u,v,u',v')^2.
+ \label{eq:indicator-determinant}
+\end{equation}
+After homogeneous barycentric substitution, every coefficient is
+nonnegative without degree elevation.  The exact signatures
+\[
+\begin{array}{c|ccc}
+\text{simplex}&\text{degree}&\text{nonzero coefficients}&
+ \text{least positive coefficient}\\ \hline
+1&8&365&9/64\\
+2&8&365&9/64\\
+3&8&410&9/64\\
+4&8&474&9/64\\
+5&8&244&21/64\\
+6&8&244&21/64
+\end{array}
+\]
+are independent exact certificates of \eqref{eq:indicator-determinant}.
+
+\begin{theorem}[Atlas 152, two indicator-fibre profiles]
+\label{thm:atlas152-two-indicator}
+On the flat threshold face of Atlas $152$, the complete quadratic
+coefficient is nonnegative for every mixture supported on at most two
+profiles whose two exceptional-to-bulk fibres are indicators.  The two
+profiles, their masses, their set intersections, and the
+exceptional--exceptional kernel are arbitrary subject only to feasibility.
+\end{theorem}
+
+\begin{proof}
+Let the two masses be $s,t\geq0$.  If the actual mixed entry $K$ is
+nonnegative, then
+\[
+ s^2D(u,v)+2stK+t^2D(u',v')\geq0.
+\]
+If $K<0$, overlap monotonicity gives
+$K_{\min}\leq K<0$, hence $K^2\leq K_{\min}^2$.
+Equation~\eqref{eq:indicator-determinant} then makes the two-by-two matrix
+positive semidefinite.  Finally, a nonzero exceptional--exceptional kernel
+adds
+\[
+ \frac14\int R(z,z')u(z)v(z)u(z')v(z')\,dz\,dz'\geq0.
+\]
+\end{proof}
+
+This theorem supplies directions outside both the coarse-profile and
+comonotone cones.  In particular, the two indicator sets in either bulk part
+may cross arbitrarily.  Thus any unresolved Atlas $152$ quadratic direction
+must use at least three profile classes or a genuinely fractional fibre in
+at least one of the two bulk parts.
+
+\subsection{Arbitrary mixtures on the two profile axes}
+
+There is also a profile-count-free theorem.  First observe that profiles of
+zero density displacement may always be discarded.  Indeed, put
+$d(z)=u(z)+v(z)-1$ and let $E_+=\{d>0\}$ have mass $\alpha$.  If
+$\alpha=0$, then $\delta=0$ and the unpaired joint-kernel integral is already
+nonnegative.  Otherwise, normalize the measure on $E_+$.  Since
+$\mathcal A(z,z')\mathcal A(z',z)\geq0$, deleting every pair meeting
+$E_+^c$ can only lower that integral, while
+$\delta=\alpha\delta_+$.  Thus any lower bound on the normalized positive
+part scales by the same factor $\alpha^2$ as the required $4\delta^2$.
+
+Now suppose each positive-displacement profile lies on
+\[
+ \{u=1\}\cup\{v=1\}.
+\]
+If $u=1$, then its first fibre equals one almost everywhere; if $v=1$, the
+same is true of its second fibre.  For two profiles $(1,x),(1,y)$ on the
+first axis, write $h\geq0$ for the overlap of their second fibres.  Direct
+substitution into the exact mutual-cell-zero pair kernel gives
+\begin{equation}
+ K_{152,0}\bigl((1,x),(1,y)\bigr)
+ =\frac{h(h+2x+2y)}8\geq0.
+ \label{eq:atlas152-same-axis}
+\end{equation}
+The other axis is symmetric.  Across the axes, for profiles $(1,x)$ and
+$(y,1)$, the forced overlaps are $h_F=y$ and $h_G=x$, and hence
+\begin{equation}
+ K_{152,0}\bigl((1,x),(y,1)\bigr)
+ =\frac{xy(xy+2x+2y)}8\geq0.
+ \label{eq:atlas152-cross-axis}
+\end{equation}
+
+\begin{theorem}[Atlas 152, arbitrary axis-profile mixtures]
+\label{thm:atlas152-axis}
+On the flat threshold face of Atlas $152$, the complete quadratic
+coefficient is nonnegative whenever almost every positive-displacement
+profile satisfies $u=1$ or $v=1$.  The profile distribution, the number of
+profile classes, the unconstrained fibre on each axis, all fibre crossings,
+and the exceptional--exceptional kernel are arbitrary.
+\end{theorem}
+
+\begin{proof}
+Discard zero-displacement profiles by the preceding scaling argument.
+Equations~\eqref{eq:atlas152-same-axis} and
+\eqref{eq:atlas152-cross-axis} make the mutual-cell-zero pair kernel
+pointwise nonnegative on the remaining support.  Integrate it.  As before,
+the exceptional--exceptional kernel contributes only a nonnegative term.
+\end{proof}
+
+Consequently a still-unresolved indicator construction must not only use at
+least three crossing profiles; a set of positive exceptional mass must also
+carry strict-interior profiles
+\[
+ u<1,\qquad v<1,\qquad u+v>1.
+\]
+
+\subsection{Arbitrary fibres over a chain of mean profiles}
+
+The profile-count restriction can be removed in a different direction.  Say
+that the mean-profile support is a \emph{coordinatewise chain} if almost every
+pair is comparable in the product order.  By symmetry, write a comparable
+pair as
+\[
+ u\leq u',\qquad v\leq v'.
+\]
+Every positive-degree coefficient of the Atlas $152$ pair kernel in
+$h_F,h_G$ is nonnegative.  It therefore suffices to use the two sharp lower
+overlaps.
+
+There is a compact exact certificate on the complete comparable-profile
+domain.  Introduce deficit and increment coordinates
+\[
+ u=1-d-y,\qquad v=1-c-x,
+ \qquad u'=1-d,\qquad v'=1-c.
+\]
+The domain is the standard four-simplex
+\begin{equation}
+ c,d,x,y\geq0,\qquad c+d+x+y\leq1,
+ \label{eq:comparable-simplex}
+\end{equation}
+and the lower overlaps are
+\[
+ h_F=(1-2d-y)_+,\qquad h_G=(1-2c-x)_+.
+\]
+The region where both displayed affine forms are nonnegative has the eight
+vertices
+\[
+\begin{array}{c|c@{\qquad}c|c@{\qquad}c}
+0&(0,0,0,0)&1&(0,0,0,1)\\
+2&(0,0,1,0)&3&(0,1/2,0,0)\\
+4&(0,1/2,1/2,0)&5&(1/2,0,0,0)\\
+6&(1/2,0,0,1/2)&7&(1/2,1/2,0,0).
+\end{array}
+\]
+It is triangulated by the seven four-simplices
+\[
+13467,\quad01246,\quad01346,\quad24567,\quad02456,\quad34567,\quad03456,
+\]
+where a string lists its five vertex labels.  The side on which $h_F$ is
+positive and $h_G=0$ is the simplex with vertices
+\[
+ (0,0,1,0),(1,0,0,0),(1/2,0,0,0),
+ (1/2,0,0,1/2),(1/2,1/2,0,0),
+\]
+and the other side is obtained by $(c,d,x,y)\mapsto(d,c,y,x)$.  The region
+where both lower overlaps vanish is only the boundary point
+$(1/2,1/2,0,0)$.
+
+For completeness, the base simplex has volume $1/24$, the two side
+simplices have volume $1/192$ each, and the seven central simplex volumes
+sum to $1/32$; hence they sum to $1/24$.  There is also an exact
+face-to-face certificate.  Convert each simplex to its five rational
+barycentric half-spaces, intersect every pair by enumerating four active
+facets, and compare every resulting intersection vertex with the convex
+hull of the vertices shared by that pair.  In all $36$ pairs the two sets
+agree.  Classified by the number of shared vertices, the incidence counts
+are
+\[
+ 1:3,\qquad 2:9,\qquad 3:13,\qquad 4:11.
+\]
+Thus all relative interiors are disjoint.  Since every simplex lies in
+\eqref{eq:comparable-simplex} and their exact volumes sum to its volume,
+they form a partition; the remaining faces follow by continuity.
+
+On each simplex substitute the appropriate lower-overlap formula into
+$K_{152,0}$ and homogenize in its five barycentric coordinates.  Every
+coefficient is nonnegative without degree elevation.  In the order of the
+seven central simplices followed by the two sides, the exact signatures are
+\[
+\begin{array}{c|ccc}
+&\text{degree}&\text{nonzero coefficients}&\text{least positive coefficient}\\ \hline
+13467&4&65&1/128\\
+01246&4&68&3/64\\
+01346&4&65&1/32\\
+24567&4&65&1/128\\
+02456&4&65&1/32\\
+34567&4&68&1/128\\
+03456&4&68&1/32\\
+\text{first side}&4&53&1/128\\
+\text{second side}&4&53&1/128
+\end{array}
+\]
+At the remaining boundary point the value is $1/128$.
+
+\begin{theorem}[Atlas 152, comparable mean profiles]
+\label{thm:atlas152-comparable-means}
+On the flat threshold face of Atlas $152$, the complete quadratic
+coefficient is nonnegative whenever the mean profiles form a coordinatewise
+chain.  The profile distribution and the fibres themselves are arbitrary;
+in particular, the fibres may be fractional and may cross without any
+nesting assumption.
+\end{theorem}
+
+\begin{proof}
+For almost every pair of exceptional points, orient the two comparable mean
+profiles as above.  Overlap monotonicity and the nine exact certificates give
+$K_{152,0}(z,z')\geq0$.  Integrate this pointwise inequality.  The
+exceptional--exceptional correction is nonnegative.
+\end{proof}
+
+Thus a residual Atlas $152$ obstruction must give positive product measure
+to incomparable profile pairs, equivalently pairs for which
+$(u-u')(v-v')<0$.
+
+\subsection{Arbitrary fibres at one density displacement}
+
+A second pointwise theorem covers the transverse antichain direction.  Fix
+$t\in[0,1]$ and suppose every mean profile satisfies
+\[
+ u+v-1=t.
+\]
+For a pair, assume $u\leq u'$ and write
+\[
+ u=t+a,\qquad v=1-a,\qquad
+ u'=t+a+b,\qquad v'=1-a-b.
+\]
+The full domain is the standard three-simplex
+\begin{equation}
+ t,a,b\geq0,\qquad t+a+b\leq1,
+ \label{eq:equal-displacement-simplex}
+\end{equation}
+and the lower overlaps are
+\[
+ h_F=(2t+2a+b-1)_+,\qquad
+ h_G=(1-2a-b)_+.
+\]
+The two switch planes partition \eqref{eq:equal-displacement-simplex} into
+four tetrahedra.  In order from the $h_F=0$ side through the two central
+tetrahedra to the $h_G=0$ side, their vertices are
+\[
+\begin{array}{c|l}
+1&(0,0,0),(0,0,1),(0,1/2,0),(1/2,0,0)\\
+2&(0,0,1),(1,0,0),(1/2,0,0),(1/2,1/2,0)\\
+3&(0,0,1),(0,1/2,0),(1/2,0,0),(1/2,1/2,0)\\
+4&(0,0,1),(0,1,0),(0,1/2,0),(1/2,1/2,0).
+\end{array}
+\]
+Each has exact volume $1/24$.  Exact rational facet enumeration checks all
+six pairwise intersections: three pairs share exactly two vertices and
+three share exactly three, and in every case the intersection is precisely
+the convex hull of those common vertices.  Hence the interiors are disjoint,
+and their total volume $1/6$ proves that they fill the base simplex.
+Pulling back the appropriate lower-envelope pair kernel gives the exact
+coefficient signatures
+\[
+ (4,22,1/128),\quad(4,26,1/16),\quad
+ (4,27,1/128),\quad(4,22,1/128).
+\]
+Thus every coefficient is nonnegative without degree elevation.
+
+\begin{theorem}[Atlas 152, equal displacement]
+\label{thm:atlas152-equal-displacement}
+On the flat threshold face of Atlas $152$, the complete quadratic
+coefficient is nonnegative whenever $u(z)+v(z)-1$ is almost everywhere
+constant.  The profile distribution and the fibres are arbitrary; in
+particular, the mean profiles may traverse the complete decreasing line
+segment and the fractional fibres may cross arbitrarily.
+\end{theorem}
+
+\begin{proof}
+Orient each pair by its first coordinate.  Overlap monotonicity and the four
+simplex certificates prove its mutual-cell-zero kernel nonnegative.  Integrate
+and add the nonnegative exceptional--exceptional correction.
+\end{proof}
+
+Consequently a residual obstruction must combine incomparable mean profiles
+with genuinely varying density displacement.
+
+\subsection{Arbitrary fibres over one mean profile}
+
+Fractional fibres are also harmless when their two means do not vary with
+the exceptional point.  Suppose $u(z)=u$ and $v(z)=v$ almost everywhere,
+while the functions $F_z$ and $G_z$ are otherwise arbitrary.  Then the joint
+kernel is symmetric:
+\[
+ \mathcal A(z,z')=v h_F(z,z')+u h_G(z,z')+uv
+                 =\mathcal A(z',z).
+\]
+Moreover, with $\overline F=\mathbb E_zF_z$ and
+$\overline G=\mathbb E_zG_z$,
+\[
+ \mathbb E_{z,z'}h_F(z,z')=\|\overline F\|_2^2\geq u^2,
+ \qquad
+ \mathbb E_{z,z'}h_G(z,z')=\|\overline G\|_2^2\geq v^2.
+\]
+Writing $d=u+v-1$, Jensen therefore gives
+\begin{align*}
+ \int\mathcal A(z,z')\mathcal A(z',z)\,dz\,dz'
+ &=\mathbb E\mathcal A^2\\
+ &\geq(\mathbb E\mathcal A)^2\\
+ &\geq\bigl(uv(u+v+1)\bigr)^2\\
+ &\geq4d^2,
+\end{align*}
+where the final unsquared slack is exactly
+\[
+ uv(u+v+1)-2d
+ =uvd+2(1-u)(1-v)\geq0.
+\]
+
+\begin{theorem}[Atlas 152, one mean profile with arbitrary fibres]
+\label{thm:atlas152-single-mean}
+On the flat threshold face of Atlas $152$, the complete quadratic
+coefficient is nonnegative when the exceptional-to-bulk fibre means are one
+fixed profile $(u,v)\in\Delta_+$.  The individual fibres may be arbitrary
+$[0,1]$-valued measurable functions and may vary and cross without
+restriction over the exceptional space.
+\end{theorem}
+
+The exceptional--exceptional correction is again nonnegative, so the
+preceding calculation proves the theorem.  In particular, a residual
+fractional-fibre construction must have nonzero mean-profile dispersion.
+
+The argument is quantitatively stable under dispersion of the mean profile.
+Let
+\[
+ \bar u=\mathbb E u(z),\qquad
+ \bar v=\mathbb E v(z),\qquad
+ \bar d=\bar u+\bar v-1,
+\]
+and define the exact fixed-profile margin
+\begin{equation}
+ \mathcal G(\bar u,\bar v)
+ =\bigl(\bar u\bar v(\bar u+\bar v+1)\bigr)^2-4\bar d^2.
+ \label{eq:atlas152-profile-margin}
+\end{equation}
+It is nonnegative on $\Delta_+$, because it is the product of the
+nonnegative sum and difference whose difference factor is
+\[
+ \bar u\bar v\bar d+2(1-\bar u)(1-\bar v).
+\]
+It vanishes only at $(\bar u,\bar v)=(1,0),(0,1)$.
+
+Keep the actual overlap kernels but freeze only the three scalar
+coefficients:
+\[
+ \mathcal A_0(z,z')
+ =\bar v h_F(z,z')+\bar u h_G(z,z')+\bar u\bar v.
+\]
+This kernel is symmetric.  Put
+\[
+ e_u(z)=u(z)-\bar u,
+ \qquad
+ e_v(z)=v(z)-\bar v.
+\]
+Since every scalar and overlap lies in $[0,1]$,
+\[
+ |\mathcal A(z,z')-\mathcal A_0(z,z')|
+ \leq2\bigl(|e_u(z)|+|e_v(z)|\bigr),
+ \qquad 0\leq\mathcal A,\mathcal A_0\leq3.
+\]
+Applying this estimate in the two orientations and integrating yields
+\begin{equation}
+ \int\mathcal A(z,z')\mathcal A(z',z)
+ \geq\int\mathcal A_0(z,z')^2
+ -12\bigl(\mathbb E|e_u|+\mathbb E|e_v|\bigr).
+ \label{eq:atlas152-dispersion-error}
+\end{equation}
+The same Gram-marginal and Jensen calculation as above gives
+\[
+ \int\mathcal A_0^2
+ \geq\bigl(\bar u\bar v(\bar u+\bar v+1)\bigr)^2.
+\]
+Since the aggregate displacement is exactly $\bar d$, we obtain the
+following uniform statement.
+
+\begin{corollary}[Atlas 152, dispersed mean profiles]
+\label{cor:atlas152-profile-concentration}
+Let
+\[
+ \sigma_u=\bigl(\mathbb E e_u^2\bigr)^{1/2},
+ \qquad
+ \sigma_v=\bigl(\mathbb E e_v^2\bigr)^{1/2}.
+\]
+The complete quadratic coefficient is nonnegative whenever
+\[
+ 12\bigl(\mathbb E|e_u|+\mathbb E|e_v|\bigr)
+ \leq\mathcal G(\bar u,\bar v).
+\]
+The fibres themselves remain arbitrary measurable $[0,1]$-valued functions.
+By Cauchy--Schwarz, the simpler sufficient condition
+\[
+ 12(\sigma_u+\sigma_v)\leq\mathcal G(\bar u,\bar v)
+\]
+also applies.  In particular, if
+\begin{equation}
+ |u(z)-\bar u|\leq\varepsilon,
+ \qquad
+ |v(z)-\bar v|\leq\varepsilon
+ \quad\text{almost everywhere},
+ \label{eq:atlas152-profile-concentration}
+\end{equation}
+then it suffices that
+\[
+ \varepsilon\leq\frac{\mathcal G(\bar u,\bar v)}{24}.
+\]
+Thus every average profile other than $(1,0),(0,1)$ has explicit positive
+$L^1$-dispersion, $L^2$-dispersion, and $L^\infty$-concentration
+neighbourhoods containing no Atlas $152$ quadratic obstruction.
+\end{corollary}
+
+\subsection{A stronger $C$-contraction is false}
+
+The joint representation and the elementary inequality
+$uv\geq u+v-1$ suggest trying to prove
+\[
+ \int\mathcal A(z,z')\mathcal A(z',z)\,dz\,dz'
+ \stackrel{?}{\geq}4C^2,
+ \qquad C=\mathbb E[uv].
+\]
+This would be stronger than the needed $4\delta^2$ bound.  It is false even
+on the boundary $\delta=0$ with two exact compatible profiles.
+
+Give the two exceptional classes masses $3/5,2/5$.  On the first bulk
+space take constant fibres
+\[
+ F_1\equiv\frac9{10},\qquad F_2\equiv\frac14.
+\]
+On a four-atom second bulk space take
+\[
+ G_1=(2/5,0,0,0),\qquad G_2=(0,1,1,1).
+\]
+The mean profiles are $(9/10,1/10)$ and $(1/4,3/4)$, so each has zero
+density displacement.  The exact joint-kernel matrix is
+\[
+ \bigl(\mathcal A(i,j)\bigr)_{i,j=1}^2
+ =
+ \begin{pmatrix}
+ 207/1000&9/80\\
+ 57/160&27/64
+ \end{pmatrix}.
+\]
+Consequently
+\[
+ C=\frac{129}{1000},\qquad
+ \int\mathcal A\mathcal A^T=\frac{25255881}{400000000},
+\]
+and
+\[
+ \frac{25255881}{400000000}-4C^2
+ =-\frac{1369719}{400000000}<0.
+\]
+The true Atlas $152$ remainder is nevertheless
+$25255881/400000000>0$, because $\delta=0$.  Thus replacing the density
+displacement by the larger moment $C$ loses precisely the boundary geometry
+that the desired inequality may exploit.
+
+There is a broad compatible subcone on which the desired pointwise estimate
+does hold.  Suppose both fibre families are comonotone: after
+measure-preserving parametrizations one may write
+\[
+ F_z(a)=\mathbf1_{a\leq u(z)},
+ \qquad
+ G_z(b)=\mathbf1_{b\leq v(z)}.
+\]
+Then
+\[
+ h_F(z,z')=\min\{u,u'\},\qquad
+ h_G(z,z')=\min\{v,v'\}.
+\]
+For fixed $(u,v)\in\Delta_+$, the function
+\[
+ (u',v')\longmapsto
+ v\min\{u,u'\}+u\min\{v,v'\}
+\]
+is concave on the upper profile triangle.  Its minimum occurs at a vertex.
+At the three vertices, its values are respectively
+\[
+ uv,\qquad uv,\qquad 2uv,
+\]
+and
+\[
+ uv-(u+v-1)=(1-u)(1-v)\geq0.
+\]
+Consequently
+\[
+ \mathcal A(z,z')
+ \geq uv+(u+v-1)\geq2(u+v-1).
+\]
+The same argument in the reverse orientation gives
+$\mathcal A(z',z)\geq2(u'+v'-1)$.  Therefore the Atlas $152$ pair kernel is
+pointwise nonnegative throughout the comonotone-fibre cone.  Together with
+Theorems~\ref{thm:atlas152-two-indicator}, \ref{thm:atlas152-axis},
+\ref{thm:atlas152-comparable-means},
+\ref{thm:atlas152-equal-displacement}, and~\ref{thm:atlas152-single-mean},
+this leaves only mixtures with a positive mass of strict-interior profiles,
+sufficiently large mean-profile dispersion, a positive measure of
+incomparable profile pairs, and genuinely varying density displacement; in
+the indicator case at least three profiles must cross.
+
+The most immediate contraction estimate does not suffice.  If
+$A=\mathbb E[u^2v]$ and $B=\mathbb E[uv^2]$, then $P$ has marginal $X$,
+$X\leq Y$, and their $B$-analogues give
+\[
+ \|P\|_2^2+2\langle X,Y\rangle\geq3A^2,
+ \qquad
+ \|Q\|_2^2+2\langle Z,T\rangle\geq3B^2.
+\]
+Also, with $J=\mathbb E[FG]$, one has $0\leq L,M\leq J$ and
+$L+M\geq J$.  Pointwise normalization shows
+$LM\geq(L+M-J)^2$, hence
+\[
+ \langle L,M\rangle\geq(A+B-C)^2.
+\]
+The resulting scalar lower bound is
+\[
+ 3A^2+3B^2+2(A+B-C)^2+C^2-4\delta^2.
+\]
+It is not nonnegative: for equal masses on profiles
+$(1,\eta)$ and $(\eta,1)$ it equals
+\[
+ \eta^2\left(-\frac32+3\eta+\frac72\eta^2\right),
+\]
+which is negative for small positive $\eta$.  Therefore any successful proof
+of \eqref{eq:atlas152-hilbert} must retain more of the joint geometry of the
+six functions; separate marginal contractions lose essential information.
+
+\section{The residual cone contains an exact counterexample}
+
+The preceding reductions are sharp.  Take two exceptional profiles of
+masses $1/10$ and $9/10$,
+\[
+ (u_1,v_1)=\left(\frac{624}{625},\frac1{16}\right),
+ \qquad
+ (u_2,v_2)=\left(\frac1{625},1\right).
+\]
+Let their first-bulk fibres be complementary indicators of sets of measures
+$624/625$ and $1/625$, and let their second-bulk fibres be the constants
+$1/16$ and $1$.  Then
+\[
+ (h_F(i,j))=\begin{pmatrix}624/625&0\\0&1/625\end{pmatrix},
+ \qquad
+ (h_G(i,j))=\begin{pmatrix}1/256&1/16\\1/16&1\end{pmatrix}.
+\]
+The density displacements are $609/10000$ and $1/625$.  Substitution into
+the exact Atlas $152$ kernel gives the eightfold quadratic matrix
+\begin{equation}
+ M=\begin{pmatrix}
+ 34569/20000000&-111/625000\\
+ -111/625000&1/78125
+ \end{pmatrix},
+ \qquad
+ \det M=-\frac{2943}{312500000000}<0,
+ \label{eq:atlas152-negative-matrix}
+\end{equation}
+and
+\[
+ (1/10,9/10)M(1/10,9/10)^{\mathsf T}
+ =-\frac{8631}{2000000000}<0.
+\]
+
+The independent note
+\path{notes/atlas_152_fractional_fibre_local_counterexample.tex} realizes
+these fibres as a five-step graphon and evaluates the complete gap at
+$\varepsilon=1/3000$.  Its exact density is
+$18750093281/37500000000>1/2$, and its exact gap is strictly negative.
+Thus Atlas $152$ changes from open to negative; no asymptotic remainder is
+used in the accepted certificate.
+
+\section{Hidden-assumption and limitation audit}
+
+The proof uses only finite macro-colouring expansion, Fubini for bounded
+functions, the elementary Frechet bounds, and exact polynomial certificates.
+It assumes neither regularity nor a finite-step representation of the
+graphon.  Shared-neighbour overlaps are retained explicitly and are not
+replaced by products of their means.  There is no division, conditioning,
+or zero-denominator case.  A common repair is applied only after aggregating
+all exceptional profiles.
+
+The positive theorems control the complete quadratic coefficient on the five
+stated flat faces and the complete zero-axis mixture cone for four further
+rows.  For those four rows they additionally give the exact
+arbitrary-kernel endpoint cubic, a uniform theorem on the whole
+arbitrary-fibre axis cone, and finally a common radius $1/10000$ for every
+measurable two-sided profile.  Thus no scale-dependent profile or kernel
+regime remains in this single-exceptional-set model.  This is not a theorem
+for several independent exceptional sets or a cut-distance neighbourhood.
+The separate two-defect-colouring theorem supplies a uniform $L^\infty$
+neighbourhood for the four rows, but it does not subsume the present
+order-one small-support statement.  For Atlas $152$, the two-profile indicator,
+axis-profile, comparable-mean, equal-displacement, bounded-dispersion, and
+comonotone subcones remain valid positive statements, but the complementary
+fractional-fibre cone contains the exact counterexample above.  No tensor or
+unrelated negative construction is used.
+
+Run
+\begin{verbatim}
+python codes/needle_higher_order_tests.py
+\end{verbatim}
+from the repository root for the bounded-memory critical-axis audit used by
+the new theorems.  The historical exhaustive suite is available explicitly
+as
+\begin{verbatim}
+python codes/needle_higher_order_tests.py --full
+\end{verbatim}
+but is not the default because it constructs $12608$ unrelated symbolic
+copositivity matrices.  In the full output, the line headed
+\texttt{threshold arbitrary-fibre positive pair kernels} reconstructs all
+ten endpoint kernels and all sixty simplex certificates using exact rational
+arithmetic.  The two-indicator-profile line checks overlap monotonicity and
+the six determinant certificates in
+Theorem~\ref{thm:atlas152-two-indicator}; the axis-profile line checks
+\eqref{eq:atlas152-same-axis} and~\eqref{eq:atlas152-cross-axis}, and the
+bounded-dispersion line checks its exact Jensen slack and margin.  The
+critical-axis pair line checks \eqref{eq:axis-needle} and all $24$ same-axis,
+opposite-axis, and mutual-cell endpoint versions of
+\eqref{eq:axis-kernel}; the following rooted-moment line reconstructs the
+four raw and repaired identities in
+\eqref{eq:axis-endpoint-cubic}, including cancellation of every cross-kernel
+moment; the uniform-support line checks
+\eqref{eq:axis-endpoint-density-coercivity} and all four exact radius slacks;
+the full-axis uniform-support line checks \eqref{eq:full-axis-density},
+\eqref{eq:full-axis-coercivity}, the good-set retained factor, and the four
+common-radius slacks in Theorem~\ref{thm:full-axis-uniform};
+the arbitrary-profile line checks the exact shifted targets, the
+one-exceptional-vertex constants, and both case slacks in
+Theorem~\ref{thm:full-profile-uniform};
+the obstruction line then checks the two exact equal-mean cubic
+comparisons.  The
+comparable-mean line reconstructs the nine degree-four simplex certificates
+and their face-to-face incidence audit; the equal-displacement line
+reconstructs its four degree-four certificates and incidence audit.  The
+counterexample line reconstructs \eqref{eq:atlas152-negative-matrix}, the
+full $5^6$ assignment sum, and the fixed rational witness.  The four
+obstruction lines headed
+\texttt{Atlas 152} reconstruct the failed $uv$-moment,
+total-mass, geometric-mean, and independent-overlap relaxations and
+distinguish each from the compatible positive functional.  The comonotone
+line verifies the vertex slacks in the pointwise nested-fibre theorem.
+
+\end{document}

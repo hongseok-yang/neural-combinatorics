@@ -1,0 +1,507 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{A Triangle with a Two-Leaf Broom:\\
+A Rooted Supporting-Plane Inequality}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $B$ be obtained from a triangle by joining one triangle vertex to the
+centre of a two-leaf star.  We prove that every graphon $W$ of edge density
+$p\geq1/2$ satisfies
+\[
+ t(B,W)\geq p^4(2p-1)=\Phi_B(p).
+\]
+The proof is edge-density-sensitive.  It does not use the false universal
+comparison between the associated five-edge tree and
+$S_4\sqcup2K_2$.  Instead, two pointwise graphon inequalities reduce the
+problem to a sharp two-variable scalar inequality on
+\[
+ 0\leq a\leq d,\qquad a\geq d-(1-p).
+\]
+The scalar lower bound contains a multiple of $a-d^2$, whose integral is
+zero for $a=T_Wd$.  This proves the formerly open NetworkX Atlas graph
+$100$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph, its target, and rooted quantities}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and define
+\[
+ A=T_Wd,
+ \qquad
+ C=T_W(d^2).
+\]
+The rooted triangle density is
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+
+Construct $B$ from a triangle rooted at $o$ by adding three new vertices
+$u,v,w$ and exactly the three further edges
+\[
+ ou,\qquad uv,\qquad uw.
+\]
+After fixing the image $x$ of $o$, integrating $v,w$, and then $u$ gives
+the exact identity
+\begin{equation}
+ t(B,W)=\int_\Omega \tau(x)C(x)\dd\mu(x).
+ \label{eq:density}
+\end{equation}
+
+The graph has six vertices and six edges.  After properly colouring the
+triangle, each successive vertex of the attached tree has $x-1$ choices.
+Therefore
+\[
+ \chi_B(x)=x(x-1)^4(x-2),
+ \qquad \chi(B)=3.
+\]
+For $q=1-p>0$,
+\[
+ q^6\chi_B(1/q)=p^4(2p-1).
+\]
+Thus the polynomial continuation of the target is
+\begin{equation}
+ \Phi_B(p)=p^4(2p-1),
+ \label{eq:target}
+\end{equation}
+and the complete required interval is $p\in[1/2,1]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two pointwise graphon reductions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Rooted feasible region]\label{lem:region}
+For almost every $x$, writing $d=d(x)$ and $a=A(x)$, one has
+\[
+ 0\leq a\leq d,
+ \qquad
+ a\geq d-(1-p).
+\]
+Moreover,
+\[
+ \int_\Omega A\dd\mu=\int_\Omega d^2\dd\mu.
+\]
+\end{lemma}
+
+\begin{proof}
+Nonnegativity is immediate.  Since $d(y)\leq1$ almost everywhere,
+\[
+ A(x)=\int W(x,y)d(y)\dd\mu(y)\leq d(x).
+\]
+The elementary inequality $rs\geq r+s-1$ for $r,s\in[0,1]$, applied to
+$r=W(x,y)$ and $s=d(y)$, gives
+\[
+ A(x)\geq\int\bigl(W(x,y)+d(y)-1\bigr)\dd\mu(y)
+ =d(x)+p-1.
+\]
+Finally Tonelli's theorem and symmetry give
+\[
+ \int A(x)\dd\mu(x)
+ =\int_{\Omega^2}W(x,y)d(y)\dd\mu^2
+ =\int_\Omega d(y)^2\dd\mu(y).
+\]
+\end{proof}
+
+\begin{lemma}[Broom and triangle roots]\label{lem:pointwise}
+For almost every $x$,
+\[
+ C(x)\geq
+ \begin{cases}
+ A(x)^2/d(x),&d(x)>0,\\
+ 0,&d(x)=0,
+ \end{cases}
+ \qquad
+ \tau(x)\geq\bigl(2A(x)-p\bigr)_+.
+\]
+Here $r_+=\max\{r,0\}$.
+\end{lemma}
+
+\begin{proof}
+For $d(x)>0$, Cauchy--Schwarz with respect to the finite measure
+$W(x,y)\dd\mu(y)$ gives
+\[
+ A(x)^2
+ =\left(\int W(x,y)d(y)\dd\mu(y)\right)^2
+ \leq d(x)\int W(x,y)d(y)^2\dd\mu(y)
+ =d(x)C(x).
+\]
+If $d(x)=0$, then $W(x,y)=0$ for almost every $y$, and hence
+$A(x)=C(x)=0$.
+
+For the triangle estimate, apply $rs\geq r+s-1$ to
+$W(x,y),W(x,z)$, multiply by $W(y,z)\geq0$, and integrate in $y,z$.
+This gives $\tau(x)\geq2A(x)-p$.  Also $\tau(x)\geq0$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The sharp scalar supporting inequality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The next lemma is the new analytic input.  Its term $a-d^2$ is tailored to
+the last identity in Lemma~\ref{lem:region}.
+
+\begin{lemma}[Dense rooted supporting plane]\label{lem:scalar}
+Let $p\in[1/2,1]$, and let $d,a\in[0,1]$ satisfy
+\[
+ 0\leq a\leq d,
+ \qquad a\geq d-(1-p).
+\]
+Define the left side to be zero when $d=0$.  Then
+\begin{align}
+ \frac{a^2}{d}(2a-p)_+
+ \geq{}&2p^4(1-4p)+p^3(10p-3)d
+ \notag\\
+ &\quad+2p^2(3p-1)(a-d^2).
+ \label{eq:scalar}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Write the right side of \eqref{eq:scalar} as
+\[
+ L_p(d,a)=\alpha+\beta d+\gamma(a-d^2),
+\]
+where
+\[
+ \alpha=2p^4(1-4p),\qquad
+ \beta=p^3(10p-3),\qquad
+ \gamma=2p^2(3p-1)>0.
+\]
+If $d=0$, then $a=0$, while $L_p(0,0)=\alpha\leq0$.
+We may therefore assume $d>0$.
+
+First suppose $a\leq p/2$.  The left side of \eqref{eq:scalar} is zero,
+and $L_p(d,a)$ is increasing in $a$.  If $d\leq p/2$, it is enough to put
+$a=d$.  Direct expansion gives
+\[
+ L_p(d,d)=-p^2Q_1(d),
+\]
+where
+\[
+ Q_1(d)=2(3p-1)d^2+(-10p^2-3p+2)d+8p^3-2p^2.
+\]
+The derivative of $Q_1$ at $d=p/2$ is
+$-4p^2-5p+2<0$.  Since $Q_1$ is convex, it is decreasing on
+$[0,p/2]$.  Hence
+\[
+ Q_1(d)\geq Q_1(p/2)
+ =\frac p2(9p^2-8p+2)>0;
+\]
+the last quadratic has negative discriminant.
+
+If instead $d\geq p/2$, it is enough to put $a=p/2$.  Feasibility also
+forces $d\leq1-p/2$.  Here
+\[
+ L_p(d,p/2)=-p^2Q_2(d),
+\]
+where
+\[
+ Q_2(d)=2(3p-1)d^2+(-10p^2+3p)d+8p^3-5p^2+p.
+\]
+Its leading coefficient is positive and its discriminant is
+\[
+ -p(2p-1)^2(23p-8)\leq0.
+\]
+Thus $Q_2(d)\geq0$.  This proves \eqref{eq:scalar} when $a\leq p/2$.
+
+Now suppose $a\geq p/2$.  Multiplication by $d>0$ reduces the assertion to
+\begin{equation}
+ G_p(d,a):=2a^3-pa^2-dL_p(d,a)\geq0.
+ \label{eq:G}
+\end{equation}
+For fixed $d$,
+\[
+ \frac{\partial^2G_p}{\partial a^2}=12a-2p\geq4p>0.
+\]
+Consequently the minimum on the feasible interval
+\[
+ \max\{p/2,d-(1-p)\}\leq a\leq d
+\]
+occurs at an endpoint or at the unique stationary point.  We check all
+possibilities exactly.
+
+At $a=p/2$, expansion gives
+\[
+ G_p(d,p/2)=dp^2Q_2(d)\geq0.
+\]
+At $a=d$, write $G_p(d,d)=dP_p(d)$, where
+\[
+ P_p(d)=2(3p^3-p^2+1)d^2
+ +(-10p^4-3p^3+2p^2-p)d+8p^5-2p^4.
+\]
+The leading coefficient is positive and
+\[
+ \operatorname{disc}_d(P_p)
+ =-p^2(p-1)^2E(p)\leq0.
+\]
+Indeed, on writing $u=p-1/2\geq0$,
+\[
+ E(p)=92u^4+196u^3+135u^2+36u+2>0.
+\]
+Therefore $P_p(d)\geq0$.
+
+For the remaining lower endpoint put
+\[
+ C_p(d)=G_p\bigl(d,d-(1-p)\bigr).
+\]
+It is needed only for $d\in[1-p/2,1]$.  Its leading coefficient as a cubic
+in $d$ is $2(3p^3-p^2+1)>0$.  For $p<1$, exact expansion gives
+\[
+ \operatorname{disc}_d(C_p)
+ =-8p^4(p-1)^4D(p)<0,
+\]
+where, for $u=p-1/2\geq0$,
+\begin{align*}
+ D(p)={}&736u^{10}+2624u^9+4448u^8+6756u^7+5532u^6
+ +776u^5\\
+ &+\frac{2331}{2}u^4+\frac{2161}{4}u^3
+ +\frac{1185}{8}u^2+\frac{197}{8}u+\frac{51}{32}>0.
+\end{align*}
+Thus $C_p$ has exactly one real zero.  At the left endpoint,
+\[
+ C_p(1-p/2)
+ =\frac{p^2(2-p)}4(29p^3-46p^2+24p-4)>0.
+\]
+The cubic in the last parentheses has discriminant $-304$, positive leading
+coefficient, and value $1/8$ at $p=1/2$; its unique real zero is therefore
+less than $1/2$.  It follows that the unique zero of $C_p$ lies below
+$1-p/2$, and $C_p(d)>0$ throughout the required interval.  When $p=1$,
+the same conclusion follows directly from
+\[
+ C_1(d)=6d(d-1)^2\geq0.
+\]
+
+It remains to check an interior stationary point.  Solving
+$\partial G_p/\partial a=0$ gives
+\[
+ a_* =\frac p6(1+\rho),
+ \qquad
+ \rho=\sqrt{1+12d(3p-1)}.
+\]
+If $a_*$ belongs to the present region, then $a_*\geq p/2$ and hence
+$\rho\geq2$.  A direct factorization gives
+\[
+ G_p(d,a_*)
+ =\frac{p^2(\rho+1)(6p-1-\rho)^2}
+ {864(3p-1)^2}\,R_p(\rho).
+\]
+Writing $r=\rho-2\geq0$ and $u=p-1/2\geq0$, the remaining factor is
+\[
+ R_p(\rho)
+ =r^3+(9+12u)r^2+(24+66u+48u^2)r
+  +14+50u+48u^2>0.
+\]
+All endpoint and stationary-point minima are nonnegative, completing the
+proof.
+\end{proof}
+
+\begin{remark}[Why the density hypothesis is essential]
+The coefficients in Lemma~\ref{lem:scalar}, the lower constraint
+$a\geq d-(1-p)$, and the sign certificates all use $p\geq1/2$.  The lemma
+is not an unconditional tree-domination statement.  This is exactly what
+allows it to avoid the forest-domination obstruction recorded in
+\texttt{FAILED\_PROOF\_ATTEMPTS.md}.
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The positive graphon theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Triangle with a two-leaf broom]\label{thm:main}
+For every graphon $W$ on an arbitrary probability space, of edge density
+$p\in[1/2,1]$,
+\[
+ \boxed{t(B,W)\geq p^4(2p-1)=\Phi_B(p).}
+\]
+\end{theorem}
+
+\begin{proof}
+For $d>0$ define
+\[
+ h_p(d,a)=\frac{a^2}{d}(2a-p)_+,
+\]
+and set $h_p(0,0)=0$.  By \eqref{eq:density} and
+Lemma~\ref{lem:pointwise},
+\[
+ t(B,W)\geq\int_\Omega h_p(d(x),A(x))\dd\mu(x).
+\]
+Lemma~\ref{lem:region} supplies the pointwise hypotheses of
+Lemma~\ref{lem:scalar}.  Integrating that scalar inequality and using
+\[
+ \int d=p,
+ \qquad
+ \int(A-d^2)=0,
+\]
+gives
+\begin{align*}
+ t(B,W)
+ &\geq2p^4(1-4p)+p^3(10p-3)p\\
+ &=p^4(2p-1),
+\end{align*}
+which is \eqref{eq:target}.
+\end{proof}
+
+At $p=1/2$ the target is zero and the proof above remains valid.  At $p=1$,
+one may alternatively note that $0\leq W\leq1$ and $\int W=1$ imply
+$W=1$ almost everywhere, so both sides equal one.  No division by
+$2p-1$ occurs.
+
+For every integer $k\geq2$, the balanced complete $k$-partite graphon has
+$p=1-1/k$ and realizes equality throughout the proof:
+$d=p$, $A=p^2$, $C=p^3$, and
+$\tau=p(2p-1)$ almost everywhere.  Thus the bound has the expected
+chromatic extremizers.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas consequence, hidden-assumption audit, and limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 100]\label{cor:atlas100}
+NetworkX Atlas graph $100$, with graph6 code \texttt{EsCW}, is positive.
+It has order six, size six, chromatic number three, chromatic polynomial
+\[
+ \chi_{F_{100}}(x)=x(x-1)^4(x-2),
+\]
+and every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{100},W)\geq p^4(2p-1)=\Phi_{F_{100}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+The NetworkX edge list is
+\[
+ 01,\ 02,\ 03,\ 34,\ 35,\ 45.
+\]
+Vertices $3,4,5$ form a triangle, rooted at $3$.  Vertex $0$ is joined to
+that root, and $1,2$ are precisely the two leaves adjacent to $0$.  Hence
+the graph is exactly $B$, and Theorem~\ref{thm:main} applies.
+\end{proof}
+
+All graphon integrands used above are bounded, nonnegative, and measurable,
+so Tonelli--Fubini applies on an arbitrary probability space.  Every
+pointwise statement is understood almost everywhere.  The proof uses
+ordinary homomorphism densities, not injective copies.  It assumes neither
+a finite-step representation, regularity, constant degree, nor a positive
+minimum degree.  The set $\{d=0\}$ is handled without division.
+
+For formal verification, the reusable new item is
+Lemma~\ref{lem:scalar}.  A convenient implementation can split on
+$d=0$, $a\leq p/2$, and $a\geq p/2$, exactly as above.  The graphon layer
+then needs only Cauchy--Schwarz under the measure $W(x,y)\dd\mu(y)$, the
+already used rooted-triangle inequality, the two identities of
+Lemma~\ref{lem:region}, and integration of the scalar supporting plane.
+The graph-specific module awaiting inspection is
+\texttt{lean/Taeyoung/Examples/Graph100.lean}.
+
+The theorem covers exactly a triangle with one adjacent star centre and two
+leaves at that centre.  It does not prove arbitrary pendant-tree closure,
+a star with another number of leaves, several such brooms, or brooms rooted
+at different triangle vertices.  The supporting plane is special to the
+two-leaf exponent and the interval $p\geq1/2$; none of these extensions may
+be inferred without a new scalar certificate.
+
+Every polynomial identity, discriminant, positive coefficient shift, the
+Atlas isomorphism, and the chromatic polynomial used in this document are
+independently checked over exact rational arithmetic by
+\begin{verbatim}
+python codes/verify_triangle_two_leaf_broom.py
+\end{verbatim}
+This audit is only a check of the displayed algebra; the arbitrary-graphon
+argument is the proof given above.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/Broom.lean}, ending at
+\texttt{satisfiesLowerBound\_100}.  Theorem~\ref{thm:main} is proved in full, on
+all of $p\in[1/2,1]$.  The departure is inside Lemma~\ref{lem:scalar}, in its
+active case $a\geq p/2$.
+
+\paragraph{The departure: no cubic discriminant.}
+This note treats $G_p(d,a)=2a^3-pa^2-dL_p(d,a)$ as a cubic in $a$ for fixed $d$
+and runs a case analysis on its root structure.  The formalization does it in
+one chain.  In the coordinates
+\[
+ \alpha=a-p^2,\qquad \delta=d-p
+\]
+--- the point where the extremal graphon sits --- the cleared inequality is the
+\texttt{ring} identity
+\begin{equation}
+ a^2(2a-p)-d\,L_p(d,a)
+ =p(6p-1)\alpha^2-2p^2(3p-1)\alpha\delta+p^3(8p-3)\delta^2
+ +2\alpha^3+2p^2(3p-1)\delta^3 .
+ \label{eq:lean-broom}
+\end{equation}
+Both cubic terms are absorbed using only the two facts that already hold in the
+active case --- $a\geq p/2$ by assumption and $d\geq a\geq p/2$:
+\[
+ 2\alpha^3\geq(p-2p^2)\alpha^2,
+ \qquad
+ 2p^2(3p-1)\delta^3\geq-p^3(3p-1)\delta^2 ,
+\]
+each being $2\alpha^2(a-\frac p2)\geq0$ and
+$2p^2(3p-1)\delta^2(d-\frac p2)\geq0$ rearranged.  What remains,
+\[
+ 4p^2\alpha^2-2p^2(3p-1)\alpha\delta+p^3(5p-2)\delta^2 ,
+\]
+is positive definite on $p\geq1/2$, certified by
+\begin{equation}
+ 16p^2\bigl(4p^2\alpha^2-2p^2(3p-1)\alpha\delta+p^3(5p-2)\delta^2\bigr)
+ =\bigl(8p^2\alpha-2p^2(3p-1)\delta\bigr)^2+4p^4(11p^2-2p-1)\delta^2,
+ \label{eq:lean-broom-pd}
+\end{equation}
+with $11p^2-2p-1\geq3/4$ there.  So the active case is four \texttt{ring}
+identities and three sign checks, and no cubic is analysed.
+
+The inactive case $a\leq p/2$ follows this note exactly, including its two
+subcases $d\leq p/2$ (push $a$ up to $d$, then $Q_1\geq Q_1(p/2)>0$) and
+$d\geq p/2$ (push $a$ up to $p/2$, then $Q_2\geq0$ by its nonpositive
+discriminant $-p(2p-1)^2(23p-8)$).
+
+\paragraph{Everything else transcribes directly.}
+Lemma~\ref{lem:region} is \texttt{Broom.le\_pathOp} together with
+\texttt{K4Tail.pathOp\_le\_degree} and \texttt{BookTail.integral\_pathOp};
+Lemma~\ref{lem:pointwise} is \texttt{Broom.sq\_pathOp\_le} (the project's
+weighted Cauchy--Schwarz at weight $W(x,\cdot)$) and the pre-existing
+\texttt{Link.rooted\-Triangle\_ge}.  The division by $d$ is never performed:
+\texttt{Broom.mul\_plane\_le} states the pointwise bound multiplied by $d$, so
+the zero-degree set is an ordinary case rather than a convention.  The
+identity \eqref{eq:density} is \texttt{Broom.homDensity\_broom}, through the
+generic peeling ladder of \texttt{Methods/Peeling.lean}.
+
+
+\end{document}

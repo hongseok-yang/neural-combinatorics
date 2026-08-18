@@ -1,0 +1,519 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{A Triangle with a Three-Edge Tail:\\
+An Odd-Walk Domination Proof}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $R_3$ be a triangle with a path of length three attached at one triangle
+vertex.  We prove that every graphon $W$ of edge density $p\geq1/2$ satisfies
+\[
+ t(R_3,W)\geq p^4(2p-1)=\Phi_{R_3}(p).
+\]
+The new input is the special path-density inequality
+\[
+ t(P_5,W)^3\geq t(P_3,W)^5,
+\]
+where $P_j$ denotes the path with $j$ edges.  This is the $(3,5)$ case of
+the Erd\H{o}s--Simonovits odd-walk theorem proved by Blekherman and Raymond.
+We give a complete transfer from finite hosts to graphons on arbitrary
+probability spaces, then combine the path ratio with the pointwise rooted
+triangle bound.  The result classifies the formerly open Atlas graph $102$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphon notation and the graph}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon.  Write
+\[
+ p=t(K_2,W),\qquad
+ d=T_W\mathbf1,\qquad
+ A=T_Wd=T_W^2\mathbf1,\qquad
+ B=T_WA=T_W^3\mathbf1.
+\]
+Define the rooted triangle density
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+
+Let $R_3$ have a triangle rooted at $o$ and three additional vertices
+$u,v,w$, with the only additional edges $ou,uv,vw$.  Integrating the tail
+from its free end toward the root gives
+\begin{equation}
+ t(R_3,W)=\int_\Omega\tau(x)B(x)\dd\mu(x).
+ \label{eq:R3-density}
+\end{equation}
+It has six vertices and six edges.  Every vertex added along the tail has
+$x-1$ colour choices after its parent is coloured, so
+\[
+ \chi_{R_3}(x)=x(x-1)^4(x-2),
+ \qquad \chi(R_3)=3.
+\]
+Consequently
+\begin{equation}
+ \Phi_{R_3}(p)=p^4(2p-1).
+ \label{eq:R3-target}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The two path inequalities on arbitrary graphons}
+\label{sec:paths}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $P_j$ denote the path with $j$ edges and $j+1$ vertices.  We need two
+standard walk inequalities in a form that applies to the probability-space
+generality used throughout the catalogue.
+
+\begin{lemma}[Blakley--Roy for $P_3$]
+\label{lem:BR}
+Every graphon of edge density $p$ satisfies
+\[
+ t(P_3,W)\geq p^3.
+\]
+\end{lemma}
+
+\begin{proof}
+Since $d(x)=0$ implies $W(x,y)=0$ for almost every $y$, define quotients by
+$d(x)$ to be zero on that null support.  Almost everywhere on the support of
+$W$,
+\[
+ W=(Wdd')^{1/3}(W/d)^{1/3}(W/d')^{1/3},
+\]
+where $d=d(x)$ and $d'=d(y)$.  H\"older gives
+\[
+ p^3\leq
+ \left(\int_{\Omega^2}W(x,y)d(x)d(y)\dd\mu^2\right)
+ \left(\int_{\Omega^2}\frac{W(x,y)}{d(x)}\dd\mu^2\right)
+ \left(\int_{\Omega^2}\frac{W(x,y)}{d(y)}\dd\mu^2\right).
+\]
+Each quotient integral is at most one.  The first factor is exactly
+$t(P_3,W)$.
+\end{proof}
+
+\begin{lemma}[The $(3,5)$ odd-walk inequality]
+\label{lem:odd-walk}
+Every graphon $W$ on every probability space satisfies
+\[
+ t(P_5,W)^3\geq t(P_3,W)^5.
+\]
+\end{lemma}
+
+\begin{proof}
+For finite simple host graphs this is the $t=3,k=5$ instance of the
+Erd\H{o}s--Simonovits odd-walk theorem; we use the proof of Blekherman and
+Raymond \cite{BlekhermanRaymond}.  We now justify the graphon transfer
+without assuming that the underlying probability space is atomless or
+standard Borel.
+
+Fix a finite graph $F$.  For each $N$, sample independent points
+$X_1,\ldots,X_N$ from $\mu$.  Conditional on these points, and independently
+for every unordered pair $i<j$, place the edge $ij$ in a simple graph $G_N$
+with probability $W(X_i,X_j)$.  Auxiliary independent uniform random
+variables on $[0,1]$ realize these Bernoulli choices.
+
+Let $T_N(F)=t(F,G_N)$.  Among the $N^{v(F)}$ maps
+$V(F)\to[N]$, at most $\binom{v(F)}2N^{v(F)-1}$ are non-injective.  For an
+injective map, all host edges used by distinct edges of $F$ are distinct;
+conditional independence and then integration of the sampled points show
+that its expected indicator is exactly $t(F,W)$.  Hence
+\begin{equation}
+ \left|\mathbb E T_N(F)-t(F,W)\right|
+ \leq\frac{\binom{v(F)}2}{N}.
+ \label{eq:mean-convergence}
+\end{equation}
+
+For the variance, expand $T_N(F)^2$ as a sum over two vertex maps.  If the
+two image sets are disjoint, their indicators depend on disjoint sampled
+points and disjoint auxiliary edge variables, and are independent.  The
+number of ordered pairs of maps with intersecting images is at most
+$v(F)^2N^{2v(F)-1}$.  Every covariance has absolute value at most one, so
+\begin{equation}
+ \operatorname{Var}T_N(F)\leq\frac{v(F)^2}{N}.
+ \label{eq:variance-convergence}
+\end{equation}
+Equations \eqref{eq:mean-convergence}--\eqref{eq:variance-convergence} imply
+$T_N(F)\to t(F,W)$ in probability.
+
+Apply this simultaneously to $F=P_3,P_5$.  Every realization of the finite
+simple graph $G_N$ satisfies
+\[
+ T_N(P_5)^3\geq T_N(P_3)^5.
+\]
+If the claimed limiting inequality were false, continuity would give an
+open neighbourhood of $(t(P_3,W),t(P_5,W))$ on which the reverse strict
+inequality holds.  Simultaneous convergence in probability places
+$(T_N(P_3),T_N(P_5))$ in that neighbourhood with probability tending to
+one, contradicting the finite inequality.  The graphon statement follows.
+\end{proof}
+
+Combining the preceding lemmas gives the ratio in precisely the form needed
+below.
+
+\begin{corollary}[Odd-path weighted mean]
+\label{cor:path-ratio}
+If $p>0$, put $Z=t(P_3,W)$.  Then $Z>0$ and
+\[
+ \frac{t(P_5,W)}{Z}\geq p^2.
+\]
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:BR} gives $Z\geq p^3>0$.  Lemma~\ref{lem:odd-walk} gives
+\[
+ \frac{t(P_5,W)}Z\geq Z^{2/3}\geq p^2.
+\]
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The positive theorem}
+\label{sec:positive}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Pointwise rooted triangle]
+\label{lem:rooted-triangle}
+For almost every $x$,
+\[
+ \tau(x)\geq\max\{2A(x)-p,0\}.
+\]
+\end{lemma}
+
+\begin{proof}
+Apply $ab\geq a+b-1$ to $W(x,y),W(x,z)$, multiply by
+$W(y,z)\geq0$, and integrate in $y,z$.  This gives
+$\tau(x)\geq2A(x)-p$; also $\tau(x)\geq0$.
+\end{proof}
+
+\begin{theorem}[Triangle with a three-edge tail]
+\label{thm:main}
+For every graphon $W$ of edge density $p\in[1/2,1]$,
+\[
+ \boxed{
+ t(R_3,W)\geq p^4(2p-1)=\Phi_{R_3}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+ Z=\int_\Omega B(x)\dd\mu(x).
+\]
+The operator definitions and self-adjointness of $T_W$ give
+\begin{align}
+ Z&=\langle\mathbf1,T_W^3\mathbf1\rangle=t(P_3,W),
+ \label{eq:Z-path}\\
+ \int_\Omega B(x)A(x)\dd\mu(x)
+ &=\langle T_W^3\mathbf1,T_W^2\mathbf1\rangle
+ =\langle\mathbf1,T_W^5\mathbf1\rangle=t(P_5,W).
+ \label{eq:BA-path}
+\end{align}
+Since $p\geq1/2>0$, Lemma~\ref{lem:BR} gives $Z>0$.  Define the probability
+measure
+\[
+ \dd\nu(x)=\frac{B(x)}Z\dd\mu(x).
+\]
+By \eqref{eq:Z-path}, \eqref{eq:BA-path}, and
+Corollary~\ref{cor:path-ratio},
+\begin{equation}
+ \mathbb E_\nu A=\frac{t(P_5,W)}{t(P_3,W)}\geq p^2.
+ \label{eq:A-mean}
+\end{equation}
+
+The function $f(a)=\max\{2a-p,0\}$ is convex and nondecreasing.  Using
+\eqref{eq:R3-density}, Lemma~\ref{lem:rooted-triangle}, Jensen,
+\eqref{eq:A-mean}, and $p^2\geq p/2$, we obtain
+\begin{align*}
+ t(R_3,W)
+ &\geq Z\,\mathbb E_\nu f(A)
+ \geq Z f(\mathbb E_\nu A)
+ \geq Zf(p^2)
+ \\
+ &=Z(2p^2-p)
+ \geq p^3\,p(2p-1)
+ =p^4(2p-1).
+\end{align*}
+The last expression is the target in \eqref{eq:R3-target}.
+\end{proof}
+
+At $p=1/2$ the target is zero, and the proof remains valid without division
+by $2p-1$.  At $p=1$, $W=1$ almost everywhere and both sides are one.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas consequence and formalization boundary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 102]
+NetworkX Atlas graph $102$, with graph6 code \texttt{EJe?}, is positive.
+It has order and size six, chromatic number three, and
+\[
+ \chi_{F_{102}}(x)=x(x-1)^4(x-2).
+\]
+For every graphon of edge density $p\in[1/2,1]$,
+\[
+ t(F_{102},W)\geq p^4(2p-1)=\Phi_{F_{102}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 04,\ 05,\ 12,\ 13,\ 23,\ 34.
+\]
+The vertices $1,2,3$ form a triangle, and the remaining edges form the
+three-edge path $3-4-0-5$.  Thus Atlas $102$ is exactly $R_3$.
+\end{proof}
+
+The proof works with ordinary, non-injective homomorphism densities.  The
+sampling transfer explicitly controls collisions and variance and therefore
+does not silently replace homomorphism counts by injective counts.  It also
+does not require the graphon probability space to have atoms, to be atomless,
+or to be standard Borel.
+
+For formalization, the genuinely new infrastructure is the special
+odd-walk comparison in Lemma~\ref{lem:odd-walk}.  One may formalize either
+the finite Blekherman--Raymond $(3,5)$ theorem together with the sampling
+transfer, or a direct analytic proof of that special case.  After that lemma,
+the graphon proof uses only operator-coordinate peeling, the already
+formalized $P_3$ bound, the existing pointwise rooted-triangle inequality,
+and scalar Jensen for the positive part of an affine function.
+
+This argument applies specifically because a single three-edge tail produces
+the consecutive odd path ratio $t(P_5)/t(P_3)$.  It does not prove arbitrary
+pendant-tree closure, multiple three-edge tails, a three-edge broom, or tails
+attached at several triangle vertices.  In particular it does not classify
+Atlas $97$ or $100$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{A shorter route, and a smaller gap}
+\label{sec:shorter}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This appendix was written while preparing the Lean formalization.  It records
+two reductions of the argument above and one obstruction, and it changes
+nothing about what is proved.  Throughout write
+\[
+ a_k=t(P_k,W)=\langle\mathbf1,T_W^k\mathbf1\rangle,
+ \qquad a_0=1,\quad a_1=p .
+\]
+
+\subsection{The convexity step is not needed}
+
+In the proof of Theorem~\ref{thm:main} the function $f(a)=\max\{2a-p,0\}$ is
+only ever integrated against $B\geq0$.  Since $f(a)\geq2a-p$ pointwise,
+\eqref{eq:R3-density} and Lemma~\ref{lem:rooted-triangle} already give
+\begin{equation}
+ t(R_3,W)=\int_\Omega\tau B\dd\mu
+ \ \geq\ \int_\Omega(2A-p)B\dd\mu
+ \ =\ 2\int_\Omega AB\dd\mu-p\int_\Omega B\dd\mu
+ \ =\ 2a_5-p\,a_3 ,
+ \label{eq:jensen-free}
+\end{equation}
+by \eqref{eq:Z-path} and \eqref{eq:BA-path}.  No auxiliary probability measure
+$\nu$, no Jensen, and no convexity or monotonicity of $f$ is used.
+
+\subsection{The odd-walk theorem is stronger than the theorem needs}
+
+By \eqref{eq:jensen-free}, Theorem~\ref{thm:main} reduces to the scalar
+statement $2a_5-p\,a_3\geq p^4(2p-1)$, equivalently
+\begin{equation}
+ 2\bigl(a_5-p^5\bigr)\ \geq\ p\bigl(a_3-p^3\bigr).
+ \label{eq:defect}
+\end{equation}
+
+\begin{lemma}
+\label{lem:reduction}
+Suppose $p\geq1/2$ and
+\begin{equation}
+ a_5\ \geq\ p^2a_3 .
+ \label{eq:weak-ratio}
+\end{equation}
+Then $t(R_3,W)\geq p^4(2p-1)$.
+\end{lemma}
+
+\begin{proof}
+By \eqref{eq:jensen-free} and \eqref{eq:weak-ratio},
+$t(R_3,W)\geq2a_5-p\,a_3\geq(2p^2-p)a_3=p(2p-1)a_3$.
+Since $2p-1\geq0$ and $a_3\geq p^3$ by Lemma~\ref{lem:BR}, this is at least
+$p(2p-1)p^3=p^4(2p-1)$.
+\end{proof}
+
+Inequality \eqref{eq:weak-ratio} is strictly weaker than
+Lemma~\ref{lem:odd-walk}: from $a_5^3\geq a_3^5$ and $a_3\geq p^3$,
+\[
+ a_5\ \geq\ a_3^{5/3}=a_3\cdot a_3^{2/3}\ \geq\ a_3p^2 .
+\]
+So the whole formalization gap is \eqref{eq:weak-ratio}, one inequality among
+three walk densities, rather than the Erd\H{o}s--Simonovits odd-walk theorem
+together with a sampling transfer.  Every other ingredient is already
+mechanically checked: Lemma~\ref{lem:BR} is \texttt{pow\_three\_le\_pathIntegral},
+Lemma~\ref{lem:rooted-triangle} is \texttt{rootedTriangle\_ge}, and
+\eqref{eq:R3-density} follows from the assignment-integral peeling ladder.
+
+\subsection{What \eqref{eq:weak-ratio} is not}
+
+Two remarks delimit the search, both negative.
+
+First, \eqref{eq:weak-ratio} is not a statement about the spectral measure
+alone.  Let $\sigma$ be the spectral measure of $\mathbf1$ for $T_W$, so that
+$a_k=\int\lambda^k\dd\sigma$ with $\sigma$ a probability measure.  The
+inequality $\int\lambda^5\geq(\int\lambda)^2\int\lambda^3$ is false for general
+probability measures: for
+$\sigma=\tfrac1{17}\delta_{-1}+\tfrac{16}{17}\delta_{1/2}$,
+\[
+ \int\lambda^3\dd\sigma=\tfrac1{17}>0,
+ \qquad
+ \int\lambda^5\dd\sigma=-\tfrac1{34}<0 .
+\]
+Adding an atom of small mass at $+1$ makes $\sigma$ satisfy the
+Perron--Frobenius constraint
+$\operatorname{supp}\sigma\subseteq[-\lambda_{\max},\lambda_{\max}]$ with
+$\sigma(\{\lambda_{\max}\})>0$, and still leaves
+$\int\lambda^5<0<(\int\lambda)^2\int\lambda^3$.  Hence no argument using only
+the moment data of $\sigma$ can succeed: nonnegativity of $W$ has to enter
+somewhere other than through the spectrum.  What it gives for free is only
+$a_{2k+1}=\langle T_W^k\mathbf1,T_W\,T_W^k\mathbf1\rangle\geq0$.
+
+Second, four natural routes fail, each of them on the complete bipartite
+graphon $W_s$ with parts of measure $s$ and $1-s$, for which
+\[
+ p=2s(1-s),\quad a_2=s(1-s),\quad a_3=2s^2(1-s)^2,\quad
+ a_4=s^2(1-s)^2,\quad a_5=2s^3(1-s)^3 .
+\]
+
+\begin{enumerate}
+\item \emph{H\"older in the Blakley--Roy pattern.}  Factoring
+ $Wdd'=(WAA')^{1/3}\bigl(Wd^3d'^3/(AA')\bigr)^{1/3}W^{1/3}$ and applying
+ H\"older with exponents $(3,3,3)$ gives $a_3^3\leq a_5\cdot J\cdot p$, where
+ $J=\iint W\,(d^3/A)(d'^3/A')$.  One would need $J\leq p^3$.  On $W_s$,
+ $J=2s^2(1-s)^2$ while $p^3=8s^3(1-s)^3$, so $J\leq p^3$ forces
+ $(1-2s)^2\leq0$.
+\item \emph{H\"older with exponents $(5/3,5/2)$.}  This reduces
+ \eqref{eq:weak-ratio} to $\langle h,T_Wh\rangle\leq1$ for
+ $h=d^{5/2}/A^{3/2}$.  On every regular graphon $\langle h,T_Wh\rangle=1$
+ exactly, so the reduced statement is tight and no crude estimate closes it.
+\item \emph{A positive-definite correction.}  With $u=A-pd=T_W(d-p)$,
+ $\langle u,T_Wu\rangle=a_5-2pa_4+p^2a_3$.  Were this nonnegative,
+ \eqref{eq:weak-ratio} would follow from $a_4\geq p\,a_3$, itself a
+ consequence of $a_3\leq(a_2a_4)^{1/2}$, $a_4\geq a_2^2$ and $a_2\geq p^2$.
+ But on $W_s$ one has $u=\mp s(1-s)(1-2s)$ on the two parts and
+ $\langle u,T_Wu\rangle=-2s^3(1-s)^3(1-2s)^2<0$ for $s\neq1/2$.
+\item \emph{Tilting.}  Writing $a_5=a_2^2p_A$ and $a_3=p^2p_d$, where $p_A$
+ and $p_d$ are the edge densities of $W$ with respect to $A\dd\mu/a_2$ and
+ $d\dd\mu/p$, inequality \eqref{eq:weak-ratio} would follow from $a_2\geq p^2$
+ together with $p_A\geq p_d$.  The latter is $a_5p^2\geq a_3a_2^2$, which on
+ $W_s$ reads $4s(1-s)\geq1$.
+\end{enumerate}
+
+\subsection{A stronger statement consistent with all numerical evidence}
+\label{sec:supermult}
+
+The following would give \eqref{eq:weak-ratio} through
+$a_5\geq a_2a_3\geq p^2a_3$, and would also contain Lemma~\ref{lem:BR} through
+$a_3\geq a_1a_2\geq a_1^3$.
+
+\begin{conjecture}
+\label{conj:supermult}
+For every graphon $W$ and all $m,n\geq0$, \ $a_{m+n}\geq a_ma_n$.
+\end{conjecture}
+
+Equality holds throughout whenever $W$ is regular, since then $a_k=p^k$.  The
+statement was tested on roughly $5\times10^6$ pseudorandom graphons --- uniform
+$[0,1]$ kernels, Bernoulli $0/1$ kernels, stochastic block kernels and
+hub-like kernels, on ground sets of size $2$ to $14$ --- for every pair with
+$m+n\leq7$.  The minimum of $a_{m+n}-a_ma_n$ over that sample was zero to
+machine precision, attained only at regular kernels.  In spectral terms
+Conjecture~\ref{conj:supermult} is the correlation inequality
+$\int\lambda^{m+n}\geq\int\lambda^m\int\lambda^n$, which by the first remark
+above is false for general probability measures; a proof must therefore use
+more about $W$ than its spectrum.  We have no proof.
+
+\subsection{Consequence for the formalization}
+\label{sec:consequence}
+
+The Lean development splits cleanly at \eqref{eq:weak-ratio}.  Everything else
+is available, so the statement
+\[
+ \text{$p\geq\tfrac12$ and $p^2\,t(P_3,W)\leq t(P_5,W)$}
+ \ \Longrightarrow\
+ p^4(2p-1)\leq t(R_3,W)
+\]
+is unconditional Lean mathematics, and Atlas $102$ becomes \texttt{verified}
+exactly when \eqref{eq:weak-ratio} is discharged --- either by a direct
+analytic proof, or by formalizing the finite Blekherman--Raymond $(3,5)$
+theorem together with the sampling transfer of Lemma~\ref{lem:odd-walk}.  The
+second route is much the heavier: it needs a product probability space, a
+conditional Bernoulli construction, a second-moment estimate and convergence in
+probability, none of which the catalogue currently has.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Theorem~\ref{thm:main} is formalized unconditionally, as
+\texttt{satisfiesLowerBound\_102} in
+\texttt{lean/Taeyoung/Methods/OddWalk/Row102.lean}.  Atlas $102$ is
+\texttt{verified}.  Two differences of substance.
+
+\subsection*{Lemma~\ref{lem:odd-walk} is discarded, and its gap is closed}
+
+Appendix~\ref{sec:shorter} leaves \eqref{eq:weak-ratio} open and weighs two
+ways to obtain it, calling the second --- the finite Blekherman--Raymond
+theorem plus the sampling transfer proved in Lemma~\ref{lem:odd-walk} ---
+much the heavier, since it needs a product probability space, a conditional
+Bernoulli construction, a second-moment estimate and convergence in
+probability.
+
+None of that is formalized.  The proof of Lemma~\ref{lem:odd-walk} given above
+is not used at all: the $(3,5)$ inequality $a_3^5\leq a_5^3$ is instead proved
+outright, by the entropy argument of \texttt{notes/blekherman\_raymond.tex}
+\S2 run against relative entropy (see the appendix of that note for how).
+\eqref{eq:weak-ratio} then follows in two lines, since $a_3\geq p^3$ gives
+$(p^2a_3)^3=p^6a_3^3\leq a_3^5\leq a_5^3$.
+
+\subsection*{The theorem is proved through Appendix~\ref{sec:shorter}, not
+through Section~\ref{sec:positive}}
+
+The auxiliary probability measure $\nu$, the Jensen step and the function
+$f(a)=\max\{2a-p,0\}$ of Theorem~\ref{thm:main}'s proof do not occur.  What is
+formalized is \eqref{eq:jensen-free} followed by Lemma~\ref{lem:reduction};
+the full odd-walk inequality is used only through the weaker ratio
+\eqref{eq:weak-ratio}.
+
+\begin{thebibliography}{9}
+
+\bibitem{BlekhermanRaymond}
+G.~Blekherman and A.~Raymond,
+\emph{A new proof of the Erd\H{o}s--Simonovits conjecture on walks},
+Graphs and Combinatorics 39 (2023), Article 53;
+\href{https://arxiv.org/abs/2009.10845}{arXiv:2009.10845}.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,395 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\join}{\mathbin{\vee}}
+
+\title{Cones over the Paw and the Triangle--Edge Product}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $P$ be the paw graph, and let $R=K_3\sqcup K_2$.  For either
+$B=P\sqcup\overline{K_s}$ or
+$B=R\sqcup\overline{K_s}$, we prove that the cone
+$H=K_1\join B$ satisfies
+\[
+t(H,W)\geq\Phi_H(p)
+\]
+for every graphon of edge density $p\geq2/3$.  This is the complete
+required interval because $\chi(H)=4$.  The proof uses only the
+previously proved paw and triangle bounds, multiplicativity, and a
+fully proved weighted link argument.  It is not a general
+universal-vertex closure.  The result proves the previously open Atlas
+graphs 49, 156, and 165.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The two base families and their common target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon on a
+probability space $(\Omega,\mu)$.  For a finite graph $G$, write
+\[
+t(G,W)=
+\int_{\Omega^{V(G)}}
+\prod_{uv\in E(G)}W(x_u,x_v)
+\prod_{u\in V(G)}\dd\mu(x_u).
+\]
+Put
+\[
+p=t(K_2,W),
+\qquad
+d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+The paw $P$ is a triangle with one pendant edge.  Let
+\[
+R=K_3\sqcup K_2.
+\]
+For $s\geq0$, define
+\[
+B_s^P=P\sqcup\overline{K_s},
+\qquad
+B_s^R=R\sqcup\overline{K_s}.
+\]
+The isolated vertices have no effect on homomorphism densities.
+
+The chromatic polynomials are
+\begin{align*}
+\chi_{B_s^P}(x)
+&=x^{s+1}(x-1)^2(x-2),
+&v(B_s^P)&=s+4,
+\\
+\chi_{B_s^R}(x)
+&=x^{s+2}(x-1)^2(x-2),
+&v(B_s^R)&=s+5.
+\end{align*}
+Consequently, both base families have the same target
+\begin{equation}
+\Phi_{B_s^P}(z)=\Phi_{B_s^R}(z)
+=\phi(z):=z^2(2z-1).
+\label{eq:base-target}
+\end{equation}
+
+We use the following accepted positive inputs.
+
+\begin{theorem}[Base bounds]
+\label{thm:base}
+For every graphon $V$ of edge density $z\geq1/2$,
+\[
+t(B_s^P,V)\geq\phi(z),
+\qquad
+t(B_s^R,V)\geq\phi(z).
+\]
+\end{theorem}
+
+\begin{proof}
+The paw is the member $L_1$ of the rooted triangle--tree theorem, so
+\[
+t(P,V)\geq z^2(2z-1).
+\]
+Adding isolated vertices changes neither side.  For the other family,
+multiplicativity over disjoint unions and the triangle Goodman bound
+give
+\[
+t(R,V)=t(K_3,V)t(K_2,V)
+\geq z(2z-1)z=z^2(2z-1).
+\]
+Again, isolates make no change.
+\end{proof}
+
+The polynomial $\phi$ satisfies
+\[
+\phi(1/2)=0,
+\qquad
+\phi'(z)=2z(3z-1)>0,
+\qquad
+\phi''(z)=12z-2>0
+\]
+on $[1/2,1]$.  It is therefore nonnegative, increasing, and convex on
+that interval.
+
+\begin{lemma}[Global tangent bound for the bases]
+\label{lem:tangent}
+Let $B$ be any $B_s^P$ or $B_s^R$, and fix $c\in[1/2,1]$.  Every
+graphon $V$, of arbitrary edge density $z\in[0,1]$, satisfies
+\[
+t(B,V)\geq\phi(c)+\phi'(c)(z-c).
+\]
+\end{lemma}
+
+\begin{proof}
+If $z\geq1/2$, Theorem~\ref{thm:base} and convexity give the result.
+If $z<1/2$, the tangent line at $c$ is at most
+$\phi(1/2)=0$ when evaluated at $1/2$, and it decreases as its argument
+moves below $1/2$.  Thus the tangent is nonpositive at $z$, while
+$t(B,V)\geq0$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The weighted link estimate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define
+\[
+\tau(x)=
+\int_{\Omega^2}W(x,y)W(x,z)W(y,z)
+\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Weighted rooted-triangle inequality]
+\label{lem:weighted}
+If $p>0$, then for every integer $h\geq0$,
+\[
+\int_\Omega d(x)^h\tau(x)\dd\mu(x)
+\geq
+\frac{2p-1}{p}
+\int_\Omega d(x)^{h+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $M_j=\int d^j$, let $T_W$ be the graphon operator, and define
+\[
+I_h=\int d^h\tau,
+\qquad
+J_h=\ip{d^h}{T_Wd}.
+\]
+The inequality $ab\geq a+b-1$ on $[0,1]^2$, applied to
+$W(x,y),W(x,z)$ and multiplied by $d(x)^hW(y,z)$, gives
+\begin{equation}
+I_h\geq2J_h-pM_h.
+\label{eq:I-J}
+\end{equation}
+
+Set $U=1-W$, $u=T_U\one=1-d$, and $q=1-p$.  Then
+\[
+T_Wd=d-q\one+T_Uu,
+\]
+and hence
+\begin{equation}
+J_h=M_{h+1}-qM_h+\ip{d^h}{T_Uu}.
+\label{eq:J}
+\end{equation}
+By symmetry of $U$, twice
+\[
+\ip{d^h}{T_Uu}-\int d^hu^2
+\]
+equals
+\[
+\int_{\Omega^2}U(x,y)
+\bigl(u(y)-u(x)\bigr)
+\bigl(d(x)^h-d(y)^h\bigr)
+\dd\mu(x)\dd\mu(y),
+\]
+which is nonnegative because $d=1-u$.  Thus
+\[
+J_h\geq M_{h+2}-M_{h+1}+pM_h.
+\]
+Substitution into \eqref{eq:I-J} yields
+\[
+I_h\geq2M_{h+2}-2M_{h+1}+pM_h.
+\]
+Finally, subtracting $(2p-1)M_{h+2}/p$ from the right-hand side gives
+\[
+\frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+\end{proof}
+
+For $d(x)>0$, set
+\[
+\dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y),
+\]
+and let $W_x$ be the kernel $W$ on $(\Omega,\mu_x)$.  Its edge density
+is $z_x=\tau(x)/d(x)^2$.  At $d(x)=0$, set $z_x=0$.
+
+\begin{corollary}[Average density in the links]
+\label{cor:average}
+For every integer $N\geq2$,
+\[
+\int_\Omega d(x)^Nz_x\dd\mu(x)
+\geq
+\left(2-\frac1p\right)\int_\Omega d(x)^N\dd\mu(x).
+\]
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:weighted} with $h=N-2$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The cone theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Special cones]
+\label{thm:main}
+Let $B$ be any $B_s^P$ or $B_s^R$, put $N=v(B)$, and define
+\[
+H=K_1\join B.
+\]
+Every graphon $W$ of edge density $p\geq2/3$ satisfies
+\[
+\boxed{t(H,W)\geq\Phi_H(p).}
+\]
+Moreover, the exact target is
+\begin{equation}
+\Phi_H(p)
+=p^{N-3}(2p-1)^2(3p-2).
+\label{eq:cone-target}
+\end{equation}
+Since $\chi(H)=4$, this is the complete required interval.
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+c=2-\frac1p.
+\]
+The hypothesis $p\geq2/3$ gives $c\in[1/2,1]$.  Conditioning on the
+image $x$ of the cone vertex gives the exact identity
+\[
+t(H,W)=\int_\Omega d(x)^N t(B,W_x)\dd\mu(x).
+\]
+Let $M_N=\int d^N$.  Lemma~\ref{lem:tangent} gives
+\begin{align*}
+t(H,W)
+&\geq
+M_N\phi(c)
+\\
+&\quad+
+\phi'(c)
+\left(\int d(x)^Nz_x\dd\mu(x)-cM_N\right).
+\end{align*}
+The second line is nonnegative by Corollary~\ref{cor:average}, since
+$c=2-1/p$ and $\phi'(c)\geq0$.  Therefore
+\[
+t(H,W)\geq M_N\phi(c)\geq p^N\phi(c),
+\]
+where the last step is Jensen and $\phi(c)\geq0$.
+
+Now
+\[
+c=\frac{2p-1}{p},
+\qquad
+2c-1=\frac{3p-2}{p}.
+\]
+Consequently,
+\[
+p^N\phi(c)
+=p^Nc^2(2c-1)
+=p^{N-3}(2p-1)^2(3p-2).
+\]
+
+It remains to verify that this is the chromatic target.  For a cone,
+\[
+\chi_H(x)=x\chi_B(x-1).
+\]
+If $q=1-p$, then $1/q-1=p/q$.  Using
+\eqref{eq:base-target} in its defining chromatic-polynomial form,
+\begin{align*}
+\Phi_H(p)
+&=q^{N+1}\frac1q\chi_B\!\left(\frac pq\right)
+\\
+&=p^N\Phi_B\!\left(2-\frac1p\right)
+=p^N\phi(c).
+\end{align*}
+This proves both the inequality and \eqref{eq:cone-target}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Endpoints, equality, and catalogue consequences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At $p=2/3$, the factor $3p-2$ vanishes, so the target is zero.  The
+balanced complete tripartite graphon has no $K_4$ and attains equality,
+because every graph in the theorem contains a $K_4$.  At $p=1$, both
+sides equal $1$.  More generally, every balanced complete $k$-partite
+graphon at $p=1-1/k$, $k\geq3$, attains equality by the chromatic
+polynomial identity.
+
+\begin{corollary}[New positive Atlas cases]
+The following previously open graphs are positive on the full interval
+$p\geq2/3$:
+
+\begin{center}
+\begin{tabular}{ccll}
+\hline
+Atlas ID & graph6 & base after deleting cone vertex & target \\
+\hline
+49  & \texttt{Df\char123}  & $P$ & $p(2p-1)^2(3p-2)$ \\
+156 & \texttt{E\char126 H\_} & $P\sqcup K_1$ & $p^2(2p-1)^2(3p-2)$ \\
+165 & \texttt{E\char126 aG} & $K_3\sqcup K_2$ & $p^2(2p-1)^2(3p-2)$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{corollary}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scope and hidden assumptions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The proof uses the rooted triangle--tree theorem for the paw, the
+triangle Goodman bound, and multiplicativity over disjoint unions.
+Every other analytic step is proved here.
+
+This is not a general universal-vertex theorem.  It applies only because
+the two stated base families share the explicitly verified target
+$\phi(z)=z^2(2z-1)$ and the required graphon lower bound.  No conclusion
+is asserted for a different base graph.
+
+The link tangent is valid even when an individual link has density below
+$1/2$: its tangent lower bound is then nonpositive.  Thus the proof does
+not silently assume pointwise link density, regularity, minimum degree,
+injective copies, or finite-step graphons.  It applies directly to every
+graphon and ordinary homomorphism densities.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Theorem~\ref{thm:main} is formalized for both base families; Atlas $49$, $156$
+and $165$ are \texttt{verified}.  The development is
+\texttt{lean/Taeyoung/Methods/PawCone/}, over the abstract
+\texttt{Methods/ConeBound.lean}.  Two differences of substance.
+
+\subsection*{Theorem~\ref{thm:base} is proved, not accepted}
+
+Both base bounds are formalized rather than taken as inputs: the paw is $L_1$
+of the rooted triangle--tree development, and $t(R,V)=t(K_3,V)t(K_2,V)$ uses
+Goodman, both of which this project proves.  So no accepted graph-density
+result enters.
+
+\subsection*{Lemma~\ref{lem:tangent} is proved without convexity}
+
+$\phi''\geq0$ is never verified, and no convexity theory is used.  The tangent
+bound is instead the polynomial identity
+\[
+ \phi(w)-\phi(c)-\phi'(c)(w-c)=(w-c)^2\bigl(2w+4c-1\bigr),
+\]
+whose right-hand side is nonnegative as soon as $w,c\geq1/2$; the case
+$z<1/2$ is unchanged.  Since both families share the target
+\eqref{eq:base-target}, everything after the base bound is proved once against
+an abstract base graph, and the two families are two instantiations of it.
+
+\end{document}

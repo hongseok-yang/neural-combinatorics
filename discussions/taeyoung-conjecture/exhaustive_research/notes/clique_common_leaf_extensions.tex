@@ -1,0 +1,497 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+
+\title{Cliques with Common Pendant Leaves:\\
+A Positive Family for the Chromatic-Polynomial Graphon Bound}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $H_{r,k}$ be obtained from $K_r$ by attaching $k$ leaves to one
+fixed clique vertex.  For every $r\geq3$, $k\geq0$, and every graphon
+$W$ of edge density
+\[
+p\geq1-\frac1{r-1},
+\]
+we prove
+\[
+t(H_{r,k},W)
+\geq
+p^k\prod_{j=0}^{r-1}\bigl(1-j(1-p)\bigr)
+=\Phi_{H_{r,k}}(p).
+\]
+This is the complete density interval required by
+$\chi(H_{r,k})=r$.  The proof is a direct link-graphon argument.  It
+does not assume a general universal-vertex or join closure.  In the
+catalogue on at most six vertices it proves the previously open Atlas
+graphs 45, 133, and 191.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The family and its exact target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be a probability space and let
+$W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon.  For a
+finite simple graph $F$, write
+\[
+t(F,W)
+=
+\int_{\Omega^{V(F)}}
+\prod_{uv\in E(F)}W(x_u,x_v)
+\prod_{u\in V(F)}\dd\mu(x_u).
+\]
+This is the ordinary non-injective homomorphism density.  Put
+\[
+p=t(K_2,W),
+\qquad
+d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+For integers $r\geq3$ and $k\geq0$, define $H_{r,k}$ as follows.
+Start with a clique $K_r$, distinguish one of its vertices as $o$, add
+new vertices $u_1,\ldots,u_k$, and add precisely the new edges $ou_i$.
+Thus all $k$ new vertices are leaves with the same neighbour $o$.
+
+After a proper colouring of $K_r$ has been chosen, each leaf has
+$x-1$ choices.  Therefore
+\begin{equation}
+\chi_{H_{r,k}}(x)=(x)_r(x-1)^k,
+\qquad
+\chi(H_{r,k})=r,
+\label{eq:chromatic}
+\end{equation}
+where $(x)_r=x(x-1)\cdots(x-r+1)$.  Define
+\[
+A_r(p):=\prod_{j=0}^{r-1}\bigl(1-j(1-p)\bigr).
+\]
+If $q=1-p$, then
+\begin{align}
+\Phi_{H_{r,k}}(p)
+&=
+q^{r+k}
+\left(\frac1q\right)_r
+\left(\frac pq\right)^k
+\notag\\
+&=p^k A_r(p).
+\label{eq:target}
+\end{align}
+The identity extends continuously to $p=1$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The accepted clique input and its tangent lines}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We use one previously accepted result: the clique case of the
+pure-chordal theorem.  In the notation above it says the following.
+
+\begin{theorem}[Clique-density input]
+\label{thm:clique-input}
+Let $m\geq2$.  Every graphon $V$ of edge density $z$ satisfying
+\[
+z\geq a_m:=1-\frac1{m-1}
+\]
+satisfies
+\[
+t(K_m,V)\geq A_m(z).
+\]
+For $m=2$, the convention $a_2=0$ is used, and the assertion is the
+identity $t(K_2,V)=z=A_2(z)$.
+\end{theorem}
+
+For completeness, the input for $m\geq3$ is exactly the specialization
+of the pure-chordal formula to the single maximal clique $K_m$.  It can
+also be obtained by multiplying the Moon--Moser clique-ratio inequalities
+\[
+\frac{t(K_j,V)}{t(K_{j-1},V)}
+\geq1-(j-1)(1-z),
+\qquad 2\leq j\leq m,
+\]
+whose right-hand sides are nonnegative when $z\geq a_m$.
+
+\begin{lemma}[Clique-target shape]
+\label{lem:shape}
+For $m\geq2$, the polynomial
+\[
+\phi_m(z):=A_m(z)
+\]
+is nonnegative, nondecreasing, and convex on $[a_m,1]$, and
+$\phi_m(a_m)=0$.
+\end{lemma}
+
+\begin{proof}
+Ignoring the constant factor corresponding to $j=0$, write
+\[
+\phi_m(z)=\prod_{j=1}^{m-1}\ell_j(z),
+\qquad
+\ell_j(z)=1-j(1-z).
+\]
+Every $\ell_j$ is affine and nondecreasing, and every $\ell_j$ is
+nonnegative on $[a_m,1]$.  The product is therefore nonnegative.  Its
+first derivative is a sum of products of nonnegative factors, and its
+second derivative is a sum over ordered pairs of distinct differentiated
+factors, again with only nonnegative factors.  Hence
+$\phi_m'\geq0$ and $\phi_m''\geq0$ on this interval.  At $a_m$, the
+last factor $\ell_{m-1}$ is zero.
+\end{proof}
+
+\begin{lemma}[Global tangent bound]
+\label{lem:tangent}
+Let $m\geq2$ and fix $c\in[a_m,1]$.  Every graphon $V$, of arbitrary
+edge density $z\in[0,1]$, satisfies
+\[
+t(K_m,V)
+\geq
+\phi_m(c)+\phi_m'(c)(z-c).
+\]
+\end{lemma}
+
+\begin{proof}
+If $z\geq a_m$, Theorem~\ref{thm:clique-input} and convexity give
+\[
+t(K_m,V)\geq\phi_m(z)
+\geq\phi_m(c)+\phi_m'(c)(z-c).
+\]
+If $z<a_m$, convexity and $\phi_m(a_m)=0$ show that the tangent line
+at $c$ is at most zero at $a_m$.  Its slope is nonnegative, so it is
+also at most zero at $z<a_m$.  The desired conclusion then follows
+from $t(K_m,V)\geq0$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Weighted link density}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define the rooted triangle density
+\[
+\tau(x)=
+\int_{\Omega^2}
+W(x,y)W(x,z)W(y,z)
+\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Weighted rooted-triangle inequality]
+\label{lem:weighted-triangle}
+Suppose $p>0$.  For every integer $h\geq0$,
+\[
+\int_\Omega d(x)^h\tau(x)\dd\mu(x)
+\geq
+\frac{2p-1}{p}
+\int_\Omega d(x)^{h+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $M_j=\int d^j$, let $T_W$ be the graphon operator, and write
+\[
+I_h=\int d^h\tau,
+\qquad
+J_h=\ip{d^h}{T_Wd}.
+\]
+The elementary inequality $ab\geq a+b-1$ for $a,b\in[0,1]$, applied
+to $W(x,y)$ and $W(x,z)$ and then multiplied by
+$d(x)^hW(y,z)$, gives
+\begin{equation}
+I_h\geq2J_h-pM_h.
+\label{eq:I-J}
+\end{equation}
+
+Set $U=1-W$, $u=T_U\one=1-d$, and $q=1-p$.  Since
+\[
+T_Wd=p\one-T_Ud=d-q\one+T_Uu,
+\]
+we have
+\begin{equation}
+J_h=M_{h+1}-qM_h+\ip{d^h}{T_Uu}.
+\label{eq:J}
+\end{equation}
+Symmetry of $U$ gives
+\begin{align*}
+&2\ip{d^h}{T_Uu}
+-2\int_\Omega d(x)^hu(x)^2\dd\mu(x)
+\\
+&\qquad=
+\int_{\Omega^2}U(x,y)
+\bigl(u(y)-u(x)\bigr)
+\bigl(d(x)^h-d(y)^h\bigr)
+\dd\mu(x)\dd\mu(y)
+\geq0.
+\end{align*}
+Indeed, $d=1-u$, so $u$ and $d^h$ are oppositely ordered.  Substitution
+in \eqref{eq:J}, using $u=1-d$, yields
+\[
+J_h\geq M_{h+2}-M_{h+1}+pM_h.
+\]
+Together with \eqref{eq:I-J}, this gives
+\[
+I_h\geq2M_{h+2}-2M_{h+1}+pM_h.
+\]
+Finally,
+\begin{align*}
+&2M_{h+2}-2M_{h+1}+pM_h
+-\frac{2p-1}{p}M_{h+2}
+\\
+&\qquad=
+\frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)
+\geq0.
+\end{align*}
+\end{proof}
+
+For $d(x)>0$, define the probability measure
+\[
+\dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y)
+\]
+and let $W_x$ denote the same kernel $W$, now viewed on
+$(\Omega,\mu_x)$.  Its edge density is
+\[
+z_x=t(K_2,W_x)=\frac{\tau(x)}{d(x)^2}.
+\]
+At points where $d(x)=0$, put $z_x=0$.
+
+\begin{corollary}[Weighted average link density]
+\label{cor:link-average}
+For every integer $n\geq2$ and $p>0$,
+\[
+\int_\Omega d(x)^nz_x\dd\mu(x)
+\geq
+\left(2-\frac1p\right)
+\int_\Omega d(x)^n\dd\mu(x).
+\]
+\end{corollary}
+
+\begin{proof}
+The left-hand side is $\int d^{n-2}\tau$.  Apply
+Lemma~\ref{lem:weighted-triangle} with $h=n-2$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Main theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Cliques with common pendant leaves]
+\label{thm:main}
+Let $r\geq3$ and $k\geq0$.  Every graphon $W$ with edge density
+\[
+p\geq1-\frac1{r-1}
+\]
+satisfies
+\[
+\boxed{
+t(H_{r,k},W)
+\geq
+p^kA_r(p)
+=\Phi_{H_{r,k}}(p).
+}
+\]
+This is the full interval required by $\chi(H_{r,k})=r$.
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+m=r-1,
+\qquad
+n=r-1+k,
+\qquad
+c=2-\frac1p.
+\]
+The assumed lower bound on $p$ implies
+\[
+c\geq1-\frac1{r-2}=a_m.
+\]
+Also $c\leq1$.  Let $M_n=\int d^n$.
+
+Condition on the image $x$ of the distinguished clique vertex $o$.
+The other $r-1$ clique vertices form $K_m$ inside the link graphon
+$W_x$, while the $k$ leaves become isolated vertices there.  Directly
+from the homomorphism integral,
+\begin{equation}
+t(H_{r,k},W)
+=
+\int_\Omega d(x)^n t(K_m,W_x)\dd\mu(x).
+\label{eq:link-identity}
+\end{equation}
+No division is needed on the set $d(x)=0$, because $n\geq2$ and its
+contribution to \eqref{eq:link-identity} is zero.
+
+Apply Lemma~\ref{lem:tangent} to each $W_x$, with tangent point $c$:
+\[
+t(K_m,W_x)
+\geq
+\phi_m(c)+\phi_m'(c)(z_x-c).
+\]
+Multiplying by $d(x)^n$ and integrating gives
+\begin{align*}
+t(H_{r,k},W)
+&\geq
+M_n\phi_m(c)
+\\
+&\quad+
+\phi_m'(c)
+\left(\int d(x)^nz_x\dd\mu(x)-cM_n\right).
+\end{align*}
+The second line is nonnegative by
+Corollary~\ref{cor:link-average} and Lemma~\ref{lem:shape}.  Hence
+\[
+t(H_{r,k},W)\geq M_n\phi_m(c).
+\]
+Since $\phi_m(c)\geq0$, Jensen's inequality gives
+\[
+t(H_{r,k},W)
+\geq p^n\phi_m(c).
+\]
+
+It remains only to identify this expression.  If $q=1-p$, then
+$1-c=q/p$, so
+\begin{align*}
+\phi_m(c)
+&=
+\prod_{j=0}^{r-2}\left(1-\frac{jq}{p}\right)
+\\
+&=
+p^{-(r-1)}
+\prod_{j=0}^{r-2}\bigl(p-jq\bigr)
+\\
+&=
+p^{-(r-1)}
+\prod_{\ell=1}^{r-1}(1-\ell q)
+=p^{-(r-1)}A_r(p).
+\end{align*}
+As $n=r-1+k$, it follows that
+\[
+p^n\phi_m(c)=p^kA_r(p)=\Phi_{H_{r,k}}(p),
+\]
+where the last equality is \eqref{eq:target}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Thresholds and equality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At the required threshold
+\[
+p=1-\frac1{r-1},
+\]
+the last factor of $A_r(p)$ is zero.  Thus the target is zero, and the
+inequality also follows directly from nonnegativity.  The balanced
+complete $(r-1)$-partite graphon attains equality there because it has
+no copy of $K_r$.
+
+More generally, for every integer $\ell\geq r-1$, the balanced complete
+$\ell$-partite graphon $T_\ell$ has edge density $p=1-1/\ell$ and
+\[
+t(H_{r,k},T_\ell)
+=\frac{\chi_{H_{r,k}}(\ell)}{\ell^{r+k}}
+=\Phi_{H_{r,k}}(p).
+\]
+At $p=1$, one has $W=1$ almost everywhere, and both sides equal $1$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Catalogue consequences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[New positive Atlas cases]
+The following previously open graphs satisfy the desired inequality on
+their full required density intervals:
+
+\begin{center}
+\begin{tabular}{ccll}
+\hline
+Atlas ID & graph6 & family member & target \\
+\hline
+45  & \texttt{DJ\char123}            & $H_{4,1}$ & $pA_4(p)$ \\
+133 & \texttt{E\char126 a?}          & $H_{4,2}$ & $p^2A_4(p)$ \\
+191 & \texttt{E\char126\char124?}   & $H_{5,1}$ & $pA_5(p)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Thus Atlas 45 and 133 are positive for $p\geq2/3$, while Atlas 191 is
+positive for $p\geq3/4$.
+\end{corollary}
+
+\begin{proof}
+Atlas 45 is $K_4$ with one leaf, Atlas 133 is $K_4$ with two leaves
+having the same clique neighbour, and Atlas 191 is $K_5$ with one leaf.
+The graph6 codes are independent machine-readable identifiers.  Apply
+Theorem~\ref{thm:main}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scope of the proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The only previously accepted graph-density result used here is the
+clique case of the pure-chordal theorem, stated precisely as
+Theorem~\ref{thm:clique-input}.  The weighted rooted-triangle estimate,
+the tangent extension, and the link averaging are all proved in this
+note.
+
+Although the proof conditions on the distinguished clique vertex, it
+does not assert that adjoining a universal vertex preserves positivity
+for an arbitrary graph.  It uses the explicit clique polynomial
+$A_{r-1}$, its verified convexity, and the exact clique-density input.
+Thus it establishes only the stated common-leaf clique family, not a
+general join or lifting closure.
+
+All calculations apply directly to arbitrary graphons.  They require
+no regularity, finite-step reduction, injective-copy interpretation,
+minimum-degree bound, or pointwise lower bound on $d(x)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Theorem~\ref{thm:main} is formalized as stated, for all $r\geq3$ and $k\geq0$;
+Atlas $45$, $133$ and $191$ are \texttt{verified}.  The development is
+\texttt{lean/Taeyoung/Methods/CliqueLeaf/}.  The proof follows the note step
+for step --- Theorem~\ref{thm:clique-input}, Lemma~\ref{lem:tangent},
+Lemma~\ref{lem:weighted-triangle}, Corollary~\ref{cor:link-average} and the
+link identity \eqref{eq:link-identity} are each a named theorem there.  Two
+remarks.
+
+\subsection*{Theorem~\ref{thm:clique-input} is proved, not accepted}
+
+The clique input is the one previously accepted result the note uses.  It is
+formalized, as the clique case of the pure-chordal development
+(\texttt{Methods/PureChordal/CliquePolynomialBound.lean}), so no accepted
+graph-density result enters the catalogue through this family.
+
+\subsection*{The chain is stated once, abstractly}
+
+Nothing in the argument uses the clique polynomial beyond four facts: it
+vanishes at the threshold, it has nonnegative slope, its tangent at $c$ lies
+under it on $[a,1]$, and it bounds the base density above the threshold.  The
+Lean development therefore states the chain once with the polynomial and the
+base graph abstract (\texttt{Methods/ConeBound.lean}), and this family is its
+first instance.  Three later families --- the paw and triangle--edge cones, the
+verified-base cones, and the clique join of $C_5$ --- are further instances of
+the same theorem, so the argument below is not repeated anywhere.
+
+\end{document}

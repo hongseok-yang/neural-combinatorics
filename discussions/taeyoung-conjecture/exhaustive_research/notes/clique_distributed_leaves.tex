@@ -1,0 +1,426 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Cliques with Distributed Pendant Leaves:\\
+Symmetric Fractional Degree Bias}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Fix $r\geq3$.  Attach $n_i\geq0$ pendant leaves to vertex $i$ of $K_r$
+and put $h=n_1+\cdots+n_r$.  We prove that, whenever $1\leq h\leq r$,
+every graphon $W$ of edge density
+$p\geq1-1/(r-1)$ satisfies
+\[
+ t(H,W)\geq p^h\prod_{j=1}^{r-1}\bigl(jp-(j-1)\bigr)
+ =\Phi_H(p).
+\]
+The leaf multiplicities may be distributed arbitrarily among the clique
+vertices.  The proof averages over clique permutations, uses the
+arithmetic--geometric mean inequality to replace the distribution by the
+fractional degree weight $d^{h/r}$ at every clique vertex, and changes the
+underlying probability measure.  A fractional H\"older inequality and a
+monotone rescaling of the accepted clique bound complete the argument.  The
+case $(r,h)=(4,2)$ with multiplicities $(1,1,0,0)$ proves the formerly open
+NetworkX Atlas graph $134$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph family and chromatic target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+For integers $r\geq3$ and $n_1,\ldots,n_r\geq0$, let
+\[
+ H=H_r(n_1,\ldots,n_r)
+\]
+be obtained from the clique on labelled vertices $1,\ldots,r$ by attaching
+$n_i$ private pendant leaves to vertex $i$.  Put
+\[
+ h=n_1+\cdots+n_r.
+\]
+The theorem below assumes $1\leq h\leq r$; no restriction is placed on the
+individual $n_i$.
+
+Since a leaf has $x-1$ colour choices after its neighbour has been coloured,
+\begin{equation}
+ \chi_H(x)=(x)_r(x-1)^h,
+ \qquad
+ (x)_r=x(x-1)\cdots(x-r+1).
+ \label{eq:chromatic}
+\end{equation}
+The clique is a subgraph and the leaves do not increase chromatic number, so
+$\chi(H)=r$.  Define the usual clique target
+\[
+ A_r(p):=\prod_{j=1}^{r-1}\bigl(jp-(j-1)\bigr).
+\]
+Substituting $x=(1-p)^{-1}$ in \eqref{eq:chromatic} gives
+\begin{equation}
+ \Phi_H(p)=p^hA_r(p).
+ \label{eq:target}
+\end{equation}
+Both sides are polynomials in $p$, so this identity includes the continued
+value $1$ at $p=1$.  At the chromatic threshold
+\[
+ a_r:=1-\frac1{r-1}=\frac{r-2}{r-1},
+\]
+the final factor of $A_r$ vanishes and hence $\Phi_H(a_r)=0$.
+
+We use exactly one previously accepted graphon theorem: for every graphon
+$V$ of edge density $s\geq a_r$,
+\begin{equation}
+ t(K_r,V)\geq A_r(s).
+ \label{eq:clique-input}
+\end{equation}
+This is the complete-clique instance of
+\texttt{notes/pure\_chordal.tex} (equivalently, the accepted Moon--Moser
+clique bound).  It applies to graphons on arbitrary probability spaces.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fractional degree bias}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We record the weighted-edge estimate needed after changing measure.
+
+\begin{lemma}[Fractionally degree-weighted edge]
+\label{lem:fractional-edge}
+Let $0<\alpha\leq1$ and set
+\[
+ N_\alpha
+ =\int_{\Omega^2}W(x,y)d(x)^\alpha d(y)^\alpha
+   \dd\mu(x)\dd\mu(y).
+\]
+Then
+\[
+ N_\alpha\geq p^{1+2\alpha}.
+\]
+\end{lemma}
+
+\begin{proof}
+On $\{d=0\}$, define $W(x,y)/d(x)$ to be zero.  Fubini's theorem implies
+that $W(x,y)=0$ for almost every $y$ there.  Put
+\[
+ \theta=\frac1{1+2\alpha},
+ \qquad
+ \eta=\frac{\alpha}{1+2\alpha}.
+\]
+Thus $\theta+2\eta=1$ and, almost everywhere on the support of $W$,
+\[
+ W(x,y)
+ =\bigl(W(x,y)d(x)^\alpha d(y)^\alpha\bigr)^\theta
+  \left(\frac{W(x,y)}{d(x)}\right)^\eta
+  \left(\frac{W(x,y)}{d(y)}\right)^\eta.
+\]
+Weighted H\"older gives
+\[
+ p\leq N_\alpha^\theta
+ \left(\int\frac{W(x,y)}{d(x)}\dd\mu^2\right)^\eta
+ \left(\int\frac{W(x,y)}{d(y)}\dd\mu^2\right)^\eta.
+\]
+Each quotient integral is the measure of a subset of $\{d>0\}$ and is at
+most one.  Hence $p\leq N_\alpha^\theta$, which is the assertion.
+\end{proof}
+
+The next scalar lemma is the reason that the upper bound $h\leq r$ is the
+natural boundary of this argument.
+
+\begin{lemma}[Clique rescaling]
+\label{lem:scalar}
+Let $r\geq3$, let $1\leq h\leq r$, and let $p\in(a_r,1]$.  Suppose
+$0<z\leq p^h$ and put
+\[
+ s_0=p\left(\frac{p^h}{z}\right)^{2/r}.
+\]
+If $s_0\leq1$, then
+\[
+ zA_r(s_0)\geq p^hA_r(p).
+\]
+\end{lemma}
+
+\begin{proof}
+Every factor $js-(j-1)$ is positive for $s>a_r$.  Put
+\[
+ \Psi_r(s)=\frac{A_r(s)}{s^{r/2}}.
+\]
+For $s\in(a_r,1]$, logarithmic differentiation gives
+\begin{align*}
+ \frac{\Psi_r'(s)}{\Psi_r(s)}
+ &=\sum_{j=1}^{r-1}\frac{j}{js-(j-1)}-\frac{r}{2s}\\
+ &=\frac{r-2}{2s}
+   +\sum_{j=2}^{r-1}
+      \frac{j-1}{s\bigl(js-(j-1)\bigr)}>0.
+\end{align*}
+Thus $\Psi_r$ is strictly increasing.  The definition of $s_0$ is
+equivalent to
+\[
+ z=p^h\left(\frac p{s_0}\right)^{r/2}.
+\]
+Since $s_0\geq p$, it follows that
+\[
+ zA_r(s_0)
+ =p^{h+r/2}\Psi_r(s_0)
+ \geq p^{h+r/2}\Psi_r(p)
+ =p^hA_r(p).
+\]
+\end{proof}
+
+Also, $A_r$ is nondecreasing on $[a_r,1]$: every one of its factors is
+nonnegative and nondecreasing there.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The distributed-leaf theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Leaves distributed on a clique]
+\label{thm:main}
+Let $r\geq3$ and let $n_1,\ldots,n_r\geq0$ have total
+$1\leq h\leq r$.  For every graphon $W$ of edge density
+\[
+ p\in[a_r,1],
+\]
+one has
+\[
+ \boxed{
+ t\bigl(H_r(n_1,\ldots,n_r),W\bigr)
+ \geq p^hA_r(p)
+ =\Phi_{H_r(n_1,\ldots,n_r)}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+The claim is immediate at $p=a_r$, because the target is zero and every
+homomorphism density is nonnegative.  At $p=1$, one has $W=1$ almost
+everywhere, and both sides equal one.  Hence assume $p\in(a_r,1)$.
+
+For clique variables $x_1,\ldots,x_r$, write
+\[
+ F(\boldsymbol x)=\prod_{1\leq i<j\leq r}W(x_i,x_j).
+\]
+After integrating every leaf, the homomorphism density is
+\[
+ t(H,W)=\int_{\Omega^r}F(\boldsymbol x)
+              \prod_{i=1}^r d(x_i)^{n_i}\dd\mu^r.
+\]
+Permuting the clique variables shows that the same integral is obtained
+after any permutation of the exponent vector $(n_1,\ldots,n_r)$.  Average
+over all $r!$ permutations.  The arithmetic--geometric mean inequality,
+applied pointwise to the resulting $r!$ monomials, gives
+\begin{equation}
+ t(H,W)
+ \geq\int_{\Omega^r}F(\boldsymbol x)
+       \prod_{i=1}^r d(x_i)^{h/r}\dd\mu^r.
+ \label{eq:symmetrization}
+\end{equation}
+Indeed, each $n_j$ appears in each coordinate exactly $(r-1)!$ times, so
+the geometric-mean exponent of every $d(x_i)$ is
+$(r-1)!h/r!=h/r$.
+
+Set
+\[
+ \alpha=\frac hr\in(0,1],
+ \qquad
+ M=\int_\Omega d(x)^\alpha\dd\mu(x),
+ \qquad
+ z=M^r.
+\]
+Since $p>0$, one has $M>0$.  Define the probability measure
+\[
+ \dd\nu(x)=\frac{d(x)^\alpha}{M}\dd\mu(x).
+\]
+The right side of \eqref{eq:symmetrization} is
+\begin{equation}
+ z\,t(K_r,W;\nu).
+ \label{eq:measure-change}
+\end{equation}
+The edge density of $W$ on $(\Omega,\nu)$ is
+\[
+ s=\frac{N_\alpha}{M^2}.
+\]
+
+Concavity of $u\mapsto u^\alpha$ gives
+\[
+ M\leq p^\alpha,
+ \qquad
+ 0<z\leq p^h.
+\]
+By Lemma~\ref{lem:fractional-edge},
+\[
+ s\geq\frac{p^{1+2h/r}}{M^2}
+ =p\left(\frac{p^h}{z}\right)^{2/r}
+ =:s_0.
+\]
+Because $W\leq1$ and $\nu$ is a probability measure, $s\leq1$, so
+$s_0\leq1$.  Also $s\geq s_0\geq p>a_r$.
+
+Apply the accepted clique bound \eqref{eq:clique-input} on the biased
+probability space, monotonicity of $A_r$, and Lemma~\ref{lem:scalar}:
+\begin{align*}
+ t(H,W)
+ &\geq z\,t(K_r,W;\nu)\\
+ &\geq zA_r(s)
+ \geq zA_r(s_0)
+ \geq p^hA_r(p).
+\end{align*}
+This is exactly \eqref{eq:target}.
+\end{proof}
+
+Every balanced complete $k$-partite graphon with $k\geq r-1$ gives the
+expected equality.  At $k=r-1$ both sides vanish.  For $k\geq r$, the degree
+is constant, equality holds in the symmetrization and fractional H\"older
+steps, the biased measure equals the original measure, and the accepted
+clique bound is sharp.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas 134, audits, and exact limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 134]
+NetworkX Atlas graph $134$, with graph6 code \texttt{E\char126\_O}, is
+positive.  It has order six, size eight, chromatic number four, and
+\[
+ \chi_{F_{134}}(x)=x(x-1)^3(x-2)(x-3).
+\]
+For every graphon of edge density $p\in[2/3,1]$,
+\[
+ t(F_{134},W)
+ \geq p^3(2p-1)(3p-2)
+ =\Phi_{F_{134}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 01,\ 02,\ 03,\ 04,\ 12,\ 13,\ 23,\ 35.
+\]
+Vertices $0,1,2,3$ induce $K_4$, while $4$ and $5$ are leaves attached to
+the distinct clique vertices $0$ and $3$.  Thus the graph is
+$H_4(1,0,0,1)$, and Theorem~\ref{thm:main} applies with $h=2$.
+\end{proof}
+
+All integrations above concern bounded nonnegative measurable functions, so
+Tonelli--Fubini applies without an approximation or finite-step reduction.
+The quotient $W/d$ is defined on $\{d=0\}$ and the almost-everywhere
+vanishing needed there is stated explicitly.  The biased measure is formed
+only after proving $M>0$.  The proof uses ordinary homomorphism densities,
+not injective copies, and assumes neither regularity nor a minimum-degree
+condition.  The threshold and $p=1$ endpoints are handled before any use of
+positive clique factors or logarithmic differentiation.
+
+The theorem's exact new boundary is $h\leq r$.  This is what ensures that
+$d^{h/r}$ is a concave weight and that Lemma~\ref{lem:fractional-edge}
+applies with exponent at most one.  The result does not cover more than $r$
+leaves distributed over several roots.  It also requires the non-leaf core
+to be a complete clique and every attachment to be a pendant leaf; it is not
+a general leaf-attachment or mixed-chordal closure theorem.
+
+The finite chromatic identities, scalar derivative, H\"older exponents, and
+Atlas identification are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_clique_distributed_leaves.py
+\end{verbatim}
+For formal verification, the reusable analytic pieces are the permutation
+symmetrization \eqref{eq:symmetrization}, the fractional edge lemma, and the
+scalar monotonicity of $A_r(s)/s^{r/2}$.  The graph-specific module awaiting
+inspection is
+\texttt{lean/Taeyoung/Examples/Graph134.lean}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/CliqueDist/\{Bias,Rows\}.lean}, ending at
+\texttt{satisfiesLowerBound\_134}.  It proves the case
+$(r,h)=(4,2)$ with multiplicities $(1,1,0,0)$, and only that case.  Three
+things are done differently.
+
+\paragraph{Scope: $r=4$, $h=2$, and $\alpha=1/2$.}
+Theorem~\ref{thm:main} is proved here for every $r\geq3$ and every
+$1\leq h\leq r$.  The formalization fixes $r=4$, $h=2$.  The reason is the
+exponent: $\alpha=h/r$ is $1/2$ there, so the biased density is $\sqrt d$ and
+every step stays inside `Real.sqrt`; a general $\alpha$ would need
+`Real.rpow` throughout and a fractional H\"older with $r$ factors.  No other
+member of the family is in the six-vertex catalogue.
+
+\paragraph{The permutation average becomes a single exchange.}
+Equation~\eqref{eq:symmetrization} averages the density over all $r!$
+permutations of the exponent vector and applies AM--GM to the resulting $r!$
+monomials.  At $(4,2)$ the formalization uses \emph{one} exchange instead.
+Writing $H_{ij}$ for $K_4$ with its two leaves at clique vertices $i$ and $j$,
+the graphs $H_{01}$ and $H_{23}$ are isomorphic, so
+\[
+ 2\,t(H,W)=\int F\bigl(d_0d_1+d_2d_3\bigr)
+ \geq\int F\cdot2\sqrt{d_0d_1d_2d_3}
+ =2\int F\prod_{i}\sqrt{d_i},
+\]
+where the middle step is the two-term AM--GM $a+b\geq2\sqrt{ab}$ applied to the
+single perfect matching $\{01\},\{23\}$.  That produces exactly the geometric
+weight $\prod d_i^{h/r}$ of \eqref{eq:symmetrization}, from one graph
+isomorphism (\texttt{CliqueDist.isoExchange}, checked by \texttt{decide}) rather
+than an $r!$-fold average.  The general case still needs the average; the
+matching shortcut is available whenever $h=r/2$ and the leaves sit on a
+perfect matching of the clique.
+
+\paragraph{Lemma~\ref{lem:scalar} becomes a factorization.}
+This note proves the rescaling by showing $\Psi_r(s)=A_r(s)/s^{r/2}$ strictly
+increasing, through logarithmic differentiation and the identity
+\[
+ \frac{\Psi_r'}{\Psi_r}
+ =\frac{r-2}{2s}+\sum_{j=2}^{r-1}\frac{j-1}{s(js-(j-1))}>0 .
+\]
+At $r=4$ the formalization uses no derivative.  With
+$m=M^2$ and $s$ the biased edge density, the two inputs are $m\leq p$ and
+$ms\geq p^2$; then $m^2s^2\geq p^4$ and
+\begin{equation}
+ p(2s-1)(3s-2)-s(2p-1)(3p-2)=(s-p)(6ps-2),
+ \label{eq:lean-rescale}
+\end{equation}
+both of whose factors are nonnegative because $s\geq p\geq2/3$.  Multiplying
+out gives $m^2A_4(s)\geq p^2A_4(p)$ directly.  Identity
+\eqref{eq:lean-rescale} is the $r=4$ shadow of the monotonicity of $\Psi_4$,
+and it is a `ring` step.
+
+\paragraph{Everything else transcribes directly.}
+Lemma~\ref{lem:fractional-edge} at $\alpha=1/2$ is
+\texttt{GeometricMean.sq\_le\_integral\_geoIntegrand}, already proved for
+\texttt{notes/two\_root\_triangle\_leaf\_cones.tex}: it is precisely
+$N_{1/2}=\int\!\!\int W\sqrt{d(x)d(y)}\geq p^2$, and the three-factor H\"older
+of this note's proof is the same one used there.  The concavity bound
+$M\leq p^{\alpha}$ becomes $M^2\leq p$, one application of the unweighted
+Cauchy--Schwarz \texttt{BookTail.sq\_integral\_mul\_le} against the constant
+$1$ --- no concavity is needed.  The change of measure
+\eqref{eq:measure-change} is \texttt{CliqueDist.integral\_sqrtDegree\_prod},
+built on \texttt{Foundation/TiltTransfer.lean} exactly as
+\texttt{Methods/DegreeBias.lean} is at $\alpha=1$.  The clique input
+\eqref{eq:clique-input} is the accepted pure-chordal bound
+\texttt{cliqueDensity\_ge\_cliquePoly} at $r=4$.
+
+\end{document}

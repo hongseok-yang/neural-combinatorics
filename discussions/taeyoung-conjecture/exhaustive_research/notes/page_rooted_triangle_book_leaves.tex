@@ -1,0 +1,651 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\dd}{\,d}
+
+\begin{document}
+
+\section{Triangle books with leaves rooted at page vertices}
+
+For a finite graph $H$ and $0\leq p<1$, put
+\[
+ \Phi_H(p)
+ :=(1-p)^{v(H)}
+ \chi_H\!\left(\frac{1}{1-p}\right),
+\]
+and use its polynomial continuation at $p=1$.  We prove a positive
+theorem for triangle books whose pendant leaves are distributed among
+the page vertices.  This is complementary to the previously proved
+two-root theorem, in which leaves are attached to the two ends of the
+common spine edge.
+
+Throughout, $(\Omega,\mathcal A,\mu)$ is an arbitrary probability
+space and $W:\Omega^2\to[0,1]$ is a symmetric jointly measurable
+graphon.  Write
+\[
+ p=t(K_2,W)=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph family and its exact target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Page-rooted leaf book]\label{def:family}
+Let $m\geq1$ and let $\mathbf{k}=(k_1,\ldots,k_m)$ be a vector of
+nonnegative integers.  The graph $P_{m;\mathbf{k}}$ has two adjacent
+\emph{spine vertices} $u,v$, page vertices $z_1,\ldots,z_m$, and
+$k_i$ private pendant leaves adjacent only to $z_i$.  Each page vertex
+is adjacent to both spine vertices, and there are no other edges.
+
+Put
+\[
+ n:=k_1+\cdots+k_m.
+\]
+Then
+\[
+ v(P_{m;\mathbf{k}})=m+n+2,
+ \qquad
+ e(P_{m;\mathbf{k}})=2m+n+1.
+\]
+\end{definition}
+
+\begin{lemma}[Chromatic data]\label{lem:chromatic}
+For every $m\geq1$ and every $\mathbf{k}\in\mathbb N^m$,
+\[
+ \chi(P_{m;\mathbf{k}})=3
+\]
+and
+\begin{equation}
+ \chi_{P_{m;\mathbf{k}}}(x)
+ =x(x-1)^{n+1}(x-2)^m.
+ \label{eq:chromatic}
+\end{equation}
+Consequently, for every $p\in[0,1]$,
+\begin{equation}
+ \Phi_{P_{m;\mathbf{k}}}(p)
+ =p^{n+1}(2p-1)^m.
+ \label{eq:target}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Choose the two distinct colours on the ordered spine in $x(x-1)$
+ways.  Each page vertex then has $x-2$ choices, independently of the
+other pages.  After a page colour has been chosen, each of its private
+leaves has $x-1$ choices.  This proves \eqref{eq:chromatic}.  The graph
+contains a triangle and the same construction gives a $3$-colouring,
+so its chromatic number is $3$.
+
+For $q=1-p>0$, substitution gives
+\begin{align*}
+ \Phi_{P_{m;\mathbf{k}}}(p)
+ &=q^{m+n+2}\frac1q
+   \left(\frac pq\right)^{n+1}
+   \left(\frac{2p-1}{q}\right)^m
+ \\
+ &=p^{n+1}(2p-1)^m.
+\end{align*}
+The last expression is a polynomial in $p$ and therefore also gives
+the continued value $1$ at $p=1$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A weighted rooted-triangle inequality for real exponents}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define
+\[
+ \tau(x):=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z)
+\]
+and, for every real $s\geq0$,
+\[
+ M_s:=\int_\Omega d(x)^s\dd\mu(x),
+\]
+with the convention $d(x)^0=1$, including when $d(x)=0$.
+
+\begin{lemma}[Weighted rooted triangle]\label{lem:weighted-triangle}
+If $p>0$, then for every real $h\geq0$,
+\begin{equation}
+ \int_\Omega d(x)^h\tau(x)\dd\mu(x)
+ \geq
+ \frac{2p-1}{p}M_{h+2}.
+ \label{eq:weighted-triangle}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For a bounded measurable kernel $K$, write
+\[
+ (T_Kf)(x):=\int_\Omega K(x,y)f(y)\dd\mu(y),
+ \qquad
+ \langle f,g\rangle:=\int_\Omega f(x)g(x)\dd\mu(x).
+\]
+Set
+\[
+ I_h:=\int d^h\tau,
+ \qquad
+ J_h:=\langle d^h,T_Wd\rangle.
+\]
+The elementary inequality $ab\geq a+b-1$ on $[0,1]^2$, applied to
+$W(x,y)$ and $W(x,z)$ and then multiplied by the nonnegative factor
+$d(x)^hW(y,z)$, gives after Tonelli and symmetry
+\begin{equation}
+ I_h\geq2J_h-pM_h.
+ \label{eq:first-reduction}
+\end{equation}
+
+Put $U=1-W$, $u=T_U\mathbf1=1-d$, and $q=1-p$.  Since
+\[
+ T_Wd=d-q\mathbf1+T_Uu,
+\]
+we have
+\begin{equation}
+ J_h=M_{h+1}-qM_h+\langle d^h,T_Uu\rangle.
+ \label{eq:J-expansion}
+\end{equation}
+Symmetry of $U$ gives the exact identity
+\begin{align*}
+ &2\left(\langle d^h,T_Uu\rangle
+       -\int_\Omega d(x)^hu(x)^2\dd\mu(x)\right)
+ \\
+ &\quad=
+ \int_{\Omega^2}U(x,y)
+ \bigl(u(y)-u(x)\bigr)
+ \bigl(d(x)^h-d(y)^h\bigr)
+ \dd\mu(x)\dd\mu(y).
+\end{align*}
+Because $d=1-u$ and $s\mapsto s^h$ is nondecreasing on $[0,1]$,
+the integrand on the right is nonnegative.  Therefore
+\[
+ \langle d^h,T_Uu\rangle
+ \geq\int d^h(1-d)^2
+ =M_h-2M_{h+1}+M_{h+2}.
+\]
+Substituting this into \eqref{eq:J-expansion}, and then into
+\eqref{eq:first-reduction}, yields
+\[
+ I_h\geq2M_{h+2}-2M_{h+1}+pM_h.
+\]
+Finally,
+\begin{align*}
+ &2M_{h+2}-2M_{h+1}+pM_h
+ -\frac{2p-1}{p}M_{h+2}
+ \\
+ &\quad=
+ \frac1p\int_\Omega d(x)^h(d(x)-p)^2\dd\mu(x)
+ \geq0.
+\end{align*}
+This proves \eqref{eq:weighted-triangle}.  Notice that no integrality
+of $h$ was used; this is the point needed below.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Compression of the page-rooted moments}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $x,y\in\Omega$ and real $s\geq0$, define
+\[
+ H_s(x,y):=
+ \int_\Omega W(x,z)W(y,z)d(z)^s\dd\mu(z).
+\]
+
+\begin{lemma}[H\"older compression]\label{lem:holder-compression}
+Let $k_1,\ldots,k_m\geq0$ be real numbers and put
+\[
+ \alpha:=\frac{k_1+\cdots+k_m}{m}.
+\]
+Then, pointwise for all $x,y\in\Omega$,
+\begin{equation}
+ \prod_{i=1}^m H_{k_i}(x,y)\geq H_\alpha(x,y)^m.
+ \label{eq:holder-compression}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Apply generalized H\"older inequality to the $m$ functions
+\[
+ z\longmapsto
+ \bigl(W(x,z)W(y,z)d(z)^{k_i}\bigr)^{1/m}.
+\]
+Their pointwise product is
+$W(x,z)W(y,z)d(z)^\alpha$.  Thus
+\[
+ H_\alpha(x,y)
+ \leq\prod_{i=1}^m H_{k_i}(x,y)^{1/m},
+\]
+which is equivalent to \eqref{eq:holder-compression}.  The convention
+$d^0=1$ handles zero exponents, and no quotient is used.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The page-rooted leaf theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Leaves on the pages of a triangle book]
+\label{thm:main}
+Let $m\geq1$ and $\mathbf{k}=(k_1,\ldots,k_m)\in\mathbb N^m$.
+For every graphon $W$ of edge density $p\in[1/2,1]$,
+\[
+ \boxed{
+ t(P_{m;\mathbf{k}},W)
+ \geq p^{n+1}(2p-1)^m
+ =\Phi_{P_{m;\mathbf{k}}}(p).
+ }
+\]
+This is the full interval required by
+$\chi(P_{m;\mathbf{k}})=3$.
+\end{theorem}
+
+\begin{proof}
+Assume first that $1/2\leq p<1$; in particular $p>0$.  Integrating
+out every private leaf and then every page vertex gives the exact
+identity
+\begin{equation}
+ t(P_{m;\mathbf{k}},W)
+ =\int_{\Omega^2}W(x,y)
+   \prod_{i=1}^m H_{k_i}(x,y)
+   \dd\mu(x)\dd\mu(y).
+ \label{eq:density-identity}
+\end{equation}
+All integrands are nonnegative and bounded, so Tonelli justifies this
+factorization on an arbitrary probability space.
+
+Put $\alpha=n/m$.  By Lemma~\ref{lem:holder-compression},
+\[
+ t(P_{m;\mathbf{k}},W)
+ \geq\int_{\Omega^2}W(x,y)H_\alpha(x,y)^m
+ \dd\mu(x)\dd\mu(y).
+\]
+Use the edge-biased probability measure
+\[
+ \dd\rho(x,y):=\frac{W(x,y)}p
+ \dd\mu(x)\dd\mu(y).
+\]
+Jensen's inequality for the convex function $s\mapsto s^m$ gives
+\begin{align}
+ t(P_{m;\mathbf{k}},W)
+ &\geq p\bigl(\mathbb E_\rho H_\alpha\bigr)^m
+ \notag\\
+ &=p^{1-m}
+ \left(\int_{\Omega^2}W(x,y)H_\alpha(x,y)
+ \dd\mu(x)\dd\mu(y)\right)^m.
+ \label{eq:edge-jensen}
+\end{align}
+Expanding $H_\alpha$ and applying Tonelli once more gives
+\[
+ \int_{\Omega^2}W(x,y)H_\alpha(x,y)\dd\mu(x)\dd\mu(y)
+ =\int_\Omega d(z)^\alpha\tau(z)\dd\mu(z).
+\]
+Lemma~\ref{lem:weighted-triangle} at the real exponent $h=\alpha$
+and Jensen's inequality for $s\mapsto s^{\alpha+2}$ imply
+\[
+ \int d^\alpha\tau
+ \geq\frac{2p-1}{p}M_{\alpha+2}
+ \geq\frac{2p-1}{p}p^{\alpha+2}
+ =(2p-1)p^{\alpha+1}.
+\]
+Substitution into \eqref{eq:edge-jensen}, using $m\alpha=n$, yields
+\begin{align*}
+ t(P_{m;\mathbf{k}},W)
+ &\geq p^{1-m}
+ \bigl((2p-1)p^{\alpha+1}\bigr)^m
+ \\
+ &=p^{n+1}(2p-1)^m.
+\end{align*}
+By Lemma~\ref{lem:chromatic}, this is exactly the required target.
+
+If $p=1$, then $0\leq W\leq1$ and $\int W=1$ imply
+$W=1$ almost everywhere.  Every finite homomorphism density is then
+$1$, equal to the polynomially continued target.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A conditional cone consequence}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $d(x)>0$, define the probability measure
+\[
+ \dd\mu_x(y):=\frac{W(x,y)}{d(x)}\dd\mu(y),
+\]
+and regard the same kernel $W$ as a graphon $W_x$ on
+$(\Omega,\mathcal A,\mu_x)$.  Its edge density is
+\[
+ z_x=t(K_2,W_x)=\frac{\tau(x)}{d(x)^2}.
+\]
+Put $z_x=0$ when $d(x)=0$.
+
+\begin{lemma}[Conditional cone lemma]\label{lem:cone}
+Let $F$ be a graph on $N\geq2$ vertices and put
+$\phi(z)=\Phi_F(z)$.  Suppose that, for some $a\in[0,1)$:
+\begin{enumerate}
+ \item every graphon $V$ on every probability space, of edge density
+ $z\geq a$, satisfies $t(F,V)\geq\phi(z)$;
+ \item $\phi\geq0$, $\phi'\geq0$, and $\phi''\geq0$ on $[a,1]$;
+ \item $\phi(a)=0$.
+\end{enumerate}
+Then every graphon $W$ of edge density
+\[
+ p\geq\frac1{2-a}
+\]
+satisfies
+\[
+ t(K_1\vee F,W)\geq\Phi_{K_1\vee F}(p).
+\]
+\end{lemma}
+
+\begin{proof}
+The endpoint $p=1$ is immediate, so assume $p<1$ and put
+$c=2-1/p$.  The density hypothesis is exactly $c\geq a$, while
+$c\leq1$.  Every graphon $V$ of arbitrary edge density $z\in[0,1]$
+satisfies the global tangent bound
+\begin{equation}
+ t(F,V)\geq\phi(c)+\phi'(c)(z-c).
+ \label{eq:global-tangent}
+\end{equation}
+Indeed, for $z\geq a$ this follows from the assumed bound and
+convexity.  For $z<a$, the tangent line is nonpositive at $a$ and has
+nonnegative slope, so it remains nonpositive; then
+$t(F,V)\geq0$ proves \eqref{eq:global-tangent}.
+
+Conditioning on the image of the cone vertex gives
+\[
+ t(K_1\vee F,W)=\int_\Omega d(x)^N t(F,W_x)\dd\mu(x).
+\]
+The set $\{d=0\}$ contributes zero and entails no division.  Applying
+\eqref{eq:global-tangent} in each nonzero link yields
+\begin{align*}
+ t(K_1\vee F,W)
+ &\geq M_N\phi(c)
+ +\phi'(c)\left(\int d(x)^Nz_x\dd\mu(x)-cM_N\right).
+\end{align*}
+By Lemma~\ref{lem:weighted-triangle} with $h=N-2$,
+\[
+ \int d(x)^Nz_x\dd\mu(x)
+ =\int d(x)^{N-2}\tau(x)\dd\mu(x)
+ \geq cM_N.
+\]
+Thus the second term is nonnegative.  Since $\phi(c)\geq0$ and
+$M_N\geq p^N$ by Jensen,
+\[
+ t(K_1\vee F,W)\geq p^N\phi(c).
+\]
+
+Let $q=1-p>0$.  Since $1-c=q/p$ and
+$\chi_{K_1\vee F}(x)=x\chi_F(x-1)$,
+\[
+ p^N\phi(c)
+ =q^N\chi_F\!\left(\frac pq\right)
+ =q^{N+1}\chi_{K_1\vee F}\!\left(\frac1q\right)
+ =\Phi_{K_1\vee F}(p).
+\]
+\end{proof}
+
+\begin{theorem}[Cones over page-rooted leaf books]\label{thm:cones}
+For every $m\geq1$ and $\mathbf{k}\in\mathbb N^m$, the cone
+\[
+ C_{m;\mathbf{k}}:=K_1\vee P_{m;\mathbf{k}}
+\]
+satisfies, for every graphon of edge density $p\in[2/3,1]$,
+\[
+ \boxed{
+ t(C_{m;\mathbf{k}},W)
+ \geq p(2p-1)^{n+1}(3p-2)^m
+ =\Phi_{C_{m;\mathbf{k}}}(p).
+ }
+\]
+Moreover,
+\[
+ \chi_{C_{m;\mathbf{k}}}(x)
+ =x(x-1)(x-2)^{n+1}(x-3)^m,
+ \qquad
+ \chi(C_{m;\mathbf{k}})=4.
+\]
+Thus $[2/3,1]$ is the complete required interval.
+\end{theorem}
+
+\begin{proof}
+The chromatic identity follows from
+$\chi_{K_1\vee F}(x)=x\chi_F(x-1)$ and
+Lemma~\ref{lem:chromatic}.  Direct substitution into the definition
+of $\Phi$ gives the displayed target.
+
+Theorem~\ref{thm:main} supplies the base bound for
+\[
+ \phi(z)=z^{n+1}(2z-1)^m
+ \qquad (z\in[1/2,1]).
+\]
+On this interval, $\phi$ is a product of nonnegative nondecreasing
+affine factors.  Its first and second derivatives are sums of products
+of nonnegative factors and positive slopes.  Hence
+$\phi,\phi',\phi''\geq0$, and $\phi(1/2)=0$.  Apply
+Lemma~\ref{lem:cone} with $a=1/2$; its threshold is
+\[
+ \frac1{2-1/2}=\frac23.
+\]
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Thresholds and equality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At the required threshold $p=1/2$, the target is zero.  The proof
+above is still valid because the only normalized measure divides by
+$p$, not by $2p-1$ or by a triangle density.  Equivalently, the
+threshold conclusion follows immediately from nonnegativity.
+
+For every integer $\ell\geq2$, the balanced complete $\ell$-partite
+graphon $T_\ell$ has $p=1-1/\ell$ and
+\[
+ t(P_{m;\mathbf{k}},T_\ell)
+ =\frac{\chi_{P_{m;\mathbf{k}}}(\ell)}
+        {\ell^{m+n+2}}
+ =\Phi_{P_{m;\mathbf{k}}}(p).
+\]
+Thus the theorem has the expected Tur\'an equality cases, including
+$T_2$ at the threshold.  At $p=1$, both sides are again $1$.
+
+For the cone family, the target vanishes at $p=2/3$, and the balanced
+complete tripartite graphon attains equality because every cone contains
+a $K_4$.  More generally, the same colouring-density calculation gives
+equality on every balanced multipartite grid point $p=1-1/\ell$ with
+$\ell\geq3$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Catalogue consequences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[New positive Atlas cases]\label{cor:atlas}
+The following previously open graphs satisfy
+$t(H,W)\geq\Phi_H(p)$ for every graphon throughout the full required
+interval $p\in[1/2,1]$:
+\[
+\begin{array}{c|c|c|c|c|c|c}
+\text{Atlas}&\text{graph6}&v&e&\mathbf{k}&\chi_H(x)&\Phi_H(p)\\ \hline
+41&\texttt{Db[}&5&6&(1,0)&x(x-1)^2(x-2)^2&p^2(2p-1)^2\\
+114&\texttt{EJwG}&6&7&(2,0)&x(x-1)^3(x-2)^2&p^3(2p-1)^2\\
+138&\texttt{Ez`\_}&6&8&(1,0,0)&x(x-1)^2(x-2)^3&p^2(2p-1)^3
+\end{array}
+\]
+For Atlas 41 and 114 one has $m=2$; for Atlas 138 one has $m=3$.
+\end{corollary}
+
+\begin{proof}
+For an unambiguous finite identification, use the canonical labelling
+from Definition~\ref{def:family}: the spine is $01$, the pages are
+$2,3,\ldots,m+1$, and the leaves follow the page vertices.
+
+For Atlas 41 the canonical edge list is
+\[
+ 01,02,03,12,13,24.
+\]
+It is carried to the NetworkX Atlas edge list
+\[
+ 01,13,14,23,24,34
+\]
+by
+\[
+ 0\mapsto3,\quad1\mapsto4,\quad2\mapsto1,\quad
+ 3\mapsto2,\quad4\mapsto0.
+\]
+
+For Atlas 114 the canonical edge list is
+\[
+ 01,02,03,12,13,24,25.
+\]
+It is carried to
+\[
+ 04,12,13,14,23,24,45
+\]
+by
+\[
+ 0\mapsto1,\quad1\mapsto2,\quad2\mapsto4,\quad
+ 3\mapsto3,\quad4\mapsto0,\quad5\mapsto5.
+\]
+
+For Atlas 138 the canonical edge list is
+\[
+ 01,02,03,04,12,13,14,25.
+\]
+It is carried to
+\[
+ 01,02,04,12,13,15,23,25
+\]
+by
+\[
+ 0\mapsto1,\quad1\mapsto2,\quad2\mapsto0,\quad
+ 3\mapsto3,\quad4\mapsto5,\quad5\mapsto4.
+\]
+These relabellings verify the structural hypotheses exactly.  The
+orders, sizes, chromatic polynomials, and targets now follow from
+Lemma~\ref{lem:chromatic}, and Theorem~\ref{thm:main} proves all three
+rows.
+\end{proof}
+
+\begin{corollary}[New positive cone: Atlas 193]\label{cor:atlas-cone}
+NetworkX Atlas graph $193$, with graph6 code \texttt{En\char125 G},
+satisfies, for every graphon of edge density $p\in[2/3,1]$,
+\[
+ t(F_{193},W)
+ \geq p(2p-1)^2(3p-2)^2
+ =\Phi_{F_{193}}(p).
+\]
+It has order $6$, size $11$, chromatic number $4$, and
+\[
+ \chi_{F_{193}}(x)=x(x-1)(x-2)^2(x-3)^2.
+\]
+\end{corollary}
+
+\begin{proof}
+This graph is the cone over
+$P_{2;(1,0)}$, the representative used for Atlas 41 above.  Add cone
+vertex $5$ to its canonical labelling.  The resulting edge list is
+\[
+ 01,02,03,05,12,13,15,24,25,35,45.
+\]
+The NetworkX Atlas 193 edge list is
+\[
+ 01,03,04,05,12,13,14,23,24,34,45.
+\]
+The first is carried to the second by
+\[
+ 0\mapsto1,\quad1\mapsto3,\quad2\mapsto0,\quad
+ 3\mapsto2,\quad4\mapsto5,\quad5\mapsto4.
+\]
+Theorem~\ref{thm:cones} with $(m,\mathbf{k})=(2,(1,0))$ now gives
+the claimed polynomial, target, chromatic number, and graphon bound.
+\end{proof}
+
+The same family also recovers Atlas 15, 34, and 92 when $m=1$, and
+Atlas 115 when $(m,\mathbf{k})=(2,(1,1))$.  Those rows were already
+positive by, respectively, the rooted triangle--tree and edge
+self-amalgamation theorems.  Exact enumeration of all members of the
+base and cone families with at most six vertices shows that the three
+rows in Corollary~\ref{cor:atlas} and the cone in
+Corollary~\ref{cor:atlas-cone} are the only new catalogue consequences.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Accepted inputs, hidden-assumption audit, and limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The proof is self-contained at the graphon level.  Its only analytic
+inputs are the elementary inequality $ab\geq a+b-1$, generalized
+H\"older, Jensen, Tonelli--Fubini, and monotonicity of real powers on
+$[0,1]$.  The weighted rooted-triangle estimate is reproved for every
+real exponent $h\geq0$, rather than cited only in its previously used
+integer form.
+
+No atomlessness, standard-Borel representation, regularity,
+finite-step approximation, injective-copy interpretation, minimum
+degree, or pointwise lower bound on $d$ is assumed.  All integrands are
+measurable and bounded.  Zero degrees cause no quotient.  The only
+division is by the global edge density $p$, which is at least $1/2$.
+At $p=1$ the argument does not substitute into $1/(1-p)$; that endpoint
+is handled separately.
+
+The boundary of the theorem is exact: all non-spine vertices must be
+independent page vertices adjacent to both ends of one common edge,
+and every added vertex must be a private leaf attached to a page
+vertex.  The proof does not attach leaves to arbitrary vertices of an
+arbitrary positive graph.  It does not cover mixtures of page leaves
+and spine leaves, edges among page vertices or leaves, shared leaves,
+longer pendant paths, or books whose pages have more than one internal
+vertex.  Such graphs require additional joint rooted estimates and are
+not promoted by this result.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Corollary~\ref{cor:atlas} and Corollary~\ref{cor:atlas-cone} are formalized:
+Atlas $41$, $114$, $138$ and $193$ are \texttt{verified}.  The development is
+\texttt{Methods/Link/PageOp.lean} with the three rows in
+\texttt{Methods/PageBook/}.  One difference of substance.
+
+\subsection*{Lemma~\ref{lem:holder-compression} is not used, at any $m$}
+
+The compression is the only place the argument leaves elementary territory,
+and generalized H\"older does not appear in the development.  Every instance
+the catalogue needs follows instead from the weighted Cauchy--Schwarz
+inequality $(\int A\eta)^2\leq(\int A)(\int A\eta^2)$, taken at
+$A(z)=W(x,z)W(y,z)$ and $\eta(z)=d(z)^{s/2}$, which the project already has:
+\[
+ H_{(a+b)/2}^2\leq H_aH_b\qquad(0\leq a\leq b),
+\]
+that is \texttt{sq\_pageOp\_le'}.  For the two-page rows $41$ and $114$ this is
+\eqref{eq:holder-compression} at $m=2$, one application.  For the three-page
+row $138$, where \eqref{eq:holder-compression} reads $H_{1/3}^3\leq H_0^2H_1$,
+two applications suffice:
+\[
+ H_{1/3}^4\leq H_0^2H_{2/3}^2\leq H_0^2H_{1/3}H_1 ,
+\]
+from $H_{1/3}^2\leq H_0H_{2/3}$ and $H_{2/3}^2\leq H_{1/3}H_1$, and cancelling
+one factor of $H_{1/3}$ (the case $H_{1/3}=0$ being immediate).  This is
+\texttt{cube\_pageOp\_le}.
+
+Lemma~\ref{lem:weighted-triangle} is formalized at real exponents, as the note
+anticipates, and \texttt{weighted\_rootedTriangle\_rpow} sits alongside the
+$\mathbb N$-indexed form that the clique common-leaf and cone families consume
+unchanged.  \texttt{Real.rpow} sets $0^0=1$, which is the note's convention
+$d^0=1$ including where the degree vanishes.
+
+\end{document}

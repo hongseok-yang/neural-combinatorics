@@ -1,0 +1,387 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+
+\title{Triangle Books with a Two-Edge Tail:\\
+A Sharp Operator-Square Inequality}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $R_m$ be a book of $m\geq1$ triangles on one common spine edge,
+with one otherwise disjoint path of length two attached to a spine
+endpoint.  We prove the chromatic-polynomial graphon bound for every
+$R_m$ and every $p\geq1/2$.  The new input is a sharp inequality for the
+weight $A=T_Wd$:
+\[
+ \int A\tau\geq(2p-1)\int Ad.
+\]
+Unlike a monotonicity assertion for the weight $A$, this follows from an
+exact Hilbert-space square after writing $d=p\mathbf1+g$.  Moment convexity
+under the positive measure $W(x,y)A(x)\,\mathrm d\mu(x)\mathrm d\mu(y)$
+then treats all pages at once.  The case $m=2$ proves the formerly open
+NetworkX Atlas graph $120$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The family and its exact target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon.  Write
+\[
+ T=T_W,\qquad
+ p=\int_{\Omega^2}W\dd\mu^2,
+ \qquad d=T\one,
+ \qquad A=Td=T^2\one.
+\]
+We also use the rooted triangle density
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z)
+\]
+and the common-neighbour kernel
+\[
+ S(x,y)=\int_\Omega W(x,z)W(y,z)\dd\mu(z).
+\]
+All these functions are measurable and take values in $[0,1]$.
+
+For $m\geq1$, define $R_m$ on a spine $ab$, page vertices
+$z_1,\ldots,z_m$, and tail vertices $u,v$.  Its edges are
+\[
+ ab,\quad az_i,bz_i\ (1\leq i\leq m),\quad au,uv.
+\]
+Thus $R_m$ is a book of $m$ triangles with one two-edge tail at the
+spine endpoint $a$.  A proper colouring first colours the ordered spine,
+then each page independently, and finally the two tail vertices.  Hence
+\begin{equation}
+ \chi_{R_m}(x)=x(x-1)^3(x-2)^m,
+ \qquad \chi(R_m)=3.
+ \label{eq:chromatic}
+\end{equation}
+Putting $q=1-p$ and substituting $x=1/q$ gives
+\begin{equation}
+ \Phi_{R_m}(p)
+ =q^{m+4}\chi_{R_m}(1/q)
+ =p^3(2p-1)^m.
+ \label{eq:target}
+\end{equation}
+The formula is polynomial and therefore also gives the value at $p=1$.
+The required interval is $p\in[1/2,1]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A sharp inequality for the two-edge-tail weight}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The next lemma is the only new analytic ingredient.  It is important that
+its proof does not insert $A$ into the previously established
+degree-weighted rooted-Goodman lemma: $A$ is not a pointwise monotone
+function of the complement degree, so that substitution would be invalid.
+
+\begin{lemma}[$T_Wd$-weighted rooted triangle]
+\label{lem:A-triangle}
+If $p\geq1/6$, then
+\begin{equation}
+ \int_\Omega A(x)\tau(x)\dd\mu(x)
+ \geq(2p-1)\int_\Omega A(x)d(x)\dd\mu(x).
+ \label{eq:A-triangle}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For $a,b\in[0,1]$ one has $ab\geq a+b-1$.  Apply this to
+$W(x,y),W(x,z)$, multiply by the nonnegative $W(y,z)$, and integrate in
+$y,z$.  Symmetry and Fubini give the pointwise estimate
+\begin{equation}
+ \tau(x)\geq2A(x)-p.
+ \label{eq:pointwise}
+\end{equation}
+Since $A\geq0$, it follows that
+\begin{equation}
+ \int A\tau\geq2\lVert A\rVert_2^2-p\lVert d\rVert_2^2,
+ \label{eq:first-reduction}
+\end{equation}
+where we used
+\[
+ \int A=\ip{Td}{\one}=\ip{d}{T\one}=\lVert d\rVert_2^2.
+\]
+
+It remains to prove
+\begin{equation}
+ E:=2\lVert A\rVert_2^2-p\lVert d\rVert_2^2
+ -(2p-1)\ip{A}{d}\geq0.
+ \label{eq:E}
+\end{equation}
+Put $g=d-p\one$ and $h=Tg$.  Then $\int g=0$ and
+\[
+ A=T(p\one+g)=pd+h.
+\]
+The coefficient of $\lVert d\rVert_2^2$ cancels exactly in
+\eqref{eq:E}, leaving
+\begin{equation}
+ E=2\lVert h\rVert_2^2+(2p+1)\ip{h}{d}.
+ \label{eq:E-one}
+\end{equation}
+Self-adjointness of $T$ and $T\one=d$ show that
+\[
+ \ip{h}{\one}=\ip{Tg}{\one}=\ip{g}{d}=\lVert g\rVert_2^2.
+\]
+Consequently
+\[
+ \ip{h}{d}
+ =p\lVert g\rVert_2^2+\ip{h}{g}.
+\]
+Substitution in \eqref{eq:E-one} and completion of the square give the
+exact identity
+\begin{equation}
+ E=
+ 2\left\lVert h+\frac{2p+1}{4}g\right\rVert_2^2
+ +\frac{(2p+1)(6p-1)}8\lVert g\rVert_2^2.
+ \label{eq:operator-square}
+\end{equation}
+Both coefficients are nonnegative for $p\geq1/6$.  Combining
+\eqref{eq:first-reduction}--\eqref{eq:operator-square} proves
+\eqref{eq:A-triangle}.
+\end{proof}
+
+\begin{remark}[Why the square is substantive]
+No positivity of the graphon operator is assumed; a nonnegative symmetric
+kernel can have negative eigenvalues.  Identity
+\eqref{eq:operator-square} controls those spectral directions through a
+quadratic polynomial with negative discriminant when $p>1/6$.  Thus the
+proof is valid for arbitrary graphons, not only positive-semidefinite or
+regular kernels.
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The book-tail theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define
+\[
+ B=\int_\Omega A(x)d(x)\dd\mu(x),
+ \qquad
+ F=\int_\Omega A(x)\tau(x)\dd\mu(x).
+\]
+The quantity $B=t(P_4,W)$, while $F=t(R_1,W)$ is the density of a
+triangle with one two-edge tail.
+
+\begin{lemma}[Sharp lower bound for the first page]
+\label{lem:first-page}
+For $p\in[1/2,1]$,
+\[
+ F\geq p^3(2p-1).
+\]
+\end{lemma}
+
+\begin{proof}
+Let $M=\int A=\int d^2$.  From \eqref{eq:pointwise}, Cauchy--Schwarz,
+and Jensen,
+\[
+ F\geq2\int A^2-p\int A\geq2M^2-pM.
+\]
+Also $M\geq p^2$.  The function $r\mapsto2r^2-pr$ is increasing for
+$r\geq p^2$ when $p\geq1/2$, because there
+$4r-p\geq4p^2-p\geq0$.  Hence
+\[
+ F\geq2p^4-p^3=p^3(2p-1).
+\]
+\end{proof}
+
+\begin{theorem}[Triangle-book two-edge-tail theorem]
+\label{thm:main}
+Let $m\geq1$.  Every graphon $W$ of edge density
+$p\in[1/2,1]$ satisfies
+\[
+ \boxed{
+ t(R_m,W)\geq p^3(2p-1)^m=\Phi_{R_m}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+Because $p>0$, the forest inequality gives
+$B=t(P_4,W)\geq p^3>0$.  Define a finite positive measure on
+$\Omega^2$ by
+\[
+ \dd\nu(x,y)=W(x,y)A(x)\dd\mu(x)\dd\mu(y).
+\]
+Its total mass is
+\[
+ \nu(\Omega^2)=\int W(x,y)A(x)\dd\mu^2=B.
+\]
+Integrating all page vertices and the two tail vertices in the defining
+homomorphism integral gives the exact identity
+\begin{equation}
+ t(R_m,W)=\int_{\Omega^2}S(x,y)^m\dd\nu(x,y).
+ \label{eq:density}
+\end{equation}
+Moreover, symmetry and Fubini give
+\begin{equation}
+ \int_{\Omega^2}S(x,y)\dd\nu(x,y)
+ =\int_\Omega A(x)\tau(x)\dd\mu(x)=F.
+ \label{eq:first-moment}
+\end{equation}
+Apply Jensen's inequality to the convex function $s\mapsto s^m$ under
+the probability measure $\nu/B$.  Equations
+\eqref{eq:density}--\eqref{eq:first-moment} yield
+\begin{equation}
+ t(R_m,W)
+ \geq B\left(\frac FB\right)^m
+ =F\left(\frac FB\right)^{m-1}.
+ \label{eq:moment}
+\end{equation}
+Lemma~\ref{lem:A-triangle} gives $F/B\geq2p-1$, and
+Lemma~\ref{lem:first-page} gives $F\geq p^3(2p-1)$.  Since
+$2p-1\geq0$, substitution in \eqref{eq:moment} proves
+\[
+ t(R_m,W)\geq p^3(2p-1)^m.
+\]
+This is the target in \eqref{eq:target}.
+\end{proof}
+
+At the threshold $p=1/2$ the target is zero; the proof above remains valid
+and uses no division by $2p-1$.  At $p=1$, $W=1$ almost everywhere and
+both sides equal one.  For every integer $k\geq2$, the balanced complete
+$k$-partite graphon has $p=1-1/k$ and realizes equality: along a graphon
+edge, $S(x,y)=1-2/k=2p-1$, while $d=p$ and $A=p^2$ almost everywhere.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas 120 and formalization boundary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 120]
+NetworkX Atlas graph $120$, with graph6 code
+\texttt{EB\char125?}, is positive.  It has order six, size seven,
+chromatic number three, and
+\[
+ \chi_{F_{120}}(x)=x(x-1)^3(x-2)^2.
+\]
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{120},W)\geq p^3(2p-1)^2=\Phi_{F_{120}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 04,\ 05,\ 13,\ 14,\ 23,\ 24,\ 34.
+\]
+Take spine $ab=43$, page vertices $1,2$, and tail $4-0-5$.
+This is exactly $R_2$, so Theorem~\ref{thm:main} applies.
+\end{proof}
+
+Every use of Tonelli--Fubini above concerns bounded nonnegative measurable
+integrands.  The operator calculation uses only bounded self-adjointness of
+$T_W$ on $L^2$ and never assumes that $T_W$ is positive semidefinite.
+The sole previously accepted density input is the forest bound for $P_4$,
+used only to certify that the normalizing mass $B$ is positive; its full
+sharp lower value is not substituted into the final estimate.
+
+For formal verification, the reusable new lemma is
+Lemma~\ref{lem:A-triangle}, including the pointwise triangle reduction and
+the exact operator-square identity \eqref{eq:operator-square}.  The remaining
+steps are the two Fubini identities, probability-measure normalization,
+Jensen for integer moments, and the scalar first-page estimate.  The
+graph-specific module awaiting inspection is
+\texttt{lean/Taeyoung/Examples/Graph120.lean}.
+
+The family requires every page to use the same spine edge and the two-edge
+tail to start at a spine endpoint.  It does not cover a tail at a page
+vertex (in particular Atlas 123), two-edge tails on an arbitrary chordal
+core, or mixed maximal-clique sizes in general.
+
+The graph, chromatic, target, Hilbert-square, moment, equality, and Atlas
+identities are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_triangle_book_two_edge_tail.py
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/BookTail/\{Core,Rows\}.lean}, ending at
+\texttt{satisfiesLowerBound\_120}.  It follows this note step for step except at
+one place, and the difference is worth stating precisely so that neither
+document is read as a paraphrase of the other.
+
+\paragraph{The departure: Lemma~\ref{lem:A-triangle} on $[1/2,1]$ only.}
+This note proves
+\[
+ \int A\tau\geq(2p-1)\int Ad
+ \qquad\text{for every }p\geq1/6,
+\]
+through the exact operator square \eqref{eq:operator-square}.  The formalization
+proves the same inequality \emph{only for $p\geq1/2$}, and by a different
+argument.  Write
+\[
+ M=\int A=\lVert d\rVert_2^2,\qquad
+ N=\lVert A\rVert_2^2,\qquad
+ B=\ip{A}{d}.
+\]
+Three applications of Cauchy--Schwarz give $B^2\leq NM$, $N\geq M^2$ and
+$M\geq p^2$, and then the polynomial identity
+\begin{equation}
+ (2N-pM)^2-(2p-1)^2NM=(4N-M)(N-p^2M)
+ \label{eq:lean-factorization}
+\end{equation}
+has both right-hand factors nonnegative: $N\geq M^2\geq p^2M$ gives the second,
+and $M\geq p^2\geq1/4$ gives $4N\geq4M^2\geq M$ for the first.  With
+$2N-pM\geq0$ and $2p-1\geq0$ this yields $2N-pM\geq(2p-1)B$, which combined
+with \eqref{eq:first-reduction} is \eqref{eq:A-triangle}.
+
+Both routes are correct; they differ in reach and in cost.  The operator square
+is the stronger statement, valid on $[1/6,1]$, and it is the one to formalize if
+that range is ever wanted --- it needs the six-term expansion of
+$\int(A+ud+v)^2$ and the substitutions $\ip{h}{\one}=\lVert g\rVert_2^2$,
+$A=pd+h$.  The factorization \eqref{eq:lean-factorization} needs no operator
+language at all, and $p\geq1/2$ is exactly the interval on which the catalogue
+proposition is asserted for a graph of chromatic number three.  No Atlas row
+--- present or possible, since $\chi(R_m)=3$ for every $m$ --- requires the
+extra range, so the formalization takes the cheaper route.
+
+\paragraph{Scope: only $m\leq2$ is formalized.}
+Theorem~\ref{thm:main} is proved here for every $m\geq1$, by Jensen for
+$s\mapsto s^m$ under $\nu/B$.  The Lean file proves the case $m=2$, where that
+Jensen step is a single Cauchy--Schwarz, and does not state the general $m$.
+This loses nothing for the catalogue: $R_1$ is the five-vertex triangle with a
+two-edge tail, already \texttt{verified} through the rooted-tree route, and
+$R_3$ already has seven vertices.
+
+\paragraph{Everything else transcribes directly.}
+The pointwise estimate \eqref{eq:pointwise} is \texttt{Link.rootedTriangle\_ge},
+which predates this note; $\int A=\int d^2$ is
+\texttt{BookTail.integral\_pathOp}, one application of self-adjointness;
+\eqref{eq:density} and \eqref{eq:first-moment} are
+\texttt{BookTail.integral\_tailWeight} and
+\texttt{integral\_tailWeight\_mul\_pageOp}; Lemma~\ref{lem:first-page} is
+\texttt{BookTail.firstPage\_bound}, with the monotonicity of
+$r\mapsto2r^2-pr$ replaced by the equivalent factorization
+$2M^2-pM-p^3(2p-1)=(M-p^2)\bigl(2(M+p^2)-p\bigr)$.  The final division by $B$
+is done as \texttt{le\_of\_mul\_le\_mul\_right}, so the argument never divides
+by $2p-1$, which vanishes at the threshold.
+
+\end{document}

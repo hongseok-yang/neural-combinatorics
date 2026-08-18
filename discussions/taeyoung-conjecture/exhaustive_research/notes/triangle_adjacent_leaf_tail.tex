@@ -1,0 +1,508 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Adjacent Triangle Roots Carrying a Leaf and a Two-Edge Tail:\\
+A Second Rooted Supporting-Plane Inequality}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $H$ be a triangle with one pendant leaf at one triangle vertex and one
+internally disjoint two-edge path at an adjacent triangle vertex.  We prove
+that every graphon $W$ of edge density $p\geq1/2$ satisfies
+\[
+ t(H,W)\geq p^4(2p-1)=\Phi_H(p).
+\]
+The attachments occur at different roots, so the one-root mixed-branch
+theorem does not apply.  A two-edge inclusion--exclusion inside the triangle
+reduces the density to a scalar function of
+$d$ and $a=T_Wd$.  We prove a sharp supporting-plane inequality on the
+entire feasible rooted region
+$0\leq a\leq d$, $a\geq d-(1-p)$.  Its $a-d^2$ term integrates to zero.
+This classifies the formerly open NetworkX Atlas graph $97$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph, target, and rooted densities}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad d=T_W\mathbf1,
+ \qquad A=T_Wd,
+ \qquad C=T_W(d^2).
+\]
+
+Let the triangle vertices be $o,r,s$.  Attach a two-edge path $o-u-v$ at
+$o$ and a leaf $w$ at the adjacent triangle vertex $r$, with no other edges.
+Integrating the tail and the leaf first gives
+\begin{equation}
+ t(H,W)=\int_{\Omega^3}
+ W(x,y)W(x,z)W(y,z)A(x)d(y)
+ \dd\mu(x)\dd\mu(y)\dd\mu(z).
+ \label{eq:density}
+\end{equation}
+
+The graph has six vertices and six edges.  Once the triangle is coloured,
+each new tree vertex has $x-1$ choices after its parent has been coloured.
+Therefore
+\[
+ \chi_H(x)=x(x-1)^4(x-2),
+ \qquad \chi(H)=3,
+\]
+and polynomial continuation gives
+\begin{equation}
+ \Phi_H(p)=p^4(2p-1).
+ \label{eq:target}
+\end{equation}
+The required interval is $p\in[1/2,1]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reduction from two triangle roots to one scalar pair}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We reuse two elementary rooted facts, proving them here to keep the argument
+self-contained.
+
+\begin{lemma}[Rooted region and star compression]\label{lem:rooted}
+For almost every $x$, writing $d=d(x)$ and $a=A(x)$,
+\[
+ 0\leq a\leq d,
+ \qquad a\geq d-(1-p),
+\]
+and
+\[
+ C(x)\geq
+ \begin{cases}
+ A(x)^2/d(x),&d(x)>0,\\
+ 0,&d(x)=0.
+ \end{cases}
+\]
+Moreover,
+\[
+ \int_\Omega A\dd\mu=\int_\Omega d^2\dd\mu.
+\]
+\end{lemma}
+
+\begin{proof}
+Nonnegativity is immediate, and $A\leq d$ follows from $d(y)\leq1$.
+The inequality $W(x,y)d(y)\geq W(x,y)+d(y)-1$ gives
+$A(x)\geq d(x)+p-1$.  Cauchy--Schwarz under the finite measure
+$W(x,y)\dd\mu(y)$ gives $A(x)^2\leq d(x)C(x)$ when $d(x)>0$.
+If $d(x)=0$, then $W(x,y)=0$ for almost every $y$, and $A(x)=C(x)=0$.
+Finally, symmetry and Tonelli give
+\[
+ \int A=\int_{\Omega^2}W(x,y)d(y)\dd\mu^2=\int d^2.
+\]
+\end{proof}
+
+\begin{lemma}[Adjacent-root reduction]\label{lem:reduction}
+Define
+\[
+ h_p(d,a)=a^2\left(\frac ad+d-1\right)_+
+\]
+when $d>0$, and $h_p(0,0)=0$.  Then
+\[
+ t(H,W)\geq\int_\Omega h_p(d(x),A(x))\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+For fixed $x$, apply $bc\geq b+c-1$ to $W(x,z),W(y,z)$ in
+\eqref{eq:density}.  After multiplication by $W(x,y)d(y)$ and integration
+in $y,z$, the three resulting terms are
+\[
+ d(x)A(x),\qquad C(x),\qquad -A(x).
+\]
+The inner rooted density in \eqref{eq:density} is also nonnegative.  Hence
+\[
+ t(H,W)
+ \geq\int A(x)\bigl(C(x)-(1-d(x))A(x)\bigr)_+\dd\mu(x).
+\]
+The positive-part function is nondecreasing.  Lemma~\ref{lem:rooted} gives,
+on $\{d>0\}$,
+\[
+ \bigl(C-(1-d)A\bigr)_+
+ \geq A\left(\frac Ad+d-1\right)_+.
+\]
+On $\{d=0\}$ all relevant quantities vanish.  The assertion follows.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The adjacent-root supporting plane}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $n\geq0$, write
+\[
+ B_i^n(x)=\binom ni x^i(1-x)^{n-i}
+ \qquad(0\leq i\leq n)
+\]
+for the Bernstein basis on $[0,1]$.  A polynomial expressed in this basis
+with nonnegative coefficients is nonnegative on the unit interval; the same
+holds for products of Bernstein bases on a box.
+
+\begin{lemma}[Adjacent-root supporting plane]\label{lem:scalar}
+Let $p\in[1/2,1]$ and let $d,a\in[0,1]$ satisfy
+\[
+ 0\leq a\leq d,
+ \qquad a\geq d-(1-p).
+\]
+Then
+\begin{align}
+ h_p(d,a)\geq{}&p^4(3-8p)+2p^3(5p-2)d
+ \notag\\
+ &\quad+p^2(5p-2)(a-d^2).
+ \label{eq:scalar}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Denote the right side by
+\[
+ L_p(d,a)=\alpha+\beta d+\gamma(a-d^2),
+\]
+where
+\[
+ \alpha=p^4(3-8p),\qquad
+ \beta=2p^3(5p-2),\qquad
+ \gamma=p^2(5p-2)>0.
+\]
+If $d=0$, then $a=0$ and $L_p(0,0)=\alpha\leq0$, so assume $d>0$.
+
+Put $t=d(1-d)$.  First suppose $a\leq t$.  Then $h_p(d,a)=0$.
+Since $L_p$ is increasing in $a$, it is enough to put $a=t$.  Direct
+expansion gives
+\[
+ L_p(d,t)=-p^2Q_p(d),
+\]
+where
+\[
+ Q_p(d)=2(5p-2)d^2+(-10p^2-p+2)d+8p^3-3p^2.
+\]
+Its leading coefficient is positive and
+\[
+ \operatorname{disc}_d(Q_p)
+ =-(2p-1)^2(5p-2)(11p+2)\leq0.
+\]
+Thus $Q_p(d)\geq0$, proving \eqref{eq:scalar} in the zero region.
+
+Now suppose $a\geq t$.  Multiplying \eqref{eq:scalar} by $d>0$ reduces it
+to
+\begin{equation}
+ G_p(d,a):=a^3+a^2d^2-a^2d-dL_p(d,a)\geq0.
+ \label{eq:G}
+\end{equation}
+The feasible lower endpoint for $a$ is
+\[
+ b_p(d)=\max\{d(1-d),d-(1-p)\}.
+\]
+At its first branch,
+\begin{equation}
+ G_p(d,d(1-d))=dp^2Q_p(d)\geq0.
+ \label{eq:first-boundary}
+\end{equation}
+The second branch occurs exactly when $d\geq\sqrt{1-p}$.  Put
+\[
+ C_p(d)=G_p(d,d-(1-p)).
+\]
+For $p<1$, $C_p$ is a monic quartic and
+\[
+ \operatorname{disc}_d(C_p)
+ =-4p^4(p-1)^4D(p)<0,
+\]
+where, after $u=p-1/2\geq0$,
+\begin{align*}
+ D(p)={}&24000u^{16}+123200u^{15}+367520u^{14}+798704u^{13}
+ +1276499u^{12}\\
+ &+1566514u^{11}+\frac{2961123}{2}u^{10}
+ +\frac{2049397}{2}u^9+\frac{8200349}{16}u^8
+ +\frac{363635}{2}u^7\\
+ &+\frac{1448591}{16}u^6+\frac{43363}{2}u^5
+ +\frac{1137901}{256}u^4+\frac{101681}{128}u^3\\
+ &+\frac{57211}{512}u^2+\frac{6845}{512}u
+ +\frac{3175}{4096}>0.
+\end{align*}
+Hence $C_p$ has exactly two real roots.  Since
+$C_p(0)=(p-1)^3<0$, one is negative and one is positive.
+
+Let $s=\sqrt{1-p}\in(0,1/\sqrt2]$.  Exact factorization gives
+\[
+ C_p(s)=s(1-s^2)^2R(s),
+\]
+where
+\[
+ R(s)=-8s^6-10s^5+11s^4+21s^3-12s^2-9s+5.
+\]
+To see that $R(s)>0$ without a numerical root estimate, put
+$x=4s/3$.  Our interval has $0<x<1$, and the degree-$12$ Bernstein
+coefficients of $R(3x/4)$ are
+\[
+\begin{gathered}
+5,\ \frac{71}{16},\ \frac{83}{22},\ \frac{42887}{14080},\
+\frac{32447}{14080},\ \frac{72073}{45056},\ \frac{77449}{78848},\\
+\frac{22375}{45056},\ \frac{19}{110},\ \frac{1951}{112640},\
+\frac{17}{5632},\ \frac{115}{2048},\ \frac{11}{256}.
+\end{gathered}
+\]
+They are all positive.  Therefore $C_p(s)>0$, so the positive real root of
+$C_p$ lies below $s$.  It follows that
+\begin{equation}
+ C_p(d)>0\qquad(d\geq\sqrt{1-p}).
+ \label{eq:second-boundary}
+\end{equation}
+At $p=1$, the same conclusion follows directly from
+$C_1(d)=d(d-1)^2(d+5)\geq0$.
+
+It remains only to rule out a dip of the cubic $G_p(d,\cdot)$ below its
+nonnegative lower endpoint.  Exact calculation gives
+\begin{equation}
+ \operatorname{disc}_a(G_p)
+ =-d^2p^2(d-p)^2S(p,d),
+ \label{eq:cubic-discriminant}
+\end{equation}
+where $S$ has degree six in $p$ and degree five in $d$.  Put
+$x=2p-1$ and $y=d$.  In the product Bernstein basis
+$B_i^6(x)B_j^5(y)$, its coefficient matrix $(s_{ij})$ is
+\begin{align*}
+S(p,d)={}&20d^5p-8d^5-60d^4p+24d^4
+ +12d^3p^3-4d^3p^2+60d^3p-24d^3\\
+&+1124d^2p^4-924d^2p^3+188d^2p^2-20d^2p+8d^2\\
+&-1364dp^5+636dp^4+156dp^3-76dp^2\\
+&+1728p^6-1296p^5+243p^4,
+\end{align*}
+and the coefficient matrix is
+\[
+\begin{pmatrix}
+27/16&97/80&57/80&67/80&83/80&25/16\\
+81/16&52/15&517/240&139/60&707/240&9/2\\
+1161/80&11783/1200&7837/1200&1537/240&1919/240&2879/240\\
+1593/40&1379/50&7801/400&3589/200&1053/50&149/5\\
+1053/10&3813/50&8563/150&1523/30&8263/150&713/10\\
+270&1032/5&2446/15&431/3&437/3&512/3\\
+675&2727/5&2267/5&2017/5&1963/5&423
+\end{pmatrix}.
+\]
+Every entry is at least $57/80$, so $S(p,d)>0$ on the whole box.
+
+If $d\neq p$, \eqref{eq:cubic-discriminant} is negative.  Thus the monic
+cubic $G_p(d,\cdot)$ has exactly one real root.  Equations
+\eqref{eq:first-boundary}--\eqref{eq:second-boundary} show that this root is
+at or below the feasible lower endpoint $b_p(d)$, so $G_p(d,a)\geq0$ for
+every feasible $a\geq b_p(d)$.  If $d=p$, direct factorization gives
+\[
+ G_p(p,a)=(a-p^2)^2(a+3p^2-p)\geq0.
+\]
+This proves \eqref{eq:G} and the lemma.
+\end{proof}
+
+\begin{remark}[Exact polynomial audit]
+The large displayed coefficient certificates are independently reconstructed
+from the defining polynomials by
+\texttt{codes/verify\_triangle\_adjacent\_leaf\_tail.py}.  In particular,
+the script does not merely check sampled values; it verifies every identity
+over the rational polynomial ring.
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graphon theorem and Atlas consequence}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Adjacent leaf and two-edge tail]\label{thm:main}
+For every graphon $W$ on an arbitrary probability space, of edge density
+$p\in[1/2,1]$,
+\[
+ \boxed{t(H,W)\geq p^4(2p-1)=\Phi_H(p).}
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:reduction} and then Lemma~\ref{lem:scalar},
+\begin{align*}
+ t(H,W)
+ \geq{}&\int h_p(d,A)\\
+ \geq{}&p^4(3-8p)+2p^3(5p-2)\int d
+ +p^2(5p-2)\int(A-d^2).
+\end{align*}
+Lemma~\ref{lem:rooted} says that the last integral vanishes, while
+$\int d=p$.  Therefore
+\[
+ t(H,W)\geq p^4(3-8p)+2p^4(5p-2)=p^4(2p-1),
+\]
+which is \eqref{eq:target}.
+\end{proof}
+
+At $p=1/2$ the target is zero and no division by $2p-1$ occurs.  At $p=1$,
+$W=1$ almost everywhere and both sides equal one.  Every balanced complete
+$k$-partite graphon, $k\geq2$, gives $d=p$, $A=p^2$, and equality in the
+supporting plane, hence realizes equality in the theorem.
+
+\begin{corollary}[Atlas 97]\label{cor:atlas97}
+NetworkX Atlas graph $97$, with graph6 code \texttt{EYWO}, is positive.  It
+has order six, size six, chromatic number three, and
+\[
+ \chi_{F_{97}}(x)=x(x-1)^4(x-2).
+\]
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{97},W)\geq p^4(2p-1)=\Phi_{F_{97}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 02,\ 12,\ 13,\ 14,\ 24,\ 35.
+\]
+Vertices $1,2,4$ form a triangle.  The path $1-3-5$ is a two-edge tail at
+vertex $1$, while $2-0$ is a leaf at the adjacent triangle vertex $2$.
+There are no other edges, so Theorem~\ref{thm:main} applies.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hidden-assumption audit and exact limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+All graphon integrands are bounded, nonnegative, and measurable, so every
+change in integration order is justified by Tonelli--Fubini.  Pointwise
+statements are almost-everywhere statements.  The set $\{d=0\}$ is handled
+without division.  The proof uses ordinary homomorphism densities and does
+not assume a finite-step graphon, injectivity, regularity, constant degree,
+or a positive minimum degree.
+
+For formal verification, the principal new statement is
+Lemma~\ref{lem:scalar}.  Bernstein positivity may be formalized by expanding
+the two exact coefficient lists and using $B_i^n(x)\geq0$ on $[0,1]$.
+The graphon layer needs only the rooted region identities, Cauchy--Schwarz,
+the elementary two-edge inequality, monotonicity of positive part, and
+integration of the supporting plane.  The graph-specific module awaiting
+inspection is \texttt{lean/Taeyoung/Examples/Graph097.lean}.
+
+The theorem requires exactly one leaf and one two-edge path at adjacent
+triangle roots.  It does not cover attachments at all three roots, longer
+paths, a different number of leaves, or multiple tails.  It also does not
+assert a general vertex-gluing theorem: the proof depends on the particular
+two-edge inclusion--exclusion and the exact scalar certificate above.
+
+Run the exact algebra audit from the repository root with
+\begin{verbatim}
+python codes/verify_triangle_adjacent_leaf_tail.py
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/AdjTail.lean}, ending at
+\texttt{satisfiesLowerBound\_97}.  Theorem~\ref{thm:main} is proved in full, on
+all of $p\in[1/2,1]$.  Two things are done differently, and one hypothesis turns
+out to be unnecessary.
+
+\paragraph{The departure: no cubic discriminant, no Bernstein certificate.}
+This note proves Lemma~\ref{lem:scalar} by treating
+$G_p(d,\cdot)=a^3+a^2d^2-a^2d-dL_p$ as a cubic in $a$: it evaluates $G_p$ at
+both branches of the feasible lower endpoint --- one of which needs the
+degree-$12$ Bernstein expansion of the sextic $R(s)$ in $s=\sqrt{1-p}$ --- and
+then rules out a dip by certifying the positivity of
+$\operatorname{disc}_a(G_p)$ through an $8\times7$ Bernstein coefficient
+matrix.  The formalization certifies none of that.  In the coordinates
+\[
+ X=a-pd,\qquad Y=d-p
+\]
+--- both of which vanish at the equality point $(d,a)=(p,p^2)$ \emph{and} at the
+degenerate corner $(d,a)=(0,0)$ --- the cleared inequality is the single
+\texttt{ring} identity
+\begin{equation}
+ a^2(a+d^2-d)-d\,L_p(d,a)
+ =(a-p^2)^2(a+d^2-d)
+ +p^2\bigl(2X^2+(2d+p)XY+(7p-2)dY^2\bigr).
+ \label{eq:lean-adj}
+\end{equation}
+The first summand is nonnegative exactly on the active region $a+d^2-d\geq0$,
+where \eqref{eq:G} is what has to be proved.  The bracket is nonnegative on the
+whole rooted region $0\leq a\leq d\leq1$, by a split at $d=p/3$.
+
+\emph{Case $d\geq p/3$.}  The form is positive semidefinite outright:
+\begin{equation}
+ 8\bigl(2X^2+(2d+p)XY+(7p-2)dY^2\bigr)
+ =\bigl(4X+(2d+p)Y\bigr)^2-q_p(d)\,Y^2,
+ \qquad
+ q_p(d)=4d^2+(16-52p)d+p^2,
+ \label{eq:lean-adj-pd}
+\end{equation}
+and $q_p\leq0$ on $[p/3,1]$ because $q_p$ is a convex quadratic in $d$ with
+\[
+ q_p(p/3)=\tfrac{p(48-143p)}9\leq0,
+ \qquad
+ q_p(1)=p^2-52p+20\leq0
+\]
+on $p\geq1/2$.  This is the only place the interval endpoint $d\leq1$ is used.
+
+\emph{Case $d\leq p/3$.}  Then $Y<0$, and $0\leq a\leq d$ together with
+$p\geq1/2$ give $|X|\leq pd$.  Dropping $2X^2\geq0$ and bounding the cross term
+by $-(2d+p)pd(p-d)$ leaves the exact remainder
+\[
+ (7p-2)dY^2-(2d+p)pd(p-d)=d(p-d)\bigl(6p^2-2p-(9p-2)d\bigr),
+\]
+whose last factor is at least $p(9p-4)/3\geq0$ once $d\leq p/3$.
+
+So the active case is three \texttt{ring} identities and a handful of sign
+checks; no cubic is analysed, no Bernstein basis appears, and no square root of
+$1-p$ is ever formed.  The inactive case follows this note exactly: $L_p$ is
+increasing in $a$, and at $a=d(1-d)$ it equals $-p^2Q_p(d)$, with the
+discriminant bound made explicit as
+\[
+ 8(5p-2)Q_p(d)=\bigl(4(5p-2)d+(2-p-10p^2)\bigr)^2+(2p-1)^2(5p-2)(11p+2).
+\]
+
+\paragraph{One hypothesis of Lemma~\ref{lem:rooted} is not needed.}
+The feasibility bound $a\geq d-(1-p)$ appears nowhere in the formal proof.  Both
+\texttt{plane\_le\_active} and \texttt{plane\_nonpos} hold on the larger region
+$0\leq a\leq d\leq1$ alone.  The remaining parts of Lemma~\ref{lem:rooted} are
+used and are pre-existing: $A\leq d$ is \texttt{K4Tail.pathOp\_le\_degree},
+$A^2\leq d\,C$ is \texttt{Broom.sq\_pathOp\_le}, and $\int A=\int d^2$ is
+\texttt{BookTail.integral\_pathOp}.  (The lower bound itself is available as
+\texttt{Broom.le\_pathOp} if a later row wants it.)
+
+\paragraph{No positive part, and no division by $d$.}
+Lemma~\ref{lem:reduction} is not formalized in the stated form.  Instead of
+introducing $h_p$ and reasoning about $(\cdot)_+$ and $A^2/d$, the Lean proof
+keeps the inner rooted density
+\[
+ E(x)=\int_{\Omega^2}W(x,y)W(x,z)W(y,z)\,d(y)\dd\mu(y)\dd\mu(z)
+\]
+as an object of its own (\texttt{AdjTail.leafTri}), proves the two-edge
+inclusion--exclusion in the form
+\[
+ E\geq C-(1-d)A
+ \qquad(\texttt{AdjTail.leafTri\_ge}),
+\]
+and states the pointwise supporting-plane bound multiplied through by $d$
+(\texttt{AdjTail.mul\_plane\_le}).  The set $\{d=0\}$ is then an ordinary case
+in \texttt{plane\_le\_rooted} rather than a convention, and the two branches of
+$h_p$ become the two branches of a case split on the sign of $a+d^2-d$.  The
+identity \eqref{eq:density} is \texttt{AdjTail.homDensity\_adjTail}, obtained
+through the generic peeling ladder of \texttt{Methods/Peeling.lean}.
+
+\end{document}

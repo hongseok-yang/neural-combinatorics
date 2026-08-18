@@ -1,0 +1,267 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}
+
+\begin{document}
+
+\title{An Exact Fractional-Fibre Counterexample for Atlas 152}
+\author{}
+\date{}
+\maketitle
+
+\section{Statement and identifying data}
+
+Let $H$ be Atlas graph $152$, with graph6 code \texttt{EhNG}, vertex set
+$\{0,1,2,3,4,5\}$, and edge set
+\[
+ \{01,05,12,15,23,24,34,45\}.
+\]
+Thus $v(H)=6$ and $e(H)=8$.  The vertices $0,1,5$ span a triangle, so
+$\chi(H)\geq3$.  The colour classes
+\[
+ \{1,4\},\qquad \{2,5\},\qquad \{0,3\}
+\]
+give a proper three-colouring, and hence $\chi(H)=3$.  Exact
+deletion--contraction gives
+\begin{equation}
+ \chi_H(x)=x(x-1)(x-2)^2(x^2-3x+3).
+ \label{eq:chromatic-polynomial}
+\end{equation}
+Consequently the conjectured lower target is
+\begin{equation}
+ \Phi_H(p)=p(2p-1)^2(3p^2-3p+1).
+ \label{eq:target}
+\end{equation}
+In particular the admissible range begins at $p=1/2$.
+
+\begin{theorem}
+There is a five-step graphon $W$ of edge density
+\[
+ p=\frac{18750093281}{37500000000}>\frac12
+\]
+for which
+\[
+ t(H,W)-\Phi_H(p)
+ =-
+ \frac{48407747400063658542114896407207170401}
+ {6179809570312500000000000000000000000000000000000000}<0.
+\]
+Therefore Atlas $152$ is a negative case of the proposed inequality.
+\end{theorem}
+
+\section{The five-step graphon}
+
+It is useful first to give a one-parameter family.  For
+$0<\varepsilon<1/2$, partition the probability space into
+\[
+ A_1,\ A_2,\ B,\ S_1,\ S_2
+\]
+with respective masses
+\begin{equation}
+ \left(\frac12-\varepsilon\right)\frac{624}{625},\qquad
+ \left(\frac12-\varepsilon\right)\frac1{625},\qquad
+ \frac12,\qquad \frac{\varepsilon}{10},\qquad
+ \frac{9\varepsilon}{10}.
+ \label{eq:masses}
+\end{equation}
+Define a symmetric graphon by putting
+\begin{equation}
+ W_{A_1B}=W_{A_2B}=W_{A_1S_1}=W_{A_2S_2}=W_{BS_2}=1,
+ \qquad W_{BS_1}=\frac1{16},
+ \label{eq:cells}
+\end{equation}
+and putting $W=0$ on every other pair of partition classes.  All cell
+values lie in $[0,1]$, and the five masses in \eqref{eq:masses} are positive
+and sum to one.
+
+This is an arbitrary-fibre perturbation of the balanced complete bipartite
+graphon.  Relative to the bulk parts $A=A_1\sqcup A_2$ and $B$, the two
+exceptional profiles are
+\[
+ (u_1,v_1)=\left(\frac{624}{625},\frac1{16}\right),
+ \qquad
+ (u_2,v_2)=\left(\frac1{625},1\right),
+\]
+with exceptional profile masses $1/10$ and $9/10$.  Their density
+displacements are
+\begin{equation}
+ d_1=u_1+v_1-1=\frac{609}{10000},
+ \qquad d_2=u_2+v_2-1=\frac1{625}.
+ \label{eq:displacements}
+\end{equation}
+Both are strictly positive.
+
+\section{Exact local mechanism}
+
+The $A$-fibres are the complementary indicators of $A_1$ and $A_2$.
+The $B$-fibres are the constant functions $1/16$ and $1$.  Therefore their
+two Gram matrices are
+\[
+ (h_A(i,j))=
+ \begin{pmatrix}624/625&0\\0&1/625\end{pmatrix},
+ \qquad
+ (h_B(i,j))=
+ \begin{pmatrix}1/256&1/16\\1/16&1\end{pmatrix}.
+\]
+For Atlas $152$, the exact joint kernel from the arbitrary-fibre threshold
+calculation is
+\[
+ \mathcal A(i,j)
+ =v_i h_A(i,j)+u_i h_B(i,j)+u_iv_i.
+\]
+Here
+\[
+ (\mathcal A(i,j))=
+ \begin{pmatrix}
+ 1287/10000&78/625\\[2pt]
+ 17/10000&3/625
+ \end{pmatrix}.
+\]
+At zero exceptional--exceptional cell value, eight times the polarized
+quadratic kernel is
+\[
+ M_{ij}=\mathcal A(i,j)\mathcal A(j,i)-4d_id_j,
+\]
+so
+\begin{equation}
+ M=
+ \begin{pmatrix}
+ 34569/20000000&-111/625000\\[2pt]
+ -111/625000&1/78125
+ \end{pmatrix},
+ \qquad
+ \det M=-\frac{2943}{312500000000}<0.
+ \label{eq:negative-kernel-matrix}
+\end{equation}
+For the exceptional mass vector $w=(1/10,9/10)$,
+\begin{equation}
+ w^{\mathsf T}Mw=-\frac{8631}{2000000000}<0.
+ \label{eq:negative-quadratic}
+\end{equation}
+Thus the coefficient of $\varepsilon^2$ in the full gap is
+$-8631/16000000000$.  This calculation explains the construction, but the
+classification below uses a fixed exact value of $\varepsilon$ and hence
+does not rely on an asymptotic remainder.
+
+\section{Exact density and homomorphism density}
+
+Summing the ordered cells in \eqref{eq:cells} gives
+\begin{equation}
+ p(\varepsilon)
+ =\frac12+\frac{753}{100000}\varepsilon
+ -\frac{20256}{100000}\varepsilon^2.
+ \label{eq:edge-density}
+\end{equation}
+For transparency, the homomorphism-density calculation can be grouped by
+the numbers of vertices sent to
+$(A_1,A_2,B,S_1,S_2)$.  All nonzero assignments fall into the following
+three groups; the second column is the sum of their edge-cell weights.
+\[
+\begin{array}{c|c}
+\text{class-count vector}&\text{total cell weight}\\ \hline
+(2,0,2,2,0)&1089/32768\\
+(1,1,2,1,1)&17/32\\
+(0,2,2,0,2)&18
+\end{array}
+\]
+Multiplying by the corresponding class masses from \eqref{eq:masses} and
+adding yields the compact identity
+\begin{equation}
+ t(H,W_\varepsilon)
+ =\frac{2224881}{80000000000}\,
+ \varepsilon^2(1-2\varepsilon)^2.
+ \label{eq:hom-density}
+\end{equation}
+This table is also reconstructed by direct exact enumeration of the
+$5^6$ vertex assignments in
+\texttt{codes/needle\_higher\_order\_tests.py}.
+
+Now set $\varepsilon=1/3000$.  The five class masses are
+\[
+ \frac{38974}{78125},\qquad
+ \frac{1499}{1875000},\qquad
+ \frac12,\qquad
+ \frac1{30000},\qquad
+ \frac3{10000}.
+\]
+Equations \eqref{eq:edge-density} and \eqref{eq:hom-density} give
+\begin{equation}
+ p=\frac{18750093281}{37500000000}
+ =\frac12+\frac{93281}{37500000000},
+ \qquad
+ t(H,W)=\frac{185159623403}{60000000000000000000000}.
+ \label{eq:witness-values}
+\end{equation}
+Substitution of this exact $p$ into \eqref{eq:target} gives
+\[
+ \Phi_H(p)=
+ \frac{19119261293088692808932739896407207170401}
+ {6179809570312500000000000000000000000000000000000000}.
+\]
+Putting the two quantities over the same denominator produces the strictly
+negative gap stated in the theorem.
+
+\section{Why the earlier positive subcones do not apply}
+
+The construction lies precisely in the residual cone left by the preceding
+Atlas $152$ analysis.
+\begin{itemize}
+ \item The two mean profiles are incomparable: $u_1>u_2$ but $v_1<v_2$.
+ \item Their density displacements in \eqref{eq:displacements} are unequal.
+ \item The first profile is strict-interior: $u_1<1$, $v_1<1$, and
+       $u_1+v_1>1$.
+ \item Although both $A$-fibres are indicators, the first $B$-fibre is the
+       genuinely fractional constant $1/16$.  Thus the two-profile theorem
+       requiring indicator fibres in both bulk parts does not apply.
+ \item The profiles are not both on the axes, are not a coordinatewise
+       chain, and are not on one constant-displacement line.
+\end{itemize}
+Accordingly none of the preceding positive subtheorems applies.  In
+particular, the indicator, axis-profile, and comparable-mean results do not
+apply.  Neither do the equal-displacement, bounded-dispersion, or comonotone
+results.
+
+\section{Hidden-assumption audit and limitations}
+
+The witness is a finite-step graphon on a genuine probability space; no
+finite-graph approximation, injective-copy interpretation, regularity,
+minimum-degree condition, or limiting argument is used.  Every cell value
+is in $[0,1]$, every class has positive rational mass, and the edge density
+is in the complete required range $p\geq1/2$.  Both $p$ and the
+homomorphism density use ordered graphon integrals.  Formula
+\eqref{eq:target} is the polynomial continuation of the conjectured target,
+but the witness has $p<1$, so no endpoint convention is needed.
+
+This construction classifies only Atlas $152$.  It does not contradict the
+universal high-density theorem: its edge density is just above $1/2$, far
+outside the small neighbourhood of $p=1$ certified there.  Nor does it
+produce a general closure operation or a counterexample for any other
+currently open row.
+
+\appendix
+\section{What the Lean formalization actually proves}
+
+The theorem is formalized as stated, with the same witness, as
+\texttt{violatesLowerBound\_152} in
+\texttt{lean/Taeyoung/Methods/Negative/Atlas152.lean}: the five masses
+\eqref{eq:masses} over the common denominator $3750000$, the cell values
+\eqref{eq:cells} over $16$, and the fractional fibre $W=1/16$ between the bulk
+class and the first exceptional class.  Both \eqref{eq:edge-density} and
+\eqref{eq:hom-density} are evaluated exactly, by kernel reduction over the
+$5^6$ assignments, and the comparison with \eqref{eq:target} is exact rational
+arithmetic.  There is no difference of substance in the verification.
+
+Two things in the note are not formalized, because the classification does not
+use them.  The exact local mechanism of Section~3 --- the kernel matrix
+\eqref{eq:negative-kernel-matrix} and the negative quadratic form
+\eqref{eq:negative-quadratic} --- explains how the witness was found and plays
+no part in checking it, exactly as that section says.  And
+\eqref{eq:chromatic-polynomial} is obtained not by deletion--contraction but
+from the six counts of surjective colourings, $0,0,0,18,264,840,720$, checked
+by kernel reduction; the \texttt{ViolatesLowerBound} statement has to exhibit
+the polynomial, so it is proved rather than quoted.
+
+\end{document}

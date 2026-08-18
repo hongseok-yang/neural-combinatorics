@@ -1,0 +1,487 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{$K_4$ with a Two-Edge Tail:\\A Rooted Supporting-Plane Proof}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $H$ be obtained from $K_4$ by attaching an otherwise disjoint path of
+length two at one clique vertex.  We prove
+\[
+ t(H,W)\geq p^3(2p-1)(3p-2)
+\]
+for every graphon of edge density $p\in[2/3,1]$, exactly the chromatic
+target on its complete required interval.  Conditioning at the tail-bearing
+clique vertex, applying the triangle Goodman bound inside its link, and using
+the pointwise estimate $\tau\geq(2T_Wd-p)_+$ reduce the problem to a scalar
+function of $d$ and $A=T_Wd$.  A sharp supporting plane at
+$(d,A)=(p,p^2)$ integrates exactly because
+$\int A=\int d^2$.  The scalar certificate is proved on the full feasible
+region; its only lengthy sign is supplied by an explicit positive Bernstein
+expansion.  This proves the formerly open NetworkX Atlas graph $142$ without
+assuming the weighted link inequality that was left unresolved in the
+failed-attempt ledger.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph and its exact target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and put
+\[
+ A(x)=(T_Wd)(x)=\int_\Omega W(x,y)d(y)\dd\mu(y).
+\]
+The rooted triangle density is
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+
+Let $H$ have clique vertices $o,a,b,c$ and tail vertices $u,v$, with
+all six edges of the $K_4$ on $o,a,b,c$ and the two further edges
+$ou,uv$.  After colouring the $K_4$, each tail vertex has $x-1$ choices.
+Thus
+\begin{equation}
+ \chi_H(x)=x(x-1)^3(x-2)(x-3),
+ \qquad \chi(H)=4.
+ \label{eq:chromatic}
+\end{equation}
+For $q=1-p>0$, direct substitution gives
+\begin{equation}
+ \Phi_H(p)=q^6\chi_H(1/q)
+ =p^3(2p-1)(3p-2).
+ \label{eq:target}
+\end{equation}
+The expression on the right is its polynomial continuation at $p=1$.
+The complete required interval is $p\in[2/3,1]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The exact link reduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For $d(x)>0$, define the probability measure
+\[
+ \dd\mu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y)
+\]
+and let $W_x$ denote the same kernel $W$ on this probability space.  Its
+edge density is
+\begin{equation}
+ z_x=t(K_2,W_x)=\frac{\tau(x)}{d(x)^2}.
+ \label{eq:link-edge}
+\end{equation}
+If $d(x)=0$, every homomorphism integrand having an edge incident with $x$
+vanishes almost everywhere, so that point may simply be assigned zero.
+
+Put, for every $z\geq0$,
+\[
+ f(z)=z(2z-1)_+.
+\]
+The triangle Goodman inequality, combined with nonnegativity, says that
+every graphon $V$ of edge density $z$ satisfies
+\begin{equation}
+ t(K_3,V)\geq f(z).
+ \label{eq:goodman}
+\end{equation}
+The function $f$ is nondecreasing: it is zero on $[0,1/2]$ and has
+derivative $4z-1>0$ on $(1/2,\infty)$.
+
+The elementary inequality $rs\geq r+s-1$ on $[0,1]^2$, applied to
+$W(x,y),W(x,z)$ and multiplied by $W(y,z)$, gives
+\begin{equation}
+ \tau(x)\geq\max\{2A(x)-p,0\}.
+ \label{eq:rooted-triangle}
+\end{equation}
+Indeed, the two positive terms integrate to $A(x)$ and the negative term
+to $p$.  Also $\tau(x)\leq d(x)^2$, by dropping the factor $W(y,z)$.
+Consequently the lower argument used in $f$ below never exceeds the actual
+link density $z_x\leq1$.
+
+Let $\kappa_4(x)$ be the rooted $K_4$ density at $o=x$.  Conditioning the
+other three clique vertices through $\mu_x$ gives
+\[
+ \kappa_4(x)=d(x)^3t(K_3,W_x).
+\]
+Integrating the tail vertices first contributes $A(x)$, hence
+\begin{equation}
+ t(H,W)=\int_\Omega d(x)^3A(x)t(K_3,W_x)\dd\mu(x).
+ \label{eq:link-identity}
+\end{equation}
+By \eqref{eq:goodman}, \eqref{eq:rooted-triangle}, and monotonicity of $f$,
+\begin{equation}
+ t(H,W)\geq\int_\Omega \mathcal F_p(d(x),A(x))\dd\mu(x),
+ \label{eq:scalar-reduction}
+\end{equation}
+where
+\begin{equation}
+ \mathcal F_p(d,a)=
+ \begin{cases}
+ d^3a\,f\!\left(\dfrac{(2a-p)_+}{d^2}\right),&d>0,\\[6pt]
+ 0,&d=0.
+ \end{cases}
+ \label{eq:F}
+\end{equation}
+No pointwise division is made on the zero-degree set.
+
+We shall use the following exact feasible information.
+\begin{lemma}[Rooted feasible region]\label{lem:region}
+For almost every $x$, with $d=d(x)$ and $a=A(x)$,
+\[
+ 0\leq a\leq d,
+ \qquad a\geq d+p-1.
+\]
+Moreover,
+\[
+ \int_\Omega d\dd\mu=p,
+ \qquad
+ \int_\Omega A\dd\mu=\int_\Omega d^2\dd\mu.
+\]
+\end{lemma}
+
+\begin{proof}
+Only the second pointwise inequality needs comment.  Applying
+$rs\geq r+s-1$ to $W(x,y),d(y)$ and integrating gives
+\[
+ A(x)\geq\int_\Omega\bigl(W(x,y)+d(y)-1\bigr)\dd\mu(y)
+ =d(x)+p-1.
+\]
+The upper bound follows from $d(y)\leq1$.  Finally, symmetry and Tonelli give
+\[
+ \int A(x)\dd\mu(x)
+ =\int W(x,y)d(y)\dd\mu^2
+ =\int d(y)^2\dd\mu(y).
+\]
+The first moment identity is the definition of $p$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The sharp scalar supporting plane}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Define
+\begin{align}
+ T_p&=p^3(2p-1)(3p-2),\label{eq:T}\\
+ \gamma_p&=p(20p^2-15p+2),\label{eq:gamma}\\
+ \beta_p&=p^2(30p^2-21p+2),\label{eq:beta}
+\end{align}
+and
+\begin{equation}
+ L_p(d,a)=T_p+\beta_p(d-p)+\gamma_p(a-d^2).
+ \label{eq:L}
+\end{equation}
+The coefficients are the derivatives, in the coordinates $(d,a-d^2)$,
+of the active expression in \eqref{eq:F} at $(p,p^2)$.  In particular,
+$L_p(p,p^2)=T_p$.
+
+\begin{lemma}[Rooted $K_4$ supporting plane]\label{lem:scalar}
+Let $p\in[2/3,1]$ and let $d,a\in[0,1]$ satisfy
+\[
+ 0\leq a\leq d,
+ \qquad a\geq d+p-1.
+\]
+Then
+\begin{equation}
+ \mathcal F_p(d,a)\geq L_p(d,a).
+ \label{eq:support}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+First note that $\gamma_p>0$ on the stated interval.  When $d=0$,
+feasibility forces $a=0$, and
+\[
+ L_p(0,0)=-2p^4(12p-7)\leq0=\mathcal F_p(0,0).
+\]
+Assume henceforth that $d>0$ and put
+\[
+ a_0=\frac p2+\frac{d^2}{4}.
+\]
+The scalar function is zero for $a\leq a_0$.  At the switching point,
+direct expansion gives
+\begin{equation}
+ d\bigl(\mathcal F_p(d,a_0)-L_p(d,a_0)\bigr)
+ =\frac{dp}{4}S_p(d),
+ \label{eq:switch}
+\end{equation}
+where
+\begin{align*}
+ S_p(d)={}&3(20p^2-15p+2)d^2
+ +(-120p^3+84p^2-8p)d\\
+ &+96p^4-96p^3+30p^2-4p.
+\end{align*}
+Its leading coefficient is positive, and its discriminant in $d$ is
+\[
+ -8p(3p-2)^2(120p^3-120p^2+34p-3)\leq0.
+\]
+Indeed, if $u=p-2/3\geq0$, the final factor is
+\[
+ 120u^3+120u^2+34u+\frac{17}{9}>0.
+\]
+Thus $S_p(d)\geq0$.  Since $L_p$ is increasing in $a$, for $a\leq a_0$
+we obtain
+\[
+ L_p(d,a)\leq L_p(d,a_0)\leq0=\mathcal F_p(d,a),
+\]
+which proves the inactive case.
+
+It remains to take $a\geq a_0$.  On this region, put
+\begin{equation}
+ G_{p,d}(a)=d\bigl(\mathcal F_p(d,a)-L_p(d,a)\bigr).
+ \label{eq:G}
+\end{equation}
+Using $f(z)=z(2z-1)$ here gives the polynomial identity
+\[
+ d\mathcal F_p(d,a)=2a(2a-p)^2-d^2a(2a-p),
+\]
+so $G_{p,d}$ is a cubic in $a$ with leading coefficient $8$.
+Its discriminant factors exactly as
+\begin{equation}
+ \operatorname{disc}_aG_{p,d}
+ =-4dp(d-p)^2K(p,d).
+ \label{eq:discriminant}
+\end{equation}
+We next give a finite exact positivity certificate for the remaining
+factor.
+
+For $0\leq u,d\leq1$, write
+\[
+ B_i^n(s)=\binom ni s^i(1-s)^{n-i}.
+\]
+With $u=3p-2$, exact coefficient conversion gives
+\begin{equation}
+ K\!\left(\frac{u+2}{3},d\right)
+ =\frac1{765450}\sum_{i=0}^7\sum_{j=0}^6
+ M_{ij}B_i^7(u)B_j^6(d),
+ \label{eq:bernstein}
+\end{equation}
+where the rows of the positive integer matrix $M$ are
+\[
+\begin{array}{rrrrrrr}
+9676800&21504000&24980480&26919060&33180000&48283550&69579300\\
+18835200&50006400&60092480&65235210&79989840&116769575&176444850\\
+33465600&109724800&136834880&149979960&181905520&262135400&403293600\\
+56168640&230669280&299354832&333139662&399385152&560819025&856861470\\
+90512640&469488960&635029632&720982620&856218816&1163172690&1733443740\\
+141264000&931953600&1314243360&1527249330&1803325680&2366134875&3399784650\\
+214617600&1813752000&2664912960&3175640640&3744513360&4758644700&6555605400\\
+318427200&3474122400&5310794160&6495149430&7682260320&9512374725&12564861750
+\end{array}
+\]
+Every Bernstein basis function is nonnegative, and in each coordinate the
+basis functions sum to one.  Hence \eqref{eq:bernstein} proves
+$K(p,d)>0$ throughout $p\in[2/3,1]$, $d\in[0,1]$.
+
+If $d\ne p$, \eqref{eq:discriminant} is strictly negative.  The cubic
+$G_{p,d}$ therefore has exactly one real root.  Equation \eqref{eq:switch}
+is strict in this case: for $p>2/3$ the quadratic $S_p$ has negative
+discriminant, while at $p=2/3$ one has
+\[
+ S_{2/3}(d)=\frac8{27}(3d-2)^2,
+\]
+whose only zero is $d=p$.  Thus $G_{p,d}(a_0)>0$.  A real cubic with positive
+leading coefficient and exactly one real root is positive precisely to the
+right of that root.  It follows that $G_{p,d}(a)>0$ for every $a\geq a_0$.
+
+If $d=p$, direct factorization instead gives
+\[
+ G_{p,p}(a)=2(a-p^2)^2(4a+7p^2-4p).
+\]
+On $a\geq a_0=p/2+p^2/4$, the last factor is at least
+$2p(4p-1)>0$.  Hence this expression is nonnegative as well.  Dividing by
+$d>0$ completes the active case and the proof.
+\end{proof}
+
+\begin{remark}[Why this repairs, rather than assumes, the old missing step]
+The earlier link approach sought the weighted mean inequality
+\[
+ \int dA\tau\geq\frac{2p-1}{p}\int d^3A.
+\]
+That statement does not follow from the accepted degree-weighted lemma,
+because $A=T_Wd$ has no proved monotone ordering along complement edges.
+Lemma~\ref{lem:scalar} never uses that comparison.  It keeps the pointwise
+pair $(d,A)$, applies Goodman before averaging, and uses the exact
+zero-integral correction $A-d^2$ in its supporting plane.
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graphon theorem and Atlas 142}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[$K_4$ with a two-edge tail]\label{thm:main}
+Every graphon $W$ of edge density $p\in[2/3,1]$ satisfies
+\[
+ \boxed{
+ t(H,W)\geq p^3(2p-1)(3p-2)=\Phi_H(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+Combine \eqref{eq:scalar-reduction} with Lemmas~\ref{lem:region} and
+\ref{lem:scalar}, and then integrate the supporting plane:
+\begin{align*}
+ t(H,W)
+ &\geq\int\mathcal F_p(d,A)\\
+ &\geq T_p+\beta_p\left(\int d-p\right)
+       +\gamma_p\left(\int A-\int d^2\right)\\
+ &=T_p.
+\end{align*}
+This is exactly \eqref{eq:target}.
+\end{proof}
+
+At $p=2/3$, the target is zero and the inequality is also immediate from
+nonnegativity.  At $p=1$, $W=1$ almost everywhere and both sides equal one;
+the proof above remains valid, but this observation handles the endpoint
+without substituting into $1/(1-p)$.  Every balanced complete $k$-partite
+graphon, $k\geq3$, realizes equality.  There $d=p$, $A=p^2$, the link is the
+balanced complete $(k-1)$-partite graphon, and every link and scalar bound
+used above is sharp.
+
+\begin{corollary}[Atlas 142]
+NetworkX Atlas graph $142$, with graph6 code \texttt{E\char126 AG}, is
+positive.  It has order six, size eight, chromatic number four, edge list
+\[
+ 01,\ 02,\ 03,\ 05,\ 12,\ 13,\ 23,\ 45,
+\]
+and chromatic polynomial
+\[
+ x(x-1)^3(x-2)(x-3).
+\]
+\end{corollary}
+
+\begin{proof}
+Vertices $0,1,2,3$ induce $K_4$, and $0-5-4$ is an otherwise disjoint
+two-edge tail.  Thus this is exactly $H$.
+\end{proof}
+
+All integrands in the proof are bounded, nonnegative, and measurable, so
+Tonelli--Fubini applies on an arbitrary probability space.  No atomlessness,
+regularity, finite-step reduction, injective-copy interpretation, minimum
+degree, or pointwise lower degree is used.  The only conditional quotient is
+on $\{d>0\}$, and the zero-degree set is handled separately.
+
+The theorem is specific to one two-edge tail attached at a $K_4$ vertex.  It
+does not prove a general clique-tail family, multiple tails, arbitrary
+attachments to cliques, or the discarded weighted link inequality above.
+For formal verification, the reusable analytic unit is
+Lemma~\ref{lem:scalar}; the graph-specific module awaiting inspection is
+\texttt{lean/Taeyoung/Examples/Graph142.lean}.
+
+The chromatic identity, rooted algebra, scalar factorizations, discriminant,
+Bernstein conversion, and Atlas identification are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_k4_two_edge_tail.py
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/K4Tail/\{Scalar,Link,Rows\}.lean}, ending at
+\texttt{satisfiesLowerBound\_142}.  Theorem~\ref{thm:main} is proved in full, on
+the whole interval $p\in[2/3,1]$, with no extra hypothesis.  The departure is
+entirely inside Lemma~\ref{lem:scalar}.
+
+\paragraph{The departure: neither the cubic discriminant nor the Bernstein
+matrix is formalized.}
+This note proves Lemma~\ref{lem:scalar} by treating
+$G_{p,d}(a)=d(\mathcal F_p(d,a)-L_p(d,a))$ as a cubic in $a$, factoring
+$\operatorname{disc}_aG_{p,d}=-4dp(d-p)^2K(p,d)$, certifying $K>0$ through the
+degree-$(7,6)$ Bernstein expansion \eqref{eq:bernstein} with its $8\times7$
+integer matrix, and then invoking the fact that a real cubic with positive
+leading coefficient and exactly one real root is positive to the right of that
+root.  None of those three ingredients appears in the formalization: not the
+discriminant, not the matrix $M$, and not the root-counting argument, which has
+no convenient Mathlib interface.
+
+Instead the cubic is factored \emph{explicitly}.  In the coordinate
+\[
+ w=4a-2p-d^2,\qquad\text{so that}\qquad d\,\mathcal F_p(d,a)=\tfrac12\,a\,w\,(w+d^2),
+\]
+one has the polynomial identity, checked by \texttt{ring},
+\begin{equation}
+\begin{aligned}
+ (11p-4)^3\cdot8\cdot\bigl(a(2a-p)w-d\,L_p(d,a)\bigr)
+ ={}&\bigl((11p-4)w-R\bigr)^2\bigl((11p-4)w+2R+2(11p-4)(p+d^2)\bigr)\\
+ &+(11p-4)(d-p)^2\,\Lambda\,w
+ +(d-p)^2\,\Gamma,
+\end{aligned}
+ \label{eq:lean-factorization}
+\end{equation}
+where $R=(11p-4)r$ and $r(p,d)=\bigl(3p^2-2p\bigr)+\sigma(p)(d-p)$ is the
+tangent line, at $d=p$, of the double root of the cubic; the slope
+$\sigma(p)=(6p^2-9p+2)/(11p-4)$ is forced, and is the reason for the factor
+$11p-4$.  The two remainder coefficients are
+\begin{align*}
+ \Lambda&=\bigl((11p-4)d+23p^2-22p+4\bigr)^2+\bigl(1658p^4-1850p^3+647p^2-60p-4\bigr),\\
+ \Gamma&=Ad^2+Bd+C,\qquad A=-2(11p-4)(6p^2-9p+2)^2\leq0 .
+\end{align*}
+$\Lambda\geq0$ is a square plus a quartic in $p$ alone.  For $\Gamma$, the
+feasibility $a\leq d$ together with $w\geq0$ gives $d^2\leq4d-2p$, and since
+$A\leq0$ this yields $\Gamma\geq(4A+B)d+C-2Ap$; the same feasibility gives
+$d\geq p/2$, and $4A+B\geq0$ then leaves $\Gamma\geq\tfrac12Bp+C$, again a
+polynomial in $p$ alone.
+
+Every one-variable inequality that remains --- there are seven --- has
+\emph{all} coefficients nonnegative after $p=\tfrac23+u$, so each is a one-line
+\texttt{nlinarith}.  In particular the quantity
+$1658p^4-1850p^3+647p^2-60p-4$, whose positivity replaces the discriminant
+condition of this note, is $\tfrac{1856}{81}+\tfrac{8128}{27}u+\tfrac{4105}{3}u^2+\tfrac{7714}{3}u^3+1658u^4$.
+
+The two routes prove the same lemma on the same interval.  The note's is the
+more informative one --- it exhibits the root structure --- while
+\eqref{eq:lean-factorization} is the one a proof assistant can check without a
+theory of cubics.
+
+\paragraph{The truncations are carried, not divided away.}
+The note defines $\mathcal F_p(d,0)=0$ by hand and notes that no pointwise
+division is made on the zero-degree set.  The formalization avoids the
+definition entirely: \texttt{K4Tail.mul\_rootedK4\_ge} states the link bound in
+the form
+\[
+ d(x)\,\kappa_4(x)\;\geq\;u\cdot(2u-d(x)^2)_+,\qquad u=(2A(x)-p)_+,
+\]
+multiplied through by $d(x)$, so both sides are polynomials in the truncated
+quantities and $d(x)=0$ is an ordinary case rather than a convention.  The
+monotonicity of $f$ used in \eqref{eq:scalar-reduction} becomes the elementary
+step that $t\mapsto t(2t-d^2)$ is nondecreasing once $2t\geq d^2$, applied to
+$\tau\geq u$.
+
+\paragraph{Everything else transcribes directly.}
+\eqref{eq:goodman} is \texttt{K4Tail.goodman}, the pure-chordal clique bound at
+$r=3$ extended below the threshold by nonnegativity; \eqref{eq:link-identity} is
+the existing cone identity \texttt{Link.rootedDensity\_eq} at $F=K_3$;
+\eqref{eq:rooted-triangle} is \texttt{Link.rootedTriangle\_ge}; and the two
+moment identities of Lemma~\ref{lem:region} are \texttt{Foundation.integral\_degree}
+and \texttt{BookTail.integral\_pathOp}.  The final integration of the supporting
+plane is \texttt{K4Tail.integral\_plane}, which is exactly the statement that the
+two corrections $d-p$ and $A-d^2$ have mean zero.
+
+\end{document}

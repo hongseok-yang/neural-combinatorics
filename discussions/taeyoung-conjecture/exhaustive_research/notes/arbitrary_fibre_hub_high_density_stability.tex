@@ -1,0 +1,580 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\dd}{\,d}
+
+\begin{document}
+
+\section{Purpose and arbitrary-fibre setup}
+
+For a finite graph $H$, put
+\[
+ \Gamma_H(W)=t(H,W)-\Phi_H(p(W)),
+ \qquad
+ \Phi_H(p)=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right).
+\]
+The constant two-block hub theorem leaves open nonconstant fibres from the
+exceptional set into the complete core.  This note first removes that
+restriction with an adaptive exact radius and then proves a uniform radius
+with no restriction on either the cut or exceptional-square kernel.
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and split it into
+measurable sets $A,B$ of masses $s,1-s$, where $0<s<1$.  Normalize the
+restrictions of $\mu$ to probability measures $\mu_A,\mu_B$.  Let $W$ be any
+graphon satisfying only
+\begin{equation}
+ W(x,y)=1\quad\text{for almost every }(x,y)\in B^2.
+ \label{eq:complete-core}
+\end{equation}
+Both $W|_{A\times B}$ and $W|_{A^2}$ are otherwise arbitrary measurable
+kernels.  Put $V=1-W$ and, for almost every $z\in A$, define the normalized
+cross-complement degree
+\begin{equation}
+ a(z)=\int_B V(z,y)\dd\mu_B(y),
+ \qquad
+ E_2=\int_Aa(z)^2\dd\mu_A(z).
+ \label{eq:cross-energy}
+\end{equation}
+The theorem proves positivity whenever $s\leq\rho_HE_2$.  In particular, if
+$E_2$ stays bounded below while $s\downarrow0$, it applies uniformly even
+though vertices in $A$ retain complement degree bounded away from zero.
+
+
+\section{The exact first layer and a scalar coercivity lemma}
+
+Write $n=v(H)$, $m=e(H)$, and $d_v=\deg_H(v)$.  Since all integrands are
+nonnegative, retain only maps sending zero or one vertices of $H$ into $A$.
+The zero-vertex contribution is $(1-s)^n$.  If exactly $v$ maps to a point
+$z\in A$, every neighbor of $v$ is an independent $\mu_B$-variable and all
+edges among the remaining vertices have value one by
+\eqref{eq:complete-core}.  Thus
+\begin{equation}
+ t(H,W)\geq(1-s)^n+s(1-s)^{n-1}
+ \sum_{v\in V(H)}\int_A(1-a(z))^{d_v}\dd\mu_A(z).
+ \label{eq:first-layer}
+\end{equation}
+This identity retains the full arbitrary fibre through its exact degree
+$a(z)$; no product-of-means replacement is made.
+
+\begin{lemma}[Degree-sequence coercivity]
+\label{lem:scalar}
+Suppose $H$ has no isolated vertices.  For every $u\in[0,1]$,
+\begin{equation}
+ 2mu-n+\sum_{v\in V(H)}(1-u)^{d_v}
+ \geq(2m-n)u^2.
+ \label{eq:scalar}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For every integer $d\geq1$,
+\begin{equation}
+ du-1+(1-u)^d\geq(d-1)u^2.
+ \label{eq:one-degree}
+\end{equation}
+To see this, put $t=1-u$.  The difference between the two sides is
+\[
+ t\bigl(t^{d-1}+(d-2)-(d-1)t\bigr)\geq0,
+\]
+because the convex function $t^{d-1}$ lies above its tangent at $t=1$.
+Sum \eqref{eq:one-degree} over the vertices and use
+$\sum_vd_v=2m$ and $\sum_v(d_v-1)=2m-n$.
+\end{proof}
+
+
+\section{Uniform target remainder and the graphon theorem}
+
+Write the polynomial continuation at high density as
+\begin{equation}
+ \Psi_H(q):=\Phi_H(1-q)
+ =1-mq+\sum_{j=2}^nb_jq^j,
+ \qquad
+ C_H=\sum_{j=2}^n|b_j|.
+ \label{eq:target-remainder}
+\end{equation}
+The coefficient of $q$ is $-m$ because the two leading coefficients of the
+chromatic polynomial are $1,-m$.
+
+\begin{theorem}[Arbitrary-fibre persistent-hub stability]
+\label{thm:hub}
+Let $H$ be a finite graph with no isolated vertices and $2m>n$.  Define
+\begin{equation}
+ K_H=n(n-1)+2m+4C_H,
+ \qquad
+ \rho_H=\frac{2m-n}{K_H}.
+ \label{eq:constants}
+\end{equation}
+For every graphon satisfying \eqref{eq:complete-core},
+\begin{equation}
+ \Gamma_H(W)\geq
+ s(2m-n)E_2-K_Hs^2.
+ \label{eq:main-bound}
+\end{equation}
+Consequently,
+\begin{equation}
+ 0\leq s\leq\rho_HE_2
+ \quad\Longrightarrow\quad
+ t(H,W)\geq\Phi_H(p(W)).
+ \label{eq:adaptive-radius}
+\end{equation}
+The inequality is strict when $0<s<\rho_HE_2$.
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+ \bar a=\int_Aa\dd\mu_A,
+ \qquad
+ \bar r=\int_{A^2}V\dd\mu_A^2.
+\]
+Direct integration gives
+\begin{equation}
+ q=1-p(W)=2s(1-s)\bar a+s^2\bar r.
+ \label{eq:q}
+\end{equation}
+In particular
+\[
+ 2s(1-s)\bar a\leq q\leq2s-s^2\leq2s.
+\]
+Since $(1-s)^k\geq1-ks$ for an integer $k\geq1$, and the sum in
+\eqref{eq:first-layer} is at most $n$, that formula implies
+\begin{align}
+ t(H,W)
+ &\geq1+s\left(
+ -n+\sum_v\int_A(1-a)^{d_v}\dd\mu_A
+ \right)-n(n-1)s^2.
+ \label{eq:hom-lower}
+\end{align}
+On the other hand, \eqref{eq:target-remainder} and \eqref{eq:q} give
+\begin{align}
+ \Psi_H(q)
+ &\leq1-mq+C_Hq^2\\
+ &\leq1-2ms\bar a+(2m+4C_H)s^2.
+ \label{eq:target-upper}
+\end{align}
+Subtract \eqref{eq:target-upper} from \eqref{eq:hom-lower}.  Applying
+Lemma~\ref{lem:scalar} pointwise with $u=a(z)$ gives
+\[
+ \Gamma_H(W)
+ \geq s(2m-n)\int_Aa^2\dd\mu_A
+ -\bigl(n(n-1)+2m+4C_H\bigr)s^2,
+\]
+which is \eqref{eq:main-bound}.  The two conclusions follow immediately.
+All estimates remain valid when the internal kernel $V|_{A^2}$ is arbitrary;
+it enters only through the favorable lower bound on $q$ and the universal
+upper bound $q\leq2s$.
+\end{proof}
+
+
+\section{A sharp union-bound improvement and the complete cut-only regime}
+
+The preceding theorem treats an arbitrary exceptional-square kernel but loses
+an $O(s^2)$ term even when that kernel and the cross defect both vanish.  A
+more faithful comparison removes that loss and closes the entire cut-only
+transition, including $E_2=o(s)$.
+
+\begin{theorem}[Exact one-exceptional-vertex gain]
+\label{thm:union-improvement}
+In the setup of Theorem~\ref{thm:hub}, let $q=1-p(W)$.  Then
+\begin{equation}
+ \Gamma_H(W)\geq
+ s(1-s)^{n-1}(2m-n)E_2-C_Hq^2.
+ \label{eq:sharp-bound}
+\end{equation}
+This bound still permits an arbitrary kernel on $A^2$.
+\end{theorem}
+
+\begin{proof}
+For numbers $v_e\in[0,1]$,
+\[
+ \prod_e(1-v_e)\geq1-\sum_ev_e.
+\]
+Apply this pointwise with the complement factors on the edges of $H$ and
+integrate.  The integral of the right side is exactly $1-mq$.  The omitted
+nonnegative remainder may be retained on any selected assignments.
+
+Consider assignments for which exactly one graph vertex $v$ lands in $A$.
+Conditional on its value $z\in A$, every other vertex lies in $B$.  All
+nonincident edges have graphon value one, while the $d_v$ neighbor variables
+are independent under the product measure.  Hence the exact product and its
+linear union bound integrate respectively to
+\[
+ (1-a(z))^{d_v},
+ \qquad1-d_va(z).
+\]
+The total gain on all such assignments is therefore
+\[
+ s(1-s)^{n-1}\sum_v\int_A
+ \bigl((1-a)^{d_v}-1+d_va\bigr)\dd\mu_A.
+\]
+The proof of Lemma~\ref{lem:scalar}, before summing its linear terms, shows
+that the summand is at least $(d_v-1)a^2$.  Summing gives
+\begin{equation}
+ t(H,W)\geq1-mq+s(1-s)^{n-1}(2m-n)E_2.
+ \label{eq:improved-union}
+\end{equation}
+Finally, \eqref{eq:target-remainder} and $0\leq q\leq1$ imply
+\[
+ \Psi_H(q)\leq1-mq+C_Hq^2.
+\]
+Subtract this from \eqref{eq:improved-union}.
+\end{proof}
+
+\begin{corollary}[Arbitrary crossing-cut fibres]
+\label{cor:cut-only}
+Assume in addition that $W=1$ almost everywhere on $A^2$; equivalently, the
+complement is supported only on $A\times B$ and $B\times A$.  Put
+\begin{equation}
+ \sigma_H=
+ \frac{2m-n}{(2m-n)(n-3)+4C_H}.
+ \label{eq:fixed-radius}
+\end{equation}
+Then
+\[
+ 0\leq s\leq\sigma_H
+ \quad\Longrightarrow\quad
+ t(H,W)\geq\Phi_H(p(W))
+\]
+for every measurable cut kernel.  No lower bound on $E_2$ is required.
+Equality occurs when the cut defect vanishes; for $0<s<\sigma_H$ the
+inequality is strict whenever $E_2>0$.
+\end{corollary}
+
+\begin{proof}
+Here
+\[
+ q=2s(1-s)\bar a,
+ \qquad \bar a=\int_Aa\dd\mu_A,
+\]
+and Cauchy--Schwarz gives $q^2\leq4s^2(1-s)^2E_2$.
+Theorem~\ref{thm:union-improvement} therefore yields
+\[
+ \Gamma_H(W)\geq
+ s(1-s)^2E_2
+ \left((2m-n)(1-s)^{n-3}-4C_Hs\right).
+\]
+Bernoulli's inequality gives
+$(1-s)^{n-3}\geq1-(n-3)s$.  The bracket is consequently at least
+\[
+ (2m-n)-\bigl((2m-n)(n-3)+4C_H\bigr)s,
+\]
+which is nonnegative precisely throughout the claimed rational interval.
+The equality statements follow from the same display.
+\end{proof}
+
+
+\section{The fully arbitrary single-hub theorem}
+
+The cut-only corollary and the internal maximum-degree theorem combine without
+any relation between the two kernels.  For
+\[
+ \Psi_H(q)=1-mq+R_H(q),
+ \qquad R_H(q)=\sum_{j=2}^nb_jq^j,
+\]
+put
+\begin{equation}
+ D_H=\sum_{j=2}^n j|b_j|.
+ \label{eq:derivative-norm}
+\end{equation}
+Let
+\[
+ g_H=\sum_{v\in V(H)}\binom{d_v}{2}-N_3(H).
+\]
+Use the graph constants $\Lambda_H,\Omega_H$ from the maximum-degree
+complement theorem: for any complement of maximum degree $\Delta$,
+\begin{equation}
+ \Gamma_H(1-V)\geq
+ (g_H-\Lambda_H\Delta)X_V
+ +(N_3(H)-\Omega_H\Delta)Y_V.
+ \label{eq:maximum-degree-input}
+\end{equation}
+
+\begin{lemma}[Superadditivity of the union-bound remainder]
+\label{lem:superadditive}
+For two disjoint collections of numbers in $[0,1]$, put
+\[
+ F(\mathcal E)=\prod_{e\in\mathcal E}(1-v_e)-1+
+ \sum_{e\in\mathcal E}v_e.
+\]
+Then
+\begin{equation}
+ F(\mathcal E_0\cup\mathcal E_1)
+ =F(\mathcal E_0)+F(\mathcal E_1)
+ +(1-P_0)(1-P_1)\geq F(\mathcal E_0)+F(\mathcal E_1),
+ \label{eq:superadditive}
+\end{equation}
+where $P_i=\prod_{e\in\mathcal E_i}(1-v_e)$.
+\end{lemma}
+
+\begin{proof}
+Expand the right side of the identity.  Its value is
+$P_0P_1-1+\sum_{\mathcal E_0\cup\mathcal E_1}v_e$.  The final term is
+nonnegative because $0\leq P_i\leq1$.
+\end{proof}
+
+\begin{theorem}[Complete-core, fully arbitrary single hub]
+\label{thm:complete-core}
+Suppose $H$ has no isolated vertices and $W=1$ almost everywhere on $B^2$, as in
+\eqref{eq:complete-core}, with no restriction on either $W|_{A\times B}$ or
+$W|_{A^2}$.  Put $a_H=2m-n$ and
+\begin{equation}
+ \tau_H=\min\left\{
+ \frac12,
+ \frac{g_H}{2\Lambda_H},
+ \frac{N_3(H)}{\Omega_H},
+ \frac{a_Hg_H}
+ {a_Hg_H(n-1)+4D_Hg_H+8D_H^2}
+ \right\}.
+ \label{eq:complete-core-radius}
+\end{equation}
+If $a_H,g_H,N_3(H)>0$ and $0\leq s\leq\tau_H$, then
+\[
+ t(H,W)\geq\Phi_H(p(W)).
+\]
+For $0<s<\tau_H$, the inequality is strict unless $W=1$ almost everywhere.
+\end{theorem}
+
+\begin{proof}
+Split the complement into its internal and cut parts,
+\[
+ V_0=V\mathbf1_{A^2},
+ \qquad V_1=V-V_0,
+ \qquad q_i=\int V_i.
+\]
+Write $W_i=1-V_i$.  Applying Lemma~\ref{lem:superadditive} pointwise to the
+edge defects and integrating gives
+\begin{equation}
+ \Gamma_H(W)\geq
+ \Gamma_H(W_0)+s(1-s)^{n-1}a_HE_2
+ -\bigl(R_H(q_0+q_1)-R_H(q_0)\bigr).
+ \label{eq:combined-gap}
+\end{equation}
+Indeed, the integrated internal remainder is
+$t(H,W_0)-1+mq_0$, while the integrated cut remainder is at least the exact
+one-exceptional-vertex gain used in
+Theorem~\ref{thm:union-improvement}; the linear target terms cancel.
+
+Let
+\[
+ \bar r=\int_{A^2}V\dd\mu_A^2,
+ \qquad \bar a=\int_Aa\dd\mu_A.
+\]
+Then $q_0=s^2\bar r$ and
+$q_1=2s(1-s)\bar a\leq2s\sqrt{E_2}$.  Since
+\[
+ 0\leq q^j-q_0^j\leq jq_1q^{j-1}\leq jq_1(q_0+q_1)
+ \quad(j\geq2),
+\]
+the target difference in \eqref{eq:combined-gap} has absolute value at most
+\begin{equation}
+ D_H(q_0q_1+q_1^2)
+ \leq D_H\bigl(2s^3\bar r\sqrt{E_2}+4s^2E_2\bigr).
+ \label{eq:target-difference}
+\end{equation}
+
+The complement $V_0$ has maximum degree at most $s$.  Under the second and
+third restrictions in \eqref{eq:complete-core-radius}, the input
+\eqref{eq:maximum-degree-input} gives
+\[
+ \Gamma_H(W_0)\geq\frac{g_H}{2}X_{V_0}.
+\]
+If $R=V|_{A^2}$ is viewed on the normalized probability space $A$, then
+\[
+ X_{V_0}=s^3t(P_3,R)-s^4\bar r^2
+ \geq s^3(1-s)\bar r^2,
+\]
+where $t(P_3,R)=\int d_R^2\geq\bar r^2$ by Cauchy--Schwarz.  Consequently
+\begin{align}
+ \Gamma_H(W)
+ &\geq \frac{g_H}{2}s^3(1-s)\bar r^2
+ +a_Hs(1-s)^{n-1}E_2 \\
+ &\quad-D_H\bigl(2s^3\bar r\sqrt{E_2}+4s^2E_2\bigr).
+ \label{eq:pre-young}
+\end{align}
+Young's inequality, with coefficient $g_H(1-s)/4$, gives
+\[
+ 2D_H\bar r\sqrt{E_2}
+ \leq\frac{g_H(1-s)}4\bar r^2
+ +\frac{4D_H^2}{g_H(1-s)}E_2.
+\]
+After substitution in \eqref{eq:pre-young}, a nonnegative internal term
+remains, while the coefficient of $sE_2$ is at least
+\[
+ a_H(1-s)^{n-1}-4D_Hs
+ -\frac{4D_H^2}{g_H(1-s)}s^2.
+\]
+For $s\leq1/2$, Bernoulli's inequality and
+$1/(1-s)\leq2$ make this at least
+\[
+ a_H-\left(a_H(n-1)+4D_H+\frac{8D_H^2}{g_H}\right)s.
+\]
+The fourth restriction in \eqref{eq:complete-core-radius} makes the last
+quantity nonnegative.  This proves the theorem.  With all restrictions
+strict, either $E_2>0$ or $\bar r>0$ whenever $V\ne0$, and the corresponding
+retained term is strict.
+\end{proof}
+
+
+\section{Exact constants for all current open rows}
+
+The graph6 strings below unambiguously specify the Atlas representatives.
+Deletion--contraction computes \eqref{eq:target-remainder}.  The value $K_H$
+is then fixed by \eqref{eq:constants}; the table lists $2m-n,C_H$, the
+adaptive radius $\rho_H$, and the fixed cut-only radius $\sigma_H$.  The
+chromatic number is also shown, so the required density threshold is explicit.
+
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\begin{longtable}{r@{\;}lrrrcc@{\quad}r@{\;}lrrrcc}
+$H$&graph6&$\chi$&$2m-n$&$C_H$&$\rho_H$&$\sigma_H$&
+$H$&graph6&$\chi$&$2m-n$&$C_H$&$\rho_H$&$\sigma_H$\\ \hline
+43&\verb|Dlc|&3&7&35&$7/172$&$1/22$&118&\verb|Eht?|&3&8&76&$2/87$&$1/41$\\
+122&\verb|Eld?|&3&8&76&$2/87$&$1/41$&124&\verb|Exd?|&3&8&76&$2/87$&$1/41$\\
+126&\verb|ERUO|&3&8&76&$2/87$&$1/41$&127&\verb|EZEG|&3&8&82&$2/93$&$1/44$\\
+130&\verb|E{CW|&3&8&64&$2/75$&$1/35$&137&\verb|EjsG|&3&10&99&$5/221$&$5/213$\\
+139&\verb|Eju?|&3&10&99&$5/221$&$5/213$&145&\verb|Exe_|&3&10&117&$5/257$&$5/249$\\
+147&\verb|EhMg|&3&10&117&$5/257$&$5/249$&148&\verb|EyUG|&3&10&117&$5/257$&$5/249$\\
+151&\verb|EhdW|&3&10&135&$5/293$&$1/57$&152&\verb|EhNG|&3&10&117&$5/257$&$5/249$\\
+153&\verb|Ehf_|&3&10&123&$5/269$&$5/261$&157&\verb|E~`_|&4&12&134&$3/146$&$3/143$\\
+160&\verb|E~@g|&4&12&134&$3/146$&$3/143$&168&\verb|E^MG|&3&12&170&$3/182$&$3/179$\\
+169&\verb|Exf_|&4&12&158&$3/170$&$3/167$&171&\verb|Ehew|&3&12&176&$3/188$&$3/185$\\
+174&\verb|EtTg|&3&12&194&$3/206$&$3/203$&178&\verb|En}?|&4&14&181&$7/387$&$7/383$\\
+181&\verb|E^mG|&4&14&205&$7/435$&$7/431$&185&\verb|Exv_|&4&14&229&$1/69$&$7/479$\\
+188&\verb|EzNG|&3&14&247&$7/519$&$7/515$&194&\verb|E~wW|&4&16&300&$4/313$&$1/78$\\
+196&\verb|ER~g|&4&16&300&$4/313$&$1/78$&199&\verb|El^g|&4&16&324&$4/337$&$1/84$\\
+203&\verb|E~^G|&4&18&395&$9/817$&$9/817$&&&&&&&
+\end{longtable}
+\normalsize
+\end{center}
+
+Every adaptive radius lies between $9/817$ and $7/172$, and every fixed
+cut-only radius lies between $9/817$ and $1/22$.  Since $E_2\leq1$, the
+hypothesis gives $s\leq7/172$ and hence $q\leq2s<1/2$.  Therefore all covered
+graphons automatically lie in the conjectured density range for the
+three-chromatic rows; for the four-chromatic rows the displayed individual
+radii are at most $3/146$, so $q<1/3$ there as well.
+
+For the fully arbitrary theorem, the following table records every additional
+constant in \eqref{eq:complete-core-radius}.  Here $g=g_H$,
+$\Lambda=\Lambda_H$, and $N=N_3(H)$.  The radii are conservative because all
+higher-rank signs and the positive $Y_V$ term are discarded.
+
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{r|rrrrr|c@{\quad}r|rrrrr|c}
+$H$&$D_H$&$g$&$\Lambda$&$N$&$\Omega$&$\tau_H$&
+$H$&$D_H$&$g$&$\Lambda$&$N$&$\Omega$&$\tau_H$\\ \hline
+43&97&8&161&1&18&$7/9825$&118&241&11&481&1&37&$22/118923$\\
+122&241&10&461&1&37&$5/29668$&124&241&10&464&1&37&$5/29668$\\
+126&241&10&454&1&31&$5/29668$&127&266&9&454&1&31&$9/71998$\\
+130&197&8&376&2&30&$8/39637$&137&316&14&1173&3&131&$35/204311$\\
+139&316&13&1134&3&131&$13/81593$&145&385&14&1211&2&131&$1/8629$\\
+147&385&13&1184&2&126&$13/120647$&148&385&13&1207&2&122&$13/120647$\\
+151&454&13&1237&1&138&$65/836593$&152&385&12&1159&2&122&$3/30122$\\
+153&410&12&1174&2&128&$3/34127$&157&435&17&2725&5&423&$17/128700$\\
+160&435&16&2638&5&423&$8/64275$&168&573&17&2893&3&421&$17/222218$\\
+169&529&16&2778&4&406&$8/94731$&171&598&16&2903&3&413&$2/30209$\\
+174&667&16&2972&2&436&$8/150115$&178&598&20&6138&7&1213&$35/363759$\\
+181&692&20&6482&6&1123&$35/485959$&185&786&20&6598&5&1193&$35/625831$\\
+188&855&20&6775&4&1215&$7/147950$&194&1043&24&14648&7&3229&$48/1100605$\\
+196&1043&24&14852&7&3091&$48/1100605$&199&1137&24&14992&6&3276&$16/435551$\\
+203&1394&28&32316&9&8052&$63/1963067$&&&&&&&
+\end{longtable}
+\normalsize
+\end{center}
+
+Thus every measurable single-hub perturbation around a complete core is
+nonnegative for an explicit fixed mass interval; the radii range from
+$63/1963067$ to $7/9825$.  Since $q\leq2s-s^2$, these intervals lie strictly
+inside the required density range.
+
+For independent checking, the exact chromatic polynomials and targets are
+grouped below.  These twenty rows cover the Atlas IDs in order of appearance
+in the preceding table.
+
+\scriptsize
+\begin{longtable}{l@{\quad}p{6.6cm}p{6.6cm}}
+Atlas IDs&$\chi_H(x)$&$\Phi_H(p)$\\ \hline
+43&$x(x-1)(x-2)(x^2-3x+3)$&$p(2p-1)(3p^2-3p+1)$\\
+118,122,124,126&$x(x-1)^2(x-2)(x^2-3x+3)$&$p^2(2p-1)(3p^2-3p+1)$\\
+127&$x(x-1)(x-2)^2(x^2-2x+2)$&$p(2p-1)^2(2p^2-2p+1)$\\
+130&$x(x-1)^3(x-2)^2$&$p^3(2p-1)^2$\\
+137,139&$x(x-1)^2(x-2)^3$&$p^2(2p-1)^3$\\
+145,147,148,152&$x(x-1)(x-2)^2(x^2-3x+3)$&$p(2p-1)^2(3p^2-3p+1)$\\
+151&$x(x-1)(x-2)^2(x^2-3x+4)$&$p(2p-1)^2(4p^2-5p+2)$\\
+153&$x(x-1)(x-2)(x^3-5x^2+9x-7)$&$p(2p-1)(7p^3-12p^2+8p-2)$\\
+157,160&$x(x-1)^2(x-2)^2(x-3)$&$p^2(2p-1)^2(3p-2)$\\
+168&$x(x-1)(x-2)^2(x^2-4x+5)$&$p(2p-1)^2(5p^2-6p+2)$\\
+169&$x(x-1)(x-2)(x-3)(x^2-3x+3)$&$p(2p-1)(3p-2)(3p^2-3p+1)$\\
+171&$x(x-1)(x-2)(x^3-6x^2+13x-11)$&$p(2p-1)(11p^3-20p^2+13p-3)$\\
+174&$x(x-1)(x-2)(x^3-6x^2+14x-13)$&$p(2p-1)(13p^3-25p^2+17p-4)$\\
+178&$x(x-1)^2(x-2)(x-3)^2$&$p^2(2p-1)(3p-2)^2$\\
+181&$x(x-1)(x-2)^3(x-3)$&$p(2p-1)^3(3p-2)$\\
+185&$x(x-1)(x-2)(x-3)(x^2-4x+5)$&$p(2p-1)(3p-2)(5p^2-6p+2)$\\
+188&$x(x-1)(x-2)(x^3-7x^2+18x-17)$&$p(2p-1)(17p^3-33p^2+22p-5)$\\
+194,196&$x(x-1)(x-2)(x-3)(x^2-5x+7)$&$p(2p-1)(3p-2)(7p^2-9p+3)$\\
+199&$x(x-1)(x-2)(x-3)(x^2-5x+8)$&$p(2p-1)(3p-2)(8p^2-11p+4)$\\
+203&$x(x-1)(x-2)(x-3)(x^2-6x+10)$&$p(2p-1)(3p-2)(10p^2-14p+5)$
+\end{longtable}
+\normalsize
+
+
+\section{Endpoint, assumptions, and limitations}
+
+At $p=1$, $V=0$ almost everywhere, hence $W=1$, $t(H,W)=1$, and monicity of
+$\chi_H$ gives $\Phi_H(1)=1$.  This case is independent of the normalization
+of $A$ and $B$ and uses no division by $1-p$.
+
+The proof uses only the union bound and its exact nonnegative remainder,
+Bernoulli's inequality, the scalar convexity lemma, Cauchy--Schwarz, Young's
+inequality, the previously proved maximum-degree complement theorem, and the
+exact chromatic polynomial.  All graphon integrations are bounded, so Tonelli
+applies.  There is no regularity, step representation, approximation by
+finite graphs, pointwise lower degree hypothesis, or product-of-fibre-means
+assumption.  In particular, the cross fibres may cross arbitrarily and the
+kernel on $A^2$ is completely unrestricted.
+
+The exact boundary is now the complete-core hypothesis
+\eqref{eq:complete-core}: the graphon must equal one on one set of measure
+$1-s$.  Theorem~\ref{thm:complete-core} covers every possible kernel on all
+remaining cells, uniformly for $s\leq\tau_H$.  In particular it already
+covers any number of interacting hubs whose union is contained in $A$.
+The independent culmination
+\path{notes/arbitrary_graphon_high_density_stability.tex} removes even this
+boundary: it chooses $A$ to be the high-complement-degree set of an arbitrary
+graphon, applies the present quantitative margin to all defects incident to
+$A$, and applies maximum-degree stability to the residual on $B^2$.  Thus the
+combined theorem closes a uniform high-density interval for every graphon.
+Intermediate densities remain unresolved, so no catalogue status changes.
+
+Run
+\begin{verbatim}
+python codes/principled_negative_tests.py
+\end{verbatim}
+from the repository root.  The line headed ``arbitrary-fibre persistent-hub
+stability theorem'' reconstructs $C_H,K_H,\rho_H$ for all $29$ rows from the
+exact chromatic polynomial.  The crossing-cut line reconstructs every
+$\sigma_H$.  The line headed ``complete-core fully arbitrary single-hub
+theorem'' additionally reconstructs $D_H,g_H,\Lambda_H,N_3(H),\Omega_H$ and
+all $29$ values of $\tau_H$.
+
+For formal verification, first formalize Lemma~\ref{lem:scalar}, the exact
+union-bound remainder, Lemma~\ref{lem:superadditive}, and the gain from maps
+using exactly one exceptional vertex.  Reuse the maximum-degree theorem for
+the internal component, then formalize the target-difference and Young bounds.
+The Atlas layer needs the exact polynomial coefficients and displayed finite
+constants.  Since the theorem is local in the exceptional mass, no Atlas
+status module should change.
+
+\end{document}

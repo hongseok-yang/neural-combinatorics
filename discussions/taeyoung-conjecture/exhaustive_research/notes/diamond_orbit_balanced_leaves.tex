@@ -1,0 +1,382 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Orbit-Balanced Leaves on the Diamond Graph:\\
+Fractional Degree Bias Beyond Vertex Transitivity}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $D=K_4-e$ be the diamond graph.  Its automorphism group has two
+vertex orbits of size two: the endpoints of the shared triangle edge and
+the two page vertices.  Attach a total of $k$ pendant leaves within each
+orbit, with arbitrary distribution inside the orbit.  For $1\leq k\leq2$,
+we prove the chromatic-polynomial graphon lower bound throughout
+$p\geq1/2$.  Orbit symmetrization makes the four root exponents uniformly
+$k/2$; a change of measure, fractional H\"older inequality, the accepted
+pure-chordal diamond bound, and an elementary scalar monotonicity then give
+the exact target.  The case $k=1$ proves the formerly open NetworkX Atlas
+graph $113$.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Family, orbit structure, and target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  Put
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y).
+\]
+
+Label the diamond $D$ by spine vertices $a,b$ and page vertices $c,d$,
+with edge set
+\[
+ ab,\ ac,\ ad,\ bc,\ bd.
+\]
+Thus $D$ is the union of the triangles $abc$ and $abd$ along the spine
+edge $ab$.  Its automorphism group contains the independent swaps
+$a\leftrightarrow b$ and $c\leftrightarrow d$; these are exactly its two
+vertex orbits.
+
+Choose nonnegative integers
+\[
+ s_a+s_b=k,
+ \qquad
+ q_c+q_d=k,
+ \qquad 1\leq k\leq2,
+\]
+and attach the indicated number of private pendant leaves to each core
+vertex.  Denote the resulting graph by
+\[
+ D_k(s_a,s_b;q_c,q_d).
+\]
+There are $2k$ leaves in total.  Since
+\[
+ \chi_D(x)=x(x-1)(x-2)^2,
+\]
+independent colouring of the leaves gives
+\begin{equation}
+ \chi_{D_k}(x)=x(x-1)^{2k+1}(x-2)^2,
+ \qquad \chi(D_k)=3.
+ \label{eq:chromatic}
+\end{equation}
+Consequently
+\begin{equation}
+ \Phi_{D_k}(p)=p^{2k+1}(2p-1)^2.
+ \label{eq:target}
+\end{equation}
+This is a polynomial identity, including the continued value one at $p=1$;
+at the required threshold $p=1/2$, the target is zero.
+
+We use the accepted pure-chordal theorem only in its diamond instance:
+every graphon $V$ of edge density $s\geq1/2$ satisfies
+\begin{equation}
+ t(D,V)\geq\phi(s),
+ \qquad
+ \phi(s):=s(2s-1)^2.
+ \label{eq:diamond-input}
+\end{equation}
+Indeed, the two maximal cliques of $D$ are triangles, so $D$ is
+$3$-pure chordal.  The theorem applies on arbitrary probability spaces.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fractional edge and scalar transfer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Fractionally degree-weighted edge]
+\label{lem:fractional-edge}
+For $0<\alpha\leq1$, set
+\[
+ N_\alpha=\int_{\Omega^2}W(x,y)d(x)^\alpha d(y)^\alpha
+ \dd\mu(x)\dd\mu(y).
+\]
+Then
+\[
+ N_\alpha\geq p^{1+2\alpha}.
+\]
+\end{lemma}
+
+\begin{proof}
+Define $W(x,y)/d(x)$ to be zero on $\{d(x)=0\}$; Fubini implies that
+$W(x,y)$ vanishes for almost every $y$ there.  With
+\[
+ \theta=\frac1{1+2\alpha},
+ \qquad
+ \eta=\frac\alpha{1+2\alpha},
+\]
+one has $\theta+2\eta=1$ and
+\[
+ W
+ =\bigl(Wd(x)^\alpha d(y)^\alpha\bigr)^\theta
+  \left(\frac W{d(x)}\right)^\eta
+  \left(\frac W{d(y)}\right)^\eta
+\]
+almost everywhere on the support of $W$.  Weighted H\"older yields
+\[
+ p\leq N_\alpha^\theta
+ \left(\int\frac W{d(x)}\dd\mu^2\right)^\eta
+ \left(\int\frac W{d(y)}\dd\mu^2\right)^\eta.
+\]
+The last two integrals are at most one, so $p\leq N_\alpha^\theta$.
+\end{proof}
+
+\begin{lemma}[Diamond rescaling]
+\label{lem:scalar}
+Let $k\in\{1,2\}$, let $p\in(1/2,1]$, and suppose
+$0<z\leq p^{2k}$.  Put
+\[
+ s_0=p\left(\frac{p^{2k}}z\right)^{1/2}.
+\]
+If $s_0\leq1$, then
+\[
+ z\phi(s_0)\geq p^{2k}\phi(p).
+\]
+\end{lemma}
+
+\begin{proof}
+For $s\in[1/2,1]$, put
+\[
+ \psi(s)=\frac{\phi(s)}{s^2}
+ =\frac{(2s-1)^2}s=4s-4+\frac1s.
+\]
+Then
+\[
+ \psi'(s)=4-\frac1{s^2}\geq0.
+\]
+The definition of $s_0$ is equivalent to
+\[
+ z=p^{2k}\left(\frac p{s_0}\right)^2.
+\]
+Since $s_0\geq p$, monotonicity of $\psi$ gives
+\[
+ z\phi(s_0)
+ =p^{2k+2}\psi(s_0)
+ \geq p^{2k+2}\psi(p)
+ =p^{2k}\phi(p).
+\]
+\end{proof}
+
+The function $\phi$ is nondecreasing on $[1/2,1]$, because
+\[
+ \phi'(s)=(2s-1)(6s-1)\geq0.
+\]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The orbit-balanced theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Orbit-balanced diamond leaves]
+\label{thm:main}
+For every $k\in\{1,2\}$, every admissible distribution
+$s_a+s_b=q_c+q_d=k$, and every graphon $W$ of edge density
+$p\in[1/2,1]$,
+\[
+ \boxed{
+ t\bigl(D_k(s_a,s_b;q_c,q_d),W\bigr)
+ \geq p^{2k+1}(2p-1)^2
+ =\Phi_{D_k}(p).
+ }
+\]
+\end{theorem}
+
+\begin{proof}
+At $p=1/2$ the target is zero.  At $p=1$, one has $W=1$ almost everywhere
+and both sides equal one.  Hence assume $p\in(1/2,1)$.
+
+For core variables $x_a,x_b,x_c,x_d$, write
+\[
+ F_D=W(x_a,x_b)W(x_a,x_c)W(x_a,x_d)
+     W(x_b,x_c)W(x_b,x_d).
+\]
+After integrating the leaves, the density is
+\[
+ \int F_D
+ d(x_a)^{s_a}d(x_b)^{s_b}
+ d(x_c)^{q_c}d(x_d)^{q_d}\dd\mu^4.
+\]
+The independent swaps within the spine and page orbits give four equal
+integrals.  Average them and apply the arithmetic--geometric mean inequality
+pointwise.  Each core variable then receives the average exponent $k/2$:
+\begin{equation}
+ t(D_k,W)
+ \geq\int F_D\prod_{v\in\{a,b,c,d\}}d(x_v)^{k/2}\dd\mu^4.
+ \label{eq:symmetrization}
+\end{equation}
+
+Set
+\[
+ \alpha=\frac k2\in(0,1],
+ \qquad
+ M=\int_\Omega d(x)^\alpha\dd\mu(x),
+ \qquad
+ z=M^4.
+\]
+Since $p>0$, one has $M>0$.  Define the probability measure
+\[
+ \dd\nu(x)=\frac{d(x)^\alpha}{M}\dd\mu(x).
+\]
+The right side of \eqref{eq:symmetrization} is
+\[
+ z\,t(D,W;\nu).
+\]
+The edge density of $W$ on $(\Omega,\nu)$ is
+\[
+ s=\frac{N_\alpha}{M^2}.
+\]
+
+Concavity of $u^\alpha$ gives
+\[
+ M\leq p^\alpha,
+ \qquad 0<z\leq p^{4\alpha}=p^{2k}.
+\]
+Lemma~\ref{lem:fractional-edge} gives
+\[
+ s\geq\frac{p^{1+k}}{M^2}
+ =p\left(\frac{p^{2k}}z\right)^{1/2}
+ =:s_0.
+\]
+Because $W\leq1$ and $\nu$ is a probability measure, $s\leq1$, hence
+$s_0\leq1$.  Also $s\geq s_0\geq p>1/2$.
+
+Apply the accepted diamond bound \eqref{eq:diamond-input} on the biased
+space, monotonicity of $\phi$, and Lemma~\ref{lem:scalar}:
+\begin{align*}
+ t(D_k,W)
+ &\geq z\,t(D,W;\nu)\\
+ &\geq z\phi(s)
+ \geq z\phi(s_0)
+ \geq p^{2k}\phi(p)
+ =p^{2k+1}(2p-1)^2.
+\end{align*}
+This equals \eqref{eq:target}.
+\end{proof}
+
+At every balanced complete $\ell$-partite graphon, $\ell\geq2$, the degree
+is constant, the orbit symmetrization and measure-change inequalities are
+equalities, and the accepted diamond bound is sharp.  Thus the theorem has
+all expected chromatic equality examples, including the zero target at
+$\ell=2$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Atlas 113, formalization audit, and limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{corollary}[Atlas 113]
+NetworkX Atlas graph $113$, with graph6 code \texttt{E\char94\_O}, is
+positive.  It has order six, size seven, chromatic number three, and
+\[
+ \chi_{F_{113}}(x)=x(x-1)^3(x-2)^2.
+\]
+Every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(F_{113},W)\geq p^3(2p-1)^2=\Phi_{F_{113}}(p).
+\]
+\end{corollary}
+
+\begin{proof}
+Its NetworkX edge list is
+\[
+ 02,\ 03,\ 04,\ 12,\ 13,\ 23,\ 35.
+\]
+Vertices $0,1,2,3$ induce the diamond with spine $2,3$ and pages $0,1$.
+Vertex $4$ is a leaf at page $0$, while vertex $5$ is a leaf at spine
+vertex $3$.  Hence this is the case $k=1$ of Theorem~\ref{thm:main}.
+\end{proof}
+
+All integrands are bounded, nonnegative, and measurable, so Tonelli--Fubini
+applies directly.  The quotient on $\{d=0\}$ and positivity of the biased
+measure's normalizing constant are handled explicitly.  No regularity,
+minimum-degree assumption, finite-step reduction, injective-copy
+interpretation, or numerical estimate is used.  The only accepted graphon
+input is the pure-chordal diamond bound with exactly matching hypotheses.
+
+The orbit-balance condition is essential to this proof: the total number of
+leaves on the spine orbit must equal the total on the page orbit, so that all
+four core variables acquire one common exponent.  The restriction $k\leq2$
+is exactly what makes that exponent at most one and permits the concavity
+step.  The theorem does not cover a leaf distribution concentrated in only
+one orbit, a two-edge tail, or attachments to an arbitrary pure-chordal core.
+
+The finite identities, symmetrized exponents, scalar derivative, and Atlas
+identification are reconstructed exactly by
+\begin{verbatim}
+python codes/verify_diamond_orbit_balanced_leaves.py
+\end{verbatim}
+For formal verification, the new reusable inputs are the two-orbit
+arithmetic--geometric symmetrization and the scalar transfer for
+$s(2s-1)^2/s^2$.  The graph-specific module awaiting inspection is
+\texttt{lean/Taeyoung/Examples/Graph113.lean}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The machine-checked development is
+\texttt{lean/Taeyoung/Methods/CliqueDist/Diamond.lean}, ending at
+\texttt{satisfiesLowerBound\_113}.  It proves the case $k=1$ and only that
+case, and it departs from this note at the same two points as the companion
+\texttt{notes/clique\_distributed\_leaves.tex} does.
+
+\paragraph{Scope: $k=1$.}
+The theorem here covers $1\leq k\leq2$.  The formalization fixes $k=1$, where
+the symmetrized exponent $k/2$ is $1/2$ and the biased density is $\sqrt d$; at
+$k=2$ it would be $1$, a different bias, and no six-vertex Atlas row needs it.
+
+\paragraph{The orbit average becomes a single exchange.}
+This note averages over both orbits, producing four monomials
+$d_{a}d_{b}$ with $a\in\{0,1\}$, $b\in\{2,3\}$, and applies AM--GM to all four.
+The formalization uses one: swapping $0\leftrightarrow1$ and
+$2\leftrightarrow3$ simultaneously is an automorphism of $D$, so the graph with
+leaves at $\{0,2\}$ is isomorphic to the one with leaves at $\{1,3\}$, and
+\[
+ 2\,t(H,W)=\int F\bigl(d_0d_2+d_1d_3\bigr)
+ \geq\int F\cdot2\sqrt{d_0d_1d_2d_3},
+\]
+the two-term AM--GM.  The four-term average and the two-term one give the same
+weight $\prod_i d_i^{1/2}$; the two-term version needs one graph isomorphism
+(\texttt{CliqueDist.isoOrbit}, checked by \texttt{decide}) instead of four
+peelings.
+
+\paragraph{The scalar transfer becomes a factorization.}
+Lemma~\ref{lem:scalar} is proved here by differentiating $A_D(s)/s^{2}$.  The
+formalization instead uses, with $m=M^2$ and $s$ the biased edge density,
+\begin{equation}
+ p(2s-1)^2-s(2p-1)^2=(s-p)(4ps-1),
+ \label{eq:lean-diamond-rescale}
+\end{equation}
+a \texttt{ring} identity whose two factors are nonnegative because
+$s\geq p\geq1/2$.  Together with $m^2s^2\geq p^4$ this gives
+$m^2A_D(s)\geq p^2A_D(p)$ directly.
+
+\paragraph{Everything else is reused verbatim.}
+Lemma~\ref{lem:fractional-edge} at $\alpha=1/2$ is
+\texttt{GeometricMean.sq\_le\_integral\_geoIntegrand}; $M\leq p^{1/2}$ is
+$M^2\leq p$, one Cauchy--Schwarz against the constant $1$; the change of measure
+is \texttt{CliqueDist.integral\_sqrtDegree\_prod}.  The accepted diamond input
+is not re-derived: it is \texttt{BaseCone.base\_diamond}, already verified for
+\texttt{notes/six\_verified\_base\_cones.tex}, which is exactly
+$t(D,V)\geq z(2z-1)^2$ on $z\geq1/2$.
+
+\end{document}
