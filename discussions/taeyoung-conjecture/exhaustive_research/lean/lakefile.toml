@@ -1,0 +1,51 @@
+name = "TaeyoungVerification"
+defaultTargets = ["Taeyoung"]
+
+# Reuse the already checked-out Mathlib source as a read-only path dependency.
+# All Taeyoung source and build products remain in this directory.
+[[require]]
+name = "mathlib"
+path = "../../../goodman-style-bound/lean/.lake/packages/mathlib"
+
+# Declare Mathlib's transitive packages as root path dependencies too.  This
+# makes Lake reuse their existing read-only checkouts/builds instead of cloning
+# or building anything below `complete_lean`.
+[[require]]
+name = "plausible"
+path = "../../../goodman-style-bound/lean/.lake/packages/plausible"
+
+[[require]]
+name = "LeanSearchClient"
+path = "../../../goodman-style-bound/lean/.lake/packages/LeanSearchClient"
+
+[[require]]
+name = "importGraph"
+path = "../../../goodman-style-bound/lean/.lake/packages/importGraph"
+
+[[require]]
+name = "proofwidgets"
+path = "../../../goodman-style-bound/lean/.lake/packages/proofwidgets"
+
+[[require]]
+name = "aesop"
+path = "../../../goodman-style-bound/lean/.lake/packages/aesop"
+
+[[require]]
+name = "Qq"
+path = "../../../goodman-style-bound/lean/.lake/packages/Qq"
+
+[[require]]
+name = "batteries"
+path = "../../../goodman-style-bound/lean/.lake/packages/batteries"
+
+[[require]]
+name = "Cli"
+path = "../../../goodman-style-bound/lean/.lake/packages/Cli"
+
+[[lean_lib]]
+name = "Taeyoung"
+# The `unusedSectionVars` linter fires on essentially every lemma here: these
+# files share broad `variable` blocks, so most lemmas legitimately do not use
+# every ambient instance.  Disable just that linter package-wide (all genuinely
+# useful linters stay on).
+leanOptions = [{name = "linter.unusedSectionVars", value = false}]
