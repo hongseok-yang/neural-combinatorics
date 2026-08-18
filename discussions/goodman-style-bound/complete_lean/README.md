@@ -42,10 +42,6 @@ Every one is proven (no `sorry`).
   Goodman/sum-of-squares short-cycle bounds; `m = 9` splits on `p` (`p ≥ 2/3` dense, `p ≤ 1/2` trivial,
   `1/2 < p < 2/3` via the intermediate-region bound).
 
-- **`fisher_triangle_bound`** — Fisher / Razborov–Reiher triangle-density bound: for `1/2 < p ≤ 2/3`,
-  `cycleDensity μ W 3 ≥ (3/2)·c·(1 − c)^2` with `c = (1 − √(4 − 6p))/3`. Not an odd-cycle regime;
-  included as the external interface used for unconditionality.
-
 ## How to verify the proof
 
 The claim is: `odd_cycle_bound` is proven from the Lean/Mathlib logical foundations alone, with no

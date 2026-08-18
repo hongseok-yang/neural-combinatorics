@@ -16,15 +16,11 @@ inequality `H(b_*) > 0` via `L(t) < 0`) in `DenseRegion/Diagonal/`; the intermed
 * `dense_cycle_bound`        — `p ≥ 2/3`, all odd `m ≥ 3`.  **PROVEN** (Phase D).
 * `intermediate_cycle_bound` — `p < 2/3`, odd `m ≥ 11`.  **PROVEN** (Phase R, paper §5–§9).
 * `small_cycle_bound`        — odd `3 ≤ m ≤ 9`, all `p`.  **PROVEN** (short-cycle SOS + `m=9` corner).
-* `fisher_triangle_bound`    — Fisher/Razborov–Reiher triangle-density bound.  **PROVEN**; it is the
-  external `TriangleDensityLowerBoundUpTo (2/3)` interface that the archived conditional
-  intermediate-region route consumes (unconditionality insurance for Phase R).
 * `odd_cycle_bound`          — the complete theorem, assembled from the three cycle regimes.
 
 `Main.lean` is a leaf: nothing imports it except (eventually) the axiom-audit `CheckComplete.lean`.
 -/
 import OddCycleBound.DenseRegion.Diagonal.DenseRegionEndgame
-import OddCycleBound.Fisher.GraphonBridge
 import OddCycleBound.ShortCycles
 import OddCycleBound.IntermediateRegion.IntermediateAssembly
 
@@ -97,19 +93,7 @@ theorem small_cycle_bound {m : ℕ} (hW : IsGraphon W μ) (hm : Odd m) (hm3 : 3 
         exact IntermediateRegion.intermediateRegion_odd_cycle_bound hW ⟨4, by norm_num⟩
           (by norm_num) (not_le.mp hp2) (not_le.mp hp)
 
-/-- **(4) Fisher's triangle-density lower bound** (Razborov–Reiher).  For a graphon `W` with
-`1/2 < p ≤ 2/3` (`p = edgeDensity W μ`), the triangle density `cycleDensity μ W 3` is at least
-`(3/2)·c·(1−c)²`, where `c = (1 − √(4 − 6p))/3`.  **Proven sorry-free** in `Fisher/`; this is not an
-odd-cycle regime but the external interface the archived conditional intermediate-region route
-consumes (unconditionality insurance for Phase R), restated here directly in terms of
-`cycleDensity`/`edgeDensity` so the statement is self-contained. -/
-theorem fisher_triangle_bound (hW : IsGraphon W μ)
-    (hp1 : 1 / 2 < edgeDensity W μ) (hp2 : edgeDensity W μ ≤ 2 / 3) :
-    let c := (1 - Real.sqrt (4 - 6 * edgeDensity W μ)) / 3
-    (3 / 2) * c * (1 - c) ^ 2 ≤ cycleDensity μ W 3 :=
-  triangleDensityLowerBound_twoThirds hW hp1 hp2
-
-/-- **(5) The odd-cycle Goodman bound** (paper §10, `thm:main`): for every graphon `W` and every odd
+/-- **(4) The odd-cycle Goodman bound** (paper §10, `thm:main`): for every graphon `W` and every odd
 `m ≥ 3`, `cycleDensity μ W m ≥ p^m − p(1−p)^{m−1}`.  Assembled from the three cycle regimes:
 `m ≤ 9` → `small_cycle_bound`; else `p ≥ 2/3` → `dense_cycle_bound`, `p < 2/3` →
 `intermediate_cycle_bound`. -/

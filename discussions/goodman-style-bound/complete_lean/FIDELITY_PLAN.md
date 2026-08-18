@@ -127,14 +127,15 @@ Action: extract these (plus their private dependency cone) into a small
 `C9Scalar.lean` (380 lines; the `1003/2000` band constants belong to the superseded conditional C9
 route — paper v2 has no such band). This was already flagged as a slimming task in `RENAMING.md`.
 
-### 2b. Fisher decision (owner call)
-`Fisher/` (14 files, ~4.7k lines) is **zero-module-overlap with `odd_cycle_bound`'s import cone**;
-`Main.lean:27` imports `Fisher.GraphonBridge` solely to state `fisher_triangle_bound`
-(`Main.lean:106`), which nothing consumes. Paper v2 contains no triangle-density material. The
-Phase-R insurance rationale (COMPLETE_LEAN_PLAN.md §8) has expired.
-Options: (i) keep as a separate deliverable but move `fisher_triangle_bound` to its own
-`FisherMain.lean` so `Main.lean`/`CheckComplete.lean` are visibly Fisher-free; (ii) delete the
-subtree. Default recommendation: (i).
+### 2b. Fisher decision (owner call) — RESOLVED 2026-08-18: option (ii), deleted
+`Fisher/` (14 files, ~4.7k lines) was **zero-module-overlap with `odd_cycle_bound`'s import cone**;
+`Main.lean` imported `Fisher.GraphonBridge` solely to state `fisher_triangle_bound`, which nothing
+consumed. Paper v2 contains no triangle-density material and the Phase-R insurance rationale
+(COMPLETE_LEAN_PLAN.md §8) had expired.
+The owner chose **(ii), delete the subtree**, over the default recommendation (i). The subtree was a
+vendored copy: the theorem itself is unaffected and still lives in `../fisher_lean`, which is now
+`sorry`-free. `Main.lean` and `CheckComplete.lean` are Fisher-free by construction rather than by
+arrangement.
 
 ### 2c. Legacy scalar route pruning (also kills the last `15 ≤ P.m` in the build)
 - `Scalar/ThreeGeometric.lean`: only `ell` (`:18`), `y` (`:19`), `s` (`:20`) are live (imported via
@@ -274,4 +275,10 @@ share of the 40-minute build).
 
 Build protocol: per `PHASE_R_PLAN.md` §9 — per-file `lake env lean` while iterating, background
 single-module `lake build` when dependencies change, one full `lake build` + `CheckComplete` at each
-phase gate; never build `../lean`, `../new_lean`, `../fisher_lean` on this machine.
+phase gate.
+
+Build environment (updated 2026-08-18): `../lean` and `../new_lean` no longer exist — their
+techniques are archived in `../archive/`, their full trees in git at 4adc70b. The 6.4 GB built
+mathlib each of them carried is consolidated into `discussions/.lake-shared/packages`, junctioned
+into this project's `.lake/packages`. `../fisher_lean` shares that same junction and now builds
+cheaply, so the old "never build the siblings" rule no longer applies.

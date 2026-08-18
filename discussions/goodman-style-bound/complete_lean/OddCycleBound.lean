@@ -18,12 +18,12 @@ Layout:
 * `IntermediateRegion/` — the region `1/2 < p < 2/3`, odd `m ≥ 9` (paper §5–§9);
   the scalar endgame (`Chart`, `QuadraticBranch`, `LinearBranch`, `Bernstein`) is
   Phase R of the plan and is not yet present
-* `Fisher/` — Fisher's triangle-density lower bound and its graphon bridge, ending
-  in `triangleDensityLowerBound_twoThirds : TriangleDensityLowerBoundUpTo (2/3)`.
-  Insurance for unconditionality: if the intermediate-region floor `m ≥ 9` stalls,
-  this discharges the triangle-density hypothesis of the archived conditional route.
-  (The optional `TraceMonoid` branch of the original `fisher_lean`, which contains a
-  `sorry`, is deliberately NOT transferred.)
+(There is no `Fisher/` directory any more.  It held a vendored copy of
+`fisher_lean`, kept as insurance in case the intermediate-region floor `m ≥ 9`
+stalled and the conditional route had to be revived.  It did not: Phase R closed
+`1/2 < p < 2/3` unconditionally, nothing in `IntermediateRegion/` ever imported
+`Fisher.*`, and `odd_cycle_bound` never referred to it.  Removed 2026-08-18; the
+theorem still lives in `../fisher_lean`.)
 -/
 
 -- Foundations
@@ -97,22 +97,6 @@ import OddCycleBound.IntermediateRegion.DirectedKernel
 import OddCycleBound.IntermediateRegion.ShiftSpectral
 import OddCycleBound.IntermediateRegion.DefectLowerBound
 import OddCycleBound.IntermediateRegion.EnvelopeBound
-
--- Fisher's triangle bound (unconditionality insurance)
-import OddCycleBound.Fisher.Interface
-import OddCycleBound.Fisher.CliqueCounts
-import OddCycleBound.Fisher.DependencePolynomial
-import OddCycleBound.Fisher.SmallestRoot
-import OddCycleBound.Fisher.ThirdTruncation
-import OddCycleBound.Fisher.Spectral
-import OddCycleBound.Fisher.CubicOpt
-import OddCycleBound.Fisher.FiniteTheorem
-import OddCycleBound.Fisher.GraphonContinuity
-import OddCycleBound.Fisher.FiniteGraphon
-import OddCycleBound.Fisher.GraphonRounding
-import OddCycleBound.Fisher.GraphonSampling
-import OddCycleBound.Fisher.GraphonScaling
-import OddCycleBound.Fisher.GraphonBridge
 
 -- Intermediate region, scalar infrastructure
 import OddCycleBound.IntermediateRegion.Scalar.Definitions
