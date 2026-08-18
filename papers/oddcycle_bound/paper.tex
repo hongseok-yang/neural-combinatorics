@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+% The environments above share the theorem counter, so cleveref would name
+% them all "Theorem"; these aliases restore the correct names.
+\usepackage{etoolbox}
+\AtBeginEnvironment{proposition}{\crefalias{theorem}{proposition}}
+\AtBeginEnvironment{lemma}{\crefalias{theorem}{lemma}}
+\AtBeginEnvironment{corollary}{\crefalias{theorem}{corollary}}
+\AtBeginEnvironment{definition}{\crefalias{theorem}{definition}}
+\AtBeginEnvironment{remark}{\crefalias{theorem}{remark}}
+
+\numberwithin{equation}{section}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\pos}[1]{\left(#1\right)_{+}}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\E}{\mathbb E}
+\newcommand{\GammaLaw}{\operatorname{Gamma}}
+\newcommand{\BetaLaw}{\operatorname{Beta}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\newcommand*{\tk}[1]{\textcolor{blue}{\textbf{[TK: #1]}}}
+\newcommand*{\jl}[1]{\textcolor{red!70!black}{\textbf{[JL: #1]}}}
+\newcommand*{\jb}[1]{\textcolor{green!50!black}{\textbf{[JB: #1]}}}
+\newcommand*{\si}[1]{\textcolor{orange!80!black}{\textbf{[SI: #1]}}}
+\newcommand*{\jk}[1]{\textcolor{purple}{\textbf{[JK: #1]}}}
+\newcommand*{\hy}[1]{\textcolor{teal}{\textbf{[HY: #1]}}}
+
+\newcommand{\dens}[2]{t(#1,#2)}
+\newcommand{\tC}[2]{t(C_{#1},#2)}
+\newcommand{\tP}[2]{t(P_{#1},#2)}
+\newcommand{\edens}[1]{t(K_{2},#1)}
+
+\newcommand{\goodman}[2]{#1^{#2}-#1(1-#1)^{#2-1}}
+\newcommand{\goal}{\goodman{p}{m}}
+
+\newcommand{\Tker}[1]{T_{#1}}
+\newcommand{\dW}{d_W}
+
+\newcommand{\coeff}[1]{[z^{#1}]}
+\newcommand{\nld}[1]{-\log\det(I-z#1)}
+
+\newcommand{\resm}{(I-zA)^{-1}}
+\newcommand{\resp}{(I+zA)^{-1}}
+\newcommand{\gresm}{\ip g{\resm g}}
+\newcommand{\gresp}{\ip g{\resp g}}
+
+\newcommand{\specmu}{\sum_i\norm{P_ig}^2\,\delta_{\lambda_i}}
+\newcommand{\dmu}{\dd\mu(\lambda)}
+\newcommand{\intmu}[1]{\int #1\dmu}
+\newcommand{\gA}[1]{\ip g{A^{#1}g}}
+
+\newcommand{\intsq}{\int_{[0,1]^2}}
+\newcommand{\intcube}[1]{\int_{[0,1]^{#1}}}
+\newcommand{\ddxy}{\dd x\dd y}
+
+\newcommand{\rep}[2]{#1^{\times #2}}
+
+\newcommand{\blockmat}[4]{\begin{pmatrix}#1&#2\\#3&#4\end{pmatrix}}
+\newcommand{\sblockmat}[4]{\left(\begin{smallmatrix}#1&#2\\#3&#4\end{smallmatrix}\right)}
+
+\title{On the Goodman style bounds on the odd cycles}
+\author{Author}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  Abstract.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}\label{sec:intro}
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\end{document}
