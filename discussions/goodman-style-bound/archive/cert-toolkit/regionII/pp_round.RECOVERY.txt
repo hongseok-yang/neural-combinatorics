@@ -1,0 +1,1606 @@
+Recovery record for lean/cert_scripts/pp_round.py
+=================================================
+
+The .py SOURCE WAS NEVER COMMITTED and no longer exists on disk. This file is
+reconstructed from the only surviving artefact, the CPython 3.12 .pyc bytecode
+(kept alongside as pp_round.LOST-SOURCE.cpython-312.pyc).
+
+Module docstring
+----------------
+Peyrl-Parrilo rational rounding for the joint (q, s-vars) Positivstellensatz SOS certs.
+
+Replaces the naive "round-to-D then poke single entries to restore coefficient match"
+rationalizer shared by gen_linear/gen_bivar/gen_trivar/gen_4var.  That scheme dumps the
+whole rounding residual into individual Gram entries (destroying PSD near the SDP margin,
+so it FAILS below RHO~12/25).  Here we instead:
+
+  1. Solve the affine coefficient-matching system A vec(G)=c once, exactly, for a rational
+     PARTICULAR solution vpart (small denominator, independent of D) plus an INTEGER null
+     basis N of A (the Gram "ideal"/free directions).
+  2. Round the SDP interior point into the affine subspace by choosing null coordinates z
+     (G = vpart + N z) via Babai nearest-plane (round in the QR-orthogonalised null basis)
+     at denominator D, so the result is EXACTLY feasible and stays at denominator ~D.
+  3. Sweep D upward; accept the first denominator at which every block is PSD.
+
+Because the correction is distributed over the full null space (not concentrated in one
+entry) and orthogonalised, it stays inside the PSD cone using the whole SDP margin -- this
+reaches the path-cert math frontier (RHO=97/200, p>=0.515) where the old scheme fails, and
+where it overlaps the old scheme it produces SMALLER coefficients (lower LDL Hadamard
+growth), which is what keeps the heavy Lean blocks within memory.
+
+`rationalize(weights, svars, target, Gf, Dlist)` returns (D, [sympy Matrix per block]) or
+None.  `weights[k] = (weight_poly_in_q, basis_k)`, each basis a list of exponent tuples
+`(q_exp, s1_exp, ...)`; `target` a sympy poly in (q, *svars); `Gf` the float Grams.
+
+
+Top-level names
+---------------
+['Fr', 'Fraction', '__doc__', '_build_affine', '_round_babai', '_round_indep', 'fractions', 'is_psd', 'np', 'numpy', 'q', 'rationalize', 'sp', 'symbols', 'sympy']
+
+Functions / classes defined (5)
+-------------------------------
+
+### is_psd(Grows, n)  [line 32]
+    docstring: Exact-rational PSD test by symmetric Gaussian elimination (pivot on max diagonal).
+    literals: [False, 0, True]
+
+### _build_affine(weights, svars, target)  [line 48]
+    docstring: Return (varlist, A (sympy nr x nv), cvec (nr x 1), rowset).
+    literals: [1, 2]
+
+### _round_babai(Nmat, target, D)  [line 80]
+    literals: [1, -1]
+
+### _round_indep(Nmat, target, D)  [line 89]
+    literals: [1]
+
+### rationalize(weights, svars, target, Gf, Dlist, verbose)  [line 93]
+    literals: [0, 1, 2, '  [pp] D=', ' via ', 'babai', 'indep', 'unique']
+
+
+Full disassembly
+----------------
+  0           0 RESUME                   0
+
+  2           2 LOAD_CONST               0 ('Peyrl-Parrilo rational rounding for the joint (q, s-vars) Positivstellensatz SOS certs.\n\nReplaces the naive "round-to-D then poke single entries to restore coefficient match"\nrationalizer shared by gen_linear/gen_bivar/gen_trivar/gen_4var.  That scheme dumps the\nwhole rounding residual into individual Gram entries (destroying PSD near the SDP margin,\nso it FAILS below RHO~12/25).  Here we instead:\n\n  1. Solve the affine coefficient-matching system A vec(G)=c once, exactly, for a rational\n     PARTICULAR solution vpart (small denominator, independent of D) plus an INTEGER null\n     basis N of A (the Gram "ideal"/free directions).\n  2. Round the SDP interior point into the affine subspace by choosing null coordinates z\n     (G = vpart + N z) via Babai nearest-plane (round in the QR-orthogonalised null basis)\n     at denominator D, so the result is EXACTLY feasible and stays at denominator ~D.\n  3. Sweep D upward; accept the first denominator at which every block is PSD.\n\nBecause the correction is distributed over the full null space (not concentrated in one\nentry) and orthogonalised, it stays inside the PSD cone using the whole SDP margin -- this\nreaches the path-cert math frontier (RHO=97/200, p>=0.515) where the old scheme fails, and\nwhere it overlaps the old scheme it produces SMALLER coefficients (lower LDL Hadamard\ngrowth), which is what keeps the heavy Lean blocks within memory.\n\n`rationalize(weights, svars, target, Gf, Dlist)` returns (D, [sympy Matrix per block]) or\nNone.  `weights[k] = (weight_poly_in_q, basis_k)`, each basis a list of exponent tuples\n`(q_exp, s1_exp, ...)`; `target` a sympy poly in (q, *svars); `Gf` the float Grams.\n')
+              4 STORE_NAME               0 (__doc__)
+
+ 27           6 LOAD_CONST               1 (0)
+              8 LOAD_CONST               2 (None)
+             10 IMPORT_NAME              1 (sympy)
+             12 STORE_NAME               2 (sp)
+             14 LOAD_CONST               1 (0)
+             16 LOAD_CONST               2 (None)
+             18 IMPORT_NAME              3 (numpy)
+             20 STORE_NAME               4 (np)
+
+ 28          22 LOAD_CONST               1 (0)
+             24 LOAD_CONST               3 (('Fraction',))
+             26 IMPORT_NAME              5 (fractions)
+             28 IMPORT_FROM              6 (Fraction)
+             30 STORE_NAME               7 (Fr)
+             32 POP_TOP
+
+ 30          34 PUSH_NULL
+             36 LOAD_NAME                2 (sp)
+             38 LOAD_ATTR               16 (symbols)
+             58 LOAD_CONST               4 ('q')
+             60 CALL                     1
+             68 STORE_NAME               9 (q)
+
+ 32          70 LOAD_CONST               5 (<code object is_psd at 0x00000274B31895D0, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 32>)
+             72 MAKE_FUNCTION            0
+             74 STORE_NAME              10 (is_psd)
+
+ 48          76 LOAD_CONST               6 (<code object _build_affine at 0x00000274B318DD20, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 48>)
+             78 MAKE_FUNCTION            0
+             80 STORE_NAME              11 (_build_affine)
+
+ 80          82 LOAD_CONST               7 (<code object _round_babai at 0x00000274B318A580, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 80>)
+             84 MAKE_FUNCTION            0
+             86 STORE_NAME              12 (_round_babai)
+
+ 89          88 LOAD_CONST               8 (<code object _round_indep at 0x00000274B30FCA50, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 89>)
+             90 MAKE_FUNCTION            0
+             92 STORE_NAME              13 (_round_indep)
+
+ 93          94 LOAD_CONST              10 ((None, False))
+             96 LOAD_CONST               9 (<code object rationalize at 0x00000274B31AA790, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 93>)
+             98 MAKE_FUNCTION            1 (defaults)
+            100 STORE_NAME              14 (rationalize)
+            102 RETURN_CONST             2 (None)
+
+Disassembly of <code object is_psd at 0x00000274B31895D0, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 32>:
+              0 MAKE_CELL                9 (R)
+
+ 32           2 RESUME                   0
+
+ 34           4 LOAD_GLOBAL              1 (NULL + range)
+             14 LOAD_FAST                1 (n)
+             16 CALL                     1
+             24 GET_ITER
+             26 LOAD_FAST_AND_CLEAR      2 (i)
+             28 LOAD_FAST_AND_CLEAR      3 (j)
+             30 SWAP                     3
+             32 BUILD_LIST               0
+             34 SWAP                     2
+        >>   36 FOR_ITER               125 (to 290)
+             40 STORE_FAST               2 (i)
+             42 LOAD_GLOBAL              1 (NULL + range)
+             52 LOAD_FAST                1 (n)
+             54 CALL                     1
+             62 GET_ITER
+             64 LOAD_FAST_AND_CLEAR      3 (j)
+             66 SWAP                     2
+             68 BUILD_LIST               0
+             70 SWAP                     2
+        >>   72 FOR_ITER               102 (to 280)
+             76 STORE_FAST               3 (j)
+             78 LOAD_GLOBAL              3 (NULL + Fr)
+             88 LOAD_GLOBAL              5 (NULL + int)
+             98 LOAD_GLOBAL              7 (NULL + sp)
+            108 LOAD_ATTR                8 (Rational)
+            128 LOAD_FAST                0 (Grows)
+            130 LOAD_FAST                2 (i)
+            132 BINARY_SUBSCR
+            136 LOAD_FAST                3 (j)
+            138 BINARY_SUBSCR
+            142 CALL                     1
+            150 LOAD_ATTR               10 (p)
+            170 CALL                     1
+            178 LOAD_GLOBAL              5 (NULL + int)
+            188 LOAD_GLOBAL              7 (NULL + sp)
+            198 LOAD_ATTR                8 (Rational)
+            218 LOAD_FAST                0 (Grows)
+            220 LOAD_FAST                2 (i)
+            222 BINARY_SUBSCR
+            226 LOAD_FAST                3 (j)
+            228 BINARY_SUBSCR
+            232 CALL                     1
+            240 LOAD_ATTR               12 (q)
+            260 CALL                     1
+            268 CALL                     2
+            276 LIST_APPEND              2
+            278 JUMP_BACKWARD          104 (to 72)
+        >>  280 END_FOR
+            282 SWAP                     2
+            284 STORE_FAST               3 (j)
+            286 LIST_APPEND              2
+            288 JUMP_BACKWARD          127 (to 36)
+        >>  290 END_FOR
+            292 SWAP                     3
+            294 STORE_FAST               3 (j)
+            296 STORE_FAST               2 (i)
+            298 STORE_DEREF              9 (R)
+
+ 35         300 LOAD_CONST               1 (False)
+            302 BUILD_LIST               1
+            304 LOAD_FAST                1 (n)
+            306 BINARY_OP                5 (*)
+            310 STORE_FAST               4 (used)
+
+ 36         312 LOAD_GLOBAL              1 (NULL + range)
+            322 LOAD_FAST                1 (n)
+            324 CALL                     1
+            332 GET_ITER
+        >>  334 FOR_ITER               186 (to 710)
+            338 STORE_FAST               5 (_)
+
+ 37         340 LOAD_GLOBAL              1 (NULL + range)
+            350 LOAD_FAST                1 (n)
+            352 CALL                     1
+            360 GET_ITER
+            362 LOAD_FAST_AND_CLEAR      6 (k)
+            364 SWAP                     2
+            366 BUILD_LIST               0
+            368 SWAP                     2
+        >>  370 FOR_ITER                10 (to 394)
+            374 STORE_FAST               6 (k)
+            376 LOAD_FAST                4 (used)
+            378 LOAD_FAST                6 (k)
+            380 BINARY_SUBSCR
+            384 POP_JUMP_IF_FALSE        1 (to 388)
+            386 JUMP_BACKWARD            9 (to 370)
+        >>  388 LOAD_FAST                6 (k)
+            390 LIST_APPEND              2
+            392 JUMP_BACKWARD           12 (to 370)
+        >>  394 END_FOR
+            396 STORE_FAST               7 (cand)
+            398 STORE_FAST               6 (k)
+            400 LOAD_GLOBAL             15 (NULL + max)
+            410 LOAD_FAST                7 (cand)
+            412 LOAD_CLOSURE             9 (R)
+            414 BUILD_TUPLE              1
+            416 LOAD_CONST               2 (<code object <lambda> at 0x00000274B323AF70, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 37>)
+            418 MAKE_FUNCTION            8 (closure)
+            420 KW_NAMES                 3 (('key',))
+            422 CALL                     2
+            430 STORE_FAST               6 (k)
+
+ 38         432 LOAD_DEREF               9 (R)
+            434 LOAD_FAST                6 (k)
+            436 BINARY_SUBSCR
+            440 LOAD_FAST                6 (k)
+            442 BINARY_SUBSCR
+            446 LOAD_CONST               4 (0)
+            448 COMPARE_OP               2 (<)
+            452 POP_JUMP_IF_FALSE        2 (to 458)
+            454 POP_TOP
+            456 RETURN_CONST             1 (False)
+
+ 39     >>  458 LOAD_DEREF               9 (R)
+            460 LOAD_FAST                6 (k)
+            462 BINARY_SUBSCR
+            466 LOAD_FAST                6 (k)
+            468 BINARY_SUBSCR
+            472 LOAD_CONST               4 (0)
+            474 COMPARE_OP              40 (==)
+            478 POP_JUMP_IF_FALSE       22 (to 524)
+            480 LOAD_GLOBAL             17 (NULL + all)
+            490 LOAD_CLOSURE             9 (R)
+            492 BUILD_TUPLE              1
+            494 LOAD_CONST               5 (<code object <genexpr> at 0x00000274B3052C30, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 39>)
+            496 MAKE_FUNCTION            8 (closure)
+            498 LOAD_FAST                7 (cand)
+            500 GET_ITER
+            502 CALL                     0
+            510 CALL                     1
+            518 SWAP                     2
+            520 POP_TOP
+            522 RETURN_VALUE
+
+ 40     >>  524 LOAD_CONST               6 (True)
+            526 LOAD_FAST                4 (used)
+            528 LOAD_FAST                6 (k)
+            530 STORE_SUBSCR
+            534 LOAD_DEREF               9 (R)
+            536 LOAD_FAST                6 (k)
+            538 BINARY_SUBSCR
+            542 LOAD_FAST                6 (k)
+            544 BINARY_SUBSCR
+            548 STORE_FAST               8 (piv)
+
+ 41         550 LOAD_GLOBAL              1 (NULL + range)
+            560 LOAD_FAST                1 (n)
+            562 CALL                     1
+            570 GET_ITER
+        >>  572 FOR_ITER                65 (to 706)
+            576 STORE_FAST               2 (i)
+
+ 42         578 LOAD_FAST                4 (used)
+            580 LOAD_FAST                2 (i)
+            582 BINARY_SUBSCR
+            586 POP_JUMP_IF_FALSE        1 (to 590)
+            588 JUMP_BACKWARD            9 (to 572)
+
+ 43     >>  590 LOAD_GLOBAL              1 (NULL + range)
+            600 LOAD_FAST                1 (n)
+            602 CALL                     1
+            610 GET_ITER
+        >>  612 FOR_ITER                43 (to 702)
+            616 STORE_FAST               3 (j)
+
+ 44         618 LOAD_FAST                4 (used)
+            620 LOAD_FAST                3 (j)
+            622 BINARY_SUBSCR
+            626 POP_JUMP_IF_FALSE        1 (to 630)
+            628 JUMP_BACKWARD            9 (to 612)
+
+ 45     >>  630 LOAD_DEREF               9 (R)
+            632 LOAD_FAST                2 (i)
+            634 BINARY_SUBSCR
+            638 LOAD_FAST                3 (j)
+            640 BINARY_SUBSCR
+            644 LOAD_DEREF               9 (R)
+            646 LOAD_FAST                6 (k)
+            648 BINARY_SUBSCR
+            652 LOAD_FAST                2 (i)
+            654 BINARY_SUBSCR
+            658 LOAD_DEREF               9 (R)
+            660 LOAD_FAST                6 (k)
+            662 BINARY_SUBSCR
+            666 LOAD_FAST                3 (j)
+            668 BINARY_SUBSCR
+            672 BINARY_OP                5 (*)
+            676 LOAD_FAST                8 (piv)
+            678 BINARY_OP               11 (/)
+            682 BINARY_OP               10 (-)
+            686 LOAD_DEREF               9 (R)
+            688 LOAD_FAST                2 (i)
+            690 BINARY_SUBSCR
+            694 LOAD_FAST                3 (j)
+            696 STORE_SUBSCR
+            700 JUMP_BACKWARD           45 (to 612)
+
+ 43     >>  702 END_FOR
+            704 JUMP_BACKWARD           67 (to 572)
+
+ 41     >>  706 END_FOR
+            708 JUMP_BACKWARD          188 (to 334)
+
+ 36     >>  710 END_FOR
+
+ 46         712 RETURN_CONST             6 (True)
+        >>  714 SWAP                     2
+            716 POP_TOP
+
+ 34         718 SWAP                     2
+            720 STORE_FAST               3 (j)
+            722 RERAISE                  0
+        >>  724 SWAP                     2
+            726 POP_TOP
+            728 SWAP                     3
+            730 STORE_FAST               3 (j)
+            732 STORE_FAST               2 (i)
+            734 RERAISE                  0
+        >>  736 SWAP                     2
+            738 POP_TOP
+
+ 37         740 SWAP                     2
+            742 STORE_FAST               6 (k)
+            744 RERAISE                  0
+ExceptionTable:
+  32 to 66 -> 724 [3]
+  68 to 280 -> 714 [6]
+  282 to 290 -> 724 [3]
+  366 to 384 -> 736 [3]
+  388 to 394 -> 736 [3]
+  714 to 722 -> 724 [3]
+
+Disassembly of <code object <lambda> at 0x00000274B323AF70, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 37>:
+              0 COPY_FREE_VARS           1
+
+ 37           2 RESUME                   0
+              4 LOAD_DEREF               1 (R)
+              6 LOAD_FAST                0 (k)
+              8 BINARY_SUBSCR
+             12 LOAD_FAST                0 (k)
+             14 BINARY_SUBSCR
+             18 RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x00000274B3052C30, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 39>:
+              0 COPY_FREE_VARS           1
+
+ 39           2 RETURN_GENERATOR
+              4 POP_TOP
+              6 RESUME                   0
+              8 LOAD_FAST                0 (.0)
+        >>   10 FOR_ITER                15 (to 44)
+             14 STORE_FAST               1 (i)
+             16 LOAD_DEREF               2 (R)
+             18 LOAD_FAST                1 (i)
+             20 BINARY_SUBSCR
+             24 LOAD_FAST                1 (i)
+             26 BINARY_SUBSCR
+             30 LOAD_CONST               0 (0)
+             32 COMPARE_OP              40 (==)
+             36 YIELD_VALUE              1
+             38 RESUME                   1
+             40 POP_TOP
+             42 JUMP_BACKWARD           17 (to 10)
+        >>   44 END_FOR
+             46 RETURN_CONST             1 (None)
+        >>   48 CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+             50 RERAISE                  1
+ExceptionTable:
+  6 to 46 -> 48 [0] lasti
+
+Disassembly of <code object _build_affine at 0x00000274B318DD20, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 48>:
+              0 MAKE_CELL               24 (b)
+              2 MAKE_CELL               25 (i)
+              4 MAKE_CELL               26 (j)
+              6 MAKE_CELL               27 (wq)
+
+ 48           8 RESUME                   0
+
+ 50          10 LOAD_GLOBAL              0 (q)
+             20 BUILD_LIST               1
+             22 LOAD_GLOBAL              3 (NULL + list)
+             32 LOAD_FAST                1 (svars)
+             34 CALL                     1
+             42 BINARY_OP                0 (+)
+             46 STORE_FAST               3 (allvars)
+
+ 51          48 BUILD_LIST               0
+             50 STORE_FAST               4 (varlist)
+
+ 52          52 LOAD_GLOBAL              5 (NULL + enumerate)
+             62 LOAD_FAST                0 (weights)
+             64 CALL                     1
+             72 GET_ITER
+        >>   74 FOR_ITER                72 (to 222)
+             78 UNPACK_SEQUENCE          2
+             82 STORE_FAST               5 (bi)
+             84 UNPACK_SEQUENCE          2
+             88 STORE_FAST               6 (w)
+             90 STORE_DEREF             24 (b)
+
+ 53          92 LOAD_GLOBAL              7 (NULL + len)
+            102 LOAD_DEREF              24 (b)
+            104 CALL                     1
+            112 STORE_FAST               7 (n)
+
+ 54         114 LOAD_GLOBAL              9 (NULL + range)
+            124 LOAD_FAST                7 (n)
+            126 CALL                     1
+            134 GET_ITER
+        >>  136 FOR_ITER                39 (to 218)
+            140 STORE_DEREF             25 (i)
+
+ 55         142 LOAD_GLOBAL              9 (NULL + range)
+            152 LOAD_DEREF              25 (i)
+            154 LOAD_FAST                7 (n)
+            156 CALL                     2
+            164 GET_ITER
+        >>  166 FOR_ITER                22 (to 214)
+            170 STORE_DEREF             26 (j)
+
+ 56         172 LOAD_FAST                4 (varlist)
+            174 LOAD_ATTR               11 (NULL|self + append)
+            194 LOAD_FAST                5 (bi)
+            196 LOAD_DEREF              25 (i)
+            198 LOAD_DEREF              26 (j)
+            200 BUILD_TUPLE              3
+            202 CALL                     1
+            210 POP_TOP
+            212 JUMP_BACKWARD           24 (to 166)
+
+ 55     >>  214 END_FOR
+            216 JUMP_BACKWARD           41 (to 136)
+
+ 54     >>  218 END_FOR
+            220 JUMP_BACKWARD           74 (to 74)
+
+ 52     >>  222 END_FOR
+
+ 57         224 LOAD_GLOBAL              5 (NULL + enumerate)
+            234 LOAD_FAST                4 (varlist)
+            236 CALL                     1
+            244 GET_ITER
+            246 LOAD_FAST_AND_CLEAR      8 (k)
+            248 LOAD_FAST_AND_CLEAR      9 (v)
+            250 SWAP                     3
+            252 BUILD_MAP                0
+            254 SWAP                     2
+        >>  256 FOR_ITER                 8 (to 276)
+            260 UNPACK_SEQUENCE          2
+            264 STORE_FAST               8 (k)
+            266 STORE_FAST               9 (v)
+            268 LOAD_FAST                9 (v)
+            270 LOAD_FAST                8 (k)
+            272 MAP_ADD                  2
+            274 JUMP_BACKWARD           10 (to 256)
+        >>  276 END_FOR
+            278 STORE_FAST              10 (vindex)
+            280 STORE_FAST               8 (k)
+            282 STORE_FAST               9 (v)
+
+ 58         284 BUILD_MAP                0
+            286 STORE_FAST              11 (rowset)
+
+ 59         288 BUILD_LIST               0
+            290 STORE_FAST              12 (contributions)
+
+ 60         292 LOAD_GLOBAL              5 (NULL + enumerate)
+            302 LOAD_FAST                0 (weights)
+            304 CALL                     1
+            312 GET_ITER
+        >>  314 EXTENDED_ARG             1
+            316 FOR_ITER               280 (to 880)
+            320 UNPACK_SEQUENCE          2
+            324 STORE_FAST               5 (bi)
+            326 UNPACK_SEQUENCE          2
+            330 STORE_FAST               6 (w)
+            332 STORE_DEREF             24 (b)
+
+ 61         334 LOAD_GLOBAL              7 (NULL + len)
+            344 LOAD_DEREF              24 (b)
+            346 CALL                     1
+            354 STORE_FAST               7 (n)
+
+ 62         356 LOAD_GLOBAL              3 (NULL + list)
+            366 LOAD_GLOBAL             13 (NULL + sp)
+            376 LOAD_ATTR               14 (Poly)
+            396 LOAD_FAST                6 (w)
+            398 LOAD_GLOBAL              0 (q)
+            408 CALL                     2
+            416 LOAD_ATTR               17 (NULL|self + terms)
+            436 CALL                     0
+            444 CALL                     1
+            452 STORE_FAST              13 (wterms)
+
+ 63         454 LOAD_GLOBAL              9 (NULL + range)
+            464 LOAD_FAST                7 (n)
+            466 CALL                     1
+            474 GET_ITER
+        >>  476 FOR_ITER               197 (to 874)
+            480 STORE_DEREF             25 (i)
+
+ 64         482 LOAD_GLOBAL              9 (NULL + range)
+            492 LOAD_DEREF              25 (i)
+            494 LOAD_FAST                7 (n)
+            496 CALL                     2
+            504 GET_ITER
+        >>  506 FOR_ITER               180 (to 870)
+            510 STORE_DEREF             26 (j)
+
+ 65         512 LOAD_DEREF              25 (i)
+            514 LOAD_DEREF              26 (j)
+            516 COMPARE_OP              40 (==)
+            520 POP_JUMP_IF_FALSE       21 (to 564)
+            522 LOAD_GLOBAL             13 (NULL + sp)
+            532 LOAD_ATTR               18 (Integer)
+            552 LOAD_CONST               1 (1)
+            554 CALL                     1
+            562 JUMP_FORWARD            20 (to 604)
+        >>  564 LOAD_GLOBAL             13 (NULL + sp)
+            574 LOAD_ATTR               18 (Integer)
+            594 LOAD_CONST               2 (2)
+            596 CALL                     1
+        >>  604 STORE_FAST              14 (mult)
+
+ 66         606 LOAD_FAST               13 (wterms)
+            608 GET_ITER
+        >>  610 FOR_ITER               126 (to 866)
+            614 UNPACK_SEQUENCE          2
+            618 UNPACK_SEQUENCE          1
+            622 STORE_DEREF             27 (wq)
+            624 STORE_FAST              15 (wc)
+
+ 67         626 LOAD_GLOBAL             21 (NULL + tuple)
+            636 LOAD_CLOSURE            24 (b)
+            638 LOAD_CLOSURE            25 (i)
+            640 LOAD_CLOSURE            26 (j)
+            642 LOAD_CLOSURE            27 (wq)
+            644 BUILD_TUPLE              4
+            646 LOAD_CONST               3 (<code object <genexpr> at 0x00000274B32B2550, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 67>)
+            648 MAKE_FUNCTION            8 (closure)
+            650 LOAD_GLOBAL              9 (NULL + range)
+            660 LOAD_GLOBAL              7 (NULL + len)
+            670 LOAD_DEREF              24 (b)
+            672 LOAD_DEREF              25 (i)
+            674 BINARY_SUBSCR
+            678 CALL                     1
+            686 CALL                     1
+            694 GET_ITER
+            696 CALL                     0
+            704 CALL                     1
+            712 STORE_FAST              16 (e)
+
+ 68         714 LOAD_FAST               12 (contributions)
+            716 LOAD_ATTR               11 (NULL|self + append)
+            736 LOAD_FAST               10 (vindex)
+            738 LOAD_FAST                5 (bi)
+            740 LOAD_DEREF              25 (i)
+            742 LOAD_DEREF              26 (j)
+            744 BUILD_TUPLE              3
+            746 BINARY_SUBSCR
+            750 LOAD_FAST               16 (e)
+            752 LOAD_GLOBAL             13 (NULL + sp)
+            762 LOAD_ATTR               22 (Rational)
+            782 LOAD_FAST               15 (wc)
+            784 CALL                     1
+            792 LOAD_FAST               14 (mult)
+            794 BINARY_OP                5 (*)
+            798 BUILD_TUPLE              3
+            800 CALL                     1
+            808 POP_TOP
+
+ 69         810 LOAD_FAST               11 (rowset)
+            812 LOAD_ATTR               25 (NULL|self + setdefault)
+            832 LOAD_FAST               16 (e)
+            834 LOAD_GLOBAL              7 (NULL + len)
+            844 LOAD_FAST               11 (rowset)
+            846 CALL                     1
+            854 CALL                     2
+            862 POP_TOP
+            864 JUMP_BACKWARD          128 (to 610)
+
+ 66     >>  866 END_FOR
+            868 JUMP_BACKWARD          182 (to 506)
+
+ 64     >>  870 END_FOR
+            872 JUMP_BACKWARD          199 (to 476)
+
+ 63     >>  874 END_FOR
+            876 EXTENDED_ARG             1
+            878 JUMP_BACKWARD          283 (to 314)
+
+ 60     >>  880 END_FOR
+
+ 71         882 LOAD_GLOBAL             13 (NULL + sp)
+            892 LOAD_ATTR               14 (Poly)
+            912 LOAD_FAST                2 (target)
+            914 BUILD_LIST               1
+            916 LOAD_FAST                3 (allvars)
+            918 LIST_EXTEND              1
+            920 CALL_INTRINSIC_1         6 (INTRINSIC_LIST_TO_TUPLE)
+            922 CALL_FUNCTION_EX         0
+            924 STORE_FAST              17 (Pt)
+
+ 72         926 LOAD_FAST               17 (Pt)
+            928 LOAD_ATTR               17 (NULL|self + terms)
+            948 CALL                     0
+            956 GET_ITER
+        >>  958 FOR_ITER                32 (to 1026)
+            962 UNPACK_SEQUENCE          2
+            966 STORE_FAST              16 (e)
+            968 STORE_FAST              18 (_)
+            970 LOAD_FAST               11 (rowset)
+            972 LOAD_ATTR               25 (NULL|self + setdefault)
+            992 LOAD_FAST               16 (e)
+            994 LOAD_GLOBAL              7 (NULL + len)
+           1004 LOAD_FAST               11 (rowset)
+           1006 CALL                     1
+           1014 CALL                     2
+           1022 POP_TOP
+           1024 JUMP_BACKWARD           34 (to 958)
+        >> 1026 END_FOR
+
+ 73        1028 LOAD_GLOBAL              7 (NULL + len)
+           1038 LOAD_FAST               11 (rowset)
+           1040 CALL                     1
+           1048 STORE_FAST              19 (nr)
+           1050 LOAD_GLOBAL              7 (NULL + len)
+           1060 LOAD_FAST                4 (varlist)
+           1062 CALL                     1
+           1070 STORE_FAST              20 (nv)
+
+ 74        1072 LOAD_GLOBAL             13 (NULL + sp)
+           1082 LOAD_ATTR               26 (zeros)
+           1102 LOAD_FAST               19 (nr)
+           1104 LOAD_FAST               20 (nv)
+           1106 CALL                     2
+           1114 STORE_FAST              21 (A)
+
+ 75        1116 LOAD_FAST               12 (contributions)
+           1118 GET_ITER
+        >> 1120 FOR_ITER                24 (to 1172)
+           1124 UNPACK_SEQUENCE          3
+           1128 STORE_FAST               8 (k)
+           1130 STORE_FAST              16 (e)
+           1132 STORE_FAST              22 (c)
+           1134 LOAD_FAST               21 (A)
+           1136 LOAD_FAST               11 (rowset)
+           1138 LOAD_FAST               16 (e)
+           1140 BINARY_SUBSCR
+           1144 LOAD_FAST                8 (k)
+           1146 BUILD_TUPLE              2
+           1148 COPY                     2
+           1150 COPY                     2
+           1152 BINARY_SUBSCR
+           1156 LOAD_FAST               22 (c)
+           1158 BINARY_OP               13 (+=)
+           1162 SWAP                     3
+           1164 SWAP                     2
+           1166 STORE_SUBSCR
+           1170 JUMP_BACKWARD           26 (to 1120)
+        >> 1172 END_FOR
+
+ 76        1174 LOAD_GLOBAL             13 (NULL + sp)
+           1184 LOAD_ATTR               26 (zeros)
+           1204 LOAD_FAST               19 (nr)
+           1206 LOAD_CONST               1 (1)
+           1208 CALL                     2
+           1216 STORE_FAST              23 (cvec)
+
+ 77        1218 LOAD_FAST               17 (Pt)
+           1220 LOAD_ATTR               17 (NULL|self + terms)
+           1240 CALL                     0
+           1248 GET_ITER
+        >> 1250 FOR_ITER                32 (to 1318)
+           1254 UNPACK_SEQUENCE          2
+           1258 STORE_FAST              16 (e)
+           1260 STORE_FAST              22 (c)
+           1262 LOAD_GLOBAL             13 (NULL + sp)
+           1272 LOAD_ATTR               22 (Rational)
+           1292 LOAD_FAST               22 (c)
+           1294 CALL                     1
+           1302 LOAD_FAST               23 (cvec)
+           1304 LOAD_FAST               11 (rowset)
+           1306 LOAD_FAST               16 (e)
+           1308 BINARY_SUBSCR
+           1312 STORE_SUBSCR
+           1316 JUMP_BACKWARD           34 (to 1250)
+        >> 1318 END_FOR
+
+ 78        1320 LOAD_FAST                4 (varlist)
+           1322 LOAD_FAST               21 (A)
+           1324 LOAD_FAST               23 (cvec)
+           1326 LOAD_FAST               11 (rowset)
+           1328 BUILD_TUPLE              4
+           1330 RETURN_VALUE
+        >> 1332 SWAP                     2
+           1334 POP_TOP
+
+ 57        1336 SWAP                     3
+           1338 STORE_FAST               9 (v)
+           1340 STORE_FAST               8 (k)
+           1342 RERAISE                  0
+ExceptionTable:
+  252 to 276 -> 1332 [3]
+
+Disassembly of <code object <genexpr> at 0x00000274B32B2550, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 67>:
+              0 COPY_FREE_VARS           4
+
+ 67           2 RETURN_GENERATOR
+              4 POP_TOP
+              6 RESUME                   0
+              8 LOAD_FAST                0 (.0)
+        >>   10 FOR_ITER                31 (to 76)
+             14 STORE_FAST               1 (d)
+             16 LOAD_DEREF               2 (b)
+             18 LOAD_DEREF               3 (i)
+             20 BINARY_SUBSCR
+             24 LOAD_FAST                1 (d)
+             26 BINARY_SUBSCR
+             30 LOAD_DEREF               2 (b)
+             32 LOAD_DEREF               4 (j)
+             34 BINARY_SUBSCR
+             38 LOAD_FAST                1 (d)
+             40 BINARY_SUBSCR
+             44 BINARY_OP                0 (+)
+             48 LOAD_FAST                1 (d)
+             50 LOAD_CONST               0 (0)
+             52 COMPARE_OP              40 (==)
+             56 POP_JUMP_IF_FALSE        2 (to 62)
+             58 LOAD_DEREF               5 (wq)
+             60 JUMP_FORWARD             1 (to 64)
+        >>   62 LOAD_CONST               0 (0)
+        >>   64 BINARY_OP                0 (+)
+             68 YIELD_VALUE              1
+             70 RESUME                   1
+             72 POP_TOP
+             74 JUMP_BACKWARD           33 (to 10)
+        >>   76 END_FOR
+             78 RETURN_CONST             1 (None)
+        >>   80 CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+             82 RERAISE                  1
+ExceptionTable:
+  6 to 78 -> 80 [0] lasti
+
+Disassembly of <code object _round_babai at 0x00000274B318A580, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 80>:
+ 80           0 RESUME                   0
+
+ 81           2 LOAD_GLOBAL              0 (np)
+             12 LOAD_ATTR                2 (linalg)
+             32 LOAD_ATTR                5 (NULL|self + qr)
+             52 LOAD_FAST                0 (Nmat)
+             54 CALL                     1
+             62 UNPACK_SEQUENCE          2
+             66 STORE_FAST               3 (Qm)
+             68 STORE_FAST               4 (Rm)
+
+ 82          70 LOAD_FAST                3 (Qm)
+             72 LOAD_ATTR                6 (T)
+             92 LOAD_FAST                1 (target)
+             94 BINARY_OP                4 (@)
+             98 STORE_FAST               5 (c_)
+
+ 83         100 LOAD_FAST                0 (Nmat)
+            102 LOAD_ATTR                8 (shape)
+            122 LOAD_CONST               1 (1)
+            124 BINARY_SUBSCR
+            128 STORE_FAST               6 (nn)
+            130 LOAD_GLOBAL              1 (NULL + np)
+            140 LOAD_ATTR               10 (zeros)
+            160 LOAD_FAST                6 (nn)
+            162 CALL                     1
+            170 STORE_FAST               7 (zi)
+
+ 84         172 LOAD_GLOBAL             13 (NULL + range)
+            182 LOAD_FAST                6 (nn)
+            184 LOAD_CONST               1 (1)
+            186 BINARY_OP               10 (-)
+            190 LOAD_CONST               2 (-1)
+            192 LOAD_CONST               2 (-1)
+            194 CALL                     3
+            202 GET_ITER
+        >>  204 FOR_ITER                57 (to 322)
+            208 STORE_FAST               8 (k)
+
+ 85         210 LOAD_FAST                5 (c_)
+            212 LOAD_FAST                8 (k)
+            214 BINARY_SUBSCR
+            218 LOAD_FAST                4 (Rm)
+            220 LOAD_FAST                8 (k)
+            222 LOAD_FAST                8 (k)
+            224 LOAD_CONST               1 (1)
+            226 BINARY_OP                0 (+)
+            230 LOAD_CONST               0 (None)
+            232 BUILD_SLICE              2
+            234 BUILD_TUPLE              2
+            236 BINARY_SUBSCR
+            240 LOAD_FAST                7 (zi)
+            242 LOAD_FAST                8 (k)
+            244 LOAD_CONST               1 (1)
+            246 BINARY_OP                0 (+)
+            250 LOAD_CONST               0 (None)
+            252 BINARY_SLICE
+            254 BINARY_OP                4 (@)
+            258 BINARY_OP               10 (-)
+            262 LOAD_FAST                4 (Rm)
+            264 LOAD_FAST                8 (k)
+            266 LOAD_FAST                8 (k)
+            268 BUILD_TUPLE              2
+            270 BINARY_SUBSCR
+            274 BINARY_OP               11 (/)
+            278 STORE_FAST               9 (s)
+
+ 86         280 LOAD_GLOBAL             15 (NULL + round)
+            290 LOAD_FAST                9 (s)
+            292 LOAD_FAST                2 (D)
+            294 BINARY_OP                5 (*)
+            298 CALL                     1
+            306 LOAD_FAST                2 (D)
+            308 BINARY_OP               11 (/)
+            312 LOAD_FAST                7 (zi)
+            314 LOAD_FAST                8 (k)
+            316 STORE_SUBSCR
+            320 JUMP_BACKWARD           59 (to 204)
+
+ 84     >>  322 END_FOR
+
+ 87         324 LOAD_GLOBAL             13 (NULL + range)
+            334 LOAD_FAST                6 (nn)
+            336 CALL                     1
+            344 GET_ITER
+            346 LOAD_FAST_AND_CLEAR      8 (k)
+            348 SWAP                     2
+            350 BUILD_LIST               0
+            352 SWAP                     2
+        >>  354 FOR_ITER                39 (to 436)
+            358 STORE_FAST               8 (k)
+            360 LOAD_GLOBAL             17 (NULL + sp)
+            370 LOAD_ATTR               18 (Rational)
+            390 LOAD_GLOBAL             15 (NULL + round)
+            400 LOAD_FAST                7 (zi)
+            402 LOAD_FAST                8 (k)
+            404 BINARY_SUBSCR
+            408 LOAD_FAST                2 (D)
+            410 BINARY_OP                5 (*)
+            414 CALL                     1
+            422 LOAD_FAST                2 (D)
+            424 CALL                     2
+            432 LIST_APPEND              2
+            434 JUMP_BACKWARD           41 (to 354)
+        >>  436 END_FOR
+            438 SWAP                     2
+            440 STORE_FAST               8 (k)
+            442 RETURN_VALUE
+        >>  444 SWAP                     2
+            446 POP_TOP
+            448 SWAP                     2
+            450 STORE_FAST               8 (k)
+            452 RERAISE                  0
+ExceptionTable:
+  350 to 436 -> 444 [2]
+
+Disassembly of <code object _round_indep at 0x00000274B30FCA50, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 89>:
+ 89           0 RESUME                   0
+
+ 90           2 LOAD_GLOBAL              0 (np)
+             12 LOAD_ATTR                2 (linalg)
+             32 LOAD_ATTR                5 (NULL|self + lstsq)
+             52 LOAD_FAST                0 (Nmat)
+             54 LOAD_FAST                1 (target)
+             56 LOAD_CONST               0 (None)
+             58 KW_NAMES                 1 (('rcond',))
+             60 CALL                     3
+             68 UNPACK_EX                1
+             70 STORE_FAST               3 (z)
+             72 STORE_FAST               4 (_)
+
+ 91          74 LOAD_GLOBAL              7 (NULL + range)
+             84 LOAD_FAST                0 (Nmat)
+             86 LOAD_ATTR                8 (shape)
+            106 LOAD_CONST               2 (1)
+            108 BINARY_SUBSCR
+            112 CALL                     1
+            120 GET_ITER
+            122 LOAD_FAST_AND_CLEAR      5 (k)
+            124 SWAP                     2
+            126 BUILD_LIST               0
+            128 SWAP                     2
+        >>  130 FOR_ITER                39 (to 212)
+            134 STORE_FAST               5 (k)
+            136 LOAD_GLOBAL             11 (NULL + sp)
+            146 LOAD_ATTR               12 (Rational)
+            166 LOAD_GLOBAL             15 (NULL + round)
+            176 LOAD_FAST                3 (z)
+            178 LOAD_FAST                5 (k)
+            180 BINARY_SUBSCR
+            184 LOAD_FAST                2 (D)
+            186 BINARY_OP                5 (*)
+            190 CALL                     1
+            198 LOAD_FAST                2 (D)
+            200 CALL                     2
+            208 LIST_APPEND              2
+            210 JUMP_BACKWARD           41 (to 130)
+        >>  212 END_FOR
+            214 SWAP                     2
+            216 STORE_FAST               5 (k)
+            218 RETURN_VALUE
+        >>  220 SWAP                     2
+            222 POP_TOP
+            224 SWAP                     2
+            226 STORE_FAST               5 (k)
+            228 RERAISE                  0
+ExceptionTable:
+  126 to 212 -> 220 [2]
+
+Disassembly of <code object rationalize at 0x00000274B31AA790, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 93>:
+              0 MAKE_CELL                0 (weights)
+              2 MAKE_CELL               37 (r2)
+              4 MAKE_CELL               38 (varlist)
+
+ 93           6 RESUME                   0
+
+ 94           8 LOAD_FAST                4 (Dlist)
+             10 POP_JUMP_IF_NOT_NONE     4 (to 20)
+
+ 95          12 BUILD_LIST               0
+             14 LOAD_CONST               1 ((8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288))
+             16 LIST_EXTEND              1
+             18 STORE_FAST               4 (Dlist)
+
+ 96     >>   20 LOAD_GLOBAL              1 (NULL + _build_affine)
+             30 LOAD_DEREF               0 (weights)
+             32 LOAD_FAST                1 (svars)
+             34 LOAD_FAST                2 (target)
+             36 CALL                     3
+             44 UNPACK_SEQUENCE          4
+             48 STORE_DEREF             38 (varlist)
+             50 STORE_FAST               6 (A)
+             52 STORE_FAST               7 (cvec)
+             54 STORE_FAST               8 (rowset)
+
+ 97          56 LOAD_GLOBAL              3 (NULL + len)
+             66 LOAD_DEREF              38 (varlist)
+             68 CALL                     1
+             76 STORE_FAST               9 (nv)
+             78 LOAD_FAST                6 (A)
+             80 LOAD_ATTR                4 (rows)
+            100 STORE_FAST              10 (nr)
+
+ 98         102 LOAD_FAST                6 (A)
+            104 LOAD_ATTR                7 (NULL|self + gauss_jordan_solve)
+            124 LOAD_FAST                7 (cvec)
+            126 CALL                     1
+            134 STORE_FAST              11 (sol)
+
+ 99         136 LOAD_GLOBAL              9 (NULL + isinstance)
+            146 LOAD_FAST               11 (sol)
+            148 LOAD_GLOBAL             10 (tuple)
+            158 CALL                     2
+            166 POP_JUMP_IF_FALSE       38 (to 244)
+            168 LOAD_FAST               11 (sol)
+            170 LOAD_CONST               2 (0)
+            172 BINARY_SUBSCR
+            176 LOAD_ATTR               13 (NULL|self + subs)
+            196 LOAD_FAST               11 (sol)
+            198 LOAD_CONST               3 (1)
+            200 BINARY_SUBSCR
+            204 GET_ITER
+            206 LOAD_FAST_AND_CLEAR     12 (s)
+            208 SWAP                     2
+            210 BUILD_MAP                0
+            212 SWAP                     2
+        >>  214 FOR_ITER                 5 (to 228)
+            218 STORE_FAST              12 (s)
+            220 LOAD_FAST               12 (s)
+            222 LOAD_CONST               2 (0)
+            224 MAP_ADD                  2
+            226 JUMP_BACKWARD            7 (to 214)
+        >>  228 END_FOR
+            230 SWAP                     2
+            232 STORE_FAST              12 (s)
+            234 CALL                     1
+            242 JUMP_FORWARD             1 (to 246)
+        >>  244 LOAD_FAST               11 (sol)
+        >>  246 STORE_FAST              13 (vpart)
+
+100         248 LOAD_FAST                6 (A)
+            250 LOAD_ATTR               15 (NULL|self + nullspace)
+            270 CALL                     0
+            278 STORE_FAST              14 (Ns)
+
+101         280 LOAD_FAST               14 (Ns)
+            282 POP_JUMP_IF_TRUE         3 (to 290)
+
+103         284 BUILD_LIST               0
+            286 STORE_FAST              15 (Ncols)
+            288 JUMP_FORWARD           165 (to 620)
+
+105     >>  290 BUILD_LIST               0
+            292 STORE_FAST              15 (Ncols)
+
+106         294 LOAD_FAST               14 (Ns)
+            296 GET_ITER
+        >>  298 FOR_ITER               158 (to 618)
+            302 STORE_FAST              16 (v)
+
+107         304 LOAD_CONST               3 (1)
+            306 STORE_FAST              17 (dd)
+
+108         308 LOAD_GLOBAL             17 (NULL + range)
+            318 LOAD_FAST                9 (nv)
+            320 CALL                     1
+            328 GET_ITER
+        >>  330 FOR_ITER                56 (to 446)
+            334 STORE_FAST              18 (k)
+            336 LOAD_GLOBAL             19 (NULL + sp)
+            346 LOAD_ATTR               20 (ilcm)
+            366 LOAD_FAST               17 (dd)
+            368 LOAD_GLOBAL             19 (NULL + sp)
+            378 LOAD_ATTR               22 (Rational)
+            398 LOAD_FAST               16 (v)
+            400 LOAD_FAST               18 (k)
+            402 BINARY_SUBSCR
+            406 CALL                     1
+            414 LOAD_ATTR               24 (q)
+            434 CALL                     2
+            442 STORE_FAST              17 (dd)
+            444 JUMP_BACKWARD           58 (to 330)
+        >>  446 END_FOR
+
+109         448 LOAD_FAST               15 (Ncols)
+            450 LOAD_ATTR               27 (NULL|self + append)
+            470 LOAD_GLOBAL             17 (NULL + range)
+            480 LOAD_FAST                9 (nv)
+            482 CALL                     1
+            490 GET_ITER
+            492 LOAD_FAST_AND_CLEAR     18 (k)
+            494 SWAP                     2
+            496 BUILD_LIST               0
+            498 SWAP                     2
+        >>  500 FOR_ITER                48 (to 600)
+            504 STORE_FAST              18 (k)
+            506 LOAD_GLOBAL             29 (NULL + int)
+            516 LOAD_GLOBAL             19 (NULL + sp)
+            526 LOAD_ATTR               22 (Rational)
+            546 LOAD_FAST               16 (v)
+            548 LOAD_FAST               18 (k)
+            550 BINARY_SUBSCR
+            554 LOAD_FAST               17 (dd)
+            556 BINARY_OP                5 (*)
+            560 CALL                     1
+            568 LOAD_ATTR               30 (p)
+            588 CALL                     1
+            596 LIST_APPEND              2
+            598 JUMP_BACKWARD           50 (to 500)
+        >>  600 END_FOR
+            602 SWAP                     2
+            604 STORE_FAST              18 (k)
+            606 CALL                     1
+            614 POP_TOP
+            616 JUMP_BACKWARD          160 (to 298)
+
+106     >>  618 END_FOR
+
+110     >>  620 LOAD_GLOBAL             33 (NULL + np)
+            630 LOAD_ATTR               34 (array)
+            650 LOAD_GLOBAL             17 (NULL + range)
+            660 LOAD_FAST                9 (nv)
+            662 CALL                     1
+            670 GET_ITER
+            672 LOAD_FAST_AND_CLEAR     18 (k)
+            674 SWAP                     2
+            676 BUILD_LIST               0
+            678 SWAP                     2
+        >>  680 FOR_ITER                16 (to 716)
+            684 STORE_FAST              18 (k)
+            686 LOAD_GLOBAL             37 (NULL + float)
+            696 LOAD_FAST               13 (vpart)
+            698 LOAD_FAST               18 (k)
+            700 BINARY_SUBSCR
+            704 CALL                     1
+            712 LIST_APPEND              2
+            714 JUMP_BACKWARD           18 (to 680)
+        >>  716 END_FOR
+            718 SWAP                     2
+            720 STORE_FAST              18 (k)
+            722 CALL                     1
+            730 STORE_FAST              19 (vpf)
+
+111         732 LOAD_GLOBAL             33 (NULL + np)
+            742 LOAD_ATTR               34 (array)
+            762 LOAD_DEREF              38 (varlist)
+            764 GET_ITER
+            766 LOAD_FAST_AND_CLEAR     20 (bi)
+            768 LOAD_FAST_AND_CLEAR     21 (i)
+            770 LOAD_FAST_AND_CLEAR     22 (j)
+            772 SWAP                     4
+            774 BUILD_LIST               0
+            776 SWAP                     2
+        >>  778 FOR_ITER                30 (to 842)
+            782 UNPACK_SEQUENCE          3
+            786 STORE_FAST              20 (bi)
+            788 STORE_FAST              21 (i)
+            790 STORE_FAST              22 (j)
+            792 LOAD_FAST                3 (Gf)
+            794 LOAD_FAST               20 (bi)
+            796 BINARY_SUBSCR
+            800 LOAD_FAST               21 (i)
+            802 LOAD_FAST               22 (j)
+            804 BUILD_TUPLE              2
+            806 BINARY_SUBSCR
+            810 LOAD_FAST                3 (Gf)
+            812 LOAD_FAST               20 (bi)
+            814 BINARY_SUBSCR
+            818 LOAD_FAST               22 (j)
+            820 LOAD_FAST               21 (i)
+            822 BUILD_TUPLE              2
+            824 BINARY_SUBSCR
+            828 BINARY_OP                0 (+)
+            832 LOAD_CONST               4 (2)
+            834 BINARY_OP               11 (/)
+            838 LIST_APPEND              2
+            840 JUMP_BACKWARD           32 (to 778)
+        >>  842 END_FOR
+            844 SWAP                     4
+            846 STORE_FAST              22 (j)
+            848 STORE_FAST              21 (i)
+            850 STORE_FAST              20 (bi)
+            852 CALL                     1
+            860 STORE_FAST              23 (vhat)
+
+112         862 LOAD_FAST               15 (Ncols)
+            864 POP_JUMP_IF_FALSE       37 (to 940)
+            866 LOAD_GLOBAL             33 (NULL + np)
+            876 LOAD_ATTR               34 (array)
+            896 LOAD_FAST               15 (Ncols)
+            898 LOAD_GLOBAL             36 (float)
+            908 KW_NAMES                 5 (('dtype',))
+            910 CALL                     2
+            918 LOAD_ATTR               38 (T)
+            938 JUMP_FORWARD             1 (to 942)
+        >>  940 LOAD_CONST               0 (None)
+        >>  942 STORE_FAST              24 (Nmat)
+
+113         944 LOAD_FAST               23 (vhat)
+            946 LOAD_FAST               19 (vpf)
+            948 BINARY_OP               10 (-)
+            952 STORE_FAST              25 (target_vec)
+
+114         954 LOAD_CLOSURE            38 (varlist)
+            956 LOAD_CLOSURE             0 (weights)
+            958 BUILD_TUPLE              2
+            960 LOAD_CONST               6 (<code object assemble at 0x00000274B317AB20, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 114>)
+            962 MAKE_FUNCTION            8 (closure)
+            964 STORE_FAST              26 (assemble)
+
+120         966 LOAD_CLOSURE             0 (weights)
+            968 BUILD_TUPLE              1
+            970 LOAD_CONST               7 (<code object check at 0x00000274B30F1330, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 120>)
+            972 MAKE_FUNCTION            8 (closure)
+            974 STORE_FAST              27 (check)
+
+124         976 LOAD_FAST                4 (Dlist)
+            978 GET_ITER
+        >>  980 EXTENDED_ARG             1
+            982 FOR_ITER               349 (to 1684)
+            986 STORE_FAST              28 (D)
+
+125         988 LOAD_FAST               24 (Nmat)
+            990 POP_JUMP_IF_NONE        12 (to 1016)
+            992 LOAD_GLOBAL             40 (_round_babai)
+           1002 LOAD_GLOBAL             42 (_round_indep)
+           1012 BUILD_LIST               2
+           1014 JUMP_FORWARD             2 (to 1020)
+        >> 1016 LOAD_CONST               0 (None)
+           1018 BUILD_LIST               1
+        >> 1020 STORE_FAST              29 (rounders)
+
+126        1022 LOAD_FAST               29 (rounders)
+           1024 GET_ITER
+        >> 1026 EXTENDED_ARG             1
+           1028 FOR_ITER               323 (to 1678)
+           1032 STORE_FAST              30 (rnd)
+
+127        1034 LOAD_FAST               30 (rnd)
+           1036 POP_JUMP_IF_NOT_NONE    47 (to 1132)
+
+128        1038 LOAD_GLOBAL             17 (NULL + range)
+           1048 LOAD_FAST                9 (nv)
+           1050 CALL                     1
+           1058 GET_ITER
+           1060 LOAD_FAST_AND_CLEAR     18 (k)
+           1062 SWAP                     2
+           1064 BUILD_LIST               0
+           1066 SWAP                     2
+        >> 1068 FOR_ITER                26 (to 1124)
+           1072 STORE_FAST              18 (k)
+           1074 LOAD_GLOBAL             19 (NULL + sp)
+           1084 LOAD_ATTR               22 (Rational)
+           1104 LOAD_FAST               13 (vpart)
+           1106 LOAD_FAST               18 (k)
+           1108 BINARY_SUBSCR
+           1112 CALL                     1
+           1120 LIST_APPEND              2
+           1122 JUMP_BACKWARD           28 (to 1068)
+        >> 1124 END_FOR
+           1126 STORE_FAST              31 (vrat)
+           1128 STORE_FAST              18 (k)
+           1130 JUMP_FORWARD           119 (to 1370)
+
+130     >> 1132 PUSH_NULL
+           1134 LOAD_FAST               30 (rnd)
+           1136 LOAD_FAST               24 (Nmat)
+           1138 LOAD_FAST               25 (target_vec)
+           1140 LOAD_FAST               28 (D)
+           1142 CALL                     3
+           1150 STORE_FAST              32 (zr)
+
+131        1152 LOAD_GLOBAL             17 (NULL + range)
+           1162 LOAD_FAST                9 (nv)
+           1164 CALL                     1
+           1172 GET_ITER
+           1174 LOAD_FAST_AND_CLEAR     18 (k)
+           1176 SWAP                     2
+           1178 BUILD_LIST               0
+           1180 SWAP                     2
+        >> 1182 FOR_ITER                26 (to 1238)
+           1186 STORE_FAST              18 (k)
+           1188 LOAD_GLOBAL             19 (NULL + sp)
+           1198 LOAD_ATTR               22 (Rational)
+           1218 LOAD_FAST               13 (vpart)
+           1220 LOAD_FAST               18 (k)
+           1222 BINARY_SUBSCR
+           1226 CALL                     1
+           1234 LIST_APPEND              2
+           1236 JUMP_BACKWARD           28 (to 1182)
+        >> 1238 END_FOR
+           1240 STORE_FAST              31 (vrat)
+           1242 STORE_FAST              18 (k)
+
+132        1244 LOAD_GLOBAL             45 (NULL + enumerate)
+           1254 LOAD_FAST               32 (zr)
+           1256 CALL                     1
+           1264 GET_ITER
+        >> 1266 FOR_ITER                49 (to 1368)
+           1270 UNPACK_SEQUENCE          2
+           1274 STORE_FAST              33 (ci)
+           1276 STORE_FAST              34 (zc)
+
+133        1278 LOAD_FAST               34 (zc)
+           1280 LOAD_CONST               2 (0)
+           1282 COMPARE_OP              40 (==)
+           1286 POP_JUMP_IF_FALSE        1 (to 1290)
+           1288 JUMP_BACKWARD           12 (to 1266)
+
+134     >> 1290 LOAD_GLOBAL             17 (NULL + range)
+           1300 LOAD_FAST                9 (nv)
+           1302 CALL                     1
+           1310 GET_ITER
+        >> 1312 FOR_ITER                24 (to 1364)
+           1316 STORE_FAST              18 (k)
+           1318 LOAD_FAST               31 (vrat)
+           1320 LOAD_FAST               18 (k)
+           1322 COPY                     2
+           1324 COPY                     2
+           1326 BINARY_SUBSCR
+           1330 LOAD_FAST               34 (zc)
+           1332 LOAD_FAST               15 (Ncols)
+           1334 LOAD_FAST               33 (ci)
+           1336 BINARY_SUBSCR
+           1340 LOAD_FAST               18 (k)
+           1342 BINARY_SUBSCR
+           1346 BINARY_OP                5 (*)
+           1350 BINARY_OP               13 (+=)
+           1354 SWAP                     3
+           1356 SWAP                     2
+           1358 STORE_SUBSCR
+           1362 JUMP_BACKWARD           26 (to 1312)
+        >> 1364 END_FOR
+           1366 JUMP_BACKWARD           51 (to 1266)
+
+132     >> 1368 END_FOR
+
+136     >> 1370 LOAD_FAST                7 (cvec)
+           1372 LOAD_FAST                6 (A)
+           1374 LOAD_GLOBAL             19 (NULL + sp)
+           1384 LOAD_ATTR               46 (Matrix)
+           1404 LOAD_FAST               31 (vrat)
+           1406 CALL                     1
+           1414 BINARY_OP                5 (*)
+           1418 BINARY_OP               10 (-)
+           1422 STORE_DEREF             37 (r2)
+
+137        1424 LOAD_GLOBAL             49 (NULL + any)
+           1434 LOAD_CLOSURE            37 (r2)
+           1436 BUILD_TUPLE              1
+           1438 LOAD_CONST               8 (<code object <genexpr> at 0x00000274B32B95C0, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 137>)
+           1440 MAKE_FUNCTION            8 (closure)
+           1442 LOAD_GLOBAL             17 (NULL + range)
+           1452 LOAD_FAST               10 (nr)
+           1454 CALL                     1
+           1462 GET_ITER
+           1464 CALL                     0
+           1472 CALL                     1
+           1480 POP_JUMP_IF_FALSE        1 (to 1484)
+           1482 JUMP_BACKWARD          229 (to 1026)
+
+138     >> 1484 PUSH_NULL
+           1486 LOAD_FAST               26 (assemble)
+           1488 LOAD_FAST               31 (vrat)
+           1490 CALL                     1
+           1498 STORE_FAST              35 (Gs)
+
+139        1500 PUSH_NULL
+           1502 LOAD_FAST               27 (check)
+           1504 LOAD_FAST               35 (Gs)
+           1506 CALL                     1
+           1514 POP_JUMP_IF_FALSE       74 (to 1664)
+
+140        1516 LOAD_FAST                5 (verbose)
+           1518 POP_JUMP_IF_FALSE       31 (to 1582)
+           1520 LOAD_GLOBAL             51 (NULL + print)
+           1530 LOAD_CONST               9 ('  [pp] D=')
+           1532 LOAD_FAST               28 (D)
+           1534 FORMAT_VALUE             0
+           1536 LOAD_CONST              10 (' via ')
+           1538 LOAD_FAST               30 (rnd)
+           1540 POP_JUMP_IF_FALSE       12 (to 1566)
+           1542 LOAD_FAST               30 (rnd)
+           1544 LOAD_GLOBAL             40 (_round_babai)
+           1554 IS_OP                    0
+           1556 POP_JUMP_IF_FALSE        2 (to 1562)
+           1558 LOAD_CONST              11 ('babai')
+           1560 JUMP_FORWARD             3 (to 1568)
+        >> 1562 LOAD_CONST              12 ('indep')
+           1564 JUMP_FORWARD             1 (to 1568)
+        >> 1566 LOAD_CONST              13 ('unique')
+        >> 1568 FORMAT_VALUE             0
+           1570 BUILD_STRING             4
+           1572 CALL                     1
+           1580 POP_TOP
+
+141     >> 1582 LOAD_FAST               28 (D)
+           1584 LOAD_FAST               35 (Gs)
+           1586 GET_ITER
+           1588 LOAD_FAST_AND_CLEAR     36 (G)
+           1590 SWAP                     2
+           1592 BUILD_LIST               0
+           1594 SWAP                     2
+        >> 1596 FOR_ITER                23 (to 1646)
+           1600 STORE_FAST              36 (G)
+           1602 LOAD_GLOBAL             19 (NULL + sp)
+           1612 LOAD_ATTR               46 (Matrix)
+           1632 LOAD_FAST               36 (G)
+           1634 CALL                     1
+           1642 LIST_APPEND              2
+           1644 JUMP_BACKWARD           25 (to 1596)
+        >> 1646 END_FOR
+           1648 SWAP                     2
+           1650 STORE_FAST              36 (G)
+           1652 BUILD_TUPLE              2
+           1654 SWAP                     2
+           1656 POP_TOP
+           1658 SWAP                     2
+           1660 POP_TOP
+           1662 RETURN_VALUE
+
+142     >> 1664 LOAD_FAST               24 (Nmat)
+           1666 POP_JUMP_IF_NONE         2 (to 1672)
+           1668 EXTENDED_ARG             1
+           1670 JUMP_BACKWARD          323 (to 1026)
+        >> 1672 POP_TOP
+           1674 EXTENDED_ARG             1
+           1676 JUMP_BACKWARD          349 (to 980)
+
+126     >> 1678 END_FOR
+           1680 EXTENDED_ARG             1
+           1682 JUMP_BACKWARD          352 (to 980)
+
+124     >> 1684 END_FOR
+
+143        1686 RETURN_CONST             0 (None)
+        >> 1688 SWAP                     2
+           1690 POP_TOP
+
+ 99        1692 SWAP                     2
+           1694 STORE_FAST              12 (s)
+           1696 RERAISE                  0
+        >> 1698 SWAP                     2
+           1700 POP_TOP
+
+109        1702 SWAP                     2
+           1704 STORE_FAST              18 (k)
+           1706 RERAISE                  0
+        >> 1708 SWAP                     2
+           1710 POP_TOP
+
+110        1712 SWAP                     2
+           1714 STORE_FAST              18 (k)
+           1716 RERAISE                  0
+        >> 1718 SWAP                     2
+           1720 POP_TOP
+
+111        1722 SWAP                     4
+           1724 STORE_FAST              22 (j)
+           1726 STORE_FAST              21 (i)
+           1728 STORE_FAST              20 (bi)
+           1730 RERAISE                  0
+        >> 1732 SWAP                     2
+           1734 POP_TOP
+
+128        1736 SWAP                     2
+           1738 STORE_FAST              18 (k)
+           1740 RERAISE                  0
+        >> 1742 SWAP                     2
+           1744 POP_TOP
+
+131        1746 SWAP                     2
+           1748 STORE_FAST              18 (k)
+           1750 RERAISE                  0
+        >> 1752 SWAP                     2
+           1754 POP_TOP
+
+141        1756 SWAP                     2
+           1758 STORE_FAST              36 (G)
+           1760 RERAISE                  0
+ExceptionTable:
+  210 to 228 -> 1688 [4]
+  496 to 600 -> 1698 [5]
+  676 to 716 -> 1708 [4]
+  774 to 842 -> 1718 [6]
+  1064 to 1124 -> 1732 [4]
+  1178 to 1238 -> 1742 [4]
+  1592 to 1646 -> 1752 [5]
+
+Disassembly of <code object assemble at 0x00000274B317AB20, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 114>:
+              0 COPY_FREE_VARS           2
+
+114           2 RESUME                   0
+
+115           4 BUILD_LIST               0
+              6 STORE_FAST               1 (Gs)
+
+116           8 LOAD_GLOBAL              1 (NULL + enumerate)
+             18 LOAD_DEREF              10 (weights)
+             20 CALL                     1
+             28 GET_ITER
+        >>   30 FOR_ITER                89 (to 212)
+             34 UNPACK_SEQUENCE          2
+             38 STORE_FAST               2 (bi)
+             40 UNPACK_SEQUENCE          2
+             44 STORE_FAST               3 (w)
+             46 STORE_FAST               4 (b)
+             48 LOAD_FAST                1 (Gs)
+             50 LOAD_ATTR                3 (NULL|self + append)
+             70 LOAD_GLOBAL              5 (NULL + range)
+             80 LOAD_GLOBAL              7 (NULL + len)
+             90 LOAD_FAST                4 (b)
+             92 CALL                     1
+            100 CALL                     1
+            108 GET_ITER
+            110 LOAD_FAST_AND_CLEAR      5 (_)
+            112 SWAP                     2
+            114 BUILD_LIST               0
+            116 SWAP                     2
+        >>  118 FOR_ITER                36 (to 194)
+            122 STORE_FAST               5 (_)
+            124 LOAD_GLOBAL              9 (NULL + sp)
+            134 LOAD_ATTR               10 (Integer)
+            154 LOAD_CONST               1 (0)
+            156 CALL                     1
+            164 BUILD_LIST               1
+            166 LOAD_GLOBAL              7 (NULL + len)
+            176 LOAD_FAST                4 (b)
+            178 CALL                     1
+            186 BINARY_OP                5 (*)
+            190 LIST_APPEND              2
+            192 JUMP_BACKWARD           38 (to 118)
+        >>  194 END_FOR
+            196 SWAP                     2
+            198 STORE_FAST               5 (_)
+            200 CALL                     1
+            208 POP_TOP
+            210 JUMP_BACKWARD           91 (to 30)
+        >>  212 END_FOR
+
+117         214 LOAD_GLOBAL              1 (NULL + enumerate)
+            224 LOAD_DEREF               9 (varlist)
+            226 CALL                     1
+            234 GET_ITER
+        >>  236 FOR_ITER                37 (to 314)
+            240 UNPACK_SEQUENCE          2
+            244 STORE_FAST               6 (k)
+            246 UNPACK_SEQUENCE          3
+            250 STORE_FAST               2 (bi)
+            252 STORE_FAST               7 (i)
+            254 STORE_FAST               8 (j)
+
+118         256 LOAD_FAST                0 (vrat)
+            258 LOAD_FAST                6 (k)
+            260 BINARY_SUBSCR
+            264 LOAD_FAST                1 (Gs)
+            266 LOAD_FAST                2 (bi)
+            268 BINARY_SUBSCR
+            272 LOAD_FAST                7 (i)
+            274 BINARY_SUBSCR
+            278 LOAD_FAST                8 (j)
+            280 STORE_SUBSCR
+            284 LOAD_FAST                0 (vrat)
+            286 LOAD_FAST                6 (k)
+            288 BINARY_SUBSCR
+            292 LOAD_FAST                1 (Gs)
+            294 LOAD_FAST                2 (bi)
+            296 BINARY_SUBSCR
+            300 LOAD_FAST                8 (j)
+            302 BINARY_SUBSCR
+            306 LOAD_FAST                7 (i)
+            308 STORE_SUBSCR
+            312 JUMP_BACKWARD           39 (to 236)
+
+117     >>  314 END_FOR
+
+119         316 LOAD_FAST                1 (Gs)
+            318 RETURN_VALUE
+        >>  320 SWAP                     2
+            322 POP_TOP
+
+116         324 SWAP                     2
+            326 STORE_FAST               5 (_)
+            328 RERAISE                  0
+ExceptionTable:
+  114 to 194 -> 320 [5]
+
+Disassembly of <code object check at 0x00000274B30F1330, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 120>:
+              0 COPY_FREE_VARS           1
+
+120           2 RESUME                   0
+
+121           4 LOAD_GLOBAL              1 (NULL + enumerate)
+             14 LOAD_DEREF               4 (weights)
+             16 CALL                     1
+             24 GET_ITER
+        >>   26 FOR_ITER                34 (to 98)
+             30 UNPACK_SEQUENCE          2
+             34 STORE_FAST               1 (bi)
+             36 UNPACK_SEQUENCE          2
+             40 STORE_FAST               2 (w)
+             42 STORE_FAST               3 (b)
+
+122          44 LOAD_GLOBAL              3 (NULL + is_psd)
+             54 LOAD_FAST                0 (Gs)
+             56 LOAD_FAST                1 (bi)
+             58 BINARY_SUBSCR
+             62 LOAD_GLOBAL              5 (NULL + len)
+             72 LOAD_FAST                3 (b)
+             74 CALL                     1
+             82 CALL                     2
+             90 POP_JUMP_IF_FALSE        1 (to 94)
+             92 JUMP_BACKWARD           34 (to 26)
+        >>   94 POP_TOP
+             96 RETURN_CONST             1 (False)
+
+121     >>   98 END_FOR
+
+123         100 RETURN_CONST             2 (True)
+
+Disassembly of <code object <genexpr> at 0x00000274B32B95C0, file "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\lean\cert_scripts\pp_round.py", line 137>:
+              0 COPY_FREE_VARS           1
+
+137           2 RETURN_GENERATOR
+              4 POP_TOP
+              6 RESUME                   0
+              8 LOAD_FAST                0 (.0)
+        >>   10 FOR_ITER                12 (to 38)
+             14 STORE_FAST               1 (k)
+             16 LOAD_DEREF               2 (r2)
+             18 LOAD_FAST                1 (k)
+             20 BINARY_SUBSCR
+             24 LOAD_CONST               0 (0)
+             26 COMPARE_OP              55 (!=)
+             30 YIELD_VALUE              1
+             32 RESUME                   1
+             34 POP_TOP
+             36 JUMP_BACKWARD           14 (to 10)
+        >>   38 END_FOR
+             40 RETURN_CONST             1 (None)
+        >>   42 CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+             44 RERAISE                  1
+ExceptionTable:
+  6 to 40 -> 42 [0] lasti
