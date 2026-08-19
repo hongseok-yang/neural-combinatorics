@@ -1,4 +1,4 @@
-import AlternatingCycle.MatrixMain
+import AlternatingCycle.Matrix.MatrixMain
 import Mathlib.Analysis.Matrix.Spectrum
 
 /-!

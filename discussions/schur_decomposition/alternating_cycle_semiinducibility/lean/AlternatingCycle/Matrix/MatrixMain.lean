@@ -1,4 +1,4 @@
-import AlternatingCycle.Beta
+import AlternatingCycle.Matrix.Beta
 
 /-!
 # The abstract alternating trace inequality

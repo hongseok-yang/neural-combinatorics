@@ -1,4 +1,4 @@
-import AlternatingCycle.Scalar.LogDeriv
+import AlternatingCycle.Matrix.Scalar.LogDeriv
 
 /-!
 # The odd logarithmic coefficient lemma

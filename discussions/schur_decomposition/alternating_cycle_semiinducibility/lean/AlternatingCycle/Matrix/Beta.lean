@@ -1,5 +1,5 @@
-import AlternatingCycle.Model
-import AlternatingCycle.Spectral
+import AlternatingCycle.Matrix.Model
+import AlternatingCycle.Matrix.Spectral
 
 /-!
 # `det M₂ = 1 − z F(z)`

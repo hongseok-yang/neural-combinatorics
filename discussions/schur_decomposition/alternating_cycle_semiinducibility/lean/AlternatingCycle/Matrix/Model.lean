@@ -1,4 +1,4 @@
-import AlternatingCycle.Series.Jacobi2
+import AlternatingCycle.Matrix.Series.Jacobi2
 
 /-!
 # The rank-one model and the trace identity

@@ -1,6 +1,6 @@
 import Mathlib.RingTheory.PowerSeries.Basic
 import Mathlib.RingTheory.PowerSeries.Derivative
-import AlternatingCycle.Scalar.LogDeriv
+import AlternatingCycle.Matrix.Scalar.LogDeriv
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Tactic

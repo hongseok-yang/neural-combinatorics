@@ -1,5 +1,5 @@
-import AlternatingCycle.Scalar.Cn
-import AlternatingCycle.Scalar.OddLog
+import AlternatingCycle.Matrix.Scalar.Cn
+import AlternatingCycle.Matrix.Scalar.OddLog
 
 /-!
 # The excursion coefficients `β_n` and their monotonicity

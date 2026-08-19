@@ -1,4 +1,4 @@
-import AlternatingCycle.Series.Resolvent
+import AlternatingCycle.Matrix.Series.Resolvent
 import Mathlib.LinearAlgebra.Matrix.Adjugate
 
 /-!

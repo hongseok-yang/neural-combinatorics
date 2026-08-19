@@ -1,5 +1,5 @@
-import AlternatingCycle.Series.Schur
-import AlternatingCycle.Scalar.LogDeriv
+import AlternatingCycle.Matrix.Series.Schur
+import AlternatingCycle.Matrix.Scalar.LogDeriv
 
 /-!
 # Jacobi's formula in size two, and the resulting `Λ` identity
