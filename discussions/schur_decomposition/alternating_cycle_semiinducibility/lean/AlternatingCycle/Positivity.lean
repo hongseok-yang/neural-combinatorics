@@ -1,5 +1,5 @@
 import AlternatingCycle.Defs
-import AlternatingCycle.Vendor.GraphonL2Operator
+import AlternatingCycle.Foundation.GraphonL2Operator
 
 /-!
 # Even cycle densities are nonnegative

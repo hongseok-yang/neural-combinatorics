@@ -3,7 +3,7 @@ import AlternatingCycle.Necklace.KernelInstance
 /-!
 # The signed kernel as an operator on `L²`
 
-`Vendor/GraphonL2Operator.lean` provides the kernel operator on all of `L²` for a graphon,
+`Foundation/GraphonL2Operator.lean` provides the kernel operator on all of `L²` for a graphon,
 `kernelOpCLM`, together with `kernelOpCLM_isSymmetric`.  The kernel needed here, `K = 2W − 1`, is
 not a graphon but a bounded measurable kernel, and is obtained from that operator by
 

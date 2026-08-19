@@ -52,7 +52,7 @@ limit anywhere in the development.  `README.md` says how to build and how to aud
 ## Reading the statement
 
 Everything the theorem mentions is defined in `Defs.lean` — `sgn`, `cmpl`, `altDensity`,
-`signedCycleDensity` — on top of four notions taken from `Vendor/`: `IsGraphon`, `comp`, `compPow`
+`signedCycleDensity` — on top of four notions taken from `Foundation/`: `IsGraphon`, `comp`, `compPow`
 and `trace`, whose definitions `Defs.lean` also spells out.  **An audit of the statement is two
 files: `Defs.lean`, then `Main.lean`.**
 
@@ -88,6 +88,6 @@ the graphon theorem; none of them mentions a graphon.
 **`Positivity.lean`** proves `t(C_{2m}, K) = ∫∫ (K^{∘m})² ≥ 0` for symmetric `K`, which is what
 turns the strengthened inequality into `Alt_{2m}(W) ≤ 4^{-m}`.
 
-**`Vendor/`** holds the kernel algebra — `GoodK`, `comp`, `compPow`, `trace`, `IsGraphon` and their
+**`Foundation/`** holds the kernel algebra — `GoodK`, `comp`, `compPow`, `trace`, `IsGraphon` and their
 calculus — and the `L²` operator of a graphon kernel.
 -/

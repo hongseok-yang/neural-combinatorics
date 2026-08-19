@@ -1,4 +1,4 @@
-import AlternatingCycle.Vendor.PathDensity
+import AlternatingCycle.Foundation.PathDensity
 import Mathlib.Data.Fintype.Sigma
 import Mathlib.Data.Fintype.Sets
 import Mathlib.MeasureTheory.Function.SimpleFunc

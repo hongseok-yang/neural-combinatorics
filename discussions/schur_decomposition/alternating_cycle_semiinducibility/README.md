@@ -45,7 +45,7 @@ lake build                        # builds everything; must end "Build completed
 lake env lean CheckAxioms.lean    # axiom audit; see below
 ```
 
-A clean build produces no warnings outside `AlternatingCycle/Vendor/`.
+A clean build produces no warnings outside `AlternatingCycle/Foundation/`.
 
 ## Auditing the statement
 
@@ -56,8 +56,8 @@ nothing else needs to be read to establish it.
 |---|---|
 | `lean/AlternatingCycle/Main.lean` | the statements: lines 43, 76 and 98 |
 | `lean/AlternatingCycle/Defs.lean` | `sgn`, `cmpl`, `altDensity`, `signedCycleDensity` (lines 32–44) |
-| `lean/AlternatingCycle/Vendor/Graphon.lean` | `IsGraphon`, line 35 — the hypothesis on `W` |
-| `lean/AlternatingCycle/Vendor/Kernel.lean` | `comp` (37), `compPow` (1429), `trace` (1442) |
+| `lean/AlternatingCycle/Foundation/Graphon.lean` | `IsGraphon`, line 35 — the hypothesis on `W` |
+| `lean/AlternatingCycle/Foundation/Kernel.lean` | `comp` (37), `compPow` (1429), `trace` (1442) |
 
 These are the definitions the theorem is actually stated in; there is no separate summary to trust.
 Points worth checking explicitly:
@@ -100,7 +100,7 @@ lean/AlternatingCycle/
   Necklace/        both densities as one universal expression in the moments ⟨1, X^j 1⟩
   Compression/     a finite symmetric matrix carrying those moments, with Tr(A²) ≤ 1
   Matrix/          the finite-dimensional theorem the compression is fed into
-  Vendor/          kernel algebra and the L² operator of a kernel
+  Foundation/      kernel algebra and the L² operator of a kernel
 ```
 
 `Necklace/` and `Compression/` are the two halves of the argument and meet in `Main.lean`;
@@ -108,6 +108,7 @@ lean/AlternatingCycle/
 combinatorial recursion of `Necklace/RankOne.lean` and the end-to-end bound against random
 matrices and discretized graphons; they are cross-checks, not part of the proof.
 
-`Vendor/` is a copy of `OddCycleBound/{Graphon,PathDensity,Kernel,Spectral/GraphonL2Operator}.lean`
-from `discussions/goodman-style-bound/complete_lean`, differing only in the `import` lines, so a
-re-sync is a `diff`.
+The four files in `Foundation/` are kept line-for-line identical, apart from their `import` lines, to
+`OddCycleBound/{Graphon,PathDensity,Kernel,Spectral/GraphonL2Operator}.lean` in
+`discussions/goodman-style-bound/complete_lean`, so that a change on either side can be carried
+across with `diff`.  Edit them only to keep that correspondence.

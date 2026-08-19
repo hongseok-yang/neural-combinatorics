@@ -1,4 +1,4 @@
-import AlternatingCycle.Vendor.Kernel
+import AlternatingCycle.Foundation.Kernel
 import Mathlib.MeasureTheory.Function.L2Space
 import Mathlib.MeasureTheory.Function.SimpleFuncDenseLp
 import Mathlib.Analysis.InnerProductSpace.Symmetric

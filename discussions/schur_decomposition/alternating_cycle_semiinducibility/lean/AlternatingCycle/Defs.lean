@@ -1,11 +1,11 @@
-import AlternatingCycle.Vendor.Kernel
+import AlternatingCycle.Foundation.Kernel
 
 /-!
 # The definitions in the statement of the theorem
 
 `Main.lean` states the theorem in terms of `IsGraphon`, `altDensity`, `signedCycleDensity` and
-`sgn`.  The last three are defined below; `IsGraphon` is in `Vendor/Graphon.lean`, and the kernel
-operations they are built from — `comp`, `compPow`, `trace` — are in `Vendor/Kernel.lean`.
+`sgn`.  The last three are defined below; `IsGraphon` is in `Foundation/Graphon.lean`, and the kernel
+operations they are built from — `comp`, `compPow`, `trace` — are in `Foundation/Kernel.lean`.
 
 `IsGraphon W μ` is a graphon over a probability space `(Ω, μ)`: a symmetric, jointly measurable,
 `[0,1]`-valued kernel.  `Ω` is an arbitrary measurable space throughout; nothing here or later

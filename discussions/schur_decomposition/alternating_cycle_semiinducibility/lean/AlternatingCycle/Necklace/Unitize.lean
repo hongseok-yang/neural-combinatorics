@@ -1,5 +1,5 @@
-import AlternatingCycle.Vendor.Kernel
-import AlternatingCycle.Vendor.GraphonL2Operator
+import AlternatingCycle.Foundation.Kernel
+import AlternatingCycle.Foundation.GraphonL2Operator
 import Mathlib.Algebra.Algebra.Unitization
 
 /-!
@@ -22,7 +22,7 @@ cyclic, so no ideal and no partial trace are needed.  It sends the unit to `0`, 
 the necklace identity never takes `τ` of the unit.
 -/
 
--- The kernel lemmas of `Vendor/Kernel.lean` all carry `[IsProbabilityMeasure μ]`, so it stays in
+-- The kernel lemmas of `Foundation/Kernel.lean` all carry `[IsProbabilityMeasure μ]`, so it stays in
 -- the section variables even where a particular lemma does not use it.
 set_option linter.unusedSectionVars false
 

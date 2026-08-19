@@ -1,4 +1,4 @@
-import AlternatingCycle.Vendor.Graphon
+import AlternatingCycle.Foundation.Graphon
 
 /-!
 # Path densities and Lemma 2.4 (integral form)
