@@ -77,6 +77,7 @@ import Taeyoung.Methods.Atlas148.Chromatic
 import Taeyoung.Examples.Graph148
 import Taeyoung.Methods.Atlas145
 import Taeyoung.Methods.Atlas160.Rows
+import Taeyoung.Methods.Atlas178.Rows
 import Taeyoung.Examples.Graph145
 import Taeyoung.Methods.Negative.ProperCount
 import Taeyoung.Methods.Negative.Chromatic
@@ -707,6 +708,33 @@ factorization, and its negative region only two boundary faces. -/
 #print axioms Taeyoung.Methods.Atlas160.chrom160
 #print axioms Taeyoung.Methods.Atlas160.num160
 #print axioms Taeyoung.Methods.Atlas160.satisfiesLowerBound_160
+
+/-! ### Atlas 178 -/
+
+#print axioms Taeyoung.Methods.Atlas178.four_fifths_le
+#print axioms Taeyoung.Methods.Atlas178.cubicL_nonneg
+#print axioms Taeyoung.Methods.Atlas178.quinticH_nonneg
+#print axioms Taeyoung.Methods.Atlas178.phiU_nonneg
+#print axioms Taeyoung.Methods.Atlas178.bigM_nonneg
+#print axioms Taeyoung.Methods.Atlas178.res₁_nonneg
+#print axioms Taeyoung.Methods.Atlas178.res₂_nonneg
+#print axioms Taeyoung.Methods.Atlas178.rootedTriangle_le_sq_degree
+#print axioms Taeyoung.Methods.Atlas178.pathOp_sub_le_rootedTriangle
+#print axioms Taeyoung.Methods.Atlas178.rootedTriangle_mul_le_degree_mul_rootedK4
+#print axioms Taeyoung.Methods.Atlas178.plane_one_pointwise
+#print axioms Taeyoung.Methods.Atlas178.sqrt_mul_le_two_mul_halfTri
+#print axioms Taeyoung.Methods.Atlas178.sq_halfTri_ge
+#print axioms Taeyoung.Methods.Atlas178.halfGoodman_le
+#print axioms Taeyoung.Methods.Atlas178.plane_two_pointwise
+#print axioms Taeyoung.Methods.Atlas178.halfK4_ge
+#print axioms Taeyoung.Methods.Atlas178.sq_pageK_half_le
+#print axioms Taeyoung.Methods.Atlas178.homDensity_graph178
+#print axioms Taeyoung.Methods.Atlas178.integral_spineA_mul_pageK
+#print axioms Taeyoung.Methods.Atlas178.sq_halfK4_le
+#print axioms Taeyoung.Methods.Atlas178.graph178_bound
+#print axioms Taeyoung.Methods.Atlas178.chrom178
+#print axioms Taeyoung.Methods.Atlas178.num178
+#print axioms Taeyoung.Methods.Atlas178.satisfiesLowerBound_178
 #print axioms Taeyoung.Examples.Graph160.status
 
 /-! ### The tensor-Turán witness, and all 19 negative rows

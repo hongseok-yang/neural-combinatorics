@@ -1,0 +1,554 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,booktabs,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{url}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\title{Atlas 178: A Half-Degree Weighted \(K_4\) Ratio}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Graph Atlas 178 is formed from two copies of \(K_4\) sharing a common
+triangle, with one pendant leaf at one of the two page vertices.  We prove
+for every graphon \(W\) of edge density \(p\in[2/3,1]\) that
+\[
+ t(H_{178},W)\geq p^2(2p-1)(3p-2)^2,
+\]
+its exact chromatic target.  Cauchy--Schwarz on the two pages reduces the
+problem to a \(K_4\) whose page vertex carries the fractional degree weight
+\(d^{1/2}\).  Rooted-link Goodman and two sharp supporting planes in the
+degree, its one-step average, and the rooted triangle prove the required
+weighted ratio.  The supporting planes are certified on the complete
+rooted feasible region by exact rational conditional Bernstein
+certificates.  The proof is for arbitrary graphons and uses no finite-step
+reduction.
+\end{abstract}
+
+\section{The graph and its target}
+
+Let \(H_{178}\) have a triangle on vertices \(s_1,s_2,s_3\), two page
+vertices \(u,v\), each adjacent to all three \(s_i\), and a leaf adjacent to
+\(u\).  This graph is isomorphic to NetworkX Graph Atlas 178 and has graph6
+code \verb|En}?|.  A proper colouring first chooses ordered distinct
+colours on the spine, then a colour outside those three for each page, and
+finally a colour different from the colour of \(u\).  Hence
+\[
+ P_{178}(z)=z(z-1)^2(z-2)(z-3)^2.
+\]
+Writing
+\[
+ c_3=2p-1,\qquad c_4=3p-2,
+\]
+gives
+\begin{equation}
+ (1-p)^6P_{178}\!\left(\frac1{1-p}\right)
+ =p^2c_3c_4^2.
+ \label{eq:target}
+\end{equation}
+The required density interval is \(p\geq2/3\).
+
+\section{Rooted data}
+
+Write \(T_W\) for the integral operator of \(W\), and put
+\begin{align}
+ p&=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ &d(x)&=(T_W\one)(x),\notag\\
+ a(x)&=(T_Wd)(x),
+ &\tau(x)&=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+ \label{eq:rooted}
+\end{align}
+Let
+\[
+ T=\int_\Omega\tau(x)\dd\mu(x)=t(K_3,W),
+\qquad
+ I=\int_\Omega d(x)^{1/2}\tau(x)\dd\mu(x).
+\]
+The standard rooted Goodman argument gives
+\begin{equation}
+ T\geq p(2p-1)=pc_3.
+ \label{eq:goodman}
+\end{equation}
+
+We use the following complete scalar region.  It is repeated here so the
+supporting-plane certificates are self-contained.
+
+\begin{lemma}[Rooted feasible region]\label{lem:feasible}
+For almost every \(x\), the tuple
+\((d,a,t)=(d(x),a(x),\tau(x))\) satisfies
+\begin{equation}
+\begin{gathered}
+ 0\leq d\leq1,\qquad
+ \max\{0,d+p-1\}\leq a\leq d,\\
+ \max\{0,2a-p,a-d(1-d)\}\leq t\leq\min\{a,d^2\}.
+\end{gathered}
+\label{eq:feasible}
+\end{equation}
+Moreover,
+\begin{equation}
+ \int d=p,\qquad
+ \int a=\int d^2,\qquad
+ \int t=T.
+ \label{eq:means}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Deleting factors gives \(a\leq d\), \(t\leq a\), and \(t\leq d^2\).
+Writing \(U=1-W\) gives
+\[
+ a(x)=p-\int U(x,y)d(y)\dd\mu(y)\geq d(x)+p-1.
+\]
+The two inequalities
+\[
+ W(x,y)W(x,z)\geq W(x,y)+W(x,z)-1
+\]
+and
+\[
+ W(x,z)W(y,z)\geq W(x,z)+W(y,z)-1
+\]
+give, after multiplication by the remaining edge factor and integration,
+\(t\geq2a-p\) and \(t\geq a-d(1-d)\), respectively.  Nonnegativity supplies
+the remaining bounds.  The identities in \eqref{eq:means} are symmetry and
+Fubini.
+\end{proof}
+
+\section{Two half-degree supporting planes}
+
+The next lemma is the only scalar input particular to this proof.
+
+\begin{lemma}[Half-degree rooted planes]\label{lem:planes}
+Let \(p\in[2/3,1]\), set \(r=\sqrt p\), and let
+\((d,a,t)\) satisfy \eqref{eq:feasible}.  Then
+\begin{align}
+ (2\sqrt d-r)t
+ &\geq
+ prc_3+\frac32r(4p-1)(d-p)
+       +\frac32r(a-d^2),
+ \label{eq:first-plane}\\
+ \frac{t}{\sqrt d}\bigl(2t-d^2-c_4d\bigr)
+ &\geq
+ 3prc_3(d-p)+2rc_3(a-d^2).
+ \label{eq:second-plane}
+\end{align}
+In \eqref{eq:second-plane}, the first term is defined to be zero at
+\(d=0\); feasibility then forces \(a=t=0\).
+\end{lemma}
+
+The exact proof of Lemma~\ref{lem:planes} is given in
+Section~\ref{sec:certificate}.  We first record its two consequences.
+
+\begin{lemma}[Half-degree triangle moment]\label{lem:triangle-moment}
+For every graphon of density \(p\in[2/3,1]\),
+\begin{equation}
+ I^2\geq p^2c_3T.
+ \label{eq:triangle-moment}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Integrating \eqref{eq:first-plane} and using \eqref{eq:means} gives
+\[
+ 2I-rT\geq prc_3.
+\]
+Thus
+\[
+ I\geq\frac{\sqrt p}{2}(T+pc_3).
+\]
+Together with \(T\geq pc_3\), arithmetic--geometric mean yields
+\[
+ I\geq \sqrt p\sqrt{Tpc_3}=p\sqrt{c_3T}.
+\]
+Squaring proves \eqref{eq:triangle-moment}.  Equivalently, the exact surplus
+before the last step is
+\[
+ \frac p4(T+pc_3)^2-p^2c_3T
+ =\frac p4(T-pc_3)^2.
+\]
+\end{proof}
+
+Let \(\kappa_4(x)\) denote the rooted \(K_4\) density at \(x\), and put
+\[
+ I_4=\int_\Omega d(x)^{1/2}\kappa_4(x)\dd\mu(x).
+\]
+
+\begin{lemma}[Half-degree adjacent-clique ratio]\label{lem:k4-ratio}
+For every graphon of density \(p\in[2/3,1]\),
+\begin{equation}
+ I_4\geq c_4 I.
+ \label{eq:k4-ratio}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If \(d(x)>0\), use the neighbour probability measure
+\[
+ \dd\nu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y).
+\]
+The edge density of the link graphon under \(\nu_x\) is
+\[
+ z_x=\frac{\tau(x)}{d(x)^2},
+\]
+whereas \(d(x)^{-3}\kappa_4(x)\) is its triangle density.  Goodman inside
+the link therefore gives
+\begin{equation}
+ \kappa_4(x)\geq
+ d(x)^3z_x(2z_x-1)
+ =\frac{2\tau(x)^2}{d(x)}-d(x)\tau(x).
+ \label{eq:link-goodman}
+\end{equation}
+The assertion is trivial on \(\{d=0\}\).  Multiply
+\eqref{eq:link-goodman} by \(\sqrt d\), integrate, and then integrate
+\eqref{eq:second-plane}.  The mean-zero correction terms disappear by
+\eqref{eq:means}, leaving
+\[
+ I_4
+ \geq
+ 2\int\frac{\tau^2}{\sqrt d}
+ -\int d^{3/2}\tau
+ \geq c_4\int\sqrt d\,\tau
+ =c_4I.
+\]
+\end{proof}
+
+\section{The page compression and the theorem}
+
+For a spine triple \(\boldsymbol x=(x_1,x_2,x_3)\), write
+\[
+ A(\boldsymbol x)=
+ W(x_1,x_2)W(x_1,x_3)W(x_2,x_3)
+\]
+and, for \(s\geq0\),
+\[
+ K_s(\boldsymbol x)=
+ \int_\Omega
+ d(y)^s\prod_{i=1}^3W(y,x_i)\dd\mu(y).
+\]
+Integrating the pendant leaf first gives the exact identity
+\begin{equation}
+ t(H_{178},W)=\int_{\Omega^3}A(\boldsymbol x)
+ K_1(\boldsymbol x)K_0(\boldsymbol x)\dd\mu^3.
+ \label{eq:page-identity}
+\end{equation}
+Cauchy--Schwarz in the page variable gives
+\[
+ K_{1/2}(\boldsymbol x)^2
+ \leq K_0(\boldsymbol x)K_1(\boldsymbol x).
+\]
+Another weighted Cauchy--Schwarz inequality, now on the spine triple, gives
+\begin{equation}
+ t(H_{178},W)
+ \geq\int A K_{1/2}^2
+ \geq\frac{(\int A K_{1/2})^2}{\int A}
+ =\frac{I_4^2}{T}.
+ \label{eq:page-cauchy}
+\end{equation}
+There is no zero-denominator issue: \eqref{eq:goodman} gives
+\(T\geq2/9\) on the required interval.
+
+\begin{theorem}[Atlas 178]\label{thm:atlas178}
+For every graphon \(W\) with edge density \(p\in[2/3,1]\),
+\[
+ t(H_{178},W)\geq p^2(2p-1)(3p-2)^2.
+\]
+\end{theorem}
+
+\begin{proof}
+Combine \eqref{eq:page-cauchy}, Lemma~\ref{lem:k4-ratio}, and
+Lemma~\ref{lem:triangle-moment}:
+\[
+ t(H_{178},W)
+ \geq\frac{I_4^2}{T}
+ \geq c_4^2\frac{I^2}{T}
+ \geq p^2c_3c_4^2.
+\]
+By \eqref{eq:target}, the last expression is the exact chromatic target.
+\end{proof}
+
+\section{Exact certificate for the rooted planes}
+\label{sec:certificate}
+
+We prove Lemma~\ref{lem:planes} entirely by rational polynomial
+certificates.  Put
+\[
+ r=\frac{4+X}{5},\qquad p=r^2,\qquad \sqrt d=D,
+ \qquad (X,D)\in[0,1]^2.
+\]
+Thus the certificate covers \(p\in[16/25,1]\), slightly more than the
+required interval.  For fixed \(p,d\), the feasible polygon in the
+\((a,t)\)-plane is cut out by the eight nonnegative slacks
+\[
+ a,\ d-a,\ a-d-p+1,\ t,\ t-2a+p,\
+ t-a+d(1-d),\ a-t,\ d^2-t.
+ \tag{C.1}
+\]
+Its possible vertices are
+\begin{center}
+\begin{tabular}{ccl}
+\toprule
+name & \(a\) & \(t\)\\
+\midrule
+\(A\)   & \(d\) & \(d^2\)\\
+\(B0\)  & \(p/2\) & \(0\)\\
+\(BL1\) & \(d^2-d+p\) & \(p-2d+2d^2\)\\
+\(BL2\) & \(d+p-1\) & \(2d+p-2\)\\
+\(BU1\) & \((d^2+p)/2\) & \(d^2\)\\
+\(BU2\) & \(d\) & \(2d-p\)\\
+\(BUp\) & \(p\) & \(p\)\\
+\(C0\)  & \(d(1-d)\) & \(0\)\\
+\(CL\)  & \(d+p-1\) & \(d^2+p-1\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Infeasible entries are discarded by (C.1).
+
+For \eqref{eq:first-plane}, subtract the right side from the left.  This is
+affine in \(a,t\), so it suffices to check the listed feasible vertices.
+At \(BL1\), the residual contains the square
+\((5D-X-4)^2\); its quotient is certified.  At \(BL2\), one constraint is
+\(-(D^2-1)^2\geq0\), so \(D=1\), where the residual factors as
+\[
+ \frac{(X-1)^2(X+4)(2X+13)(2X+23)}{3125}.
+\]
+The exact conditional Bernstein trees are:
+\begin{center}
+\begin{tabular}{crrr}
+\toprule
+face & visited & accepted & infeasible\\
+\midrule
+\(A\)&115&29&29\\
+\(B0\)&7&0&4\\
+\(BL1\)&5&2&1\\
+\(BU1\)&41&16&5\\
+\(BU2\)&39&10&10\\
+\(BUp\)&15&4&4\\
+\(C0\)&13&6&1\\
+\(CL\)&265&132&1\\
+\midrule
+total&500&199&55\\
+\bottomrule
+\end{tabular}
+\end{center}
+The only two equality-corner patches are also rational.  At \(A\), write
+\(u=1-D,v=1-X\).  Feasibility gives
+\[
+ \frac{9}{25}v\leq1-p\leq(1-d)^2\leq4u^2,
+ \qquad v\leq\frac{100}{9}u^2.
+\]
+The leading residual \(17u^2-v/5\) is therefore at least
+\(133u^2/9\).  On \(u,v\leq1/64\), the absolute remainder is at most
+\[
+ \frac{6332030460179381}{4057816381784064}\,u^2
+ <\frac{133}{9}u^2.
+\]
+At \(CL\), the leading quadratic is
+\[
+ 17u^2-6uv+\frac35v^2.
+\]
+After subtracting \((u^2+v^2)/50\), its determinant is \(2121/2500\);
+on \(u,v\leq1/2048\), the remainder is at most
+\[
+ \frac{697663143033}{53687091200000}(u^2+v^2)
+ <\frac1{50}(u^2+v^2).
+\]
+
+For \eqref{eq:second-plane}, multiply its residual by \(D\).  The resulting
+polynomial is
+\begin{equation}
+ Q=2t^2-(d^2+c_4d)t
+ -3prc_3D(d-p)-2rc_3D(a-d^2).
+ \tag{C.2}
+\end{equation}
+At \(D=0\), feasibility gives \(a=t=0\), and the unmultiplied inequality is
+immediate.  For \(D>0\), \(Q\geq0\) is equivalent to
+\eqref{eq:second-plane}.  The coefficient of \(a\) in (C.2) is
+nonpositive.  Thus, for fixed \(d,t\), the minimum occurs on one of
+\[
+ a=d,\qquad a=\frac{t+p}{2},\qquad a=t+d(1-d).
+\]
+The first face collapses to \(A\).  On the other two faces, \(Q\) is a
+convex quadratic in \(t\), so its minimum occurs at a listed endpoint or
+at its stationary point.  This proves that the nine vertex checks and two
+stationary checks below cover the whole feasible region.
+
+\begin{center}
+\begin{tabular}{crrr}
+\toprule
+face & visited & accepted & infeasible\\
+\midrule
+\(A\)&67&22&12\\
+\(B0\)&5&0&3\\
+\(BL1\)&5&2&1\\
+\(BU1\)&11&3&3\\
+\(BU2\)&25&6&7\\
+\(BUp\)&1&1&0\\
+\(C0\)&7&4&0\\
+\(CL\)&277&138&1\\
+\(B\)-stationary&7&0&4\\
+\(C\)-stationary&1&1&0\\
+\midrule
+total&406&177&31\\
+\bottomrule
+\end{tabular}
+\end{center}
+Again, \(BL1\) and the \(C\)-stationary residual contain
+\((5D-X-4)^2\), and \(BL2\) collapses to \(D=1\).  Its remaining boundary
+factor is
+\[
+ \frac{(X-1)^2(X+4)(X+9)
+ (6X^3+102X^2+503X+514)}{78125}.
+\]
+At the \(A\) corner, the leading quadratic is
+\[
+ 18u^2-\frac{52}{5}uv+\frac{42}{25}v^2.
+\]
+After subtracting \((u^2+v^2)/10\), its determinant is \(621/500\); on
+\(u,v\leq1/1024\), the remainder coefficient is
+\[
+ \frac{62190435867197668803}{900719925474099200000}<\frac1{10}.
+\]
+
+The \(CL\) face has a thin equality tube, which is treated directly instead
+of forcing excessive bisection.  Put \(z=r-D\) and \(q=1-r^2\).  Its exact
+residual is
+\begin{align*}
+ Q_{CL}
+ &=\bigl(5r^6+22r^4-7r^2-2\bigr)z^2
+   +2r(r^2+3)q^2z+2q^4+z^3R(r,z),\\
+ R(r,z)
+ &=-r(30r^4+31r^2-10)
+ +(45r^4+23r^2-3)z\\
+ &\quad-2r(21r^2+5)z^2+(25r^2+2)z^3
+ -8rz^4+z^5.
+\end{align*}
+For \(9/10\leq r\leq1\), the first three terms are at least
+\(\frac35(z^2+q^4)\); the two principal minors are certified by positive
+one-variable Bernstein coefficients.  If \(|z|\leq1/100\), then
+\[
+ |z^3R(r,z)|
+ \leq
+ \frac{516552270801}{10^{12}}z^2
+ <\frac35z^2.
+\]
+Thirty Bernstein boxes lie wholly inside this proved tube.  All other boxes
+are settled by ordinary nonnegative Bernstein coefficients or by an
+infeasible constraint.
+
+Every subdivision, integer Bernstein tensor, corner coefficient, graph
+identity, and target factorization is reproduced by
+\[
+ \texttt{codes/verify\_atlas178\_half\_degree\_weighted\_k4.py}.
+\]
+
+\section{Scope}
+
+All integrations above are over an arbitrary probability space and an
+arbitrary measurable symmetric kernel \(0\leq W\leq1\).  The proof uses
+Tonelli--Fubini, Cauchy--Schwarz, Goodman in a normalized link, the rooted
+feasible inequalities proved in Lemma~\ref{lem:feasible}, and the exact
+finite polynomial certificates in Section~\ref{sec:certificate}.  It does
+not assume that \(W\) is finite-step, regular, or bounded away from zero.
+No limiting division at \(d=0\) is used.
+
+\section{What the Lean formalization actually proves}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Theorem~\ref{thm:atlas178} is formalized in full, on \(p\in[2/3,1]\).  The
+development is \texttt{lean/Taeyoung/Methods/Atlas178/}, the catalogue theorem
+is \texttt{satisfiesLowerBound\_178}, and every declaration depends on exactly
+\texttt{[propext, Classical.choice, Quot.sound]}.  Atlas \(178\) is
+\texttt{verified}.
+
+Sections~1, 2 and~4 are followed as written.
+Section~\ref{sec:certificate} is not: none of it is used.
+
+\subsection{Both planes are exact duals, not subdivision trees}
+
+The two conditional Bernstein trees of \(500\) and \(406\) boxes, the
+nine-vertex enumeration, the two equality-corner patches, and the \(Q_{CL}\)
+tube are all replaced by three polynomial identities.  Writing the three
+feasibility slacks of \eqref{eq:feasible} as
+\[
+ g_5=t-2a+p,\qquad g_6=t-a+d-d^{2},\qquad g_8=d^{2}-t,
+\]
+and putting \(\mathrm{res}_1\) for twice the residual of
+\eqref{eq:first-plane} and \(\mathrm{res}_2\) for \(D\) times the residual of
+\eqref{eq:second-plane}, the identities are
+\begin{align*}
+ \mathrm{res}_1&=\tfrac32 r\,g_5+\bigl(\tfrac72r-4D\bigr)g_8+\Phi_U
+   &&\text{on }8D\leq7r,\\
+ \mathrm{res}_1&=(5r-4D)g_5+(8D-7r)g_6+2(D-r)^{2}L
+   &&\text{on }8D\geq7r,\\
+ \mathrm{res}_2&=2Drc_3\,g_6+2(t-\theta)^{2}
+   +\tfrac{D}{8}(D-r)^{2}M,
+\end{align*}
+with
+\[
+ \theta=\tfrac14 D(D+r)(D^{2}-Dr+4r^{2}-2),\qquad
+ L=4D^{3}+6D^{2}r+8Dr^{2}-4D+4r^{3}-3r,
+\]
+\[
+ \Phi_U=\tfrac12\bigl(8D^{5}-D^{4}r-24D^{2}r^{3}+6D^{2}r+16r^{5}-5r^{3}\bigr),
+\]
+\[
+ M=-D^{5}-2D^{4}r-9D^{3}r^{2}+4D^{3}+40D^{2}r^{3}-20D^{2}r
+   +80Dr^{4}-32Dr^{2}-4D+48r^{5}-24r^{3}.
+\]
+Every multiplier is nonnegative on its region: \(5r\geq4\geq4D\) because
+\(r\geq4/5\), and \(7r/2\geq4D\) is the case hypothesis.  So the first plane
+needs two cases and the second none.  The tangency at the balanced tripartite
+graphon appears in both as an explicit \((D-r)^{2}\).
+
+\subsection{The three leftover factors}
+
+\(L\geq0\) on \(8D\geq7r\) is one \texttt{nlinarith}.  \(M\geq0\) on the whole
+box is the four-term grouping
+\[
+ M=24r^{3}c_3+D(80r^{4}-41r^{2}-7)+20D^{2}rc_3
+   +D\bigl(4D^{2}+9r^{2}+3-D^{4}-2D^{3}r-9D^{2}r^{2}\bigr).
+\]
+\(\Phi_U\geq0\) mixes degrees \(5\) and \(3\), so its degree-\(3\) part is first
+traded against its degree-\(5\) part using \(25r^{2}\geq16\); what is left is
+homogeneous, and in the band coordinate \(7r-8D\) it has positive coefficients
+throughout:
+\[
+ 32\,\Phi_U=H+r(25r^{2}-16)(5r^{2}-6D^{2}),\qquad
+ H=128D^{5}-16D^{4}r-234D^{2}r^{3}+131r^{5},
+\]
+\[
+ 256\,H=2078r^{5}+2471(7r-8D)r^{4}
+ +(7r-8D)^{2}\bigl(289r^{3}+1064r^{2}D+832rD^{2}+512D^{3}\bigr).
+\]
+No box subdivision, and no Bernstein coefficient, occurs anywhere in the
+formalization.  The certificate interval is the same: \(r\geq4/5\) is
+\(p\geq16/25\), the note's \(X\geq0\).
+
+\subsection{The quotient at \(d=0\)}
+
+The second plane is used in the divided form of \eqref{eq:second-plane}, since
+that is what has mean-zero corrections.  Lean's \(x/0=0\) is exactly the note's
+convention: at \(d=0\) feasibility gives \(\tau\leq d^{2}=0\), so both the
+divided Goodman quotient \(\tau(2\tau-d^{2})/\sqrt d\) and the divided residual
+vanish, while the right-hand side is \(-3p^{2}rc_3\leq0\).  The degenerate
+fibre therefore needs no separate statement, only a separate two-line case.
+
+\subsection{The page identity}
+
+\eqref{eq:page-identity} is obtained by peeling all six coordinates and
+collapsing the three page coordinates in turn; the leaf integral produces
+\(d(x_3)\) and the two page integrals produce \(K_1\) and \(K_0\).  Both
+Cauchy--Schwarz steps are the same lemma, once on \(\mu\) and once on the
+assignment measure of \(\mathrm{Fin}\,3\), and the identification
+\(\int A\,K_{1/2}=I_4\) is a single Fubini swap between the spine triple and
+the page variable rather than three nested ones.
+
+\end{document}

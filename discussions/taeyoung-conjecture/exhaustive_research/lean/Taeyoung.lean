@@ -32,6 +32,7 @@ import Taeyoung.Methods.Atlas148
 -- page's cycle edge, by one pointwise Cauchy--Schwarz on the cycle arm.
 import Taeyoung.Methods.Atlas145
 import Taeyoung.Methods.Atlas160.Rows
+import Taeyoung.Methods.Atlas178.Rows
 
 /-!
 # Taeyoung-conjecture verification project
