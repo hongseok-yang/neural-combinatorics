@@ -19,3 +19,24 @@ open CycleCommonality
 #print axioms CycleCommonality.twoClique.violates
 #print axioms CycleCommonality.commonality_iff
 #print axioms CycleCommonality.exists_unique_critical
+-- Graphon-level cycle densities
+#print axioms CycleCommonality.trace_compList_eq_cycleIntegral
+#print axioms CycleCommonality.cycleDensity_eq_integral
+#print axioms CycleCommonality.l1norm_compPow_sub_le
+#print axioms CycleCommonality.abs_cycleDensity_sub_le
+#print axioms CycleCommonality.exists_finiteRank_sq_close
+#print axioms CycleCommonality.exists_finiteRank_l1_close
+#print axioms CycleCommonality.isStepKernel_of_finiteRank
+#print axioms CycleCommonality.exists_stepGraphon_l1_close
+#print axioms CycleCommonality.cycleDensity_of_factored
+#print axioms CycleCommonality.commonality_of_stepKernel
+#print axioms CycleCommonality.trace_pow_eq_sum_cycleProd
+#print axioms CycleCommonality.StepGraphon.density_eq_sum
+#print axioms CycleCommonality.StepGraphon.densityCompl_eq_sum
+#print axioms CycleCommonality.exists_stepGraphon_of_isStepKernel
+#print axioms CycleCommonality.StepGraphon.cycleDensity_eq
+-- Headline
+#print axioms CycleCommonality.commonality_graphon
+#print axioms CycleCommonality.commonality_graphon_compl
+#print axioms CycleCommonality.commonality_graphon_integral
+#print axioms CycleCommonality.commonality_graphon_iff

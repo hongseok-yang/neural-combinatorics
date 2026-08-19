@@ -18,7 +18,7 @@ the paper's `eq:trace-density`, the cycle densities are *defined* as traces:
   t(C_r, W) = Tr ((P - T) ^ r),  P = rankOne u,  u i = √(w i).
 ```
 
-`Analytic/` will connect `Tr (T ^ r)` to the integral definition of homomorphism density; nothing
+`Graphon.lean` connects `Tr (T ^ r)` to the integral definition of homomorphism density; nothing
 below depends on that.
 
 The one structural fact making the model work is `compl_op`: `P - T` is exactly the operator of

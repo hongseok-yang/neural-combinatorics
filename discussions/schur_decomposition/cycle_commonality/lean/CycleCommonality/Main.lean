@@ -1,64 +1,78 @@
-import CycleCommonality.Extremal
+import CycleCommonality.Graphon
+import CycleCommonality.StepTheorem
 
 /-!
-# The exact commonality region, for step graphons
+# The commonality region of `C_n` and `C_{n+1}`
 
-Theorem `thm:main` of `adjacent_cycle_commonality.tex`, in the finite model.
-
-For `n = 2k ≥ 4` even, `α*_n ∈ (1/2, 1)` is the unique solution of `ρ_n(α*) = 2^{1-n}`
-(`exists_critical`, `rho_strictMonoOn`), and the scaled commonality inequality
-`eq:scaled-target`
+For `n = 2k ≥ 4` even, let `α*_n` be the unique point of `(1/2, 1)` with `ρ_n(α*) = 2^{1-n}`
+(`exists_unique_critical`).  The scaled commonality inequality
 
 ```
-  t(C_n, W) + κ_n(a) t(C_{n+1}, 1-W) ≥ ρ_n(a)
+  t(C_n, 1−W) + κ_n(a) · t(C_{n+1}, W) ≥ ρ_n(a)
 ```
 
-holds for **every** step graphon exactly when `a ≤ α*_n`:
+holds for **every** graphon `W` on **every** probability space exactly when `a ≤ α*_n`.
 
-* `≤` is `StepGraphon.lower_bound` (§6, resting on Corollary `cor:rank-one-trace` and Lemma
-  `lem:kappa-bounds`);
-* `>` fails at the balanced two-clique (`twoClique.violates`, §7).
+`W : Ω² → [0,1]` is symmetric and jointly measurable over an arbitrary probability space `(Ω, μ)`
+(`IsGraphon`), and the cycle density is the homomorphism density
 
-What is **not** covered here is Lemma `lem:step-reduction`, the passage from step graphons to
-arbitrary graphons, and Lemma `lem:trace-density`, the identification of `Tr (T ^ r)` with the
-integral homomorphism density.  Both are the subject of `Analytic/`; in this file the cycle
-densities *are* the traces.  See `DEVIATIONS.md`.
+```
+  t(C_r, W) = ∫_{Ω^r} ∏_{i<r} W(x_i, x_{i+1}) dμ^{⊗r}        (indices read cyclically),
+```
+
+which is the form `commonality_graphon_integral` states the theorem in.
 -/
+
+open MeasureTheory OddCycleBound
 
 namespace CycleCommonality
 
-/-- **Theorem `thm:main` for step graphons.**  The scaled commonality inequality holds for every
-weighted step graphon if and only if `a` does not exceed the critical point `c = α*_n`. -/
-theorem commonality_iff {n : ℕ} (hne : Even n) (hn4 : 4 ≤ n) {a c : ℝ}
-    (hc : 1 / 2 < c) (hc1 : c < 1) (hcrit : rho n c = twoCliqueValue n)
-    (ha0 : 0 < a) :
-    (∀ (N : ℕ), 0 < N → ∀ G : StepGraphon N,
-        rho n a ≤ G.densityCompl n + kappa n a * G.density (n + 1))
+universe u
+
+variable {Ω : Type u} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
+
+/-- **The commonality inequality, in the paper's orientation.**  Applying `commonality_graphon`
+to the complement, which is again a graphon. -/
+theorem commonality_graphon_compl {n : ℕ} (hne : Even n) (hn4 : 4 ≤ n) {a c : ℝ}
+    (hc : 1 / 2 < c) (hc1 : c < 1) (hcrit : rho n c = twoCliqueValue n) (ha0 : 0 < a)
+    (hac : a ≤ c) {W : Ω → Ω → ℝ} (hW : IsGraphon W μ) :
+    rho n a ≤ cycleDensity W μ n + kappa n a * cycleDensity (cmpl W) μ (n + 1) := by
+  have h := commonality_graphon hne hn4 hc hc1 hcrit ha0 hac (isGraphon_cmpl hW)
+  rwa [cmpl_cmpl] at h
+
+/-- **The commonality inequality, with both densities written as integrals.** -/
+theorem commonality_graphon_integral {m : ℕ} (hne : Even (m + 1)) (hn4 : 4 ≤ m + 1) {a c : ℝ}
+    (hc : 1 / 2 < c) (hc1 : c < 1) (hcrit : rho (m + 1) c = twoCliqueValue (m + 1)) (ha0 : 0 < a)
+    (hac : a ≤ c) {W : Ω → Ω → ℝ} (hW : IsGraphon W μ) :
+    rho (m + 1) a
+      ≤ (∫ v : Fin (m + 1) → Ω, ∏ i, (1 - W (v i) (v (i + 1))) ∂(Measure.pi fun _ => μ))
+        + kappa (m + 1) a
+          * ∫ v : Fin (m + 2) → Ω, ∏ i, W (v i) (v (i + 1)) ∂(Measure.pi fun _ => μ) := by
+  have h := commonality_graphon hne hn4 hc hc1 hcrit ha0 hac hW
+  rwa [cycleDensity_eq_integral (goodK_cmpl hW) m,
+    cycleDensity_eq_integral (goodK_of_isGraphon hW) (m + 1)] at h
+
+/-- **The commonality region.**  For `n = 2k ≥ 4` and `c = α*_n` the critical point, the scaled
+inequality holds for every graphon on every probability space if and only if `a ≤ α*_n`; beyond
+the critical point it already fails for the balanced two-clique. -/
+theorem commonality_graphon_iff {n : ℕ} (hne : Even n) (hn4 : 4 ≤ n) {a c : ℝ}
+    (hc : 1 / 2 < c) (hc1 : c < 1) (hcrit : rho n c = twoCliqueValue n) (ha0 : 0 < a) :
+    (∀ (Ω : Type) (_ : MeasurableSpace Ω) (μ : Measure Ω) (_ : IsProbabilityMeasure μ)
+        (W : Ω → Ω → ℝ), IsGraphon W μ →
+          rho n a ≤ cycleDensity (cmpl W) μ n + kappa n a * cycleDensity W μ (n + 1))
       ↔ a ≤ c := by
   constructor
   · intro h
     by_contra hcon
     rw [not_le] at hcon
+    obtain ⟨m, hm⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
     have hviol := twoClique.violates hne hn4 (by linarith : (0 : ℝ) ≤ c) hcrit hcon
-    have := h 2 (by norm_num) twoClique
+    have hthis := h (Fin 2) inferInstance twoClique.measure inferInstance twoClique.U
+      twoClique.isGraphon
+    rw [hm] at hthis
+    rw [(twoClique.cycleDensity_eq m).2, (twoClique.cycleDensity_eq (m + 1)).1, ← hm] at hthis
     linarith
-  · intro hac N hN G
-    exact G.lower_bound hN hne hn4 hc hc1 hcrit ha0 hac
-
-/-- The critical point exists and is unique in `(1/2, 1)`. -/
-theorem exists_unique_critical {n : ℕ} (hn4 : 4 ≤ n) :
-    ∃! c : ℝ, (1 / 2 < c ∧ c < 1) ∧ rho n c = twoCliqueValue n := by
-  obtain ⟨c, hc, hc1, hcrit⟩ := exists_critical (by omega : 2 ≤ n)
-  refine ⟨c, ⟨⟨hc, hc1⟩, hcrit⟩, ?_⟩
-  rintro d ⟨⟨hd, hd1⟩, hdcrit⟩
-  by_contra hne
-  have hmono := rho_strictMonoOn (by omega : 2 ≤ n)
-  rcases lt_or_gt_of_ne hne with hlt | hlt
-  · have := hmono (by linarith : (0:ℝ) ≤ d) (by linarith : (0:ℝ) ≤ c) hlt
-    rw [hdcrit, hcrit] at this
-    exact lt_irrefl _ this
-  · have := hmono (by linarith : (0:ℝ) ≤ c) (by linarith : (0:ℝ) ≤ d) hlt
-    rw [hdcrit, hcrit] at this
-    exact lt_irrefl _ this
+  · intro hac Ω _ μ _ W hW
+    exact commonality_graphon hne hn4 hc hc1 hcrit ha0 hac hW
 
 end CycleCommonality
