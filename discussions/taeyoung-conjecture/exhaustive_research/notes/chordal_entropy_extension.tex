@@ -1,0 +1,1225 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{aliascnt}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}[section]
+
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+
+\newaliascnt{example}{theorem}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+\numberwithin{equation}{section}
+
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\homnum}{hom}
+\newcommand{\bbE}{\mathbb E}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\K}{K}
+\newcommand{\PhiH}{\Phi_H}
+\newcommand{\PsiH}{\Psi_H}
+\newcommand{\N}{\mathbb N}
+
+\title{An Entropy Extension of the Chromatic-Polynomial\\
+Lower Bound for Chordal Graphs}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $H$ be a connected chordal graph of clique number $r\geq 3$, and let
+$W$ be a graphon of edge density $p$.  The known entropy proof of
+\[
+ t(H,W)\geq (1-p)^{v(H)}\chi_H\!\left(\frac{1}{1-p}\right)
+\]
+assumes that all maximal cliques of $H$ have size $r$.  We give a strictly
+more general sufficient condition.  If $C_1,\dots,C_m$ are the maximal
+cliques of $H$, $T$ is a clique tree, $r_i=|C_i|$, and
+$s_e=|C_i\cap C_j|$ for $e=ij\in E(T)$, define
+\[
+ b_j:=\#\{i:r_i\geq j\}-\#\{e:s_e\geq j\},
+ \qquad 1\leq j\leq r.
+\]
+We prove that the chromatic-polynomial lower bound holds throughout the
+usual Tur\'an range $p\geq 1-1/(r-1)$ whenever
+$b_1\leq b_2\leq\cdots\leq b_r$.  The proof replaces the separate uniform
+clique laws by marginals of one uniform $K_r$-homomorphism law, and then
+uses a suffix-majorization consequence of the Moon--Moser clique-ratio
+inequalities.  We also give an explicit, generally weaker lower bound for
+every connected chordal graph by pooling the decreasing blocks of the
+sequence $(b_j)$.
+\end{abstract}
+
+\section{Definitions and statements}
+
+A \emph{graphon} is a symmetric measurable function
+$W:[0,1]^2\to[0,1]$.  For a finite graph $F$, its homomorphism density in
+$W$ is
+\[
+ t(F,W)
+ :=
+ \int_{[0,1]^{V(F)}}
+ \prod_{uv\in E(F)}W(x_u,x_v)
+ \prod_{u\in V(F)}\dd x_u.
+\]
+We write
+\[
+ p:=t(\K_2,W)
+\]
+for the edge density of $W$.
+
+For $0\leq p<1$, define
+\[
+ \PhiH(p)
+ :=
+ (1-p)^{v(H)}\chi_H\!\left(\frac{1}{1-p}\right),\label{eq:def-Phi}
+\]
+where $\chi_H$ denotes the chromatic polynomial of $H$.  We set
+$\PhiH(1):=1$, which is the continuous extension of
+\eqref{eq:def-Phi} to $p=1$.
+
+A graph $H$ is \emph{chordal} if every cycle of length at least four has a
+chord.  Equivalently, its maximal cliques admit a \emph{clique tree}: a
+tree $T$ whose vertices are the maximal cliques $C_1,\dots,C_m$ of $H$,
+such that, for every $v\in V(H)$, the set
+\[
+ \{i:v\in C_i\}
+\]
+induces a connected subtree of $T$.  Throughout the note, $H$ is connected
+and chordal.  We write
+\[
+ r_i:=|C_i|,
+ \qquad
+ r:=\omega(H)=\max_i r_i,
+\]
+and, for an edge $e=ij\in E(T)$, we write
+\[
+ S_e:=C_i\cap C_j,
+ \qquad
+ s_e:=|S_e|.
+\]
+For $1\leq j\leq r$, define
+\begin{equation}
+ b_j
+ :=
+ \#\{i:r_i\geq j\}
+ -
+ \#\{e\in E(T):s_e\geq j\}.\label{eq:def-b}
+\end{equation}
+We shall prove in \cref{sec:chordal} that the integers $b_j$ are positive
+and independent of the chosen clique tree.
+
+For $1\leq j\leq r$ and $p\in[0,1]$, set
+\begin{equation}
+ c_j(p):=1-(j-1)(1-p).\label{eq:def-c}
+\end{equation}
+Thus $c_1(p)=1$, $c_2(p)=p$, and
+\[
+ A_s(p):=\prod_{j=1}^s c_j(p)
+ =\prod_{a=0}^{s-1}\bigl(1-a(1-p)\bigr).
+\]
+
+Our main result is the following.
+
+\begin{theorem}[Monotone exponent condition]\label{thm:main}
+Let $H$ be a connected chordal graph with clique number $r\geq3$, and let
+$b_1,\dots,b_r$ be defined by \eqref{eq:def-b}.  Suppose that
+\begin{equation}
+ b_1\leq b_2\leq\cdots\leq b_r.\label{eq:b-monotone}
+\end{equation}
+Then every graphon $W$ with edge density
+\[
+ p=t(\K_2,W)\geq 1-\frac{1}{r-1}
+\]
+satisfies
+\begin{equation}
+ t(H,W)
+ \geq
+ \PhiH(p)
+ =
+ \prod_{j=1}^r c_j(p)^{b_j}.\label{eq:main-bound}
+\end{equation}
+For $p<1$, the product on the right is equal to
+$(1-p)^{v(H)}\chi_H(1/(1-p))$.
+\end{theorem}
+
+The pure chordal theorem is an immediate special case.
+
+\begin{corollary}[Pure chordal graphs]\label{cor:pure}
+Suppose every maximal clique of $H$ has the same size $r\geq3$.  Then
+\eqref{eq:main-bound} holds for every graphon of edge density
+$p\geq1-1/(r-1)$.
+\end{corollary}
+
+The condition in \cref{thm:main} is strictly weaker than purity; see
+\cref{sec:structure}.  In \cref{sec:all-chordal}, we also derive an
+explicit lower bound for every connected chordal graph, without assuming
+\eqref{eq:b-monotone}.
+
+\begin{remark}[Logical dependence and status]\label{rem:status}
+All chordal and entropy arguments are proved below.  The only substantive
+external inequality is the Moon--Moser clique-ratio inequality, stated in
+\cref{thm:moon-moser}.  No claim concerning priority in the literature is
+made for \cref{thm:main} or \cref{thm:all-chordal}.
+\end{remark}
+
+\section{Clique trees and the chromatic polynomial}\label{sec:chordal}
+
+We first record the clique-tree identities needed later.
+
+\begin{lemma}[Clique-tree factorization]\label{lem:factorization}
+Let $H$ be a connected chordal graph with maximal cliques
+$C_1,\dots,C_m$ and clique tree $T$.  Then
+\begin{equation}
+ v(H)
+ =
+ \sum_{i=1}^m r_i
+ -
+ \sum_{e\in E(T)}s_e,\label{eq:vertex-inclusion-exclusion}
+\end{equation}
+and
+\begin{equation}
+ \chi_H(x)
+ =
+ \frac{\prod_{i=1}^m (x)_{r_i}}
+      {\prod_{e\in E(T)}(x)_{s_e}},\label{eq:chordal-chi-factorization}
+\end{equation}
+where
+\[
+ (x)_k:=x(x-1)\cdots(x-k+1),
+ \qquad
+ (x)_0:=1.
+\]
+\end{lemma}
+
+\begin{proof}
+For \eqref{eq:vertex-inclusion-exclusion}, fix $v\in V(H)$ and let
+\[
+ I_v:=\{i:v\in C_i\}.
+\]
+By the running-intersection property, $T[I_v]$ is a nonempty tree.  Hence
+it has $|I_v|-1$ edges.  The contribution of $v$ to the right-hand side
+of \eqref{eq:vertex-inclusion-exclusion} is therefore
+\[
+ |I_v|-\bigl(|I_v|-1\bigr)=1.
+\]
+Summing over all $v\in V(H)$ proves
+\eqref{eq:vertex-inclusion-exclusion}.
+
+We prove \eqref{eq:chordal-chi-factorization} by induction on the number
+$m$ of maximal cliques.  If $m=1$, then $H=K_{r_1}$ and
+$\chi_H(x)=(x)_{r_1}$.
+
+Suppose $m\geq2$.  Choose a leaf clique $C_m$ of $T$, let $C_k$ be its
+unique neighbour in $T$, and put
+\[
+ S:=C_m\cap C_k,
+ \qquad
+ s:=|S|,
+ \qquad
+ R:=C_m\setminus S.
+\]
+Every vertex of $R$ belongs to no maximal clique other than $C_m$.
+Indeed, if $v\in R$ also belonged to a maximal clique $C_i\neq C_m$,
+then every clique on the path from $C_m$ to $C_i$ would contain $v$.
+In particular, $C_k$ would contain $v$, contradicting $v\notin S$.
+Since every edge of $H$ is contained in a maximal clique, it follows that
+every neighbour of a vertex in $R$ lies in $C_m$.
+
+Consequently, after a proper coloring of $H-R$ has been fixed, the
+vertices of $S$ have $s$ pairwise distinct colors, and the vertices of
+$R$ form a clique of size $r_m-s$ adjacent to all of $S$ and to no
+additional vertex of $H-R$.  The number of ways to extend the coloring
+to $R$ is therefore
+\[
+ (x-s)_{r_m-s}
+ =
+ \frac{(x)_{r_m}}{(x)_s}.
+\]
+Deleting the leaf $C_m$ from $T$ gives a clique tree for $H-R$.  Hence,
+for every sufficiently large positive integer $x$, induction gives
+\[
+ \chi_H(x)
+ =
+ \frac{(x)_{r_m}}{(x)_s}
+ \frac{\prod_{i=1}^{m-1}(x)_{r_i}}
+      {\prod_{e\in E(T-C_m)}(x)_{s_e}}
+ =
+ \frac{\prod_{i=1}^m(x)_{r_i}}
+      {\prod_{e\in E(T)}(x)_{s_e}}.
+\]
+Both sides are polynomials in $x$, so equality for all sufficiently large
+positive integers implies the polynomial identity
+\eqref{eq:chordal-chi-factorization}.
+\end{proof}
+
+\begin{lemma}[The integers $b_j$]\label{lem:b-properties}
+For $1\leq j\leq r$, let $b_j$ be given by \eqref{eq:def-b}.  Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item
+\begin{equation}
+ \chi_H(x)
+ =
+ \prod_{j=1}^r (x-j+1)^{b_j};\label{eq:chi-b-factorization}
+\end{equation}
+\item
+\begin{equation}
+ v(H)=\sum_{j=1}^r b_j;\label{eq:v-sum-b}
+\end{equation}
+\item each $b_j$ is a positive integer, $b_1=1$, and the sequence
+$(b_1,\dots,b_r)$ is independent of the chosen clique tree;
+\item for every $p\in[0,1]$,
+\begin{equation}
+ \PhiH(p)=\prod_{j=1}^r c_j(p)^{b_j},\label{eq:Phi-product}
+\end{equation}
+where the right-hand side is understood as the continuous definition at
+$p=1$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Since
+\[
+ (x)_s=\prod_{j=1}^s(x-j+1),
+\]
+substitution into \eqref{eq:chordal-chi-factorization} shows that the
+exponent of $x-j+1$ is exactly
+\[
+ \#\{i:r_i\geq j\}-\#\{e:s_e\geq j\}=b_j,
+\]
+which proves \eqref{eq:chi-b-factorization}.  Similarly,
+\[
+ \sum_{j=1}^r b_j
+ =
+ \sum_i\sum_{j=1}^{r_i}1
+ -
+ \sum_e\sum_{j=1}^{s_e}1
+ =
+ \sum_i r_i-\sum_e s_e
+ =v(H),
+\]
+proving \eqref{eq:v-sum-b}.
+
+For positivity, let $T_j$ be the forest with
+\[
+ V(T_j):=\{i:r_i\geq j\},
+ \qquad
+ E(T_j):=\{e\in E(T):s_e\geq j\}.
+\]
+If $e=ik$ satisfies $s_e\geq j$, then both $r_i$ and $r_k$ are at least
+$j$, so $T_j$ is indeed a subgraph of the tree $T$.  Since $j\leq r$,
+its vertex set is nonempty.  Therefore
+\[
+ b_j=|V(T_j)|-|E(T_j)|
+\]
+is the number of connected components of the nonempty forest $T_j$.
+In particular, $b_j\geq1$.  We also have $b_1=1$.  Indeed, every
+separator of a clique tree of a connected graph is nonempty: if an edge
+of $T$ had empty separator, deleting that tree edge would partition the
+maximal cliques into two families with disjoint vertex unions, and no edge
+of $H$ could join the two unions because every graph edge lies in a
+maximal clique.  This would contradict connectedness of $H$.  Hence
+$T_1=T$, and therefore $b_1=|V(T)|-|E(T)|=1$.
+
+Independence of the clique tree follows also from
+\eqref{eq:chi-b-factorization}, because the multiplicity of each linear
+factor $x-j+1$ in $\chi_H(x)$ is intrinsic to $H$.
+
+Finally, let $q:=1-p$.  For $p<1$, equations
+\eqref{eq:def-Phi}, \eqref{eq:chi-b-factorization}, and
+\eqref{eq:v-sum-b} give
+\[
+ \begin{aligned}
+ \PhiH(p)
+ &=q^{v(H)}
+   \prod_{j=1}^r\left(\frac{1}{q}-j+1\right)^{b_j}\\
+ &=q^{v(H)-\sum_jb_j}
+   \prod_{j=1}^r\bigl(1-(j-1)q\bigr)^{b_j}\\
+ &=\prod_{j=1}^r c_j(p)^{b_j}.
+ \end{aligned}
+\]
+At $p=1$, every factor on the right equals one, which is the continuous
+extension of the same expression.
+\end{proof}
+
+\section{Finite graphs, entropy, and the Moon--Moser input}
+
+For a finite graph $G$ on $n$ vertices, write
+\[
+ \homnum(F,G):=|\Hom(F,G)|,
+ \qquad
+ t(F,G):=\frac{\homnum(F,G)}{n^{v(F)}}.
+\]
+All graphs are finite, simple, and loopless.  We use natural logarithms
+throughout.
+
+We repeatedly use the following elementary entropy facts.  If a finite
+random variable $Z$ is supported on a set of cardinality at most $M$,
+then
+\begin{equation}
+ H(Z)\leq\log M.\label{eq:support-entropy}
+\end{equation}
+For jointly distributed finite random variables,
+\begin{equation}
+ H(Z_1,\dots,Z_k)
+ =
+ \sum_{j=1}^k H(Z_j\mid Z_1,\dots,Z_{j-1}),\label{eq:entropy-chain}
+\end{equation}
+and conditioning cannot increase entropy.
+
+\subsection{The junction-tree entropy lemma}
+
+\begin{lemma}[Junction-tree entropy gluing]\label{lem:junction-entropy}
+Let $H$ be a connected chordal graph with maximal cliques
+$C_1,\dots,C_m$ and clique tree $T$, and let $G$ be a finite graph.  For
+each $i$, let $\mu_i$ be a probability measure on
+$\Hom(H[C_i],G)$.  Suppose that, for every edge $e=ij\in E(T)$, the
+marginals of $\mu_i$ and $\mu_j$ on
+$S_e=C_i\cap C_j$ agree; denote their common marginal by $\nu_e$.
+Then
+\begin{equation}
+ \log\homnum(H,G)
+ \geq
+ \sum_{i=1}^m H(\mu_i)
+ -
+ \sum_{e\in E(T)}H(\nu_e).\label{eq:junction-entropy}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Root $T$ at a clique $C_\rho$.  We construct a random assignment
+$X:V(H)\to V(G)$ recursively.  First sample $X|_{C_\rho}$ according to
+$\mu_\rho$.  Suppose that $C_i$ is a non-root clique, its parent is
+$C_{\pi(i)}$, and
+\[
+ S_i:=C_i\cap C_{\pi(i)}.
+\]
+When the values of $X$ on all earlier cliques have been sampled, the
+values on $S_i$ are already determined.  Conditional on these values,
+sample the coordinates in $C_i\setminus S_i$ using the conditional law
+of $\mu_i$ given its restriction to $S_i$.  Conditional laws on
+separator states of probability zero may be defined arbitrarily; the
+construction never reaches such states because the separator marginal
+of the parent law equals that of $\mu_i$.
+
+The running-intersection property guarantees that whenever a vertex has
+already been assigned, every later occurrence of that vertex lies in the
+relevant separator.  Thus the construction is consistent.  Moreover,
+each edge of $H$ lies in a maximal clique, and the assignment on that
+clique is almost surely a homomorphism into $G$.  Hence the resulting
+assignment $X$ lies in $\Hom(H,G)$ almost surely.
+
+By induction away from the root, the marginal law of $X|_{C_i}$ is
+$\mu_i$ for every $i$.  Applying the entropy chain rule in the rooted
+clique order gives
+\[
+ \begin{aligned}
+ H(X)
+ &=H(X|_{C_\rho})
+   +\sum_{i\neq\rho}
+     H\bigl(X|_{C_i\setminus S_i}\mid X|_{S_i}\bigr)\\
+ &=H(\mu_\rho)
+   +\sum_{i\neq\rho}\bigl(H(\mu_i)-H(\nu_{i\pi(i)})\bigr)\\
+ &=\sum_{i=1}^mH(\mu_i)-\sum_{e\in E(T)}H(\nu_e).
+ \end{aligned}
+\]
+Since $X$ is supported on the set $\Hom(H,G)$,
+\eqref{eq:support-entropy} yields
+$H(X)\leq\log\homnum(H,G)$.  This proves
+\eqref{eq:junction-entropy}.
+\end{proof}
+
+\subsection{The clique-ratio inequality}
+
+The only external extremal inequality used in the proof is the following
+form of the Moon--Moser theorem.
+
+\begin{theorem}[Moon--Moser clique ratios]\label{thm:moon-moser}
+Let $G$ be a finite graph, write
+\[
+ p:=t(\K_2,G),
+ \qquad
+ t_j:=t(\K_j,G),
+ \qquad
+ t_0=t_1:=1.
+\]
+If $j\geq2$ and $c_j(p)=1-(j-1)(1-p)\geq0$, then
+\begin{equation}
+ t_j\geq c_j(p)t_{j-1}.\label{eq:moon-moser}
+\end{equation}
+Consequently, whenever $0\leq k<r$ and all the factors
+$c_{k+1}(p),\dots,c_r(p)$ are nonnegative,
+\begin{equation}
+ \frac{t_r}{t_k}
+ \geq
+ \prod_{j=k+1}^r c_j(p)
+ =
+ \frac{A_r(p)}{A_k(p)},\label{eq:moon-moser-iterated}
+\end{equation}
+provided the quotient is interpreted only in the case $t_k>0$.
+\end{theorem}
+
+In the strict range
+\[
+ p>1-\frac{1}{r-1},\label{eq:strict-range}
+\]
+all $c_j(p)$, $1\leq j\leq r$, are positive, and
+\eqref{eq:moon-moser} implies $t_r\geq A_r(p)>0$.  In particular,
+$t_k>0$ for every $k\leq r$, and all quotients in
+\eqref{eq:moon-moser-iterated} are well defined.
+
+\subsection{Passage from finite graphs to graphons}
+
+For completeness, we record the approximation statement used at the end
+of the proof.
+
+\begin{lemma}[Finite graph approximation]\label{lem:finite-approximation}
+Let $W$ be a graphon and let $F_1,\dots,F_q$ be finitely many finite
+graphs.  There exists a sequence of finite simple graphs $(G_n)$ such
+that
+\[
+ t(F_a,G_n)\longrightarrow t(F_a,W)
+ \qquad
+ (1\leq a\leq q).
+\]
+\end{lemma}
+
+\begin{proof}
+For each $n$, sample independent uniform points
+$X_1,\dots,X_n\in[0,1]$.  Conditional on these points, join each pair
+$1\leq i<j\leq n$ independently with probability $W(X_i,X_j)$.  Let
+$\mathbb G(n,W)$ denote the resulting random simple graph.
+
+Fix a finite graph $F$ with $v=v(F)$.  Expanding the homomorphism count as
+a sum over maps $\varphi:V(F)\to[n]$, the injective maps contribute
+expectation
+\[
+ \frac{(n)_v}{n^v}t(F,W),
+\]
+while the number of non-injective maps is $O_F(n^{v-1})$.  Since every
+summand lies in $[0,1]$, it follows that
+\[
+ \bbE\,t(F,\mathbb G(n,W))
+ =t(F,W)+O_F(n^{-1}).
+\]
+In the variance expansion, two summands corresponding to maps with
+disjoint images are independent.  The number of ordered pairs of maps
+with intersecting images is $O_F(n^{2v-1})$, and each covariance has
+absolute value at most one.  Hence
+\[
+ \operatorname{Var}\bigl(t(F,\mathbb G(n,W))\bigr)
+ =O_F(n^{-1}).
+\]
+Chebyshev's inequality and a union bound over the fixed finite family
+$F_1,\dots,F_q$ show that, for every sufficiently large $n$, there is a
+deterministic realization $G_n$ for which all the required densities are
+simultaneously arbitrarily close to their graphon values.  Choosing one
+such realization for each $n$ proves the lemma.
+\end{proof}
+
+\section{The common \texorpdfstring{$K_r$}{Kr} marginal construction}\label{sec:common-law}
+
+Let $G$ be a finite graph on $n$ vertices, let
+\[
+ p:=t(\K_2,G),
+\]
+and assume the strict range \eqref{eq:strict-range}.  By
+\cref{thm:moon-moser}, $\Hom(\K_r,G)$ is nonempty.  Let
+\[
+ Y=(Y_1,\dots,Y_r)
+\]
+be uniformly distributed on $\Hom(\K_r,G)$.  The law of $Y$ is
+exchangeable: for every permutation $\sigma\in S_r$,
+\[
+ (Y_{\sigma(1)},\dots,Y_{\sigma(r)})
+ \stackrel{d}{=}
+ (Y_1,\dots,Y_r).
+\]
+For $0\leq k\leq r$, define
+\begin{equation}
+ \cH_k:=H(Y_1,\dots,Y_k),
+ \qquad
+ \cH_0:=0,\label{eq:def-Hk}
+\end{equation}
+and, for $1\leq j\leq r$, define
+\begin{equation}
+ \alpha_j:=\cH_j-\cH_{j-1}
+ =H(Y_j\mid Y_1,\dots,Y_{j-1}),
+ \qquad
+ \delta_j:=\log n-\alpha_j.\label{eq:def-alpha-delta}
+\end{equation}
+Since $Y_j$ takes at most $n$ values, $\alpha_j\leq\log n$, so
+\begin{equation}
+ \delta_j\geq0.\label{eq:delta-nonnegative}
+\end{equation}
+
+The next proposition is the point at which purity is relaxed.
+
+\begin{proposition}[Entropy bound from one common clique law]
+\label{prop:common-law-bound}
+With the notation above,
+\begin{equation}
+ \log\homnum(H,G)
+ \geq
+ \sum_{i=1}^m\cH_{r_i}
+ -
+ \sum_{e\in E(T)}\cH_{s_e}
+ =
+ \sum_{j=1}^r b_j\alpha_j.\label{eq:common-law-hom-bound}
+\end{equation}
+Consequently,
+\begin{equation}
+ \log t(H,G)
+ \geq
+ -\sum_{j=1}^r b_j\delta_j.\label{eq:basic-deficit-bound}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For each maximal clique $C_i$, choose an arbitrary injection
+\[
+ \iota_i:C_i\hookrightarrow[r].
+\]
+Define a probability measure $\mu_i$ on $\Hom(H[C_i],G)$ by taking the
+law of the random assignment
+\[
+ v\longmapsto Y_{\iota_i(v)},
+ \qquad v\in C_i.
+\]
+This assignment is a clique homomorphism because it is the restriction
+of the homomorphism $Y:K_r\to G$.
+
+We verify consistency on separators.  Let $e=ik\in E(T)$ and put
+$S_e=C_i\cap C_k$.  The two restrictions
+\[
+ \iota_i|_{S_e},\ \iota_k|_{S_e}:S_e\hookrightarrow[r]
+\]
+are injections.  There is a permutation $\sigma\in S_r$ satisfying
+\[
+ \sigma(\iota_i(v))=\iota_k(v)
+ \qquad(v\in S_e).
+\]
+Exchangeability of $Y$ therefore gives
+\[
+ \bigl(Y_{\iota_i(v)}\bigr)_{v\in S_e}
+ \stackrel{d}{=}
+ \bigl(Y_{\iota_k(v)}\bigr)_{v\in S_e}.
+\]
+Thus the marginals of $\mu_i$ and $\mu_k$ on $S_e$ agree.  Moreover, by
+exchangeability, the entropy of every $k$-coordinate marginal of $Y$ is
+$\cH_k$.  Hence
+\[
+ H(\mu_i)=\cH_{r_i},
+ \qquad
+ H(\nu_e)=\cH_{s_e}.
+\]
+Applying \cref{lem:junction-entropy} proves the first inequality in
+\eqref{eq:common-law-hom-bound}.
+
+Using $\cH_k=\sum_{j=1}^k\alpha_j$ and the definition
+\eqref{eq:def-b}, we obtain
+\[
+ \begin{aligned}
+ \sum_i\cH_{r_i}-\sum_e\cH_{s_e}
+ &=\sum_i\sum_{j=1}^{r_i}\alpha_j
+   -\sum_e\sum_{j=1}^{s_e}\alpha_j\\
+ &=\sum_{j=1}^r
+   \left(\#\{i:r_i\geq j\}-\#\{e:s_e\geq j\}\right)\alpha_j\\
+ &=\sum_{j=1}^r b_j\alpha_j,
+ \end{aligned}
+\]
+which completes \eqref{eq:common-law-hom-bound}.
+
+Finally, by \eqref{eq:v-sum-b} and
+$\alpha_j=\log n-\delta_j$,
+\[
+ \begin{aligned}
+ \log t(H,G)
+ &=\log\homnum(H,G)-v(H)\log n\\
+ &\geq\sum_{j=1}^r b_j\alpha_j
+       -\left(\sum_{j=1}^r b_j\right)\log n\\
+ &=-\sum_{j=1}^r b_j\delta_j.
+ \end{aligned}
+\]
+This proves \eqref{eq:basic-deficit-bound}.
+\end{proof}
+
+The Moon--Moser inequalities control every suffix sum of the deficits.
+
+\begin{lemma}[Suffix bounds]\label{lem:suffix-bounds}
+Let
+\[
+ h_k:=\homnum(\K_k,G),
+ \qquad
+ t_k:=t(\K_k,G),
+ \qquad
+ h_0:=1,
+ \qquad
+ t_0=t_1:=1.
+\]
+For $0\leq k<r$, define
+\[
+ D_k:=\sum_{j=k+1}^r\delta_j.
+\]
+Then
+\begin{equation}
+ D_k
+ \leq
+ -\log\frac{t_r}{t_k}
+ \leq
+ -\log\frac{A_r(p)}{A_k(p)}.\label{eq:suffix-bound-A}
+\end{equation}
+Equivalently, if
+\begin{equation}
+ \lambda_j:=-\log c_j(p),
+ \qquad 1\leq j\leq r,\label{eq:def-lambda}
+\end{equation}
+then
+\begin{equation}
+ D_k\leq\sum_{j=k+1}^r\lambda_j.\label{eq:suffix-bound-lambda}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Because $Y$ is uniform on $\Hom(K_r,G)$,
+\[
+ \cH_r=\log h_r.
+\]
+The random tuple $(Y_1,\dots,Y_k)$ is supported on
+$\Hom(K_k,G)$, so \eqref{eq:support-entropy} gives
+\[
+ \cH_k\leq\log h_k.
+\]
+Using \eqref{eq:def-alpha-delta}, we therefore obtain
+\[
+ \begin{aligned}
+ D_k
+ &=\sum_{j=k+1}^r(\log n-\alpha_j)\\
+ &=(r-k)\log n-(\cH_r-\cH_k)\\
+ &\leq(r-k)\log n-\log h_r+\log h_k\\
+ &=-\log\frac{h_r/n^r}{h_k/n^k}\\
+ &=-\log\frac{t_r}{t_k}.
+ \end{aligned}
+\]
+The second inequality in \eqref{eq:suffix-bound-A} follows from
+\eqref{eq:moon-moser-iterated}.  Finally,
+\[
+ -\log\frac{A_r(p)}{A_k(p)}
+ =-\sum_{j=k+1}^r\log c_j(p)
+ =\sum_{j=k+1}^r\lambda_j,
+\]
+which proves \eqref{eq:suffix-bound-lambda}.
+\end{proof}
+
+For the extension to all chordal graphs in \cref{sec:all-chordal}, we
+also need monotonicity of the deficits.
+
+\begin{lemma}[Monotonicity of the entropy deficits]
+\label{lem:delta-monotone}
+The sequence $(\alpha_j)_{j=1}^r$ is nonincreasing, and hence
+\begin{equation}
+ 0\leq\delta_1\leq\delta_2\leq\cdots\leq\delta_r.\label{eq:delta-monotone}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For $1\leq j<r$, conditioning reduces entropy, so
+\[
+ \begin{aligned}
+ \alpha_{j+1}
+ &=H(Y_{j+1}\mid Y_1,\dots,Y_j)\\
+ &\leq H(Y_{j+1}\mid Y_2,\dots,Y_j).
+ \end{aligned}
+\]
+By exchangeability, the joint law of
+$(Y_{j+1},Y_2,\dots,Y_j)$ is the same, up to a relabeling of coordinates,
+as that of $(Y_j,Y_1,\dots,Y_{j-1})$.  Therefore
+\[
+ H(Y_{j+1}\mid Y_2,\dots,Y_j)
+ =H(Y_j\mid Y_1,\dots,Y_{j-1})
+ =\alpha_j.
+\]
+Thus $\alpha_{j+1}\leq\alpha_j$.  Since
+$\delta_j=\log n-\alpha_j$, the sequence $(\delta_j)$ is nondecreasing.
+Its nonnegativity was established in \eqref{eq:delta-nonnegative}.
+\end{proof}
+
+\section{Proof of the main theorem}\label{sec:main-proof}
+
+We first prove the finite-graph statement in the strict range.
+
+\begin{proposition}[Finite-graph form]\label{prop:finite-main}
+Let $H$ satisfy the assumptions of \cref{thm:main}, and let $G$ be a
+finite graph with
+\[
+ p=t(K_2,G)>1-\frac{1}{r-1}.
+\]
+Then
+\[
+ t(H,G)\geq\prod_{j=1}^r c_j(p)^{b_j}.
+\]
+\end{proposition}
+
+\begin{proof}
+Keep the notation $D_k$ and $\lambda_j$ from
+\cref{lem:suffix-bounds}.  Abel summation, in the form obtained by
+expanding each coefficient $b_j$ from its successive differences, gives
+\begin{equation}
+ \sum_{j=1}^r b_j\delta_j
+ =
+ b_1D_0
+ +
+ \sum_{k=1}^{r-1}(b_{k+1}-b_k)D_k.\label{eq:abel-b-delta}
+\end{equation}
+Indeed, the coefficient of $\delta_j$ on the right is
+\[
+ b_1+\sum_{k=1}^{j-1}(b_{k+1}-b_k)=b_j.
+\]
+By \cref{lem:b-properties}, $b_1\geq1$, and by the hypothesis
+\eqref{eq:b-monotone}, every difference $b_{k+1}-b_k$ is nonnegative.
+We may therefore apply the suffix estimates
+\eqref{eq:suffix-bound-lambda} term by term in
+\eqref{eq:abel-b-delta}.  This yields
+\[
+ \begin{aligned}
+ \sum_{j=1}^r b_j\delta_j
+ &\leq
+ b_1\sum_{j=1}^r\lambda_j
+ +
+ \sum_{k=1}^{r-1}(b_{k+1}-b_k)
+ \sum_{j=k+1}^r\lambda_j\\
+ &=\sum_{j=1}^r b_j\lambda_j.
+ \end{aligned}
+\]
+Combining this with \eqref{eq:basic-deficit-bound}, we obtain
+\[
+ \begin{aligned}
+ \log t(H,G)
+ &\geq-\sum_{j=1}^r b_j\delta_j\\
+ &\geq-\sum_{j=1}^r b_j\lambda_j\\
+ &=\sum_{j=1}^r b_j\log c_j(p)\\
+ &=\log\prod_{j=1}^r c_j(p)^{b_j}.
+\end{aligned}
+\]
+Exponentiating proves the proposition.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:main}]
+Let $W$ be a graphon with edge density $p$.
+
+First suppose
+\[
+ 1-\frac{1}{r-1}<p<1.
+\]
+Apply \cref{lem:finite-approximation} to the finite family consisting of
+$H,K_2,\dots,K_r$.  We obtain finite graphs $G_n$ such that
+\[
+ t(H,G_n)\to t(H,W),
+ \qquad
+ p_n:=t(K_2,G_n)\to p.
+\]
+For all sufficiently large $n$,
+$p_n>1-1/(r-1)$, so \cref{prop:finite-main} gives
+\[
+ t(H,G_n)\geq\prod_{j=1}^r c_j(p_n)^{b_j}.
+\]
+Letting $n\to\infty$ and using continuity of the right-hand side gives
+\[
+ t(H,W)\geq\prod_{j=1}^r c_j(p)^{b_j}=\PhiH(p),
+\]
+where the last equality is \eqref{eq:Phi-product}.
+
+If $p=1-1/(r-1)$, then $c_r(p)=0$.  Since
+$b_r\geq1$ by \cref{lem:b-properties}, the right-hand side of
+\eqref{eq:main-bound} is zero, and the inequality follows from
+$t(H,W)\geq0$.
+
+Finally, if $p=1$, then $0\leq W\leq1$ and
+$\int W=1$ imply that $W=1$ almost everywhere.  Hence
+$t(H,W)=1=\PhiH(1)$.  This covers all cases.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:pure}]
+Suppose every maximal clique has size $r$.  Let
+\[
+ m_j:=\#\{i:r_i=j\},
+ \qquad
+ a_j:=\#\{e\in E(T):s_e=j\}.
+\]
+For $1\leq j<r$, direct subtraction from \eqref{eq:def-b} gives
+\begin{equation}
+ b_{j+1}-b_j=a_j-m_j.\label{eq:b-difference}
+\end{equation}
+In the pure case, $m_j=0$ for every $j<r$, so
+$b_{j+1}-b_j=a_j\geq0$.  Thus \eqref{eq:b-monotone} holds, and the
+corollary follows from \cref{thm:main}.
+\end{proof}
+
+\section{Structural interpretation and non-pure examples}
+\label{sec:structure}
+
+Equation \eqref{eq:b-difference} holds for every connected chordal graph,
+not only in the pure case.  Therefore \eqref{eq:b-monotone} has the
+following direct interpretation.
+
+\begin{corollary}[Equivalent clique-tree condition]\label{cor:structural}
+For $1\leq j<r$, let $m_j$ be the number of maximal cliques of size
+exactly $j$, and let $a_j$ be the number of clique-tree edges whose
+separator has size exactly $j$.  Then
+\[
+ b_1\leq b_2\leq\cdots\leq b_r
+\]
+if and only if
+\begin{equation}
+ m_j\leq a_j
+ \qquad(1\leq j<r).\label{eq:structural-condition}
+\end{equation}
+The numbers $a_j$ are independent of the chosen clique tree.
+\end{corollary}
+
+\begin{proof}
+The equivalence follows immediately from
+$b_{j+1}-b_j=a_j-m_j$.  Since the numbers $m_j$ are intrinsic to $H$ and
+the differences $b_{j+1}-b_j$ are intrinsic by
+\cref{lem:b-properties}, each $a_j$ is also independent of the chosen
+clique tree.
+\end{proof}
+
+Thus maximal cliques smaller than $r$ are allowed: at each size $j<r$,
+their number must be at most the number of separators of the same size.
+
+\begin{example}[A genuinely non-pure graph]\label{ex:nonpure}
+Let $H$ have maximal cliques
+\[
+ C_1=\{a,b,c\},
+ \qquad
+ C_2=\{a,b,d\},
+ \qquad
+ C_3=\{c,e\}.
+\]
+A clique tree has edges $C_1C_2$ and $C_1C_3$, with separator sizes $2$
+and $1$, respectively.  The maximal clique sizes are $3,3,2$, so
+\[
+ (b_1,b_2,b_3)=(1,2,2).
+\]
+The graph is not pure, but \cref{thm:main} applies and gives
+\[
+ t(H,W)\geq p^2(2p-1)^2,
+ \qquad p\geq\frac12.
+\]
+Indeed,
+\[
+ \chi_H(x)=x(x-1)^2(x-2)^2.
+\]
+\end{example}
+
+For clique number three, \eqref{eq:structural-condition} has a particularly
+simple form.  Since $b_1=1$ and $b_2\geq1$, the only nonautomatic
+condition is
+\[
+ \#\{\text{maximal edges}\}
+ \leq
+ \#\{\text{clique-tree separators that are edges}\}.
+\]
+Every chordal graph of clique number three satisfying this inequality
+obeys the chromatic-polynomial lower bound for $p\geq1/2$.
+
+\section{A bound for every connected chordal graph}
+\label{sec:all-chordal}
+
+When $(b_j)$ is not nondecreasing, the suffix estimates from
+\cref{lem:suffix-bounds} cannot be combined directly with
+\eqref{eq:basic-deficit-bound}: the coefficients
+$b_{k+1}-b_k$ in \eqref{eq:abel-b-delta} may be negative.  The additional
+fact \eqref{eq:delta-monotone} permits a canonical weakening.
+
+\subsection{Pooling decreasing adjacent blocks}
+
+We define a sequence $\bar b_1,\dots,\bar b_r$ by the following fixed
+pool-adjacent-violators procedure.
+
+Start with the ordered singleton blocks
+\[
+ \{1\},\{2\},\dots,\{r\},
+\]
+where a block $I$ is assigned the mean
+\[
+ \operatorname{av}(I):=\frac{1}{|I|}\sum_{j\in I}b_j.
+\]
+As long as two consecutive blocks $I,J$ satisfy
+$\operatorname{av}(I)>\operatorname{av}(J)$, merge the leftmost such pair
+into the single block $I\cup J$.  The number of blocks decreases at every
+step, so the procedure terminates.  On each final block $I$, set
+\begin{equation}
+ \bar b_j:=\operatorname{av}(I)
+ \qquad(j\in I).\label{eq:def-bar-b}
+\end{equation}
+By construction,
+\[
+ \bar b_1\leq\bar b_2\leq\cdots\leq\bar b_r.
+\]
+
+\begin{lemma}[Prefix and dual inequalities]\label{lem:pava}
+Let
+\[
+ B_k:=\sum_{j=1}^k b_j,
+ \qquad
+ \bar B_k:=\sum_{j=1}^k\bar b_j.
+\]
+Then
+\begin{equation}
+ \bar B_k\leq B_k
+ \quad(1\leq k<r),
+ \qquad
+ \bar B_r=B_r.\label{eq:pava-prefix}
+\end{equation}
+Consequently, for every nondecreasing real sequence
+$z_1\leq\cdots\leq z_r$,
+\begin{equation}
+ \sum_{j=1}^r b_jz_j
+ \leq
+ \sum_{j=1}^r\bar b_jz_j.\label{eq:pava-dual}
+\end{equation}
+Moreover, every $\bar b_j$ is positive.
+\end{lemma}
+
+\begin{proof}
+Initially the current sequence equals $(b_j)$, so all current prefix sums
+are equal to $B_k$.  We show that one merge can only decrease the current
+prefix sums and leaves the total sum unchanged.
+
+Suppose two consecutive constant blocks
+\[
+ I=\{u,\dots,v\},
+ \qquad
+ J=\{v+1,\dots,w\}
+\]
+have lengths $\ell$ and $m$ and means $x>y$.  Their merged mean is
+\[
+ z:=\frac{\ell x+my}{\ell+m},
+\]
+so $y<z<x$ and
+\begin{equation}
+ \ell(x-z)=m(z-y).\label{eq:merge-balance}
+\end{equation}
+For a prefix ending at $k\in I$, replacing $x$ by $z$ changes the prefix
+sum by
+\[
+ (k-u+1)(z-x)\leq0.
+\]
+For a prefix ending at $v+t\in J$, where $1\leq t\leq m$, the change is
+\[
+ \ell(z-x)+t(z-y)
+ =-(m-t)(z-y)
+ \leq0,
+\]
+where \eqref{eq:merge-balance} was used.  At the end of $J$ the change is
+zero, and all later prefix sums are unchanged.  Induction over all merges
+proves \eqref{eq:pava-prefix}.
+
+Set
+\[
+ d_j:=\bar b_j-b_j,
+ \qquad
+ D_k:=\sum_{j=1}^k d_j=\bar B_k-B_k.
+\]
+Then $D_k\leq0$ for $k<r$ and $D_r=0$.  Abel summation gives
+\[
+ \begin{aligned}
+ \sum_{j=1}^r d_jz_j
+ &=\sum_{k=1}^{r-1}D_k(z_k-z_{k+1})\\
+ &=-\sum_{k=1}^{r-1}D_k(z_{k+1}-z_k)\\
+ &\geq0,
+ \end{aligned}
+\]
+because both $-D_k$ and $z_{k+1}-z_k$ are nonnegative.  This is exactly
+\eqref{eq:pava-dual}.  Finally, every $b_j$ is positive by
+\cref{lem:b-properties}, and each $\bar b_j$ is an average of a nonempty
+block of the $b_j$; hence $\bar b_j>0$.
+\end{proof}
+
+Define, for $p\in[0,1]$,
+\begin{equation}
+ \PsiH(p)
+ :=
+ \prod_{j=1}^r c_j(p)^{\bar b_j}.\label{eq:def-Psi}
+\end{equation}
+The exponents $\bar b_j$ may be rational rather than integral.
+
+\begin{theorem}[Explicit bound for arbitrary chordal graphs]
+\label{thm:all-chordal}
+Let $H$ be any connected chordal graph with clique number $r\geq3$, and
+let $\bar b$ be defined by \eqref{eq:def-bar-b}.  Then every graphon $W$
+with edge density
+\[
+ p\geq1-\frac{1}{r-1}
+\]
+satisfies
+\begin{equation}
+ t(H,W)\geq\PsiH(p)
+ =\prod_{j=1}^r c_j(p)^{\bar b_j}.\label{eq:all-chordal-bound}
+\end{equation}
+If $(b_j)$ is nondecreasing, then $\bar b=b$, and
+\eqref{eq:all-chordal-bound} is exactly \cref{thm:main}.  In general,
+\begin{equation}
+ \PsiH(p)\leq\PhiH(p)
+ \qquad
+ \left(1-\frac{1}{r-1}\leq p\leq1\right).\label{eq:Psi-le-Phi}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+We first treat a finite graph $G$ in the strict range
+$p>1-1/(r-1)$.  By \eqref{eq:basic-deficit-bound},
+\[
+ \log t(H,G)\geq-\sum_{j=1}^r b_j\delta_j.
+\]
+The deficits are nondecreasing by \cref{lem:delta-monotone}; therefore
+\eqref{eq:pava-dual}, applied with $z_j=\delta_j$, gives
+\[
+ \sum_{j=1}^r b_j\delta_j
+ \leq
+ \sum_{j=1}^r\bar b_j\delta_j.
+\]
+Hence
+\begin{equation}
+ \log t(H,G)
+ \geq
+ -\sum_{j=1}^r\bar b_j\delta_j.\label{eq:bar-basic}
+\end{equation}
+Since $(\bar b_j)$ is nondecreasing and positive, the same Abel-summation
+argument as in \cref{prop:finite-main}, together with the suffix bounds
+from \cref{lem:suffix-bounds}, gives
+\[
+ \sum_{j=1}^r\bar b_j\delta_j
+ \leq
+ \sum_{j=1}^r\bar b_j\lambda_j.
+\]
+Substituting this into \eqref{eq:bar-basic} yields
+\[
+ \log t(H,G)
+ \geq
+ -\sum_{j=1}^r\bar b_j\lambda_j
+ =
+ \log\prod_{j=1}^r c_j(p)^{\bar b_j}.
+\]
+This proves the finite-graph inequality in the strict range.
+
+The passage to graphons, the boundary
+$p=1-1/(r-1)$, and the case $p=1$ are handled exactly as in the proof of
+\cref{thm:main}.  At the lower boundary, $c_r(p)=0$ and
+$\bar b_r>0$, so the right-hand side of
+\eqref{eq:all-chordal-bound} is zero.
+
+If $(b_j)$ is nondecreasing, the pooling procedure performs no merge, so
+$\bar b=b$.  Finally, in the strict range, the sequence
+$\lambda_j=-\log c_j(p)$ is nondecreasing.  Applying
+\eqref{eq:pava-dual} with $z_j=\lambda_j$ gives
+\[
+ \sum_j b_j\lambda_j
+ \leq
+ \sum_j\bar b_j\lambda_j.
+\]
+After multiplying by $-1$ and exponentiating, this is
+$\PsiH(p)\leq\PhiH(p)$.  The two boundary cases follow by continuity.
+\end{proof}
+
+\begin{example}[A triangle with pendant leaves]\label{ex:leaves}
+Let $H_L$ be obtained from a triangle by attaching $L$ leaves to each of
+its three vertices.  Its maximal cliques consist of one triangle and
+$3L$ pendant edges.  In a clique tree, every pendant-edge clique is
+joined to the triangle clique along a one-vertex separator.  Therefore
+\[
+ (b_1,b_2,b_3)=(1,3L+1,1).
+\]
+For $L\geq1$, the pooling procedure merges the final two entries and gives
+\[
+ (\bar b_1,\bar b_2,\bar b_3)
+ =
+ \left(1,\frac{3L+2}{2},\frac{3L+2}{2}\right).
+\]
+Thus \cref{thm:all-chordal} yields
+\begin{equation}
+ t(H_L,W)
+ \geq
+ \bigl[p(2p-1)\bigr]^{(3L+2)/2},
+ \qquad p\geq\frac12.\label{eq:leaf-bound}
+\end{equation}
+By contrast,
+\[
+ \Phi_{H_L}(p)=p^{3L+1}(2p-1).
+\]
+The downward jump from $b_2=3L+1$ to $b_3=1$ is exactly the obstruction
+to applying \cref{thm:main}; the pooled bound
+\eqref{eq:leaf-bound} records the entropy loss forced by that jump.
+\end{example}
+
+\section{Conclusion}
+
+The common source of all local clique laws is the decisive modification.
+For a pure chordal graph, every bag already carries the full uniform
+$K_r$-law.  For a non-pure graph, a bag of size $r_i<r$ instead carries
+an $r_i$-coordinate marginal of the same uniform $K_r$-law.  This restores
+separator consistency automatically.  The resulting entropy deficits
+are not controlled coordinate by coordinate; Moon--Moser controls their
+suffix sums.  The condition $b_1\leq\cdots\leq b_r$ is precisely what
+allows those suffix inequalities to be combined with nonnegative
+coefficients.  When the condition fails, monotonicity of the entropy
+deficits and adjacent-block pooling give the weaker universal bound of
+\cref{thm:all-chordal}.
+
+\begin{thebibliography}{9}
+
+\bibitem{Agnarsson}
+G.~Agnarsson,
+\emph{On chordal graphs and their chromatic polynomials},
+Math. Scand. \textbf{93} (2003), 240--246.
+
+\bibitem{Lovasz}
+L.~Lov\'asz,
+\emph{Large Networks and Graph Limits},
+American Mathematical Society, Providence, RI, 2012.
+
+\bibitem{MoonMoser}
+J.~W. Moon and L.~Moser,
+\emph{On a problem of Tur\'an},
+Magyar Tud. Akad. Mat. Kutat\'o Int. K\"ozl. \textbf{7} (1962), 283--286.
+
+\bibitem{Zhao}
+Y.~Zhao,
+\emph{Graph Theory and Additive Combinatorics: Exploring Structure and Randomness},
+Cambridge University Press, Cambridge, 2023.
+
+\end{thebibliography}
+
+\end{document}

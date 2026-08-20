@@ -1,0 +1,601 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\tw}{T_W}
+\newcommand{\tu}{T_U}
+\newcommand{\kw}{K_W}
+\newcommand{\thet}{\theta_{1,2,4}}
+
+\title{De-flagging the smoothed Goodman certificate\\
+\large What the $C_3\cup_{K_2}C_5$ proof says without flag algebra,
+and what a human proof still has to beat}
+\author{Working note}
+\date{August 20, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\texttt{smoothed\_goodman\_theorem.tex} proves $\Delta_2(W)=t(\thet,W)-(2p-1)t(C_5,W)\ge0$
+by an exact rational multiplier flag-SOS certificate at ground size $8$.  This note
+answers the question ``can the flag algebra be removed?''.  The answer has two
+halves.  \emph{Yes as language}: the certificate is, verbatim, the statement that
+$\Delta_2$ is a nonnegative combination of (i) integrals of squares of rooted
+subgraph densities, (ii) $(2p-1)$ times such integrals, and (iii) induced
+$8$-vertex densities; we state this in pure graphon language and prove the three
+supporting lemmas from scratch, so that no flag-algebra formalism is needed to
+read or trust the logic (\S\ref{sec:deflag}).  \emph{No as computation}: we
+measured the committed certificate --- $170+14$ PSD blocks of total dimension
+$13{,}242$ (largest $272\times272$), $1{,}431{,}052$ integer entries over the
+common denominator $4^{48}=2^{96}$, and $12{,}346$ per-graph inequalities
+(\S\ref{sec:size}).  Translation is a change of vocabulary, not of length.
+
+We then record what \emph{is} human-scale.  We give a flag-free reduction chain
+with two exact identities (\S\ref{sec:structure}), verified in rational
+arithmetic against the paper's own gates; we kill four natural flag-free routes
+with explicit witnesses, one of them exactly rational (\S\ref{sec:dead}); and we
+measure how much room a lossy human argument actually has
+(\S\ref{sec:landscape}).  The headline of that measurement: routed through
+Goodman's inequality, the residual ``correlation deficit'' never exceeded $2\%$
+of the available budget over ${\sim}10^6$ step graphons including adversarial
+hill-climbing, and it is \emph{negative} near the balanced multipartite
+frontier.  This corrects the expectation recorded in
+\texttt{smoothed\_goodman\_spectral\_partial.tex}~\S7 that the frontier is where
+the domination is tight.  The genuine obstruction is instead located precisely:
+the Goodman part $G$ vanishes identically on the whole family of complete
+multipartite graphons, balanced \emph{or not}, where the theorem degenerates to
+a vertex-bias covariance inequality that is false for general graphons
+(\S\ref{sec:landscape}, Observation~\ref{obs:multipartite}).
+\end{abstract}
+
+\tableofcontents
+
+\section{Notation and the two statements}\label{sec:notation}
+
+$W:[0,1]^2\to[0,1]$ is a graphon, $U:=1-W$, $p:=t(K_2,W)=\iint W$, $q:=1-p$.
+$\tw$ is the integral operator with kernel $W$, and $\tw^r(x,y)$ denotes the
+kernel of its $r$-th power, so $t(C_m,W)=\Tr(\tw^m)=\sum_k\lambda_k^m$ for the
+eigenvalues $\lambda_k$ of $\tw$.  Write
+\[
+  d(x):=\int W(x,y)\,dy,\qquad a:=d-p,\qquad c_5(x):=\tw^5(x,x).
+\]
+$\thet=C_3\cup_{K_2}C_5$ is the theta graph with branch paths of lengths
+$1,2,4$, so that
+$t(\thet,W)=\iint W(x,y)\,\tw^2(x,y)\,\tw^4(x,y)\,dx\,dy$.  The target is
+\[
+  \Delta_2(W)\;=\;t(\thet,W)-(2p-1)\,t(C_5,W)
+  \;=\;\iint W(x,y)\big(\tw^2(x,y)-(2p-1)\big)\tw^4(x,y)\,dx\,dy\;\ge\;0 .
+\]
+We write $\kw$ for the \emph{Goodman defect kernel}
+$\kw(x,y)=W(x,y)\big(\tw^2(x,y)-(2p-1)\big)$, so $\Delta_2=\langle
+\kw,\tw^4\rangle=\Tr(\tw^2\kw\tw^2)$.  Two scalars recur:
+\[
+  \Gamma\;:=\;t(K_3,W)-p(2p-1)\ \ge0 \quad(\text{Goodman slack}),
+  \qquad
+  G\;:=\;\iint W(x,y)\,\tu^2(x,y)\,\tw^4(x,y)\,dx\,dy\ \ge0 .
+\]
+Throughout, ``step graphon'' means a symmetric block matrix $B\in[0,1]^{n\times
+n}$ with block masses $w\in\Delta_{n-1}$; all numerical statements below were
+computed with an independent implementation, validated against the two exact
+gates published in \texttt{smoothed\_goodman\_theorem.tex}: it reproduces
+$\Delta_2(W\equiv p)=p^5(1-p)^2$ and $\Delta_2=\tfrac{177}{25000}$ at the
+complete tripartite profile $(\tfrac12,\tfrac3{10},\tfrac15)$, both in exact
+rational arithmetic.
+
+\section{The certificate without flag algebra}\label{sec:deflag}
+
+Flag algebra is a bookkeeping formalism for three elementary facts about
+graphons.  We state them, prove them, and then state exactly what the committed
+certificate asserts.  Nothing below mentions flags, types, or the flag product.
+
+\subsection{Rooted densities and squares}
+
+Fix $m\ge0$ and a graph $\sigma$ on the labelled vertex set $[m]$ (the
+\emph{root pattern}).  For $\mathbf x=(x_1,\dots,x_m)\in[0,1]^m$ put
+\[
+  W^\sigma(\mathbf x)\;:=\;\prod_{ij\in E(\sigma)}W(x_i,x_j)
+  \prod_{ij\notin E(\sigma)}\big(1-W(x_i,x_j)\big),
+\]
+the density of the pattern $\sigma$ at the roots.  For a graph $F$ containing
+$\sigma$ as a labelled induced subgraph, with $v(F)=\ell$, let
+\[
+  t_\sigma(F;\mathbf x)\;:=\;\int_{[0,1]^{\ell-m}}
+  \prod_{ij\in E(F)}W(y_i,y_j)\prod_{ij\notin E(F)}\big(1-W(y_i,y_j)\big)
+  \,dy_{m+1}\cdots dy_\ell ,
+\]
+where $y_i=x_i$ for $i\le m$.  This is the \emph{rooted induced density} of $F$
+at $\mathbf x$: the probability that $\ell-m$ fresh random points, together with
+the roots, induce $F$.
+
+\begin{lemma}[Squares are nonnegative; this is all ``Gram positivity'' means]
+\label{lem:square}
+Let $\sigma$ be a root pattern on $[m]$, let $F_1,\dots,F_n$ be graphs on
+$\ell$ vertices containing $\sigma$ as a labelled induced subgraph, and let
+$u\in\R^n$.  Then
+\[
+  \int_{[0,1]^m}W^\sigma(\mathbf x)
+  \Big(\sum_{i=1}^{n}u_i\,t_\sigma(F_i;\mathbf x)\Big)^{\!2}d\mathbf x\;\ge\;0 .
+\]
+Consequently, for any positive semidefinite $Q\in\R^{n\times n}$,
+$\int W^\sigma(\mathbf x)\,f(\mathbf x)^{T}Qf(\mathbf x)\,d\mathbf x\ge0$, where
+$f(\mathbf x)=\big(t_\sigma(F_i;\mathbf x)\big)_{i\le n}$.
+\end{lemma}
+
+\begin{proof}
+The integrand is a nonnegative weight times a square.  For the consequence,
+write $Q=\sum_j c_j u_ju_j^{T}$ with $c_j\ge0$ and sum.
+\end{proof}
+
+The only genuinely combinatorial input is that the quantity
+$\int W^\sigma f f^{T}$ --- call it $\mathrm{Gram}^\sigma(W)$ --- can be
+expanded in \emph{unrooted} induced densities of graphs on $2\ell-m$ vertices.
+That expansion is a finite counting identity (choose which of the $2\ell-m$
+points play the roles of the roots and of the two copies of the fresh points),
+and it is what produces the integer tables $M^\sigma(H)$ of the certificate:
+\begin{equation}\label{eq:gram}
+  \sum_{H}p_{N}(H,W)\,M^{\sigma}(H)\;=\;\mathrm{Gram}^{\sigma}(W)\;\succeq\;0,
+  \qquad N=2\ell-m,
+\end{equation}
+where $p_N(H,W)$ is the probability that $N$ i.i.d.\ uniform points induce $H$.
+Identity \eqref{eq:gram} is a statement about integers only; it is the part of
+the pipeline that is machine-generated and double-derived.
+
+\subsection{The multiplier is an independence statement}
+
+\begin{lemma}[Factorisation]\label{lem:mult}
+Let $\sigma'$ be a root pattern with $2\ell'-m'=6$, let $M^{\sigma'}_6$ be its
+ground-$6$ table, and for a graph $H$ on $8$ vertices set
+\[
+  \mathrm{Mult}^{\sigma'}(H)\;:=\;\frac1{\binom82}\sum_{\{a,b\}\subseteq V(H)}
+  \big(2A_H(a,b)-1\big)\,M^{\sigma'}_6\big(H[V(H)\setminus\{a,b\}]\big).
+\]
+Then for every graphon $W$,
+$\sum_H p_8(H,W)\,\mathrm{Mult}^{\sigma'}(H)=(2p-1)\,\mathrm{Gram}^{\sigma'}(W)$.
+\end{lemma}
+
+\begin{proof}
+Sample $x_1,\dots,x_8$ i.i.d.\ uniform and let $G$ be the induced random graph.
+Averaging the definition against $p_8(\cdot,W)$ and using exchangeability gives
+$\E\big[(2\mathbf 1[x_1x_2\in G]-1)\,M^{\sigma'}_6(G[x_3,\dots,x_8])\big]$.  The
+edge indicator of $\{x_1,x_2\}$ depends only on $(x_1,x_2)$ and on the edge
+variable of that pair; $G[x_3,\dots,x_8]$ depends only on $(x_3,\dots,x_8)$ and
+on the edge variables of pairs inside $\{3,\dots,8\}$.  These are disjoint sets
+of independent variables, so the expectation factorises, and
+$\E[2W(x_1,x_2)-1]=2p-1$.
+\end{proof}
+
+Lemma~\ref{lem:mult} is exactly where the earlier \emph{invalid} attempts
+failed: multiplying a same-ground table by the per-graph scalar $(2p_H-1)$ does
+not factorise, because then the edge and the $6$-set share coordinates.  The
+disjointness is the whole content.
+
+\subsection{What the certificate asserts}
+
+\begin{theorem}[De-flagged form of the ground-$8$ multiplier certificate]
+\label{thm:deflag}
+There exist finitely many root patterns $\sigma_1,\dots,\sigma_{170}$ and
+$\sigma'_1,\dots,\sigma'_{14}$, positive semidefinite rational matrices
+$Q_b,R_{b'}$, and rationals $s_H\ge0$ $(H\in\mathcal H_8)$, such that for every
+graphon $W$,
+\begin{equation}\label{eq:deflagged}
+  \Delta_2(W)\;=\;
+  \sum_{b=1}^{170}\int W^{\sigma_b}f_{b}^{T}Q_bf_{b}
+  \;+\;(2p-1)\sum_{b'=1}^{14}\int W^{\sigma'_{b'}}f_{b'}^{T}R_{b'}f_{b'}
+  \;+\;\sum_{H\in\mathcal H_8}s_H\,p_8(H,W).
+\end{equation}
+In words: \emph{$\Delta_2$ is a nonnegative combination of integrals of squares
+of rooted densities, of $(2p-1)$ times such integrals, and of induced
+$8$-vertex densities.}  In particular $\Delta_2(W)\ge0$ whenever $p\ge\tfrac12$;
+and for $p\le\tfrac12$, $\Delta_2=t(\thet,W)+(1-2p)t(C_5,W)\ge0$ termwise.
+\end{theorem}
+
+\begin{proof}
+Given the per-graph inequalities $s_H:=c[H]-\sum_b\langle
+Q_b,M^{\sigma_b}_8(H)\rangle-\sum_{b'}\langle
+R_{b'},\mathrm{Mult}^{\sigma'_{b'}}(H)\rangle\ge0$ that the verifier checks in
+exact integer arithmetic, multiply by $p_8(H,W)\ge0$, sum over $H$, and use
+$\Delta_2=\sum_Hp_8(H,W)c[H]$ together with \eqref{eq:gram} and
+Lemma~\ref{lem:mult}.  Nonnegativity of the first two groups is
+Lemma~\ref{lem:square}, using $2p-1\ge0$ for the second.
+\end{proof}
+
+\begin{remark}
+Equation~\eqref{eq:deflagged} is an \emph{identity}, not merely an inequality:
+the slacks $s_H$ are defined so that it holds exactly.  The certificate already
+stores each $Q_b$ in factored form $Q_b=4^{-s}\,U_bF_b(I+\Theta_b)F_b^{T}U_b^{T}$,
+which is literally a sum of squares once $I+\Theta_b$ is diagonalised; and
+$I+\Theta_b\succ0$ is certified by the exact rational check
+$\|\Theta_b\|_F<1$.  So no eigenvalue computation, and no flag-algebra
+vocabulary, enters the proof at any point.
+\end{remark}
+
+\section{Why the translation stops there: the measured size}\label{sec:size}
+
+Theorem~\ref{thm:deflag} is the honest translation.  It removes the formalism
+completely, and it reduces the trust chain to ``squares are nonnegative'' plus
+``disjoint coordinates are independent'' plus one integer computation.  What it
+does not do is make the proof short, and it cannot: we measured the committed
+certificate \texttt{flag\_sdp/n8\_mult/rounding/data/certificate.json.gz}
+directly.
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+ground-$8$ PSD blocks $Q_b$ & $170$\\
+\quad block sizes & $7$ to $272$; $133$ of them are $64\times64$\\
+ground-$6$ multiplier blocks $R_{b'}$ & $14$ (sizes $17^2,16^6,14^5,1$)\\
+total PSD dimension & $13{,}041+201=13{,}242$\\
+integer entries in the stored factors & $1{,}431{,}052$\\
+common denominator & $4^{48}=2^{96}$\\
+rational $\Theta$ corrections & $53$ entries across $8$ blocks\\
+rank-one additions & $0$\\
+per-graph inequalities $s_H\ge0$ & $12{,}346$\\
+zero slacks & $48$ ($22$ complete multipartite, $26$ bipartite-family)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The full ground-$8$ size multiset is $133$ blocks of size $64$, then
+$13{\times}62$, $3{\times}61$, $3{\times}55$, $2{\times}272$, $2{\times}269$,
+$2{\times}260$, $2{\times}60$, and one each of sizes
+$270,267,266,265,252,109,104,63,50,7$.
+
+Writing \eqref{eq:deflagged} out explicitly therefore means exhibiting on the
+order of $10^6$ rational numbers with $96$-bit denominators, plus $12{,}346$
+verified inequalities.  There is no mathematical obstruction to doing so --- it
+is what the file contains --- but the result is not a proof a human reads; it is
+the same computer proof in a different alphabet.  Two consequences worth
+stating plainly:
+
+\begin{enumerate}[leftmargin=1.6em]
+\item \emph{The flag algebra is not the reason the proof is hard to verify.}
+The reason is the $12{,}346$ inequalities and the $13{,}242$-dimensional PSD
+data.  De-flagging changes what a referee must \emph{understand} (three
+elementary lemmas instead of Razborov's calculus) but not what a referee must
+\emph{check} (a $150$-line integer program, $5$ seconds).
+\item \emph{No block is idle.} All $170$ ground-$8$ and all $14$ ground-$6$
+blocks have nonzero factors, so there is no cheap sparsification of the existing
+certificate into a human-scale one.  A short proof, if it exists, must come from
+a different argument, not from compressing this one.
+\end{enumerate}
+
+The rest of this note is about that different argument: what flag-free structure
+is available, which natural routes are provably dead, and --- the useful part
+--- how much room a lossy human estimate actually has.
+
+\section{Flag-free structure that is human-scale}\label{sec:structure}
+
+Everything in this section is elementary and was verified in exact rational
+arithmetic on step graphons.
+
+\subsection{Two parallel decompositions}
+
+The pointwise identity $\tw^2(x,y)-(2p-1)=\tu^2(x,y)+a(x)+a(y)$ (expand
+$W=1-U$) contracts against two different weights and gives two statements that
+should be read side by side.
+
+\begin{proposition}[Goodman and its smoothed form]\label{prop:parallel}
+For every graphon $W$,
+\begin{align}
+  \Gamma\;=\;t(K_3,W)-p(2p-1)\;&=\;\iint W\,\tu^2\;+\;2\Var(d),
+  \label{eq:goodman-split}\\
+  \Delta_2(W)\;&=\;\underbrace{\iint W\,\tu^2\,\tw^4}_{=\;G\;\ge\;0}
+  \;+\;2\Cov\big(d,c_5\big).
+  \label{eq:delta-split}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+Contract the pointwise identity against $W(x,y)\,dx\,dy$ and against
+$W(x,y)\tw^4(x,y)\,dx\,dy$ respectively.  In both cases the two degree terms are
+equal by symmetry.  For \eqref{eq:goodman-split},
+$\iint W(x,y)a(x)=\int a\,d=\Var(d)$ since $\int a=0$.  For
+\eqref{eq:delta-split}, $\int_yW(x,y)\tw^4(x,y)\,dy=\tw^5(x,x)=c_5(x)$, and
+$\int a\,c_5=\Cov(d,c_5)$ since $\int a=0$.  Nonnegativity of $G$ holds because
+$W\ge0$, $\tu^2\ge0$ and $\tw^4\ge0$ pointwise.
+\end{proof}
+
+Thus Goodman's inequality is the case ``weight $\equiv1$'' and the theorem is
+the case ``weight $=\tw^4$'' of one statement.  Goodman is easy only because in
+\eqref{eq:goodman-split} the degree term is a \emph{variance}, hence
+nonnegative; in \eqref{eq:delta-split} it is a \emph{covariance}, and
+$\Cov(d,c_5)<0$ does occur.  That single sign change is the entire difficulty.
+
+\subsection{An exact spectral refinement}
+
+Expanding the covariance in the eigenbasis $\{\varphi_k\}$ of $\tw$ isolates the
+negative part of the spectrum as the sole source of trouble.
+
+\begin{proposition}[Dirichlet form of $\Delta_2$]\label{prop:dirichlet}
+Let $E_k:=\tfrac12\iint W(x,y)\big(\varphi_k(x)-\varphi_k(y)\big)^2dx\,dy\ \ge0$
+be the Dirichlet energy of the $k$-th eigenfunction.  Then
+\begin{equation}\label{eq:dirichlet}
+  \Delta_2(W)\;=\;G\;+\;2\big(t(C_6,W)-p\,t(C_5,W)\big)\;+\;2\sum_k\lambda_k^5E_k .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+$\Cov(d,c_5)=\sum_k\lambda_k^5\big(\int d\varphi_k^2-p\big)$ because
+$c_5=\sum_k\lambda_k^5\varphi_k^2$ and $\int c_5=t(C_5)$.  The Dirichlet
+identity $\int d\,\varphi_k^2-\langle\varphi_k,\tw\varphi_k\rangle=E_k$ gives
+$\int d\varphi_k^2=\lambda_k+E_k$, so
+$\Cov(d,c_5)=\sum_k\lambda_k^5(\lambda_k-p+E_k)
+=t(C_6)-p\,t(C_5)+\sum_k\lambda_k^5E_k$.  Substitute into
+\eqref{eq:delta-split}.
+\end{proof}
+
+Three immediate readings of \eqref{eq:dirichlet}:
+
+\begin{enumerate}[leftmargin=1.6em]
+\item If $W$ is regular then $a\equiv0$, and \eqref{eq:delta-split} already
+gives $\Delta_2=G\ge0$; no spectral information is needed.
+\item If $\tw\succeq0$ then every $\lambda_k^5E_k\ge0$, so
+$\Delta_2\ge2\big(t(C_6)-p\,t(C_5)\big)$; the PSD case would follow from
+$t(C_6)\ge p\,t(C_5)$.  That inequality is false --- see
+\S\ref{sec:dead}(d) --- but it is the cleanest sufficient condition we found for
+the PSD case, and it is considerably simpler than the crux
+$(\mathrm{JEN})$/$(\mathbf A)$ of \texttt{smoothed\_goodman\_spectral\_partial.tex}.
+\item At the balanced $m$-partite frontier $W_m$ the three terms are
+$0$, $+\tfrac{m-1}{m^5}$ and $-\tfrac{m-1}{m^5}$: the equality case is an exact
+cancellation between the cycle comparison and the negative-eigenvalue Dirichlet
+term, not a termwise vanishing.
+\end{enumerate}
+
+Identity \eqref{eq:dirichlet} was checked against a direct evaluation of
+$\Delta_2$ on $6\times10^4$ random step graphons ($n\le7$ blocks); the largest
+absolute discrepancy was $2.9\times10^{-15}$.
+
+\subsection{The Goodman chain}
+
+Dividing \eqref{eq:delta-split} differently gives the form in which the theorem
+has the most visible slack.  Let $\nu:=p^{-1}W(x,y)\,dx\,dy$ be the edge
+probability measure and put
+\[
+  \Lambda\;:=\;\frac{t(K_3,W)\,t(C_5,W)}{p}-t(\thet,W)
+  \;=\;-\,p\,\Cov_\nu\!\big(\tw^2,\tw^4\big).
+\]
+
+\begin{proposition}[Chain identity]\label{prop:chain}
+For every graphon $W$ with $p>0$,
+\begin{equation}\label{eq:chain}
+  \Delta_2(W)\;=\;\frac{t(C_5,W)}{p}\,\Gamma\;-\;\Lambda .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+$\frac{t(C_5)}{p}\Gamma-\Lambda
+=\frac{t(C_5)t(K_3)}{p}-(2p-1)t(C_5)-\frac{t(K_3)t(C_5)}{p}+t(\thet)
+=t(\thet)-(2p-1)t(C_5)$.
+\end{proof}
+
+So the theorem says exactly: \emph{the correlation deficit $\Lambda$ between
+codegree and $4$-walk density, over a random edge, never exceeds the Goodman
+slack budget $t(C_5)\Gamma/p$.}  Both sides vanish at every equality case.  If
+$\Lambda\le0$ --- that is, if $\tw^2$ and $\tw^4$ were positively correlated
+over a random edge --- the theorem would follow from Goodman alone.  They are
+not always positively correlated (\S\ref{sec:dead}(a)), but \S\ref{sec:landscape}
+shows the failure is small by a factor of about $50$.
+
+\section{Four natural flag-free routes, and why each fails}\label{sec:dead}
+
+Each of the following would give a short proof.  Each is false.  We record
+explicit witnesses so that the routes need not be re-explored.
+
+\paragraph{(a) Positive correlation of $\tw^2$ and $\tw^4$ over a random edge.}
+The statement $\Lambda\le0$, i.e.
+\[
+  (\mathrm{CORR})\qquad p\cdot t(\thet,W)\;\ge\;t(K_3,W)\,t(C_5,W),
+\]
+would, with \eqref{eq:chain} and Goodman, prove $\Delta_2\ge0$ for \emph{all}
+$p$ in two lines.  It is false, already on two blocks and already on the top
+branch.  Take the step graphon
+\[
+  B=\begin{pmatrix}3/10&1\\1&0\end{pmatrix},\qquad w=\big(\tfrac45,\tfrac15\big),
+  \qquad p=\tfrac{64}{125}\;>\;\tfrac12 .
+\]
+Then, exactly,
+$t(K_3)=\tfrac{2016}{15625}$, $t(C_5)=\tfrac{415776}{9765625}$,
+$t(\thet)=\tfrac{13003584}{1220703125}$, and
+\[
+  p\,t(\thet)-t(K_3)\,t(C_5)\;=\;-\,\frac{1195008}{30517578125}
+  \;=\;-3.9158\ldots\times10^{-5}\;<\;0
+\]
+(a relative deficit of $0.36\%$), while
+$\Delta_2=\tfrac{11756256}{1220703125}>0$, as it must be.  This is the cleanest
+obstruction in the note: the theorem is \emph{not} a corollary of Goodman plus a
+correlation inequality.
+
+\paragraph{(b) Copositivity of the Goodman defect kernel.}
+Since $\Delta_2=\langle\kw,\tw^4\rangle$ and $\tw^4$ is both positive
+semidefinite and pointwise nonnegative, it would suffice that $\kw$ be
+copositive, i.e.\ $\langle v,\kw v\rangle\ge0$ for every $v\ge0$.  It is not,
+even for $p$ close to $1$.  Let $\varepsilon\in(0,\tfrac13)$ and take three
+blocks $S_1,S_2,R$ of masses $\varepsilon,\varepsilon,1-2\varepsilon$ with
+\[
+  B=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix},
+\]
+that is: $S_1$ and $S_2$ are completely joined to each other and to nothing
+else, and $R$ is a clique.  Then $x\in S_1,y\in S_2$ have no common neighbour,
+so $\kw(x,y)=-(2p-1)<0$, and with $v=\mathbf 1_{S_1\cup S_2}$,
+\[
+  \langle v,\kw v\rangle=-2\varepsilon^2(2p-1)<0 .
+\]
+Numerically: $\varepsilon=0.1$ gives $p=0.66$ and
+$\langle v,\kw v\rangle=-6.4\times10^{-3}$, while $\Delta_2=0.157>0$.  So the
+positivity of $\Delta_2$ genuinely uses that the test kernel is $\tw^4$ and not
+an arbitrary nonnegative one.
+
+\paragraph{(c) Rooting the pentagon.}
+Writing $\tw^4(x,y)=\int\tw^2(x,z)\tw^2(z,y)\,dz$ gives
+$\Delta_2=\int_z\langle v_z,\kw v_z\rangle\,dz$ with $v_z:=\tw^2(z,\cdot)\ge0$,
+which suggests proving the integrand nonnegative for each root $z$.  That fails
+too, for the same reason as (b) but with a witness inside the range of $\tw^2$:
+\[
+  B=\begin{pmatrix}1&0&0\\0&1&1\\0&1&0\end{pmatrix},\qquad
+  w=(0.0721,\,0.4189,\,0.5091),\qquad p=0.6071,
+\]
+a graphon with a small clique component $S$ of mass $0.0721$.  Rooting at
+$z\in S$ gives $v_z=0.0721\cdot\mathbf 1_S$, supported where the internal
+codegree $0.0721$ falls below $2p-1=0.2142$, so
+$\langle v_z,\kw v_z\rangle=-3.83\times10^{-6}<0$.  The mechanism is generic:
+any small dense component has internal codegree below the global $2p-1$.
+
+\paragraph{(d) The cycle comparison $t(C_6)\ge p\,t(C_5)$.}
+By Proposition~\ref{prop:dirichlet} this would close the positive semidefinite
+case outright.  It is false, both for general graphons (worst normalised deficit
+$-0.034$ at $p\approx0.39$; $-0.025$ at $p\approx0.54$ on the top branch) and,
+more importantly, for PSD graphons ($-0.025$ at $p\approx0.26$; $-0.021$ at
+$p\approx0.51$ on the top branch), over $2\times10^5$ sampled step graphons of
+each kind with $n\le8$ blocks.  So the PSD case does not collapse to a pure
+spectral comparison, consistent with the earlier finding that it resists
+majorisation arguments.
+
+\paragraph{(e) Cauchy--Schwarz on the covariance.}  Both decompositions
+\eqref{eq:delta-split} and \eqref{eq:chain} invite bounding the covariance by
+the product of standard deviations.  Both are far too lossy.  On the chain,
+$\sqrt{\Var_\nu(\tw^2)\Var_\nu(\tw^4)}\big/\big(\E_\nu[\tw^4]\cdot
+\E_\nu[\tw^2-(2p-1)]\big)$ must be $\le1$; its measured maximum is $14.6$.  On
+\eqref{eq:delta-split}, $2\sqrt{\Var(d)\Var(c_5)}/G$ must be $\le1$; its
+measured maximum is $9.2\times10^{4}$.  The reason for the second blow-up is
+structural and is the subject of Observation~\ref{obs:multipartite} below.
+
+\section{How much room a human proof has}\label{sec:landscape}
+
+The two decompositions turn the theorem into a ratio being at most $1$:
+\[
+  R\;:=\;\frac{\Lambda}{\,t(C_5)\Gamma/p\,}\ \le\ 1
+  \quad\Longleftrightarrow\quad \Delta_2\ge0
+  \quad\Longleftrightarrow\quad
+  \rho\;:=\;\frac{-2\Cov(d,c_5)}{G}\ \le\ 1 .
+\]
+Neither ratio is a new statement --- each is the theorem rewritten --- but their
+\emph{numerical size} tells a would-be prover how lossy an estimate may be.  We
+measured both over $p\ge\tfrac12$ step graphons: ${\sim}10^6$ random samples
+($n\le7$ blocks, three samplers: uniform, Bernoulli, clipped-affine), plus
+hill-climbing with $60$ restarts per block count $n=2,\dots,6$ directly
+maximising $R$.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& $\max R$ & $\max\rho$\\
+\midrule
+random sampling, $p\ge\tfrac12$        & $0.0138$ & $0.0671$\\
+adversarial hill-climbing, $n\le6$     & $0.0198$ & ---\\
+perturbations of balanced $W_m$, $m=3,4,5$, $\varepsilon\to0$
+                                       & $<0$ (to $-0.06$) & $<0$ (to $-0.63$)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two conclusions.
+
+\paragraph{The frontier is safe, not tight.}
+\texttt{smoothed\_goodman\_spectral\_partial.tex}~\S7 records the expectation
+that $G\ge2D$ is ``frontier-tight'', with $2D/G\to1$ as $W\to W_m$.  The
+measurements do not support this.  Perturbing $W_m$ ($m=3,4,5$) in both the
+edge-weight and the part-mass directions, with $\varepsilon$ from $10^{-1}$ down
+to $10^{-5}$, the ratio $\rho$ is \emph{negative} throughout and tends to $0$
+from below (at $m=4$: mean $-0.74,-0.099,-0.011,-0.0009,-0.0001$ for
+$\varepsilon=10^{-1},\dots,10^{-5}$).  The degree correction \emph{helps} near
+the frontier rather than competing with $G$; this is consistent with the
+first-order mechanism of the quantitative neighbourhood theorem there, and it
+means the frontier is not where a proof will be lost.
+
+\paragraph{The real obstruction is the complete multipartite family.}
+
+\begin{observation}[$G$ vanishes on all complete multipartite graphons]
+\label{obs:multipartite}
+Let $W$ be complete multipartite with arbitrary part masses.  Then $U$ is
+supported on the union of the diagonal blocks, so for $x,y$ in different parts
+$\tu^2(x,y)=\int U(x,z)U(z,y)\,dz=0$: no $z$ lies in both parts.  Hence
+$\tu^2\equiv0$ on $\operatorname{supp}W$ and $G=0$ identically, so by
+\eqref{eq:delta-split}
+\[
+  \Delta_2(W)\;=\;2\Cov\big(d,c_5\big)\qquad\text{on this whole family.}
+\]
+\end{observation}
+
+We verified this exactly at the unbalanced tripartite profile
+$(\tfrac12,\tfrac3{10},\tfrac15)$: there $G=0$ and
+$2\Cov(d,c_5)=\Delta_2=\tfrac{177}{25000}$, reproducing the value published in
+\texttt{smoothed\_goodman\_theorem.tex}, Prop.~5.1.  Also
+$\Gamma=\tfrac{39}{1250}$ and the split \eqref{eq:goodman-split} holds exactly.
+
+This is the sharp statement of where the difficulty lives.  On a
+$(k-1)$-parameter family of extremal-looking graphons the Goodman part $G$ is
+identically zero, so the decomposition \eqref{eq:delta-split} offers \emph{no}
+budget at all, and the theorem there is exactly the vertex-bias inequality
+\[
+  \Cov\big(d,c_5\big)\;\ge\;0,
+\]
+which is false for general graphons (this is the ``naive vertex-bias
+inequality'' already known to fail).  So a proof via \eqref{eq:delta-split} must
+prove $\Cov(d,c_5)\ge0$ on the multipartite family by a special argument and
+then perturb --- which is why the generic $15$-fold slack in $\rho$ is
+misleading, and why Cauchy--Schwarz blows up by $10^5$ there.
+
+By contrast the chain \eqref{eq:chain} does \emph{not} degenerate on that
+family: $\Gamma=\tfrac{39}{1250}>0$ and $t(C_5)>0$ at the unbalanced profile, so
+the budget $t(C_5)\Gamma/p$ is strictly positive wherever $\Delta_2>0$.  This
+makes \eqref{eq:chain} the better target.
+
+\section{Verdict and recommendation}\label{sec:verdict}
+
+\begin{enumerate}[leftmargin=1.6em]
+\item The flag algebra \emph{can} be removed from the existing proof, and
+Theorem~\ref{thm:deflag} does so: the certificate asserts nothing more exotic
+than ``a nonnegative combination of squares of rooted densities, of $(2p-1)$
+times such squares, and of induced densities''.  Lemmas~\ref{lem:square} and
+\ref{lem:mult} are the only conceptual content, and both are three-line proofs.
+A referee who distrusts flag algebra can read Theorem~\ref{thm:deflag} instead
+and lose nothing.
+\item The computation \emph{cannot} be removed: $13{,}242$ PSD dimensions,
+$1.4\times10^6$ rationals over $2^{96}$, $12{,}346$ inequalities, no idle
+blocks.  ``Verified easily'' will not be achieved by translation; it would be
+achieved by formalising the $150$-line integer verifier, which is a realistic
+Lean target and, given the exact-rational structure already in place, probably
+the cheapest route to a machine-checked proof of the theorem as it stands.
+\item For a genuine human proof, the target to attack is \eqref{eq:chain}:
+prove $\Lambda\le t(C_5)\Gamma/p$, i.e.\ that the edge-correlation deficit
+between codegree and $4$-walk density is dominated by the Goodman slack.  The
+measured true ratio never exceeded $0.02$, so an argument may be lossy by a
+factor of $50$ and still succeed --- but it must be sign-aware: plain
+Cauchy--Schwarz overshoots by $14.6$.  The witness in \S\ref{sec:dead}(a) shows
+the deficit is genuinely positive sometimes, so the estimate cannot be a pure
+correlation inequality.
+\item Do not attack via \eqref{eq:delta-split} alone:
+Observation~\ref{obs:multipartite} shows its budget vanishes identically on the
+complete multipartite family, where the residual statement
+$\Cov(d,c_5)\ge0$ is false in general and must be proved by other means.
+\end{enumerate}
+
+\begin{remark}[Scope]
+All numerical statements in \S\ref{sec:dead} and \S\ref{sec:landscape} are
+searches over step graphons with at most $7$--$8$ blocks; they are evidence
+about sizes of ratios, not proofs.  The exact statements --- the witnesses in
+\S\ref{sec:dead}(a),(b),(c), Observation~\ref{obs:multipartite}, and the
+identities of \S\ref{sec:structure} --- are proved or verified in rational
+arithmetic and stand on their own.
+\end{remark}
+
+\end{document}
