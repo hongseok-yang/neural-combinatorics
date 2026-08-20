@@ -15,6 +15,9 @@ off by taking `mean` (the mean-zero part drops out).
 
 open MeasureTheory
 
+-- A few lemmas do not use the section variable `[IsProbabilityMeasure μ]`; keep the declarations uniform.
+set_option linter.unusedSectionVars false
+
 namespace OddCycleBound
 
 variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
@@ -44,7 +47,7 @@ lemma integrable_Uf (hU : IsGraphon U μ) {f : Ω → ℝ} (hf : Good f) (x : Ω
   exact (Good.mul ⟨hmx.stronglyMeasurable, ⟨1, zero_le_one, fun y => by
     rw [abs_of_nonneg (hU.nonneg x y)]; exact hU.le_one x y⟩⟩ hf).integrable
 
-lemma kernelOp_one (hU : IsGraphon U μ) : kernelOp U μ (fun _ => 1) = degree U μ := by
+lemma kernelOp_one (_hU : IsGraphon U μ) : kernelOp U μ (fun _ => 1) = degree U μ := by
   funext x; simp [kernelOp, degree]
 
 lemma degree_eq (x : Ω) : degree U μ x = edgeDensity U μ + degCentered U μ x := by simp [degCentered]

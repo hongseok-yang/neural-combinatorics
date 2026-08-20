@@ -1,4 +1,4 @@
-# The commonality region of adjacent cycles
+# Off-diagonal commonality of cycles of length 2k and 2k+1
 
 For every even `n = 2k ≥ 4` there is a critical point `α*_n ∈ (1/2, 1)`, the unique solution of
 
@@ -9,7 +9,7 @@ For every even `n = 2k ≥ 4` there is a critical point `α*_n ∈ (1/2, 1)`, th
 such that for every graphon `W` on every probability space `(Ω, μ)` and every `a ∈ (0, α*_n]`
 
 ```
-  t(C_n, 1−W) + κ_n(a) · t(C_{n+1}, W)  ≥  ρ_n(a),        κ_n(a) = n α^{n−1} / ((n+1)(1−α)^n),
+  t(C_n, 1−W) + κ_n(a) · t(C_{n+1}, W)  ≥  ρ_n(a),        κ_n(a) = n a^{n−1} / ((n+1)(1−a)^n),
 ```
 
 while for `a > α*_n` the inequality already fails at the balanced two-clique.  So the commonality
@@ -20,8 +20,8 @@ region of the adjacent pair `(C_n, C_{n+1})` is exactly `(0, α*_n]`.  Here
 ```
 
 `W : Ω² → [0,1]` is symmetric and jointly measurable, and `(Ω, μ)` is an arbitrary probability
-space — not `[0,1]`, not finite, not standard Borel, and `W` is not a step function.  The source
-note is `../adjacent_cycle_commonality.tex`; the Lean development is in `lean/`.
+space — not `[0,1]`, not finite, not standard Borel, and `W` is not a step function.  The note
+is `adjacent_cycle_commonality.pdf`; the Lean development is in `lean/`.
 
 The results, all in `CycleCommonality`:
 
@@ -35,23 +35,16 @@ The results, all in `CycleCommonality`:
 
 ## Building
 
-Requires Lean `v4.31.0` (via `elan`) and mathlib `v4.31.0`.  The project does not fetch its own
-mathlib: it reuses the one shared by the projects under `discussions/` through a directory
-junction.  If `lean/.lake/packages` is missing (fresh clone, different machine), recreate it from
-the repository root:
+Requires Lean `v4.31.0` (via `elan`); the pinned mathlib `v4.31.0` is fetched automatically.  In
+`lean/`:
 
 ```
-cmd //c mklink //J "<abs>\discussions\schur_decomposition\cycle_commonality\lean\.lake\packages" "<abs>\discussions\.lake-shared\packages"
-```
-
-Then, in `lean/`:
-
-```
+lake exe cache get                # download the prebuilt mathlib cache
 lake build                        # builds everything; must end "Build completed successfully"
 lake env lean CheckAxioms.lean    # axiom audit; see below
 ```
 
-A clean build produces no warnings outside `CycleCommonality/Foundation/`.
+A clean build produces no warnings.
 
 ## Auditing the statement
 
@@ -61,10 +54,10 @@ nothing else needs to be read to establish it.
 | Read | For |
 |---|---|
 | `lean/CycleCommonality/Main.lean` | the statements: lines 36, 44 and 58 |
-| `lean/CycleCommonality/Defs.lean` | `cmpl` (30) and `cycleDensity` (33) |
-| `lean/CycleCommonality/Scalar/Rho.lean` | `rho` (33), `kappa` (36), `twoCliqueValue` (189) |
+| `lean/CycleCommonality/Defs.lean` | `cmpl` (32) and `cycleDensity` (35) |
+| `lean/CycleCommonality/Scalar/Rho.lean` | `rho` (34), `kappa` (37), `twoCliqueValue` (190) |
 | `lean/CycleCommonality/Foundation/Graphon.lean` | `IsGraphon`, line 35 — the hypothesis on `W` |
-| `lean/CycleCommonality/Foundation/Kernel.lean` | `comp` (37), `compPow` (1429), `trace` (1442) |
+| `lean/CycleCommonality/Foundation/Kernel.lean` | `comp` (40), `compPow` (1432), `trace` (1445) |
 
 These are the definitions the theorems are actually stated in; there is no separate summary to
 trust.  Points worth checking explicitly:
@@ -109,22 +102,13 @@ lean/CycleCommonality/
   Fubini.lean        traces = integrals over Ω^r
   Continuity.lean    both densities are Lipschitz in L¹
   StepApprox.lean    an L¹ approximation by finite-rank kernels
-  Factored.lean      those are step kernels, repaired into graphons
+  Factored.lean      those are step kernels, corrected into graphons
   StepDensity.lean   a step kernel's density is a finite sum over closed walks
   FiniteBridge.lean  so is Tr(T^r) for the finite model, and they agree
   Transfer.lean      an inequality for all step graphons holds for all graphons
   Scalar/            ρ_n, κ_n and the critical point
   Majorization/      Karamata, and the rank-one majorization
   Spectral/          the eigen-decomposition of the model's matrix
-  Model/             the weighted step-graphon model and its spectral budget
+  Model/             the weighted step-graphon model and its spectral bounds
   Foundation/        kernel algebra and the L² operator of a kernel
 ```
-
-The reduction to step graphons is elementary: a graphon is approximated in `L¹` by a finite-rank
-kernel, which is a step kernel after repair, and both cycle densities are Lipschitz in `L¹`.  No
-cut metric, no regularity lemma, and no compactness of the space of graphons is used.
-
-The four files in `Foundation/` are kept line-for-line identical, apart from their `import` lines, to
-`OddCycleBound/{Graphon,PathDensity,Kernel,Spectral/GraphonL2Operator}.lean` in
-`discussions/goodman-style-bound/complete_lean`, so that a change on either side can be carried
-across with `diff`.  Edit them only to keep that correspondence.

@@ -25,7 +25,7 @@ on `ℝ⟦X⟧`, a rational operation, and use only
 * `logDeriv_mul` — `Λ(AB) = Λ A + Λ B` for `A, B` with constant coefficient `1`
   (this is where "`log` of a product" is used, `eq:logdet-factor` and `eq:log-decomposition`);
 * `coeff_logDeriv_one_add_X` — `[z^m] Λ(1+X) = −1` for odd `m` (`[z^m] log(1+z) = 1/m`);
-* `coeff_logDeriv_one_sub_eq_sum` — the excursion expansion of `Λ(1−H)` for `H` with zero
+* `coeff_logDeriv_one_sub_eq_sum` — the expansion of `Λ(1−H)` in powers of `H`, for `H` with zero
   constant coefficient (`eq:log-G-expansion`, `−log(1−H) = ∑_{r≥1} H^r/r`).
 
 No `PowerSeries.log`, no `Real.log`, no convergence.
@@ -101,9 +101,9 @@ lemma coeff_pow_eq_zero {H : ℝ⟦X⟧} (hH : constantCoeff H = 0) {s j : ℕ} 
     coeff j (H ^ s) = 0 := by
   simpa using coeff_mul_pow_eq_zero hH 1 hj
 
-/-! ### The excursion expansion of `Λ(1 − H)` -/
+/-! ### The expansion of `Λ(1 − H)` in powers of `H` -/
 
-/-- The single excursion step, in the division-free form: differentiating `H^{r+1}` produces the
+/-- One term of the expansion, in division-free form: differentiating `H^{r+1}` produces the
 factor `r+1`.  This is `eq:log-G-expansion` term by term. -/
 lemma coeff_X_mul_deriv_mul_pow (H : ℝ⟦X⟧) (m r : ℕ) :
     ((r : ℝ) + 1) * coeff m (X * (d⁄dX ℝ H) * H ^ r) = m * coeff m (H ^ (r + 1)) := by

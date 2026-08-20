@@ -89,8 +89,8 @@ lemma compList_succ {n : ℕ} (M : Fin (n + 2) → (Ω → Ω → ℝ)) :
 
 lemma goodK_compList : ∀ {n : ℕ} (M : Fin (n + 1) → (Ω → Ω → ℝ)), (∀ i, GoodK (M i)) →
     GoodK (compList μ M)
-  | 0, M, hM => hM 0
-  | _ + 1, M, hM => goodK_comp (hM 0) (goodK_compList _ fun i => hM i.succ)
+  | 0, _, hM => hM 0
+  | _ + 1, _, hM => goodK_comp (hM 0) (goodK_compList _ fun i => hM i.succ)
 
 /-! ### Measurability and boundedness of the path product -/
 
@@ -171,7 +171,7 @@ lemma cons_add_one {n : ℕ} (x : Ω) (w : Fin n → Ω) (i : Fin (n + 1)) :
     (Fin.cons x w : Fin (n + 1) → Ω) (i + 1) = (Fin.snoc w x : Fin (n + 1) → Ω) i := by
   refine Fin.lastCases ?_ ?_ i
   · have hlast : (Fin.last n) + 1 = (0 : Fin (n + 1)) := by
-      ext; simp [Fin.val_add]
+      ext; simp
     rw [hlast, Fin.cons_zero, Fin.snoc_last]
   · intro j
     have hstep : (j.castSucc : Fin (n + 1)) + 1 = j.succ := by
@@ -180,7 +180,7 @@ lemma cons_add_one {n : ℕ} (x : Ω) (w : Fin n → Ω) (i : Fin (n + 1)) :
         rw [Fin.val_one']
         exact Nat.mod_eq_of_lt (by omega)
       ext
-      rw [Fin.val_add, Fin.coe_castSucc, hone, Fin.val_succ]
+      rw [Fin.val_add, Fin.val_castSucc, hone, Fin.val_succ]
       exact Nat.mod_eq_of_lt (by omega)
     rw [hstep, Fin.cons_succ, Fin.snoc_castSucc]
 
@@ -285,7 +285,7 @@ lemma altKernels_zero (W : Ω → Ω → ℝ) (t : ℕ) : altKernels W t 0 = W :
   simp [altKernels]
 
 lemma altKernels_one (W : Ω → Ω → ℝ) (t : ℕ) : altKernels W t 1 = cmpl W := by
-  simp [altKernels, Fin.val_one', Nat.mod_eq_of_lt]
+  simp [altKernels, Nat.mod_eq_of_lt]
 
 lemma altKernels_succ_succ (W : Ω → Ω → ℝ) (t : ℕ) (i : Fin (2 * t + 2)) :
     altKernels W (t + 1) i.succ.succ = altKernels W t i := by

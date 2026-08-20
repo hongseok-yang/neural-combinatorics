@@ -3,7 +3,8 @@ import AlternatingCycle.Matrix.Scalar.LogDeriv
 /-!
 # The odd logarithmic coefficient lemma
 
-This is `lem:odd-log` of `alternating_cycles_schur_proof.tex`, the parity heart of the proof.
+This is `lem:odd-log` of `alternating_cycles_schur_proof.tex`, the lemma that isolates the role
+of the parity of `m`.
 
 Given a nonincreasing sequence `β` with `β 0 = 1`, set
 
@@ -17,7 +18,7 @@ The two-line computation `eq:F-G`–`eq:factor-log`,
   (1+z) F(z) = 1 + z G(-z),        (1+z)(1 - z F(z)) = 1 - z² G(-z),
 ```
 
-splits the excursion series into a part with an explicitly known logarithm and a part whose
+splits the series into a part with an explicitly known logarithm and a part whose
 coefficients all carry the sign `(-1)^{m-2r}`.  For **odd** `m` that sign is negative, giving
 
 ```
@@ -27,8 +28,7 @@ coefficients all carry the sign `(-1)^{m-2r}`.  For **odd** `m` that sign is neg
 which is `eq:odd-log-bound` (recall `coeff m (Λ A) = m · [z^m](-log A)`).
 
 Note what is *not* needed: nonnegativity of `β`.  Only `β 0 = 1` and monotonicity enter, the latter
-solely through `0 ≤ d_n`.  The paper lists `β_n ≥ 0` in the hypotheses of `lem:odd-log`, but its
-proof never uses it.
+solely through `0 ≤ d_n` — and these are exactly the hypotheses of `lem:odd-log` in the note.
 -/
 
 namespace AlternatingCycle
@@ -39,7 +39,7 @@ noncomputable section
 
 variable (β : ℕ → ℝ)
 
-/-- `F(z) = ∑_{n≥0} (-1)^n β_n z^n`, the excursion series `eq:F-beta`. -/
+/-- `F(z) = ∑_{n≥0} (-1)^n β_n z^n`, the series `eq:F-beta`. -/
 def betaSeries : ℝ⟦X⟧ := PowerSeries.mk fun n => (-1) ^ n * β n
 
 /-- `G(z) = ∑_{n≥0} d_n z^n` with `d_n = β_n - β_{n+1}`, the successive-difference series. -/
@@ -95,11 +95,11 @@ lemma one_add_X_mul_one_sub (hβ0 : β 0 = 1) :
   have h := one_add_X_mul_betaSeries hβ0
   linear_combination (-X : ℝ⟦X⟧) * h
 
-/-! ### The sign of the excursion powers -/
+/-! ### The sign of the powers of `z² G(−z)` -/
 
 /-- For odd `m` every power of `H = z² G(-z)` has nonpositive `m`-th coefficient.  This is the one
 place where the parity `m ≡ 1 (mod 2)` is used. -/
-lemma coeff_excursion_pow_nonpos (hanti : ∀ n, β (n + 1) ≤ β n) {m : ℕ} (hm : Odd m) (s : ℕ) :
+lemma coeff_diffSeries_pow_nonpos (hanti : ∀ n, β (n + 1) ≤ β n) {m : ℕ} (hm : Odd m) (s : ℕ) :
     coeff m ((X ^ 2 * rescale (-1) (diffSeries β)) ^ s) ≤ 0 := by
   have hGpow : ∀ j, 0 ≤ coeff j (diffSeries β ^ s) :=
     coeff_pow_nonneg (coeff_diffSeries_nonneg hanti) s
@@ -137,7 +137,7 @@ theorem coeff_logDeriv_betaSeries_le_one (hβ0 : β 0 = 1) (hanti : ∀ n, β (n
   have h1 : coeff m (logDeriv (1 + X : ℝ⟦X⟧)) = -1 := coeff_logDeriv_one_add_X hm
   have h2 : coeff m (logDeriv (1 - H)) ≤ 0 :=
     coeff_logDeriv_one_sub_nonpos hcc m fun s _ =>
-      coeff_excursion_pow_nonpos hanti hm s
+      coeff_diffSeries_pow_nonpos hanti hm s
   have h3 : coeff m (logDeriv (1 - H))
       = coeff m (logDeriv (1 + X : ℝ⟦X⟧)) + coeff m (logDeriv (1 - X * betaSeries β)) := by
     rw [hsplit, map_add]

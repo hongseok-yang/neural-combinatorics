@@ -15,8 +15,8 @@ and since the cycle density of a symmetric kernel at even length is nonnegative,
 
 both attained at the constant graphon `W ≡ 1/2`, where `t(C_{2m}, 2W − 1) = 0` and
 `Alt_{2m}(W) = 4^{-m}`.  So the alternating `(4k+2)`-cycle is semi-inducible with density `4^{-m}`,
-and the random-like graphon is extremal.  The source note is `alternating_cycles_schur_proof.tex`;
-the Lean development is in `lean/`.
+and the random-like graphon is extremal.  The note is `alternating_cycles_schur_proof.pdf`; the
+Lean development is in `lean/`.
 
 The results, all in `AlternatingCycle`:
 
@@ -29,23 +29,16 @@ The results, all in `AlternatingCycle`:
 
 ## Building
 
-Requires Lean `v4.31.0` (via `elan`) and mathlib `v4.31.0`.  The project does not fetch its own
-mathlib: it reuses the one shared by the projects under `discussions/` through a directory
-junction.  If `lean/.lake/packages` is missing (fresh clone, different machine), recreate it from
-the repository root:
+Requires Lean `v4.31.0` (via `elan`); the pinned mathlib `v4.31.0` is fetched automatically.  In
+`lean/`:
 
 ```
-cmd //c mklink //J "<abs>\discussions\schur_decomposition\alternating_cycle_semiinducibility\lean\.lake\packages" "<abs>\discussions\.lake-shared\packages"
-```
-
-Then, in `lean/`:
-
-```
+lake exe cache get                # download the prebuilt mathlib cache
 lake build                        # builds everything; must end "Build completed successfully"
 lake env lean CheckAxioms.lean    # axiom audit; see below
 ```
 
-A clean build produces no warnings outside `AlternatingCycle/Foundation/`.
+A clean build produces no warnings.
 
 ## Auditing the statement
 
@@ -57,7 +50,7 @@ nothing else needs to be read to establish it.
 | `lean/AlternatingCycle/Main.lean` | the statements: lines 43, 76 and 98 |
 | `lean/AlternatingCycle/Defs.lean` | `sgn`, `cmpl`, `altDensity`, `signedCycleDensity` (lines 32–44) |
 | `lean/AlternatingCycle/Foundation/Graphon.lean` | `IsGraphon`, line 35 — the hypothesis on `W` |
-| `lean/AlternatingCycle/Foundation/Kernel.lean` | `comp` (37), `compPow` (1429), `trace` (1442) |
+| `lean/AlternatingCycle/Foundation/Kernel.lean` | `comp` (40), `compPow` (1432), `trace` (1445) |
 
 These are the definitions the theorem is actually stated in; there is no separate summary to trust.
 Points worth checking explicitly:
@@ -102,13 +95,3 @@ lean/AlternatingCycle/
   Matrix/          the finite-dimensional theorem the compression is fed into
   Foundation/      kernel algebra and the L² operator of a kernel
 ```
-
-`Necklace/` and `Compression/` are the two halves of the argument and meet in `Main.lean`;
-`AlternatingCycle.lean` describes how.  `numerics/` holds two Python scripts that check the
-combinatorial recursion of `Necklace/RankOne.lean` and the end-to-end bound against random
-matrices and discretized graphons; they are cross-checks, not part of the proof.
-
-The four files in `Foundation/` are kept line-for-line identical, apart from their `import` lines, to
-`OddCycleBound/{Graphon,PathDensity,Kernel,Spectral/GraphonL2Operator}.lean` in
-`discussions/goodman-style-bound/complete_lean`, so that a change on either side can be carried
-across with `diff`.  Edit them only to keep that correspondence.

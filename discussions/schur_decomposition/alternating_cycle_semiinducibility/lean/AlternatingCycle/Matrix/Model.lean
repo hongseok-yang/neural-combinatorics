@@ -3,7 +3,8 @@ import AlternatingCycle.Matrix.Series.Jacobi2
 /-!
 # The rank-one model and the trace identity
 
-This is §2–§5 of `alternating_cycles_schur_proof.tex` in the finite model.  The data is a symmetric
+This is `eq:def-L`–`eq:logdet-factor` of `alternating_cycles_schur_proof.tex` in the finite
+model.  The data is a symmetric
 matrix `A` (the note's `X`) together with a unit vector `e`; we write
 
 ```

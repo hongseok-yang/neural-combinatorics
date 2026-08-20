@@ -2,9 +2,10 @@ import AlternatingCycle.Matrix.Scalar.Cn
 import AlternatingCycle.Matrix.Scalar.OddLog
 
 /-!
-# The excursion coefficients `β_n` and their monotonicity
+# The coefficients `β_n` and their monotonicity
 
-This is §6 of `alternating_cycles_schur_proof.tex`.  A `Spectrum` is the spectral data of the
+This is `eq:def-beta`–`lem:beta-monotone` of `alternating_cycles_schur_proof.tex`.  A `Spectrum`
+is the spectral data of the
 symmetric operator `X` relative to the distinguished unit vector: eigenvalues `λ_i` (with
 multiplicity) and coordinates `e_i = ⟨e, v_i⟩`, so that `ω_i = e_i²` and `τ = ∑ λ_i² ≤ 1`.  The
 moments are
@@ -27,7 +28,7 @@ Main results:
 
 The paper proves `β₁ ≤ τ` by writing `X` in a basis adapted to `e` and reading off `Tr(A²) ≥ 0`
 for the compression `A`.  We instead exhibit the compression's Frobenius norm directly: with
-`a = ν₀`, `τ − β₁` dominates `∑_i (λ_i − ω_i(2λ_i − a))²`, because the "off-diagonal budget"
+`a = ν₀`, `τ − β₁` dominates `∑_i (λ_i − ω_i(2λ_i − a))²`, because the off-diagonal sum
 `∑_{i,j} (e_i e_j(λ_i + λ_j − a))²` equals `2μ₁ − a²` and dominates its own diagonal.  No basis
 change and no `Submodule` bookkeeping.
 -/
@@ -133,8 +134,8 @@ lemma beta_one_eq : T.beta 1 = 2 * T.mu 1 - T.nu 0 ^ 2 := by
   rw [T.e_unit, ← mu_one_eq, ← nu_zero_eq]
   ring
 
-/-- The off-diagonal budget `∑_{i,j} (e_i e_j (λ_i + λ_j − a))² = 2μ₁ − a²`. -/
-lemma offdiag_budget : ∑ i, ∑ j, (T.e i * T.e j * (T.lam i + T.lam j - T.nu 0)) ^ 2
+/-- The off-diagonal sum `∑_{i,j} (e_i e_j (λ_i + λ_j − a))² = 2μ₁ − a²`. -/
+lemma offdiag_sum_sq : ∑ i, ∑ j, (T.e i * T.e j * (T.lam i + T.lam j - T.nu 0)) ^ 2
     = 2 * T.mu 1 - T.nu 0 ^ 2 := by
   set a := T.nu 0 with ha
   have hsum1 : ∑ j, T.e j ^ 2 = 1 := T.e_unit
@@ -186,10 +187,10 @@ lemma beta_one_le_tau : T.beta 1 ≤ T.tau := by
     rw [T.nu_zero_eq.symm, T.mu_one_eq.symm]
     simp only [tau]
     ring
-  have hbud := T.offdiag_budget
+  have hoff := T.offdiag_sum_sq
   rw [beta_one_eq]
-  rw [← ha] at hbud ⊢
-  linarith [hdiag, hsq, hexpand, hbud]
+  rw [← ha] at hoff ⊢
+  linarith [hdiag, hsq, hexpand, hoff]
 
 /-! ### The Cauchy-product form -/
 
@@ -260,7 +261,7 @@ lemma hSer_add_X_mul_lSer : T.hSer + X * T.lSer = 1 := by
       · exact Nat.succ_ne_zero r
 
 open PowerSeries in
-/-- **`eq:F-double`/`eq:def-beta`**: the excursion series `F = h² + z k²` has coefficients
+/-- **`eq:F-double`/`eq:def-beta`**: the series `F = h² + z k²` has coefficients
 `(-1)^n β_n`. -/
 lemma hSer_sq_add : T.hSer ^ 2 + X * T.kSer ^ 2 = betaSeries T.beta := by
   ext m

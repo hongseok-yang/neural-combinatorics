@@ -33,8 +33,6 @@ The recursion is driven by four rewrite rules,
   (k ^ a * j * k ^ b) * j       = μ b • (k ^ a * j * k ^ 0)     -- this is `hjk`
   (k ^ a * j * k ^ b) * (ε • k) = ε • (k ^ a * j * k ^ (b+1))
 ```
-
-The recursion is checked numerically against random symmetric matrices in `numerics/normalform.py`.
 -/
 
 namespace AlternatingCycle.RankOne
@@ -100,8 +98,7 @@ lemma coeff_eq_zero_of_le_right (ε μ : ℕ → ℝ) :
       rw [coeff_succ_succ, coeff_eq_zero_of_le_right ε μ n a b (by omega), mul_zero]
 
 /-- **Total degree.**  A monomial of `word ε j k n` carries one `j` and at most `n−1` factors `k`,
-so only `μ_g` with `g < n` can occur.  (Checked numerically in `numerics/normalform.py`: the
-maximal `a + b` over the nonzero coefficients of `coeff alt μ (2m)` is exactly `2m − 1`.) -/
+so only `μ_g` with `g < n` can occur. -/
 lemma coeff_eq_zero_of_le_add (ε μ : ℕ → ℝ) :
     ∀ (n a b : ℕ), n ≤ a + b → coeff ε μ n a b = 0
   | 0, _, _, _ => rfl

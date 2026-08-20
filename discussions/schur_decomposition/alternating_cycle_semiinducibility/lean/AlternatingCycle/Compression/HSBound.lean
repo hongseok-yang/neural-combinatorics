@@ -1,7 +1,7 @@
 import AlternatingCycle.Compression.L2
 
 /-!
-# The Hilbert–Schmidt budget
+# The Hilbert–Schmidt bound
 
 For any finite orthonormal family `v` in `L²(μ)`,
 
@@ -74,7 +74,7 @@ theorem norm_opX_sq_eq (hW : IsGraphon W μ) (f : Lp ℝ 2 μ) :
   filter_upwards [coeFn_opX hW f] with x hx
   rw [hx, rowInner_eq hW f x, sq]
 
-/-! ### The budget -/
+/-! ### The bound -/
 
 /-- `∫∫ K² ≤ 1` for `K = 2W − 1` on a probability space. -/
 theorem kernelSqNorm_sgn_le_one (hW : IsGraphon W μ) : kernelSqNorm μ (sgn W) ≤ 1 := by
@@ -97,7 +97,7 @@ theorem kernelSqNorm_sgn_le_one (hW : IsGraphon W μ) : kernelSqNorm μ (sgn W) 
     _ ≤ ∫ _x : Ω, (1 : ℝ) ∂μ := integral_mono hintrow (integrable_const 1) hrow
     _ = 1 := by simp
 
-/-- **The Hilbert–Schmidt budget.**  Bessel for each fixed `x`, then integrate. -/
+/-- **The Hilbert–Schmidt bound.**  Bessel for each fixed `x`, then integrate. -/
 theorem sum_norm_opX_sq_le (hW : IsGraphon W μ) {ι : Type*} [Fintype ι] {v : ι → Lp ℝ 2 μ}
     (hv : Orthonormal ℝ v) : ∑ i, ‖opX hW (v i)‖ ^ 2 ≤ 1 := by
   classical

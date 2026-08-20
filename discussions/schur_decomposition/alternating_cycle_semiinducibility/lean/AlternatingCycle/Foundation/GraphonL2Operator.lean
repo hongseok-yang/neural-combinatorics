@@ -22,6 +22,9 @@ open MeasureTheory
 open scoped InnerProductSpace
 open scoped ENNReal
 
+-- A few lemmas do not use the section variable `[IsProbabilityMeasure mu]`; keep the declarations uniform.
+set_option linter.unusedSectionVars false
+
 noncomputable section
 
 namespace OddCycleBound
@@ -1305,7 +1308,7 @@ lemma integrable_sum_graphon_row_inner_l2_sq
         inner Real
           (goodL2 (mu := mu) (goodK_row (goodK_of_isGraphon hW) x))
           (mode n) ^ 2)) mu := by
-  refine integrable_finset_sum s ?_
+  refine integrable_finsetSum s ?_
   intro n hn
   have hgood : Good (fun x : Omega =>
       kernelOp W mu (fun y : Omega => mode n y) x *
@@ -1352,7 +1355,7 @@ lemma sum_norm_kernelOpL2OfGoodK_sq_eq_integral_sum_row_inner_sq
             (goodL2 (mu := mu) (hf n)) ^ 2
       rw [inner_goodK_row_goodL2_eq_kernelOp (mu := mu) hK (hf n) x]
       ring
-  rw [integral_finset_sum s hterm_integrable]
+  rw [integral_finsetSum s hterm_integrable]
   refine Finset.sum_congr rfl ?_
   intro n hn
   rw [norm_kernelOpL2OfGoodK_sq_eq_integral_mul (mu := mu) hK (hf n)]
@@ -1373,7 +1376,7 @@ lemma integrable_sum_goodK_row_inner_sq
       s.sum (fun n : Nat =>
         inner Real (goodL2 (mu := mu) (goodK_row hK x))
             (goodL2 (mu := mu) (hf n)) ^ 2)) mu := by
-  refine integrable_finset_sum s ?_
+  refine integrable_finsetSum s ?_
   intro n hn
   have hgood : Good (fun x : Omega => kernelOp K mu (f n) x * kernelOp K mu (f n) x) :=
     (good_kernelOp_goodK (mu := mu) hK (hf n)).mul
@@ -2729,7 +2732,7 @@ lemma sum_norm_kernelOpCLM_sq_eq_integral_sum_graphon_row_inner_l2_sq
       rw [inner_goodK_row_l2_eq_kernelOp
         (mu := mu) (goodK_of_isGraphon hW) (mode n) x]
       ring
-  rw [integral_finset_sum s hterm_integrable]
+  rw [integral_finsetSum s hterm_integrable]
   refine Finset.sum_congr rfl ?_
   intro n hn
   have happly :

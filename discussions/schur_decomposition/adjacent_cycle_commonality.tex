@@ -4,6 +4,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{microtype}
 \usepackage{enumitem}
+\usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -19,9 +20,10 @@
 \newcommand{\one}{\mathbf{1}}
 \newcommand{\tr}{\operatorname{Tr}}
 
-\title{The Exact Commonality Region of Adjacent Even and Odd Cycles}
-\author{}
-\date{}
+\title{Off-diagonal Commonality of Cycles of Length
+\texorpdfstring{$2k$}{2k} and \texorpdfstring{$2k+1$}{2k+1}}
+\author{Taeyoung Kim}
+\date{\today}
 
 \begin{document}
 \maketitle
@@ -40,11 +42,12 @@ We prove
 \]
 The upper bound is witnessed by the balanced disjoint union of two cliques.  For
 the lower bound, after passing to a finite-rank graphon operator, a rank-one
-Lidskii--Karamata inequality separates the Perron eigenvalue from the remaining
-spectrum.  A Hilbert--Schmidt budget shows that at most one negative eigenvalue
-can contribute with the wrong sign.  Perron domination then pays for that single
-dangerous mode exactly, reducing the graphon inequality to the elementary
-convexity inequality $x^{2k}+(1-x)^{2k}\ge 2^{1-2k}$.
+case of Lidskii's majorisation theorem, combined with Karamata's inequality,
+separates the Perron eigenvalue from the remaining spectrum.  A
+Hilbert--Schmidt bound shows that at most one negative eigenvalue can
+contribute with the wrong sign.  Perron--Frobenius-type domination then
+compensates for that eigenvalue exactly, reducing the graphon inequality to
+the elementary convexity inequality $x^{2k}+(1-x)^{2k}\ge 2^{1-2k}$.
 \end{abstract}
 
 \section{Definitions and statement of the result}
@@ -90,7 +93,7 @@ for every graphon $W$.  Define
   \end{equation}
   Then
   \begin{equation}
-    \boxed{\pi(C_{2k},C_{2k+1})=(0,a_k^\star].}
+    \pi(C_{2k},C_{2k+1})=(0,a_k^\star].
     \label{eq:pi-answer}
   \end{equation}
   Equivalently, for $a\in(0,1)$ and $b=1-a$, the inequality
@@ -114,14 +117,26 @@ For $k=2$, this becomes
 \[
   8(a_2^\star)^3(a_2^\star+4)=5,
 \]
-and
-\[
-  a_2^\star=0.51721344027009436197\ldots.
-\]
-Thus Theorem~\ref{thm:main} includes the exact determination of
-$\pi(C_4,C_5)$.
+so Theorem~\ref{thm:main} includes the exact determination of
+$\pi(C_4,C_5)$.  Numerically, the first few critical values are
+\begin{center}
+\begin{tabular}{cl}
+  \toprule
+  $k$ & \multicolumn{1}{c}{$a_k^\star$}\\
+  \midrule
+  $2$ & $0.5172134403...$\\
+  $3$ & $0.5073512819...$\\
+  $4$ & $0.5040650275...$\\
+  $5$ & $0.5025774302...$\\
+  $6$ & $0.5017794484...$\\
+  $7$ & $0.5013021447...$\\
+  \bottomrule
+\end{tabular}
+\end{center}
+and $a_k^\star\to1/2$ as $k\to\infty$, by the bound
+\eqref{eq:delta-bound} below.
 
-\section{Finite-rank reduction and the trace model}
+\section{Proof of the main theorem}
 
 We first reduce the proof to step graphons.  The details are included so that no
 compactness theorem for graphons is needed.
@@ -251,10 +266,8 @@ $T:=T_U$, then
   \label{eq:complement-operator}
 \end{equation}
 
-\section{A rank-one Lidskii--Karamata inequality}
-
 For a vector $x\in\R^N$, write $x^\downarrow$ for its coordinates rearranged
-in nonincreasing order.  Recall that $x$ is \emph{majorized} by $y$, written
+in nonincreasing order.  Recall that $x$ is \emph{majorised} by $y$, written
 $x\prec y$, if
 \[
   \sum_{i=1}^j x_i^\downarrow
@@ -264,7 +277,7 @@ $x\prec y$, if
   \qquad
   \sum_{i=1}^N x_i=\sum_{i=1}^N y_i.
 \]
-Karamata's inequality (see, e.g., \cite[Chapter~4]{MOA}) says that if
+Karamata's inequality (see, e.g., \cite[Chapter~4]{MOA}) states that if
 $x\prec y$ and $\varphi\colon\R\to\R$ is convex, then
 \begin{equation}
   \sum_{i=1}^N\varphi(x_i)
@@ -274,11 +287,11 @@ $x\prec y$ and $\varphi\colon\R\to\R$ is convex, then
 \end{equation}
 
 The next lemma is the special rank-one form of Lidskii's additive
-majorization theorem that we need; for the general form see
+majorisation theorem that we need; for the general form see
 \cite[Chapter~III]{Bhatia} or \cite[Chapter~9]{MOA}.  We include a
 self-contained proof.
 
-\begin{lemma}[Rank-one lower majorization]
+\begin{lemma}[Rank-one lower majorisation]
   \label{lem:rank-one-majorization}
   Let $A$ be an $N\times N$ real symmetric matrix with eigenvalues
   \[
@@ -344,7 +357,7 @@ self-contained proof.
     1+\alpha_N+\sum_{i=1}^{j-1}\alpha_i.
   \end{align*}
   This dominates the right side of \eqref{eq:subset-with-N}.  Thus the first
-  $j$ majorization inequality holds.  Equality of the total sums follows from
+  $j$ majorisation inequality holds.  Equality of the total sums follows from
   $\tr(A+P)=\tr(A)+1$.
 \end{proof}
 
@@ -364,7 +377,7 @@ self-contained proof.
 \end{corollary}
 
 \begin{proof}
-  Apply Lemma~\ref{lem:rank-one-majorization} to $A=-T$.  The decreasingly
+  Apply Lemma~\ref{lem:rank-one-majorization} to $A=-T$.  The nonincreasingly
   ordered eigenvalues of $-T$ are
   \[
     -\lambda_N\ge\cdots\ge-\lambda_1.
@@ -381,12 +394,10 @@ self-contained proof.
   \eqref{eq:rank-one-trace-bound} follows.
 \end{proof}
 
-\section{Spectral constraints for graphon operators}
-
 The following elementary bounds use the pointwise condition $0\le U\le1$.
 They do not assume that $T_U$ is positive semidefinite.
 
-\begin{lemma}[Perron domination and the tail square budget]
+\begin{lemma}[Perron--Frobenius-type domination and the tail sum bound]
   \label{lem:spectral-budget}
   Let $U$ be a symmetric step graphon, choose a finite partition on which $U$
   is constant, let $E$ be its associated step-function space, and let
@@ -457,13 +468,11 @@ They do not assume that $T_U$ is positive semidefinite.
   as claimed.
 \end{proof}
 
-\section{The scalar branch and the critical parameter}
-
 Fix an even integer
 \[
   n\ge4.
 \]
-Eventually we set $n=2k$.  For $a\in(0,1)$, put
+In the end we take $n=2k$.  For $a\in(0,1)$, put
 \[
   b:=1-a,
 \]
@@ -549,7 +558,7 @@ Moreover,
 The next quantitative bounds are the only estimates on the critical point
 needed in the proof.
 
-\begin{lemma}[Bounds on the normalized coefficient]
+\begin{lemma}[Bounds on the normalised coefficient]
   \label{lem:kappa-bounds}
   Let $\alpha_n^\star$ be as in Lemma~\ref{lem:critical-point}, and put
   \[
@@ -567,9 +576,9 @@ needed in the proof.
   Consequently, for every $0<a\le\alpha_n^\star$, with $b=1-a$ and
   $\kappa=\kappa_n(a)$,
   \begin{equation}
-    \boxed{\kappa b<1,
+    \kappa b<1,
     \qquad
-    \kappa<2\sqrt2.}
+    \kappa<2\sqrt2.
     \label{eq:kappa-bounds-all-a}
   \end{equation}
 \end{lemma}
@@ -651,8 +660,6 @@ needed in the proof.
   \]
   Therefore the endpoint bounds remain valid for every $a\le\alpha_n^\star$.
 \end{proof}
-
-\section{Proof of the lower bound}
 
 We now prove that \eqref{eq:scaled-target} holds whenever
 $a\le\alpha_n^\star$.
@@ -773,7 +780,7 @@ $a\le\alpha_n^\star$.
     \beta>\frac1\kappa.
   \]
   All remaining terms in the sum in \eqref{eq:lower-start} are nonnegative.
-  Perron domination \eqref{eq:perron-domination} gives
+  Perron--Frobenius-type domination \eqref{eq:perron-domination} gives
   \begin{equation}
     \lambda_1\ge\beta.
     \label{eq:perron-pays}
@@ -787,7 +794,7 @@ $a\le\alpha_n^\star$.
   \[
     0<\beta\le\lambda_1\le1.
   \]
-  Since $f_\kappa$ is strictly convex and minimized at $b$, it is increasing
+  Since $f_\kappa$ is strictly convex and minimised at $b$, it is increasing
   on $[b,1]$.  Hence, by \eqref{eq:perron-pays} and
   \eqref{eq:beta-above-b},
   \[
@@ -819,9 +826,8 @@ $a\le\alpha_n^\star$.
   \eqref{eq:lower-bound-final}.
 \end{proof}
 
-\section{The balanced two-clique obstruction and completion}
-
-Let $W_{\mathrm{cl}}$ be the balanced disjoint union of two cliques:
+It remains to prove the upper bound.  Let $W_{\mathrm{cl}}$ be the
+balanced disjoint union of two cliques:
 \[
   W_{\mathrm{cl}}(x,y)
   :=
@@ -867,26 +873,43 @@ Proposition~\ref{prop:lower-bound} gives the reverse inclusion.  Taking
 $n=2k$, the number $\alpha_{2k}^\star$ is exactly the number
 $a_k^\star$ defined in Theorem~\ref{thm:main}, so the theorem follows.
 
-\begin{remark}[The endpoint transition]
-  For every $a\in(0,1)$, the constant graphon $W\equiv a$ attains equality in
-  the defining commonality inequality.  At $a=\alpha_n^\star$, the balanced
-  two-clique graphon also attains equality because
-  $\rho_n(\alpha_n^\star)=2^{1-n}$.  Thus the endpoint is exactly the point where
-  the constant branch meets the balanced two-clique branch.
-\end{remark}
+\section{Remarks}
 
-\begin{remark}[The role of the rank-one decomposition]
-  The identity $T_W=J-T_{1-W}$ separates the one-dimensional constant state
-  from the remaining spectrum.  Corollary~\ref{cor:rank-one-trace} is a global
-  form of this separation: it accounts for every coupling between the
-  constant state and the orthogonal directions at once.  The tail square
-  budget then leaves at most one negative mode for which
-  $1+\kappa\lambda<0$, and the Perron eigenvalue compensates for that mode.
-  For the balanced two-clique graphon the spectrum of $T_{1-W}|_E$ is
-  $\{\tfrac12,-\tfrac12\}$ and \eqref{eq:rank-one-trace-bound} holds with
-  equality, so Corollary~\ref{cor:rank-one-trace} is tight exactly at the
-  extremal point.
-\end{remark}
+The proof of Theorem~\ref{thm:main} has been verified in the Lean~4
+proof assistant~\cite{Lean4}, on top of the mathlib
+library~\cite{mathlib}; the development accompanies this note.  The
+formal statement covers both directions and the existence and
+uniqueness of $a_k^\star$: the inequality holds for every graphon if
+and only if $a\le a_k^\star$.  The formal proof differs from the one
+given here in four ways.
+
+First, instead of the dyadic conditional expectations in
+Lemma~\ref{lem:step-reduction}, the formal proof approximates $W$
+directly by a step graphon in the $L^1$ norm; both cycle densities
+are Lipschitz in that norm, so the inequality transfers.
+
+Second, the interlacing inequalities \eqref{eq:rank-one-interlace}
+are proved by an intersection argument instead of the
+Courant--Fischer principle: two spans of eigenvectors whose
+dimensions add up to more than $N$ contain a common unit vector, and
+evaluating the quadratic forms of $A$ and $A+P$ at that vector gives
+the inequality.
+
+Third, the rearrangement in Lemma~\ref{lem:rank-one-majorization} is
+not obtained by sorting.  Since the $\alpha_i$ are already ordered,
+rearranging $(\alpha_1,\ldots,\alpha_{N-1},\alpha_N+1)$ only moves
+the entry $\alpha_N+1$ to its correct position, and the formal proof
+writes this down explicitly, with the partial sums in closed form.
+Karamata's inequality \eqref{eq:karamata} is proved in a form that
+requires only one of the two sequences to be monotone, so the
+eigenvalues $\mu_i$ of $A+P$ are not sorted either.
+
+Fourth, the derivatives of $f_\kappa$ are not computed.  The paper
+locates the minimum of $f_\kappa$ at $b$ through $f_\kappa'$ and
+$f_\kappa''$; the formal proof instead bounds $(1-x)^n$ and
+$\kappa x^{n+1}$ from below by their supporting lines at $x=b$, both
+instances of Bernoulli's inequality, and the sum of the two lines is
+the constant $\rho_n(a)$ because $\kappa(n+1)b^n=na^{n-1}$.
 
 \begin{thebibliography}{9}
 
@@ -913,6 +936,18 @@ A. W. Marshall, I. Olkin, and B. C. Arnold,
 second edition,
 Springer Series in Statistics,
 Springer, New York, 2011.
+
+\bibitem{mathlib}
+The mathlib Community,
+\emph{The Lean mathematical library},
+Proceedings of the 9th ACM SIGPLAN International Conference on
+Certified Programs and Proofs (CPP 2020), ACM, 2020, pp.~367--381.
+
+\bibitem{Lean4}
+L. de Moura and S. Ullrich,
+\emph{The Lean 4 theorem prover and programming language},
+Automated Deduction -- CADE 28, Lecture Notes in Computer Science,
+vol.~12699, Springer, 2021, pp.~625--635.
 
 \end{thebibliography}
 

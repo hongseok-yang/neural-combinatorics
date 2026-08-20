@@ -26,7 +26,7 @@ Run with `lake env lean CheckAxioms.lean`.
 #print axioms AlternatingCycle.KAlg.tau_mul_comm
 #print axioms AlternatingCycle.alt_add_cycle_eq_necklace
 
--- ## Fact B: the L² operator, the Hilbert–Schmidt budget, the matrix model
+-- ## Fact B: the L² operator, the Hilbert–Schmidt bound, the matrix model
 #print axioms AlternatingCycle.opX_isSymmetric
 #print axioms AlternatingCycle.coeFn_opX
 #print axioms AlternatingCycle.inner_oneL2_opX_pow_oneL2

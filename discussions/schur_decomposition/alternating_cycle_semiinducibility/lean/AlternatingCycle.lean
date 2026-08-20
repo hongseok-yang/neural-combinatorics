@@ -10,7 +10,7 @@ import AlternatingCycle.Necklace.Trace
 import AlternatingCycle.Necklace.MatrixInstance
 import AlternatingCycle.Necklace.Unitize
 import AlternatingCycle.Necklace.KernelInstance
--- Fact B: the L² operator, the Hilbert–Schmidt budget, and the matrix model.
+-- Fact B: the L² operator, the Hilbert–Schmidt bound, and the matrix model.
 import AlternatingCycle.Compression.L2
 import AlternatingCycle.Compression.HSBound
 import AlternatingCycle.Compression.Krylov

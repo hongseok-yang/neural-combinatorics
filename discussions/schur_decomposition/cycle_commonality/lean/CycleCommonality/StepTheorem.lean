@@ -15,9 +15,9 @@ For `n = 2k ≥ 4` even, `α*_n ∈ (1/2, 1)` is the unique solution of `ρ_n(α
 
 holds for **every** step graphon exactly when `a ≤ α*_n`:
 
-* `≤` is `StepGraphon.lower_bound` (§6, resting on Corollary `cor:rank-one-trace` and Lemma
+* `≤` is `StepGraphon.lower_bound` (resting on Corollary `cor:rank-one-trace` and Lemma
   `lem:kappa-bounds`);
-* `>` fails at the balanced two-clique (`twoClique.violates`, §7).
+* `>` fails at the balanced two-clique (`twoClique.violates`).
 
 In this file the cycle densities *are* the traces of matrix powers.  `Graphon.lean` identifies
 them with the integral homomorphism densities of the graphon a step graphon realises, and removes

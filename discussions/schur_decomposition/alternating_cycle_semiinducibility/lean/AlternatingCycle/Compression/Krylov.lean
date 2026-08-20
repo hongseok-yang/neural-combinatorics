@@ -10,7 +10,7 @@ For a symmetric `T` on an inner product space, a vector
 the compression:
 
 * the vector moments, `⟨g, C^j g⟩ = ⟨g, T^j g⟩` for `j ≤ d` — because `C^j g = T^j g` there;
-* the Hilbert–Schmidt budget, since `C = Π ∘ T` on `V` and `Π` does not increase norms.
+* the Hilbert–Schmidt bound, since `C = Π ∘ T` on `V` and `Π` does not increase norms.
 
 Diagonalising `C` (it is symmetric on a finite-dimensional space) turns this into the *matrix* data
 that `matrix_main_general` wants, and the packaging is deliberately trivial: with `λ` the
@@ -189,7 +189,7 @@ lemma coeLinear_pow {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
       rfl
 
 /-- **The matrix model.**  A symmetric matrix and a unit vector whose moments are the graphon
-moments and whose Hilbert–Schmidt norm respects the budget. -/
+moments and whose Hilbert–Schmidt norm respects the bound. -/
 theorem exists_matrix_model (hW : IsGraphon W μ) (m : ℕ) :
     ∃ (N : ℕ) (A : Matrix (Fin N) (Fin N) ℝ) (e : Fin N → ℝ),
       Aᵀ = A ∧ e ⬝ᵥ e = 1 ∧ Matrix.trace (A * A) ≤ 1 ∧

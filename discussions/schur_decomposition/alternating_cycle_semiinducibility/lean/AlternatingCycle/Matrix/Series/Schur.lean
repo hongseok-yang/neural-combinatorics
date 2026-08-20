@@ -4,7 +4,7 @@ import Mathlib.LinearAlgebra.Matrix.Adjugate
 /-!
 # The rank-`κ` Schur reduction of a resolvent trace
 
-`lem:det-factor` of `alternating_cycles_schur_proof.tex` strips the rank-one state `P` off
+`lem:det-factor` of `alternating_cycles_schur_proof.tex` removes the rank-one projection `P` from
 `I − zL` by the matrix determinant lemma.  We do the same on the *resolvent* instead, which keeps
 everything on the trace side and avoids any `n × n` determinant.
 

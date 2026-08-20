@@ -14,7 +14,7 @@ import CycleCommonality.Spectral.Interlace
 import CycleCommonality.Spectral.RankOneTrace
 -- The finite model, and the exact region within it.
 import CycleCommonality.Model.StepModel
-import CycleCommonality.Model.Budget
+import CycleCommonality.Model.TailBound
 import CycleCommonality.Discrete
 import CycleCommonality.Extremal
 import CycleCommonality.StepTheorem

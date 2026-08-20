@@ -22,6 +22,9 @@ connection to `pathDensity`/`c_m` are built on top.
 open MeasureTheory
 open scoped BigOperators ENNReal symmDiff
 
+-- A few lemmas do not use the section variables `[IsProbabilityMeasure μ]` or `[MeasurableSpace Ω]`; keep the declarations uniform.
+set_option linter.unusedSectionVars false
+
 namespace OddCycleBound
 
 universe u

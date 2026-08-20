@@ -1,8 +1,8 @@
-import CycleCommonality.Model.Budget
+import CycleCommonality.Model.TailBound
 import CycleCommonality.Scalar.KappaBounds
 
 /-!
-# §6: the spectral reduction and the lower bound, for step graphons
+# The spectral reduction and the lower bound, for step graphons
 
 `prop:spectral-reduction` and `prop:lower-bound` of `adjacent_cycle_commonality.tex`, in the
 finite model of `Model/StepModel.lean`.
@@ -15,9 +15,9 @@ finite model of `Model/StepModel.lean`.
 
 * No dangerous index: every tail term is nonnegative because `n` is even, and `f_κ(λ₀) ≥ ρ_n(a)`
   by `fk_min`.
-* One dangerous index `i₀` (there is at most one, by the tail square budget against `κ² < 8`):
-  write `β = -λ i₀ > 1/κ > b`.  Perron domination gives `λ₀ ≥ β`, so `f_κ(λ₀) ≥ f_κ(β)` by
-  `fk_mono`, and the dangerous term is paid for exactly:
+* One dangerous index `i₀` (there is at most one, by the tail sum bound against `κ² < 8`):
+  write `β = -λ i₀ > 1/κ > b`.  Perron--Frobenius-type domination gives `λ₀ ≥ β`, so
+  `f_κ(λ₀) ≥ f_κ(β)` by `fk_mono`, and the dangerous term is compensated exactly:
   `f_κ(β) + β^n(1 - κβ) = (1-β)^n + β^n ≥ 2^{1-n} ≥ ρ_n(a)`.
 -/
 
@@ -62,14 +62,14 @@ theorem spectral_reduction (hN : 0 < N) {n : ℕ} (hne : Even n) (hn0 : n ≠ 0)
   simp only [hlam] at *
   linarith [hcor]
 
-/-- At most one index is dangerous: two would violate the tail square budget. -/
+/-- At most one index is dangerous: two would violate the tail sum bound. -/
 lemma dangerous_unique (hN : 0 < N) {κ : ℝ} (_hκ0 : 0 < κ) (hκ8 : κ ^ 2 < 8)
     {i j : Fin N} (hi : i ∈ Finset.univ.erase (⟨0, hN⟩ : Fin N))
     (hj : j ∈ Finset.univ.erase (⟨0, hN⟩ : Fin N))
     (hdi : 1 + κ * G.lam i < 0) (hdj : 1 + κ * G.lam j < 0) : i = j := by
   classical
   by_contra hne
-  have hbudget := G.tail_budget_quarter hN
+  have htail := G.tail_sum_bound_quarter hN
   have hsub : ({i, j} : Finset (Fin N)) ⊆ Finset.univ.erase (⟨0, hN⟩ : Fin N) := by
     intro k hk
     rcases Finset.mem_insert.mp hk with rfl | hk'
@@ -89,7 +89,7 @@ lemma dangerous_unique (hN : 0 < N) {κ : ℝ} (_hκ0 : 0 < κ) (hκ8 : κ ^ 2 <
     nlinarith [hxneg]
   have h1 := hsq _ hdi
   have h2 := hsq _ hdj
-  nlinarith [h1, h2, hle, hbudget, hκ8, sq_nonneg κ]
+  nlinarith [h1, h2, hle, htail, hκ8, sq_nonneg κ]
 
 /-- **Proposition `prop:lower-bound`**: commonality up to the critical point, for step
 graphons. -/
@@ -117,7 +117,7 @@ theorem lower_bound (hN : 0 < N) {n : ℕ} (hne : Even n) (hn4 : 4 ≤ n)
   have hperron1 : G.perron hN ≤ 1 := G.perron_le_one hN
   set S := Finset.univ.erase (⟨0, hN⟩ : Fin N) with hS
   by_cases hcase : ∃ i ∈ S, 1 + κ * G.lam i < 0
-  · -- Case 2: a single dangerous eigenvalue, paid for by the Perron eigenvalue
+  · -- Case 2: a single dangerous eigenvalue, compensated by the Perron eigenvalue
     obtain ⟨i₀, hi₀S, hi₀⟩ := hcase
     set β : ℝ := -(G.lam i₀) with hβ
     have hβκ : 1 / κ < β := by
@@ -149,7 +149,7 @@ theorem lower_bound (hN : 0 < N) {n : ℕ} (hne : Even n) (hn4 : 4 ≤ n)
     -- `f_κ` is increasing to the right of `b`
     have hfk : fk n κ β ≤ fk n κ (G.perron hN) :=
       fk_mono hne hn0 ha0 ha1 (le_of_lt hbβ) hβ1 hβperron
-    -- the dangerous term is paid for exactly
+    -- the dangerous term is compensated exactly
     have hpay : fk n κ β + (G.lam i₀) ^ n * (1 + κ * G.lam i₀) = (1 - β) ^ n + β ^ n := by
       have hlam : G.lam i₀ = -β := by rw [hβ]; ring
       rw [hlam, fk, hne.neg_pow]

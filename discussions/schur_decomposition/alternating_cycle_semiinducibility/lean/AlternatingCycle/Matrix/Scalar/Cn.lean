@@ -3,9 +3,9 @@ import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic
 
 /-!
-# The divided-difference polynomials `c_n`
+# The polynomials `c_n`
 
-Section `sec:excursion` of `alternating_cycles_schur_proof.tex`.  For `n ≥ 0`,
+`eq:def-cn-quotient`–`lem:cn` of `alternating_cycles_schur_proof.tex`.  For `n ≥ 0`,
 
 ```
   c_n(x,y) = ∑_{r=0}^{2n} (-1)^r x^{2n-r} y^r = (x^{2n+1} + y^{2n+1}) / (x + y),
@@ -14,7 +14,7 @@ Section `sec:excursion` of `alternating_cycles_schur_proof.tex`.  For `n ≥ 0`,
 the second expression read by continuity at `x + y = 0`.  These are the coefficients of the
 partial-fraction expansion `eq:cn-generating`, and the two facts the proof needs about them are
 
-* `cn_nonneg` (`eq:cn-positive`): `c_n ≥ 0`, because `c_n` is a divided difference of the
+* `cn_nonneg` (`eq:cn-positive`): `c_n ≥ 0`, because `c_n` is a difference quotient of the
   increasing function `t ↦ t^{2n+1}`;
 * `cn_recurrence` (`eq:cn-recurrence`): `(x²+y²) c_n − c_{n+1} = x²y² c_{n-1}` for `n ≥ 1`,
   whence `cn_le_mul`: `c_{n+1} ≤ (x²+y²) c_n`.
@@ -135,7 +135,7 @@ lemma cn_le_mul (n : ℕ) (x y : ℝ) :
 
 /-! ### The convolution form
 
-The excursion coefficients arise from a Cauchy product, so `c_n` is needed in the shape
+The coefficients `β_n` arise from a Cauchy product, so `c_n` is needed in the shape
 `∑_{p+q=n} x^{2p}y^{2q} − xy ∑_{p+q=n-1} x^{2p}y^{2q}` (`eq:partial-fraction` expanded).  Both sides
 satisfy the peeling recursion `cn_succ`, so a single induction identifies them. -/
 

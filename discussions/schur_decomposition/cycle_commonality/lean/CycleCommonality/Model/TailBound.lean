@@ -2,7 +2,7 @@ import CycleCommonality.Model.StepModel
 import Mathlib.Algebra.Order.BigOperators.Ring.Finset
 
 /-!
-# Lemma `lem:spectral-budget`: Perron domination and the tail square budget
+# Lemma `lem:spectral-budget`: Perron--Frobenius-type domination and the tail sum bound
 
 For a weighted step graphon with eigenvalues `λ₀ ≥ λ₁ ≥ … ≥ λ_{N-1}` of the kernel operator:
 
@@ -142,7 +142,7 @@ lemma perron_le_one (hN : 0 < N) : G.perron hN ≤ 1 := by
   rw [G.inner_basis_eq ⟨0, hN⟩, G.sys.basis.norm_eq_one] at h
   simpa [perron] using h
 
-/-! ### `λ₀ ≥ 0` and Perron domination -/
+/-! ### `λ₀ ≥ 0` and Perron--Frobenius-type domination -/
 
 lemma edgeDensity_le_perron (hN : 0 < N) : G.edgeDensity ≤ G.perron hN := by
   have h := G.sys.rayleigh_top hN G.unit
@@ -161,7 +161,7 @@ lemma inner_absVec_ge (v : EuclideanSpace ℝ (Fin N)) :
   refine le_trans (Finset.abs_sum_le_sum_abs _ _) (Finset.sum_le_sum fun j _ => ?_)
   rw [absVec_apply, absVec_apply, abs_mul, abs_mul, abs_of_nonneg (G.mat_nonneg i j)]
 
-/-- **Perron domination** `eq:perron-domination`: `|λ i| ≤ λ₀`. -/
+/-- **Perron--Frobenius-type domination** `eq:perron-domination`: `|λ i| ≤ λ₀`. -/
 theorem abs_lam_le_perron (hN : 0 < N) (i : Fin N) : |G.lam i| ≤ G.perron hN := by
   have h1 := G.inner_absVec_ge (G.sys.basis i)
   have h2 : ⟪absVec (G.sys.basis i), G.op (absVec (G.sys.basis i))⟫
@@ -170,7 +170,7 @@ theorem abs_lam_le_perron (hN : 0 < N) (i : Fin N) : |G.lam i| ≤ G.perron hN :
   rw [G.inner_basis_eq i] at h1
   exact le_trans h1 h2
 
-/-! ### The tail square budget -/
+/-! ### The tail sum bound -/
 
 lemma sum_sq_lam : ∑ i, (G.lam i) ^ 2 = ∑ i, ∑ j, (G.mat i j) ^ 2 := by
   have h : ∑ i, (G.lam i) ^ 2 = Matrix.trace (G.mat ^ 2) := by
@@ -203,8 +203,8 @@ lemma sum_sq_mat_le : ∑ i, ∑ j, (G.mat i j) ^ 2 ≤ G.edgeDensity := by
         mul_le_mul_of_nonneg_right hsq hww
     _ = G.U i j * G.w i * G.w j := by ring
 
-/-- **The tail square budget** `eq:tail-square-budget`. -/
-theorem tail_budget (hN : 0 < N) :
+/-- **The tail sum bound** `eq:tail-square-budget`. -/
+theorem tail_sum_bound (hN : 0 < N) :
     ∑ i ∈ Finset.univ.erase (⟨0, hN⟩ : Fin N), (G.lam i) ^ 2
       ≤ G.perron hN * (1 - G.perron hN) := by
   classical
@@ -218,10 +218,10 @@ theorem tail_budget (hN : 0 < N) :
   rw [hsum]
   nlinarith [h1, h2, h3]
 
-/-- The tail square budget in the numeric form used in Case 2: at most `1/4`. -/
-theorem tail_budget_quarter (hN : 0 < N) :
+/-- The tail sum bound in the numeric form used in Case 2: at most `1/4`. -/
+theorem tail_sum_bound_quarter (hN : 0 < N) :
     ∑ i ∈ Finset.univ.erase (⟨0, hN⟩ : Fin N), (G.lam i) ^ 2 ≤ 1 / 4 := by
-  have h := G.tail_budget hN
+  have h := G.tail_sum_bound hN
   nlinarith [h, sq_nonneg (G.perron hN - 1 / 2)]
 
 end StepGraphon

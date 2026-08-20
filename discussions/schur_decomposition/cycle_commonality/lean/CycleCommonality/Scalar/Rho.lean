@@ -2,9 +2,10 @@ import CycleCommonality.Majorization.Karamata
 import Mathlib.Topology.Order.IntermediateValue
 
 /-!
-# The scalar branch: `ρ_n`, `κ_n`, and the minimum of `f_κ`
+# The scalar functions `ρ_n`, `κ_n`, and the minimum of `f_κ`
 
-This is §5 of `adjacent_cycle_commonality.tex`.  For `a ∈ (0,1)` and `b = 1 - a`,
+This is `eq:kappa-rho`–`lem:critical-point` of `adjacent_cycle_commonality.tex`.  For `a ∈ (0,1)`
+and `b = 1 - a`,
 
 ```
   κ_n(a) = n a^{n-1} / ((n+1) b^n),      ρ_n(a) = a^{n-1}(a+n)/(n+1),
@@ -35,7 +36,7 @@ noncomputable def rho (n : ℕ) (a : ℝ) : ℝ := a ^ (n - 1) * (a + n) / (n + 
 /-- The normalizing coefficient `κ_n(a) = n a^{n-1} / ((n+1)(1-a)^n)` of `eq:kappa-rho`. -/
 noncomputable def kappa (n : ℕ) (a : ℝ) : ℝ := n * a ^ (n - 1) / ((n + 1) * (1 - a) ^ n)
 
-/-- The scalar branch `f_κ(x) = (1-x)^n + κ x^{n+1}` of `eq:f-kappa`. -/
+/-- The function `f_κ(x) = (1-x)^n + κ x^{n+1}` of `eq:f-kappa`. -/
 noncomputable def fk (n : ℕ) (κ x : ℝ) : ℝ := (1 - x) ^ n + κ * x ^ (n + 1)
 
 /-! ### A supporting line for `x ^ m` on `[0, ∞)` -/
@@ -125,7 +126,7 @@ theorem fk_min {n : ℕ} (hne : Even n) (hn0 : n ≠ 0) {a : ℝ} (ha0 : 0 < a) 
   exact h
 
 /-- **`f_κ` is monotone to the right of `b`**: this is what Case 2 of the main proof uses, where
-the Perron eigenvalue `λ₁ ≥ β > b` pays for the single dangerous mode. -/
+the Perron eigenvalue `λ₁ ≥ β > b` compensates for the single dangerous eigenvalue. -/
 theorem fk_mono {n : ℕ} (hne : Even n) (hn0 : n ≠ 0) {a : ℝ} (ha0 : 0 < a) (ha1 : a < 1)
     {y z : ℝ} (hby : 1 - a ≤ y) (hy1 : y ≤ 1) (hyz : y ≤ z) :
     fk n (kappa n a) y ≤ fk n (kappa n a) z := by

@@ -48,7 +48,7 @@ noncomputable def signedCycleDensity (K : Ω → Ω → ℝ) (μ : Measure Ω) (
 These are the only facts about `sgn` and `cmpl` the rest of the development needs from this file.
 -/
 
-variable {μ : Measure Ω} [IsProbabilityMeasure μ] {W : Ω → Ω → ℝ}
+variable {μ : Measure Ω} {W : Ω → Ω → ℝ}
 
 lemma goodK_sgn (hW : IsGraphon W μ) : GoodK (sgn W) := by
   refine ⟨(measurable_const.mul hW.meas).sub measurable_const, 1, zero_le_one, fun x y => ?_⟩

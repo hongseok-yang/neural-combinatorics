@@ -1,7 +1,7 @@
 import CycleCommonality.Discrete
 
 /-!
-# §7: the balanced two-clique obstruction
+# The balanced two-clique obstruction
 
 `W_cl` is the balanced disjoint union of two cliques, so its complement `U = 1 - W_cl` is the
 balanced complete bipartite graphon.  As a two-cell step graphon, `w = (1/2, 1/2)` and

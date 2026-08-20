@@ -5,7 +5,7 @@ import AlternatingCycle.Matrix.Spectral
 # `det M₂ = 1 − z F(z)`
 
 This is `lem:det-factor` finished: the `2 × 2` Schur determinant of `Model.lean` is identified with
-the excursion series of `Spectral.lean`.
+the series `F` of `Spectral.lean`.
 
 We work in the **diagonal** model `A = diagonal λ`, where `N(z)` is diagonal and every bilinear form
 `⟨a, N(z) b⟩` collapses to a single sum.  Then

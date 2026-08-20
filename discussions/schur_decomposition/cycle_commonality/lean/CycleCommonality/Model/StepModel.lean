@@ -5,8 +5,9 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 /-!
 # The weighted step-graphon model
 
-Sections 3–7 of `adjacent_cycle_commonality.tex`, except Lemma `lem:step-reduction`, are pure
-finite symmetric-matrix theory.  This file fixes the finite model and the dictionary to the
+After the step-graphon reduction (`lem:step-reduction`) and the trace identity
+(`lem:trace-density`), the proof of `adjacent_cycle_commonality.tex` is pure finite
+symmetric-matrix theory.  This file fixes the finite model and the dictionary to the
 operator statements of `Spectral/`.
 
 A `StepGraphon N` is a finite measurable partition with weights `w` summing to `1` together with a
