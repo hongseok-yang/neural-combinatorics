@@ -95,12 +95,253 @@
 \maketitle
 
 \begin{abstract}
-  Abstract.
+  Recently, Bennett et al. proved that the density of the odd cycle of length 5 is minimised by the balanced complete $k$-partite graph at the fixed edge density $p = 1 - 1 / k$, using flag algebras.
+  Motivated by this result, we extend it to all odd cycles.
+  Specifically, we prove that $f_m(p) = p^{m} - p(1-p)^{m-1}$ is a lower bound on the density of the odd cycle of length $m$ at every edge density $p \ge 2/3$, which is tight at $p = 1 - 1 / k$ for all $k \ge 2$.
+  As a companion result, we also prove a stronger bound on the extended commonality of the odd cycles, which strengthens the result of Kim and Lee.
 \end{abstract}
 
 \tableofcontents
 
 \section{Introduction}\label{sec:intro}
+
+A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
+For a finite graph $F$ with vertex set $\{1,\ldots,v\}$ and edge set $E(F)$, the \emph{homomorphism density} of $F$ in $W$ is
+\[
+  \dens FW=\intcube{v}\prod_{ij\in E(F)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
+\]
+and $p=\edens W=\intsq W(x,y)\ddxy$ is the \emph{edge density} of $W$.
+
+\subsection{The minimum density of an odd cycle}
+
+How small can the density of a fixed graph be at a given edge density?
+For the triangle, Goodman~\cite{goodman1959on} proved that every graphon of edge density $p$ satisfies
+\begin{equation}\label{eq:intro-goodman}
+  \tC3W\ge2p^2-p=\goodman p3.
+\end{equation}
+For an integer $k\ge2$, equality holds at $p=1-1/k$ for the \emph{balanced complete $k$-partite graphon}
+\[
+  W_k(x,y)=
+  \begin{cases}
+    1&\text{if }\lfloor kx\rfloor\ne\lfloor ky\rfloor,\\
+    0&\text{otherwise},
+  \end{cases}
+\]
+whose edge density is $1-1/k$.
+At the other edge densities the bound \eqref{eq:intro-goodman} is not attained, and the exact minimum---the subject of the Erd\H os--Rademacher problem~\cite{erdos1962on}---was determined only much later: Razborov~\cite{razborov2008on} found it for the triangle with his flag algebra method, Nikiforov~\cite{nikiforov2010the} for $K_4$, and Reiher~\cite{reiher2016the} for every complete graph, confirming the extremal structure conjectured by Lov\'asz and Simonovits~\cite{lovasz1983on}.
+
+Bipartite graphons contain no odd cycle and exist at every edge density $p\le1/2$, so for odd $m$ the minimum density of the cycle $C_m$ with $m$ vertices is $0$ at every $p\le1/2$, and the problem is nontrivial only for $p>1/2$.
+There, the natural candidate for the minimizer at the density $p=1-1/k$ is again $W_k$.
+Cycle densities are traces of kernel operators, $\tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m$ for $m\ge3$, where $\Tker W$ is the integral operator on $L^2[0,1]$ with kernel $W$ and $\lambda_i$ are its eigenvalues~\cite{lovasz2012large}; the nonzero eigenvalues of $\Tker{W_k}$ are $p$, on the constant functions, and $-1/k$ with multiplicity $k-1$, so for odd $m$
+\begin{equation}\label{eq:intro-kpartite-value}
+  \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m=\goal.
+\end{equation}
+Whether this value is the minimum was known in two cases.
+For $m=3$ it is Goodman's bound \eqref{eq:intro-goodman}.
+For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, a graph of edge density $1-1/k$ contains asymptotically at least as many copies of $C_5$ as the balanced complete $k$-partite graph; by the correspondence between graphs and graphons~\cite{lovasz2006limits,lovasz2012large}, $W_k$ minimizes the $C_5$-density among graphons of edge density $1-1/k$.
+Their proof is a flag algebra computation together with a stability analysis.
+Their theorem is stated only at the densities $p=1-1/k$, but interpolating their flag algebra certificate over real $k\in[3,\infty)$ yields the lower bound $\tC5W\ge\goodman p5$ at every edge density $p\ge2/3$.
+
+Our main result is the corresponding lower bound for every odd cycle, at every edge density $p\ge2/3$.
+
+\begin{theorem}[Odd-cycle Goodman bound for $p\ge2/3$]\label{thm:main}
+  Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
+  Then
+  \begin{equation}\label{eq:intro-main}
+    \tC mW\ge\goal.
+  \end{equation}
+\end{theorem}
+
+For $m=3$, \Cref{thm:main} is contained in Goodman's bound \eqref{eq:intro-goodman}, which holds at every edge density; the content of the theorem is the case $m\ge5$.
+For $p\le1/2$ the right side of \eqref{eq:intro-main} is nonpositive, since $\goal=p(p^{m-1}-(1-p)^{m-1})$, so the inequality holds at every edge density $p\le1/2$ as well.
+The remaining range $1/2<p<2/3$ needs different methods and is not treated in this paper; we discuss it in \Cref{sec:conclusion}.
+
+By the value \eqref{eq:intro-kpartite-value}, the bound of \Cref{thm:main} is attained at the densities $p=1-1/k$.
+
+\begin{corollary}\label{cor:kpartite}
+  For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimizes the $C_m$-density among graphons of edge density $1-1/k$.
+\end{corollary}
+
+For $k\ge3$ the corollary follows from \Cref{thm:main} and the value \eqref{eq:intro-kpartite-value}; for $k=2$ it holds because $W_2$ is bipartite, so that $\tC m{W_2}=0$, while $\tC mW\ge0$ for every graphon.
+The corollary extends the theorem of Bennett, Dudek, Lidick\'y and Pikhurko from $m=5$ to every odd cycle length.
+
+\subsection{Commonality of odd cycles}
+
+A graph $H$ with $e(H)$ edges is \emph{common} if
+\[
+  \dens HW+\dens H{1-W}\ge2^{1-e(H)}
+\]
+for every graphon $W$; equivalently, the number of monochromatic copies of $H$ in a $2$-colouring of the edges of a large complete graph is asymptotically minimized by the uniformly random colouring.
+Goodman's theorem implies that the triangle is common.
+Erd\H os~\cite{erdos1962on} conjectured that every complete graph is common, and Burr and Rosta~\cite{burr1980on} that every graph is; Thomason~\cite{thomason1989a} disproved both conjectures, already for $K_4$, and Jagger, \v S\v tov\'i\v cek and Thomason~\cite{jagger1996multiplicities} proved that no graph containing $K_4$ is common.
+Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
+Kim and Lee~\cite{kim2024extended} proved the following \emph{extended commonality} of paths and cycles: for every path or cycle $H$ and every graphon $W$ of edge density $p$,
+\begin{equation}\label{eq:intro-extended-commonality}
+  \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)},
+\end{equation}
+answering a question of Sidorenko~\cite{sidorenko1989cycles} and proving a conjecture of Behague, Morrison and Noel~\cite{behague2025common} in a strengthened form.
+Since $p^{e}+(1-p)^{e}\ge2^{1-e}$, the extended inequality \eqref{eq:intro-extended-commonality} implies commonality.
+
+For odd cycles at edge density $p\ge2/3$, we prove \eqref{eq:intro-extended-commonality} with an explicit nonnegative quantity added to its right side.
+
+\begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
+  Let $m\ge3$ be odd, let $W$ be a graphon of edge density $p\ge2/3$, and write $U=1-W$ and $q=1-p$.
+  Then, with $P_{m-1}$ the path with $m-1$ edges,
+  \begin{equation}\label{eq:intro-commonality}
+    \tC mW+\tC mU\ge p^m+q^m+\tP{m-1}U-q^{m-1}.
+  \end{equation}
+\end{theorem}
+
+% NOTE: the path bound t(P_{m-1},U) >= q^{m-1} is the Mulholland--Smith inequality;
+% it is also attributed to Blakley--Roy (1965); add that reference if preferred.
+The added quantity is nonnegative: $\tP{m-1}U\ge q^{m-1}$ by the path inequality of Mulholland and Smith~\cite{mulholland1959an}.
+Hence \eqref{eq:intro-commonality} strengthens \eqref{eq:intro-extended-commonality} for odd cycles whenever $p\ge2/3$; exchanging the roles of $W$ and $U$ gives the corresponding statement for $p\le1/3$.
+Equality holds in \eqref{eq:intro-commonality} for the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, for $W_k$.
+
+\Cref{thm:main} is a consequence of \Cref{thm:commonality}.
+Since $0\le U\le1$, deleting one edge of the $m$-cycle gives $\tC mU\le\tP{m-1}U$, and subtracting this bound from \eqref{eq:intro-commonality} gives, with $p+q=1$,
+\[
+  \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
+\]
+
+% The overview below is commented out: the proof is going to be revised into a
+% more combinatorially interpretable form, and this outline describes the old
+% analytic route. Rewrite it once the revised proof structure is fixed.
+\iffalse
+\subsection{Overview of the proof}\label{subsec:intro-overview}
+
+Every quantity in the proof is built from the complement kernel.
+Let $U=1-W$, $q=1-p$, and $T=\Tker U$.
+Splitting $T\one$ into its constant and mean-zero parts gives
+\[
+  T\one=q\one+g,
+  \qquad
+  g=p-\dW,
+  \quad
+  \dW(x)=\int_0^1W(x,y)\dd y,
+\]
+so $g$ is the deviation of the degree function of $W$ from its mean.
+We restrict $T$ to the mean-zero subspace $\one^\perp$ and write $A$ for the resulting self-adjoint operator, in the sense that $\ip f{Ah}=\ip f{Th}$ for all $f,h\perp\one$, and we set $s_j=\ip g{A^jg}$.
+Two elementary facts are used throughout.
+First, $\Tker Uf=\bigl(\int_0^1f\bigr)\one-\Tker Wf$, so the operator obtained from $W$ in the same way is $-A$: the two kernels share one operator up to sign.
+Second, since $0\le U\le1$, the spectrum of $A$ lies in $[-1/2,1/2]$.
+
+After a reduction to step graphons, which fixes the edge density and makes every operator below finite-rank, cycle densities become traces, $\tC jK=\Tr(\Tker K^j)$ for $j\ge2$, and a determinant generates them:
+\[
+  \nld{\Tker K}=\sum_{j\ge1}\frac{\Tr(\Tker K^j)}{j}z^j.
+\]
+The Schur complement of $I-zT$ against the constant function factorizes the determinant into a scalar factor and a mean-zero factor,
+\[
+  \det(I-z\Tker U)=\bigl(1-qz-z^2R(z)\bigr)\det(I-zA),
+  \qquad
+  R(z)=\sum_{j\ge0}s_jz^j,
+\]
+and the same computation for $W$ gives $\det(I-z\Tker W)=\bigl(1-pz-z^2R(-z)\bigr)\det(I+zA)$.
+Taking logarithms and extracting the coefficient of $z^m$ turns the two factorizations into two identities for the cycle densities, whose trace parts are $\Tr(A^m)$ and $\Tr((-A)^m)=-\Tr(A^m)$.
+Adding the identities cancels the traces and leaves
+\begin{equation}\label{eq:intro-two-sided}
+  \tC mW+\tC mU=p^m+q^m+S_m,
+\end{equation}
+where $S_m$ is an explicit polynomial in $p$, $q$, and the moments $s_0,\ldots,s_{m-2}$.
+The odd trace $\Tr(A^m)$, which neither kernel controls separately, does not appear in the identity \eqref{eq:intro-two-sided}.
+By \eqref{eq:intro-two-sided}, the extended commonality \eqref{eq:intro-extended-commonality} for odd cycles is exactly the inequality $S_m\ge0$.
+The path densities obey the same algebra: the scalar factor above generates them, $\sum_{j\ge0}\tP jUz^j=\bigl(1-qz-z^2R(z)\bigr)^{-1}$.
+Therefore \Cref{thm:commonality} reduces to the single inequality
+\[
+  \Phi_m:=q^{m-1}+S_m-\tP{m-1}U\ge0.
+\]
+
+Positivity is proved spectrally.
+Let $\lambda_i$ be the eigenvalues of $A$, let $P_i$ be the orthogonal projections onto their eigenspaces, and let $\mu=\specmu$, the spectral measure of $A$ associated with $g$; then $s_j=\intmu{\lambda^j}$, and $\mu$ is supported in $[-1/2,1/2]$.
+Sorting the terms of $\Phi_m$ by the number $r$ of factors $s_j$ they contain gives, with $n=m-2r$,
+\[
+  \Phi_m=\sum_{r=1}^{(m-1)/2}\int\!\cdots\!\int
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+  \prod_{i=1}^r\dd\mu(\lambda_i),
+\]
+\[
+  P_{m,r}=\frac mr\Bigl[h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+  +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)\Bigr]
+  -h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r),
+\]
+where $h_d$ is the complete homogeneous symmetric polynomial of degree $d$ and $\rep ak$ means the argument $a$ repeated $k$ times.
+It therefore suffices to prove $P_{m,r}\ge0$ on the cube $[-1/2,1/2]^r$.
+
+The positivity of $P_{m,r}$ is proved through three integral representations.
+First, up to a positive factor, $h_d(y_1,\ldots,y_k)$ is the $d$-th moment of the convex combination $\sum_i\Theta_iy_i$ whose weight vector $\Theta$ is uniform on the simplex; applying this to the three terms of $P_{m,r}$ at once gives
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+  =\E\,\widetilde P_{m,r}\Bigl(q,\sum_{i=1}^r\Theta_i\lambda_i\Bigr),
+  \qquad
+  \widetilde P_{m,r}(q,\ell)=P_{m,r}(q;\ell,\ldots,\ell).
+\]
+A convex combination of points of $[-1/2,1/2]$ stays in $[-1/2,1/2]$, so the $r$ variables collapse to one, and it suffices to prove $\widetilde P_{m,r}(q,\ell)\ge0$ for $\ell\in[-1/2,1/2]$.
+For $\ell\le0$ this follows from a pointwise bound.
+For $\ell>0$, a beta integral converts the diagonal polynomial into
+\begin{align*}
+  \widetilde P_{m,r}(q,\ell)
+  &=\frac{\Gamma(m)}{r\,\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
+  \int_0^\infty\frac{s^{r-1}}{(\ell+s)^m}\,\rho_{n,m}(q+s)\dd s,
+  \\
+  \rho_{n,m}(u)&=\frac mn\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
+\end{align*}
+The function $\rho_{n,m}$ is negative on part of the range of integration, so no pointwise argument applies, and the integral itself has to be bounded from below.
+The Laplace representation of $(\ell+s)^{-m}$ replaces the integral by expectations over a gamma random variable $Y\sim\GammaLaw(r,1)$ and reduces everything to
+\[
+  \E\,\rho_{n,m}(q+xY)\ge0
+  \qquad(x\ge0).
+\]
+Centering at $u=1/2$ and using that $n$ is odd, this becomes a single inequality between consecutive moments of a shifted gamma variable,
+\[
+  3j\,\E(zY-1)^{2j-1}\le(r+j)\,\E(zY-1)^{2j}
+  \qquad(z\ge0),
+\]
+which we prove from the Stein identity of the gamma distribution and the differential equation it induces.
+The constant $3$ is where the hypothesis $p\ge2/3$, that is $q\le1/3$, enters.
+The whole argument is uniform in $m$ and involves no computer assistance.
+\fi
+
+% TODO(TK): write the organization paragraph once the revised, more
+% combinatorial proof and its section structure are in place.
+The remainder of the paper proves \Cref{thm:main,thm:commonality}.
+\Cref{sec:conclusion} discusses the remaining range $1/2<p<2/3$ and the extension of Goodman-style bounds to other graphs.
+
+% Reserved for notation that first appears in the proof; do not restate
+% objects already defined above.
+\paragraph{Notation.}
+We write $\ip{\cdot}{\cdot}$ and $\norm{\cdot}$ for the inner product and the norm of $L^2[0,1]$, and $\one$ for the constant function $1$.
+
+\section{Conclusion} \label{sec:conclusion}
+
+The remaining question is the intermediate range $p \in (1/2, 2/3)$, which was not covered by our result.
+The proof technique used in the range $p \ge 2/3$ is not applicable to the intermediate range: the edge-deletion lemma is too loose in this range and makes the inequality invalid.
+We have proven the same lower bound on the range $p \in (1/2, 2/3)$, but the proof is not combinatorial and we are in the process of polishing it to make it more readable.
+We note that the stronger extended commonality bound is not valid in the range $p \in (1/2, 2/3)$, as the edge deletion lemma gap is exactly the same as the gap the extended commonality bound requires.
+
+The definition of the Goodman-style bound can be extended to other graphs.
+For a graph $H$, a Goodman-style bound is the following lower bound on the density of $H$ at the edge densities $p \ge 1 - \frac{1}{\chi(H) - 1}$:
+\[
+  t(H, W) \ge \chi_H\left( \frac{1}{1-p} \right) (1-p)^{v(H)},
+\]
+where $\chi_H$ is the chromatic polynomial of $H$, $\chi(H)$ is the chromatic number of $H$, and $v(H)$ is the number of vertices in $H$.
+If the edge-density-constrained minimisation problem
+\[
+  \min_W t(H, W) \text{ s.t. } t(K_2, W) = p
+\]
+is minimised by the balanced complete $k$-partite graph at $p = 1 - 1 / k$ for all $k \ge \chi(H) - 1$, then the Goodman-style bound is tight at these points, and is the unique polynomial that interpolates these points.
+
+Thus a general research question is determining which graphs have the Goodman-style bound and which graphs do not have the Goodman-style bound.
+We list some conditions that partially characterise the nonbipartite graphs with the Goodman-style bound.
+\begin{itemize}
+  \item If a graph is chordal and all its maximal cliques are of the same size, then it has the Goodman-style bound.
+  \item If a graph has an even girth, then it does not have the Goodman-style bound.
+\end{itemize}
+
+\section{Remarks} \label{sec:remarks}
+
+\textbf{AI Disclosure} 
+This proof was discovered by two week span of interaction with ChatGPT 5.5 and Fable 5. 
+We polished the proof and modified the proof to give combinatorial interpretation and make it more readable.
 
 \bibliographystyle{abbrv}
 \bibliography{references}
