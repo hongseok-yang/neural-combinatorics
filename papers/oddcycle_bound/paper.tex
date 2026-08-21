@@ -318,10 +318,521 @@ The whole argument is uniform in $m$ and involves no computer assistance.
 The remainder of the paper proves \Cref{thm:main,thm:commonality}.
 \Cref{sec:conclusion} discusses the remaining range $1/2<p<2/3$ and the extension of Goodman-style bounds to other graphs.
 
-% Reserved for notation that first appears in the proof; do not restate
-% objects already defined above.
-\paragraph{Notation.}
-We write $\ip{\cdot}{\cdot}$ and $\norm{\cdot}$ for the inner product and the norm of $L^2[0,1]$, and $\one$ for the constant function $1$.
+\section{Reduction to symmetric matrices}
+\label{sec:matrix-reduction}
+
+Let $W\colon[0,1]^2\to[0,1]$ be a graphon of edge density $p\ge2/3$, and
+write
+\[
+  U=1-W,
+  \qquad
+  q=1-p.
+\]
+Thus $U$ is the complementary graphon and has edge density $q$.
+
+\begin{lemma}[Step-graphon reduction]
+\label{lem:step-reduction}
+  It suffices to prove \Cref{thm:main,thm:commonality} for graphons that
+  are constant on the rectangles of a partition of $[0,1]$ into equal
+  intervals.
+\end{lemma}
+The proof is given in \Cref{app:step-reduction}.
+
+Fix such a step graphon on $N$ equal intervals.  If $K_{ab}$ is the value
+of a step kernel $K$ on $I_a\times I_b$, define the $N\times N$ matrix
+$M_K$ and the vector $e\in\R^N$ by
+\begin{equation}\label{eq:MK-e}
+  M_K=\left(\frac{K_{ab}}N\right)_{a,b=1}^N,
+  \qquad
+  e=\frac1{\sqrt N}(1,\ldots,1)^{\mathsf T}.
+\end{equation}
+Then $M_K$ is symmetric and $\norm e=1$.  Also,
+\begin{align}
+  \Tr(M_K^j)
+  &=\frac1{N^j}\sum_{a_1,\ldots,a_j=1}^N
+    K_{a_1a_2}\cdots K_{a_ja_1}
+   =\dens{C_j}K, \label{eq:cycle-matrix}\\
+  e^{\mathsf T}M_K^je
+  &=\frac1{N^{j+1}}\sum_{a_0,\ldots,a_j=1}^N
+    K_{a_0a_1}\cdots K_{a_{j-1}a_j}
+   =\dens{P_j}K, \label{eq:path-matrix}\\
+  e^{\mathsf T}M_Ke
+  &=\frac1{N^2}\sum_{a,b=1}^NK_{ab}
+   =\edens K. \label{eq:edge-matrix}
+\end{align}
+
+Let $\mathcal E_0=e^\perp$, and let $I$ be the $N\times N$ identity
+matrix.  The matrices
+\[
+  P=ee^{\mathsf T},
+  \qquad
+  Q=I-P
+\]
+are the orthogonal projections of $\R^N$ onto $\R e$ and $\mathcal E_0$,
+respectively.  Define the vector $g\in\R^N$ and the symmetric linear map
+$A\colon\mathcal E_0\to\mathcal E_0$ by
+\begin{equation}\label{eq:g-A}
+  g=M_Ue-qe,
+  \qquad
+  A=QM_UQ\big|_{\mathcal E_0}.
+\end{equation}
+The edge identity \eqref{eq:edge-matrix} gives
+\[
+  e^{\mathsf T}g=e^{\mathsf T}M_Ue-q=0,
+\]
+so $g\in\mathcal E_0$.  Relative to $\R e\oplus\mathcal E_0$,
+\begin{equation}\label{eq:block-UW}
+  M_U=
+  \begin{pmatrix}
+    q&g^{\mathsf T}\\
+    g&A
+  \end{pmatrix},
+  \qquad
+  M_W=
+  \begin{pmatrix}
+    p&-g^{\mathsf T}\\
+    -g&-A
+  \end{pmatrix}.
+\end{equation}
+The matrix corresponding to the constant graphon $1$ is $M_1=P$, and
+\[
+  M_W=M_1-M_U.
+\]
+
+\begin{lemma}[Eigenvalue bound]\label{lem:half-norm}
+  Every eigenvalue of $A$ lies in $[-1/2,1/2]$.
+\end{lemma}
+
+\begin{proof}
+  Let $f\in\mathcal E_0$ with $\norm f=1$, and let $f_+$ and $f_-$ be its
+  coordinatewise positive and negative parts.  Since $e^{\mathsf T}f=0$,
+  \[
+    e^{\mathsf T}f_+=e^{\mathsf T}f_-=:a,
+    \qquad
+    2a=e^{\mathsf T}|f|\le\norm e\norm f=1.
+  \]
+  Expanding $f=f_+-f_-$ gives
+  \[
+    f^{\mathsf T}M_Uf
+    =f_+^{\mathsf T}M_Uf_+
+     -f_+^{\mathsf T}M_Uf_-
+     -f_-^{\mathsf T}M_Uf_+
+     +f_-^{\mathsf T}M_Uf_-.
+  \]
+  Since $f_+$, $f_-$, and $M_U$ have nonnegative entries,
+  $f_+^{\mathsf T}M_Uf_-$ and $f_-^{\mathsf T}M_Uf_+$ are nonnegative.
+  Dropping these terms gives
+  \[
+    f^{\mathsf T}M_Uf
+    \le f_+^{\mathsf T}M_Uf_++f_-^{\mathsf T}M_Uf_-
+      \le2a^2\le\frac12,
+  \]
+  where the second inequality follows from $M_U\le M_1$ entrywise and
+  $f_+^{\mathsf T}M_1f_+=f_-^{\mathsf T}M_1f_-=a^2$.  Similarly,
+  $f_+^{\mathsf T}M_Uf_+$ and $f_-^{\mathsf T}M_Uf_-$ are nonnegative,
+  so dropping these terms gives
+  \[
+    f^{\mathsf T}M_Uf
+    \ge-f_+^{\mathsf T}M_Uf_--f_-^{\mathsf T}M_Uf_+
+      \ge-2a^2\ge-\frac12.
+  \]
+  Here the second inequality follows from $M_U\le M_1$ entrywise and
+  $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
+  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the claim follows.
+\end{proof}
+
+Let $\lambda_1,\ldots,\lambda_{N-1}$ be the eigenvalues of $A$, counted
+with multiplicity, and choose corresponding orthonormal eigenvectors
+$u_1,\ldots,u_{N-1}$ of $\mathcal E_0$.  For each $i$, let $P_i$ be the
+orthogonal projection onto the one-dimensional subspace spanned by $u_i$.
+Define the finite positive measure
+\begin{equation}\label{eq:mu}
+  \mu=\sum_{i=1}^{N-1}\norm{P_ig}^2\delta_{\lambda_i}.
+\end{equation}
+The measure $\mu$ is independent of the choice of orthonormal eigenvectors
+within each eigenspace.  Here $\delta_{\lambda_i}$ is the unit point mass
+at $\lambda_i$.  By \Cref{lem:half-norm},
+\begin{equation}\label{eq:moments}
+  \supp\mu\subseteq[-1/2,1/2],
+  \qquad
+  g^{\mathsf T}A^jg=\int\lambda^j\dd\mu(\lambda),
+  \qquad
+  \mu(\R)=\norm g^2.
+\end{equation}
+
+\section{Excursion expansions}
+\label{sec:excursions}
+
+For variables $y_1,\ldots,y_k$, the complete homogeneous symmetric
+polynomial of degree $d$ is
+\begin{equation}\label{eq:h-def}
+  h_d(y_1,\ldots,y_k)
+  =\sum_{\substack{\gamma_1,\ldots,\gamma_k\ge0\\
+                    \gamma_1+\cdots+\gamma_k=d}}
+   y_1^{\gamma_1}\cdots y_k^{\gamma_k},
+  \qquad h_0=1.
+\end{equation}
+We write $\rep ak$ when $a$ occurs $k$ times.
+
+\begin{lemma}[Cycle densities by excursions]
+\label{lem:cycle-excursions}
+  For every odd $m\ge3$,
+  \begin{align}
+    \tC mU
+    ={}&q^m+\Tr(A^m)\notag\\
+    &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i),
+    \label{eq:cycle-U}\\
+    \tC mW
+    ={}&p^m-\Tr(A^m)\notag\\
+    &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      h_{m-2r}(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \label{eq:cycle-W}
+  \end{align}
+\end{lemma}
+
+\begin{proof}
+  Since $P+Q=I$,
+  \[
+    \Tr(M_U^m)
+    =\sum_{R_1,\ldots,R_m\in\{P,Q\}}
+      \Tr(R_1M_UR_2M_U\cdots R_mM_U).
+  \]
+  Pair each summand with the word $R_1\cdots R_m$.  If $R_i=P$ for
+  every $i$, the summand is $q^m$; if $R_i=Q$ for every $i$, it is
+  $\Tr(A^m)$.
+
+  Now consider a mixed word with $r$ blocks of $Q$.  By cyclicity of the
+  trace, we may circularly shift the word so that its first letter is $P$
+  and its last letter is $Q$.  For $1\le i\le r$, let $\alpha_i+1$ be the
+  number of letters in the $i$th $P$-block, and let $\beta_i+1$ be the
+  number of letters in the $Q$-block that follows it.  For example, the
+  following word has $r=2$:
+  \[
+    \underbrace{PPP}_{\alpha_1=2}\,
+    \underbrace{QQQ}_{\beta_1=2}\,
+    \underbrace{PPPP}_{\alpha_2=3}\,
+    \underbrace{QQ}_{\beta_2=1}
+  \]
+  These integers satisfy the length condition, and the value of the
+  corresponding summand is determined solely by them:
+  \begin{equation}\label{eq:excursion-length-weight}
+    \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,
+    \qquad
+    \Tr(R_1M_UR_2M_U\cdots R_mM_U)
+    =q^{\alpha_1+\cdots+\alpha_r}
+     \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \end{equation}
+
+  Consider pairs consisting of a word $R_1\cdots R_m$ and an ordered
+  tuple $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ obtained by
+  circularly shifting the word so that it begins with $P$ and ends with
+  $Q$, and then taking the successive block lengths.  Equal pairs arising
+  from different shifts are counted with multiplicity.  Double counting
+  these pairs gives
+  \[
+    \begin{aligned}
+      &\sum_{\substack{\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r\ge0\\
+              \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+       \left|\left\{R_1\cdots R_m\in\{P,Q\}^m:
+       \substack{(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
+       \text{ is obtained}\\
+       \text{from a circular shift of }R_1\cdots R_m}
+       \right\}\right|\\
+      &\qquad=\left|\left\{
+       \substack{(R_1\cdots R_m,
+       (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)):\\
+       R_1\cdots R_m\in\{P,Q\}^m,\quad
+       \alpha_1,\beta_1,\ldots,\alpha_r,\beta_r\ge0,\\
+       \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,\\
+       (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
+       \text{ is obtained from a circular shift of }R_1\cdots R_m}
+       \right\}\right|\\
+      &\qquad=\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
+                       R_1\cdots R_m\text{ has }r\text{ $Q$-blocks}}}
+       \left|\left\{\substack{(\alpha_1,\beta_1,\ldots,
+       \alpha_r,\beta_r)\in\mathbb Z_{\ge0}^{2r}:\\
+       \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,\\
+       (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
+       \text{ is obtained from a circular shift of }R_1\cdots R_m}
+       \right\}\right|.
+    \end{aligned}
+  \]
+  For every ordered tuple in the first sum,
+  \[
+    \left|\left\{R_1\cdots R_m\in\{P,Q\}^m:
+      \substack{(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
+      \text{ is obtained}\\
+      \text{from a circular shift of }R_1\cdots R_m}
+    \right\}\right|=m.
+  \]
+  For every word in the last sum,
+  \[
+    \left|\left\{\substack{(\alpha_1,\beta_1,\ldots,
+      \alpha_r,\beta_r)\in\mathbb Z_{\ge0}^{2r}:\\
+      \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,\\
+      (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
+      \text{ is obtained from a circular shift of }R_1\cdots R_m}
+    \right\}\right|=r.
+  \]
+  Applying the same double count with the values in
+  \eqref{eq:excursion-length-weight} as weights gives
+  \begin{equation}\label{eq:U-r-excursions}
+    \begin{aligned}
+      &\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
+                       R_1\cdots R_m\text{ has }r\text{ $Q$-blocks}}}
+        \Tr(R_1M_U\cdots R_mM_U)\\
+      &\qquad=\frac mr
+        \sum_{\substack{\alpha_1,\beta_1,\ldots,
+                          \alpha_r,\beta_r\ge0\\
+                          \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+        q^{\alpha_1+\cdots+\alpha_r}
+        \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+    \end{aligned}
+  \end{equation}
+  Summing \eqref{eq:U-r-excursions} over $r$ and including the two
+  constant words gives
+  \[
+    \tC mU=q^m+\Tr(A^m)
+    +\sum_{r=1}^{(m-1)/2}\frac mr
+      \sum_{\substack{\alpha_1,\beta_1,\ldots,
+                        \alpha_r,\beta_r\ge0\\
+                        \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+      q^{\alpha_1+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \]
+  Applying the moment identity \eqref{eq:moments} now gives
+  \[
+    \begin{aligned}
+      \tC mU={}&q^m+\Tr(A^m)\\
+      &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      \sum_{\substack{\alpha_1,\beta_1,\ldots,
+                        \alpha_r,\beta_r\ge0\\
+                        \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+      q^{\alpha_1+\cdots+\alpha_r}
+      \lambda_1^{\beta_1}\cdots\lambda_r^{\beta_r}
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \]
+  The inner sum is
+  $h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)$ by
+  \eqref{eq:h-def}.  This proves \eqref{eq:cycle-U}.
+
+  For $M_W$, the block identity \eqref{eq:block-UW} replaces
+  $(q,g,A)$ by $(p,-g,-A)$.  The two crossing signs cancel in each block,
+  while
+  \[
+    (-g)^{\mathsf T}(-A)^{\beta_i}(-g)
+    =(-1)^{\beta_i}g^{\mathsf T}A^{\beta_i}g.
+  \]
+  Hence $q$ becomes $p$, every $\lambda_i$ becomes $-\lambda_i$, and
+  $\Tr(A^m)$ becomes $-\Tr(A^m)$.  This proves \eqref{eq:cycle-W}.
+\end{proof}
+
+Let $P_k$ denote the path with $k$ edges, and define the scalar
+\begin{equation}\label{eq:xk}
+  x_k=\tP kU=e^{\mathsf T}M_U^ke.
+\end{equation}
+
+\begin{lemma}[Path densities by excursions]
+\label{lem:path-excursions}
+  For every $k\ge0$,
+  \begin{equation}\label{eq:path-expansion}
+    x_k=q^k+
+    \sum_{r=1}^{\lfloor k/2\rfloor}
+      \int\!\cdots\!\int
+      h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  The case $k=0$ is immediate.  Since $Pe=e$ and $Qe=0$, a word that
+  starts or ends with $Q$ has summand zero.  Hence, for $k\ge1$, inserting
+  $P+Q=I$ between consecutive factors of $M_U$ gives
+  \[
+    x_k=
+    \sum_{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}}
+      e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe.
+  \]
+  Pair each summand with the word $PR_1\cdots R_{k-1}P$.  If every letter
+  is $P$, the summand is $q^k$.
+
+  Now consider a word with $r$ blocks of $Q$.  Let
+  $\alpha_0+1,\ldots,\alpha_r+1$ be the numbers of letters in the
+  successive $P$-blocks, and let $\beta_1+1,\ldots,\beta_r+1$ be the
+  numbers of letters in the successive $Q$-blocks.  For example, the
+  following word has $r=2$:
+  \[
+    \underbrace{PP}_{\alpha_0=1}\,
+    \underbrace{QQ}_{\beta_1=1}\,
+    \underbrace{PP}_{\alpha_1=1}\,
+    \underbrace{Q}_{\beta_2=0}\,
+    \underbrace{PP}_{\alpha_2=1}.
+  \]
+  These integers satisfy the length condition, and the corresponding
+  summand is
+  \[
+    \sum_{i=0}^r\alpha_i+\sum_{i=1}^r\beta_i=k-2r,
+    \qquad
+    e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe
+    =q^{\alpha_0+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \]
+  There is a one-to-one correspondence between such words and the values
+  of the $\alpha_i$ and $\beta_i$ satisfying the length condition.
+  Therefore,
+  \begin{equation}\label{eq:path-r-excursions}
+    \begin{aligned}
+      &\sum_{\substack{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}\\
+                       PR_1\cdots R_{k-1}P
+                       \text{ has }r\text{ $Q$-blocks}}}
+        e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe\\
+      &\qquad=
+      \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
+                      \sum_{i=0}^r\alpha_i+
+                      \sum_{i=1}^r\beta_i=k-2r}}
+      q^{\alpha_0+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+    \end{aligned}
+  \end{equation}
+  Summing \eqref{eq:path-r-excursions} over $r$ and including the word
+  consisting only of $P$ gives
+  \[
+    x_k=q^k+
+    \sum_{r=1}^{\lfloor k/2\rfloor}
+      \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
+                      \sum_{i=0}^r\alpha_i+
+                      \sum_{i=1}^r\beta_i=k-2r}}
+      q^{\alpha_0+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \]
+  Applying the moment identity \eqref{eq:moments} now gives
+  \[
+    \begin{aligned}
+      x_k={}&q^k+
+      \sum_{r=1}^{\lfloor k/2\rfloor}
+      \int\!\cdots\!\int
+      \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
+                      \sum_{i=0}^r\alpha_i+
+                      \sum_{i=1}^r\beta_i=k-2r}}
+      q^{\alpha_0+\cdots+\alpha_r}
+      \lambda_1^{\beta_1}\cdots\lambda_r^{\beta_r}
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \]
+  The inner sum is
+  $h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)$ by
+  \eqref{eq:h-def}.  This proves \eqref{eq:path-expansion}.
+\end{proof}
+
+\subsection{Reduction to symmetric polynomials}
+
+\begin{lemma}[Reduction to symmetric polynomials]
+\label{lem:polynomial-reduction}
+  For $1\le r\le(m-1)/2$, define the symmetric polynomial
+  \begin{align}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac mr\Bigl[
+      h_{m-2r}(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      +h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
+    \Bigr]\notag\\
+    &-h_{m-2r-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r).
+    \label{eq:Pmr}
+  \end{align}
+  It suffices to prove
+  \begin{equation}\label{eq:Phi-expansion}
+    \Phi_m:=\sum_{r=1}^{(m-1)/2}
+      \int\!\cdots\!\int
+      P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i)\ge0
+  \end{equation}
+  to prove \Cref{thm:main,thm:commonality}.
+\end{lemma}
+
+\begin{proof}
+  Adding the cycle expansions \eqref{eq:cycle-U} and
+  \eqref{eq:cycle-W} cancels the two trace terms and gives
+  \[
+    \begin{aligned}
+      \tC mW&+\tC mU\\
+      =p^m+q^m&+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      [
+        h_{m-2r}(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+        +h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
+      ]
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \]
+  The path expansion \eqref{eq:path-expansion} with $k=m-1$ is
+  \[
+    x_{m-1}=q^{m-1}+
+    \sum_{r=1}^{(m-1)/2}
+      \int\!\cdots\!\int
+      h_{m-2r-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+  \]
+  For each $r$, subtracting the integrand in the path expansion from the
+  corresponding integrand in the sum of the cycle expansions leaves
+  \[
+    \frac mr\Bigl[
+      h_{m-2r}(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      +h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
+    \Bigr]
+    -h_{m-2r-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r),
+  \]
+  which is $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ by
+  \eqref{eq:Pmr}.  Therefore,
+  \begin{equation}\label{eq:commonality-gap}
+    \tC mW+\tC mU-x_{m-1}
+    =p^m+q^m-q^{m-1}+\Phi_m.
+  \end{equation}
+  Hence $\Phi_m\ge0$ gives
+  \[
+    \tC mW+\tC mU
+    \ge p^m+q^m+\tP{m-1}U-q^{m-1},
+  \]
+  proving \Cref{thm:commonality}.
+
+  Since $0\le U\le1$, deleting the edge joining $x_m$ and $x_1$ gives
+  \begin{equation}\label{eq:cycle-path}
+    \begin{aligned}
+      \tC mU
+      &=\int_{[0,1]^m}
+        U(x_1,x_2)\cdots U(x_{m-1},x_m)U(x_m,x_1)
+        \dd x_1\cdots\dd x_m\\
+      &\le\int_{[0,1]^m}
+        U(x_1,x_2)\cdots U(x_{m-1},x_m)
+        \dd x_1\cdots\dd x_m
+       =x_{m-1}.
+    \end{aligned}
+  \end{equation}
+  Rearranging \eqref{eq:commonality-gap} and using $p+q=1$ gives
+  \begin{align*}
+    \tC mW-\bigl(p^m-pq^{m-1}\bigr)
+    &={}
+      \Phi_m+x_{m-1}-\tC mU
+      +q^m-q^{m-1}+pq^{m-1}\\
+    &=\Phi_m+x_{m-1}-\tC mU
+     \ge\Phi_m,
+  \end{align*}
+  where the last inequality follows from \eqref{eq:cycle-path}.
+  Thus $\Phi_m\ge0$ also proves \Cref{thm:main}.
+\end{proof}
+
+Since $\mu$ is positive and supported on $[-1/2,1/2]$, it suffices to
+prove
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0
+\]
+for $0\le q\le1/3$, $1\le r\le(m-1)/2$, and
+$\lambda_i\in[-1/2,1/2]$.
 
 \section{Conclusion} \label{sec:conclusion}
 
@@ -354,6 +865,50 @@ We list some conditions that partially characterise the nonbipartite graphs with
 \textbf{AI Disclosure} 
 This proof was discovered by two week span of interaction with ChatGPT 5.5 and Fable 5. 
 We polished the proof and modified the proof to give combinatorial interpretation and make it more readable.
+
+\tk{TODO: Write here about deviation that lean verification and current proof.}
+
+\appendix
+
+\section{Step-graphon reduction}
+\label{app:step-reduction}
+
+\begin{proof}[Proof of \Cref{lem:step-reduction}]
+  For $N=2^n$, let $I_1,\ldots,I_N$ be the intervals of length $1/N$, and
+  define
+  \[
+    W_n(x,y)=N^2\int_{I_a\times I_b}W(s,t)\dd s\dd t
+    \qquad ((x,y)\in I_a\times I_b).
+  \]
+  Each $W_n$ is a symmetric graphon, and
+  \[
+    \int_{[0,1]^2}W_n
+    =\sum_{a,b=1}^N\int_{I_a\times I_b}W=p.
+  \]
+  Moreover,
+  \begin{equation}\label{eq:step-L1}
+    \norm{W_n-W}_1\longrightarrow0.
+  \end{equation}
+  To verify the convergence, let $S$ be a function constant on the
+  level-$n_0$ dyadic rectangles.  For $n\ge n_0$, cell averaging fixes
+  $S$ and is an $L^1$-contraction, so
+  \[
+    \norm{W_n-W}_1
+    \le \norm{W_n-S}_1+\norm{S-W}_1
+    \le2\norm{W-S}_1.
+  \]
+  Dyadic step functions are dense in $L^1([0,1]^2)$, proving
+  \eqref{eq:step-L1}.
+
+  If $F$ is a finite graph, telescoping its edge factors gives
+  \[
+    \left|\dens F{W_n}-\dens FW\right|
+    \le |E(F)|\norm{W_n-W}_1.
+  \]
+  The same bound holds for $U_n=1-W_n$ and $U=1-W$.  Hence all cycle and
+  path densities in the two inequalities converge, while $p$ and $q$
+  remain unchanged.
+\end{proof}
 
 \bibliographystyle{abbrv}
 \bibliography{references}
