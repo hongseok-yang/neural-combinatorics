@@ -111,6 +111,7 @@
   Motivated by this result, we extend it to all odd cycles.
   Specifically, we prove that $f_m(p) = p^{m} - p(1-p)^{m-1}$ is a lower bound on the density of the odd cycle of length $m$ at every edge density $p \ge 2/3$, which is tight at $p = 1 - 1 / k$ for all $k \ge 2$.
   As a companion result, we also prove a stronger bound on the extended commonality of the odd cycles, which strengthens the result of Kim and Lee.
+  The proofs of this result is verified in Lean4 which can be found at the following GitHub repository: \url{ADDLINKLATER}.
 \end{abstract}
 
 \tableofcontents
@@ -1421,7 +1422,7 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 
 The remaining question is the intermediate range $p \in (1/2, 2/3)$, which was not covered in this paper.
 The proof technique used in the range $p \ge 2/3$ is not applicable to the intermediate range: the edge-deletion inequality \eqref{eq:cycle-path} is too loose in this range and makes the inequality invalid.
-We have proven the same lower bound on the range $p \in (1/2, 2/3)$, but the proof is not interpretable and we are in the process of polishing it to make it more readable.
+We have proven the same lower bound on the range $p \in (1/2, 2/3)$ whose proof is also verified with Lean4 and can be found in the following GitHub repository: \url{ADDLINK}.
 We note that the stronger extended commonality bound is also not valid in the range $p \in (1/2, 2/3)$, as the edge deletion lemma gap is exactly the same as the gap the extended commonality bound requires.
 
 The definition of the Goodman-style bound can be extended to other graphs.
@@ -1449,7 +1450,11 @@ We list some conditions that partially characterise the nonbipartite graphs with
 This proof was discovered by two week span of interaction with ChatGPT 5.5 and Fable 5. 
 We polished the proof and modified the proof to give combinatorial interpretation and make it more readable.
 
+\noindent\textbf{Deviation of the Lean verification and current proof.}
 \tk{TODO: Write here about deviation that lean verification and current proof.}
+
+\noindent{\textbf{Acknowledgements.}}
+\tk{TODO: Add acknowledgements.}
 
 \appendix
 
