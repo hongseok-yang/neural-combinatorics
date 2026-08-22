@@ -1,0 +1,901 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\tr}{\operatorname{Tr}}
+
+\title{Off-Diagonal Commonality of a Shorter Even Cycle and a Longer Odd Cycle}
+\author{Taeyoung Kim}
+\date{\today}
+\hypersetup{
+  pdftitle={Off-Diagonal Commonality of a Shorter Even Cycle and a Longer Odd Cycle},
+  pdfauthor={Taeyoung Kim},
+  pdfsubject={The exact commonality region for a shorter even cycle and a longer odd cycle}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $m\ge2$ and $k\ge m$, so that the even cycle $C_{2m}$ is shorter
+than the odd cycle $C_{2k+1}$.  We determine the complete off-diagonal
+commonality region of the ordered pair $(C_{2m},C_{2k+1})$.  Let
+$a_{m,k}^{\star}\in(1/2,1)$ be the unique solution of
+\[
+  \frac{(a_{m,k}^{\star})^{2m-1}
+  \bigl(2m+(2k+1-2m)a_{m,k}^{\star}\bigr)}{2k+1}
+  =2^{1-2m}.
+\]
+We prove that the commonality region is exactly $(0,a_{m,k}^{\star}]$.
+The upper bound is witnessed by the balanced disjoint union of two cliques.
+For the lower bound, cycle densities are expressed as traces of graphon
+operators.  Rank-one eigenvalue majorisation separates the Perron eigenvalue
+from the rest of the spectrum, while a Hilbert--Schmidt budget shows that at
+most one negative eigenvalue can contribute with the wrong sign.  That
+eigenvalue is paid for by the Perron eigenvalue, leaving the elementary
+inequality $x^{2m}+(1-x)^{2m}\ge2^{1-2m}$.
+\end{abstract}
+
+\section{Definitions and main theorem}
+
+A \emph{graphon} is a symmetric measurable function
+$W\colon[0,1]^2\to[0,1]$.  If $H$ is a finite graph, its homomorphism density
+in $W$ is
+\[
+  t(H,W)
+  :=
+  \int_{[0,1]^{V(H)}}
+  \prod_{uv\in E(H)}W(x_u,x_v)
+  \prod_{u\in V(H)}dx_u.
+\]
+We write $e(H)=|E(H)|$.  See Lov\'asz~\cite{Lovasz} for background on
+graphons and homomorphism densities.
+
+Following Behague, Morrison, and Noel~\cite{BMN}, let $a,b\in(0,1)$ with
+$a+b=1$.  An ordered pair $(H_1,H_2)$ is \emph{$(a,b)$-common} if
+\begin{equation}
+  \frac{t(H_1,W)}{e(H_1)a^{e(H_1)-1}}
+  +
+  \frac{t(H_2,1-W)}{e(H_2)b^{e(H_2)-1}}
+  \ge
+  \frac{a}{e(H_1)}+\frac{b}{e(H_2)}
+  \label{eq:common-definition}
+\end{equation}
+for every graphon $W$.  Define
+\[
+  \pi(H_1,H_2)
+  :=
+  \{a\in(0,1):(H_1,H_2)\text{ is }(a,1-a)\text{-common}\}.
+\]
+
+\begin{theorem}[Shorter even and longer odd cycles]
+  \label{thm:main}
+  Let $m\ge2$ and $k\ge m$, and put
+  \[
+    n:=2m,
+    \qquad
+    \ell:=2k+1.
+  \]
+  Thus $n<\ell$.  There is a unique
+  $a_{n,\ell}^{\star}\in(1/2,1)$ satisfying
+  \begin{equation}
+    \frac{(a_{n,\ell}^{\star})^{n-1}
+    \bigl(n+(\ell-n)a_{n,\ell}^{\star}\bigr)}{\ell}
+    =2^{1-n}.
+    \label{eq:critical-main}
+  \end{equation}
+  Moreover,
+  \begin{equation}
+    \pi(C_n,C_\ell)=(0,a_{n,\ell}^{\star}].
+    \label{eq:main-region}
+  \end{equation}
+\end{theorem}
+
+Writing $a_{m,k}^{\star}:=a_{2m,2k+1}^{\star}$, the critical equation in
+terms of the indices in the title is
+\[
+  \frac{(a_{m,k}^{\star})^{2m-1}
+  \bigl(2m+(2k+1-2m)a_{m,k}^{\star}\bigr)}{2k+1}
+  =2^{1-2m}.
+\]
+
+Some numerical values of the critical point are displayed in
+Table~\ref{tab:critical-values}.  The columns give the even length $n$ and
+the rows give the odd length $\ell$.  An entry is replaced by $0$ when
+$n\ge\ell$, which lies outside the shorter-even regime of
+Theorem~\ref{thm:main}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c@{\qquad}cccccc}
+    \toprule
+    $\ell\backslash n$ & $4$ & $6$ & $8$ & $10$ & $12$ & $14$ \\
+    \midrule
+    $5$  & $0.517213\ldots$ & $0$ & $0$ & $0$ & $0$ & $0$ \\
+    $7$  & $0.538147\ldots$ & $0.507351\ldots$ & $0$ & $0$ & $0$ & $0$ \\
+    $9$  & $0.550283\ldots$ & $0.517832\ldots$ & $0.504065\ldots$ & $0$ & $0$ & $0$ \\
+    $11$ & $0.558163\ldots$ & $0.524929\ldots$ & $0.510344\ldots$ & $0.502577\ldots$ & $0$ & $0$ \\
+    $13$ & $0.563680\ldots$ & $0.530044\ldots$ & $0.514968\ldots$ & $0.506759\ldots$ & $0.501779\ldots$ & $0$ \\
+    $15$ & $0.567753\ldots$ & $0.533903\ldots$ & $0.518513\ldots$ & $0.510006\ldots$ & $0.504764\ldots$ & $0.501302\ldots$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{The critical values $a_{n,\ell}^{\star}$ for shorter even cycles
+  $C_n$ and longer odd cycles $C_\ell$.}
+  \label{tab:critical-values}
+\end{table}
+
+The proof of Theorem~\ref{thm:main} is self-contained apart from standard
+finite-dimensional spectral facts.
+
+\section{Reduction to finite-dimensional operators}
+\label{sec:reduction}
+
+We first show that it is enough to prove the required inequalities for step
+graphons.
+
+\begin{lemma}[Step-graphon reduction]
+  \label{lem:step-reduction}
+  Fix integers $r,s\ge3$ and a continuous function
+  $\Phi\colon\R^2\to\R$.  Suppose that
+  \[
+    \Phi\bigl(t(C_r,W),t(C_s,1-W)\bigr)\ge0
+  \]
+  for every symmetric step graphon $W$.  Then the same inequality holds for
+  every graphon $W$.
+\end{lemma}
+
+\begin{proof}
+  For $j\ge1$, partition $[0,1]$ into its $2^j$ dyadic intervals of equal
+  length, and let $\mathcal A_j$ be the finite sigma-algebra generated by this
+  partition.  Set
+  \[
+    W_j:=\mathbb E[W\mid\mathcal A_j\otimes\mathcal A_j].
+  \]
+  Conditional expectation preserves symmetry and the pointwise bounds
+  $0\le W\le1$, so $W_j$ is a symmetric step graphon.
+
+  The dyadic rectangle step functions form nested subspaces whose union is
+  dense in $L^2([0,1]^2)$.  Since conditional expectation is the orthogonal
+  projection onto the corresponding subspace,
+  \[
+    \|W_j-W\|_2\longrightarrow0.
+  \]
+  The underlying space has measure one, so also
+  $\|W_j-W\|_1\to0$.
+
+  For every fixed $q\ge3$, the telescoping identity for products and the
+  bounds $0\le W_j,W\le1$ give
+  \begin{equation}
+    |t(C_q,W_j)-t(C_q,W)|
+    \le q\|W_j-W\|_1.
+    \label{eq:cycle-lipschitz}
+  \end{equation}
+  Indeed, after writing $x_{q+1}=x_1$, expand the difference of the two
+  products into $q$ terms, with the $i$th term containing
+  $(W_j-W)(x_i,x_{i+1})$ and all other factors bounded in absolute value by
+  one.  Integration of each term gives $\|W_j-W\|_1$.  The same estimate
+  applies to $1-W_j$ and $1-W$.  Both cycle densities therefore converge,
+  and continuity of $\Phi$ proves the lemma.
+\end{proof}
+
+Let $K$ be a symmetric step kernel, constant on every rectangle
+$B_i\times B_j$ of a finite measurable partition
+\[
+  [0,1]=B_1\sqcup\cdots\sqcup B_N,
+  \qquad |B_i|>0.
+\]
+Let $T_K$ be its integral operator on $L^2([0,1])$,
+\[
+  (T_Kf)(x)=\int_0^1K(x,y)f(y)\,dy.
+\]
+Put
+\[
+  E:=\operatorname{span}\{\one_{B_1},\ldots,\one_{B_N}\}.
+\]
+The operator $T_K$ maps $L^2([0,1])$ into $E$ and vanishes on $E^\perp$.
+In the orthonormal basis
+\[
+  e_i:=\frac{\one_{B_i}}{\sqrt{|B_i|}},
+\]
+the restriction $T_K|_E$ is represented by the real symmetric matrix
+\[
+  \bigl(K_{ij}\sqrt{|B_i||B_j|}\bigr)_{i,j=1}^N,
+\]
+where $K_{ij}$ is the value of $K$ on $B_i\times B_j$.
+
+\begin{lemma}[Cycle densities are traces]
+  \label{lem:trace-density}
+  For every integer $q\ge3$,
+  \begin{equation}
+    t(C_q,K)=\tr(T_K^q),
+    \label{eq:trace-density}
+  \end{equation}
+  where the trace is taken on $E$.
+\end{lemma}
+
+\begin{proof}
+  Expanding the matrix trace in the basis $(e_i)_{i=1}^N$ gives
+  \[
+    \tr(T_K^q)
+    =
+    \sum_{i_1,\ldots,i_q=1}^N
+    |B_{i_1}|\cdots|B_{i_q}|
+    K_{i_1i_2}K_{i_2i_3}\cdots K_{i_qi_1}.
+  \]
+  This is precisely the step-function expansion of $t(C_q,K)$.
+\end{proof}
+
+Let $J:=T_1$.  Since the measure of $[0,1]$ is one,
+\[
+  Jf=\langle\one,f\rangle\one,
+\]
+so $J$ is the rank-one orthogonal projection onto the constant functions.
+If $U=1-W$ and $T=T_U$, then
+\begin{equation}
+  T_W=J-T.
+  \label{eq:operator-complement}
+\end{equation}
+
+\section{Rank-one majorisation and spectral bounds}
+\label{sec:spectral-tools}
+
+For a vector $x\in\R^N$, write $x^\downarrow$ for its coordinates rearranged
+in nonincreasing order.  Recall that $x$ is \emph{majorised} by $y$, written
+$x\prec y$, if
+\[
+  \sum_{i=1}^j x_i^\downarrow
+  \le
+  \sum_{i=1}^j y_i^\downarrow
+  \quad(1\le j<N),
+  \qquad
+  \sum_{i=1}^N x_i=\sum_{i=1}^N y_i.
+\]
+Karamata's inequality~\cite[Chapter~4]{MOA} states that, whenever $x\prec y$ and
+$\varphi\colon\R\to\R$ is convex,
+\begin{equation}
+  \sum_{i=1}^N\varphi(x_i)
+  \le
+  \sum_{i=1}^N\varphi(y_i).
+  \label{eq:karamata}
+\end{equation}
+
+We need the following rank-one case of Lidskii's additive majorisation
+theorem.  A proof is included for completeness.
+
+\begin{lemma}[Rank-one lower majorisation]
+  \label{lem:rank-one-majorisation}
+  Let $A$ be a real symmetric $N\times N$ matrix with eigenvalues
+  \[
+    \alpha_1\ge\alpha_2\ge\cdots\ge\alpha_N,
+  \]
+  and let $P$ be a rank-one orthogonal projection.  If
+  \[
+    \mu_1\ge\mu_2\ge\cdots\ge\mu_N
+  \]
+  are the eigenvalues of $A+P$, then
+  \begin{equation}
+    (\alpha_1,\ldots,\alpha_{N-1},\alpha_N+1)
+    \prec
+    (\mu_1,\ldots,\mu_N).
+    \label{eq:rank-one-majorisation}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Eigenvalues under a positive rank-one perturbation interlace:
+  \begin{equation}
+    \mu_i\ge\alpha_i\ge\mu_{i+1}
+    \quad(1\le i<N),
+    \qquad
+    \mu_N\ge\alpha_N.
+    \label{eq:rank-one-interlacing}
+  \end{equation}
+  These inequalities follow from the Courant--Fischer min--max principle;
+  see, for example,~\cite[Chapter~III]{Bhatia}.
+
+  Put
+  \[
+    v:=(\alpha_1,\ldots,\alpha_{N-1},\alpha_N+1).
+  \]
+  Fix $1\le j<N$.  The sum of the $j$ largest coordinates of $v$ is the
+  maximum of $\sum_{i\in S}v_i$ over all $j$-element subsets
+  $S\subseteq\{1,\ldots,N\}$.
+
+  If $N\notin S$, then
+  \[
+    \sum_{i\in S}v_i
+    \le\sum_{i=1}^j\alpha_i
+    \le\sum_{i=1}^j\mu_i.
+  \]
+  If $N\in S$, then
+  \[
+    \sum_{i\in S}v_i
+    \le1+\alpha_N+\sum_{i=1}^{j-1}\alpha_i.
+  \]
+  On the other hand, $\tr(A+P)=\tr(A)+1$, and
+  $\mu_{i+1}\le\alpha_i$ for $j\le i<N$.  Hence
+  \begin{align*}
+    \sum_{i=1}^j\mu_i
+    &=\tr(A+P)-\sum_{i=j+1}^N\mu_i\\
+    &\ge1+\sum_{i=1}^N\alpha_i-
+      \sum_{i=j}^{N-1}\alpha_i\\
+    &=1+\alpha_N+\sum_{i=1}^{j-1}\alpha_i.
+  \end{align*}
+  Thus every partial-sum inequality in the definition of majorisation holds.
+  Equality of the total sums again follows from
+  $\tr(A+P)=\tr(A)+1$.
+\end{proof}
+
+\begin{corollary}[Even trace after subtracting a rank-one projection]
+  \label{cor:rank-one-trace}
+  Let $T$ be a real symmetric $N\times N$ matrix with eigenvalues
+  \[
+    \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N,
+  \]
+  and let $P$ be a rank-one orthogonal projection.  If $q\ge2$ is even, then
+  \begin{equation}
+    \tr(P-T)^q
+    \ge
+    (1-\lambda_1)^q+
+    \sum_{i=2}^N|\lambda_i|^q.
+    \label{eq:rank-one-trace}
+  \end{equation}
+\end{corollary}
+
+\begin{proof}
+  Apply Lemma~\ref{lem:rank-one-majorisation} to $A=-T$.  The eigenvalues of
+  $-T$ in nonincreasing order are
+  \[
+    -\lambda_N\ge\cdots\ge-\lambda_1.
+  \]
+  Consequently,
+  \[
+    (-\lambda_N,\ldots,-\lambda_2,1-\lambda_1)
+    \prec \lambda(P-T),
+  \]
+  where $\lambda(P-T)$ denotes the eigenvalue vector of $P-T$.
+  Apply Karamata's inequality to the convex function $x\mapsto x^q$.
+  Since $q$ is even, $(-\lambda_i)^q=|\lambda_i|^q$, and the result follows.
+\end{proof}
+
+The next estimates record all the consequences of $0\le U\le1$ that will be
+used later.  Notice that $T_U$ need not be positive semidefinite.
+
+\begin{lemma}[Perron domination and the spectral budget]
+  \label{lem:spectral-budget}
+  Let $U$ be a symmetric step graphon and let $T=T_U|_E$ be its matrix on an
+  associated step-function space.  If
+  \[
+    \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N
+  \]
+  are the eigenvalues of $T$, then
+  \begin{align}
+    &0\le\lambda_1\le1,
+    \label{eq:lambda-one-range}\\
+    &|\lambda_i|\le\lambda_1
+    \quad(1\le i\le N),
+    \label{eq:perron-domination}\\
+    &\sum_{i=2}^N\lambda_i^2
+    \le\lambda_1(1-\lambda_1)
+    \le\frac14.
+    \label{eq:tail-budget}
+  \end{align}
+\end{lemma}
+
+\begin{proof}
+  If $f\in E$ is a real unit vector, then $|f|\in E$ is also a unit vector.
+  Pointwise nonnegativity of $U$ gives
+  \begin{equation}
+    |\langle f,Tf\rangle|
+    \le\langle|f|,T|f|\rangle
+    \le\lambda_1,
+    \label{eq:absolute-rayleigh}
+  \end{equation}
+  where the second inequality is the Rayleigh principle.  Applying this to a
+  unit eigenvector of $\lambda_i$ proves
+  $|\lambda_i|\le\lambda_1$.  Also, $\lambda_1\ge0$ by testing the
+  nonnegative vector $\one$.  Since $U\le1$,
+  \[
+    \langle|f|,T|f|\rangle
+    \le\left(\int_0^1|f|\right)^2
+    \le\|f\|_2^2=1,
+  \]
+  which gives $\lambda_1\le1$.
+
+  Finally, put
+  \[
+    p:=\int_{[0,1]^2}U(x,y)\,dx\,dy
+    =\langle\one,T\one\rangle.
+  \]
+  The Rayleigh principle gives $p\le\lambda_1$, while $U^2\le U$ gives
+  \[
+    \sum_{i=1}^N\lambda_i^2
+    =\tr(T^2)
+    =\int_{[0,1]^2}U(x,y)^2\,dx\,dy
+    \le p.
+  \]
+  Therefore
+  \[
+    \sum_{i=2}^N\lambda_i^2
+    \le p-\lambda_1^2
+    \le\lambda_1-\lambda_1^2
+    \le\frac14.
+  \]
+\end{proof}
+
+\section{The scalar critical point when the odd cycle is longer}
+\label{sec:scalar}
+
+Throughout this section, let
+\[
+  n\ge4\text{ be even},
+  \qquad
+  \ell>n\text{ be odd},
+  \qquad
+  d:=\ell-n.
+\]
+Thus $d$ is a positive odd integer.  For $a\in(0,1)$, set $b:=1-a$ and
+define
+\begin{align}
+  \kappa_{n,\ell}(a)
+  &:=\frac{n a^{n-1}}{\ell b^{\ell-1}},
+  \label{eq:kappa-definition}\\
+  \rho_{n,\ell}(a)
+  &:=a^n+\frac n\ell a^{n-1}b
+    =\frac{a^{n-1}(n+da)}{\ell}.
+  \label{eq:rho-definition}
+\end{align}
+Multiplying the commonality inequality by $na^{n-1}$ shows that
+$(C_n,C_\ell)$ is $(a,b)$-common exactly when
+\begin{equation}
+  t(C_n,W)+\kappa_{n,\ell}(a)t(C_\ell,1-W)
+  \ge\rho_{n,\ell}(a)
+  \label{eq:scaled-target}
+\end{equation}
+for every graphon $W$.
+
+For $\kappa>0$, define
+\begin{equation}
+  f_\kappa(x):=(1-x)^n+\kappa x^\ell,
+  \qquad 0\le x\le1.
+  \label{eq:f-definition}
+\end{equation}
+If $\kappa=\kappa_{n,\ell}(a)$, then
+\begin{align*}
+  f_\kappa'(x)
+  &=-n(1-x)^{n-1}+\kappa\ell x^{\ell-1},\\
+  f_\kappa''(x)
+  &=n(n-1)(1-x)^{n-2}
+    +\kappa\ell(\ell-1)x^{\ell-2}>0.
+\end{align*}
+Moreover,
+\[
+  f_\kappa'(b)
+  =-na^{n-1}+\kappa\ell b^{\ell-1}=0.
+\]
+Thus $f_\kappa$ is strictly convex and has its unique minimum at $b$, with
+\begin{equation}
+  f_\kappa(b)
+  =a^n+\kappa b^\ell
+  =\rho_{n,\ell}(a).
+  \label{eq:f-minimum}
+\end{equation}
+
+\begin{lemma}[Existence and uniqueness of the critical point]
+  \label{lem:critical-point}
+  There is a unique $a_{n,\ell}^{\star}\in(1/2,1)$ such that
+  \begin{equation}
+    \rho_{n,\ell}(a_{n,\ell}^{\star})=2^{1-n}.
+    \label{eq:critical-rho}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Differentiating \eqref{eq:rho-definition} gives
+  \[
+    \rho_{n,\ell}'(a)
+    =\frac{n}{\ell}a^{n-2}(n-1+da)>0.
+  \]
+  Hence $\rho_{n,\ell}$ is strictly increasing.  At the endpoints,
+  \[
+    \rho_{n,\ell}\left(\frac12\right)
+    =2^{1-n}\frac{n+\ell}{2\ell}
+    <2^{1-n},
+    \qquad
+    \rho_{n,\ell}(1)=1>2^{1-n}.
+  \]
+  The intermediate value theorem proves existence, and strict monotonicity
+  proves uniqueness.
+\end{proof}
+
+The following endpoint estimates replace all length-specific numerical
+bounds in the spectral argument.
+
+\begin{lemma}[Critical coefficient bounds]
+  \label{lem:critical-bounds}
+  Put
+  \[
+    a^\star:=a_{n,\ell}^{\star},
+    \qquad b^\star:=1-a^\star,
+    \qquad \kappa^\star:=\kappa_{n,\ell}(a^\star).
+  \]
+  Then
+  \begin{equation}
+    \kappa^\star(b^\star)^d<1,
+    \qquad
+    b^\star>\frac5{14}.
+    \label{eq:critical-kappa-bounds}
+  \end{equation}
+  Consequently, for every $0<a\le a^\star$, with $b=1-a$ and
+  $\kappa=\kappa_{n,\ell}(a)$,
+  \begin{equation}
+    \kappa b^d<1,
+    \qquad
+    b>\frac5{14}.
+    \label{eq:all-kappa-bounds}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Write
+  \[
+    a^\star=\frac{1+\delta}{2},
+    \qquad
+    b^\star=\frac{1-\delta}{2},
+    \qquad
+    \delta\in(0,1).
+  \]
+  Since $\ell=n+d$, the critical equation
+  \eqref{eq:critical-rho} is equivalent to
+  \begin{equation}
+    (1+\delta)^{n-1}(\ell+n+d\delta)=2\ell.
+    \label{eq:delta-critical}
+  \end{equation}
+  It follows that
+  \[
+    (1+\delta)^{n-1}
+    <\frac{2\ell}{\ell+n}
+    =1+\frac{d}{\ell+n}.
+  \]
+  Bernoulli's inequality therefore yields
+  \begin{equation}
+    0<\delta<\frac{d}{(n-1)(\ell+n)}.
+    \label{eq:delta-first-bound}
+  \end{equation}
+  A second application of Bernoulli's inequality gives
+  \begin{equation}
+    (1-\delta)^{n-1}
+    \ge1-(n-1)\delta
+    >1-\frac{d}{\ell+n}
+    =\frac{2n}{\ell+n}.
+    \label{eq:one-minus-delta-bound}
+  \end{equation}
+  Combining these two estimates gives
+  \begin{align*}
+    \kappa^\star(b^\star)^d
+    &=\frac n\ell
+      \left(\frac{1+\delta}{1-\delta}\right)^{n-1}\\
+    &<\frac n\ell
+      \frac{2\ell/(\ell+n)}{2n/(\ell+n)}
+    =1.
+  \end{align*}
+
+  Equation~\eqref{eq:delta-critical} also implies
+  $(1+\delta)^{n-1}<2$.  Since $n-1\ge3$ and $1+\delta>1$,
+  \[
+    (1+\delta)^3\le(1+\delta)^{n-1}<2.
+  \]
+  If $\delta\ge2/7$, then
+  \[
+    (1+\delta)^3\ge\left(\frac97\right)^3
+    =\frac{729}{343}>2,
+  \]
+  a contradiction.  Thus $\delta<2/7$, and hence
+  \[
+    b^\star=\frac{1-\delta}{2}>\frac5{14}.
+  \]
+
+  Finally,
+  \[
+    \kappa_{n,\ell}(a)(1-a)^d
+    =\frac n\ell
+      \left(\frac{a}{1-a}\right)^{n-1}
+  \]
+  is strictly increasing on $(0,1)$.  Therefore
+  $\kappa b^d\le\kappa^\star(b^\star)^d<1$ whenever
+  $a\le a^\star$.  Moreover,
+  $b=1-a\ge1-a^\star=b^\star>5/14$.
+\end{proof}
+
+\section{The exact region when the odd cycle is longer}
+\label{sec:longer-odd}
+
+We retain the assumptions and notation of Section~\ref{sec:scalar}.
+
+\begin{proposition}[Spectral reduction]
+  \label{prop:spectral-reduction}
+  Let $W$ be a symmetric step graphon, put $U=1-W$, and let
+  $T=T_U|_E$ on an associated step-function space.  Order the eigenvalues of
+  $T$ as
+  \[
+    \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N.
+  \]
+  For every $\kappa>0$,
+  \begin{equation}
+    t(C_n,W)+\kappa t(C_\ell,U)
+    \ge
+    f_\kappa(\lambda_1)
+    +\sum_{i=2}^N
+      \lambda_i^n(1+\kappa\lambda_i^d).
+    \label{eq:master-spectral}
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  Let $P:=J|_E$.  Since $\one\in E$ and $\|\one\|_2=1$, $P$ is a rank-one
+  orthogonal projection.  By \eqref{eq:operator-complement},
+  $T_W|_E=P-T$.  Lemma~\ref{lem:trace-density} and
+  Corollary~\ref{cor:rank-one-trace} give
+  \[
+    t(C_n,W)
+    =\tr(P-T)^n
+    \ge(1-\lambda_1)^n+
+      \sum_{i=2}^N|\lambda_i|^n.
+  \]
+  Because $n$ is even, $|\lambda_i|^n=\lambda_i^n$.  Also,
+  \[
+    t(C_\ell,U)=\tr(T^\ell)=\sum_{i=1}^N\lambda_i^\ell.
+  \]
+  Since $\ell=n+d$, adding the last two displays gives
+  \eqref{eq:master-spectral}.
+\end{proof}
+
+\begin{proposition}[Lower bound up to the critical point]
+  \label{prop:lower-bound}
+  If $0<a\le a_{n,\ell}^{\star}$, then every graphon $W$ satisfies
+  \begin{equation}
+    t(C_n,W)+\kappa_{n,\ell}(a)t(C_\ell,1-W)
+    \ge\rho_{n,\ell}(a).
+    \label{eq:lower-bound}
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  Put $b=1-a$ and $\kappa=\kappa_{n,\ell}(a)$.  By
+  Lemma~\ref{lem:step-reduction}, it is enough to consider a symmetric step
+  graphon $W$.  Let $U=1-W$, let $T=T_U|_E$, and write the eigenvalues of $T$
+  as
+  \[
+    \lambda_1\ge\lambda_2\ge\cdots\ge\lambda_N.
+  \]
+  Proposition~\ref{prop:spectral-reduction} gives
+  \begin{equation}
+    t(C_n,W)+\kappa t(C_\ell,U)
+    \ge f_\kappa(\lambda_1)
+      +\sum_{i=2}^N\lambda_i^n(1+\kappa\lambda_i^d).
+    \label{eq:lower-start}
+  \end{equation}
+
+  Call an eigenvalue $\lambda_i$, $i\ge2$, \emph{dangerous} if
+  \begin{equation}
+    1+\kappa\lambda_i^d<0.
+    \label{eq:dangerous-definition}
+  \end{equation}
+  Since $d$ is odd and $\kappa>0$, a dangerous eigenvalue has the form
+  $\lambda_i=-\beta$ with $\beta>0$.  Its defining inequality gives
+  \begin{equation}
+    \kappa\beta^d>1>\kappa b^d.
+  \end{equation}
+  Since $x\mapsto x^d$ is strictly increasing on $[0,\infty)$, it follows
+  that
+  \begin{equation}
+    \beta>b>\frac5{14}.
+    \label{eq:dangerous-magnitude}
+  \end{equation}
+  Every nondangerous summand in \eqref{eq:lower-start} is nonnegative because
+  $n$ is even.
+
+  There is at most one dangerous index.  Indeed, if two distinct dangerous
+  indices existed, with magnitudes $\beta$ and $\gamma$, then
+  Lemma~\ref{lem:spectral-budget} and \eqref{eq:dangerous-magnitude} would give
+  \[
+    \frac14
+    \ge\sum_{i=2}^N\lambda_i^2
+    \ge\beta^2+\gamma^2
+    >2\left(\frac5{14}\right)^2
+    =\frac{25}{98}
+    >\frac14.
+  \]
+
+  If there is no dangerous eigenvalue, then \eqref{eq:lower-start} and
+  \eqref{eq:f-minimum} immediately give
+  \[
+    t(C_n,W)+\kappa t(C_\ell,U)
+    \ge f_\kappa(\lambda_1)
+    \ge f_\kappa(b)
+    =\rho_{n,\ell}(a).
+  \]
+
+  Suppose instead that the unique dangerous eigenvalue is $-\beta$.
+  Perron domination \eqref{eq:perron-domination} gives
+  \begin{equation}
+    \beta\le\lambda_1\le1.
+    \label{eq:beta-perron}
+  \end{equation}
+  Moreover, \eqref{eq:dangerous-magnitude} gives
+  \begin{equation}
+    \beta>b.
+    \label{eq:beta-right-of-minimum}
+  \end{equation}
+  The strictly convex function $f_\kappa$ is increasing on $[b,1]$.
+  Therefore \eqref{eq:beta-perron} and
+  \eqref{eq:beta-right-of-minimum} imply
+  \[
+    f_\kappa(\lambda_1)\ge f_\kappa(\beta).
+  \]
+  All other tail terms in \eqref{eq:lower-start} are nonnegative, so the
+  dangerous term can be combined with $f_\kappa$ as follows:
+  \begin{align*}
+    t(C_n,W)+\kappa t(C_\ell,U)
+    &\ge f_\kappa(\beta)+\beta^n(1-\kappa\beta^d)\\
+    &=(1-\beta)^n+\kappa\beta^\ell
+      +\beta^n-\kappa\beta^{n+d}\\
+    &=(1-\beta)^n+\beta^n\\
+    &\ge2^{1-n}.
+  \end{align*}
+  The last inequality follows from convexity of $x\mapsto x^n$ applied to
+  $\beta$ and $1-\beta$.  Finally, monotonicity of $\rho_{n,\ell}$ and
+  $a\le a_{n,\ell}^{\star}$ imply
+  \[
+    \rho_{n,\ell}(a)
+    \le\rho_{n,\ell}(a_{n,\ell}^{\star})
+    =2^{1-n}.
+  \]
+  This proves \eqref{eq:lower-bound} in the remaining case.
+\end{proof}
+
+We now give the matching obstruction.  Let $W_{\mathrm{cl}}$ be the balanced
+disjoint union of two cliques:
+\[
+  W_{\mathrm{cl}}(x,y)
+  :=
+  \begin{cases}
+    1,&x,y\in[0,1/2]
+       \text{ or }x,y\in(1/2,1],\\
+    0,&\text{otherwise}.
+  \end{cases}
+\]
+Every homomorphism from the connected graph $C_n$ into
+$W_{\mathrm{cl}}$ maps all vertices into one of the two halves.  Thus
+\begin{equation}
+  t(C_n,W_{\mathrm{cl}})
+  =2\left(\frac12\right)^n
+  =2^{1-n}.
+  \label{eq:two-clique-density}
+\end{equation}
+The complement $1-W_{\mathrm{cl}}$ is the balanced complete bipartite
+graphon.  Since $\ell$ is odd,
+\begin{equation}
+  t(C_\ell,1-W_{\mathrm{cl}})=0.
+  \label{eq:odd-bipartite-zero}
+\end{equation}
+If $a>a_{n,\ell}^{\star}$, strict monotonicity of $\rho_{n,\ell}$ gives
+\[
+  \rho_{n,\ell}(a)>2^{1-n}.
+\]
+Equations~\eqref{eq:two-clique-density} and
+\eqref{eq:odd-bipartite-zero} therefore show that $W_{\mathrm{cl}}$ violates
+\eqref{eq:scaled-target}.  Together with Proposition~\ref{prop:lower-bound},
+this proves
+\[
+  \pi(C_n,C_\ell)=(0,a_{n,\ell}^{\star}]
+\]
+whenever $n<\ell$.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+  Lemma~\ref{lem:critical-point} gives the unique critical point.
+  Proposition~\ref{prop:lower-bound} proves commonality for every $a$ up to
+  and including that point, and the balanced two-clique obstruction proves
+  failure for every larger $a$.
+\end{proof}
+
+\section{Remarks}
+
+The proof of Theorem~\ref{thm:main} has been verified in the Lean~4
+proof assistant~\cite{Lean4}, on top of the mathlib
+library~\cite{mathlib}; the development accompanies this note.  The
+formal statement covers both directions and the existence and
+uniqueness of $a_{n,\ell}^{\star}$: the inequality holds for every graphon
+if and only if $a\le a_{n,\ell}^{\star}$.  The formal proof differs from
+the one given here in four ways.
+
+First, instead of the dyadic conditional expectations in
+Lemma~\ref{lem:step-reduction}, the formal proof approximates $W$
+directly by a step graphon in the $L^1$ norm; both cycle densities
+are Lipschitz in that norm, so the inequality transfers.
+
+Second, the interlacing inequalities \eqref{eq:rank-one-interlacing}
+are proved by an intersection argument instead of the
+Courant--Fischer principle: two spans of eigenvectors whose
+dimensions add up to more than $N$ contain a common unit vector, and
+evaluating the quadratic forms of $A$ and $A+P$ at that vector gives
+the inequality.
+
+Third, the rearrangement in Lemma~\ref{lem:rank-one-majorisation} is
+not obtained by sorting.  Since the $\alpha_i$ are already ordered,
+rearranging $(\alpha_1,\ldots,\alpha_{N-1},\alpha_N+1)$ only moves
+the entry $\alpha_N+1$ to its correct position, and the formal proof
+writes this down explicitly, with the partial sums in closed form.
+Karamata's inequality \eqref{eq:karamata} is proved in a form that
+requires only one of the two sequences to be monotone, so no second
+sorting argument is needed.
+
+Fourth, the derivatives of $f_\kappa$ are not computed.  The paper
+locates the minimum of $f_\kappa$ at $b$ through $f_\kappa'$ and
+$f_\kappa''$; the formal proof instead bounds $(1-x)^n$ and
+$\kappa x^\ell$ from below by their supporting lines at $x=b$, both
+instances of Bernoulli's inequality, and the sum of the two lines is
+the constant $\rho_{n,\ell}(a)$ because
+$\kappa\ell b^{\ell-1}=na^{n-1}$.  The same supporting-line estimate,
+together with monotonicity of powers on the nonnegative reals, proves
+that $f_\kappa$ is increasing on $[b,1]$.  Strict monotonicity of
+$\rho_{n,\ell}$ is proved directly from its explicit formula, without
+differentiating.  Finally, the formal proof obtains
+$x^n+(1-x)^n\ge 2^{1-n}$ by applying the supporting-line inequality
+at $1/2$ to both terms.
+
+\begin{thebibliography}{9}
+
+\bibitem{BMN}
+N. Behague, N. Morrison, and J. A. Noel,
+\emph{Common pairs of graphs},
+Combin. Probab. Comput. \textbf{34} (2025), no.~5, 649--670.
+
+\bibitem{Bhatia}
+R. Bhatia,
+\emph{Matrix Analysis},
+Graduate Texts in Mathematics, vol.~169,
+Springer, New York, 1997.
+
+\bibitem{Lovasz}
+L. Lov\'asz,
+\emph{Large Networks and Graph Limits},
+American Mathematical Society Colloquium Publications, vol.~60,
+American Mathematical Society, Providence, RI, 2012.
+
+\bibitem{MOA}
+A. W. Marshall, I. Olkin, and B. C. Arnold,
+\emph{Inequalities: Theory of Majorization and Its Applications},
+second edition, Springer Series in Statistics,
+Springer, New York, 2011.
+
+\bibitem{mathlib}
+The mathlib Community,
+\emph{The Lean mathematical library},
+Proceedings of the 9th ACM SIGPLAN International Conference on
+Certified Programs and Proofs (CPP 2020), ACM, 2020, pp.~367--381.
+
+\bibitem{Lean4}
+L. de Moura and S. Ullrich,
+\emph{The Lean 4 theorem prover and programming language},
+Automated Deduction -- CADE 28, Lecture Notes in Computer Science,
+vol.~12699, Springer, 2021, pp.~625--635.
+
+\end{thebibliography}
+
+\end{document}
