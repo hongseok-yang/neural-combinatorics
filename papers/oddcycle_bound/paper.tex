@@ -175,8 +175,8 @@ For the triangle, Goodman proved that every graphon of edge density $p$ satisfie
 \begin{equation}\label{eq:intro-goodman}
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
-Before this work, sharpness at the balanced multipartite densities was known for only two odd cycle lengths.
-For $m=3$ it is Goodman's bound \eqref{eq:intro-goodman}.
+Before this work, extremality of the balanced multipartite graphons was known for only two odd cycle lengths.
+For $m=3$, it follows from Goodman's bound \eqref{eq:intro-goodman}.
 For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, a graph of edge density $1-1/k$ contains asymptotically at least as many copies of $C_5$ as the balanced complete $k$-partite graph; by the correspondence between graphs and graphons~\cite{lovasz2006limits,lovasz2012large}, $W_k$ minimizes the $C_5$-density among graphons of edge density $1-1/k$.
 Their proof is a flag algebra computation together with a stability analysis.
 Their theorem is stated only at the densities $p=1-1/k$, but interpolating their flag algebra certificate over real $k\in[3,\infty)$ yields the lower bound $\tC5W\ge\goodman p5$ at every edge density $p\ge2/3$.
@@ -197,7 +197,7 @@ For $m=3$, \Cref{thm:main} is contained in Goodman's bound \eqref{eq:intro-goodm
 For $p\le1/2$ the right side of \eqref{eq:intro-main} is nonpositive, since $\goal=p(p^{m-1}-(1-p)^{m-1})$, so the inequality holds at every edge density $p\le1/2$ as well.
 The intermediate range $1/2<p<2/3$ is established in the companion paper by different methods and is not part of the present proof; we discuss this division in \Cref{sec:conclusion}.
 
-By the value \eqref{eq:intro-kpartite-value}, the bound of \Cref{thm:main} is attained at the densities $p=1-1/k$.
+By the value \eqref{eq:intro-kpartite-value}, the bound of \Cref{thm:main} is attained at the densities $p=1-1/k$ for every integer $k\ge3$.
 
 \begin{corollary}\label{cor:kpartite}
   For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimizes the $C_m$-density among graphons of edge density $1-1/k$.
@@ -242,6 +242,29 @@ Since $0\le U\le1$, deleting one edge of the $m$-cycle gives $\tC mU\le\tP{m-1}U
 \[
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
 \]
+
+\paragraph{Proof strategy and reusable ingredients.}
+The proof is designed to separate the information specific to the graphon from a universal positivity problem.
+After reducing to step graphons, we represent the graphon and its complement by finite matrices and decompose them into the constant direction and its orthogonal complement.
+The nonconstant information is encoded by a positive spectral measure supported on $[-1/2,1/2]$.
+Expanding matrix powers as words in the two corresponding projections records each passage from the constant direction into the orthogonal complement and back as an \emph{excursion}.
+Complete homogeneous symmetric polynomials and their generating functions collect all possible excursion patterns, reducing both main inequalities to the nonnegativity of a family of universal symmetric polynomials integrated against the spectral measure.
+
+The number of spectral variables in the resulting positivity problem grows with $m$, so a direct multivariate analysis would not be uniform in the cycle length.
+Our first key simplification is a \emph{Dirichlet averaging identity}: each excursion polynomial in $r$ variables is the expectation of its diagonal, one-variable specialization evaluated at a random convex combination of those variables.
+Consequently, its minimum on the spectral cube is attained on the diagonal.
+Generating-function identities then express this diagonal polynomial as an expectation with respect to a symmetric Beta distribution.
+The Dirichlet and Beta laws are standard tools in Bayesian statistics, with Dirichlet laws also underlying Bayesian nonparametrics; here their moment identities act as algebraic averaging operators that turn a high-dimensional problem into a one-dimensional integral inequality.
+
+For the positive half of the spectral interval, the Beta integral is not pointwise nonnegative.
+An inverse Laplace transform decouples its variables and converts it into expectations of a scalar polynomial under a Gamma distribution.
+After centering at $1/2$, the remaining assertion reduces to a uniform comparison between odd and even shifted Gamma moments.
+We prove that comparison by applying the Gamma Stein identity to derive a second-order ODE for the even moment and then using a zero-crossing argument.
+The density restriction $p\ge2/3$ enters only at the final shifted-Gamma positivity step, which also pinpoints why the companion paper requires a different argument below this threshold.
+
+Beyond the theorem itself, the methodological contribution is this modular chain of spectral reduction, excursion generating functions, probabilistic diagonalization, and ODE-based moment control.
+The individual ingredients are classical, but their combination gives a new route that, unlike a computation tied to a fixed cycle, keeps the odd length $m$ symbolic throughout.
+We expect the same architecture to be useful for other fixed-density extremal problems whose pattern densities admit compatible trace expansions.
 
 \paragraph{Organization.}
 In \Cref{sec:matrix-reduction}, we pass from graphons to matrices and encode the relevant densities by a spectral measure.
