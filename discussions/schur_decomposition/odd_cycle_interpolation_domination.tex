@@ -1,0 +1,818 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\homn}{\operatorname{hom}}
+\newcommand{\tr}{\operatorname{Tr}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\e}{\mathrm{e}}
+
+\title{Even-Anchored Interpolation for Odd Cycles\\
+and Domination Exponents}
+\author{Taeyoung Kim}
+\date{\today}
+\hypersetup{
+  pdftitle={Even-Anchored Interpolation for Odd Cycles and Domination Exponents},
+  pdfauthor={Taeyoung Kim},
+  pdfsubject={Cycle homomorphism inequalities and odd-cycle domination exponents}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $T$ be a finite simple graph.  We prove that, whenever $b$ is even,
+$n,m$ are odd, and $2\le b<n<m$,
+\[
+  t(C_b,T)^{m-n}t(C_m,T)^{n-b}
+  \ge t(C_n,T)^{m-b},
+\]
+where $C_2$ denotes $K_2$.  The proof roots the
+three closed-walk counts at a vertex, applies Sa\u{g}lam's same-parity
+power inequality to $A^{b/2}e_x$, and sums the resulting pointwise
+inequality by H\"older's inequality.  This answers Problem~6 of
+Blekherman--Raymond--Razborov--Wei.  Combining the edge-anchored case
+with their pruning argument also gives, for all $k>\ell\ge1$,
+\[
+  C(C_{2k+1},C_{2\ell+1})
+  \le
+  \frac{2k(2k-2\ell+1)-1}
+       {2\ell(2k-2\ell+1)-1},
+\]
+extending their second upper-bound formula to the full parameter range.
+\end{abstract}
+
+\section{Definitions and main results}
+
+All graphs are finite, simple, undirected, and loopless.  For finite
+graphs $F,T$, write
+\[
+  \homn(F,T):=|\Hom(F,T)|,
+  \qquad
+  t(F,T):=\frac{\homn(F,T)}{|V(T)|^{|V(F)|}}.
+\]
+For a uniform treatment of the edge case, set
+\[
+  C_2:=K_2,
+\]
+while $C_r$ has its usual meaning for $r\ge3$.  Thus $C_2$ is a single
+edge, not a two-edge multigraph.
+
+Our main interpolation theorem is the following.
+
+\begin{theorem}[Even-anchored interpolation for odd cycles]
+  \label{thm:interpolation}
+  Let $b,n,m$ be integers such that
+  \[
+    2\le b<n<m,
+    \qquad
+    b\equiv0\pmod2,
+    \qquad
+    n\equiv m\equiv1\pmod2.
+  \]
+  Then every finite simple graph $T$ satisfies
+  \begin{equation}
+    \homn(C_b,T)^{m-n}\homn(C_m,T)^{n-b}
+    \ge
+    \homn(C_n,T)^{m-b}.
+    \label{eq:main-hom}
+  \end{equation}
+  Equivalently,
+  \begin{equation}
+    t(C_b,T)^{m-n}t(C_m,T)^{n-b}
+    \ge
+    t(C_n,T)^{m-b}.
+    \label{eq:main-density}
+  \end{equation}
+\end{theorem}
+
+Taking consecutive odd cycles gives precisely the inequality posed in
+\cite[Problem~6]{BRRW2025}.
+
+\begin{corollary}[Problem~6 of \cite{BRRW2025}]
+  \label{cor:problem6}
+  Let $i>j\ge1$.  Then every finite simple graph $T$ satisfies
+  \begin{equation}
+    t(C_{2j},T)^2
+    t(C_{2i+1},T)^{2i-1-2j}
+    \ge
+    t(C_{2i-1},T)^{2i+1-2j},
+    \label{eq:problem6}
+  \end{equation}
+  where $C_2$ denotes $K_2$.
+\end{corollary}
+
+We also obtain an improved upper bound for odd-cycle domination
+exponents.
+
+\begin{definition}[Homomorphism-density domination exponent]
+  For graphs $G,H$, let
+  \[
+    C(G,H)
+    :=
+    \min\bigl\{c\ge0:
+    t(G,T)\ge t(H,T)^c
+    \text{ for every finite simple graph }T\bigr\},
+  \]
+  whenever this set is nonempty.
+\end{definition}
+
+\begin{theorem}[Odd-cycle domination bound]
+  \label{thm:domination}
+  For all integers $k>\ell\ge1$,
+  \begin{equation}
+    C(C_{2k+1},C_{2\ell+1})
+    \le
+    \frac{2k(2k-2\ell+1)-1}
+         {2\ell(2k-2\ell+1)-1}.
+    \label{eq:domination}
+  \end{equation}
+\end{theorem}
+
+\begin{corollary}[Adjacent odd cycles]
+  \label{cor:adjacent}
+  For every $i\ge2$,
+  \[
+    C(C_{2i+1},C_{2i-1})
+    \le \frac{6i-1}{6i-7}.
+  \]
+\end{corollary}
+
+The proof of Theorem~\ref{thm:interpolation} uses one non-elementary
+input, Sa\u{g}lam's same-parity power inequality.  The proof of
+Theorem~\ref{thm:domination} then combines the case $b=2$ with an
+explicit version of the pruning and tensor-power argument from
+\cite{BRRW2025}.
+
+\section{Rooted interpolation}
+
+We first record the matrix inequality that drives the proof.
+
+\begin{theorem}[Sa\u{g}lam \cite{Saglam2018}]
+  \label{thm:saglam}
+  Let $\Omega$ be a finite set, let
+  $S\in\R^{\Omega\times\Omega}$ be symmetric and entrywise
+  nonnegative, and let $u,v\in\R^\Omega$ be entrywise nonnegative unit
+  vectors.  If $K\ge R$ are positive integers of the same parity, then
+  \begin{equation}
+    \langle v,S^K u\rangle^R
+    \ge
+    \langle v,S^R u\rangle^K.
+    \label{eq:saglam}
+  \end{equation}
+\end{theorem}
+
+Let $T$ have $N\ge1$ vertices, and let $A$ be its adjacency matrix.
+For $x\in V(T)$ and $r\ge0$, put
+\[
+  c_r(x):=(A^r)_{xx}=\langle e_x,A^r e_x\rangle.
+\]
+For $r\ge1$, this is the number of closed walks of length $r$ based at
+$x$.
+
+\begin{lemma}[Trace and rooted-walk identities]
+  \label{lem:rooted-identities}
+  For every $r\ge2$,
+  \begin{equation}
+    \homn(C_r,T)=\tr(A^r)=\sum_{x\in V(T)}c_r(x).
+    \label{eq:trace-hom}
+  \end{equation}
+  Moreover, if $b\ge2$ is even and
+  \[
+    w_x:=A^{b/2}e_x,
+  \]
+  then $w_x$ is entrywise nonnegative and, for every $r\ge b$,
+  \begin{equation}
+    \|w_x\|_2^2=c_b(x),
+    \qquad
+    \langle w_x,A^{r-b}w_x\rangle=c_r(x).
+    \label{eq:anchor-identities}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  For $r\ge3$, expansion of the diagonal entries of $A^r$ identifies
+  $\tr(A^r)$ with the number of closed walks of length $r$, hence with
+  $\homn(C_r,T)$.  For $r=2$, the fact that $A$ is a symmetric
+  $0$--$1$ matrix gives
+  \[
+    \tr(A^2)
+    =\sum_{x,y}A_{xy}A_{yx}
+    =\sum_{x,y}A_{xy}
+    =2|E(T)|
+    =\homn(K_2,T).
+  \]
+  This proves \eqref{eq:trace-hom}.
+
+  Since every power of the entrywise nonnegative matrix $A$ is
+  entrywise nonnegative, so is $w_x$.  Symmetry of $A$ gives
+  \[
+    \|w_x\|_2^2
+    =\langle e_x,A^b e_x\rangle=c_b(x),
+  \]
+  and, for $r\ge b$,
+  \[
+    \langle w_x,A^{r-b}w_x\rangle
+    =\langle e_x,A^{b/2}A^{r-b}A^{b/2}e_x\rangle
+    =\langle e_x,A^r e_x\rangle=c_r(x).
+  \]
+\end{proof}
+
+\begin{lemma}[Rooted even-anchor interpolation]
+  \label{lem:rooted-interpolation}
+  Under the hypotheses of Theorem~\ref{thm:interpolation}, for every
+  $x\in V(T)$,
+  \begin{equation}
+    c_b(x)^{m-n}c_m(x)^{n-b}
+    \ge c_n(x)^{m-b}.
+    \label{eq:rooted-interpolation}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Fix $x$ and let $w_x=A^{b/2}e_x$.  If $c_b(x)=0$, then
+  \eqref{eq:anchor-identities} gives $\|w_x\|_2=0$, so $w_x=0$.
+  Consequently $c_n(x)=c_m(x)=0$, and
+  \eqref{eq:rooted-interpolation} is immediate.
+
+  Suppose now that $c_b(x)>0$ and set
+  \[
+    u_x:=\frac{w_x}{\|w_x\|_2},
+    \qquad
+    K:=m-b,
+    \qquad
+    R:=n-b.
+  \]
+  The vector $u_x$ is an entrywise nonnegative unit vector.  Since $b$
+  is even and $n,m$ are odd, $K>R$ are positive odd integers.
+  Theorem~\ref{thm:saglam}, applied with $S=A$ and $u=v=u_x$, yields
+  \[
+    \langle u_x,A^{m-b}u_x\rangle^{n-b}
+    \ge
+    \langle u_x,A^{n-b}u_x\rangle^{m-b}.
+  \]
+  By \eqref{eq:anchor-identities},
+  \[
+    \langle u_x,A^{r-b}u_x\rangle
+    =\frac{c_r(x)}{c_b(x)}
+    \qquad(r\in\{n,m\}).
+  \]
+  Substitution and multiplication by the positive number
+  $c_b(x)^{m-b}$ give
+  \[
+    c_b(x)^{(m-b)-(n-b)}c_m(x)^{n-b}
+    \ge c_n(x)^{m-b},
+  \]
+  which is \eqref{eq:rooted-interpolation}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:interpolation}]
+  Define
+  \[
+    \alpha:=\frac{m-n}{m-b},
+    \qquad
+    \beta:=\frac{n-b}{m-b}.
+  \]
+  Then $\alpha,\beta\in(0,1)$ and $\alpha+\beta=1$.
+  Taking the $(m-b)$-th root in
+  \eqref{eq:rooted-interpolation} gives
+  \[
+    c_n(x)\le c_b(x)^\alpha c_m(x)^\beta.
+  \]
+  H\"older's inequality with conjugate exponents $1/\alpha$ and
+  $1/\beta$ therefore implies
+  \[
+  \begin{aligned}
+    \sum_xc_n(x)
+    &\le \sum_x c_b(x)^\alpha c_m(x)^\beta\\
+    &\le
+    \left(\sum_xc_b(x)\right)^\alpha
+    \left(\sum_xc_m(x)\right)^\beta.
+  \end{aligned}
+  \]
+  Using \eqref{eq:trace-hom} and raising to the power $m-b$ proves
+  \eqref{eq:main-hom}.
+
+  To pass to densities, substitute
+  $\homn(F,T)=N^{|V(F)|}t(F,T)$.  The powers of $N$ cancel because
+  \[
+    b(m-n)+m(n-b)=n(m-b).
+  \]
+  This proves \eqref{eq:main-density}.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:problem6}]
+  Apply Theorem~\ref{thm:interpolation} with
+  \[
+    b=2j,
+    \qquad
+    n=2i-1,
+    \qquad
+    m=2i+1.
+  \]
+  The assumption $i>j$ gives $2j<2i-1$, and the three exponents in
+  \eqref{eq:main-density} become
+  \[
+    m-n=2,
+    \qquad
+    n-b=2i-1-2j,
+    \qquad
+    m-b=2i+1-2j.
+  \]
+  This is exactly \eqref{eq:problem6}.
+\end{proof}
+
+\begin{remark}[How H\"older removes regularity]
+  For $b=2$, the rooted inequality reads
+  \[
+    \deg_T(x)^{m-n}c_m(x)^{n-2}
+    \ge c_n(x)^{m-2}.
+  \]
+  In a regular graph the degree is constant and can be pulled out of
+  the sum.  For an arbitrary graph, H\"older's inequality performs the
+  same summation exactly:
+  \[
+    \sum_x\deg_T(x)^\alpha c_m(x)^\beta
+    \le
+    \left(\sum_x\deg_T(x)\right)^\alpha
+    \left(\sum_xc_m(x)\right)^\beta.
+  \]
+\end{remark}
+
+\section{Domination exponents}
+
+We now prove Theorem~\ref{thm:domination}.  The argument follows the
+pruning framework of \cite[Theorem~4.6]{BRRW2025}, with constants and
+normalizations included for completeness.
+
+\subsection{Even cycles and rooted edges}
+
+\begin{lemma}[Even-cycle lower bound]
+  \label{lem:even-cycle}
+  For every $r\ge2$ and every finite simple graph $T$,
+  \begin{equation}
+    t(C_{2r},T)\ge t(K_2,T)^{2r}.
+    \label{eq:even-cycle}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Let $A$ be the adjacency matrix of $T$, let $N=|V(T)|$, and put
+  $p=t(K_2,T)$.  If $\lambda_{\max}$ is the largest eigenvalue of $A$,
+  the Rayleigh--Ritz principle applied to $\one$ gives
+  \[
+    \lambda_{\max}
+    \ge
+    \frac{\langle\one,A\one\rangle}{\langle\one,\one\rangle}
+    =Np.
+  \]
+  If $\lambda_1,\ldots,\lambda_N$ are the eigenvalues of $A$, then
+  \[
+    \homn(C_{2r},T)
+    =\tr(A^{2r})
+    =\sum_{s=1}^N\lambda_s^{2r}
+    \ge\lambda_{\max}^{2r}
+    \ge(Np)^{2r}.
+  \]
+  Division by $N^{2r}$ proves \eqref{eq:even-cycle}.
+\end{proof}
+
+Give $C_q$ the cyclic vertex set $\mathbb{Z}/q\mathbb{Z}$ and
+distinguish the oriented edge $(0,1)$.  For an oriented edge $(u,v)$
+of $T$, define
+\[
+  h_q^T(u,v)
+  :=
+  \bigl|\{\phi\in\Hom(C_q,T):
+  \phi(0)=u,\ \phi(1)=v\}\bigr|.
+\]
+Write
+\[
+  \vec E(T)
+  :=\{(u,v)\in V(T)^2:\{u,v\}\in E(T)\}.
+\]
+Partitioning homomorphisms according to the image of $(0,1)$ gives
+\begin{equation}
+  \sum_{(u,v)\in\vec E(T)}h_q^T(u,v)=\homn(C_q,T).
+  \label{eq:rooted-edge-sum}
+\end{equation}
+Reflection of $C_q$ across the distinguished edge also gives
+\begin{equation}
+  h_q^T(u,v)=h_q^T(v,u).
+  \label{eq:rooted-edge-symmetry}
+\end{equation}
+
+\begin{lemma}[Pruning to cycle-rich edges]
+  \label{lem:pruning}
+  Fix $q\ge3$.  Let $T_0$ be a graph on $N\ge3$ vertices and suppose
+  \[
+    H_0:=\homn(C_q,T_0)>0.
+  \]
+  Then $T_0$ has a spanning subgraph $T$ such that, with
+  \[
+    H:=\homn(C_q,T),
+    \qquad
+    M:=|E(T)|,
+  \]
+  one has
+  \begin{equation}
+    H\ge\e^{-3/2}H_0
+    \label{eq:pruning-preservation}
+  \end{equation}
+  and, for every $(u,v)\in\vec E(T)$,
+  \begin{equation}
+    h_q^T(u,v)>
+    \frac{H}{8qM\log N}.
+    \label{eq:uniform-rooted-edge}
+  \end{equation}
+  Here and below $\log$ denotes the natural logarithm.
+\end{lemma}
+
+\begin{proof}
+  Starting from $T_0$, suppose the current graph $T_i$ has $i$ edges,
+  and write $H_i=\homn(C_q,T_i)$.  For $e\in E(T_i)$, let $L_i(e)$ be
+  the number of homomorphisms $C_q\to T_i$ whose image uses $e$.
+  If some edge satisfies
+  \[
+    L_i(e)\le\frac{H_i}{4i\log N},
+  \]
+  delete it.  The resulting graph $T_{i-1}$ satisfies
+  \begin{equation}
+    H_{i-1}=H_i-L_i(e)
+    \ge H_i\left(1-\frac1{4i\log N}\right).
+    \label{eq:pruning-step}
+  \end{equation}
+  Stop when no such edge remains, and call the terminal graph $T$.
+  Since every factor in \eqref{eq:pruning-step} is positive, all
+  intermediate $H_i$ are positive; in particular, $T$ has at least one
+  edge.
+
+  Let $M_0=|E(T_0)|$.  Iterating \eqref{eq:pruning-step} gives
+  \[
+    H\ge
+    H_0\prod_{i=M+1}^{M_0}
+    \left(1-\frac1{4i\log N}\right).
+  \]
+  Since $N\ge3$, each $x_i=1/(4i\log N)$ lies in $[0,1/2]$.
+  Using $\log(1-x)\ge-2x$ on this interval,
+  \[
+  \begin{aligned}
+    \log\prod_{i=M+1}^{M_0}(1-x_i)
+    &\ge-\frac1{2\log N}\sum_{i=1}^{M_0}\frac1i\\
+    &\ge-\frac{1+\log M_0}{2\log N}
+    \ge-\frac32.
+  \end{aligned}
+  \]
+  The last inequality uses $M_0<N^2$ and $\log N\ge1$.  This proves
+  \eqref{eq:pruning-preservation}.
+
+  At termination, every edge $e=\{u,v\}$ satisfies
+  \[
+    L_T(e)>\frac{H}{4M\log N}.
+  \]
+  For $a\in\mathbb{Z}/q\mathbb{Z}$, let $I_a(e)$ count those
+  homomorphisms for which the source edge $\{a,a+1\}$ maps to $e$.
+  Every homomorphism counted by $L_T(e)$ contributes to at least one
+  $I_a(e)$, so
+  \[
+    \sum_a I_a(e)\ge L_T(e).
+  \]
+  Rotation symmetry makes all $I_a(e)$ equal, while
+  \eqref{eq:rooted-edge-symmetry} gives
+  \[
+    I_0(e)=h_q^T(u,v)+h_q^T(v,u)=2h_q^T(u,v).
+  \]
+  Hence
+  \[
+    2q\,h_q^T(u,v)
+    =\sum_aI_a(e)
+    >\frac{H}{4M\log N},
+  \]
+  which proves \eqref{eq:uniform-rooted-edge}.
+\end{proof}
+
+\begin{lemma}[Gluing two edge-rooted cycles]
+  \label{lem:gluing}
+  Let $q,h\ge3$ and set $m=q+h-2$.  Suppose that a graph $T$ on
+  $N\ge3$ vertices satisfies \eqref{eq:uniform-rooted-edge} for $C_q$.
+  Put
+  \[
+    a:=t(C_q,T),
+    \qquad
+    z:=t(C_h,T),
+    \qquad
+    p:=t(K_2,T),
+    \qquad
+    y:=t(C_m,T).
+  \]
+  Then
+  \begin{equation}
+    y>\frac1{4q\log N}\frac{az}{p}.
+    \label{eq:gluing}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  The hypothesis implies $E(T)\ne\varnothing$, so $p>0$.  Label the
+  vertices of $C_m$ cyclically by $0,\ldots,m-1$, and add the chord
+  $\{0,q-1\}$.  The resulting graph $C_m^+$ is the union of a $q$-cycle
+  and an $h$-cycle along that chord.  Consequently,
+  \[
+  \begin{aligned}
+    \homn(C_m,T)
+    &\ge\homn(C_m^+,T)\\
+    &=\sum_{(u,v)\in\vec E(T)}
+      h_q^T(u,v)h_h^T(u,v)\\
+    &>
+    \frac{\homn(C_q,T)}
+         {8q|E(T)|\log N}
+    \sum_{(u,v)\in\vec E(T)}h_h^T(u,v)\\
+    &=
+    \frac{\homn(C_q,T)\homn(C_h,T)}
+         {8q|E(T)|\log N}.
+  \end{aligned}
+  \]
+  Now $|E(T)|=N^2p/2$ and $q+h=m+2$.  Dividing by $N^m$ therefore
+  gives \eqref{eq:gluing}.
+\end{proof}
+
+\subsection{Combining the inequalities}
+
+Fix $k>\ell\ge1$ and put
+\[
+  \Delta:=k-\ell,
+  \qquad
+  n:=2\ell+1,
+  \qquad
+  m:=2k+1,
+  \qquad
+  h:=2\Delta+2.
+\]
+Thus $n+h-2=m$.
+
+\begin{lemma}[Polylogarithmic domination after pruning]
+  \label{lem:polylog}
+  There are constants $c_0>0$ and $\gamma\ge0$, depending only on
+  $k,\ell$, such that every graph $T_0$ on $N\ge3$ vertices satisfies
+  \begin{equation}
+    t(C_m,T_0)
+    \ge
+    c_0(\log N)^{-\gamma}
+    t(C_n,T_0)^\eta,
+    \label{eq:polylog}
+  \end{equation}
+  where
+  \begin{equation}
+    \eta
+    :=
+    \frac{2k(2\Delta+1)-1}
+         {2\ell(2\Delta+1)-1}.
+    \label{eq:eta}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Write
+  \[
+    a_0:=t(C_n,T_0),
+    \qquad
+    y_0:=t(C_m,T_0).
+  \]
+  If $a_0=0$, there is nothing to prove.  Suppose $a_0>0$.
+  Lemma~\ref{lem:pruning}, applied with $q=n$, gives a spanning
+  subgraph $T\subseteq T_0$ satisfying
+  \eqref{eq:pruning-preservation} and
+  \eqref{eq:uniform-rooted-edge}.  Set
+  \[
+    a:=t(C_n,T),
+    \qquad
+    y:=t(C_m,T),
+    \qquad
+    p:=t(K_2,T).
+  \]
+  Since the subgraph is spanning,
+  \begin{equation}
+    a\ge\e^{-3/2}a_0,
+    \qquad
+    y_0\ge y.
+    \label{eq:preserved-densities}
+  \end{equation}
+
+  Apply Lemma~\ref{lem:gluing} with $q=n$ and
+  $h=2\Delta+2$, and then apply Lemma~\ref{lem:even-cycle} to $C_h$.
+  This gives
+  \begin{equation}
+    y>
+    \frac1{4n\log N}\frac{a\,t(C_h,T)}p
+    \ge
+    \frac1{4n\log N}a p^{2\Delta+1}.
+    \label{eq:gluing-lower}
+  \end{equation}
+  On the other hand, Theorem~\ref{thm:interpolation} with
+  $(b,n,m)=(2,2\ell+1,2k+1)$ gives the exact constraint
+  \begin{equation}
+    p^{2\Delta}y^{2\ell-1}\ge a^{2k-1}.
+    \label{eq:anchor-constraint}
+  \end{equation}
+
+  Introduce
+  \[
+    A_0:=2\ell-1,
+    \quad
+    B_0:=2\Delta,
+    \quad
+    C_0:=2k-1=A_0+B_0,
+    \quad
+    D_0:=2\Delta+1=B_0+1.
+  \]
+  Since $a>0$, \eqref{eq:anchor-constraint} implies $p,y>0$.
+  Raising \eqref{eq:gluing-lower} to $B_0$ and
+  \eqref{eq:anchor-constraint} to $D_0$ gives
+  \[
+    y^{B_0}>
+    (4n\log N)^{-B_0}a^{B_0}p^{B_0D_0},
+    \qquad
+    p^{B_0D_0}
+    \ge\frac{a^{C_0D_0}}{y^{A_0D_0}}.
+  \]
+  Eliminating $p$ yields
+  \[
+    y^{B_0+A_0D_0}>
+    (4n\log N)^{-B_0}a^{B_0+C_0D_0}.
+  \]
+  Therefore
+  \begin{equation}
+    y>
+    (4n)^{-\theta}(\log N)^{-\theta}a^\eta,
+    \qquad
+    \theta:=\frac{B_0}{B_0+A_0D_0},
+    \label{eq:combined}
+  \end{equation}
+  where
+  \[
+  \begin{aligned}
+    B_0+A_0D_0
+    &=(A_0+1)(B_0+1)-1
+      =2\ell(2\Delta+1)-1,\\
+    B_0+C_0D_0
+    &=(A_0+B_0+1)(B_0+1)-1
+      =2k(2\Delta+1)-1.
+  \end{aligned}
+  \]
+  Thus the exponent in \eqref{eq:combined} is exactly the number
+  $\eta$ in \eqref{eq:eta}.  Finally,
+  \eqref{eq:preserved-densities} and \eqref{eq:combined} give
+  \[
+    y_0>
+    (4n)^{-\theta}\e^{-3\eta/2}
+    (\log N)^{-\theta}a_0^\eta.
+  \]
+  Hence \eqref{eq:polylog} holds with
+  \[
+    c_0=(4n)^{-\theta}\e^{-3\eta/2},
+    \qquad
+    \gamma=\theta.
+  \]
+\end{proof}
+
+\begin{lemma}[Tensor-power removal]
+  \label{lem:tensor}
+  Let $H_1,H_2$ be fixed graphs and let $c>0$.  Suppose that constants
+  $K>0$ and $D\ge0$ satisfy
+  \[
+    t(H_1,T)\ge
+    K(\log |V(T)|)^{-D}t(H_2,T)^c
+  \]
+  for every graph $T$ with at least three vertices.  Then
+  \[
+    t(H_1,T)\ge t(H_2,T)^c
+  \]
+  for every such graph $T$.
+\end{lemma}
+
+\begin{proof}
+  Fix $T$ with $N\ge3$ vertices and let $T^{\times r}$ be its $r$-fold
+  categorical tensor product.  Coordinatewise factorization of
+  homomorphisms gives
+  \[
+    t(H,T^{\times r})=t(H,T)^r
+  \]
+  for every fixed graph $H$.  Applying the assumed inequality to
+  $T^{\times r}$ gives
+  \[
+    t(H_1,T)^r
+    \ge
+    K(r\log N)^{-D}t(H_2,T)^{cr}.
+  \]
+  Taking $r$-th roots and sending $r\to\infty$, we use
+  \[
+    K^{1/r}\longrightarrow1,
+    \qquad
+    (r\log N)^{-D/r}\longrightarrow1
+  \]
+  to obtain the result.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:domination}]
+  Lemma~\ref{lem:polylog} and Lemma~\ref{lem:tensor} give
+  \[
+    t(C_{2k+1},T)\ge t(C_{2\ell+1},T)^\eta
+  \]
+  for every target $T$ with at least three vertices, where
+  \[
+    \eta
+    =
+    \frac{2k(2k-2\ell+1)-1}
+         {2\ell(2k-2\ell+1)-1}.
+  \]
+  A simple graph with at most two vertices is bipartite, so it admits
+  no homomorphism from an odd cycle.  Both sides are then zero.
+  Thus the displayed inequality holds for every finite simple target,
+  and the definition of $C$ proves \eqref{eq:domination}.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:adjacent}]
+  Set $k=i$ and $\ell=i-1$ in Theorem~\ref{thm:domination}.  Then
+  $2k-2\ell+1=3$, so the numerator is $6i-1$ and the denominator is
+  $6i-7$.
+\end{proof}
+
+\section{Remarks}
+
+Blekherman--Raymond--Razborov--Wei prove
+\[
+  C(C_{2k+1},C_{2\ell+1})
+  \le
+  \begin{cases}
+    \dfrac{2(k+1)}{2\ell+1},&k\le2\ell-1,\\[2mm]
+    \dfrac{2k(2k-2\ell+1)-1}
+          {2\ell(2k-2\ell+1)-1},&k\ge2\ell.
+  \end{cases}
+\]
+Theorem~\ref{thm:domination} extends the second expression to every
+$k>\ell$.  If $D=2k-2\ell+1$, then
+\[
+  \frac{2(k+1)}{2\ell+1}
+  -
+  \frac{2kD-1}{2\ell D-1}
+  =
+  \frac{(4\ell-2k-1)D}
+       {(2\ell+1)(2\ell D-1)}.
+\]
+Thus the new bound is strictly stronger throughout the former
+first-branch range $k\le2\ell-1$.  Their projective-plane construction
+gives the lower bound
+\[
+  C(C_{2k+1},C_{2\ell+1})
+  \ge\frac{4k^2-1}{4k\ell-1},
+\]
+and the remaining gap is
+\[
+  \frac{2(k-\ell)(2\ell-1)}
+  {(4k\ell-1)\bigl(2\ell(2k-2\ell+1)-1\bigr)}.
+\]
+
+The $b=2$ case of Theorem~\ref{thm:interpolation} is specifically a
+finite simple-target statement.  Indeed, for a $0$--$1$ adjacency
+matrix,
+\[
+  \tr(A^2)=\homn(K_2,T),
+\]
+whereas for a graphon $W$,
+\[
+  \tr(T_W^2)
+  =\int_{[0,1]^2}W(x,y)^2\,dx\,dy
+\]
+need not equal the edge density $\int W$.  A direct operator analogue
+therefore has the two-edge multigraph density, rather than
+$t(K_2,W)$, as its length-two anchor.
+
+\begin{thebibliography}{9}
+
+\bibitem{Saglam2018}
+M.~Sa\u{g}lam,
+\emph{Near log-convexity of measured heat in (discrete) time and consequences},
+arXiv:1808.06717, 2018.
+
+\bibitem{BRRW2025}
+G.~Blekherman, A.~Raymond, A.~Razborov, and F.~Wei,
+\emph{On domination exponents for pairs of graphs},
+arXiv:2506.12151v2, 2025.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,360 +1,778 @@
-# Verification plan — `alternating_cycles_schur_proof.tex`
+# Verification plan — central fixed-density inequality for alternating cycles
 
-> **Status (see `NOTES.md` for the running log).**  Phase A (numerics) was skipped by request.
-> Phase B is done through M5: `thm:matrix` is proved for an arbitrary symmetric matrix, and
-> `eq:main-strengthened` / `eq:main-unweighted` are proved for step graphons, together with both
-> sharpness examples and the §11 parity obstruction.  2055 lines, zero warnings, only the three
-> standard axioms.  M6 (`Analytic/`) is not started.
+## Milestone dashboard
 
-Target: for every odd `m ≥ 3` and every graphon `W`,
+| Milestone | Deliverable | Status | Difficulty |
+|---|---|:---:|:---:|
+| M0 | Baseline build, axiom audit, and numerical harness | ✅ done | Easy |
+| M1 | Density parameters and centered-kernel definitions | ✅ done | Medium |
+| M2 | Period-two color word and parameterized diagonal Schur model | ✅ done | Medium |
+| M3 | Weighted excursion coefficients and diagonal matrix inequality | ✅ done | Medium |
+| M4 | Normalized centered operator and Krylov spectral model | ✅ done | Hard |
+| M5 | Kernel-algebra cubic head bound | ✅ done | Medium |
+| M6 | Strong inequality, profile bound, integral form, and sharpness | ✅ done | Medium |
+| M7 | Final source, statement, build, and axiom audit | ✅ done | Easy |
 
-```
-  4^m Alt_{2m}(W) + t(C_{2m}, 2W-1) ≤ 1,     hence     Alt_{2m}(W) ≤ 4^{-m},
-```
+Status key: ✅ done · 🚧 work in progress · ❌ not started.
 
-with equality in the second iff `W = 1/2` a.e.  Equivalently `Alt_{4k+2}(W) ≤ 2^{-(4k+2)}`.
-
-Structure mirrors `../cycle_commonality/` (same toolchain, same shared-mathlib junction, same
-"matrix model first, analytic surface last" staging, same `NOTES.md` / `DEVIATIONS.md` /
-paper-appendix convention).
-
----
-
-## 0. Audit result (done)
-
-I re-derived every step of the note. **No error found.** Every displayed identity was also checked
-numerically to machine precision (see §3); the chain is:
-
-| # | Statement | Status |
-|---|---|---|
-| 2.3 | step-graphon reduction (`lem:step-reduction`) | correct; the only measure-theoretic step |
-| 2.4 | `t(C_{2r},K) = ‖T_K^r‖²_HS ≥ 0` (`lem:even-signed-cycle`) | correct |
-| §2 | `T_W = (P+X)/2`, `T_U = (P-X)/2`, `Tr(X²) ≤ 1` | correct |
-| 4.1 | abstract matrix inequality (`thm:matrix`) | correct |
-| 5.1 | rank-two determinant factorization (`lem:det-factor`) | correct; algebra re-derived below |
-| 6.1 | `c_n ≥ 0` and the recurrence (`lem:cn`) | correct |
-| 6.2 | `1 = β₀ ≥ β₁ ≥ … ≥ 0`, `β_{n+1} ≤ τβ_n` (`lem:beta-monotone`) | correct |
-| 7.1 | odd logarithmic coefficient lemma (`lem:odd-log`) | correct |
-| §8 | trace extraction, proof of `thm:matrix` | correct |
-| 8.2 | exact matrix defect (`prop:matrix-defect`) | correct |
-| §9 | graphon theorem + equality case | correct |
-| 9.x | stability (`cor:stability`), fixed density (`cor:fixed-density`) | correct |
-| §11 | complete-bipartite parity obstruction | correct; the inequality is sharp at *both* ends |
-
-Re-derivations worth recording, because the Lean files will follow them literally:
-
-* `PX = e⊗u`, `XP = u⊗e` with `u = Xe`, so `I − zL = D(z) + z e⊗(u−e) − z u⊗e` with `D = I + zX²`.
-* `I₂ + 𝒱ᵀN𝒰 = [[1+z(k−h), z(k−ℓ)], [zh, 1−zk]]`, determinant `1 − zh − z²k² + z²hℓ`, and
-  `zℓ = 1 − h` turns this into `1 − z(h² + zk²) = 1 − zF(z)`.
-* `β_n = Σ_{p+q=n} λ_i^{2p}λ_j^{2q} − λ_iλ_j Σ_{p+q=n−1} λ_i^{2p}λ_j^{2q}` averaged over `ω_iω_j`.
-  The **minus** sign in front of the second sum comes from `[z^n](zk²) = (−1)^{n−1}(…)`, not
-  `(−1)^n`; getting it wrong gives `c₁ = x²+xy+y²` instead of `x²−xy+y²` and the whole
-  monotonicity claim collapses.  Check `c₁` numerically before proving anything about `c_n`.
-* `(1+z)F(z) = 1 + zG(−z)` and `(1+z)(1−zF) = 1 − z²G(−z)`.
-* `τ − β₁ = Tr(A²)` where `A = (I−P)X(I−P)`; expanding,
-  `Tr(((I−P)X(I−P))²) = Tr(X²) − 2⟨e,X²e⟩ + ⟨e,Xe⟩²`, and `β₁ = 2⟨e,X²e⟩ − ⟨e,Xe⟩²`.
-  **This replaces the paper's block decomposition `X = [[a,wᵀ],[w,A]]` by a projector identity**,
-  which needs no basis adapted to `e` and no `Submodule` bookkeeping.  Take this route.
-
-### Points that need care (this is where a formalization will fight)
-
-1. **`τ ≤ 1` is used twice, and both uses matter.**  `β₁ ≤ τ ≤ 1` is what gives `β₀ ≥ β₁`
-   (the head of the monotone chain), and `β_{n+1} ≤ τβ_n ≤ β_n` is what gives the tail.  There is
-   no slack: at the complete-bipartite graphon `τ = 1` exactly.
-2. **`λ_i² + λ_j² ≤ τ` needs `i ≠ j` and eigenvalues listed with multiplicity.**  With a
-   multiset-free "set of distinct eigenvalues" the step is false.  Use a `Fin N`-indexed
-   eigensystem throughout (as `cycle_commonality/Spectral/EigenSystem.lean` does).
-3. **`c_{n+1} ≤ (x²+y²)c_n` needs `n ≥ 1`**, because the recurrence produces `x²y²c_{n−1}` and
-   `c_{−1}` is not defined.  The `n = 0` step is handled separately by `β₁ ≤ τ`.
-4. **Parity is load-bearing in exactly one place**: `[z^{m−2r}]G(−z)^r = −[z^{m−2r}]G(z)^r`
-   requires `m − 2r` odd, i.e. `m` odd.  For even `m` the sign flips and §11 shows the conclusion
-   genuinely fails.  Do not state any lemma of §7 for general `m`.
-5. **All power series are formal.**  The note says so explicitly; nothing below needs radius of
-   convergence, and `ℝ⟦X⟧` is the right home.  Resist any temptation to introduce `Real.log`.
-6. **The strengthened inequality is sharp at both ends**, so no term may be relaxed:
-   `W ≡ 1/2` gives `4^m Alt = 1`, `t(C_{2m},2W−1) = 0`; complete bipartite gives `4^m Alt = 0`,
-   `t(C_{2m},2W−1) = 1`.  Both belong in `Extremal.lean` as regression tests.
-7. **Scope.**  `m ≥ 3` odd.  `m = 1` is degenerate (`Alt₂` is not a cycle); state the matrix
-   theorem for all odd `m ≥ 1` (it is true and the proof does not care) but the graphon corollary
-   only for `m ≥ 3`.
-
-**Open cross-check (not done):** reconcile the constant with Chen–Noel (arXiv:2505.09809) for
-`k = 1` (length 6) and with the `4 | length` results of Basit–Granet–Horsley–Kündgen–Staden
-(arXiv:2501.09842) — confirm that `2^{-(4k+2)}` is what they conjecture and that nothing in the
-`2 mod 4` class was already settled beyond length 6.
+Target paper: `../alternating_cycles_density_semi_inducibility.tex`.
 
 ---
 
-## 1. The decisive restructuring: no `det`, no `log`, no `ℂ`
+## 0. Target and completion standard
 
-The note's engine is
+Let `W` be a graphon on an arbitrary probability space, let
 
-```
-  −log det(I − zL) = −log det(I + zX²) − log(1 − zF(z)),
-```
-
-read off at `[z^m]` through `−log det(I − zM) = Σ_{r≥1} Tr(M^r) z^r / r`.
-
-Formalized literally this is expensive.  `L = (P+X)(P−X)` is **not** self-adjoint, so the
-trace/log-det bridge would have to be proved for a general real matrix: complexify, split the
-characteristic polynomial, and identify `Tr(M^r) = Σ μ_i^r` — which needs triangularization.
-Mathlib has `Module.End.exists_eigenvalue` and `iSup_maxGenEigenspace_eq_top` but **no**
-Schur triangulation, **no** Jacobi formula beyond `derivative_det_one_add_X_smul` (first order
-only), and **no** `charpoly` multiplicativity along an invariant subspace.  That is a 400–600 line
-detour on its own.
-
-**All of it is avoidable.**  Replace the determinant by the *resolvent*.  Work in
-`Matrix (Fin N) (Fin N) ℝ⟦X⟧` and write `z` for `PowerSeries.X`:
-
-1. **Trace generating function.**  `(I − z·M)⁻¹ = Σ_r z^r M^r`, entrywise, so
-   `trace ((I − z·M)⁻¹) = mk (fun r ↦ Tr (M^r))`.  Elementary: verify `(I − z·M) * S = 1`
-   coefficientwise.
-2. **Woodbury instead of the matrix determinant lemma.**  With `D = I + z·Y` (`Y := X²`),
-   `N := D⁻¹`, and `𝒰 = z·[e, −u]`, `𝒱 = [u−e, e]` (both `N×2`),
-   ```
-     I − z·L = D + 𝒰𝒱ᵀ,
-     (D + 𝒰𝒱ᵀ)⁻¹ = N − N𝒰 M₂⁻¹ 𝒱ᵀN,        M₂ := I₂ + 𝒱ᵀN𝒰.
-   ```
-   Verified by multiplying out.  Taking traces and `Matrix.trace_mul_comm`:
-   ```
-     mk (Tr (L^r)) = mk (Tr ((−Y)^r)) − trace₂ (M₂⁻¹ 𝒱ᵀN²𝒰).
-   ```
-3. **The resolvent derivative identity.**  From `(I + z·Y)N = I` we get `z·Y·N = I − N`, hence
-   ```
-     N + z·(d⁄dX N) = N(I − z·Y·N) = N·N = N².
-   ```
-   Since `𝒰 = z·𝒰₀` with `𝒰₀` constant, `d⁄dX M₂ = 𝒱ᵀ(N + z N')𝒰₀ = 𝒱ᵀN²𝒰₀`, so
-   `𝒱ᵀN²𝒰 = z · d⁄dX M₂`.  One line, no calculus.
-4. **Jacobi's formula, but only for `2×2`.**  For `M₂ = [[a,b],[c,d]]` over any commutative ring,
-   `adj(M₂) = [[d,−b],[−c,a]]` and
-   `trace₂(adj(M₂) · M₂') = d a' − b c' − c b' + a d' = (ad − bc)' = (det M₂)'`,
-   which `ring` closes outright.  Hence `trace₂(M₂⁻¹ M₂') = (det M₂)' · (det M₂)⁻¹`.
-
-Combining, with `Λ(A) := −(z · d⁄dX A · A⁻¹)` for `constantCoeff A = 1`:
-
-```
-  mk (Tr (L^r)) = mk (Tr ((−X²)^r)) + Λ (det M₂),        det M₂ = 1 − z·F.
+```text
+p = t(K_2,W),   q = 1-p,
 ```
 
-Reading `[z^m]` for odd `m` and using `Tr((−X²)^m) = −Tr(X^{2m})` gives the note's
-`eq:trace-coefficient` **with no `n×n` determinant anywhere in the development.**  The only
-determinant is the `2×2` one, and the only "log" is `Λ`, a rational operation on `ℝ⟦X⟧`.
+and let `m >= 3` be odd. Under
 
-This is the single most important decision in the plan.  It removes the one module that would
-otherwise have dominated the schedule and would have been mathlib-contribution-sized on its own.
+```text
+(5 - sqrt 5)/10 <= p <= (5 + sqrt 5)/10,
+```
 
-Consequence for the layout: `Series/` is elementary formal-power-series and matrix algebra;
-`Spectral/` is one reused file; `Scalar/` is one-variable polynomial inequalities; only
-`Analytic/` touches measure theory.
+the formalization proves
+
+```text
+Alt_{2m}(W) + t(C_{2m},W-p) <= (p*q)^m,
+Alt_{2m}(W) <= (p*q)^m.
+```
+
+The constant graphon calculation
+
+```text
+Alt_{2m}(p) = (p*q)^m
+```
+
+is included as a regression theorem showing that the upper bound is sharp. No uniqueness statement
+is part of this project.
+
+Completion requires:
+
+1. The strong inequality and its profile consequence in trace form.
+2. The same inequalities in integral cycle-density form.
+3. A theorem for arbitrary probability spaces, with no step-graphon assumption.
+4. Inclusion of both endpoints of the central density interval.
+5. The constant-graphon sharpness calculation.
+6. `lake build` with no project warnings or errors.
+7. No `sorry`, `admit`, declaration-level `axiom`, or `native_decide`.
+8. `CheckAxioms.lean` reports only `propext`, `Classical.choice`, and `Quot.sound`.
+
+The verified environment is:
+
+```text
+Lean 4.31.0
+Mathlib v4.31.0
+lean/.lake/packages
+  -> discussions/goodman-style-bound/new_lean/.lake/packages
+```
 
 ---
 
-## 2. Directory layout
+## 1. Lean proof route
 
-```
-alternating_cycle_semiinducibility/
-  VERIFICATION_PLAN.md          this file
-  NOTES.md                      running log (created at the start of Phase B)
-  DEVIATIONS.md                 "What the Lean formalization actually proves"
-  numerics/
-    identities.py               det factorization, β spectral formula, exact defect identity
-    random_matrix.py            randomized test of thm:matrix and of lem:beta-monotone
-    extremal.py                 W ≡ 1/2 and complete bipartite; the even-m failure
-    report.md                   recorded output
-  lean/
-    lakefile.toml               name = "AlternatingCycle", mathlib rev v4.31.0
-    lean-toolchain              leanprover/lean4:v4.31.0
-    CheckAxioms.lean
-    AlternatingCycle.lean
-    AlternatingCycle/…          see §4
+The graphon theorem uses a finite diagonal spectral model obtained directly from the Krylov
+compression. It does not require a fixed-density theorem for arbitrary symmetric matrices.
+
+The proof pipeline is:
+
+```text
+graphon W of density p
+  -> normalized centered kernel K = (W-p)/sqrt(pq)
+  -> finite Krylov compression preserving moments through degree 2m
+  -> diagonal eigenvalue model (lambda_i,e_i)
+  -> weighted Schur coefficient inequality
+  -> universal rank-one moment expression
+  -> strong graphon inequality.
 ```
 
-Toolchain matches `cycle_commonality` and the four projects under `../../goodman-style-bound/`, so
-the mathlib cache is shared.  Reproduce the junction exactly as `cycle_commonality/NOTES.md`
-records:
+The implementation principles are:
 
-```
-cmd //c mklink //J "lean\.lake\packages" \
-  "C:\Users\mekty\neural-combinatorics\discussions\goodman-style-bound\new_lean\.lake\packages"
-```
-
-then copy `lake-manifest.json` across.  Do **not** run `lake exe cache get`.
+1. Use the diagonal spectrum produced inside the Krylov construction; do not add a conjugation
+   theorem for the density-dependent matrix inequality.
+2. Define the normalized centered operator directly from the graphon operator and the projection
+   onto constants; do not redesign the bounded-kernel operator API.
+3. Use specialized variance and Bessel estimates for the normalized centered kernel; do not create
+   a generic Hilbert--Schmidt abstraction.
+4. Define the weighted coefficients by
+   ```text
+   densityBeta delta n = beta n - delta*nu n
+   ```
+   and prove a weighted double-sum representation only where positivity is needed.
+5. Prove the cubic first-coefficient estimate in the kernel algebra from nonnegative red and blue
+   kernels.
+6. Reuse the formal resolvent, logarithmic derivative, size-two Schur, divided-difference, and odd
+   coefficient machinery.
 
 ---
 
-## 3. Phase A — numerics (half a day, do first)
+## 2. Public definitions and statements
 
-Already prototyped; the four identities below reproduce to `< 5e−15` for
-`(N,m) ∈ {(4,3),(5,5),(6,7),(3,3),(7,9)}` on random symmetric `X` normalized to `Tr(X²) ≤ 1`.
-Promote that prototype to `numerics/` and widen it.
+### 2.1 Central density
 
-* **`identities.py`** — for random symmetric `X`, unit `e`, and small `z`:
-  (i) `det(I − zL) = det(I + zX²)(1 − zF(z))` with `F = h² + zk²`;
-  (ii) `Σ_n (−1)^n β_n z^n = F(z)` with `β_n = Σ_{ij} ω_iω_j c_n(λ_i,λ_j)` — **this is the check
-       that catches the sign error in point (2) of §0**;
-  (iii) `1 − Tr(L^m) − Tr(X^{2m}) = m Σ_{r=1}^{(m−1)/2} (1/r)[z^{m−2r}]G(z)^r` exactly;
-  (iv) `τ − β₁ = Tr(((I−P)X(I−P))²)`.
-* **`random_matrix.py`** — 20k random `(X, e)` with `Tr(X²) ≤ 1`, `N ≤ 12`, `m ∈ {3,5,7,9}`,
-  including near-degenerate spectra and rank-one `X`: report the minimum slack in
-  `Tr(L^m) + Tr(X^{2m}) ≤ 1`, in `β_{n+1} ≤ τ β_n` (`n ≥ 1`), and in `β₁ ≤ τ`, with the argmin.
-* **`extremal.py`** — `W ≡ 1/2` attains `4^m Alt = 1`; complete bipartite attains
-  `t(C_{2m},2W−1) = 1` and `Alt = 0` for odd `m`, and `Alt = 2·4^{-m}` for **even** `m`
-  (the §11 obstruction).  Sweep `m = 2..10` and tabulate.
+Use the polynomial predicate internally:
 
-Gate: all four identities exact to `1e−13`, all inequalities with slack `≥ −1e−13`, and the even-`m`
-violation reproduced, before starting Phase B.
+```lean
+def CentralDensity (p : Real) : Prop :=
+  0 < p /\ p < 1 /\ (2*p-1)^2 <= p*(1-p)
+```
+
+Prove the public interval equivalence:
+
+```lean
+theorem centralDensity_iff_interval :
+    CentralDensity p <->
+      (5 - Real.sqrt 5)/10 <= p /\
+      p <= (5 + Real.sqrt 5)/10
+```
+
+For `CentralDensity p`, define a parameter package containing
+
+```text
+q     = 1-p,
+s     = sqrt(p*q),
+a     = s/p,
+b     = s/q,
+delta = b-a.
+```
+
+The package exposes:
+
+```text
+p > 0,
+q > 0,
+s > 0,
+s^2 = p*q,
+a*b = 1,
+delta = (p-q)/s,
+abs delta <= 1.
+```
+
+Downstream modules consume these identities without unfolding square roots.
+
+### 2.2 Centered kernels
+
+Define
+
+```lean
+def centered (W : Omega -> Omega -> Real) (p : Real) :=
+  fun x y => W x y - p
+
+def normalizedCentered (W : Omega -> Omega -> Real) (p s : Real) :=
+  fun x y => (W x y - p)/s
+```
+
+Prove the `GoodK`, symmetry, scalar-composition, trace, and cycle-density lemmas required by the
+kernel algebra and `Positivity.lean`.
+
+Use `edgeDensity W mu = p` as the public density hypothesis and prove the bridge to
+`doubleMean mu W = p` once.
+
+### 2.3 Public theorems
+
+The trace-form statements should have the shape
+
+```lean
+theorem fixedDensity_strong
+    (hW : IsGraphon W mu)
+    (hp : edgeDensity W mu = p)
+    (hcentral : CentralDensity p)
+    (hm : Odd m) (hm3 : 3 <= m) :
+    altDensity W mu m
+      + signedCycleDensity (centered W p) mu (2*m)
+        <= (p*(1-p))^m
+
+theorem fixedDensity_alt_le
+    (hW : IsGraphon W mu)
+    (hp : edgeDensity W mu = p)
+    (hcentral : CentralDensity p)
+    (hm : Odd m) (hm3 : 3 <= m) :
+    altDensity W mu m <= (p*(1-p))^m
+```
+
+Add `fixedDensity_strong_integral`, `fixedDensity_alt_le_integral`, and the constant graphon theorem
+`constant_fixedDensity_alt`.
 
 ---
 
-## 4. Phase B — Lean formalization
+## 3. Period-two rank-one word
 
-### Mathlib gap analysis (checked against mathlib `v4.31.0` in `new_lean/.lake`)
+For scalars `a,b`, define
 
-Present and usable:
-
-* `PowerSeries` with `derivative` / `d⁄dX` as a `Derivation` (`derivative_mul`, `derivative_pow`,
-  `coeff_derivative`), inverses over a field (`PowerSeries.inv`, `mul_inv_cancel` for
-  `constantCoeff ≠ 0`), `PowerSeries.mk`/`coeff_mk`, `coeff_mul` over `Nat.antidiagonal`.
-* `Matrix.trace_mul_comm`, `Matrix.adjugate_mul`, `Matrix.isUnit_iff_isUnit_det`,
-  `Matrix.det_fin_two`.
-* `LinearMap.IsSymmetric.eigenvectorBasis` / `eigenvalues` / `eigenvalues_antitone`
-  (`Mathlib/Analysis/InnerProductSpace/Spectrum.lean`).
-* `Odd.pow_lt_pow_iff_left` (strict monotonicity of odd powers on all of `ℝ`) for `c_n ≥ 0`.
-* `ConvexOn.map_sum_le` (Jensen) for `cor:fixed-density`.
-
-Absent, but **not needed** thanks to §1: Schur triangulation, Jacobi's formula in general,
-`charpoly` multiplicativity along invariant subspaces, `PowerSeries` composition inverse.
-`PowerSeries.logOf` exists but is defined by substitution and is awkward; use `Λ` instead and never
-mention it.
-
-### Reuse from this repo
-
-* **`cycle_commonality/lean/CycleCommonality/Spectral/EigenSystem.lean` — take wholesale.**
-  `EigenSystem N T` (orthonormal eigenbasis + eigenvalues + symmetry + sortedness),
-  `ofSymmetric`, `inner_apply_eq_sum`, `pow_apply_basis`, `trace_pow_eq_sum`, `trace_eq_sum_inner`.
-  This is exactly the `ω_i, λ_i` bookkeeping of §6 of the note.  (`neg`, `rayleigh_*`,
-  `spectralSpan` are not needed here — no interlacing, no majorization, no Karamata.)
-* **`cycle_commonality/lean/CycleCommonality/Model/StepModel.lean`** — the weighted step graphon
-  `⟨w, U⟩`, `unit`, `mat`, `op`, `rankOne_eq`, `compl_op`, `toMatrix_pow`, `trace_op_pow`.
-  Adapt: here the distinguished operator is `X = T_{2W−1}` rather than `T_U`, and the identity to
-  port is `T_W = (P+X)/2`, `T_U = (P−X)/2` instead of `compl_op`.
-* **`goodman-style-bound/new_lean/OddCycleBound/HighDensity/DefectPowerSeries.lean`** — the closest
-  existing precedent for `Λ`-style coefficient extraction on `ℝ⟦X⟧`
-  (`derivative_pathDenominator_mul_pathSeries`, `coeff_derivative_excursion_mul_pow`,
-  `coeff_derivative_pathDenominator_mul_pathSeries`).  Read it before writing `Scalar/LogDeriv.lean`;
-  the `X * d⁄dX Φ ↦ m · coeff m Φ` idiom is already worked out there.
-* **`goodman-style-bound/new_lean/OddCycleBound/HighDensity/FiniteRank.lean`** — the `Option ι`
-  hub/body block matrix with `none` the constant direction, and the "odd powers of the body cancel"
-  bookkeeping.  Useful shape for `Extremal.lean`.
-* **`goodman-style-bound/fisher_lean/OddCycleBound/Graphon.lean` / `Kernel.lean` /
-  `Fisher/GraphonContinuity.lean`** — `IsGraphon`, `Good`, `kernelOp`, `GoodK`, `comp`,
-  `kernelL1Dist`, and `abs_triangleDensity_sub_le_three_mul_kernelL1Dist` (the `r = 3` case of the
-  note's `|t(C_r,K_n) − t(C_r,K)| ≤ r‖K_n−K‖₁`).  Needed only in `Analytic/`.
-* **`fisher_lean/OddCycleBound/Fisher/FiniteGraphon.lean`** — finite-graph-as-graphon, for the
-  two-cell complete bipartite example of §11.
-
-### Module breakdown
-
-```
-AlternatingCycle/
-  Scalar/
-    Cn.lean            c_n def; (x+y)c_n = x^{2n+1}+y^{2n+1}; c_n ≥ 0; recurrence     ~180
-    LogDeriv.lean      Λ A := −(X · d⁄dX A · A⁻¹); Λ(AB)=Λ A+Λ B; Λ(1+X); coeff Λ     ~280
-    OddLog.lean        lem:odd-log + the exact defect eq:odd-log-defect               ~260
-  Series/
-    Resolvent.lean     (1 − X·M)⁻¹ = Σ X^r M^r; trace = mk (Tr (M^r))                 ~240
-    Woodbury.lean      (D + 𝒰𝒱ᵀ)⁻¹; the trace form; trace_mul_comm bookkeeping        ~300
-    Jacobi2.lean       trace₂(M⁻¹ · d⁄dX M) = (det M)' · (det M)⁻¹, 2×2 only          ~120
-  Spectral/
-    EigenSystem.lean   ported verbatim from cycle_commonality                         ~215
-  Model.lean           H, unit e, symmetric X, P := rankOne e, L, Y := X²; τ          ~200
-  SchurSeries.lean     N; h,k,ℓ; h + zℓ = 1; N + zN' = N²; M₂; det M₂ = 1 − z·F       ~420
-  Beta.lean            β_n spectral formula; β₀ = 1; β₁ ≤ τ; β_{n+1} ≤ τ β_n          ~420
-  TraceIdentity.lean   mk(Tr L^r) = mk(Tr(−Y)^r) + Λ(det M₂); eq:trace-coefficient    ~300
-  MatrixMain.lean      thm:matrix and prop:matrix-defect                              ~200
-  StepModel.lean       weighted step graphon; Alt_{2m}, t(C_r,2W−1) as traces; τ ≤ 1  ~260
-  Extremal.lean        W ≡ 1/2; complete bipartite; the even-m obstruction §11        ~260
-  Consequences.lean    equality case; cor:fixed-density; discrete cut-norm stability  ~320
-  Main.lean            the theorem for step graphons                                  ~150
-  Analytic/
-    Density.lean       t(C_r,K) as an integral; bridge to Tr(T^r) (eq:mixed-trace)    ~450
-    StepReduction.lean lem:step-reduction; lem:even-signed-cycle for general kernels  ~650
+```text
+colorPattern a b (2r)   = a,
+colorPattern a b (2r+1) = -b.
 ```
 
-Roughly 3900 lines for the core, plus ~1100 analytic.  The three files to watch are
-`SchurSeries.lean` (bookkeeping volume, not depth), `Beta.lean` (the sign in point (2) of §0), and
-`StepReduction.lean` (the only measure theory).
+Using the generic normal form in `Necklace/RankOne.lean`, prove
 
-### Milestones (gate each before proceeding)
+```text
+word (colorPattern a b) j k (2m)
+  = ((j+a*k)*(j-b*k))^m,
 
-* **M0** (1–2 days) `Scalar/Cn.lean` + `Scalar/OddLog.lean`.  Pure one-variable algebra with no
-  matrices; proves the parity heart of the paper.  Do this **first**: it is cheap, and if the odd
-  logarithmic coefficient lemma fights, the whole approach is wrong and you learn it in two days.
-  Deliverable: `1 − m·[z^m]Λ(1 − X·F) = m Σ_{r=1}^{(m−1)/2} (1/r)[z^{m−2r}]G^r ≥ 0` for odd `m`,
-  from the abstract hypothesis `1 = β₀ ≥ β₁ ≥ … ≥ 0` alone.
-* **M1** (2–3 days) `Series/`.  The go/no-go for §1.  If `Resolvent`, `Woodbury` and `Jacobi2` go
-  through, the log-det detour is confirmed dead and the schedule holds.  If `Woodbury` fights over
-  `ℝ⟦X⟧`, fall back to proving the general `Λ(det(I − zM)) = Σ Tr(M^r)z^r` bridge (§1, first
-  paragraph) — budget 3 extra weeks and record it in `DEVIATIONS.md`.
-* **M2** (2–3 days) `Model.lean` + `SchurSeries.lean` → `det M₂ = 1 − X·F` with `F` defined from
-  `h, k`.  Validate against `numerics/identities.py` (i) before proving.
-* **M3** (3–4 days) `Beta.lean`.  `β₁ ≤ τ` via the projector identity `τ − β₁ = Tr(((I−P)X(I−P))²)`;
-  `β_{n+1} ≤ τβ_n` via `Cn.lean` plus `λ_i² + λ_j² ≤ τ` for `i ≠ j`.  Validate against
-  `numerics/identities.py` (ii) and (iv) first — this is where the sign error would hide.
-* **M4** (2 days) `TraceIdentity.lean` + `MatrixMain.lean` → `thm:matrix` and the exact defect.
-* **M5** (2–3 days) `StepModel.lean` + `Extremal.lean` + `Consequences.lean` + `Main.lean` → the
-  full theorem for step graphons, both sharpness examples, the equality case, and
-  `cor:fixed-density`.  **At this milestone the mathematically interesting content is fully
-  verified.**
-* **M6** (5–8 days) `Analytic/` → the theorem for arbitrary graphons.
+alphaC (colorPattern a b) (2m)
+  = (-a*b)^m.
+```
 
-M0–M5 is the high-value core, ≈ 3 weeks.  M6 is analytic bookkeeping; if time is short, stop after
-M5 and state the theorem for step graphons, noting that the reduction is standard — exactly the
-position `cycle_commonality` is in today.
+If `a*b=1` and `m` is odd, cyclic trace gives
 
-### Simplification to decide before writing `Analytic/StepReduction.lean`
+```text
+tau (((j+a*k)*(j-b*k))^m) + tau(k^(2m))
+  = N_m(colorPattern a b, moments).
+```
 
-The note uses dyadic conditional expectation and `L²` density.  Mathlib has `condExp` and
-`eLpNorm_condExp_le`, so that transfers, but the `L¹`-only route is cheaper: approximate `W` in
-`L¹` by a dyadic step function, symmetrize (`(G + Gᵀ)/2`) and truncate to `[0,1]` — both are
-1-Lipschitz in `L¹` and preserve the graphon constraints — then apply the telescoping estimate
-generalized from `fisher_lean/…/GraphonContinuity.lean`.  This avoids conditional expectation on a
-product σ-algebra entirely.  Note that `lem:even-signed-cycle` for *general* bounded symmetric
-kernels additionally needs Hilbert–Schmidt convergence, which the `L¹` route does not give; but
-that lemma is only used to drop a term that the step-graphon proof already delivers, so state it in
-the finite model and let `StepReduction.lean` carry the limit.  Record the choice in
-`DEVIATIONS.md`.
+### Kernel specialization
+
+Let
+
+```text
+K = (W-p)/s,
+a = s/p,
+b = s/q.
+```
+
+In the kernel algebra prove
+
+```text
+j+a*K = W/p,
+j-b*K = (1-W)/q.
+```
+
+Therefore
+
+```text
+tau (((j+a*K)*(j-b*K))^m)
+  = Alt_{2m}(W)/(p*q)^m,
+
+tau(K^(2m))
+  = t(C_{2m},W-p)/(p*q)^m.
+```
+
+The result is an equality between the normalized sum of graphon densities and a universal
+expression in the normalized centered moments.
+
+Gate M2-A: this identity compiles for arbitrary probability spaces.
 
 ---
 
-## 5. Phase C — write-up
+## 4. Parameterized diagonal Schur model
 
-Per repo convention, append to `alternating_cycles_schur_proof.tex` a section
-**"What the Lean formalization actually proves"**, listing every deviation: the resolvent/Woodbury
-replacement for the determinant factorization (§1), the projector identity replacing the block
-decomposition in `lem:beta-monotone`, the `Λ` operator replacing `−log`, whichever route
-`StepReduction.lean` took, and any axiom left open.
-`lake env lean CheckAxioms.lean` must show only `propext`, `Classical.choice`, `Quot.sound` for
-every main result — no `sorry`, no `native_decide`.
+For spectral data `lambda : Fin n -> Real`, coordinates `e : Fin n -> Real`, and scalars `a,b`, use
 
-`CheckAxioms.lean` should cover at least:
-
+```text
+A = diagonal lambda,
+P = e outer e,
+u = A e,
+Y = A^2,
+L = (P+a*A)*(P-b*A).
 ```
-AlternatingCycle.cn_nonneg
-AlternatingCycle.cn_recurrence
-AlternatingCycle.oddLog_defect
-AlternatingCycle.trace_resolvent
-AlternatingCycle.woodbury
-AlternatingCycle.det_two_logDeriv
-AlternatingCycle.det_M2_eq
-AlternatingCycle.beta_le_tau
-AlternatingCycle.beta_antitone
-AlternatingCycle.trace_coefficient
-AlternatingCycle.matrix_main            -- thm:matrix
-AlternatingCycle.matrix_defect          -- prop:matrix-defect
-AlternatingCycle.StepGraphon.main       -- 4^m Alt + t(C_2m,2W−1) ≤ 1
-AlternatingCycle.StepGraphon.alt_le     -- Alt ≤ 4^{-m}
-AlternatingCycle.StepGraphon.eq_iff     -- equality iff W ≡ 1/2
-AlternatingCycle.StepGraphon.fixedDensity
-AlternatingCycle.bipartite_even_violates
+
+The rank-two decomposition is
+
+```text
+I-zL = I+zA^2 + U V,
+U = z [e,-a*u],
+V = [b*u-e; e].
 ```
+
+Parameterize the constructions in `Matrix/Model.lean` that depend on `L`, `U`, and `V`. The generic
+files
+
+```text
+Matrix/Series/Resolvent.lean
+Matrix/Series/Schur.lean
+Matrix/Series/Jacobi2.lean
+Matrix/Scalar/LogDeriv.lean
+```
+
+remain independent of `a,b`.
+
+For
+
+```text
+h = <e,(I+zA^2)^(-1)e>,
+k = <e,A(I+zA^2)^(-1)e>,
+l = <e,A^2(I+zA^2)^(-1)e>,
+```
+
+the size-two Schur matrix has entries
+
+```text
+[ 1+z(b*k-h)   z(a*k-l) ]
+[ z*h           1-z*a*k ]
+```
+
+and, using `a*b=1`,
+
+```text
+det M2 = 1-z*F,
+F = h^2-delta*k+z*k^2,
+delta = b-a.
+```
+
+The established trace-series identity then yields, for odd `m`,
+
+```text
+Tr(L^m)+Tr(A^(2m))
+  = coeff m (logDeriv(1-z*F)).
+```
+
+Gate M2-B: the determinant and trace identities compile for diagonal `A` and match numerical
+regressions at both density endpoints.
+
+---
+
+## 5. Weighted excursion coefficients
+
+Retain the spectral moments
+
+```text
+tau  = sum_i lambda_i^2,
+mu r = sum_i e_i^2*lambda_i^(2r),
+nu r = sum_i e_i^2*lambda_i^(2r+1).
+```
+
+Define
+
+```text
+densityBeta delta n = beta n - delta*nu n.
+```
+
+### Series identity
+
+Derive
+
+```text
+h^2-delta*k+z*k^2 = betaSeries (densityBeta delta)
+```
+
+from the formulas already available for `h^2+z*k^2` and `k`. Do not repeat the Cauchy-product proof.
+
+### Weighted representation
+
+Prove
+
+```text
+densityBeta delta n =
+  sum_i sum_j e_i^2*e_j^2*c_n(lambda_i,lambda_j)
+    *(1-delta*(lambda_i+lambda_j)/2).
+```
+
+This uses
+
+```text
+(lambda_i+lambda_j)*c_n(lambda_i,lambda_j)
+  = lambda_i^(2n+1)+lambda_j^(2n+1).
+```
+
+### Monotonicity hypotheses
+
+The diagonal theorem assumes
+
+```text
+sum_i e_i^2 = 1,
+tau <= 1,
+nu 0 = 0,
+2*mu 1-delta*nu 1 <= 1,
+abs delta <= 1.
+```
+
+From these prove:
+
+1. `abs lambda_i <= 1`.
+2. `1-delta*(lambda_i+lambda_j)/2 >= 0`.
+3. `densityBeta delta n >= 0`.
+4. `densityBeta delta 0 = 1`, using `nu 0=0`.
+5. `densityBeta delta 1 = 2*mu 1-delta*nu 1`.
+6. For `n>=1`,
+   ```text
+   densityBeta delta (n+1) <= tau*densityBeta delta n.
+   ```
+
+Thus
+
+```text
+1 = densityBeta delta 0
+  >= densityBeta delta 1
+  >= densityBeta delta 2 >= ... >= 0.
+```
+
+Apply `coeff_logDeriv_betaSeries_le_one` directly to conclude the diagonal inequality
+
+```text
+Tr(((P+a*A)*(P-b*A))^m)+Tr(A^(2m)) <= 1.
+```
+
+No theorem for a nondiagonal symmetric matrix is required.
+
+Gate M3: `matrix_fixedDensity_diagonal` compiles and passes the axiom audit.
+
+---
+
+## 6. Normalized centered operator and Krylov spectrum
+
+Let `s=sqrt(p*q)`. Define the continuous linear operator directly by
+
+```text
+centeredOp = (1/s) * kernelOpCLM W - (p/s) * oneProj.
+```
+
+Prove:
+
+```text
+centeredOp is symmetric,
+centeredOp acts by the kernel (W-p)/s,
+<1,centeredOp 1> = 0.
+```
+
+### Square budget
+
+First prove
+
+```text
+kernelSqNorm (W-p) <= p*q.
+```
+
+Use the pointwise inequality
+
+```text
+(W-p)^2 <= (1-2p)*W+p^2,
+```
+
+whose difference is `W-W^2 >= 0`, and then integrate using `doubleMean W=p`. Scale by `s^2=p*q` to
+obtain
+
+```text
+kernelSqNorm ((W-p)/s) <= 1.
+```
+
+Adapt the finite-family Bessel estimate specifically to `centeredOp`:
+
+```text
+sum_i ||centeredOp(v_i)||^2 <= 1
+```
+
+for every finite orthonormal family. A generic bounded-kernel theorem is not required.
+
+### Diagonal Krylov output
+
+Use the generic Krylov subspace definitions with
+
+```text
+T = centeredOp,
+g = oneL2,
+cutoff = 2*m.
+```
+
+Package the eigenvalues and coordinates of the compressed symmetric operator directly as spectral
+data. Prove
+
+```text
+sum_i e_i^2 = 1,
+sum_i lambda_i^2 <= 1,
+sum_i e_i^2*lambda_i^j = centeredMoment j  for j <= 2*m.
+```
+
+Since `m>=3`, degrees `1,2,3` needed by the weighted coefficient theorem are within the cutoff.
+
+There is no intermediate arbitrary symmetric matrix theorem and no density-dependent conjugation
+module.
+
+Gate M4: `exists_fixedDensity_spectrum` provides the diagonal data and exact moment agreement.
+
+---
+
+## 7. Cubic head bound in the kernel algebra
+
+Let `k` be the normalized centered kernel element and define
+
+```text
+r = j+a*k = W/p,
+bK = j-b*k = (1-W)/q.
+```
+
+The kernels of `r` and `bK` are pointwise nonnegative. Therefore
+
+```text
+phi(r*bK*r) >= 0,
+phi(bK*r*bK) >= 0.
+```
+
+Using `phi(k)=0`, the rank-one identity for `j`, and cyclicity, prove
+
+```text
+phi(r*bK*r) = 1-2*mu_2-a*mu_3,
+phi(bK*r*bK) = 1-2*mu_2+b*mu_3.
+```
+
+The convex combination with weights `q,p` is
+
+```text
+q*phi(r*bK*r)+p*phi(bK*r*bK)
+  = 1-2*mu_2+delta*mu_3 >= 0.
+```
+
+Hence
+
+```text
+2*mu_2-delta*mu_3 <= 1.
+```
+
+Prove positivity before algebraic expansion. The order argument then depends only on nonnegative
+kernels, while the identity is handled separately by ring and moment rules.
+
+Transport the degree-two and degree-three moments to the diagonal Krylov spectrum.
+
+Implemented in `AlternatingCycle/Compression/DensityCubic.lean`. The kernel positivity certificate,
+both cubic expansions, the weighted head inequality, and its finite-spectrum transport compile.
+
+Gate M5: the spectral data satisfy the first-coefficient hypothesis of
+`matrix_fixedDensity_diagonal`.
+
+---
+
+## 8. Main inequality
+
+The graphon and diagonal matrix instances of the period-two rank-one word produce the same universal
+moment expression. Moment agreement through degree `2*m` identifies them term by term.
+
+Apply the diagonal matrix inequality to obtain
+
+```text
+Alt_{2m}(W)/(p*q)^m
+  + t(C_{2m},W-p)/(p*q)^m
+  <= 1.
+```
+
+Since `p*q>0`, multiply through to prove `fixedDensity_strong`.
+
+Apply even-cycle nonnegativity to the symmetric centered kernel:
+
+```text
+t(C_{2m},W-p) >= 0.
+```
+
+Dropping this term proves `fixedDensity_alt_le`.
+
+Use `altDensity_eq_integral` and `signedCycleDensity_eq_integral` to prove the integral forms. The
+Fubini machinery already accepts arbitrary `GoodK` kernels.
+
+Finally calculate the constant graphon:
+
+```text
+Alt_{2m}(p) = p^m*q^m = (p*q)^m,
+t(C_{2m},p-p) = 0.
+```
+
+Implemented in `AlternatingCycle/DensityMain.lean`. The strong and profile inequalities compile in
+trace and integral form on the closed central interval, and the constant-graphon equality compiles.
+
+Gate M6: all public theorems in Section 2.3 compile for arbitrary probability spaces.
+
+---
+
+## 9. Module plan
+
+Add:
+
+```text
+AlternatingCycle/Parameters.lean
+```
+
+Concentrate theorem-specific changes in:
+
+```text
+AlternatingCycle/Defs.lean
+AlternatingCycle/Necklace/Trace.lean
+AlternatingCycle/Necklace/MatrixInstance.lean
+AlternatingCycle/Necklace/KernelInstance.lean
+AlternatingCycle/Matrix/Model.lean
+AlternatingCycle/Matrix/Spectral.lean
+AlternatingCycle/Matrix/Beta.lean
+AlternatingCycle/Matrix/MatrixMain.lean
+AlternatingCycle/Compression/L2.lean
+AlternatingCycle/Compression/HSBound.lean
+AlternatingCycle/Compression/Krylov.lean
+AlternatingCycle/Main.lean
+AlternatingCycle/Sharp.lean
+AlternatingCycle.lean
+CheckAxioms.lean
+```
+
+Use without density-specific changes:
+
+```text
+AlternatingCycle/Matrix/Scalar/Cn.lean
+AlternatingCycle/Matrix/Scalar/LogDeriv.lean
+AlternatingCycle/Matrix/Scalar/OddLog.lean
+AlternatingCycle/Matrix/Series/Resolvent.lean
+AlternatingCycle/Matrix/Series/Schur.lean
+AlternatingCycle/Matrix/Series/Jacobi2.lean
+AlternatingCycle/Necklace/RankOne.lean
+AlternatingCycle/Necklace/Unitize.lean
+the generic Krylov subspace definitions
+AlternatingCycle/Fubini.lean
+AlternatingCycle/Positivity.lean
+AlternatingCycle/Foundation/*
+```
+
+`Matrix/Conjugation.lean` is not on the dependency path of the fixed-density theorem.
+
+---
+
+## 10. Milestones and gates
+
+### M0 — baseline and numerical harness
+
+- Record the clean Lean build and axiom audit.
+- Check `a*b=1`, `abs delta<=1`, and the endpoint values.
+- Check the parameterized rank-one word.
+- Check the rank-two determinant.
+- Check the weighted coefficient series and monotonicity.
+- Check the end-to-end inequality on finite weighted graphons.
+- Reproduce an even-`m` parity counterexample at `p=1/2`.
+
+Gate: all algebraic identities agree to `1e-10`; inequality excess is at most `2e-9`.
+
+### M1 — parameters and definitions
+
+- Implement `CentralDensity` and its interval equivalence.
+- Package `p,q,s,a,b,delta` and their identities.
+- Define centered and normalized centered kernels.
+
+Gate: downstream tests use parameter lemmas without unfolding square roots.
+
+### M2 — color word and Schur model
+
+- Prove the period-two word and pure coefficient.
+- Add kernel and diagonal matrix instances.
+- Parameterize the rank-two model and prove `det M2=1-zF`.
+
+Gate: the Schur and universal-moment identities compile.
+
+### M3 — weighted coefficients and diagonal inequality
+
+- Define `densityBeta=beta-delta*nu`.
+- Prove its weighted representation, positivity, normalization, and contraction.
+- Identify the Schur series.
+- Apply the odd logarithmic coefficient theorem.
+
+Gate: `matrix_fixedDensity_diagonal` passes `#print axioms`.
+
+### M4 — centered operator and Krylov spectrum
+
+- Implement `centeredOp` as a graphon-operator/projection combination.
+- Prove its pointwise kernel action, symmetry, mean zero, and square budget.
+- Adapt the finite Bessel estimate.
+- Return diagonal spectral data and moment agreement from Krylov compression.
+
+Gate: `exists_fixedDensity_spectrum` supplies all spectral hypotheses except the cubic head bound.
+
+### M5 — cubic positivity
+
+- Define normalized red and blue kernel elements.
+- Prove nonnegativity of the two triple products.
+- Expand their convex combination into the first-coefficient defect.
+- Transport the bound to the Krylov spectrum.
+
+Gate: the diagonal spectrum satisfies `densityBeta delta 1 <= 1`.
+
+### M6 — graphon theorem
+
+- Match the graphon and diagonal universal moment expressions.
+- Prove the strong inequality and profile consequence.
+- Add integral forms and constant sharpness.
+
+Gate: all public theorem statements compile on arbitrary probability spaces.
+
+### M7 — final audit
+
+- Remove unused declarations, imports, and theorem wrappers.
+- Ensure documentation describes the final mathematical objects directly.
+- Run the numerical regressions, full build, placeholder search, and axiom audit.
+- Compare each public Lean statement against the corresponding paper formula.
+
+Completed on 2026-08-23:
+
+- `lake build` succeeded with 8596 jobs.
+- `CheckAxioms.lean` reports only `propext`, `Classical.choice`, and `Quot.sound` for every new
+  public theorem.
+- The project-wide Lean scan found no `sorry`, `admit`, declaration-level `axiom`, or
+  `native_decide`.
+- Both numerical regression suites passed, including both central-interval endpoints.
+- `git diff --check` reported no whitespace errors.
+
+Gate: every requirement in Section 0 is satisfied.
+
+Estimated effort after M0 is 4--7 focused working days for a contributor familiar with the project.
+The main technical risk is the normalized centered Krylov operator; the scalar and power-series
+engines are already available.
+
+---
+
+## 11. Regression and axiom audit
+
+The numerical suite covers:
+
+```text
+p = 1/2,
+both central interval endpoints,
+interior densities 0.35 and 0.65,
+dimensions 2,4,7,10,
+odd m = 3,5,7,9,
+repeated and nearly zero eigenvalues,
+finite weighted graphons of exact prescribed density,
+an even-m counterexample.
+```
+
+For each appropriate sample verify:
+
+```text
+a*b = 1,
+abs delta <= 1,
+det(I-zL) = det(I+zA^2)*(1-zF),
+F = sum_n (-1)^n*densityBeta_n*z^n,
+1 = densityBeta_0 >= densityBeta_1 >= ... >= 0,
+Tr(L^m)+Tr(A^(2m)) <= 1,
+normalized graphon sum = universal moment expression.
+```
+
+`CheckAxioms.lean` covers at least:
+
+```text
+centralDensity_iff_interval
+normalizedCentered_mean_zero
+normalizedCentered_kernelSqNorm_le_one
+RankOne.word_colorPattern
+RankOne.tau_colorPattern_add
+alt_add_centeredCycle_eq_necklace
+det_M2
+densityBeta_zero
+densityBeta_nonneg
+densityBeta_antitone
+densityBeta_series
+matrix_fixedDensity_diagonal
+exists_fixedDensity_spectrum
+cubic_head_le_one
+centeredCycleDensity_nonneg
+fixedDensity_strong
+fixedDensity_alt_le
+fixedDensity_strong_integral
+fixedDensity_alt_le_integral
+constant_fixedDensity_alt
+```
+
+---
+
+## 12. Source-writing rules
+
+Module and declaration comments state the mathematical object, hypotheses, and role in the proof.
+Repository provenance, migrations, compatibility notes, and development chronology are omitted from
+mathematical documentation.
+
+- Include declarations only when they support the final inequality or its verification.
+- Describe specialization at `p=1/2` as a mathematical regression case.
+- Keep implementation decisions in this plan or the running log, not in theorem docstrings.
+- The source should read as a self-contained formal proof of the fixed-density inequality.

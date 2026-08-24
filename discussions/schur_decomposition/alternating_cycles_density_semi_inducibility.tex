@@ -1,0 +1,1170 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\Alt}{\mathrm{alt}}
+
+\title{Semi-inducibility of Alternating Cycles with length \texorpdfstring{$4k+2$}{4k+2}}
+\author{Taeyoung Kim}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $W\colon[0,1]^2\to[0,1]$ be a graphon, and let $C_{2m}^{\Alt}$ denote the $2m$-cycle in which red edges contribute $W$ and blue edges contribute its complement $1-W$.  For every odd integer $m\ge3$, we first prove the universal inequality
+\[
+   4^m t(C_{2m}^{\Alt},W)+t(C_{2m},2W-1)\le1,
+\]
+and hence $t(C_{2m}^{\Alt},W)\le4^{-m}$.  We then refine this result at fixed edge density.  Suppose
+$W$ has edge density $p$, and let $q=1-p$.  If
+\[
+   \frac{5-\sqrt5}{10}\le p\le \frac{5+\sqrt5}{10},
+\]
+then
+\[
+   t(C_{2m}^{\Alt},W)+t(C_{2m},W-p)\le \bigl(p(1-p)\bigr)^m.
+\]
+Since $t(C_{2m},W-p)\ge0$, this yields the exact fixed-edge-density profile
+\[
+   \sup_{t(K_2,W)=p}t(C_{2m}^{\Alt},W)=\bigl(p(1-p)\bigr)^m,
+\]
+with equality only for the constant graphon $W\equiv p$.  Thus the universal result holds at every edge density, while the exact fixed-density profile is determined throughout the central interval.  The proof uses normalized kernel operators, a rank-two determinant factorization, monotone auxiliary coefficient sequences, and an odd logarithmic coefficient inequality.
+\end{abstract}
+
+\section{Introduction and main result}
+
+Alternating cycles arise in the semi-inducibility problem studied by Basit, Granet, Horsley,
+K\"undgen, and Staden~\cite{BGHKS}.  They obtained sharp or nearly sharp results for alternating
+cycles whose lengths are divisible by four, while the lengths congruent to two modulo four remained
+open.  The first such case, the alternating six-cycle, was settled by Chen and
+Noel~\cite{ChenNoel}.  Theorem~\ref{thm:universal} resolves the entire congruence class without an
+edge-density restriction.  We then impose a fixed edge density and determine the sharper exact
+profile throughout the central interval in Theorem~\ref{thm:main}.  For background on graphons and
+homomorphism densities, see Lov\'asz~\cite{Lovasz}.
+
+A \emph{graphon} is a symmetric measurable function
+\[
+   W\colon[0,1]^2\to[0,1].
+\]
+Its edge density is
+\[
+   p=t(K_2,W)=\int_{[0,1]^2}W(x,y)\,dx\,dy,
+\]
+and throughout we write
+\[
+   q:=1-p.
+\]
+For any bounded symmetric kernel $K$, let $T_K$ denote the associated integral operator on $L^2([0,1])$,
+\[
+   (T_K f)(x)=\int_0^1 K(x,y)f(y)\,dy.
+\]
+
+Fix an odd integer $m\ge3$.  The alternating red--blue cycle density is
+\begin{align}
+ t(C_{2m}^{\Alt},W)
+ :=\int_{[0,1]^{2m}}
+ \prod_{j=1}^{m}
+   W(x_{2j-1},x_{2j})
+   \bigl(1-W(x_{2j},x_{2j+1})\bigr)
+ \,dx_1\cdots dx_{2m},
+ \label{eq:alt-density}
+\end{align}
+where $x_{2m+1}=x_1$.
+For a bounded symmetric signed kernel $K$, we use the usual cycle-density notation
+\[
+   t(C_r,K)
+   =\int_{[0,1]^r}\prod_{j=1}^r K(x_j,x_{j+1})\,dx_1\cdots dx_r,
+   \qquad x_{r+1}=x_1.
+\]
+
+We first state the density-independent result.
+
+\begin{theorem}[Universal alternating-cycle bound]\label{thm:universal}
+Let $m\ge3$ be odd.  Every graphon $W$ satisfies
+\begin{equation}
+   4^m t(C_{2m}^{\Alt},W)+t(C_{2m},2W-1)\le1.
+   \label{eq:universal-strong}
+\end{equation}
+Consequently,
+\begin{equation}
+   t(C_{2m}^{\Alt},W)\le4^{-m}.
+   \label{eq:universal-bound}
+\end{equation}
+Equality in \eqref{eq:universal-bound} holds if and only if $W=1/2$ almost everywhere.
+\end{theorem}
+
+At fixed edge density, the universal upper bound can be sharpened on the following interval.
+
+\begin{theorem}[Central fixed-density profile]\label{thm:main}
+Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p$.  Suppose
+\begin{equation}
+   \frac{5-\sqrt5}{10}\le p\le \frac{5+\sqrt5}{10}.
+   \label{eq:p-range}
+\end{equation}
+Then
+\begin{equation}
+   t(C_{2m}^{\Alt},W)+t(C_{2m},W-p)
+   \le (pq)^m.
+   \label{eq:strong-main}
+\end{equation}
+Consequently,
+\begin{equation}
+   t(C_{2m}^{\Alt},W)\le(pq)^m.
+   \label{eq:profile-main}
+\end{equation}
+Moreover, equality in \eqref{eq:profile-main} holds if and only if $W=p$ almost everywhere.
+\end{theorem}
+
+Since the constant graphon $W\equiv p$ has
+\[
+   t(C_{2m}^{\Alt},W)=p^mq^m=(pq)^m,
+\]
+Theorem~\ref{thm:main} determines the profile exactly on the interval \eqref{eq:p-range}.
+Since $p(1-p)\le1/4$, the fixed-density bound \eqref{eq:profile-main} strengthens
+\eqref{eq:universal-bound} throughout this interval, except that the two bounds agree at $p=1/2$.
+
+The elementary equivalence
+\begin{equation}
+ \frac{5-\sqrt5}{10}\le p\le \frac{5+\sqrt5}{10}
+ \quad\Longleftrightarrow\quad
+ |2p-1|\le\sqrt{p(1-p)}
+ \label{eq:range-equivalence}
+\end{equation}
+will be used repeatedly.  Indeed, after squaring, the latter inequality is
+\[
+   (2p-1)^2\le p(1-p),
+\]
+which is equivalent to
+\[
+   5p^2-5p+1\le0.
+\]
+
+\section{Finite-rank reduction}
+
+We first reduce all determinant calculations to ordinary finite matrices.  The reduction also preserves the edge density exactly.
+
+\begin{lemma}[Step-graphon reduction]\label{lem:step-reduction}
+For fixed $m$, it is enough to prove Theorem~\ref{thm:universal} for symmetric step graphons.  For
+fixed $p$ and $m$, it is enough to prove Theorem~\ref{thm:main} for symmetric step graphons of edge
+density exactly $p$.
+\end{lemma}
+
+\begin{proof}
+For $n\ge1$, partition $[0,1]$ into the $2^n$ dyadic intervals
+\[
+   I_{n,a}=\left[\frac{a}{2^n},\frac{a+1}{2^n}\right),
+   \qquad 0\le a<2^n,
+\]
+with the harmless convention that the final interval contains $1$.  Let $\mathcal A_n$ denote the finite sigma-algebra generated by these intervals, and set
+\[
+   W_n:=\mathbb E[W\mid\mathcal A_n\otimes\mathcal A_n].
+\]
+Then $W_n$ is a symmetric step graphon, $0\le W_n\le1$, and conditional expectation preserves the integral, so
+\[
+   \int_{[0,1]^2}W_n=p
+\]
+for every $n$.  Moreover,
+\[
+   \|W_n-W\|_2\longrightarrow0.
+\]
+
+We verify continuity of the two densities occurring in \eqref{eq:strong-main}.  First, every factor in the alternating product \eqref{eq:alt-density} lies in $[0,1]$.  Telescoping the product over its $2m$ factors gives
+\[
+   \bigl|t(C_{2m}^{\Alt},W_n)-t(C_{2m}^{\Alt},W)\bigr|
+   \le 2m\|W_n-W\|_1
+   \le 2m\|W_n-W\|_2,
+\]
+because replacing $W_n$ by $W$ or $1-W_n$ by $1-W$ changes the relevant factor by the same quantity $W_n-W$ in absolute value.
+
+Next define
+\[
+   K_n:=W_n-p,
+   \qquad
+   K:=W-p.
+\]
+Both kernels take values in $[-1,1]$, and $\|K_n-K\|_2=\|W_n-W\|_2$.  The same telescoping argument yields
+\[
+   |t(C_{2m},K_n)-t(C_{2m},K)|
+   \le 2m\|K_n-K\|_1
+   \le 2m\|W_n-W\|_2.
+\]
+Thus both densities in \eqref{eq:strong-main} converge.  The same argument, applied to $2W_n-1$
+and $2W-1$, treats the signed density in \eqref{eq:universal-strong}.  Any inequality proved for
+every $W_n$ therefore passes to $W$.
+\end{proof}
+
+Henceforth, until Section~\ref{sec:limit}, we assume that $W$ is a symmetric step graphon.  Let
+\[
+   [0,1]=B_1\sqcup\cdots\sqcup B_N
+\]
+be a finite measurable partition on whose product cells $W$ is constant, and let
+\[
+   E:=\operatorname{span}\{\mathbf 1_{B_1},\ldots,\mathbf 1_{B_N}\}.
+\]
+Every operator associated with a step kernel maps $L^2([0,1])$ into $E$ and vanishes on $E^\perp$.  Thus all nonzero action takes place on the finite-dimensional Hilbert space $E$.
+
+Let
+\[
+   e:=\one.
+\]
+Because the underlying measure space has total mass one, $\|e\|_2=1$.  Let
+\[
+   P:=e\otimes e
+\]
+be the rank-one orthogonal projection onto the constants.  The operator of the constant kernel $1$ is exactly $P$.
+
+For every symmetric step kernel $K$ and every $r\ge2$,
+\begin{equation}
+   t(C_r,K)=\Tr(T_K^r).
+   \label{eq:trace-cycle}
+\end{equation}
+Likewise, direct multiplication around the alternating cycle gives
+\begin{equation}
+   t(C_{2m}^{\Alt},W)
+   =\Tr\bigl((T_WT_{1-W})^m\bigr).
+   \label{eq:trace-alt}
+\end{equation}
+All traces and determinants below are ordinary finite-dimensional traces and determinants on $E$.
+
+\section{Centering and normalization at fixed density}
+
+Let
+\[
+   s:=\sqrt{pq}
+\]
+and define the normalized centered operator
+\begin{equation}
+   Y:=\frac{T_W-pP}{s}.
+   \label{eq:def-Y}
+\end{equation}
+Since the interval \eqref{eq:p-range} is contained in $(0,1)$, we have $s>0$.  The operator $Y$ is self-adjoint.  Moreover,
+\begin{equation}
+   \ip{e}{Ye}
+   =\frac{\ip{e}{T_We}-p}{s}
+   =0.
+   \label{eq:mu1zero}
+\end{equation}
+
+The Hilbert--Schmidt norm of $Y$ satisfies the following bound.
+
+\begin{lemma}[Normalized Hilbert--Schmidt bound]\label{lem:normalized-hs-bound}
+One has
+\begin{equation}
+   \tau:=\Tr(Y^2)\le1.
+   \label{eq:tau}
+\end{equation}
+Consequently every eigenvalue $\lambda$ of $Y$ satisfies $|\lambda|\le1$.
+\end{lemma}
+
+\begin{proof}
+For a symmetric step kernel, the Hilbert--Schmidt norm agrees with the $L^2$ norm of the kernel.  Therefore
+\begin{align*}
+   \Tr(Y^2)
+   &=\frac{1}{pq}\int_{[0,1]^2}(W(x,y)-p)^2\,dx\,dy\\
+   &=\frac{1}{pq}\left(\int W^2-p^2\right).
+\end{align*}
+Since $0\le W\le1$, we have $W^2\le W$ pointwise, hence
+\[
+   \int W^2-p^2\le p-p^2=pq.
+\]
+This proves \eqref{eq:tau}.  Since $Y$ is self-adjoint,
+\[
+   \|Y\|_{\op}^2\le\|Y\|_{\HS}^2=\Tr(Y^2)\le1,
+\]
+so every eigenvalue belongs to $[-1,1]$.
+\end{proof}
+
+Define
+\begin{equation}
+   \alpha:=\sqrt{\frac qp},
+   \qquad
+   \delta:=\alpha^{-1}-\alpha
+   =\frac{p-q}{\sqrt{pq}}.
+   \label{eq:alpha-delta}
+\end{equation}
+The density assumption \eqref{eq:p-range}, by \eqref{eq:range-equivalence}, is precisely
+\begin{equation}
+   |\delta|\le1.
+   \label{eq:delta-bound}
+\end{equation}
+
+Normalize the red and blue operators by their respective edge densities:
+\begin{equation}
+   R:=\frac{T_W}{p}=P+\alpha Y,
+   \qquad
+   B:=\frac{T_{1-W}}q=P-\alpha^{-1}Y.
+   \label{eq:R-B}
+\end{equation}
+Indeed,
+\[
+   T_W=pP+sY=p(P+\alpha Y),
+\]
+because $p\alpha=s$, and similarly
+\[
+   T_{1-W}=P-T_W=qP-sY=q(P-\alpha^{-1}Y).
+\]
+The kernels of $R$ and $B$ are respectively $W/p$ and $(1-W)/q$, and hence are pointwise nonnegative.
+
+Set
+\begin{equation}
+   L:=RB.
+   \label{eq:def-L}
+\end{equation}
+Then
+\begin{equation}
+   T_WT_{1-W}=pq\,L,
+\end{equation}
+so \eqref{eq:trace-alt} becomes
+\begin{equation}
+   t(C_{2m}^{\Alt},W)=(pq)^m\Tr(L^m).
+   \label{eq:alt-normalized}
+\end{equation}
+Likewise,
+\begin{equation}
+   T_{W-p}=T_W-pP=sY,
+\end{equation}
+so
+\begin{equation}
+   t(C_{2m},W-p)
+   =(pq)^m\Tr(Y^{2m}).
+   \label{eq:centered-cycle-normalized}
+\end{equation}
+Thus Theorem~\ref{thm:main} reduces to the finite-dimensional inequality
+\begin{equation}
+   \Tr(L^m)+\Tr(Y^{2m})\le1.
+   \label{eq:normalized-inequality}
+\end{equation}
+
+\section{The rank-two determinant factorization}
+
+We now derive the determinant identity used to evaluate the alternating-cycle density.
+Since $Ye$ will appear repeatedly, write
+\[
+   u:=Ye.
+\]
+From \eqref{eq:R-B},
+\begin{equation}
+\begin{aligned}
+   L
+   &=(P+\alpha Y)(P-\alpha^{-1}Y)\\
+   &=P-\alpha^{-1}PY+\alpha YP-Y^2.
+\end{aligned}
+   \label{eq:L-expanded}
+\end{equation}
+Because $P=e\otimes e$, self-adjointness of $Y$ gives
+\[
+   PY=e\otimes u,
+   \qquad
+   YP=u\otimes e.
+\]
+
+For an auxiliary variable $z$, define
+\begin{equation}
+   D(z):=I+zY^2,
+   \qquad
+   N(z):=D(z)^{-1}.
+   \label{eq:D-N}
+\end{equation}
+For $z$ sufficiently close to $0$, $D(z)$ is invertible.  Define scalar functions
+\begin{equation}
+   h(z):=\ip{e}{N(z)e},
+   \qquad
+   k(z):=\ip{e}{YN(z)e},
+   \qquad
+   \ell(z):=\ip{e}{Y^2N(z)e}.
+   \label{eq:h-k-ell}
+\end{equation}
+Since $N(z)$ is a function of $Y^2$, it commutes with $Y$.  The identity
+\[
+   N(z)+zY^2N(z)=I
+\]
+implies
+\begin{equation}
+   h(z)+z\ell(z)=1.
+   \label{eq:h-ell}
+\end{equation}
+
+\begin{lemma}[Rank-two determinant factorization]\label{lem:rank-two-factorization}
+With the notation above,
+\begin{equation}
+   \det(I-zL)
+   =\det(I+zY^2)\bigl(1-zF(z)\bigr),
+   \label{eq:det-factor}
+\end{equation}
+where
+\begin{equation}
+   F(z):=h(z)^2-\delta k(z)+zk(z)^2.
+   \label{eq:def-F}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+From \eqref{eq:L-expanded},
+\begin{align}
+   I-zL
+   &=I+zY^2-zP+z\alpha^{-1}PY-z\alpha YP\notag\\
+   &=D(z)+ze(\alpha^{-1}u-e)^*-z\alpha u e^*.
+   \label{eq:ranktwo-perturb}
+\end{align}
+Introduce the two-column operators
+\[
+   \mathcal U
+   :=\begin{pmatrix}ze&-z\alpha u\end{pmatrix},
+   \qquad
+   \mathcal V
+   :=\begin{pmatrix}\alpha^{-1}u-e&e\end{pmatrix}.
+\]
+Then \eqref{eq:ranktwo-perturb} is
+\[
+   I-zL=D(z)+\mathcal U\mathcal V^*.
+\]
+The matrix determinant lemma gives
+\begin{equation}
+   \det(D+\mathcal U\mathcal V^*)
+   =\det(D)\det(I_2+\mathcal V^*D^{-1}\mathcal U).
+   \label{eq:matrix-det-lemma}
+\end{equation}
+For completeness, \eqref{eq:matrix-det-lemma} follows from Sylvester's identity
+$\det(I+AB)=\det(I+BA)$:
+\[
+   \det(D+\mathcal U\mathcal V^*)
+   =\det(D)\det(I+D^{-1}\mathcal U\mathcal V^*)
+   =\det(D)\det(I_2+\mathcal V^*D^{-1}\mathcal U).
+\]
+
+We now compute the $2\times2$ matrix explicitly.  Since $N=D^{-1}$ and $u=Ye$,
+\[
+   \ip{u}{Ne}=k,
+   \qquad
+   \ip{u}{Nu}=\ell.
+\]
+Therefore
+\begin{equation}
+   I_2+\mathcal V^*N\mathcal U
+   =
+   \begin{pmatrix}
+      1+z(\alpha^{-1}k-h) & z(\alpha k-\ell)\\
+      zh & 1-z\alpha k
+   \end{pmatrix}.
+   \label{eq:2by2}
+\end{equation}
+Its determinant is
+\begin{align*}
+ &\bigl(1+z(\alpha^{-1}k-h)\bigr)(1-z\alpha k)
+   -z^2h(\alpha k-\ell)\\
+ &\qquad
+ =1+z\bigl((\alpha^{-1}-\alpha)k-h\bigr)
+   +z^2(h\ell-k^2).
+\end{align*}
+Using \eqref{eq:h-ell},
+\[
+   z^2h\ell=zh(1-h),
+\]
+so the preceding expression becomes
+\begin{align*}
+   1+z\delta k-zh+zh-zh^2-z^2k^2
+   &=1-z\bigl(h^2-\delta k+zk^2\bigr)\\
+   &=1-zF(z).
+\end{align*}
+Substitution into \eqref{eq:matrix-det-lemma} proves \eqref{eq:det-factor}.
+\end{proof}
+
+\section{Spectral expansion of the auxiliary series}
+
+Diagonalize the finite-dimensional self-adjoint operator $Y$.  Let
+\[
+   Yv_i=\lambda_i v_i
+\]
+for an orthonormal eigenbasis $(v_i)$, and define
+\begin{equation}
+   \omega_i:=|\ip{e}{v_i}|^2.
+   \label{eq:omega}
+\end{equation}
+Then
+\begin{equation}
+   \omega_i\ge0,
+   \qquad
+   \sum_i\omega_i=1,
+   \qquad
+   \sum_i\omega_i\lambda_i=\ip{e}{Ye}=0,
+   \label{eq:omega-identities}
+\end{equation}
+and
+\begin{equation}
+   \sum_i\lambda_i^2=\Tr(Y^2)=\tau\le1.
+   \label{eq:spectrum-bound}
+\end{equation}
+The scalar resolvents are
+\begin{equation}
+   h(z)=\sum_i\frac{\omega_i}{1+z\lambda_i^2},
+   \qquad
+   k(z)=\sum_i\frac{\omega_i\lambda_i}{1+z\lambda_i^2}.
+   \label{eq:h-k-spectral}
+\end{equation}
+
+For $n\ge0$ and real $x,y$, define
+\begin{equation}
+   c_n(x,y)
+   :=
+   \begin{cases}
+   \dfrac{x^{2n+1}+y^{2n+1}}{x+y},&x+y\ne0,\\[2mm]
+   (2n+1)x^{2n},&y=-x.
+   \end{cases}
+   \label{eq:def-cn}
+\end{equation}
+The second line is the continuous extension of the first.
+
+\begin{lemma}[Properties of the divided differences]\label{lem:cn}
+For every $n\ge0$ and every real $x,y$,
+\begin{equation}
+   c_n(x,y)\ge0.
+   \label{eq:cn-positive}
+\end{equation}
+Moreover, for every $n\ge1$,
+\begin{equation}
+   (x^2+y^2)c_n(x,y)-c_{n+1}(x,y)
+   =x^2y^2c_{n-1}(x,y).
+   \label{eq:cn-recurrence}
+\end{equation}
+Finally,
+\begin{equation}
+   c_n(x,x)=x^{2n}.
+   \label{eq:cn-diagonal}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The map $t\mapsto t^{2n+1}$ is increasing on $\R$.  If $x+y\ne0$, then
+\[
+   c_n(x,y)
+   =\frac{x^{2n+1}-(-y)^{2n+1}}{x-(-y)}
+\]
+is a divided difference of this increasing function, and is therefore nonnegative.  When $y=-x$, its limiting value is the derivative
+\[
+   (2n+1)x^{2n}\ge0.
+\]
+This proves \eqref{eq:cn-positive}.
+
+For $x+y\ne0$,
+\begin{align*}
+ &(x^2+y^2)c_n(x,y)-c_{n+1}(x,y)\\
+ &\quad=
+ \frac{(x^2+y^2)(x^{2n+1}+y^{2n+1})-(x^{2n+3}+y^{2n+3})}{x+y}\\
+ &\quad=
+ x^2y^2\frac{x^{2n-1}+y^{2n-1}}{x+y}\\
+ &\quad=x^2y^2c_{n-1}(x,y).
+\end{align*}
+The identity extends to $x+y=0$ by continuity.  Formula \eqref{eq:cn-diagonal} follows immediately from \eqref{eq:def-cn}.
+\end{proof}
+
+The following partial-fraction identity connects the resolvent with these divided differences:
+\begin{equation}
+   \frac{1+zxy}{(1+zx^2)(1+zy^2)}
+   =\frac{x}{x+y}\frac1{1+zx^2}
+    +\frac{y}{x+y}\frac1{1+zy^2}.
+   \label{eq:partial-fraction}
+\end{equation}
+For $x+y=0$ the identity is understood by continuity.  Expanding the two geometric series gives
+\begin{equation}
+   \frac{1+zxy}{(1+zx^2)(1+zy^2)}
+   =\sum_{n\ge0}(-1)^n c_n(x,y)z^n.
+   \label{eq:cn-generating}
+\end{equation}
+
+We next expand the auxiliary function $F$.
+
+\begin{lemma}[Coefficients of $F$]\label{lem:beta-expansion}
+There exist real numbers $\beta_n$ such that
+\begin{equation}
+   F(z)=\sum_{n\ge0}(-1)^n\beta_n z^n,
+   \label{eq:F-beta}
+\end{equation}
+where
+\begin{equation}
+   \beta_n
+   =\sum_{i,j}\omega_i\omega_j
+     c_n(\lambda_i,\lambda_j)
+     \left(1-\frac{\delta}{2}(\lambda_i+\lambda_j)\right).
+   \label{eq:beta-formula}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Using \eqref{eq:h-k-spectral},
+\begin{align*}
+ h(z)^2+zk(z)^2
+ &=\sum_{i,j}\omega_i\omega_j
+   \frac{1+z\lambda_i\lambda_j}
+   {(1+z\lambda_i^2)(1+z\lambda_j^2)}.
+\end{align*}
+Also, since $\sum_j\omega_j=1$,
+\begin{align*}
+ -\delta k(z)
+ &=-\frac{\delta}{2}\sum_{i,j}\omega_i\omega_j
+ \left(
+   \frac{\lambda_i}{1+z\lambda_i^2}
+   +\frac{\lambda_j}{1+z\lambda_j^2}
+ \right)\\
+ &=-\frac{\delta}{2}\sum_{i,j}\omega_i\omega_j
+ \frac{(\lambda_i+\lambda_j)(1+z\lambda_i\lambda_j)}
+ {(1+z\lambda_i^2)(1+z\lambda_j^2)}.
+\end{align*}
+Therefore
+\begin{align}
+ F(z)
+ =\sum_{i,j}\omega_i\omega_j
+ \left(1-\frac{\delta}{2}(\lambda_i+\lambda_j)\right)
+ \frac{1+z\lambda_i\lambda_j}
+ {(1+z\lambda_i^2)(1+z\lambda_j^2)}.
+ \label{eq:F-double-sum}
+\end{align}
+Substituting \eqref{eq:cn-generating} into \eqref{eq:F-double-sum} and comparing coefficients proves \eqref{eq:F-beta}--\eqref{eq:beta-formula}.
+\end{proof}
+
+In the density interval \eqref{eq:p-range}, these coefficients form a decreasing nonnegative sequence.
+
+\begin{proposition}[Monotonicity of the coefficients]\label{prop:beta-monotone}
+Under the assumptions of Theorem~\ref{thm:main},
+\begin{equation}
+   1=\beta_0\ge\beta_1\ge\beta_2\ge\cdots\ge0.
+   \label{eq:beta-monotone}
+\end{equation}
+More precisely,
+\begin{equation}
+   \beta_{n+1}\le\tau\beta_n
+   \qquad(n\ge1),
+   \label{eq:beta-recursive-bound}
+\end{equation}
+where $\tau=\Tr(Y^2)\le1$.
+\end{proposition}
+
+\begin{proof}
+We divide the proof into three steps.
+
+\medskip
+\noindent\textbf{Step 1: nonnegativity and $\beta_0=1$.}
+By Lemma~\ref{lem:normalized-hs-bound} and \eqref{eq:delta-bound},
+\[
+   |\lambda_i|\le1,
+   \qquad
+   |\delta|\le1.
+\]
+Hence
+\[
+   \delta\lambda_i\le |\delta|\,|\lambda_i|\le1
+\]
+for every $i$, and therefore
+\begin{equation}
+   1-\frac{\delta}{2}(\lambda_i+\lambda_j)
+   =\frac{(1-\delta\lambda_i)+(1-\delta\lambda_j)}{2}
+   \ge0.
+   \label{eq:weight-positive}
+\end{equation}
+Together with $c_n\ge0$ from Lemma~\ref{lem:cn}, formula \eqref{eq:beta-formula} gives
+\[
+   \beta_n\ge0
+\]
+for every $n$.
+
+Since $c_0(x,y)=1$, \eqref{eq:omega-identities} yields
+\begin{align*}
+   \beta_0
+   &=\sum_{i,j}\omega_i\omega_j
+      \left(1-\frac{\delta}{2}(\lambda_i+\lambda_j)\right)\\
+   &=1-\delta\sum_i\omega_i\lambda_i\\
+   &=1.
+\end{align*}
+
+\medskip
+\noindent\textbf{Step 2: $\beta_1\le1$.}
+For $r\ge0$, define
+\[
+   \mu_r:=\ip{e}{Y^r e}=\sum_i\omega_i\lambda_i^r.
+\]
+We already know $\mu_1=0$.  Since
+\[
+   c_1(x,y)=x^2-xy+y^2,
+\]
+formula \eqref{eq:beta-formula} gives
+\begin{equation}
+   \beta_1=2\mu_2-\delta\mu_3.
+   \label{eq:beta1}
+\end{equation}
+Indeed, the unweighted average of $c_1$ is $2\mu_2-\mu_1^2=2\mu_2$, while
+\[
+   c_1(x,y)(x+y)=x^3+y^3,
+\]
+so the $\delta$-term contributes $-\delta\mu_3$.
+
+We now use the pointwise nonnegativity of the red and blue kernels.  From \eqref{eq:R-B}, a direct expansion using $Pe=e$, $\ip{e}{Ye}=0$, and $Y=Y^*$ gives
+\begin{equation}
+   \ip{e}{RBR e}=1-2\mu_2-\alpha\mu_3,
+   \label{eq:RBR}
+\end{equation}
+and
+\begin{equation}
+   \ip{e}{BRB e}=1-2\mu_2+\alpha^{-1}\mu_3.
+   \label{eq:BRB}
+\end{equation}
+For example,
+\[
+   Re=e+\alpha Ye,
+\]
+and therefore
+\[
+   \ip{e}{RBR e}=\ip{Re}{B(Re)}.
+\]
+Expansion of the right side gives \eqref{eq:RBR}; the second identity is analogous.
+
+Because $R$ and $B$ have pointwise nonnegative kernels, the compositions $RBR$ and $BRB$ also have pointwise nonnegative kernels.  Hence
+\[
+   \ip{e}{RBR e}\ge0,
+   \qquad
+   \ip{e}{BRB e}\ge0.
+\]
+Taking the convex combination with weights $q$ and $p$, and using
+\[
+   p\alpha^{-1}-q\alpha
+   =\frac{p-q}{\sqrt{pq}}
+   =\delta,
+\]
+we obtain
+\begin{align*}
+ 0
+ &\le q\ip{e}{RBR e}+p\ip{e}{BRB e}\\
+ &=1-2\mu_2+\delta\mu_3\\
+ &=1-\beta_1.
+\end{align*}
+Thus
+\[
+   0\le\beta_1\le1.
+\]
+
+\medskip
+\noindent\textbf{Step 3: the recursive inequality for $n\ge1$.}
+Fix indices $i,j$.  If $i=j$, then by \eqref{eq:cn-diagonal},
+\[
+   c_{n+1}(\lambda_i,\lambda_i)
+   =\lambda_i^2c_n(\lambda_i,\lambda_i)
+   \le\tau c_n(\lambda_i,\lambda_i),
+\]
+because $\lambda_i^2\le\sum_r\lambda_r^2=\tau$.
+
+If $i\ne j$, then Lemma~\ref{lem:cn} gives
+\begin{align*}
+   c_{n+1}(\lambda_i,\lambda_j)
+   &=(\lambda_i^2+\lambda_j^2)c_n(\lambda_i,\lambda_j)
+     -\lambda_i^2\lambda_j^2c_{n-1}(\lambda_i,\lambda_j)\\
+   &\le(\lambda_i^2+\lambda_j^2)c_n(\lambda_i,\lambda_j)\\
+   &\le\tau c_n(\lambda_i,\lambda_j),
+\end{align*}
+because $c_{n-1}\ge0$ and, for distinct basis indices,
+\[
+   \lambda_i^2+\lambda_j^2\le\sum_r\lambda_r^2=\tau.
+\]
+
+The factors \eqref{eq:weight-positive} in \eqref{eq:beta-formula} are nonnegative.  Multiplying the preceding pointwise inequality by those factors and by $\omega_i\omega_j$, then summing over $i,j$, yields
+\[
+   \beta_{n+1}\le\tau\beta_n.
+\]
+Since $\tau\le1$, this proves
+\[
+   \beta_{n+1}\le\beta_n
+\]
+for every $n\ge1$.  Together with $1=\beta_0\ge\beta_1\ge0$, the full chain \eqref{eq:beta-monotone} follows.
+\end{proof}
+
+\section{The odd logarithmic coefficient lemma}
+
+The preceding proposition reduces the remaining argument to a one-variable formal power-series fact.
+
+\begin{lemma}[Odd logarithmic coefficient]\label{lem:odd-log}
+Let
+\[
+   1=\beta_0\ge\beta_1\ge\beta_2\ge\cdots\ge0
+\]
+and define
+\[
+   F(z)=\sum_{n\ge0}(-1)^n\beta_nz^n.
+\]
+Then for every odd positive integer $m$,
+\begin{equation}
+   m[z^m]\bigl(-\log(1-zF(z))\bigr)\le1.
+   \label{eq:odd-log-bound}
+\end{equation}
+More precisely, if
+\[
+   d_n:=\beta_n-\beta_{n+1}\ge0,
+   \qquad
+   G(z):=\sum_{n\ge0}d_nz^n,
+\]
+then
+\begin{equation}
+\begin{aligned}
+ 1-m[z^m]\bigl(-\log(1-zF(z))\bigr)
+ =m\sum_{r=1}^{(m-1)/2}\frac1r
+   [z^{m-2r}]G(z)^r
+ \ge0.
+   \label{eq:odd-log-identity}
+\end{aligned}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For $k\ge1$, the coefficient of $z^k$ in $(1+z)F(z)$ is
+\[
+   (-1)^k\beta_k+(-1)^{k-1}\beta_{k-1}
+   =(-1)^{k-1}d_{k-1}.
+\]
+Thus
+\begin{equation}
+   (1+z)F(z)=1+zG(-z).
+   \label{eq:FG}
+\end{equation}
+It follows that
+\begin{align}
+   (1+z)(1-zF(z))
+   &=1+z-z(1+z)F(z)\notag\\
+   &=1-z^2G(-z).
+   \label{eq:factor-log}
+\end{align}
+Taking formal logarithms gives
+\begin{equation}
+   -\log(1-zF(z))
+   =\log(1+z)-\log(1-z^2G(-z)).
+   \label{eq:log-split}
+\end{equation}
+Since $m$ is odd,
+\[
+   [z^m]\log(1+z)=\frac1m.
+\]
+Also,
+\begin{equation}
+   -\log(1-z^2G(-z))
+   =\sum_{r\ge1}\frac{z^{2r}G(-z)^r}{r}.
+   \label{eq:second-log}
+\end{equation}
+For $1\le r\le(m-1)/2$, the integer $m-2r$ is odd.  Since $G$ has nonnegative coefficients,
+\[
+   [z^{m-2r}]G(-z)^r
+   =(-1)^{m-2r}[z^{m-2r}]G(z)^r
+   =-[z^{m-2r}]G(z)^r.
+\]
+Therefore the coefficient of $z^m$ in the second term on the right side of \eqref{eq:log-split} is
+\[
+   -\sum_{r=1}^{(m-1)/2}\frac1r[z^{m-2r}]G(z)^r.
+\]
+Combining this with the contribution $1/m$ from $\log(1+z)$ proves the exact identity \eqref{eq:odd-log-identity}, and hence \eqref{eq:odd-log-bound}.
+\end{proof}
+
+\section{Completion of the finite-dimensional argument}
+
+We now combine the determinant factorization with Lemma~\ref{lem:odd-log}.  For any finite matrix $M$, the Taylor expansion at $z=0$ gives
+\begin{equation}
+   -\log\det(I-zM)
+   =\sum_{r\ge1}\frac{\Tr(M^r)}{r}z^r.
+   \label{eq:trace-log}
+\end{equation}
+This identity may equivalently be read as a formal power-series identity.  Applying \eqref{eq:trace-log} to Lemma~\ref{lem:rank-two-factorization},
+\begin{equation}
+   -\log\det(I-zL)
+   =-\log\det(I+zY^2)-\log(1-zF(z)).
+   \label{eq:log-det-factor}
+\end{equation}
+The first term on the right has expansion
+\begin{equation}
+   -\log\det(I+zY^2)
+   =\sum_{r\ge1}\frac{(-1)^r\Tr(Y^{2r})}{r}z^r.
+   \label{eq:Y-log}
+\end{equation}
+Taking the coefficient of $z^m$ in \eqref{eq:log-det-factor}, and using that $m$ is odd, gives
+\begin{equation}
+   \Tr(L^m)
+   =-\Tr(Y^{2m})
+    +m[z^m]\bigl(-\log(1-zF(z))\bigr).
+   \label{eq:trace-identity-final}
+\end{equation}
+By Proposition~\ref{prop:beta-monotone}, the coefficients of $F$ satisfy the hypotheses of Lemma~\ref{lem:odd-log}.  Hence
+\[
+   m[z^m]\bigl(-\log(1-zF(z))\bigr)\le1.
+\]
+Substitution into \eqref{eq:trace-identity-final} yields
+\begin{equation}
+   \Tr(L^m)+\Tr(Y^{2m})\le1.
+   \label{eq:abstract-proved}
+\end{equation}
+This proves the normalized inequality \eqref{eq:normalized-inequality}.  Multiplying by $(pq)^m$ and using \eqref{eq:alt-normalized} and \eqref{eq:centered-cycle-normalized}, we obtain
+\[
+   t(C_{2m}^{\Alt},W)+t(C_{2m},W-p)\le(pq)^m
+\]
+for every symmetric step graphon of edge density $p$ satisfying \eqref{eq:p-range}.
+
+\section{The universal inequality}\label{sec:universal-proof}
+
+We now prove the density-independent inequality \eqref{eq:universal-strong}, using the same
+rank-two determinant factorization and scalar coefficient argument.  By Lemma~\ref{lem:step-reduction}, it is enough for
+now to take $W$ to be a symmetric step graphon.  On the finite-dimensional space $E$ from
+Section~2, define
+\[
+   X:=T_{2W-1},
+   \qquad
+   L_0:=(P+X)(P-X).
+\]
+Then $X=X^*$ and
+\begin{equation}
+   T_W=\frac{P+X}{2},
+   \qquad
+   T_{1-W}=\frac{P-X}{2}.
+   \label{eq:universal-coordinates}
+\end{equation}
+Consequently,
+\begin{equation}
+   4^m t(C_{2m}^{\Alt},W)=\Tr(L_0^m),
+   \qquad
+   t(C_{2m},2W-1)=\Tr(X^{2m}).
+   \label{eq:universal-traces}
+\end{equation}
+Moreover,
+\begin{equation}
+   \tau_0:=\Tr(X^2)
+   =\int_{[0,1]^2}(2W(x,y)-1)^2\,dx\,dy
+   \le1.
+   \label{eq:universal-hs-bound}
+\end{equation}
+
+Set
+\[
+   D_0(z):=I+zX^2,
+   \qquad N_0(z):=D_0(z)^{-1},
+\]
+and define
+\[
+   h_0(z):=\ip{e}{N_0(z)e},
+   \qquad
+   k_0(z):=\ip{e}{XN_0(z)e}.
+\]
+The proof of Lemma~\ref{lem:rank-two-factorization}, with $Y=X$ and $\alpha=1$ (and hence $\delta=0$),
+gives
+\begin{equation}
+   \det(I-zL_0)
+   =\det(I+zX^2)\bigl(1-zF_0(z)\bigr),
+   \qquad
+   F_0(z):=h_0(z)^2+zk_0(z)^2.
+   \label{eq:universal-det-factor}
+\end{equation}
+
+Diagonalize $X$, writing $Xv_i=\lambda_i v_i$ and
+$\omega_i:=|\ip{e}{v_i}|^2$.  Thus
+\[
+   \omega_i\ge0,
+   \qquad
+   \sum_i\omega_i=1,
+   \qquad
+   \sum_i\lambda_i^2=\tau_0\le1.
+\]
+The calculation of Lemma~\ref{lem:beta-expansion}, now with $\delta=0$, gives
+\begin{equation}
+   F_0(z)=\sum_{n\ge0}(-1)^n\beta_n^{(0)}z^n,
+   \qquad
+   \beta_n^{(0)}
+   :=\sum_{i,j}\omega_i\omega_jc_n(\lambda_i,\lambda_j).
+   \label{eq:universal-beta}
+\end{equation}
+Lemma~\ref{lem:cn} implies $\beta_n^{(0)}\ge0$, and $c_0\equiv1$ gives
+$\beta_0^{(0)}=1$.
+
+It remains to check the first monotonicity step.  Define
+\[
+   \mu_r:=\sum_i\omega_i\lambda_i^r=\ip{e}{X^re}.
+\]
+Since $c_1(x,y)=x^2-xy+y^2$,
+\begin{equation}
+   \beta_1^{(0)}=2\mu_2-\mu_1^2.
+   \label{eq:universal-beta-one}
+\end{equation}
+Decompose $E=\R e\oplus e^\perp$ and write
+\[
+   X=
+   \begin{pmatrix}
+      a&w^*\\
+      w&A
+   \end{pmatrix}.
+\]
+Then $\mu_1=a$, $\mu_2=a^2+\|w\|^2$, and hence
+\[
+   \beta_1^{(0)}=a^2+2\|w\|^2
+   \le a^2+2\|w\|^2+\Tr(A^2)
+   =\tau_0
+   \le1.
+\]
+For $n\ge1$, Step~3 in the proof of Proposition~\ref{prop:beta-monotone} applies unchanged, with
+the additional density factor in \eqref{eq:beta-formula} equal to one, and gives
+\[
+   \beta_{n+1}^{(0)}\le\tau_0\beta_n^{(0)}\le\beta_n^{(0)}.
+\]
+Therefore
+\[
+   1=\beta_0^{(0)}\ge\beta_1^{(0)}\ge\beta_2^{(0)}\ge\cdots\ge0.
+\]
+
+Lemma~\ref{lem:odd-log}, applied to \eqref{eq:universal-beta}, yields
+\[
+   m[z^m]\bigl(-\log(1-zF_0(z))\bigr)\le1.
+\]
+Finally, comparing the coefficient of $z^m$ in the logarithm of
+\eqref{eq:universal-det-factor}, exactly as in Section~7, gives
+\[
+   \Tr(L_0^m)+\Tr(X^{2m})
+   =m[z^m]\bigl(-\log(1-zF_0(z))\bigr)
+   \le1.
+\]
+Together with \eqref{eq:universal-traces}, this proves \eqref{eq:universal-strong} for symmetric
+step graphons.
+
+\section{Passage to arbitrary graphons and equality}\label{sec:limit}
+
+By Lemma~\ref{lem:step-reduction}, the inequalities \eqref{eq:universal-strong} and
+\eqref{eq:strong-main} pass from step graphons to arbitrary graphons.
+
+We use the following standard positivity fact.  For every bounded symmetric kernel $K$ and every
+integer $r\ge1$,
+\begin{equation}
+   t(C_{2r},K)=\Tr(T_K^{2r})=\|T_K^r\|_{\HS}^2\ge0.
+   \label{eq:even-signed-nonnegative}
+\end{equation}
+For step kernels this follows from
+$T_K^{2r}=(T_K^r)^*T_K^r$ and the finite-dimensional trace formula.  For a general bounded
+symmetric kernel, apply the dyadic conditional expectations from Lemma~\ref{lem:step-reduction}.
+The cycle densities converge by the same telescoping argument, while the corresponding integral
+operators and their $r$th powers converge in Hilbert--Schmidt norm.  Passing to the limit gives
+\eqref{eq:even-signed-nonnegative}.
+
+Applying \eqref{eq:even-signed-nonnegative} to $K=2W-1$ in
+\eqref{eq:universal-strong} gives \eqref{eq:universal-bound}.  If equality holds, then
+\eqref{eq:universal-strong} forces
+\[
+   \|T_{2W-1}^m\|_{\HS}^2=t(C_{2m},2W-1)=0.
+\]
+Because $T_{2W-1}$ is self-adjoint, this implies $T_{2W-1}=0$.  Its Hilbert--Schmidt norm is the
+$L^2$ norm of its kernel, so $W=1/2$ almost everywhere.  The converse is immediate.  This proves
+Theorem~\ref{thm:universal}.
+
+Applying \eqref{eq:even-signed-nonnegative} to $K=W-p$ in \eqref{eq:strong-main} gives
+\[
+   t(C_{2m}^{\Alt},W)\le(pq)^m,
+\]
+which is \eqref{eq:profile-main}.
+
+Suppose equality holds in \eqref{eq:profile-main}.  Then \eqref{eq:strong-main} and \eqref{eq:even-signed-nonnegative} force
+\[
+   t(C_{2m},W-p)=0.
+\]
+Hence every eigenvalue of the self-adjoint compact operator $T_{W-p}$ is zero.  Therefore $T_{W-p}=0$.  Since $T_{W-p}$ is Hilbert--Schmidt,
+\[
+   \|W-p\|_2^2=\|T_{W-p}\|_{\HS}^2=0,
+\]
+so
+\[
+   W=p
+\]
+almost everywhere.  Conversely, the constant graphon $W\equiv p$ plainly gives equality.
+
+We have therefore also proved Theorem~\ref{thm:main} in full.
+
+\begin{corollary}[Exact profile on the central interval]
+Let $m\ge3$ be odd.  For
+\[
+   \frac{5-\sqrt5}{10}\le p\le\frac{5+\sqrt5}{10},
+\]
+one has
+\[
+   \sup\left\{
+      t(C_{2m}^{\Alt},W):
+      W\text{ a graphon and }t(K_2,W)=p
+   \right\}
+   =[p(1-p)]^m.
+\]
+The unique maximizing graphon, up to equality almost everywhere, is the constant graphon $W\equiv p$.
+\end{corollary}
+
+\section{Remark on the Lean verification}
+
+The inequalities \eqref{eq:universal-strong}, \eqref{eq:universal-bound},
+\eqref{eq:strong-main}, and \eqref{eq:profile-main}, their cyclic-integral formulations, and
+attainment by the constant graphons $W\equiv1/2$ and $W\equiv p$ have been formalised in the
+Lean~4 proof assistant~\cite{Lean4}, on top of the mathlib library~\cite{mathlib}.  The uniqueness
+of the equality cases is not formalised.  The formal proof differs from the one given here in
+three ways.
+
+First, instead of the step-graphon approximation (Lemma~\ref{lem:step-reduction}), we write the
+graphon quantities in \eqref{eq:universal-strong} and \eqref{eq:strong-main}, the latter after
+division by $(pq)^m$, and their matrix counterparts as the same polynomials in the moments
+$\mu_g=\ip{\one}{Z^g\one}$, $g<2m$, where $Z$ denotes the relevant normalized kernel operator.
+We then compress $Z$ to the Krylov subspace
+$\operatorname{span}\{\one,Z\one,\ldots,Z^{2m}\one\}$; this produces a finite symmetric matrix
+with the same moments and $\Tr(A^2)\le1$, to which the corresponding finite-dimensional inequality
+applies directly.
+
+Second, the formal proof never forms a logarithm or a large determinant.  Instead of handling
+$m[z^m]\bigl(-\log A(z)\bigr)$, it uses the operator
+$\Lambda(A):=-zA'(z)/A(z)$: since $z\,d/dz$ multiplies the coefficient of $z^m$ by $m$, one has
+$[z^m]\Lambda(A)=m[z^m]\bigl(-\log A(z)\bigr)$, while $\Lambda$ itself involves no logarithm.  The
+rule $\Lambda(fg)=\Lambda(f)+\Lambda(g)$, immediate from $(fg)'=f'g+fg'$, replaces the only
+property of the logarithm that the argument uses.  Similarly, the logarithm in
+\eqref{eq:trace-identity-final} is read as $[z^m]\Lambda(1-zF(z))$, and the identity is proved not
+through \eqref{eq:trace-log} but directly from the rank-two structure in the proof of
+Lemma~\ref{lem:rank-two-factorization}, as a computation with the $2\times2$ matrix
+$I_2+\mathcal V^*N(z)\mathcal U$; the only determinants that appear are $2\times2$.
+
+Third, for the first coefficient in the universal inequality, the formal proof obtains
+$\beta_1^{(0)}\le\tau_0$ from a direct sum-of-squares identity, without decomposing $X$ along $e$.
+
+\begin{thebibliography}{9}
+
+\bibitem{BGHKS}
+A. Basit, B. Granet, D. Horsley, A. K\"undgen, and K. Staden,
+\emph{The semi-inducibility problem},
+arXiv:2501.09842.
+
+\bibitem{ChenNoel}
+H. Chen and J. A. Noel,
+\emph{On alternating 6-cycles in edge-coloured graphs},
+arXiv:2505.09809.
+
+\bibitem{Lovasz}
+L. Lov\'asz,
+\emph{Large Networks and Graph Limits},
+American Mathematical Society Colloquium Publications, vol.~60,
+American Mathematical Society, Providence, RI, 2012.
+
+\bibitem{mathlib}
+The mathlib Community,
+\emph{The Lean mathematical library},
+Proceedings of the 9th ACM SIGPLAN International Conference on
+Certified Programs and Proofs (CPP 2020), ACM, 2020, pp.~367--381.
+
+\bibitem{Lean4}
+L. de Moura and S. Ullrich,
+\emph{The Lean 4 theorem prover and programming language},
+Automated Deduction -- CADE 28, Lecture Notes in Computer Science,
+vol.~12699, Springer, 2021, pp.~625--635.
+
+\end{thebibliography}
+
+\end{document}
