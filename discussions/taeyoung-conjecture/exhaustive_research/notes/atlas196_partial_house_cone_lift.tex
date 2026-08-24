@@ -1,0 +1,304 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{A Partial Cone Lift from the House Graph to Atlas 196}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Statement}
+
+Let $F$ be the house graph, Atlas $43$, and let
+\[
+ H=K_1\vee F.
+\]
+The graph $H$ is Atlas $196$, with graph6 code \texttt{ER\string~g}.  Put
+\[
+ \phi(z):=\Phi_F(z)
+ =z(2z-1)(3z^2-3z+1)
+ =6z^4-9z^3+5z^2-z.
+\]
+The improved global house theorem in
+\texttt{notes/atlas43\_improved\_global\_interval.tex} proves
+\begin{equation}\label{eq:house-input}
+ t(F,V)\geq\phi(t(K_2,V))
+ \qquad\text{whenever}\qquad
+ t(K_2,V)\geq
+ a:=0.7085121949942608482\ldots,
+\end{equation}
+where (a) is the unique root in ((3/4,1)) of
+\[
+ 5440a^4-10848a^3+7981a^2-2580a+309=0.
+\]
+
+For $c\in[a,1]$, define the value at $a$ of the tangent to $\phi$ at $c$:
+\[
+ L(c):=\phi(c)+(a-c)\phi'(c).
+\]
+There is a unique $c_0\in(a,1)$ satisfying
+\begin{equation}\label{eq:c0}
+ L(c_0)=0.
+\end{equation}
+Define
+\begin{equation}\label{eq:p0}
+ p_0:=\frac1{2-c_0}.
+\end{equation}
+
+\begin{theorem}[Atlas 196 partial range]\label{thm:atlas196}
+Every graphon $W$ of edge density $p\geq p_0$ satisfies
+\[
+ t(H,W)\geq\Phi_H(p).
+\]
+Numerically,
+\[
+\begin{split}
+ c_0&=0.8412137423978822016\ldots,\\
+ p_0&=0.8629719186257049718\ldots,
+\end{split}
+\]
+and in particular the theorem holds throughout the certified rounded range
+\[
+ \boxed{p\geq0.8629719187.}
+\]
+\end{theorem}
+
+\section{A partial-range lifting lemma}
+
+The usual universal-vertex lifting theorem assumes that the base inequality
+starts at a zero of its target.  Only one line of its proof needs to be
+changed when the known base range begins later.
+
+\subsection{The weighted link estimate}
+
+We include the weighted local Goodman inequality used in the lift so that
+the argument is self-contained.  Write
+\[
+ d(x)=\int W(x,y)\dd y,
+ \qquad
+ \tau(x)=\int W(x,y)W(x,z)W(y,z)\dd y\dd z.
+\]
+
+\begin{lemma}[Weighted rooted-triangle inequality]\label{lem:weighted-goodman}
+If \(W\) has edge density \(p>0\), then, for every integer \(k\geq0\),
+\[
+ \int d(x)^k\tau(x)\dd x
+ \geq
+ \frac{2p-1}{p}\int d(x)^{k+2}\dd x.
+\]
+Consequently, for every integer \(n\geq2\),
+\begin{equation}\label{eq:weighted-link}
+ \int d(x)^n z_x\dd x
+ \geq
+ \left(2-\frac1p\right)\int d(x)^n\dd x,
+\end{equation}
+where \(z_x=\tau(x)/d(x)^2\) when \(d(x)>0\), and \(z_x=0\)
+when \(d(x)=0\).
+\end{lemma}
+
+\begin{proof}
+Put \(M_j=\int d^j\), and set
+\[
+ I_k=\int d(x)^k\tau(x)\dd x,
+ \qquad
+ J_k=\int d(x)^kW(x,y)d(y)\dd x\dd y.
+\]
+The pointwise inequality \(ab\geq a+b-1\), applied to
+\(W(x,y)W(x,z)\), gives
+\begin{equation}\label{eq:I-J}
+ I_k\geq2J_k-pM_k.
+\end{equation}
+
+Let \(U=1-W\), \(u(x)=\int U(x,y)\dd y=1-d(x)\), and
+\(q=1-p\).  If \(T_U\) is the integral operator with kernel \(U\), then
+\[
+ T_Wd=d-q+T_Uu,
+\]
+so
+\[
+ J_k=M_{k+1}-qM_k+\int d(x)^k(T_Uu)(x)\dd x.
+\]
+Symmetry of \(U\) gives
+\[
+\begin{split}
+ &2\left[
+ \int d(x)^k(T_Uu)(x)\dd x-\int d(x)^ku(x)^2\dd x
+ \right]\\
+ &\qquad=
+ \int U(x,y)\bigl(u(y)-u(x)\bigr)
+ \bigl(d(x)^k-d(y)^k\bigr)\dd x\dd y
+ \geq0.
+\end{split}
+\]
+The last sign holds because \(u=1-d\), so the two displayed differences
+have the same sign.  Therefore
+\[
+ J_k\geq
+ M_{k+1}-qM_k+\int d^k(1-d)^2
+ =M_{k+2}-M_{k+1}+pM_k.
+\]
+Combining this with \eqref{eq:I-J} yields
+\[
+ I_k\geq2M_{k+2}-2M_{k+1}+pM_k.
+\]
+Finally,
+\[
+\begin{split}
+ &2M_{k+2}-2M_{k+1}+pM_k
+ -\frac{2p-1}{p}M_{k+2}\\
+ &\qquad=
+ \frac1p\int d(x)^k\bigl(d(x)-p\bigr)^2\dd x
+ \geq0.
+\end{split}
+\]
+This proves the first assertion.  Since
+\(d(x)^nz_x=d(x)^{n-2}\tau(x)\), applying it with \(k=n-2\)
+proves \eqref{eq:weighted-link}.
+\end{proof}
+
+\subsection{The tangent lift}
+
+\begin{lemma}[Tangent lift from a partial base range]\label{lem:lift}
+Let $G$ be a graph on $n\geq2$ vertices and let
+$\psi(z)=\Phi_G(z)$.  Suppose that, for some $a\in[0,1)$,
+\begin{enumerate}
+ \item every graphon $V$ of density $z\geq a$ satisfies
+       $t(G,V)\geq\psi(z)$;
+ \item $\psi,\psi'$, and $\psi''$ are nonnegative on $[a,1]$.
+\end{enumerate}
+Let $W$ have density $p<1$, set
+\[
+ c=2-\frac1p,
+\]
+and suppose
+\[
+ c\in[a,1],
+ \qquad
+ \psi(c)+(a-c)\psi'(c)\leq0.
+\]
+Then
+\[
+ t(K_1\vee G,W)\geq\Phi_{K_1\vee G}(p).
+\]
+\end{lemma}
+
+\begin{proof}
+Write $d(x)=\int W(x,y)\dd y$.  For $d(x)>0$, let $W_x$ be the link
+graphon on the probability measure $W(x,y)\dd y/d(x)$, and let $z_x$ be
+its edge density; when $d(x)=0$, set $z_x=0$.  The link identity gives
+\begin{equation}\label{eq:link}
+ t(K_1\vee G,W)
+ =\int d(x)^n t(G,W_x)\dd x.
+\end{equation}
+
+Let
+\[
+ \ell_c(z)=\psi(c)+\psi'(c)(z-c)
+\]
+be the tangent at $c$.  If $z\geq a$, convexity and the base theorem give
+\[
+ t(G,V)\geq\psi(z)\geq\ell_c(z).
+\]
+If $z<a$, then $\psi'(c)\geq0$ and the assumed tangent condition give
+\[
+ \ell_c(z)\leq\ell_c(a)\leq0\leq t(G,V).
+\]
+Consequently $t(G,V)\geq\ell_c(z)$ for every graphon $V$, irrespective of
+whether its density lies in the proved base range.
+
+Substitute this affine minorant into \eqref{eq:link}.
+Lemma~\ref{lem:weighted-goodman} gives
+\[
+ \int d(x)^n z_x\dd x
+ \geq
+ \left(2-\frac1p\right)\int d(x)^n\dd x
+ =c\int d(x)^n\dd x.
+\]
+Since $\psi'(c)\geq0$, the tangent term is nonnegative after integration,
+and hence
+\[
+ t(K_1\vee G,W)
+ \geq
+ \psi(c)\int d(x)^n\dd x.
+\]
+Jensen gives $\int d^n\geq p^n$, and $\psi(c)\geq0$, so
+\[
+ t(K_1\vee G,W)\geq p^n\psi(c).
+\]
+Finally, writing $q=1-p$, one has
+\[
+ 1-c=\frac qp,
+ \qquad
+ p^n\psi(c)=q^n\chi_G\!\left(\frac pq\right)
+ =\Phi_{K_1\vee G}(p),
+\]
+where the last identity uses
+$\chi_{K_1\vee G}(x)=x\chi_G(x-1)$.  This proves the lemma.  The endpoint
+$p=1$ follows directly from $W=1$ almost everywhere.
+\end{proof}
+
+\section{Verification for the house target}
+
+Differentiation gives
+\[
+ \phi'(z)=24z^3-27z^2+10z-1,
+ \qquad
+ \phi''(z)=2(3z-1)(12z-5).
+\]
+Thus $\phi''(z)>0$ for $z\geq1/2$.  Also
+$\phi'(1/2)=1/4$, so $\phi'$ is positive on $[1/2,1]$, and
+$\phi$ is nonnegative there because its only vanishing factor in that
+interval is $2z-1$.  The analytic hypotheses of
+Lemma~\ref{lem:lift} therefore hold on $[a,1]$.
+
+Moreover,
+\[
+ L'(c)=(a-c)\phi''(c)<0
+ \qquad(a<c<1).
+\]
+At the two endpoints,
+\[
+ L(a)=\phi(a)>0,
+ \qquad
+ L(1)=1+6(a-1)=6a-5<0.
+\]
+Hence the zero $c_0$ in \eqref{eq:c0} exists and is unique, and
+$L(c)\leq0$ for every $c\geq c_0$.
+
+The map $p\mapsto2-1/p$ is increasing.  Therefore $p\geq p_0$ implies
+$c\geq c_0$, and Lemma~\ref{lem:lift}, with the accepted house input
+\eqref{eq:house-input}, proves Theorem~\ref{thm:atlas196}.
+
+The numerical values are obtained by first isolating the unique quartic
+root (a), then using the strict monotonicity of (L) to isolate the
+unique zero in \eqref{eq:c0}.  Exact rational interval arithmetic gives
+\[
+ 0.8629719186<p_0<0.8629719187,
+\]
+so the rounded decimal threshold in the theorem is on the proved side.
+
+\section{Scope}
+
+This note uses the improved global house theorem only on its proved range.  It
+does not assume the unresolved house inequality below $a$, and it applies
+to arbitrary graphons.  It leaves
+\[
+ \frac23\leq p<p_0
+\]
+open for Atlas 196, so the catalogue status is partial rather than
+positive.  A future full proof for the house would satisfy the ordinary
+lifting theorem with $a=1/2$ and would immediately settle Atlas 196 on its
+entire required interval.
+
+\end{document}

@@ -1,0 +1,403 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\TT}{\mathsf T}
+
+\title{Atlas 130: Exact Operator Reduction and Two Restricted-Family Theorems}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Atlas 130 is the graph consisting of two triangles joined by a bridge.
+Its desired graphon inequality is
+\[
+ t(H_{130},W)\geq p^3(2p-1)^2\qquad (p\geq\tfrac12).
+\]
+We prove this inequality for two substantial classes: graphons whose
+self-adjoint integral operator is positive semidefinite, and all regular
+graphons.  For an arbitrary graphon we derive an exact one-line reduction
+and isolate a stronger sufficient inequality as a conjecture, not a theorem.  An
+exact rational two-step example shows why a tempting termwise proof of that
+conjecture cannot work.  Thus this note gives rigorous restricted-family
+progress but does not change the open status of Atlas 130.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The graph and its target}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Use the Atlas labelling
+\[
+ E(H_{130})=\{01,02,03,12,34,35,45\}.
+\]
+Thus $012$ and $345$ are triangles and $03$ is their joining bridge.  The
+Graph Atlas index is $130$ and the graph6 code is \verb|E{CW|.  Colouring
+the first triangle, then the bridge endpoint, and then the last two triangle
+vertices gives
+\begin{equation}
+ \chi_{H_{130}}(x)=x(x-1)^3(x-2)^2.
+ \label{eq:chromatic}
+\end{equation}
+For $q=1-p$ and $r=2p-1$, the chromatic target is therefore
+\begin{equation}
+ q^6\chi_{H_{130}}(1/q)=p^3r^2.
+ \label{eq:target}
+\end{equation}
+The formula on the left is interpreted polynomially at $p=1$.
+
+Let $W\colon\Omega^2\to[0,1]$ be a symmetric measurable graphon on a
+probability space.  Write
+\[
+ \TT g(x)=\int_\Omega W(x,y)g(y)\dd\mu(y),
+ \qquad p=\int_{\Omega^2}W\dd\mu^2,
+ \qquad d=\TT\one,
+ \qquad A=\TT d.
+\]
+Define the rooted triangle density and three graph densities
+\begin{align*}
+ \tau(x)&=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z),\\
+ B&=\ip dA=t(P_4,W),\\
+ F&=\ip\tau A,\\
+ H&=\ip\tau{\TT\tau}=t(H_{130},W).
+\end{align*}
+Here $F$ is the density of a triangle with a path of length two attached
+at one triangle vertex.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Two arbitrary-graphon anchor inequalities}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lemma}[Two-edge-tail anchor]
+\label{lem:anchor}
+For every graphon of density $p\geq\tfrac12$,
+\begin{equation}
+ F\geq rB
+ \qquad\text{and}\qquad
+ B\geq p^3.
+ \label{eq:anchors}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The elementary inequality $ab\geq a+b-1$, applied to
+$W(x,y),W(x,z)$ and then multiplied by $W(y,z)$, gives
+\begin{equation}
+ \tau(x)\geq2A(x)-p.
+ \label{eq:rooted-goodman}
+\end{equation}
+Since $A\geq0$ and $\int A=\lVert d\rVert_2^2$,
+\[
+ F\geq2\lVert A\rVert_2^2-p\lVert d\rVert_2^2.
+\]
+Put $g=d-p\one$ and $h=\TT g$, so $A=pd+h$.  A direct expansion and
+completion of the square give
+\begin{align}
+ &2\lVert A\rVert_2^2-p\lVert d\rVert_2^2-r\ip Ad \notag\\
+ &\quad=
+ 2\left\lVert h+\frac{2p+1}{4}g\right\rVert_2^2
+ +\frac{(2p+1)(6p-1)}8\lVert g\rVert_2^2\geq0.
+ \label{eq:anchor-square}
+\end{align}
+This proves $F\geq rB$ (indeed, the square works for $p\geq1/6$).
+
+For completeness, the path bound follows from one application of
+H\"older.  Define the quotients to be zero wherever their denominator
+vanishes.  The integrand identity below holds almost everywhere because
+zero-degree fibres carry no $W$-mass.  Thus
+\begin{align*}
+ p
+ &=\int_{\Omega^2}
+   \bigl(W(x,y)d(x)d(y)\bigr)^{1/3}
+   \left(\frac{W(x,y)}{d(x)}\right)^{1/3}
+   \left(\frac{W(x,y)}{d(y)}\right)^{1/3}\dd\mu^2\\
+ &\leq B^{1/3}
+ \left(\int\frac{W(x,y)}{d(x)}\dd\mu^2\right)^{1/3}
+ \left(\int\frac{W(x,y)}{d(y)}\dd\mu^2\right)^{1/3}
+ \leq B^{1/3}.
+\end{align*}
+Thus $B\geq p^3$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The exact operator reduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{proposition}[Only the negative spectral energy remains]
+\label{prop:reduction}
+Set
+\[
+ f=\tau-rd.
+\]
+Then the following are exact identities:
+\begin{align}
+ H-rF
+ &=r(F-rB)+\ip f{\TT f},
+ \label{eq:reduction-one}\\
+ H-r^2B
+ &=2r(F-rB)+\ip f{\TT f}.
+ \label{eq:reduction-two}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+Because $\tau=rd+f$ and $\TT d=A$,
+\[
+ H-rF=\ip\tau{\TT(\tau-rd)}
+ =r\ip d{\TT f}+\ip f{\TT f}
+ =r\ip A f+\ip f{\TT f}.
+\]
+But $\ip Af=F-rB$, proving \eqref{eq:reduction-one}.  Substituting
+$F=rB+(F-rB)$ once more gives \eqref{eq:reduction-two}.
+\end{proof}
+
+Lemma~\ref{lem:anchor} makes $F-rB$ nonnegative.  Consequently the only
+term in \eqref{eq:reduction-two} that can have the wrong sign for a general
+graphon is the spectral energy $\ip f{\TT f}$.  A pointwise nonnegative
+kernel need not define a positive-semidefinite operator, so this observation
+does not by itself settle the arbitrary-graphon problem.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Positive-semidefinite operator graphons}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[PSD-operator case]
+\label{thm:psd}
+Suppose the graphon operator is positive semidefinite on $L^2(\Omega)$:
+\[
+ \ip g{\TT g}\geq0\qquad\text{for every }g\in L^2(\Omega).
+\]
+Then, for every $p\geq\tfrac12$,
+\[
+ H\geq rF\geq r^2B\geq p^3r^2.
+\]
+In particular Atlas 130 satisfies its full chromatic target on this class.
+\end{theorem}
+
+\begin{proof}
+In \eqref{eq:reduction-one}, all three quantities $r$, $F-rB$, and
+$\ip f{\TT f}$ are nonnegative.  Thus $H\geq rF$.  The other two
+inequalities are exactly Lemma~\ref{lem:anchor}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{All regular graphons}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[Regular case]
+\label{thm:regular}
+If $W$ is $p$-regular, meaning $d(x)=p$ almost everywhere, then for every
+$p\geq\tfrac12$,
+\[
+ H\geq rF\geq p^3r^2.
+\]
+Thus Atlas 130 satisfies its full chromatic target for every regular
+graphon, with no spectral assumption.
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+ C(x,y)=\int_\Omega W(x,z)W(y,z)\dd\mu(z),
+ \qquad \ell=\TT\tau,
+\]
+and put $U=1-W$ and
+\[
+ K_U(x,y)=\int_\Omega U(x,z)U(y,z)\dd\mu(z)\geq0.
+\]
+The elementary complement-codegree identity is
+\begin{equation}
+ C(x,y)-r
+ =K_U(x,y)+(d(x)-p)+(d(y)-p).
+ \label{eq:codegree}
+\end{equation}
+Indeed, $K_U=1-d(x)-d(y)+C$ and $r=2p-1$.
+
+Fubini and self-adjointness give
+\begin{align*}
+ H&=\int_{\Omega^2}W(x,y)\ell(x)C(x,y)\dd\mu^2,\\
+ F&=\ip\tau A=\ip{\TT\tau}d
+   =\int_{\Omega^2}W(x,y)\ell(x)\dd\mu^2.
+\end{align*}
+If $d=p$ almost everywhere, \eqref{eq:codegree} reduces to
+$C-r=K_U\geq0$.  Since $W\geq0$ and $\ell=\TT\tau\geq0$,
+\begin{equation}
+ H-rF=\int_{\Omega^2}W(x,y)\ell(x)K_U(x,y)\dd\mu^2\geq0.
+ \label{eq:regular-repair}
+\end{equation}
+Finally regularity gives $A=\TT(p\one)=p^2\one$ and hence
+$B=\ip dA=p^3$.  Lemma~\ref{lem:anchor} now yields
+$H\geq rF\geq r^2B=p^3r^2$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The exact target condition, a sufficient lemma, and a termwise obstruction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+By \eqref{eq:reduction-two}, the original Atlas 130 target is exactly
+equivalent to
+\begin{equation}
+ \ip f{\TT f}+2r(F-rB)+r^2(B-p^3)\geq0.
+ \label{eq:exact-target-condition}
+\end{equation}
+Both correction terms outside the spectral energy are nonnegative by
+Lemma~\ref{lem:anchor}.  The following cleaner statement is sufficient for
+\eqref{eq:exact-target-condition}, but is potentially strictly stronger.
+
+\begin{conjecture}[Concrete sufficient arbitrary-graphon lemma; unproved]
+\label{conj:remaining}
+Every graphon of density $p\geq\tfrac12$ satisfies
+\begin{equation}
+ \boxed{H\geq rF.}
+ \label{eq:conjecture}
+\end{equation}
+\end{conjecture}
+
+This statement is deliberately labelled conjectural and is not asserted to
+be equivalent to the original target.  If it holds, then
+Lemma~\ref{lem:anchor} immediately gives
+$H\geq rF\geq r^2B\geq p^3r^2$, closing Atlas 130 for arbitrary graphons.
+The sufficient statement itself is equivalent, by
+Proposition~\ref{prop:reduction}, to
+\[
+ \ip f{\TT f}\geq-r(F-rB).
+\]
+
+There is another exact form that exposes a possible complement repair.
+For arbitrary $W$, equations \eqref{eq:codegree} and the two Fubini
+identities in the proof of Theorem~\ref{thm:regular} give
+\begin{align}
+ H-rF
+ &=\int_\Omega \ell(x)
+   \bigl(d(x)^2+A(x)-2p\,d(x)\bigr)\dd\mu(x) \notag\\
+ &\quad+\int_{\Omega^2}W(x,y)\ell(x)K_U(x,y)\dd\mu^2.
+ \label{eq:complement-repair}
+\end{align}
+The second term is nonnegative, but the first term is not.
+
+Here is a small exact obstruction to simply discarding the second term.
+Take a two-step graphon with block masses
+\[
+ (m_1,m_2)=\left(\frac{35}{100},\frac{65}{100}\right)
+\]
+and block matrix
+\[
+ (W_{ij})=
+ \begin{pmatrix}
+  2/100&86/100\\
+  86/100&41/100
+ \end{pmatrix}.
+\]
+Its edge density is $p=22679/40000>1/2$.  Direct rational evaluation
+of the signed first term in \eqref{eq:complement-repair} gives
+\begin{equation}
+ -\frac{523633393223577}{640000000000000000000}<0,
+ \label{eq:signed-obstruction}
+\end{equation}
+whereas the complete difference is
+\begin{equation}
+ H-rF=
+ \frac{45687431624678040839}{6400000000000000000000}>0.
+ \label{eq:repaired-example}
+\end{equation}
+Thus a proof through \eqref{eq:complement-repair} must retain enough of the
+nonnegative complement-codegree term to repair a genuinely negative signed
+part.  Neither this example nor the decomposition proves
+Conjecture~\ref{conj:remaining}.
+
+There is an even simpler obstruction to a stronger, tempting route.  The
+pointwise inequality
+\begin{equation}
+ \TT\tau\geq rA
+ \label{eq:false-pointwise}
+\end{equation}
+would imply $H\geq rF$ immediately after taking the inner product with
+$\tau\geq0$, but \eqref{eq:false-pointwise} is false.  Take the disjoint union
+of two clique graphons with block masses $1/10$ and $9/10$, that is,
+\[
+ (W_{ij})=\begin{pmatrix}1&0\\0&1\end{pmatrix}.
+\]
+Here $p=41/50$ and $r=16/25$.  On the small block,
+\[
+ A=\tau=\frac1{100},\qquad
+ \TT\tau=\frac1{1000},\qquad
+ \TT\tau-rA=-\frac{27}{5000}<0.
+\]
+This is only a dead-route certificate, not a counterexample to the averaged
+conjecture: globally
+\[
+ F=\frac{1181}{2000},\qquad
+ H=\frac{265721}{500000},\qquad
+ H-rF=\frac{76761}{500000}>0.
+\]
+Thus any proof must use averaging or compensation between fibres; it cannot
+establish the conjecture by pointwise domination of $\TT\tau$ over $rA$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Exact audit}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The companion script
+\[
+ \texttt{experiments/atlas130\_psd\_regular\_verify.py}
+\]
+uses only NetworkX, integer arithmetic, and \texttt{fractions.Fraction}.
+It verifies the Atlas index, graph6 code and edge set; checks the chromatic
+polynomial and target polynomial exactly; recomputes
+\eqref{eq:signed-obstruction}--\eqref{eq:repaired-example} from the first
+two-step graphon; and checks the exact pointwise obstruction and positive
+global gap for the two-clique graphon.  The largest exhaustive loop has only
+$8^6$ colour assignments, so the audit has negligible memory requirements.
+
+A second companion,
+\[
+ \texttt{experiments/atlas130\_conjecture\_search.py},
+\]
+contains both an exact finite census and a separate numerical falsification
+search.  In the exact branch it enumerates all $2^{15}=32768$ symmetric
+$5$-by-$5$ binary block matrices, with diagonal entries allowed and all five
+blocks of mass $1/5$.  Exactly $16384$ have $p\geq1/2$.  If
+$p=P/5^2$, $F=F_0/5^5$, and $H=H_0/5^6$, it evaluates the integer
+\[
+ 5H_0-(2P-25)F_0=5^7(H-rF)
+\]
+for every matrix.  There are exactly zero negative values, two equality
+values, and the least positive gap is exactly
+\[
+ \frac{128}{5^7}=\frac{128}{78125}.
+\]
+This is a rigorous certificate for that finite step-graphon family, not a
+proof of Conjecture~\ref{conj:remaining}.  The variable-mass continuous search
+in the same file remains explicitly numerical evidence only.
+
+\begin{remark}[Status]
+Theorems~\ref{thm:psd} and~\ref{thm:regular} are full-interval theorems on
+restricted graphon families.  They are not a density interval valid for
+all graphons.  Atlas 130 therefore remains open in the arbitrary-graphon
+classification, and no green range is claimed here.
+\end{remark}
+
+\end{document}

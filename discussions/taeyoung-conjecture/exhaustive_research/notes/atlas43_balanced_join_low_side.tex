@@ -1,0 +1,323 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Atlas 43 at Low Density:\\A Balanced-Join Theorem}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Scope and result}
+
+Let \(H\) be the house graph, equivalently the theta graph with path
+lengths \(1,2,3\).  Its claimed Goodman-type lower bound is
+\begin{equation}\label{eq:target}
+ t(H,W)\geq B(p):=p(2p-1)\bigl(p^3+(1-p)^3\bigr),
+ \qquad p=t(K_2,W)\geq\frac12.
+\end{equation}
+The general low-density problem remains open.  This note proves
+\eqref{eq:target} on a large, infinite-dimensional class containing the
+natural low-density extremal candidates.
+
+Let \(X,Y\) be arbitrary graphons.  Their \emph{balanced complete join}
+\(J(X,Y)\) is the graphon on two classes of measure \(1/2\), equal to \(X\)
+and \(Y\) inside the two classes and equal to \(1\) across the classes.
+No regularity, finite-step, or pointwise-smallness assumption is made on
+\(X\) or \(Y\).
+
+\begin{theorem}[Arbitrary interiors]\label{thm:arbitrary}
+Let \(W=J(X,Y)\).  If
+\[
+ \frac12\leq p=t(K_2,W)
+ \leq \frac{1+1/\sqrt5}{2}=0.7236067977\ldots,
+\]
+then \(W\) satisfies the Atlas \(43\) bound \eqref{eq:target}.
+\end{theorem}
+
+When the two interiors agree, a triangle--\(C_4\) tradeoff gives a modest
+but useful extension.
+
+\begin{theorem}[Identical interiors]\label{thm:symmetric}
+Let \(W=J(X,X)\).  If
+\[
+ \frac12\leq p=t(K_2,W)\leq\frac{59}{80}=0.7375,
+\]
+then \(W\) satisfies the Atlas \(43\) bound \eqref{eq:target}.
+\end{theorem}
+
+These are structural low-side theorems, not global graphon theorems, so
+they do not enlarge the green interval in the classification table.  Their
+importance is that arbitrary high-amplitude perturbations inside the two
+Turan classes are allowed.  Thus the unresolved obstruction to a global
+low-density theorem is narrowed to incomplete or unbalanced cuts, rather
+than the pure critical-addition face.
+
+\section{The 32-colouring identity}
+
+We use \(P_j\) for the path with \(j\) edges and \(Paw\) for a triangle
+with a pendant edge.  Put
+\[
+ x=t(K_2,X),\qquad y=t(K_2,Y),\qquad r=\frac{x+y}{2}.
+\]
+The edge density of \(W=J(X,Y)\) is
+\begin{equation}\label{eq:p-r}
+ p=\frac12+\frac{x+y}{4}=\frac{1+r}{2},
+ \qquad 2p-1=r.
+\end{equation}
+
+Assign each of the five vertices of \(H\) to one of the two join classes.
+Edges crossing the classes contribute \(1\); the remaining edges induce a
+graph in \(X\) or \(Y\).  Grouping the \(2^5=32\) assignments by their two
+induced graphs gives the following exact identity:
+\begin{align}
+32t(H,J(X,Y))={}&t(H,X)+t(H,Y)\notag\\
+&+2t(Paw,X)+2t(Paw,Y)\notag\\
+&+y\,t(K_3,X)+x\,t(K_3,Y)\notag\\
+&+t(C_4,X)+t(C_4,Y)\notag\\
+&+2t(P_2,X)+2t(P_2,Y)\notag\\
+&+2t(P_3,X)+2t(P_3,Y)\notag\\
+&+4y\,t(P_2,X)+4x\,t(P_2,Y)\notag\\
+&+2xy+2x+2y.\label{eq:32identity}
+\end{align}
+For reference, the multiplicities of the ordered induced pairs are
+\begin{center}
+\begin{tabular}{c|c}
+ordered pair, together with its reversal&multiplicity in each orientation\\
+\midrule
+\((H,1)\)&\(1\)\\
+\((Paw,1)\)&\(2\)\\
+\((K_3,K_2)\)&\(1\)\\
+\((C_4,1)\)&\(1\)\\
+\((P_3,1)\)&\(2\)\\
+\((P_2,1)\)&\(2\)\\
+\((P_2,K_2)\)&\(4\)\\
+\((K_2,1)\)&\(2\)\\
+\((K_2,K_2)\)&\(2\) total
+\end{tabular}
+\end{center}
+The entries sum to \(32\), and directly verify \eqref{eq:32identity}.
+
+We shall use only the elementary path and \(4\)-cycle inequalities
+\begin{equation}\label{eq:sidorenko-small}
+ t(P_2,Z)\geq z^2,\qquad
+ t(P_3,Z)\geq z^3,\qquad
+ t(C_4,Z)\geq z^4,
+ \qquad z=t(K_2,Z).
+\end{equation}
+The first is Jensen applied to the degree function, the second is the
+Blakley--Roy path inequality, and the third follows twice from
+Cauchy--Schwarz: if \(C_Z(u,v)=\int Z(u,w)Z(w,v)\dd w\), then
+\[
+ t(C_4,Z)=\int C_Z^2
+ \geq\left(\int C_Z\right)^2
+ =t(P_2,Z)^2\geq z^4.
+\]
+
+\section{Proof for arbitrary interiors}
+
+\begin{proof}[Proof of Theorem~\ref{thm:arbitrary}]
+All terms on the first three lines of \eqref{eq:32identity} are
+nonnegative.  Dropping them and applying \eqref{eq:sidorenko-small} gives
+\begin{align}
+32t(H,W)\geq{}&x^4+y^4+2(x^2+y^2)+2(x^3+y^3)\notag\\
+&+4(x^2y+xy^2)+2xy+2(x+y).\label{eq:join-lower}
+\end{align}
+Write
+\[
+ x=r+z,\qquad y=r-z.
+\]
+By \eqref{eq:p-r},
+\[
+ B(p)=\frac{r(1+r)(1+3r^2)}8.
+\]
+Expanding the right side of \eqref{eq:join-lower} and subtracting this
+target yields
+\begin{equation}\label{eq:general-gap}
+ t(H,W)-B(p)
+ \geq
+ \frac{
+ r^2(1-5r^2)
+ +(6r^2+2r+1)z^2+z^4
+ }{16}.
+\end{equation}
+If \(0\leq r\leq1/\sqrt5\), every term on the right is nonnegative.
+Equation \eqref{eq:p-r} translates this condition exactly into the range
+in the theorem.
+\end{proof}
+
+Notice that imbalance between the two internal edge densities contributes
+the explicitly positive \(z^2\) and \(z^4\) terms in
+\eqref{eq:general-gap}.  The symmetric case is therefore the limiting one
+for this basic certificate.
+
+\section{A triangle--\(C_4\) tradeoff}
+
+The next lemma uses the fact that a graphon with few triangles must put
+most of its two-step paths on nonedges.
+
+\begin{lemma}\label{lem:tradeoff}
+Let \(Z\) be a graphon of edge density \(s<1\), triangle density
+\(\tau=t(K_3,Z)\), and \(4\)-cycle density \(c_4=t(C_4,Z)\).  Then
+\begin{equation}\label{eq:tradeoff}
+ c_4\geq s^4,
+ \qquad
+ c_4\geq\frac{(s^2-\tau)_+^2}{1-s}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The first inequality is \eqref{eq:sidorenko-small}.  Let
+\(C_Z(u,v)=\int Z(u,w)Z(w,v)\dd w\) and
+\(a=t(P_2,Z)=\int C_Z\geq s^2\).  Since
+\[
+ a-\tau=\int(1-Z)C_Z,
+\]
+Cauchy--Schwarz gives
+\[
+ (a-\tau)^2
+ \leq\left(\int(1-Z)\right)
+       \left(\int(1-Z)C_Z^2\right)
+ \leq(1-s)c_4.
+\]
+If \(\tau<s^2\), use \(a-\tau\geq s^2-\tau\).  If
+\(\tau\geq s^2\), the second assertion is vacuous.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:symmetric}]
+Put \(s=t(K_2,X)\), so that \(p=(1+s)/2\).  Specializing
+\eqref{eq:32identity} to \(X=Y\) gives
+\begin{align}
+16t(H,J(X,X))={}&t(H,X)+2t(Paw,X)+s\,t(K_3,X)+t(C_4,X)\notag\\
+&+(2+4s)t(P_2,X)+2t(P_3,X)+s^2+2s.
+\label{eq:symmetric-identity}
+\end{align}
+After dropping the first two nonnegative terms and applying the path
+inequalities, it is enough to prove
+\begin{equation}\label{eq:needed-tradeoff}
+ t(C_4,X)+s\,t(K_3,X)\geq 6s^4-s^2.
+\end{equation}
+
+For \(s\leq1/\sqrt5\), the first inequality in
+Lemma~\ref{lem:tradeoff} is already sufficient.  Assume henceforth that
+\[
+ \frac1{\sqrt5}\leq s\leq\frac{19}{40},
+ \qquad q=1-s,
+ \qquad \tau=t(K_3,X).
+\]
+Set
+\[
+ \tau_*:=s^2(1-\sqrt q).
+\]
+If \(\tau\geq\tau_*\), then the first inequality in
+\eqref{eq:tradeoff} gives
+\[
+ t(C_4,X)+s\tau
+ \geq s^4+s^3(1-\sqrt q).
+\]
+If \(\tau<\tau_*\), the second inequality gives
+\[
+ t(C_4,X)+s\tau
+ \geq \frac{(s^2-\tau)^2}{q}+s\tau.
+\]
+The expression on the right is decreasing for
+\(0\leq\tau\leq\tau_*\): its derivative at the right endpoint is
+\[
+ s-\frac{2s^2}{\sqrt q}\leq0,
+\]
+because \(4s^2\geq q\) throughout the present range.  Hence the same lower
+bound holds in both cases:
+\begin{equation}\label{eq:uniform-tradeoff}
+ t(C_4,X)+s\tau
+ \geq s^4+s^3(1-\sqrt{1-s}).
+\end{equation}
+
+It remains to check
+\[
+ h(s):=1-5s^2+s(1-\sqrt{1-s})\geq0.
+\]
+On the interval under consideration,
+\[
+ h'(s)=1-10s-\sqrt{1-s}+\frac{s}{2\sqrt{1-s}}<0;
+\]
+indeed \(1-10s<-3\), while the last two terms combine to
+\((3s-2)/(2\sqrt{1-s})<0\).  Finally,
+\[
+ h\left(\frac{19}{40}\right)
+ =\frac{111}{320}-\frac{19\sqrt{210}}{800}>0,
+\]
+where the strict inequality follows by squaring
+\(555>38\sqrt{210}\).  Thus \eqref{eq:uniform-tradeoff} implies
+\eqref{eq:needed-tradeoff}.  Since \(p=(1+s)/2\), the endpoint
+\(s=19/40\) is \(p=59/80\).
+\end{proof}
+
+\section{Exact model families and the remaining obstruction}
+
+If \(X\equiv r\), then \(J(X,X)\) is the regular two-block graphon with
+cross value \(1\) and within-class value \(r=2p-1\).  A direct \(2\times2\)
+calculation gives
+\[
+ t(H,J(X,X))
+ =\frac{r(r+1)(r^4-r^3+5r^2+r+2)}{16}
+\]
+and the exact gap
+\begin{equation}\label{eq:two-block-gap}
+ t(H,J(X,X))-B(p)
+ =\frac{r^2(1-r^2)^2}{16}\geq0.
+\end{equation}
+Thus this natural smoothing of the balanced bipartite graphon satisfies the
+bound for the entire interval \(1/2\leq p\leq1\), although its gap is only
+quadratic as \(p\downarrow1/2\).
+
+For \(0\leq r\leq1/2\), take \(X\) itself to be a balanced two-block
+graphon with cross value \(2r\) and diagonal value \(0\).  The resulting
+four-block graphon has
+\begin{equation}\label{eq:four-block-gap}
+ t(H,W)-B(p)=\frac{r^2(1-4r^2)}{16}\geq0.
+\end{equation}
+It meets equality at \(r=0\) and \(r=1/2\), corresponding to the balanced
+complete \(2\)- and \(4\)-partite graphons.  This family is numerically a
+slightly stronger low-density competitor than the constant-interior family,
+but still stays above the target.
+
+The small-memory search script
+\texttt{experiments/atlas43\_step\_search.py} optimizes both equal-part and
+variable-part step graphons.  It is only a falsification tool, not a
+certificate.  Runs with up to six parts found no violation down to
+\(p=0.5001\); the smallest configurations were balanced joins or refinements
+of them.  In particular, the retained certificate from the high-density
+proof can be negative on these examples while the true gap in
+\eqref{eq:two-block-gap} or \eqref{eq:four-block-gap} remains positive.
+
+The next useful theorem would therefore control a graphon of the form
+\[
+ W=T_2+F-V,
+\]
+where \(F\geq0\) is arbitrary on the two diagonal cells and \(V\geq0\) is
+the missing-edge kernel on the two cross cells.  Theorems
+\ref{thm:arbitrary} and \ref{thm:symmetric} settle the full-amplitude face
+\(V=0\) on substantial low-density intervals.  A global low-side result
+now requires either:
+\begin{enumerate}
+ \item an absorption inequality showing that the positive pure-addition
+ pair energy and the deletion derivative dominate all \(F\)-\(V\) mixed
+ terms; or
+ \item a symmetrization theorem showing that a low-density minimizer may be
+ taken to have a complete balanced cut.
+\end{enumerate}
+Neither statement is proved here.
+
+\end{document}

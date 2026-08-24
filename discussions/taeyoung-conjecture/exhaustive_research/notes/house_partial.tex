@@ -1,0 +1,1009 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+
+\title{A Goodman-Type Lower Bound for the House Graph\\
+in the High-Density Regime}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Statement}
+
+Let \(H\) be the house graph: it is obtained by gluing a triangle and a
+\(4\)-cycle along an edge.  Equivalently, we may take
+\[
+V(H)=\{x,y,a,b,z\}
+\]
+and
+\[
+E(H)
+=
+\{xy,xa,ay,xb,bz,zy\}.
+\]
+Thus \(xya\) is a triangle, while \(xy z b x\) is a \(4\)-cycle, and the
+two subgraphs share the edge \(xy\).
+
+For a graphon \(W:[0,1]^2\to[0,1]\), write
+\[
+p=t(K_2,W)
+=
+\int_{[0,1]^2}W(x,y)\,\dd x\,\dd y
+\]
+for its edge density.
+
+The chromatic polynomial of \(H\) is
+\[
+\chi_H(k)
+=
+k(k-1)(k-2)(k^2-3k+3).
+\]
+Indeed, \(H\) is obtained by gluing \(K_3\) and \(C_4\) along \(K_2\), so
+\[
+\chi_H(k)
+=
+\frac{\chi_{K_3}(k)\chi_{C_4}(k)}{\chi_{K_2}(k)},
+\]
+and
+\[
+\chi_{K_3}(k)=k(k-1)(k-2),
+\qquad
+\chi_{C_4}(k)
+=
+(k-1)^4+(k-1)
+=
+k(k-1)(k^2-3k+3).
+\]
+Hence, putting
+\[
+q:=1-p,
+\qquad
+r:=2p-1,
+\qquad
+c:=p^3+q^3,
+\]
+we obtain
+\[
+q^5\chi_H\!\left(\frac1q\right)
+=
+p(2p-1)(p^3+q^3)
+=
+prc.
+\]
+
+We shall prove the following.
+
+\begin{theorem}\label{thm:main}
+Let \(H\) be the house graph and let \(W\) be a graphon of edge density
+\(p=t(K_2,W)\).  If
+\[
+p\ge \frac{1+1/\sqrt3}{2},
+\]
+then
+\[
+t(H,W)
+\ge
+(1-p)^5
+\chi_H\!\left(\frac1{1-p}\right).
+\]
+Equivalently,
+\[
+\boxed{
+t(H,W)
+\ge
+p(2p-1)
+\bigl(p^3+(1-p)^3\bigr).
+}
+\]
+\end{theorem}
+
+The proof consists of three elementary ingredients:
+
+\begin{enumerate}
+    \item Goodman's lower bound for the triangle density;
+    \item the sharp Goodman-type lower bound for \(C_5\);
+    \item a gluing inequality for three triangles arranged as a clique tree.
+\end{enumerate}
+
+We first establish these ingredients.
+
+\section{Goodman's triangle bound}
+
+\begin{lemma}[Goodman]\label{lem:goodman}
+For every graphon \(W\) of edge density \(p\),
+\[
+t(K_3,W)\ge 2p^2-p=p(2p-1).
+\]
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+d_W(x):=\int_0^1W(x,z)\,\dd z
+\]
+be the degree function of \(W\).
+
+For every \(a,b\in[0,1]\),
+\[
+ab\ge a+b-1.
+\]
+Consequently, for almost every \(x,y\),
+\[
+\begin{aligned}
+\int_0^1 W(x,z)W(y,z)\,\dd z
+&\ge
+\int_0^1
+\bigl(W(x,z)+W(y,z)-1\bigr)\,\dd z\\
+&=
+d_W(x)+d_W(y)-1.
+\end{aligned}
+\]
+Multiplying by \(W(x,y)\ge0\) and integrating gives
+\[
+\begin{aligned}
+t(K_3,W)
+&\ge
+\int_{[0,1]^2}
+W(x,y)
+\bigl(d_W(x)+d_W(y)-1\bigr)
+\,\dd x\,\dd y\\
+&=
+2\int_0^1d_W(x)^2\,\dd x-p.
+\end{aligned}
+\]
+Since
+\[
+\int_0^1d_W(x)\,\dd x=p,
+\]
+Cauchy--Schwarz yields
+\[
+\int_0^1d_W(x)^2\,\dd x\ge p^2.
+\]
+Therefore
+\[
+t(K_3,W)\ge 2p^2-p=p(2p-1).
+\]
+\end{proof}
+
+\section{The sharp \(C_5\) bound}
+
+We next record a self-contained proof of the sharp odd-cycle bound for
+\(C_5\).
+
+\begin{lemma}[Sharp \(C_5\) bound]\label{lem:c5}
+For every graphon \(W\) of edge density \(p\),
+\[
+t(C_5,W)
+\ge
+p^5-p(1-p)^4.
+\]
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+U:=1-W,
+\qquad
+q:=t(K_2,U)=1-p.
+\]
+If \(q\ge1/2\), equivalently \(p\le1/2\), then
+\[
+p^5-pq^4
+=
+p(p^4-q^4)
+\le0,
+\]
+and the assertion follows from \(t(C_5,W)\ge0\).  Hence it is enough to
+consider
+\[
+0\le q\le\frac12.
+\]
+
+For \(j\ge1\), let
+\[
+x_j:=t(P_j,U),
+\]
+where \(P_j\) denotes the path with \(j\) edges, and put
+\[
+c_5:=t(C_5,U).
+\]
+
+Expanding
+\[
+t(C_5,W)=t(C_5,1-U)
+\]
+by inclusion--exclusion over the five edges of \(C_5\) gives
+\[
+t(C_5,1-U)
+=
+1-5q+5x_2+5q^2
+-5x_3-5qx_2+5x_4-c_5.
+\]
+Since \(0\le U\le1\), deleting one edge from the integrand defining
+\(c_5\) gives
+\[
+c_5\le x_4.
+\]
+Therefore
+\[
+t(C_5,1-U)
+\ge
+1-5q+5q^2
++5(1-q)x_2
+-5x_3
++4x_4.
+\]
+On the other hand,
+\[
+(1-q)^5-(1-q)q^4
+=
+1-5q+10q^2-10q^3+4q^4.
+\]
+Thus it is enough to prove
+\begin{equation}\label{eq:c5certificate}
+4x_4-5x_3+5(1-q)x_2
+-
+\bigl(4q^4-10q^3+5q^2\bigr)
+\ge0.
+\end{equation}
+
+Let \(T=T_U\) be the self-adjoint graphon operator
+\[
+Tf(x)
+=
+\int_0^1U(x,y)f(y)\,\dd y.
+\]
+Write
+\[
+T\one=q\one+g,
+\qquad
+\ip{g}{\one}=0.
+\]
+We compute the first three path moments.
+
+First,
+\[
+x_2
+=
+\|T\one\|_2^2
+=
+q^2+\|g\|_2^2.
+\]
+Next,
+\[
+T^2\one
+=
+T(q\one+g)
+=
+q^2\one+qg+Tg,
+\]
+and hence
+\[
+\begin{aligned}
+x_3
+&=
+\ip{T\one}{T^2\one}\\
+&=
+\ip{q\one+g}{q^2\one+qg+Tg}\\
+&=
+q^3+2q\|g\|_2^2+\ip{g}{Tg},
+\end{aligned}
+\]
+where we used
+\[
+\ip{\one}{Tg}
+=
+\ip{T\one}{g}
+=
+\|g\|_2^2.
+\]
+Finally,
+\[
+x_4
+=
+\|T^2\one\|_2^2,
+\]
+so
+\[
+x_4
+=
+q^4
++3q^2\|g\|_2^2
++2q\ip{g}{Tg}
++\|Tg\|_2^2.
+\]
+
+Substitution into the left-hand side of
+\eqref{eq:c5certificate} gives
+\[
+4\|Tg\|_2^2
++
+(8q-5)\ip{g}{Tg}
++
+(12q^2-15q+5)\|g\|_2^2.
+\]
+Completing the square,
+\[
+\begin{aligned}
+&4\|Tg\|_2^2
++
+(8q-5)\ip{g}{Tg}
++
+(12q^2-15q+5)\|g\|_2^2\\
+&\qquad=
+4\left\|
+Tg+\frac{8q-5}{8}g
+\right\|_2^2
++
+\left(
+8q^2-10q+\frac{55}{16}
+\right)
+\|g\|_2^2.
+\end{aligned}
+\]
+The remaining scalar coefficient is strictly positive:
+\[
+8q^2-10q+\frac{55}{16}
+=
+8\left(q-\frac58\right)^2+\frac5{16}>0.
+\]
+Thus \eqref{eq:c5certificate} holds, completing the proof.
+\end{proof}
+
+\section{A three-triangle gluing inequality}
+
+We now prove the special clique-tree inequality needed in the main
+argument directly in graphon space.
+
+For a graphon \(W\), define its two-step kernel
+\[
+C_W(x,y)
+:=
+\int_0^1W(x,s)W(s,y)\,\dd s.
+\]
+
+Let \(F\) be the graph on five vertices \(x,y,z,a,b\) whose three maximal
+cliques are
+\[
+\{x,y,z\},\qquad
+\{x,y,a\},\qquad
+\{x,z,b\}.
+\]
+Thus \(F\) consists of three triangles, with the first triangle sharing
+the edge \(xy\) with the second and the edge \(xz\) with the third.
+
+\begin{lemma}[Three-triangle gluing]\label{lem:triangle-tree}
+Let
+\[
+p=t(K_2,W),
+\qquad
+\tau=t(K_3,W).
+\]
+If \(p>0\), then
+\[
+\boxed{
+t(F,W)\ge\frac{\tau^3}{p^2}.
+}
+\]
+\end{lemma}
+
+\begin{proof}
+If \(\tau=0\), the claim is immediate.  Assume henceforth that
+\(\tau>0\).
+
+Write simply
+\[
+C(x,y):=C_W(x,y).
+\]
+Integrating first over the two vertices \(a,b\) gives
+\begin{equation}\label{eq:F-density}
+t(F,W)
+=
+\int_{[0,1]^3}
+W(x,y)W(x,z)W(y,z)
+C(x,y)C(x,z)
+\,\dd x\,\dd y\,\dd z.
+\end{equation}
+
+Consider the probability density
+\[
+\rho(x,y,z)
+:=
+\frac{
+W(x,y)W(x,z)W(y,z)
+}{\tau}
+\]
+on \([0,1]^3\).
+Its \((x,y)\)-marginal is the probability density
+\[
+\nu(x,y)
+=
+\frac{W(x,y)C(x,y)}{\tau}.
+\]
+The \((x,z)\)-marginal is the same, after relabelling variables.
+
+Also consider the probability density
+\[
+\mu(x,y)
+=
+\frac{W(x,y)}{p}
+\]
+on \([0,1]^2\).
+We have \(\nu\ll\mu\), with Radon--Nikodym derivative
+\[
+\frac{\dd\nu}{\dd\mu}(x,y)
+=
+\frac{p\,C(x,y)}{\tau}.
+\]
+Nonnegativity of relative entropy gives
+\[
+0
+\le
+D(\nu\Vert\mu)
+=
+\int_{[0,1]^2}
+\nu(x,y)
+\log\left(
+\frac{pC(x,y)}{\tau}
+\right)
+\,\dd x\,\dd y.
+\]
+Therefore
+\begin{equation}\label{eq:geom-codegree}
+\int\nu(x,y)\log C(x,y)\,\dd x\,\dd y
+\ge
+\log\frac{\tau}{p}.
+\end{equation}
+
+By \eqref{eq:F-density},
+\[
+\frac{t(F,W)}{\tau}
+=
+\mathbb E_\rho
+\bigl[
+C(x,y)C(x,z)
+\bigr].
+\]
+Jensen's inequality for the concave function \(\log\) gives
+\[
+\begin{aligned}
+\log\frac{t(F,W)}{\tau}
+&\ge
+\mathbb E_\rho
+\bigl[
+\log C(x,y)+\log C(x,z)
+\bigr]\\
+&=
+2\int\nu(x,y)\log C(x,y)\,\dd x\,\dd y\\
+&\ge
+2\log\frac{\tau}{p},
+\end{aligned}
+\]
+where the last inequality is \eqref{eq:geom-codegree}.
+Exponentiating,
+\[
+\frac{t(F,W)}{\tau}
+\ge
+\left(\frac{\tau}{p}\right)^2,
+\]
+hence
+\[
+t(F,W)\ge\frac{\tau^3}{p^2}.
+\]
+
+All logarithmic expressions above may be interpreted in the usual
+extended sense.  Alternatively, one may replace \(C\) by
+\(C+\varepsilon\), apply the same argument, and let
+\(\varepsilon\downarrow0\).
+\end{proof}
+
+\section{The exact two-chord decomposition}
+
+We now turn to the house graph.
+
+Let
+\[
+U:=1-W.
+\]
+Again write
+\[
+C(x,y)
+=
+C_W(x,y)
+=
+\int_0^1W(x,s)W(s,y)\,\dd s.
+\]
+Define
+\[
+A(x,y):=W(x,y)C(x,y),
+\qquad
+D(x,y):=U(x,y)C(x,y).
+\]
+Since \(W+U=1\),
+\begin{equation}\label{eq:AplusD}
+A(x,y)+D(x,y)=C(x,y).
+\end{equation}
+
+Consider the \(5\)-cycle
+\[
+x-a-y-z-b-x.
+\]
+After integrating over \(a\) and \(b\), its density is
+\[
+t(C_5,W)
+=
+\int_{[0,1]^3}
+W(y,z)C(x,y)C(x,z)
+\,\dd x\,\dd y\,\dd z.
+\]
+The two distance-two chords incident with \(x\) are \(xy\) and \(xz\).
+
+Define
+\[
+\begin{aligned}
+F
+&:=
+\int
+W(y,z)A(x,y)A(x,z)
+\,\dd x\,\dd y\,\dd z,\\
+R
+&:=
+\int
+W(y,z)A(x,y)D(x,z)
+\,\dd x\,\dd y\,\dd z,\\
+G
+&:=
+\int
+W(y,z)D(x,y)D(x,z)
+\,\dd x\,\dd y\,\dd z.
+\end{aligned}
+\]
+The integral with \(D(x,y)A(x,z)\) instead of
+\(A(x,y)D(x,z)\) also equals \(R\), by interchanging \(y\) and \(z\).
+
+Expanding \eqref{eq:AplusD} therefore gives
+\begin{equation}\label{eq:c5split}
+t(C_5,W)=F+2R+G.
+\end{equation}
+
+On the other hand, adding the chord \(xy\) to the \(5\)-cycle gives
+exactly the house graph: \(xay\) is the triangle and
+\(xy z b x\) is the \(4\)-cycle.
+Consequently
+\[
+\begin{aligned}
+t(H,W)
+&=
+\int
+W(y,z)A(x,y)C(x,z)
+\,\dd x\,\dd y\,\dd z\\
+&=
+F+R.
+\end{aligned}
+\]
+Combining this with \eqref{eq:c5split}, we obtain the exact identity
+\begin{equation}\label{eq:key-decomposition}
+\boxed{
+2t(H,W)
+=
+F+t(C_5,W)-G.
+}
+\end{equation}
+
+This identity is the main structural point of the proof.
+
+\section{Triangle surplus and the bad two-chord term}
+
+Let
+\[
+\tau:=t(K_3,W)
+\]
+and define the Goodman surplus
+\[
+\delta
+:=
+\tau-p(2p-1)
+=
+\tau-pr.
+\]
+By Lemma~\ref{lem:goodman},
+\begin{equation}\label{eq:delta-nonneg}
+\delta\ge0.
+\end{equation}
+
+We shall show that the negative term \(G\) in
+\eqref{eq:key-decomposition} is bounded by this same surplus.
+
+Let
+\[
+d_U(x):=\int_0^1U(x,y)\,\dd y
+\]
+and
+\[
+x_2:=t(P_2,U)
+=
+\int_0^1d_U(x)^2\,\dd x.
+\]
+Since
+\[
+\int_0^1d_U(x)\,\dd x=q,
+\]
+put
+\[
+v
+:=
+x_2-q^2
+=
+\int_0^1(d_U(x)-q)^2\,\dd x
+\ge0.
+\]
+Also define
+\begin{equation}\label{eq:n-def}
+n
+:=
+\int_{[0,1]^3}
+W(y,z)U(x,y)U(x,z)
+\,\dd x\,\dd y\,\dd z.
+\end{equation}
+Clearly
+\[
+n\ge0.
+\]
+
+Let
+\[
+\kappa_3:=t(K_3,U).
+\]
+Splitting the missing edge \(yz\) according to
+\(1=W(y,z)+U(y,z)\), we have
+\[
+x_2=n+\kappa_3,
+\]
+and hence
+\begin{equation}\label{eq:n-x2}
+n=x_2-\kappa_3.
+\end{equation}
+
+Expanding the triangle density of \(W=1-U\),
+\[
+\begin{aligned}
+\tau
+&=
+t(K_3,1-U)\\
+&=
+1-3q+3x_2-\kappa_3.
+\end{aligned}
+\]
+Since
+\[
+pr
+=
+(1-q)(1-2q)
+=
+1-3q+2q^2,
+\]
+we obtain
+\[
+\begin{aligned}
+\delta
+&=
+\tau-pr\\
+&=
+3x_2-\kappa_3-2q^2\\
+&=
+2(x_2-q^2)+(x_2-\kappa_3).
+\end{aligned}
+\]
+Using the definitions of \(v\) and \(n\),
+\begin{equation}\label{eq:delta-decomp}
+\boxed{
+\delta=2v+n.
+}
+\end{equation}
+In particular,
+\begin{equation}\label{eq:n-le-delta}
+0\le n\le\delta.
+\end{equation}
+
+Now \(0\le C(x,y)\le1\), and therefore
+\[
+0\le D(x,y)
+=
+U(x,y)C(x,y)
+\le U(x,y).
+\]
+It follows directly from the definition of \(G\) that
+\[
+\begin{aligned}
+G
+&=
+\int
+W(y,z)
+D(x,y)D(x,z)
+\,\dd x\,\dd y\,\dd z\\
+&\le
+\int
+W(y,z)
+U(x,y)U(x,z)
+\,\dd x\,\dd y\,\dd z\\
+&=
+n.
+\end{aligned}
+\]
+Together with \eqref{eq:n-le-delta}, this gives
+\begin{equation}\label{eq:G-delta}
+\boxed{
+G\le n\le\delta.
+}
+\end{equation}
+
+\section{Completion of the proof}
+
+We can now prove Theorem~\ref{thm:main}.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Assume
+\[
+p\ge\frac{1+1/\sqrt3}{2}.
+\]
+In particular \(p>1/2\), so
+\[
+r:=2p-1>0.
+\]
+Let
+\[
+q:=1-p,
+\qquad
+c:=p^3+q^3,
+\qquad
+B(p):=prc.
+\]
+Thus \(B(p)\) is precisely the claimed chromatic-polynomial lower bound.
+
+Let
+\[
+\tau=t(K_3,W)=pr+\delta,
+\qquad
+\delta\ge0.
+\]
+
+The graph counted by \(F\) is exactly the graph of
+Lemma~\ref{lem:triangle-tree}, so
+\[
+F\ge\frac{\tau^3}{p^2}.
+\]
+Therefore
+\[
+\begin{aligned}
+F-pr^3
+&\ge
+\frac{(pr+\delta)^3}{p^2}-pr^3\\
+&=
+3r^2\delta
++
+\frac{3r}{p}\delta^2
++
+\frac1{p^2}\delta^3.
+\end{aligned}
+\]
+Thus
+\begin{equation}\label{eq:F-surplus}
+F-pr^3
+\ge
+3r^2\delta
++
+\frac{3r}{p}\delta^2
++
+\frac1{p^2}\delta^3.
+\end{equation}
+
+By Lemma~\ref{lem:c5},
+\begin{equation}\label{eq:C5-surplus}
+t(C_5,W)
+\ge
+p^5-pq^4.
+\end{equation}
+Since \(p+q=1\) and \(r=p-q\),
+\[
+p^5-pq^4
+=
+p(p^4-q^4)
+=
+pr(p^2+q^2).
+\]
+Moreover,
+\[
+\begin{aligned}
+r^2+p^2+q^2
+&=
+(p-q)^2+p^2+q^2\\
+&=
+2(p^2-pq+q^2)\\
+&=
+2(p^3+q^3),
+\end{aligned}
+\]
+where in the last equality we used
+\[
+p^3+q^3=(p+q)^3-3pq(p+q)=1-3pq
+=p^2-pq+q^2.
+\]
+Consequently,
+\begin{equation}\label{eq:target-split}
+pr^3+\bigl(p^5-pq^4\bigr)
+=
+pr\bigl(r^2+p^2+q^2\bigr)
+=
+2pr(p^3+q^3)
+=
+2B(p).
+\end{equation}
+
+Subtracting \eqref{eq:target-split} from the exact decomposition
+\eqref{eq:key-decomposition}, we obtain the exact defect identity
+\begin{equation}\label{eq:defect-exact}
+\boxed{
+\begin{aligned}
+2\bigl(t(H,W)-B(p)\bigr)
+={}&
+\bigl(F-pr^3\bigr)\\
+&+
+\bigl(t(C_5,W)-(p^5-pq^4)\bigr)
+-G.
+\end{aligned}
+}
+\end{equation}
+
+The middle term is nonnegative by
+\eqref{eq:C5-surplus}.  Combining
+\eqref{eq:F-surplus} and \eqref{eq:G-delta} with
+\eqref{eq:defect-exact} gives
+\[
+\begin{aligned}
+2\bigl(t(H,W)-B(p)\bigr)
+&\ge
+3r^2\delta
++
+\frac{3r}{p}\delta^2
++
+\frac1{p^2}\delta^3
+-G\\
+&\ge
+3r^2\delta
++
+\frac{3r}{p}\delta^2
++
+\frac1{p^2}\delta^3
+-\delta\\
+&=
+(3r^2-1)\delta
++
+\frac{3r}{p}\delta^2
++
+\frac1{p^2}\delta^3.
+\end{aligned}
+\]
+Thus we have proved the quantitative estimate
+\begin{equation}\label{eq:quantitative-final}
+\boxed{
+2\bigl(t(H,W)-B(p)\bigr)
+\ge
+(3r^2-1)\delta
++
+\frac{3r}{p}\delta^2
++
+\frac1{p^2}\delta^3.
+}
+\end{equation}
+
+Finally, the hypothesis
+\[
+p\ge\frac{1+1/\sqrt3}{2}
+\]
+is equivalent, because \(r=2p-1\ge0\), to
+\[
+r\ge\frac1{\sqrt3},
+\]
+and hence
+\[
+3r^2-1\ge0.
+\]
+Every term on the right-hand side of
+\eqref{eq:quantitative-final} is therefore nonnegative, since
+\[
+p>0,\qquad r\ge0,\qquad \delta\ge0.
+\]
+It follows that
+\[
+t(H,W)\ge B(p)
+=
+p(2p-1)(p^3+q^3).
+\]
+Since \(q=1-p\),
+\[
+t(H,W)
+\ge
+p(2p-1)
+\bigl(p^3+(1-p)^3\bigr).
+\]
+As shown at the beginning,
+\[
+p(2p-1)
+\bigl(p^3+(1-p)^3\bigr)
+=
+(1-p)^5
+\chi_H\!\left(\frac1{1-p}\right).
+\]
+This proves the theorem.
+\end{proof}
+
+\section{A useful quantitative form}
+
+The proof actually establishes a little more than the theorem.
+
+\begin{proposition}\label{prop:quantitative}
+Let \(W\) be any graphon with \(p>1/2\).  Put
+\[
+r=2p-1
+\]
+and
+\[
+\delta
+=
+t(K_3,W)-p(2p-1)\ge0.
+\]
+Then
+\[
+\boxed{
+\begin{aligned}
+2\Bigl(
+t(H,W)
+-
+p(2p-1)
+\bigl(p^3+(1-p)^3\bigr)
+\Bigr)
+\ge{}&
+(3(2p-1)^2-1)\delta\\
+&+
+\frac{3(2p-1)}{p}\delta^2
++
+\frac1{p^2}\delta^3.
+\end{aligned}
+}
+\]
+In particular, the desired house inequality follows whenever
+\[
+3(2p-1)^2\ge1.
+\]
+\end{proposition}
+
+\begin{remark}
+The argument is sharp at every balanced complete \(k\)-partite graphon
+whose edge density lies in the proved range.  At such a graphon,
+\[
+p=1-\frac1k,
+\]
+the Goodman triangle surplus satisfies
+\[
+\delta=0,
+\]
+the \(C_5\) inequality is an equality, and the term \(G\) is zero.
+Thus no positive error is introduced at the Tur\'an equality examples.
+For the present density range, this includes every \(k\ge5\).
+\end{remark}
+
+\end{document}

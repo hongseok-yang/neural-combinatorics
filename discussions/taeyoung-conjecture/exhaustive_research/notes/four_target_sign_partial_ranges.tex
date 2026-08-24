@@ -1,0 +1,151 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{Exact Target-Sign Partial Ranges for\\
+Atlas 153, 171, 174, and 188}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Statement}
+
+For a finite graph $H$ and a graphon $W$, write
+\[
+ p=t(K_2,W),
+ \qquad
+ \Phi_H(p)
+ =(1-p)^{v(H)}\chi_H\!\left(\frac1{1-p}\right).
+\]
+The catalogue asks whether
+\[
+ t(H,W)\geq\Phi_H(p)
+\]
+throughout the Tur\'an range.  For the four graphs in this note the
+chromatic target remains nonpositive for a nontrivial interval beyond
+$p=7/12$.  Nonnegativity of homomorphism densities therefore settles that
+whole interval without any structural assumption on $W$.
+
+\begin{theorem}[Exact nonpositive-target ranges]\label{thm:main}
+For $H$ equal to Atlas $153,171,174$, or $188$, let $Q_H$ be as follows:
+\[
+\begin{array}{c|c|c}
+H&Q_H(p)&\text{unique real zero }\alpha_H\\ \hline
+153&7p^3-12p^2+8p-2&0.6068701814<\alpha_{153}<0.6068701815\\
+171&11p^3-20p^2+13p-3&0.6271894887<\alpha_{171}<0.6271894888\\
+174&13p^3-25p^2+17p-4&0.5924019902<\alpha_{174}<0.5924019903\\
+188&17p^3-33p^2+22p-5&0.6108707597<\alpha_{188}<0.6108707598
+\end{array}
+\]
+Then every graphon $W$ of edge density
+\[
+ \frac12\leq p\leq\alpha_H
+\]
+satisfies
+\[
+ t(H,W)\geq\Phi_H(p).
+\]
+In particular, the rounded-down decimal endpoints displayed in the table
+give certified closed subintervals.
+\end{theorem}
+
+\section{Chromatic targets}
+
+The graph6 codes and chromatic polynomials are
+\[
+\begin{array}{c|c|c}
+H&\text{graph6}&\chi_H(x)\\ \hline
+153&\texttt{Ehf\_}&x(x-1)(x-2)(x^3-5x^2+9x-7)\\
+171&\texttt{Ehew}&x(x-1)(x-2)(x^3-6x^2+13x-11)\\
+174&\texttt{EtTg}&x(x-1)(x-2)(x^3-6x^2+14x-13)\\
+188&\texttt{EzNG}&x(x-1)(x-2)(x^3-7x^2+18x-17).
+\end{array}
+\]
+Substituting $x=1/(1-p)$ and multiplying by $(1-p)^6$ gives, in every
+case,
+\begin{equation}\label{eq:target}
+ \Phi_H(p)=p(2p-1)Q_H(p),
+\end{equation}
+with the four polynomials $Q_H$ from Theorem~\ref{thm:main}.
+
+\section{The sign certificate}
+
+\begin{lemma}\label{lem:sign}
+Each $Q_H$ has exactly one real zero, this zero is larger than $1/2$, and
+\[
+ Q_H(p)\leq0
+ \qquad\left(\frac12\leq p\leq\alpha_H\right).
+\]
+\end{lemma}
+
+\begin{proof}
+The cubic discriminants, in Atlas order $153,171,174,188$, are
+\[
+ -44,\qquad -31,\qquad -59,\qquad -23.
+\]
+They are strictly negative, so every $Q_H$ has exactly one real root.
+Direct substitution gives the common value
+\[
+ Q_H\!\left(\frac12\right)=-\frac18.
+\]
+Every $Q_H$ has positive leading coefficient.  Its unique real zero is
+therefore larger than $1/2$, and the polynomial is negative to the left of
+that zero.
+
+For completeness, the displayed decimal brackets are exact rational sign
+checks: substituting their left endpoints gives respectively
+\[
+\begin{split}
+ &-\frac{7725129772420851499}{125000000000000000000000000000},\\
+ &-\frac{6439081474941456867}{1000000000000000000000000000000},\\
+ &-\frac{330401596447139437}{125000000000000000000000000000},\\
+ &-\frac{35667743563068492059}{1000000000000000000000000000000},
+\end{split}
+\]
+while substituting the right endpoints gives respectively
+\[
+\begin{split}
+ &\frac{440980018562085029}{8000000000000000000000000000},\\
+ &\frac{161939305390749191}{1953125000000000000000000000},\\
+ &\frac{104013296381851155251}{1000000000000000000000000000000},\\
+ &\frac{4464622023299603783}{125000000000000000000000000000}.
+\end{split}
+\]
+Thus the signs at every bracket endpoint are certified in exact rational
+arithmetic.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let $1/2\leq p\leq\alpha_H$.  Then
+\[
+ p\geq0,
+ \qquad
+ 2p-1\geq0,
+ \qquad
+ Q_H(p)\leq0
+\]
+by Lemma~\ref{lem:sign}.  Equation~\eqref{eq:target} therefore gives
+$\Phi_H(p)\leq0$.  On the other hand, the integrand defining a graph
+homomorphism density is nonnegative, so $t(H,W)\geq0$.  Hence
+\[
+ t(H,W)\geq0\geq\Phi_H(p),
+\]
+as required.
+\end{proof}
+
+\section{Scope}
+
+The argument is valid for every graphon and uses no regularity,
+finite-step, topology, or perturbative assumption.  It does not settle any
+density above $\alpha_H$, where the target is positive.  Accordingly these
+four catalogue rows are partial rather than positive.
+
+\end{document}

@@ -1,0 +1,469 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{Fisher-Strengthened Self-Amalgam Bounds and Partial Ranges for\\
+Atlas 153, 171, 174, and 188}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Result}
+
+For a finite graph $H$ and a graphon $W$, write
+\[
+ p=t(K_2,W),
+ \qquad
+ \Phi_H(p)=(1-p)^{v(H)}
+ \chi_H\!\left(\frac1{1-p}\right),
+\]
+with the usual polynomial continuation at $p=1$.
+
+Put
+\[
+ \pi(y)=\frac{(1-y)(1+3y)}2,
+ \qquad
+ g(y)=\frac32y(1-y)^2.
+\]
+For each of the four graphs, let $\eta_H$ be the unique zero in
+$[0,1/3]$ of the integer polynomial $C_H$ displayed in
+Section~\ref{sec:fisher-comparison}, and put $\beta_H=\pi(\eta_H)$.
+
+\begin{theorem}[Improved arbitrary-graphon ranges]\label{thm:main}
+For every graphon $W$, Atlas $H$ satisfies
+\[
+ t(H,W)\geq\Phi_H(p)
+ \qquad\left(\frac12\leq p\leq\beta_H\right)
+\]
+for $H=153,171,174,188$.  The exact endpoints, specified as roots of
+the displayed integer polynomials, have the certified brackets
+\[
+\begin{array}{c|c|c}
+H&\text{certified bracket for }\beta_H&
+100\,\dfrac{\beta_H-1/2}{1-1/2}\\ \hline
+153&(0.6181289270058,0.6181289270059)&23.6257854\ldots\%\\
+171&(0.6309517719656,0.6309517719657)&26.1903543\ldots\%\\
+174&(0.5934675772766,0.5934675772767)&18.6935154\ldots\%\\
+188&(0.6139911259451,0.6139911259452)&22.7982251\ldots\%.
+\end{array}
+\]
+Thus the safe rounded-down closed endpoints are respectively
+$0.6181289270$, $0.6309517719$, $0.5934675772$, and $0.6139911259$.
+\end{theorem}
+
+The proof is not a finite-step reduction.  The elementary fallback uses
+weighted Cauchy--Schwarz and the already proved pure-chordal bounds for the
+diamond and Atlas $47$.  The improvement uses, in addition, Fisher's sharp
+$k=2$ triangle-density band.  This is the accepted, Lean-formalized
+triangle theorem already used for Atlas $148$; it is not a flag-algebra
+input.
+
+\section{A self-amalgam inequality over an arbitrary root}
+
+Let $J$ be the subgraph of a finite graph $F$ induced by a chosen set of
+root vertices.  Form $S=F\cup_JF$ from two labelled copies of $F$ by
+identifying their copies of $J$ and adding no edges between the two
+branches.  The graph $J$ need not be a clique.
+
+\begin{lemma}[Two-copy self-amalgamation]\label{lem:amalgam}
+For every graphon $W$,
+\[
+ t(S,W)t(J,W)\geq t(F,W)^2.
+\]
+If a graph $H$ is a spanning subgraph of $S$, then also
+$t(H,W)\geq t(S,W)$.
+\end{lemma}
+
+\begin{proof}
+Fix the variables $x_J$ on the common root.  Let
+\[
+ h(x_J)=\prod_{ab\in E(J)}W(x_a,x_b)
+\]
+and let $g(x_J)$ be the integral of all edge factors of $F$ not already
+in $J$, over the variables in $V(F)\setminus V(J)$.  Tonelli--Fubini
+gives
+\[
+ t(J,W)=\int h,
+ \qquad
+ t(F,W)=\int hg,
+ \qquad
+ t(S,W)=\int hg^2.
+\]
+Weighted Cauchy--Schwarz, applied to $\sqrt h$ and $\sqrt h\,g$, gives
+\[
+ \left(\int hg\right)^2
+ \leq\left(\int h\right)\left(\int hg^2\right).
+\]
+This form uses no division and therefore also covers $t(J,W)=0$.
+
+Finally, $0\leq W\leq1$.  Removing the edge factors in
+$E(S)\setminus E(H)$ can only increase the integrand, so a spanning
+subgraph $H\subseteq S$ satisfies $t(H,W)\geq t(S,W)$.
+\end{proof}
+
+We shall also need an upper bound, rather than Sidorenko's lower bound,
+for the four-vertex path $P_4=abcd$:
+\begin{equation}\label{eq:p4-upper}
+\begin{split}
+ t(P_4,W)
+ &=\int W(x_a,x_b)W(x_b,x_c)W(x_c,x_d)\,d\mu^4\\
+ &\leq\int W(x_a,x_b)W(x_c,x_d)\,d\mu^4=p^2.
+\end{split}
+\end{equation}
+This is pointwise deletion of the middle edge.  In particular, no
+division by $t(P_4,W)$ will occur below.
+
+\section{The two positive bases}
+
+Let $D$ be the diamond, NetworkX Atlas $17$, and let $B$ be NetworkX
+Atlas $47$, and put $T=t(K_3,W)$.  Their edge lists and chromatic
+polynomials are
+\[
+\begin{array}{c|l|l}
+F&E(F)&\chi_F(x)\\ \hline
+D&01,02,03,12,23&x(x-1)(x-2)^2\\
+B&01,04,12,13,14,23,34&x(x-1)(x-2)^3.
+\end{array}
+\]
+Both graphs are $3$-pure chordal.  The pure-chordal theorem therefore
+gives, for every graphon and every $p\geq1/2$,
+\begin{equation}\label{eq:base-bounds}
+ t(D,W)\geq p(2p-1)^2,
+ \qquad
+ t(B,W)\geq p(2p-1)^3.
+\end{equation}
+These right sides are exactly $\Phi_D(p)$ and $\Phi_B(p)$.
+
+We shall also use the triangle-sensitive form of the accepted
+pure-chordal entropy-gluing inequality.  The diamond has two maximal
+triangles and one edge separator, while $B$ has three maximal triangles
+in a path and two edge separators.  Consequently
+\begin{equation}\label{eq:triangle-sensitive-bases}
+ t(D,W)p\geq T^2,
+ \qquad
+ t(B,W)p^2\geq T^3.
+\end{equation}
+Equivalently, because our range has $p\geq1/2$,
+\[
+ t(D,W)\geq\frac{T^2}{p},
+ \qquad
+ t(B,W)\geq\frac{T^3}{p^2}.
+\]
+The first inequality is also Lemma~\ref{lem:amalgam} applied to two
+triangles glued along an edge.  The second is the three-clique-tree case
+of the same accepted pure-chordal entropy theorem.
+
+\section{Exact Atlas identifications}
+
+All labels in this section are the NetworkX Atlas labels.  We exhibit a
+supergraph $S_H\supseteq H$ that is a two-copy self-amalgam of one of the
+two bases.
+
+\paragraph{Atlas 153.}
+Its edge set is
+\[
+ 01,04,05,12,15,23,25,34.
+\]
+Add the two edges $03$ and $24$.  With common root $J=\{0,2\}$ and
+branches $\{1,5\}$ and $\{3,4\}$, the resulting graph is two diamonds
+glued along the nonedge $02$.  Explicit maps from the two rooted copies
+to the displayed Atlas-$17$ labelling are
+\[
+ (1,0,5,2)\mapsto(0,1,2,3),
+ \qquad
+ (3,0,4,2)\mapsto(0,1,2,3).
+\]
+They agree on the common root.  Since $J$ has no edges, $t(J,W)=1$.
+Lemma~\ref{lem:amalgam} and \eqref{eq:base-bounds} give
+\begin{equation}\label{eq:153-lower}
+ t(153,W)\geq t(D,W)^2
+ \geq p^2(2p-1)^4.
+\end{equation}
+Using \eqref{eq:triangle-sensitive-bases} instead gives the stronger
+triangle-sensitive estimate
+\begin{equation}\label{eq:153-triangle-lower}
+ t(153,W)\geq\frac{T^4}{p^2}.
+\end{equation}
+
+\paragraph{Atlas 171.}
+Its edge set is
+\[
+ 01,04,05,12,23,25,34,35,45.
+\]
+Add $02$ and $13$.  The common root
+$J=\{1,2,4,5\}$ has edges $12,25,45$, hence is a four-vertex path;
+the branches are the single vertices $0$ and $3$.  The maps
+\[
+ (1,0,4,5,2)\mapsto(0,1,2,3,4),
+ \qquad
+ (1,3,4,5,2)\mapsto(0,1,2,3,4)
+\]
+identify both rooted branches with Atlas $47$ and agree on $J$.
+
+\paragraph{Atlas 174.}
+Its edge set is
+\[
+ 01,02,03,14,15,23,25,34,45.
+\]
+Add $05$ and $24$.  Now $J=\{1,2,3,5\}$ has path edges $15,25,23$,
+and the branches are $0$ and $4$.  The two rooted Atlas-$47$ maps are
+\[
+ (1,0,3,2,5)\mapsto(0,1,2,3,4),
+ \qquad
+ (1,4,3,2,5)\mapsto(0,1,2,3,4).
+\]
+
+\paragraph{Atlas 188.}
+Its edge set is
+\[
+ 01,02,05,12,13,15,23,24,34,45.
+\]
+Add $04$.  Here $J=\{0,2,3,5\}$ has path edges $05,02,23$, and the
+branches are $1$ and $4$.  The rooted Atlas-$47$ maps are
+\[
+ (3,1,5,0,2)\mapsto(0,1,2,3,4),
+ \qquad
+ (3,4,5,0,2)\mapsto(0,1,2,3,4).
+\]
+
+For each of the final three graphs, Lemma~\ref{lem:amalgam},
+\eqref{eq:p4-upper}, and \eqref{eq:base-bounds} yield directly
+\[
+ t(B,W)^2
+ \leq t(S_H,W)t(P_4,W)
+ \leq t(S_H,W)p^2.
+\]
+Since $p\geq1/2$, division is only by the positive scalar $p^2$; no
+rooted density is divided out.  Therefore
+\begin{equation}\label{eq:three-lower}
+ t(H,W)\geq t(S_H,W)
+ \geq\frac{t(B,W)^2}{p^2}
+ \geq(2p-1)^6
+ \quad(H=171,174,188).
+\end{equation}
+The triangle-sensitive base bound in
+\eqref{eq:triangle-sensitive-bases} yields at the same time
+\begin{equation}\label{eq:three-triangle-lower}
+ t(H,W)\geq\frac{T^6}{p^6}
+ \quad(H=171,174,188).
+\end{equation}
+
+\section{Elementary fallback comparison}\label{sec:elementary-comparison}
+
+Define
+\[
+\begin{array}{c|l}
+H&R_H(p)\\ \hline
+153&8p^3-11p^2+7p-2\\
+171&32p^4-59p^3+41p^2-12p+1\\
+174&32p^4-61p^3+44p^2-13p+1\\
+188&32p^4-65p^3+48p^2-14p+1.
+\end{array}
+\]
+
+The four targets from the target-sign note are
+\[
+ \Phi_H(p)=p(2p-1)Q_H(p),
+\]
+where
+\[
+\begin{array}{c|l}
+H&Q_H(p)\\ \hline
+153&7p^3-12p^2+8p-2\\
+171&11p^3-20p^2+13p-3\\
+174&13p^3-25p^2+17p-4\\
+188&17p^3-33p^2+22p-5.
+\end{array}
+\]
+Exact expansion of \eqref{eq:153-lower} and
+\eqref{eq:three-lower} gives
+\begin{align}
+ p^2(2p-1)^4-\Phi_{153}(p)
+ &=p(p-1)(2p-1)R_{153}(p),\label{eq:gap153}\\
+ (2p-1)^6-\Phi_H(p)
+ &=(p-1)(2p-1)R_H(p)
+ \quad(H=171,174,188).\label{eq:gapthree}
+\end{align}
+
+Every $R_H$ is strictly increasing on $[1/2,1]$.  For $H=153$,
+$R'_{153}$ is a positive-leading quadratic of discriminant $-188$.
+For $H=171,174,188$, the cubic $R'_H$ has respectively discriminant
+\[
+ -233324,\qquad-669356,\qquad-651240.
+\]
+Thus it has one real zero; because its leading coefficient is positive
+and
+\[
+ R'_{171}(1/2)=\frac34,
+ \qquad
+ R'_{174}(1/2)=R'_{188}(1/2)=\frac54,
+\]
+that zero lies below $1/2$, and $R'_H>0$ thereafter.  Finally,
+\[
+ R_{153}(1/2)=-\frac14,
+ \qquad
+ R_{171}(1/2)=R_{174}(1/2)=R_{188}(1/2)=-\frac18,
+\]
+whereas the four values at $1$ are $2,3,3,2$.  This proves existence
+and uniqueness of a zero $\gamma_H$ of each $R_H$ and shows
+$R_H\leq0$ on $[1/2,\gamma_H]$.  Equations
+\eqref{eq:gap153}--\eqref{eq:gapthree} therefore give the independent,
+elementary fallback endpoints
+\[
+ 0.6128767076,\quad 0.6292381397,\quad
+ 0.5927496223,\quad 0.6121757702
+\]
+for Atlas $153,171,174,188$, respectively.
+
+For completeness, the decimal brackets are certified by substituting
+their finite-decimal rational endpoints.  After reducing to a fraction
+with positive denominator, the exact numerator pairs (left, right) are
+\[
+\begin{array}{c|r|r}
+H&\operatorname{num}R_H(\text{left})&
+\operatorname{num}R_H(\text{right})\\ \hline
+153&-326087393309890391&10774669858388085533\\
+171&-23637245921617628887830851119&1268914984346577868385927201\\
+174&-30483718352770372806343598559&4074137222454462766319\\
+188&-354905520499384947188549599&27334051028435931971959991681.
+\end{array}
+\]
+The signs are therefore exact, not floating-point evidence.
+
+\section{Fisher strengthening and the sharp certified endpoints}
+\label{sec:fisher-comparison}
+
+We use the following already accepted triangle-density input.  If
+$1/2<p\leq2/3$, there is a unique $y\in(0,1/3]$ such that
+\begin{equation}\label{eq:fisher-parameter}
+ p=\pi(y)=\frac{(1-y)(1+3y)}2,
+\end{equation}
+and Fisher's sharp $k=2$ band gives
+\begin{equation}\label{eq:fisher-bound}
+ T=t(K_3,W)\geq g(y)=\frac32y(1-y)^2.
+\end{equation}
+At $p=1/2$ the same inequality follows simply from $T\geq0=g(0)$.
+The map $\pi$ is strictly increasing on $[0,1/3]$ because
+$\pi'(y)=1-3y$.
+
+This is precisely the triangle theorem used and audited in
+\path{notes/atlas148_paw_bias_hilbert_projection.tex}.  In the Lean
+development it is \path{fisher_triangle_bound} in
+\path{Methods/TriangleDensity.lean}.
+Its imported analytic declaration is
+\[
+ \texttt{triangleDensityLowerBound\_twoThirds}.
+\]
+It is provided by \path{lean/Taeyoung/Fisher/}.  That development formalizes Fisher's
+finite/spectral proof and its graphon sampling bridge.  It uses no flag
+algebra.  Its axiom audit is
+\[
+ \texttt{[propext, Classical.choice, Quot.sound]}.
+\]
+
+The four primitive integer comparison polynomials are
+\begin{align*}
+C_{153}(y)={}&-15309y^{10}+25515y^9-7614y^8-5832y^7-702y^6
+ +4266y^5\\
+ &{}-1524y^4+248y^3-69y^2-5y+2,\\[2mm]
+C_{171}(y)={}&-1948617y^{14}+649539y^{13}+1968300y^{12}
+ -354294y^{11}-923643y^{10}\\
+ &{}+21141y^9+83106y^8+173988y^7-64071y^6+4437y^5\\
+ &{}-2640y^4-494y^3+11y^2+19y+2,\\[2mm]
+C_{174}(y)={}&-2302911y^{14}+767637y^{13}+2165130y^{12}
+ -472392y^{11}-949887y^{10}\\
+ &{}+82377y^9+86022y^8+161352y^7-63261y^6+6039y^5\\
+ &{}-3282y^4-1024y^3-101y^2+11y+2,\\[2mm]
+C_{188}(y)={}&-3011499y^{14}+1003833y^{13}+2794986y^{12}
+ -629856y^{11}-1159839y^{10}\\
+ &{}+152361y^9+126846y^8+136080y^7-75249y^6+8595y^5\\
+ &{}-1002y^4-560y^3-69y^2+11y+2.
+\end{align*}
+
+Substitute \eqref{eq:fisher-parameter} into the targets and use the lower
+bounds \eqref{eq:153-triangle-lower} and
+\eqref{eq:three-triangle-lower}.  Exact expansion gives
+\begin{align}
+ \pi(y)^2\left(\frac{g(y)^4}{\pi(y)^2}
+       -\Phi_{153}(\pi(y))\right)
+ &=\frac{y(1-y)^3}{64}C_{153}(y),
+ \label{eq:fisher-gap153}\\
+ \pi(y)^6\left(\frac{g(y)^6}{\pi(y)^6}
+       -\Phi_H(\pi(y))\right)
+ &=\frac{y(1-y)^7}{1024}C_H(y),
+ \quad H=171,174,188.
+ \label{eq:fisher-gapthree}
+\end{align}
+All factors outside $C_H$ are nonnegative on the parameter interval, and
+the powers of $\pi(y)$ on the left are positive.
+
+It remains only to locate the first zero of $C_H$.  Use the signed Sturm
+sequence
+\[
+ C_H,\quad C'_H,\quad-\operatorname{rem}(C_H,C'_H),\quad\ldots
+\]
+and delete zeros before counting sign variations.  Exact rational Euclidean
+division gives
+\[
+\begin{array}{c|c|c|c|c}
+H&\deg C_H&V(0)&V(1/3)&V(0)-V(1/3)\\ \hline
+153&10&6&5&1\\
+171&14&8&7&1\\
+174&14&8&7&1\\
+188&14&8&7&1.
+\end{array}
+\]
+Thus every $C_H$ has exactly one zero $\eta_H$ in $(0,1/3)$.  Moreover
+$C_H(0)=2$, and exact Horner evaluation at the rational finite-decimal
+endpoints below has signs $+$ and $-$:
+\[
+\begin{array}{c|c|c}
+H&\text{exact rational bracket for }\eta_H&
+  \text{induced exact bracket for }\beta_H=\pi(\eta_H)\\ \hline
+153&(0.1534486672074800,0.1534486672074801)&
+ (0.6181289270058,0.6181289270059)\\
+171&(0.1790286678151776,0.1790286678151777)&
+ (0.6309517719656,0.6309517719657)\\
+174&(0.1124274870396899,0.1124274870396900)&
+ (0.5934675772766,0.5934675772767)\\
+188&(0.1459379567956481,0.1459379567956482)&
+ (0.6139911259451,0.6139911259452).
+\end{array}
+\]
+The second column is therefore an exact isolating certificate, not a
+floating-point root computation.  The last column follows by exact rational
+evaluation of the increasing quadratic $\pi$.  Since $C_H$ is positive
+from $0$ through its unique zero, equations
+\eqref{eq:fisher-gap153}--\eqref{eq:fisher-gapthree} prove
+Theorem~\ref{thm:main}.
+
+\section{Reproducibility and scope}
+
+Run
+\begin{verbatim}
+python experiments/four_self_amalgam_partial_verify.py
+\end{verbatim}
+from the repository root.  The script uses only small NetworkX Atlas
+graphs, exact SymPy polynomials, and Python rational arithmetic.  It checks
+the four edge inclusions and rooted isomorphisms, the target and gap
+factorizations, the elementary derivative discriminants, the exact Sturm
+variation counts, and every rational endpoint sign and parameter conversion.
+
+These bounds improve four low-density partial intervals but do not close a
+row.  Above $\beta_H$, the Fisher-enhanced self-amalgam lower bound used here
+is smaller than $\Phi_H$; this is a limitation of the certificate, not
+evidence that the desired graphon inequality fails there.  Section
+\ref{sec:elementary-comparison} remains a completely independent fallback
+that avoids the sharp triangle theorem, at the cost of slightly shorter
+intervals.
+
+\end{document}

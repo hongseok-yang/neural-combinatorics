@@ -1,0 +1,460 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Conditional Implications Among the Unresolved Atlas Rows}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Result}
+
+For a finite graph $G$ and $0\leq p<1$, put
+\[
+ \Phi_G(p)=(1-p)^{v(G)}
+ \chi_G\!\left(\frac1{1-p}\right),
+\]
+with its polynomial continuation at $p=1$.  Let $F_{43}$ denote the
+house graph (NetworkX Atlas $43$, graph6 \texttt{Dlc}) and let $F_{196}$
+denote NetworkX Atlas $196$ (graph6 \texttt{ER\string~g}).
+
+The following is a genuine implication between two rows that are not yet
+completely classified.
+
+\begin{theorem}[The blue arrow $43\longrightarrow196$]
+\label{thm:arrow}
+Assume that every graphon $V$ of edge density $z\in[1/2,1]$ satisfies
+\[
+ t(F_{43},V)\geq \Phi_{F_{43}}(z).
+\]
+Then every graphon $W$ of edge density $p\in[2/3,1]$ satisfies
+\[
+ t(F_{196},W)\geq \Phi_{F_{196}}(p).
+\]
+Thus a complete positive classification of Atlas $43$ would immediately
+give a complete positive classification of Atlas $196$.
+\end{theorem}
+
+This is not merely a graph-containment observation.  Atlas $196$ is the
+cone $K_1\vee F_{43}$, and the proof below transfers the assumed inequality
+through normalized link graphons.  In particular, it applies to arbitrary
+graphons, not only finite-step or regular graphons.
+
+\section{The weighted link estimate}
+
+Let $W$ be a graphon on a probability space $(\Omega,\mu)$, and write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),
+ \qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and
+\[
+ \tau(x)=\int_{\Omega^2}
+ W(x,y)W(x,z)W(y,z)\dd\mu(y)\dd\mu(z).
+\]
+
+\begin{lemma}[Degree-weighted rooted Goodman inequality]
+\label{lem:weighted}
+If $p>0$, then for every integer $k\geq0$,
+\[
+ \int_\Omega d(x)^k\tau(x)\dd\mu(x)
+ \geq \frac{2p-1}{p}
+       \int_\Omega d(x)^{k+2}\dd\mu(x).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $M_j=\int d^j$, and define
+\[
+ I_k=\int d(x)^k\tau(x)\dd\mu(x),
+ \qquad
+ J_k=\int_{\Omega^2}d(x)^kW(x,y)d(y)
+       \dd\mu(x)\dd\mu(y).
+\]
+The elementary inequality $ab\geq a+b-1$ on $[0,1]^2$, followed by
+integration, gives
+\[
+ I_k\geq 2J_k-pM_k.
+\]
+Set $U=1-W$, $u=1-d$, and $q=1-p$.  If $T_U$ is the integral operator
+with kernel $U$, then
+\[
+ T_Wd=d-q+T_Uu.
+\]
+Moreover, symmetry of $U$ gives
+\[
+\begin{split}
+ 2\left(\int d^kT_Uu-\int d^ku^2\right)
+ ={}&\int_{\Omega^2}U(x,y)
+       \bigl(u(y)-u(x)\bigr)
+       \bigl(d(x)^k-d(y)^k\bigr)\dd\mu^2\\
+ \geq{}&0,
+\end{split}
+\]
+because $u=1-d$.  It follows that
+\[
+ J_k\geq M_{k+2}-M_{k+1}+pM_k
+\]
+and hence
+\[
+ I_k\geq2M_{k+2}-2M_{k+1}+pM_k.
+\]
+Finally,
+\[
+ 2M_{k+2}-2M_{k+1}+pM_k
+ -\frac{2p-1}{p}M_{k+2}
+ =\frac1p\int d(x)^k(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+\end{proof}
+
+For $d(x)>0$, let $W_x$ be the same kernel $W$ on the probability measure
+\[
+ \dd\nu_x(y)=\frac{W(x,y)}{d(x)}\dd\mu(y),
+\]
+and let $z_x=t(K_2,W_x)=\tau(x)/d(x)^2$.  Put $z_x=0$ when $d(x)=0$.
+All link-integral contributions on $\{x:d(x)=0\}$ are taken to be zero.
+Lemma~\ref{lem:weighted}, with $k=3$, says
+\begin{equation}
+ \label{eq:link-average}
+ \int d(x)^5z_x\dd\mu(x)
+ \geq \left(2-\frac1p\right)\int d(x)^5\dd\mu(x).
+\end{equation}
+
+\section{Proof of the implication}
+
+The house target is
+\[
+ \phi(z):=\Phi_{F_{43}}(z)
+ =z(2z-1)(3z^2-3z+1)
+ =6z^4-9z^3+5z^2-z.
+\]
+Its derivatives are
+\[
+ \phi'(z)=24z^3-27z^2+10z-1,
+ \qquad
+ \phi''(z)=2(3z-1)(12z-5).
+\]
+Thus $\phi''>0$ on $[1/2,1]$, and
+$\phi'(1/2)=1/4$, so $\phi'$ is positive there.  Also
+$\phi\geq0$ on this interval and $\phi(1/2)=0$.
+
+\begin{proof}[Proof of Theorem~\ref{thm:arrow}]
+The endpoint $p=1$ is immediate, so suppose $2/3\leq p<1$ and put
+\[
+ c=2-\frac1p\in[1/2,1].
+\]
+Let
+\[
+ \ell_c(z)=\phi(c)+\phi'(c)(z-c)
+\]
+be the tangent to $\phi$ at $c$.  We claim that every graphon $V$ of
+arbitrary edge density $z\in[0,1]$ satisfies
+\begin{equation}
+ \label{eq:tangent-minorant}
+ t(F_{43},V)\geq\ell_c(z).
+\end{equation}
+If $z\geq1/2$, this follows from the conditional hypothesis and convexity:
+$t(F_{43},V)\geq\phi(z)\geq\ell_c(z)$.  If $z<1/2$, then
+$\phi'(c)\geq0$ and convexity gives
+\[
+ \ell_c(z)\leq\ell_c(1/2)\leq\phi(1/2)=0
+ \leq t(F_{43},V).
+\]
+
+Atlas $196$ is $K_1\vee F_{43}$.  Integrating first over the five
+neighbours of its universal vertex gives the exact link identity
+\[
+ t(F_{196},W)
+ =\int_\Omega d(x)^5t(F_{43},W_x)\dd\mu(x).
+\]
+Apply \eqref{eq:tangent-minorant} to every $W_x$.  Using
+\eqref{eq:link-average} and $\phi'(c)\geq0$, we obtain
+\[
+\begin{split}
+ t(F_{196},W)
+ &\geq \phi(c)\int d^5
+ +\phi'(c)\left(\int d^5z_x-c\int d^5\right)\\
+ &\geq \phi(c)\int d^5.
+\end{split}
+\]
+Jensen gives $\int d^5\geq p^5$, and $\phi(c)\geq0$, hence
+\[
+ t(F_{196},W)\geq p^5\phi(c).
+\]
+
+It remains only to identify the target.  With $q=1-p$, one has
+$1-c=q/p$.  Also
+\[
+ \chi_{K_1\vee F_{43}}(x)=x\chi_{F_{43}}(x-1).
+\]
+Consequently
+\[
+ p^5\phi(c)
+ =q^5\chi_{F_{43}}\!\left(\frac pq\right)
+ =\Phi_{K_1\vee F_{43}}(p)
+ =\Phi_{F_{196}}(p),
+\]
+which proves the theorem.
+\end{proof}
+
+For reference, the exact chromatic polynomials are
+\[
+ \chi_{F_{43}}(x)=x(x-1)(x-2)(x^2-3x+3)
+\]
+and
+\[
+ \chi_{F_{196}}(x)
+ =x(x-1)(x-2)(x-3)(x^2-5x+7).
+\]
+The latter target is therefore
+\[
+ \Phi_{F_{196}}(p)
+ =p(2p-1)(3p-2)(7p^2-9p+3).
+\]
+
+One explicit Atlas identification is as follows.  In the NetworkX
+labelling of Atlas $43$, the edge list is
+\[
+ 01,\ 03,\ 04,\ 12,\ 23,\ 34.
+\]
+Add a universal vertex $5$.  The map
+\[
+ 0\mapsto2,\quad 1\mapsto3,\quad 2\mapsto1,\quad
+ 3\mapsto5,\quad 4\mapsto0,\quad 5\mapsto4
+\]
+carries the resulting cone to the NetworkX edge list of Atlas $196$.
+
+\section{Quantitative propagation of partial progress}
+
+The same argument explains the already accepted partial range for Atlas
+$196$.  Suppose the house inequality is known only for $z\geq a$, where
+$a\in[1/2,5/6)$, while $\phi,\phi',\phi''\geq0$ on $[a,1]$.  Define
+\[
+ L_a(c)=\phi(c)+(a-c)\phi'(c).
+\]
+If $c_a\in[a,1]$ is the least point for which $L_a(c_a)\leq0$, then the
+same tangent proof gives
+\[
+ \boxed{
+  \text{Atlas }43\text{ proved for }z\geq a
+  \quad\Longrightarrow\quad
+  \text{Atlas }196\text{ proved for }
+  p\geq\frac1{2-c_a}.}
+\]
+For the current house threshold
+\[
+ a=0.7085121949942608\ldots,
+\]
+this gives
+\[
+ c_a=0.8412137423978822\ldots,
+ \qquad
+ \frac1{2-c_a}=0.8629719186257050\ldots,
+\]
+which is exactly the green partial range recorded for Atlas $196$.
+When $a=1/2$, one has $L_a(a)=\phi(a)=0$, so $c_a=a$ and the transferred
+threshold is $1/(2-a)=2/3$, proving Theorem~\ref{thm:arrow} on the entire
+required interval.
+
+\section{Audit of other possible arrows}
+
+\subsection{Three exact range-transfer arrows}
+
+There are also three exact implications obtained from spanning containment.
+Unlike Theorem~\ref{thm:arrow}, each implication covers only a proper initial
+subinterval of the target row's required range.
+
+\begin{theorem}[Spanning-supergraph range transfers]
+\label{thm:range-arrows}
+The following statements hold for arbitrary graphons.
+\begin{enumerate}
+\item If Atlas $188$ satisfies its chromatic-polynomial bound on its full
+required interval, then Atlas $171$ satisfies its bound for
+\[
+ \frac12\leq p\leq\frac23.
+\]
+\item Under the same hypothesis on Atlas $188$, Atlas $153$ satisfies its
+bound for
+\[
+ \frac12\leq p\leq\frac35.
+\]
+\item If Atlas $199$ satisfies its chromatic-polynomial bound on its full
+required interval, then Atlas $181$ satisfies its bound for
+\[
+ \frac23\leq p\leq\frac34.
+\]
+\end{enumerate}
+None of these statements claims anything about the remainder of the target row's
+required interval.
+\end{theorem}
+
+\begin{proof}
+In the NetworkX labellings, the vertex map
+\[
+ \sigma:(0,1,2,3,4,5)\longmapsto(0,5,4,3,1,2)
+\]
+embeds Atlas $171$ as the spanning subgraph of Atlas $188$ obtained by
+deleting the single edge $15$.  Consequently, since $0\leq W\leq1$,
+\begin{equation}
+ t(F_{171},W)\geq t(F_{188},W).                 \label{eq:171-188-density}
+\end{equation}
+Their targets satisfy the exact identity
+\begin{equation}
+ \Phi_{188}(p)-\Phi_{171}(p)
+ =p(p-1)(2p-1)^2(3p-2).                        \label{eq:171-188-target}
+\end{equation}
+For $1/2\leq p\leq2/3$, the two factors $p-1$ and $3p-2$ are both
+nonpositive and every other factor is nonnegative.  Thus
+$\Phi_{188}(p)\geq\Phi_{171}(p)$ there.  The assumed Atlas $188$ bound,
+\eqref{eq:171-188-density}, and \eqref{eq:171-188-target} give
+\[
+ t(F_{171},W)\geq t(F_{188},W)
+ \geq\Phi_{188}(p)\geq\Phi_{171}(p).
+\]
+
+The vertex map
+\[
+ \rho:(0,1,2,3,4,5)\longmapsto(0,1,3,4,5,2)
+\]
+embeds Atlas $153$ as the spanning subgraph of Atlas $188$ obtained by
+deleting the two edges $15$ and $24$.  Thus
+\begin{equation}
+ t(F_{153},W)\geq t(F_{188},W).                 \label{eq:153-188-density}
+\end{equation}
+The exact target comparison is
+\begin{equation}
+ \Phi_{188}(p)-\Phi_{153}(p)
+ =p(p-1)(2p-1)^2(5p-3).                        \label{eq:153-188-target}
+\end{equation}
+For $1/2\leq p\leq3/5$, the factors $p-1$ and $5p-3$ are both
+nonpositive and all other factors are nonnegative.  Hence the same
+three-step comparison gives the second assertion.  This is an exact but
+presently redundant transfer: the unconditional Atlas $153$ range already
+extends beyond $3/5$ by a direct argument.
+
+Similarly, the map
+\[
+ \eta:(0,1,2,3,4,5)\longmapsto(1,3,2,4,5,0)
+\]
+embeds Atlas $181$ as the spanning subgraph of Atlas $199$ obtained by
+deleting the single edge $03$.  Hence
+\begin{equation}
+ t(F_{181},W)\geq t(F_{199},W).                 \label{eq:181-199-density}
+\end{equation}
+Here the target difference factors as
+\begin{equation}
+ \Phi_{199}(p)-\Phi_{181}(p)
+ =p(p-1)(2p-1)(3p-2)(4p-3).                    \label{eq:181-199-target}
+\end{equation}
+On $2/3\leq p\leq3/4$, the factors $p-1$ and $4p-3$ are both
+nonpositive, while the remaining factors are nonnegative.  Therefore
+$\Phi_{199}(p)\geq\Phi_{181}(p)$, and the same three-step comparison proves
+the third assertion.
+\end{proof}
+
+\begin{remark}[Why these arrows are range-qualified]
+For $p>2/3$, the right-hand side of \eqref{eq:171-188-target} is negative;
+for $p>3/5$, the right-hand side of \eqref{eq:153-188-target} is negative;
+for $p>3/4$, the right-hand side of \eqref{eq:181-199-target} is negative.
+Thus plain spanning containment reverses the needed target comparison beyond
+the displayed endpoints.  These are rigorous partial dependencies, not
+complete classification arrows.
+\end{remark}
+
+The exact audit script exhausts all $108$ ordered spanning-subgraph
+containments among the twenty unresolved rows.  It factors every target gap
+over the rationals; every irreducible factor is linear or a quadratic with
+negative discriminant, so rational sign-cell tests are exact.  After
+intersecting the target's required interval with the interval on which the
+source theorem is assumed, the three implications in
+Theorem~\ref{thm:range-arrows} are the only positive-length loci.  Four raw
+target-gap loci ($194\to153$, $194\to171$, $196\to153$, and $196\to171$)
+lie wholly below the sources' required threshold $p=2/3$ and therefore do
+not constitute conditional implications.
+
+\subsection{Closure-operation audit}
+
+The current unresolved set consists of the six partial rows
+\[
+ 43,153,171,174,188,196
+\]
+and the fourteen open rows
+\[
+ 118,122,124,130,147,151,157,168,169,181,185,194,199,203.
+\]
+An exact NetworkX audit of the accepted closure operations gives the
+following result.
+
+\begin{center}
+\begin{tabular}{@{}p{0.25\linewidth}p{0.50\linewidth}p{0.18\linewidth}@{}}
+\toprule
+Operation & order restriction for a target on at most $6$ vertices
+          & unresolved-base arrow\\
+\midrule
+add one universal vertex & base has at most $5$ vertices
+                         & $43\longrightarrow196$\\
+full whiskering & base has at most $3$ vertices & none\\
+vertex self-amalgam & every nontrivial unresolved base is too large & none\\
+edge self-amalgam & every nontrivial unresolved base is too large & none\\
+disjoint union & no applicable connected unresolved target & none\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+There are three especially tempting non-arrows.  Atlas $118$, $122$, and
+$124$ are obtained by attaching one leaf to the three vertex orbits of the
+house, and all three have target $p\phi(p)$.  However, a one-leaf operation
+is not covered by full whiskering.  If $f_r(x)$ is the house density rooted
+at the attachment vertex $r$, the assumed house theorem controls only
+\[
+ \int f_r(x)\dd\mu(x),
+\]
+whereas the required leaf density is
+\[
+ \int d(x)f_r(x)\dd\mu(x).
+\]
+The unrooted assertion supplies no sign for the covariance term
+\[
+ \int (d(x)-p)f_r(x)\dd\mu(x).
+\]
+Therefore this note does \emph{not} assert any of the arrows
+$43\to118$, $43\to122$, or $43\to124$.  Proving one of them requires a
+new rooted or degree-biased house theorem, not just the present unrooted
+Atlas $43$ statement.
+
+The audit is reproduced by
+\texttt{experiments/open\_conditional\_implication\_audit.py}.  Its purpose
+is to prevent a visual subgraph relation from being mistaken for a valid
+graphon closure theorem.
+
+\section{Dependencies and scope}
+
+The conditional proof uses only Tonelli--Fubini, the elementary weighted
+rooted Goodman inequality proved above, convexity of the explicit house
+target, Jensen's inequality, and the assumed complete Atlas $43$ theorem.
+It uses neither flag algebras nor a finite-step reduction.  The theorem is
+conditional: it does not change the present partial status of either row.
+
+The general universal-vertex theorem is also proved in
+\path{notes/clique_oddcycle_join.tex}; the quantitative delayed-range
+version is proved in
+\path{notes/atlas196_partial_house_cone_lift.tex}.  The proof here is
+included so that the blue dependency arrow has a single, self-contained
+reference.
+
+\end{document}

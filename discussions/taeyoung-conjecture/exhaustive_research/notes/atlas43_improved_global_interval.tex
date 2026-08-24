@@ -1,0 +1,351 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+
+\title{Atlas 43: An Improved Global Graphon Interval\\
+via Joint Absorption of the Bad Chord and the $C_5$ Surplus}
+\author{}
+\date{August 24, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $H$ be the house graph, equivalently the theta graph with path
+lengths $1,2,3$.  The earlier global proof established its claimed
+Goodman-style bound for
+\[
+ p\geq \frac{1+1/\sqrt3}{2}=0.7886751345\ldots.
+\]
+We improve the global threshold to
+\[
+ p\geq p_0=0.708512194994\ldots,
+\]
+where $p_0$ is the unique zero in $(7/10,1)$ of
+\[
+ 5440p^4-10848p^3+7981p^2-2580p+309.
+\]
+The proof applies to every graphon.  Its new ingredient is a joint estimate:
+the exact $C_5$ surplus controls complement-degree variance, while the
+two codegree factors in the bad chord term are bounded by the square of the
+ordinary degree.  A $2\times2$ positive-semidefinite calculation then
+absorbs the whole bad term at the stated quartic threshold.
+\end{abstract}
+
+\section{Statement}
+
+Let $W\colon[0,1]^2\to[0,1]$ be a symmetric measurable graphon and put
+\[
+ p:=t(K_2,W),\qquad q:=1-p,\qquad r:=2p-1.
+\]
+For the house graph $H$, the conjectured lower bound is
+\begin{equation}\label{eq:target}
+ t(H,W)\geq B(p),
+ \qquad
+ B(p):=pr(p^3+q^3).
+\end{equation}
+
+Define
+\begin{equation}\label{eq:quartic}
+ P(p):=5440p^4-10848p^3+7981p^2-2580p+309.
+\end{equation}
+
+\begin{theorem}[Improved global interval]\label{thm:main}
+Let $p_0$ be the unique root of $P$ in $(7/10,1)$.  Then
+\[
+ p_0=0.7085121949942608\ldots.
+\]
+Every graphon $W$ of edge density $p\geq p_0$ satisfies
+\[
+ \boxed{
+ t(H,W)\geq p(2p-1)\bigl(p^3+(1-p)^3\bigr).
+ }
+\]
+In particular, the decimal statement $p\geq0.7085121950$ is safe.
+\end{theorem}
+
+The proof is self-contained modulo three inequalities already proved in
+\texttt{notes/house\_partial.tex}: the exact two-chord identity, the
+three-triangle gluing bound, and the displayed square certificate for
+$C_5$.  We restate precisely the parts needed below.
+
+\section{The previous decomposition}
+
+Put $U:=1-W$, and let
+\[
+ C(x,y):=\int_0^1 W(x,s)W(s,y)\dd s
+\]
+be the two-step kernel.  Set
+\[
+ A(x,y):=W(x,y)C(x,y),
+ \qquad
+ D(x,y):=U(x,y)C(x,y).
+\]
+The two relevant nonnegative five-vertex integrals are
+\begin{align}
+ F&:=\int W(y,z)A(x,y)A(x,z)\dd x\dd y\dd z,\label{eq:F}\\
+ G&:=\int W(y,z)D(x,y)D(x,z)\dd x\dd y\dd z.\label{eq:G}
+\end{align}
+The exact two-chord decomposition is
+\begin{equation}\label{eq:two-chord}
+ 2t(H,W)=F+t(C_5,W)-G.
+\end{equation}
+
+Write
+\[
+ \tau:=t(K_3,W),
+ \qquad
+ \delta:=\tau-pr.
+\]
+Goodman's inequality gives $\delta\geq0$.  The three-triangle gluing
+inequality gives $F\geq\tau^3/p^2$, and therefore
+\begin{equation}\label{eq:F-surplus}
+ F-pr^3
+ \geq
+ 3r^2\delta+\frac{3r}{p}\delta^2+\frac1{p^2}\delta^3.
+\end{equation}
+The target has the exact split
+\begin{equation}\label{eq:target-split}
+ 2B(p)=pr^3+(p^5-pq^4).
+\end{equation}
+Consequently
+\begin{equation}\label{eq:gap-start}
+ \begin{aligned}
+ 2\bigl(t(H,W)-B(p)\bigr)
+ \geq{}&
+ 3r^2\delta+\frac{3r}{p}\delta^2+\frac1{p^2}\delta^3\\
+ &+\bigl(t(C_5,W)-(p^5-pq^4)\bigr)-G.
+ \end{aligned}
+\end{equation}
+The earlier proof used only $G\leq\delta$ and discarded the $C_5$
+surplus.  The following joint estimate is the improvement.
+
+\section{Complement variance and transitivity defect}
+
+Let
+\[
+ d_U(x):=\int_0^1U(x,y)\dd y,
+ \qquad
+ g(x):=d_U(x)-q,
+ \qquad
+ v:=\int_0^1g(x)^2\dd x.
+\]
+Thus $v$ is the variance of the complement degree.  Split it as
+\[
+ v=v_-+v_+,
+ \qquad
+ v_-:=\int_{\{g<0\}}g^2,
+ \qquad
+ v_+:=\int_{\{g\geq0\}}g^2.
+\]
+Also put
+\begin{align}
+ n_x&:=\int_{[0,1]^2}
+ U(x,y)U(x,z)W(y,z)\dd y\dd z,\label{eq:nx}\\
+ n&:=\int_0^1n_x\dd x.\label{eq:n}
+\end{align}
+Both $v,n$ are nonnegative.  Expanding the triangle density of
+$W=1-U$ gives the exact Goodman-surplus identity
+\begin{equation}\label{eq:delta-vn}
+ \boxed{\delta=2v+n.}
+\end{equation}
+
+The sharp $C_5$ proof in \texttt{notes/house\_partial.tex} writes
+$T=T_U$, $T\one=q\one+g$, and completes a square.  Keeping the
+degree-variance term rather than discarding the whole surplus yields the
+following bound.
+
+\begin{lemma}[Retained $C_5$ variance]\label{lem:c5-variance}
+For $p\geq1/2$,
+\begin{equation}\label{eq:c5-variance}
+ t(C_5,W)-(p^5-pq^4)\geq c(p)v,
+\end{equation}
+where
+\begin{equation}\label{eq:c-def}
+ c(p):=8q^2-10q+\frac{55}{16}
+      =8p^2-6p+\frac{23}{16}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The exact certificate retained in the proof of the sharp $C_5$ bound is
+\[
+ 4\left\|Tg+\frac{8q-5}{8}g\right\|_2^2
+ +\left(8q^2-10q+\frac{55}{16}\right)\|g\|_2^2.
+\]
+The only preceding relaxation replaces the complement $5$-cycle density
+by a $4$-path density, and its omitted remainder is nonnegative.  Dropping
+the displayed square and that remainder proves
+\eqref{eq:c5-variance}.
+\end{proof}
+
+We next improve the pointwise estimate $C\leq1$ used in the earlier
+bound on $G$.
+
+\begin{lemma}[Degree-sensitive bad-chord bound]\label{lem:G-bound}
+With the notation above,
+\begin{equation}\label{eq:G-bound}
+ G\leq p^2n+2pq\sqrt{v_-n}+q^2v_-+v_+.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The two-step kernel satisfies, pointwise,
+\[
+ C(x,y)
+ =\int W(x,s)W(s,y)\dd s
+ \leq\int W(x,s)\dd s
+ =d_W(x)=p-g(x).
+\]
+Therefore $D(x,y)=U(x,y)C(x,y)\leq U(x,y)(p-g(x))$, and
+\[
+ G\leq\int_0^1(p-g(x))^2n_x\dd x.
+\]
+The negative contribution to $\int g n_x$ is the only one that can
+increase the last integral.  On $\{g<0\}$ we have
+\[
+ d_U(x)=q+g(x)\leq q,
+ \qquad
+ n_x\leq d_U(x)^2\leq q^2.
+\]
+Consequently Cauchy--Schwarz gives
+\[
+ -\int g(x)n_x\dd x
+ \leq\int_{\{g<0\}}|g(x)|n_x\dd x
+ \leq q\sqrt{v_-n}.
+\]
+The same pointwise bounds give
+\[
+ \int g(x)^2n_x\dd x
+ \leq q^2v_-+v_+.
+\]
+Expanding $(p-g)^2$ proves \eqref{eq:G-bound}.
+\end{proof}
+
+Combining Lemmas~\ref{lem:c5-variance} and \ref{lem:G-bound},
+\begin{equation}\label{eq:joint-bound}
+ G-\bigl(t(C_5,W)-(p^5-pq^4)\bigr)
+ \leq
+ p^2n+2pq\sqrt{v_-n}
+ +(q^2-c(p))v_-+(1-c(p))v_+.
+\end{equation}
+
+\section{The $2\times2$ absorption and the quartic}
+
+Set
+\[
+ L:=3r^2=3(2p-1)^2.
+\]
+In view of $\delta=n+2v_-+2v_+$, first consider the variables
+$(n,v_-)$.  Their contribution in \eqref{eq:joint-bound} is at most
+$L(n+2v_-)$ precisely when
+\begin{equation}\label{eq:quadratic-psd}
+ (L-p^2)n-2pq\sqrt{nv}
+ +\bigl(2L-(q^2-c(p))\bigr)v\geq0,
+\end{equation}
+where in this display $v=v_-$.  The remaining $v_+$ contribution is
+at most $2Lv_+$ whenever
+\begin{equation}\label{eq:positive-variance}
+ 2L-(1-c(p))\geq0.
+\end{equation}
+This is a quadratic form in $(\sqrt n,\sqrt v)$.  Its two diagonal
+entries are
+\begin{align}
+ L-p^2&=11p^2-12p+3,\label{eq:diag1}\\
+ 2L-(q^2-c(p))&=\frac{496p^2-448p+103}{16}.\label{eq:diag2}
+\end{align}
+Its determinant is
+\begin{equation}\label{eq:det}
+ \begin{aligned}
+ &(L-p^2)\bigl(2L-(q^2-c(p))\bigr)-p^2q^2\\
+ &\hspace{35mm}=\frac1{16}P(p).
+ \end{aligned}
+\end{equation}
+
+For completeness, $P(7/10)=-103/100$ and $P(1)=302$.  Moreover
+\[
+ P''(p)=65280p^2-65088p+15962
+\]
+is positive and increasing on $[7/10,1]$, and
+$P'(7/10)=2763/25>0$.  Thus $P$ is strictly increasing on this interval
+and has a unique root $p_0\in(7/10,1)$.  Direct rational evaluations give
+\[
+ P(0.7085121949)<0,
+ \qquad
+ P(0.7085121950)>0,
+\]
+and hence
+\[
+ 0.7085121949<p_0<0.7085121950.
+\]
+All polynomial identities and rational endpoint signs in this section are
+reproduced by
+\texttt{experiments/atlas43\_global\_interval\_verify.py}.
+
+For $p\geq p_0>7/10$, both \eqref{eq:diag1} and
+\eqref{eq:diag2} are positive, while \eqref{eq:det} is nonnegative.
+The quadratic form \eqref{eq:quadratic-psd} is therefore positive
+semidefinite.  Also \eqref{eq:positive-variance} holds: its left-hand
+side is $(512p^2-480p+103)/16$, whose larger zero is
+$(15+\sqrt{19})/32<7/10$.  We have proved
+\begin{equation}\label{eq:absorption}
+ G-\bigl(t(C_5,W)-(p^5-pq^4)\bigr)
+ \leq3r^2\delta.
+\end{equation}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Substitute \eqref{eq:absorption} into \eqref{eq:gap-start}.  The linear
+terms cancel, leaving
+\[
+ 2\bigl(t(H,W)-B(p)\bigr)
+ \geq
+ \frac{3r}{p}\delta^2+\frac1{p^2}\delta^3\geq0.
+\]
+Here $p\geq p_0>1/2$, $r\geq0$, and $\delta\geq0$.  This proves the
+claimed graphon inequality.
+\end{proof}
+
+\section{What changed and what remains}
+
+The old estimate treated the two terms separately:
+\[
+ t(C_5,W)-(p^5-pq^4)\geq0,
+ \qquad G\leq\delta.
+\]
+It therefore required $3r^2\geq1$.  The new proof retains the exact
+degree-variance payment inside the $C_5$ certificate and replaces
+$C\leq1$ by $C(x,y)\leq d_W(x)$.  The resulting joint cost is at most
+$3r^2\delta$ already at the smaller quartic threshold.
+
+This theorem is global: there is no step-graphon, regularity, finite-rank,
+balanced-join, or bounded-perturbation assumption.  It enlarges the proved
+portion of the required interval $[1/2,1]$ from
+\[
+ 2\left(1-\frac{1+1/\sqrt3}{2}\right)
+ =42.2649\ldots\%
+\]
+to
+\[
+ 2(1-p_0)=58.29756100\ldots\%.
+\]
+The interval
+\[
+ \frac12\leq p<p_0
+\]
+remains open for arbitrary graphons.  The balanced-join low-side theorem in
+\texttt{notes/atlas43\_balanced\_join\_low\_side.tex} remains complementary:
+it covers a much larger low-density interval, but only under its structural
+complete-join hypothesis.
+
+\end{document}
