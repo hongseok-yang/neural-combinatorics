@@ -345,24 +345,26 @@ Thus $U$ is the complementary graphon and has edge density $q$.
 \end{lemma}
 The proof is given in \Cref{app:step-reduction}.
 
-Fix such a step graphon on $N$ equal intervals.  If $K_{ab}$ is the value
-of a step kernel $K$ on $I_a\times I_b$, define the $N\times N$ matrix
+Fix such a step graphon, and denote its $N$ equal partition intervals by
+$I_1,\ldots,I_N$. If $K_{ab}$ is the value of a step kernel $K$ on
+$I_a\times I_b$, define the $N\times N$ matrix
 $M_K$ and the vector $e\in\R^N$ by
 \begin{equation*}
   M_K=\left(\frac{K_{ab}}N\right)_{a,b=1}^N,
   \qquad
   e=\frac1{\sqrt N}(1,\ldots,1)^{\mathsf T}.
 \end{equation*}
-Then $M_K$ is symmetric and $\norm e=1$.  Also,
+Then $M_K$ is symmetric and $\norm e=1$. With this normalization, matrix
+powers recover the relevant graph densities:
 \begin{align}
   \Tr(M_K^j)
   &=\frac1{N^j}\sum_{a_1,\ldots,a_j=1}^N
     K_{a_1a_2}\cdots K_{a_ja_1}
-   =\dens{C_j}K,\notag\\
-  e^{\mathsf T}M_K^je
-  &=\frac1{N^{j+1}}\sum_{a_0,\ldots,a_j=1}^N
-    K_{a_0a_1}\cdots K_{a_{j-1}a_j}
-   =\dens{P_j}K,\notag\\
+   =\dens{C_j}K \qquad (j\ge3),\notag\\
+  e^{\mathsf T}M_K^ke
+  &=\frac1{N^{k+1}}\sum_{a_0,\ldots,a_k=1}^N
+    K_{a_0a_1}\cdots K_{a_{k-1}a_k}
+   =\dens{P_k}K \qquad (k\ge1),\notag\\
   e^{\mathsf T}M_Ke
   &=\frac1{N^2}\sum_{a,b=1}^NK_{ab}
    =\edens K. \label{eq:edge-matrix}
@@ -387,7 +389,9 @@ The edge identity \eqref{eq:edge-matrix} gives
 \[
   e^{\mathsf T}g=e^{\mathsf T}M_Ue-q=0,
 \]
-so $g\in\mathcal E_0$.  Relative to $\R e\oplus\mathcal E_0$,
+so $g\in\mathcal E_0$.
+The constant-one graphon has matrix $M_1=P$, and hence $M_W=P-M_U$.
+Therefore, relative to $\R e\oplus\mathcal E_0$,
 \begin{equation}\label{eq:block-UW}
   M_U=
   \begin{pmatrix}
@@ -401,10 +405,6 @@ so $g\in\mathcal E_0$.  Relative to $\R e\oplus\mathcal E_0$,
     -g&-A
   \end{pmatrix}.
 \end{equation}
-The matrix corresponding to the constant graphon $1$ is $M_1=P$, and
-\[
-  M_W=M_1-M_U.
-\]
 
 \begin{lemma}[Eigenvalue bound]\label{lem:half-norm}
   Every eigenvalue of $A$ lies in $[-1/2,1/2]$.
@@ -445,7 +445,9 @@ The matrix corresponding to the constant graphon $1$ is $M_1=P$, and
   \]
   Here the second inequality follows from $M_U\le M_1$ entrywise and
   $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
-  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the claim follows.
+  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh--Ritz
+  characterization of the eigenvalues of the symmetric map $A$ proves the
+  claim.
 \end{proof}
 
 Let $\lambda_1,\ldots,\lambda_{N-1}$ be the eigenvalues of $A$, counted
@@ -466,6 +468,9 @@ at $\lambda_i$.  By \Cref{lem:half-norm},
   \qquad
   \mu(\R)=\norm g^2.
 \end{equation}
+Thus every quantity $g^{\mathsf T}A^jg$ that will occur in the matrix
+expansions is a moment of one positive measure on a fixed interval. The next
+section organizes those expansions in terms of these moments.
 
 \section{Excursion expansions}
 \label{sec:excursions}
@@ -479,7 +484,7 @@ polynomial of degree $d$ is
    y_1^{\gamma_1}\cdots y_k^{\gamma_k},
   \qquad h_0=1.
 \end{equation}
-We write $\rep ak$ when $a$ occurs $k$ times.
+We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 
 In a word in $P$ and $Q$, each maximal block of $Q$'s bracketed by
 occurrences of $P$ represents a passage from $\R e$ into $\mathcal E_0$
@@ -522,12 +527,12 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
   trace, we may circularly shift the word so that its first letter is $P$
   and its last letter is $Q$.  For $1\le i\le r$, let $\alpha_i+1$ be the
   number of letters in the $i$th $P$-block, and let $\beta_i+1$ be the
-  number of letters in the $Q$-block that follows it.  For example, the
-  following word has $r=2$:
+  number of letters in the $Q$-block that follows it. For example, the
+  following cyclic word has $r=2$ and odd length $13$:
   \[
     \underbrace{PPP}_{\alpha_1=2}\,
     \underbrace{QQQ}_{\beta_1=2}\,
-    \underbrace{PPPP}_{\alpha_2=3}\,
+    \underbrace{PPPPP}_{\alpha_2=4}\,
     \underbrace{QQ}_{\beta_2=1}
   \]
   These integers satisfy the length condition, and the value of the
@@ -540,59 +545,16 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
   \end{equation}
 
-  Consider pairs consisting of a word $R_1\cdots R_m$ and an ordered
-  tuple $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ obtained by
-  circularly shifting the word so that it begins with $P$ and ends with
-  $Q$, and then taking the successive block lengths.  Equal pairs arising
-  from different shifts are counted with multiplicity.  Double counting
-  these pairs gives
-  \[
-    \begin{aligned}
-      &\sum_{\substack{\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r\ge0\\
-              \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
-       \left|\left\{R_1\cdots R_m\in\{P,Q\}^m:
-       \substack{(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
-       \text{ is obtained}\\
-       \text{from a circular shift of }R_1\cdots R_m}
-       \right\}\right|\\
-      &\qquad=\left|\left\{
-       \substack{(R_1\cdots R_m,
-       (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)):\\
-       R_1\cdots R_m\in\{P,Q\}^m,\quad
-       \alpha_1,\beta_1,\ldots,\alpha_r,\beta_r\ge0,\\
-       \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,\\
-       (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
-       \text{ is obtained from a circular shift of }R_1\cdots R_m}
-       \right\}\right|\\
-      &\qquad=\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
-                       R_1\cdots R_m\text{ has }r\text{ $Q$-blocks}}}
-       \left|\left\{\substack{(\alpha_1,\beta_1,\ldots,
-       \alpha_r,\beta_r)\in\mathbb Z_{\ge0}^{2r}:\\
-       \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,\\
-       (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
-       \text{ is obtained from a circular shift of }R_1\cdots R_m}
-       \right\}\right|.
-    \end{aligned}
-  \]
-  For every ordered tuple in the first sum,
-  \[
-    \left|\left\{R_1\cdots R_m\in\{P,Q\}^m:
-      \substack{(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
-      \text{ is obtained}\\
-      \text{from a circular shift of }R_1\cdots R_m}
-    \right\}\right|=m.
-  \]
-  For every word in the last sum,
-  \[
-    \left|\left\{\substack{(\alpha_1,\beta_1,\ldots,
-      \alpha_r,\beta_r)\in\mathbb Z_{\ge0}^{2r}:\\
-      \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,\\
-      (\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)
-      \text{ is obtained from a circular shift of }R_1\cdots R_m}
-    \right\}\right|=r.
-  \]
-  Applying the same double count with the values in
-  \eqref{eq:excursion-length-weight} as weights gives
+  It remains to determine the multiplicity of each block-length tuple.
+  Mark a cut in the cyclic word after a $Q$-block, so that the shifted word
+  begins with $P$ and ends with $Q$. Every word with $r$ $Q$-blocks admits
+  exactly $r$ such marked cuts. Conversely, an ordered tuple
+  $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ satisfying the length
+  condition determines the cyclic pattern, and its first position can be
+  placed at any of the $m$ labelled positions. This counts marked placements
+  with multiplicity, so the statement remains valid for periodic words.
+  Because a circular shift does not change the trace, weighted double
+  counting with \eqref{eq:excursion-length-weight} gives
   \begin{equation}\label{eq:U-r-excursions}
     \begin{aligned}
       &\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
@@ -646,6 +608,8 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
   $\Tr(A^m)$ becomes $-\Tr(A^m)$.  This proves \eqref{eq:cycle-W}.
 \end{proof}
 
+Unlike a cycle, a path has fixed endpoints, so its excursion expansion has no
+cyclic multiplicity factor.
 Let $P_k$ denote the path with $k$ edges, and define the scalar
 \begin{equation*}
   x_k=\tP kU=e^{\mathsf T}M_U^ke.
@@ -749,7 +713,8 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   \begin{equation}\label{eq:pge23-n}
     n=m-2r,
   \end{equation}
-  and define the symmetric excursion polynomial
+  which is a positive odd integer, and define the symmetric excursion
+  polynomial
   \begin{align}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     ={}&\frac mr\Bigl[
@@ -774,13 +739,15 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   \eqref{eq:cycle-W} cancels the two trace terms and gives
   \[
     \begin{aligned}
-      \tC mW&+\tC mU\\
-      =p^m+q^m&+\sum_{r=1}^{(m-1)/2}\frac mr
+      \tC mW+\tC mU
+      ={}&p^m+q^m\\
+      &+\sum_{r=1}^{(m-1)/2}\frac mr
       \int\!\cdots\!\int
-      [
         h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
-        +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
-      ]
+      \prod_{i=1}^r\dd\mu(\lambda_i)\\
+      &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+        h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
     \end{aligned}
   \]
@@ -827,15 +794,13 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
        =x_{m-1}.
     \end{aligned}
   \end{equation}
-  Rearranging \eqref{eq:commonality-gap} and using $p+q=1$ gives
-  \begin{align*}
+  Since $q^m-q^{m-1}=-pq^{m-1}$, rearranging
+  \eqref{eq:commonality-gap} gives
+  \[
     \tC mW-\bigl(p^m-pq^{m-1}\bigr)
-    &={}
-      \Phi_m+x_{m-1}-\tC mU
-      +q^m-q^{m-1}+pq^{m-1}\\
-    &=\Phi_m+x_{m-1}-\tC mU
-     \ge\Phi_m,
-  \end{align*}
+    =\Phi_m+x_{m-1}-\tC mU
+    \ge\Phi_m,
+  \]
   where the last inequality follows from \eqref{eq:cycle-path}.
   Thus $\Phi_m\ge0$ also proves \Cref{thm:main}.
 \end{proof}
@@ -844,15 +809,15 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
 \label{sec:short-cycles}
 
 In this section, we consider the first three odd cycles to illustrate the
-general excursion argument through explicit low-degree computations.  The
+general excursion argument through explicit low-degree computations. The
 identities used in \Cref{lem:polynomial-reduction} do not require
 $p\ge2/3$, and for these cycles every excursion polynomial is pointwise
-nonnegative when $p\ge1/2$.  Consequently, the inequalities in
+nonnegative when $p\ge1/2$. Consequently, the inequalities in
 \Cref{thm:main,thm:commonality} hold for $m\in\{3,5,7\}$ throughout the
 larger range $p\ge1/2$.
 
 \begin{proposition}\label{prop:short-cycles}
-  Suppose that $0\le q\le1/2$.  For $m\in\{3,5,7\}$,
+  Suppose that $0\le q\le1/2$ and set $p=1-q$. For $m\in\{3,5,7\}$,
   $1\le r\le(m-1)/2$, and $\lambda_1,\ldots,\lambda_r\in\R$, we have
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0.
@@ -995,15 +960,17 @@ larger range $p\ge1/2$.
   We have proved that
   $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
   $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
-  Thus \eqref{eq:Phi-expansion} gives $\Phi_m\ge0$, and
+  Since $\mu$ is a positive measure, \eqref{eq:Phi-expansion} gives
+  $\Phi_m\ge0$, and
   \Cref{lem:polynomial-reduction} proves both inequalities.
 \end{proof}
 
 \section{Positivity of the excursion polynomials}
 \label{sec:excursion-positivity}
 
-Fix $1\le r\le(m-1)/2$.  Then $n$ is a positive odd integer.
-We simplify the integrand $P_{m,r}$ of \eqref{eq:Phi-expansion} by replacing the eigenvalues $\lambda_1,\ldots,\lambda_r$ by a single variable $\ell$.
+Fix $1\le r\le(m-1)/2$. Then $n=m-2r$ is a positive odd integer.
+Our first goal is to replace the $r$ spectral variables in $P_{m,r}$ by a
+single variable $\ell$.
 Define the diagonal polynomial
 \begin{equation}\label{eq:pge23-Ptilde}
   \widetilde P_{m,r}(q,\ell)
@@ -1033,7 +1000,8 @@ Define the diagonal polynomial
   Write $S=\sum_{i=1}^r\Theta_i\lambda_i$.
   The proof rests on two properties of $h_j$.
 
-  First, the moments of $S$ are the complete homogeneous polynomials, up to a constant:
+  First, the moments of $S$ are, up to normalization, the complete
+  homogeneous symmetric polynomials:
   \begin{equation}\label{eq:pge23-dirichlet-moment}
     \E\,S^j
     =\frac{h_j(\lambda_1,\ldots,\lambda_r)}
@@ -1065,13 +1033,14 @@ Define the diagonal polynomial
     =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
   \end{align*}
 
-  Second, setting all variables equal in the definition of $h_j$ gives the diagonal value
+  Second, setting all variables equal in the definition of $h_j$ gives
   \begin{equation}\label{eq:pge23-h-diagonal}
     h_j(\ell,\ldots,\ell)=\binom{j+r-1}{r-1}\ell^j,
   \end{equation}
   the binomial coefficient being the number of monomials of degree $j$ in $r$ variables.
 
-  It remains to express the terms of $P_{m,r}$ through the $h_j(\lambda_1,\ldots,\lambda_r)$.
+  It remains to express the terms of $P_{m,r}$ through
+  $h_j(\lambda_1,\ldots,\lambda_r)$.
   The generating function of the $h_d$ is
   \[
     \sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d
@@ -1086,14 +1055,17 @@ Define the diagonal polynomial
         \Bigl(\sum_{j\ge0}h_j(b_1,\ldots,b_r)z^j\Bigr).
     \end{aligned}
   \]
-  and comparing the coefficients of $z^d$ gives the splitting identity
+  Comparing the coefficients of $z^d$ gives the splitting identity
   \begin{equation}\label{eq:pge23-h-split}
     h_d(a^{\times k},b_1,\ldots,b_r)
     =\sum_{j=0}^d
     \binom{d-j+k-1}{k-1}a^{d-j}h_j(b_1,\ldots,b_r).
   \end{equation}
-  Apply this to the three terms of $P_{m,r}$, the first two with $k=r$ and $a=p$ or $q$, the third with $k=r+1$ and $a=q$.
-  Since $h_j$ is homogeneous of degree $j$, we have $h_j(-\lambda_1,\ldots,-\lambda_r)=(-1)^jh_j(\lambda_1,\ldots,\lambda_r)$, and therefore
+  Apply this identity to the three terms of $P_{m,r}$: to the first two
+  with $k=r$ and $a=p$ or $q$, and to the third with $k=r+1$ and $a=q$.
+  Since $h_j$ is homogeneous of degree $j$,
+  $h_j(-\lambda_1,\ldots,-\lambda_r)=(-1)^jh_j(\lambda_1,\ldots,\lambda_r)$.
+  Therefore,
   \begin{align}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     ={}&\frac {m}{r}\sum_{j=0}^{n}\binom{n-j+r-1}{r-1}
@@ -1108,8 +1080,10 @@ Define the diagonal polynomial
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\sum_{j=0}^nc_j\,h_j(\lambda_1,\ldots,\lambda_r),
   \]
-  where $c_j$ subsumes the two coefficients of $h_j$ above, which do not involve the $\lambda_i$.
-  Setting $\lambda_1=\cdots=\lambda_r=\ell$ and using the diagonal value \eqref{eq:pge23-h-diagonal},
+  where $c_j$ denotes the combined coefficient of $h_j$; it does not
+  depend on the $\lambda_i$.
+  Setting $\lambda_1=\cdots=\lambda_r=\ell$ and using
+  \eqref{eq:pge23-h-diagonal},
   \begin{equation*}
     \widetilde P_{m,r}(q,\ell)
     =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\ell^j.
@@ -1123,10 +1097,15 @@ Define the diagonal polynomial
   \]
   the last equality being $\widetilde P_{m,r}$ with $\ell$ replaced by $S$.
 
-  For the second claim, if the $\lambda_i$ lie in $[-1/2,1/2]$ then so does every convex combination $S$, so the right side of the identity \eqref{eq:pge23-dirichlet-identity} is at least $\min_\ell\widetilde P_{m,r}(q,\ell)$; conversely $\lambda_1=\cdots=\lambda_r=\ell$ attains each diagonal value.
+  For the second claim, suppose that the $\lambda_i$ lie in
+  $[-1/2,1/2]$. Then every convex combination $S$ lies in the same
+  interval, so the right-hand side of
+  \eqref{eq:pge23-dirichlet-identity} is at least
+  $\min_\ell\widetilde P_{m,r}(q,\ell)$. Conversely, setting
+  $\lambda_1=\cdots=\lambda_r=\ell$ attains each diagonal value.
 \end{proof}
 
-Thus \eqref{eq:Phi-expansion} will be nonnegative once we prove
+By \Cref{lem:pge23-dirichlet}, it now suffices to prove
 \begin{equation*}
   \widetilde P_{m,r}(q,\ell)\ge0
 \end{equation*}
@@ -1136,9 +1115,11 @@ for
   \quad 1\le r\le\frac{m-1}{2},
   \quad -\frac{1}{2}\le\ell\le\frac{1}{2}.
 \]
-This is the first major simplification: an $r$-variable symmetric polynomial is replaced by one scalar variable polynomial.
+This is the first major simplification: it replaces an $r$-variable symmetric
+polynomial by a one-variable polynomial.
 
-In this section, we will further simplify the diagonal polynomial $\widetilde P_{m,r}$ by representing it as an expectation over a beta distribution.
+We next represent this diagonal polynomial as an expectation under a symmetric
+Beta distribution.
 
 \begin{lemma}[Beta formula]\label{lem:pge23-beta}
   Let $1\le r\le\frac{m-1}{2}$ and let $n$ be as in
@@ -1173,14 +1154,15 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     =\binom{n+2r-1}{2r-1}
     \E\bigl(aX+b(1-X)\bigr)^n.
   \end{equation}
-  Both sides are polynomials in $a$ and $b$, so it suffices to compare the coefficient of $a^kb^{n-k}$.
+  Both sides are polynomials in $a$ and $b$, so it suffices to compare the
+  coefficient of $a^kb^{n-k}$.
   On the left, the splitting identity \eqref{eq:pge23-h-split} and the diagonal value \eqref{eq:pge23-h-diagonal} give
   \[
     h_n(a^{\times r},b^{\times r})
     =\sum_{k=0}^n h_k(a^{\times r})\,h_{n-k}(b^{\times r})
     =\sum_{k=0}^n\binom{k+r-1}{r-1}\binom{n-k+r-1}{r-1}a^kb^{n-k}.
   \]
-  On the right, the binomial theorem and the beta moments
+  On the right, the binomial theorem and the Beta moments
   \[
     \E\bigl[X^k(1-X)^{n-k}\bigr]
     =\frac{\Gamma(2r)}{\Gamma(r)^2}
@@ -1194,10 +1176,16 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     =\sum_{k=0}^n\binom{n+2r-1}{2r-1}\binom nk
     \E\bigl[X^k(1-X)^{n-k}\bigr]a^kb^{n-k}.
   \]
-  The two coefficients agree, since writing every factor in factorials turns both into $(r+k-1)!\,(r+n-k-1)!/\bigl(k!\,(n-k)!\,((r-1)!)^2\bigr)$; on the right the factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel against those of $\binom{n+2r-1}{2r-1}\binom nk$.
+  The two coefficients agree. Indeed, writing every factor in factorials
+  turns both into
+  $(r+k-1)!\,(r+n-k-1)!/\bigl(k!\,(n-k)!\,((r-1)!)^2\bigr)$;
+  on the right, the factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel
+  against those of $\binom{n+2r-1}{2r-1}\binom nk$.
 
   Next we differentiate both sides of \eqref{eq:pge23-beta-h} with respect to $a$.
-  On the left, differentiating the generating function in the form $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d=(1-az)^{-r}(1-bz)^{-r}$ gives
+  On the left, differentiate the generating function
+  $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d
+  =(1-az)^{-r}(1-bz)^{-r}$ to obtain
   \[
     \sum_{d\ge0}\frac{\partial h_d(a^{\times r},b^{\times r})}{\partial a}z^d
     =rz\,(1-az)^{-(r+1)}(1-bz)^{-r}
@@ -1217,16 +1205,19 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     \widetilde P_{m,r}(q,\ell)
     =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
     +h_n(q^{\times r},\ell^{\times r})\bigr]
-    -h_{n-1}(q^{\times(r+1)},\ell^{\times r}),
+    -h_{n-1}(q^{\times(r+1)},\ell^{\times r}).
   \]
-  and we apply \eqref{eq:pge23-beta-h} to the first two terms, with $(a,b)=(p,-\ell)$ and $(a,b)=(q,\ell)$, and \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
+  Apply \eqref{eq:pge23-beta-h} to the first two terms, with
+  $(a,b)=(p,-\ell)$ and $(a,b)=(q,\ell)$, and apply
+  \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
   Define
   \[
     V_X=qX+\ell(1-X),
     \qquad
     W_X=pX-\ell(1-X),
-    \qquad\text{so that } V_X+W_X=X.
+    \qquad\text{so that } V_X+W_X=X,
   \]
+  where the last identity uses $p+q=1$.
   Using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$ now gives
   \begin{equation}\label{eq:pge23-beta-first}
     \widetilde P_{m,r}(q,\ell)
@@ -1237,9 +1228,8 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     \right].
   \end{equation}
 
-  The three terms $V_X^n$, $W_X^n$, and $XV_X^{n-1}$ all have degree $n$ in $(V_X,W_X,X)$, and $V_X+W_X=X$.
-  They therefore depend on $X$ only through the proportion of $X$ taken by $V_X$.
-  Writing that proportion as
+  Since $X\in(0,1)$ almost surely and $V_X+W_X=X$, we may factor out
+  $X^n$ by writing
   \[
     u_X=\frac{V_X}{X}=q+\ell\,\frac{1-X}{X},
     \qquad
@@ -1247,7 +1237,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
     \qquad
     W_X=X(1-u_X),
   \]
-  the last equality again because $V_X+W_X=X$, we obtain
+  and hence
   \[
     V_X^n+W_X^n=X^n\bigl(u_X^n+(1-u_X)^n\bigr),
     \qquad
@@ -1261,7 +1251,7 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   \]
   by the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$, and this proves \eqref{eq:pge23-beta-second}.
 
-  For $\ell>0$, expand the expectation in \eqref{eq:pge23-beta-second} as an integral against the beta density,
+  For $\ell>0$, expand the expectation in \eqref{eq:pge23-beta-second} as an integral against the Beta density,
   \[
     \E\left[X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)\right]
     =\frac{\Gamma(2r)}{\Gamma(r)^2}
@@ -1290,7 +1280,8 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
      =\ell^{n+r}\int_0^\infty
      \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
   \end{align*}
-  where in the last line the minus sign has been used to interchange the endpoints of integration, and the exponent $n+2r$ has been replaced by $m$ according to \eqref{eq:pge23-n}.
+  where we reversed the limits of integration and used $n+2r=m$ in the
+  final equality.
   Altogether
   \[
     \widetilde P_{m,r}(q,\ell)
@@ -1317,13 +1308,16 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
   From the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$,
   \begin{align*}
     \rho_{n,m}(u)
-    &=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1} \nonumber \\
+    &=\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1} \\
     &=\frac {m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)
-    +\left(\frac {m}{n}-1\right)u^{n-1},
+    +\left(\frac {m}{n}-1\right)u^{n-1}.
   \end{align*}
-  which can be shown by expanding $(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)=(1-u)^n-u^{n-1}+u^n$.
-  Recall that $\frac{m}{n}-1=\frac{2r}{n}>0$ by \eqref{eq:pge23-n}, and $n-1$ is even.
-  The second term is therefore always nonnegative, and the first is nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, which hold for $u \le 1/2$.
+  This identity follows by expanding
+  $(1-u)((1-u)^{n-1}-u^{n-1})=(1-u)^n-u^{n-1}+u^n$.
+  By \eqref{eq:pge23-n}, $m/n-1=2r/n>0$, and $n-1$ is even.
+  The second term is therefore always nonnegative. The first is
+  nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, both of which hold
+  for $u\le1/2$.
 
   Since $X\sim\BetaLaw(r,r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\ell\le0$ gives
   \[
@@ -1333,23 +1327,29 @@ In this section, we will further simplify the diagonal polynomial $\widetilde P_
 \end{proof}
 
 So only the case $\ell>0$ remains.
-There the argument $q+s$ of $\rho_{n,m}$ in \eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, and unlike the $\ell\le0$ case, $\rho_{n,m}$ can be negative on that range: for instance $\rho_{5,7}(0.7)<0$.
-The integrand can therefore no longer be handled pointwise, and nonnegativity has to be derived from the integral as a whole.
+Unlike the case $\ell\le0$, the argument $q+s$ of $\rho_{n,m}$ in
+\eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, where
+$\rho_{n,m}$ can be negative; for example, $\rho_{5,7}(0.7)<0$.
+The integrand can therefore no longer be handled pointwise. We must instead
+prove that the integral as a whole is nonnegative.
 
-Since the constant and the factor $\ell^{n+r}$ in \eqref{eq:pge23-beta-integral} are positive, what has to be shown nonnegative for $\ell>0$ is
+Since the constant prefactor and $\ell^{n+r}$ in
+\eqref{eq:pge23-beta-integral} are positive, it remains to show that
 \[
   \int_0^\infty
   \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s.
 \]
-Here $\ell$ and $s$ are coupled through $(\ell+s)^{-m}$, which is what makes the integral difficult to handle.
-They can be separated by an inverse Laplace transform: the inverse Laplace transform of $x\mapsto x^{-m}$ is $t\mapsto t^{m-1}/\Gamma(m)$, so that
+The difficulty is that $\ell$ and $s$ are coupled through
+$(\ell+s)^{-m}$. The following Laplace-transform representation separates
+them:
 \begin{equation}\label{eq:pge23-laplace-kernel}
   \frac{1}{(\ell+s)^m}
-  =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t,
+  =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t.
 \end{equation}
-which can be shown by evaluating the integral under the substitution $w=t(\ell+s)$.
+Indeed, \eqref{eq:pge23-laplace-kernel} follows from the substitution
+$w=t(\ell+s)$.
 
-\begin{lemma}[Laplace--gamma representation]\label{lem:pge23-laplace-gamma}
+\begin{lemma}[Laplace--Gamma representation]\label{lem:pge23-laplace-gamma}
   Let $Y\sim\GammaLaw(r,1)$.
   If $\ell>0$, then
   \begin{equation}\label{eq:pge23-laplace-gamma}
@@ -1362,7 +1362,8 @@ which can be shown by evaluating the integral under the substitution $w=t(\ell+s
 \end{lemma}
 
 \begin{proof}
-  Insert \eqref{eq:pge23-laplace-kernel} into \eqref{eq:pge23-beta-integral} and exchange the two integrals:
+  Insert \eqref{eq:pge23-laplace-kernel} into
+  \eqref{eq:pge23-beta-integral} and exchange the two integrals:
   \begin{align*}
     \widetilde P_{m,r}(q,\ell)
     &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
@@ -1373,8 +1374,9 @@ which can be shown by evaluating the integral under the substitution $w=t(\ell+s
       \int_0^\infty t^{m-1}e^{-\ell t}
       \left(\int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s\right)\dd t.
   \end{align*}
-  This exchange is justified by Fubini's theorem, given the absolute integrability of the double integral.
-  To verify absolute integrability, integrate the absolute value in $t$ first: by \eqref{eq:pge23-laplace-kernel},
+  We justify this exchange by verifying absolute integrability. Integrating
+  the absolute value first in $t$ and using
+  \eqref{eq:pge23-laplace-kernel} gives
   \[
     \int_0^\infty\!\!\int_0^\infty
     s^{r-1}t^{m-1}e^{-t(\ell+s)}\bigl|\rho_{n,m}(q+s)\bigr|\dd t\dd s
@@ -1382,9 +1384,11 @@ which can be shown by evaluating the integral under the substitution $w=t(\ell+s
     \bigl|\rho_{n,m}(q+s)\bigr|\dd s.
   \]
   It remains to show that the integral on the right is finite.
-  Recall that $\rho_{n,m}$ is a polynomial of degree $n-1$, since the terms $u^n$ and $-u^n$ of $u^n+(1-u)^n$ cancel for odd $n$.
-  As $s\to\infty$, the integrand is therefore $O\bigl(s^{r+n-2-m}\bigr)=O\bigl(s^{-r-2}\bigr)$ by \eqref{eq:pge23-n}, which is integrable at infinity.
-  As $s\to0$, the integrand is $O\bigl(s^{r-1}\bigr)$, which is integrable because $r\ge1$.
+  Because $n$ is odd, the leading terms in $u^n+(1-u)^n$ cancel, so
+  $\rho_{n,m}$ has degree $n-1$. As $s\to\infty$, the integrand is
+  therefore $O(s^{r+n-2-m})=O(s^{-r-2})$ by
+  \eqref{eq:pge23-n}, and hence is integrable at infinity. As $s\to0$,
+  it is $O(s^{r-1})$, which is integrable because $r\ge1$.
 
   It remains to compute the inner integral.
   Substituting $y=ts$, so that $s=y/t$ and $\dd s=\dd y/t$, gives
@@ -1399,21 +1403,26 @@ which can be shown by evaluating the integral under the substitution $w=t(\ell+s
   Substituting this for the inner integral obtained after the exchange gives \eqref{eq:pge23-laplace-gamma}.
 \end{proof}
 
-In \eqref{eq:pge23-laplace-gamma} the parameter $\ell$ occurs only in the factor $\ell^{n+r}$ and in the weight $t^{m-r-1}e^{-\ell t}$, both of which are positive; the expectation $\E\rho_{n,m}(q+Y/t)$ does not involve $\ell$ at all.
-It is therefore enough to prove that this expectation is nonnegative for every $t>0$, and the conclusion then follows for all $\ell>0$ at once.
-We next establish this inequality.
+In \eqref{eq:pge23-laplace-gamma}, the parameter $\ell$ occurs only in
+the positive prefactor $\ell^{n+r}$ and the positive weight
+$t^{m-r-1}e^{-\ell t}$. The expectation
+$\E\rho_{n,m}(q+Y/t)$ is independent of $\ell$. It is therefore enough
+to prove that this expectation is nonnegative for every $t>0$; the result
+will then follow for every $\ell>0$ at once.
 
-To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we center $\rho_{n,m}$ at $u=1/2$ and expand.
-This produces the terms with positive constant factors
+To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we center
+$\rho_{n,m}$ at $u=1/2$. The resulting expansion is a positive linear
+combination of a constant and terms of the form
 \[
   2(r+j)v^{2j}-jv^{2j-1},
   \qquad j\ge1,
 \]
-evaluated at the random $v=q+xY-1/2$.
-In each of them, the even power has nonnegative expectation, while the odd power has no definite sign; what is needed is therefore a bound of the odd moment by the even one.
-The following lemma supplies such a bound, uniformly in the scaling of $Y$.
+evaluated at the random variable $v=q+xY-1/2$. The even moment is
+nonnegative, whereas the odd moment has no fixed sign. We therefore need to
+control the odd moment by the even one. The following lemma provides exactly
+this comparison, uniformly in the scaling of $Y$.
 
-\begin{lemma}[Uniform odd-to-even gamma moment bound]\label{lem:pge23-gamma-moment}
+\begin{lemma}[Uniform odd-to-even Gamma moment bound]\label{lem:pge23-gamma-moment}
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
   For every $z\ge0$,
   \begin{equation*}
@@ -1425,7 +1434,7 @@ The following lemma supplies such a bound, uniformly in the scaling of $Y$.
 The proof is given in \Cref{app:gamma-moment}.  We first show how the
 lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 
-\begin{proposition}[Shifted-gamma positivity]\label{prop:pge23-gamma-positive}
+\begin{proposition}[Shifted-Gamma positivity]\label{prop:pge23-gamma-positive}
   Let $n\ge1$ be odd, $r\ge1$, and $m=n+2r$.
   If $0\le q\le1/3$, then for every $x\ge0$,
   \begin{equation}\label{eq:pge23-shifted-positive}
@@ -1448,7 +1457,7 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
     =nu^{n-1}-nA_n(u),
   \]
   that is, $u^{n-1}=A_n(u)+\frac1n(1-u)A_n'(u)$.
-  Substituting this into the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$ and using $m-n=2r$,
+  Substituting this into \eqref{eq:pge23-rho} and using $m-n=2r$ gives
   \begin{equation}\label{eq:pge23-rho-derivative}
     n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
   \end{equation}
@@ -1462,8 +1471,10 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
     =\sum_{j=0}^{(n-1)/2}a_jv^{2j},
   \end{equation*}
   where $a_j=2^{2j+1-n}\binom n{2j}>0$.
-  Differentiating in $v$, we also have $A_n'\bigl(\frac12+v\bigr)=\sum_{j\ge1}2ja_jv^{2j-1}$.
-  Substituting both into \eqref{eq:pge23-rho-derivative}, with $1-u=\frac12-v$, gives
+  Differentiating in $v$ gives
+  $A_n'(\frac12+v)=\sum_{j\ge1}2ja_jv^{2j-1}$.
+  Substitute these two expansions into \eqref{eq:pge23-rho-derivative},
+  with $1-u=\frac12-v$, to obtain
   \begin{align}
     n\rho_{n,m}\left(\frac{1}{2}+v\right)
     &=2r\sum_{j\ge0}a_jv^{2j}
@@ -1485,7 +1496,8 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
     z=\frac{x}{\delta},
   \]
   which is the form occurring in \Cref{lem:pge23-gamma-moment}.
-  Taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to bound each summand.
+  Taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to
+  bound each summand.
   For $j\ge1$,
   \begin{align*}
     &\E\left[
@@ -1501,7 +1513,8 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
     \E(zY-1)^{2j}
     \ge0,
   \end{align*}
-  where the inequality is \Cref{lem:pge23-gamma-moment} and the last step uses $2\delta\ge1/3$ together with $\E(zY-1)^{2j}\ge0$.
+  where the inequality follows from \Cref{lem:pge23-gamma-moment}. The last
+  step uses $2\delta\ge1/3$ and $\E(zY-1)^{2j}\ge0$.
   Since every $a_j$ is positive, we conclude
   \[
     n\,\E\rho_{n,m}(q+xY)\ge2ra_0>0,
@@ -1509,12 +1522,14 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
   which proves \eqref{eq:pge23-shifted-positive}.
 \end{proof}
 
-\begin{remark}[Tightness of the density requirement $p \ge 2/3$]\label{rem:pge23-threshold}
-  This is the only place in the proof where the restriction $p\ge 2/3$ is used.
-  As this inequality is tight, this proof only works for $p \ge 2/3$, and we require a different argument for $p<2/3$.
+\begin{remark}[Where the density threshold enters]\label{rem:pge23-threshold}
+  This is the only place in the proof where we use $p\ge2/3$. The moment
+  estimate gives the factor $2-1/(3\delta)$, whose nonnegativity is
+  equivalent to $\delta\ge1/6$, or $p\ge2/3$. Thus this argument does not
+  extend below the threshold.
 \end{remark}
 
-\begin{proof}[Completion of the proof]
+\begin{proof}[Proof of the main theorems]
   By \Cref{lem:pge23-dirichlet}, it suffices to prove
   $\widetilde P_{m,r}(q,\ell)\ge0$ for $-1/2\le\ell\le1/2$.
   This follows from \Cref{lem:pge23-ell-negative} when $\ell\le0$.
@@ -1535,32 +1550,50 @@ The present proof does not extend to this range because it first establishes the
 Within our argument, the obstruction appears precisely in the shifted-Gamma comparison, where $q\le1/3$---equivalently, $p\ge2/3$---is needed.
 The companion paper proves the original one-colour bound on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
 
-The definition of the Goodman-style bound can be extended to other graphs.
-For a graph $H$, a Goodman-style bound is the following lower bound on the density of $H$ at the edge densities $p \ge 1 - \frac{1}{\chi(H) - 1}$:
+The Goodman-style perspective extends naturally beyond odd cycles. For a
+nonbipartite graph $H$, let $\chi_H$ be its chromatic polynomial, let
+$\chi(H)$ be its chromatic number, and let $v(H)$ be its number of vertices.
+Define
 \[
-  t(H, W) \ge \chi_H\left( \frac{1}{1-p} \right) (1-p)^{v(H)},
+  G_H(p):=\chi_H\left(\frac{1}{1-p}\right)(1-p)^{v(H)}.
 \]
-where $\chi_H$ is the chromatic polynomial of $H$, $\chi(H)$ is the chromatic number of $H$, and $v(H)$ is the number of vertices in $H$.
-If the edge-density-constrained minimisation problem
+Although this formula is written using $1/(1-p)$, it is a polynomial in
+$p$: expanding the chromatic polynomial cancels every denominator. At
+$p=1$, we use this polynomial's continuous extension.
+We say that $H$ satisfies its \emph{Goodman-style bound} if every graphon
+$W$ of edge density $p\ge1-1/(\chi(H)-1)$ satisfies
 \[
-  \min_W t(H, W) \text{ s.t. } t(K_2, W) = p
+  \dens HW\ge G_H(p).
 \]
-is minimised by the balanced complete $k$-partite graph at $p = 1 - 1 / k$ for all $k \ge \chi(H) - 1$, then the Goodman-style bound is tight at these points, and is the unique polynomial that interpolates these points.
+The definition is motivated by the balanced complete multipartite graphons:
+at $p=1-1/k$,
+\[
+  G_H(1-1/k)=\frac{\chi_H(k)}{k^{v(H)}}=\dens H{W_k}.
+\]
+Consequently, if $W_k$ minimizes the $H$-density at edge density $1-1/k$
+for every integer $k\ge\chi(H)-1$, then the Goodman-style bound is tight at
+all of these distinguished densities. Moreover, $G_H$ is the unique
+polynomial in $p$ that takes these values for every such $k$.
 
-Thus a general research question is determining which graphs have the Goodman-style bound and which graphs do not have the Goodman-style bound.
-We list some conditions that partially characterise the nonbipartite graphs with the Goodman-style bound.
+This leads to a broader question: which nonbipartite graphs satisfy their
+Goodman-style bounds? We record several examples and obstructions whose
+proofs lie beyond the scope of this paper.
 \begin{itemize}
   \item If a graph is chordal and all its maximal cliques are of the same size, then it has the Goodman-style bound.
-  \item A join of the clique $K_r$ and odd cycle $C_{2k+1}$ has the Goodman-style bound. Specifically, odd wheels $W_{2k+1}$ have the Goodman-style bound.
-  \item If a graph has an even girth, then it does not have the Goodman-style bound.
+  \item The join of a clique $K_r$ and an odd cycle $C_{2k+1}$ has the
+  Goodman-style bound. In particular, taking $r=1$ gives the joins
+  $K_1\vee C_{2k+1}$, often called odd wheels.
+  \item If the girth of a graph is even, then the graph does not have the
+  Goodman-style bound.
 \end{itemize}
 
 \medskip
 \noindent\textbf{AI use disclosure.}
-This proof was discovered by two week span of interaction with ChatGPT 5.5 and Fable 5. 
-We polished the proof and modified the proof to give combinatorial interpretation and make it more readable.
+This proof was discovered during two weeks of interaction with ChatGPT~5.5
+and Fable~5. We subsequently revised the argument to emphasize its
+combinatorial interpretation and improve its readability.
 
-\noindent\textbf{Deviation of the Lean verification and current proof.}
+\noindent\textbf{Differences between the Lean verification and the present proof.}
 \tk{TODO: Write here about deviation that lean verification and current proof.}
 
 \noindent{\textbf{Acknowledgements.}}
@@ -1572,27 +1605,30 @@ We polished the proof and modified the proof to give combinatorial interpretatio
 \label{app:step-reduction}
 
 \begin{proof}[Proof of \Cref{lem:step-reduction}]
-  For $N=2^n$, let $I_1,\ldots,I_N$ be the intervals of length $1/N$, and
+  For an integer $s\ge1$, set $N=2^s$. Let $I_1,\ldots,I_N$ be the
+  intervals of length $1/N$, and
   define
   \[
-    W_n(x,y)=N^2\int_{I_a\times I_b}W(s,t)\dd s\dd t
+    W_s(x,y)=N^2\int_{I_a\times I_b}W(u,v)\dd u\dd v
     \qquad ((x,y)\in I_a\times I_b).
   \]
-  Each $W_n$ is a symmetric graphon, and
+  Each $W_s$ is a symmetric graphon with exactly the same edge density as
+  $W$:
   \[
-    \int_{[0,1]^2}W_n
+    \int_{[0,1]^2}W_s
     =\sum_{a,b=1}^N\int_{I_a\times I_b}W=p.
   \]
   Moreover,
   \begin{equation}\label{eq:step-L1}
-    \norm{W_n-W}_1\longrightarrow0.
+    \norm{W_s-W}_1\longrightarrow0
+    \qquad(s\to\infty).
   \end{equation}
   To verify the convergence, let $S$ be a function constant on the
-  level-$n_0$ dyadic rectangles.  For $n\ge n_0$, cell averaging fixes
+  level-$s_0$ dyadic rectangles. For $s\ge s_0$, cell averaging fixes
   $S$ and is an $L^1$-contraction, so
   \[
-    \norm{W_n-W}_1
-    \le \norm{W_n-S}_1+\norm{S-W}_1
+    \norm{W_s-W}_1
+    \le \norm{W_s-S}_1+\norm{S-W}_1
     \le2\norm{W-S}_1.
   \]
   Dyadic step functions are dense in $L^1([0,1]^2)$, proving
@@ -1600,25 +1636,29 @@ We polished the proof and modified the proof to give combinatorial interpretatio
 
   If $F$ is a finite graph, telescoping its edge factors gives
   \[
-    \left|\dens F{W_n}-\dens FW\right|
-    \le |E(F)|\norm{W_n-W}_1.
+    \left|\dens F{W_s}-\dens FW\right|
+    \le |E(F)|\norm{W_s-W}_1.
   \]
-  The same bound holds for $U_n=1-W_n$ and $U=1-W$.  Hence all cycle and
+  The same bound holds for $U_s=1-W_s$ and $U=1-W$. Hence all cycle and
   path densities in the two inequalities converge, while $p$ and $q$
   remain unchanged.
+  Applying the two inequalities to each $W_s$ and passing to the limit
+  proves the lemma.
 \end{proof}
 
 \section{Proof of the odd-to-even gamma moment bound}
 \label{app:gamma-moment}
 
-It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $Y\sim\GammaLaw(r,1)$, and for every $z\ge0$,
+It remains to prove \Cref{lem:pge23-gamma-moment}. Let $r,j\ge1$ be
+integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
 \begin{equation}
   3j\,\E(zY-1)^{2j-1}
   \le(r+j)\,\E(zY-1)^{2j}. \label{eq:pge23-gamma-moment2}
 \end{equation}
 
 \begin{proof}[Proof of \Cref{lem:pge23-gamma-moment}]
-  The case $z=0$ is immediate, since the left hand side equals $-3j < 0$ and the right hand side equals $r+j > 0$.
+  The case $z=0$ is immediate: the left-hand side equals $-3j<0$, while
+  the right-hand side equals $r+j>0$.
 
   Now assume $z>0$, write $b=1/z$, and define
   \[
@@ -1626,12 +1666,23 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
     \qquad\text{so that}\qquad
     F'(b)=-2j\,\E(Y-b)^{2j-1}.
   \]
-  Since $zY-1=z(Y-b)$, dividing \eqref{eq:pge23-gamma-moment2} by $z^{2j}>0$ gives the equivalent inequality
+  Since $zY-1=z(Y-b)$, dividing \eqref{eq:pge23-gamma-moment2} by
+  $z^{2j}>0$ gives the equivalent inequality
   \begin{equation}\label{eq:pge23-gamma-H}
     H(b):=(r+j)F(b)+\frac{3b}{2}F'(b)\ge0.
   \end{equation}
 
-  For $I_k(b)=\E(Y-b)^k$, apply the Stein identity of the gamma distribution $Y\sim\GammaLaw(r,1)$,
+  The proof has three stages. The Gamma Stein identity first gives a
+  differential equation for $F$. That equation shows that any interval on
+  which $H$ is negative must contain one explicit point $b_*$. Finally, an
+  integral representation of $H(b_*)$ reduces its positivity to a
+  one-variable comparison between two local maxima.
+
+  \smallskip
+  \noindent\emph{The differential equation.}
+
+  For $I_k(b)=\E(Y-b)^k$, apply the Stein identity for the Gamma
+  distribution $Y\sim\GammaLaw(r,1)$,
   \begin{equation*}
     \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr],
   \end{equation*}
@@ -1645,11 +1696,14 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
   \begin{equation*}
     I_{k+1}(b)=(r+k-b)I_k(b)+kbI_{k-1}(b).
   \end{equation*}
-  Taking $k=2j-1$, and using $I_{k+1} = F$, $I_{k}=-\frac{F'}{2j}$ and $I_{k-1}=\frac{F''}{2j(2j-1)}$, gives the differential equation
+  Taking $k=2j-1$ and using $I_{k+1}=F$,
+  $I_k=-F'/(2j)$, and $I_{k-1}=F''/(2j(2j-1))$ gives
   \begin{equation}\label{eq:pge23-gamma-ODE}
     bF''(b)+(b-r-2j+1)F'(b)-2jF(b)=0.
   \end{equation}
 
+  \smallskip
+  \noindent\emph{Reduction to one critical point.}
   We next determine the sign of $H'$ at a zero of $H$.
   Differentiating \eqref{eq:pge23-gamma-H} and then eliminating $F''$ by \eqref{eq:pge23-gamma-ODE}, we obtain
   \[
@@ -1675,11 +1729,13 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
   \]
   so $H$ is positive at both ends of $[0,\infty)$.
   If $H$ were negative somewhere, it would have a first zero, where $H'\le0$, and a later zero, where $H'\ge0$; the first therefore lies below $b_*$ and the second above it, so the interval where $H$ is negative would contain $b_*$.
-  It is therefore enough to prove
+  Thus it remains only to prove
   \begin{equation}\label{eq:pge23-gamma-Hbstar}
     H(b_*)\ge0.
   \end{equation}
 
+  \smallskip
+  \noindent\emph{An integral representation at $b_*$.}
   We first write $H(b_*)$ as an integral.
   Since $F'(b)=-2j\E(Y-b)^{2j-1}$, \eqref{eq:pge23-gamma-H} gives
   \[
@@ -1707,6 +1763,11 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
   \[
     d=\frac{2jb_*}{c}=\frac{2(r+j)}{3}.
   \]
+  A direct calculation gives
+  \[
+    b_*-d=\frac{r(r+j)}{r+4j}>0,
+  \]
+  so $-d$ lies in the interval of integration.
   Thus
   \begin{equation}\label{eq:pge23-gamma-Gprime}
     G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}(c-x)(x+d),
@@ -1716,7 +1777,9 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
     \frac{\Gamma(r)e^{b_*}}{r+j}H(b_*)
     =-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x.
   \]
-  While $-d$ lies inside the range of integration, the quotient $-G'(x)/(x+d)$ is the integrand of \eqref{eq:pge23-gamma-H-integral} and is therefore harmless there.
+  Although the displayed quotient has a denominator $x+d$, the factorization
+  \eqref{eq:pge23-gamma-Gprime} shows that its apparent singularity at
+  $x=-d$ is removable.
 
   We integrate by parts on the two sides of $-d$.
   Away from $x=-d$,
@@ -1733,7 +1796,12 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
     &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}
     -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
   \end{align*}
-  Here $G(-b_*)=0$ and $G(x)$ converges to zero as $x\to\infty$, so the boundary terms at $-b_*$ and at $\infty$ contribute $G(-d)/(b_*-d)$; the boundary terms at $-d-\varepsilon$ and at $-d+\varepsilon$ vanish as $\varepsilon\downarrow0$, because $G(-d\pm\varepsilon)-G(-d) =O(\varepsilon^2)$ by $G'(-d)=0$; and $(G(x)-G(-d))/(x+d)^2$ extends continuously to $x=-d$ for the same reason, combining the two remaining integrals.
+  Here $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$, so the two outer
+  boundary terms contribute $G(-d)/(b_*-d)$. The boundary terms at
+  $-d\pm\varepsilon$ vanish as $\varepsilon\downarrow0$, because
+  $G(-d\pm\varepsilon)-G(-d)=O(\varepsilon^2)$ by $G'(-d)=0$.
+  For the same reason, $(G(x)-G(-d))/(x+d)^2$ extends continuously to
+  $x=-d$, allowing the two remaining integrals to be combined.
   Hence
   \begin{align}
     -\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x
@@ -1749,19 +1817,22 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
     -\int_{-b_*}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
     \label{eq:pge23-gamma-ibp-max}
   \end{align}
-  Here $b_*-d=r(r+j)/(r+4j)>0$ and $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, so the first term is positive.
+  Since $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, the first term is positive.
   For the second term, $(x+d)^{-2}$ is positive as well, so its sign is decided by that of $G(x)-G(-d)$.
   Consequently, if $G(x)-G(-d)\le0$ for every $x\ge-b_*$, that is, if $G(-d)$ is the global maximum of $G$, then the second term is nonnegative and \eqref{eq:pge23-gamma-Hbstar} follows.
 
-  By \eqref{eq:pge23-gamma-Gprime}, the two nonzero local maxima occur at $-d$ and $c$.
+  \smallskip
+  \noindent\emph{Comparison of the two local maxima.}
+  By \eqref{eq:pge23-gamma-Gprime}, the two nonzero local maxima occur at
+  $-d$ and $c$.
   Their ratio is
   \begin{equation}\label{eq:pge23-gamma-max-ratio}
     \frac{G(c)}{G(-d)}
     =\left(\frac {c}{d}\right)^{2j}
     \left(\frac{b_*+c}{b_*-d}\right)^r e^{-(c+d)}.
   \end{equation}
-  Let $t=j/r>0$.
-  To see that $G$ attains its maximum at $-d$ we prove that the logarithm of \eqref{eq:pge23-gamma-max-ratio}, divided by $r$, namely
+  Let $t=j/r>0$, and let $L(t)$ be the logarithm of
+  \eqref{eq:pge23-gamma-max-ratio}, divided by $r$:
   \begin{align*}
     L(t)={}&2t\log\left(
     \frac{3t(5+8t)}{2(1+t)(1+4t)}\right)
@@ -1769,7 +1840,7 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
     \frac{(1+4t)(5+8t)}{3(1+t)}\right)\\
     &-\frac{32t^2+25t+2}{3(1+4t)}.
   \end{align*}
-  is negative for every $t>0$.
+  It remains to prove that $L(t)<0$ for every $t>0$.
   Direct differentiation gives, with $A(t)=\frac{3t(5+8t)}{2(1+t)(1+4t)}$,
   \begin{align}
     L'(t)
@@ -1784,9 +1855,11 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
   \end{align}
   Every factor of \eqref{eq:pge23-gamma-Lsecond} other than the quartic $P(t)=128t^4+224t^3+120t^2-28t-25$ is positive for $t>0$, so $L''$ and $P$ have opposite signs.
   The coefficients of $P$ change sign once, so by Descartes' rule of signs $P$ has at most one positive root.
-  Since $P(0) = -25 < 0$ and $P(t)\to\infty$, it has exactly one positive root $t_0$, and $L'$ increases on $(0,t_0)$ and decreases on $(t_0,\infty)$.
+  Since $P(0)=-25<0$ and $P(t)\to\infty$, it has exactly one positive
+  root $t_0$. Consequently, $L'$ increases on $(0,t_0)$ and decreases on
+  $(t_0,\infty)$.
 
-  We evaluate $L'$ at three places to see its sign changes.
+  We now evaluate $L'$ at three points to locate its two zeros.
   As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:pge23-gamma-Lprime} tends to $-14/15$, so $L'(t)\to-\infty$.
   At $t=1$ we have $A(1)=39/20$ and the rational term equals $2419/1950$, so the bound
   \[
@@ -1807,8 +1880,12 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
     <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}\approxeq -0.002681... <0.
   \]
 
-  Since $L'$ increases and then decreases, and is negative near $0$, positive at $t=1$ and negative at $t=3/2$, it has two roots: at some $t_1\in(0,1)$ with $L''(t_1) > 0$, and at some $t_2\in(1,3/2)$ with $L''(t_2) < 0$.
-  Thus $L$ decreases on $(0,t_1)$, increases on $(t_1,t_2)$ and decreases on $(t_2,\infty)$, so its supremum over $(0,\infty)$ is the larger of $L(t_2)$ and the limit of $L$ at $0$.
+  Since $L'$ first increases and then decreases, these signs show that it
+  has exactly two roots: some $t_1\in(0,1)$ with $L''(t_1)>0$, and some
+  $t_2\in(1,3/2)$ with $L''(t_2)<0$.
+  Thus $L$ decreases on $(0,t_1)$, increases on $(t_1,t_2)$, and
+  decreases on $(t_2,\infty)$. Its supremum over $(0,\infty)$ is therefore
+  the larger of $L(t_2)$ and its limit at $0$.
   The latter is negative,
   \[
     \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0,
@@ -1836,7 +1913,10 @@ It remains to prove \Cref{lem:pge23-gamma-moment}: for integers $r,j\ge1$, for $
   To summarize the proof: the signs of $L'$ and $L''$ in \eqref{eq:pge23-gamma-Lprime} and \eqref{eq:pge23-gamma-Lsecond} leave two candidates for the supremum of $L$, namely its limit at $0$, which is negative, and a single local maximum, which lies in $[1,3/2]$.
   Confined to that interval, $L$ is bounded by the rational function \eqref{eq:pge23-gamma-L-rational}, which is negative there; hence $L<0$ on all of $(0,\infty)$.
   The ratio \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$, so $G$ attains its maximum at $-d$ and the integrand $G(x)-G(-d)$ in \eqref{eq:pge23-gamma-ibp-max} is nonpositive.
-  The right side of \eqref{eq:pge23-gamma-ibp-max} is then positive, giving $H(b_*)>0$, and the crossing argument yields $H(b)\ge0$ for every $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies \eqref{eq:pge23-gamma-moment2}.
+  The right-hand side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
+  giving $H(b_*)>0$. The crossing argument yields $H(b)\ge0$ for every
+  $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
+  \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
 
 \bibliographystyle{abbrv}
