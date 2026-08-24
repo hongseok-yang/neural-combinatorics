@@ -238,7 +238,7 @@ for every graphon $W$.
 Equivalently, among all $2$-colourings of the edges of a large complete graph, the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
 Goodman's theorem implies that the triangle is common.
 Erd\H os~\cite{erdos1962number} conjectured that every complete graph is common, while Burr and Rosta~\cite{burr1980ramsey} conjectured that every graph is common.
-Thomason~\cite{thomason1989disproof} disproved both conjectures with $K_4$, and Jagger, \v S\v tov\'i\v cek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
+Thomason~\cite{thomason1989disproof} disproved both conjectures with $K_4$, and Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
 Cycles nevertheless form an important positive family: Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
 
 Kim and Lee~\cite{kim2024extended} established the following sharper statement, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ of edge density $p$:
@@ -371,14 +371,14 @@ powers recover the relevant graph densities:
 \end{align}
 
 Let $\mathcal E_0=e^\perp$, and let $I$ be the $N\times N$ identity
-matrix.  The matrices
+matrix. The matrices
 \[
   P=ee^{\mathsf T},
   \qquad
   Q=I-P
 \]
 are the orthogonal projections of $\R^N$ onto $\R e$ and $\mathcal E_0$,
-respectively.  Define the vector $g\in\R^N$ and the symmetric linear map
+respectively. Define the vector $g\in\R^N$ and the symmetric linear map
 $A\colon\mathcal E_0\to\mathcal E_0$ by
 \begin{equation*}
   g=M_Ue-qe,
@@ -452,7 +452,7 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
 
 Let $\lambda_1,\ldots,\lambda_{N-1}$ be the eigenvalues of $A$, counted
 with multiplicity, and choose corresponding orthonormal eigenvectors
-$u_1,\ldots,u_{N-1}$ of $\mathcal E_0$.  For each $i$, let $P_i$ be the
+$u_1,\ldots,u_{N-1}$ of $\mathcal E_0$. For each $i$, let $P_i$ be the
 orthogonal projection onto the one-dimensional subspace spanned by $u_i$.
 Define the finite positive measure
 \begin{equation*}
@@ -569,7 +569,7 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
     \end{aligned}
   \end{equation}
   Summing \eqref{eq:U-r-excursions} over $r$ and including the two
-  constant words gives
+  unmixed words gives
   \[
     \tC mU=q^m+\Tr(A^m)
     +\sum_{r=1}^{(m-1)/2}\frac mr
@@ -1546,7 +1546,9 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 \label{sec:conclusion}
 
 The only nontrivial range not covered in the present paper is $p\in(1/2,2/3)$.
-The present proof does not extend to this range because it first establishes the stronger two-colour inequality in \Cref{thm:commonality}, and that inequality can fail when $1/2<p<2/3$.
+The present proof first establishes the stronger two-colour inequality in
+\Cref{thm:commonality}. That inequality can fail when $1/2<p<2/3$, so the
+argument does not extend to this range.
 Within our argument, the obstruction appears precisely in the shifted-Gamma comparison, where $q\le1/3$---equivalently, $p\ge2/3$---is needed.
 The companion paper proves the original one-colour bound on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
 
@@ -1646,7 +1648,7 @@ combinatorial interpretation and improve its readability.
   proves the lemma.
 \end{proof}
 
-\section{Proof of the odd-to-even gamma moment bound}
+\section{Proof of the odd-to-even Gamma moment bound}
 \label{app:gamma-moment}
 
 It remains to prove \Cref{lem:pge23-gamma-moment}. Let $r,j\ge1$ be
@@ -1728,7 +1730,10 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     \qquad(b\to\infty),
   \]
   so $H$ is positive at both ends of $[0,\infty)$.
-  If $H$ were negative somewhere, it would have a first zero, where $H'\le0$, and a later zero, where $H'\ge0$; the first therefore lies below $b_*$ and the second above it, so the interval where $H$ is negative would contain $b_*$.
+  If $H$ were negative somewhere, the corresponding interval of negativity
+  would have a first zero, where $H'\le0$, and a later zero, where
+  $H'\ge0$. The first therefore lies below $b_*$ and the second above it,
+  so this interval would contain $b_*$.
   Thus it remains only to prove
   \begin{equation}\label{eq:pge23-gamma-Hbstar}
     H(b_*)\ge0.
@@ -1819,7 +1824,9 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \end{align}
   Since $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, the first term is positive.
   For the second term, $(x+d)^{-2}$ is positive as well, so its sign is decided by that of $G(x)-G(-d)$.
-  Consequently, if $G(x)-G(-d)\le0$ for every $x\ge-b_*$, that is, if $G(-d)$ is the global maximum of $G$, then the second term is nonnegative and \eqref{eq:pge23-gamma-Hbstar} follows.
+  Consequently, if $G(-d)$ is the global maximum of $G$, then the second
+  term is nonnegative and \eqref{eq:pge23-gamma-Hbstar} follows. It remains
+  to prove that $G(x)\le G(-d)$ for every $x\ge-b_*$.
 
   \smallskip
   \noindent\emph{Comparison of the two local maxima.}
@@ -1867,7 +1874,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \]
   gives $2\log A(1)\ge\frac{76}{59}$ and
   \[
-    L'(1)\ge\frac{76}{59}-\frac{2419}{1950} \approxeq 0.047622... >0.
+    L'(1)\ge\frac{76}{59}-\frac{2419}{1950} \approxeq 0.047622\ldots>0.
   \]
   At $t=3/2$ we have $A(3/2)=153/70$ and the rational term equals $19847/12495$; concavity of the logarithm at $x=2$ gives
   \[
@@ -1877,7 +1884,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   so with $2 \log 2 < 7/5$,
   \[
     L'\left(\frac{3}{2}\right)
-    <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}\approxeq -0.002681... <0.
+    <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}
+    \approxeq -0.002681\ldots<0.
   \]
 
   Since $L'$ first increases and then decreases, these signs show that it
@@ -1910,9 +1918,15 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \end{equation}
   On $[1,3/2]$ we have $96t-191<0$ and $t^2\ge1$, so the cubic numerator is at most $(96t-191)-16t+46=80t-145\le-25$, and $L(t)<0$ there as well.
 
-  To summarize the proof: the signs of $L'$ and $L''$ in \eqref{eq:pge23-gamma-Lprime} and \eqref{eq:pge23-gamma-Lsecond} leave two candidates for the supremum of $L$, namely its limit at $0$, which is negative, and a single local maximum, which lies in $[1,3/2]$.
-  Confined to that interval, $L$ is bounded by the rational function \eqref{eq:pge23-gamma-L-rational}, which is negative there; hence $L<0$ on all of $(0,\infty)$.
-  The ratio \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$, so $G$ attains its maximum at $-d$ and the integrand $G(x)-G(-d)$ in \eqref{eq:pge23-gamma-ibp-max} is nonpositive.
+  To summarize, the signs of $L'$ and $L''$ in
+  \eqref{eq:pge23-gamma-Lprime} and \eqref{eq:pge23-gamma-Lsecond} leave only two
+  candidates for the supremum of $L$: its negative limit at $0$ and one
+  local maximum in $[1,3/2]$. On that interval, the rational bound
+  \eqref{eq:pge23-gamma-L-rational} is negative. Hence $L<0$ throughout
+  $(0,\infty)$.
+  The ratio \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$,
+  so $G$ attains its maximum at $-d$. Thus the integrand $G(x)-G(-d)$ in
+  \eqref{eq:pge23-gamma-ibp-max} is nonpositive.
   The right-hand side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
   giving $H(b_*)>0$. The crossing argument yields $H(b)\ge0$ for every
   $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
