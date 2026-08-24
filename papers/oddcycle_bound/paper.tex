@@ -111,31 +111,35 @@
 
 \begin{abstract}
   Odd cycles are precisely the obstructions to bipartiteness, so determining how many are forced by a prescribed edge density is a fundamental problem in extremal graph theory.
-  Goodman's classical triangle inequality is the prototype for this question.
-  We establish its analogue for every odd cycle in the dense regime: for every odd integer $m\ge3$, every graphon $W$ of edge density $\edens W=p\ge2/3$ satisfies
+  Goodman's classical triangle inequality provides the prototype for this question.
+  We establish its analogue for every odd cycle in the dense regime.
+  In the language of dense graph limits, for every odd integer $m\ge3$, every graphon $W$ of edge density $\edens W=p\ge2/3$ satisfies
   \[
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
-  At every density $p=1-1/k$ with $k\ge3$, the balanced complete $k$-partite graphon attains equality; we do not claim optimality at other densities.
-  Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} proved the corresponding $C_5$ result at these discrete densities, and our theorem extends it to every odd cycle while giving a single uniform bound throughout $p\ge2/3$.
+  Here $\tC mW$ is the homomorphism density of the $m$-cycle in $W$.
+  At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality; we do not claim optimality at other densities.
+  Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} proved the corresponding $C_5$ result at these discrete densities for $k\ge3$, and our theorem extends it to every odd cycle while giving a single uniform bound throughout $p\ge2/3$.
   This is the first of two papers establishing the bound for all edge densities.
-  A companion paper treats $1/2<p<2/3$, while for $p\le1/2$ the inequality is immediate because its right-hand side is nonpositive.
+  A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
   Kim and Lee~\cite{kim2024extended} proved the extended-commonality inequality
   \[
     \tC mW+\tC m{1-W}\ge p^m+(1-p)^m.
   \]
   For odd cycles with $p\ge2/3$, we strengthen their inequality by adding an explicit nonnegative correction term to the right-hand side.
-  The proof combines spectral reduction and excursion generating functions with Dirichlet and Beta averaging, a Laplace--Gamma representation, and an ODE argument for shifted moments; the resulting framework is uniform in $m$.
-  This proof has been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
+  The proof combines spectral reduction and excursion generating functions with Dirichlet and Beta averaging, a Laplace--Gamma representation, and an ODE argument for shifted moments.
+  Together, these ingredients yield a framework that is uniform in $m$.
+  The proof has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
-A central question in extremal graph theory asks how dense a graph can be while avoiding a prescribed subgraph $H$.
+How does a graph's global edge density force specific local configurations?
+Extremal graph theory begins with a threshold version of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
 The Erd\H os--Stone--Simonovits theorem~\cite{erdos1946structure,erdos1966limit} answers this question asymptotically.
 If $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
 The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} goes further: exceeding this threshold by a fixed amount forces a positive density of copies of $H$.
-These theorems locate the point at which copies of $H$ become unavoidable, but they do not determine how many copies are forced at each density above that point.
+These theorems locate the threshold at which copies of $H$ become unavoidable, but they do not determine how many copies are forced at each density above it.
 The fixed-density problem studied here asks for this quantitative refinement: among graphs of edge density $p$, how small can the density of $H$ be?
 
 Odd cycles are a particularly natural family for this problem.
@@ -144,11 +148,10 @@ Accordingly, the Erd\H os--Stone--Simonovits threshold for every odd cycle is $1
 Below this threshold all odd cycles can be avoided; above it, every fixed odd cycle occurs with positive density.
 The question is therefore not whether odd cycles occur, but how many cycles of each odd length are forced as $p$ varies above $1/2$.
 
-For complete graphs, this quantitative problem is the classical Erd\H os--Rademacher or clique-density problem~\cite{erdos1962number}.
+For complete subgraphs, this quantitative refinement leads to the classical Erd\H os--Rademacher or clique-density problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is sharp at the densities of balanced complete multipartite graphs, although not between them.
-The exact minimum at every density was determined much later.
+Determining the exact, piecewise-defined extremal curve required much deeper ideas.
 Razborov~\cite{razborov2008minimal} solved the triangle case using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, confirming the extremal structures conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
-This line of work determines an exact, piecewise-defined extremal curve.
 
 For odd cycles, we pursue a complementary goal.
 Rather than determine the exact minimum at every $p$, we seek a single low-complexity polynomial bound, with no case distinctions in $p$, that works uniformly for every odd cycle length.
@@ -189,8 +192,8 @@ For the triangle, Goodman proved that every graphon of edge density $p$ satisfie
 \begin{equation}\label{eq:intro-goodman}
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
-Before this work, balanced complete multipartite graphons were known to be extremal for only two odd cycle lengths.
-Goodman's bound settles $C_3$.
+Before this work, extremality of the balanced complete $k$-partite graphon at the distinguished densities $p=1-1/k$, with $k\ge3$, was known for only $C_3$ and $C_5$.
+Goodman's bound settles the case of $C_3$.
 For $C_5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, a graph of edge density $1-1/k$ contains asymptotically at least as many copies of $C_5$ as the balanced complete $k$-partite graph.
 By the correspondence between graphs and graphons~\cite{lovasz2006limits,lovasz2012large}, their theorem says that $W_k$ minimizes the $C_5$-density among graphons of edge density $1-1/k$.
 Their proof is a flag algebra computation together with a stability analysis.
@@ -276,15 +279,16 @@ The number of spectral variables grows with $m$, so direct multivariate analysis
 The first key simplification is a \emph{Dirichlet averaging identity}: an $r$-variable excursion polynomial equals the average of its one-variable diagonal specialization evaluated at a random convex combination of the $r$ inputs.
 It follows that the minimum over the spectral cube occurs on the diagonal.
 Generating-function identities then express the diagonal polynomial as an expectation under a symmetric Beta distribution.
-Dirichlet and Beta laws are standard tools in Bayesian statistics, with Dirichlet laws also underlying Bayesian nonparametrics; here their moment identities serve as algebraic averaging operators that turn a high-dimensional problem into a one-dimensional integral inequality.
+The Dirichlet and Beta laws are standard tools in Bayesian statistics, and Dirichlet laws also underpin Bayesian nonparametrics.
+Here their moment identities serve as algebraic averaging operators, turning a high-dimensional problem into a one-dimensional integral inequality.
 
 On the positive half of the spectral interval, however, the resulting Beta integrand can change sign.
 An inverse Laplace transform resolves this obstacle: it decouples the variables and converts the integral into expectations of a scalar polynomial under a Gamma distribution.
 After centering at $1/2$, positivity reduces to a uniform comparison between odd and even shifted Gamma moments.
-We establish this comparison by applying the Gamma Stein identity, deriving a second-order ODE for the even moment, and analyzing its zero crossings.
+We establish this comparison by applying the Gamma Stein identity, deriving a second-order ODE for the even moment, and analyzing its possible zero crossings.
 The assumption $p\ge2/3$ enters only in this final shifted-Gamma step, pinpointing why the companion paper needs a different argument below the threshold.
 
-This modular chain---spectral reduction, excursion generating functions, probabilistic diagonalization, and ODE-based moment control---is a second contribution of the paper.
+The resulting modular chain---spectral reduction, excursion generating functions, probabilistic diagonalization, and ODE-based moment control---is a second contribution of the paper.
 Although the individual ingredients are classical, their combination provides a new route that keeps the odd length $m$ symbolic throughout, rather than treating one fixed cycle at a time.
 We expect this architecture to be useful in other fixed-density extremal problems whose pattern densities admit compatible trace expansions.
 
