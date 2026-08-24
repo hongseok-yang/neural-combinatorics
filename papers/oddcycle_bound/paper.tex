@@ -6,8 +6,12 @@
 \usepackage{enumitem}
 \usepackage{microtype}
 \usepackage{xcolor}
+\usepackage{authblk}
 \usepackage{hyperref}
 \usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+\renewcommand{\Affilfont}{\small}
+\renewcommand{\Authfont}{\normalsize}
+
 
 \hypersetup{
   colorlinks=true,
@@ -87,31 +91,43 @@
 \newcommand{\blockmat}[4]{\begin{pmatrix}#1&#2\\#3&#4\end{pmatrix}}
 \newcommand{\sblockmat}[4]{\left(\begin{smallmatrix}#1&#2\\#3&#4\end{smallmatrix}\right)}
 
-\title{On the Goodman style lower bounds of the odd cycles}
-\author{%
-  Taeyoung Kim\thanks{School of Computing, KAIST, Daejeon, South Korea.}
-  \and Sunghyuk Im\thanks{Center for AI and Natural Science, KIAS, Seoul, South Korea.}
-  \and Jineon Baek\thanks{June E Huh Center for Mathematical Challenges, KIAS, Seoul, South Korea.}
-  \and Joonkyung Lee\thanks{Department of Mathematics, Yonsei University, Seoul, South Korea.}
-  \and Jangsoo Kim\thanks{Department of Mathematics, Sungkyunkwan University, Suwon, South Korea.}
-  \and Hongseok Yang\thanks{School of Computing, KAIST, Daejeon, South Korea, and School of Computational Sciences, KIAS, Seoul, South Korea.}%
-}
+\title{Goodman-type lower bounds for odd cycles I: The dense regime}
+\author[1,5]{Taeyoung~Kim}
+\author[2]{Jineon~Baek}
+\author[3]{Seonghyuk~Im}
+\author[4]{Jang~Soo~Kim}
+\author[5]{Joonkyung~Lee}
+\author[5]{Hongseok~Yang}
+\affil[1]{School of Computing, KAIST, Korea}
+\affil[2]{June E Huh Center for Mathematical Challenges, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[3]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[4]{Department of Mathematics, Sungkyunkwan University, Korea}
+\affil[5]{School of Computational Sciences, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[ ]{\newline\texttt{taeyoungkim21@kaist.ac.kr}, \texttt{{jineon.kias}@gmail.com}, \texttt{seonghyuk@kias.re.kr}, \texttt{jangsookim@skku.edu}, \texttt{joonkyunglee@yonsei.ac.kr}, \texttt{hongseokyang@kias.re.kr}}
 \date{\today}
 
 \begin{document}
-% Symbolic marks (*, †, ‡, §, ¶, ‖) for the affiliation footnotes on the
-% title page; regular numbered footnotes resume after \maketitle.
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \maketitle
-\renewcommand{\thefootnote}{\arabic{footnote}}
-\setcounter{footnote}{0}
 
 \begin{abstract}
-  Recently, Bennett et al. proved that the density of the odd cycle of length 5 is minimised by the balanced complete $k$-partite graph at the fixed edge density $p = 1 - 1 / k$, using flag algebras.
-  Motivated by this result, we extend it to all odd cycles.
-  Specifically, we prove that $f_m(p) = p^{m} - p(1-p)^{m-1}$ is a lower bound on the density of the odd cycle of length $m$ at every edge density $p \ge 2/3$, which is tight at $p = 1 - 1 / k$ for all $k \ge 2$.
-  As a companion result, we also prove a stronger bound on the extended commonality of the odd cycles, which strengthens the result of Kim and Lee.
-  The proofs of this result is verified in Lean4 which can be found at the following GitHub repository: \url{ADDLINKLATER}.
+  Odd cycles are precisely the obstructions to bipartiteness, so determining how many are forced by a prescribed edge density is a fundamental problem in extremal graph theory.
+  Goodman's classical triangle inequality is the prototype for such a result, and in this paper we establish its odd-cycle analogue in the dense regime.
+  Specifically, for every odd integer $m\ge3$, we prove that every graphon $W$ of edge density $\edens W=p\ge2/3$ satisfies
+  \[
+    \tC mW\ge p^m-p(1-p)^{m-1}.
+  \]
+  At each density $p=1-1/k$ with $k\ge3$, equality is attained by the balanced complete $k$-partite graphon.
+  The corresponding extremal result for $C_5$ at these discrete densities was proved by Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing}; our theorem extends it to every odd cycle and gives a uniform bound throughout $p\ge2/3$.
+  This is the first of two papers establishing the bound for every edge density: a companion paper treats the remaining nontrivial range $1/2<p<2/3$, while for $p\le1/2$ the bound follows immediately because its right-hand side is nonpositive.
+  We also prove, for $p\ge2/3$, the stronger inequality
+  \[
+    \tC mW+\tC m{1-W}
+    \ge p^m+(1-p)^m+\tP{m-1}{1-W}-(1-p)^{m-1},
+  \]
+  where $P_{m-1}$ is the path with $m-1$ edges.
+  The path-density inequality gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$, so the final two terms form a nonnegative correction.
+  Omitting this correction recovers the extended-commonality inequality of Kim and Lee~\cite{kim2024extended}.
+  The proof is formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
 \end{abstract}
 
 \tableofcontents
