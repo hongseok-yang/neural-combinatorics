@@ -117,7 +117,7 @@
   \[
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
-  Here $\tC mW$ is the homomorphism density of the $m$-cycle in $W$.
+  Here $\tC mW$ denotes the $C_m$-density of $W$.
   At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality; we do not claim optimality at other densities.
   Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} proved the corresponding $C_5$ result at these discrete densities for $k\ge3$, and our theorem extends it to every odd cycle while giving a single uniform bound throughout $p\ge2/3$.
   This is the first of two papers establishing the bound for all edge densities.
@@ -127,8 +127,9 @@
     \tC mW+\tC m{1-W}\ge p^m+(1-p)^m.
   \]
   For odd cycles with $p\ge2/3$, we strengthen their inequality by adding an explicit nonnegative correction term to the right-hand side.
-  The proof combines spectral reduction and excursion generating functions with Dirichlet and Beta averaging, a Laplace--Gamma representation, and an ODE argument for shifted moments.
-  Together, these ingredients yield a framework that is uniform in $m$.
+  Our proof combines spectral techniques, generating functions, probabilistic averaging, and an ODE argument.
+  The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces a calculation with more and more variables to a one-variable problem, and the ODE controls the remaining competition between positive and negative terms.
+  Together, these tools give a single argument that is uniform in $m$.
   The proof has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
 \end{abstract}
 
@@ -187,6 +188,7 @@ Consequently, for odd $m$,
 \end{equation}
 Thus the single polynomial $\goal$ passes through the odd-cycle densities of every balanced complete multipartite graphon.
 Our central question is whether it remains a universal lower bound between these distinguished densities, even when it is not the exact minimum.
+The trace formula also suggests a way to seek a proof that treats the cycle length $m$ symbolically rather than one value at a time.
 
 For the triangle, Goodman proved that every graphon of edge density $p$ satisfies
 \begin{equation}\label{eq:intro-goodman}
@@ -197,7 +199,7 @@ Goodman's bound settles the case of $C_3$.
 For $C_5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, a graph of edge density $1-1/k$ contains asymptotically at least as many copies of $C_5$ as the balanced complete $k$-partite graph.
 By the correspondence between graphs and graphons~\cite{lovasz2006limits,lovasz2012large}, their theorem says that $W_k$ minimizes the $C_5$-density among graphons of edge density $1-1/k$.
 Their proof is a flag algebra computation together with a stability analysis.
-Although their theorem is stated only at the densities $p=1-1/k$, their flag algebra certificate can be interpolated over real $k\in[3,\infty)$ to give $\tC5W\ge\goodman p5$ for every $p\ge2/3$.
+Although their theorem is stated only at the discrete densities $p=1-1/k$, the same flag algebra certificate gives $\tC5W\ge\goodman p5$ throughout $p\ge2/3$ when its parameter $k=1/(1-p)$ is allowed to vary continuously.
 
 This two-paper series establishes the corresponding bound for every odd cycle and every edge density.
 The present paper treats the dense regime $p\ge2/3$.
@@ -225,8 +227,10 @@ For $k\ge3$, the corollary follows from \Cref{thm:main} and \eqref{eq:intro-kpar
 For $k=2$, it holds because $W_2$ is bipartite, so $\tC m{W_2}=0$, whereas $\tC mW\ge0$ for every graphon.
 The corollary extends the theorem of Bennett, Dudek, Lidick\'y and Pikhurko from $m=5$ to every odd cycle length.
 
-We prove \Cref{thm:main} through a stronger two-colour inequality.
-A graph $H$ with $e(H)$ edges is \emph{common} if
+We prove \Cref{thm:main} through a stronger inequality that treats $W$ and its complement together.
+This two-colour formulation is not merely a formal strengthening: adding the two odd-cycle densities creates the cancellation on which our proof rests.
+The relevant framework is \emph{commonality}.
+A graph $H$ with $e(H)$ edges is common if
 \[
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
 \]
@@ -268,34 +272,57 @@ Subtracting this inequality from \eqref{eq:intro-commonality} and using $p+q=1$,
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
 \]
 
-\paragraph{Proof strategy and reusable ingredients.}
-Our proof separates the information specific to the graphon from a universal positivity problem.
-We first reduce to step graphons, represent the graphon and its complement by finite matrices, and split the underlying space into the constant direction and its orthogonal complement.
-A positive spectral measure supported on $[-1/2,1/2]$ then encodes all nonconstant information.
-When we expand matrix powers as words in the two corresponding projections, each passage from the constant direction into the orthogonal complement and back becomes an \emph{excursion}.
-Complete homogeneous symmetric polynomials and their generating functions collect these excursions, reducing both main inequalities to the positivity of universal symmetric polynomials integrated against the spectral measure.
+\paragraph{Proof strategy: from a graphon to one variable.}
+We begin by approximating an arbitrary graphon by step graphons; this reduces the problem to finite matrices without changing the limiting densities.
+The constant vector singles out the prescribed edge density, while its orthogonal complement records how the graphon deviates from being constant.
+For the complementary graphon $U=1-W$, this decomposition has a particularly useful form.
+Because $m$ is odd, the terms that remain entirely in the orthogonal complement occur with opposite signs in $\tC mW$ and $\tC mU$ and therefore cancel when the two cycle densities are added.
+This cancellation explains why the stronger two-colour statement is easier to attack than the one-colour inequality alone.
 
-The number of spectral variables grows with $m$, so direct multivariate analysis would not yield an argument uniform in the cycle length.
-The first key simplification is a \emph{Dirichlet averaging identity}: an $r$-variable excursion polynomial equals the average of its one-variable diagonal specialization evaluated at a random convex combination of the $r$ inputs.
-It follows that the minimum over the spectral cube occurs on the diagonal.
-Generating-function identities then express the diagonal polynomial as an expectation under a symmetric Beta distribution.
-The Dirichlet and Beta laws are standard tools in Bayesian statistics, and Dirichlet laws also underpin Bayesian nonparametrics.
-Here their moment identities serve as algebraic averaging operators, turning a high-dimensional problem into a one-dimensional integral inequality.
+The terms that remain move from the constant direction into its orthogonal complement, spend some number of steps there, and then return.
+We call each such departure and return an \emph{excursion}.
+Instead of tracking the exponentially many terms in the matrix expansion one by one, we group them by their number $r$ of excursions.
+A generating function collects all the terms with the same $r$; its coefficients are complete homogeneous symmetric polynomials.
+The commonality gap---the left-hand side of \Cref{thm:commonality} minus its right-hand side---then becomes a sum of integrals of polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ against a positive measure supported on $[-1/2,1/2]$, where the $\lambda_i$ are the nonconstant spectral parameters in this decomposition.
+The measure records the sizes of the graphon's nonconstant spectral components, whereas the polynomials depend only on $m$, $r$, and the edge density.
+It therefore suffices to prove that each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
 
-On the positive half of the spectral interval, however, the resulting Beta integrand can change sign.
-An inverse Laplace transform resolves this obstacle: it decouples the variables and converts the integral into expectations of a scalar polynomial under a Gamma distribution.
-After centering at $1/2$, positivity reduces to a uniform comparison between odd and even shifted Gamma moments.
-We establish this comparison by applying the Gamma Stein identity, deriving a second-order ODE for the even moment, and analyzing its possible zero crossings.
-The assumption $p\ge2/3$ enters only in this final shifted-Gamma step, pinpointing why the companion paper needs a different argument below the threshold.
+This still leaves a difficulty: $P_{m,r}$ has $r$ variables, and $r$ grows with the cycle length.
+A Dirichlet averaging identity removes this growing dimension.
+Choose random nonnegative weights $\Theta_1,\ldots,\Theta_r$ that sum to one, uniformly on the simplex.
+Their elementary moment formula shows that
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+  =\mathbb E\,P_{m,r}
+  \left(q;\sum_i\Theta_i\lambda_i,\ldots,
+  \sum_i\Theta_i\lambda_i\right).
+\]
+Thus the multivariable polynomial is an average of its diagonal values, and nonnegativity need only be checked when all spectral variables are equal.
+The weights have a Dirichlet distribution, familiar from Bayesian statistics and Bayesian nonparametrics, but here the distribution is simply an algebraic averaging device.
+A second moment identity, now for a symmetric Beta variable, rewrites the diagonal value as a one-dimensional integral of an explicit polynomial.
+In this way, the graphon inequality has been reduced to a scalar sign problem.
 
-The resulting modular chain---spectral reduction, excursion generating functions, probabilistic diagonalization, and ODE-based moment control---is a second contribution of the paper.
-Although the individual ingredients are classical, their combination provides a new route that keeps the odd length $m$ symbolic throughout, rather than treating one fixed cycle at a time.
-We expect this architecture to be useful in other fixed-density extremal problems whose pattern densities admit compatible trace expansions.
+One final obstacle remains.
+For a nonpositive spectral value, the integrand in the Beta representation is nonnegative pointwise.
+For a positive spectral value, it can change sign, so pointwise estimates cannot finish the proof.
+A Laplace-transform identity separates the spectral parameter from the integration variable and rewrites the whole integral as a positive mixture of expectations under a Gamma distribution.
+After centering at $1/2$, the desired sign follows from a uniform comparison between an odd shifted Gamma moment and the next even moment.
+We prove that comparison using the Gamma integration-by-parts identity, also known as the Gamma Stein identity.
+It yields a second-order ODE for the even moment.
+The ODE shows that any interval of negativity would have to contain one particular critical point; a final integral comparison proves positivity there and rules out such an interval.
+
+This last comparison is also where the density threshold appears.
+Writing $q=1-p$, the assumption $p\ge2/3$ says $q\le1/3$; it gives exactly the amount of separation from $1/2$ needed to absorb the odd moment into the even one.
+The strengthened two-colour inequality can fail when $1/2<p<2/3$, which is why the companion paper requires a different route to the original one-colour bound.
+
+The reusable feature of the proof is this sequence of reductions: exploit cancellation between complementary kernels, encode the remaining irregularity spectrally, average away a dimension that grows with the pattern, and solve the final one-variable sign problem.
+This sequence keeps the odd length $m$ symbolic throughout.
+It may also apply to other fixed-density extremal problems in which pattern densities admit analogous matrix expansions.
 
 \paragraph{Organization.}
 In \Cref{sec:matrix-reduction}, we pass from graphons to matrices and encode the relevant densities by a spectral measure.
 \Cref{sec:excursions} develops the excursion expansion that reduces both main inequalities to the positivity of explicit symmetric polynomials.
-\Cref{sec:short-cycles} illustrates the reduction for $C_3,C_5,C_7$, and \Cref{sec:excursion-positivity} proves the required positivity for all odd cycles.
+\Cref{sec:short-cycles} illustrates the reduction for $C_3$, $C_5$, and $C_7$, and \Cref{sec:excursion-positivity} proves the required positivity for all odd cycles.
 We close with further questions in \Cref{sec:conclusion}; the appendices justify the step-graphon reduction and prove the Gamma moment inequality.
 
 \section{Matrix reduction and spectral measure}
@@ -1503,10 +1530,10 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 \section{Concluding remarks and further questions}
 \label{sec:conclusion}
 
-The remaining question is the intermediate range $p \in (1/2, 2/3)$, which was not covered in this paper.
-The proof technique used in the range $p \ge 2/3$ is not applicable to the intermediate range: the edge-deletion inequality \eqref{eq:cycle-path} is too loose in this range and makes the inequality invalid.
-We have proven the same lower bound on the range $p \in (1/2, 2/3)$ whose proof is also verified with Lean4 and can be found in the following GitHub repository: \url{ADDLINK}.
-We note that the stronger extended commonality bound is also not valid in the range $p \in (1/2, 2/3)$, as the edge deletion lemma gap is exactly the same as the gap the extended commonality bound requires.
+The only nontrivial range not covered in the present paper is $p\in(1/2,2/3)$.
+The present proof does not extend to this range because it first establishes the stronger two-colour inequality in \Cref{thm:commonality}, and that inequality can fail when $1/2<p<2/3$.
+Within our argument, the obstruction appears precisely in the shifted-Gamma comparison, where $q\le1/3$---equivalently, $p\ge2/3$---is needed.
+The companion paper proves the original one-colour bound on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
 
 The definition of the Goodman-style bound can be extended to other graphs.
 For a graph $H$, a Goodman-style bound is the following lower bound on the density of $H$ at the edge densities $p \ge 1 - \frac{1}{\chi(H) - 1}$:
