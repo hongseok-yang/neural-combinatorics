@@ -228,9 +228,10 @@ At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact e
 For $k\ge3$, \eqref{eq:intro-kpartite-value} shows that $W_k$ attains the lower bound in \Cref{thm:main}.
 For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$, while every graphon has nonnegative $C_m$-density.
 
-Our proof of \Cref{thm:main} proceeds through a stronger two-colour inequality for $W$ and its complement $1-W$.
-The sum of their odd-cycle densities exhibits a cancellation unavailable in $\tC mW$ alone, making the stronger statement more tractable than the original one.
-This two-colour formulation is naturally expressed through \emph{commonality}.
+\paragraph{A stronger two-colour theorem.}
+Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
+This intermediate theorem is also of independent interest because it strengthens a known density-sensitive form of commonality for odd cycles.
+We first place it in the commonality framework and show how it implies \Cref{thm:main}; afterward, we explain the cancellation that makes the two-colour formulation useful for the proof.
 A graph $H$ with $e(H)$ edges is common if
 \[
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
@@ -269,12 +270,15 @@ Subtracting this inequality from \eqref{eq:intro-commonality} and using $p+q=1$,
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
 \]
 
-\paragraph{Proof strategy: from a graphon to one variable.}
+\paragraph{Proof strategy: cancellation and reduction to one variable.}
+The key advantage of the two-colour formulation is that $\tC mW+\tC mU$ exhibits a spectral cancellation unavailable in $\tC mW$ alone, making the stronger inequality more tractable than the original one.
 We first approximate an arbitrary graphon by step graphons, reducing the problem to finite matrices while preserving the limiting densities.
-In the resulting matrix decomposition, the constant vector records the prescribed edge density and its orthogonal complement records the nonconstant part of the graphon.
-Passing from $U=1-W$ to $W$ reverses the sign of the block on this orthogonal complement.
-Because $m$ is odd, the terms contained entirely in that block cancel when $\tC mW$ and $\tC mU$ are added.
-This is why the stronger two-colour inequality is easier to approach than the one-colour bound alone.
+Each step graphon is constant on the rectangles of a partition into $N$ equal intervals, and its cell values, scaled by the interval length, form a symmetric $N\times N$ matrix representing the graphon operator on the space of step functions.
+Identifying this space with $\mathbb R^N$, the normalized all-ones vector $e$ represents the constant functions.
+We decompose $\mathbb R^N$ into the constant direction $\mathbb R e$ and its orthogonal complement $e^\perp$.
+In the corresponding block decomposition of the matrix, the entry in the constant direction records the edge density, while the remaining blocks record how the graphon deviates from being constant.
+Passing from $U=1-W$ to $W$ reverses the signs of these nonconstant blocks.
+Because $m$ is odd, the terms contained entirely in the block on $e^\perp$ cancel when $\tC mW$ and $\tC mU$ are added.
 
 Each remaining term leaves the constant direction, spends some number of steps in its orthogonal complement, and then returns; we call such a departure and return an \emph{excursion}.
 Rather than track exponentially many matrix terms individually, we group them by their number $r$ of excursions.
