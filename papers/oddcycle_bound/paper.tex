@@ -119,7 +119,7 @@
   \]
   Here $\tC mW$ denotes the $C_m$-density of $W$.
   At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality, although we do not claim optimality at other densities.
-  Our theorem extends the corresponding $C_5$ result of Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing}, which applies at the discrete densities $p=1-1/k$ with $k\ge3$, in two directions: it treats every odd cycle and gives a single uniform bound throughout $p\ge2/3$.
+  Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
   This is the first of two papers establishing the bound for all edge densities.
   A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
   Our result also yields a strengthening of Kim and Lee's extended-commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
@@ -132,27 +132,27 @@
 \section{Introduction}\label{sec:intro}
 
 How does a graph's global edge density force specific local configurations?
-Extremal graph theory begins with a threshold version of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
-The Erd\H os--Stone--Simonovits theorem~\cite{erdos1946structure,erdos1966limit} answers this question asymptotically.
-If $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
-The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} goes further: exceeding this threshold by a fixed amount forces a positive density of copies of $H$.
-These theorems locate the threshold at which copies of $H$ become unavoidable, but they do not determine how many copies are forced at each density above it.
-The fixed-density problem studied here asks for this quantitative refinement: among graphs of edge density $p$, how small can the density of $H$ be?
+Extremal graph theory first addresses the threshold form of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
+The Erd\H os--Stone--Simonovits theorem~\cite{erdos1946structure,erdos1966limit} answers it asymptotically: if $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
+The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} goes beyond this threshold statement by showing that exceeding the threshold by a fixed amount forces a positive density of copies of $H$.
+Together, these results tell us when copies of $H$ become unavoidable, but not how many are forced at each density above the threshold.
+This gap leads to the fixed-density problem studied here: among graphs of edge density $p$, how small can the density of $H$ be?
 
 Odd cycles are a particularly natural family for this problem.
-They are precisely the obstructions to bipartiteness, and bipartite graphs can have edge density as large as $1/2$.
-Accordingly, the Erd\H os--Stone--Simonovits threshold for every odd cycle is $1/2$.
-Below this threshold all odd cycles can be avoided; above it, every fixed odd cycle occurs with positive density.
-The question is therefore not whether odd cycles occur, but how many cycles of each odd length are forced as $p$ varies above $1/2$.
+A graph is bipartite exactly when it contains no odd cycle, so odd-cycle densities provide a natural quantitative measure of departure from bipartiteness.
+This viewpoint identifies $p=1/2$ as the critical edge density.
+Bipartite graphs can have any asymptotic edge density $p\le1/2$ while avoiding all odd cycles; once $p>1/2$, the Erd\H os--Stone--Simonovits and supersaturation theorems force a positive density of every fixed odd cycle.
+The qualitative transition is therefore understood; our problem asks how sharply it can be quantified: at a given density $p>1/2$, how small can the density of a specified odd cycle be?
 
-For complete subgraphs, this quantitative refinement leads to the classical Erd\H os--Rademacher or clique-density problem~\cite{erdos1962number}.
+The analogous fixed-density problem has been studied most intensively for complete subgraphs.
+In this setting, the problem becomes the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is sharp at the densities of balanced complete multipartite graphs, although not between them.
-Determining the exact, piecewise-defined extremal curve required much deeper ideas.
+Determining the exact minimum at every density leads to a substantially more intricate, piecewise-defined curve.
 Razborov~\cite{razborov2008minimal} solved the triangle case using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, confirming the extremal structures conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
 
-For odd cycles, we pursue a complementary goal.
-Rather than determine the exact minimum at every $p$, we seek a single low-complexity polynomial bound, with no case distinctions in $p$, that works uniformly for every odd cycle length.
-We allow the bound to be nonoptimal between the distinguished densities $p=1-1/k$, but require it to be exact at each of them, where the balanced complete $k$-partite graph is the canonical extremal example.
+For odd cycles, we pursue the analogue of Goodman's simpler polynomial bound rather than an exact description of the extremal curve.
+Our goal is a single low-complexity formula, with no case distinctions in $p$, that works uniformly for every odd cycle length.
+We allow this bound to be nonoptimal between the distinguished densities $p=1-1/k$, but require equality at each of them, where the balanced complete $k$-partite graph is the canonical extremal example.
 
 We formulate this problem in the language of graphons, the natural limit objects for dense graphs.
 A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
