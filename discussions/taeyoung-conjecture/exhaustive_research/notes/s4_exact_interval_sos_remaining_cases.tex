@@ -1,0 +1,284 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\dd}{\,\mathrm d}
+
+\title{Exact Four-Root Interval Sum-of-Squares Certificates\\
+for the Remaining Six-Vertex Cases}
+\author{}
+\date{August 25, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We record direct arbitrary-graphon proofs of the conjectured chromatic lower
+bound for sixteen previously open or partial Atlas graphs.  The new input is
+an exact rational interval sum-of-squares identity on four labelled vertices
+and one integrated branch vertex.  Every identity is independently rebuilt
+from the Atlas graph and checked coefficient by coefficient.  Positivity is
+certified by rational Gram factors and strictly diagonally dominant rational
+corrections.  The argument does not assume that an optimizer has a special
+form and does not use flag-algebra inference rules.  Together with the
+separate exact house certificate and the normalized-link house-cone theorem,
+this closes eighteen of the twenty cases that were unresolved at the start of
+this research pass.  Atlas 130 and Atlas 203 retain only proper-interval
+results and therefore remain unclassified.
+\end{abstract}
+
+\section{Statement}
+
+For a graph $H$ on $h$ vertices with chromatic polynomial $P_H$ put
+\[
+ \Phi_H(p)=(1-p)^hP_H\!\left(\frac1{1-p}\right).
+\]
+The required density interval is $p\in[1-1/(\chi(H)-1),1]$.
+
+\begin{theorem}\label{thm:classification}
+For every graphon $W$, the inequality
+\[
+             t(H,W)\geq \Phi_H(t(K_2,W))
+\]
+holds throughout the required density interval for each
+\[
+\begin{split}
+H\in\{&118,122,124,147,151,153,157,168,169,171,174,\\
+       &181,185,188,194,199\}.
+\end{split}
+\]
+Here a number denotes the corresponding NetworkX Graph Atlas graph.
+\end{theorem}
+
+Atlas 43 is proved separately by the exact rooted identity in
+\path{notes/atlas43_exact_rooted_sos.tex}.  Atlas 196 is the cone
+$K_1\vee H_{43}$ and hence follows unconditionally from Atlas 43 by the
+normalized-link theorem in \path{notes/open_conditional_implications.tex}.
+Thus those two graphs are also positive classifications.
+
+\section{The direct rooted identity}
+
+Fix four labelled variables $x=(x_0,x_1,x_2,x_3)$ and one branch variable
+$y$.  For each graph $F$ having those four labels and the one branch, let
+\[
+ f_F(x)=\int_\Omega\prod_{ij\in E(F)}W(z_i,z_j)\dd y,
+ \qquad z_i=x_i\ (0\leq i<4),\quad z_4=y.
+\]
+The certificates use every branch-to-label edge pattern and labelled graphs
+with at most two label-to-label edges.  Put these evaluations into a vector
+$f(x)$.  Permuting the four labels gives an $S_4$ action.  Integer Young
+symmetrizers split $f$ into the five rational slices
+\[
+                  \lambda\in\{4,31,22,211,1111\}.
+\]
+Write the corresponding evaluation vectors as $v_\lambda(x)$.
+
+For an interval $[a,b]$, set
+\[
+                  p=a+(b-a)s,\qquad 0\leq s\leq1,
+\]
+and $\widehat v_\lambda=(v_\lambda,sv_\lambda)$.  Each JSON certificate
+gives rational positive-semidefinite matrices $Q_{0,\lambda}$ and
+$Q_{1,\lambda}$ for which exact expansion gives
+\begin{equation}\label{eq:master}
+\boxed{
+ t(H,W)-\Phi_H(p)=
+ 24\sum_\lambda\left(
+  \int_{\Omega^4}\widehat v_\lambda^{\mathsf T}
+     Q_{0,\lambda}\widehat v_\lambda\dd x
+ +s(1-s)\int_{\Omega^4}v_\lambda^{\mathsf T}
+     Q_{1,\lambda}v_\lambda\dd x\right).}
+\end{equation}
+The factor 24 is the order of $S_4$.  This is simply a symmetry-reduced
+way to write a sum of squares; it has no sign effect.
+
+To see directly why \eqref{eq:master} is a graphon identity, expand a
+quadratic term.  A product $f_F(x)f_G(x)$ uses two independent branch
+variables and therefore is the homomorphism density of the graph obtained
+by identifying equally labelled vertices of $F$ and $G$.  The result has at
+most six vertices.  Any disjoint isolated-edge components are removed using
+the exact fixed-density relation
+\[
+                 t(J\sqcup mK_2,W)=p^m t(J,W).
+\]
+After substituting $p=a+(b-a)s$, equality of every coefficient of every
+unlabelled graph proves \eqref{eq:master} for arbitrary $W$.
+
+The numerical SDP was used only to discover Gram matrices.  In a stored
+certificate each final Gram block has the form
+\[
+             Q=D^{-2}LZL^{\mathsf T},\qquad Z=I+C,
+\]
+with integer $L,D$ and rational symmetric $C$.  The checker verifies in
+exact fraction arithmetic that $Z=I+C$ has positive diagonal and is strictly
+diagonally dominant.  It is therefore positive definite, so every $Q$ in
+\eqref{eq:master} is positive semidefinite.  Exact complements of kernels
+seen at balanced Turan equality graphons were used to reduce the matrices.
+This is only a rational change to a smaller Gram-coordinate space: it is
+not a restriction on $W$.
+
+\begin{lemma}\label{lem:interval}
+An exact certificate satisfying the coefficient and diagonal-dominance
+checks proves $t(H,W)\geq\Phi_H(p)$ for every graphon $W$ and every
+$p\in[a,b]$.
+\end{lemma}
+
+\begin{proof}
+All integrals on the right of \eqref{eq:master} are nonnegative quadratic
+forms.  Also $s(1-s)\geq0$ on $[0,1]$.
+\end{proof}
+
+\section{Certificates and interval coverage}
+
+The exact files used in Theorem~\ref{thm:classification} are listed below.
+The last column is a decimal lower bound for the smallest exact strict
+diagonal-dominance margin among all corrected Gram blocks.  It is included
+only as a readability aid; the JSON stores the exact rational value.
+
+\begin{longtable}{@{}rllr@{}}
+\toprule
+Atlas & interval & certificate basename & minimum margin $>$\\
+\midrule
+\endhead
+118 & $[1/2,1]$ & \path{atlas118_exact_interval_sos.json} & $0.9751$\\
+122 & $[1/2,1]$ & \path{atlas122_exact_interval_sos.json} & $0.9764$\\
+124 & $[1/2,1]$ & \path{atlas124_exact_interval_sos.json} & $0.9805$\\
+147 & $[1/2,2/3]$ & \path{atlas147_exact_lower_interval_sos.json} & $0.9665$\\
+147 & $[2/3,1]$ & \path{atlas147_exact_upper_interval_sos.json} & $0.9948$\\
+151 & $[1/2,2/3]$ & \path{atlas151_exact_lower_interval_sos.json} & $0.9929$\\
+151 & $[2/3,1]$ & \path{atlas151_exact_upper_interval_sos.json} & $0.9826$\\
+153 & $[37/60,2/3]$ & \path{atlas153_exact_middle_interval_sos.json} & $0.9961$\\
+153 & $[2/3,1]$ & \path{atlas153_exact_upper_interval_sos.json} & $0.9970$\\
+157 & $[2/3,1]$ & \path{atlas157_exact_interval_sos.json} & $0.9789$\\
+168 & $[1/2,2/3]$ & \path{atlas168_exact_lower_interval_sos.json} & $0.9922$\\
+168 & $[2/3,1]$ & \path{atlas168_exact_upper_interval_sos.json} & $0.9943$\\
+169 & $[2/3,1]$ & \path{atlas169_exact_interval_sos.json} & $0.9746$\\
+171 & $[5/8,2/3]$ & \path{atlas171_exact_middle_interval_sos.json} & $0.9911$\\
+171 & $[2/3,1]$ & \path{atlas171_exact_upper_interval_sos.json} & $0.9923$\\
+174 & $[7/12,2/3]$ & \path{atlas174_exact_middle_interval_sos.json} & $0.8831$\\
+174 & $[2/3,1]$ & \path{atlas174_exact_upper_interval_sos.json} & $0.9833$\\
+181 & $[2/3,1]$ & \path{atlas181_exact_interval_sos.json} & $0.9726$\\
+185 & $[2/3,1]$ & \path{atlas185_exact_interval_sos.json} & $0.9930$\\
+188 & $[3/5,2/3]$ & \path{atlas188_exact_middle_interval_sos.json} & $0.9761$\\
+188 & $[2/3,1]$ & \path{atlas188_exact_upper_interval_sos.json} & $0.9995$\\
+194 & $[2/3,1]$ & \path{atlas194_exact_interval_sos.json} & $0.9935$\\
+199 & $[2/3,1]$ & \path{atlas199_exact_interval_sos.json} & $0.9901$\\
+\bottomrule
+\end{longtable}
+
+All basenames in the table lie in \path{experiments/}.  For Atlas 147,
+151, and 168, the two closed intervals meet and cover $[1/2,1]$.  The
+single certificates for 118, 122, and 124 cover $[1/2,1]$ directly.  The
+single certificates for 157, 169, 181, 185, 194, and 199 cover their whole
+required interval $[2/3,1]$ directly.
+
+Four low-density pieces come from the previously accepted arbitrary-graphon
+self-amalgam theorem in
+\path{notes/four_self_amalgam_partial_ranges.tex}:
+\[
+\begin{array}{c|c}
+H&\hbox{previously proved range}\\ \hline
+153 &[1/2,\,0.6181289270\ldots]\\
+171 &[1/2,\,0.6309517719\ldots]\\
+174 &[1/2,\,0.5934675772\ldots]\\
+188 &[1/2,\,0.6139911259\ldots].
+\end{array}
+\]
+These overlap the exact middle intervals because
+\begin{align*}
+ 37/60&<0.6181289270\ldots,&
+ 5/8&<0.6309517719\ldots,\\
+ 7/12&<0.5934675772\ldots,&
+ 3/5&<0.6139911259\ldots.
+\end{align*}
+Their unions with the middle and upper certificates therefore cover
+$[1/2,1]$.  Lemma~\ref{lem:interval} proves every exact piece, and the
+stated interval unions prove Theorem~\ref{thm:classification}.
+
+\section{Exact audit}
+
+The independent checker is
+\path{experiments/s4_interval_verify.py}.  Given only one JSON file, it
+rebuilds the Atlas graph and chromatic target, reconstructs the rooted
+products and the five integer Young slices, checks the basis and dimensions,
+checks all strict diagonal-dominance inequalities over $\mathbb Q$, and
+then verifies all 407 coefficient equations with FLINT integer and rational
+matrices.  Thus the numerical solver and the floating certificate used in
+discovery are outside the trusted proof path.
+
+For example, the audit command has the form
+\begin{verbatim}
+.venv/Scripts/python.exe experiments/s4_interval_verify.py \
+  experiments/atlas181_exact_interval_sos.json
+\end{verbatim}
+and reports 407 exact equations before exiting successfully.  The house
+certificate has a different three-root basis and is audited independently by
+\path{experiments/house_verify_rational.py}.
+
+\subsection{Validation environment and commands}
+
+The accepted audit was run with Python~3.9 and the following package
+versions:
+\begin{center}
+\begin{tabular}{ll@{\qquad}ll}
+\toprule
+package & version & package & version\\
+\midrule
+\texttt{cvxpy} & \texttt{1.7.5} & \texttt{networkx} & \texttt{3.2.1}\\
+\texttt{numpy} & \texttt{2.0.2} & \texttt{python-flint} & \texttt{0.6.0}\\
+\texttt{scipy} & \texttt{1.13.1} & \texttt{sympy} & \texttt{1.14.0}\\
+\bottomrule
+\end{tabular}
+\end{center}
+These versions are recorded for reproducibility, not used as mathematical
+assumptions.  From the \path{exhaustive_research/} directory, the two checker
+entry points are
+\begin{verbatim}
+python experiments/house_verify_rational.py
+python experiments/s4_interval_verify.py \
+  experiments/atlas181_exact_interval_sos.json
+\end{verbatim}
+On PowerShell, all committed four-root certificates can be checked by
+\begin{verbatim}
+Get-ChildItem experiments -Filter 'atlas*_exact_*interval_sos.json' |
+  ForEach-Object {
+    python experiments/s4_interval_verify.py $_.FullName
+    if ($LASTEXITCODE -ne 0) {
+      throw "certificate audit failed: $($_.Name)"
+    }
+  }
+\end{verbatim}
+The committed JSON files are the exact proof certificates.  Numerical
+\texttt{.npz} workspaces were used only to discover the Gram matrices; they
+are neither trusted by these commands nor required to validate the proof.
+
+\section{The two cases not closed}
+
+The same exact method gives two useful but incomplete arbitrary-graphon
+results:
+\begin{center}
+\begin{tabular}{ccl}
+\toprule
+$H$ & proved interval & certificate\\
+\midrule
+130 & $[2/3,1]$ & \path{experiments/atlas130_exact_upper_interval_sos.json}\\
+203 & $[3/4,1]$ & \path{experiments/atlas203_exact_upper34_interval_sos.json}\\
+\bottomrule
+\end{tabular}
+\end{center}
+Atlas 130 still lacks $[1/2,2/3)$, and Atlas 203 still lacks
+$[2/3,3/4)$.  These are proper-range theorems, not complete positive
+classifications.  No exact counterexample was found for either graph.  The
+final search job was a CVXOPT fixed-margin feasibility solve for Atlas 203 on
+$[2/3,7/10]$ in the degree-two four-root cone.  It ran for approximately
+42 minutes, ended with a solver failure, and wrote no candidate certificate;
+this numerical failure has no mathematical sign implication.
+
+\end{document}

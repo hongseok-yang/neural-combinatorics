@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\dd}{\,\mathrm d}
+
+\title{An Exact Rooted Sum-of-Squares Certificate for the House Graph}
+\author{}
+\date{August 25, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove the chromatic-polynomial lower bound for the house graph, NetworkX
+Atlas~43, on its entire required interval.  The proof is a direct graphon
+sum-of-squares identity with two rational positive-semidefinite Gram
+matrices.  Its machine-readable certificate is checked coefficient by
+coefficient in exact rational arithmetic.  It uses ordinary non-induced
+homomorphism densities and no flag-algebra rules.
+\end{abstract}
+
+\section{Statement}
+
+Let $H$ be the house graph and let $W$ be an arbitrary graphon of edge
+density $p=t(K_2,W)$.  Its chromatic target is
+\[
+ \Phi_H(p)=p(2p-1)(3p^2-3p+1)
+ =6p^4-9p^3+5p^2-p.
+\]
+
+\begin{theorem}\label{thm:house}
+For every graphon $W$ and every $p\in[1/2,1]$,
+\[
+ t(H,W)\geq p(2p-1)(3p^2-3p+1).
+\]
+Thus Atlas~43 has positive classification.
+\end{theorem}
+
+\section{The rooted basis and the exact identity}
+
+Use three labelled vertices $0,1,2$ and one unlabelled branch vertex $3$.
+There are six possible edges on these four vertices.  For each subset $S$
+of those edges let $F_S$ be the corresponding partially labelled simple
+graph.  After fixing the labelled variables $x=(x_0,x_1,x_2)$, write
+\[
+ f_S(x)=\int_\Omega\prod_{ij\in S}W(x_i,x_j)\,\dd x_3,
+\]
+where $x_3$ is integrated and factors not involving vertex $3$ remain
+outside that one-variable integral.  Order the $2^6=64$ subsets by their
+binary edge masks and put $f(x)=(f_S(x))_S$.
+
+Set
+\[
+ u=2p-1\in[0,1],\qquad
+ \widehat f(x)=\binom{f(x)}{u f(x)}.
+\]
+The certificate file
+\begin{center}
+ \path{experiments/house_atlas43_rational.json}
+\end{center}
+contains integer matrices
+\[
+ F_0\in\mathbb Z^{128\times107},\qquad
+ F_1\in\mathbb Z^{64\times48},
+\]
+a common positive integer $D=10^6$, and exact rational symmetric matrices
+\[
+ Z_0\in\mathbb Q^{107\times107},\qquad
+ Z_1\in\mathbb Q^{48\times48}.
+\]
+The matrices $Z_i$ are stored sparsely as $I+C_i$.  Define
+\[
+ Q_0=D^{-2}F_0Z_0F_0^{\mathsf T},\qquad
+ Q_1=D^{-2}F_1Z_1F_1^{\mathsf T}.
+\]
+The exact certificate asserts the identity
+\begin{equation}\label{eq:sos}
+ \boxed{
+ t(H,W)-\Phi_H(p)
+ =\int_{\Omega^3}\widehat f(x)^{\mathsf T}Q_0\widehat f(x)\,\dd x
+ +u(1-u)\int_{\Omega^3}f(x)^{\mathsf T}Q_1f(x)\,\dd x.}
+\end{equation}
+
+This is an ordinary graphon identity.  Indeed,
+$\int f_S(x)f_T(x)\dd x$ is the homomorphism density of the simple graph
+obtained by taking two copies of $F_S,F_T$ and identifying equally labelled
+vertices.  If that graph has $m$ isolated-edge components, the exact
+fixed-density identity
+\[
+ t(G\sqcup mK_2,W)=p^m t(G,W)
+\]
+removes them.  Expanding $p=(1+u)/2$ leaves 91 nonzero coefficients,
+and the certificate checker verifies every one of them over $\mathbb Q$.
+
+\section{Positive semidefiniteness and exact verification}
+
+For a symmetric matrix $Z=(z_{ij})$, strict diagonal dominance with positive
+diagonal,
+\[
+ z_{ii}-\sum_{j\ne i}|z_{ij}|>0\quad\hbox{for every }i,
+\]
+implies positive definiteness.  Exact fraction arithmetic gives the minimum
+row margins
+\[
+ \min_i\left((Z_0)_{ii}-\sum_{j\ne i}|(Z_0)_{ij}|\right)
+ >0.9997,
+ \qquad
+ \min_i\left((Z_1)_{ii}-\sum_{j\ne i}|(Z_1)_{ij}|\right)
+ =\frac{999955414399}{10^{12}}>0.
+\]
+Consequently $Z_0,Z_1$ are positive definite and $Q_0,Q_1$ are positive
+semidefinite.
+
+The independent checker is
+\begin{center}
+ \path{experiments/house_verify_rational.py}.
+\end{center}
+It performs the following exact checks:
+\begin{enumerate}
+\item NetworkX Atlas~43 has target
+      $6p^4-9p^3+5p^2-p$ by its chromatic polynomial;
+\item the dimensions and sparse entries of the two Gram factors are valid;
+\item both diagonal-dominance margins are positive rational numbers; and
+\item all 91 coefficients in \eqref{eq:sos} agree exactly after isolated
+      edge components are replaced by powers of $p$.
+\end{enumerate}
+Running it prints
+\begin{verbatim}
+verified Atlas 43 exact interval SOS: equations=91 orders=[107, 48]
+\end{verbatim}
+and exits successfully.  No floating-point value is used by the checker.
+
+\begin{proof}[Proof of Theorem~\ref{thm:house}]
+Both quadratic integrands on the right of \eqref{eq:sos} are nonnegative,
+and $u(1-u)\geq0$ for $p\in[1/2,1]$.  Hence the right-hand side is
+nonnegative, proving the theorem.
+\end{proof}
+
+\section{How the certificate was recovered}
+
+The initial numerical SDP is singular because every balanced complete
+$k$-partite graphon is an equality case at $p=1-1/k$.  Rooted evaluations
+on those Turan graphons give exact rational kernel spaces of dimensions 15
+and 10.  Two further six-dimensional faces have half-integral bases.  After
+restricting to the exact complements of these spaces, the reduced Gram
+orders are 107 and 48 and the numerical feasibility margin is
+$0.0056368\ldots$.  A rational Cholesky preconditioner then converts the
+final exact correction into the strictly diagonally dominant matrices above.
+
+The discovery and audit scripts are
+\begin{center}
+\begin{minipage}{0.9\linewidth}
+\path{experiments/house_interval_matrix_sos.py},
+\path{experiments/house_turan_face.py},
+\path{experiments/house_face_reduced_sos.py}, and
+\path{experiments/house_rationalize_reduced.py}.
+\end{minipage}
+\end{center}
+They are not assumptions of the proof: the JSON certificate and exact
+checker contain all data needed to verify \eqref{eq:sos} and positivity.
+
+\begin{remark}
+This construction is a direct rooted quantum-graph sum of squares.  It does
+not use induced flags, asymptotic flag-density multiplication, or a
+flag-algebra semidefinite certificate.  Every product in \eqref{eq:sos} is
+interpreted directly as an integral of graphon kernels.
+\end{remark}
+
+\end{document}
