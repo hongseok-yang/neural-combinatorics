@@ -219,40 +219,36 @@ Our main result is the following.
   \end{equation}
 \end{theorem}
 
-The companion paper requires different methods; we explain the reason for the split at $p=2/3$ in \Cref{sec:conclusion}.
-
-By \eqref{eq:intro-kpartite-value}, equality holds in \Cref{thm:main} at $p=1-1/k$ for every integer $k\ge3$.
+At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact extremal value.
 
 \begin{corollary}\label{cor:kpartite}
   For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimizes the $C_m$-density among graphons $W$ with $\edens W=1-1/k$.
 \end{corollary}
 
-For $k\ge3$, the corollary follows from \Cref{thm:main} and \eqref{eq:intro-kpartite-value}.
-For $k=2$, it holds because $W_2$ is bipartite, so $\tC m{W_2}=0$, whereas $\tC mW\ge0$ for every graphon.
-The corollary extends the theorem of Bennett, Dudek, Lidick\'y and Pikhurko from $m=5$ to every odd cycle length.
+For $k\ge3$, \eqref{eq:intro-kpartite-value} shows that $W_k$ attains the lower bound in \Cref{thm:main}.
+For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$, while every graphon has nonnegative $C_m$-density.
 
-We prove \Cref{thm:main} through a stronger inequality that treats $W$ and its complement together.
-This two-colour formulation is not merely a formal strengthening: adding the two odd-cycle densities creates the cancellation on which our proof rests.
-The relevant framework is \emph{commonality}.
+Our proof of \Cref{thm:main} proceeds through a stronger two-colour inequality for $W$ and its complement $1-W$.
+The sum of their odd-cycle densities exhibits a cancellation unavailable in $\tC mW$ alone, making the stronger statement more tractable than the original one.
+This two-colour formulation is naturally expressed through \emph{commonality}.
 A graph $H$ with $e(H)$ edges is common if
 \[
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
 \]
 for every graphon $W$.
-Equivalently, among all $2$-colourings of the edges of a large complete graph, the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
-Goodman's theorem implies that the triangle is common.
-Erd\H os~\cite{erdos1962number} conjectured that every complete graph is common, while Burr and Rosta~\cite{burr1980ramsey} conjectured that every graph is common.
-Thomason~\cite{thomason1989disproof} disproved both conjectures with $K_4$, and Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
-Cycles nevertheless form an important positive family: Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
+Here $W$ and $1-W$ represent the two colours; the inequality says that the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
+Goodman's theorem shows that the triangle is common, but commonality is not automatic.
+Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
+Cycles form an important positive family: Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
 
-Kim and Lee~\cite{kim2024extended} established the following sharper statement, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
+Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
   \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)},
 \end{equation}
 thereby answering a question of Sidorenko~\cite{sidorenko1989cycles} and proving, in stronger form, a conjecture of Behague, Morrison and Noel~\cite{behague2025common}.
-Since $p^e+(1-p)^e\ge2^{1-e}$, extended commonality implies commonality.
+Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
-For odd cycles with $p\ge2/3$, we strengthen \eqref{eq:intro-extended-commonality} by adding an explicit nonnegative term to its right-hand side.
+For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
   Let $m\ge3$ be odd, let $W$ be a graphon with $\edens W=p\ge2/3$, and write $U=1-W$ and $q=1-p$.
@@ -262,14 +258,11 @@ For odd cycles with $p\ge2/3$, we strengthen \eqref{eq:intro-extended-commonalit
   \end{equation}
 \end{theorem}
 
-% NOTE: the path bound t(P_{m-1},U) >= q^{m-1} is the Mulholland--Smith inequality;
-% it is also attributed to Blakley--Roy (1965); add that reference if preferred.
-The correction term is nonnegative because the path inequality of Mulholland and Smith~\cite{mulholland1959inequality} gives $\tP{m-1}U\ge q^{m-1}$.
-Thus \eqref{eq:intro-commonality} strengthens \eqref{eq:intro-extended-commonality} for odd cycles whenever $p\ge2/3$.
+The path inequality of Mulholland and Smith~\cite{mulholland1959inequality} gives $\tP{m-1}U\ge q^{m-1}$, so the correction term is nonnegative and \eqref{eq:intro-commonality} indeed strengthens extended commonality.
 Exchanging $W$ and $U$ gives the corresponding statement for $p\le1/3$.
 Equality holds in \eqref{eq:intro-commonality} for the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, for $W_k$.
 
-The main theorem follows immediately from this stronger statement.
+This stronger statement immediately implies \Cref{thm:main}.
 Since $0\le U\le1$, deleting one edge from the $m$-cycle gives $\tC mU\le\tP{m-1}U$.
 Subtracting this inequality from \eqref{eq:intro-commonality} and using $p+q=1$, we obtain
 \[
@@ -277,18 +270,17 @@ Subtracting this inequality from \eqref{eq:intro-commonality} and using $p+q=1$,
 \]
 
 \paragraph{Proof strategy: from a graphon to one variable.}
-We begin by approximating an arbitrary graphon by step graphons; this reduces the problem to finite matrices without changing the limiting densities.
-The constant vector singles out the prescribed edge density, while its orthogonal complement records how the graphon deviates from being constant.
-For the complementary graphon $U=1-W$, this decomposition has a particularly useful form.
-Because $m$ is odd, the terms that remain entirely in the orthogonal complement occur with opposite signs in $\tC mW$ and $\tC mU$ and therefore cancel when the two cycle densities are added.
-This cancellation explains why the stronger two-colour statement is easier to attack than the one-colour inequality alone.
+We first approximate an arbitrary graphon by step graphons, reducing the problem to finite matrices while preserving the limiting densities.
+In the resulting matrix decomposition, the constant vector records the prescribed edge density and its orthogonal complement records the nonconstant part of the graphon.
+Passing from $U=1-W$ to $W$ reverses the sign of the block on this orthogonal complement.
+Because $m$ is odd, the terms contained entirely in that block cancel when $\tC mW$ and $\tC mU$ are added.
+This is why the stronger two-colour inequality is easier to approach than the one-colour bound alone.
 
-The terms that remain move from the constant direction into its orthogonal complement, spend some number of steps there, and then return.
-We call each such departure and return an \emph{excursion}.
-Instead of tracking the exponentially many terms in the matrix expansion one by one, we group them by their number $r$ of excursions.
-A generating function collects all the terms with the same $r$; its coefficients are complete homogeneous symmetric polynomials.
-The commonality gap---the left-hand side of \Cref{thm:commonality} minus its right-hand side---then becomes a sum of integrals of polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ against a positive measure supported on $[-1/2,1/2]$, where the $\lambda_i$ are the nonconstant spectral parameters in this decomposition.
-The measure records the sizes of the graphon's nonconstant spectral components, whereas the polynomials depend only on $m$, $r$, and the edge density.
+Each remaining term leaves the constant direction, spends some number of steps in its orthogonal complement, and then returns; we call such a departure and return an \emph{excursion}.
+Rather than track exponentially many matrix terms individually, we group them by their number $r$ of excursions.
+A generating function collects each group, with coefficients given by complete homogeneous symmetric polynomials.
+After diagonalizing the nonconstant block, the commonality gap becomes a sum of integrals of explicit polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ against a positive spectral measure supported on $[-1/2,1/2]$.
+The measure records the sizes of the nonconstant spectral components, while the variables $\lambda_i$ record their locations; the polynomials themselves depend only on $m$, $r$, and the edge density.
 It therefore suffices to prove that each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
 
 This still leaves a difficulty: $P_{m,r}$ has $r$ variables, and $r$ grows with the cycle length.
@@ -303,20 +295,17 @@ Their elementary moment formula shows that
 \]
 Thus the multivariable polynomial is an average of its diagonal values, and nonnegativity need only be checked when all spectral variables are equal.
 The weights have a Dirichlet distribution, familiar from Bayesian statistics and Bayesian nonparametrics, but here the distribution is simply an algebraic averaging device.
-A second moment identity, now for a symmetric Beta variable, rewrites the diagonal value as a one-dimensional integral of an explicit polynomial.
+A second averaging identity, now involving a symmetric Beta variable, rewrites the diagonal value as a one-dimensional integral of an explicit polynomial.
 In this way, the graphon inequality has been reduced to a scalar sign problem.
 
-One final obstacle remains.
-For a nonpositive spectral value, the integrand in the Beta representation is nonnegative pointwise.
-For a positive spectral value, it can change sign, so pointwise estimates cannot finish the proof.
-A Laplace-transform identity separates the spectral parameter from the integration variable and rewrites the whole integral as a positive mixture of expectations under a Gamma distribution.
-After centering at $1/2$, the desired sign follows from a uniform comparison between an odd shifted Gamma moment and the next even moment.
-We prove that comparison using the Gamma integration-by-parts identity, also known as the Gamma Stein identity.
-It yields a second-order ODE for the even moment.
-The ODE shows that any interval of negativity would have to contain one particular critical point; a final integral comparison proves positivity there and rules out such an interval.
+One obstacle remains: the integrand in the Beta representation is pointwise nonnegative for a nonpositive spectral value but can change sign for a positive one.
+A Laplace-transform identity separates the spectral parameter from the integration variable and rewrites the integral as a positive mixture of expectations under a Gamma distribution.
+After centering at $1/2$, each required sign reduces to a uniform comparison between an odd shifted Gamma moment and the next even moment.
+Applying the Gamma integration-by-parts identity, also known as the Gamma Stein identity, produces a second-order ordinary differential equation (ODE) for the even moment.
+The ODE shows that any interval of negativity must contain one explicit critical point; an integral comparison proves positivity there and rules out such an interval.
 
-This last comparison is also where the density threshold appears.
-Writing $q=1-p$, the assumption $p\ge2/3$ says $q\le1/3$; it gives exactly the amount of separation from $1/2$ needed to absorb the odd moment into the even one.
+This final moment comparison is the only step that requires the density threshold.
+Writing $q=1-p$ and $\delta=1/2-q$, the assumption $p\ge2/3$ gives $\delta\ge1/6$, exactly the condition needed to control the odd moment by the even one.
 The strengthened two-colour inequality can fail when $1/2<p<2/3$, which is why the companion paper requires a different route to the original one-colour bound.
 
 The reusable feature of the proof is this sequence of reductions: exploit cancellation between complementary kernels, encode the remaining irregularity spectrally, average away a dimension that grows with the pattern, and solve the final one-variable sign problem.
