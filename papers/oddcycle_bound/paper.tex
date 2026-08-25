@@ -154,15 +154,16 @@ For odd cycles, we pursue the analogue of Goodman's simpler polynomial bound rat
 Our goal is a single low-complexity formula, with no case distinctions in $p$, that works uniformly for every odd cycle length.
 We allow this bound to be nonoptimal between the distinguished densities $p=1-1/k$, but require equality at each of them, where the balanced complete $k$-partite graph is the canonical extremal example.
 
-We formulate this problem in the language of graphons, the natural limit objects for dense graphs.
+To state this extremal problem precisely, we pass to graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities.
 A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
-For a finite graph $F$ with vertex set $\{1,\ldots,v\}$ and edge set $E(F)$, the \emph{homomorphism density} of $F$ in $W$ is
+For a finite graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H)$, the \emph{homomorphism density} of $H$ in $W$ is
 \[
-  \dens FW=\intcube{v}\prod_{ij\in E(F)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
+  \dens HW=\intcube{v}\prod_{ij\in E(H)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
 \]
 and $p=\edens W=\intsq W(x,y)\ddxy$ is the \emph{edge density} of $W$.
 
-For an integer $k\ge2$, define the \emph{balanced complete $k$-partite graphon} by
+The canonical examples at the edge densities $p=1-1/k$ are the \emph{balanced complete multipartite graphons}.
+For an integer $k\ge2$, write $W_k$ for the graphon defined by
 \[
   W_k(x,y)=
   \begin{cases}
