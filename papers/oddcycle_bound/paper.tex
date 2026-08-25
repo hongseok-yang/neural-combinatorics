@@ -276,14 +276,21 @@ We first approximate an arbitrary graphon by step graphons, reducing the problem
 Each step graphon is constant on the rectangles of a partition into $N$ equal intervals, and its cell values, scaled by the interval length, form a symmetric $N\times N$ matrix representing the graphon operator on the space of step functions.
 Identifying this space with $\mathbb R^N$, the normalized all-ones vector $e$ represents the constant functions.
 We decompose $\mathbb R^N$ into the constant direction $\mathbb R e$ and its orthogonal complement $e^\perp$.
-In the corresponding block decomposition of the matrix, the entry in the constant direction records the edge density, while the remaining blocks record how the graphon deviates from being constant.
+In the corresponding block decomposition of the matrix, the entry in the constant direction records the edge density of the graphon, while the remaining blocks record how the graphon deviates from being constant.
 Passing from $U=1-W$ to $W$ reverses the signs of these nonconstant blocks.
 Because $m$ is odd, the terms contained entirely in the block on $e^\perp$ cancel when $\tC mW$ and $\tC mU$ are added.
 
 Each remaining term leaves the constant direction, spends some number of steps in its orthogonal complement, and then returns; we call such a departure and return an \emph{excursion}.
 Rather than track exponentially many matrix terms individually, we group them by their number $r$ of excursions.
 A generating function collects each group, with coefficients given by complete homogeneous symmetric polynomials.
-After diagonalizing the nonconstant block, the commonality gap becomes a sum of integrals of explicit polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ against a positive spectral measure supported on $[-1/2,1/2]$.
+After diagonalizing the nonconstant block, we subtract the proposed lower bound in \eqref{eq:intro-commonality} from $\tC mW+\tC mU$.
+The resulting difference,
+\[
+  \tC mW+\tC mU
+  -\bigl(p^m+q^m+\tP{m-1}U-q^{m-1}\bigr),
+\]
+is precisely the quantity whose nonnegativity proves the stronger theorem.
+It can be written as a sum of integrals of explicit polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ against a positive spectral measure supported on $[-1/2,1/2]$.
 The measure records the sizes of the nonconstant spectral components, while the variables $\lambda_i$ record their locations; the polynomials themselves depend only on $m$, $r$, and the edge density.
 It therefore suffices to prove that each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
 
