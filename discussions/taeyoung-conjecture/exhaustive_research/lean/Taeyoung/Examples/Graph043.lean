@@ -22,12 +22,13 @@ def metadata : CatalogueRow where
   edgeCount := 6
   chromaticNumber := 3
   graph6 := "Dlc"
-  status := .open
-  formalization := .unresolved
+  status := .positive
+  formalization := .believed
 
-/-- This row is mathematically open.  It asserts no sign: only `P ∨ ¬P`. -/
-theorem statusAlternative :
-    SatisfiesLowerBound graph ∨ ViolatesLowerBound graph :=
-  status_excludedMiddle graph
+/-- Accepted mathematical result: the exact rooted interval-SOS certificate in notes/atlas43_exact_rooted_sos.tex.
+
+The method-specific Lean bridge for this row remains to be formalized. -/
+theorem status : SatisfiesLowerBound graph := by
+  sorry
 
 end Taeyoung.Examples.Graph043

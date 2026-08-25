@@ -10,8 +10,8 @@ def countStatus (s : CatalogueStatus) : ℕ :=
   (rows.filter fun row => row.status = s).length
 
 theorem row_count : rows.length = 117 := by decide
-theorem positive_count : countStatus .positive = 73 := by decide
+theorem positive_count : countStatus .positive = 92 := by decide
 theorem negative_count : countStatus .negative = 23 := by decide
-theorem open_count : countStatus .open = 21 := by decide
+theorem open_count : countStatus .open = 2 := by decide
 
 end Taeyoung.Catalogue

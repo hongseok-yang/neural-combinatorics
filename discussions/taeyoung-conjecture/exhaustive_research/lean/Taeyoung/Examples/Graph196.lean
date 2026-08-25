@@ -22,12 +22,13 @@ def metadata : CatalogueRow where
   edgeCount := 11
   chromaticNumber := 4
   graph6 := "ER~g"
-  status := .open
-  formalization := .unresolved
+  status := .positive
+  formalization := .believed
 
-/-- This row is mathematically open.  It asserts no sign: only `P ∨ ¬P`. -/
-theorem statusAlternative :
-    SatisfiesLowerBound graph ∨ ViolatesLowerBound graph :=
-  status_excludedMiddle graph
+/-- Accepted mathematical result: the exact Atlas 43 theorem followed by the normalized-link house-cone theorem.
+
+The method-specific Lean bridge for this row remains to be formalized. -/
+theorem status : SatisfiesLowerBound graph := by
+  sorry
 
 end Taeyoung.Examples.Graph196

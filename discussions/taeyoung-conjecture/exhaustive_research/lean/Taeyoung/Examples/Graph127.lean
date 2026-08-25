@@ -22,12 +22,13 @@ def metadata : CatalogueRow where
   edgeCount := 7
   chromaticNumber := 3
   graph6 := "EZEG"
-  status := .open
-  formalization := .unresolved
+  status := .positive
+  formalization := .believed
 
-/-- This row is mathematically open.  It asserts no sign: only `P ∨ ¬P`. -/
-theorem statusAlternative :
-    SatisfiesLowerBound graph ∨ ViolatesLowerBound graph :=
-  status_excludedMiddle graph
+/-- Accepted mathematical result: the accepted smoothed Goodman theorem recorded in the classification catalogue.
+
+The method-specific Lean bridge for this row remains to be formalized. -/
+theorem status : SatisfiesLowerBound graph := by
+  sorry
 
 end Taeyoung.Examples.Graph127

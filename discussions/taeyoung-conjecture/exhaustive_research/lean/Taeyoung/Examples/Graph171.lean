@@ -22,12 +22,13 @@ def metadata : CatalogueRow where
   edgeCount := 9
   chromaticNumber := 3
   graph6 := "Ehew"
-  status := .open
-  formalization := .unresolved
+  status := .positive
+  formalization := .believed
 
-/-- This row is mathematically open.  It asserts no sign: only `P ∨ ¬P`. -/
-theorem statusAlternative :
-    SatisfiesLowerBound graph ∨ ViolatesLowerBound graph :=
-  status_excludedMiddle graph
+/-- Accepted mathematical result: the exact four-root interval-SOS proof in notes/s4_exact_interval_sos_remaining_cases.tex.
+
+The method-specific Lean bridge for this row remains to be formalized. -/
+theorem status : SatisfiesLowerBound graph := by
+  sorry
 
 end Taeyoung.Examples.Graph171
