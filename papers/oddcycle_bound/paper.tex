@@ -165,16 +165,17 @@ Thus, for an odd integer $m\ge3$ and a fixed edge density $p\in[0,1]$, we seek a
 \[
   \inf\bigl\{\tC mW: W\text{ is a graphon with }\edens W=p\bigr\}.
 \]
-For cycles, the quantity being minimized has a useful spectral form.
-Let $\Tker W$ be the self-adjoint integral operator on $L^2[0,1]$ defined by
+To seek such a bound, we use the spectral characterization of cycle densities.
+Associate with a graphon $W$ the integral operator $\Tker W$ on $L^2[0,1]$ defined by
 \[
   (\Tker{W}f)(x)=\int_0^1 W(x,y)f(y)\dd y.
 \]
+Because $W$ is symmetric, $\Tker W$ is self-adjoint.
 If $(\lambda_i)_i$ are its eigenvalues, then the trace formula~\cite{lovasz2012large} gives
 \[
-  \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m
-  \qquad(m\ge3).
+  \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m.
 \]
+Thus, the objective becomes a power sum of the eigenvalues of $\Tker W$, subject to the edge-density constraint $\edens W=p$.
 
 At each edge density $p=1-1/k$, $k\ge2$, the canonical candidate is the \emph{balanced complete $k$-partite graphon} $W_k$, defined by
 \[
