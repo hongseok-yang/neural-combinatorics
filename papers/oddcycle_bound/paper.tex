@@ -177,24 +177,27 @@ If $(\lambda_i)_i$ are its eigenvalues, then the trace formula~\cite{lovasz2012l
 \]
 Thus, the objective becomes a power sum of the eigenvalues of $\Tker W$, subject to the edge-density constraint $\edens W=p$.
 
-At each edge density $p=1-1/k$, $k\ge2$, the canonical candidate is the \emph{balanced complete $k$-partite graphon} $W_k$, defined by
+Balanced complete $k$-partite graphons play a central role in this extremal problem: our proposed bound is designed to be attained by them at the edge densities $p=1-1/k$.
+For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graphon defined by
 \[
   W_k(x,y)=
   \begin{cases}
     1&\text{if }\lfloor kx\rfloor\ne\lfloor ky\rfloor,\\
     0&\text{otherwise}.
-  \end{cases}
+\end{cases}
 \]
+Its edge density is $p=1-1/k$.
 For $\Tker{W_k}$, the constant function has eigenvalue $p$.
 The functions that are constant on each part and whose partwise values sum to zero form a $(k-1)$-dimensional eigenspace with eigenvalue $-1/k$; all remaining eigenvalues are zero.
 The trace formula therefore gives, for odd $m$,
 \begin{equation}\label{eq:intro-kpartite-value}
   \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m=\goal.
 \end{equation}
-As $k$ varies, these values lie on the single polynomial $\goal$.
-We ask whether this polynomial is a universal lower bound at every edge density, even though it need not be the exact minimum away from $p=1-1/k$.
+As $k$ varies, these equality values determine the single polynomial $\goal$.
+Our problem is to show that this polynomial remains a universal lower bound at every edge density, even where it need not be the exact minimum.
 
-For $m=3$, this question is answered by Goodman's inequality: every graphon $W$ with $\edens W=p$ satisfies
+The central role of $W_k$ is already visible in the two previously known cases.
+For $m=3$, Goodman's inequality answers this question, with $W_k$ attaining equality at $p=1-1/k$: every graphon $W$ with $\edens W=p$ satisfies
 \begin{equation}\label{eq:intro-goodman}
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
