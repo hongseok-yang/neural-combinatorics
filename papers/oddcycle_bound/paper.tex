@@ -270,64 +270,52 @@ Subtracting this inequality from \eqref{eq:intro-commonality} and using $p+q=1$,
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
 \]
 
-\paragraph{Proof strategy: cancellation and reduction to one variable.}
-The key advantage of the two-colour formulation is that $\tC mW+\tC mU$ exhibits a spectral cancellation unavailable in $\tC mW$ alone, making the stronger inequality more tractable than the original one.
-We first approximate an arbitrary graphon by step graphons, reducing the problem to finite matrices while preserving the limiting densities.
-Each step graphon is constant on the rectangles of a partition into $N$ equal intervals, and its cell values, scaled by the interval length, form a symmetric $N\times N$ matrix representing the graphon operator on the space of step functions.
-Identifying this space with $\mathbb R^N$, the normalized all-ones vector $e$ represents the constant functions.
-We decompose $\mathbb R^N$ into the constant direction $\mathbb R e$ and its orthogonal complement $e^\perp$.
-In the corresponding block decomposition of the matrix, the entry in the constant direction records the edge density of the graphon, while the remaining blocks record how the graphon deviates from being constant.
-Passing from $U=1-W$ to $W$ reverses the signs of these nonconstant blocks.
-Because $m$ is odd, the terms contained entirely in the block on $e^\perp$ cancel when $\tC mW$ and $\tC mU$ are added.
+\paragraph{Proof strategy: four reductions.}
+We prove the stronger two-colour inequality through four reductions, each of which replaces the problem by a simpler positivity statement.
 
-Each remaining term leaves the constant direction, spends some number of steps in its orthogonal complement, and then returns; we call such a departure and return an \emph{excursion}.
-Rather than track exponentially many matrix terms individually, we group them by their number $r$ of excursions.
-A generating function collects each group, with coefficients given by complete homogeneous symmetric polynomials.
-After diagonalizing the nonconstant block, we subtract the proposed lower bound in \eqref{eq:intro-commonality} from $\tC mW+\tC mU$.
-The resulting difference,
+First, we approximate the graphons $W$ and $U=1-W$ by step graphons and represent them by complementary symmetric matrices.
+We decompose each matrix into a part that records its edge density and a remaining, nonconstant part.
+The nonconstant parts for $W$ and $U$ have opposite signs, so their purely nonconstant contributions cancel when the two odd-cycle densities $\tC mW$ and $\tC mU$ are added.
+This leaves a finite matrix expansion in which the prescribed edge density has been separated from the rest of the graphon.
+
+Second, we organize the surviving terms.
+Each term can be broken into departures from the constant part of the matrix and returns to it; we call these pieces \emph{excursions}.
+We group the terms by their number $r$ of excursions and sum each group with a generating function.
+This produces an explicit symmetric polynomial $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ for each $r$, where the variables $\lambda_i$ represent eigenvalues of the nonconstant part and range over $[-1/2,1/2]$.
+The stronger two-colour theorem is then reduced to proving $P_{m,r}\ge0$ on $[-1/2,1/2]^r$ for every $r$.
+
+Third, we reduce each of these multivariable inequalities to one variable.
+A Dirichlet averaging identity reduces the problem to the diagonal case $\lambda_1=\cdots=\lambda_r=\ell$.
+A second identity, using a symmetric Beta distribution, writes the resulting one-variable polynomial as a one-dimensional integral.
+Together, these two averaging steps reduce every inequality $P_{m,r}\ge0$ to a one-variable integral inequality.
+
+Finally, we prove this integral inequality.
+We split the problem according to the sign of $\ell$.
+For $\ell\le0$, nonnegativity follows directly from the Beta representation.
+For $\ell>0$, the integrand can change sign, so a pointwise argument is no longer available.
+We instead apply a Laplace transform to rewrite the integral in terms of expectations under a Gamma distribution, and then use Gamma integration by parts together with an ODE argument to prove the required nonnegativity.
+These transformations allow us to control the integral as a whole despite the changing sign of its integrand.
+This is the only stage at which $q\le1/3$, or equivalently $p\ge2/3$, is required; the strengthened two-colour inequality can fail for $1/2<p<2/3$, so the companion paper takes a different route in that range.
+
+The proof thus follows the chain
 \[
-  \tC mW+\tC mU
-  -\bigl(p^m+q^m+\tP{m-1}U-q^{m-1}\bigr),
+  \begin{gathered}
+    \text{graphon inequality}
+    \longrightarrow \text{complementary matrices}
+    \longrightarrow \text{excursion polynomials }P_{m,r}\\
+    \longrightarrow \text{a one-variable integral}
+    \longrightarrow \text{Gamma expectations and an ODE}.
+  \end{gathered}
 \]
-is precisely the quantity whose nonnegativity proves the stronger theorem.
-It can be written as a sum of integrals of explicit polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ against a positive spectral measure supported on $[-1/2,1/2]$.
-The measure records the sizes of the nonconstant spectral components, while the variables $\lambda_i$ record their locations; the polynomials themselves depend only on $m$, $r$, and the edge density.
-It therefore suffices to prove that each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
-
-This still leaves a difficulty: $P_{m,r}$ has $r$ variables, and $r$ grows with the cycle length.
-A Dirichlet averaging identity removes this growing dimension.
-Choose random nonnegative weights $\Theta_1,\ldots,\Theta_r$ that sum to one, uniformly on the simplex.
-Their elementary moment formula shows that
-\[
-  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-  =\mathbb E\,P_{m,r}
-  \left(q;\sum_i\Theta_i\lambda_i,\ldots,
-  \sum_i\Theta_i\lambda_i\right).
-\]
-Thus the multivariable polynomial is an average of its diagonal values, and nonnegativity need only be checked when all spectral variables are equal.
-The weights have a Dirichlet distribution, familiar from Bayesian statistics and Bayesian nonparametrics, but here the distribution is simply an algebraic averaging device.
-A second averaging identity, now involving a symmetric Beta variable, rewrites the diagonal value as a one-dimensional integral of an explicit polynomial.
-In this way, the graphon inequality has been reduced to a scalar sign problem.
-
-One obstacle remains: the integrand in the Beta representation is pointwise nonnegative for a nonpositive spectral value but can change sign for a positive one.
-A Laplace-transform identity separates the spectral parameter from the integration variable and rewrites the integral as a positive mixture of expectations under a Gamma distribution.
-After centering at $1/2$, each required sign reduces to a uniform comparison between an odd shifted Gamma moment and the next even moment.
-Applying the Gamma integration-by-parts identity, also known as the Gamma Stein identity, produces a second-order ordinary differential equation (ODE) for the even moment.
-The ODE shows that any interval of negativity must contain one explicit critical point; an integral comparison proves positivity there and rules out such an interval.
-
-This final moment comparison is the only step that requires the density threshold.
-Writing $q=1-p$ and $\delta=1/2-q$, the assumption $p\ge2/3$ gives $\delta\ge1/6$, exactly the condition needed to control the odd moment by the even one.
-The strengthened two-colour inequality can fail when $1/2<p<2/3$, which is why the companion paper requires a different route to the original one-colour bound.
-
-The reusable feature of the proof is this sequence of reductions: exploit cancellation between complementary kernels, encode the remaining irregularity spectrally, average away a dimension that grows with the pattern, and solve the final one-variable sign problem.
-This sequence keeps the odd length $m$ symbolic throughout.
-It may also apply to other fixed-density extremal problems in which pattern densities admit analogous matrix expansions.
+The reductions keep the odd length $m$ symbolic rather than treating one cycle at a time.
+In particular, the complementary-matrix cancellation, excursion generating functions, and Dirichlet reduction may be useful in other fixed-density problems with similar matrix expansions.
 
 \paragraph{Organization.}
-In \Cref{sec:matrix-reduction}, we pass from graphons to matrices and encode the relevant densities by a spectral measure.
-\Cref{sec:excursions} develops the excursion expansion that reduces both main inequalities to the positivity of explicit symmetric polynomials.
-\Cref{sec:short-cycles} illustrates the reduction for $C_3$, $C_5$, and $C_7$, and \Cref{sec:excursion-positivity} proves the required positivity for all odd cycles.
-We close with further questions in \Cref{sec:conclusion}; the appendices justify the step-graphon reduction and prove the Gamma moment inequality.
+In \Cref{sec:matrix-reduction}, we carry out the graphon-to-matrix reduction and record the relevant nonconstant matrix data through eigenvalues and nonnegative weights.
+\Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
+\Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
+We close with further questions in \Cref{sec:conclusion}.
+The appendices justify the graphon approximation and prove the estimate used to control the Gamma expectations in the final step.
 
 \section{Matrix reduction and spectral measure}
 \label{sec:matrix-reduction}
