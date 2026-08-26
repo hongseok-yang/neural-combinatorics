@@ -1,0 +1,489 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,booktabs,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{url}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\PhiH}{\Phi_H}
+\title{Atlas 126: A Triangle--$C_4$ Vertex-Amalgam Supporting Plane}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $H$ be a triangle and a $4$-cycle sharing exactly one vertex.  We prove
+that every graphon of edge density $p\in[1/2,1]$ satisfies
+\[
+ t(H,W)\ge p^2(2p-1)\bigl(p^3+(1-p)^3\bigr).
+\]
+This is the full chromatic interval and the exact target for Graph Atlas 126.
+Rooting at the common vertex factors the density into a rooted triangle and a
+rooted $C_4$.  A two-piece weighted Cauchy--Schwarz projection then reduces
+the graphon problem to a scalar function of the degree, the one-step degree
+average, and the rooted triangle density.  Its sharp supporting plane uses
+Reiher's triangle-density theorem on $1/2\le p\le2/3$ and is elementary above
+$2/3$.  The remaining rational polynomial inequalities are proved by an
+exact Bernstein subdivision certificate, including exact local analyses of
+all zero-coefficient boxes.
+\end{abstract}
+
+\section{The graph and its chromatic target}
+
+Let $(\Omega,\mu)$ be an arbitrary probability space and let
+$W\colon\Omega^2\to[0,1]$ be symmetric and measurable.  All equalities and
+inequalities below hold after changing functions on null sets if necessary.
+Every integrand is nonnegative and bounded, so Tonelli's theorem justifies
+all changes in the order of integration.
+
+The Atlas-labelled edge set of Graph Atlas 126 is
+\[
+ \{02,05,13,14,23,34,35\}.
+\]
+It has graph6 string \texttt{ERUO} and degree sequence
+$(4,2,2,2,2,2)$.  Its triangle is $1$--$3$--$4$--$1$, and its $4$-cycle is
+$0$--$2$--$3$--$5$--$0$; these subgraphs share only vertex $3$.
+Thus it is isomorphic to a triangle and a $C_4$ with one vertex identified.
+
+If $r$ colours are available, first colour the common vertex.  The remaining
+two triangle vertices have $(r-1)(r-2)$ choices.  The three remaining cycle
+vertices have $(r-1)(r^2-3r+3)$ choices.  Hence
+\begin{equation}
+ P_H(r)=r(r-2)(r-1)^2(r^2-3r+3),\qquad \chi(H)=3.
+ \label{eq:chromatic}
+\end{equation}
+The chromatic target is
+\begin{align}
+ \PhiH(p)
+ &=(1-p)^6P_H\!\left(\frac1{1-p}\right)\notag\\
+ &=p^2(2p-1)\bigl(p^3+(1-p)^3\bigr).
+ \label{eq:target}
+\end{align}
+The required interval is therefore $p\in[1/2,1]$.
+
+\section{Rooting and the Hilbert-space projection}
+
+Write
+\[
+ p=\int_{\Omega^2}W(x,y)\dd\mu(x)\dd\mu(y),\qquad
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+\]
+and define
+\begin{align*}
+ a(x)&=(T_Wd)(x)=\int_\Omega W(x,y)d(y)\dd\mu(y),\\
+ t(x)&=\int_{\Omega^2}W(x,y)W(x,z)W(y,z)
+       \dd\mu(y)\dd\mu(z).
+\end{align*}
+Thus $t(x)$ is the triangle density rooted at $x$.  For fixed $x$, put
+\[
+ b_x(z)=\int_\Omega W(x,y)W(y,z)\dd\mu(y).
+\]
+The $C_4$ density rooted at $x$ is
+\[
+ r_4(x)=\int_\Omega b_x(z)^2\dd\mu(z).
+\]
+Moreover,
+\[
+ \int b_x=a(x),\qquad
+ \int W(x,z)b_x(z)\dd\mu(z)=t(x).
+\]
+Splitting $r_4(x)$ with weights $W(x,z)$ and $1-W(x,z)$ and applying
+Cauchy--Schwarz on each part gives, for $0<d(x)<1$,
+\begin{equation}
+ r_4(x)\ge \frac{t(x)^2}{d(x)}
+ +\frac{(a(x)-t(x))^2}{1-d(x)}.
+ \label{eq:projection}
+\end{equation}
+Conditioning on the common vertex makes the triangle and $C_4$ factors
+independent.  Consequently
+\begin{equation}
+ t(H,W)=\int_\Omega t(x)r_4(x)\dd\mu(x)
+ \ge\int_\Omega F_p(d(x),a(x),t(x))\dd\mu(x),
+ \label{eq:rooted-reduction}
+\end{equation}
+where
+\begin{equation}
+ F_p(d,a,t)=\frac{t^3}{d}+\frac{t(a-t)^2}{1-d}.
+ \label{eq:F}
+\end{equation}
+At $d=0$ and $d=1$ this is interpreted by the actual rooted limits described
+in Section~\ref{sec:endpoints}; no assertion about arbitrary scalar triples
+at those endpoints is being made.
+
+\section{The exact scalar feasible region}
+
+The rooted quantities obey
+\begin{equation}
+ 0\le d\le1,\qquad
+ \max\{0,d+p-1\}\le a\le d,\qquad
+ \max\{0,2a-p\}\le t\le\min\{a,d^2\}.
+ \label{eq:feasible}
+\end{equation}
+Indeed, $a\le d$ follows from $d(y)\le1$.  Expanding
+$\int(1-W(x,y))(1-d(y))\dd\mu(y)\ge0$ gives $a\ge d+p-1$.
+The inequalities $t\le a$ and $t\le d^2$ follow by deleting, respectively,
+one and two edge factors from the rooted triangle integral.  Finally,
+\[
+ W(x,y)W(x,z)\ge W(x,y)+W(x,z)-1;
+\]
+multiplication by $W(y,z)$ and integration give $t\ge2a-p$.
+
+The three global moments needed below are
+\begin{equation}
+ \int d=p,\qquad \int a=\int d^2,\qquad
+ \int t=t(K_3,W).
+ \label{eq:moments}
+\end{equation}
+The middle identity follows directly from symmetry and Tonelli:
+$\int_xa(x)=\int_yd(y)^2$.
+
+For $p\in[1/2,2/3]$, introduce the unique $x\in[0,1]$ such that
+\begin{equation}
+ p=\frac{3+2x-x^2}{6},\qquad
+ g(p)=\frac{x(3-x)^2}{18}.
+ \label{eq:triangle-profile}
+\end{equation}
+The $K_3$ case of Reiher's clique-density theorem gives
+\begin{equation}
+ t(K_3,W)\ge g(p).
+ \label{eq:reiher}
+\end{equation}
+This is the only prior non-elementary graph-density theorem used here.
+
+\section{The supporting planes}
+
+Put $q=1-p$, $c=2p-1$, and
+\[
+ C(p)=p^2c(p^3+q^3),\qquad D_0=p^2+q^2,\qquad h=1-\frac p2.
+\]
+Define the low coefficients
+\begin{equation}
+ \gamma_L=\frac1{16}+\frac c2+c^2,\qquad
+ \rho=\frac{p^2}{D_0},\qquad
+ \beta_L=2\gamma_L\rho.
+ \label{eq:low-coefficients}
+\end{equation}
+
+On region $A$, $0\le x\le13/20$, set
+\begin{equation}
+ \gamma=\gamma_L,\qquad \beta=\beta_L,\qquad
+ \lambda=
+ \frac{C+\beta_L(\rho-p)+\gamma_L(p/2-\rho^2)}{g}
+ +\frac{x}{1000}.
+ \label{eq:region-a}
+\end{equation}
+The quotient has a removable singularity at $x=0$; its prescribed value is
+$\lambda(0)=1/16$.  The small final term vanishes at the threshold and
+strictly separates one otherwise isolated boundary contact.
+
+On region $C$, $13/20\le x\le1$, use
+\begin{equation}
+ x=\frac{13+7w^2}{20},\qquad 0\le w\le1,\qquad
+ \varphi=2w-w^2.
+ \label{eq:transition-parameter}
+\end{equation}
+Set
+\begin{align}
+ \gamma_H&=2p(9p^2-10p+3),\notag\\
+ \beta_H&=p(30p^3-29p^2+6p+1),\label{eq:high-coefficients}\\
+ \gamma&=(1-\varphi)\gamma_L+\varphi\gamma_H,\notag\\
+ \beta&=(1-\varphi)\beta_L+\varphi\beta_H,\notag\\
+ \lambda&=\frac{C+\beta(h-p)+\gamma(p/2-h^2)}{g}.
+ \label{eq:region-c}
+\end{align}
+The endpoint-flat interpolation is important at $p=2/3$.  At $w=1$,
+\begin{equation}
+ \beta=\frac23,\qquad \gamma=\frac49,\qquad \lambda=0.
+ \label{eq:join-coefficients}
+\end{equation}
+On region $H$, $2/3\le p\le1$, use \eqref{eq:high-coefficients} directly
+and set $\lambda=0$.
+
+The exact univariate Bernstein checks in the companion verifier prove
+$\gamma\ge0$ and $\lambda\ge0$.  They also prove the endpoint scalar gaps
+used in Section~\ref{sec:endpoints}.  The Bernstein degrees and numbers of
+zero coefficients for $(\gamma,\lambda,G_0,G_1)$ are
+\begin{center}
+\begin{tabular}{c@{\qquad}cccc}
+\toprule
+region&$\gamma$&$\lambda$&$G_0$&$G_1$\\
+\midrule
+$A$&$(4,0)$&$(16,0)$&$(14,0)$&$(17,0)$\\
+$C$&$(14,0)$&$(30,2)$&$(30,0)$&$(34,0)$\\
+$H$&$(3,0)$&identically zero&$(5,0)$&$(5,2)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+where
+\begin{align*}
+ G_0&=\beta p+\lambda g-C,\\
+ G_1&=p^3-C-\beta(1-p)-\gamma(p-1)-\lambda(p-g).
+\end{align*}
+
+\begin{lemma}[Scalar supporting plane]
+\label{lem:scalar}
+Let $p\in[1/2,1)$ and let $(d,a,t)$ satisfy \eqref{eq:feasible} with
+$0<d<1$.  With the coefficients from the appropriate region above,
+\begin{equation}
+ F_p(d,a,t)\ge
+ C(p)+\beta(d-p)+\gamma(a-d^2)+\lambda(t-g),
+ \label{eq:supporting-plane}
+\end{equation}
+where $g=0$ and $\lambda=0$ in region $H$.
+The same inequality holds at the actual rooted endpoint triples and at
+$t=0$ under the conventions of Section~\ref{sec:endpoints}.
+\end{lemma}
+
+\section{Convex face reduction}
+
+Fix $d$ and $t>0$.  After moving the right side of
+\eqref{eq:supporting-plane} to the left, the part depending on $a$ is
+\[
+ \frac{t(a-t)^2}{1-d}-\gamma a.
+\]
+It is convex and has its unconstrained minimum at
+\begin{equation}
+ a_*=t+\frac{\gamma(1-d)}{2t}>t.
+ \label{eq:astar}
+\end{equation}
+For fixed $d,t$, \eqref{eq:feasible} says
+\[
+ \max\{t,d-q\}\le a\le\min\left\{d,\frac{t+p}{2}\right\}.
+\]
+Since $a_*>t$, a minimum cannot occur only on the face $a=t$; if that face
+is a singleton it is already one of the upper faces.  It is enough to check
+\begin{equation}
+ a=d-q,\qquad a=d,\qquad a=\frac{t+p}{2},\qquad a=a_*.
+ \label{eq:four-candidates}
+\end{equation}
+
+For the interior candidate, feasibility of \eqref{eq:astar} is expressed by
+\begin{align}
+ K_1&=pt-t^2-\gamma(1-d)\ge0,\notag\\
+ K_2&=2t(d-t)-\gamma(1-d)\ge0,\notag\\
+ K_3&=2t(t-d+q)+\gamma(1-d)\ge0,\label{eq:interior-constraints}\\
+ K_4&=d^2-t\ge0.
+\end{align}
+The redundant inequality $2t-\gamma\ge0$ follows from
+\[
+ 2K_1+K_3=(1-d)(2t-\gamma).
+\]
+Substitution of \eqref{eq:astar} into the residual and multiplication by
+$4dt>0$ gives the verifier target
+\begin{equation}
+ 4dt\left(
+ \frac{t^3}{d}+\gamma d^2-\beta(d-p)-C+\lambda g
+ -(\gamma+\lambda)t-\frac{\gamma^2(1-d)}{4t}
+ \right)\ge0.
+ \label{eq:interior-polynomial}
+\end{equation}
+Its denominator depends only on the region parameter and has a strictly
+positive Bernstein expansion.  The certificate takes $t=pv$ on the unit
+cube in the region parameter, $d$, and $v$, pruning a box only when one of
+\eqref{eq:interior-constraints} or $2t-\gamma$ is strictly negative there.
+
+For completeness, the low-density boundary cubes are as follows.  Here
+$u,v\in[0,1]$ and $h=1-p/2$:
+\begin{center}
+\begin{tabular}{ccl}
+\toprule
+face&range substitution&$t$\\
+\midrule
+$a=d-q$, I&$d=q+pu/2$&$(d-q)v$\\
+$a=d-q$, II&$d=h+pu/2$&$2d+p-2+(1-d)v$\\
+$a=d$, I&$d=pu/2$&$d^2v$\\
+$a=d$, II&$d=p/2+pu/2$&$2d-p+(d^2-2d+p)v$\\
+$a=(t+p)/2$, I&$d=p/2+qu$&$(2d-p)v$\\
+$a=(t+p)/2$, II&$d=h+pu/2$&$2d+p-2+2qv$\\
+\bottomrule
+\end{tabular}
+\end{center}
+These cubes cover every feasible boundary point.  Some contain extra
+infeasible points; positivity there only strengthens the certificate.  In
+region $C$, the last coordinate on the two $a=(t+p)/2$ faces is split at
+$v=1/3$ to isolate the $p=2/3$ equality.
+
+The high-density region uses coordinates adapted to its curved feasible
+edges.  On $a=d$, after the first cube above, write
+\begin{equation}
+ s=1-d,\qquad q=s^2u,\qquad
+ t=2d-p+(s^2-q)v.
+ \label{eq:high-upper-d}
+\end{equation}
+The additional constraints $q\le1/3$ and $2d-p\ge0$ give an exact cover.
+On $a=(t+p)/2$, write
+\begin{equation}
+ q=\frac X3,\quad p=1-q,\quad s=1-d,\quad
+ t=p-2s+2qv.
+ \label{eq:high-upper-t}
+\end{equation}
+The remaining feasibility conditions are exactly
+\begin{equation}
+ s-qv\ge0,\qquad s^2+q-2qv\ge0.
+ \label{eq:high-upper-t-constraints}
+\end{equation}
+The rectangle is split at $s=q$ and $v=q$, producing $ll,lh,rl,rh$.
+The lower face $a=d-q=p-s$ is similarly split at $s=q$ and uses
+$t=p-2s+sv$.  These substitutions remove the square-root boundary that
+would otherwise occur on $a=d$ and expose every endpoint zero in rational
+coordinates.
+
+\section{Exact Bernstein certificate}
+
+If a polynomial $P$ on a box is written in the tensor Bernstein basis, then
+\[
+ P=\sum_{\boldsymbol i}b_{\boldsymbol i}
+ \prod_j B_{i_j,n_j}(u_j).
+\]
+The basis functions are nonnegative and sum to one.  Thus nonnegative
+$b_{\boldsymbol i}$ prove $P\ge0$ on the box.  Exact de Casteljau bisection
+gives the coefficients on each dyadic child.  Conversely, if every
+coefficient of a feasibility constraint is strictly negative, that box is
+infeasible.  The verifier clears a positive common denominator and performs
+de Casteljau subdivision over the integers.  A separate exact check proves
+equivalence to rational subdivision up to a positive scale.
+
+After each face substitution, the residual is multiplied by $d(1-d)$; in
+the interior it is multiplied by $4dt$.  All other denominators depend only
+on the region parameter, and their strict signs are proved by univariate
+Bernstein coefficients.  The certificate tree is:
+\begin{center}
+\begin{tabular}{llrrr}
+\toprule
+region&piece&visited&accepted&infeasible\\
+\midrule
+$A$&interior&1097&261&288\\
+&lower I, II&34&18&0\\
+&upper-$d$ I, II&6&4&0\\
+&upper-$t$ I, II&538&270&0\\
+\midrule
+$C$&interior&479&106&134\\
+&lower I, II&36&19&0\\
+&upper-$d$ I, II&6&4&0\\
+&upper-$t$ I low/high&7704&3853&0\\
+&upper-$t$ II low/high&7210&3606&0\\
+\midrule
+$H$&interior&221&42&69\\
+&lower faces&37&20&0\\
+&upper-$d$ faces&2&2&0\\
+&upper-$t$ first range&44&23&0\\
+&upper-$t$ split $ll,lh,rl,rh$&11670&5836&1\\
+\midrule
+&total&29084&14064&492\\
+\bottomrule
+\end{tabular}
+\end{center}
+Accepted counts leaf boxes proved directly or by an exact local lemma;
+internal nodes are included in visited.
+
+There are genuine equality boxes, so subdivision alone is not used as a
+substitute for endpoint proofs.  The verifier checks:
+\begin{itemize}
+\item At the region-$A$ interior equality $x=0$, after
+  $d=1/2+y$ and $v=1/4+z$, the quadratic part is
+  \[
+  5y^2-8yz+8z^2=y^2+4(y-z)^2+4z^2.
+  \]
+  The higher remainder is dominated on the box of radius $1/64$, while the
+  quotient by $x$ has 380 nonnegative tensor Bernstein coefficients there.
+\item The isolated region-$A$ upper-face corner has leading terms, after a
+  positive common scale,
+  \[
+  112500z+86021x^2-195000xy+112500y^2.
+  \]
+  The quadratic matrix remains positive definite after subtracting
+  $500(x^2+y^2)$; the exact remainder radius is $1/2048$.
+\item Each of the four region-$C$ corners at $p=2/3$ has a positive-definite
+  leading form in $((1-w)^2,u,z)$.  Sylvester's criterion is checked over
+  the rationals after subtracting the margins
+  $19/100,19/100,3/20,9/50$; the exact radii are
+  $1/128,1/256,1/512,1/1024$.
+\item On the high $ll$ piece a weighted quadratic form controls the endpoint
+  uniformly in $p$.  On the high $rh$ piece there are separate exact
+  estimates at $p=1$ and $p=2/3$, together with 13 rational dyadic parameter
+  bands.  The remaining high upper-face corner has the positive-cone form
+  \[
+  \frac{119r^2+100ru-88rz+28u^2-16uz+32z^2}{1458}.
+  \]
+  Dropping the nonnegative $100ru$ term leaves a matrix positive definite
+  after subtracting $I/200$, with exact radius $1/128$.
+\end{itemize}
+All polynomial construction, coefficient extraction, feasibility pruning,
+local identities, margins, remainders, tree sizes, graph identification, and
+target algebra are checked by
+\begin{center}
+\url{codes/verify_atlas126_triangle_c4_vertex_supporting_plane.py}.
+\end{center}
+There is no floating-point sign decision.  This proves
+Lemma~\ref{lem:scalar}.
+
+\section{Integration and endpoints}
+\label{sec:endpoints}
+
+Integrating \eqref{eq:supporting-plane} and using \eqref{eq:moments} gives
+\begin{align*}
+ \int F_p(d,a,t)
+ &\ge C(p)
+ +\beta\left(\int d-p\right)
+ +\gamma\left(\int a-\int d^2\right)
+ +\lambda\left(\int t-g\right)\\
+ &\ge C(p).
+\end{align*}
+The last inequality is \eqref{eq:reiher} and $\lambda\ge0$ on the low
+interval; on the high interval the last term is absent.  Combining this with
+\eqref{eq:rooted-reduction} proves the desired graphon inequality once the
+rooted endpoints are interpreted as follows.
+
+If $d(x)=0$, then $W(x,\cdot)=0$ almost everywhere, so $a(x)=t(x)=0$ and
+the projected contribution is $0$.  Its scalar gap is
+$G_0=\beta p+\lambda g-C\ge0$.  If $d(x)=1$, then
+$W(x,\cdot)=1$ almost everywhere, so $a(x)=t(x)=p$, the rooted $C_4$
+projection is $p^2$, and $F=p^3$.  Its scalar gap is $G_1\ge0$.
+When $t=0$ and $0<d<1$, define $F=0$; the relevant minima occur on the
+certified boundary faces.  This removes every zero denominator without
+appealing to continuity outside the actual feasible set.
+
+At $p=1/2$, $C(p)=0$; region $A$ includes this endpoint and its exact local
+certificate, with $g=0$ and $\lambda=1/16$.  At $p=2/3$, the region-$C$ and
+region-$H$ coefficients agree as in \eqref{eq:join-coefficients}; all four
+transition corners are audited.  If $p=1$, then $W=1$ almost everywhere and
+both sides are $1$.
+
+\begin{theorem}
+For the triangle--$C_4$ one-vertex amalgam $H$ (Graph Atlas 126) and every
+symmetric measurable graphon $W$ of edge density $p\in[1/2,1]$,
+\[
+ t(H,W)\ge p^2(2p-1)\bigl(p^3+(1-p)^3\bigr).
+\]
+\end{theorem}
+
+\section{Audit boundary and formalization status}
+
+The proof is graph-specific.  It uses the factorization at the common vertex
+and a supporting plane tailored to three scalar rooted statistics.  It does
+not assert a general vertex-amalgamation, cone, or join closure theorem.  On
+the low interval, $\lambda$ is calibrated sharply to the triangle-density
+profile; a coarser triangle bound does not prove the target.
+
+The companion script also performs 46 exact two-block graphon checks.  Each
+independently enumerates the homomorphism density, verifies the rooted
+factorization and scalar constraints, and checks the projection and target
+inequalities.  They are sanity checks, not a replacement for the
+arbitrary-graphon argument.
+
+No Lean command was run and no claim of Lean verification is made.  A future
+formalization should define the graph in
+\texttt{lean/Taeyoung/Examples/Graph126.lean}, import or prove the sharp
+triangle profile, formalize the weighted Cauchy projection, and reflect the
+exact rational scalar certificates.
+
+\begin{thebibliography}{9}
+\bibitem{ReiherCliqueDensity}
+Christian Reiher,
+\emph{The clique density theorem},
+Annals of Mathematics \textbf{184} (2016), 683--707.
+\end{thebibliography}
+\end{document}
