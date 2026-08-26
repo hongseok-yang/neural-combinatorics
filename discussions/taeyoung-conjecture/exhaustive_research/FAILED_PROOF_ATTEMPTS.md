@@ -2315,9 +2315,9 @@ $$
  =\frac{740757729}{274877906944}>0.
 $$
 Thus negativity of a base graph does not lift through this natural symmetric
-cone construction.  The full exact certificate is in
-`notes/atlas203_symmetric_cone_lift_no_hit.tex` and
-`codes/verify_atlas203_symmetric_cone_lift_no_hit.py`.
+cone construction.  The displayed polynomial identity, its admissible
+interval, and the stated positive Bernstein coefficients are the exact
+no-hit certificate; this entry does not depend on a separate proof note.
 
 **Recovery condition.**  Numerically allowing the old--new value and new-cell
 diagonal to vary, then allowing four stabilizer-orbit cross values, and finally
@@ -2487,12 +2487,10 @@ $$
  \gamma=\frac{-9p^3-p^2+5p-1}{2},
  \qquad \beta=\gamma-5p^2c^2
 $$
-produces a valid exact supporting plane on $2/3\leq p\leq1$.  The full
-arbitrary-graphon proof and its 336-box rational certificate are in
-`notes/atlas130_high_density_root_moment.tex` and
-`codes/verify_atlas130_high_density_root_moment.py`.  This repairs the high
-subinterval only; Atlas 130 remains open on $1/2<p<2/3$ and therefore remains
-open in the catalogue.
+produces a valid exact supporting plane on $2/3\leq p\leq1$.  The resulting
+336-box rational certificate proves the arbitrary-graphon bound on that high
+interval.  This repairs the high subinterval only; Atlas 130 remains open on
+$1/2<p<2/3$ and therefore remains open in the catalogue.
 
 ## 53. A $P_4$-biased Cauchy determinant for Atlas 130
 
@@ -2599,24 +2597,23 @@ This is a distribution of scalar rooted data, not a graphon, so it does not
 refute Atlas 130.  It does prove that no argument whose only conclusion is
 the complement lower bound \(T^2-R\), and whose only further input is the
 recorded scalar feasible region and its mean identities, can close the low
-interval.  Additional kernel compatibility is indispensable.  The exact
-arithmetic is checked by
-codes/verify_atlas130_high_density_root_moment.py.
+interval.  Additional kernel compatibility is indispensable.  The displayed
+exact factorization is the complete obstruction needed for this entry.
 
 ## 55. Closing the Atlas 127 cycle compression by a separate pentagon whisker ratio
 
-**Tempting closure.**  Let (C=t(C_5,W)), and let (J) be the density of
-(C_5) with one pendant leaf.  The exact five-cycle attachment compression
-in `notes/atlas127_cycle_attachment_compression.tex` proves
+**Tempting closure.**  Let $C=t(C_5,W)$, and let $J$ be the density of
+$C_5$ with one pendant leaf.  A valid exact five-cycle attachment compression
+gives
 
 \[
- t(H_{127},W)geq
+ t(H_{127},W)\geq
  \max\left\{0,J-\frac25C,2J-C\right\}.
 \]
 
 The common-neighbour union bound also makes the separate comparison
-(J\geq pC) especially attractive.  It would turn the last affine piece
-into (2J-C\geq(2p-1)C), after which the accepted pentagon bound would
+$J\geq pC$ especially attractive.  It would turn the last affine piece
+into $2J-C\geq(2p-1)C$, after which the accepted pentagon bound would
 give the Atlas 127 target.
 
 **Exact obstruction.**  Take three equal cells and
@@ -2632,8 +2629,8 @@ give the Atlas 127 target.
 Then
 
 \[
- p=\frac12,qquad
- C=\frac{3446549}{97200000},qquad
+ p=\frac12,\qquad
+ C=\frac{3446549}{97200000},\qquad
  J=\frac{1652897729}{93312000000},
 \]
 
@@ -2644,7 +2641,7 @@ and therefore
 \]
 
 This is not a counterexample to Atlas 127, whose target is zero at
-(p=1/2).  Indeed, the middle piece retained by the cycle compression is
+$p=1/2$.  Indeed, the middle piece retained by the cycle compression is
 
 \[
  J-\frac25C=\frac{329422913}{93312000000}>0.
@@ -2652,8 +2649,9 @@ This is not a counterexample to Atlas 127, whose target is zero at
 
 Thus the nonlinear five-cycle slack repairs the negative leaf covariance,
 but it cannot be discarded and replaced by a separate whisker-to-core
-ratio.  The exact identities are checked by
-`codes/verify_atlas127_cycle_attachment_compression.py`.
+ratio.  The displayed rational matrix and exact evaluations make this
+obstruction self-contained.  Atlas 127 itself is positive by the separate
+smoothed-Goodman flag-SOS proof; only this attempted closure fails.
 
 ## 56. Adding the full triangle surplus to the Atlas 43 target
 
@@ -2805,22 +2803,22 @@ The exact Atlas 168 density is
 \[
  \int W(x,y)s(x,y)\lVert T_WL_{xy}\rVert_2^2\,d\mu^2.
 \]
-Projection onto (1) and (L_{xy}-s) proves, for arbitrary graphons,
+Projection onto $1$ and $L_{xy}-s$ proves, for arbitrary graphons,
 \[
  t(H_{168},W)\geq
  \frac{R^2}{T}+\frac{(K-R)^2}{p-T},
  \tag{58.1}
 \]
-where (T=t(K_3,W)), (R=t(H_{41},W)) is the page-rooted
-two-triangle one-leaf density, and (K=t(K_4,W)).  On every balanced Turan
+where $T=t(K_3,W)$, $R=t(H_{41},W)$ is the page-rooted
+two-triangle one-leaf density, and $K=t(K_4,W)$.  On every balanced Turan
 graphon, the right side is exactly
 \[
  p(2p-1)^2(5p^2-6p+2).
 \]
 In particular, the second projection supplies precisely the
-(2p(2p-1)^2(1-p)^3) missed by constant projection.  The full arbitrary-
-graphon derivation is in
-`notes/atlas168_common_neighbor_two_coordinate_projection.tex`.
+$2p(2p-1)^2(1-p)^3$ missed by constant projection.  The full arbitrary-
+graphon projection is valid; for this failed closure, equation (58.1) is the
+starting inequality rather than the disputed step.
 
 **Why the obvious scalar closure fails.**  The accepted separate bounds
 \[
@@ -2831,14 +2829,14 @@ together with the Moon--Moser consequence
 \[
  K\geq\max\left\{0,\frac{T(3T-p)}{2p}\right\},
 \]
-do not imply that (58.1) reaches the target.  At (p=3/5), the abstract
+do not imply that (58.1) reaches the target.  At $p=3/5$, the abstract
 scalar tuple
 \[
  T=\frac3{25},\qquad R=K=\frac9{625}
 \]
-satisfies all those inequalities and (0\leq R,K\leq T\leq p), but the
-right side of (58.1) is (27/15625), short of the target (3/625) by
-(48/15625).  This tuple is not asserted to be graphon-realizable; it is an
+satisfies all those inequalities and $0\leq R,K\leq T\leq p$, but the
+right side of (58.1) is $27/15625$, short of the target $3/625$ by
+$48/15625$.  This tuple is not asserted to be graphon-realizable; it is an
 exact obstruction to closing the valid projection by marginal substitutions.
 
 **Required repair.**  Atlas 168 remains open.  A completion now has a precise
@@ -2847,10 +2845,9 @@ form: prove the joint three-density inequality
  \frac{R^2}{T}+\frac{(K-R)^2}{p-T}
  \geq p(2p-1)^2(5p^2-6p+2).
 \]
-It must use compatibility among (T,R,K), not only their separate sharp
-lower bounds.  The identities, endpoint conventions, deterministic rational
-step checks, Turan equality, and scalar obstruction are verified by
-`codes/verify_atlas168_common_neighbor_projection.py`.
+It must use compatibility among $(T,R,K)$, not only their separate sharp
+lower bounds.  The displayed feasible scalar tuple is already sufficient to
+show that marginal substitution cannot supply that compatibility.
 
 ## 59. Target-matched edge gluing of the $K_4$ and $C_4$ in Atlas 169
 
