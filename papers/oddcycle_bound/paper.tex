@@ -148,7 +148,7 @@ The analogous fixed-density problem has been studied most intensively for comple
 In this setting, the problem becomes the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is attained by the balanced complete $k$-partite graph at each edge density $p=1-1/k$, $k\ge2$, but is not generally sharp between these densities.
 Determining the exact minimum at every density leads to a substantially more intricate, piecewise-defined curve.
-Razborov~\cite{razborov2008minimal} solved the triangle case using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, confirming the extremal structures conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
+Razborov~\cite{razborov2008minimal} solved the triangle case using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, confirming the extremal structures conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}. \tk{For extermal structure, we might need to cite papers like \url{https://arxiv.org/abs/1204.2846} and \url{https://arxiv.org/abs/1906.05942}, which characterises the optimal graph, not just number of triangles. }
 
 For odd cycles, we pursue the analogue of Goodman's simpler polynomial bound rather than an exact description of the extremal curve.
 Our goal is a single low-complexity formula, with no case distinctions in $p$, that works uniformly for every odd cycle length.
@@ -202,7 +202,7 @@ For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
 For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko proved that, for every integer $k\ge3$, $W_k$ minimizes the $C_5$-density among graphons $W$ with $\edens W=1-1/k$~\cite{bennett2020minimizing,lovasz2006limits,lovasz2012large}.
-Their proof combines a flag algebra computation with stability.
+Their proof combines a flag algebra computation with stability \tk{It is a bit misleading, since they only use flag algebra to solve lower bound, and additionally prove stability. flag algebra with stability sounds like flag algebra itself was insufficient, and they closed the gap that flag algebra can't prove with some stability arguments.}.
 Although their theorem is stated only for integer $k\ge3$, a direct inspection of their flag algebra certificate shows that it remains valid for every real $k\ge3$.
 Substituting $k=1/(1-p)$ yields $\tC5W\ge\goodman p5$ throughout $p\ge2/3$.
 
@@ -246,7 +246,7 @@ Kim and Lee~\cite{kim2024extended} established the following density-sensitive s
 \begin{equation}\label{eq:intro-extended-commonality}
   \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)},
 \end{equation}
-thereby answering a question of Sidorenko~\cite{sidorenko1989cycles} and proving, in stronger form, a conjecture of Behague, Morrison and Noel~\cite{behague2025common}.
+thereby answering a question of Sidorenko~\cite{sidorenko1989cycles} and proving, in stronger form, a conjecture of Behague, Morrison and Noel~\cite{behague2025common}. \tk{The conjecture only appears in the first version in arXiv of this paper, which does not appear in the most recent or published version.}
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
@@ -259,7 +259,7 @@ For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:int
   \end{equation}
 \end{theorem}
 
-The path inequality of Mulholland and Smith~\cite{mulholland1959inequality} gives $\tP{m-1}U\ge q^{m-1}$, so the correction term is nonnegative and \eqref{eq:intro-commonality} indeed strengthens extended commonality.
+The path inequality of Mulholland and Smith~\cite{mulholland1959inequality} gives $\tP{m-1}U\ge q^{m-1}$, so the correction term is nonnegative and \eqref{eq:intro-commonality} indeed strengthens extended commonality. \tk{The citation seems to be correct, but Blakely-Roy is more well-known, considered as independent work.}
 Exchanging $W$ and $U$ gives the corresponding statement for $p\le1/3$.
 Equality holds in \eqref{eq:intro-commonality} for the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, for $W_k$.
 
