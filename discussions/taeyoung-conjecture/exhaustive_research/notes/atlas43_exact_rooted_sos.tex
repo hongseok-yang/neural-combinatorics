@@ -48,18 +48,26 @@ Thus Atlas~43 has positive classification.
 Use three labelled vertices $0,1,2$ and one unlabelled branch vertex $3$.
 There are six possible edges on these four vertices.  For each subset $S$
 of those edges let $F_S$ be the corresponding partially labelled simple
-graph.  After fixing the labelled variables $x=(x_0,x_1,x_2)$, write
+graph.  After fixing the labelled variables $x=(x_0,x_1,x_2)$, sample one
+shared Bernoulli bit $\xi_{ij}\in\{0,1\}$ for each of the three labelled
+edges, independently conditional on $x$, with
 \[
- f_S(x)=\int_\Omega\prod_{ij\in S}W(x_i,x_j)\,\dd x_3,
+ \mathbb P(\xi_{ij}=1\mid x)=W(x_i,x_j).
 \]
-where $x_3$ is integrated and factors not involving vertex $3$ remain
-outside that one-variable integral.  Order the $2^6=64$ subsets by their
-binary edge masks and put $f(x)=(f_S(x))_S$.
+Write
+\[
+ f_S(x,\xi)=
+ \prod_{\substack{ij\in S\\i,j<3}}\xi_{ij}
+ \int_\Omega
+ \prod_{\substack{i3\in S\\i<3}}W(x_i,x_3)\,\dd x_3,
+\]
+where $x_3$ is integrated.  Order the $2^6=64$ subsets by their binary edge
+masks and put $f(x,\xi)=(f_S(x,\xi))_S$.
 
 Set
 \[
  u=2p-1\in[0,1],\qquad
- \widehat f(x)=\binom{f(x)}{u f(x)}.
+ \widehat f(x,\xi)=\binom{f(x,\xi)}{u f(x,\xi)}.
 \]
 The certificate file
 \begin{center}
@@ -84,14 +92,22 @@ The exact certificate asserts the identity
 \begin{equation}\label{eq:sos}
  \boxed{
  t(H,W)-\Phi_H(p)
- =\int_{\Omega^3}\widehat f(x)^{\mathsf T}Q_0\widehat f(x)\,\dd x
- +u(1-u)\int_{\Omega^3}f(x)^{\mathsf T}Q_1f(x)\,\dd x.}
+ =\int_{\Omega^3}\mathbb E_{\xi\mid x}
+   \left[\widehat f(x,\xi)^{\mathsf T}Q_0\widehat f(x,\xi)\right]\,\dd x
+ +u(1-u)\int_{\Omega^3}\mathbb E_{\xi\mid x}
+   \left[f(x,\xi)^{\mathsf T}Q_1f(x,\xi)\right]\,\dd x.}
 \end{equation}
 
 This is an ordinary graphon identity.  Indeed,
-$\int f_S(x)f_T(x)\dd x$ is the homomorphism density of the simple graph
+$\int\mathbb E_{\xi\mid x}[f_S(x,\xi)f_T(x,\xi)]\dd x$ is the homomorphism
+density of the simple graph
 obtained by taking two copies of $F_S,F_T$ and identifying equally labelled
-vertices.  If that graph has $m$ isolated-edge components, the exact
+vertices.  A labelled edge in both flags is counted once because
+$\xi_{ij}^2=\xi_{ij}$, and conditional averaging then replaces every surviving
+$\xi_{ij}$ by $W(x_i,x_j)$.  This shared Bernoulli step is essential: directly
+using graphon values on labelled edges would incorrectly replace
+$W(x_i,x_j)^2$ by $W(x_i,x_j)$ when the two flags share that edge.
+If the glued graph has $m$ isolated-edge components, the exact
 fixed-density identity
 \[
  t(G\sqcup mK_2,W)=p^m t(G,W)
@@ -138,7 +154,8 @@ verified Atlas 43 exact interval SOS: equations=91 orders=[107, 48]
 and exits successfully.  No floating-point value is used by the checker.
 
 \begin{proof}[Proof of Theorem~\ref{thm:house}]
-Both quadratic integrands on the right of \eqref{eq:sos} are nonnegative,
+Both quadratic expressions inside the conditional expectations on the right
+of \eqref{eq:sos} are nonnegative,
 and $u(1-u)\geq0$ for $p\in[1/2,1]$.  Hence the right-hand side is
 nonnegative, proving the theorem.
 \end{proof}

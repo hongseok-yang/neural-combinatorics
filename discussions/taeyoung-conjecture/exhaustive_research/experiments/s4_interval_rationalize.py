@@ -31,16 +31,37 @@ def exact_equations(
     atlas: int, left: sp.Rational, right: sp.Rational, label_degree: int,
     degree_three_kind: str = "all",
     polynomial_degree: int = 2,
+    young_transforms: list[np.ndarray] | None = None,
 ):
     if polynomial_degree not in (2, 4):
         raise ValueError(polynomial_degree)
     order0 = polynomial_degree // 2 + 1
     order1 = polynomial_degree // 2
-    transforms, factors, names, basis_indices = young_integer_transforms(
+    canonical_transforms, factors, names, basis_indices = young_integer_transforms(
         label_degree, degree_three_kind
     )
     if names != NAMES or factors != [24] * 5:
         raise AssertionError((names, factors))
+    if young_transforms is None:
+        transforms = canonical_transforms
+    else:
+        # SciPy's pivoted QR can choose different columns when several pivots
+        # tie, so certificates produced on another platform need not contain
+        # byte-for-byte identical Young bases.  What matters is the exact
+        # rational column space of every primitive slice.
+        from flint import fmpz_mat
+
+        transforms = [np.asarray(value, dtype=np.int64) for value in young_transforms]
+        if len(transforms) != len(canonical_transforms):
+            raise AssertionError("wrong number of Young bases")
+        for name, claimed, canonical in zip(NAMES, transforms, canonical_transforms):
+            if claimed.shape != canonical.shape:
+                raise AssertionError(f"wrong Young basis shape {name}")
+            dimension = claimed.shape[1]
+            claimed_matrix = fmpz_mat(claimed.tolist())
+            joined_matrix = fmpz_mat(np.concatenate((canonical, claimed), axis=1).tolist())
+            if claimed_matrix.rank() != dimension or joined_matrix.rank() != dimension:
+                raise AssertionError(f"wrong Young basis space {name}")
     raw = raw_by_isolated(basis_indices)
     pulled = {}
     for key, matrix in raw.items():
@@ -306,6 +327,7 @@ def main() -> None:
         "degree_three_kind": args.degree_three_kind,
         "polynomial_degree": args.polynomial_degree,
         "factor_denominator": denominator,
+        "correction_denominator": correction_denominator,
         "basis_indices": basis_indices,
         "phi": str(phi),
         "names": NAMES,

@@ -1,0 +1,62 @@
+# Lean verification artifacts
+#
+# These files are intentionally kept out of Git.  They are deterministic
+# outputs of the preparation scripts and are needed only in a local checkout.
+# Regenerate the S4 campaign with:
+#
+#   python experiments/prepare_all_s4_lean.py
+#
+# Regenerate the Atlas 43 JSON and bounded-memory leaves with:
+#
+#   python experiments/export_atlas43_lean_data.py
+#   python experiments/export_atlas43_lean_gram.py
+#   python experiments/export_atlas43_raw_group_witness.py
+#   python experiments/generate_atlas43_lean_checks.py
+
+# Temporary certificate-reduction probes.
+/experiments/reduction_probe/
+
+# Atlas 43 JSON exports (the rational certificate input remains tracked).
+/experiments/house_atlas43_lean_classification.json
+/experiments/house_atlas43_lean_gram.json
+/experiments/house_atlas43_raw_group_witness.json
+
+# Per-certificate S4 sidecars and target lists.
+/experiments/atlas*_lean_certificate*.json
+/experiments/atlas*_lean_certificate*_targets.txt
+
+# Shared S4 sidecars and target lists.
+/experiments/s4_lean_common*.json
+/experiments/s4_lean_classification_manifest*.json
+/experiments/s4_lean_*targets.txt
+
+# Local campaign state and preparation reports.
+/experiments/s4_lean_campaign.json
+/experiments/s4_lean_campaign_summary.txt
+/experiments/s4_lean_preparation.log
+/experiments/s4_lean_preparation_report.json
+
+# S4 Lean modules emitted by the preparation scripts.
+/lean/Taeyoung/Methods/RootedSOS/S4Atlas*.lean
+/lean/Taeyoung/Methods/RootedSOS/S4Classification*.lean
+/lean/Taeyoung/Methods/RootedSOS/S4YoungSparse*.lean
+/lean/Taeyoung/Methods/RootedSOS/S4YoungPullback*.lean
+/lean/Taeyoung/Methods/RootedSOS/S4YoungPullPart*.lean
+/lean/Taeyoung/Methods/RootedSOS/S4YoungPullFull*.lean
+
+# Atlas 43 bounded-memory leaf checks emitted by
+# experiments/generate_atlas43_lean_checks.py.
+/lean/Taeyoung/Methods/RootedSOS/Atlas43CommonBlock*Row*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ScaledCorrection?Row*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ScaledGroupCell*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ExceptionalPairWeight0_*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ExceptionalPairWeight1_*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43CoefficientCell*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43PartitionRow*.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43CommonGramChecks.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ScaledCorrectionChecks.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ExceptionalPairWeightChecks.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43ScaledGroupChecks.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43RawGroups.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43CoefficientChecks.lean
+/lean/Taeyoung/Methods/RootedSOS/Atlas43PartitionChecks.lean

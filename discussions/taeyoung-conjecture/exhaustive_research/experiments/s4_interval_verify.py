@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from fractions import Fraction
 from pathlib import Path
 
@@ -14,6 +15,12 @@ from flint import fmpq, fmpq_mat, fmpz_mat
 from networkx.algorithms.polynomials import chromatic_polynomial
 
 from s4_interval_rationalize import NAMES, coefficient_rows, exact_equations
+
+
+# Exact residual corrections can contain several-thousand-digit integers.
+# They are trusted only after the checks below, but Python must first allow
+# json.loads to construct them.
+sys.set_int_max_str_digits(0)
 
 
 def main() -> None:
@@ -37,17 +44,18 @@ def main() -> None:
     target = sp.factor((1 - p) ** graph.number_of_nodes() *
                        chromatic.subs(x, 1 / (1 - p)))
 
+    if certificate["names"] != NAMES:
+        raise AssertionError("wrong S4 block order")
+    claimed_transforms = [
+        np.asarray(certificate["young_bases"][name], dtype=np.int64)
+        for name in NAMES
+    ]
     equations, transforms, basis_indices, _ = exact_equations(
-        atlas, left, right, label_degree, degree_three_kind, polynomial_degree
+        atlas, left, right, label_degree, degree_three_kind, polynomial_degree,
+        young_transforms=claimed_transforms,
     )
     if list(map(int, certificate["basis_indices"])) != basis_indices:
         raise AssertionError("wrong rooted basis")
-    if certificate["names"] != NAMES:
-        raise AssertionError("wrong S4 block order")
-    for name, transform in zip(NAMES, transforms):
-        claimed = np.asarray(certificate["young_bases"][name], dtype=np.int64)
-        if not np.array_equal(claimed, transform):
-            raise AssertionError(f"wrong Young basis {name}")
 
     factors = [np.asarray(value, dtype=np.int64) for value in certificate["factors"]]
     orders = list(map(int, certificate["orders"]))

@@ -1,7 +1,8 @@
 import Taeyoung.Foundation
+import Taeyoung.Methods.RootedSOS.Atlas196
 
 /-!
-# Atlas 196
+# Atlas 196: verified normalized-link consequence of Atlas 43
 
 graph6: `ER~g`.  The edge-list definition below is the Lean graph;
 the graph6 string is stable external metadata until a verified decoder exists.
@@ -23,12 +24,34 @@ def metadata : CatalogueRow where
   chromaticNumber := 4
   graph6 := "ER~g"
   status := .positive
-  formalization := .believed
+  formalization := .verified
 
-/-- Accepted mathematical result: the exact Atlas 43 theorem followed by the normalized-link house-cone theorem.
+/-- Vertex relabelling carrying the cone-over-house representative to this
+Atlas graph. -/
+def relabel : Fin 6 ≃ Fin 6 where
+  toFun := ![4, 2, 3, 1, 5, 0]
+  invFun := ![5, 3, 1, 2, 0, 4]
+  left_inv := by decide
+  right_inv := by decide
 
-The method-specific Lean bridge for this row remains to be formalized. -/
-theorem status : SatisfiesLowerBound graph := by
-  sorry
+/-- The relabelling preserves adjacency, checked by kernel computation. -/
+theorem iso_adj (a b : Fin 6) :
+    graph.Adj (relabel a) (relabel b) ↔
+      (Taeyoung.Methods.Link.coneGraph
+        Taeyoung.Methods.RootedSOS.House.houseGraph).Adj a b := by
+  revert a b
+  decide
+
+/-- The certificate representative is Atlas 196 up to relabelling. -/
+def iso :
+    (Taeyoung.Methods.Link.coneGraph
+      Taeyoung.Methods.RootedSOS.House.houseGraph) ≃g graph where
+  toEquiv := relabel
+  map_rel_iff' := by intro a b; exact iso_adj a b
+
+/-- Fully checked instance of the common catalogue proposition. -/
+theorem status : SatisfiesLowerBound graph :=
+  SatisfiesLowerBound.of_iso iso
+    Taeyoung.Methods.RootedSOS.Atlas196.satisfiesLowerBound_coneHouse
 
 end Taeyoung.Examples.Graph196

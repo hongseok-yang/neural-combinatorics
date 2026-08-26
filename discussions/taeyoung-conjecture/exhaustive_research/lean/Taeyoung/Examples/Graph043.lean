@@ -1,7 +1,7 @@
-import Taeyoung.Foundation
+import Taeyoung.Methods.RootedSOS.Atlas43
 
 /-!
-# Atlas 43
+# Atlas 43: verified exact rooted-SOS certificate
 
 graph6: `Dlc`.  The edge-list definition below is the Lean graph;
 the graph6 string is stable external metadata until a verified decoder exists.
@@ -23,12 +23,11 @@ def metadata : CatalogueRow where
   chromaticNumber := 3
   graph6 := "Dlc"
   status := .positive
-  formalization := .believed
+  formalization := .verified
 
-/-- Accepted mathematical result: the exact rooted interval-SOS certificate in notes/atlas43_exact_rooted_sos.tex.
-
-The method-specific Lean bridge for this row remains to be formalized. -/
+/-- Fully checked instance of the common catalogue proposition. -/
 theorem status : SatisfiesLowerBound graph := by
-  sorry
+  simpa [graph, Taeyoung.Methods.RootedSOS.House.houseGraph] using
+    Taeyoung.Methods.RootedSOS.Atlas43.satisfiesLowerBound_house
 
 end Taeyoung.Examples.Graph043

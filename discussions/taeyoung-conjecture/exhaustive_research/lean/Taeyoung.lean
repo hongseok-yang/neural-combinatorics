@@ -17,6 +17,14 @@ import Taeyoung.Methods.OddWalk.Row102
 -- Reusable machinery that no catalogue row consumes *yet*: the ported Bernstein
 -- certificate format.  Imported here so that it cannot rot.
 import Taeyoung.Methods.Certificate.Bernstein
+-- Exact rooted interval-SOS infrastructure.  The Bernoulli layer is essential:
+-- it makes the simple-edge gluing used by the certificates sound for
+-- fractional graphons, rather than only for `{0,1}`-valued kernels.
+import Taeyoung.Methods.RootedSOS.Bernoulli
+import Taeyoung.Methods.RootedSOS.Gram
+import Taeyoung.Methods.RootedSOS.Interval
+import Taeyoung.Methods.RootedSOS.House
+import Taeyoung.Methods.RootedSOS.Atlas43
 -- Fisher's sharp triangle-density theorem on `1/2 < p <= 2/3`, vendored from
 -- `discussions/goodman-style-bound/fisher_lean`, and its bridge to this
 -- project's bundled graphons.  Atlas 148 is the row that needs it; see

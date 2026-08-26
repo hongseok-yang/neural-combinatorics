@@ -76,6 +76,8 @@ import Taeyoung.Methods.TriangleDensity
 import Taeyoung.Methods.Atlas148.Chromatic
 import Taeyoung.Examples.Graph148
 import Taeyoung.Methods.Atlas145
+import Taeyoung.Methods.RootedSOS.House
+import Taeyoung.Methods.RootedSOS.Atlas43
 import Taeyoung.Methods.Atlas160.Rows
 import Taeyoung.Methods.Atlas178.Rows
 import Taeyoung.Examples.Graph145
@@ -735,6 +737,33 @@ factorization, and its negative region only two boundary faces. -/
 #print axioms Taeyoung.Methods.Atlas178.chrom178
 #print axioms Taeyoung.Methods.Atlas178.num178
 #print axioms Taeyoung.Methods.Atlas178.satisfiesLowerBound_178
+
+/-! ### Exact rooted interval-SOS infrastructure and the Atlas 43 shell -/
+
+#print axioms Taeyoung.Methods.RootedSOS.identity_add_rat_correction_quadratic_nonneg
+#print axioms Taeyoung.Methods.RootedSOS.factoredRatGramForm_nonneg
+#print axioms Taeyoung.Methods.RootedSOS.sum_bernoulliWeight
+#print axioms Taeyoung.Methods.RootedSOS.bernoulli_monomial
+#print axioms Taeyoung.Methods.RootedSOS.bernoulli_indicator_product
+#print axioms Taeyoung.Methods.RootedSOS.bernoulli_interval_sos_nonneg
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Data.header_eq
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Gram.C₀_row_dominant
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Gram.C₁_row_dominant
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43PSD.gram₀_nonneg
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43PSD.gram₁_nonneg
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Flags.bernoulli_rootedFlag_product
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Flags.certificateSOS_nonneg
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Coefficients.common_gram₀_rational_exact
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Coefficients.common_gram₁_rational_exact
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43Coefficients.certificate_identity
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43.certificateIdentity
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43.house_bound_of_certificateIdentity
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43.satisfiesLowerBound_house_of_certificateIdentity
+#print axioms Taeyoung.Methods.RootedSOS.Atlas43.satisfiesLowerBound_house
+#print axioms Taeyoung.Methods.RootedSOS.House.houseChromaticPolynomial
+#print axioms Taeyoung.Methods.RootedSOS.House.houseChromaticNumber
+#print axioms Taeyoung.Methods.RootedSOS.House.satisfiesLowerBound_house_of_bound
+#print axioms Taeyoung.Examples.Graph043.status
 #print axioms Taeyoung.Examples.Graph160.status
 
 /-! ### The tensor-Turán witness, and all 19 negative rows
