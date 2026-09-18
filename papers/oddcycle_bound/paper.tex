@@ -132,27 +132,25 @@
 How does a graph's global edge density force specific local configurations?
 Extremal graph theory first addresses the threshold form of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
 The Erd\H os--Stone--Simonovits theorem~\cite{erdos1946structure,erdos1966limit} answers it asymptotically: if $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
-The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} goes beyond this threshold statement by showing that exceeding the threshold by a fixed amount forces a positive density of copies of $H$.
-Together, these results tell us when copies of $H$ become unavoidable, but not how many are forced at each density above the threshold.
-This gap leads to the fixed-density problem studied here: among graphs of edge density $p$, how small can the density of $H$ be?
+The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding this threshold by a fixed amount forces a positive density of copies of $H$.
+These results identify when copies of $H$ become unavoidable, but leave open the quantitative problem studied here: among graphs of edge density $p$, how small can the density of $H$ be?
 
-Odd cycles are a particularly natural family for this problem.
-A graph is bipartite exactly when it contains no odd cycle, so odd-cycle densities provide a natural quantitative measure of departure from bipartiteness.
-This viewpoint identifies $p=1/2$ as the critical edge density.
-Bipartite graphs can have any asymptotic edge density $p\le1/2$ while avoiding all odd cycles; once $p>1/2$, the Erd\H os--Stone--Simonovits and supersaturation theorems force a positive density of every fixed odd cycle.
-The qualitative transition is therefore understood; our problem asks how sharply it can be quantified: at a given density $p>1/2$, how small can the density of a specified odd cycle be?
+Odd cycles are a natural family for this problem because a graph is bipartite exactly when it contains no odd cycle.
+Their densities therefore provide a quantitative measure of departure from bipartiteness, with a threshold at $p=1/2$.
+Bipartite graphs can have any asymptotic edge density $p\le1/2$ while avoiding all odd cycles.
+Once $p>1/2$, the theorems above force a positive density of every fixed odd cycle.
+We seek an explicit lower bound for these densities throughout this range.
 
-The analogous fixed-density problem has been studied most intensively for complete subgraphs.
-In this setting, the problem becomes the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
+For complete subgraphs, the corresponding question is the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is attained by the balanced complete $k$-partite graph at each edge density $p=1-1/k$, $k\ge2$, but is not generally sharp between these densities.
-Determining the exact minimum at every density leads to a substantially more intricate, piecewise-defined curve.
-Razborov~\cite{razborov2008minimal} solved the triangle case using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, confirming the extremal structures conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}. \tk{For extermal structure, we might need to cite papers like \url{https://arxiv.org/abs/1204.2846} and \url{https://arxiv.org/abs/1906.05942}, which characterises the optimal graph, not just number of triangles. }
+The exact minimum follows a more intricate, piecewise-defined curve.
+Razborov~\cite{razborov2008minimal} determined this curve for triangles using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, establishing the asymptotic minimum conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
+The asymptotic structure of extremal and almost extremal graphs was characterized by Pikhurko and Razborov~\cite{pikhurko2017asymptotic} for triangles and by Kim, Liu, Pikhurko and Sharifzadeh~\cite{kim2020asymptotic} for general cliques.
 
-For odd cycles, we pursue the analogue of Goodman's simpler polynomial bound rather than an exact description of the extremal curve.
-Our goal is a single low-complexity formula, with no case distinctions in $p$, that works uniformly for every odd cycle length.
-We allow this bound to be nonoptimal between the edge densities $p=1-1/k$, but require equality at each of them, where the balanced complete $k$-partite graph is the canonical extremal example.
+For odd cycles, our aim is an analogue of Goodman's polynomial bound: a simple formula that works uniformly for every odd cycle length, with no case distinctions in $p$.
+We seek equality at each density $p=1-1/k$, where the balanced complete $k$-partite graph supplies the candidate extremal value, while allowing the bound to be nonoptimal between these densities.
 
-To state this extremal problem precisely, we pass to graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities.
+We formulate the problem using graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities~\cite{lovasz2006limits,lovasz2012large}.
 A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
 For a finite graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H)$, its \emph{homomorphism density} in $W$ is
 \[
@@ -163,7 +161,7 @@ Thus, for an odd integer $m\ge3$ and a fixed edge density $p\in[0,1]$, we seek a
 \[
   \inf\bigl\{\tC mW: W\text{ is a graphon with }\edens W=p\bigr\}.
 \]
-To seek such a bound, we use the spectral characterization of cycle densities.
+The spectral characterization of cycle densities suggests a candidate bound.
 Associate with a graphon $W$ the integral operator $\Tker W$ on $L^2[0,1]$ defined by
 \[
   (\Tker{W}f)(x)=\int_0^1 W(x,y)f(y)\dd y.
@@ -173,9 +171,9 @@ If $(\lambda_i)_i$ are its eigenvalues, then the trace formula~\cite{lovasz2012l
 \[
   \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m.
 \]
-Thus, the objective becomes a power sum of the eigenvalues of $\Tker W$, subject to the edge-density constraint $\edens W=p$.
+Thus cycle densities are power sums of the eigenvalues of $\Tker W$.
 
-Balanced complete $k$-partite graphons play a central role in this extremal problem: our proposed bound is designed to be attained by them at the edge densities $p=1-1/k$.
+For balanced complete multipartite graphons, these eigenvalues can be computed explicitly.
 For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graphon defined by
 \[
   W_k(x,y)=
@@ -191,23 +189,19 @@ The trace formula therefore gives, for odd $m$,
 \begin{equation}\label{eq:intro-kpartite-value}
   \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m=\goal.
 \end{equation}
-As $k$ varies, these equality values determine the single polynomial $\goal$.
-Our problem is to show that this polynomial remains a universal lower bound at every edge density, even where it need not be the exact minimum.
+This calculation suggests the polynomial $\goal$ as a lower bound at every edge density, including those where it need not give the exact minimum.
 
 In the dense range $p\ge2/3$ considered here, this polynomial bound was previously known only for $C_3$ and $C_5$.
 For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=p$ satisfies
 \begin{equation}\label{eq:intro-goodman}
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
-For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko proved that, for every integer $k\ge3$, $W_k$ minimizes the $C_5$-density among graphons $W$ with $\edens W=1-1/k$~\cite{bennett2020minimizing,lovasz2006limits,lovasz2012large}.
-Their proof combines a flag algebra computation with stability \tk{It is a bit misleading, since they only use flag algebra to solve lower bound, and additionally prove stability. flag algebra with stability sounds like flag algebra itself was insufficient, and they closed the gap that flag algebra can't prove with some stability arguments.}.
+For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, $W_k$ minimizes the $C_5$-density among graphons $W$ with $\edens W=1-1/k$.
+They establish the lower bound by a flag algebra computation and also prove a stability theorem describing graphs whose $C_5$-density is close to the minimum.
 Although their theorem is stated only for integer $k\ge3$, a direct inspection of their flag algebra certificate shows that it remains valid for every real $k\ge3$.
-Substituting $k=1/(1-p)$ yields $\tC5W\ge\goodman p5$ throughout $p\ge2/3$.
+Substituting $k=1/(1-p)$ yields $\tC5W\ge\goodman p5$ for $2/3\le p<1$; the case $p=1$ is immediate.
 
-We extend the same polynomial bound from $C_3$ and $C_5$ to every odd cycle.
-The present paper proves the bound for $p\ge2/3$, while a companion paper treats $1/2<p<2/3$.
-Together with the immediate case $p\le1/2$, where the proposed lower bound $p^m-p(1-p)^{m-1}$ is nonpositive, the two papers cover every edge density.
-Our main result is the following.
+Our main result extends this bound to every odd cycle in the dense range.
 
 \begin{theorem}[Odd-cycle Goodman bound for $p\ge2/3$]\label{thm:main}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
@@ -217,6 +211,8 @@ Our main result is the following.
   \end{equation}
 \end{theorem}
 
+This is the first of two papers establishing the bound at every edge density.
+A companion paper treats $1/2<p<2/3$, and the case $p\le1/2$ is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
 At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact extremal value.
 
 \begin{corollary}\label{cor:kpartite}
@@ -228,23 +224,23 @@ For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$,
 
 \paragraph{A stronger two-colour theorem.}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
-This intermediate theorem is also of independent interest because it strengthens a known density-sensitive form of commonality for odd cycles.
-We first place it in the commonality framework and show how it implies \Cref{thm:main}; afterward, we explain the cancellation that makes the two-colour formulation useful for the proof.
+This inequality strengthens a density-sensitive form of \emph{commonality} for odd cycles.
 A graph $H$ with $e(H)$ edges is common if
 \[
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
 \]
 for every graphon $W$.
 Here $W$ and $1-W$ represent the two colours; the inequality says that the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
-Goodman's theorem shows that the triangle is common, but commonality is not automatic.
+Goodman's theorem shows that the triangle is common.
 Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
-Cycles form an important positive family: Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
+Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
 
 Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
-  \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)},
+  \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)}.
 \end{equation}
-thereby answering a question of Sidorenko~\cite{sidorenko1989cycles} and proving, in stronger form, a conjecture of Behague, Morrison and Noel~\cite{behague2025common}. \tk{The conjecture only appears in the first version in arXiv of this paper, which does not appear in the most recent or published version.}
+This answers a question of Sidorenko~\cite{sidorenko1989cycles}.
+It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
@@ -257,42 +253,44 @@ For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:int
   \end{equation}
 \end{theorem}
 
-The path inequality of Mulholland and Smith~\cite{mulholland1959inequality} gives $\tP{m-1}U\ge q^{m-1}$, so the correction term is nonnegative and \eqref{eq:intro-commonality} indeed strengthens extended commonality. \tk{The citation seems to be correct, but Blakely-Roy is more well-known, considered as independent work.}
+The Blakley--Roy inequality~\cite{blakley1965holder} gives $\tP{m-1}U\ge q^{m-1}$.
+This path inequality was proved independently, and earlier, by Mulholland and Smith~\cite{mulholland1959inequality}.
+Thus the path-density correction is nonnegative, and \eqref{eq:intro-commonality} strengthens extended commonality.
 Exchanging $W$ and $U$ gives the corresponding statement for $p\le1/3$.
 Equality holds in \eqref{eq:intro-commonality} for the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, for $W_k$.
 
 This stronger statement immediately implies \Cref{thm:main}.
 Since $0\le U\le1$, deleting one edge from the $m$-cycle gives $\tC mU\le\tP{m-1}U$.
-Subtracting this inequality from \eqref{eq:intro-commonality} and using $p+q=1$, we obtain
+Rearranging \eqref{eq:intro-commonality} and using $q^m-q^{m-1}=-pq^{m-1}$, we obtain
 \[
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
 \]
 
 \paragraph{Proof strategy: four reductions.}
-We prove the stronger two-colour inequality through four reductions, each of which replaces the problem by a simpler positivity statement.
+The proof of the two-colour inequality has four steps.
 
 First, we approximate the graphons $W$ and $U=1-W$ by step graphons and represent them by complementary symmetric matrices.
-We decompose each matrix into a part that records its edge density and a remaining, nonconstant part.
-The nonconstant parts for $W$ and $U$ have opposite signs, so their purely nonconstant contributions cancel when the two odd-cycle densities $\tC mW$ and $\tC mU$ are added.
-This leaves a finite matrix expansion in which the prescribed edge density has been separated from the rest of the graphon.
+We write each matrix in blocks relative to the constant vector and its orthogonal complement.
+The constant blocks are the edge densities $p$ and $q$, while the blocks on the orthogonal complement have opposite signs.
+Since $m$ is odd, the trace terms involving only these latter blocks cancel in the sum $\tC mW+\tC mU$.
+The remaining terms describe how the constant and nonconstant subspaces interact.
 
-Second, we organize the surviving terms.
-Each term can be broken into departures from the constant part of the matrix and returns to it; we call these pieces \emph{excursions}.
+Second, we organize these terms into \emph{excursions}: departures from the constant subspace into its orthogonal complement, followed by returns.
 We group the terms by their number $r$ of excursions and sum each group with a generating function.
-This produces an explicit symmetric polynomial $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ for each $r$, where the variables $\lambda_i$ represent eigenvalues of the nonconstant part and range over $[-1/2,1/2]$.
-The stronger two-colour theorem is then reduced to proving $P_{m,r}\ge0$ on $[-1/2,1/2]^r$ for every $r$.
+Subtracting the analogous expansion of the path-density correction produces explicit symmetric polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$, where the variables $\lambda_i$ represent eigenvalues of the complementary graphon's nonconstant block and lie in $[-1/2,1/2]$.
+The difference between the two sides of \eqref{eq:intro-commonality} is a sum of integrals of these polynomials against nonnegative measures.
+It therefore suffices to prove $P_{m,r}\ge0$ on $[-1/2,1/2]^r$ for $1\le r\le(m-1)/2$.
 
 Third, we reduce each of these multivariable inequalities to one variable.
-A Dirichlet averaging identity reduces the problem to the diagonal case $\lambda_1=\cdots=\lambda_r=\ell$.
+A Dirichlet averaging identity expresses each polynomial as an average of its diagonal values, reducing positivity to the case $\lambda_1=\cdots=\lambda_r=\ell$.
 A second identity, using a symmetric Beta distribution, writes the resulting one-variable polynomial as a one-dimensional integral.
-Together, these two averaging steps reduce every inequality $P_{m,r}\ge0$ to a one-variable integral inequality.
+Thus positivity in arbitrarily many spectral variables reduces to a one-variable integral inequality.
 
-Finally, we prove this integral inequality.
-We split the problem according to the sign of $\ell$.
+Finally, we prove this integral inequality by considering the sign of $\ell$.
 For $\ell\le0$, nonnegativity follows directly from the Beta representation.
 For $\ell>0$, the integrand can change sign, so a pointwise argument is no longer available.
-We instead apply a Laplace transform to rewrite the integral in terms of expectations under a Gamma distribution, and then use Gamma integration by parts together with an ODE argument to prove the required nonnegativity.
-These transformations allow us to control the integral as a whole despite the changing sign of its integrand.
+We use a Laplace integral representation to express it as a positive weighted integral of expectations under a Gamma distribution.
+Gamma integration by parts and an ODE argument give a uniform bound comparing odd and even moments, which makes these expectations nonnegative.
 This is the only stage at which $q\le1/3$, or equivalently $p\ge2/3$, is required; the strengthened two-colour inequality can fail for $1/2<p<2/3$, so the companion paper takes a different route in that range.
 
 The proof thus follows the chain
@@ -305,11 +303,11 @@ The proof thus follows the chain
     \longrightarrow \text{Gamma expectations and an ODE}.
   \end{gathered}
 \]
-The reductions keep the odd length $m$ symbolic rather than treating one cycle at a time.
+All four steps apply uniformly in the odd length $m$.
 In particular, the complementary-matrix cancellation, excursion generating functions, and Dirichlet reduction may be useful in other fixed-density problems with similar matrix expansions.
 
 \paragraph{Organization.}
-In \Cref{sec:matrix-reduction}, we carry out the graphon-to-matrix reduction and record the relevant nonconstant matrix data through eigenvalues and nonnegative weights.
+\Cref{sec:matrix-reduction} carries out the graphon-to-matrix reduction and encodes the nonconstant block and its interaction with the constant vector in a positive spectral measure.
 \Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 We close with further questions in \Cref{sec:conclusion}.

@@ -1,0 +1,214 @@
+\documentclass[10pt]{article}
+
+\usepackage[a4paper,margin=0.65in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt plus 1pt}
+\setlist{nosep,leftmargin=1.5em}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\E}{\mathbb E}
+\newcommand{\pos}[1]{(#1)_+}
+
+\title{Two Complementary Mechanisms for the Odd-Cycle Goodman Bound\\
+\large A high-level guide to the proof and its reusable ideas}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2.2em}
+
+\paragraph{The problem and the main message.}
+Let $W:[0,1]^2\to[0,1]$ be a graphon of edge density $p$, and let $m\ge3$ be odd.
+The theorem proved in the accompanying paper is
+\begin{equation}\label{eq:goal}
+  t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\end{equation}
+Put $U=1-W$ and $q=1-p$.
+When $p\le1/2$, the right-hand side of \eqref{eq:goal} is nonpositive, so the result is immediate.
+The substantive proof therefore concerns $p>1/2$, and it divides naturally at $p=2/3$, or equivalently at $q=1/3$.
+The short cycles $m=3,5,7$ are dispatched separately by elementary sum-of-squares estimates; the machinery below is what makes the argument uniform for general odd $m$.
+
+The two sides use different mechanisms.
+For $p\ge2/3$, the proof combines the equations for $W$ and its complement $U$ so that the uncontrolled odd spectral moments cancel.  A succession of positivity-preserving transforms---Dirichlet averaging, a beta integral, and a Laplace--gamma representation---then reduces the problem to a shifted-gamma moment inequality.
+For $1/2<p<2/3$, cancellation is no longer strong enough.  Instead, a spectral energy budget shows that there can be at most one dangerous eigenvalue.  The graphon constraints force compensation either through direct coupling to this eigenmode or through the remaining safe spectral space.  A one-dimensional Huber-type convex program records the cheapest possible compensation.
+
+Thus the proof is not one long calculation.  It is a meeting of two general principles:
+\[
+  \boxed{\text{cancel uncontrolled modes when possible}}
+  \qquad
+  \boxed{\text{compensate the surviving modes}.}
+\]
+
+\paragraph{The common operator reduction.}
+The constant function $\one$ is distinguished because edge densities, degree functions, and path densities are observed from this direction.  Decompose the complement operator into the constant direction and its orthogonal complement:
+\begin{equation}\label{eq:block}
+  T_U=
+  \begin{pmatrix}
+    q&g^*\\
+    g&A
+  \end{pmatrix}
+  \quad\text{on}\quad
+  \mathbb R\one\oplus\one^\perp.
+\end{equation}
+Here
+\[
+  g=T_U\one-q\one=p-d_W
+\]
+is the degree fluctuation, while $A$ is the compression of $T_U$ to mean-zero functions.  In particular, $g=0$ exactly when the graphon is regular.  The spectral measure of $A$ as seen from $g$ packages the moments $\ip{g}{A^jg}$, so the unknown graphon structure is reduced to a positive measure on the spectrum of $A$.
+
+Schur complementation of \eqref{eq:block}, followed by the log-determinant identity for cycle counts, gives for odd $m$
+\begin{align}
+  t(C_m,U)&=\Tr(A^m)+q^m+m[z^m]L_+(z),\label{eq:U}\\
+  t(C_m,W)&=-\Tr(A^m)+p^m+m[z^m]L_-(z).\label{eq:W}
+\end{align}
+These identities separate three contributions: the constant model $p^m$ or $q^m$, the pure mean-zero moment $\Tr(A^m)$, and mixed excursions that leave the constant direction, travel through the mean-zero space, and return.  The rest of the proof is about how to control the pure odd moment using the mixed excursions.
+
+\paragraph{The dense side: $p\ge2/3$.}
+On this side, the fundamental move is to add \eqref{eq:U} and \eqref{eq:W}.  Because $m$ is odd, the terms $\Tr(A^m)$ and $-\Tr(A^m)$ cancel exactly.  After bounding an $m$-cycle in $U$ by the corresponding $(m-1)$-edge path, the target becomes the nonnegativity of a quantity $\Phi_m$ built entirely from the mixed excursions and path moments.
+
+Expanding the logarithms expresses $\Phi_m$ as integrals of symmetric polynomials
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+\]
+against independent copies of the spectral measure.  At first this is a positivity problem in as many as $r$ spectral variables.  Its special feature is that the variables occur through complete homogeneous symmetric polynomials.  This basis admits a probabilistic polarization identity: if
+\[
+  \Theta\sim\operatorname{Dirichlet}(1,\ldots,1),
+  \qquad
+  L=\Theta_1\lambda_1+\cdots+\Theta_r\lambda_r,
+\]
+then
+\begin{equation}\label{eq:dirichlet}
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+  =\E\,\widetilde P_{m,r}(q,L),
+\end{equation}
+where $\widetilde P$ is the restriction of the polynomial to the diagonal.  Since $L$ is a convex combination of the eigenvalues, it stays in the same spectral interval.  Consequently, positivity on the whole spectral cube is equivalent to positivity of one polynomial in one variable.  This is the first major dimension reduction.
+
+Repeated variables in the diagonal polynomial then produce a beta distribution.  A projective change of variables turns its density into a beta-prime kernel, leading to an integral of the form
+\begin{equation}\label{eq:beta-prime}
+  \int_0^\infty
+  \frac{s^{r-1}}{(\ell+s)^m}\,
+  \rho_{n,m}(q+s)\,ds.
+\end{equation}
+The polynomial $\rho_{n,m}$ is not pointwise nonnegative, so the integral cannot be settled by inspecting its integrand.  The next move is instead to understand the average as a whole.  The Laplace identity
+\[
+  \frac1{(\ell+s)^m}
+  =\frac1{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t\ell}e^{-ts}\,dt
+\]
+separates $\ell$ from $s$.  After the substitution $y=ts$, the factor $y^{r-1}e^{-y}$ reveals a gamma random variable $Y\sim\operatorname{Gamma}(r,1)$.  The integral \eqref{eq:beta-prime} becomes a positive mixture of expectations
+\begin{equation}\label{eq:gamma-expectation}
+  \E\,\rho_{n,m}(q+xY),
+  \qquad x\ge0.
+\end{equation}
+It is therefore enough to prove that every expectation in \eqref{eq:gamma-expectation} is nonnegative.
+
+Centering at $1/2$ reduces this to comparing consecutive shifted gamma moments.  The required estimate has the form
+\begin{equation}\label{eq:gamma-moment}
+  3j\,\E(zY-1)^{2j-1}
+  \le (r+j)\,\E(zY-1)^{2j}.
+\end{equation}
+The gamma Stein identity converts neighboring moments into a differential recurrence.  Equivalently, the shifted moment polynomial
+\[
+  F_k(b)=\E(Y-b)^k
+\]
+is a generalized Laguerre polynomial and satisfies a rigid second-order differential equation.  The proof uses this global differential structure rather than estimating the alternating coefficients of a high-degree polynomial.  Finally, \eqref{eq:gamma-moment} pays for the odd term precisely when
+\[
+  q\le\frac13,
+  \qquad\text{equivalently}\qquad p\ge\frac23.
+\]
+
+The reusable dense-side pattern is
+\[
+  \boxed{
+    \text{trace cancellation}
+    \to\text{Dirichlet averaging}
+    \to\text{Laplace--gamma transform}
+    \to\text{Laguerre inequality}}
+\]
+
+\paragraph{The intermediate side: $1/2<p<2/3$.}
+Here $q>1/3$, and the proof starts from \eqref{eq:W} alone.  A Hilbert--Schmidt estimate gives the spectral budget
+\begin{equation}\label{eq:budget}
+  \Tr(A^2)+2\norm{g}^2\le pq.
+\end{equation}
+If every eigenvalue of $A$ is at most $q$, then its odd power is controlled by its square and \eqref{eq:budget} immediately proves the theorem.  If two eigenvalues were larger than $q$, however, their squared contribution would exceed
+\[
+  2q^2>pq,
+\]
+contradicting \eqref{eq:budget}.  Thus there is at most one dangerous eigenvalue $\Lambda>q$.  Let $\phi$ be its unit eigenfunction and split
+\[
+  g=\gamma\phi+g_s,
+  \qquad g_s\perp\phi.
+\]
+The cycle inequality is reduced to
+\begin{equation}\label{eq:payment}
+  -R_m+\Lambda_m\gamma^2+M_m\norm{g_s}^2\ge0,
+\end{equation}
+with positive coefficients $\Lambda_m$ and $M_m$.  The term $R_m$ is the debt created by the outlying eigenvalue; the other two terms are two possible payments.  Direct coupling $\gamma$ pays through the dangerous direction, while $g_s$ pays through the safe spectral complement.
+
+The decisive fact is that these payments cannot both vanish.  Since $U\ge0$, removing the sign of $\phi$ can only increase its quadratic form:
+\[
+  \ip{|\phi|}{T_U|\phi|}\ge\ip{\phi}{T_U\phi}=\Lambda.
+\]
+Decomposing $|\phi|$ along $\one$, $\phi$, and their orthogonal complement converts this pointwise graphon constraint into a compensation inequality
+\begin{equation}\label{eq:compensation}
+  b\gamma+\ip{g_s}{\phi_\perp}\ge\kappa>0.
+\end{equation}
+Thus either $g$ couples substantially to the dangerous mode, or a controlled amount of $g$ is forced into the safe space.  By Cauchy--Schwarz, any unpaid part of \eqref{eq:compensation} gives a lower bound for $\norm{g_s}$.
+
+After eliminating the unknown shape of $\phi$ and normalizing the direct coupling by a scalar $v\in[0,1]$, the least possible combined payment is bounded below by
+\begin{equation}\label{eq:huber}
+  \Omega_m\psi(\xi,\rho),
+  \qquad
+  \psi(\xi,\rho)
+  =\min_{0\le v\le1}
+  \left\{\rho v^2+\pos{\xi-v+v^2}\right\}.
+\end{equation}
+The first term is the quadratic cost of direct coupling.  The positive-part term is the residual obligation paid by the safe subspace.  This is Huber-like: the optimizer chooses the cheapest allocation between a quadratic channel and a linear fallback channel.
+
+Convex duality makes \eqref{eq:huber} usable.  Since
+\[
+  x_+=\max_{0\le\lambda\le1}\lambda x,
+\]
+one obtains
+\begin{equation}\label{eq:dual}
+  \psi(\xi,\rho)
+  =\max_{0\le\lambda\le1}
+  \left\{
+    \lambda\xi-\frac{\lambda^2}{4(\rho+\lambda)}
+  \right\}.
+\end{equation}
+Every choice of the dual variable $\lambda$ now supplies a lower bound.  The interior optimizer describes a quadratic regime; when it reaches the boundary $\lambda=1$, the constraint saturates and the estimate enters a linear regime.  Elementary estimates in these two regimes cover the debt $R_m$ in \eqref{eq:payment}.
+
+The reusable intermediate-side pattern is
+\[
+  \boxed{
+    \text{energy budget}
+    \to\text{one outlier}
+    \to\text{forced compensation}
+    \to\text{convex duality}}
+\]
+
+\paragraph{Why the two mechanisms meet at $p=2/3$.}
+The threshold is not imposed for convenience.  On the dense side, the gamma moment estimate absorbs the odd contribution exactly when $q\le1/3$.  On the intermediate side, uniqueness of the dangerous eigenvalue follows exactly when
+\[
+  2q^2>pq,
+\]
+which is equivalent to $q>1/3$.  The two unrelated mechanisms therefore meet without a gap.  This is strong evidence that $p=2/3$ is a structural interface of the problem rather than an artifact of later estimates.
+
+\paragraph{Context, novelty, and opportunities.}
+The dense-side route connects Dirichlet averages and complete homogeneous polynomials with divided differences, splines, beta--gamma algebra, Stein identities, and Laguerre differential equations.  The intermediate-side route resembles coercivity modulo a finite number of bad directions in solitary-wave stability, macro--micro compensation in hypocoercivity, the Shizuta--Kawashima principle for partially dissipative systems, and Lyapunov--Schmidt or Feshbach reduction.  Its final optimization is closely related to Huber regularization, Fenchel duality, and active-set methods.
+
+The novelty is best understood as a synthesis rather than the invention of any one component.  On the dense side, a multivariable spectral positivity problem is carried through a chain of positivity-preserving representations until a classical probability law supplies a rigid differential equation.  On the intermediate side, a qualitative statement---``the dangerous mode must be compensated somehow''---is retained quantitatively in both channels and converted into an explicit convex program.
+
+This suggests a research program.  If a Schatten bound permits $k$ dangerous eigenvalues rather than one, one should project onto their $k$-dimensional span, derive geometric coupling constraints, and replace \eqref{eq:huber} by a small vector-valued convex program.  Near-equality analysis of the same program may also yield stability: if the total bound is nearly sharp, then the energy budget, the compensation inequality, and the active dual witness must all be nearly sharp, potentially forcing the graphon close to a low-rank or multipartite model.  More broadly, the proof offers a practical search strategy for new spectral extremal inequalities: cancel what symmetry can cancel, count the surviving outliers, preserve every available compensation channel, and eliminate the remaining geometry by convex duality.
+
+\end{document}
