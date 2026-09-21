@@ -297,19 +297,17 @@ For a real-valued function $f\in L^2[0,1]$, write
 where $\one$ is the constant function equal to one.
 Define the operators
 \[
-  \Pi_c f=c\one,\qquad \Pi_0 f=f_0,
+  \Pi_{\mathrm c} f=c\one,\qquad \Pi_0 f=f_0,
 \]
 which retain the constant and zero-average components, respectively.
 For either $T=\Tker W$ or $T=\Tker{1-W}$, the trace decomposes as
 \[
-  \begin{aligned}
     \Tr(T^m)
-    ={}&\Tr\bigl((\Pi_cT)^m\bigr)
-       +\Tr\bigl((\Pi_0T)^m\bigr)\\
-       &+\sum_{\substack{(s_1,\ldots,s_m)\in\{c,0\}^m\\
+    =  \Tr\bigl((\Pi_{\mathrm c}T)^m\bigr)
+       +\Tr\bigl((\Pi_0T)^m\bigr)
+       +\sum_{\substack{(s_1,\ldots,s_m)\in\{\mathrm c,0\}^m\\
                          \text{not all }s_i\text{ equal}}}
        \Tr\bigl(\Pi_{s_1}T\cdots\Pi_{s_m}T\bigr).
-  \end{aligned}
 \]
 The first term retains only the constant component, the second retains only the zero-average component, and the final sum includes every sequence using both components.
 For $\Tker W$ and $\Tker{1-W}$, the first contributions sum to $p^m+(1-p)^m$, while the second contributions cancel for odd $m$.
@@ -317,17 +315,49 @@ It therefore remains to show that the two sums involving both components togethe
 We carry out this decomposition using finite-matrix representations of graphons that are constant on a finite grid of rectangles; an approximation argument gives the result for general graphons.
 
 Second, we reduce this comparison to polynomial nonnegativity.
-We group the contributions involving both spaces by their number $r$ of passages from the constant space into the zero-average space and back, called \emph{excursions}.
-Subtracting the path-density correction then expresses the difference between the two sides of \eqref{eq:intro-commonality} as a weighted sum of values of explicit polynomials $P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$.
-All weights are nonnegative, and the variables $\lambda_i$ lie in $[-1/2,1/2]$.
-It suffices to prove that each polynomial is nonnegative for every tuple of variables in this interval, for $1\le r\le(m-1)/2$.
+Using the trace decomposition from the first step, we write the difference between the two sides of \eqref{eq:intro-commonality} as follows.
+\[
+  \begin{aligned}
+    & \Bigl(\tC mW+\tC m{1-W}-p^m-(1-p)^m\Bigr)
+      - \Bigl[\tP{m-1}{1-W}-(1-p)^{m-1}\Bigr]\\
+    &\quad {} =
+      \Biggl(\sum_{\substack{(s_1,\ldots,s_m)\in\{\mathrm c,0\}^m\\
+                            \text{not all }s_i\text{ equal}}}
+      \Tr\bigl(\Pi_{s_1}\Tker W\cdots\Pi_{s_m}\Tker W\bigr)
+      +\sum_{\substack{(s_1,\ldots,s_m)\in\{\mathrm c,0\}^m\\
+                             \text{not all }s_i\text{ equal}}}
+      \Tr\bigl(\Pi_{s_1}\Tker{1-W}\cdots\Pi_{s_m}\Tker{1-W}\bigr)\Biggr)\\
+    &\quad\qquad\qquad {} - \Bigl[\tP{m-1}{1-W}-(1-p)^{m-1}\Bigr]\\
+    &\quad {} =
+      \sum_{r=1}^{(m-1)/2}
+      \int_{[-1/2,1/2]^r}
+      P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+  \end{aligned}
+\]
+The first equality records the outcome of the first reduction.
+The second expresses the remaining trace sums, after subtracting the path-density correction, in terms of explicit polynomials.
+Here $\mu$ is a finite nonnegative measure determined by $W$, supported on $[-1/2,1/2]$, and constructed in \Cref{sec:matrix-reduction}; the $P_{m,r}$ are symmetric polynomials defined in \eqref{eq:Pmr}.
+The index $r$ counts passages from the constant component into the zero-average component and back, called \emph{excursions}.
+The measure supplies nonnegative weights, so it suffices to prove, for every $1\le r\le(m-1)/2$, that
+\[
+  P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)\ge0
+  \qquad\text{for every }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r.
+\]
 
 Third, we reduce these multivariable inequalities to one-variable inequalities.
-An averaging identity shows that it suffices to consider the case where all variables are equal to a common value $\ell$.
-The remaining task is therefore to prove
+Choose nonnegative weights $\Theta_1,\ldots,\Theta_r$, summing to one, uniformly at random.
+These weights have the Dirichlet$(1,\ldots,1)$ distribution.
+Set $L=\sum_{i=1}^r\Theta_i\lambda_i$.
+The Dirichlet averaging identity (\Cref{lem:pge23-dirichlet}) gives
+\[
+  P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)
+  =\E\bigl[P_{m,r}(1-p;L,\ldots,L)\bigr].
+\]
+Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suffices to prove
 \[
   P_{m,r}(1-p;\ell,\ldots,\ell)\ge0
-  \qquad\text{for }-\frac12\le\ell\le\frac12.
+  \qquad\text{for every }\ell\in[-1/2,1/2].
 \]
 Although the number $r$ of variables can grow with $m$, this is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
