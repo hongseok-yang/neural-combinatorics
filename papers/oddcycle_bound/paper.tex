@@ -285,69 +285,38 @@ The trace formula expresses the two cycle densities as
 \]
 Each trace is the sum of the $m$th powers of the corresponding operator's eigenvalues.
 Our aim is to show that the sum of these two traces exceeds $p^m+(1-p)^m$ by at least the path-density correction in \eqref{eq:intro-commonality}.
-For odd $m$, negative eigenvalues contribute negatively to each trace, so obtaining this bound requires controlling their contribution.
-We analyze the two traces together: the relationship between $W$ and $1-W$ makes certain terms in their expansions cancel, leaving a smaller collection of terms to bound.
+We obtain this bound through four reductions, all uniform in the odd cycle length $m$.
 
-First, we show that the excess over $p^m+(1-p)^m$ consists entirely of terms that switch between constant and zero-average components.
-To expand $\Tker W^m$, consider its action on an arbitrary function $f$.
-Split $f$ into its constant average and a remainder with integral zero, and apply $\Tker W$ separately to these two pieces.
-Split each resulting function again into its constant average and zero-average remainder, then apply $\Tker W$ separately to every piece.
-Repeat this procedure through all $m$ applications of $\Tker W$.
-After the final application, split each output once more into its constant and zero-average components.
-By linearity, the sum of the resulting functions is exactly $\Tker W^m f$.
+First, we isolate the contribution that must be bounded.
+We separate functions $f : \mathbb{R} \to \mathbb{R}$ into their constant averages $c = \int f(x)dx$ and zero-average remainders $f_0 = f - c$.
+This writes each trace as a sum of contributions from repeated applications of the operator that stay within constant functions, stay within zero-average functions, or pass between these two spaces.
+In the sum of the two traces, the constant contributions give $p^m+(1-p)^m$, while the contributions confined to zero-average functions cancel for odd $m$.
+The desired inequality therefore reduces to showing that the total contribution from passages between the two spaces is at least the path-density correction.
+We carry out this decomposition using finite-matrix representations of graphons that are constant on a finite grid of rectangles; an approximation argument gives the result for general graphons.
 
-This gives an expansion of $\Tker W^m$ into terms indexed by the sequence of constant or zero-average components retained during the calculation.
-We expand $\Tker{1-W}^m$ in the same way and then take traces.
-Since a trace sums diagonal contributions, only sequences that start and finish in the same component space contribute.
+Second, we reduce this comparison to polynomial nonnegativity.
+We group the contributions involving both spaces by their number $r$ of passages from the constant space into the zero-average space and back, called \emph{excursions}.
+Subtracting the path-density correction then expresses the difference between the two sides of \eqref{eq:intro-commonality} as a weighted sum of values of explicit polynomials $P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$.
+All weights are nonnegative, and the variables $\lambda_i$ lie in $[-1/2,1/2]$.
+It suffices to prove that each polynomial is nonnegative for every tuple of variables in this interval, for $1\le r\le(m-1)/2$.
 
-Consider first the expansion term that starts with the zero-average component of $f$ and retains the zero-average component of the output after every application.
-The identity
+Third, we reduce these multivariable inequalities to one-variable inequalities.
+An averaging identity shows that it suffices to consider the case where all variables are equal to a common value $\ell$.
+The remaining task is therefore to prove
 \[
-  (\Tker Wf)(x)+(\Tker{1-W}f)(x)=\int_0^1 f(y)\dd y
+  P_{m,r}(1-p;\ell,\ldots,\ell)\ge0
+  \qquad\text{for }-\frac12\le\ell\le\frac12.
 \]
-shows that, for a zero-average input, applying $\Tker W$ or $\Tker{1-W}$ gives outputs that are negatives of one another.
-Their zero-average components are therefore negatives as well.
-Thus, replacing $\Tker W$ by $\Tker{1-W}$ in this sequence introduces a factor of $-1$ at each of the $m$ applications.
-The two resulting operators differ by a factor of $(-1)^m$, so their traces cancel because $m$ is odd.
+Although the number $r$ of variables can grow with $m$, this is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
-Next, consider the expansion term that starts with the constant component of $f$ and retains the constant component of the output at every stage.
-Applying $\Tker W$ to a constant and taking the average of the output multiplies that constant by $p$; the corresponding multiplier for $\Tker{1-W}$ is $1-p$.
-Repeating this $m$ times gives trace contributions $p^m$ and $(1-p)^m$, respectively.
-Every other sequence that contributes to the traces visits both component spaces and returns to the space in which it started.
-The sum of these contributions is therefore exactly the excess over $p^m+(1-p)^m$ that we must bound below by the path-density correction.
-We justify the expansions by first approximating the graphons by functions that are constant on a finite grid of rectangles, so that the operators can be represented by finite matrices.
-
-Second, we group the sequences that visit both component spaces and compare their trace contributions with the path-density correction.
-A passage from the constant component into the zero-average component and back is called an \emph{excursion}.
-We group these contributions by the number $r$ of excursions and sum over the possible lengths of the excursions and the intervening constant portions.
-The path density admits a similar expansion, so we can subtract its correction one group at a time.
-The resulting gap between the two sides of \eqref{eq:intro-commonality} is a sum of polynomials
-$P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$ with nonnegative weights.
-Here the $\lambda_i$ are eigenvalues of the map obtained by applying $\Tker{1-W}$ to a zero-average function and then subtracting the average of the output.
-We prove that these eigenvalues lie in $[-1/2,1/2]$.
-The graphon determines the weights, but it is enough to prove that each polynomial is nonnegative throughout this interval in each variable.
-
-Third, we overcome the fact that the number of variables grows with $m$.
-These particular polynomials satisfy an averaging identity: their value at any tuple $(\lambda_1,\ldots,\lambda_r)$ is an average of values with all variables equal,
-\[
-  P_{m,r}(1-p;\ell,\ldots,\ell).
-\]
-The common value $\ell$ is a randomly chosen weighted average of the original $\lambda_i$, with nonnegative weights summing to one, so it remains in $[-1/2,1/2]$.
-Consequently, nonnegativity when all variables are equal implies nonnegativity for every tuple.
-This reduces the problem to a polynomial in one variable, regardless of the number of excursions.
-A second averaging identity expresses this polynomial as an integral with an explicit nonnegative weight, making it possible to compare its positive and negative contributions.
-
-Finally, we prove that this integral is nonnegative.
-When $\ell\le0$, its integrand is nonnegative everywhere.
-When $\ell>0$, the integrand can have both signs, so we must show that the positive contribution outweighs the negative one after integration.
-We rewrite the integral as a positively weighted combination of expectations in which $\ell$ appears only in the weights.
-It is therefore enough to prove that each expectation is nonnegative.
-In this representation, the potentially negative terms involve odd powers of a shifted random variable, while the compensating terms involve the next even powers.
-These expectations are related by differentiation: varying the shift in an even power produces the preceding odd power.
-An integration-by-parts identity for the random variable gives a differential equation for the even-power expectation.
-We use this equation to bound the odd-power contribution by the even-power contribution, with constants that make the total nonnegative when $p\ge2/3$.
-This is the only step that requires this density assumption.
-All four steps apply uniformly in the odd cycle length $m$.
+Finally, we reduce the one-variable inequalities to a comparison of expected odd and even powers.
+An integral representation establishes nonnegativity when $\ell\le0$.
+For $\ell>0$, the integrand can have both signs, so its positive and negative contributions must be compared after integration.
+A further integral identity reduces the required nonnegativity to a bound comparing expected odd powers of a shifted random variable with the next even powers.
+We prove this bound using a differential equation.
+The resulting estimate establishes the one-variable inequalities for $p\ge2/3$; this is the only stage that needs this density assumption.
+It follows that the polynomials in the second step are nonnegative, completing the comparison required by the first step and proving \Cref{thm:commonality}.
+The deduction preceding this overview then gives \Cref{thm:main}.
 
 \paragraph{Organization.}
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
