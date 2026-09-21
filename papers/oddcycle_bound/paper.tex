@@ -256,38 +256,38 @@ Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commona
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
-  Let $m\ge3$ be odd, let $W$ be a graphon with $\edens W=p\ge2/3$, and write $U=1-W$ and $q=1-p$.
+  Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
   Then, with $P_{m-1}$ the path with $m-1$ edges,
   \begin{equation}\label{eq:intro-commonality}
-    \tC mW+\tC mU\ge p^m+q^m+\tP{m-1}U-q^{m-1}.
+    \tC mW+\tC m{1-W}\ge p^m+(1-p)^m+\bigl[\tP{m-1}{1-W}-(1-p)^{m-1}\bigr].
   \end{equation}
 \end{theorem}
 
-The Blakley--Roy inequality~\cite{blakley1965holder} gives $\tP{m-1}U\ge q^{m-1}$.
+The Blakley--Roy inequality~\cite{blakley1965holder} gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
 This path inequality was proved independently, and earlier, by Mulholland and Smith~\cite{mulholland1959inequality}.
 Thus, the path-density correction is nonnegative, and \eqref{eq:intro-commonality} strengthens extended commonality.
-Exchanging $W$ and $U$ gives the corresponding statement for $p\le1/3$.
+Exchanging $W$ and $1-W$ gives the corresponding statement for $p\le1/3$.
 Equality holds in \eqref{eq:intro-commonality} for the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, for $W_k$.
 
 This stronger statement immediately implies \Cref{thm:main}.
-Since $0\le U\le1$, deleting one edge from the $m$-cycle gives $\tC mU\le\tP{m-1}U$.
-Rearranging \eqref{eq:intro-commonality} and using $q^m-q^{m-1}=-pq^{m-1}$, we obtain
+Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives $\tC m{1-W}\le\tP{m-1}{1-W}$.
+Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^{m-1}$, we obtain
 \[
-  \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}U-\tC mU\ge0.
+  \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}{1-W}-\tC m{1-W}\ge0.
 \]
 
 \paragraph{Proof strategy: four reductions.}
 The proof of the two-colour inequality has four steps.
 
-First, we approximate the graphons $W$ and $U=1-W$ by step graphons and represent them by complementary symmetric matrices.
+First, we approximate the graphons $W$ and $1-W$ by step graphons and represent them by complementary symmetric matrices.
 We write each matrix in blocks relative to the constant vector and its orthogonal complement.
-The constant blocks are the edge densities $p$ and $q$, while the blocks on the orthogonal complement have opposite signs.
-Since $m$ is odd, the trace terms involving only these latter blocks cancel in the sum $\tC mW+\tC mU$.
+The constant blocks are the edge densities $p$ and $1-p$, while the blocks on the orthogonal complement have opposite signs.
+Since $m$ is odd, the trace terms involving only these latter blocks cancel in the sum $\tC mW+\tC m{1-W}$.
 The remaining terms describe how the constant and nonconstant subspaces interact.
 
 Second, we organize these terms into \emph{excursions}: departures from the constant subspace into its orthogonal complement, followed by returns.
 We group the terms by their number $r$ of excursions and sum each group with a generating function.
-Subtracting the analogous expansion of the path-density correction produces explicit symmetric polynomials $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$, where the variables $\lambda_i$ represent eigenvalues of the complementary graphon's nonconstant block and lie in $[-1/2,1/2]$.
+Subtracting the analogous expansion of the path-density correction produces explicit symmetric polynomials $P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$, where the variables $\lambda_i$ represent eigenvalues of the complementary graphon's nonconstant block and lie in $[-1/2,1/2]$.
 The difference between the two sides of \eqref{eq:intro-commonality} is a sum of integrals of these polynomials against nonnegative measures.
 It therefore suffices to prove $P_{m,r}\ge0$ on $[-1/2,1/2]^r$ for $1\le r\le(m-1)/2$.
 
@@ -301,7 +301,7 @@ For $\ell\le0$, nonnegativity follows directly from the Beta representation.
 For $\ell>0$, the integrand can change sign, so a pointwise argument is no longer available.
 We use a Laplace integral representation to express it as a positive weighted integral of expectations under a Gamma distribution.
 Gamma integration by parts and an ODE argument give a uniform bound comparing odd and even moments, which makes these expectations nonnegative.
-This is the only stage at which $q\le1/3$, or equivalently $p\ge2/3$, is required; the strengthened two-colour inequality can fail for $1/2<p<2/3$, so the companion paper takes a different route in that range.
+This is the only stage at which $p\ge2/3$ is required; the strengthened two-colour inequality can fail for $1/2<p<2/3$, so the companion paper takes a different route in that range.
 
 The proof thus follows the chain
 \[
