@@ -277,51 +277,60 @@ Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^
 \]
 
 \paragraph{Proof strategy: four reductions.}
-The proof of the two-colour inequality has four steps.
+For odd $m$, negative eigenvalues contribute negatively to the trace formula, so that formula alone does not give the desired lower bound.
+Our proof combines the trace expansions for $W$ and $1-W$ so that certain terms cancel, then shows that the remaining terms cover the path-density correction in \eqref{eq:intro-commonality}.
 
-First, we approximate the graphons $W$ and $1-W$ by step graphons and represent them by complementary symmetric matrices.
-We write each matrix in blocks relative to the constant vector and its orthogonal complement.
-The constant blocks are the edge densities $p$ and $1-p$, while the blocks on the orthogonal complement have opposite signs.
-Since $m$ is odd, the trace terms involving only these latter blocks cancel in the sum $\tC mW+\tC m{1-W}$.
-The remaining terms describe how the constant and nonconstant subspaces interact.
-
-Second, we organize these terms into \emph{excursions}: departures from the constant subspace into its orthogonal complement, followed by returns.
-We group the terms by their number $r$ of excursions and sum each group with a generating function.
-Subtracting the analogous expansion of the path-density correction produces explicit symmetric polynomials $P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$, where the variables $\lambda_i$ represent eigenvalues of the complementary graphon's nonconstant block and lie in $[-1/2,1/2]$.
-The difference between the two sides of \eqref{eq:intro-commonality} is a sum of integrals of these polynomials against nonnegative measures.
-It therefore suffices to prove $P_{m,r}\ge0$ on $[-1/2,1/2]^r$ for $1\le r\le(m-1)/2$.
-
-Third, we reduce each of these multivariable inequalities to one variable.
-A Dirichlet averaging identity expresses each polynomial as an average of its diagonal values, reducing positivity to the case $\lambda_1=\cdots=\lambda_r=\ell$.
-A second identity, using a symmetric Beta distribution, writes the resulting one-variable polynomial as a one-dimensional integral.
-Thus, positivity in arbitrarily many spectral variables reduces to a one-variable integral inequality.
-
-Finally, we prove this integral inequality by considering the sign of $\ell$.
-For $\ell\le0$, nonnegativity follows directly from the Beta representation.
-For $\ell>0$, the integrand can change sign, so a pointwise argument is no longer available.
-We use a Laplace integral representation to express it as a positive weighted integral of expectations under a Gamma distribution.
-Gamma integration by parts and an ODE argument give a uniform bound comparing odd and even moments, which makes these expectations nonnegative.
-This is the only stage at which $p\ge2/3$ is required; the strengthened two-colour inequality can fail for $1/2<p<2/3$, so the companion paper takes a different route in that range.
-
-The proof thus follows the chain
+First, we identify the cancellation.
+Every function splits into its constant average and a remainder with integral zero.
+The operators associated with the two graphons satisfy
 \[
-  \begin{gathered}
-    \text{graphon inequality}
-    \longrightarrow \text{complementary matrices}
-    \longrightarrow \text{excursion polynomials }P_{m,r}\\
-    \longrightarrow \text{a one-variable integral}
-    \longrightarrow \text{Gamma expectations and an ODE}.
-  \end{gathered}
+  (\Tker Wf)(x)+(\Tker{1-W}f)(x)=\int_0^1 f(y)\dd y.
 \]
-All four steps apply uniformly in the odd length $m$.
-In particular, the complementary-matrix cancellation, excursion generating functions, and Dirichlet reduction may be useful in other fixed-density problems with similar matrix expansions.
+Thus, on an input with integral zero, their outputs have opposite signs.
+To use this observation in the trace formula, we expand each operator power by separating the constant and zero-average components after every multiplication.
+Terms that use only zero-average components cancel between the two traces because $m$ is odd.
+Terms that use only constant components contribute $p^m+(1-p)^m$.
+The remaining terms involve transitions between the two types of components.
+We justify these expansions by first approximating the graphons by functions that are constant on a finite grid of rectangles; their operators can then be represented by finite matrices.
+
+Second, we organize the remaining terms and compare them with the path-density correction.
+A passage from the constant component into the zero-average component and back is called an \emph{excursion}.
+We group terms by the number $r$ of such passages and sum over their possible lengths.
+The path density admits a similar expansion, so we can subtract its correction one group at a time.
+The resulting gap between the two sides of \eqref{eq:intro-commonality} is a sum of polynomials
+$P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$ with nonnegative weights.
+Here the $\lambda_i$ are eigenvalues of the map obtained by applying $\Tker{1-W}$ to a zero-average function and then subtracting the average of the output.
+We prove that these eigenvalues lie in $[-1/2,1/2]$.
+The graphon determines the weights, but it is enough to prove that each polynomial is nonnegative throughout this interval in each variable.
+
+Third, we overcome the fact that the number of variables grows with $m$.
+These particular polynomials satisfy an averaging identity: their value at any tuple $(\lambda_1,\ldots,\lambda_r)$ is an average of values with all variables equal,
+\[
+  P_{m,r}(1-p;\ell,\ldots,\ell).
+\]
+The common value $\ell$ is a randomly chosen weighted average of the original $\lambda_i$, with nonnegative weights summing to one, so it remains in $[-1/2,1/2]$.
+Consequently, nonnegativity when all variables are equal implies nonnegativity for every tuple.
+This reduces the problem to a polynomial in one variable, regardless of the number of excursions.
+A second averaging identity expresses this polynomial as an integral with an explicit nonnegative weight, making it possible to compare its positive and negative contributions.
+
+Finally, we prove that this integral is nonnegative.
+When $\ell\le0$, its integrand is nonnegative everywhere.
+When $\ell>0$, the integrand can have both signs, so we must show that the positive contribution outweighs the negative one after integration.
+We rewrite the integral as a positively weighted combination of expectations in which $\ell$ appears only in the weights.
+It is therefore enough to prove that each expectation is nonnegative.
+In this representation, the potentially negative terms involve odd powers of a shifted random variable, while the compensating terms involve the next even powers.
+These expectations are related by differentiation: varying the shift in an even power produces the preceding odd power.
+An integration-by-parts identity for the random variable gives a differential equation for the even-power expectation.
+We use this equation to bound the odd-power contribution by the even-power contribution, with constants that make the total nonnegative when $p\ge2/3$.
+This is the only step that requires this density assumption.
+All four steps apply uniformly in the odd cycle length $m$.
 
 \paragraph{Organization.}
-\Cref{sec:matrix-reduction} carries out the graphon-to-matrix reduction and encodes the nonconstant block and its interaction with the constant vector in a positive spectral measure.
+\Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
 \Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 We close with further questions in \Cref{sec:conclusion}.
-The appendices justify the graphon approximation and prove the estimate used to control the Gamma expectations in the final step.
+The appendices justify the graphon approximation and prove the comparison of expected powers used in the final step.
 
 \section{Matrix reduction and spectral measure}
 \label{sec:matrix-reduction}
