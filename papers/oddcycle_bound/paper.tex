@@ -288,10 +288,32 @@ Our aim is to show that the sum of these two traces exceeds $p^m+(1-p)^m$ by at 
 We obtain this bound through four reductions, all uniform in the odd cycle length $m$.
 
 First, we isolate the contribution that must be bounded.
-We separate functions $f : \mathbb{R} \to \mathbb{R}$ into their constant averages $c = \int f(x)dx$ and zero-average remainders $f_0 = f - c$.
-This writes each trace as a sum of contributions from repeated applications of the operator that stay within constant functions, stay within zero-average functions, or pass between these two spaces.
-In the sum of the two traces, the constant contributions give $p^m+(1-p)^m$, while the contributions confined to zero-average functions cancel for odd $m$.
-The desired inequality therefore reduces to showing that the total contribution from passages between the two spaces is at least the path-density correction.
+For a real-valued function $f\in L^2[0,1]$, write
+\[
+  f=c\one+f_0,\qquad
+  c=\int_0^1 f(x)\dd x,\qquad
+  \int_0^1 f_0(x)\dd x=0,
+\]
+where $\one$ is the constant function equal to one.
+Define the operators
+\[
+  \Pi_c f=c\one,\qquad \Pi_0 f=f_0,
+\]
+which retain the constant and zero-average components, respectively.
+For either $T=\Tker W$ or $T=\Tker{1-W}$, the trace decomposes as
+\[
+  \begin{aligned}
+    \Tr(T^m)
+    ={}&\Tr\bigl((\Pi_cT)^m\bigr)
+       +\Tr\bigl((\Pi_0T)^m\bigr)\\
+       &+\sum_{\substack{(s_1,\ldots,s_m)\in\{c,0\}^m\\
+                         \text{not all }s_i\text{ equal}}}
+       \Tr\bigl(\Pi_{s_1}T\cdots\Pi_{s_m}T\bigr).
+  \end{aligned}
+\]
+The first term retains only the constant component, the second retains only the zero-average component, and the final sum includes every sequence using both components.
+For $\Tker W$ and $\Tker{1-W}$, the first contributions sum to $p^m+(1-p)^m$, while the second contributions cancel for odd $m$.
+It therefore remains to show that the two sums involving both components together are at least the path-density correction.
 We carry out this decomposition using finite-matrix representations of graphons that are constant on a finite grid of rectangles; an approximation argument gives the result for general graphons.
 
 Second, we reduce this comparison to polynomial nonnegativity.
