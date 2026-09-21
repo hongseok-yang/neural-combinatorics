@@ -277,26 +277,49 @@ Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^
 \]
 
 \paragraph{Proof strategy: four reductions.}
-The trace formula $\tC mW=\sum_i\lambda_i^m$ expresses the cycle density as a sum of eigenvalue powers.
-For odd $m$, negative eigenvalues contribute negatively, so obtaining a lower bound requires controlling their contribution.
-Our proof combines the trace formulas for $W$ and $1-W$ so that certain terms cancel, and then shows that the remaining terms cover the path-density correction in \eqref{eq:intro-commonality}.
-
-First, we identify the cancellation.
-Every function splits into its constant average and a remainder with integral zero.
-The operators associated with the two graphons satisfy
+The trace formula expresses the two cycle densities as
 \[
-  (\Tker Wf)(x)+(\Tker{1-W}f)(x)=\int_0^1 f(y)\dd y.
+  \tC mW=\Tr(\Tker W^m),
+  \qquad
+  \tC m{1-W}=\Tr(\Tker{1-W}^m).
 \]
-Thus, on an input with integral zero, their outputs have opposite signs.
-To use this observation in the trace formula, we expand each operator power by separating the constant and zero-average components after every multiplication.
-Terms that use only zero-average components cancel between the two traces because $m$ is odd.
-Terms that use only constant components contribute $p^m+(1-p)^m$.
-The remaining terms involve transitions between the two types of components.
-We justify these expansions by first approximating the graphons by functions that are constant on a finite grid of rectangles; their operators can then be represented by finite matrices.
+Each trace is the sum of the $m$th powers of the corresponding operator's eigenvalues.
+Our aim is to show that the sum of these two traces exceeds $p^m+(1-p)^m$ by at least the path-density correction in \eqref{eq:intro-commonality}.
+For odd $m$, negative eigenvalues contribute negatively to each trace, so obtaining this bound requires controlling their contribution.
+We analyze the two traces together: the relationship between $W$ and $1-W$ makes certain terms in their expansions cancel, leaving a smaller collection of terms to bound.
 
-Second, we organize the remaining terms and compare them with the path-density correction.
+First, we show that the excess over $p^m+(1-p)^m$ consists entirely of terms that switch between constant and zero-average components.
+To expand $\Tker W^m$, consider its action on an arbitrary function $f$.
+Split $f$ into its constant average and a remainder with integral zero, and apply $\Tker W$ separately to these two pieces.
+Split each resulting function again into its constant average and zero-average remainder, then apply $\Tker W$ separately to every piece.
+Repeat this procedure through all $m$ applications of $\Tker W$.
+After the final application, split each output once more into its constant and zero-average components.
+By linearity, the sum of the resulting functions is exactly $\Tker W^m f$.
+
+This gives an expansion of $\Tker W^m$ into terms indexed by the sequence of constant or zero-average components retained during the calculation.
+We expand $\Tker{1-W}^m$ in the same way and then take traces.
+Since a trace sums diagonal contributions, only sequences that start and finish in the same component space contribute.
+
+Consider first the expansion term that starts with the zero-average component of $f$ and retains the zero-average component of the output after every application.
+The identity
+\[
+  (\Tker Wf)(x)+(\Tker{1-W}f)(x)=\int_0^1 f(y)\dd y
+\]
+shows that, for a zero-average input, applying $\Tker W$ or $\Tker{1-W}$ gives outputs that are negatives of one another.
+Their zero-average components are therefore negatives as well.
+Thus, replacing $\Tker W$ by $\Tker{1-W}$ in this sequence introduces a factor of $-1$ at each of the $m$ applications.
+The two resulting operators differ by a factor of $(-1)^m$, so their traces cancel because $m$ is odd.
+
+Next, consider the expansion term that starts with the constant component of $f$ and retains the constant component of the output at every stage.
+Applying $\Tker W$ to a constant and taking the average of the output multiplies that constant by $p$; the corresponding multiplier for $\Tker{1-W}$ is $1-p$.
+Repeating this $m$ times gives trace contributions $p^m$ and $(1-p)^m$, respectively.
+Every other sequence that contributes to the traces visits both component spaces and returns to the space in which it started.
+The sum of these contributions is therefore exactly the excess over $p^m+(1-p)^m$ that we must bound below by the path-density correction.
+We justify the expansions by first approximating the graphons by functions that are constant on a finite grid of rectangles, so that the operators can be represented by finite matrices.
+
+Second, we group the sequences that visit both component spaces and compare their trace contributions with the path-density correction.
 A passage from the constant component into the zero-average component and back is called an \emph{excursion}.
-We group terms by the number $r$ of such passages and sum over their possible lengths.
+We group these contributions by the number $r$ of excursions and sum over the possible lengths of the excursions and the intervening constant portions.
 The path density admits a similar expansion, so we can subtract its correction one group at a time.
 The resulting gap between the two sides of \eqref{eq:intro-commonality} is a sum of polynomials
 $P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)$ with nonnegative weights.
