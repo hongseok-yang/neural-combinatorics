@@ -315,7 +315,7 @@ It therefore remains to show that the two sums involving both components togethe
 We carry out this decomposition using finite-matrix representations of graphons that are constant on a finite grid of rectangles; an approximation argument gives the result for general graphons.
 
 Second, we reduce this comparison to polynomial nonnegativity.
-Using the trace decomposition from the first step, we write the difference between the two sides of \eqref{eq:intro-commonality} as follows.
+For a step graphon, the trace decomposition from the first step gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
 \[
   \begin{aligned}
     & \Bigl(\tC mW+\tC m{1-W}-p^m-(1-p)^m\Bigr)
@@ -364,7 +364,7 @@ Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal
 Finally, we prove \eqref{eq:intro-diagonal-positive} using an ODE argument.
 An integral representation of $P_{m,r}(1-p;\ell,\ldots,\ell)$ establishes \eqref{eq:intro-diagonal-positive} when $\ell\le0$ (\Cref{lem:pge23-ell-negative}).
 For $\ell>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
-The integral representation \eqref{eq:pge23-laplace-gamma} can be written as
+The Gamma expectation formula \eqref{eq:pge23-gamma-expectation} gives
 \[
   P_{m,r}(1-p;\ell,\ldots,\ell)
   =\binom{m-r-1}{r}
@@ -403,7 +403,7 @@ We close with further questions in \Cref{sec:conclusion}.
 \section{Matrix reduction and spectral measure}
 \label{sec:matrix-reduction}
 
-Let $W\colon[0,1]^2\to[0,1]$ be a graphon with $\edens W=p\ge2/3$, and
+Let $W\colon[0,1]^2\to[0,1]$ be a graphon with $\edens W=p$, and
 write
 \[
   U=1-W,
@@ -411,6 +411,7 @@ write
   q=1-p.
 \]
 Thus, $U$ is the complementary graphon and has edge density $q$.
+The matrix identities and excursion expansions below hold at every edge density; the restriction $p\ge2/3$ enters only in the positivity argument in \Cref{sec:excursion-positivity}.
 
 \begin{lemma}[Step-graphon reduction]
 \label{lem:step-reduction}
@@ -453,7 +454,9 @@ matrix. The matrices
   Q=I-P
 \]
 are the orthogonal projections of $\R^N$ onto $\R e$ and $\mathcal E_0$,
-respectively. Define the vector $g\in\R^N$ and the symmetric linear map
+respectively. They are the matrix counterparts of the projections
+$\Pi_{\mathrm c}$ and $\Pi_0$ used in the introduction.
+Define the vector $g\in\R^N$ and the symmetric linear map
 $A\colon\mathcal E_0\to\mathcal E_0$ by
 \begin{equation*}
   g=M_Ue-qe,
@@ -529,7 +532,7 @@ Let $\lambda_1,\ldots,\lambda_{N-1}$ be the eigenvalues of $A$, counted
 with multiplicity, and choose corresponding orthonormal eigenvectors
 $u_1,\ldots,u_{N-1}$ of $\mathcal E_0$. For each $i$, let $P_i$ be the
 orthogonal projection onto the one-dimensional subspace spanned by $u_i$.
-Define the finite positive measure
+Define the finite nonnegative measure
 \begin{equation*}
   \mu=\sum_{i=1}^{N-1}\norm{P_ig}^2\delta_{\lambda_i}.
 \end{equation*}
@@ -544,7 +547,7 @@ at $\lambda_i$.  By \Cref{lem:half-norm},
   \mu(\R)=\norm g^2.
 \end{equation}
 Thus, every quantity $g^{\mathsf T}A^jg$ that will occur in the matrix
-expansions is a moment of one positive measure on a fixed interval. The next
+expansions is a moment of one nonnegative measure on a fixed interval. The next
 section organizes those expansions in terms of these moments.
 
 \section{Excursion expansions}
@@ -784,7 +787,7 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
 
 \begin{lemma}[Reduction to excursion polynomials]
 \label{lem:polynomial-reduction}
-  For $1\le r\le(m-1)/2$, let
+  Let $m\ge3$ be odd. For $1\le r\le(m-1)/2$, let
   \begin{equation}\label{eq:pge23-n}
     n=m-2r,
   \end{equation}
@@ -1035,7 +1038,7 @@ larger range $p\ge1/2$.
   We have proved that
   $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
   $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
-  Since $\mu$ is a positive measure, \eqref{eq:Phi-expansion} gives
+  Since $\mu$ is a nonnegative measure, \eqref{eq:Phi-expansion} gives
   $\Phi_m\ge0$, and
   \Cref{lem:polynomial-reduction} proves both inequalities.
 \end{proof}
@@ -1043,7 +1046,7 @@ larger range $p\ge1/2$.
 \section{Positivity of the excursion polynomials}
 \label{sec:excursion-positivity}
 
-Fix $1\le r\le(m-1)/2$. Then, $n=m-2r$ is a positive odd integer.
+Fix an odd integer $m\ge3$ and $1\le r\le(m-1)/2$. Then, $n=m-2r$ is a positive odd integer.
 Our first goal is to replace the $r$ spectral variables in $P_{m,r}$ by a
 single variable $\ell$.
 Define the diagonal polynomial
@@ -1412,7 +1415,7 @@ Since the constant prefactor and $\ell^{n+r}$ in
 \eqref{eq:pge23-beta-integral} are positive, it remains to show that
 \[
   \int_0^\infty
-  \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s.
+  \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s\ge0.
 \]
 The difficulty is that $\ell$ and $s$ are coupled through
 $(\ell+s)^{-m}$. The following Laplace-transform representation separates
@@ -1425,7 +1428,7 @@ Indeed, \eqref{eq:pge23-laplace-kernel} follows from the substitution
 $w=t(\ell+s)$.
 
 \begin{lemma}[Laplace--Gamma representation]\label{lem:pge23-laplace-gamma}
-  Let $Y\sim\GammaLaw(r,1)$.
+  Let $Y\sim\GammaLaw(r,1)$, where the parameters denote shape and rate.
   If $\ell>0$, then
   \begin{equation}\label{eq:pge23-laplace-gamma}
     \widetilde P_{m,r}(q,\ell)
@@ -1433,6 +1436,12 @@ $w=t(\ell+s)$.
     \int_0^\infty
     t^{m-r-1}e^{-\ell t}
     \E\rho_{n,m}\left(q+\frac {Y}{t}\right)\dd t.
+  \end{equation}
+  Equivalently, if $Z\sim\GammaLaw(m-r,1)$ is independent of $Y$, then
+  \begin{equation}\label{eq:pge23-gamma-expectation}
+    \widetilde P_{m,r}(q,\ell)
+    =\binom{m-r-1}{r}
+      \E\!\left[\rho_{n,m}\!\left(q+\frac{\ell}{Z}Y\right)\right].
   \end{equation}
 \end{lemma}
 
@@ -1476,6 +1485,15 @@ $w=t(\ell+s)$.
   \]
   where the last equality holds because $Y$ has density $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.
   Substituting this for the inner integral obtained after the exchange gives \eqref{eq:pge23-laplace-gamma}.
+  To obtain \eqref{eq:pge23-gamma-expectation}, substitute $z=\ell t$
+  in this integral. Since $m-r=n+r$, the powers of $\ell$ cancel, and
+  the density $z^{m-r-1}e^{-z}/\Gamma(m-r)$ leaves the prefactor
+  \[
+    \frac{\Gamma(m-r)}{r\Gamma(n)\Gamma(r)}
+    =\binom{m-r-1}{r}.
+  \]
+  This is the expectation formula used in the introduction, with
+  $q=1-p$ and $n=m-2r$.
 \end{proof}
 
 In \eqref{eq:pge23-laplace-gamma}, the parameter $\ell$ occurs only in
@@ -1506,11 +1524,13 @@ this comparison, uniformly in the scaling of $Y$.
   \end{equation*}
 \end{lemma}
 
-The proof is given in \Cref{app:gamma-moment}.  We first show how the
+For $z>0$, this is the moment bound \eqref{eq:intro-moment-bound}
+after rescaling with $b=1/z$.
+The proof is given in \Cref{app:gamma-moment}. We first show how the
 lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 
 \begin{proposition}[Shifted-Gamma positivity]\label{prop:pge23-gamma-positive}
-  Let $n\ge1$ be odd, $r\ge1$, and $m=n+2r$.
+  Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
   If $0\le q\le1/3$, then for every $x\ge0$,
   \begin{equation}\label{eq:pge23-shifted-positive}
     \E\rho_{n,m}(q+xY)\ge0,
@@ -1613,14 +1633,14 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
   $\E\rho_{n,m}(q+xY)$, which are nonnegative by
   \Cref{prop:pge23-gamma-positive}.
   Thus, $P_{m,r}\ge0$ on $[-1/2,1/2]^r$.
-  Since $\mu$ is positive, \eqref{eq:Phi-expansion} gives $\Phi_m\ge0$,
+  Since $\mu$ is nonnegative, \eqref{eq:Phi-expansion} gives $\Phi_m\ge0$,
   and \Cref{lem:polynomial-reduction} proves both theorems.
 \end{proof}
 
 \section{Concluding remarks and further questions}
 \label{sec:conclusion}
 
-The only nontrivial range not covered in the present paper is $p\in(1/2,2/3)$.
+For general odd cycle lengths, the only nontrivial range not covered in the present paper is $p\in(1/2,2/3)$; \Cref{prop:short-cycles} already covers this range for $C_3$, $C_5$, and $C_7$.
 The present proof first establishes the stronger two-colour inequality in
 \Cref{thm:commonality}. That inequality can fail when $1/2<p<2/3$, so the
 argument does not extend to this range.
@@ -1750,10 +1770,10 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \end{equation}
 
   The proof has three stages. The Gamma Stein identity first gives a
-  differential equation for $F$. That equation shows that any interval on
-  which $H$ is negative must contain one explicit point $b_*$. Finally, an
-  integral representation of $H(b_*)$ reduces its positivity to a
-  one-variable comparison between two local maxima.
+  differential equation for $F$. If $H$ were negative anywhere, that
+  equation would force $H(b_*)<0$ at an explicit point $b_*$.
+  Finally, an integral representation shows that $H(b_*)\ge0$ by comparing
+  two local maxima, giving a contradiction.
 
   \smallskip
   \noindent\emph{The differential equation.}
@@ -1797,6 +1817,13 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     b_*:=\frac{(r+j)(5r+8j)}{3(r+4j)}.
   \end{equation*}
   Since $F(b)=\E(Y-b)^{2j}>0$, formula \eqref{eq:pge23-gamma-crossing} shows that at a zero $b$ of $H$ we have $H'(b)>0$ if $b>b_*$, and $H'(b)<0$ if $b<b_*$.
+  If $H(b_*)=0$, then $H'(b_*)=0$. Differentiating the formula for $H'$
+  above and using \eqref{eq:pge23-gamma-ODE} gives
+  \[
+    H''(b_*)=\frac{r+4j}{b_*}F(b_*)>0.
+  \]
+  Thus, if $b_*$ is a zero of $H$, it is a strict local minimum and
+  cannot be an endpoint of an interval on which $H$ is negative.
   Now
   \[
     H(0)=(r+j)\E Y^{2j}>0,
@@ -1805,11 +1832,11 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     \qquad(b\to\infty),
   \]
   so $H$ is positive at both ends of $[0,\infty)$.
-  If $H$ were negative somewhere, the corresponding interval of negativity
+  If $H$ were negative somewhere, the maximal interval of negativity containing that point
   would have a first zero, where $H'\le0$, and a later zero, where
   $H'\ge0$. The first therefore lies below $b_*$ and the second above it,
-  so this interval would contain $b_*$.
-  Thus, it remains only to prove
+  so this interval would contain $b_*$ and give $H(b_*)<0$.
+  To rule out this possibility, it remains only to prove
   \begin{equation}\label{eq:pge23-gamma-Hbstar}
     H(b_*)\ge0.
   \end{equation}
