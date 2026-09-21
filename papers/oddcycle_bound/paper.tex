@@ -340,12 +340,12 @@ The second expresses the remaining trace sums, after subtracting the path-densit
 Here $\mu$ is a finite nonnegative measure determined by $W$, supported on $[-1/2,1/2]$, and constructed in \Cref{sec:matrix-reduction}; the $P_{m,r}$ are symmetric polynomials defined in \eqref{eq:Pmr}.
 The index $r$ counts passages from the constant component into the zero-average component and back, called \emph{excursions}.
 The measure supplies nonnegative weights, so it suffices to prove, for every $1\le r\le(m-1)/2$, that
-\[
+\begin{equation}\label{eq:intro-polynomial-positive}
   P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)\ge0
   \qquad\text{for every }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r.
-\]
+\end{equation}
 
-Third, we reduce these multivariable inequalities to one-variable inequalities.
+Third, we reduce \eqref{eq:intro-polynomial-positive} to a one-variable inequality.
 Choose nonnegative weights $\Theta_1,\ldots,\Theta_r$, summing to one, uniformly at random.
 These weights have the Dirichlet$(1,\ldots,1)$ distribution.
 Set $L=\sum_{i=1}^r\Theta_i\lambda_i$.
@@ -355,14 +355,14 @@ The Dirichlet averaging identity (\Cref{lem:pge23-dirichlet}) gives
   =\E\bigl[P_{m,r}(1-p;L,\ldots,L)\bigr].
 \]
 Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suffices to prove
-\[
+\begin{equation}\label{eq:intro-diagonal-positive}
   P_{m,r}(1-p;\ell,\ldots,\ell)\ge0
   \qquad\text{for every }\ell\in[-1/2,1/2].
-\]
-Although the number $r$ of variables can grow with $m$, this is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
+\end{equation}
+Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
-Finally, we establish the one-variable inequalities using an ODE argument.
-An integral representation of $P_{m,r}(1-p;\ell,\ldots,\ell)$ establishes its nonnegativity when $\ell\le0$ (\Cref{lem:pge23-ell-negative}).
+Finally, we prove \eqref{eq:intro-diagonal-positive} using an ODE argument.
+An integral representation of $P_{m,r}(1-p;\ell,\ldots,\ell)$ establishes \eqref{eq:intro-diagonal-positive} when $\ell\le0$ (\Cref{lem:pge23-ell-negative}).
 For $\ell>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
 The integral representation \eqref{eq:pge23-laplace-gamma} can be written as
 \[
@@ -371,24 +371,27 @@ The integral representation \eqref{eq:pge23-laplace-gamma} can be written as
     \E\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\ell}{Z}Y\right)\right],
 \]
 where $\rho_{m-2r,m}$ is the polynomial defined in \eqref{eq:pge23-rho}.
-It suffices to show that, for each fixed $z>0$, the expectation over $Y$ satisfies
-\[
+To prove \eqref{eq:intro-diagonal-positive} for $\ell>0$, it suffices to show that, for each fixed $z>0$, the expectation over $Y$ satisfies
+\begin{equation}\label{eq:intro-expectation-positive}
   \E_Y\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\ell}{z}Y\right)\right]\ge0.
-\]
-Writing $F_j(b)=\E(Y-b)^{2j}$ for integers $j\ge1$, this follows for $p\ge2/3$ from the bound
-\[
+\end{equation}
+Writing $F_j(b)=\E(Y-b)^{2j}$ for integers $j\ge1$, \eqref{eq:intro-expectation-positive} follows for $p\ge2/3$ from the bound
+\begin{equation}\label{eq:intro-moment-bound}
   (r+j)F_j(b)+\frac{3b}{2}F_j'(b)\ge0
   \qquad(j\ge1,\ b\ge0),
-\]
+\end{equation}
 as shown in the proof of \Cref{prop:pge23-gamma-positive}.
 The function $F_j$ satisfies the differential equation
-\[
+\begin{equation}\label{eq:intro-moment-ode}
   bF_j''(b)+(b-r-2j+1)F_j'(b)-2jF_j(b)=0.
-\]
-The ODE shows that any interval on which $(r+j)F_j(b)+(3b/2)F_j'(b)$ is negative must contain a particular point depending only on $r$ and $j$.
-An integral estimate establishes nonnegativity at this point, ruling out all such intervals and proving the bound for every $b\ge0$.
-This establishes the one-variable polynomial inequalities; the implication from the bound on $F_j$ to positivity of the expectation is the only stage that needs $p\ge2/3$.
-It follows that the polynomials in the second step are nonnegative, completing the comparison required by the first step and proving \Cref{thm:commonality}.
+\end{equation}
+If the left-hand side of \eqref{eq:intro-moment-bound} were negative for some $b\ge0$, the ODE \eqref{eq:intro-moment-ode} would force the same expression to be negative at a particular point determined only by $r$ and $j$.
+An integral estimate shows that this expression is nonnegative at that point, giving a contradiction and proving the moment bound \eqref{eq:intro-moment-bound} for every $b\ge0$.
+
+The moment bound ensures that the expectation over $Y$ in \eqref{eq:intro-expectation-positive} is nonnegative; this is the only step requiring $p\ge2/3$.
+Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:intro-diagonal-positive} for $\ell>0$, completing the fourth reduction.
+The Dirichlet averaging identity extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
+These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
 The deduction preceding this overview then gives \Cref{thm:main}.
 
 \paragraph{Organization.}
