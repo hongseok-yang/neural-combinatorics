@@ -184,13 +184,22 @@ For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graph
 \end{cases}
 \]
 Its edge density is $p=1-1/k$.
-For $\Tker{W_k}$, the constant function has eigenvalue $p$.
-The functions that are constant on each part and whose partwise values sum to zero form a $(k-1)$-dimensional eigenspace with eigenvalue $-1/k$; all remaining eigenvalues are zero.
+Write $I_1,\ldots,I_k$ for the $k$ equal parts.
+If $f$ takes the constant value $c_i$ on each part $I_i$, then
+\[
+  (\Tker{W_k}f)(x)=\sum_{j\ne i}\int_{I_j}f(y)\dd y
+  =\frac1k\sum_{j=1}^k c_j-\frac{c_i}{k},\qquad x\in I_i.
+\]
+Thus, the constant function has eigenvalue $(k-1)/k=p$, while the partwise constant functions with $\sum_i c_i=0$ form a $(k-1)$-dimensional eigenspace with eigenvalue $-1/k$.
+Every function decomposes into its partwise averages and a remainder whose integral on each part is zero.
+The operator maps this remainder to zero, so all remaining eigenvalues are zero.
 The trace formula therefore gives, for odd $m$,
 \begin{equation}\label{eq:intro-kpartite-value}
   \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m=\goal.
 \end{equation}
-This calculation suggests the polynomial $\goal$ as a lower bound at every edge density, including those where it need not give the exact minimum.
+At each density $p=1-1/k$, this construction gives an upper bound on the minimum $C_m$-density.
+Motivated by this expression and Goodman's triangle inequality, we ask whether $\goal$ is also a lower bound for every graphon.
+Such a bound would establish the optimality of $W_k$ at these densities, while allowing the bound to be nonoptimal between them.
 
 In the dense range $p\ge2/3$ considered here, this polynomial bound was previously known only for $C_3$ and $C_5$.
 For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=p$ satisfies
