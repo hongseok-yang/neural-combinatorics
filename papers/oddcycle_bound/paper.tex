@@ -361,12 +361,33 @@ Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suf
 \]
 Although the number $r$ of variables can grow with $m$, this is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
-Finally, we reduce the one-variable inequalities to a comparison of expected odd and even powers.
-An integral representation establishes nonnegativity when $\ell\le0$.
-For $\ell>0$, the integrand can have both signs, so its positive and negative contributions must be compared after integration.
-A further integral identity reduces the required nonnegativity to a bound comparing expected odd powers of a shifted random variable with the next even powers.
-We prove this bound using a differential equation.
-The resulting estimate establishes the one-variable inequalities for $p\ge2/3$; this is the only stage that needs this density assumption.
+Finally, we establish the one-variable inequalities using an ODE argument.
+An integral representation of $P_{m,r}(1-p;\ell,\ldots,\ell)$ establishes its nonnegativity when $\ell\le0$ (\Cref{lem:pge23-ell-negative}).
+For $\ell>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
+The integral representation \eqref{eq:pge23-laplace-gamma} can be written as
+\[
+  P_{m,r}(1-p;\ell,\ldots,\ell)
+  =\binom{m-r-1}{r}
+    \E\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\ell}{Z}Y\right)\right],
+\]
+where $\rho_{m-2r,m}$ is the polynomial defined in \eqref{eq:pge23-rho}.
+It suffices to show that, for each fixed $z>0$, the expectation over $Y$ satisfies
+\[
+  \E_Y\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\ell}{z}Y\right)\right]\ge0.
+\]
+Writing $F_j(b)=\E(Y-b)^{2j}$ for integers $j\ge1$, this follows for $p\ge2/3$ from the bound
+\[
+  (r+j)F_j(b)+\frac{3b}{2}F_j'(b)\ge0
+  \qquad(j\ge1,\ b\ge0),
+\]
+as shown in the proof of \Cref{prop:pge23-gamma-positive}.
+The function $F_j$ satisfies the differential equation
+\[
+  bF_j''(b)+(b-r-2j+1)F_j'(b)-2jF_j(b)=0.
+\]
+The ODE shows that any interval on which $(r+j)F_j(b)+(3b/2)F_j'(b)$ is negative must contain a particular point depending only on $r$ and $j$.
+An integral estimate establishes nonnegativity at this point, ruling out all such intervals and proving the bound for every $b\ge0$.
+This establishes the one-variable polynomial inequalities; the implication from the bound on $F_j$ to positivity of the expectation is the only stage that needs $p\ge2/3$.
 It follows that the polynomials in the second step are nonnegative, completing the comparison required by the first step and proving \Cref{thm:commonality}.
 The deduction preceding this overview then gives \Cref{thm:main}.
 
@@ -375,7 +396,6 @@ The deduction preceding this overview then gives \Cref{thm:main}.
 \Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 We close with further questions in \Cref{sec:conclusion}.
-The appendices justify the graphon approximation and prove the comparison of expected powers used in the final step.
 
 \section{Matrix reduction and spectral measure}
 \label{sec:matrix-reduction}
