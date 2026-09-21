@@ -116,7 +116,8 @@
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
   Here $\tC mW$ denotes the $C_m$-density of $W$.
-  At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality, although we do not claim optimality at other densities.
+  At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality.
+  For $k\ge3$, we also obtain uniqueness up to graphon equivalence and qualitative stability.
   Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
   This is the first of two papers establishing the bound for all edge densities.
   A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
@@ -124,7 +125,7 @@
   Our proof combines spectral techniques, generating functions, probabilistic averaging, and an ODE argument.
   The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the ODE controls the remaining competition between positive and negative terms.
   Together, these tools give a single argument that is uniform in $m$.
-  The proof has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
+  The lower-bound theorem has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -227,10 +228,13 @@ At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact e
 
 \begin{corollary}\label{cor:kpartite}
   For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimizes the $C_m$-density among graphons $W$ with $\edens W=1-1/k$.
+  For $k\ge3$, it is the unique minimizer up to graphon equivalence.
 \end{corollary}
 
 For $k\ge3$, \eqref{eq:intro-kpartite-value} shows that $W_k$ attains the lower bound in \Cref{thm:main}.
 For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$, while every graphon has nonnegative $C_m$-density.
+The uniqueness assertion follows from the equality analysis in \Cref{sec:equality-stability}, where graphon equivalence is defined by zero cut distance.
+It also gives qualitative stability: at each fixed density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum must approach $W_k$ in cut distance (\Cref{cor:stability}).
 
 \paragraph{A stronger two-colour theorem.}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
@@ -267,7 +271,8 @@ The Blakley--Roy inequality~\cite{blakley1965holder} gives $\tP{m-1}{1-W}\ge(1-p
 This path inequality was proved independently, and earlier, by Mulholland and Smith~\cite{mulholland1959inequality}.
 Thus, the path-density correction is nonnegative, and \eqref{eq:intro-commonality} strengthens extended commonality.
 Exchanging $W$ and $1-W$ gives the corresponding statement for $p\le1/3$.
-Equality holds in \eqref{eq:intro-commonality} for the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, for $W_k$.
+For $p\ge2/3$, equality holds in \eqref{eq:intro-commonality} exactly when $W$ has constant degree $p$, meaning that $\int_0^1 W(x,y)\dd y=p$ for almost every $x$ (\Cref{prop:regularity-gap}).
+This includes the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, $W_k$.
 
 This stronger statement immediately implies \Cref{thm:main}.
 Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives $\tC m{1-W}\le\tP{m-1}{1-W}$.
@@ -398,6 +403,7 @@ The deduction preceding this overview then gives \Cref{thm:main}.
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
 \Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
+\Cref{sec:equality-stability} identifies the equality cases and deduces qualitative stability.
 We close with further questions in \Cref{sec:conclusion}.
 
 \section{Matrix reduction and spectral measure}
@@ -1637,6 +1643,152 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
   and \Cref{lem:polynomial-reduction} proves both theorems.
 \end{proof}
 
+\section{Equality and qualitative stability}
+\label{sec:equality-stability}
+
+The two inequalities used in the proof impose different conditions on equality.
+Equality in the strengthened two-colour theorem forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
+Together, these conditions identify the balanced complete multipartite graphons as the only graphons attaining the bound when $2/3\le p<1$.
+
+For a graphon $W$ of edge density $p$, define its degree function by
+\[
+  \dW(x)=\int_0^1 W(x,y)\dd y.
+\]
+We call $W$ \emph{$p$-regular} if $\dW(x)=p$ for almost every $x$.
+With $U=1-W$ and $q=1-p$, extend the gap in \eqref{eq:commonality-gap} to arbitrary graphons by setting
+\begin{equation}\label{eq:equality-gap}
+  \Phi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr).
+\end{equation}
+Thus, $\Phi_m(W)$ is the difference between the two sides of \eqref{eq:intro-commonality}.
+The excursion expansion gives an explicit lower bound in terms of degree variation.
+
+\begin{proposition}[Degree variation and equality in the two-colour bound]
+\label{prop:regularity-gap}
+  Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
+  Then
+  \begin{equation}\label{eq:degree-variance-gap}
+    \Phi_m(W)\ge(m-1)
+    \left(\int_0^1(\dW(x)-p)^2\dd x\right)^{(m-1)/2}.
+  \end{equation}
+  In particular, equality holds in \Cref{thm:commonality} if and only if $W$ is $p$-regular.
+\end{proposition}
+
+\begin{proof}
+  First suppose that $W$ is a step graphon as in \Cref{sec:matrix-reduction}.
+  For $r=(m-1)/2$, the degree $n=m-2r$ in \eqref{eq:Pmr} is one, so
+  \[
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    =\frac mr\bigl(rp+rq\bigr)-1=m-1.
+  \]
+  All other integrands in \eqref{eq:Phi-expansion} are nonnegative by \Cref{sec:excursion-positivity}.
+  Retaining this single term gives
+  \[
+    \Phi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
+  \]
+  By the normalization of $g=M_Ue-qe$ and \eqref{eq:moments},
+  \[
+    \mu(\R)=\norm g^2
+    =\int_0^1(\dW(x)-p)^2\dd x,
+  \]
+  proving \eqref{eq:degree-variance-gap} for step graphons.
+  The same-density approximations in \Cref{lem:step-reduction} extend it to every graphon: the densities defining $\Phi_m(W)$ converge, as does the degree variance, which equals $\tP2W-p^2$.
+
+  If $\Phi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
+  Conversely, if $W$ is $p$-regular, the constant functions and their orthogonal complement are invariant under both $\Tker W$ and $\Tker U$.
+  On the constants the eigenvalues are $p$ and $q$, while on the orthogonal complement the two operators are negatives of each other.
+  Since $m$ is odd, their traces therefore satisfy
+  \[
+    \tC mW+\tC mU=p^m+q^m.
+  \]
+  Also, $\Tker U\one=q\one$ gives $\tP{m-1}U=q^{m-1}$.
+  Substituting in \eqref{eq:equality-gap} yields $\Phi_m(W)=0$.
+\end{proof}
+
+The one-colour gap decomposes as
+\begin{equation}\label{eq:one-colour-gap}
+  \tC mW-\bigl(p^m-pq^{m-1}\bigr)
+  =\Phi_m(W)+\bigl[\tP{m-1}U-\tC mU\bigr].
+\end{equation}
+Both terms on the right are nonnegative.
+Thus, a small one-colour gap also forces small degree variation, and equality requires the cycle--path comparison to be an equality as well.
+
+\begin{proposition}[Equality in the odd-cycle bound]
+\label{prop:main-equality}
+  Let $m\ge3$ be odd, and let $W$ have edge density $2/3\le p<1$.
+  Equality holds in \Cref{thm:main} if and only if $p=1-1/k$ for an integer $k\ge3$ and, up to a measure-preserving relabelling and null sets, $W=W_k$.
+\end{proposition}
+
+\begin{proof}
+  The converse follows from \eqref{eq:intro-kpartite-value}.
+  For the forward implication, \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} show that $W$ is $p$-regular and
+  \[
+    \tC mU=\tP{m-1}U=q^{m-1},\qquad q=1-p>0.
+  \]
+  The graphon $U$ is $q$-regular.
+  Weighted Cauchy--Schwarz gives, for $f\in L^2[0,1]$,
+  \[
+    |\Tker Uf(x)|^2
+    \le q\int_0^1 U(x,y)|f(y)|^2\dd y,
+  \]
+  and integration shows that $\norm{\Tker Uf}_2\le q\norm f_2$.
+  Hence every eigenvalue $\lambda_i$ of $\Tker U$ lies in $[-q,q]$.
+  Since $m$ is odd and $0\le U\le1$,
+  \begin{equation}\label{eq:regular-complement-cycle}
+    q^{m-1}=\sum_i\lambda_i^m
+    \le q^{m-2}\sum_i\lambda_i^2
+    =q^{m-2}\intsq U(x,y)^2\ddxy
+    \le q^{m-1}.
+  \end{equation}
+  Equality throughout implies that $U$ takes values in $\{0,1\}$ almost everywhere and every nonzero $\lambda_i$ equals $q$.
+  In particular, $\Tker U^2=q\Tker U$, so its kernels satisfy
+  \begin{equation}\label{eq:equal-neighbourhoods}
+    \int_0^1 U(x,z)U(y,z)\dd z=qU(x,y)
+    \quad\text{for almost every }(x,y).
+  \end{equation}
+
+  Write $N(x)=\{y:U(x,y)=1\}$, which has measure $q$ for almost every $x$.
+  By \eqref{eq:equal-neighbourhoods}, adjacent points have the same neighbourhood up to a null set, while nonadjacent points have disjoint neighbourhoods up to a null set.
+  Choose $x$ for which these statements hold for almost every $y$, and set $B=N(x)$.
+  Then $N(y)=B$ up to a null set for almost every $y\in B$.
+  Consequently, $U=1$ almost everywhere on $B\times B$ and $U=0$ almost everywhere between $B$ and its complement.
+  Repeating on the remaining set extracts disjoint cliques, each of measure $q$.
+  A remainder of positive measure less than $q$ is impossible, since its points still have degree $q$ and no neighbours in the extracted cliques.
+  Thus, these cliques partition $[0,1]$ up to a null set, and their number $k$ satisfies $kq=1$.
+  Their complement is $W_k$ after relabelling; $p\ge2/3$ implies $k\ge3$.
+\end{proof}
+
+At $p=1$, the only graphon is $W=1$ almost everywhere, which also attains equality.
+This completes the uniqueness assertion in \Cref{cor:kpartite}.
+
+To state stability, recall the cut norm and cut distance:
+\[
+  \norm F_\square=\sup_{S,T\subseteq[0,1]}
+    \left|\int_{S\times T}F(x,y)\ddxy\right|,
+  \qquad
+  \delta_\square(W,V)=\inf_\varphi\norm{W-V^\varphi}_\square.
+\]
+Here $S,T$ are measurable, $\varphi$ ranges over measure-preserving bijections of $[0,1]$ modulo null sets, and $V^\varphi(x,y)=V(\varphi(x),\varphi(y))$.
+Graphons at zero cut distance are called \emph{equivalent}.
+The space of graphons modulo this equivalence is compact in cut distance, and homomorphism densities are continuous in this metric~\cite{borgs2008convergent,lovasz2012large}.
+
+\begin{corollary}[Qualitative stability]\label{cor:stability}
+  Fix an odd integer $m\ge3$ and an integer $k\ge3$, and set $p_k=1-1/k$.
+  For every $\varepsilon>0$ there exists $\delta>0$ such that every graphon $W$ with
+  \[
+    \edens W=p_k,
+    \qquad
+    \tC mW\le p_k^m-p_k(1-p_k)^{m-1}+\delta
+  \]
+  satisfies $\delta_\square(W,W_k)<\varepsilon$.
+\end{corollary}
+
+\begin{proof}
+  Otherwise, there would be a sequence $(V_j)_j$ of edge density $p_k$ whose $C_m$-densities tend to the minimum, but with $\delta_\square(V_j,W_k)\ge\varepsilon$ for some fixed $\varepsilon>0$.
+  Compactness gives a subsequence converging in cut distance to a graphon $W$.
+  Continuity of edge and cycle densities shows that $W$ attains the minimum at edge density $p_k$.
+  By \Cref{prop:main-equality}, $W$ is equivalent to $W_k$, contradicting the distance bound.
+\end{proof}
+
 \section{Concluding remarks and further questions}
 \label{sec:conclusion}
 
@@ -1646,6 +1798,10 @@ The present proof first establishes the stronger two-colour inequality in
 argument does not extend to this range.
 Within our argument, the obstruction appears precisely in the shifted-Gamma comparison, where $q\le1/3$---equivalently, $p\ge2/3$---is needed.
 The companion paper proves the original one-colour bound on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
+
+At each density $1-1/k$ with $k\ge3$, the present argument determines both the minimum odd-cycle density and the unique extremal graphon, with qualitative stability.
+The degree-variance estimate \eqref{eq:degree-variance-gap} quantifies one part of this structure: a small gap forces degrees to be nearly constant.
+The subsequent compactness argument gives no explicit rate of convergence to $W_k$ in cut distance; obtaining such a rate would strengthen the structural conclusion.
 
 The Goodman-style perspective extends naturally beyond odd cycles. For a
 nonbipartite graph $H$, let $\chi_H$ be its chromatic polynomial, let
@@ -1691,6 +1847,7 @@ and Fable~5. We subsequently revised the argument to emphasize its
 combinatorial interpretation and improve its readability.
 
 \noindent\textbf{Differences between the Lean verification and the present proof.}
+The equality and stability consequences in \Cref{sec:equality-stability} are not included in the formal verification reported here.
 \tk{TODO: Write here about deviation that lean verification and current proof.}
 
 \noindent{\textbf{Acknowledgements.}}
