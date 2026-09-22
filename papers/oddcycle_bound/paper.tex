@@ -1691,10 +1691,13 @@ For a graphon $W$ of edge density $p$, define its degree function by
   \dW(x)=\int_0^1 W(x,y)\dd y.
 \]
 We call $W$ \emph{$p$-regular} if $\dW(x)=p$ for almost every $x$.
-With $U=1-W$ and $q=1-p$, extend the gap in \eqref{eq:commonality-gap} to arbitrary graphons by setting
+The gap $\Phi_m$ of \eqref{eq:Phi-expansion} is a sum of integrals against the spectral measure $\mu$ of a step graphon.
+With $U=1-W$ and $q=1-p$, solving \eqref{eq:commonality-gap} for $\Phi_m$ and using $q^m-q^{m-1}=-pq^{m-1}$ turns it into
 \begin{equation}\label{eq:equality-gap}
-  \Phi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr).
+  \Phi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr),
 \end{equation}
+a combination of homomorphism densities in which no eigenvalue appears.
+We take \eqref{eq:equality-gap} as the definition of the gap for an arbitrary graphon $W$; for step graphons it agrees with $\Phi_m$.
 Thus, $\Phi_m(W)$ is the difference between the two sides of \eqref{eq:intro-commonality}.
 The excursion expansion gives an explicit lower bound in terms of degree variation.
 
@@ -1711,13 +1714,23 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
 
 \begin{proof}
   First suppose that $W$ is a step graphon as in \Cref{sec:matrix-reduction}.
-  For $r=(m-1)/2$, the degree $n=m-2r$ in \eqref{eq:Pmr} is one, so
+  We keep only the top term $r=(m-1)/2$ of the sum \eqref{eq:Phi-expansion}.
+  For this $r$ the degree $n=m-2r$ in \eqref{eq:Pmr} equals one, so the two
+  complete homogeneous polynomials of degree $n$ are linear,
+  \[
+    h_1(\rep pr,-\lambda_1,\ldots,-\lambda_r)=rp-\sum_{i=1}^r\lambda_i,
+    \qquad
+    h_1(\rep qr,\lambda_1,\ldots,\lambda_r)=rq+\sum_{i=1}^r\lambda_i,
+  \]
+  and the subtracted term is $h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)=h_0=1$.
+  The eigenvalues cancel when the two linear forms are added, and $p+q=1$, so the
+  integrand for this $r$ is the constant
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\frac mr\bigl(rp+rq\bigr)-1=m-1.
   \]
   All other integrands in \eqref{eq:Phi-expansion} are nonnegative by \Cref{sec:excursion-positivity}.
-  Retaining this single term gives
+  Discarding them and integrating the constant $m-1$ against the $r$-fold product of $\mu$ gives
   \[
     \Phi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
   \]
@@ -1730,14 +1743,46 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
   The same-density approximations in \Cref{lem:step-reduction} extend it to every graphon: the densities defining $\Phi_m(W)$ converge, as does the degree variance, which equals $\tP2W-p^2$.
 
   If $\Phi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
-  Conversely, if $W$ is $p$-regular, the constant functions and their orthogonal complement are invariant under both $\Tker W$ and $\Tker U$.
-  On the constants the eigenvalues are $p$ and $q$, while on the orthogonal complement the two operators are negatives of each other.
-  Since $m$ is odd, their traces therefore satisfy
+
+  Conversely, suppose that $W$ is $p$-regular.
+  The degree function of $U=1-W$ is then the constant $q$, so
   \[
-    \tC mW+\tC mU=p^m+q^m.
+    \Tker W\one=\dW=p\one,
+    \qquad
+    \Tker U\one=q\one .
   \]
-  Also, $\Tker U\one=q\one$ gives $\tP{m-1}U=q^{m-1}$.
-  Substituting in \eqref{eq:equality-gap} yields $\Phi_m(W)=0$.
+  Both operators are self-adjoint, so each leaves the orthogonal complement
+  $\one^\perp=\{f\in L^2[0,1]:\int_0^1f(x)\dd x=0\}$ invariant.
+  On $\one^\perp$ the two operators are negatives of each other: the identity
+  $W+U\equiv1$ gives
+  \[
+    \Tker Wf+\Tker Uf=\Bigl(\int_0^1f(y)\dd y\Bigr)\one=\ip f\one\one
+    \qquad\text{for all }f\in L^2[0,1],
+  \]
+  which is the orthogonal projection onto the constants and therefore vanishes on
+  $\one^\perp$.
+  Write $\nu_1,\nu_2,\ldots$ for the eigenvalues of the restriction of $\Tker W$ to
+  $\one^\perp$.
+  The eigenvalues of $\Tker W$ are then $p$ together with the $\nu_j$, and those of
+  $\Tker U$ are $q$ together with the $-\nu_j$.
+  Since $m$ is odd, the terms $\nu_j^m$ and $(-\nu_j)^m$ cancel in pairs, so the
+  trace formula gives
+  \[
+    \tC mW+\tC mU
+    =\Bigl(p^m+\sum_j\nu_j^m\Bigr)+\Bigl(q^m+\sum_j(-\nu_j)^m\Bigr)
+    =p^m+q^m.
+  \]
+  Iterating $\Tker U\one=q\one$ gives $\Tker U^{m-1}\one=q^{m-1}\one$, whence
+  \[
+    \tP{m-1}U=\ip\one{\Tker U^{m-1}\one}=q^{m-1}.
+  \]
+  Substituting both evaluations in \eqref{eq:equality-gap} and using $1-p=q$,
+  \[
+    \Phi_m(W)
+    =\bigl(p^m+q^m\bigr)-q^{m-1}-\bigl(p^m-pq^{m-1}\bigr)
+    =q^m-(1-p)q^{m-1}
+    =0. \qedhere
+  \]
 \end{proof}
 
 The one-colour gap decomposes as
@@ -1761,13 +1806,28 @@ Thus, a small one-colour gap also forces small degree variation, and equality re
     \tC mU=\tP{m-1}U=q^{m-1},\qquad q=1-p>0.
   \]
   The graphon $U$ is $q$-regular.
-  Weighted Cauchy--Schwarz gives, for $f\in L^2[0,1]$,
+  Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$ and apply the Cauchy--Schwarz
+  inequality to the two factors: for $f\in L^2[0,1]$ and almost every $x$,
   \[
-    |\Tker Uf(x)|^2
-    \le q\int_0^1 U(x,y)|f(y)|^2\dd y,
+    \bigl|\Tker Uf(x)\bigr|^2
+    =\left|\int_0^1 U(x,y)^{1/2}\cdot U(x,y)^{1/2}f(y)\dd y\right|^2
+    \le\left(\int_0^1 U(x,y)\dd y\right)
+      \left(\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y\right).
   \]
-  and integration shows that $\norm{\Tker Uf}_2\le q\norm f_2$.
-  Hence every eigenvalue $\lambda_i$ of $\Tker U$ lies in $[-q,q]$.
+  The first factor is the degree of $U$ at $x$, which equals $q$, so
+  \[
+    \bigl|\Tker Uf(x)\bigr|^2\le q\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y .
+  \]
+  Integrating in $x$, exchanging the order of integration, and using $q$-regularity a
+  second time, now in the variable $y$,
+  \[
+    \norm{\Tker Uf}_2^2
+    \le q\int_0^1\bigl|f(y)\bigr|^2
+      \left(\int_0^1 U(x,y)\dd x\right)\dd y
+    =q^2\norm f_2^2 .
+  \]
+  Hence $\Tker U$ has operator norm at most $q$, and being self-adjoint, every
+  eigenvalue $\lambda_i$ of $\Tker U$ lies in $[-q,q]$.
   Since $m$ is odd and $0\le U\le1$,
   \begin{equation}\label{eq:regular-complement-cycle}
     q^{m-1}=\sum_i\lambda_i^m
@@ -1776,21 +1836,39 @@ Thus, a small one-colour gap also forces small degree variation, and equality re
     \le q^{m-1}.
   \end{equation}
   Equality throughout implies that $U$ takes values in $\{0,1\}$ almost everywhere and every nonzero $\lambda_i$ equals $q$.
-  In particular, $\Tker U^2=q\Tker U$, so its kernels satisfy
+  The operator $\Tker U$ is self-adjoint and Hilbert--Schmidt, so the spectral theorem
+  writes it as $\sum_i\lambda_iP_i$ over its nonzero eigenvalues, with $P_i$ the
+  orthogonal projection onto the eigenspace of $\lambda_i$.
+  All these eigenvalues equal $q$, so the sum collapses to
+  \[
+    \Tker U=qP,
+    \qquad P=\text{the orthogonal projection onto }\ker(\Tker U-q).
+  \]
+  Since $P^2=P$, this gives $\Tker U^2=q^2P^2=q^2P=q\Tker U$.
+  Comparing the kernels of these two Hilbert--Schmidt operators,
   \begin{equation}\label{eq:equal-neighbourhoods}
     \int_0^1 U(x,z)U(y,z)\dd z=qU(x,y)
     \quad\text{for almost every }(x,y).
   \end{equation}
 
-  Write $N(x)=\{y:U(x,y)=1\}$, which has measure $q$ for almost every $x$.
-  By \eqref{eq:equal-neighbourhoods}, adjacent points have the same neighbourhood up to a null set, while nonadjacent points have disjoint neighbourhoods up to a null set.
-  Choose $x$ for which these statements hold for almost every $y$, and set $B=N(x)$.
-  Then $N(y)=B$ up to a null set for almost every $y\in B$.
-  Consequently, $U=1$ almost everywhere on $B\times B$ and $U=0$ almost everywhere between $B$ and its complement.
-  Repeating on the remaining set extracts disjoint cliques, each of measure $q$.
-  A remainder of positive measure less than $q$ is impossible, since its points still have degree $q$ and no neighbours in the extracted cliques.
-  Thus, these cliques partition $[0,1]$ up to a null set, and their number $k$ satisfies $kq=1$.
-  Their complement is $W_k$ after relabelling; $p\ge2/3$ implies $k\ge3$.
+  Write $N(x)=\{y:U(x,y)=1\}$ and $|A|$ for the Lebesgue measure of $A\subseteq[0,1]$, so that $|N(x)|=q$ for almost every $x$.
+  The left side of \eqref{eq:equal-neighbourhoods} is $|N(x)\cap N(y)|$ and $U$ is $\{0,1\}$-valued, so for almost every pair $(x,y)$,
+  \[
+    \bigl|N(x)\cap N(y)\bigr|
+    =\begin{cases}
+      q&\text{if }U(x,y)=1,\\
+      0&\text{if }U(x,y)=0.
+    \end{cases}
+  \]
+  Two sets of measure $q$ meeting in measure $q$ coincide, so adjacent points have equal neighbourhoods and nonadjacent points have disjoint ones.
+  The remaining identities between sets and between kernels hold up to null sets, which we no longer state.
+
+  Fix $x$ at which this dichotomy holds for almost every $y$, and put $B=N(x)$.
+  Each $y\in B$ is adjacent to $x$, so $N(y)=B$; hence $U=1$ on $B\times B$, and $U=0$ between $B$ and $[0,1]\setminus B$ because $N(y)=B$ leaves $y$ no neighbour outside $B$.
+  Points outside $B$ therefore keep all $q$ of their neighbours outside $B$, so the same argument applied to $[0,1]\setminus B$ extracts a further set of measure $q$, and so on.
+  A remainder of measure strictly between $0$ and $q$ is impossible, since its points have degree $q$ and no neighbours in the sets already extracted.
+  These sets thus partition $[0,1]$, their number $k$ satisfies $kq=1$, and $U$ is the union of the $k$ disjoint cliques $B\times B$.
+  The complement of $U$ is $W_k$ after relabelling; $p\ge2/3$ implies $k\ge3$.
 \end{proof}
 
 At $p=1$, the only graphon is $W=1$ almost everywhere, which also attains equality.
