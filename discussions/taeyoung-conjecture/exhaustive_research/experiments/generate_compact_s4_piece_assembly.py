@@ -23,7 +23,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('witnesses', nargs='+')
     parser.add_argument('--complete', action='store_true')
+    parser.add_argument('--low-module',
+                        help='Row module proving the bound left of the first S4 piece.')
+    parser.add_argument('--low-right',
+                        help='Right endpoint of that module, where the first S4 piece starts.')
     args = parser.parse_args()
+    assert (args.low_module is None) == (args.low_right is None), \
+        'A low module and its right endpoint are given together.'
+    if args.low_module is not None:
+        assert re.fullmatch(r'[A-Z][A-Za-z0-9_]*', args.low_module), args.low_module
     witnesses = [json.loads(Path(p).read_text(encoding='utf-8')) for p in args.witnesses]
     atlas = int(witnesses[0]['atlas'])
     assert all(w['atlas'] == atlas for w in witnesses)
@@ -80,11 +88,17 @@ end {ns}
     coloring = (root/'Coloring.lean').read_text(encoding='utf-8')
     chromatic = int(re.search(fr'IsChromaticNumber graph{atlas} (\d+) where', coloring)[1])
     lower = 1-sp.Rational(1,chromatic-1)
-    assert sp.Rational(witnesses[0]['interval'][0]) == lower
+    start = lower
+    modules = [f"{PREFIX}.{row_tag(w)}.Certificate" for w in witnesses]
+    if args.low_module is not None:
+        start = sp.Rational(args.low_right)
+        assert lower < start < 1, (lower,start)
+        modules.insert(0,f'{parent}.{args.low_module}')
+    assert sp.Rational(witnesses[0]['interval'][0]) == start
     assert sp.Rational(witnesses[-1]['interval'][1]) == 1
     assert all(sp.Rational(u['interval'][1]) == sp.Rational(v['interval'][0])
                for u,v in zip(witnesses,witnesses[1:]))
-    imports = '\n'.join(f"import {PREFIX}.{row_tag(w)}.Certificate" for w in witnesses)
+    imports = '\n'.join(f'import {m}' for m in modules)
     source = imports+f'''
 namespace {parent}
 open MeasureTheory Taeyoung
@@ -94,6 +108,12 @@ theorem graphon_bound (W : Graphon Ω μ) (hp : {rational(lower)} ≤ cliqueDens
     target{atlas} (cliqueDensity 2 W) ≤ homDensity graph{atlas} W := by
 '''
     lo = 'hp'
+    if args.low_module is not None:
+        source += f'''  by_cases hlow : cliqueDensity 2 W ≤ {rational(start)}
+  · exact {args.low_module}.graphon_bound W hp hlow
+  have hstart : {rational(start)} ≤ cliqueDensity 2 W := le_of_lt (lt_of_not_ge hlow)
+'''
+        lo = 'hstart'
     for i,w in enumerate(witnesses[:-1]):
         source += f'''  by_cases h{i} : cliqueDensity 2 W ≤ {rational(w['interval'][1])}
   · exact {w['lean_namespace_suffix']}.graphon_bound W {lo} h{i}
