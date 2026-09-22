@@ -96,6 +96,7 @@ import Taeyoung.Methods.RootedSOS.House
 import Taeyoung.Methods.RootedSOS.Atlas43
 import Taeyoung.Methods.Atlas160.Rows
 import Taeyoung.Methods.Atlas178.Rows
+import Taeyoung.Examples.Graph178
 import Taeyoung.Examples.Graph145
 import Taeyoung.Examples.Graph160
 import Taeyoung.Methods.Negative.ProperCount
@@ -754,6 +755,7 @@ factorization, and its negative region only two boundary faces. -/
 #print axioms Taeyoung.Methods.Atlas178.chrom178
 #print axioms Taeyoung.Methods.Atlas178.num178
 #print axioms Taeyoung.Methods.Atlas178.satisfiesLowerBound_178
+#print axioms Taeyoung.Examples.Graph178.status
 
 /-! ### Atlas 126 (conditional on the scalar plane) -/
 
