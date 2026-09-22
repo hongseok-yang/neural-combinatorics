@@ -24,7 +24,12 @@ import Taeyoung.Methods.RootedSOS.Bernoulli
 import Taeyoung.Methods.RootedSOS.Gram
 import Taeyoung.Methods.RootedSOS.Interval
 import Taeyoung.Methods.RootedSOS.House
-import Taeyoung.Methods.RootedSOS.Atlas43
+-- The Atlas 43 module chain (`Taeyoung.Methods.RootedSOS.Atlas43*`) is not
+-- imported here directly; it enters the build through
+-- `Taeyoung.Examples.Graph043`.  It is verified but costs about six hours
+-- sequentially with one module at 15.4 GiB, so build it one module at a time
+-- (`lean/verification_runs/atlas43/`), never with a parallel `lake build`.
+-- `Taeyoung.CheckAtlas43` audits it on its own.
 -- Fisher's sharp triangle-density theorem on `1/2 < p <= 2/3`, vendored from
 -- `discussions/goodman-style-bound/fisher_lean`, and its bridge to this
 -- project's bundled graphons.  Atlas 148 is the row that needs it; see

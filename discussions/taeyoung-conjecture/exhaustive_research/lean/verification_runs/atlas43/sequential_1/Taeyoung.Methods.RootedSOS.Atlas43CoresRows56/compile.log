@@ -1,0 +1,12 @@
+Taeyoung\Methods\RootedSOS\Atlas43CoresRows56.lean:10:2: error: Tactic `decide` failed for proposition
+  ∀ (a : Fin 8) (b : Fin 64), coreWitnessValid ⟨56 + ↑a, ⋯⟩ b = true
+because its `Decidable` instance
+  Nat.decidableForallFin fun a => ∀ (b : Fin 64), coreWitnessValid ⟨56 + ↑a, ⋯⟩ b = true
+did not reduce to `isTrue` or `isFalse`.
+
+Reduction got stuck at the `Decidable` instance
+  match coreWitnessValid ⟨56 + ↑⟨0, ⋯⟩, ⋯⟩ ⟨0, ⋯⟩, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯

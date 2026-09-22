@@ -94,6 +94,7 @@ import Taeyoung.Methods.Atlas145
 import Taeyoung.Methods.Atlas126.Rows
 import Taeyoung.Methods.RootedSOS.House
 import Taeyoung.Methods.RootedSOS.Atlas43
+import Taeyoung.Examples.Graph043
 import Taeyoung.Methods.Atlas160.Rows
 import Taeyoung.Methods.Atlas178.Rows
 import Taeyoung.Examples.Graph178
@@ -794,6 +795,7 @@ factorization, and its negative region only two boundary faces. -/
 #print axioms Taeyoung.Methods.RootedSOS.Atlas43.house_bound_of_certificateIdentity
 #print axioms Taeyoung.Methods.RootedSOS.Atlas43.satisfiesLowerBound_house_of_certificateIdentity
 #print axioms Taeyoung.Methods.RootedSOS.Atlas43.satisfiesLowerBound_house
+#print axioms Taeyoung.Methods.RootedSOS.Atlas196.satisfiesLowerBound_coneHouse
 #print axioms Taeyoung.Methods.RootedSOS.House.houseChromaticPolynomial
 #print axioms Taeyoung.Methods.RootedSOS.House.houseChromaticNumber
 #print axioms Taeyoung.Methods.RootedSOS.House.satisfiesLowerBound_house_of_bound

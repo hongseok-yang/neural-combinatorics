@@ -1,0 +1,218 @@
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row000
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row001
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row002
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row003
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row004
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row005
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row006
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row007
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row008
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row009
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row010
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row011
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row012
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row013
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row014
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row015
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row016
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row017
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row018
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row019
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row020
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row021
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row022
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row023
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row024
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row025
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row026
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row027
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row028
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row029
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row030
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row031
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row032
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row033
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row034
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row035
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row036
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row037
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row038
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row039
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row040
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row041
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row042
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row043
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row044
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row045
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row046
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row047
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row048
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row049
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row050
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row051
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row052
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row053
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row054
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row055
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row056
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row057
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row058
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row059
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row060
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row061
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row062
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row063
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row064
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row065
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row066
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row067
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row068
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row069
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row070
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row071
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row072
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row073
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row074
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row075
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row076
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row077
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row078
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row079
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row080
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row081
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row082
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row083
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row084
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row085
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row086
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row087
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row088
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row089
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row090
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row091
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row092
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row093
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row094
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row095
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row096
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row097
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row098
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row099
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row100
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row101
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row102
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row103
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row104
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row105
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row106
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row107
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row108
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row109
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row110
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row111
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row112
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row113
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row114
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row115
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row116
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row117
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row118
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row119
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row120
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row121
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row122
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row123
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row124
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row125
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row126
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock0Row127
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row000
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row001
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row002
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row003
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row004
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row005
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row006
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row007
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row008
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row009
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row010
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row011
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row012
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row013
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row014
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row015
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row016
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row017
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row018
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row019
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row020
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row021
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row022
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row023
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row024
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row025
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row026
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row027
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row028
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row029
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row030
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row031
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row032
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row033
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row034
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row035
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row036
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row037
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row038
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row039
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row040
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row041
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row042
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row043
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row044
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row045
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row046
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row047
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row048
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row049
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row050
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row051
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row052
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row053
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row054
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row055
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row056
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row057
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row058
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row059
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row060
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row061
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row062
+import Taeyoung.Methods.RootedSOS.Atlas43CommonBlock1Row063
+
+/-! # Complete bounded-memory kernel audit of the common Gram witness -/
+
+namespace Taeyoung.Methods.RootedSOS.Atlas43Coefficients
+
+set_option maxRecDepth 1000000
+set_option maxHeartbeats 40000000
+
+theorem witness_shape_valid : witnessShapeCheck = true := by
+  decide +kernel
+
+theorem arithmetic_bound_formulas_valid :
+    arithmeticBoundFormulasValid = true := by
+  decide +kernel
+
+theorem all_block0_witness_rows_valid :
+    ∀ row : Fin 128, block₀WitnessRowValid row = true := by
+  intro row
+  fin_cases row <;> simp [block0_witness_row_000, block0_witness_row_001, block0_witness_row_002, block0_witness_row_003, block0_witness_row_004, block0_witness_row_005, block0_witness_row_006, block0_witness_row_007, block0_witness_row_008, block0_witness_row_009, block0_witness_row_010, block0_witness_row_011, block0_witness_row_012, block0_witness_row_013, block0_witness_row_014, block0_witness_row_015, block0_witness_row_016, block0_witness_row_017, block0_witness_row_018, block0_witness_row_019, block0_witness_row_020, block0_witness_row_021, block0_witness_row_022, block0_witness_row_023, block0_witness_row_024, block0_witness_row_025, block0_witness_row_026, block0_witness_row_027, block0_witness_row_028, block0_witness_row_029, block0_witness_row_030, block0_witness_row_031, block0_witness_row_032, block0_witness_row_033, block0_witness_row_034, block0_witness_row_035, block0_witness_row_036, block0_witness_row_037, block0_witness_row_038, block0_witness_row_039, block0_witness_row_040, block0_witness_row_041, block0_witness_row_042, block0_witness_row_043, block0_witness_row_044, block0_witness_row_045, block0_witness_row_046, block0_witness_row_047, block0_witness_row_048, block0_witness_row_049, block0_witness_row_050, block0_witness_row_051, block0_witness_row_052, block0_witness_row_053, block0_witness_row_054, block0_witness_row_055, block0_witness_row_056, block0_witness_row_057, block0_witness_row_058, block0_witness_row_059, block0_witness_row_060, block0_witness_row_061, block0_witness_row_062, block0_witness_row_063, block0_witness_row_064, block0_witness_row_065, block0_witness_row_066, block0_witness_row_067, block0_witness_row_068, block0_witness_row_069, block0_witness_row_070, block0_witness_row_071, block0_witness_row_072, block0_witness_row_073, block0_witness_row_074, block0_witness_row_075, block0_witness_row_076, block0_witness_row_077, block0_witness_row_078, block0_witness_row_079, block0_witness_row_080, block0_witness_row_081, block0_witness_row_082, block0_witness_row_083, block0_witness_row_084, block0_witness_row_085, block0_witness_row_086, block0_witness_row_087, block0_witness_row_088, block0_witness_row_089, block0_witness_row_090, block0_witness_row_091, block0_witness_row_092, block0_witness_row_093, block0_witness_row_094, block0_witness_row_095, block0_witness_row_096, block0_witness_row_097, block0_witness_row_098, block0_witness_row_099, block0_witness_row_100, block0_witness_row_101, block0_witness_row_102, block0_witness_row_103, block0_witness_row_104, block0_witness_row_105, block0_witness_row_106, block0_witness_row_107, block0_witness_row_108, block0_witness_row_109, block0_witness_row_110, block0_witness_row_111, block0_witness_row_112, block0_witness_row_113, block0_witness_row_114, block0_witness_row_115, block0_witness_row_116, block0_witness_row_117, block0_witness_row_118, block0_witness_row_119, block0_witness_row_120, block0_witness_row_121, block0_witness_row_122, block0_witness_row_123, block0_witness_row_124, block0_witness_row_125, block0_witness_row_126, block0_witness_row_127]
+
+theorem all_block1_witness_rows_valid :
+    ∀ row : Fin 64, block₁WitnessRowValid row = true := by
+  intro row
+  fin_cases row <;> simp [block1_witness_row_000, block1_witness_row_001, block1_witness_row_002, block1_witness_row_003, block1_witness_row_004, block1_witness_row_005, block1_witness_row_006, block1_witness_row_007, block1_witness_row_008, block1_witness_row_009, block1_witness_row_010, block1_witness_row_011, block1_witness_row_012, block1_witness_row_013, block1_witness_row_014, block1_witness_row_015, block1_witness_row_016, block1_witness_row_017, block1_witness_row_018, block1_witness_row_019, block1_witness_row_020, block1_witness_row_021, block1_witness_row_022, block1_witness_row_023, block1_witness_row_024, block1_witness_row_025, block1_witness_row_026, block1_witness_row_027, block1_witness_row_028, block1_witness_row_029, block1_witness_row_030, block1_witness_row_031, block1_witness_row_032, block1_witness_row_033, block1_witness_row_034, block1_witness_row_035, block1_witness_row_036, block1_witness_row_037, block1_witness_row_038, block1_witness_row_039, block1_witness_row_040, block1_witness_row_041, block1_witness_row_042, block1_witness_row_043, block1_witness_row_044, block1_witness_row_045, block1_witness_row_046, block1_witness_row_047, block1_witness_row_048, block1_witness_row_049, block1_witness_row_050, block1_witness_row_051, block1_witness_row_052, block1_witness_row_053, block1_witness_row_054, block1_witness_row_055, block1_witness_row_056, block1_witness_row_057, block1_witness_row_058, block1_witness_row_059, block1_witness_row_060, block1_witness_row_061, block1_witness_row_062, block1_witness_row_063]
+
+end Taeyoung.Methods.RootedSOS.Atlas43Coefficients
