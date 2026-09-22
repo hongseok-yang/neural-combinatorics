@@ -39,6 +39,7 @@ import Taeyoung.Methods.Atlas148
 -- Atlas 145: Atlas 148 with the second triangle page moved onto the first
 -- page's cycle edge, by one pointwise Cauchy--Schwarz on the cycle arm.
 import Taeyoung.Methods.Atlas145
+import Taeyoung.Methods.Atlas126.Rows
 import Taeyoung.Methods.Atlas160.Rows
 import Taeyoung.Methods.Atlas178.Rows
 

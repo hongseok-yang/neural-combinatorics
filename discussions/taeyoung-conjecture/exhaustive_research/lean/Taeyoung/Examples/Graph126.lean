@@ -1,10 +1,13 @@
-import Taeyoung.Foundation
+import Taeyoung.Methods.Atlas126.Verified
 
 /-!
 # Atlas 126
 
-graph6: `ERUO`.  The edge-list definition below is the Lean graph;
-the graph6 string is stable external metadata until a verified decoder exists.
+graph6: `ERUO`. A triangle and a four-cycle share one vertex.
+The supporting planes, their complete domain coverage, the exact arithmetic
+certificates, the graphon integration and coloring counts are checked in Lean.
+The explicit isomorphism below transports the method representative to the
+catalogue's edge list.
 -/
 
 namespace Taeyoung.Examples.Graph126
@@ -23,12 +26,28 @@ def metadata : CatalogueRow where
   chromaticNumber := 3
   graph6 := "ERUO"
   status := .positive
-  formalization := .believed
+  formalization := .verified
 
-/-- Accepted mathematical result: [Atlas 126 triangle--$C_4$ vertex supporting-plane theorem](notes/atlas126_triangle_c4_vertex_supporting_plane.tex): a rooted $C_4$ projection, the sharp triangle profile, and exact Bernstein certificates
+def relabel : Fin 6 ≃ Fin 6 where
+  toFun := ![3, 1, 4, 0, 2, 5]
+  invFun := ![3, 1, 4, 0, 2, 5]
+  left_inv := by decide
+  right_inv := by decide
 
-The method-specific Lean bridge for this row remains to be formalized. -/
-theorem status : SatisfiesLowerBound graph := by
-  sorry
+theorem iso_adj (a b : Fin 6) :
+    graph.Adj (relabel a) (relabel b) ↔
+      (Taeyoung.Methods.Atlas126.graph126).Adj a b := by
+  revert a b
+  decide
+
+def iso : (Taeyoung.Methods.Atlas126.graph126) ≃g graph where
+  toEquiv := relabel
+  map_rel_iff' := by intro a b; exact iso_adj a b
+
+theorem status : SatisfiesLowerBound graph :=
+  SatisfiesLowerBound.of_iso iso
+    Taeyoung.Methods.Atlas126.satisfiesLowerBound_126
 
 end Taeyoung.Examples.Graph126
+
+#print axioms Taeyoung.Examples.Graph126.status

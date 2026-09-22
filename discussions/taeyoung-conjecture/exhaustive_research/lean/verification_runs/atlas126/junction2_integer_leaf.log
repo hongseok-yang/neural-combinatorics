@@ -1,0 +1,68 @@
+interpretation of Mathlib.Tactic.ToAdditive.guessNameExt took 167ms
+interpretation of Mathlib.Tactic.ToDual.guessNameExt took 164ms
+import took 7.18s
+ring took 376ms
+type checking took 212ms
+elaboration took 138ms
+type checking took 6.77s
+type checking took 1.14s
+type checking took 252ms
+elaboration took 177ms
+type checking took 9.6s
+verification_runs/atlas126/Junction2IntegerLeaf.lean:315:2: error: Type mismatch
+  scaled_dot_eq (fun i => leaf5InputNumer i j k) (leaf5W1Numer h) (leaf5S1Numer h j k) 648 1152921504606846976 10
+    (leaf5S1NumerCorrect h hh j hj k hk)
+has type
+  ↑(leaf5S1Numer h j k) / (648 * 1152921504606846976) =
+    ∑ i ∈ range (10 + 1), ↑(leaf5InputNumer i j k) / 648 * (↑(leaf5W1Numer h i) / 1152921504606846976)
+but is expected to have type
+  leaf5S1 h j k = ∑ i ∈ range (10 + 1), leaf5Input i j k * leaf5W1 h i
+elaboration took 183ms
+type checking took 9.12s
+verification_runs/atlas126/Junction2IntegerLeaf.lean:373:2: error: Type mismatch
+  scaled_dot_eq (fun i => leaf5S1Numer k i h) (leaf5W2Numer j) (leaf5S2Numer k j h) 747093134985236840448 68719476736 6
+    (leaf5S2NumerCorrect k hk j hj h hh)
+has type
+  ↑(leaf5S2Numer k j h) / (747093134985236840448 * 68719476736) =
+    ∑ i ∈ range (6 + 1), ↑(leaf5S1Numer k i h) / 747093134985236840448 * (↑(leaf5W2Numer j i) / 68719476736)
+but is expected to have type
+  leaf5S2 k j h = ∑ i ∈ range (6 + 1), leaf5S1 k i h * leaf5W2 j i
+elaboration took 118ms
+type checking took 8.62s
+verification_runs/atlas126/Junction2IntegerLeaf.lean:431:2: error: Type mismatch
+  scaled_dot_eq (fun i => leaf5S2Numer k j i) (leaf5W3Numer h) (leaf5S3Numer k j h) 51339849309243290760616479817728 8 3
+    (leaf5S3NumerCorrect k hk j hj h hh)
+has type
+  ↑(leaf5S3Numer k j h) / (51339849309243290760616479817728 * 8) =
+    ∑ i ∈ range (3 + 1), ↑(leaf5S2Numer k j i) / 51339849309243290760616479817728 * (↑(leaf5W3Numer h i) / 8)
+but is expected to have type
+  leaf5S3 k j h = ∑ i ∈ range (3 + 1), leaf5S2 k j i * leaf5W3 h i
+type checking took 4.25s
+interpretation of Mathlib.Tactic._aux_Mathlib_Tactic_Linarith_Frontend___elabRules_Mathlib_Tactic_linarith_1._boxed took 312ms
+cumulative profiling times:
+	attribute application 0.483ms
+	blocked (unaccounted) 139s
+	compilation (IR) 10.8ms
+	compilation (LCNF base) 93.1ms
+	compilation (LCNF impure) 50ms
+	compilation (LCNF mono) 78.2ms
+	congr simp thm 8.6ms
+	elaboration 871ms
+	fix level params 5.25ms
+	import 7.18s
+	initialization 27.4ms
+	instantiate metavars 3.5ms
+	interpretation 12.3s
+	let-to-have transformation 9.52ms
+	linting 37.3ms
+	norm_num 244ms
+	overlappingInstancesLinter 23.6ms
+	parsing 28.9ms
+	process pre-definitions 68.4ms
+	ring 408ms
+	share common exprs 105ms
+	simp 290ms
+	tactic execution 169ms
+	tacticAnalysis 129ms
+	type checking 40.1s
+	typeclass inference 2.64s

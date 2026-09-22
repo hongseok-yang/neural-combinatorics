@@ -1,4 +1,5 @@
 import Taeyoung.Examples.Graph007
+import Taeyoung.Examples.Graph126
 import Taeyoung.Examples.Graph015
 import Taeyoung.Examples.Graph017
 import Taeyoung.Examples.Graph018
@@ -76,11 +77,13 @@ import Taeyoung.Methods.TriangleDensity
 import Taeyoung.Methods.Atlas148.Chromatic
 import Taeyoung.Examples.Graph148
 import Taeyoung.Methods.Atlas145
+import Taeyoung.Methods.Atlas126.Rows
 import Taeyoung.Methods.RootedSOS.House
 import Taeyoung.Methods.RootedSOS.Atlas43
 import Taeyoung.Methods.Atlas160.Rows
 import Taeyoung.Methods.Atlas178.Rows
 import Taeyoung.Examples.Graph145
+import Taeyoung.Examples.Graph160
 import Taeyoung.Methods.Negative.ProperCount
 import Taeyoung.Methods.Negative.Chromatic
 import Taeyoung.Methods.Negative.Tensor
@@ -738,6 +741,21 @@ factorization, and its negative region only two boundary faces. -/
 #print axioms Taeyoung.Methods.Atlas178.num178
 #print axioms Taeyoung.Methods.Atlas178.satisfiesLowerBound_178
 
+/-! ### Atlas 126 (conditional on the scalar plane) -/
+
+#print axioms Taeyoung.Methods.Atlas126.pairOp_symm
+#print axioms Taeyoung.Methods.Atlas126.integral_pairOp
+#print axioms Taeyoung.Methods.Atlas126.integral_row_mul_pairOp
+#print axioms Taeyoung.Methods.Atlas126.rootedTriangle_le_pathOp
+#print axioms Taeyoung.Methods.Atlas126.sq_pathOp_le_rootedC4
+#print axioms Taeyoung.Methods.Atlas126.projection
+#print axioms Taeyoung.Methods.Atlas126.homDensity_graph126
+#print axioms Taeyoung.Methods.Atlas126.plane_le_rooted
+#print axioms Taeyoung.Methods.Atlas126.graph126_bound
+#print axioms Taeyoung.Methods.Atlas126.chrom126
+#print axioms Taeyoung.Methods.Atlas126.num126
+#print axioms Taeyoung.Methods.Atlas126.satisfiesLowerBound_126_of_bound
+
 /-! ### Exact rooted interval-SOS infrastructure and the Atlas 43 shell -/
 
 #print axioms Taeyoung.Methods.RootedSOS.identity_add_rat_correction_quadratic_nonneg
@@ -828,3 +846,8 @@ list.  What the row supplies is arithmetic — the surjective counts by
 #print axioms Taeyoung.Examples.Graph197.status
 #print axioms Taeyoung.Examples.Graph198.status
 #print axioms Taeyoung.Examples.Graph204.status
+
+/-! Atlas126: compact supporting planes, graphon integration and catalogue
+transport; fresh sequential verification is recorded in
+`docs/ATLAS126_VERIFICATION_PROGRESS.md`. -/
+#print axioms Taeyoung.Examples.Graph126.status

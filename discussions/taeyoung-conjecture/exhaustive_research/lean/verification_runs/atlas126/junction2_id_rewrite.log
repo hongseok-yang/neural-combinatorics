@@ -1,0 +1,49 @@
+interpretation of Mathlib.Tactic.ToDual.guessNameExt took 104ms
+import took 4.86s
+before combination identity
+ring took 218ms
+type checking took 158ms
+after combination identity
+verification_runs/atlas126/Junction2IdentitiesRewrite.lean:142:58: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 11
+where
+ a := ↑{ i := 0, j := 0, k := 0, value := eps }.i
+verification_runs/atlas126/Junction2IdentitiesRewrite.lean:142:69: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 7
+where
+ a := ↑{ i := 0, j := 0, k := 0, value := eps }.j
+verification_runs/atlas126/Junction2IdentitiesRewrite.lean:142:80: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 4
+where
+ a := ↑{ i := 0, j := 0, k := 0, value := eps }.k
+after margin identity
+cumulative profiling times:
+	attribute application 0.0953ms
+	blocked (unaccounted) 1.56s
+	compilation (IR) 3.07ms
+	compilation (LCNF base) 34.9ms
+	compilation (LCNF impure) 5.86ms
+	compilation (LCNF mono) 15.7ms
+	congr simp thm 2.84ms
+	elaboration 69.1ms
+	fix level params 2ms
+	import 4.86s
+	initialization 27.4ms
+	instantiate metavars 0.996ms
+	interpretation 7.29s
+	let-to-have transformation 0.409ms
+	linting 6.38ms
+	norm_num 9.99ms
+	overlappingInstancesLinter 11.8ms
+	parsing 5.12ms
+	process pre-definitions 16.5ms
+	ring 229ms
+	share common exprs 38.2ms
+	simp 151ms
+	tactic execution 52.3ms
+	tacticAnalysis 25.2ms
+	type checking 187ms
+	typeclass inference 111ms

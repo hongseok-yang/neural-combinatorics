@@ -1,0 +1,14 @@
+Taeyoung/Methods/Bernstein/CheckedTensor.lean:193:58: error: unsolved goals
+a w : ℕ → ℤ
+b : ℤ
+da dw : ℚ
+n : ℕ
+h : b = ∑ i ∈ range (n + 1), a i * w i
+⊢ ∑ i ∈ range (n + 1), ↑(a i) * ↑(w i) * (da * dw)⁻¹ = ∑ x ∈ range (n + 1), ↑(a x) * da⁻¹ * (↑(w x) * dw⁻¹)
+Taeyoung/Methods/Bernstein/CheckedTensor.lean:195:27: warning: This simp argument is unused:
+  div_mul_div_comm
+
+Hint: Omit it from the simp argument list.
+  simp only [Int.cast_mul, div_m̵u̵l̵_̵d̵i̵v̵_̵c̵o̵m̵m̵,̵ ̵d̵i̵v̵_̵eq_mul_inv, Finset.sum_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
