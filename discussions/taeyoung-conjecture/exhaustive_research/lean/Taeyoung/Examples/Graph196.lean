@@ -6,6 +6,10 @@ import Taeyoung.Methods.RootedSOS.Atlas196
 
 graph6: `ER~g`.  The edge-list definition below is the Lean graph;
 the graph6 string is stable external metadata until a verified decoder exists.
+
+The proof is the house-cone lift `Atlas196.satisfiesLowerBound_coneHouse` on
+top of the Atlas 43 chain; see `Taeyoung.Examples.Graph043` for that chain's
+verification record and build cost.
 -/
 
 namespace Taeyoung.Examples.Graph196

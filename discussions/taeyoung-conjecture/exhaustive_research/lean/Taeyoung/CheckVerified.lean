@@ -95,6 +95,7 @@ import Taeyoung.Methods.Atlas126.Rows
 import Taeyoung.Methods.RootedSOS.House
 import Taeyoung.Methods.RootedSOS.Atlas43
 import Taeyoung.Examples.Graph043
+import Taeyoung.Examples.Graph196
 import Taeyoung.Methods.Atlas160.Rows
 import Taeyoung.Methods.Atlas178.Rows
 import Taeyoung.Examples.Graph178
@@ -800,6 +801,7 @@ factorization, and its negative region only two boundary faces. -/
 #print axioms Taeyoung.Methods.RootedSOS.House.houseChromaticNumber
 #print axioms Taeyoung.Methods.RootedSOS.House.satisfiesLowerBound_house_of_bound
 #print axioms Taeyoung.Examples.Graph043.status
+#print axioms Taeyoung.Examples.Graph196.status
 #print axioms Taeyoung.Examples.Graph160.status
 
 /-! ### The tensor-Turán witness, and all 19 negative rows
