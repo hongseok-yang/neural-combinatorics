@@ -1,3 +1,4 @@
+import Taeyoung.Examples.Graph122
 import Taeyoung.Examples.Graph007
 import Taeyoung.Examples.Graph126
 import Taeyoung.Examples.Graph118
@@ -857,3 +858,6 @@ transport; fresh sequential verification is recorded in
 and the complete graphon and catalogue proof. Fresh sequential verification is
 recorded in `docs/ATLAS118_VERIFICATION_PROGRESS.md`. -/
 #print axioms Taeyoung.Examples.Graph118.status
+
+/-! Atlas122: complete compact integer SOS verification; see `docs/ATLAS122_VERIFICATION_PROGRESS.md`. -/
+#print axioms Taeyoung.Examples.Graph122.status
