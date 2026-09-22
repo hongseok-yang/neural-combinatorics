@@ -131,7 +131,9 @@ its own. Rows 21 and 22 below are therefore optional: a compact certificate
 would bring the two rows inside the envelope but is not needed for their
 status.
 
-Atlas188 completed on 2026-09-23. Its three interval bounds and the full catalogue proof passed in a fresh 98-file build: 40m55s at 11.90 GiB. The installed recheck brings combined verification to 41m03s. The theorem has only the standard axioms; its example and classification are updated. Atlas171 is now the active row. See [the verification record](lean/docs/ATLAS188_VERIFICATION_PROGRESS.md).
+Atlas188 completed on 2026-09-23. Its three interval bounds and the full catalogue proof passed in a fresh 98-file build: 40m55s at 11.90 GiB. The installed recheck brings combined verification to 41m03s. The theorem has only the standard axioms; its example and classification are updated. See [the verification record](lean/docs/ATLAS188_VERIFICATION_PROGRESS.md).
+
+Atlas171 completed on 2026-09-23. Its three interval bounds and the full catalogue proof passed in a fresh 98-file build: 42m16s at 11.88 GiB. The installed recheck brings combined verification to 42m24s. The theorem has only the standard axioms; its example and classification are updated. Atlas174 is now the active row. See [the verification record](lean/docs/ATLAS171_VERIFICATION_PROGRESS.md).
 
 | Priority | Atlas | Proposed route and reason |
 |---:|---:|---|
@@ -151,7 +153,7 @@ Atlas188 completed on 2026-09-23. Its three interval bounds and the full catalog
 | 14 | 168 | **Completed.** Two four-root pieces, full catalogue proof; fresh 97-file build in 44m34s at 11.84 GiB. |
 | 15 | 151 | **Completed.** Two four-root pieces, full catalogue proof; fresh 97-file build in 46m04s at 11.83 GiB. |
 | 16 | 188 | **Completed.** Three interval bounds, full catalogue proof; fresh 98-file build in 40m55s at 11.90 GiB. |
-| 17 | 171 | Same three-bound shape as 188. `Φ₁₇₁ = p(2p−1)(11p³−20p²+13p−3)`, whose cubic factor is increasing with value `−1/512` at `5/8`, so the target is nonpositive on `[1/2,5/8]` by an elementary sign lemma; the exact middle `[5/8,2/3]` and upper `[2/3,1]` certificates cover the rest. Neither the self-amalgam argument nor the transfer from 188 is needed. The transfer (spanning-subgraph map deleting edge `15`, with `Φ₁₈₈ − Φ₁₇₁ = p(p−1)(2p−1)²(3p−2) ≥ 0` on `[1/2,2/3]`) stays available should the middle piece overrun the envelope. |
+| 17 | 171 | **Completed.** Three interval bounds, full catalogue proof; fresh 98-file build in 42m16s at 11.88 GiB. |
 | 18 | 153 | Reuse the self-amalgam/Fisher infrastructure, then join the low, middle, and upper ranges. The transfer from 188 only reaches `3/5`, below the middle certificate's start `37/60`, so it does not by itself replace this low-range argument. |
 | 19 | 174 | Same three-bound shape as 188. `Φ₁₇₄ = p(2p−1)(13p³−25p²+17p−4)`, whose cubic factor is increasing with value `−17/1728` at `7/12`, so an elementary sign lemma covers `[1/2,7/12]`; the exact middle `[7/12,2/3]` and upper `[2/3,1]` certificates cover the rest. No self-amalgam argument is needed. Its middle certificate has the weakest source diagonal-dominance margin of the four, so watch the compact face discovery. |
 | 20 | 127 | First seek a smaller direct certificate for the catalogue bound. Its existing stronger eight-vertex proof has 184 PSD blocks and about 1.43 million integer entries; use that route only after the checker is established and benchmarked. |
