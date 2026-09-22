@@ -26,7 +26,7 @@ Each row is one graph, drawn in the **Graph** cell. **Atlas ID** and **graph6** 
 **Lean** is the machine-checked state of the row in [lean/](lean/), which is independent of the mathematical status.
 
 * ✅ **Verified** — the row's Lean proposition is proved with no `sorry`, and `#print axioms` reports only `propext`, `Classical.choice`, `Quot.sound`. That proposition is `SatisfiesLowerBound` for a positive row and `ViolatesLowerBound` for a negative one. **116 rows.**
-* 🔧 **Believed** — the mathematical status is accepted, but the Lean bridge for it is still a `sorry`. **1 rows** (Atlas 127).
+* 🔧 **Believed** — the mathematical status is accepted, but the Lean bridge for it is still a `sorry`. **1 row** (Atlas 127).
 * ⚪ **Unresolved** — Lean asserts only `P ∨ ¬P`. **0 rows**. A row stays here until its full classification theorem is carried into Lean.
 
 **Reason or exact certificate** gives the accepted justification. Every method named there is catalogued in the sections after the table.
