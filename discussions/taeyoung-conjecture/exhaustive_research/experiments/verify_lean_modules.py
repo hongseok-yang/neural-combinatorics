@@ -29,7 +29,8 @@ def main():
     start = time.monotonic()
     results = []
     success = True
-    for module in args.modules:
+    total = len(args.modules)
+    for index, module in enumerate(args.modules, 1):
         if not re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*(?:\.[A-Za-z_][A-Za-z_0-9]*)*', module):
             raise ValueError(f'invalid module name: {module}')
         relative = Path(*module.split('.')).with_suffix('.lean')
@@ -57,9 +58,11 @@ def main():
         report['source_unchanged'] = source_hash == hashlib.sha256(source.read_bytes()).hexdigest()
         report['log'] = str(stem.with_suffix('.log'))
         results.append(report)
-        print(f"{module}: {report['elapsed_seconds']:.1f}s, "
+        used = time.monotonic()-start
+        print(f"({index}/{total}) {module}: {report['elapsed_seconds']:.1f}s, "
               f"{report['peak_tree_private_bytes']/2**30:.2f} GiB private, "
-              f"exit {run.returncode}", flush=True)
+              f"exit {run.returncode}; {used:.0f}s used, "
+              f"{args.seconds-used:.0f}s of budget left", flush=True)
         if run.returncode or not report['source_unchanged']:
             success = False
             break
