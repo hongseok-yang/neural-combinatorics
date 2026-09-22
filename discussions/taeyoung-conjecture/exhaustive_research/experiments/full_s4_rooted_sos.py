@@ -19,7 +19,9 @@ from __future__ import annotations
 
 import argparse
 import itertools
+import json
 from collections import defaultdict
+from pathlib import Path
 
 import cvxpy as cp
 import networkx as nx
@@ -206,6 +208,27 @@ def permutation_sign(permutation: tuple[int, ...]) -> int:
     return -1 if inversions % 2 else 1
 
 
+def canonical_young_transforms(names, basis_indices):
+    """The Young slice bases every generated Lean row was built against.
+
+    Column-pivoted QR picks one integer basis of each slice out of many, and
+    which one it picks moves with the LAPACK build. Every accepted row carries
+    the bases stored in `s4_lean_common.json`, and the shared Lean data modules
+    encode them, so a new certificate has to be expressed in those same bases.
+    Returns None unless the stored data describes exactly this cone.
+    """
+    path = Path(__file__).resolve().parent/"s4_lean_common.json"
+    if not path.is_file():
+        return None
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    if stored.get("basis_indices") != list(basis_indices):
+        return None
+    bases = stored.get("young_bases")
+    if not isinstance(bases, dict) or set(bases) != set(names):
+        return None
+    return [np.asarray(bases[name], dtype=np.int64) for name in names]
+
+
 def young_integer_transforms(
     label_degree: int,
     degree_three_kind: str = "all",
@@ -254,9 +277,23 @@ def young_integer_transforms(
             raise AssertionError((name, rank, expected))
         transform = operator[:, np.asarray(pivots[:rank], dtype=int)].astype(np.int64)
         transforms.append(transform)
+    canonical = canonical_young_transforms(names, basis_indices)
+    if canonical is not None:
+        for name, computed, stored in zip(names, transforms, canonical):
+            expected = expected_dimensions[name]
+            if stored.shape != computed.shape:
+                raise AssertionError((name, stored.shape, computed.shape))
+            if np.linalg.matrix_rank(stored) != expected:
+                raise AssertionError((name, "stored basis is not full rank"))
+            if np.linalg.matrix_rank(np.hstack([stored, computed])) != expected:
+                raise AssertionError((name, "stored basis spans a different slice"))
+        transforms = canonical
+    for name, transform in zip(names, transforms):
+        row_group, column_group = (setwise_stabilizer(blocks)
+                                   for blocks in YOUNG_ROWS_COLUMNS[name])
         print(
             f"Young slice {name}: rows={len(row_group)} columns={len(column_group)} "
-            f"multiplicity={rank} maxabs={np.max(np.abs(transform))}", flush=True,
+            f"multiplicity={transform.shape[1]} maxabs={np.max(np.abs(transform))}", flush=True,
         )
     return transforms, [24] * len(names), names, basis_indices
 
