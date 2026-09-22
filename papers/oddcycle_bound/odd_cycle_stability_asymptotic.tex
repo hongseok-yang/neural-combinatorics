@@ -1,0 +1,880 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% The environments above share the theorem counter, so cleveref would name
+% them all "Theorem"; these aliases restore the correct names.
+\usepackage{etoolbox}
+\AtBeginEnvironment{proposition}{\crefalias{theorem}{proposition}}
+\AtBeginEnvironment{lemma}{\crefalias{theorem}{lemma}}
+\AtBeginEnvironment{corollary}{\crefalias{theorem}{corollary}}
+\AtBeginEnvironment{remark}{\crefalias{theorem}{remark}}
+
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dsq}{\delta_{\square}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\Var}{\operatorname{Var}}
+
+\title{Quantitative stability for the odd-cycle Goodman bound:\\
+an asymptotic two-parameter form}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Assuming the results proved before the stability corollary in
+\emph{Goodman-type lower bounds for odd cycles I: The dense regime},
+we prove the following. Fix an odd integer $m\geq3$ and an integer
+$k\geq3$, and let $p_k=1-1/k$. If a graphon $W$ has edge density
+within $\delta_e$ of $p_k$ and $C_m$-density at most
+$\delta_C$ above the extremal value, then $W$ lies within
+$O_{m,k}\bigl(\sqrt{\delta_e+\delta_C}\bigr)$ of the balanced complete
+$k$-partite graphon, in relabelled $L^1$ distance and hence in cut
+distance. The exponent $1/2$ is optimal in each of the two parameters
+separately: it is already forced by graphons at exact edge density,
+and independently by graphons whose $C_m$-density does not exceed the
+extremal value at all. No constant is tracked; every implied constant
+depends only on $m$ and $k$.
+\end{abstract}
+
+\section{Statement}
+\label{sec:statement}
+
+References to numbered results of the manuscript mean the numbering in
+\cite{dense}. The argument below is conditional on its Theorem~1.1 and
+Theorem~1.3, its excursion expansion, its polynomial nonnegativity, and
+its Gamma-moment lemma; it uses neither its Proposition~6.1 nor its
+qualitative stability corollary.
+
+All graphons are symmetric measurable functions
+$[0,1]^2\to[0,1]$, and integrals with unspecified domains are over the
+appropriate powers of $[0,1]$. For a graphon $W$ we write
+\[
+ p=t(K_2,W),\qquad U=1-W,\qquad q=1-p,
+ \qquad d_W(x)=\int_0^1W(x,y)\,dy,
+\]
+and $(T_Wf)(x)=\int_0^1W(x,y)f(y)\,dy$ for the associated integral
+operator. The path $P_j$ has $j$ edges. Throughout, $m\geq3$ is odd and
+\[
+ G_m(p)=p^m-p(1-p)^{m-1}.
+\]
+For a bounded measurable kernel $F$ we use the cut norm
+$\norm{F}_{\square}=\sup_{S,T}\abs{\int_{S\times T}F}$ over measurable
+$S,T\subseteq[0,1]$, and
+\[
+ \dsq(W,V)=\inf_\phi\norm{W-V^\phi}_{\square},
+ \qquad
+ \delta_1(W,V)=\inf_\phi\norm{W-V^\phi}_1,
+\]
+where $V^\phi(x,y)=V(\phi(x),\phi(y))$ and $\phi$ ranges over
+measure-preserving bijections of $[0,1]$ modulo null sets. Directly from
+these definitions,
+\begin{equation}\label{eq:distance-basics}
+ \dsq(W,V)\leq\delta_1(W,V)\leq1,
+ \qquad
+ \delta_1(1-W,1-V)=\delta_1(W,V),
+\end{equation}
+and both quantities satisfy the triangle inequality, by composing the
+relabellings and using the invariance of the two norms under them.
+
+For an integer $k\geq3$ we set $q_k=1/k$ and $p_k=1-1/k$, we let $W_k$ be
+the balanced complete $k$-partite graphon, and we put $U_k=1-W_k$.
+
+\paragraph{Convention on constants.}
+Throughout, $m\geq3$ is a fixed odd integer and $k\geq3$ a fixed integer.
+We write $A=O(B)$, or $A\lesssim B$, to mean $A\leq CB$ for some
+$C=C(m,k)<\infty$ depending only on $m$ and $k$; the value of $C$ may
+change from line to line. No constant is tracked. Explicit admissible
+values for all of them are computed in \cite{explicit}.
+
+\begin{theorem}[Two-parameter stability]
+\label{thm:main}
+Fix an odd integer $m\geq3$ and an integer $k\geq3$. Let
+$\delta_e,\delta_C\geq0$ and let $W$ be a graphon with
+\begin{equation}\label{eq:hypotheses}
+ \abs{t(K_2,W)-p_k}\leq\delta_e,
+ \qquad
+ t(C_m,W)\leq G_m(p_k)+\delta_C.
+\end{equation}
+Then
+\begin{equation}\label{eq:main}
+ \dsq(W,W_k)\ \leq\ \delta_1(W,W_k)
+ \ \lesssim\ (\delta_e+\delta_C)+\sqrt{\delta_e+\delta_C}
+ \ \lesssim\ \sqrt{\delta_e+\delta_C}
+ \ \lesssim\ \sqrt{\delta_e}+\sqrt{\delta_C}.
+\end{equation}
+\end{theorem}
+
+The middle bound in \eqref{eq:main} is the informative one: for small
+tolerances the square-root term dominates, and its coefficient is
+considerably smaller than the coefficient of the single-power bound,
+which must also cover the range where the tolerances are of order one.
+
+\begin{theorem}[Optimality in each parameter separately]
+\label{thm:sharp}
+Fix an odd integer $m\geq3$ and an integer $k\geq3$, and let
+$c>1/2$. There is no constant $C<\infty$ for which
+\[
+ \dsq(W,W_k)\leq C(\delta_e+\delta_C)^c
+\]
+holds for all sufficiently small $\delta_e,\delta_C\geq0$ and all
+graphons $W$ satisfying \eqref{eq:hypotheses}. This already fails on each
+of the two coordinate axes:
+\begin{enumerate}
+\item[(i)] there are graphons with $t(K_2,W)=p_k$ exactly, hence with
+$\delta_e=0$, admissible $\delta_C\downarrow0$, and
+$\dsq(W,W_k)\gtrsim\sqrt{\delta_C}$;
+\item[(ii)] there are graphons with $t(C_m,W)\leq G_m(p_k)$, hence with
+$\delta_C=0$, admissible $\delta_e\downarrow0$, and
+$\dsq(W,W_k)\gtrsim\sqrt{\delta_e}$.
+\end{enumerate}
+\end{theorem}
+
+In particular neither parameter may be given an exponent larger than
+$1/2$, so $\sqrt{\delta_e+\delta_C}$ is the correct joint form. The two
+families witnessing (i) and (ii) are the same complete $k$-partite
+graphons with one enlarged and one reduced part; only the normalisation
+differs.
+
+The proof of \Cref{thm:main} occupies
+Sections~\ref{sec:degree}--\ref{sec:completion} and has three
+ingredients, each stated as a self-contained estimate:
+
+\begin{itemize}
+\item a \emph{degree estimate} (\Cref{prop:degree}): the gap in the
+two-colour inequality of \cite[Theorem~1.3]{dense} dominates the
+variance of the degree function, with a positive constant depending only
+on $m$;
+\item \emph{robust spectral estimates} (\Cref{lem:spectral}): a cycle
+count close to the extremal value forces the complement to be nearly
+$\{0,1\}$-valued and nearly transitive, quantitatively;
+\item a \emph{rounding lemma} (\Cref{lem:rounding}): a $\{0,1\}$-valued
+graphon with nearly correct degrees and few cherries with a missing
+closing edge is close to a balanced union of $k$ cliques.
+\end{itemize}
+
+The third step is purely combinatorial and constructive: it uses no
+regularity lemma and no removal lemma, and its only smallness threshold
+is explicit, with the trivial bound $\delta_1\leq1$ covering the
+complementary range. \Cref{thm:sharp} is proved in
+Section~\ref{sec:sharpness}.
+
+\section{The degree estimate}
+\label{sec:degree}
+
+Recall from \cite[Section~3]{dense} that for $d\geq0$, $h_d$ denotes the
+complete homogeneous symmetric polynomial of degree $d$, with $h_0=1$,
+and that for $p=1-q$ and $n=m-2$ the first excursion polynomial is
+\begin{equation}\label{eq:first-poly}
+ P_{m,1}(q;\lambda)
+ =m\bigl[h_{n}(p,-\lambda)+h_{n}(q,\lambda)\bigr]
+   -h_{n-1}(q,q,\lambda).
+\end{equation}
+
+\begin{lemma}[Strict positivity of the first excursion polynomial]
+\label{lem:first-poly}
+Let
+\[
+ c_m=\min\bigl\{P_{m,1}(q;\lambda):\ 0\leq q\leq\tfrac13,\
+ \abs{\lambda}\leq\tfrac12\bigr\}.
+\]
+Then $c_m>0$.
+\end{lemma}
+
+\begin{proof}
+Write $n=m-2$, which is odd. Expanding \eqref{eq:first-poly} by
+$h_{n}(p,-\lambda)=\sum_{j=0}^{n}(-1)^jp^{n-j}\lambda^j$,
+$h_{n}(q,\lambda)=\sum_{j=0}^{n}q^{n-j}\lambda^j$ and
+$h_{n-1}(q,q,\lambda)=\sum_{j=0}^{n-1}(n-j)q^{n-1-j}\lambda^j$ gives
+\begin{equation}\label{eq:poly-expansion}
+ P_{m,1}(q;\lambda)
+ =\sum_{j=0}^{n-1}
+ \Bigl[m\bigl((-1)^jp^{n-j}+q^{n-j}\bigr)
+       -(n-j)q^{n-1-j}\Bigr]\lambda^j,
+\end{equation}
+the degree-$n$ terms cancelling because $n$ is odd. For every odd $j$
+the bracket equals
+$m\bigl(q^{n-j}-p^{n-j}\bigr)-(n-j)q^{n-1-j}$, which is nonpositive
+because $p\geq q\geq0$. Consequently
+\begin{equation}\label{eq:reflection}
+ P_{m,1}(q;-a)-P_{m,1}(q;a)
+ =-2\sum_{j\ \mathrm{odd}}
+ \Bigl[m\bigl(q^{n-j}-p^{n-j}\bigr)-(n-j)q^{n-1-j}\Bigr]a^j\ \geq\ 0
+ \qquad(a\geq0),
+\end{equation}
+so it suffices to bound $P_{m,1}(q;\lambda)$ from below for
+$\lambda\geq0$.
+
+Let $\lambda>0$. With $\rho_{n,m}$ as in \cite[Eq.~(5.7)]{dense}, the
+Gamma representation \cite[Eq.~(5.15)]{dense}, specialised to $r=1$,
+reads
+\[
+ P_{m,1}(q;\lambda)
+ =n\,\E\Bigl[\rho_{n,m}\Bigl(q+\frac{\lambda}{Z}Y\Bigr)\Bigr],
+ \qquad Y\sim\operatorname{Gamma}(1,1),\quad
+ Z\sim\operatorname{Gamma}(m-1,1)
+\]
+with $Y$ and $Z$ independent. The centred identity
+\cite[Eq.~(5.18)]{dense}, again with $r=1$, expresses
+$n\rho_{n,m}(\tfrac12+v)$ as $2a_0$ plus a combination, with positive
+coefficients $a_j=2^{2j+1-n}\binom{n}{2j}$, of the quantities
+$2(1+j)v^{2j}-jv^{2j-1}$ for $1\leq j\leq (n-1)/2$; here
+$a_0=2^{1-n}$. For $0\leq q\leq1/3$ and any $x\geq0$, the proof of
+\cite[Proposition~5.6]{dense} shows that each of these quantities has
+nonnegative expectation at $v=q+xY-\tfrac12$. Hence
+\[
+ n\,\E\rho_{n,m}(q+xY)\ \geq\ 2a_0=2^{2-n}
+ \qquad(x\geq0,\ 0\leq q\leq\tfrac13),
+\]
+and conditioning on $Z$ gives $P_{m,1}(q;\lambda)\geq2^{2-n}>0$ for every
+$\lambda>0$. Continuity extends this to $\lambda=0$, and
+\eqref{eq:reflection} extends it to $\lambda<0$. Thus
+$c_m\geq2^{2-n}=2^{4-m}>0$.
+\end{proof}
+
+\begin{remark}
+The bound $c_m\geq2^{4-m}$ recorded in the proof is very lossy. The
+true order of magnitude is
+$c_m=\tfrac{9m}{7}\bigl(\tfrac23\bigr)^{m}\bigl(1+O((3/4)^m)\bigr)$,
+and for $m=3,5$ one has $c_3=2$ and $c_5=143/144$; see
+\cite[Lemma~3.1]{explicit}. Only $c_m>0$ is used below.
+\end{remark}
+
+Following \cite[Eq.~(6.1)]{dense}, we write, for an arbitrary graphon
+$W$ of edge density $p$ with $U=1-W$ and $q=1-p$,
+\begin{equation}\label{eq:Phi-definition}
+ \Phi_m(W)=t(C_m,W)+t(C_m,U)-t(P_{m-1},U)-G_m(p),
+\end{equation}
+so that \cite[Theorem~1.3]{dense} states $\Phi_m(W)\geq0$ for
+$p\geq2/3$, and \cite[Eq.~(6.3)]{dense} is the gap decomposition
+\begin{equation}\label{eq:gap-decomposition}
+ t(C_m,W)-G_m(p)
+ =\Phi_m(W)+\bigl[t(P_{m-1},U)-t(C_m,U)\bigr],
+\end{equation}
+in which, for $p\geq2/3$, both terms on the right are nonnegative.
+
+\begin{proposition}[Degree estimate]\label{prop:degree}
+Every graphon $W$ with edge density $p\geq2/3$ satisfies
+\begin{equation}\label{eq:degree-coercivity}
+ \Phi_m(W)\ \geq\ c_m\int_0^1\bigl(d_W(x)-p\bigr)^2\,dx .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Suppose first that $W$ is a step graphon as in
+\cite[Section~2]{dense}. The excursion expansion
+\cite[Eq.~(3.10)]{dense} reads
+\[
+ \Phi_m(W)=\sum_{r=1}^{(m-1)/2}
+ \int P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+       \,d\mu(\lambda_1)\cdots d\mu(\lambda_r),
+\]
+where the measure $\mu$ is nonnegative and, by
+\cite[Lemma~2.2 and Eq.~(2.3)]{dense}, is supported on $[-1/2,1/2]$ and
+has total mass
+\[
+ \mu(\R)=\norm{g}_2^2=\int_0^1\bigl(d_W(x)-p\bigr)^2\,dx .
+\]
+Since $p\geq2/3$ gives $q\leq1/3$, all the integrands are nonnegative by
+\cite[Section~5]{dense}. Discarding every term with $r\geq2$ and applying
+\Cref{lem:first-poly} to the term $r=1$ yields
+\eqref{eq:degree-coercivity}.
+
+For a general graphon let $W_s$ be the same-density dyadic step
+approximations of \cite[Lemma~2.1 and Appendix~A]{dense}, so that
+$\norm{W_s-W}_1\to0$ while $t(K_2,W_s)=p$ for every $s$. Telescoping the
+edge factors shows that every homomorphism density occurring in
+\eqref{eq:Phi-definition} converges, and the degree variance converges as
+well because it equals $t(P_2,W_s)-p^2$. Passing to the limit proves the
+assertion.
+\end{proof}
+
+\begin{remark}
+\Cref{prop:degree} is exactly the stability statement for
+\cite[Theorem~1.3]{dense}: the gap in the two-colour inequality is
+bounded below by a fixed multiple of the degree variance, and it vanishes
+precisely for $p$-regular graphons. Retaining instead only the term
+$r=(m-1)/2$, whose integrand is the constant $m-1$, recovers
+\cite[Proposition~6.1]{dense}. Retaining every term gives the full
+lower bound $\Phi_m(W)\geq\sum_r c_{m,r}\sigma^{2r}$ with
+$c_{m,r}=\min P_{m,r}$ over $[-1/2,1/2]^r$, together with the matching
+upper bound obtained by replacing each minimum by the corresponding
+maximum; we shall not need either refinement.
+\end{remark}
+
+\section{Robust spectral estimates}
+\label{sec:spectral}
+
+For a graphon $U$ define
+\begin{align}
+ \eta(U)&=\int U(x,y)\bigl(1-U(x,y)\bigr)\,dx\,dy,\label{eq:eta-def}\\
+ \tau(U)&=t(P_2,U)-t(C_3,U)
+ =\int U(x,y)U(y,z)\bigl(1-U(x,z)\bigr)\,dx\,dy\,dz.\label{eq:tau-def}
+\end{align}
+Both are nonnegative. The first measures how far $U$ is from being
+$\{0,1\}$-valued; the second measures how far the relation
+$\{U=1\}$ is from being transitive, and vanishes exactly when $U$ is a
+disjoint union of cliques.
+
+\begin{lemma}[Even-path inequality]\label{lem:path}
+If $U$ has edge density $q$ and $\ell\geq2$ is even, then
+$t(P_\ell,U)\geq q^\ell$.
+\end{lemma}
+
+\begin{proof}
+Let $\nu$ be the spectral measure of the self-adjoint operator $T_U$ at
+the unit vector $\ind$. Then $\nu$ is a probability measure with
+$\int\lambda\,d\nu=\langle\ind,T_U\ind\rangle=q$ and
+$\int\lambda^\ell\,d\nu=\langle\ind,T_U^\ell\ind\rangle=t(P_\ell,U)$. As
+$\ell$ is even, $x\mapsto x^\ell$ is convex on $\R$, and Jensen's
+inequality gives the claim.
+\end{proof}
+
+\begin{lemma}[Robust moment comparison]\label{lem:spectral}
+Let $U$ be a graphon of edge density $q=1/k$, put
+$\sigma^2=\int_0^1(d_U-q)^2$, and suppose that $\Gamma\geq0$ satisfies
+\begin{equation}\label{eq:moment-hypothesis}
+ t(C_m,U)\geq q^{m-1}-\Gamma .
+\end{equation}
+Then
+\begin{equation}\label{eq:operator-bound}
+ \norm{T_U}_{\op}\leq q+\frac{\sigma}{q},
+\end{equation}
+and
+\begin{equation}\label{eq:eta-tau-bound}
+ \eta(U)\ \lesssim\ \Gamma+\sigma,
+ \qquad
+ \tau(U)\ \lesssim\ \Gamma+\sigma .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $a=m-2$, a positive odd integer, and
+$\varrho=\norm{T_U}_{\op}$. The operator $T_U$ is self-adjoint and
+Hilbert--Schmidt, hence compact with real spectrum, and
+\[
+ q=\langle\ind,T_U\ind\rangle\leq\varrho\leq\norm{U}_2\leq1 .
+\]
+
+\emph{A nonnegative extremal eigenfunction.}
+Let $h$ be a real unit eigenfunction for an eigenvalue of modulus
+$\varrho$. Since $U\geq0$,
+\[
+ \varrho=\abs{\langle h,T_Uh\rangle}\leq\langle\abs h,T_U\abs h\rangle
+ \leq\varrho,
+\]
+so $f=\abs h$ is a nonnegative unit vector with
+$\langle f,T_Uf\rangle=\varrho$. Then
+$\norm{T_Uf-\varrho f}_2^2=\norm{T_Uf}_2^2-\varrho^2\leq0$, whence
+$T_Uf=\varrho f$.
+
+\emph{The operator norm.}
+From $\varrho f=T_Uf$, $U\leq1$ and $f\geq0$ we get
+$\norm f_\infty\leq\varrho^{-1}\norm f_1\leq\varrho^{-1}$ and therefore
+$\norm{f^2}_2\leq\norm f_\infty\leq\varrho^{-1}$. Using symmetry and
+$2f(x)f(y)\leq f(x)^2+f(y)^2$,
+\[
+ \varrho=\int U(x,y)f(x)f(y)\,dx\,dy
+ \leq\int d_U(x)f(x)^2\,dx
+ \leq q+\sigma\norm{f^2}_2\leq q+\frac{\sigma}{\varrho}
+ \leq q+\frac{\sigma}{q},
+\]
+which is \eqref{eq:operator-bound}; in particular
+\begin{equation}\label{eq:rho-minus-q}
+ 0\leq\varrho-q\leq\frac{\sigma}{q}\ \lesssim\ \sigma .
+\end{equation}
+
+\emph{The deficit.}
+Let $(\lambda_i)$ list the nonzero eigenvalues of $T_U$ with
+multiplicity, so that $\sum_i\lambda_i^2=\int U^2\leq q$ and
+$t(C_m,U)=\sum_i\lambda_i^m$; all series below converge absolutely.
+Since $\eta(U)=q-\int U^2$,
+\begin{equation}\label{eq:F}
+ F:=\varrho^aq-t(C_m,U)
+ =\varrho^a\eta(U)+\sum_i\lambda_i^2\bigl(\varrho^a-\lambda_i^a\bigr),
+\end{equation}
+and every summand is nonnegative because $a$ is odd and
+$\lambda_i\leq\varrho$. By \eqref{eq:moment-hypothesis},
+\begin{equation}\label{eq:F-upper}
+ 0\leq F\leq\Gamma+q\bigl(\varrho^a-q^a\bigr).
+\end{equation}
+For $0\leq x\leq1$ one has $1-x^a\leq a(1-x)$, so
+$q(\varrho^a-q^a)=q\varrho^a\bigl(1-(q/\varrho)^a\bigr)
+\leq a\varrho^{a}(\varrho-q)\lesssim\sigma$ by \eqref{eq:rho-minus-q}
+and $\varrho\leq1$. Combining with \eqref{eq:F} and $\varrho\geq q$,
+\[
+ \eta(U)\leq\varrho^{-a}F\leq q^{-a}\bigl(\Gamma+q(\varrho^a-q^a)\bigr)
+ \ \lesssim\ \Gamma+\sigma ,
+\]
+which is the first half of \eqref{eq:eta-tau-bound}.
+
+\emph{Transitivity.}
+For $-1\leq x\leq1$ and odd $a$ one has $1-x\leq2(1-x^a)$: for $x\geq0$
+because $x^a\leq x$, and for $x\leq0$ because the left side is at most
+$2$ while $1-x^a\geq1$. Applying this with $x=\lambda_i/\varrho$ termwise
+in
+\[
+ \varrho q-t(C_3,U)
+ =\varrho\eta(U)+\sum_i\lambda_i^2(\varrho-\lambda_i)
+\]
+gives $\varrho q-t(C_3,U)\leq2\varrho^{1-a}F$. Since
+$t(P_2,U)=q^2+\sigma^2$ and $\varrho\geq q$,
+\[
+ \tau(U)=\sigma^2+\bigl(q^2-\varrho q\bigr)
+ +\bigl(\varrho q-t(C_3,U)\bigr)
+ \leq\sigma^2+2q^{1-a}\bigl(\Gamma+q(\varrho^a-q^a)\bigr)
+ \ \lesssim\ \sigma^2+\Gamma+\sigma ,
+\]
+and $\sigma\leq1$ gives $\sigma^2\leq\sigma$. This is the second half of
+\eqref{eq:eta-tau-bound}.
+\end{proof}
+
+\section{Recovering a balanced clique partition}
+\label{sec:rounding}
+
+\begin{lemma}[Approximation by a balanced union of cliques]
+\label{lem:rounding}
+Let $k\geq2$, let $q=1/k$, and let $H$ be a $\{0,1\}$-valued graphon.
+Put
+\[
+ v=\int_0^1\abs{d_H-q},\qquad \tau=\tau(H).
+\]
+Then $\delta_1(H,U_k)\lesssim v+\tau$.
+\end{lemma}
+
+\begin{proof}
+Set $b=v+12k^2\tau$. If $b\geq1/(16k^2)$ then
+$16k^2b\geq1\geq\delta_1(H,U_k)$ and there is nothing to prove, so
+assume
+\begin{equation}\label{eq:small-b}
+ b<\frac{1}{16k^2}.
+\end{equation}
+We show $\delta_1(H,U_k)\leq(16k+3)b$, which suffices. Replacing $H$ on a
+null set by a symmetric Borel $\{0,1\}$-valued representative, all sets
+below may be taken Borel and no integral is affected.
+
+\paragraph{The cost of selecting a neighbourhood.}
+For a measurable $R\subseteq[0,1]$ and $x\in R$ put
+$N_R(x)=\{y\in R:H(x,y)=1\}$ and $d_R(x)=\abs{N_R(x)}$, where $\abs A$
+denotes Lebesgue measure. Define
+\begin{equation}\label{eq:local-cost}
+ e_R(x)=\int_{N_R(x)^2}(1-H)
+       +2\int_{N_R(x)\times(R\setminus N_R(x))}H,
+\end{equation}
+the $L^1$ cost of making $N_R(x)$ a clique and of removing its edges to
+the rest of $R$. All costs are computed against the original $H$, which
+is never modified. Writing the membership indicator of $N_R(x)$ as
+$H(x,\cdot)$ and using Fubini's theorem and the symmetry of $H$,
+\begin{equation}\label{eq:average-cost}
+ \int_Re_R(x)\,dx
+ =\int_{R^3}H(x,y)H(x,z)\bigl(1-H(y,z)\bigr)
+ +2\int_{R^3}H(x,y)\bigl(1-H(x,z)\bigr)H(y,z)
+ =3\tau_R\leq3\tau,
+\end{equation}
+where $\tau_R$ is the integral \eqref{eq:tau-def} restricted to $R^3$.
+
+\paragraph{Extraction.}
+Suppose disjoint sets $A_1,\ldots,A_t$ have been selected, let
+$R=[0,1]\setminus\bigcup_{i\leq t}A_i$, and let $E$ be the sum of their
+costs \eqref{eq:local-cost} at the times of selection. Each edge of $H$
+from $R$ to a selected set was counted, together with its symmetric
+counterpart, in the cost of that selection, and every other contribution
+to $E$ is nonnegative; hence $\int_{R\times R^c}H\leq E/2$. Since
+$d_H(x)-d_R(x)=\int_{R^c}H(x,y)\,dy$ for $x\in R$,
+\begin{equation}\label{eq:remaining-degree}
+ \int_R\abs{d_R-q}\leq v+\int_{R\times R^c}H\leq v+E/2 .
+\end{equation}
+
+We select every set to have measure at least $q/2$ and cost at most
+$12k\tau$. Suppose inductively that $t$ such choices have been made.
+Their disjointness forces $t\leq2k$, so
+\begin{equation}\label{eq:total-cost-bound}
+ E\leq12kt\tau\leq24k^2\tau,\qquad v+E/2\leq b .
+\end{equation}
+If $\abs R\geq q/2$, set $X_R=\{x\in R:d_R(x)\geq q/2\}$. On
+$R\setminus X_R$ we have $\abs{d_R-q}\geq q/2$, so by
+\eqref{eq:remaining-degree} and \eqref{eq:small-b},
+$\abs{R\setminus X_R}\leq2k(v+E/2)\leq2kb<q/8$, whence
+$\abs{X_R}\geq q/4$. By \eqref{eq:average-cost} there is $x\in X_R$ with
+$e_R(x)\leq3\tau/\abs{X_R}\leq12k\tau$. Select $A_{t+1}=N_R(x)$, which
+has measure $d_R(x)\geq q/2$, and replace $R$ by $R\setminus A_{t+1}$.
+Both inductive properties are preserved, and the induction starts with no
+selected sets and $E=0$.
+
+Each choice removes measure at least $q/2$, so the process stops after
+at most $2k$ choices. Write the final sets as $A_1,\ldots,A_N$, put
+$a_i=\abs{A_i}$, and let $R$ be the final remainder, of measure $r$. Then
+\begin{equation}\label{eq:extraction-output}
+ a_i\geq q/2,\qquad N\leq2k,\qquad r<q/2,\qquad E\leq24k^2\tau=2(b-v).
+\end{equation}
+
+\paragraph{The remainder and the number of parts.}
+For $x\in R$ we have $d_R(x)\leq r<q/2$, so
+\eqref{eq:remaining-degree} gives $qr/2\leq b$ and hence $r\leq2kb$;
+moreover $r^2\leq(q/2)r\leq b$. Put
+$V_0=\sum_{i=1}^N\ind_{A_i\times A_i}$. The costs counted during the
+extraction account exactly for the discrepancies between $H$ and $V_0$
+outside $R^2$, so
+\begin{equation}\label{eq:partial-cliques}
+ \norm{H-V_0}_1=E+\int_{R^2}H\leq E+r^2\leq3b .
+\end{equation}
+The degree function of $V_0$ equals $a_i$ on $A_i$ and $0$ on $R$, and
+$\norm{d_H-d_{V_0}}_1\leq\norm{H-V_0}_1$, so by
+\eqref{eq:extraction-output},
+\begin{equation}\label{eq:part-degrees}
+ \sum_{i=1}^Na_i\abs{a_i-q}+qr=\int\abs{d_{V_0}-q}
+ \leq v+E+r^2\leq3b .
+\end{equation}
+Since $a_i\geq1/(2k)$, this gives $\sum_i\abs{a_i-q}\leq6kb$, and since
+$\sum_ia_i=1-r$,
+\[
+ \abs{1-Nq}\leq r+\sum_i\abs{a_i-q}\leq8kb<q/2 .
+\]
+The number $1-Nq=(k-N)/k$ is an integer multiple of $q$, so
+\begin{equation}\label{eq:number-of-parts}
+ N=k .
+\end{equation}
+
+\paragraph{Balancing.}
+By atomlessness choose measurable $A_i'\subseteq A_i$ with
+$\abs{A_i'}=\min(a_i,q)$. The pool of unretained points has measure
+\[
+ s=r+\sum_{i=1}^k(a_i-q)_+=\sum_{i=1}^k(q-a_i)_+
+ \leq r+\sum_{i=1}^k\abs{a_i-q}\leq8kb,
+\]
+the middle equality following from $\sum_ia_i=1-r$ and $kq=1$. Split the
+pool into sets of measures $(q-a_i)_+$ and adjoin the $i$th to $A_i'$;
+this produces a measurable partition $B_1,\ldots,B_k$ of $[0,1]$ into
+sets of measure $q$. Put $V_B=\sum_i\ind_{B_i\times B_i}$. On pairs both
+of whose endpoints were retained, $V_B$ and $V_0$ agree, so their
+difference is supported on pairs meeting the pool and
+\[
+ \norm{V_B-V_0}_1\leq2s\leq16kb .
+\]
+Finally $V_B$ is a relabelling of $U_k$: on $B_i$ the map
+$\phi(x)=(i-1)q+\int_0^x\ind_{B_i}$ sends Lebesgue measure restricted to
+$B_i$ to Lebesgue measure on the $i$th interval of length $q$, is
+strictly increasing at the density-one points of $B_i$, and therefore
+has a measurable inverse after discarding null sets; combining the $k$
+maps gives a measure-preserving bijection modulo null sets with
+$U_k^\phi=V_B$ almost everywhere. With \eqref{eq:partial-cliques},
+\[
+ \delta_1(H,U_k)\leq\norm{H-V_B}_1\leq(16k+3)b
+ =(16k+3)\bigl(v+12k^2\tau\bigr)\ \lesssim\ v+\tau. \qedhere
+\]
+\end{proof}
+
+\section{Proof of the two-parameter bound}
+\label{sec:completion}
+
+We first treat graphons whose edge density is exactly $p_k$.
+
+\begin{proposition}[Exact-density estimate]\label{prop:exact}
+Let $W$ be a graphon with $t(K_2,W)=p_k$ and set
+$\Gamma=t(C_m,W)-G_m(p_k)$. Then $\Gamma\geq0$ and
+\begin{equation}\label{eq:exact-estimate}
+ \delta_1(W,W_k)\ \lesssim\ \Gamma+\sqrt{\Gamma}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Put $p=p_k$, $q=1/k$ and $U=1-W$, and let
+$\sigma^2=\int_0^1(d_W-p)^2$; since $d_U-q=-(d_W-p)$, this also equals
+$\int_0^1(d_U-q)^2$. As $p\geq2/3$, \cite[Theorem~1.1]{dense} gives
+$\Gamma\geq0$.
+
+\emph{Two small quantities.}
+By the gap decomposition \eqref{eq:gap-decomposition} both summands are
+nonnegative and their sum is $\Gamma$, so
+\[
+ \Phi_m(W)\leq\Gamma
+ \qquad\text{and}\qquad
+ 0\leq t(P_{m-1},U)-t(C_m,U)\leq\Gamma .
+\]
+\Cref{prop:degree} turns the first into
+\begin{equation}\label{eq:sigma-bound}
+ \sigma^2\leq\Gamma/c_m,
+ \qquad\text{that is,}\qquad \sigma\lesssim\sqrt{\Gamma},
+\end{equation}
+and \Cref{lem:path}, applied with the even length $m-1$, turns the
+second into $t(C_m,U)\geq t(P_{m-1},U)-\Gamma\geq q^{m-1}-\Gamma$. Hence
+\Cref{lem:spectral} applies to $U$ with this $\Gamma$ and this $\sigma$,
+and yields
+\begin{equation}\label{eq:eta-tau-applied}
+ \eta(U)\lesssim\Gamma+\sigma,
+ \qquad
+ \tau(U)\lesssim\Gamma+\sigma .
+\end{equation}
+
+\emph{Thresholding.}
+Let $H=\ind_{\{U\geq1/2\}}$ and $e=\norm{H-U}_1$. Pointwise
+$\abs{H-U}=\min(U,1-U)\leq2U(1-U)$, so by \eqref{eq:eta-tau-applied},
+\begin{equation}\label{eq:threshold-error}
+ e\leq2\eta(U)\ \lesssim\ \Gamma+\sigma .
+\end{equation}
+Since $\norm{d_H-d_U}_1\leq e$ and $\norm{d_U-q}_1\leq\sigma$,
+\begin{equation}\label{eq:threshold-degrees}
+ v_H:=\int_0^1\abs{d_H-q}\leq\sigma+e\ \lesssim\ \Gamma+\sigma .
+\end{equation}
+Telescoping the three factors in \eqref{eq:tau-def}, each difference
+being bounded by $\abs{H-U}$ on its own pair of coordinates and the
+remaining coordinate contributing a factor one, gives
+$\abs{\tau(H)-\tau(U)}\leq3e$, so by \eqref{eq:eta-tau-applied} and
+\eqref{eq:threshold-error},
+\begin{equation}\label{eq:threshold-triples}
+ \tau(H)\ \lesssim\ \Gamma+\sigma .
+\end{equation}
+
+\emph{Rounding.}
+By \eqref{eq:distance-basics}, the triangle inequality, and
+\Cref{lem:rounding} applied to the $\{0,1\}$-valued graphon $H$,
+\[
+ \delta_1(W,W_k)=\delta_1(U,U_k)
+ \leq e+\delta_1(H,U_k)
+ \ \lesssim\ e+v_H+\tau(H)
+ \ \lesssim\ \Gamma+\sigma .
+\]
+Substituting \eqref{eq:sigma-bound} proves \eqref{eq:exact-estimate}.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:main}]
+Let $W$ satisfy \eqref{eq:hypotheses} and put $p_0=t(K_2,W)$. Define
+\begin{equation}\label{eq:density-correction}
+ \widehat W=
+ \begin{cases}
+ \dfrac{p_k}{p_0}\,W, & p_0\geq p_k,\\[8pt]
+ W+\dfrac{p_k-p_0}{1-p_0}\,(1-W), & p_0<p_k .
+ \end{cases}
+\end{equation}
+In either case the denominator is positive and the coefficient lies in
+$[0,1]$, so $\widehat W$ is a graphon, and direct integration gives
+\begin{equation}\label{eq:density-correction-error}
+ t(K_2,\widehat W)=p_k,
+ \qquad
+ \norm{\widehat W-W}_1=\abs{p_0-p_k}\leq\delta_e .
+\end{equation}
+
+For graphons $F_1,F_2$ and a finite simple graph $F$, telescoping the
+edge factors in the defining integral gives
+$\abs{t(F,F_1)-t(F,F_2)}\leq\abs{E(F)}\norm{F_1-F_2}_1$. Applying this to
+$C_m$ and using \eqref{eq:hypotheses},
+\begin{equation}\label{eq:Gamma-hat}
+ 0\ \leq\ \widehat\Gamma:=t(C_m,\widehat W)-G_m(p_k)
+ \ \leq\ \delta_C+m\,\delta_e
+ \ \lesssim\ \delta_e+\delta_C ,
+\end{equation}
+the left inequality being \cite[Theorem~1.1]{dense} applied to
+$\widehat W$, whose edge density is exactly $p_k\geq2/3$. Only
+$\widehat W$ is ever subjected to the dense-regime theorem and to
+\Cref{prop:degree}; in particular the argument remains valid when $k=3$
+and $p_0<2/3$.
+
+Writing $D=\delta_e+\delta_C$ and combining
+\eqref{eq:density-correction-error}, \Cref{prop:exact} and
+\eqref{eq:Gamma-hat},
+\begin{equation}\label{eq:two-term}
+ \delta_1(W,W_k)\leq\norm{W-\widehat W}_1+\delta_1(\widehat W,W_k)
+ \ \lesssim\ \delta_e+\widehat\Gamma+\sqrt{\widehat\Gamma}
+ \ \lesssim\ D+\sqrt D ,
+\end{equation}
+which is the first bound in \eqref{eq:main}. For the second, recall
+$\delta_1(W,W_k)\leq1$ and note that $\min\{1,x\}\leq\sqrt x$ and
+$\min\{1,x+y\}\leq\min\{1,x\}+y$ for $x,y\geq0$; hence, with
+$x\lesssim D$ and $y\lesssim\sqrt D$ the two terms of
+\eqref{eq:two-term},
+\[
+ \delta_1(W,W_k)\leq\min\bigl\{1,\ C D+C\sqrt D\bigr\}
+ \leq\sqrt{CD}+C\sqrt D\ \lesssim\ \sqrt D .
+\]
+The final bound in \eqref{eq:main} follows from
+$\sqrt{x+y}\leq\sqrt x+\sqrt y$, and $\dsq\leq\delta_1$ is
+\eqref{eq:distance-basics}.
+\end{proof}
+
+\section{Optimality in each parameter}
+\label{sec:sharpness}
+
+Fix $m$ and $k$ and write $q=1/k$, $p=1-q$. For $0<\varepsilon<q$ let
+$W_\varepsilon$ be the complete $k$-partite graphon with part measures
+\[
+ q+\varepsilon,\quad q-\varepsilon,\quad q,\ \ldots,\ q .
+\]
+Its edge density is
+\begin{equation}\label{eq:unbalanced-edge}
+ t(K_2,W_\varepsilon)
+ =1-\bigl((q+\varepsilon)^2+(q-\varepsilon)^2+(k-2)q^2\bigr)
+ =p-2\varepsilon^2 .
+\end{equation}
+
+\begin{lemma}[Cycle density under a change of part sizes]
+\label{lem:expansion}
+There are $\beta=\beta(m,k)>0$ and $\varepsilon_0=\varepsilon_0(m,k)>0$
+such that
+\begin{equation}\label{eq:unbalanced-cycle}
+ t(C_m,W_\varepsilon)\leq G_m(p)-\tfrac12\beta\varepsilon^2
+ \qquad(0<\varepsilon\leq\varepsilon_0).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $J$ be the $k\times k$ all-one matrix, $I$ the identity, and put
+$D=\operatorname{diag}(1,-1,0,\ldots,0)$, $B_0=q(J-I)$ and $R=(J-I)D$.
+Summing over the successive part indices of a cycle gives
+$t(C_m,W_{(s_1,\ldots,s_k)})
+=\Tr\bigl(((J-I)\operatorname{diag}(s_1,\ldots,s_k))^m\bigr)$, so
+\[
+ t(C_m,W_\varepsilon)=\Tr\bigl((B_0+\varepsilon R)^m\bigr).
+\]
+This polynomial in $\varepsilon$ is even, because interchanging the first
+two part indices replaces $\varepsilon$ by $-\varepsilon$, and its
+constant term is $G_m(p)$ by \cite[Eq.~(1.1)]{dense}.
+
+Its coefficient of $\varepsilon^2$ is
+$\tfrac m2\sum_{j=0}^{m-2}\Tr\bigl(RB_0^jRB_0^{m-2-j}\bigr)$: there are
+$m$ choices for the position of the first factor $\varepsilon R$ and
+$j\in\{0,\ldots,m-2\}$ intervening factors $B_0$ before the second,
+cyclicity of the trace makes the value independent of the first position,
+and each unordered pair of positions is counted twice. Let
+$P_0=J/k$ and $P_1=I-P_0$ be the two complementary orthogonal
+projections. Then $B_0=pP_0-qP_1$ and $J-I=(k-1)P_0-P_1$, and from
+$P_0DP_0=0$, $\Tr(P_0D^2)=2q$ and $\Tr(D^2)=2$ one computes
+\[
+ P_0RP_0=0,\qquad
+ \Tr(P_0RP_1R)=-(k-1)\Tr(P_0DP_1D)=-2p,\qquad
+ \Tr(P_1RP_1R)=2(1-2q).
+\]
+Writing $a=m-2$ and expanding $B_0^j=p^jP_0+(-q)^jP_1$ therefore gives
+\[
+ \Tr\bigl(RB_0^jRB_0^{a-j}\bigr)
+ =-2p\bigl(p^j(-q)^{a-j}+(-q)^jp^{a-j}\bigr)+2(1-2q)(-q)^a .
+\]
+Since $a$ is odd, $\sum_{j=0}^ap^j(-q)^{a-j}
+=\bigl(p^{a+1}-(-q)^{a+1}\bigr)/(p+q)=p^{m-1}-q^{m-1}$ and
+$(-q)^a=-q^a$, so the coefficient of $\varepsilon^2$ equals $-\beta$ with
+\[
+ \beta=2mp\bigl(p^{m-1}-q^{m-1}\bigr)+m(m-1)(1-2q)q^{m-2}>0,
+\]
+positivity holding because $p>q$ and, as $k\geq3$, $1-2q>0$.
+
+For the higher coefficients, expand the cycle density as the sum over
+proper assignments of part indices to the cycle vertices of the product
+of the corresponding part measures. A vertex contributing a factor
+$\varepsilon$ must receive one of two part indices and contributes a
+factor of absolute value one, while each remaining vertex has $k$ choices
+and contributes $q$; dropping the properness restrictions therefore
+bounds the coefficient of $\varepsilon^j$ in absolute value by
+$\binom mj2^jk^{m-j}q^{m-j}=\binom mj2^j$. Odd coefficients vanish, so for
+$\varepsilon\leq1$ the terms of degree at least four contribute at most
+$\varepsilon^4\sum_{j\geq4}\binom mj2^j\leq3^m\varepsilon^4$ in absolute
+value. Taking
+$\varepsilon_0=\min\{q/2,\sqrt{\beta/(2\cdot3^m)}\}$ makes this at most
+$\tfrac12\beta\varepsilon^2$, which proves
+\eqref{eq:unbalanced-cycle}.
+\end{proof}
+
+\begin{lemma}[Distance to the balanced graphon]\label{lem:distance}
+For $0<\varepsilon<q$ we have
+$\dsq(W_\varepsilon,W_k)\geq(q+\varepsilon)\varepsilon$.
+\end{lemma}
+
+\begin{proof}
+Every relabelling $W_k^\phi$ has constant degree function $p$. Let $S$ be
+the part of $W_\varepsilon$ of measure $q+\varepsilon$, on which
+$d_{W_\varepsilon}=1-(q+\varepsilon)=p-\varepsilon$. Testing the cut norm
+on $S\times[0,1]$ gives, for every $\phi$,
+\[
+ \norm{W_\varepsilon-W_k^\phi}_{\square}
+ \geq\Bigl\lvert\int_S\bigl(d_{W_\varepsilon}-p\bigr)\Bigr\rvert
+ =(q+\varepsilon)\varepsilon .
+\]
+Taking the infimum over $\phi$ proves the claim.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:sharp}]
+Let $0<\varepsilon\leq\varepsilon_0$ throughout.
+
+\emph{(ii) Pure edge-density tolerance.}
+By \Cref{lem:expansion}, $t(C_m,W_\varepsilon)\leq G_m(p_k)$, so
+$W_\varepsilon$ satisfies \eqref{eq:hypotheses} with
+$\delta_C=0$ and, by \eqref{eq:unbalanced-edge},
+$\delta_e=2\varepsilon^2$. By \Cref{lem:distance},
+\[
+ \dsq(W_\varepsilon,W_k)\geq q\varepsilon
+ =\frac{q}{\sqrt2}\sqrt{\delta_e}.
+\]
+Thus a bound $C(\delta_e+\delta_C)^c$ would force
+$q2^{-c}\varepsilon^{1-2c}\leq C$ for all small $\varepsilon$, which
+fails for every $c>1/2$.
+
+\emph{(i) Pure cycle tolerance.}
+Let
+\[
+ \widetilde W_\varepsilon
+ =W_\varepsilon+\frac{2\varepsilon^2}{q+2\varepsilon^2}
+ \bigl(1-W_\varepsilon\bigr).
+\]
+Since $\int(1-W_\varepsilon)=q+2\varepsilon^2$ by
+\eqref{eq:unbalanced-edge}, we get
+$t(K_2,\widetilde W_\varepsilon)=p_k$ exactly and
+$\norm{\widetilde W_\varepsilon-W_\varepsilon}_1=2\varepsilon^2$.
+Telescoping the edge factors of $C_m$ and using \Cref{lem:expansion},
+\[
+ t(C_m,\widetilde W_\varepsilon)\leq G_m(p_k)+2m\varepsilon^2,
+\]
+so $\widetilde W_\varepsilon$ satisfies \eqref{eq:hypotheses} with
+$\delta_e=0$ and $\delta_C=2m\varepsilon^2$. By the triangle inequality,
+\Cref{lem:distance} and $\norm\cdot_\square\leq\norm\cdot_1$,
+\[
+ \dsq(\widetilde W_\varepsilon,W_k)
+ \geq(q+\varepsilon)\varepsilon-2\varepsilon^2
+ =q\varepsilon-\varepsilon^2\geq\frac q2\varepsilon
+ =\frac{q}{2\sqrt{2m}}\sqrt{\delta_C},
+\]
+using $\varepsilon\leq\varepsilon_0\leq q/2$. Again no exponent
+$c>1/2$ can hold.
+
+Since both coordinate axes already defeat every $c>1/2$, so does the
+joint statement.
+\end{proof}
+
+\begin{remark}
+The two families are complete $k$-partite graphons, hence at distance
+zero from the family of \emph{all} complete $k$-partite graphons with
+unrestricted part measures; the distance of order $\varepsilon$ in
+\Cref{lem:distance} is a distance to its balanced member only. The square
+root in \Cref{thm:main} is therefore attributable to a single degenerate
+direction, namely the part sizes, along which the functional
+$t(C_m,\cdot)$ is quadratically rather than linearly sensitive. No
+linear estimate to the unrestricted family is asserted here.
+\end{remark}
+
+\begin{thebibliography}{EXP}
+\bibitem[D]{dense}
+T.~Kim, J.~Baek, S.~Im, J.~Lee, and H.~Yang,
+\emph{Goodman-type lower bounds for odd cycles I: The dense regime},
+manuscript.
+\bibitem[E]{explicit}
+\emph{Quantitative stability for the odd-cycle Goodman bound},
+companion note with explicit constants.
+\end{thebibliography}
+
+\end{document}
