@@ -1889,18 +1889,37 @@ The space of graphons modulo this equivalence is compact in cut distance, and ho
   Fix an odd integer $m\ge3$ and an integer $k\ge3$, and set $p_k=1-1/k$.
   For every $\varepsilon>0$ there exists $\delta>0$ such that every graphon $W$ with
   \[
-    \edens W=p_k,
+    \bigl|\edens W-p_k\bigr|\le\delta,
     \qquad
     \tC mW\le p_k^m-p_k(1-p_k)^{m-1}+\delta
   \]
   satisfies $\delta_\square(W,W_k)<\varepsilon$.
 \end{corollary}
 
+The edge density is not required to equal $p_k$ exactly.
+This matters for finite graphs, whose edge densities are rational with denominator $\binom n2$ and therefore almost never equal $1-1/k$.
+
 \begin{proof}
-  Otherwise, there would be a sequence $(V_j)_j$ of edge density $p_k$ whose $C_m$-densities tend to the minimum, but with $\delta_\square(V_j,W_k)\ge\varepsilon$ for some fixed $\varepsilon>0$.
-  Compactness gives a subsequence converging in cut distance to a graphon $W$.
-  Continuity of edge and cycle densities shows that $W$ attains the minimum at edge density $p_k$.
-  By \Cref{prop:main-equality}, $W$ is equivalent to $W_k$, contradicting the distance bound.
+  Suppose the conclusion fails for some $\varepsilon>0$.
+  Taking $\delta=1/j$ for $j\in\mathbb N$ produces graphons $W^{(j)}$ with
+  \[
+    \bigl|\edens{W^{(j)}}-p_k\bigr|\le\frac1j,
+    \qquad
+    \tC m{W^{(j)}}\le p_k^m-p_k(1-p_k)^{m-1}+\frac1j,
+    \qquad
+    \delta_\square(W^{(j)},W_k)\ge\varepsilon .
+  \]
+  By compactness, after passing to a subsequence and relabelling, $W^{(j)}$ converges in cut distance to a graphon $W$.
+  Edge and cycle densities are continuous in cut distance, so the first two conditions pass to the limit as
+  \[
+    \edens W=p_k,
+    \qquad
+    \tC mW\le p_k^m-p_k(1-p_k)^{m-1}.
+  \]
+  Since $k\ge3$ gives $p_k\ge2/3$, \Cref{thm:main} applies to $W$ and supplies the reverse inequality, so $\tC mW=p_k^m-p_k(1-p_k)^{m-1}$; that is, equality holds in \Cref{thm:main}.
+  \Cref{prop:main-equality} then makes $W$ equivalent to $W_k$.
+  Finally, $\delta_\square(W^{(j)},W_k)\to\delta_\square(W,W_k)=0$, because $\delta_\square$ obeys the triangle inequality and $\delta_\square(W^{(j)},W)\to0$.
+  This contradicts $\delta_\square(W^{(j)},W_k)\ge\varepsilon$.
 \end{proof}
 
 \section{Concluding remarks and further questions}
