@@ -409,35 +409,47 @@ We close with further questions in \Cref{sec:conclusion}.
 \section{Matrix reduction and spectral measure}
 \label{sec:matrix-reduction}
 
-Let $W\colon[0,1]^2\to[0,1]$ be a graphon with $\edens W=p$, and
-write
+Let $W\colon[0,1]^2\to[0,1]$ be a graphon with edge density
+$\edens W=p\ge2/3$, as in \Cref{thm:main,thm:commonality}. Write
 \[
   U=1-W,
   \qquad
   q=1-p.
 \]
 Thus, $U$ is the complementary graphon and has edge density $q$.
-The matrix identities and excursion expansions below hold at every edge density; the restriction $p\ge2/3$ enters only in the positivity argument in \Cref{sec:excursion-positivity}.
+The assumption $p\ge2/3$ will be needed only for the positivity argument in \Cref{sec:excursion-positivity}; the matrix identities and excursion expansions developed before that point hold at every edge density.
+
+To prove \Cref{thm:main,thm:commonality} by finite matrix calculations, we first restrict attention to \emph{step graphons}: graphons that are constant on each product of two parts of a finite measurable partition of $[0,1]$.
+We will use partitions into intervals of equal length, so these products form a grid of equally sized rectangles.
+Each such graphon is specified by the finite matrix of its values, and its cycle and path densities can be expressed through matrix products.
+The following lemma justifies this restriction: proving the two inequalities in those theorems for all such graphons, with no bound on the number of parts, proves them for arbitrary graphons as well.
 
 \begin{lemma}[Step-graphon reduction]
 \label{lem:step-reduction}
   It suffices to prove \Cref{thm:main,thm:commonality} for graphons that
-  are constant on the rectangles of a partition of $[0,1]$ into equal
-  intervals.
+  are constant on each rectangle $I_a\times I_b$, where
+  $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$
+  and $N$ ranges over all positive integers.
 \end{lemma}
+Starting from an arbitrary graphon $W$, divide $[0,1]$ into $N$ equal intervals and replace $W$ on each rectangle $I_a\times I_b$ by its average value there.
+This produces a step graphon with exactly the same edge density as $W$.
+Starting with two equal intervals and repeatedly halving each partition interval gives increasingly fine grids, with $N=2,4,8,\ldots$ parts.
+Averaging $W$ on each of these grids produces a sequence of step graphons whose cycle and path densities, and those of their complements, converge to the corresponding densities of $W$ and $1-W$.
+Thus, if the two inequalities hold for every graphon in this sequence, they also hold for $W$ by taking limits.
 The proof is given in \Cref{app:step-reduction}.
 
-Fix such a step graphon, and denote its $N$ equal partition intervals by
-$I_1,\ldots,I_N$. If $K_{ab}$ is the value of a step kernel $K$ on
-$I_a\times I_b$, define the $N\times N$ matrix
+We may therefore fix such a step graphon with partition intervals
+$I_1,\ldots,I_N$.
+A \emph{step kernel} on this partition is a symmetric function $K\colon[0,1]^2\to\R$ that is constant on each rectangle $I_a\times I_b$.
+It is a step graphon when its values lie in $[0,1]$; in particular, $W$, $U$, and the constant-one graphon are step kernels on this partition.
+Write $K_{ab}$ for the value of $K$ on $I_a\times I_b$, and define the $N\times N$ matrix
 $M_K$ and the vector $e\in\R^N$ by
 \begin{equation*}
   M_K=\left(\frac{K_{ab}}N\right)_{a,b=1}^N,
   \qquad
   e=\frac1{\sqrt N}(1,\ldots,1)^{\mathsf T}.
 \end{equation*}
-Then, $M_K$ is symmetric and $\norm e=1$. With this normalization, matrix
-powers recover the relevant graph densities:
+Then, $M_K$ is symmetric and $\norm e=1$. For a step graphon $K$, this normalization expresses the relevant graph densities through matrix powers:
 \begin{align}
   \Tr(M_K^j)
   &=\frac1{N^j}\sum_{a_1,\ldots,a_j=1}^N
