@@ -1,4 +1,4 @@
-import Taeyoung.Foundation
+import Taeyoung.Methods.RootedSOS.CompactS4.Atlas203.Certificate
 
 /-!
 # Atlas 203
@@ -22,12 +22,13 @@ def metadata : CatalogueRow where
   edgeCount := 12
   chromaticNumber := 4
   graph6 := "E~^G"
-  status := .open
-  formalization := .unresolved
+  status := .positive
+  formalization := .verified
 
-/-- This row is mathematically open.  It asserts no sign: only `P ∨ ¬P`. -/
-theorem statusAlternative :
-    SatisfiesLowerBound graph ∨ ViolatesLowerBound graph :=
-  status_excludedMiddle graph
+/-- Complete catalogue bound, with both density intervals checked in Lean. -/
+theorem status : SatisfiesLowerBound graph :=
+  Taeyoung.Methods.RootedSOS.CompactS4.Atlas203.satisfiesLowerBound_203
+
+#print axioms status
 
 end Taeyoung.Examples.Graph203

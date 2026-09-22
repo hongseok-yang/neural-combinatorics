@@ -1,0 +1,4 @@
+{
+  "imports": "import Taeyoung.Methods.RootedSOS.CompactS4.Atlas203.LowerIntervalChecks0000\nimport Taeyoung.Methods.RootedSOS.CompactS4.Atlas203.LowerIntervalChecks0078",
+  "theorem": "theorem Lower.coefficientCheck_all (k : Fin 156) : Lower.coefficientCheck k := by\n  by_cases h : k.1 < 78\n  \u00b7 let j : Fin 78 := \u27e8k.1-0, by omega\u27e9\n    have he : (\u27e80+j.1, by omega\u27e9 : Fin 156) = k := by\n      apply Fin.ext\n      dsimp only [j] <;> omega\n    simpa only [he] using LowerIntervalChecks_0000 j\n  by_cases h : k.1 < 156\n  \u00b7 let j : Fin 78 := \u27e8k.1-78, by omega\u27e9\n    have he : (\u27e878+j.1, by omega\u27e9 : Fin 156) = k := by\n      apply Fin.ext\n      dsimp only [j] <;> omega\n    simpa only [he] using LowerIntervalChecks_0078 j\n  omega\n"
+}

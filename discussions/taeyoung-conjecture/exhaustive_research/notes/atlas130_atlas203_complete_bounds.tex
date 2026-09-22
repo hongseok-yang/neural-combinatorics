@@ -1,0 +1,281 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,mathtools,microtype}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\Q}{\mathbb Q}
+\title{Completing Atlas 130 and Atlas 203\\
+\large Exact rational certificates for both missing density intervals}
+\author{}
+\date{September 21, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove the chromatic-polynomial graphon lower bound for the two remaining
+partial rows of the six-vertex catalogue.  New rational certificates cover
+$[1/2,2/3]$ for Atlas 130 and $[2/3,3/4]$ for Atlas 203.  Together with the
+previously verified high-density certificates, these prove both inequalities
+on their full required intervals, giving 94 positive and 23 negative rows.
+Each new certificate is an exact identity involving integrals of rooted
+squares, fixed-density identities, and nonnegative induced-density terms.
+A separate verifier reconstructs all counting coefficients using integer
+enumeration, proves positivity by exact rational Schur complements, and checks
+936 rational equations per certificate.  No numerical solver output is used
+as a premise of the proof.  Both full bounds now have complete Lean proofs. Fresh sequential builds
+use 100 row-specific files each and meet the one-hour, 16 GiB limits;
+the shared infrastructure is measured separately. The complete theorem
+axiom audits admit only the three standard Lean axioms. See
+\path{lean/docs/ATLAS130_VERIFICATION_PROGRESS.md} and
+\path{lean/docs/ATLAS203_VERIFICATION_PROGRESS.md} for the records.
+\end{abstract}
+
+\section{The complete results}
+
+Let $W\colon\Omega^2\to[0,1]$ be a symmetric measurable kernel on a
+probability space, and put $p=\int_{\Omega^2}W\dd\mu^2$.  All densities are
+homomorphism densities, with the target at $p=1$ interpreted polynomially.
+
+\begin{theorem}\label{thm:complete}
+For every such graphon,
+\begin{align}
+ t(H_{130},W)&\ge p^3(2p-1)^2 &&(1/2\le p\le1),\label{eq:130}\\
+ t(H_{203},W)&\ge p(2p-1)(3p-2)(10p^2-14p+5)
+       &&(2/3\le p\le1).\label{eq:203}
+\end{align}
+\end{theorem}
+
+Atlas 130, with graph6 string \verb|E{CW|, consists of the triangles $012$
+and $345$ joined by the edge $03$.  Its edges and chromatic polynomial are
+\[
+ E_{130}=\{01,02,03,12,34,35,45\},\qquad
+ P_{130}(z)=z(z-1)^3(z-2)^2.
+\]
+Atlas 203, with graph6 string \verb|E~^G|, has
+\[
+ E_{203}=\{01,02,03,05,12,13,14,15,23,24,34,45\}.
+\]
+Equivalently it is $K_6$ with $04,25,35$ removed.  Its chromatic polynomial is
+\[
+ P_{203}(z)=z(z-1)(z-2)(z-3)(z^2-6z+10).
+\]
+Substitution of $z=1/(1-p)$ gives exactly the targets in
+\eqref{eq:130}--\eqref{eq:203}.  The independent checker also recovers each
+target by enumerating all independent-set partitions of the six source
+vertices, using $P_H(z)=\sum_\pi(z)_{|\pi|}$.
+
+\section{An arbitrary-graphon certificate lemma}
+
+Here we give all analytic ingredients of the computer-assisted proof.
+There is no extremal-graphon assumption or finite-host approximation.
+
+\subsection{Root patterns and rooted probabilities}
+
+For $m\in\{0,2,4\}$, set $r=(6-m)/2$.  Take one labelled representative
+$\sigma$ of each unlabelled graph on $m$ vertices, using the NetworkX Atlas
+order.  There are respectively $1,2,11$ representatives, hence 14 root types.
+For $x=(x_0,\ldots,x_{m-1})$, write
+\[
+ w_\sigma(x)=\prod_{ij\in E(\sigma)}W(x_i,x_j)
+ \prod_{\substack{i<j<m\\ij\notin E(\sigma)}}(1-W(x_i,x_j)).
+\]
+For the empty type this weight is 1.
+
+Conditional on the root points, sample $r$ further independent points and
+independent Bernoulli edge indicators for all pairs having at least one
+new endpoint.  Each pair $uv$ has success probability $W(x_u,x_v)$.
+Group the resulting edge patterns into classes under permutations of the
+$r$ new vertices, fixing the roots individually.  Let $f_\sigma(x)$ be the
+vector of the probabilities of these classes.  Thus its entries sum to 1;
+they do not include the root weight $w_\sigma$.  The vector sizes are
+\[
+ \begin{array}{c|ccc}m&0&2&4\\ \hline
+ r&3&2&1\\ \dim f_\sigma&4&20&16.\end{array}
+\]
+For a precise encoding, order the pairs $i<j<m+r$ with $j\ge m$
+lexicographically, encode an edge set by its binary mask in that order,
+replace it by the least mask under permutations of the new vertices, and
+order the distinct least masks increasingly.
+
+For a rational positive-semidefinite matrix $Q$,
+\begin{equation}
+ \int_{\Omega^m}w_\sigma(x)f_\sigma(x)^{\mathsf T}
+ Qf_\sigma(x)\dd\mu^m(x)\ge0.\label{eq:square}
+\end{equation}
+Indeed, the integrand is a nonnegative weight times a nonnegative quadratic
+form.  This also holds with polynomially varying positive-semidefinite $Q$.
+
+\subsection{The independent six-point expansion}
+
+Let $\mathcal G_6$ be the 156 unlabelled simple graphs on six vertices, and
+let $\rho_J(W)$ be the probability that six independent points, with the
+conditionally independent edge indicators just described, induce a graph
+isomorphic to $J$.  In particular, $\rho_J(W)\ge0$ and
+$\sum_J\rho_J(W)=1$.
+
+For a graph $F$ on at most six vertices, let $h_F(J)$ be the proportion of
+injective maps $V(F)\to V(J)$ that preserve every edge of $F$.  Exchangeability
+and conditional independence give the exact identity
+\begin{equation}
+ t(F,W)=\sum_{J\in\mathcal G_6}\rho_J(W)h_F(J).
+ \label{eq:hom-expansion}
+\end{equation}
+Injectivity here concerns the six sampled \emph{indices}, not distinctness
+of their underlying points in $\Omega$.  Thus this is exact even on an atomic
+probability space, and does not replace graphon homomorphism densities by
+finite-host injective densities.
+
+Similarly let $M^\sigma_{ij}(J)$ be the following unconditional probability.
+Choose a uniformly random ordering of the six vertices of $J$.  The first
+$m$ vertices must induce the specific labelled type $\sigma$; the next $r$
+and final $r$ vertices must give rooted classes $i$ and $j$, respectively.
+Unspecified edges between these two branch sets are ignored.  Then
+\begin{equation}
+ \int w_\sigma f_{\sigma,i}f_{\sigma,j}\dd\mu^m
+   =\sum_{J\in\mathcal G_6}\rho_J(W)M^\sigma_{ij}(J).
+ \label{eq:gram-expansion}
+\end{equation}
+To prove this, first condition on the roots.  The two branch experiments
+are independent and the root edges are sampled once.  Averaging the resulting
+product over all sampled six-point graphs proves the identity.  In
+particular, $M^\sigma$ is \emph{not} divided by the number of copies of
+$\sigma$ in $J$; that conditional normalization would invalidate this proof.
+
+\subsection{The interval identity}
+
+For $a<b$, put $p(s)=a+(b-a)s$ and $0\le s\le1$.  Write
+\[
+ B_{d,k}(s)=\binom dk s^k(1-s)^{d-k}.
+\]
+For each root type, the certificate contains integer matrices $L_\sigma$,
+$R_\sigma$, $C_{0,\sigma}$, $C_{1,\sigma}$ and symmetric rational
+\emph{positive-definite} matrices $Z_{0,\sigma}$, $Z_{1,\sigma}$.
+Define
+\begin{align*}
+ A_\sigma(s)&=[(1-s)L_\sigma\ \ sR_\sigma]C_{0,\sigma},\\
+ Q_\sigma(s)&=A_\sigma(s)Z_{0,\sigma}A_\sigma(s)^{\mathsf T}
+   +s(1-s)C_{1,\sigma}Z_{1,\sigma}C_{1,\sigma}^{\mathsf T}.
+\end{align*}
+Every $Q_\sigma(s)$ is positive semidefinite on the closed interval.
+The certificate also contains arbitrary rational coefficients $u_{G,k}$
+for each of the 11 four-vertex graphs $G$, and nonnegative rationals
+$z_{J,k}$ for $J\in\mathcal G_6$.  Put
+\[
+ \gamma_G(s)=\sum_{k=0}^4u_{G,k}B_{4,k}(s),\qquad
+ z_J(s)=\sum_{k=0}^5z_{J,k}B_{5,k}(s)\ge0.
+\]
+The exact identity checked by the verifier is
+\begin{align}
+ t(H,W)-\Phi_H(p(s))
+ &=\sum_\sigma\int w_\sigma f_\sigma^{\mathsf T}
+       Q_\sigma(s)f_\sigma\dd\mu^m\notag\\
+ &\quad+\sum_{G\in\mathcal G_4}\gamma_G(s)
+       \bigl(t(G\sqcup K_2,W)-p(s)t(G,W)\bigr)\notag\\
+ &\quad+\sum_{J\in\mathcal G_6}z_J(s)\rho_J(W).
+ \label{eq:certificate}
+\end{align}
+This identity holds for every graphon and every real $s$ as a polynomial
+identity; the positivity conclusion uses $s\in[0,1]$ and $t(K_2,W)=p(s)$.
+
+\begin{lemma}\label{lem:certificate}
+If the stated rational positivity conditions and identity
+\eqref{eq:certificate} hold, then $t(H,W)\ge\Phi_H(t(K_2,W))$ whenever
+$a\le t(K_2,W)\le b$.
+\end{lemma}
+\begin{proof}
+Choose $s=(t(K_2,W)-a)/(b-a)$.  All square terms and all induced-density
+terms are nonnegative.  Independence on the disjoint components gives
+$t(G\sqcup K_2,W)=t(K_2,W)t(G,W)$, so every middle term is zero, regardless
+of the signs of $\gamma_G$.  This proves the result, including both endpoints.
+\end{proof}
+
+\section{Exact verification and interval coverage}
+
+The two exact data files, relative to \path{experiments/}, are
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}cclrr@{}}
+\toprule
+Atlas & interval & filename & zero slacks & positive slacks\\
+\midrule
+130 & $[1/2,2/3]$ & \path{atlas130_exact_lower_induced_interval.json} &43&893\\
+203 & $[2/3,3/4]$ & \path{atlas203_exact_lower_induced_interval.json} &31&905\\
+\bottomrule
+\end{tabular}
+\end{center}
+Each file contains the matrices and all coefficients in
+\eqref{eq:certificate}, as integers or exact rational strings.  There are
+28 positive-definite rational Gram factors per certificate.
+
+The standalone checker is
+\path{experiments/verify_remaining_cases_induced.py}.  It performs the
+following exact checks:
+\begin{enumerate}
+\item Rebuild the Atlas source graph, all 156 hosts, the 14 root types, and
+the rooted class encodings.  Recover the target by independent-set partitions.
+\item Verify symmetry and positivity of all 28 Gram factors by rational
+Schur elimination: every pivot is strictly positive.
+\item Rebuild $h_F(J)$ and $M^\sigma_{ij}(J)$ by enumerating all $6!=720$
+ordered samples in each host.  All coefficients are integer counts over 720.
+\item Expand both sides of \eqref{eq:certificate} in the degree-five
+Bernstein basis.  Verify all $156\cdot6=936$ equations over $\Q$, and
+verify that all 936 residual coefficients are nonnegative.
+\end{enumerate}
+Equations \eqref{eq:hom-expansion} and \eqref{eq:gram-expansion} show why these
+finite checks prove the entire graphon identity.  This is not a test of the
+inequality on 156 particular graphons.
+
+From the \path{exhaustive_research/} directory, run
+\begin{verbatim}
+python experiments/verify_remaining_cases_induced.py \
+  experiments/atlas130_exact_lower_induced_interval.json \
+  experiments/atlas203_exact_lower_induced_interval.json
+\end{verbatim}
+On PowerShell this can be entered on one line.  The verifier uses NetworkX
+and python-flint, together with Python's exact integer and fraction arithmetic.
+It imports no discovery scripts, solver, or numerical cache.
+
+\begin{proof}[Proof of Theorem~\ref{thm:complete}]
+The two exact checks establish the hypotheses of
+Lemma~\ref{lem:certificate}, proving \eqref{eq:130} on $[1/2,2/3]$ and
+\eqref{eq:203} on $[2/3,3/4]$.
+The earlier four-root certificates, described in
+\path{notes/s4_exact_interval_sos_remaining_cases.tex}, prove the respective
+inequalities on $[2/3,1]$ and $[3/4,1]$.  Their exact data are
+\path{experiments/atlas130_exact_upper_interval_sos.json} and
+\path{experiments/atlas203_exact_upper34_interval_sos.json}; both were
+rechecked with \path{experiments/s4_interval_verify.py} in this completion.
+The closed intervals meet and cover the full required ranges.
+\end{proof}
+
+\section{What changed relative to the earlier attempts}
+
+The new search allows every induced root pattern on zero, two, or four
+roots, retains a nonnegative induced six-point residual, and includes the
+exact fixed-density identities with polynomial multipliers.  The earlier
+restricted four-root search did not supply these particular lower-interval
+certificates.  We make no claim that its cone cannot do so.
+
+For Atlas 130, this proof does not assert positive correlation of the two
+rooted triangles, discard complement-codegree slack, or prove the stronger
+conjecture $t(H_{130},W)\ge(2p-1)t(F,W)$ from the earlier operator note.
+That stronger conjecture remains unproved here.  The invalid routes in the
+failed-attempts ledger therefore stay invalid even though the target is now
+settled.  For Atlas 203, the proof does not infer positivity of a cone from
+positivity of its base; indeed its base Atlas 48 is negative.
+
+For reproducibility, the discovery and reconstruction scripts are
+\path{experiments/remaining_cases_flag_search.py},
+\path{experiments/remaining_cases_interval_search.py}, and
+\path{experiments/remaining_cases_rationalize.py}.  Floating-point solves
+suggested rational subspaces; rounding followed by exact linear corrections
+produced the saved data.  No inferred kernel or numerical tolerance needs
+to be trusted: the independent checker tests the resulting rational factors
+and the complete identity directly.
+
+\end{document}

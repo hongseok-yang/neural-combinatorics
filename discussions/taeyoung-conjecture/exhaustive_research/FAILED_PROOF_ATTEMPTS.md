@@ -4,6 +4,8 @@ This is a proof-safety ledger for the Taeyoung-conjecture catalogue. Its purpose
 
 The standing rule is: numerical evidence may suggest a lemma, but a catalogue row moves to positive only after a proof for every graphon on the full required density interval.
 
+**Completion update (2026-09-21).** Atlas 130 and 203 are now fully positive by the exact rational certificates in [notes/atlas130_atlas203_complete_bounds.tex](notes/atlas130_atlas203_complete_bounds.tex). The new certificates cover their missing lower intervals and meet the accepted upper-interval proofs. Historical statements below that these rows remain open describe the state at the time of the attempt. Their invalid inequalities remain invalid; in particular, this completion does not prove the stronger Atlas 130 comparison from Attempts 53 and 60. The independent checker is [experiments/verify_remaining_cases_induced.py](experiments/verify_remaining_cases_induced.py).
+
 ## 1. Universal-vertex and join closure
 
 **Tempting claim.** If $F$ is positive, then $K_1\vee F$ is positive; more generally, positivity is preserved by graph joins.
