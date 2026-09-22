@@ -515,6 +515,13 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
 \end{lemma}
 
 \begin{proof}
+  Throughout this proof, vector coordinates and matrix entries refer to the standard basis of $\R^N$, indexed by the partition intervals $I_1,\ldots,I_N$.
+  In these coordinates,
+  \[
+    0\le (M_U)_{ab}=\frac{U_{ab}}{N}\le\frac1N=(M_1)_{ab},
+    \qquad 1\le a,b\le N,
+  \]
+  so $0\le M_U\le M_1$ entrywise.
   Let $f\in\mathcal E_0$ with $\norm f=1$, and define its coordinatewise
   positive and negative parts by
   \[
@@ -545,8 +552,9 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
     \le f_+^{\mathsf T}M_Uf_++f_-^{\mathsf T}M_Uf_-
       \le2a^2\le\frac12,
   \]
-  where the second inequality follows from $M_U\le M_1$ entrywise and
-  $f_+^{\mathsf T}M_1f_+=f_-^{\mathsf T}M_1f_-=a^2$.  Similarly,
+  where the second inequality uses the entrywise comparison $M_U\le M_1$
+  in the standard coordinates, the nonnegative entries of $f_+$ and $f_-$,
+  and the identities $f_+^{\mathsf T}M_1f_+=f_-^{\mathsf T}M_1f_-=a^2$.  Similarly,
   $f_+^{\mathsf T}M_Uf_+$ and $f_-^{\mathsf T}M_Uf_-$ are nonnegative,
   so dropping these terms gives
   \[
@@ -554,8 +562,9 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
     \ge-f_+^{\mathsf T}M_Uf_--f_-^{\mathsf T}M_Uf_+
       \ge-2a^2\ge-\frac12.
   \]
-  Here the second inequality follows from $M_U\le M_1$ entrywise and
-  $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
+  Here the second inequality again uses the entrywise comparison $M_U\le M_1$
+  in the standard coordinates and the nonnegative entries of $f_+$ and $f_-$,
+  together with $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
   Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh--Ritz
   characterization of the eigenvalues of the symmetric map $A$ proves the
   claim.
