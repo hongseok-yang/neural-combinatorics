@@ -1,0 +1,23 @@
+Taeyoung\Methods\RootedSOS\CongruenceDiagonalDominance.lean:106:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?L * (?M * ?N)
+in the target expression
+  ∑ x, (∑ x_1, ↑(P x_1 i) * ↑(A x_1 x)) * ↑(P x j) = ↑(B i j)
+
+case hproduct
+n : ℕ
+A P K B : Fin n → Fin n → ℤ
+hupper : ∀ (i j : Fin n), j < i → P i j = 0
+hdiag : ∀ (i : Fin n), P i i ≠ 0
+hK : ∀ (i j : Fin n), K i j = ∑ k, A i k * P k j
+hB : ∀ (i j : Fin n), B i j = ∑ k, P k i * K k j
+hsymm : ∀ (i j : Fin n), B i j = B j i
+hrow : ∀ (i : Fin n), (∑ j, if i = j then 0 else (B i j).natAbs) ≤ (B i i).toNat
+hdiagB : ∀ (i : Fin n), 0 ≤ B i i
+x : Fin n → ℝ
+i j : Fin n
+hcast : ∀ (i j : Fin n), ↑(K i j) = ∑ k, ↑(A i k) * ↑(P k j)
+⊢ ∑ x, (∑ x_1, ↑(P x_1 i) * ↑(A x_1 x)) * ↑(P x j) = ↑(B i j)
+Taeyoung\Methods\RootedSOS\CongruenceDiagonalDominance.lean:116:6: error: mod_cast has type
+  @Nat.cast ℤ instNatCastInt (∑ j, if i = j then 0 else (B i j).natAbs) ≤ B i i
+but is expected to have type
+  @Nat.cast ℝ Real.instNatCast (∑ j, if i = j then 0 else (B i j).natAbs) ≤ ↑(B i i)

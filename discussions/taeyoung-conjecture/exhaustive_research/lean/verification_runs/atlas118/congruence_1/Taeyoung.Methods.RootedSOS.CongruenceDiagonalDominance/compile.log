@@ -1,0 +1,32 @@
+Taeyoung\Methods\RootedSOS\CongruenceDiagonalDominance.lean:35:4: error: Type mismatch: After simplification, term
+  hrow i
+ has type
+  (∑ j, if i = j then 0 else |A i j|) ≤ A i i
+but is expected to have type
+  (∑ x, if i = x then 0 else |A i x - if i = x then 1 else 0|) ≤ A i i
+Taeyoung\Methods\RootedSOS\CongruenceDiagonalDominance.lean:27:52: error: unsolved goals
+n : ℕ
+A : Matrix (Fin n) (Fin n) ℝ
+hsymm : ∀ (i j : Fin n), A i j = A j i
+hrow : ∀ (i : Fin n), (∑ j, if i = j then 0 else |A i j|) ≤ A i i
+x : Fin n → ℝ
+C : Fin n → Fin n → ℝ := fun i j => A i j - if i = j then 1 else 0
+hc : ∀ (i j : Fin n), C i j = C j i
+hr : ∀ (i : Fin n), ∑ j, |if i = j then 0 else C i j| ≤ 1 + C i i
+⊢ 0 ≤ matrixQuadratic A x
+Taeyoung\Methods\RootedSOS\CongruenceDiagonalDominance.lean:61:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ∑ j, ∑ k, ∑ l, x i * (P l i * A l k) * P k j * x j
+in the target expression
+  ∑ x_1, ∑ x_2, ∑ x_3, ∑ i, x x_1 * (P i x_1 * A i x_3 * P x_3 x_2) * x x_2 =
+    ∑ x_1, ∑ x_2, ∑ x_3, ∑ i, P x_1 i * x i * A x_1 x_2 * (P x_2 x_3 * x x_3)
+
+n : ℕ
+A P : Matrix (Fin n) (Fin n) ℝ
+x : Fin n → ℝ
+⊢ ∑ x_1, ∑ x_2, ∑ x_3, ∑ i, x x_1 * (P i x_1 * A i x_3 * P x_3 x_2) * x x_2 =
+    ∑ x_1, ∑ x_2, ∑ x_3, ∑ i, P x_1 i * x i * A x_1 x_2 * (P x_2 x_3 * x x_3)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    P i

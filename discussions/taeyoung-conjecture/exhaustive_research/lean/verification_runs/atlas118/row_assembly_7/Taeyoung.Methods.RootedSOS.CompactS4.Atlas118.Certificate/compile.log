@@ -1,0 +1,23 @@
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Certificate.lean:37:32: error: Application type mismatch: The argument
+  groupTotal_exact
+has type
+  ∀ (g : Fin 143) (u : Fin 4), groupTotal ↑g ↑u = ∑ k, Sparse.pulled g k * right ↑k ↑u
+but is expected to have type
+  ∀ (g : Fin 143) (u : ℕ), groupTotal (↑g) u = ∑ k, Sparse.pulled g k * right (↑k) u
+in the application
+  integer_contraction_eval Sparse.pulled (fun k u => right (↑k) u) (fun g u => groupTotal (↑g) u) groupTotal_exact
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Certificate.lean:36:13: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype ℕ
+
+Hint: Adding the command `deriving instance Fintype for Nat` may allow Lean to derive the missing instance.
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Certificate.lean:41:2: error: `simp` made no progress
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Certificate.lean:46:8: warning: automatically included section variable(s) unused in theorem `_private.Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.Certificate.0.Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.density_eq_of_graph_eq`:
+  [IsProbabilityMeasure μ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure μ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.satisfiesLowerBound_118' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,8 @@
+Taeyoung\Methods\RootedSOS\PackedMatrix.lean:59:4: error: Type mismatch
+  natAbs_sum_le_card_mul_bound (fun k => left ↑i ↑k * right ↑k ↑j) (leftBound * rightBound) fun k =>
+    Eq.mpr (id (congrArg (fun _a => _a ≤ leftBound * rightBound) (Int.natAbs_mul (left ↑i ↑k) (right ↑k ↑j))))
+      (Nat.mul_le_mul (hleft i k) (hright k j))
+has type
+  (∑ i_1, left ↑i ↑i_1 * right ↑i_1 ↑j).natAbs ≤ Fintype.card (Fin n) * (leftBound * rightBound)
+but is expected to have type
+  (∑ k, left ↑i ↑k * right ↑k ↑j).natAbs ≤ n * (leftBound * rightBound)

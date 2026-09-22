@@ -1,11 +1,7 @@
-import Taeyoung.Foundation
+import Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.Certificate
 
-/-!
-# Atlas 118
-
-graph6: `Eht?`.  The edge-list definition below is the Lean graph;
-the graph6 string is stable external metadata until a verified decoder exists.
--/
+/-! Atlas118. Exact integer Gram matrices, their flag-density interpretation,
+the complete interval identity, and coloring counts certify the catalogue bound. -/
 
 namespace Taeyoung.Examples.Graph118
 
@@ -23,12 +19,11 @@ def metadata : CatalogueRow where
   chromaticNumber := 3
   graph6 := "Eht?"
   status := .positive
-  formalization := .believed
+  formalization := .verified
 
-/-- Accepted mathematical result: the exact four-root interval-SOS proof in notes/s4_exact_interval_sos_remaining_cases.tex.
-
-The method-specific Lean bridge for this row remains to be formalized. -/
-theorem status : SatisfiesLowerBound graph := by
-  sorry
+theorem status : SatisfiesLowerBound graph :=
+  Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.satisfiesLowerBound_118
 
 end Taeyoung.Examples.Graph118
+
+#print axioms Taeyoung.Examples.Graph118.status

@@ -1,0 +1,13 @@
+Taeyoung\Methods\RootedSOS\SparseContraction.lean:37:13: error: unsolved goals
+m n : ℕ
+rowSize : Fin m → ℕ
+columnSize : Fin n → ℕ
+rowColumn : (i : Fin m) × Fin (rowSize i) → Fin n
+rowValue : (i : Fin m) × Fin (rowSize i) → ℤ
+e : (j : Fin n) × Fin (columnSize j) ≃ (i : Fin m) × Fin (rowSize i)
+hcolumn : ∀ (x : (j : Fin n) × Fin (columnSize j)), rowColumn (e x) = x.fst
+v : Fin n → ℤ
+row : Fin m
+f : (i : Fin m) × Fin (rowSize i) → ℤ := fun x => if x.fst = row then rowValue x * v (rowColumn x) else 0
+⊢ (∑ x, ∑ x_1, if x = row then rowValue ⟨x, x_1⟩ * v (rowColumn ⟨x, x_1⟩) else 0) =
+    ∑ k, rowValue ⟨row, k⟩ * v (rowColumn ⟨row, k⟩)

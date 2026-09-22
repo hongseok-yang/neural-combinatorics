@@ -1,5 +1,6 @@
 import Taeyoung.Examples.Graph007
 import Taeyoung.Examples.Graph126
+import Taeyoung.Examples.Graph118
 import Taeyoung.Examples.Graph015
 import Taeyoung.Examples.Graph017
 import Taeyoung.Examples.Graph018
@@ -851,3 +852,8 @@ list.  What the row supplies is arithmetic — the surjective counts by
 transport; fresh sequential verification is recorded in
 `docs/ATLAS126_VERIFICATION_PROGRESS.md`. -/
 #print axioms Taeyoung.Examples.Graph126.status
+
+/-! Atlas118: compact integer Gram matrices, sparse coefficient contractions,
+and the complete graphon and catalogue proof. Fresh sequential verification is
+recorded in `docs/ATLAS118_VERIFICATION_PROGRESS.md`. -/
+#print axioms Taeyoung.Examples.Graph118.status

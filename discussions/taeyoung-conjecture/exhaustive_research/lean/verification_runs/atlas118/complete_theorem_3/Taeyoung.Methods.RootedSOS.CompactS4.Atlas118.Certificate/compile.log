@@ -1,0 +1,68 @@
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Certificate.lean:43:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x,
+    ((↑(groupTotal (↑x) 0) + ↑(groupTotal (↑x) 1) * s +
+          if 2 = 0 then ↑(groupTotal (↑x) 2)
+          else if 2 = 1 then ↑(groupTotal (↑x) 2) * s else ↑(groupTotal (↑x) 2) * s ^ 2) +
+        if 3 = 0 then ↑(groupTotal (↑x) 3)
+        else
+          if 3 = 1 then ↑(groupTotal (↑x) 3) * s
+          else if 3 = 2 then ↑(groupTotal (↑x) 3) * s ^ 2 else ↑(groupTotal (↑x) 3) * (s * (1 - s))) *
+      (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W)
+in the target expression
+  0 ≤
+    ∑ x,
+      (↑(groupTotal (↑x) 0) + ↑(groupTotal (↑x) 1) * s + ↑(groupTotal (↑x) 2) * s ^ 2 +
+          ↑(groupTotal (↑x) 3) * (s * (1 - s))) *
+        (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W)
+
+Ω : Type u_1
+inst✝¹ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝ : IsProbabilityMeasure μ
+W : Graphon Ω μ
+s : ℝ
+hs : 0 ≤ s
+hs1 : s ≤ 1
+w : Fin 4 → ℝ := fun u => if u = 0 then 1 else if u = 1 then s else if u = 2 then s ^ 2 else s * (1 - s)
+he :
+  ∑ x,
+      ((↑(right (↑x) 0) + ↑(right (↑x) 1) * s +
+            if 2 = 0 then ↑(right (↑x) 2) else if 2 = 1 then ↑(right (↑x) 2) * s else ↑(right (↑x) 2) * s ^ 2) +
+          if 3 = 0 then ↑(right (↑x) 3)
+          else
+            if 3 = 1 then ↑(right (↑x) 3) * s
+            else if 3 = 2 then ↑(right (↑x) 3) * s ^ 2 else ↑(right (↑x) 3) * (s * (1 - s))) *
+        ∑ g,
+          ↑(Sparse.pulled g x) *
+            (cliqueDensity 2 W ^ (S4Classification.groupKey g).2 * homDensity (S4Classification.coreGraph6 g) W) =
+    ∑ x,
+      ((↑(groupTotal (↑x) 0) + ↑(groupTotal (↑x) 1) * s +
+            if 2 = 0 then ↑(groupTotal (↑x) 2)
+            else if 2 = 1 then ↑(groupTotal (↑x) 2) * s else ↑(groupTotal (↑x) 2) * s ^ 2) +
+          if 3 = 0 then ↑(groupTotal (↑x) 3)
+          else
+            if 3 = 1 then ↑(groupTotal (↑x) 3) * s
+            else if 3 = 2 then ↑(groupTotal (↑x) 3) * s ^ 2 else ↑(groupTotal (↑x) 3) * (s * (1 - s))) *
+        (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W)
+h :
+  0 ≤
+    ∑ x,
+      (↑(right (↑x) 0) + ↑(right (↑x) 1) * s + ↑(right (↑x) 2) * s ^ 2 + ↑(right (↑x) 3) * (s * (1 - s))) *
+        ∑ g,
+          ↑(Sparse.pulled g x) *
+            (cliqueDensity 2 W ^ (S4Classification.groupKey g).2 * homDensity (S4Classification.coreGraph6 g) W)
+⊢ 0 ≤
+    ∑ x,
+      (↑(groupTotal (↑x) 0) + ↑(groupTotal (↑x) 1) * s + ↑(groupTotal (↑x) 2) * s ^ 2 +
+          ↑(groupTotal (↑x) 3) * (s * (1 - s))) *
+        (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W)
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Certificate.lean:45:8: warning: automatically included section variable(s) unused in theorem `_private.Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.Certificate.0.Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.density_eq_of_graph_eq`:
+  [IsProbabilityMeasure μ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure μ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.satisfiesLowerBound_118' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

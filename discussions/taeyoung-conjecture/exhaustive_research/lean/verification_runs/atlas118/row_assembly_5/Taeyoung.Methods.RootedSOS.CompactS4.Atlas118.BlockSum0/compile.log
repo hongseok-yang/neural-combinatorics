@@ -1,0 +1,50 @@
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\BlockSum0.lean:48:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  right ↑(blockIndex0 i j) ↑0
+in the target expression
+  ∑ i_1,
+      (↑(right (↑(blockIndex0 i j)) 0) + ↑(right (↑(blockIndex0 i j)) 1) * s + ↑(right (↑(blockIndex0 i j)) 2) * s ^ 2 +
+          ↑(right (↑(blockIndex0 i j)) 3) * s * (1 - s)) *
+        (↑(Young4.pulled i_1 i j) *
+          (cliqueDensity 2 W ^ (S4Classification.groupKey i_1).2 * homDensity (S4Classification.coreGraph6 i_1) W)) =
+    ∑ x,
+      (24 *
+          ((↑(Block00.H ↑i ↑j) + (↑(Block00.H (↑i) (32 + ↑j)) + ↑(Block00.H (32 + ↑i) ↑j)) * s +
+              ↑(Block00.H (32 + ↑i) (32 + ↑j)) * s ^ 2) *
+            (↑(Young4.pulled x i j) *
+              (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W))) +
+        24 * s * (1 - s) *
+          (↑(Block05.H ↑i ↑j) *
+            (↑(Young4.pulled x i j) *
+              (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W))))
+
+Ω : Type u_1
+inst✝¹ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝ : IsProbabilityMeasure μ
+W : Graphon Ω μ
+s : ℝ
+hs : 0 ≤ s
+hs1 : s ≤ 1
+i : Fin 32
+a✝¹ : i ∈ univ
+j : Fin 32
+a✝ : j ∈ univ
+⊢ ∑ i_1,
+      (↑(right (↑(blockIndex0 i j)) 0) + ↑(right (↑(blockIndex0 i j)) 1) * s + ↑(right (↑(blockIndex0 i j)) 2) * s ^ 2 +
+          ↑(right (↑(blockIndex0 i j)) 3) * s * (1 - s)) *
+        (↑(Young4.pulled i_1 i j) *
+          (cliqueDensity 2 W ^ (S4Classification.groupKey i_1).2 * homDensity (S4Classification.coreGraph6 i_1) W)) =
+    ∑ x,
+      (24 *
+          ((↑(Block00.H ↑i ↑j) + (↑(Block00.H (↑i) (32 + ↑j)) + ↑(Block00.H (32 + ↑i) ↑j)) * s +
+              ↑(Block00.H (32 + ↑i) (32 + ↑j)) * s ^ 2) *
+            (↑(Young4.pulled x i j) *
+              (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W))) +
+        24 * s * (1 - s) *
+          (↑(Block05.H ↑i ↑j) *
+            (↑(Young4.pulled x i j) *
+              (cliqueDensity 2 W ^ (S4Classification.groupKey x).2 * homDensity (S4Classification.coreGraph6 x) W))))
+'Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.blockSum0_nonneg' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

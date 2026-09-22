@@ -1,0 +1,30 @@
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas118\Block00Density.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ ui, ∑ vj, ↑(?H ↑(finProdFinEquiv ui) ↑(finProdFinEquiv vj)) * ?s ^ (↑ui.1 + ↑vj.1) * ?phi ui.2 vj.2
+in the target expression
+  0 ≤
+    ∑ x,
+      ∑ x_1,
+        ↑(H ↑(finProdFinEquiv x) ↑(finProdFinEquiv x_1)) * s ^ (↑x.1 + ↑x_1.1) *
+          ∑ g,
+            ↑(Young4.pulled g x.2 x_1.2) *
+              (cliqueDensity 2 W ^ (S4Classification.groupKey g).2 * homDensity (S4Classification.coreGraph6 g) W)
+
+Ω : Type u_1
+inst✝¹ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝ : IsProbabilityMeasure μ
+W : Graphon Ω μ
+s : ℝ
+h :
+  0 ≤
+    ∑ x,
+      ∑ x_1,
+        ↑(H ↑(finProdFinEquiv x) ↑(finProdFinEquiv x_1)) * s ^ (↑x.1 + ↑x_1.1) *
+          ∑ g,
+            ↑(Young4.pulled g x.2 x_1.2) *
+              (cliqueDensity 2 W ^ (S4Classification.groupKey g).2 * homDensity (S4Classification.coreGraph6 g) W)
+⊢ 0 ≤ density W s
+'Taeyoung.Methods.RootedSOS.CompactS4.Atlas118.Block00.density_nonneg' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
