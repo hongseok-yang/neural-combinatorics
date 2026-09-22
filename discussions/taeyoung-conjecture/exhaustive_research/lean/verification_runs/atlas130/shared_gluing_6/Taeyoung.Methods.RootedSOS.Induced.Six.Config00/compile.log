@@ -1,0 +1,76 @@
+Taeyoung\Methods\RootedSOS\Induced\Six\Config00.lean:593:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ↑(rootBits ?a i) * 2 ^ ↑(rootIndex i)
+in the target expression
+  ↑(patternCode
+        { toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex, invFun := edgeInv,
+          left_inv := ⋯, right_inv := ⋯ }
+        (Sum.elim (Sum.elim (rootBits p) (Sum.elim (branchBits a) (branchBits b))) (crossBits c))) =
+    ∑ x,
+          ↑(rootBits p x) *
+            2 ^
+              ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex,
+                    invFun := edgeInv, left_inv := ⋯, right_inv := ⋯ }
+                  (Sum.inl (Sum.inl x))) +
+        (∑ x,
+            ↑(branchBits a x) *
+              2 ^
+                ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex,
+                      invFun := edgeInv, left_inv := ⋯, right_inv := ⋯ }
+                    (Sum.inl (Sum.inr (Sum.inl x)))) +
+          ∑ x,
+            ↑(branchBits b x) *
+              2 ^
+                ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex,
+                      invFun := edgeInv, left_inv := ⋯, right_inv := ⋯ }
+                    (Sum.inl (Sum.inr (Sum.inr x))))) +
+      ∑ x,
+        ↑(crossBits c x) *
+          2 ^
+            ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex, invFun := edgeInv,
+                  left_inv := ⋯, right_inv := ⋯ }
+                (Sum.inr x))
+
+p : Fin 1
+a b : Fin 8
+c : Fin 512
+h :
+  ↑(patternCode
+        { toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex, invFun := edgeInv,
+          left_inv := ⋯, right_inv := ⋯ }
+        (Sum.elim (Sum.elim (rootBits p) (Sum.elim (branchBits a) (branchBits b))) (crossBits c))) =
+    ∑ x,
+          ↑(rootBits p x) *
+            2 ^
+              ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex,
+                    invFun := edgeInv, left_inv := ⋯, right_inv := ⋯ }
+                  (Sum.inl (Sum.inl x))) +
+        (∑ x,
+            ↑(branchBits a x) *
+              2 ^
+                ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex,
+                      invFun := edgeInv, left_inv := ⋯, right_inv := ⋯ }
+                    (Sum.inl (Sum.inr (Sum.inl x)))) +
+          ∑ x,
+            ↑(branchBits b x) *
+              2 ^
+                ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex,
+                      invFun := edgeInv, left_inv := ⋯, right_inv := ⋯ }
+                    (Sum.inl (Sum.inr (Sum.inr x))))) +
+      ∑ x,
+        ↑(crossBits c x) *
+          2 ^
+            ↑({ toFun := Sum.elim (Sum.elim rootIndex (Sum.elim firstIndex secondIndex)) crossIndex, invFun := edgeInv,
+                  left_inv := ⋯, right_inv := ⋯ }
+                (Sum.inr x))
+⊢ completion p a b c = patternCode edgeEquiv (gluedPattern (rootBits p) (branchBits a) (branchBits b) (crossBits c))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    edge_left
+  has type
+    ∀ (e : Edge), edgeInv (edgeMap e) = e
+  but is expected to have type
+    Function.LeftInverse edgeInv edgeMap
+  in the application
+    @Eq.ndrec (Fin 15 → Edge) edgeInv (fun invFun => Function.LeftInverse invFun edgeMap) edge_left

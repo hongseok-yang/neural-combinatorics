@@ -1,0 +1,110 @@
+Taeyoung\Methods\RootedSOS\Induced\Relabeling.lean:14:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.patternWeight_sum`:
+  [DecidableEq F]
+  [DecidableEq U]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq F] [DecidableEq U] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Relabeling.lean:19:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.patternWeight_reindex`:
+  [DecidableEq E]
+  [DecidableEq F]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq E] [DecidableEq F] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Relabeling.lean:54:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v (a i).1
+in the target expression
+  bitWeight ((fun e => W.toFun ((fun i => z (v i)) (a e).1) ((fun i => z (v i)) (a e).2)) i) (q (e i)) =
+    bitWeight ((fun i => W.toFun (z (b (e i)).1) (z (b (e i)).2)) i) ((fun i => q (e i)) i)
+
+case inl
+E : Type u_1
+F : Type u_2
+inst✝⁹ : Fintype E
+inst✝⁸ : Fintype F
+inst✝⁷ : DecidableEq E
+inst✝⁶ : DecidableEq F
+Ω : Type u_4
+inst✝⁵ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝⁴ : IsProbabilityMeasure μ
+V : Type u_5
+V' : Type u_6
+inst✝³ : Fintype V
+inst✝² : DecidableEq V
+inst✝¹ : Fintype V'
+inst✝ : DecidableEq V'
+a : E → V × V
+b : F → V' × V'
+p : E → Fin 2
+q : F → Fin 2
+v : V ≃ V'
+e : E ≃ F
+hbits : ∀ (i : E), p i = q (e i)
+hpairs :
+  ∀ (i : E), v (a i).1 = (b (e i)).1 ∧ v (a i).2 = (b (e i)).2 ∨ v (a i).1 = (b (e i)).2 ∧ v (a i).2 = (b (e i)).1
+W : Graphon Ω μ
+z : V' → Ω
+i : E
+a✝ : i ∈ univ
+h1 : v (a i).1 = (b (e i)).1
+h2 : v (a i).2 = (b (e i)).2
+⊢ bitWeight ((fun e => W.toFun ((fun i => z (v i)) (a e).1) ((fun i => z (v i)) (a e).2)) i) (q (e i)) =
+    bitWeight ((fun i => W.toFun (z (b (e i)).1) (z (b (e i)).2)) i) ((fun i => q (e i)) i)
+Taeyoung\Methods\RootedSOS\Induced\Relabeling.lean:55:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  v (a i).1
+in the target expression
+  bitWeight ((fun e => W.toFun ((fun i => z (v i)) (a e).1) ((fun i => z (v i)) (a e).2)) i) (q (e i)) =
+    bitWeight ((fun i => W.toFun (z (b (e i)).1) (z (b (e i)).2)) i) ((fun i => q (e i)) i)
+
+case inr
+E : Type u_1
+F : Type u_2
+inst✝⁹ : Fintype E
+inst✝⁸ : Fintype F
+inst✝⁷ : DecidableEq E
+inst✝⁶ : DecidableEq F
+Ω : Type u_4
+inst✝⁵ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝⁴ : IsProbabilityMeasure μ
+V : Type u_5
+V' : Type u_6
+inst✝³ : Fintype V
+inst✝² : DecidableEq V
+inst✝¹ : Fintype V'
+inst✝ : DecidableEq V'
+a : E → V × V
+b : F → V' × V'
+p : E → Fin 2
+q : F → Fin 2
+v : V ≃ V'
+e : E ≃ F
+hbits : ∀ (i : E), p i = q (e i)
+hpairs :
+  ∀ (i : E), v (a i).1 = (b (e i)).1 ∧ v (a i).2 = (b (e i)).2 ∨ v (a i).1 = (b (e i)).2 ∧ v (a i).2 = (b (e i)).1
+W : Graphon Ω μ
+z : V' → Ω
+i : E
+a✝ : i ∈ univ
+h1 : v (a i).1 = (b (e i)).2
+h2 : v (a i).2 = (b (e i)).1
+⊢ bitWeight ((fun e => W.toFun ((fun i => z (v i)) (a e).1) ((fun i => z (v i)) (a e).2)) i) (q (e i)) =
+    bitWeight ((fun i => W.toFun (z (b (e i)).1) (z (b (e i)).2)) i) ((fun i => q (e i)) i)
+Taeyoung\Methods\RootedSOS\Induced\Relabeling.lean:84:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ?g (finFunctionFinEquiv.symm i)
+in the target expression
+  ∑ code, inducedDensity pairs (finFunctionFinEquiv.symm code) W = 1
+
+Ω : Type u_4
+inst✝³ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝² : IsProbabilityMeasure μ
+V : Type u_5
+inst✝¹ : Fintype V
+inst✝ : DecidableEq V
+n : ℕ
+pairs : Fin n → V × V
+W : Graphon Ω μ
+⊢ ∑ code, inducedDensity pairs (finFunctionFinEquiv.symm code) W = 1

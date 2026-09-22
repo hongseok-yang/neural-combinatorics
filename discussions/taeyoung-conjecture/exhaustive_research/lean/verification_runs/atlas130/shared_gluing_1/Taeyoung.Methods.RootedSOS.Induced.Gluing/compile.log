@@ -1,0 +1,79 @@
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:50:4: error(lean.unknownIdentifier): Unknown constant `MeasurableEquiv.coe_prodCongr`
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:50:35: error(lean.unknownIdentifier): Unknown constant `MeasurableEquiv.coe_refl`
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:49:2: error: Type mismatch: After simplification, term
+  MeasurePreserving.comp
+    (MeasurePreserving.prod (MeasurePreserving.id (assignmentMeasure I μ))
+      (measurePreserving_sumPiEquivProdPi fun x => μ))
+    (measurePreserving_sumPiEquivProdPi fun x => μ)
+ has type
+  @MeasurePreserving (I ⊕ J ⊕ J → Ω) ((I → Ω) × (J → Ω) × (J → Ω)) MeasurableSpace.pi Prod.instMeasurableSpace
+    (Prod.map id ⇑(MeasurableEquiv.sumPiEquivProdPi fun x => Ω) ∘ ⇑(MeasurableEquiv.sumPiEquivProdPi fun x => Ω))
+    (Measure.pi fun x => μ) ((Measure.pi fun x => μ).prod ((Measure.pi fun i => μ).prod (Measure.pi fun i => μ)))
+but is expected to have type
+  @MeasurePreserving (I ⊕ J ⊕ J → Ω) ((I → Ω) × (J → Ω) × (J → Ω)) MeasurableSpace.pi Prod.instMeasurableSpace
+    (⇑((MeasurableEquiv.refl (I → Ω)).prodCongr (MeasurableEquiv.sumPiEquivProdPi fun x => Ω)) ∘
+      ⇑(MeasurableEquiv.sumPiEquivProdPi fun x => Ω))
+    (Measure.pi fun x => μ) ((Measure.pi fun x => μ).prod ((Measure.pi fun x => μ).prod (Measure.pi fun x => μ)))
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:55:8: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.join_sumTripleSplit`:
+  [Fintype I]
+  [Fintype J]
+  [DecidableEq I]
+  [DecidableEq J]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype I] [Fintype J] [DecidableEq I] [DecidableEq J] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:65:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.sum_completedWeight`:
+  [Fintype I]
+  [Fintype J]
+  [DecidableEq I]
+  [DecidableEq J]
+  [IsProbabilityMeasure μ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype I] [Fintype J] [DecidableEq I] [DecidableEq J] [IsProbabilityMeasure μ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:84:48: warning: This simp argument is unused:
+  Function.comp_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [pairKernel, branchWeight, inducedWeight, patternWeight, gluedPairs, joinAssignment,
+  ̲  ̲ ̲ ̲Sum.elim_inl, S̵u̵m̵.̵e̵l̵i̵m̵_̵i̵n̵r̵,̵ ̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵a̵p̵p̵l̵y̵]̵S̲u̲m̲.̲e̲l̲i̲m̲_̲i̲n̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Taeyoung\Methods\RootedSOS\Induced\Gluing.lean:139:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  |inducedWeight rootPairs p W q.1 * inducedWeight branchPairs a W (Sum.elim q.1 q.2.1) *
+      inducedWeight branchPairs b W (Sum.elim q.1 q.2.2)|
+in the target expression
+  |pairKernel (inducedWeight rootPairs p W) (branchWeight branchPairs a W) (branchWeight branchPairs b W) q| ≤ 1
+
+I : Type u_1
+J : Type u_2
+R : Type u_3
+B : Type u_4
+inst✝⁹ : Fintype I
+inst✝⁸ : Fintype J
+inst✝⁷ : Fintype R
+inst✝⁶ : Fintype B
+inst✝⁵ : DecidableEq I
+inst✝⁴ : DecidableEq J
+inst✝³ : DecidableEq R
+inst✝² : DecidableEq B
+Ω : Type u_6
+inst✝¹ : MeasurableSpace Ω
+μ : Measure Ω
+inst✝ : IsProbabilityMeasure μ
+rootPairs : R → I × I
+branchPairs : B → (I ⊕ J) × (I ⊕ J)
+p : R → Fin 2
+a b : B → Fin 2
+W : Graphon Ω μ
+hm : Measurable (pairKernel (inducedWeight rootPairs p W) (branchWeight branchPairs a W) (branchWeight branchPairs b W))
+q : (I → Ω) × (J → Ω) × (J → Ω)
+hr0 : 0 ≤ inducedWeight rootPairs p W q.1
+hr1 : inducedWeight rootPairs p W q.1 ≤ 1
+ha0 : 0 ≤ inducedWeight branchPairs a W (Sum.elim q.1 q.2.1)
+ha1 : inducedWeight branchPairs a W (Sum.elim q.1 q.2.1) ≤ 1
+hb0 : 0 ≤ inducedWeight branchPairs b W (Sum.elim q.1 q.2.2)
+hb1 : inducedWeight branchPairs b W (Sum.elim q.1 q.2.2) ≤ 1
+⊢ |pairKernel (inducedWeight rootPairs p W) (branchWeight branchPairs a W) (branchWeight branchPairs b W) q| ≤ 1

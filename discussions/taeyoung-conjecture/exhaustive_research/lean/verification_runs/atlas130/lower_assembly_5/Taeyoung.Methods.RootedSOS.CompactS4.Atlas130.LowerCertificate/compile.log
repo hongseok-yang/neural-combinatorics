@@ -1,0 +1,761 @@
+checking Lower.coefficientCheck_all
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:13:21: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:19:21: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+checking blockRight00
+checking blockMatrix00
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:60:76: error: unsolved goals
+i j : Fin 4
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex00 i j)) 0 =
+    if True then Block00.H ↑i ↑j
+    else
+      if False then Block00.H (↑i) (4 + ↑j) + Block00.H (4 + ↑i) ↑j + Block01.H ↑i ↑j else Block00.H (4 + ↑i) (4 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex00 i j)) 1 =
+    if False then Block00.H ↑i ↑j
+    else if True then Block00.H (↑i) (4 + ↑j) + Block00.H (4 + ↑i) ↑j + Block01.H ↑i ↑j else Block00.H (4 + ↑i) (4 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex00 i j)) 2 =
+    if False then Block00.H ↑i ↑j
+    else
+      if False then Block00.H (↑i) (4 + ↑j) + Block00.H (4 + ↑i) ↑j + Block01.H ↑i ↑j else Block00.H (4 + ↑i) (4 + ↑j)
+⊢ ↑(if True then Block00.H ↑i ↑j
+            else
+              if False then Block00.H (↑i) (4 + ↑j) + Block00.H (4 + ↑i) ↑j + Block01.H ↑i ↑j
+              else Block00.H (4 + ↑i) (4 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block00.H ↑i ↑j
+              else
+                if True then Block00.H (↑i) (4 + ↑j) + Block00.H (4 + ↑i) ↑j + Block01.H ↑i ↑j
+                else Block00.H (4 + ↑i) (4 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block00.H ↑i ↑j
+          else
+            if False then Block00.H (↑i) (4 + ↑j) + Block00.H (4 + ↑i) ↑j + Block01.H ↑i ↑j
+            else Block00.H (4 + ↑i) (4 + ↑j)) *
+        s ^ 2 =
+    ↑(Block00.H ↑(Fin.castAdd 4 i) ↑(Fin.castAdd 4 j)) * (1 - s) ^ 2 +
+        (↑(Block00.H ↑(Fin.castAdd 4 i) ↑(Fin.natAdd 4 j)) + ↑(Block00.H ↑(Fin.natAdd 4 i) ↑(Fin.castAdd 4 j)) +
+              ↑(Block01.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block00.H ↑(Fin.natAdd 4 i) ↑(Fin.natAdd 4 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:67:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg00
+checking blockRight01
+checking blockMatrix01
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:100:76: error: unsolved goals
+i j : Fin 20
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex01 i j)) 0 =
+    if True then Block02.H ↑i ↑j
+    else
+      if False then Block02.H (↑i) (20 + ↑j) + Block02.H (20 + ↑i) ↑j + Block03.H ↑i ↑j
+      else Block02.H (20 + ↑i) (20 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex01 i j)) 1 =
+    if False then Block02.H ↑i ↑j
+    else
+      if True then Block02.H (↑i) (20 + ↑j) + Block02.H (20 + ↑i) ↑j + Block03.H ↑i ↑j
+      else Block02.H (20 + ↑i) (20 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex01 i j)) 2 =
+    if False then Block02.H ↑i ↑j
+    else
+      if False then Block02.H (↑i) (20 + ↑j) + Block02.H (20 + ↑i) ↑j + Block03.H ↑i ↑j
+      else Block02.H (20 + ↑i) (20 + ↑j)
+⊢ ↑(if True then Block02.H ↑i ↑j
+            else
+              if False then Block02.H (↑i) (20 + ↑j) + Block02.H (20 + ↑i) ↑j + Block03.H ↑i ↑j
+              else Block02.H (20 + ↑i) (20 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block02.H ↑i ↑j
+              else
+                if True then Block02.H (↑i) (20 + ↑j) + Block02.H (20 + ↑i) ↑j + Block03.H ↑i ↑j
+                else Block02.H (20 + ↑i) (20 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block02.H ↑i ↑j
+          else
+            if False then Block02.H (↑i) (20 + ↑j) + Block02.H (20 + ↑i) ↑j + Block03.H ↑i ↑j
+            else Block02.H (20 + ↑i) (20 + ↑j)) *
+        s ^ 2 =
+    ↑(Block02.H ↑(Fin.castAdd 20 i) ↑(Fin.castAdd 20 j)) * (1 - s) ^ 2 +
+        (↑(Block02.H ↑(Fin.castAdd 20 i) ↑(Fin.natAdd 20 j)) + ↑(Block02.H ↑(Fin.natAdd 20 i) ↑(Fin.castAdd 20 j)) +
+              ↑(Block03.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block02.H ↑(Fin.natAdd 20 i) ↑(Fin.natAdd 20 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:107:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg01
+checking blockRight02
+checking blockMatrix02
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:143:76: error: unsolved goals
+i j : Fin 20
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex02 i j)) 0 =
+    if True then Block04.H ↑i ↑j
+    else
+      if False then Block04.H (↑i) (20 + ↑j) + Block04.H (20 + ↑i) ↑j + Block05.H ↑i ↑j
+      else Block04.H (20 + ↑i) (20 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex02 i j)) 1 =
+    if False then Block04.H ↑i ↑j
+    else
+      if True then Block04.H (↑i) (20 + ↑j) + Block04.H (20 + ↑i) ↑j + Block05.H ↑i ↑j
+      else Block04.H (20 + ↑i) (20 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex02 i j)) 2 =
+    if False then Block04.H ↑i ↑j
+    else
+      if False then Block04.H (↑i) (20 + ↑j) + Block04.H (20 + ↑i) ↑j + Block05.H ↑i ↑j
+      else Block04.H (20 + ↑i) (20 + ↑j)
+⊢ ↑(if True then Block04.H ↑i ↑j
+            else
+              if False then Block04.H (↑i) (20 + ↑j) + Block04.H (20 + ↑i) ↑j + Block05.H ↑i ↑j
+              else Block04.H (20 + ↑i) (20 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block04.H ↑i ↑j
+              else
+                if True then Block04.H (↑i) (20 + ↑j) + Block04.H (20 + ↑i) ↑j + Block05.H ↑i ↑j
+                else Block04.H (20 + ↑i) (20 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block04.H ↑i ↑j
+          else
+            if False then Block04.H (↑i) (20 + ↑j) + Block04.H (20 + ↑i) ↑j + Block05.H ↑i ↑j
+            else Block04.H (20 + ↑i) (20 + ↑j)) *
+        s ^ 2 =
+    ↑(Block04.H ↑(Fin.castAdd 20 i) ↑(Fin.castAdd 20 j)) * (1 - s) ^ 2 +
+        (↑(Block04.H ↑(Fin.castAdd 20 i) ↑(Fin.natAdd 20 j)) + ↑(Block04.H ↑(Fin.natAdd 20 i) ↑(Fin.castAdd 20 j)) +
+              ↑(Block05.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block04.H ↑(Fin.natAdd 20 i) ↑(Fin.natAdd 20 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:150:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg02
+checking blockRight03
+checking blockMatrix03
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:189:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex03 i j)) 0 =
+    if True then Block06.H ↑i ↑j
+    else
+      if False then Block06.H (↑i) (16 + ↑j) + Block06.H (16 + ↑i) ↑j + Block07.H ↑i ↑j
+      else Block06.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex03 i j)) 1 =
+    if False then Block06.H ↑i ↑j
+    else
+      if True then Block06.H (↑i) (16 + ↑j) + Block06.H (16 + ↑i) ↑j + Block07.H ↑i ↑j
+      else Block06.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex03 i j)) 2 =
+    if False then Block06.H ↑i ↑j
+    else
+      if False then Block06.H (↑i) (16 + ↑j) + Block06.H (16 + ↑i) ↑j + Block07.H ↑i ↑j
+      else Block06.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block06.H ↑i ↑j
+            else
+              if False then Block06.H (↑i) (16 + ↑j) + Block06.H (16 + ↑i) ↑j + Block07.H ↑i ↑j
+              else Block06.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block06.H ↑i ↑j
+              else
+                if True then Block06.H (↑i) (16 + ↑j) + Block06.H (16 + ↑i) ↑j + Block07.H ↑i ↑j
+                else Block06.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block06.H ↑i ↑j
+          else
+            if False then Block06.H (↑i) (16 + ↑j) + Block06.H (16 + ↑i) ↑j + Block07.H ↑i ↑j
+            else Block06.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block06.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block06.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block06.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block07.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block06.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:196:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg03
+checking blockRight04
+checking blockMatrix04
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:238:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex04 i j)) 0 =
+    if True then Block08.H ↑i ↑j
+    else
+      if False then Block08.H (↑i) (16 + ↑j) + Block08.H (16 + ↑i) ↑j + Block09.H ↑i ↑j
+      else Block08.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex04 i j)) 1 =
+    if False then Block08.H ↑i ↑j
+    else
+      if True then Block08.H (↑i) (16 + ↑j) + Block08.H (16 + ↑i) ↑j + Block09.H ↑i ↑j
+      else Block08.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex04 i j)) 2 =
+    if False then Block08.H ↑i ↑j
+    else
+      if False then Block08.H (↑i) (16 + ↑j) + Block08.H (16 + ↑i) ↑j + Block09.H ↑i ↑j
+      else Block08.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block08.H ↑i ↑j
+            else
+              if False then Block08.H (↑i) (16 + ↑j) + Block08.H (16 + ↑i) ↑j + Block09.H ↑i ↑j
+              else Block08.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block08.H ↑i ↑j
+              else
+                if True then Block08.H (↑i) (16 + ↑j) + Block08.H (16 + ↑i) ↑j + Block09.H ↑i ↑j
+                else Block08.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block08.H ↑i ↑j
+          else
+            if False then Block08.H (↑i) (16 + ↑j) + Block08.H (16 + ↑i) ↑j + Block09.H ↑i ↑j
+            else Block08.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block08.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block08.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block08.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block09.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block08.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:245:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg04
+checking blockRight05
+checking blockMatrix05
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:290:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex05 i j)) 0 =
+    if True then Block10.H ↑i ↑j
+    else
+      if False then Block10.H (↑i) (16 + ↑j) + Block10.H (16 + ↑i) ↑j + Block11.H ↑i ↑j
+      else Block10.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex05 i j)) 1 =
+    if False then Block10.H ↑i ↑j
+    else
+      if True then Block10.H (↑i) (16 + ↑j) + Block10.H (16 + ↑i) ↑j + Block11.H ↑i ↑j
+      else Block10.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex05 i j)) 2 =
+    if False then Block10.H ↑i ↑j
+    else
+      if False then Block10.H (↑i) (16 + ↑j) + Block10.H (16 + ↑i) ↑j + Block11.H ↑i ↑j
+      else Block10.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block10.H ↑i ↑j
+            else
+              if False then Block10.H (↑i) (16 + ↑j) + Block10.H (16 + ↑i) ↑j + Block11.H ↑i ↑j
+              else Block10.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block10.H ↑i ↑j
+              else
+                if True then Block10.H (↑i) (16 + ↑j) + Block10.H (16 + ↑i) ↑j + Block11.H ↑i ↑j
+                else Block10.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block10.H ↑i ↑j
+          else
+            if False then Block10.H (↑i) (16 + ↑j) + Block10.H (16 + ↑i) ↑j + Block11.H ↑i ↑j
+            else Block10.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block10.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block10.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block10.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block11.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block10.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:297:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg05
+checking blockRight06
+checking blockMatrix06
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:345:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex06 i j)) 0 =
+    if True then Block12.H ↑i ↑j
+    else
+      if False then Block12.H (↑i) (16 + ↑j) + Block12.H (16 + ↑i) ↑j + Block13.H ↑i ↑j
+      else Block12.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex06 i j)) 1 =
+    if False then Block12.H ↑i ↑j
+    else
+      if True then Block12.H (↑i) (16 + ↑j) + Block12.H (16 + ↑i) ↑j + Block13.H ↑i ↑j
+      else Block12.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex06 i j)) 2 =
+    if False then Block12.H ↑i ↑j
+    else
+      if False then Block12.H (↑i) (16 + ↑j) + Block12.H (16 + ↑i) ↑j + Block13.H ↑i ↑j
+      else Block12.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block12.H ↑i ↑j
+            else
+              if False then Block12.H (↑i) (16 + ↑j) + Block12.H (16 + ↑i) ↑j + Block13.H ↑i ↑j
+              else Block12.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block12.H ↑i ↑j
+              else
+                if True then Block12.H (↑i) (16 + ↑j) + Block12.H (16 + ↑i) ↑j + Block13.H ↑i ↑j
+                else Block12.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block12.H ↑i ↑j
+          else
+            if False then Block12.H (↑i) (16 + ↑j) + Block12.H (16 + ↑i) ↑j + Block13.H ↑i ↑j
+            else Block12.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block12.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block12.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block12.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block13.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block12.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:352:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg06
+checking blockRight07
+checking blockMatrix07
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:403:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex07 i j)) 0 =
+    if True then Block14.H ↑i ↑j
+    else
+      if False then Block14.H (↑i) (16 + ↑j) + Block14.H (16 + ↑i) ↑j + Block15.H ↑i ↑j
+      else Block14.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex07 i j)) 1 =
+    if False then Block14.H ↑i ↑j
+    else
+      if True then Block14.H (↑i) (16 + ↑j) + Block14.H (16 + ↑i) ↑j + Block15.H ↑i ↑j
+      else Block14.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex07 i j)) 2 =
+    if False then Block14.H ↑i ↑j
+    else
+      if False then Block14.H (↑i) (16 + ↑j) + Block14.H (16 + ↑i) ↑j + Block15.H ↑i ↑j
+      else Block14.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block14.H ↑i ↑j
+            else
+              if False then Block14.H (↑i) (16 + ↑j) + Block14.H (16 + ↑i) ↑j + Block15.H ↑i ↑j
+              else Block14.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block14.H ↑i ↑j
+              else
+                if True then Block14.H (↑i) (16 + ↑j) + Block14.H (16 + ↑i) ↑j + Block15.H ↑i ↑j
+                else Block14.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block14.H ↑i ↑j
+          else
+            if False then Block14.H (↑i) (16 + ↑j) + Block14.H (16 + ↑i) ↑j + Block15.H ↑i ↑j
+            else Block14.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block14.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block14.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block14.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block15.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block14.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:410:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg07
+checking blockRight08
+checking blockMatrix08
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:464:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex08 i j)) 0 =
+    if True then Block16.H ↑i ↑j
+    else
+      if False then Block16.H (↑i) (16 + ↑j) + Block16.H (16 + ↑i) ↑j + Block17.H ↑i ↑j
+      else Block16.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex08 i j)) 1 =
+    if False then Block16.H ↑i ↑j
+    else
+      if True then Block16.H (↑i) (16 + ↑j) + Block16.H (16 + ↑i) ↑j + Block17.H ↑i ↑j
+      else Block16.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex08 i j)) 2 =
+    if False then Block16.H ↑i ↑j
+    else
+      if False then Block16.H (↑i) (16 + ↑j) + Block16.H (16 + ↑i) ↑j + Block17.H ↑i ↑j
+      else Block16.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block16.H ↑i ↑j
+            else
+              if False then Block16.H (↑i) (16 + ↑j) + Block16.H (16 + ↑i) ↑j + Block17.H ↑i ↑j
+              else Block16.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block16.H ↑i ↑j
+              else
+                if True then Block16.H (↑i) (16 + ↑j) + Block16.H (16 + ↑i) ↑j + Block17.H ↑i ↑j
+                else Block16.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block16.H ↑i ↑j
+          else
+            if False then Block16.H (↑i) (16 + ↑j) + Block16.H (16 + ↑i) ↑j + Block17.H ↑i ↑j
+            else Block16.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block16.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block16.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block16.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block17.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block16.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:471:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg08
+checking blockRight09
+checking blockMatrix09
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:528:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex09 i j)) 0 =
+    if True then Block18.H ↑i ↑j
+    else
+      if False then Block18.H (↑i) (16 + ↑j) + Block18.H (16 + ↑i) ↑j + Block19.H ↑i ↑j
+      else Block18.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex09 i j)) 1 =
+    if False then Block18.H ↑i ↑j
+    else
+      if True then Block18.H (↑i) (16 + ↑j) + Block18.H (16 + ↑i) ↑j + Block19.H ↑i ↑j
+      else Block18.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex09 i j)) 2 =
+    if False then Block18.H ↑i ↑j
+    else
+      if False then Block18.H (↑i) (16 + ↑j) + Block18.H (16 + ↑i) ↑j + Block19.H ↑i ↑j
+      else Block18.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block18.H ↑i ↑j
+            else
+              if False then Block18.H (↑i) (16 + ↑j) + Block18.H (16 + ↑i) ↑j + Block19.H ↑i ↑j
+              else Block18.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block18.H ↑i ↑j
+              else
+                if True then Block18.H (↑i) (16 + ↑j) + Block18.H (16 + ↑i) ↑j + Block19.H ↑i ↑j
+                else Block18.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block18.H ↑i ↑j
+          else
+            if False then Block18.H (↑i) (16 + ↑j) + Block18.H (16 + ↑i) ↑j + Block19.H ↑i ↑j
+            else Block18.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block18.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block18.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block18.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block19.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block18.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:535:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg09
+checking blockRight10
+checking blockMatrix10
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:595:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex10 i j)) 0 =
+    if True then Block20.H ↑i ↑j
+    else
+      if False then Block20.H (↑i) (16 + ↑j) + Block20.H (16 + ↑i) ↑j + Block21.H ↑i ↑j
+      else Block20.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex10 i j)) 1 =
+    if False then Block20.H ↑i ↑j
+    else
+      if True then Block20.H (↑i) (16 + ↑j) + Block20.H (16 + ↑i) ↑j + Block21.H ↑i ↑j
+      else Block20.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex10 i j)) 2 =
+    if False then Block20.H ↑i ↑j
+    else
+      if False then Block20.H (↑i) (16 + ↑j) + Block20.H (16 + ↑i) ↑j + Block21.H ↑i ↑j
+      else Block20.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block20.H ↑i ↑j
+            else
+              if False then Block20.H (↑i) (16 + ↑j) + Block20.H (16 + ↑i) ↑j + Block21.H ↑i ↑j
+              else Block20.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block20.H ↑i ↑j
+              else
+                if True then Block20.H (↑i) (16 + ↑j) + Block20.H (16 + ↑i) ↑j + Block21.H ↑i ↑j
+                else Block20.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block20.H ↑i ↑j
+          else
+            if False then Block20.H (↑i) (16 + ↑j) + Block20.H (16 + ↑i) ↑j + Block21.H ↑i ↑j
+            else Block20.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block20.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block20.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block20.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block21.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block20.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:602:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg10
+checking blockRight11
+checking blockMatrix11
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:665:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex11 i j)) 0 =
+    if True then Block22.H ↑i ↑j
+    else
+      if False then Block22.H (↑i) (16 + ↑j) + Block22.H (16 + ↑i) ↑j + Block23.H ↑i ↑j
+      else Block22.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex11 i j)) 1 =
+    if False then Block22.H ↑i ↑j
+    else
+      if True then Block22.H (↑i) (16 + ↑j) + Block22.H (16 + ↑i) ↑j + Block23.H ↑i ↑j
+      else Block22.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex11 i j)) 2 =
+    if False then Block22.H ↑i ↑j
+    else
+      if False then Block22.H (↑i) (16 + ↑j) + Block22.H (16 + ↑i) ↑j + Block23.H ↑i ↑j
+      else Block22.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block22.H ↑i ↑j
+            else
+              if False then Block22.H (↑i) (16 + ↑j) + Block22.H (16 + ↑i) ↑j + Block23.H ↑i ↑j
+              else Block22.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block22.H ↑i ↑j
+              else
+                if True then Block22.H (↑i) (16 + ↑j) + Block22.H (16 + ↑i) ↑j + Block23.H ↑i ↑j
+                else Block22.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block22.H ↑i ↑j
+          else
+            if False then Block22.H (↑i) (16 + ↑j) + Block22.H (16 + ↑i) ↑j + Block23.H ↑i ↑j
+            else Block22.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block22.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block22.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block22.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block23.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block22.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:672:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg11
+checking blockRight12
+checking blockMatrix12
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:738:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex12 i j)) 0 =
+    if True then Block24.H ↑i ↑j
+    else
+      if False then Block24.H (↑i) (16 + ↑j) + Block24.H (16 + ↑i) ↑j + Block25.H ↑i ↑j
+      else Block24.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex12 i j)) 1 =
+    if False then Block24.H ↑i ↑j
+    else
+      if True then Block24.H (↑i) (16 + ↑j) + Block24.H (16 + ↑i) ↑j + Block25.H ↑i ↑j
+      else Block24.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex12 i j)) 2 =
+    if False then Block24.H ↑i ↑j
+    else
+      if False then Block24.H (↑i) (16 + ↑j) + Block24.H (16 + ↑i) ↑j + Block25.H ↑i ↑j
+      else Block24.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block24.H ↑i ↑j
+            else
+              if False then Block24.H (↑i) (16 + ↑j) + Block24.H (16 + ↑i) ↑j + Block25.H ↑i ↑j
+              else Block24.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block24.H ↑i ↑j
+              else
+                if True then Block24.H (↑i) (16 + ↑j) + Block24.H (16 + ↑i) ↑j + Block25.H ↑i ↑j
+                else Block24.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block24.H ↑i ↑j
+          else
+            if False then Block24.H (↑i) (16 + ↑j) + Block24.H (16 + ↑i) ↑j + Block25.H ↑i ↑j
+            else Block24.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block24.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block24.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block24.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block25.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block24.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:745:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg12
+checking blockRight13
+checking blockMatrix13
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:811:76: error: unsolved goals
+i j : Fin 16
+s : ℝ
+h0 :
+  right (↑(Induced.Six.blockIndex13 i j)) 0 =
+    if True then Block26.H ↑i ↑j
+    else
+      if False then Block26.H (↑i) (16 + ↑j) + Block26.H (16 + ↑i) ↑j + Block27.H ↑i ↑j
+      else Block26.H (16 + ↑i) (16 + ↑j)
+h1 :
+  right (↑(Induced.Six.blockIndex13 i j)) 1 =
+    if False then Block26.H ↑i ↑j
+    else
+      if True then Block26.H (↑i) (16 + ↑j) + Block26.H (16 + ↑i) ↑j + Block27.H ↑i ↑j
+      else Block26.H (16 + ↑i) (16 + ↑j)
+h2 :
+  right (↑(Induced.Six.blockIndex13 i j)) 2 =
+    if False then Block26.H ↑i ↑j
+    else
+      if False then Block26.H (↑i) (16 + ↑j) + Block26.H (16 + ↑i) ↑j + Block27.H ↑i ↑j
+      else Block26.H (16 + ↑i) (16 + ↑j)
+⊢ ↑(if True then Block26.H ↑i ↑j
+            else
+              if False then Block26.H (↑i) (16 + ↑j) + Block26.H (16 + ↑i) ↑j + Block27.H ↑i ↑j
+              else Block26.H (16 + ↑i) (16 + ↑j)) *
+          (1 - s) ^ 2 +
+        ↑(if False then Block26.H ↑i ↑j
+              else
+                if True then Block26.H (↑i) (16 + ↑j) + Block26.H (16 + ↑i) ↑j + Block27.H ↑i ↑j
+                else Block26.H (16 + ↑i) (16 + ↑j)) *
+            s *
+          (1 - s) +
+      ↑(if False then Block26.H ↑i ↑j
+          else
+            if False then Block26.H (↑i) (16 + ↑j) + Block26.H (16 + ↑i) ↑j + Block27.H ↑i ↑j
+            else Block26.H (16 + ↑i) (16 + ↑j)) *
+        s ^ 2 =
+    ↑(Block26.H ↑(Fin.castAdd 16 i) ↑(Fin.castAdd 16 j)) * (1 - s) ^ 2 +
+        (↑(Block26.H ↑(Fin.castAdd 16 i) ↑(Fin.natAdd 16 j)) + ↑(Block26.H ↑(Fin.natAdd 16 i) ↑(Fin.castAdd 16 j)) +
+              ↑(Block27.H ↑i ↑j)) *
+            s *
+          (1 - s) +
+      ↑(Block26.H ↑(Fin.natAdd 16 i) ↑(Fin.natAdd 16 j)) * s ^ 2
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:818:13: warning: This simp argument is unused:
+  Int.cast_add
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵I̵n̵t̵.̵c̵a̵s̵t̵_̵a̵d̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+checking blockNonneg13
+checking dense_nonneg
+checking group_nonneg
+checking coefficient_identity
+checking density_eq_of_graph_eq
+Taeyoung\Methods\RootedSOS\CompactS4\Atlas130\LowerCertificate.lean:896:8: warning: automatically included section variable(s) unused in theorem `_private.Taeyoung.Methods.RootedSOS.CompactS4.Atlas130.LowerCertificate.0.Taeyoung.Methods.RootedSOS.CompactS4.Atlas130.Lower.density_eq_of_graph_eq`:
+  [IsProbabilityMeasure μ]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure μ] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+checking interval_identity
+checking lower_graphon_bound
+'Taeyoung.Methods.RootedSOS.CompactS4.Atlas130.Lower.lower_graphon_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

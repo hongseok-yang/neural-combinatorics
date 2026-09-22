@@ -1,0 +1,42 @@
+Taeyoung\Methods\RootedSOS\Induced\BranchGram.lean:29:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (z : ?m.108 × ?m.109), ?f z.1 * ?g z.2 ∂Measure.prod ?m.112 ?m.113
+in the target expression
+  root x * ∫ (a : Y × Y), f (x, a.1) * g (x, a.2) ∂η.prod η =
+    root x * ((∫ (y : Y), f (x, y) ∂η) * ∫ (y : Y), g (x, y) ∂η)
+
+X : Type u_1
+Y : Type u_2
+inst✝³ : MeasurableSpace X
+inst✝² : MeasurableSpace Y
+ν : Measure X
+η : Measure Y
+inst✝¹ : IsProbabilityMeasure ν
+inst✝ : IsProbabilityMeasure η
+root : X → ℝ
+f g : X × Y → ℝ
+hint : Integrable (pairKernel root f g) (ν.prod (η.prod η))
+x : X
+⊢ root x * ∫ (a : Y × Y), f (x, a.1) * g (x, a.2) ∂η.prod η =
+    root x * ((∫ (y : Y), f (x, y) ∂η) * ∫ (y : Y), g (x, y) ∂η)
+Taeyoung\Methods\RootedSOS\Induced\BranchGram.lean:38:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (z : ?m.119 × ?m.120), ?f z.1 * ?g z.2 ∂Measure.prod ?m.123 ?m.124
+in the target expression
+  root x * ∫ (a : Y × Y), f (x, a.1) * g (x, a.2) ∂η.prod η =
+    root x * ((∫ (y : Y), f (x, y) ∂η) * ∫ (y : Y), g (x, y) ∂η)
+
+X : Type u_1
+Y : Type u_2
+inst✝³ : MeasurableSpace X
+inst✝² : MeasurableSpace Y
+ν : Measure X
+η : Measure Y
+inst✝¹ : IsProbabilityMeasure ν
+inst✝ : IsProbabilityMeasure η
+root : X → ℝ
+f g : X × Y → ℝ
+hint : Integrable (pairKernel root f g) (ν.prod (η.prod η))
+h : Integrable (fun x => ∫ (y : Y × Y), pairKernel root f g (x, y) ∂η.prod η) ν
+x : X
+⊢ root x * ∫ (a : Y × Y), f (x, a.1) * g (x, a.2) ∂η.prod η =
+    root x * ((∫ (y : Y), f (x, y) ∂η) * ∫ (y : Y), g (x, y) ∂η)
+Taeyoung\Methods\RootedSOS\Induced\BranchGram.lean:62:4: warning: `MeasureTheory.integrable_finset_sum` has been deprecated: Use `MeasureTheory.integrable_finsetSum` instead

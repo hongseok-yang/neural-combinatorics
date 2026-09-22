@@ -1,0 +1,29 @@
+Taeyoung\Methods\RootedSOS\Induced\BranchSums.lean:17:49: error: unsolved goals
+A : Type u_1
+B : Type u_2
+X : Type u_3
+Y : Type u_4
+inst✝³ : Fintype A
+inst✝² : Fintype B
+inst✝¹ : MeasurableSpace X
+inst✝ : MeasurableSpace Y
+root : X → ℝ
+f : A → X × Y → ℝ
+g : B → X × Y → ℝ
+q : X × Y × Y
+⊢ ∑ x, ∑ i, root q.1 * f i (q.1, q.2.1) * g x (q.1, q.2.2) =
+    ∑ x, ∑ x_1, root q.1 * f x (q.1, q.2.1) * g x_1 (q.1, q.2.2)
+Taeyoung\Methods\RootedSOS\Induced\BranchSums.lean:20:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.integrable_pairKernel_sum`:
+  [IsProbabilityMeasure ν]
+  [IsProbabilityMeasure η]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure ν] [IsProbabilityMeasure η] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\BranchSums.lean:29:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.integral_pairKernel_sum`:
+  [IsProbabilityMeasure ν]
+  [IsProbabilityMeasure η]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure ν] [IsProbabilityMeasure η] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`

@@ -1,0 +1,22 @@
+Taeyoung\Methods\RootedSOS\Induced\CoefficientIdentity.lean:27:4: error: Tactic `apply` failed: could not unify the conclusion of `sum_congr rfl`
+  Finset.sum ?m.250 ?m.247 = Finset.sum ?m.250 ?m.248
+with the goal
+  ∑ x, multiplier j * (edge j x - p * plain j x) * density x =
+    multiplier j * ∑ i, (edge j i * density i - p * (plain j i * density i))
+
+Note: The full type of `sum_congr rfl` is
+  (∀ x ∈ ?m.250, ?m.247 x = ?m.248 x) → Finset.sum ?m.250 ?m.247 = Finset.sum ?m.250 ?m.248
+
+G : Type u_1
+J : Type u_2
+inst✝¹ : Fintype G
+inst✝ : Fintype J
+target empty gram residual density : G → ℝ
+multiplier : J → ℝ
+plain edge : J → G → ℝ
+D T p : ℝ
+h : ∀ (g : G), D * target g - T * empty g = gram g + residual g + ∑ j, multiplier j * (edge j g - p * plain j g)
+j : J
+a✝ : j ∈ univ
+⊢ ∑ x, multiplier j * (edge j x - p * plain j x) * density x =
+    multiplier j * ∑ i, (edge j i * density i - p * (plain j i * density i))

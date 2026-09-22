@@ -1,0 +1,109 @@
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:33:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.patternWeight_nonneg`:
+  [DecidableEq E]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq E] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:38:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.patternWeight_le_one`:
+  [DecidableEq E]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq E] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:45:6: error: Failed to rewrite using equation theorems for `patternWeight`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:61:6: error: Tactic `apply` failed: could not unify the conclusion of `prod_congr rfl`
+  Finset.prod ?m.106 ?m.103 = Finset.prod ?m.106 ?m.104
+with the goal
+  ((∏ e, bitWeight (w e) (b e)) * if ∀ e ∈ S, b e = p e then 1 else 0) = ∏ e, v e (b e)
+
+Note: The full type of `prod_congr rfl` is
+  (∀ x ∈ ?m.106, ?m.103 x = ?m.104 x) → Finset.prod ?m.106 ?m.103 = Finset.prod ?m.106 ?m.104
+
+case pos
+E : Type u_1
+inst✝¹ : Fintype E
+inst✝ : DecidableEq E
+w : E → ℝ
+S : Finset E
+p : E → Fin 2
+v : E → Fin 2 → ℝ := fun e t => if e ∈ S ∧ t ≠ p e then 0 else bitWeight (w e) t
+b : E → Fin 2
+hb : ∀ e ∈ S, b e = p e
+⊢ ((∏ e, bitWeight (w e) (b e)) * if ∀ e ∈ S, b e = p e then 1 else 0) = ∏ e, v e (b e)
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:67:6: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:76:16: error(lean.unknownIdentifier): Unknown identifier `hp`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:74:52: error: unsolved goals
+case neg
+E : Type u_1
+inst✝¹ : Fintype E
+inst✝ : DecidableEq E
+w : E → ℝ
+S : Finset E
+p : E → Fin 2
+v : E → Fin 2 → ℝ := fun e t => if e ∈ S ∧ t ≠ p e then 0 else bitWeight (w e) t
+hterm : ∀ (b : E → Fin 2), (patternWeight w b * if ∀ e ∈ S, b e = p e then 1 else 0) = ∏ e, v e (b e)
+e : E
+he : e ∉ S
+⊢ ∑ t, v e t = if e ∈ S then bitWeight (w e) (p e) else 1
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:52:40: error: unsolved goals
+E : Type u_1
+inst✝¹ : Fintype E
+inst✝ : DecidableEq E
+w : E → ℝ
+S : Finset E
+p : E → Fin 2
+v : E → Fin 2 → ℝ := fun e t => if e ∈ S ∧ t ≠ p e then 0 else bitWeight (w e) t
+hterm : ∀ (b : E → Fin 2), (patternWeight w b * if ∀ e ∈ S, b e = p e then 1 else 0) = ∏ e, v e (b e)
+hv : ∀ (e : E), ∑ t, v e t = if e ∈ S then bitWeight (w e) (p e) else 1
+⊢ ∏ i, ∑ j, v i j = ∏ e ∈ S, bitWeight (w e) (p e)
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:60:17: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b̵,̵ ̵if_true, mul_one, patternWeight]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:60:21: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [hb, i̵f̵_̵t̵r̵u̵e̵,̵ ̵mul_one, patternWeight]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:60:30: warning: This simp argument is unused:
+  mul_one
+
+Hint: Omit it from the simp argument list.
+  simp only [hb, if_true, m̵u̵l̵_̵o̵n̵e̵,̵ ̵patternWeight]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:76:19: error: unexpected token ':'; expected command
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:97:4: error: Type mismatch
+  Measurable.comp W.measurable ?m.68
+has type
+  Measurable (Function.uncurry W.toFun ∘ ?m.51)
+but is expected to have type
+  Measurable fun z => W.toFun (z (pairs e).1) (z (pairs e).2)
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:103:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.inducedWeight_nonneg`:
+  [IsProbabilityMeasure μ]
+  [Fintype V]
+  [DecidableEq V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure μ] [Fintype V] [DecidableEq V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:107:0: warning: automatically included section variable(s) unused in theorem `Taeyoung.Methods.RootedSOS.Induced.inducedWeight_le_one`:
+  [IsProbabilityMeasure μ]
+  [Fintype V]
+  [DecidableEq V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [IsProbabilityMeasure μ] [Fintype V] [DecidableEq V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+Taeyoung\Methods\RootedSOS\Induced\Patterns.lean:129:6: error: Failed to rewrite using equation theorems for `inducedDensity`
