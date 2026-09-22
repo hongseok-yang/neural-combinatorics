@@ -1,3 +1,4 @@
+import Taeyoung.Examples.Graph157
 import Taeyoung.Examples.Graph181
 import Taeyoung.Examples.Graph124
 import Taeyoung.Examples.Graph122
@@ -869,3 +870,6 @@ recorded in `docs/ATLAS118_VERIFICATION_PROGRESS.md`. -/
 
 /-! Atlas181: complete compact integer SOS verification; see `docs/ATLAS181_VERIFICATION_PROGRESS.md`. -/
 #print axioms Taeyoung.Examples.Graph181.status
+
+/-! Atlas157: complete compact integer SOS verification; see `docs/ATLAS157_VERIFICATION_PROGRESS.md`. -/
+#print axioms Taeyoung.Examples.Graph157.status

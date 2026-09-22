@@ -1,4 +1,4 @@
-import Taeyoung.Foundation
+import Taeyoung.Methods.RootedSOS.CompactS4.Atlas157.Certificate
 
 /-!
 # Atlas 157
@@ -23,12 +23,12 @@ def metadata : CatalogueRow where
   chromaticNumber := 4
   graph6 := "E~`_"
   status := .positive
-  formalization := .believed
+  formalization := .verified
 
-/-- Accepted mathematical result: the exact four-root interval-SOS proof in notes/s4_exact_interval_sos_remaining_cases.tex.
-
-The method-specific Lean bridge for this row remains to be formalized. -/
-theorem status : SatisfiesLowerBound graph := by
-  sorry
+/-- Complete compact integer SOS proof, including the graphon interpretation. -/
+theorem status : SatisfiesLowerBound graph :=
+  Taeyoung.Methods.RootedSOS.CompactS4.Atlas157.satisfiesLowerBound_157
 
 end Taeyoung.Examples.Graph157
+
+#print axioms Taeyoung.Examples.Graph157.status
