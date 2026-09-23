@@ -401,7 +401,7 @@ The deduction preceding this overview then gives \Cref{thm:main}.
 
 \paragraph{Organization.}
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
-\Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
+\Cref{sec:excursions} develops the excursion expansion and reduces \Cref{thm:commonality} to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 \Cref{sec:equality-stability} identifies the equality cases and deduces qualitative stability.
 We close with further questions in \Cref{sec:conclusion}.
@@ -595,6 +595,41 @@ Since $\mu$ is nonnegative, proving that these polynomials are nonnegative will 
 \section{Excursion expansions}
 \label{sec:excursions}
 
+\Cref{sec:matrix-reduction} expresses cycle and path densities through finite matrices and represents the quantities $g^{\mathsf T}A^jg$ as moments of the measure $\mu$.
+We now combine these two descriptions to express the difference between the two sides of \eqref{eq:intro-commonality} as a sum of polynomial integrals against $\mu$ (\Cref{lem:polynomial-reduction}).
+Since $\mu$ is nonnegative, this reduces the proof of \Cref{thm:commonality} to polynomial nonnegativity.
+\Cref{sec:short-cycles,sec:excursion-positivity} establish that nonnegativity, proving \Cref{thm:commonality} and hence the odd-cycle bound in \Cref{thm:main}.
+
+To obtain these formulas, we expand matrix powers by inserting $P+Q=I$.
+For an odd integer $m\ge3$, the cycle density of $U$ satisfies
+\begin{equation}\label{eq:trace-projection-expansion}
+  \tC mU=\Tr(M_U^m)
+  =\sum_{R_1,\ldots,R_m\in\{P,Q\}}
+    \Tr(R_1M_UR_2M_U\cdots R_mM_U).
+\end{equation}
+We associate each summand with the sequence $R_1\cdots R_m$, called a \emph{word} in $P$ and $Q$.
+This word records the projection choices; the actual matrix product contains an application of $M_U$ between consecutive projections.
+For trace terms, we regard the word as cyclic, so its last and first letters are consecutive.
+
+A \emph{block} is a maximal consecutive run of the same letter.
+Thus, in a word containing both $P$ and $Q$, each $Q$-block has a $P$ immediately before and after it.
+For example, the projection pattern
+\[
+  P\,\underbrace{QQ}_{\text{one $Q$-block}}\,P
+\]
+corresponds to the matrix segment $P M_U Q M_U Q M_U P$.
+Reading this product from right to left, the rightmost $P$ retains the component in $\R e$.
+An application of $M_U$ followed by $Q$ then retains the component in $\mathcal E_0$; the next application of $M_U$ followed by $Q$ retains a component in $\mathcal E_0$ again; the final application of $M_U$ followed by $P$ returns to $\R e$.
+We call this passage from $\R e$ into $\mathcal E_0$ and back an \emph{excursion}.
+The block forms in \eqref{eq:block-UW} give
+\[
+  P M_U Q M_U Q M_U P=(g^{\mathsf T}Ag)P.
+\]
+Here the outward transition contributes $g$, the step within $\mathcal E_0$ contributes $A$, and the return contributes $g^{\mathsf T}$.
+More generally, a block of $\beta+1$ letters $Q$ has $\beta$ steps within $\mathcal E_0$ and contributes the scalar factor $g^{\mathsf T}A^\beta g$.
+By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{sec:matrix-reduction}.
+
+Grouping the contributions by the number and lengths of excursions produces sums of monomials, which we write using complete homogeneous symmetric polynomials.
 For variables $y_1,\ldots,y_k$, the complete homogeneous symmetric
 polynomial of degree $d$ is
 \begin{equation}\label{eq:h-def}
@@ -605,11 +640,6 @@ polynomial of degree $d$ is
   \qquad h_0=1.
 \end{equation}
 We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
-
-In a word in $P$ and $Q$, each maximal block of $Q$'s bracketed by
-occurrences of $P$ represents a passage from $\R e$ into $\mathcal E_0$
-and back.  We call such a block an \emph{excursion}.  A block containing
-$\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
 
 \begin{lemma}[Cycle densities by excursions]
 \label{lem:cycle-excursions}
@@ -633,13 +663,8 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
 \end{lemma}
 
 \begin{proof}
-  Since $P+Q=I$,
-  \[
-    \Tr(M_U^m)
-    =\sum_{R_1,\ldots,R_m\in\{P,Q\}}
-      \Tr(R_1M_UR_2M_U\cdots R_mM_U).
-  \]
-  Pair each summand with the word $R_1\cdots R_m$.  If $R_i=P$ for
+  Consider the summands in \eqref{eq:trace-projection-expansion}, indexed by the words $R_1\cdots R_m$.
+  If $R_i=P$ for
   every $i$, the summand is $q^m$; if $R_i=Q$ for every $i$, it is
   $\Tr(A^m)$.
 
@@ -728,6 +753,7 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
   $\Tr(A^m)$ becomes $-\Tr(A^m)$.  This proves \eqref{eq:cycle-W}.
 \end{proof}
 
+We next derive the corresponding formula for path densities, which supplies the correction term in \eqref{eq:intro-commonality}.
 Unlike a cycle, a path has fixed endpoints, so its excursion expansion has no
 cyclic multiplicity factor.
 Let $P_k$ denote the path with $k$ edges, and define the scalar
@@ -826,6 +852,9 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   $h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:h-def}.  This proves \eqref{eq:path-expansion}.
 \end{proof}
+
+We now combine the cycle and path formulas to express the difference between the two sides of \eqref{eq:intro-commonality} as polynomial integrals against $\mu$.
+The following lemma completes the reduction announced at the start of this section.
 
 \begin{lemma}[Reduction to excursion polynomials]
 \label{lem:polynomial-reduction}
@@ -1683,7 +1712,7 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 \label{sec:equality-stability}
 
 The two inequalities used in the proof impose different conditions on equality.
-Equality in the strengthened two-colour theorem forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
+Equality in \Cref{thm:commonality} forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
 Together, these conditions identify the balanced complete multipartite graphons as the only graphons attaining the bound when $2/3\le p<1$.
 
 For a graphon $W$ of edge density $p$, define its degree function by
