@@ -816,18 +816,26 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
 \end{lemma}
 
 \begin{proof}
-  The case $k=0$ is immediate.  Since $Pe=e$ and $Qe=0$, a word that
-  starts or ends with $Q$ has summand zero.  Hence, for $k\ge1$, inserting
-  $P+Q=I$ between consecutive factors of $M_U$ gives
+  For $k=0$ and $k=1$, the formula gives $x_0=e^{\mathsf T}e=1$ and
+  $x_1=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
+  Now let $k\ge2$. Since $Pe=e$ and $e^{\mathsf T}P=e^{\mathsf T}$,
+  we may insert $P$ at both ends of the product defining $x_k$.
+  Inserting $P+Q=I$ between its $k$ copies of $M_U$ and expanding gives
   \[
     x_k=
     \sum_{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}}
       e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe.
   \]
-  Pair each summand with the word $PR_1\cdots R_{k-1}P$.  If every letter
-  is $P$, the summand is $q^k$.
+  Associate each summand with the word $PR_1\cdots R_{k-1}P$.
+  This word has $k+1$ letters, separated by the $k$ copies of $M_U$.
+  We read it from its fixed left endpoint to its fixed right endpoint;
+  its first and last letters are separate occurrences of $P$.
+  If every letter is $P$, the identity $P M_U P=qP$ gives the summand
+  $q^k e^{\mathsf T}Pe=q^k$.
 
-  Now consider a word with $r$ blocks of $Q$.  Let
+  Now fix the number $r\ge1$ of $Q$-blocks in a word.
+  Because the word starts and ends with $P$, it has $r+1$ $P$-blocks,
+  alternating with the $r$ $Q$-blocks. Let
   $\alpha_0+1,\ldots,\alpha_r+1$ be the numbers of letters in the
   successive $P$-blocks, and let $\beta_1+1,\ldots,\beta_r+1$ be the
   numbers of letters in the successive $Q$-blocks.  For example, the
@@ -839,25 +847,41 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
     \underbrace{Q}_{\beta_2=0}\,
     \underbrace{PP}_{\alpha_2=1}.
   \]
-  These integers satisfy the length condition, and the corresponding
-  summand is
+  Counting the $k+1$ letters gives
   \[
-    \sum_{i=0}^r\alpha_i+\sum_{i=1}^r\beta_i=k-2r,
+    \sum_{i=0}^r(\alpha_i+1)+\sum_{i=1}^r(\beta_i+1)=k+1,
     \qquad
+    \sum_{i=0}^r\alpha_i+\sum_{i=1}^r\beta_i=k-2r.
+  \]
+  In particular, $r\le\lfloor k/2\rfloor$.
+  To evaluate the summand, use the same block identities as in the proof
+  of \Cref{lem:cycle-excursions}: each internal step in a $P$-block
+  contributes $q$, and the excursion through the $i$th $Q$-block
+  contributes $g^{\mathsf T}A^{\beta_i}g$.
+  Collapsing these blocks leaves the product of their scalar factors
+  times $P$. Since $e^{\mathsf T}Pe=1$, the summand is
+  \[
     e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe
     =q^{\alpha_0+\cdots+\alpha_r}
       \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
   \]
-  There is a one-to-one correspondence between such words and the values
-  of the $\alpha_i$ and $\beta_i$ satisfying the length condition.
-  Therefore,
+
+  Reading the blocks from left to right determines the ordered tuple
+  $(\alpha_0,\beta_1,\alpha_1,\ldots,\beta_r,\alpha_r)$ uniquely.
+  Conversely, any tuple of nonnegative integers satisfying the length
+  condition constructs exactly one word: start with $\alpha_0+1$ copies
+  of $P$, then $\beta_1+1$ copies of $Q$, then $\alpha_1+1$ copies of $P$,
+  and continue through the final $P$-block of length $\alpha_r+1$.
+  The endpoints fix the starting position, so each tuple contributes
+  once, with no choice of a marked boundary or cyclic placement.
+  Summing the displayed weights over these tuples therefore gives
   \begin{equation}\label{eq:path-r-excursions}
     \begin{aligned}
       &\sum_{\substack{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}\\
                        PR_1\cdots R_{k-1}P
                        \text{ has }r\text{ $Q$-blocks}}}
         e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe\\
-      &\qquad=
+      &\qquad\qquad\qquad {}=
       \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
                       \sum_{i=0}^r\alpha_i+
                       \sum_{i=1}^r\beta_i=k-2r}}
@@ -892,7 +916,11 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   \]
   The inner sum is
   $h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)$ by
-  \eqref{eq:h-def}.  This proves \eqref{eq:path-expansion}.
+  \eqref{eq:h-def}: the $r+1$ exponents $\alpha_0,\ldots,\alpha_r$
+  account for the $r+1$ copies of $q$, and the exponents
+  $\beta_1,\ldots,\beta_r$ belong to $\lambda_1,\ldots,\lambda_r$.
+  Their total degree is $k-2r$, as required.
+  This proves \eqref{eq:path-expansion}.
 \end{proof}
 
 We now combine the cycle and path formulas to express the difference between the two sides of \eqref{eq:intro-commonality} as polynomial integrals against $\mu$.
@@ -904,8 +932,8 @@ The following lemma completes the reduction announced at the start of this secti
   \begin{equation}\label{eq:pge23-n}
     n=m-2r,
   \end{equation}
-  which is a positive odd integer, and define the symmetric excursion
-  polynomial
+  which is a positive odd integer, and define the excursion polynomial,
+  symmetric in $\lambda_1,\ldots,\lambda_r$, by
   \begin{align}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     ={}&\frac mr\Bigl[
@@ -915,19 +943,24 @@ The following lemma completes the reduction announced at the start of this secti
     &-h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r).
     \label{eq:Pmr}
   \end{align}
-  It suffices to prove
+  The sum of integrals
   \begin{equation}\label{eq:Phi-expansion}
     \Phi_m:=\sum_{r=1}^{(m-1)/2}
       \int\!\cdots\!\int
       P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-      \prod_{i=1}^r\dd\mu(\lambda_i)\ge0
+      \prod_{i=1}^r\dd\mu(\lambda_i)
   \end{equation}
-  to prove \Cref{thm:main,thm:commonality}.
+  is the difference between the left- and right-hand sides of
+  \eqref{eq:intro-commonality}.
+  Thus, $\Phi_m\ge0$ implies \Cref{thm:main,thm:commonality}.
+  In particular, it suffices to prove that each $P_{m,r}$ is nonnegative
+  on $[-1/2,1/2]^r$.
 \end{lemma}
 
 \begin{proof}
   Adding the cycle expansions \eqref{eq:cycle-U} and
-  \eqref{eq:cycle-W} cancels the two trace terms and gives
+  \eqref{eq:cycle-W} cancels $\Tr(A^m)$ with $-\Tr(A^m)$ and gives the
+  following identity, with $n=m-2r$ in each summand:
   \[
     \begin{aligned}
       \tC mW+\tC mU
@@ -942,7 +975,9 @@ The following lemma completes the reduction announced at the start of this secti
       \prod_{i=1}^r\dd\mu(\lambda_i).
     \end{aligned}
   \]
-  The path expansion \eqref{eq:path-expansion} with $k=m-1$ is
+  For $k=m-1$, the path expansion \eqref{eq:path-expansion} uses the
+  same range $1\le r\le(m-1)/2$, and its polynomial degree is
+  $(m-1)-2r=n-1$. Thus,
   \[
     x_{m-1}=q^{m-1}+
     \sum_{r=1}^{(m-1)/2}
@@ -950,8 +985,11 @@ The following lemma completes the reduction announced at the start of this secti
       h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \]
-  For each $r$, subtracting the integrand in the path expansion from the
-  corresponding integrand in the sum of the cycle expansions leaves
+  For each fixed number $r$ of excursions, the two cycle integrals and
+  the path integral use the same product measure
+  $\prod_{i=1}^r\dd\mu(\lambda_i)$.
+  Subtracting the path contribution from the sum of the cycle
+  contributions therefore combines their integrands into
   \[
     \frac mr\Bigl[
       h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
@@ -965,14 +1003,19 @@ The following lemma completes the reduction announced at the start of this secti
     \tC mW+\tC mU-x_{m-1}
     =p^m+q^m-q^{m-1}+\Phi_m.
   \end{equation}
-  Hence $\Phi_m\ge0$ gives
+  Recalling $x_{m-1}=\tP{m-1}U$, this identifies $\Phi_m$ as the
+  difference between the two sides of \eqref{eq:intro-commonality}.
+  In particular, $\Phi_m\ge0$ gives
   \[
     \tC mW+\tC mU
     \ge p^m+q^m+\tP{m-1}U-q^{m-1},
   \]
   proving \Cref{thm:commonality}.
 
-  Since $0\le U\le1$, deleting the edge joining $x_m$ and $x_1$ gives
+  To deduce the bound for $\tC mW$ alone, compare the cycle density of
+  $U$ with its path density. Since $0\le U\le1$, removing the closing
+  factor $U(x_m,x_1)$ from the cycle-density integrand can only increase
+  it. The remaining factors describe the path with $m-1$ edges, so
   \begin{equation}\label{eq:cycle-path}
     \begin{aligned}
       \tC mU
@@ -994,6 +1037,13 @@ The following lemma completes the reduction announced at the start of this secti
   \]
   where the last inequality follows from \eqref{eq:cycle-path}.
   Thus, $\Phi_m\ge0$ also proves \Cref{thm:main}.
+
+  Finally, $\mu$ is nonnegative and supported on $[-1/2,1/2]$ by
+  \Cref{sec:matrix-reduction}.
+  If each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$, every integral in
+  \eqref{eq:Phi-expansion} is nonnegative, and hence $\Phi_m\ge0$.
+  This proves both inequalities for step graphons;
+  \Cref{lem:step-reduction} then extends them to arbitrary graphons.
 \end{proof}
 
 \section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
