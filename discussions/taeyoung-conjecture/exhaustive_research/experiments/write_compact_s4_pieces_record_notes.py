@@ -19,8 +19,11 @@ def spell(n):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--atlas', type=int, required=True)
-    parser.add_argument('--next', type=int, required=True)
+    parser.add_argument('--next', type=int,
+                        help='The row to work on next; omit when this is the last believed row.')
     args = parser.parse_args()
+    following = f'Atlas{args.next} is next.' if args.next else 'No believed row remains.'
+    active = f'Atlas{args.next} is now the active row. ' if args.next else ''
     atlas = args.atlas
     root = Path(__file__).resolve().parents[1]
     run = root/f'lean/verification_runs/atlas{atlas}'
@@ -108,7 +111,7 @@ assembly, and the catalogue example are counted in the fresh run. See
 Atlas{atlas} is **verified** ({a['date']}). {summary}
 All source hashes remained unchanged. The final theorem has only the three
 standard axioms. Its catalogue example and classification are updated;
-Atlas{args.next} is next.
+{following}
 
 The fresh run includes all {spell(bounds)} interval bounds, chromatic counts, graph
 identification, complete `SatisfiesLowerBound` theorem, and catalogue example.
@@ -161,7 +164,7 @@ attempt substitutes for an accepted compilation.
                  f'build: {duration(a["fresh_elapsed_seconds"])} at {peak:.2f} GiB. '
                  f'The installed recheck brings combined verification to {duration(a["combined_seconds"])}. '
                  'The theorem has only the standard axioms; its example and classification '
-                 f'are updated. Atlas{args.next} is now the active row. See '
+                 f'are updated. {active}See '
                  f'[the verification record](lean/docs/ATLAS{atlas}_VERIFICATION_PROGRESS.md).\n\n')
     assert f'Atlas{atlas} completed on' not in plan
     plan = plan.replace(marker, paragraph+marker)
@@ -174,7 +177,7 @@ attempt substitutes for an accepted compilation.
     (root/f'notes/atlas{atlas}_compact_certificate.md').write_text(note, encoding='utf-8')
     (root/f'lean/docs/ATLAS{atlas}_VERIFICATION_PROGRESS.md').write_text(progress, encoding='utf-8')
     plan_path.write_text(plan, encoding='utf-8')
-    print(f'Recorded completed Atlas{atlas}; Atlas{args.next} is next.')
+    print(f'Recorded completed Atlas{atlas}; {following}')
 
 
 if __name__ == '__main__':

@@ -88,8 +88,9 @@ def main():
             lines[i]=re.sub(r'\*\*\d+ rows\.\*\*',f'**{counts["Verified"]} rows.**',line)
         elif line.startswith('* 🔧 **Believed**'):
             noun='row' if counts['Believed']==1 else 'rows'
-            lines[i]=re.sub(r'\*\*\d+ rows?\*\* \(Atlas .*?\)\.',
-                           f'**{counts["Believed"]} {noun}** (Atlas {listing}).',line)
+            details=f' (Atlas {listing}).' if believed else '.'
+            lines[i]=re.sub(r'\*\*\d+ rows?\*\*(?: \(Atlas .*?\))?\.',
+                           f'**{counts["Believed"]} {noun}**{details}',line)
         elif line.startswith('* ⚪ **Unresolved**'):
             ids=(', '.join(map(str,unresolved[:-1]))+' and '+str(unresolved[-1])
                  if len(unresolved)>1 else ', '.join(map(str,unresolved)))
