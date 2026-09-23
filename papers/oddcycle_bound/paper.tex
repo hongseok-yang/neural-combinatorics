@@ -401,7 +401,7 @@ The deduction preceding this overview then gives \Cref{thm:main}.
 
 \paragraph{Organization.}
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
-\Cref{sec:excursions} develops the excursion expansion and reduces the strengthened two-colour theorem to the inequalities $P_{m,r}\ge0$.
+\Cref{sec:excursions} develops the excursion expansion and reduces \Cref{thm:commonality} to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 \Cref{sec:equality-stability} identifies the equality cases and deduces qualitative stability.
 We close with further questions in \Cref{sec:conclusion}.
@@ -475,11 +475,11 @@ are the orthogonal projections of $\R^N$ onto $\R e$ and $\mathcal E_0$,
 respectively. They are the matrix counterparts of the projections
 $\Pi_{\mathrm c}$ and $\Pi_0$ used in the introduction.
 Relative to the decomposition $\R e\oplus\mathcal E_0$, these projections have the block forms
-\[
+\begin{equation}\label{eq:block-PQ}
   P=\begin{pmatrix}1&0\\0&0\end{pmatrix},
   \qquad
   Q=\begin{pmatrix}0&0\\0&I_{\mathcal E_0}\end{pmatrix},
-\]
+\end{equation}
 where $I_{\mathcal E_0}$ is the identity on $\mathcal E_0$.
 
 Define the vector $g\in\R^N$ and the symmetric linear map
@@ -595,6 +595,43 @@ Since $\mu$ is nonnegative, proving that these polynomials are nonnegative will 
 \section{Excursion expansions}
 \label{sec:excursions}
 
+\Cref{sec:matrix-reduction} expresses cycle and path densities through finite matrices and represents the quantities $g^{\mathsf T}A^jg$ as moments of the measure $\mu$.
+We now combine these two descriptions to express the difference between the two sides of \eqref{eq:intro-commonality} as a sum of polynomial integrals against $\mu$ (\Cref{lem:polynomial-reduction}).
+Since $\mu$ is nonnegative, this reduces the proof of \Cref{thm:commonality} to polynomial nonnegativity.
+\Cref{sec:short-cycles,sec:excursion-positivity} establish that nonnegativity, proving \Cref{thm:commonality} and hence the odd-cycle bound in \Cref{thm:main}.
+
+To obtain these formulas, we expand matrix powers by inserting $P+Q=I$.
+For an odd integer $m\ge3$, the cycle density of $U$ satisfies
+\begin{equation}\label{eq:trace-projection-expansion}
+  \tC mU=\Tr(M_U^m)
+  =\sum_{R_1,\ldots,R_m\in\{P,Q\}}
+    \Tr(R_1M_UR_2M_U\cdots R_mM_U).
+\end{equation}
+We associate each summand with the sequence $R_1\cdots R_m$, called a \emph{word} in $P$ and $Q$.
+This word records the projection choices; the actual matrix product contains an application of $M_U$ between consecutive projections.
+For trace terms, we regard the word as cyclic, so its last and first letters are consecutive.
+
+A \emph{block} is a maximal consecutive run of the same letter.
+Thus, in a word containing both $P$ and $Q$, each $Q$-block has a $P$ immediately before and after it.
+For example, the projection pattern
+\[
+  P\,\underbrace{QQ}_{\text{one $Q$-block}}\,P
+\]
+corresponds to the matrix segment $P M_U Q M_U Q M_U P$.
+Reading this product from right to left, the rightmost $P$ retains the component in $\R e$.
+An application of $M_U$ followed by $Q$ then retains the component in $\mathcal E_0$; the next application of $M_U$ followed by $Q$ retains a component in $\mathcal E_0$ again; the final application of $M_U$ followed by $P$ returns to $\R e$.
+We call this passage from $\R e$ into $\mathcal E_0$ and back an \emph{excursion}.
+Using the block forms of $P$ and $Q$ in \eqref{eq:block-PQ} and of $M_U$ in \eqref{eq:block-UW}, we obtain
+\[
+  P M_U Q M_U Q M_U P=(g^{\mathsf T}Ag)P.
+\]
+Here the outward transition contributes $g$, the step within $\mathcal E_0$ contributes $A$, and the return contributes $g^{\mathsf T}$.
+More generally, a block of $\beta+1$ letters $Q$ has $\beta$ steps within $\mathcal E_0$ and contributes the scalar factor $g^{\mathsf T}A^\beta g$.
+By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{sec:matrix-reduction}.
+
+We organize the summands by first fixing the number $r$ of excursions in a word.
+For each fixed $r$, we sum over the possible lengths of the individual $P$-blocks and $Q$-blocks.
+The resulting sums of monomials are expressed using complete homogeneous symmetric polynomials, which we now define.
 For variables $y_1,\ldots,y_k$, the complete homogeneous symmetric
 polynomial of degree $d$ is
 \begin{equation}\label{eq:h-def}
@@ -606,25 +643,20 @@ polynomial of degree $d$ is
 \end{equation}
 We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 
-In a word in $P$ and $Q$, each maximal block of $Q$'s bracketed by
-occurrences of $P$ represents a passage from $\R e$ into $\mathcal E_0$
-and back.  We call such a block an \emph{excursion}.  A block containing
-$\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
-
 \begin{lemma}[Cycle densities by excursions]
 \label{lem:cycle-excursions}
   For every odd $m\ge3$,
   \begin{align}
     \tC mU
-    ={}&q^m+\Tr(A^m)\notag\\
-    &+\sum_{r=1}^{(m-1)/2}\frac mr
+    ={}&q^m+\Tr(A^m)
+    +\sum_{r=1}^{(m-1)/2}\frac mr
       \int\!\cdots\!\int
       h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i),
     \label{eq:cycle-U}\\
     \tC mW
-    ={}&p^m-\Tr(A^m)\notag\\
-    &+\sum_{r=1}^{(m-1)/2}\frac mr
+    ={}&p^m-\Tr(A^m)
+    +\sum_{r=1}^{(m-1)/2}\frac mr
       \int\!\cdots\!\int
       h_{m-2r}(\rep pr,-\lambda_1,\ldots,-\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
@@ -633,19 +665,17 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
 \end{lemma}
 
 \begin{proof}
-  Since $P+Q=I$,
-  \[
-    \Tr(M_U^m)
-    =\sum_{R_1,\ldots,R_m\in\{P,Q\}}
-      \Tr(R_1M_UR_2M_U\cdots R_mM_U).
-  \]
-  Pair each summand with the word $R_1\cdots R_m$.  If $R_i=P$ for
+  Consider the summands in \eqref{eq:trace-projection-expansion}, indexed by the words $R_1\cdots R_m$.
+  If $R_i=P$ for
   every $i$, the summand is $q^m$; if $R_i=Q$ for every $i$, it is
   $\Tr(A^m)$.
 
-  Now consider a mixed word with $r$ blocks of $Q$.  By cyclicity of the
-  trace, we may circularly shift the word so that its first letter is $P$
-  and its last letter is $Q$.  For $1\le i\le r$, let $\alpha_i+1$ be the
+  Now consider a word containing both $P$ and $Q$.
+  Choose a boundary where $Q$ is followed by $P$ in cyclic order, and rotate the word so that this $P$ is its first letter and the preceding $Q$ is its last letter.
+  Cyclicity of the trace preserves the value of the summand under this rotation.
+  Let $r$ be the number of $Q$-blocks in the resulting linear word; there are also $r$ $P$-blocks.
+  Since the cut is between different letters, no cyclic block is split, so $r$ is also the number of cyclic $Q$-blocks in the original word and does not depend on the chosen boundary.
+  For $1\le i\le r$, let $\alpha_i+1$ be the
   number of letters in the $i$th $P$-block, and let $\beta_i+1$ be the
   number of letters in the $Q$-block that follows it. For example, the
   following cyclic word has $r=2$ and odd length $13$:
@@ -655,8 +685,23 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
     \underbrace{PPPPP}_{\alpha_2=4}\,
     \underbrace{QQ}_{\beta_2=1}
   \]
-  These integers satisfy the length condition, and the value of the
-  corresponding summand is determined solely by them:
+  Counting the letters gives $\sum_{i=1}^r((\alpha_i+1)+(\beta_i+1))=m$.
+  To evaluate the corresponding trace, use the block forms in \eqref{eq:block-PQ} and \eqref{eq:block-UW}:
+  \[
+    P M_U P=qP,
+    \qquad
+    P M_U(Q M_U)^{\beta_i+1}P
+    =(g^{\mathsf T}A^{\beta_i}g)P.
+  \]
+  The $P$-block has $\alpha_i$ internal steps, each contributing $q$, while the following $Q$-block gives one excursion.
+  Thus, the pair of blocks, ending at the next $P$, satisfies
+  \[
+    (P M_U)^{\alpha_i+1}(Q M_U)^{\beta_i+1}P
+    =q^{\alpha_i}(g^{\mathsf T}A^{\beta_i}g)P.
+  \]
+  Since the normalized product begins with $P$, appending a final $P$ does not change its trace, by $P^2=P$ and cyclicity.
+  Applying the displayed identity successively, from the last pair of blocks to the first, leaves the product of their scalar factors times $P$.
+  Taking the trace and using $\Tr(P)=1$, we obtain the length condition and trace formula
   \begin{equation}\label{eq:excursion-length-weight}
     \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,
     \qquad
@@ -667,7 +712,7 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
 
   It remains to determine the multiplicity of each block-length tuple.
   Mark a cut in the cyclic word after a $Q$-block, so that the shifted word
-  begins with $P$ and ends with $Q$. Every word with $r$ $Q$-blocks admits
+  begins with $P$ and ends with $Q$. Every word with $r$ cyclic $Q$-blocks admits
   exactly $r$ such marked cuts. Conversely, an ordered tuple
   $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ satisfying the length
   condition determines the cyclic pattern, and its first position can be
@@ -678,7 +723,7 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
   \begin{equation}\label{eq:U-r-excursions}
     \begin{aligned}
       &\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
-                       R_1\cdots R_m\text{ has }r\text{ $Q$-blocks}}}
+                       R_1\cdots R_m\text{ has }r\text{ cyclic $Q$-blocks}}}
         \Tr(R_1M_U\cdots R_mM_U)\\
       &\qquad=\frac mr
         \sum_{\substack{\alpha_1,\beta_1,\ldots,
@@ -728,6 +773,7 @@ $\beta+1$ letters $Q$ contributes $g^{\mathsf T}A^\beta g$.
   $\Tr(A^m)$ becomes $-\Tr(A^m)$.  This proves \eqref{eq:cycle-W}.
 \end{proof}
 
+We next derive the corresponding formula for path densities, which supplies the correction term in \eqref{eq:intro-commonality}.
 Unlike a cycle, a path has fixed endpoints, so its excursion expansion has no
 cyclic multiplicity factor.
 Let $P_k$ denote the path with $k$ edges, and define the scalar
@@ -826,6 +872,9 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   $h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:h-def}.  This proves \eqref{eq:path-expansion}.
 \end{proof}
+
+We now combine the cycle and path formulas to express the difference between the two sides of \eqref{eq:intro-commonality} as polynomial integrals against $\mu$.
+The following lemma completes the reduction announced at the start of this section.
 
 \begin{lemma}[Reduction to excursion polynomials]
 \label{lem:polynomial-reduction}
@@ -1683,7 +1732,7 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 \label{sec:equality-stability}
 
 The two inequalities used in the proof impose different conditions on equality.
-Equality in the strengthened two-colour theorem forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
+Equality in \Cref{thm:commonality} forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
 Together, these conditions identify the balanced complete multipartite graphons as the only graphons attaining the bound when $2/3\le p<1$.
 
 For a graphon $W$ of edge density $p$, define its degree function by
