@@ -1,8 +1,12 @@
-"""Generate one complete, unverified two-piece compact S4 row.
+"""Generate one complete, unverified compact S4 row from its interval pieces.
 
-Consumes independently audited compact candidates. Refuses to overwrite
-existing row methods or verified catalogue examples. The generated example
-is staged; only the fresh acceptance driver may install it.
+Consumes independently audited compact candidates, named either by
+`--lower/--upper` or by repeated `--piece SUFFIX=PATH` in interval order. A row
+whose S4 pieces start above the admissible endpoint names the hand-written
+module covering the rest with `--low-module/--low-right`; that one module is
+the only Lean source the row may already contain. Refuses to overwrite
+existing row methods or verified catalogue examples. The generated example is
+staged; only the fresh acceptance driver may install it.
 """
 
 import argparse
@@ -18,18 +22,40 @@ from generate_compact_s4_psd import PREFIX, row_tag
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--atlas', type=int, required=True)
-    parser.add_argument('--lower', required=True)
-    parser.add_argument('--upper', required=True)
+    parser.add_argument('--lower')
+    parser.add_argument('--upper')
+    parser.add_argument('--piece', action='append', default=[], metavar='SUFFIX=PATH',
+                        help='Namespace suffix and audited candidate of one S4 piece, in interval order.')
+    parser.add_argument('--low-module',
+                        help='Hand-written row module covering the range left of the first S4 piece.')
+    parser.add_argument('--low-right',
+                        help='Right endpoint of that module, where the first S4 piece starts.')
     args = parser.parse_args()
+    if args.piece:
+        assert args.lower is None and args.upper is None, 'Give either --piece or --lower/--upper.'
+        pieces = []
+        for item in args.piece:
+            suffix,sep,path = item.partition('=')
+            assert sep and suffix and path, item
+            pieces.append((suffix,path))
+    else:
+        assert args.lower and args.upper, 'Give both --lower and --upper, or use --piece.'
+        pieces = [('Lower',args.lower),('Upper',args.upper)]
+    assert (args.low_module is None) == (args.low_right is None), \
+        'A low module and its right endpoint are given together.'
     workspace = Path(__file__).resolve().parents[1]
     scripts = workspace/'experiments'
     atlas = args.atlas
     example = workspace/f'lean/Taeyoung/Examples/Graph{atlas}.lean'
     assert 'formalization := .verified' not in example.read_text(encoding='utf-8')
     root = workspace/f'lean/Taeyoung/Methods/RootedSOS/CompactS4/Atlas{atlas}'
-    assert not any(root.rglob('*.lean')), 'Existing row methods must be preserved.'
+    low = root/f'{args.low_module}.lean' if args.low_module else None
+    if low is not None:
+        assert low.is_file(), f'Write {low} before preparing the row.'
+    assert not any(p for p in root.rglob('*.lean') if p != low), \
+        'Existing row methods must be preserved.'
     candidates = []
-    for suffix,path in [('Lower',args.lower),('Upper',args.upper)]:
+    for suffix,path in pieces:
         c = json.loads(Path(path).read_text(encoding='utf-8'))
         assert int(c['atlas']) == atlas
         c['lean_namespace_suffix'] = suffix
@@ -42,7 +68,7 @@ def main():
         subprocess.run([sys.executable,'-X','utf8',str(scripts/script),*map(str,arguments)],
                        cwd=workspace,check=True)
 
-    run('generate_compact_s4_assembly.py',Path(args.upper).resolve(),'--coloring-only')
+    run('generate_compact_s4_assembly.py',Path(pieces[-1][1]).resolve(),'--coloring-only')
     witnesses = []
     for suffix,c,candidate in candidates:
         candidate.write_text(json.dumps(c,separators=(',',':'))+'\n',encoding='utf-8')
@@ -57,7 +83,10 @@ def main():
         run('generate_compact_s4_block_sums.py','--atlas',atlas,'--namespace-suffix',suffix)
         run('inline_compact_s4_density.py','--atlas',atlas,'--namespace-suffix',suffix)
         run('merge_compact_s4_blocks.py','--atlas',atlas,'--namespace-suffix',suffix)
-    run('generate_compact_s4_piece_assembly.py',*witnesses,'--complete')
+    completion = ['--complete']
+    if args.low_module:
+        completion += ['--low-module',args.low_module,'--low-right',args.low_right]
+    run('generate_compact_s4_piece_assembly.py',*witnesses,*completion)
     row_prefix = f'{PREFIX}.CompactS4.Atlas{atlas}.'
     files = list(root.rglob('*.lean'))
     for path in files:

@@ -1,0 +1,595 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools,microtype}
+\usepackage{enumitem,xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{authblk}
+\renewcommand{\Affilfont}{\small}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\pos}[1]{(#1)_+}
+\title{Goodman-type lower bounds for odd cycles II: The intermediate regime}
+\author[1,2]{Taeyoung~Kim}
+\author[3]{Jineon~Baek}
+\author[4]{Seonghyuk~Im}
+\author[2]{Joonkyung~Lee}
+\author[1,2]{Hongseok~Yang}
+\affil[1]{School of Computing, KAIST, Korea}
+\affil[2]{School of Computational Sciences, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[3]{June E Huh Center for Mathematical Challenges, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[4]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[ ]{\newline\texttt{taeyoungkim21@kaist.ac.kr}, \texttt{{jineon.kias}@gmail.com}, \texttt{seonghyuk@kias.re.kr}, \texttt{joonkyunglee@kias.re.kr}, \texttt{hongseokyang@kias.re.kr}}
+\date{September 23, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We give a self-contained proof of
+\[
+ t(C_m,W)\ge p^m-p(1-p)^{m-1}
+\]
+for every graphon of edge density $0\le p\le2/3$ and every odd $m\ge3$.
+The nontrivial range is $1/2<p\le2/3$. A finite excursion expansion separates the constant direction from the compressed complement operator. The Hilbert--Schmidt bound leaves at most one exceptional eigenvalue. Positivity and boundedness of the kernel then force compensation through the two components of the degree fluctuation. A single truncated-square inequality proves that this compensation suffices at every cutoff; positive integration supplies all odd lengths $m\ge5$. The remaining scalar argument consists of fixed low-degree identities and completions of squares. The triangle is proved separately. Together with the case $p\ge2/3$, treated in a companion paper, this establishes the inequality at every edge density.
+\end{abstract}
+
+\paragraph{Context.}
+The inequality $t(C_m,W)\ge p^m-p(1-p)^{m-1}$ was proved for $p\ge2/3$ in \cite{partI}, where equality is attained by the balanced complete $k$-partite graphon at each density $p=1-1/k$. This article treats the remaining range. The excursion expansion of Section~\ref{sec:excursions} is the cycle case of \cite[Lemma~3.1]{partI}, written in the notation used here; its proof is included so that the article is self-contained.
+
+\section{The theorem and the elementary reductions}\label{sec:reductions}
+For a finite simple graph $F$ and a graphon $W:[0,1]^2\to[0,1]$, symmetric and measurable, write
+\[
+ t(F,W)=\int_{[0,1]^{V(F)}}\prod_{ij\in E(F)}W(x_i,x_j)\prod_{i\in V(F)}dx_i,
+ \qquad p=\int_{[0,1]^2}W.
+\]
+\begin{theorem}\label{thm:main}
+If $0\le p\le2/3$, then, for every odd integer $m\ge3$,
+\begin{equation}\label{eq:target}
+ t(C_m,W)\ge p^m-p(1-p)^{m-1}.
+\end{equation}
+\end{theorem}
+The endpoint $p=2/3$ is also covered by \cite[Theorem~1.1]{partI}; the argument below includes it as well.
+
+\paragraph{Edge densities at most $1/2$.}
+Put $q=1-p$. If $p\le1/2$, then $p^{m}-pq^{m-1}=p(p^{m-1}-q^{m-1})\le0$, whereas $t(C_m,W)\ge0$.
+
+\paragraph{The triangle.}
+Let $d_W(x)=\int_0^1 W(x,z)\,dz$. For $a,b\in[0,1]$, $ab\ge a+b-1$, so
+\[
+ \int W(x,z)W(y,z)\,dz\ge d_W(x)+d_W(y)-1.
+\]
+Multiplying by $W(x,y)$ and integrating yields
+\[
+ t(C_3,W)\ge2\int d_W(x)^2\,dx-p\ge2p^2-p=p^3-pq^2.
+\]
+The last inequality follows from $\int(d_W-p)^2\ge0$.
+
+\paragraph{Reduction to step graphons.}
+Let $W_N$ be the averages of $W$ over the rectangles of the level-$N$ dyadic partition. Then $W_N$ is a symmetric step graphon, $0\le W_N\le1$, and $\int W_N=p$ exactly. Moreover $W_N\to W$ in $L^1$: if $S$ is a dyadic rectangle step function with $\norm{W-S}_1<\varepsilon$, then for every sufficiently fine partition, averaging fixes $S$ and is an $L^1$ contraction, giving $\norm{W_N-W}_1<2\varepsilon$. Such step functions are dense in $L^1([0,1]^2)$.
+Telescoping the product of the $m$ edge factors gives
+\begin{equation}\label{eq:continuity}
+ |t(C_m,W_N)-t(C_m,W)|\le m\norm{W_N-W}_1\longrightarrow0.
+\end{equation}
+It therefore suffices to prove the assertion for step graphons. From now on assume
+\begin{equation}\label{eq:range}
+ \frac12<p\le\frac23,\qquad \frac13\le q<\frac12,
+\end{equation}
+and work in the finite-dimensional space $E$ of functions constant on the cells of a partition for $W$ into finitely many cells of positive measure. For a kernel $K$ constant on the products of these cells, $T_K$ maps $L^2[0,1]$ into $E$ and vanishes on $E^\perp$; we regard $T_K$ as an operator on $E$, and all traces are taken on $E$. The space $E$ is closed under $f\mapsto|f|$ and $f\mapsto f_\pm$.
+
+\section{The block decomposition and the spectral bound}
+Put $U=1-W$ and let $T_U,T_W$ denote the corresponding integral operators. The function $\one$ has norm one. On $E=\R\one\oplus E_0$, where $E_0=E\cap\one^\perp$, define
+\[
+ g=T_U\one-q\one,\qquad A=\Pi_{E_0}T_U|_{E_0}.
+\]
+Then
+\begin{equation}\label{eq:blocks}
+ T_U=\begin{pmatrix}q&g^*\\g&A\end{pmatrix},\qquad
+ T_W=\begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix}.
+\end{equation}
+Here $g=p-d_W$ is the mean-zero degree fluctuation with its sign reversed, and $A$ is self-adjoint.
+
+If a cell $B_i$ has measure $b_i$, the matrix of a step-kernel operator $T_K$ in the orthonormal basis $\one_{B_i}/\sqrt{b_i}$ has entries $K_{ij}\sqrt{b_ib_j}$. Matrix multiplication around a cycle therefore gives, for $m\ge2$,
+\begin{equation}\label{eq:tracecycle}
+ \Tr(T_K^m)=\int_{[0,1]^m}K(x_1,x_2)K(x_2,x_3)\cdots K(x_m,x_1)\,dx_1\cdots dx_m .
+\end{equation}
+For $m\ge3$ the right side is $t(C_m,K)$; for $m=2$ it is $\int K^2$.
+
+\begin{lemma}[Hilbert--Schmidt bound]\label{lem:HS}
+One has
+\begin{equation}\label{eq:HS}
+ \Tr(A^2)+2\norm g^2\le pq.
+\end{equation}
+In particular every eigenvalue $\lambda$ of $A$ satisfies $|\lambda|\le\sqrt{pq}<p$.
+\end{lemma}
+\begin{proof}
+Because $0\le U\le1$,
+\[
+ q^2+2\norm g^2+\Tr(A^2)=\Tr(T_U^2)=\int U^2\le\int U=q.
+\]
+The first equality is the block form \eqref{eq:blocks}, and the second is the trace formula \eqref{eq:tracecycle} with $m=2$. Subtract $q^2$. The eigenvalue assertion follows from $\lambda^2\le\Tr(A^2)$ and $q<p$.
+\end{proof}
+
+\section{Excursions: an exact finite counting identity}\label{sec:excursions}
+This section supplies both the interpretation and the inequality used later. Insert
+$I=\Pi_0+\Pi_H$, the projections onto $\R\one$ and $E_0$, between consecutive copies of $T_W$ in the trace. Thus
+\begin{equation}\label{eq:words}
+ \Tr(T_W^m)=\sum_{\omega\in\{0,H\}^m}
+ \Tr\bigl(\Pi_{\omega_1}T_W\Pi_{\omega_2}T_W\cdots\Pi_{\omega_m}T_W\bigr).
+\end{equation}
+Indices are cyclic. An \emph{excursion} in a mixed word is a maximal nonempty cyclic block of $H$'s, with a $0$ before and after it. The $0$-only word contributes $p^m$; the $H$-only word contributes $\Tr((-A)^m)$.
+
+An excursion with $j\ge0$ internal transitions in $E_0$, followed by $k\ge0$ constant-to-constant transitions, has length $j+k+2$ and weight
+\[
+ p^k\ip{g}{(-A)^j g}.
+\]
+The two minus signs on departure and return cancel. For $\ell\ge2$, define the sum of these weights at total length $\ell$ by
+\begin{equation}\label{eq:e}
+ e_\ell=\sum_{j=0}^{\ell-2}p^{\ell-2-j}\ip{g}{(-A)^j g}.
+\end{equation}
+
+\begin{lemma}[Cyclic excursion expansion]\label{lem:exc}
+For every integer $m\ge3$,
+\begin{equation}\label{eq:exactexc}
+ \Tr(T_W^m)=p^m+\Tr((-A)^m)
+ +\sum_{r=1}^{\lfloor m/2\rfloor}\frac mr
+ \sum_{\substack{\ell_1+\cdots+\ell_r=m\\\ell_i\ge2}}
+ e_{\ell_1}\cdots e_{\ell_r}.
+\end{equation}
+Every $e_\ell$ is nonnegative. Consequently, for odd $m\ge3$,
+\begin{equation}\label{eq:oneexc}
+ t(C_m,W)\ge p^m-\Tr(A^m)+m\ip{g}{k_m(A)g},
+ \qquad k_m(z)=\frac{p^{m-1}-z^{m-1}}{p+z}.
+\end{equation}
+The function $k_m(A)$ can equivalently be defined by the polynomial
+$\sum_{j=0}^{m-2}p^{m-2-j}(-A)^j$.
+\end{lemma}
+\begin{proof}
+Consider the mixed words in \eqref{eq:words} having exactly $r$ excursions, and mark one of their departures from $0$ to $H$. Every such word has $r$ possible marks. Conversely, choose the position of the marked departure among the $m$ indexed positions, and then choose an ordered list of $r$ excursions, each together with the constant transitions following its return. These data uniquely determine the marked word. Since $\Pi_0$ has rank one, its weight is the product of the $r$ scalar block weights. Summing these weights gives
+\[
+ r\,\bigl(\text{total weight of words with $r$ excursions}\bigr)
+ =m\sum_{\substack{\ell_1+\cdots+\ell_r=m\\\ell_i\ge2}}
+ e_{\ell_1}\cdots e_{\ell_r}.
+\]
+This proves \eqref{eq:exactexc}. Marking indexed departures also handles periodic words; no assumption about the number of distinct cyclic rotations is made.
+
+Choose an orthonormal eigenbasis $(\phi_i)$ of $A$, with eigenvalues $\lambda_i$, and put $g_i=\ip g{\phi_i}$. Summing the finite geometric series in \eqref{eq:e} gives
+\begin{equation}\label{eq:epos}
+ e_\ell=\sum_i g_i^2\frac{p^{\ell-1}-(-\lambda_i)^{\ell-1}}{p+\lambda_i}\ge0.
+\end{equation}
+The denominator and numerator are positive, since $|\lambda_i|<p$ by Lemma~\ref{lem:HS}. Thus every aggregate with $r\ge2$ in \eqref{eq:exactexc} is nonnegative. For odd $m$, the $r=1$ aggregate is $m e_m=m\ip g{k_m(A)g}$, and $\Tr((-A)^m)=-\Tr(A^m)$. Discarding $r\ge2$ proves \eqref{eq:oneexc}.
+\end{proof}
+
+\begin{remark}
+Individual projection words may have negative weight. Nonnegativity is proved only after the excursion lengths and constant transitions have been summed into the coefficients $e_\ell$. It is these aggregates, not individual words, that are discarded.
+\end{remark}
+
+\section{Isolating the exceptional eigenvalue}\label{sec:isolate}
+There is at most one eigenvalue of $A$ greater than $q$, counted with multiplicity: two such eigenvalues would give
+\[
+ \Tr(A^2)>2q^2\ge pq,
+\]
+contrary to \eqref{eq:HS}; the second inequality uses $q\ge1/3$.
+
+If every eigenvalue is at most $q$, then for odd $m$,
+\[
+ \lambda^m\le q^{m-2}\lambda^2
+\]
+for every eigenvalue $\lambda$, including the negative ones. Hence
+\[
+ \Tr(A^m)\le q^{m-2}\Tr(A^2)\le pq^{m-1}.
+\]
+The last term of \eqref{eq:oneexc} is $m\ip{g}{k_m(A)g}=me_m\ge0$ by \eqref{eq:epos}, so \eqref{eq:oneexc} gives $t(C_m,W)\ge p^m-pq^{m-1}$.
+
+It remains to consider a simple eigenvalue $\Lambda>q$. Choose a real unit eigenfunction $\phi$ and write
+\begin{equation}\label{eq:split}
+ A\phi=\Lambda\phi,\qquad
+ g=\gamma\phi+g_s,\qquad g_s\perp\one,\phi,\qquad
+ s=\norm{g_s},\qquad M=\sqrt{pq-\Lambda^2}.
+\end{equation}
+Let $A_s$ be the restriction of $A$ to $\{\one,\phi\}^\perp\cap E$. The Hilbert--Schmidt bound gives
+\begin{equation}\label{eq:safeHS}
+ \Tr(A_s^2)+2(\gamma^2+s^2)\le M^2.
+\end{equation}
+Every eigenvalue of $A_s$ therefore lies in $[-M,M]$, and
+\begin{equation}\label{eq:ordering}
+ 0\le M<q<\Lambda<\frac12<p.
+\end{equation}
+Indeed $M^2<pq-q^2=q(1-2q)\le q^2$, while $\Lambda^2\le pq<1/4$.
+
+\paragraph{The three-state excursion interpretation.}
+In the decomposition $\R\one\oplus\R\phi\oplus\{\one,\phi\}^\perp$,
+\begin{equation}\label{eq:threeblocks}
+ T_W=\begin{pmatrix}
+ p&-\gamma&-g_s^*\\
+ -\gamma&-\Lambda&0\\
+ -g_s&0&-A_s
+ \end{pmatrix}.
+\end{equation}
+There is no transition between the exceptional direction and the remaining spectral subspace. Consequently a nonzero excursion stays in one of these two subspaces. An exceptional excursion with $b\ge1$ nonconstant positions and $m-b\ge1$ constant positions has, for each rotation, weight
+\[
+ p^{m-b-1}\gamma^2(-\Lambda)^{b-1}.
+\]
+Summing over its $m$ rotations and $b=1,\ldots,m-1$ gives $m k_m(\Lambda)\gamma^2$. The corresponding remaining-subspace sum is $m\ip{g_s}{k_m(A_s)g_s}$.
+
+For $0\le z<p$, $k_m(-z)\ge k_m(z)$, and, with $n=m-1$,
+\[
+ k_m'(z)=-\frac{p^n+npz^{n-1}+(n-1)z^n}{(p+z)^2}<0.
+\]
+Thus $k_m(\lambda)\ge k_m(M)$ for $|\lambda|\le M$. Since $A=\Lambda\oplus A_s$ on $\R\phi\oplus(\{\one,\phi\}^\perp\cap E)$, the polynomial $k_m(A)$ splits in the same way, and
+\[
+ \ip{g}{k_m(A)g}=k_m(\Lambda)\gamma^2+\ip{g_s}{k_m(A_s)g_s}
+ \ge k_m(\Lambda)\gamma^2+k_m(M)s^2,
+\]
+where the inequality expands $g_s$ in an eigenbasis of $A_s$. Hence
+\begin{equation}\label{eq:couplelower}
+ m\ip{g}{k_m(A)g}\ge m k_m(\Lambda)\gamma^2+m k_m(M)s^2.
+\end{equation}
+The words that never visit the constant direction contribute exactly $-\Lambda^m-\Tr(A_s^m)$. Since $m$ is odd, \eqref{eq:safeHS} gives
+\begin{align}\label{eq:noreturn}
+ \Tr(A^m)
+ &\le\Lambda^m+M^{m-2}\Tr(A_s^2)\notag\\
+ &\le\Lambda^m+M^m-2M^{m-2}(\gamma^2+s^2).
+\end{align}
+Combining \eqref{eq:oneexc}, \eqref{eq:couplelower}, and \eqref{eq:noreturn},
+\begin{equation}\label{eq:Ebound}
+ t(C_m,W)-(p^m-pq^{m-1})\ge E_m+2M^{m-2}(\gamma^2+s^2),
+\end{equation}
+where
+\begin{align}\label{eq:E}
+ E_m={}&\frac{m\gamma^2}{p+\Lambda}(p^{m-1}-\Lambda^{m-1})
+ +\frac{ms^2}{p+M}(p^{m-1}-M^{m-1})\notag\\
+ &-\Lambda^m-M^m+pq^{m-1}.
+\end{align}
+We will prove $E_m\ge0$ without using the extra nonnegative term in \eqref{eq:Ebound}.
+
+\section{Compensation forced by the eigenfunction}
+The next lemma eliminates the shape of the eigenfunction. Its coefficient is chosen to match the scalar inequality used later.
+\begin{lemma}\label{lem:comp}
+One has $M>0$. The sign of $\phi$ may be chosen so that
+\begin{equation}\label{eq:comp}
+ \Lambda-q\le c\gamma_++\frac{s^2}{\Lambda-M},
+ \qquad c=\sqrt{\frac{M^2(p-\Lambda)}{\Lambda pq}},
+ \qquad \gamma_+=\max\{\gamma,0\}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Choose the sign so that $b=\ip{|\phi|}{\phi}\ge0$, and write, using notation local to this proof (recall that $|\phi|,\phi_\pm\in E$),
+\[
+ |\phi|=a\one+b\phi+k,\qquad k\perp\one,\phi.
+\]
+Then $a=\int|\phi|>0$ and $a^2+b^2+\norm k^2=1$. Since $\int\phi=0$, the positive and negative parts of $\phi$ both have integral $a/2$. Dropping the nonpositive cross term in $\ip\phi{T_U\phi}$ and using $U\le1$ gives
+\begin{equation}\label{eq:alower}
+ \Lambda\le\left(\int\phi_+\right)^2+\left(\int\phi_-\right)^2=\frac{a^2}{2}.
+\end{equation}
+Also $U\ge0$ implies
+\begin{equation}\label{eq:abs}
+ \ip{|\phi|}{T_U|\phi|}\ge\ip\phi{T_U\phi}=\Lambda.
+\end{equation}
+
+\paragraph{A constraint on the spectral parameters.}
+Use the bound $A\le\Lambda I$ on $E_0$ in \eqref{eq:abs}. Cauchy--Schwarz gives
+\[
+ \Lambda\le qa^2+2a\norm g\sqrt{1-a^2}+\Lambda(1-a^2),
+\]
+so
+\[
+ (\Lambda-q)a\le2\norm g\sqrt{1-a^2}.
+\]
+In particular $a<1$ and $\norm g>0$. By \eqref{eq:alower},
+\[
+ \norm g^2\ge\frac{(\Lambda-q)^2a^2}{4(1-a^2)}
+ \ge\frac{\Lambda(\Lambda-q)^2}{2(1-2\Lambda)}.
+\]
+Combining this with $2\norm g^2\le M^2$ shows first that $M>0$, and then that
+\begin{align}\label{eq:admiss}
+ 0&\le M^2(1-2\Lambda)-\Lambda(\Lambda-q)^2\notag\\
+  &=(p-\Lambda)\bigl(q(1-\Lambda)-\Lambda^2\bigr).
+\end{align}
+Hence $q(1-\Lambda)-\Lambda^2\ge0$.
+
+\paragraph{Separating the two coupling components.}
+Expand \eqref{eq:abs} and now use $\ip k{Ak}\le M\norm k^2$ to obtain
+\[
+ (\Lambda-q)a^2+(\Lambda-M)\norm k^2
+ \le2ab\gamma+2a\ip{g_s}{k}.
+\]
+Dividing by $a^2$ and completing a square in $\norm k/a$ yields
+\begin{equation}\label{eq:compintermediate}
+ \Lambda-q\le\frac{2b\gamma}{a}+\frac{s^2}{\Lambda-M}.
+\end{equation}
+If $\gamma\le0$, \eqref{eq:comp} follows immediately because $b\ge0$.
+
+Suppose $\gamma>0$. Pointwise, $T_U\phi\le\int\phi_+=a/2$. Since $T_U\phi=\gamma\one+\Lambda\phi$ and $\norm{\phi_+}^2=(1+b)/2$, taking the inner product with $\phi_+$ gives
+\[
+ 2a\gamma+2\Lambda(1+b)\le a^2\le1-b^2.
+\]
+Thus $0\le b\le1-2\Lambda$. Since $b^2/(1+b)$ is increasing for $b\ge0$,
+\[
+ \frac{b^2}{a^2}\le\frac{b^2}{2\Lambda(1+b)}
+ \le\frac{(1-2\Lambda)^2}{4\Lambda(1-\Lambda)}.
+\]
+Consequently \eqref{eq:compintermediate} gives the sharper estimate
+\begin{equation}\label{eq:sharpercomp}
+ \Lambda-q\le\frac{1-2\Lambda}{\sqrt{\Lambda(1-\Lambda)}}\gamma_+
+ +\frac{s^2}{\Lambda-M}.
+\end{equation}
+
+\paragraph{Matching the coefficient to the spectral parameters.}
+Write $\varepsilon=\Lambda-q$. The identity
+\begin{align}\label{eq:parametercert}
+ &(1-\Lambda)M^2(p-\Lambda)-pq(1-2\Lambda)^2\notag\\
+ &\quad=\varepsilon\Bigl[(1-2\Lambda)(q-p\Lambda)
+ +\varepsilon\bigl(q(1-\Lambda)-\Lambda^2\bigr)\Bigr]
+ \ge0
+\end{align}
+follows by expansion with $p+q=1$ and $M^2=pq-\Lambda^2$. Its sign uses \eqref{eq:admiss} and
+\[
+ q-p\Lambda\ge q-\frac p2=\frac{3q-1}{2}\ge0.
+\]
+After division by $\Lambda pq(1-\Lambda)>0$, it states
+\[
+ \frac{(1-2\Lambda)^2}{\Lambda(1-\Lambda)}\le c^2.
+\]
+Thus \eqref{eq:sharpercomp} implies \eqref{eq:comp}.
+\end{proof}
+
+\section{Removing the cycle length by positive integration}
+For $t,z\ge0$, define
+\begin{equation}\label{eq:D}
+ D_t(z)=\frac{d}{dz}\bigl(z^2(z-t)_+^2\bigr)
+       =2z(z-t)_+(2z-t).
+\end{equation}
+Define the cutoff expression
+\begin{align}\label{eq:K}
+ \mathcal K(t)={}&
+ \frac{\gamma^2}{p+\Lambda}\bigl(D_t(p)-D_t(\Lambda)\bigr)
+ +\frac{s^2}{p+M}\bigl(D_t(p)-D_t(M)\bigr)\notag\\
+ &+pq(q-t)_+^2-\Lambda^2(\Lambda-t)_+^2-M^2(M-t)_+^2.
+\end{align}
+Let $m\ge5$ be odd, put $k=m-5\ge0$ and $C_m=(m-2)(m-3)(m-4)/2$, and let $0\le z\le p$. Both integrands below vanish for $t>z$, so the integrals over $[0,p]$ are integrals over $[0,z]$. The beta integral
+\[
+ \int_0^z t^{k}(z-t)^2\,dt=\frac{2z^{k+3}}{(k+1)(k+2)(k+3)}
+\]
+gives
+\begin{equation}\label{eq:powerint}
+ z^{m-2}=C_m\int_0^p t^{m-5}(z-t)_+^2\,dt.
+\end{equation}
+Since $D_t(z)=2z(2z^2-3zt+t^2)$ for $t\le z$,
+\begin{align}\label{eq:powerintD}
+ \int_0^p t^{k}D_t(z)\,dt
+ &=2z^{k+4}\left(\frac2{k+1}-\frac3{k+2}+\frac1{k+3}\right)\notag\\
+ &=\frac{2(k+5)z^{k+4}}{(k+1)(k+2)(k+3)}
+ =\frac{mz^{m-1}}{C_m}.
+\end{align}
+Apply \eqref{eq:powerintD} with $z=p,\Lambda,M$ to the three powers $p^{m-1},\Lambda^{m-1},M^{m-1}$ in \eqref{eq:E}, and \eqref{eq:powerint} to the remaining terms written as
+\[
+ \Lambda^m=\Lambda^2\cdot\Lambda^{m-2},\qquad
+ M^m=M^2\cdot M^{m-2},\qquad
+ pq^{m-1}=pq\cdot q^{m-2}.
+\]
+All four points $p,\Lambda,M,q$ lie in $[0,p]$ by \eqref{eq:ordering}. Comparing with \eqref{eq:K} term by term yields
+\begin{equation}\label{eq:Eint}
+ E_m=C_m\int_0^p t^{m-5}\mathcal K(t)\,dt
+ \qquad(m\ge5).
+\end{equation}
+It therefore remains to prove $\mathcal K(t)\ge0$ for every cutoff $t\in[0,p]$. This is a stronger assertion than positivity of the integrals alone, and it contains no cycle-length parameter.
+
+\section{The length-independent scalar lemma}
+All notation in the next lemma is local. The exceptional spectral level is normalized to one.
+\begin{lemma}[Truncated-square inequality]\label{lem:scalar}
+Suppose
+\begin{equation}\label{eq:normalized}
+ 0<y<x<1<P,\qquad Px=1+y^2,\qquad P\le2x.
+\end{equation}
+Set $h=1-x$, and let $u,v\ge0$ satisfy $u+v\ge h$. Put
+\[
+ A(t)=\frac{D_t(P)-D_t(1)}{P+1},\qquad
+ B(t)=\frac{D_t(P)-D_t(y)}{P+y}.
+\]
+Then, for $0\le t\le P$,
+\begin{align}\label{eq:Phi}
+ \Phi(t)={}&\frac{1+y^2}{y^2(P-1)}A(t)u^2+(1-y)B(t)v\notag\\
+ &+(1+y^2)(x-t)_+^2-(1-t)_+^2-y^2(y-t)_+^2
+ \ge0.
+\end{align}
+\end{lemma}
+\begin{proof}
+For fixed $t\ge0$, $D_t(z)$ is nonnegative and nondecreasing in $z\ge0$. Indeed it vanishes for $z\le t$, and for $z\ge t$,
+\[
+ \frac{d}{dz}D_t(z)=12(z-t)^2+12t(z-t)+2t^2\ge0.
+\]
+In particular $A(t),B(t)\ge0$.
+
+\subsection*{Two coefficient bounds}
+The bounds needed above the cutoff $y$ are
+\begin{align}
+ A(t)&\ge P-1 &&(0\le t\le1),\label{eq:Abound}\\
+ (1-y)B(t)&\ge2(1-t) &&(y\le t\le1).\label{eq:Bbound}
+\end{align}
+For the first, on $[0,1]$,
+\[
+ A'(t)=\frac{2(P-1)}{P+1}\bigl(2t-3(P+1)\bigr)<0.
+\]
+Thus
+\[
+ A(t)\ge A(1)=\frac{2P(P-1)(2P-1)}{P+1}\ge P-1;
+\]
+the last difference equals $(P-1)^2(4P+1)/(P+1)$.
+
+For \eqref{eq:Bbound}, set $r=1-t$, so $0\le r\le1-y$. Here $D_t(y)=0$ and
+\[
+ B(t)=2\frac{P}{P+y}(P-t)(2P-t).
+\]
+Each displayed factor is nonnegative and nondecreasing in $P\ge1+y^2$, and $P\ge1+y^2$ follows from $Px=1+y^2$ and $x<1$. It suffices to substitute $P=1+y^2$. After clearing the positive denominator and dividing by two, the needed inequality is certified by
+\begin{align}\label{eq:Bcert}
+ &(1-y)(1+y^2)(r+y^2)(r+1+2y^2)-r(1+y+y^2)\notag\\
+ &\quad=(1-y)(1+y^2)(r-y)^2\notag\\
+ &\qquad\quad+y^2r\bigl((1-y)^2+y^2(2-3y+2y^2)\bigr)\notag\\
+ &\qquad\quad+2y^4(1+y^2)(1-y-r)\ge0.
+\end{align}
+All terms are nonnegative because $r\le1-y$ and
+$2-3y+2y^2=2(y-3/4)^2+7/8>0$.
+
+\subsection*{Cutoffs at or above $y$}
+For $y\le t\le x$, write $r=1-t$, so $x-t=r-h$. Apply \eqref{eq:Abound}--\eqref{eq:Bbound}, and then use $v\ge h-u$:
+\begin{align}\label{eq:middlesquares}
+ \Phi(t)&\ge\frac{1+y^2}{y^2}u^2+2r(h-u)+(1+y^2)(r-h)^2-r^2\notag\\
+ &=\left(y(r-h)-\frac uy\right)^2+(u-h)^2\ge0.
+\end{align}
+For $x\le t\le1$, $0\le r\le h$ and the reference term vanishes. Since $(1+y^2)/y^2\ge1$, the same bounds give
+\begin{align}\label{eq:uppersquare}
+ \Phi(t)&\ge u^2+2r(h-u)-r^2\notag\\
+ &=(u-r)^2+2r(h-r)\ge0.
+\end{align}
+For $1\le t\le P$, only the nonnegative coupling terms involving $D_t(P)$ remain. Thus $\Phi(t)\ge0$ for every $t\ge y$.
+
+\subsection*{A consequence of the density restriction}
+To treat $t\le y$, we first record a bound on $h$. From $P\le2x$ and $Px=1+y^2$,
+\[
+ y^2\le2x^2-1=1-4h+2h^2.
+\]
+In particular $x>1/\sqrt2>1/2$, and
+\[
+ (2x-1)^2-y^2\ge2(1-x)^2\ge0.
+\]
+Hence $y\le2x-1$, or $h\le(1-y)/2$. Substituting this in the preceding inequality,
+\[
+ 4h\le1-y^2+2h^2
+ \le(1-y)(1+y)+\frac{(1-y)^2}{2}
+ =\frac{(1-y)(3+y)}2.
+\]
+Therefore
+\begin{equation}\label{eq:hbound}
+ h\le\frac{(1-y)(3+y)}8.
+\end{equation}
+Set, for the rest of this proof,
+\[
+ H=(1+y^2)h-y^2(1-y).
+\]
+Since $h>0$, \eqref{eq:hbound} implies
+\begin{align}\label{eq:Hbound}
+ \frac{H}{(1-y)h}
+ &=\frac{1+y^2}{1-y}-\frac{y^2}{h}\notag\\
+ &\le\frac{3+4y-y^2}{3+y}\notag\\
+ &=\frac32-\frac{(1-y)(3-2y)}{2(3+y)}\le\frac32.
+\end{align}
+
+\subsection*{Monotonicity for cutoffs below $y$}
+On $[0,y]$, all positive parts in \eqref{eq:Phi} can be removed. The resulting polynomial is a convex quadratic because
+\begin{equation}\label{eq:convex}
+ \Phi''(t)=\frac{4(1+y^2)}{y^2(P+1)}u^2
+ +\frac{4(1-y)(P-y)}{P+y}v\ge0.
+\end{equation}
+Its left derivative at $y$ is
+\begin{align}\label{eq:derivative}
+ \frac12\Phi'(y^-)=H
+ &-\frac{1+y^2}{y^2}\left(3-\frac{2y}{P+1}\right)u^2\notag\\
+ &-\frac{(P-y)(3P+y)}{P+y}(1-y)v.
+\end{align}
+We claim that this is nonpositive. If $H\le0$, the claim is immediate. Suppose $H>0$, so
+\begin{equation}\label{eq:Hpositive}
+ h>\frac{y^2(1-y)}{1+y^2}.
+\end{equation}
+First, since $P>1>y$,
+\begin{equation}\label{eq:firstcost}
+ \frac{1+y^2}{y^2}\left(3-\frac{2y}{P+1}\right)
+ \ge\frac{2(1+y^2)}{y^2}\ge\frac{2(1-y)}h.
+\end{equation}
+For the other coefficient, \eqref{eq:Hpositive} gives
+\[
+ P=\frac{1+y^2}{1-h}\ge(1+y^2)(1+h)
+ \ge1+2y^2-y^3=:P_0.
+\]
+The function
+\[
+ \frac{(P-y)(3P+y)}{P+y}=3P-5y+\frac{4y^2}{P+y}
+\]
+increases in $P\ge y$: its derivative is $3-4y^2/(P+y)^2\ge2$. Here $P_0>y$. At $P=P_0$, the following identity proves that this function is at least two:
+\begin{align}\label{eq:derivcert}
+ &(P_0-y)(3P_0+y)-2(P_0+y)\notag\\
+ &\quad=(1-2y)^2+y^2(1-y)(6y^2-5y+3)
+ +3y^4(1-y)^2\ge0,
+\end{align}
+since $6y^2-5y+3=6(y-5/12)^2+47/24>0$. We have shown
+\begin{equation}\label{eq:secondcost}
+ \frac{(P-y)(3P+y)}{P+y}\ge2\qquad\text{whenever }H>0.
+\end{equation}
+By \eqref{eq:firstcost}--\eqref{eq:secondcost} and $v\ge h-u$, the sum of the two subtracted terms in \eqref{eq:derivative} is at least
+\begin{align}\label{eq:finalsquare}
+ \frac{2(1-y)}h u^2+2(1-y)v
+ &\ge\frac{2(1-y)}h u^2+2(1-y)(h-u)\notag\\
+ &=2(1-y)h\left[\left(\frac uh-\frac12\right)^2+\frac34\right]\notag\\
+ &\ge\frac32(1-y)h\ge H,
+\end{align}
+where the final inequality is \eqref{eq:Hbound}. Thus $\Phi'(y^-)\le0$.
+
+Convexity on the lower interval now gives $\Phi'(t)\le\Phi'(y^-)\le0$ for $0\le t<y$. Consequently $\Phi(t)\ge\Phi(y)\ge0$ for $t\le y$, completing the proof. Only the derivative of the polynomial on the lower interval is used; differentiability across the cutoff junction is not assumed.
+\end{proof}
+
+\section{Application of the scalar lemma and completion}
+We verify all hypotheses of Lemma~\ref{lem:scalar} for the graphon parameters. Put
+\begin{equation}\label{eq:normalizeapplication}
+ P=\frac p\Lambda,\qquad x=\frac q\Lambda,\qquad
+ y=\frac M\Lambda,\qquad h=1-x,
+\end{equation}
+and, with $c$ and the sign of $\phi$ as in Lemma~\ref{lem:comp}, put
+\begin{equation}\label{eq:normalizecoupling}
+ u=\frac{c\gamma_+}{\Lambda},\qquad
+ v=\frac{s^2}{\Lambda(\Lambda-M)}.
+\end{equation}
+By \eqref{eq:ordering} and $M>0$,
+\[
+ 0<y<x<1<P.
+\]
+Moreover $M^2+\Lambda^2=pq$ gives $Px=1+y^2$, while $q\ge1/3$ gives $p\le2q$, hence $P\le2x$. Inequality \eqref{eq:comp} is exactly $u+v\ge h$. Replacing $\phi$ by $-\phi$ changes $\gamma$ into $-\gamma$ and leaves $g_s$, $s$, and $E_m$ unchanged, since $E_m$ depends on $\gamma$ only through $\gamma^2$; so the choice of sign in Lemma~\ref{lem:comp} does not affect \eqref{eq:Ebound}.
+
+The definition of $c$ yields
+\[
+ c^2=\frac{y^2(P-1)}{1+y^2},\qquad
+ \frac{\gamma^2}{\Lambda^2}\ge
+ \frac{1+y^2}{y^2(P-1)}u^2,\qquad
+ \frac{s^2}{\Lambda^2}=(1-y)v.
+\]
+Finally $D_{\Lambda t}(\Lambda z)=\Lambda^3D_t(z)$, so \eqref{eq:K} and nonnegativity of its coupling coefficients give
+\begin{align*}
+ \frac{\mathcal K(\Lambda t)}{\Lambda^4}
+ ={}&\frac{\gamma^2}{\Lambda^2}A(t)+\frac{s^2}{\Lambda^2}B(t)\notag\\
+ &+(1+y^2)(x-t)_+^2-(1-t)_+^2-y^2(y-t)_+^2
+ \ge\Phi(t)\ge0
+\end{align*}
+for every $t\in[0,P]$. Thus $\mathcal K\ge0$ throughout $[0,p]$.
+
+For each odd $m\ge5$, \eqref{eq:Eint} gives $E_m\ge0$, and \eqref{eq:Ebound} proves
+\[
+ t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+This settles the exceptional-eigenvalue case; the case without an exceptional eigenvalue was already proved in Section~\ref{sec:isolate}. The step approximation \eqref{eq:continuity} returns the result to arbitrary graphons. Together with the triangle argument and the case $p\le1/2$ in Section~\ref{sec:reductions}, this proves Theorem~\ref{thm:main}.\hfill$\square$
+
+\section*{Structure and interpretation}
+The proof has four substantive components. The excursion identity separates the constant contribution, the nonconstant trace, and the coupling contributions, with positivity justified only after the appropriate sums. The Hilbert--Schmidt bound leaves at most one compression eigenvalue above $q$. The absolute-value and positive-part comparisons of its eigenfunction force sufficient coupling either directly to that eigenfunction or to the remaining spectral subspace. The truncated-square lemma then compares these two contributions with the spectral deficit at every cutoff. All higher odd powers follow from the same positive integral representation.
+
+Beyond completions of squares, the proof uses two polynomial certificates, \eqref{eq:Bcert} and \eqref{eq:derivcert}. The first lower-bounds the remaining-subspace excursion coefficient, and the second controls the derivative below the smallest cutoff. The central interval is settled by the two squares in \eqref{eq:middlesquares}. After the excursion reduction, no estimate depends on $m$.
+
+\paragraph{Verification note.}
+The accompanying file \nolinkurl{verify_complete_odd_cycle_proof.py} checks the displayed algebraic certificates, the normalization, representative exact excursion identities, and the power-integral formula using rational symbolic arithmetic. These checks supplement the mathematical proof; they are not a formalization in a proof assistant.
+
+\begin{thebibliography}{1}
+\bibitem{partI}
+T.~Kim, J.~Baek, S.~Im, J.~Lee, and H.~Yang.
+\newblock Goodman-type lower bounds for odd cycles {I}: {T}he dense regime.
+\newblock Manuscript, 2026.
+\end{thebibliography}
+\end{document}

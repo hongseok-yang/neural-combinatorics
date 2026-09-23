@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections import defaultdict
 from fractions import Fraction
 from pathlib import Path
@@ -18,6 +19,9 @@ from full_s4_interval_sos import raw_by_isolated
 from full_s4_rooted_sos import young_integer_transforms
 from rooted_sos_search import fixed_density_key
 
+# Exact Gram factors and corrections run to several thousand digits, as every
+# tracked certificate in experiments/ shows; the writer must not be capped.
+sys.set_int_max_str_digits(0)
 
 NAMES = ["4", "31", "22", "211", "1111"]
 

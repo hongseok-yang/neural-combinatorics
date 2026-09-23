@@ -163,6 +163,7 @@ Atlas & interval & certificate basename & minimum margin $>$\\
 151 & $[1/2,2/3]$ & \path{atlas151_exact_lower_interval_sos.json} & $0.9929$\\
 151 & $[2/3,1]$ & \path{atlas151_exact_upper_interval_sos.json} & $0.9826$\\
 153 & $[37/60,2/3]$ & \path{atlas153_exact_middle_interval_sos.json} & $0.9961$\\
+153 & $[3/5,2/3]$ & \path{atlas153_exact_middle35_interval_sos.json} & $0.9977$\\
 153 & $[2/3,1]$ & \path{atlas153_exact_upper_interval_sos.json} & $0.9970$\\
 157 & $[2/3,1]$ & \path{atlas157_exact_interval_sos.json} & $0.9789$\\
 168 & $[1/2,2/3]$ & \path{atlas168_exact_lower_interval_sos.json} & $0.9922$\\
@@ -288,5 +289,50 @@ final search job was a CVXOPT fixed-margin feasibility solve for Atlas 203 on
 $[2/3,7/10]$ in the degree-two four-root cone.  It ran for approximately
 42 minutes, ended with a solver failure, and wrote no candidate certificate;
 this numerical failure has no mathematical sign implication.
+
+\section{What the Lean formalization actually proves}
+
+Atlas 153, 171, 174, and 188 were carried into Lean on 2026-09-23, each as a
+sorry-free \verb|SatisfiesLowerBound| theorem whose \verb|#print axioms| gives
+only \verb|propext|, \verb|Classical.choice|, and \verb|Quot.sound|.  Two
+deviations from this note are worth stating.
+
+First, none of the four Lean rows uses the self-amalgam theorem of
+\path{notes/four_self_amalgam_partial_ranges.tex}, whose four proved ranges are
+tabulated above.  For each of these graphs the catalogue target factors as
+\[
+ \Phi_H(p)=p\,(2p-1)\,Q_H(p),
+\]
+and each $Q_H'$ has negative discriminant, so $Q_H$ is strictly increasing.
+With $a_H$ the left endpoint of the middle certificate,
+\[
+\begin{array}{c|c|c}
+H&a_H&Q_H(a_H)\\ \hline
+153 &3/5  &-1/125\\
+171 &5/8  &-1/512\\
+174 &7/12 &-17/1728\\
+188 &3/5  &-1/125,
+\end{array}
+\]
+so $Q_H\le Q_H(a_H)<0$ on $[1/2,a_H]$, while $p\ge0$ and $2p-1\ge0$ there.
+Hence $\Phi_H(p)\le0\le t(H,W)$ on $[1/2,a_H]$, by nonnegativity of the
+homomorphism density alone.  Each Lean row proves this in a single file
+\verb|AtlasNNN/Low.lean|, about forty lines, and joins it to the two exact
+certificates by a case split at $a_H$.
+
+Second, Atlas 153's middle interval in Lean is $[3/5,2/3]$, not the
+$[37/60,2/3]$ that the campaign of 2026-08-25 produced.  The sign argument
+above reaches only to the root $0.6068\ldots$ of $Q_{153}$, which lies below
+$37/60=0.6166\ldots$, so the August interval would have left a genuine gap.
+The interval SOS was therefore re-solved on the wider $[3/5,2/3]$, giving
+\path{atlas153_exact_middle35_interval_sos.json} in the table above; that file,
+not \path{atlas153_exact_middle_interval_sos.json}, is what the Lean row
+carries.  The wider interval also keeps the affine denominator at $15$, matching
+Atlas 188.
+
+Each row is 98 Lean files and passes a fresh sequential rebuild within one
+hour and 16 GiB; the four measurements are 40m52s to 42m16s at 11.88 to
+11.91 GiB.  The per-row certificates and measurements are in
+\path{lean/docs/ATLAS153_VERIFICATION_PROGRESS.md} and its three companions.
 
 \end{document}
