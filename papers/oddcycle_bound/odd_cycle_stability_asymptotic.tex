@@ -6,6 +6,8 @@
 \usepackage{microtype}
 \usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+\usepackage{authblk}
+\renewcommand{\Affilfont}{\small}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -32,10 +34,18 @@
 \newcommand{\abs}[1]{\left\lvert #1\right\rvert}
 \newcommand{\Var}{\operatorname{Var}}
 
-\title{Quantitative stability for the odd-cycle Goodman bound:\\
-an asymptotic two-parameter form}
-\author{}
-\date{}
+\title{Goodman-type lower bounds for odd cycles III: Quantitative stability}
+\author[1,2]{Taeyoung~Kim}
+\author[3]{Jineon~Baek}
+\author[4]{Seonghyuk~Im}
+\author[2]{Joonkyung~Lee}
+\author[1,2]{Hongseok~Yang}
+\affil[1]{School of Computing, KAIST, Korea}
+\affil[2]{School of Computational Sciences, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[3]{June E Huh Center for Mathematical Challenges, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[4]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[ ]{\newline\texttt{taeyoungkim21@kaist.ac.kr}, \texttt{{jineon.kias}@gmail.com}, \texttt{seonghyuk@kias.re.kr}, \texttt{joonkyunglee@kias.re.kr}, \texttt{hongseokyang@kias.re.kr}}
+\date{September 23, 2026}
 
 \begin{document}
 \maketitle
@@ -60,7 +70,7 @@ depends only on $m$ and $k$.
 \label{sec:statement}
 
 References to numbered results of the manuscript mean the numbering in
-\cite{dense}. The argument below is conditional on its Theorem~1.1 and
+\cite{kim2026goodman}. The argument below is conditional on its Theorem~1.1 and
 Theorem~1.3, its excursion expansion, its polynomial nonnegativity, and
 its Gamma-moment lemma; it uses neither its Proposition~6.1 nor its
 qualitative stability corollary.
@@ -77,7 +87,8 @@ operator. The path $P_j$ has $j$ edges. Throughout, $m\geq3$ is odd and
 \[
  G_m(p)=p^m-p(1-p)^{m-1}.
 \]
-For a bounded measurable kernel $F$ we use the cut norm
+For a bounded measurable kernel $F$ we use the cut norm and cut
+distance~\cite{lovasz2006limits,borgs2008convergent,lovasz2012large},
 $\norm{F}_{\square}=\sup_{S,T}\abs{\int_{S\times T}F}$ over measurable
 $S,T\subseteq[0,1]$, and
 \[
@@ -99,12 +110,14 @@ relabellings and using the invariance of the two norms under them.
 For an integer $k\geq3$ we set $q_k=1/k$ and $p_k=1-1/k$, we let $W_k$ be
 the balanced complete $k$-partite graphon, and we put $U_k=1-W_k$.
 
+\paragraph{Background.}
+Stability statements of this kind go back to Simonovits~\cite{simonovits1968method}. For clique densities, the structure of graphs that nearly minimize the density was determined by Pikhurko and Razborov~\cite{pikhurko2017asymptotic} for triangles and by Kim, Liu, Pikhurko and Sharifzadeh~\cite{kim2020asymptotic} for general cliques. For odd cycles, \cite[Corollary~6.3]{kim2026goodman} gives qualitative stability at the densities $p_k$; the present article makes it quantitative.
+
 \paragraph{Convention on constants.}
 Throughout, $m\geq3$ is a fixed odd integer and $k\geq3$ a fixed integer.
 We write $A=O(B)$, or $A\lesssim B$, to mean $A\leq CB$ for some
 $C=C(m,k)<\infty$ depending only on $m$ and $k$; the value of $C$ may
-change from line to line. No constant is tracked. Explicit admissible
-values for all of them are computed in \cite{explicit}.
+change from line to line. No constant is tracked.
 
 \begin{theorem}[Two-parameter stability]
 \label{thm:main}
@@ -161,7 +174,7 @@ ingredients, each stated as a self-contained estimate:
 
 \begin{itemize}
 \item a \emph{degree estimate} (\Cref{prop:degree}): the gap in the
-two-colour inequality of \cite[Theorem~1.3]{dense} dominates the
+two-colour inequality of \cite[Theorem~1.3]{kim2026goodman} dominates the
 variance of the degree function, with a positive constant depending only
 on $m$;
 \item \emph{robust spectral estimates} (\Cref{lem:spectral}): a cycle
@@ -172,8 +185,11 @@ graphon with nearly correct degrees and few cherries with a missing
 closing edge is close to a balanced union of $k$ cliques.
 \end{itemize}
 
-The third step is purely combinatorial and constructive: it uses no
-regularity lemma and no removal lemma, and its only smallness threshold
+The third step is purely combinatorial and constructive. Its selection
+step is the pivot step of the correlation-clustering algorithm of Ailon,
+Charikar and Newman~\cite{ailon2008aggregating}, and it uses neither the
+regularity lemma~\cite{szemeredi1978regular} nor the induced removal
+lemma~\cite{alon2000efficient}; its only smallness threshold
 is explicit, with the trivial bound $\delta_1\leq1$ covering the
 complementary range. \Cref{thm:sharp} is proved in
 Section~\ref{sec:sharpness}.
@@ -181,7 +197,7 @@ Section~\ref{sec:sharpness}.
 \section{The degree estimate}
 \label{sec:degree}
 
-Recall from \cite[Section~3]{dense} that for $d\geq0$, $h_d$ denotes the
+Recall from \cite[Section~3]{kim2026goodman} that for $d\geq0$, $h_d$ denotes the
 complete homogeneous symmetric polynomial of degree $d$, with $h_0=1$,
 and that for $p=1-q$ and $n=m-2$ the first excursion polynomial is
 \begin{equation}\label{eq:first-poly}
@@ -224,8 +240,8 @@ because $p\geq q\geq0$. Consequently
 so it suffices to bound $P_{m,1}(q;\lambda)$ from below for
 $\lambda\geq0$.
 
-Let $\lambda>0$. With $\rho_{n,m}$ as in \cite[Eq.~(5.7)]{dense}, the
-Gamma representation \cite[Eq.~(5.15)]{dense}, specialised to $r=1$,
+Let $\lambda>0$. With $\rho_{n,m}$ as in \cite[Eq.~(5.7)]{kim2026goodman}, the
+Gamma representation \cite[Eq.~(5.15)]{kim2026goodman}, specialised to $r=1$,
 reads
 \[
  P_{m,1}(q;\lambda)
@@ -234,12 +250,12 @@ reads
  Z\sim\operatorname{Gamma}(m-1,1)
 \]
 with $Y$ and $Z$ independent. The centred identity
-\cite[Eq.~(5.18)]{dense}, again with $r=1$, expresses
+\cite[Eq.~(5.18)]{kim2026goodman}, again with $r=1$, expresses
 $n\rho_{n,m}(\tfrac12+v)$ as $2a_0$ plus a combination, with positive
 coefficients $a_j=2^{2j+1-n}\binom{n}{2j}$, of the quantities
 $2(1+j)v^{2j}-jv^{2j-1}$ for $1\leq j\leq (n-1)/2$; here
 $a_0=2^{1-n}$. For $0\leq q\leq1/3$ and any $x\geq0$, the proof of
-\cite[Proposition~5.6]{dense} shows that each of these quantities has
+\cite[Proposition~5.6]{kim2026goodman} shows that each of these quantities has
 nonnegative expectation at $v=q+xY-\tfrac12$. Hence
 \[
  n\,\E\rho_{n,m}(q+xY)\ \geq\ 2a_0=2^{2-n}
@@ -251,21 +267,14 @@ $\lambda>0$. Continuity extends this to $\lambda=0$, and
 $c_m\geq2^{2-n}=2^{4-m}>0$.
 \end{proof}
 
-\begin{remark}
-The bound $c_m\geq2^{4-m}$ recorded in the proof is very lossy. The
-true order of magnitude is
-$c_m=\tfrac{9m}{7}\bigl(\tfrac23\bigr)^{m}\bigl(1+O((3/4)^m)\bigr)$,
-and for $m=3,5$ one has $c_3=2$ and $c_5=143/144$; see
-\cite[Lemma~3.1]{explicit}. Only $c_m>0$ is used below.
-\end{remark}
-
-Following \cite[Eq.~(6.1)]{dense}, we write, for an arbitrary graphon
+Following \cite[Eq.~(6.1)]{kim2026goodman}, we write, for an arbitrary graphon
 $W$ of edge density $p$ with $U=1-W$ and $q=1-p$,
 \begin{equation}\label{eq:Phi-definition}
  \Phi_m(W)=t(C_m,W)+t(C_m,U)-t(P_{m-1},U)-G_m(p),
 \end{equation}
-so that \cite[Theorem~1.3]{dense} states $\Phi_m(W)\geq0$ for
-$p\geq2/3$, and \cite[Eq.~(6.3)]{dense} is the gap decomposition
+so that \cite[Theorem~1.3]{kim2026goodman}, a strengthening of the
+extended-commonality inequality of Kim and Lee~\cite{kim2024extended} for
+odd cycles, states $\Phi_m(W)\geq0$ for $p\geq2/3$, and \cite[Eq.~(6.3)]{kim2026goodman} is the gap decomposition
 \begin{equation}\label{eq:gap-decomposition}
  t(C_m,W)-G_m(p)
  =\Phi_m(W)+\bigl[t(P_{m-1},U)-t(C_m,U)\bigr],
@@ -281,26 +290,26 @@ Every graphon $W$ with edge density $p\geq2/3$ satisfies
 
 \begin{proof}
 Suppose first that $W$ is a step graphon as in
-\cite[Section~2]{dense}. The excursion expansion
-\cite[Eq.~(3.10)]{dense} reads
+\cite[Section~2]{kim2026goodman}. The excursion expansion
+\cite[Eq.~(3.10)]{kim2026goodman} reads
 \[
  \Phi_m(W)=\sum_{r=1}^{(m-1)/2}
  \int P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
        \,d\mu(\lambda_1)\cdots d\mu(\lambda_r),
 \]
 where the measure $\mu$ is nonnegative and, by
-\cite[Lemma~2.2 and Eq.~(2.3)]{dense}, is supported on $[-1/2,1/2]$ and
+\cite[Lemma~2.2 and Eq.~(2.3)]{kim2026goodman}, is supported on $[-1/2,1/2]$ and
 has total mass
 \[
  \mu(\R)=\norm{g}_2^2=\int_0^1\bigl(d_W(x)-p\bigr)^2\,dx .
 \]
 Since $p\geq2/3$ gives $q\leq1/3$, all the integrands are nonnegative by
-\cite[Section~5]{dense}. Discarding every term with $r\geq2$ and applying
+\cite[Section~5]{kim2026goodman}. Discarding every term with $r\geq2$ and applying
 \Cref{lem:first-poly} to the term $r=1$ yields
 \eqref{eq:degree-coercivity}.
 
 For a general graphon let $W_s$ be the same-density dyadic step
-approximations of \cite[Lemma~2.1 and Appendix~A]{dense}, so that
+approximations of \cite[Lemma~2.1 and Appendix~A]{kim2026goodman}, so that
 $\norm{W_s-W}_1\to0$ while $t(K_2,W_s)=p$ for every $s$. Telescoping the
 edge factors shows that every homomorphism density occurring in
 \eqref{eq:Phi-definition} converges, and the degree variance converges as
@@ -310,11 +319,11 @@ assertion.
 
 \begin{remark}
 \Cref{prop:degree} is exactly the stability statement for
-\cite[Theorem~1.3]{dense}: the gap in the two-colour inequality is
+\cite[Theorem~1.3]{kim2026goodman}: the gap in the two-colour inequality is
 bounded below by a fixed multiple of the degree variance, and it vanishes
 precisely for $p$-regular graphons. Retaining instead only the term
 $r=(m-1)/2$, whose integrand is the constant $m-1$, recovers
-\cite[Proposition~6.1]{dense}. Retaining every term gives the full
+\cite[Proposition~6.1]{kim2026goodman}. Retaining every term gives the full
 lower bound $\Phi_m(W)\geq\sum_r c_{m,r}\sigma^{2r}$ with
 $c_{m,r}=\min P_{m,r}$ over $[-1/2,1/2]^r$, together with the matching
 upper bound obtained by replacing each minimum by the corresponding
@@ -339,6 +348,11 @@ disjoint union of cliques.
 If $U$ has edge density $q$ and $\ell\geq2$ is even, then
 $t(P_\ell,U)\geq q^\ell$.
 \end{lemma}
+
+This is the even case of the inequality of Mulholland and
+Smith~\cite{mulholland1959inequality} and Blakley and
+Roy~\cite{blakley1965holder}, which holds for every $\ell$. For even $\ell$
+the spectral proof is short.
 
 \begin{proof}
 Let $\nu$ be the spectral measure of the self-adjoint operator $T_U$ at
@@ -376,7 +390,8 @@ Hilbert--Schmidt, hence compact with real spectrum, and
 \]
 
 \emph{A nonnegative extremal eigenfunction.}
-Let $h$ be a real unit eigenfunction for an eigenvalue of modulus
+The following is the argument behind the Perron--Frobenius theorem for
+nonnegative matrices~\cite[Chapter~8]{horn2012matrix}. Let $h$ be a real unit eigenfunction for an eigenvalue of modulus
 $\varrho$. Since $U\geq0$,
 \[
  \varrho=\abs{\langle h,T_Uh\rangle}\leq\langle\abs h,T_U\abs h\rangle
@@ -405,7 +420,8 @@ which is \eqref{eq:operator-bound}; in particular
 
 \emph{The deficit.}
 Let $(\lambda_i)$ list the nonzero eigenvalues of $T_U$ with
-multiplicity, so that $\sum_i\lambda_i^2=\int U^2\leq q$ and
+multiplicity, so that, by the Hilbert--Schmidt identity and the trace
+formula~\cite{lovasz2012large}, $\sum_i\lambda_i^2=\int U^2\leq q$ and
 $t(C_m,U)=\sum_i\lambda_i^m$; all series below converge absolutely.
 Since $\eta(U)=q-\int U^2$,
 \begin{equation}\label{eq:F}
@@ -491,6 +507,10 @@ $H(x,\cdot)$ and using Fubini's theorem and the symmetry of $H$,
  =3\tau_R\leq3\tau,
 \end{equation}
 where $\tau_R$ is the integral \eqref{eq:tau-def} restricted to $R^3$.
+Each cherry with a missing closing edge is counted three times, once from
+each of its vertices. This is the charging argument for the pivot
+algorithm of Ailon, Charikar and Newman~\cite{ailon2008aggregating}, in
+which a vertex and its neighbourhood are taken as one cluster.
 
 \paragraph{Extraction.}
 Suppose disjoint sets $A_1,\ldots,A_t$ have been selected, let
@@ -599,7 +619,7 @@ $\Gamma=t(C_m,W)-G_m(p_k)$. Then $\Gamma\geq0$ and
 \begin{proof}
 Put $p=p_k$, $q=1/k$ and $U=1-W$, and let
 $\sigma^2=\int_0^1(d_W-p)^2$; since $d_U-q=-(d_W-p)$, this also equals
-$\int_0^1(d_U-q)^2$. As $p\geq2/3$, \cite[Theorem~1.1]{dense} gives
+$\int_0^1(d_U-q)^2$. As $p\geq2/3$, \cite[Theorem~1.1]{kim2026goodman} gives
 $\Gamma\geq0$.
 
 \emph{Two small quantities.}
@@ -682,7 +702,7 @@ $C_m$ and using \eqref{eq:hypotheses},
  \ \leq\ \delta_C+m\,\delta_e
  \ \lesssim\ \delta_e+\delta_C ,
 \end{equation}
-the left inequality being \cite[Theorem~1.1]{dense} applied to
+the left inequality being \cite[Theorem~1.1]{kim2026goodman} applied to
 $\widehat W$, whose edge density is exactly $p_k\geq2/3$. Only
 $\widehat W$ is ever subjected to the dense-regime theorem and to
 \Cref{prop:degree}; in particular the argument remains valid when $k=3$
@@ -746,7 +766,7 @@ $t(C_m,W_{(s_1,\ldots,s_k)})
 \]
 This polynomial in $\varepsilon$ is even, because interchanging the first
 two part indices replaces $\varepsilon$ by $-\varepsilon$, and its
-constant term is $G_m(p)$ by \cite[Eq.~(1.1)]{dense}.
+constant term is $G_m(p)$ by \cite[Eq.~(1.1)]{kim2026goodman}.
 
 Its coefficient of $\varepsilon^2$ is
 $\tfrac m2\sum_{j=0}^{m-2}\Tr\bigl(RB_0^jRB_0^{m-2-j}\bigr)$: there are
@@ -867,14 +887,7 @@ $t(C_m,\cdot)$ is quadratically rather than linearly sensitive. No
 linear estimate to the unrestricted family is asserted here.
 \end{remark}
 
-\begin{thebibliography}{EXP}
-\bibitem[D]{dense}
-T.~Kim, J.~Baek, S.~Im, J.~Lee, and H.~Yang,
-\emph{Goodman-type lower bounds for odd cycles I: The dense regime},
-manuscript.
-\bibitem[E]{explicit}
-\emph{Quantitative stability for the odd-cycle Goodman bound},
-companion note with explicit constants.
-\end{thebibliography}
+\bibliographystyle{abbrv}
+\bibliography{references}
 
 \end{document}
