@@ -137,7 +137,9 @@ Atlas171 completed on 2026-09-23. Its three interval bounds and the full catalog
 
 Atlas174 completed on 2026-09-23. Its three interval bounds and the full catalogue proof passed in a fresh 98-file build: 40m52s at 11.91 GiB. The installed recheck brings combined verification to 41m00s. The theorem has only the standard axioms; its example and classification are updated. See [the verification record](lean/docs/ATLAS174_VERIFICATION_PROGRESS.md).
 
-Atlas153 completed on 2026-09-23. Its three interval bounds and the full catalogue proof passed in a fresh 98-file build: 40m48s at 11.90 GiB. The installed recheck brings combined verification to 40m56s. The theorem has only the standard axioms; its example and classification are updated. Atlas127 is now the active row. See [the verification record](lean/docs/ATLAS153_VERIFICATION_PROGRESS.md).
+Atlas153 completed on 2026-09-23. Its three interval bounds and the full catalogue proof passed in a fresh 98-file build: 40m48s at 11.90 GiB. The installed recheck brings combined verification to 40m56s. The theorem has only the standard axioms; its example and classification are updated. See [the verification record](lean/docs/ATLAS153_VERIFICATION_PROGRESS.md).
+
+Atlas127 completed on 2026-09-23. Its two interval bounds and the full catalogue proof passed in a fresh 97-file build: 43m30s at 11.90 GiB. The installed recheck brings combined verification to 43m37s. The theorem has only the standard axioms; its example and classification are updated. See [the verification record](lean/docs/ATLAS127_VERIFICATION_PROGRESS.md).
 
 | Priority | Atlas | Proposed route and reason |
 |---:|---:|---|
@@ -160,7 +162,7 @@ Atlas153 completed on 2026-09-23. Its three interval bounds and the full catalog
 | 17 | 171 | **Completed.** Three interval bounds, full catalogue proof; fresh 98-file build in 42m16s at 11.88 GiB. |
 | 18 | 153 | **Completed.** Three interval bounds, full catalogue proof; fresh 98-file build in 40m48s at 11.90 GiB. |
 | 19 | 174 | **Completed.** Three interval bounds, full catalogue proof; fresh 98-file build in 40m52s at 11.91 GiB. |
-| 20 | 127 | First seek a smaller direct certificate for the catalogue bound. Its existing stronger eight-vertex proof has 184 PSD blocks and about 1.43 million integer entries; use that route only after the checker is established and benchmarked. |
+| 20 | 127 | **Completed.** Two interval bounds, full catalogue proof; fresh 97-file build in 43m30s at 11.90 GiB. |
 | 21 | 43 | Replace the retired 1,097-module `decide +kernel` chain with a compact rooted-SOS certificate on `[1/2,1]` in the `CompactS4` style (exact integer Gram data, sparse contractions, one shared checker). The house is the smallest S4 row, so the existing 118/122/124 pipeline should transfer directly; the rational certificate input `experiments/house_atlas43_rational.json` remains tracked. |
 | 22 | 196 | Reattach the existing house-cone lift `Taeyoung.Methods.RootedSOS.Atlas196.satisfiesLowerBound_coneHouse` (20 small modules, `[2/3,1]`) to the compact Atlas 43 theorem; `Taeyoung.Examples.Graph196.iso` is already in place. No new certificate is needed. |
 

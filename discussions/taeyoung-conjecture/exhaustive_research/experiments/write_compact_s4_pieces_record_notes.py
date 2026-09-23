@@ -22,7 +22,7 @@ def main():
     parser.add_argument('--next', type=int,
                         help='The row to work on next; omit when this is the last believed row.')
     args = parser.parse_args()
-    following = f'Atlas{args.next} is next.' if args.next else 'No believed row remains.'
+    following = f'Atlas{args.next} is next.' if args.next else 'no believed row remains.'
     active = f'Atlas{args.next} is now the active row. ' if args.next else ''
     atlas = args.atlas
     root = Path(__file__).resolve().parents[1]
@@ -113,7 +113,7 @@ All source hashes remained unchanged. The final theorem has only the three
 standard axioms. Its catalogue example and classification are updated;
 {following}
 
-The fresh run includes all {spell(bounds)} interval bounds, chromatic counts, graph
+The fresh run includes {'both' if bounds == 2 else f'all {spell(bounds)}'} interval bounds, chromatic counts, graph
 identification, complete `SatisfiesLowerBound` theorem, and catalogue example.
 Row artifacts were absent at the start. Compilation was sequential with
 `LEAN_NUM_THREADS=1`, Lean `-M 12288 -j 1`, a 16 GiB process-tree watchdog,
