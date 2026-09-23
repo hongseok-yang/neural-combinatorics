@@ -710,31 +710,53 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
   \end{equation}
 
-  It remains to determine the multiplicity of each block-length tuple.
-  Mark a cut in the cyclic word after a $Q$-block, so that the shifted word
-  begins with $P$ and ends with $Q$. Every word with $r$ cyclic $Q$-blocks admits
-  exactly $r$ such marked cuts. Conversely, an ordered tuple
-  $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ satisfying the length
-  condition determines the cyclic pattern, and its first position can be
-  placed at any of the $m$ labelled positions. This counts marked placements
-  with multiplicity, so the statement remains valid for periodic words.
-  Because a circular shift does not change the trace, weighted double
-  counting with \eqref{eq:excursion-length-weight} gives
+  To sum over all words with $r$ cyclic $Q$-blocks, we count pairs consisting
+  of a word $R_1\cdots R_m$, whose positions are labelled $1,\ldots,m$, and
+  a marked boundary where $Q$ is followed by $P$.
+  The mark specifies where to start reading the word in cyclic order, and
+  hence which pair of blocks is recorded as $(\alpha_1,\beta_1)$.
+  Reading from the mark begins with $P$ and ends with $Q$, so no block is
+  split. Each word has exactly $r$ eligible boundaries and therefore gives
+  $r$ marked words.
+
+  Conversely, fix an ordered tuple
+  $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ of nonnegative integers
+  satisfying the length condition in \eqref{eq:excursion-length-weight}.
+  Choose any position $j\in\{1,\ldots,m\}$ for the first $P$ of its first
+  block, and fill the positions in cyclic order with $\alpha_1+1$ copies
+  of $P$, then $\beta_1+1$ copies of $Q$, and so on, wrapping from position
+  $m$ back to position $1$. Mark the boundary immediately before $j$.
+  The block lengths are positive and sum to $m$, so every choice of $j$
+  gives a word with exactly $r$ cyclic $Q$-blocks.
+  Beginning with $P$ and ending with $Q$ refers to reading from the mark;
+  the original trace sum allows any letters at positions $1$ and $m$.
+  Thus, each tuple gives $m$ marked words. Even if two placements produce
+  the same letters because the word is periodic, their marked boundaries
+  occupy different labelled positions, so the marked words are distinct.
+
+  These constructions are inverse: a marked word determines both the
+  ordered tuple and the position $j$ immediately after its mark.
+  Give each marked word the weight $\Tr(R_1M_U\cdots R_mM_U)$.
+  By cyclicity of the trace and \eqref{eq:excursion-length-weight}, this
+  weight depends only on the tuple, not on $j$.
+  Summing the weights using the two descriptions therefore gives
   \begin{equation}\label{eq:U-r-excursions}
-    \begin{aligned}
-      &\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
+      \Bigg(
+        r\!\!\!\!
+        \sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
                        R_1\cdots R_m\text{ has }r\text{ cyclic $Q$-blocks}}}
-        \Tr(R_1M_U\cdots R_mM_U)\\
-      &\qquad=\frac mr
+        \Tr(R_1M_U\cdots R_mM_U)\Bigg)
+      =
+      \Bigg(
+        m \!\!\!\!
         \sum_{\substack{\alpha_1,\beta_1,\ldots,
                           \alpha_r,\beta_r\ge0\\
                           \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
         q^{\alpha_1+\cdots+\alpha_r}
-        \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
-    \end{aligned}
+        \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g\Bigg).
   \end{equation}
-  Summing \eqref{eq:U-r-excursions} over $r$ and including the two
-  unmixed words gives
+  Dividing \eqref{eq:U-r-excursions} by $r$ gives the factor $m/r$.
+  Summing over $r$ and including the two unmixed words gives
   \[
     \tC mU=q^m+\Tr(A^m)
     +\sum_{r=1}^{(m-1)/2}\frac mr
@@ -747,8 +769,8 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
   Applying the moment identity \eqref{eq:moments} now gives
   \[
     \begin{aligned}
-      \tC mU={}&q^m+\Tr(A^m)\\
-      &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \tC mU={}&q^m+\Tr(A^m)
+      +\sum_{r=1}^{(m-1)/2}\frac mr
       \int\!\cdots\!\int
       \sum_{\substack{\alpha_1,\beta_1,\ldots,
                         \alpha_r,\beta_r\ge0\\
