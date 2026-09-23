@@ -670,9 +670,12 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
   every $i$, the summand is $q^m$; if $R_i=Q$ for every $i$, it is
   $\Tr(A^m)$.
 
-  Now consider a mixed word with $r$ blocks of $Q$.  By cyclicity of the
-  trace, we may circularly shift the word so that its first letter is $P$
-  and its last letter is $Q$.  For $1\le i\le r$, let $\alpha_i+1$ be the
+  Now consider a word containing both $P$ and $Q$.
+  Choose a boundary where $Q$ is followed by $P$ in cyclic order, and rotate the word so that this $P$ is its first letter and the preceding $Q$ is its last letter.
+  Cyclicity of the trace preserves the value of the summand under this rotation.
+  Let $r$ be the number of $Q$-blocks in the resulting linear word; there are also $r$ $P$-blocks.
+  Since the cut is between different letters, no cyclic block is split, so $r$ is also the number of cyclic $Q$-blocks in the original word and does not depend on the chosen boundary.
+  For $1\le i\le r$, let $\alpha_i+1$ be the
   number of letters in the $i$th $P$-block, and let $\beta_i+1$ be the
   number of letters in the $Q$-block that follows it. For example, the
   following cyclic word has $r=2$ and odd length $13$:
@@ -682,8 +685,23 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
     \underbrace{PPPPP}_{\alpha_2=4}\,
     \underbrace{QQ}_{\beta_2=1}
   \]
-  These integers satisfy the length condition, and the value of the
-  corresponding summand is determined solely by them:
+  Counting the letters gives $\sum_{i=1}^r((\alpha_i+1)+(\beta_i+1))=m$.
+  To evaluate the corresponding trace, use the block forms in \eqref{eq:block-PQ} and \eqref{eq:block-UW}:
+  \[
+    P M_U P=qP,
+    \qquad
+    P M_U(Q M_U)^{\beta_i+1}P
+    =(g^{\mathsf T}A^{\beta_i}g)P.
+  \]
+  The $P$-block has $\alpha_i$ internal steps, each contributing $q$, while the following $Q$-block gives one excursion.
+  Thus, the pair of blocks, ending at the next $P$, satisfies
+  \[
+    (P M_U)^{\alpha_i+1}(Q M_U)^{\beta_i+1}P
+    =q^{\alpha_i}(g^{\mathsf T}A^{\beta_i}g)P.
+  \]
+  Since the normalized product begins with $P$, appending a final $P$ does not change its trace, by $P^2=P$ and cyclicity.
+  Applying the displayed identity successively, from the last pair of blocks to the first, leaves the product of their scalar factors times $P$.
+  Taking the trace and using $\Tr(P)=1$, we obtain the length condition and trace formula
   \begin{equation}\label{eq:excursion-length-weight}
     \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,
     \qquad
@@ -694,7 +712,7 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 
   It remains to determine the multiplicity of each block-length tuple.
   Mark a cut in the cyclic word after a $Q$-block, so that the shifted word
-  begins with $P$ and ends with $Q$. Every word with $r$ $Q$-blocks admits
+  begins with $P$ and ends with $Q$. Every word with $r$ cyclic $Q$-blocks admits
   exactly $r$ such marked cuts. Conversely, an ordered tuple
   $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ satisfying the length
   condition determines the cyclic pattern, and its first position can be
@@ -705,7 +723,7 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
   \begin{equation}\label{eq:U-r-excursions}
     \begin{aligned}
       &\sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
-                       R_1\cdots R_m\text{ has }r\text{ $Q$-blocks}}}
+                       R_1\cdots R_m\text{ has }r\text{ cyclic $Q$-blocks}}}
         \Tr(R_1M_U\cdots R_mM_U)\\
       &\qquad=\frac mr
         \sum_{\substack{\alpha_1,\beta_1,\ldots,
