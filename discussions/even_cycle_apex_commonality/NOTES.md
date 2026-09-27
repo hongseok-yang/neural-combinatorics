@@ -1,0 +1,113 @@
+# Engineering and mathematical log
+
+Chronological.  Decisions inside the plan's freedom, spike timings, Lean gotchas, blockers, and gate
+evidence.  Status lives in [`DASHBOARD.md`](DASHBOARD.md); changes to the plan in
+[`DEVIATIONS.md`](DEVIATIONS.md).
+
+## 2026-09-27 — M0 (scaffold, data, kernel spike)
+
+### Plan documents aligned with the certificate-free `k = 2` route
+
+The user asked that `k = 2` use the existing hand proof, not the `mean_two` certificate.  Plan D10
+already did this, but `DASHBOARD.md`, `VERIFICATION_PLAN.md` (D6, §2.5, §3, M7) and `OPUS_PROMPT.md`
+still called the `mean_two` data "kept but unused / optional".  Reworded everywhere to "excluded
+(D10)"; the JSON stays in `certificates/` only because `independent_audit.py` reads all four files.
+Recorded as DEVIATIONS X2.  The D10 chain was re-derived by hand: `K_{1,2,2} = C₄⁺¹` (8 edges each),
+and `(1+2b)⁴ − (1+b)²(1+6b) = 11b² + 26b³ + 16b⁴`.
+
+### Scaffold
+
+* `lean/` created per plan §1.6: `lakefile.toml` (package `EvenCycleApex`), `lean-toolchain`
+  (`leanprover/lean4:v4.31.0`), `lake-manifest.json` copied from `goodman-style-bound/complete_lean`
+  with the root `name` changed to `EvenCycleApex`, and `.lake/packages` a directory junction to the
+  built packages of `complete_lean`.  First `lake build`: Mathlib replayed, not rebuilt (the first
+  built job was our own module, job 8558/8578); 11 min wall time, all of it the copied modules.
+* Foundation copied from `schur_decomposition/cycle_commonality/lean` at commit `e2d96440` into
+  `lean/EvenCycleApex/Foundation/`, each file with a four-line provenance header; changes are only
+  `import` paths and the prefix `CycleCommonality → EvenCycleApex` (sed).  The D7 list is not the
+  full import closure: `Model/StepModel.lean` imports `Spectral/RankOneTrace.lean`, which pulls in
+  `Spectral/Interlace.lean` (where `rankOne` lives) and `Majorization/{Karamata,Bump,RankOne}.lean`.
+  All five copied as well (DEVIATIONS X1).  Build: 0 warnings, 0 errors.
+* Note: the copied `StepGraphon` has a `[0,1]`-valued `U`; our finite host will carry a `[-1,1]`
+  signed kernel, so `FiniteHost` (M2) is a new structure that reuses only `trace_weighted_pow_eq_sum`
+  and the matrix/unit-vector pattern.
+* Smoke theorem `EvenCycleApex.foundation_smoke` (`EvenCycleApex/Smoke.lean`) uses `IsGraphon`,
+  `exists_stepGraphon_l1_close`, `StepGraphon.trace_op_pow`, `EigenSystem.ofSymmetric` and
+  `EigenSystem.trace_pow_eq_sum`.
+
+### Certificate data
+
+* `tools/extract_embedded.py` wrote CRLF line endings on Windows (on-disk sizes larger than the
+  printed byte counts).  Patched to `open(..., newline='')`; the eight files now match the embedded
+  byte counts exactly (e.g. `mean_three_sos.json` 110,862 bytes).
+* `python independent_audit.py --certificates . --export lean-data`: all PASS (32,768 witnesses,
+  156 normal forms, 4 × 19 LDLᵀ, 956 pivots, 13,708 entries, 131,072 coefficient slots), 57 s.
+* Data facts used for the encoding: matrix entries ≤ 26 digits; LDLᵀ numerators ≤ 373 digits,
+  denominators ≤ 350 digits (the three proof-path targets); 156 normal forms, so an orbit index
+  fits in 8 bits; a base-6 permutation code is < 6⁶ = 46,656.
+
+### Kernel spike (plan §4 M0)
+
+Generator `tools/gen_bench.py certificates lean/Bench`; the benchmark files import only `Init` and
+are not part of the library.  Timings are the profiler's "type checking" line (kernel time).
+
+* **(a) one 15×15 rational FactorOK**, core `Rat` via `mkRat`, `positive_majority` block 16 (the
+  block with the largest LDLᵀ numbers, up to 500 digits in numerator + denominator): **0.87 s**.
+  Negative control (one matrix entry +1): `decide` fails, as it must.
+* **Profiler caveat.**  Lean 4.31 kernel-checks declarations in parallel tasks, and the profiler's
+  per-declaration "type checking took" line then measures from a shared start (the lines of a
+  32-theorem file grew 1 s, 2 s, …, 29 s and summed to 484 s against 50.6 s wall).  Multi-theorem
+  timings below are therefore wall-clock with `lake env lean --threads=1`, which includes parsing
+  and elaborating the data.
+* **(b) 32,768 relabelling witnesses, plan encoding** (typeclass notation `>>>`, `%`, `testBit`,
+  base-6 codes, all 32 chunks in one conjoined theorem): **aborted** after 336 s CPU at 5.7 GB
+  resident (the machine had 1 GB free).  One kernel cache for the whole check is the problem.
+* **(b′) the same 32,768 witnesses, optimized**: direct `Nat.shiftRight/land/mod/lor/beq` (the
+  kernel's GMP-accelerated primitives, no instance unfolding), 3-bit permutation fields, a packed
+  6×6 pair-index table, bijectivity as `OR of 1 <<< π(i) = 63`, one theorem per 1024-chunk:
+  **81.7 s wall single-threaded** for the whole file (≈ 2 ms per witness), 50.6 s wall with the
+  default parallelism.
+* **(c) trie accumulation, plan encoding**: the eleven `r = 4` blocks of `mean_three` expanded
+  naively, 158,400 signed monomials inserted into a depth-15 binary trie keyed by the mask, path
+  forced at every insertion: **aborted** after 343 s CPU at 7.9 GB resident.  (The lazy variant
+  was not run: unforced accumulators build a 158,400-deep term.)  Kernel lesson: the kernel
+  substitutes arguments unevaluated and caches every whnf, so an accumulator must be (1) forced at
+  every step — here by `match Nat.beq acc 0 with | true => k acc | false => k acc` — and (2) small,
+  because every intermediate version stays in the cache.
+* **(c2) redesign**: the same `r = 4` group, but each skeleton `(a, b, T)` gets one merged
+  coefficient `Σ_t (−1)^{|T∖t|} A⁽ᵗ⁾_ab` computed in Lean from the eleven literal matrices
+  (14,400 updates), the orbit id of the skeleton supplied as data, and the accumulator two packed
+  naturals `(pos, neg)` with one 128-bit slot per orbit (156 × 128 bits), forced at each step:
+  **18.2 s kernel, 29.7 s wall, 3.5 GB peak**, one theorem.  Negative control (one orbit id
+  changed): `decide` proves the proposition false, as it must.  Memory per theorem will be bounded
+  by splitting at literal checkpoints (e.g. one theorem per `a`-row, ≈ 1000 updates).
+* **Decision** (DEVIATIONS X3): per-occurrence relabelling witnesses `(orbit, π)` for the 15,548
+  target-independent skeletons and the target pieces, instead of the global 32,768-entry table;
+  merged per-skeleton coefficients; packed orbit accumulators with checkpoints; dense subset
+  enumeration of `P_ε(E)`.  Soundness needs one new elementary lemma (base-2¹²⁸ digits are unique
+  under a total-mass bound).  Estimated total kernel time for all three targets: FactorOK ≈ 30 s,
+  skeleton witnesses ≈ 35 s, pieces ≈ 10 s, accumulations ≈ 3 × 20 s — a few minutes.
+* `certificates/lean-data/normalization_witnesses.json` and the generated `Data/Perm.lean` (the
+  global table) are superseded by X3; `Perm.lean` stays until M6 generates the per-occurrence data.
+
+### Data files
+
+`tools/gen_lean_data.py certificates lean/EvenCycleApex/Certificate/Data` writes
+`Matrices_{MeanThree,Neg,Pos}.lean` (19 `List (List Int)` blocks each), `LDL_{MeanThree,Neg,Pos}.lean`
+(strict lower rows of `L` and the diagonal `δ` as `(Int × Nat)` pairs; the generator asserts the
+unit diagonal and zero upper part it drops), and `Perm.lean` (32 chunks of 1024).  All import only
+`Init`; each elaborates in about 47 s (parallel).  `lakefile.toml` now names
+`EvenCycleApex.Certificate.Data.+` in `globs`, so `lake build` elaborates them.
+
+### M0 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8586 jobs); 0 warnings
+lake env lean CheckAxioms.lean
+'EvenCycleApex.foundation_smoke' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.exists_stepGraphon_l1_close' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.EigenSystem.trace_pow_eq_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.trace_weighted_pow_eq_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.cycleDensity_of_factored' depends on axioms: [propext, Classical.choice, Quot.sound]
+forbidden-token scan (native_decide, decide +native, sorry, admit, ofReduceBool, axiom): none
+```
