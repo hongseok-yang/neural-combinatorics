@@ -2,7 +2,9 @@
 """Generate the certificate schema and data for the Lean checker (encoding of DEVIATIONS X3).
 
 Usage (from the directory even_cycle_apex_commonality):
-    python tools/gen_cert_data.py schema          -> lean/EvenCycleApex/Certificate/Schema.lean
+    python tools/gen_cert_data.py schema    -> lean/EvenCycleApex/Certificate/Schema.lean
+    python tools/gen_cert_data.py data      -> lean/EvenCycleApex/Certificate/Data/{Witnesses,Target_*}.lean
+    python tools/gen_cert_data.py checks    -> lean/EvenCycleApex/Certificate/Checks/{MeanThree,Neg,Pos}.lean
 
 Inputs: certificates/lean-data/feature_schema.json (exported by independent_audit.py --export).
 The schema is literal data; Lean checks `Schema.ok` and the block dimensions itself.
@@ -125,9 +127,374 @@ end EvenCycleApex
         f.write(s)
 
 
+# ---------------------------------------------------------------------------------------------
+# Certificate data (M7).  Every list below is built in exactly the order of the Lean definitions
+# (`subMasks`, `Schema.roots/feats2/signs`, `GroupCert.itemsRows`, `targetItems` of the targets in
+# `Targets.lean`), and the expected accumulator totals are recomputed from them.
+
+TARGETS = [('mean_three', 'MeanThree'), ('negative_majority', 'Neg'), ('positive_majority', 'Pos')]
+DEN = 90315258984881964711936
+SCALE = 64 * DEN
+CHUNK = 1024
+
+
+def sub_masks(R, n):
+    if n == 0:
+        return [0]
+    L = sub_masks(R, n - 1)
+    if (R >> (n - 1)) & 1:
+        return L + [h | (1 << (n - 1)) for h in L]
+    return L
+
+
+def perm_at(code, i):
+    return (code >> (3 * i)) % 8
+
+
+def relabel(g, code):
+    out = 0
+    for b, (i, j) in enumerate(EDGES):
+        if (g >> b) & 1:
+            out |= 1 << INDEX[tuple(sorted((perm_at(code, i), perm_at(code, j))))]
+    return out
+
+
+def sgn_go(t, h):
+    return bin(h & ~t & 0x7FFF).count('1') % 2 == 1
+
+
+def bit_count(g):
+    return bin(g & 0x7FFF).count('1')
+
+
+def edge_mask(E):
+    m = 0
+    for i, j in E:
+        m |= 1 << INDEX[tuple(sorted((i, j)))]
+    return m
+
+
+def parity_poly(eps, E):
+    return [(1, h) for h in sub_masks(edge_mask(E), 15) if bit_count(h) % 2 == eps]
+
+
+def scale(c, P):
+    return [(c * x, g) for x, g in P]
+
+
+def mul(P, Q):
+    return [(x * y, g | h) for x, g in P for y, h in Q]
+
+
+def mono(c, E):
+    return [(c, edge_mask(E))]
+
+
+def edges_E(s):
+    return [e for i in range(s) for e in ((i, s), (i, s + 1), (i, s + 2))] + [(s, s + 1), (s, s + 2)]
+
+
+def edges_B(s):
+    return [e for i in range(s) for e in ((i, s + 1), (i, s + 2))]
+
+
+def lean_targets():
+    """The three targets as lists, in the order of the Lean definitions in `Targets.lean`."""
+    mean3 = parity_poly(0, edges_E(3)) + scale(-1, parity_poly(0, edges_B(3)))
+
+    def F(eps):
+        return scale(2, parity_poly(eps, edges_E(3))) + scale(-1, parity_poly(eps, edges_B(3)))
+
+    ptri = mono(1, [(0, 1)]) + mono(1, [(0, 2)]) + mono(1, [(1, 2)]) + mono(-1, [(0, 1), (0, 2), (1, 2)])
+    C = parity_poly(0, [(0, 1), (1, 2), (2, 3), (0, 3)])
+    neg = (scale(3, F(0)) + scale(-3, C) + F(1) + scale(-1, mul(ptri, F(0))) + mono(-13, [(0, 1)]) +
+           mono(-1, [(0, 1), (0, 2), (1, 2)]) + mono(-12, [(0, 1), (2, 3)]) +
+           mono(4, [(0, 1), (2, 3), (2, 4), (3, 4)]) + mono(-12, [(0, 1), (1, 2), (2, 3)]))
+    pos = (scale(6, F(0)) + scale(-6, C) + F(1) + mul(ptri, F(0)) + mono(-19, [(0, 1)]) +
+           mono(-23, [(0, 1), (0, 2), (1, 2)]) + mono(12, [(0, 1), (2, 3)]) +
+           mono(-4, [(0, 1), (2, 3), (2, 4), (3, 4)]) + mono(-24, [(0, 1), (1, 2), (2, 3)]))
+    return {'mean_three': mean3, 'negative_majority': neg, 'positive_majority': pos}
+
+
+class Witnesses:
+    def __init__(self):
+        w = json.loads((ROOT / 'certificates' / 'lean-data' / 'normalization_witnesses.json').read_text())
+        self.nf, self.perm = w['normal_form'], w['permutation']
+        self.reps = sorted(set(self.nf))
+        assert len(self.reps) == 156
+        self.orbit = {r: o for o, r in enumerate(self.reps)}
+
+    def of(self, g):
+        g &= 0x7FFF
+        code = sum(p << (3 * i) for i, p in enumerate(self.perm[g]))
+        o = self.orbit[self.nf[g]]
+        assert relabel(g, code) == self.reps[o]
+        return o + 256 * code
+
+    def packed_reps(self):
+        return sum(r << (15 * o) for o, r in enumerate(self.reps))
+
+
+def acc(items):
+    """(pos, neg, mass) of a list of (orbit, coefficient) items."""
+    pos = neg = mass = 0
+    for o, c in items:
+        if c >= 0:
+            pos += c << (128 * o)
+        else:
+            neg += (-c) << (128 * o)
+        mass += abs(c)
+    return pos, neg, mass
+
+
+def group_items(g, W, M, rows):
+    roots = sub_masks(g['rootMask'], 15)
+    signs = [[sgn_go(t, h) for t in g['typeMasks']] for h in roots]
+    n = len(g['feats'])
+    items = []
+    for a in rows:
+        for b in range(n):
+            e = M[a][b]
+            for w, sg in zip(W[a][b], signs):
+                items.append((w & 255, sum(-x if s else x for x, s in zip(e, sg))))
+    return items
+
+
+def chunks_of(n):
+    """Row chunks of the accumulation checks (one kernel theorem each)."""
+    return [(a, min(5, n - a)) for a in range(0, n, 5)] if n == 15 else [(0, n)]
+
+
+def lean_int(x):
+    return str(x) if x >= 0 else f'({x})'
+
+
+def nested(xs, depth=0):
+    if isinstance(xs, list):
+        if not xs:
+            return '[]'
+        sep = ',\n' + '  ' * (depth + 1) if isinstance(xs[0], list) else ', '
+        return '[' + sep.join(nested(x, depth + 1) for x in xs) + ']'
+    return lean_int(xs)
+
+
+def write(path, text):
+    with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(text)
+
+
+WIT_DOC = """/-! Relabelling witnesses of the rooted skeletons (DEVIATIONS X3 (i)), shared by the three
+targets: `W{r} a b` lists, for the submasks `h` of the root mask in `subMasks` order, the witness
+`o + 256 * code` of the skeleton `h ∪ F_a ∪ σF_b` (`o` an orbit id, `code` a permutation).
+`rep o` is the representative mask of orbit `o` (156 orbits, packed in 15-bit fields).
+
+Generated by `tools/gen_cert_data.py data`; do not edit.  Literal data only: the checks are
+in `Certificate/Checks/`. -/
+
+set_option maxRecDepth 100000
+
+namespace EvenCycleApex.Certificate.Data
+
+"""
+
+TGT_DOC = """/-! Certificate data of the target `NAME` in the `GroupCert` layout: for each group `r`,
+the matrices of its blocks merged entrywise (`M{r} a b = [A⁽ʲ⁾_ab]ⱼ`), one `LDLᵀ` witness per
+block (strictly lower rows of the unit lower factor, diagonal), the target witnesses `WtChunks`
+(one per monomial of the Lean target, in list order, in chunks of 1024), and the expected
+accumulator totals.
+
+Generated by `tools/gen_cert_data.py data`; do not edit.  Literal data only: the checks are
+in `Certificate/Checks/`. -/
+
+set_option maxRecDepth 100000
+
+namespace NS
+
+"""
+
+
+def gen_data():
+    out = ROOT / 'lean' / 'EvenCycleApex' / 'Certificate' / 'Data'
+    gs = groups()
+    wit = Witnesses()
+    # skeleton witnesses, shared by the three targets
+    Ws = []
+    for g in gs:
+        roots = sub_masks(g['rootMask'], 15)
+        feats2 = [relabel(f, g['sigma']) for f in g['feats']]
+        Ws.append([[[wit.of((h | fa) | fb) for h in roots] for fb in feats2] for fa in g['feats']])
+    s = WIT_DOC
+    s += f'/-- The orbit representatives, in 15-bit fields. -/\ndef repsPacked : Nat := {wit.packed_reps()}\n\n'
+    s += ('/-- The representative mask of orbit `o`. -/\n'
+          'def rep (o : Nat) : Nat := Nat.land (Nat.shiftRight repsPacked (Nat.mul 15 o)) 32767\n\n')
+    for g, W in zip(gs, Ws):
+        s += (f'/-- Skeleton witnesses of the group `r = {g["r"]}`. -/\n'
+              f'def W{g["r"]} : List (List (List Nat)) :=\n  {nested(W, 1)}\n\n')
+    s += 'end EvenCycleApex.Certificate.Data\n'
+    write(out / 'Witnesses.lean', s)
+    # per target
+    ldl_all = json.loads((ROOT / 'certificates' / 'lean-data' / 'ldl_witnesses.json').read_text())
+    assert int(ldl_all['denominator']) == DEN
+    tgts = lean_targets()
+    summary = {}
+    for name, short in TARGETS:
+        obj = json.loads((ROOT / 'certificates' / f'{name}_sos.json').read_text())
+        assert obj['target'] == name and int(obj['denominator']) == DEN
+        mats = [[[int(x) for x in row] for row in A] for A in obj['matrices']]
+        facts = ldl_all['factorizations_of_integer_numerators'][name]
+        ns = f'EvenCycleApex.Certificate.Data.{short}'
+        s = TGT_DOC.replace('NAME', name).replace('NS', ns)
+        posR = negR = massR = 0
+        for g, W in zip(gs, Ws):
+            n = len(g['feats'])
+            M = [[[mats[j][a][b] for j in g['blocks']] for b in range(n)] for a in range(n)]
+            s += f'def M{g["r"]} : List (List (List Int)) :=\n  {nested(M, 1)}\n\n'
+            ldl = []
+            for j in g['blocks']:
+                L, d = facts[j]['lower'], facts[j]['diagonal']
+                assert len(L) == n
+                for i in range(n):
+                    assert L[i][i] == ['1', '1'] and all(L[i][k] == ['0', '1'] for k in range(i + 1, n))
+                strict = '[' + ',\n    '.join(
+                    '[' + ', '.join(f'({lean_int(int(a))}, {b})' for a, b in L[i][:i]) + ']'
+                    for i in range(n)) + ']'
+                diag = '[' + ', '.join(f'({lean_int(int(a))}, {b})' for a, b in d) + ']'
+                ldl.append(f'({strict},\n   {diag})')
+            s += (f'def ldl{g["r"]} : List (List (List (Int × Nat)) × List (Int × Nat)) :=\n  ['
+                  + ',\n  '.join(ldl) + ']\n\n')
+            gp = gn = gm = 0
+            for a0, ln in chunks_of(n):
+                P, N, Mm = acc(group_items(g, W, M, range(a0, a0 + ln)))
+                s += f'/-- Totals of the rows `[{a0}, {a0 + ln})` of the group `r = {g["r"]}`. -/\n'
+                s += f'def claim{g["r"]}_{a0} : Nat × Nat × Nat :=\n  ({P},\n   {N},\n   {Mm})\n\n'
+                gp, gn, gm = gp + P, gn + N, gm + Mm
+            assert (gp, gn, gm) == acc(group_items(g, W, M, range(n)))
+            posR, negR, massR = posR + g['weight'] * gp, negR + g['weight'] * gn, massR + g['weight'] * gm
+        P = tgts[name]
+        Wt = [wit.of(m) for _, m in P]
+        names, cnames = [], []
+        Pt = Nt = Mt = 0
+        for k, c0 in enumerate(range(0, len(P), CHUNK)):
+            names.append(f'Wt_{k}')
+            cnames.append(f'claimT_{k}')
+            s += (f'/-- Witnesses of the target monomials `[{c0}, {min(c0 + CHUNK, len(P))})`. -/\n'
+                  f'def Wt_{k} : List Nat :=\n  [' + ', '.join(map(str, Wt[c0:c0 + CHUNK])) + ']\n\n')
+            cp, cn, cm = acc([(w & 255, c) for (c, _), w in zip(P[c0:c0 + CHUNK], Wt[c0:c0 + CHUNK])])
+            s += (f'/-- Totals of the target chunk {k}. -/\ndef claimT_{k} : Nat × Nat × Nat :=\n'
+                  f'  ({cp},\n   {cn},\n   {cm})\n\n')
+            Pt, Nt, Mt = Pt + cp, Nt + cn, Mt + cm
+        assert (Pt, Nt, Mt) == acc([(w & 255, c) for (c, _), w in zip(P, Wt)])
+        s += ('/-- The target witnesses, in chunks of 1024 monomials. -/\n'
+              'def WtChunks : List (List Nat) := [' + ', '.join(names) + ']\n\n')
+        s += ('/-- The totals of the target chunks. -/\n'
+              'def claimsT : List (Nat × Nat × Nat) := [' + ', '.join(cnames) + ']\n\n')
+        s += f'end {ns}\n'
+        write(out / f'Target_{short}.lean', s)
+        ok_sum = SCALE * Pt + negR == posR + SCALE * Nt
+        ok_mass = SCALE * Mt + massR < 1 << 128
+        summary[name] = (len(P), ok_sum, ok_mass, (SCALE * Mt + massR).bit_length())
+        assert ok_sum and ok_mass, name
+    for f in sorted(out.glob('*.lean')):
+        print(f'{f.name}: {f.stat().st_size} bytes')
+    print(summary)
+
+
+CHECK_TEMPLATE = """import IMPORT
+
+/-!
+# Kernel check: the certificate of `TEX`
+
+`prop:checked-data` for this target, evaluated by the kernel (`decide +kernel`): the 19
+factorizations (`P_ldl*`), identity (C) as accumulated totals (`P_acc*` for the groups, in row
+ranges for `r = 4`; `P_t*` for the target in chunks of 1024 monomials, witnesses and totals
+together), and the final comparison `P_fin`.  Then `thm:certificate-inequalities` for this target:
+`NAME_nonneg`.
+
+Generated by `tools/gen_cert_data.py checks`; do not edit.  The files `Checks/{MeanThree,Neg,Pos}`
+import each other in a chain so that `lake build` evaluates them one at a time (kernel memory).
+-/
+
+set_option maxRecDepth 100000
+
+namespace EvenCycleApex.Checks
+
+open EvenCycleApex Certificate
+
+"""
+
+
+def gen_checks():
+    out = ROOT / 'lean' / 'EvenCycleApex' / 'Certificate' / 'Checks'
+    tgts = lean_targets()
+    specs = [('mean_three', 'MeanThree', 'meanThree', 'meanThree', 'P_mean,3', 'targetMeanThree',
+              'EvenCycleApex.Certificate.Checks.Witness'),
+             ('negative_majority', 'Neg', 'neg', 'negMajority', 'P₋', 'targetNeg',
+              'EvenCycleApex.Certificate.Checks.MeanThree'),
+             ('positive_majority', 'Pos', 'pos', 'posMajority', 'P₊', 'targetPos',
+              'EvenCycleApex.Certificate.Checks.Neg')]
+    for name, D, p, nm, tex, tgt, imp in specs:
+        s = CHECK_TEMPLATE.replace('IMPORT', imp).replace('TEX', tex).replace('NAME', nm).replace('P_', p + '_')
+        dd = f'Data.{D}'
+        for r in range(5):
+            s += (f'theorem {p}_ldl{r} : ∀ j < schema{r}.types.length, {p}G{r}.ldlOK j = true := by\n'
+                  '  decide +kernel\n\n')
+        for r in range(4):
+            s += (f'theorem {p}_acc{r} : {p}G{r}.accRows 0 {p}G{r}.S.feats.length 0 0 0\n'
+                  f'    (claimOK {dd}.claim{r}_0.1 {dd}.claim{r}_0.2.1 {dd}.claim{r}_0.2.2) = true := by\n'
+                  '  decide +kernel\n\n')
+        for a0 in (0, 5, 10):
+            s += (f'theorem {p}_acc4_{a0} : {p}G4.accRows {a0} 5 0 0 0\n'
+                  f'    (claimOK {dd}.claim4_{a0}.1 {dd}.claim4_{a0}.2.1 {dd}.claim4_{a0}.2.2) = true := by\n'
+                  '  decide +kernel\n\n')
+        K = (len(tgts[name]) + CHUNK - 1) // CHUNK
+        for k in range(K):
+            s += (f'theorem {p}_t{k} : tchunk Data.rep 1024 {tgt} {k} {dd}.Wt_{k} {dd}.claimT_{k} = true := by\n'
+                  '  decide +kernel\n\n')
+        s += (f'theorem {p}_chunks : ∀ k < {dd}.WtChunks.length,\n'
+              f'    tchunk Data.rep 1024 {tgt} k ({dd}.WtChunks.getD k []) ({dd}.claimsT.getD k (0, 0, 0)) = true := by\n'
+              '  intro k hk\n'
+              f'  change k < {K} at hk\n'
+              '  interval_cases k\n')
+        for k in range(K):
+            s += f'  · exact {p}_t{k}\n'
+        s += (f'\ntheorem {p}_end : {tgt}.drop (1024 * {dd}.WtChunks.length) = [] := by\n'
+              '  decide +kernel\n\n')
+        s += ('/-- The claimed weighted totals of the five groups. -/\n'
+              f'def {p}Claims : List (ℕ × (ℕ × ℕ × ℕ)) :=\n'
+              f'  [({p}G0.S.weight, {dd}.claim0_0), ({p}G1.S.weight, {dd}.claim1_0),\n'
+              f'   ({p}G2.S.weight, {dd}.claim2_0), ({p}G3.S.weight, {dd}.claim3_0),\n'
+              f'   ({p}G4.S.weight, add3 (add3 {dd}.claim4_0 {dd}.claim4_5) {dd}.claim4_10)]\n\n')
+        s += (f'theorem {p}_fin : totalsOK certScale (sum3 {dd}.claimsT) {p}Claims = true := by\n'
+              '  decide +kernel\n\n')
+        s += (f'theorem {p}_valid : ∀ G ∈ {p}Groups, G.valid Data.rep := by\n'
+              '  intro G hG\n'
+              f'  simp only [{p}Groups, List.mem_cons, List.not_mem_nil, or_false] at hG\n'
+              '  rcases hG with rfl | rfl | rfl | rfl | rfl\n')
+        for r in range(5):
+            s += f'  · exact ⟨schemas_ok schema{r} (by simp [schemas]), fun a ha => wit{r} a ha, {p}_ldl{r}⟩\n'
+        s += (f'\ntheorem {p}_totals : List.Forall₂ GroupCert.Totals {p}Groups {p}Claims :=\n'
+              f'  .cons (GroupCert.totals_of_claim {p}_acc0) <|\n'
+              f'  .cons (GroupCert.totals_of_claim {p}_acc1) <|\n'
+              f'  .cons (GroupCert.totals_of_claim {p}_acc2) <|\n'
+              f'  .cons (GroupCert.totals_of_claim {p}_acc3) <|\n'
+              f'  .cons (GroupCert.totals_of_claims3 rfl {p}_acc4_0 {p}_acc4_5 {p}_acc4_10) .nil\n\n')
+        s += (f'/-- **`thm:certificate-inequalities` for `{tex}`**: `eval_U({tex}) ≥ 0` on every finite host. -/\n'
+              f'theorem {nm}_nonneg {{d : ℕ}} (K : FiniteKernel d) : 0 ≤ evalPoly K {tgt} :=\n'
+              f'  cert_sound_of_chunks (by decide) {p}_valid (Ws := {dd}.WtChunks) (cs := {dd}.claimsT) rfl\n'
+              f'    {p}_chunks {p}_end {p}_totals {p}_fin K\n\n'
+              'end EvenCycleApex.Checks\n')
+        write(out / f'{D}.lean', s)
+        print(f'{D}.lean: {K} target chunks')
+
+
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'schema'
+    if what == 'checks':
+        gen_checks()
+        raise SystemExit(0)
     if what == 'schema':
         gen_schema(ROOT / 'lean' / 'EvenCycleApex' / 'Certificate' / 'Schema.lean')
+    elif what == 'data':
+        gen_data()
     else:
         raise SystemExit(f'unknown target {what}')

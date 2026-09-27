@@ -11,7 +11,7 @@ design decision in the plan).
 Hardness: Easy · Medium · Hard · Very hard — an estimate for an axiom-free Lean proof, not for the
 paper argument.
 
-Last updated: 2026-09-27 (M0–M6 passed; **headlines: commonality for k = 1 and k = 2, no certificate**; certificate checker and its soundness proved, kernel evaluation next (M7).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
+Last updated: 2026-09-27 (M0–M7 passed; **headlines: commonality for k = 1 and k = 2, no certificate**; **the three certificate inequalities are kernel-checked** (`three_universal_graph_inequalities`).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
 
 ## Milestones
 
@@ -23,14 +23,14 @@ Last updated: 2026-09-27 (M0–M6 passed; **headlines: commonality for k = 1 and
 | M3 | Conditional second spectral moments: `h_s, D_s, Π_s, B_s, Q♯_s`, zero-denominator branches, trace representation `A_{n/2,s} = E Tr B_sⁿ ≥ E(Q♯_s)ⁿ`, quartic support, codegree and diamond identities | ✅ | Hard | `FiniteKernel.conditional_trace_bound`, `FiniteKernel.diamond_lower_bound`: `[propext, Classical.choice, Quot.sound]` (49 audited); 8604 jobs, 0 warnings; codegree identities deferred to M5/M8 where used; 2026-09-27 |
 | M4 | Moment inequalities (finite Cauchy–Schwarz/Jensen, two-point majorization, length lifting, apex lifting), finite one-apex bound, transfer lemma, **first headline: commonality for k = 1** | ✅ | Medium | `#print axioms EvenCycleApex.commonality_one_apex`: `[propext, Classical.choice, Quot.sound]` (61 audited); 8608 jobs, 0 warnings; 2026-09-27 |
 | M5 | **Second headline: commonality for k = 2, certificate-free** (plan D10): `EΠ₂ = A_{2,1}`, `Z₂ = R₄ ≤ 1+6b+c`, the scalar inequality `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)`, `E(Q♯₂)⁴ ≥ 1`, finite bound, transfer | ✅ | Medium | `#print axioms EvenCycleApex.commonality_two_apices`: `[propext, Classical.choice, Quot.sound]` (68 audited); no `Certificate/` import on the path; 8609 jobs, 0 warnings; 2026-09-27 |
-| M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ✅ | Hard | `meanThree_nonneg_of_checks`, `negMajority_nonneg_of_checks`, `posMajority_nonneg_of_checks` (from `cert_sound`): `[propext, Classical.choice, Quot.sound]` (85 audited, every one within that set); targets agree with `independent_audit.py` on all 992 / 6150 / 6151 merged monomials; `schemas_ok`, `schema_dims` by `decide`; 8617 jobs, 0 warnings; 2026-09-27 |
-| M7 | Kernel-checked certificate data: `decide +kernel` for 32,768 relabelling witnesses, three 156-orbit coefficient identities, 57 rational factorizations | ❌ | Very hard | `three_universal_graph_inequalities`; no `Lean.ofReduceBool`, no `sorryAx`; kernel times recorded |
+| M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ✅ | Hard | `meanThree_nonneg_of_checks`, `negMajority_nonneg_of_checks`, `posMajority_nonneg_of_checks` (from `cert_sound`): `[propext, Classical.choice, Quot.sound]` (91 audited, every one within that set); targets agree with `independent_audit.py` on all 992 / 6150 / 6151 merged monomials; `schemas_ok`, `schema_dims` by `decide`; 8617 jobs, 0 warnings; 2026-09-27 |
+| M7 | Kernel-checked certificate data: `decide +kernel` for the relabelling witnesses (per occurrence, X3: 15,548 skeletons + 13,754 target monomials), three orbit-coefficient identities (C), 57 rational factorizations | ✅ | Very hard | `three_universal_graph_inequalities`: `[propext, Classical.choice, Quot.sound]`; no `Lean.ofReduceBool`, no `sorryAx` (104 audited); single-threaded wall per check file 60 / 69 / 118 / 118 s (budget table); peak 5.6 GB for the whole chain; 8620 jobs, 0 warnings; 2026-09-27 |
 | M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ❌ | Hard | `FiniteKernel.three_apex_relative` |
 | M9 | All k ≥ 3 by apex lifting, `thm:finite-main`, transfer; **headlines H1 `commonality_all_even_all_apices` and H3 `apex_relative_of_three_le`** | ❌ | Medium | both audited; statements match plan §1 D5 |
 | M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ❌ | Hard | audited, both directions |
 | M11 | Final audit: prune, `CheckAxioms.lean` coverage of plan §6, README, `DEVIATIONS.md`, complete label map, forbidden-token scan | ❌ | Easy | every item of plan §0 passes |
 
-Overall: **7 / 12 milestones complete** (M0–M6).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free) (targets: all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
+Overall: **8 / 12 milestones complete** (M0–M7).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free) (targets: all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
 
 ## Blueprint statements
 
@@ -56,10 +56,10 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:ldl-soundness | 17017 | unit-lower `L`, `δ > 0`, `A = L diag δ Lᵀ` ⇒ `A/𝒟` PSD | `factorOK_sound` (checker `factorOK` checks `δ > 0`; positive semidefiniteness, all that is used, needs only `δ ≥ 0`) | M6 | ✅ | Easy |
 | lem:rooted-expansion | 17040 | `64𝒟·𝓘 = eval(…)` | `edgeDensity_rooted_split`, `evalMask_skeleton`, `typeFactor_expand` (+ `prod_one_add_subMasks`, `sgnGo_eq`); the factor `2^{6−C(r,2)}` is the group weight | M6 | ✅ | Hard |
 | def:feature-schema | 17069 | the 19 blocks `(r,t,k,Φ)` | `schema0` … `schema4`, `schemas`, `schemas_ok`, `schema_dims` | M6 | ✅ | Easy |
-| def:certificate-data | 17104 | `𝒟`, the integer matrices (57 on the proof path) | `GroupCert` data (`Certificate/Data/`) | M0/M7 | 🚧 (M0 files in per-block layout; M7 regenerates them in the merged layout of `GroupCert`) | Easy |
+| def:certificate-data | 17104 | `𝒟`, the integer matrices (57 on the proof path) | `Certificate/Data/Target_{MeanThree,Neg,Pos}` (merged matrices `M{r}`, factorizations `ldl{r}`), `certScale = 64𝒟`, groups `meanThreeGroups`, `negGroups`, `posGroups` | M7 | ✅ | Easy |
 | lem:normalform-soundness | 17137 | valid witnesses ⇒ `N(P)=N(Q)` ⇒ `eval P = eval Q` | `evalMask_relabel`, `evalMask_of_witOK` (per occurring mask, X3), `list_sum_eq_of_packed` (orbit-wise sums via `digits_zero`) | M6 | ✅ | Medium |
-| prop:checked-data | 17152 | 57 factorizations, 32,768 witnesses, identity (C) ×3 | `all_certificate_checks` | M7 | ❌ | Very hard |
-| thm:certificate-inequalities | 17205 | `eval(P_mean,3), eval(P₋), eval(P₊) ≥ 0` (`eval(P_mean,2) ≥ 0` excluded, D10) | `three_universal_graph_inequalities` | M7 | 🚧 (soundness ✅ `cert_sound`, `*_nonneg_of_checks`; kernel evaluation in M7) | Medium |
+| prop:checked-data | 17152 | 57 factorizations, 32,768 witnesses, identity (C) ×3 | `Checks.wit0` … `wit4` (skeleton witnesses), `Checks.{meanThree,neg,pos}_{ldl*,acc*,t*,end,fin}` (X3: witnesses per occurring mask) | M7 | ✅ | Very hard |
+| thm:certificate-inequalities | 17205 | `eval(P_mean,3), eval(P₋), eval(P₊) ≥ 0` (`eval(P_mean,2) ≥ 0` excluded, D10) | `three_universal_graph_inequalities` (finite hosts; + `Checks.meanThree_nonneg`, `negMajority_nonneg`, `posMajority_nonneg`) | M7 | ✅ | Medium |
 | def:finite-scalars | 17234 | `T, f, m, a, b, c, r, v, p_3, τ, K, L_0, r_{σ,4}` on the host | `FiniteKernel.{f, m, a, b, cod, c, r, p3, τ, q, rσ4, R, T, TS}` | M2 | ✅ | Medium |
 | lem:finite-spectral | 17267 | eigen-expansion; `Tr Bⁿ ≥ ‖Bg‖ⁿ`, `≥ \|⟨g,Bg⟩\|ⁿ`, `≤ (Tr B⁴)^{n/4}` | `normSq_pow_le_trace_pow`, `rayleigh_pow_le_trace_pow`, `trace_pow_le_trace_four_rpow` | M2 | ✅ | Medium |
 | lem:cycle-trace | 17301 | `t(C_n, L) = Tr (T_L)ⁿ` | `hostDensity_cycle_eq_trace` | M2 | ✅ | Easy |
@@ -108,7 +108,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | — | — | headline for two apices (certificate-free) | `commonality_two_apices` | M5 | ✅ | — |
 | — | — | headline H3 | `apex_relative_of_three_le` | M9 | ❌ | — |
 
-## Kernel-check budget (M0 spike; totals to be filled in M7)
+## Kernel-check budget (M0 spike and M7)
 
 Single-threaded wall or kernel time on this machine (16 GB RAM, 8 threads).  Encodings per DEVIATIONS X3.
 
@@ -119,4 +119,9 @@ Single-threaded wall or kernel time on this machine (16 GB RAM, 8 threads).  Enc
 | FactorOK (rational LDLᵀ), largest 15×15 block | 1 of 57 | 0.87 s | spike (a); 57 matrices / 717 pivots / 10,281 entries in all; `mean_two` excluded by D10 |
 | identity (C), plan encoding (15-bit trie, `r = 4` of `mean_three`, 158,400 inserts) | 1 group | aborted at 343 s CPU, 7.9 GB | spike (c) |
 | identity (C), X3 encoding (merged skeletons, packed orbit accumulator, `r = 4` of `mean_three`) | 14,400 updates | 18.2 s, 3.5 GB peak | spike (c2); negative control rejected |
-| identity (C) `mean_three`, `negative_majority`, `positive_majority` (full, M7) | 3 × 156 orbits | — | |
+| **M7, `Checks/Witness.lean`**: all skeleton witnesses (five groups; `r = 4` in 3 theorems of 4,800) | 15,548 | 60 s wall (≈ 38 s kernel) | shared by the three targets; +1.5 GB over the import baseline per `r = 4` theorem |
+| **M7, `Checks/MeanThree.lean`**: 19 factorizations, group accumulations (`r = 4` in 3 row ranges), target in 2 chunks, final comparison | 1 target | 69 s wall (47 s kernel) | |
+| **M7, `Checks/Neg.lean`** (same, target in 7 chunks of ≤ 1,024 monomials) | 1 target | 118 s wall | |
+| **M7, `Checks/Pos.lean`** | 1 target | 118 s wall | |
+| import baseline (no kernel work) | — | 22 s wall, 3.1 GB | included in every wall time above |
+| M7 whole chain via `lake build` (parallel where the imports allow) | — | 164 s + 228 s | peak 5.6 GB (all Lean processes); the three target files import each other so they run one at a time |

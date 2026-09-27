@@ -383,12 +383,53 @@ and removes `Perm.lean`.
 
 ```text
 lake build                     Build completed successfully (8617 jobs); 0 warnings
-lake env lean CheckAxioms.lean 85 declarations; 79 print exactly [propext, Classical.choice, Quot.sound],
-  6 a subset (accList_eq, schemas_ok: [propext]; accRows_eq, accTarget_eq: [propext, Quot.sound];
-  schema_dims: none; one line wrapped) — including cert_sound, cert_sound_of_totals,
+lake env lean CheckAxioms.lean 91 declarations; 86 print exactly [propext, Classical.choice, Quot.sound]
+  (one of them wrapped over three lines), 5 a strict subset (accList_eq, schemas_ok: [propext];
+  accRows_eq, accTarget_eq: [propext, Quot.sound]; schema_dims: none) — including cert_sound, cert_sound_of_totals,
   meanThree_nonneg_of_checks, negMajority_nonneg_of_checks, posMajority_nonneg_of_checks,
   block_nonneg, factorOK_sound, list_sum_eq_of_packed, evalMask_skeleton
 forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
 targets vs independent_audit.targets(): equal (mean_three 992, negative_majority 6150,
   positive_majority 6151 merged monomials)
+```
+
+## 2026-09-27 — M7 (kernel-checked certificates)
+
+Generator `tools/gen_cert_data.py` (`schema`, `data`, `checks`); data
+`lean/EvenCycleApex/Certificate/Data/{Witnesses,Target_MeanThree,Target_Neg,Target_Pos}.lean`; group
+certificates `Certificate/Groups.lean`; kernel checks `Certificate/Checks/{Witness,MeanThree,Neg,Pos}.lean`;
+headline `Certificate/Main.lean`.  The M0 files `Data/{Matrices,LDL}_*.lean`, `Data/Perm.lean` and the old
+generator `tools/gen_lean_data.py` were removed (superseded by the `GroupCert` layout, X3).
+
+* **Data.**  Skeleton witnesses `W{r} a b` (orbit id + 256 · permutation code) in `subMasks` order,
+  shared by the targets; per target, the matrices of each group merged entrywise, the `LDLᵀ` data per
+  block, the target witnesses in chunks of 1024, and the expected packed totals (`claim{r}_{a}`,
+  `claimT_{k}`).  The generator rebuilds every list in the order of the Lean definitions and checks
+  the whole identity in Python before writing (`SCALE · T = ∑ weight · groups`, mass `< 2^98`).  Cross
+  checks: the raw Lean target lists (`#eval`) equal the generator's lists element by element.
+* **Checks** (`decide +kernel` only).  `wit0` … `wit4`: all 15,548 skeleton witnesses.  Per target:
+  `*_ldl0..4` (19 factorizations), `*_acc*` (group accumulations against literal totals; `r = 4` in
+  row ranges `[0,5)`, `[5,10)`, `[10,15)`), `*_t*` (target chunks: witnesses and totals in one theorem,
+  `tchunk`), `*_end` (the chunks cover the target), `*_fin` (`totalsOK`: `64𝒟 · target = ∑ 2^{6−C(r,2)}
+  · groups` as packed naturals, total mass `< 2^128`).  Assembled by `cert_sound_of_chunks` into
+  `meanThree_nonneg`, `negMajority_nonneg`, `posMajority_nonneg`, and `three_universal_graph_inequalities`.
+* **Kernel memory.**  Relabelling checks cost ≈ 0.3–0.5 MB each in the kernel cache (per declaration):
+  the unchunked `P₋` witness theorem (6,349 monomials) peaked at 6.4 GB (import baseline 3.1 GB).  Hence
+  the target chunks (`tchunk`, `target_chunks`, `cert_sound_of_chunks` in `Sound.lean`) and the import
+  chain `Checks/MeanThree → Neg → Pos` so that `lake build` never evaluates two target files at once.
+  Measured peak for the whole chain: 5.6 GB (sum over all Lean processes).
+* **Timings** (single-threaded `lake env lean --threads=1`, wall, including ≈ 22 s of imports):
+  `Witness` 60 s, `MeanThree` 69 s, `Neg` 118 s, `Pos` 118 s.
+
+### M7 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8620 jobs); 0 warnings
+#print axioms EvenCycleApex.three_universal_graph_inequalities
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+lake env lean CheckAxioms.lean 104 declarations: 94 print exactly [propext, Classical.choice, Quot.sound]
+  (one wrapped), the other 10 a strict subset (the 5 of M6, and the kernel-check theorems
+  Checks.meanThree_acc4_10, meanThree_t1, meanThree_fin, neg_t6, pos_t6: [propext]);
+  no Lean.ofReduceBool, no sorryAx
+forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
 ```

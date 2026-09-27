@@ -339,7 +339,8 @@ python independent_audit.py --certificates . --export lean-data            # ≈
 ```
 
 Then `tools/gen_lean_data.py` (to be written in M0) converts `lean-data/*.json` into the chunked
-Lean literal files of D6.  Keep the generator, its inputs and its outputs in the repository; the
+Lean literal files of D6.  (Superseded in M7 by `tools/gen_cert_data.py` and the `GroupCert` data
+layout of DEVIATIONS X3.)  Keep the generator, its inputs and its outputs in the repository; the
 Lean checker validates the data, it never trusts a file name or hash.
 
 ---
@@ -500,7 +501,7 @@ even_cycle_apex_commonality/
   VERIFICATION_PLAN.md   DASHBOARD.md   OPUS_PROMPT.md
   NOTES.md               (chronological log, created in M0)
   DEVIATIONS.md          (created when the first design choice changes)
-  tools/extract_embedded.py   tools/gen_lean_data.py
+  tools/extract_embedded.py   tools/gen_cert_data.py (X3; replaced gen_lean_data.py)
   certificates/          (extracted JSON + scripts + lean-data/, generated in M0, committed)
   lean/
     lakefile.toml  lean-toolchain  lake-manifest.json  EvenCycleApex.lean  CheckAxioms.lean
@@ -523,7 +524,8 @@ even_cycle_apex_commonality/
       Conditional/Defs.lean  Bounds.lean  Trace.lean  Support.lean  Codegree.lean  Diamond.lean
       Certificate/Mask.lean  Targets.lean  Schema.lean  Rooted.lean  Factor.lean
       Certificate/Checker.lean  Soundness.lean  Checks.lean  Main.lean
-      Certificate/Data/Matrices_{MeanThree,Neg,Pos}.lean  LDL_*.lean  Perm.lean   (generated; no MeanTwo, D10)
+      Certificate/Data/Witnesses.lean  Target_{MeanThree,Neg,Pos}.lean   (generated, X3; no MeanTwo, D10)
+      Certificate/Groups.lean  Checks/{Witness,MeanThree,Neg,Pos}.lean  Main.lean   (as built, X3)
       Weighted/Amplification.lean  Majority.lean  GH.lean  Reference.lean
       Finite/OneApex.lean  TwoApex.lean (certificate-free, D10)  ThreeApex.lean  Main.lean
       Transfer.lean

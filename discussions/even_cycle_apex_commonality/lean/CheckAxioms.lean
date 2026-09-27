@@ -109,3 +109,18 @@ open EvenCycleApex
 #print axioms EvenCycleApex.meanThree_nonneg_of_checks
 #print axioms EvenCycleApex.negMajority_nonneg_of_checks
 #print axioms EvenCycleApex.posMajority_nonneg_of_checks
+
+-- M7: kernel-checked certificates
+#print axioms EvenCycleApex.target_chunks
+#print axioms EvenCycleApex.cert_sound_of_chunks
+#print axioms EvenCycleApex.Checks.wit4
+#print axioms EvenCycleApex.Checks.meanThree_ldl4
+#print axioms EvenCycleApex.Checks.meanThree_acc4_10
+#print axioms EvenCycleApex.Checks.meanThree_t1
+#print axioms EvenCycleApex.Checks.meanThree_fin
+#print axioms EvenCycleApex.Checks.meanThree_nonneg
+#print axioms EvenCycleApex.Checks.neg_t6
+#print axioms EvenCycleApex.Checks.negMajority_nonneg
+#print axioms EvenCycleApex.Checks.pos_t6
+#print axioms EvenCycleApex.Checks.posMajority_nonneg
+#print axioms EvenCycleApex.three_universal_graph_inequalities

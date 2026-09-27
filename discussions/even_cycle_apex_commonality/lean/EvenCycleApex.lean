@@ -56,3 +56,10 @@ import EvenCycleApex.Certificate.Checker
 import EvenCycleApex.Certificate.Targets
 import EvenCycleApex.Certificate.Schema
 import EvenCycleApex.Certificate.Sound
+-- M7: kernel-checked certificates (decide +kernel).
+import EvenCycleApex.Certificate.Groups
+import EvenCycleApex.Certificate.Checks.Witness
+import EvenCycleApex.Certificate.Checks.MeanThree
+import EvenCycleApex.Certificate.Checks.Neg
+import EvenCycleApex.Certificate.Checks.Pos
+import EvenCycleApex.Certificate.Main
