@@ -1,7 +1,8 @@
 -- Provenance (plan D7): copied from
 --   discussions/schur_decomposition/cycle_commonality/lean/CycleCommonality/Fubini.lean
 --   at neural-combinatorics commit e2d96440.
--- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex only.
+-- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex; pruned in M11
+-- (declarations unused by this development removed).
 import EvenCycleApex.Foundation.Defs
 import Mathlib.MeasureTheory.Constructions.Pi
 import Mathlib.MeasureTheory.Integral.Prod
@@ -89,11 +90,6 @@ noncomputable def compList (μ : Measure Ω) :
 
 lemma compList_succ {n : ℕ} (M : Fin (n + 2) → (Ω → Ω → ℝ)) :
     compList μ M = comp μ (M 0) (compList μ fun i => M i.succ) := rfl
-
-lemma goodK_compList : ∀ {n : ℕ} (M : Fin (n + 1) → (Ω → Ω → ℝ)), (∀ i, GoodK (M i)) →
-    GoodK (compList μ M)
-  | 0, _, hM => hM 0
-  | _ + 1, _, hM => goodK_comp (hM 0) (goodK_compList _ fun i => hM i.succ)
 
 /-! ### Measurability and boundedness of the path product -/
 

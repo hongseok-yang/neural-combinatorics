@@ -1,4 +1,5 @@
 import EvenCycleApex.Foundation.Model.StepModel
+import EvenCycleApex.Foundation.Spectral.EigenSystem
 import Mathlib.Analysis.MeanInequalitiesPow
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 

@@ -1,17 +1,17 @@
 -- Provenance (plan D7): copied from
 --   discussions/schur_decomposition/cycle_commonality/lean/CycleCommonality/FiniteBridge.lean
 --   at neural-combinatorics commit e2d96440.
--- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex only.
-import EvenCycleApex.Foundation.StepDensity
-import EvenCycleApex.Foundation.Model.StepModel
+-- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex; pruned in M11
+-- (the step-graphon corollaries `StepGraphon.density_eq_sum`, `densityCompl_eq_sum` are unused, and
+-- with them the import of `StepDensity.lean`, itself removed).
+import EvenCycleApex.Foundation.Factored
 
 /-!
-# The finite model as a sum over closed walks
+# The weighted matrix model as a sum over closed walks
 
-`StepDensity.lean` writes the cycle density of a step kernel as a sum over closed walks in the
-cells.  `Model/StepModel.lean` defines the density of a weighted step graphon as `Tr(Tʳ)` with
-`T i j = U i j √(wᵢ) √(wⱼ)`.  This file identifies the two, which lets the finite commonality
-theorem be applied to the approximants produced by `Factored.lean`.
+For a matrix `T i j = A i j √(wᵢ) √(wⱼ)` (the shape of the host matrix of `Host/Matrix.lean`),
+`trace_weighted_pow_eq_sum` writes `Tr(T^{n+1})` as the weighted sum over closed walks
+`∑_v ∏ᵢ w(vᵢ) · ∏ᵢ A(vᵢ, v_{i+1})`, which is how host cycle densities become traces.
 
 Two steps:
 
@@ -102,17 +102,5 @@ theorem trace_weighted_pow_eq_sum (w : Fin N → ℝ) (hw : ∀ i, 0 ≤ w i)
     exact Finset.prod_congr rfl fun i _ => Real.mul_self_sqrt (hw _)
   rw [h1, h2, h3]
   ring
-
-/-- The density of a weighted step graphon is the sum over closed walks. -/
-theorem StepGraphon.density_eq_sum (G : StepGraphon N) (n : ℕ) :
-    G.density (n + 1)
-      = ∑ v : Fin (n + 1) → Fin N, (∏ i, G.w (v i)) * ∏ i, G.U (v i) (v (i + 1)) :=
-  trace_weighted_pow_eq_sum G.w (fun i => (G.w_pos i).le) G.U n
-
-/-- The same for the complementary density. -/
-theorem StepGraphon.densityCompl_eq_sum (G : StepGraphon N) (n : ℕ) :
-    G.densityCompl (n + 1)
-      = ∑ v : Fin (n + 1) → Fin N, (∏ i, G.w (v i)) * ∏ i, (1 - G.U (v i) (v (i + 1))) :=
-  trace_weighted_pow_eq_sum G.w (fun i => (G.w_pos i).le) (fun i j => 1 - G.U i j) n
 
 end EvenCycleApex

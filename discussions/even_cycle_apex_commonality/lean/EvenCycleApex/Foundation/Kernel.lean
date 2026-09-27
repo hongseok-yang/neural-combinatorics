@@ -1,8 +1,9 @@
 -- Provenance (plan D7): copied from
 --   discussions/schur_decomposition/cycle_commonality/lean/CycleCommonality/Foundation/Kernel.lean
 --   at neural-combinatorics commit e2d96440.
--- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex only.
-import EvenCycleApex.Foundation.PathDensity
+-- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex; pruned in M11
+-- (declarations unused by this development removed, module docstring updated to match).
+import EvenCycleApex.Foundation.Graphon
 import Mathlib.Data.Fintype.Sigma
 import Mathlib.Data.Fintype.Sets
 import Mathlib.MeasureTheory.Function.SimpleFunc
@@ -38,15 +39,6 @@ structure GoodK (K : Ω → Ω → ℝ) : Prop where
 /-- Kernel composition `(K ∘ L)(x,y) = ∫ z, K x z · L z y`. -/
 noncomputable def comp (μ : Measure Ω) (K L : Ω → Ω → ℝ) : Ω → Ω → ℝ :=
   fun x y => ∫ z, K x z * L z y ∂μ
-
-/-- The all-ones kernel. -/
-def onesKernel : Ω → Ω → ℝ := fun _ _ => 1
-
-/-- Double mean `∫∫ M`. -/
-noncomputable def doubleMean (μ : Measure Ω) (M : Ω → Ω → ℝ) : ℝ := ∫ x, ∫ y, M x y ∂μ ∂μ
-
-lemma goodK_onesKernel : GoodK (onesKernel (Ω := Ω)) :=
-  ⟨measurable_const, ⟨1, zero_le_one, fun _ _ => by simp [onesKernel]⟩⟩
 
 lemma goodK_of_isGraphon {U : Ω → Ω → ℝ} (hU : IsGraphon U μ) : GoodK U :=
   ⟨hU.meas, ⟨1, zero_le_one, fun x y => by
@@ -428,14 +420,6 @@ lemma finpartition_sup_indicator_one_eq_sum_parts_indicator
   exact indicator_biUnion_finset_one_eq_sum_indicator
     P.parts (fun p : Set α => p) P.disjoint x
 
-/-- Weighted version of `finpartition_sup_indicator_one_eq_sum_parts_indicator`. -/
-lemma finpartition_sup_weighted_indicator_one_eq_sum_parts_indicator
-    {α : Type*} {s : Set α} (P : Finpartition s) (c : ℝ) (x : α) :
-    c * (P.parts.sup id).indicator (fun _ : α => (1 : ℝ)) x =
-      P.parts.sum fun p => c * p.indicator (fun _ : α => (1 : ℝ)) x := by
-  rw [finpartition_sup_indicator_one_eq_sum_parts_indicator P x,
-    Finset.mul_sum]
-
 /-- The indicator of a measurable set, with value `1`, is a bounded strongly
 measurable function. -/
 lemma good_indicator_one {s : Set Ω} (hs : MeasurableSet s) :
@@ -456,15 +440,6 @@ lemma goodK_separable {a b : Ω → ℝ} (ha : Good a) (hb : Good b) :
       (hb.meas.comp_measurable measurable_snd)).measurable
   · rw [abs_mul]
     exact mul_le_mul (hCa x) (hCb y) (abs_nonneg _) hCa0
-
-/-- Rectangle indicator kernels are separable `GoodK` kernels. -/
-lemma goodK_rectIndicator {s t : Set Ω}
-    (hs : MeasurableSet s) (ht : MeasurableSet t) :
-    GoodK (fun x y =>
-      (s.indicator (fun _ : Ω => (1 : ℝ)) x) *
-        (t.indicator (fun _ : Ω => (1 : ℝ)) y)) :=
-  goodK_separable (good_indicator_one (Ω := Ω) hs)
-    (good_indicator_one (Ω := Ω) ht)
 
 /-- Product-set indicators split as a product of one-dimensional indicators. -/
 lemma indicator_prod_one_eq_mul_indicator_one
@@ -516,20 +491,6 @@ lemma goodK_finset_sum {ι : Type*} (s : Finset ι) (K : ι → Ω → Ω → �
       exact ih fun i hi => hK i (by simp [hi])
     simpa [Finset.sum_insert ha] using goodK_add hKa hsum
 
-lemma goodK_finset_rectIndicator_sum {ι : Type*} (s : Finset ι)
-    (A B : ι → Set Ω)
-    (hA : ∀ i ∈ s, MeasurableSet (A i))
-    (hB : ∀ i ∈ s, MeasurableSet (B i)) :
-    GoodK (fun x y =>
-      ∑ i ∈ s,
-        (A i).indicator (fun _ : Ω => (1 : ℝ)) x *
-          (B i).indicator (fun _ : Ω => (1 : ℝ)) y) := by
-  exact goodK_finset_sum s
-    (fun i x y =>
-      (A i).indicator (fun _ : Ω => (1 : ℝ)) x *
-        (B i).indicator (fun _ : Ω => (1 : ℝ)) y)
-    (fun i hi => goodK_rectIndicator (hA i hi) (hB i hi))
-
 lemma goodK_finset_weighted_rectIndicator_sum {ι : Type*} (s : Finset ι)
     (c : ι → ℝ) (A B : ι → Set Ω)
     (hA : ∀ i ∈ s, MeasurableSet (A i))
@@ -566,52 +527,6 @@ lemma finset_weighted_rectIndicator_sum_eq_separable_sum {ι : Type*} (s : Finse
   refine Finset.sum_congr rfl ?_
   intro i hi
   simp [mul_assoc]
-
-lemma good_finset_weighted_rectIndicator_left {ι : Type*}
-    (c : ι → ℝ) (A : ι → Set Ω)
-    (hA : ∀ i, MeasurableSet (A i)) (i : ι) :
-    Good (c i • (A i).indicator (fun _ : Ω => (1 : ℝ)) : Ω → ℝ) :=
-  good_smul (c i) (good_indicator_one (Ω := Ω) (hA i))
-
-lemma good_finset_rectIndicator_right {ι : Type*}
-    (B : ι → Set Ω) (hB : ∀ i, MeasurableSet (B i)) (i : ι) :
-    Good ((B i).indicator (fun _ : Ω => (1 : ℝ)) : Ω → ℝ) :=
-  good_indicator_one (Ω := Ω) (hB i)
-
-lemma abs_finset_weighted_rectIndicator_sum_le {ι : Type*} (s : Finset ι)
-    (c : ι → ℝ) (A B : ι → Set Ω) (x y : Ω) :
-    |∑ i ∈ s,
-        c i *
-          ((A i).indicator (fun _ : Ω => (1 : ℝ)) x *
-            (B i).indicator (fun _ : Ω => (1 : ℝ)) y)|
-      ≤ ∑ i ∈ s, |c i| := by
-  refine (Finset.abs_sum_le_sum_abs
-    (fun i =>
-      c i *
-        ((A i).indicator (fun _ : Ω => (1 : ℝ)) x *
-          (B i).indicator (fun _ : Ω => (1 : ℝ)) y)) s).trans ?_
-  refine Finset.sum_le_sum ?_
-  intro i hi
-  rw [abs_mul]
-  have hA01 : |(A i).indicator (fun _ : Ω => (1 : ℝ)) x| ≤ 1 := by
-    by_cases hx : x ∈ A i
-    · simp [Set.indicator_of_mem hx]
-    · simp [Set.indicator_of_notMem hx]
-  have hB01 : |(B i).indicator (fun _ : Ω => (1 : ℝ)) y| ≤ 1 := by
-    by_cases hy : y ∈ B i
-    · simp [Set.indicator_of_mem hy]
-    · simp [Set.indicator_of_notMem hy]
-  calc
-    |c i| *
-        |(A i).indicator (fun _ : Ω => (1 : ℝ)) x *
-          (B i).indicator (fun _ : Ω => (1 : ℝ)) y|
-        = |c i| *
-          (|(A i).indicator (fun _ : Ω => (1 : ℝ)) x| *
-            |(B i).indicator (fun _ : Ω => (1 : ℝ)) y|) := by rw [abs_mul]
-    _ ≤ |c i| * (1 * 1) := by
-      exact mul_le_mul_of_nonneg_left
-        (mul_le_mul hA01 hB01 (abs_nonneg _) zero_le_one) (abs_nonneg _)
-    _ = |c i| := by ring
 
 /-! ### Measurable rectangle semiring -/
 
@@ -1319,80 +1234,6 @@ lemma GoodK.colsum_integrable {K : Ω → Ω → ℝ} (hK : GoodK K) :
     _ ≤ ∫ _x, C ∂μ := integral_mono (hK.integrable_col y).abs (integrable_const C) (fun x => hC x y)
     _ = C := by simp
 
-/-! ### Bilinearity of composition (in each argument) -/
-
-lemma comp_add_left {K₁ K₂ L : Ω → Ω → ℝ} (hK₁ : GoodK K₁) (hK₂ : GoodK K₂) (hL : GoodK L) :
-    comp μ (fun x y => K₁ x y + K₂ x y) L = fun x y => comp μ K₁ L x y + comp μ K₂ L x y := by
-  funext x y
-  simp only [comp]
-  rw [← integral_add (integrable_KL hK₁ hL x y) (integrable_KL hK₂ hL x y)]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-lemma comp_add_right {K L₁ L₂ : Ω → Ω → ℝ} (hK : GoodK K) (hL₁ : GoodK L₁) (hL₂ : GoodK L₂) :
-    comp μ K (fun x y => L₁ x y + L₂ x y) = fun x y => comp μ K L₁ x y + comp μ K L₂ x y := by
-  funext x y
-  simp only [comp]
-  rw [← integral_add (integrable_KL hK hL₁ x y) (integrable_KL hK hL₂ x y)]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-lemma comp_smul_left (c : ℝ) (K L : Ω → Ω → ℝ) :
-    comp μ (fun x y => c * K x y) L = fun x y => c * comp μ K L x y := by
-  funext x y
-  simp only [comp]
-  rw [← integral_const_mul]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-lemma comp_smul_right (c : ℝ) (K L : Ω → Ω → ℝ) :
-    comp μ K (fun x y => c * L x y) = fun x y => c * comp μ K L x y := by
-  funext x y
-  simp only [comp]
-  rw [← integral_const_mul]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-lemma comp_neg_left (K L : Ω → Ω → ℝ) :
-    comp μ (fun x y => -K x y) L = fun x y => -comp μ K L x y := by
-  funext x y; simp only [comp]; rw [← integral_neg]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-lemma comp_sub_left {K₁ K₂ L : Ω → Ω → ℝ} (hK₁ : GoodK K₁) (hK₂ : GoodK K₂) (hL : GoodK L) :
-    comp μ (fun x y => K₁ x y - K₂ x y) L = fun x y => comp μ K₁ L x y - comp μ K₂ L x y := by
-  funext x y
-  simp only [comp]
-  rw [← integral_sub (integrable_KL hK₁ hL x y) (integrable_KL hK₂ hL x y)]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-lemma comp_sub_right {K L₁ L₂ : Ω → Ω → ℝ} (hK : GoodK K) (hL₁ : GoodK L₁) (hL₂ : GoodK L₂) :
-    comp μ K (fun x y => L₁ x y - L₂ x y) = fun x y => comp μ K L₁ x y - comp μ K L₂ x y := by
-  funext x y
-  simp only [comp]
-  rw [← integral_sub (integrable_KL hK hL₁ x y) (integrable_KL hK hL₂ x y)]
-  exact integral_congr_ae (ae_of_all _ fun z => by ring)
-
-/-! ### The cut lemma: `onesKernel ∘ M ∘ onesKernel = (∫∫ M) · onesKernel` -/
-
-/-- Right multiplication by `onesKernel` integrates out the second variable: `(M ∘ onesKernel)(x,y) = ∫ M x ·`. -/
-lemma comp_onesKernel_right (M : Ω → Ω → ℝ) :
-    comp μ M onesKernel = fun x _ => ∫ z, M x z ∂μ := by
-  funext x y; simp [comp, onesKernel]
-
-/-- Left multiplication by `onesKernel` integrates out the first variable. -/
-lemma comp_onesKernel_left (M : Ω → Ω → ℝ) :
-    comp μ onesKernel M = fun _ y => ∫ z, M z y ∂μ := by
-  funext x y; simp [comp, onesKernel]
-
-/-- `onesKernel` is idempotent under composition. -/
-lemma comp_onesKernel_onesKernel : comp μ (onesKernel (Ω := Ω)) onesKernel = onesKernel := by
-  funext x y; simp [comp, onesKernel]
-
-/-- **The cut lemma.**  `onesKernel ∘ M ∘ onesKernel = (∫∫ M) · onesKernel`: a `onesKernel`-flanked block collapses to its
-double mean times `onesKernel`.  This is the arc-factorization mechanism. -/
-lemma cut (M : Ω → Ω → ℝ) :
-    comp μ onesKernel (comp μ M onesKernel) = fun _ _ => doubleMean μ M := by
-  rw [comp_onesKernel_right]
-  funext x y
-  simp only [comp, onesKernel, one_mul]
-  rfl
-
 /-! ### Associativity of composition (Fubini) -/
 
 lemma comp_assoc {K L M : Ω → Ω → ℝ} (hK : GoodK K) (hL : GoodK L) (hM : GoodK M) :
@@ -1432,67 +1273,8 @@ noncomputable def compPow (μ : Measure Ω) (K : Ω → Ω → ℝ) : ℕ → (�
   | 0 => K
   | (n + 1) => comp μ K (compPow μ K n)
 
-lemma goodK_compPow {K : Ω → Ω → ℝ} (hK : GoodK K) : ∀ n, GoodK (compPow μ K n)
-  | 0 => hK
-  | (n + 1) => goodK_comp hK (goodK_compPow hK n)
-
-lemma compPow_onesKernel : ∀ n, compPow μ (onesKernel (Ω := Ω)) n = onesKernel
-  | 0 => rfl
-  | (n + 1) => by rw [compPow, compPow_onesKernel n, comp_onesKernel_onesKernel]
-
 /-- The trace `trace K = ∫ x, K x x`.  The cycle density is `t(C_m, K) = trace (compPow K (m−1))`. -/
 noncomputable def trace (μ : Measure Ω) (K : Ω → Ω → ℝ) : ℝ := ∫ x, K x x ∂μ
-
-lemma trace_onesKernel : trace μ (onesKernel (Ω := Ω)) = 1 := by simp [trace, onesKernel]
-
-/-- **Trace cyclic-invariance**: `trace (A ∘ B) = trace (B ∘ A)`. -/
-lemma trace_comp_comm {A B : Ω → Ω → ℝ} (hA : GoodK A) (hB : GoodK B) :
-    trace μ (comp μ A B) = trace μ (comp μ B A) := by
-  obtain ⟨Ca, _, hCa⟩ := hA.bdd
-  obtain ⟨Cb, _, hCb⟩ := hB.bdd
-  have hint : Integrable (Function.uncurry fun x z => A x z * B z x) (μ.prod μ) := by
-    have hm : Measurable (Function.uncurry fun x z => A x z * B z x) :=
-      (hA.meas.comp (measurable_fst.prodMk measurable_snd)).mul
-        (hB.meas.comp (measurable_snd.prodMk measurable_fst))
-    refine (integrable_const (Ca * Cb)).mono' hm.aestronglyMeasurable (ae_of_all _ fun p => ?_)
-    simp only [Function.uncurry, Real.norm_eq_abs, abs_mul]
-    exact mul_le_mul (hCa p.1 p.2) (hCb p.2 p.1) (abs_nonneg _) (le_trans (abs_nonneg _) (hCa p.1 p.2))
-  have h1 : trace μ (comp μ A B) = ∫ x, ∫ z, A x z * B z x ∂μ ∂μ := rfl
-  have h2 : trace μ (comp μ B A) = ∫ x, ∫ z, B x z * A z x ∂μ ∂μ := rfl
-  rw [h1, h2, integral_integral_swap hint]
-  refine integral_congr_ae (ae_of_all _ fun x => integral_congr_ae (ae_of_all _ fun z => ?_))
-  ring
-
-/-- `trace (onesKernel ∘ M) = ∫∫ M`. -/
-lemma trace_comp_onesKernel {M : Ω → Ω → ℝ} (hM : GoodK M) : trace μ (comp μ onesKernel M) = doubleMean μ M := by
-  have hint : Integrable (Function.uncurry fun x z => M z x) (μ.prod μ) := by
-    obtain ⟨C, _, hC⟩ := hM.bdd
-    have hm : Measurable (Function.uncurry fun x z => M z x) :=
-      hM.meas.comp (measurable_snd.prodMk measurable_fst)
-    exact (integrable_const C).mono' hm.aestronglyMeasurable
-      (ae_of_all _ fun p => by rw [Real.norm_eq_abs]; exact hC p.2 p.1)
-  show ∫ x, comp μ onesKernel M x x ∂μ = doubleMean μ M
-  simp only [comp, onesKernel, one_mul]
-  rw [integral_integral_swap hint]; rfl
-
-/-- `trace (M ∘ onesKernel) = ∫∫ M`. -/
-lemma trace_comp_onesKernel_right {M : Ω → Ω → ℝ} : trace μ (comp μ M onesKernel) = doubleMean μ M := by
-  show ∫ x, comp μ M onesKernel x x ∂μ = doubleMean μ M
-  simp only [comp, onesKernel, mul_one]; rfl
-
-/-- The diagonal of a `GoodK` kernel is integrable. -/
-lemma GoodK.diag_integrable {K : Ω → Ω → ℝ} (hK : GoodK K) :
-    Integrable (fun x => K x x) μ := by
-  obtain ⟨C, _, hC⟩ := hK.bdd
-  have hm : Measurable (fun x => K x x) := hK.meas.comp (measurable_id.prodMk measurable_id)
-  exact (integrable_const C).mono' hm.aestronglyMeasurable
-    (ae_of_all _ fun x => by rw [Real.norm_eq_abs]; exact hC x x)
-
-/-- Additivity of the trace over a pointwise difference of `GoodK` kernels. -/
-lemma trace_sub {A B : Ω → Ω → ℝ} (hA : GoodK A) (hB : GoodK B) :
-    trace μ (fun x y => A x y - B x y) = trace μ A - trace μ B := by
-  show ∫ x, (A x x - B x x) ∂μ = (∫ x, A x x ∂μ) - ∫ x, B x x ∂μ
-  exact integral_sub hA.diag_integrable hB.diag_integrable
 
 /-- The row-broadcast `(x,y) ↦ f x` of a `Good` function is a `GoodK` kernel. -/
 lemma goodK_rowBroadcast {f : Ω → ℝ} (hf : Good f) : GoodK (fun _x _y => f _x) := by

@@ -5,12 +5,9 @@ import EvenCycleApex
 
 open EvenCycleApex
 
--- M0: copied foundation, exercised by the smoke theorem
-#print axioms EvenCycleApex.foundation_smoke
 #print axioms EvenCycleApex.exists_stepGraphon_l1_close
 #print axioms EvenCycleApex.EigenSystem.trace_pow_eq_sum
 #print axioms EvenCycleApex.trace_weighted_pow_eq_sum
-#print axioms EvenCycleApex.cycleDensity_of_factored
 
 -- M1: graph densities on an arbitrary probability space
 #print axioms EvenCycleApex.apexCycle_edgeCount
@@ -188,3 +185,11 @@ open EvenCycleApex
 #print axioms EvenCycleApex.commonality_equality_iff_constant
 #print axioms EvenCycleApex.R_four_graphon
 #print axioms EvenCycleApex.fourth_signed_cycle_zero_iff
+
+-- M11: the blueprint's declaration names (plan §6)
+#print axioms EvenCycleApex.FiniteKernel.spectral_trace_bounds
+#print axioms EvenCycleApex.apex_number_moment_lifting
+#print axioms EvenCycleApex.positive_diagonal_factorization_sound
+#print axioms EvenCycleApex.graph_normalization_sound
+#print axioms EvenCycleApex.rooted_quadratic_expansion
+#print axioms EvenCycleApex.all_certificate_checks

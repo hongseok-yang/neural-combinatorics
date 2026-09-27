@@ -1,27 +1,26 @@
 -- Provenance (plan D7): copied from
 --   discussions/schur_decomposition/cycle_commonality/lean/CycleCommonality/Spectral/EigenSystem.lean
 --   at neural-combinatorics commit e2d96440.
--- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex only.
-import EvenCycleApex.Foundation.Spectral.Rayleigh
+-- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex; pruned in M11
+-- (declarations unused by this development removed, module docstring updated to match;
+-- the removed `Spectral/Rayleigh.lean` contributed only its Mathlib imports).
+import Mathlib.Analysis.InnerProductSpace.Spectrum
+import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import Mathlib.Tactic
 
 /-!
-# Eigensystems, and the Rayleigh bounds relative to one
+# Eigensystems and traces of powers
 
 An `EigenSystem N T` packages an orthonormal basis of eigenvectors of `T` together with the
 corresponding eigenvalues, listed in nonincreasing order.  Mathlib's
 `hT.eigenvectorBasis`/`hT.eigenvalues` provide one (`EigenSystem.ofSymmetric`).
 
-The abstraction makes it convenient to apply majorization to `A = -T`, whose eigenvalues are the
-negated, *reversed*
-eigenvalues of `T`.  Identifying `(-T).eigenvalues` with `fun i => -(T.eigenvalues i.rev)` would
-need a uniqueness theorem for sorted eigenvalue lists, which Mathlib does not have.  With an
-eigensystem the passage to `-T` is one line: reverse the basis and negate (`EigenSystem.neg`).
-
 Main results:
 
-* `EigenSystem.ofSymmetric`, `EigenSystem.neg` — the two constructions;
-* `EigenSystem.rayleigh_ge`, `EigenSystem.rayleigh_le` — the Rayleigh bounds on `spectralSpan`;
-* `EigenSystem.trace_eq_sum`, `EigenSystem.trace_pow_eq_sum` — traces of `T` and of `T ^ n`.
+* `norm_sq_eq_sum`, `EigenSystem.inner_apply_eq_sum` — the norm and the quadratic form in
+  eigencoordinates;
+* `EigenSystem.trace_pow_eq_sum` — `Tr(Tⁿ) = ∑ λᵢⁿ`.
 -/
 
 namespace EvenCycleApex
@@ -75,32 +74,6 @@ noncomputable def ofSymmetric (hT : T.IsSymmetric) (hn : finrank ℝ E = N) : Ei
   apply_basis := fun i => by simp
   antitone := hT.eigenvalues_antitone hn
 
-@[simp] lemma ofSymmetric_val (hT : T.IsSymmetric) (hn : finrank ℝ E = N) :
-    (ofSymmetric hT hn).val = hT.eigenvalues hn := rfl
-
-@[simp] lemma ofSymmetric_basis (hT : T.IsSymmetric) (hn : finrank ℝ E = N) :
-    (ofSymmetric hT hn).basis = hT.eigenvectorBasis hn := rfl
-
-/-- Negating the operator reverses the eigenbasis and negates the eigenvalues.  This is the step
-that lets the majorization lemma be applied to `A = -T` for free. -/
-noncomputable def neg (S : EigenSystem N T) : EigenSystem N (-T) where
-  basis := S.basis.reindex (Fin.revPerm : Equiv.Perm (Fin N))
-  val := fun i => -(S.val i.rev)
-  symm := by
-    intro x y
-    simp only [LinearMap.neg_apply, inner_neg_left, inner_neg_right, S.symm x y]
-  apply_basis := by
-    intro i
-    have hb : (S.basis.reindex (Fin.revPerm : Equiv.Perm (Fin N))) i = S.basis i.rev := by
-      simp [OrthonormalBasis.reindex_apply]
-    rw [hb, LinearMap.neg_apply, S.apply_basis i.rev, neg_smul]
-  antitone := by
-    intro i j hij
-    simpa using S.antitone (Fin.rev_le_rev.mpr hij)
-
-omit [FiniteDimensional ℝ E] in
-@[simp] lemma neg_val (S : EigenSystem N T) (i : Fin N) : S.neg.val i = -(S.val i.rev) := rfl
-
 /-! ### Coordinates -/
 
 omit [FiniteDimensional ℝ E] in
@@ -123,36 +96,6 @@ lemma inner_apply_eq_sum (S : EigenSystem N T) (v : E) :
   rw [h1, h2]
   ring
 
-/-! ### The Rayleigh bounds -/
-
-omit [FiniteDimensional ℝ E] in
-/-- On the span of the eigenvectors indexed by `F`, the quadratic form is bounded below by any
-lower bound for the eigenvalues indexed by `F`. -/
-lemma rayleigh_ge (S : EigenSystem N T) {F : Finset (Fin N)} {c : ℝ}
-    (hF : ∀ j ∈ F, c ≤ S.val j) {v : E} (hv : v ∈ spectralSpan S.basis F) :
-    c * ‖v‖ ^ 2 ≤ ⟪v, T v⟫ := by
-  classical
-  rw [S.inner_apply_eq_sum v, norm_sq_eq_sum S.basis v, Finset.mul_sum]
-  refine Finset.sum_le_sum fun i _ => ?_
-  by_cases hi : i ∈ F
-  · exact mul_le_mul_of_nonneg_right (hF i hi) (sq_nonneg _)
-  · rw [repr_eq_zero_of_mem_spectralSpan hv hi]
-    simp
-
-omit [FiniteDimensional ℝ E] in
-/-- On the span of the eigenvectors indexed by `F`, the quadratic form is bounded above by any
-upper bound for the eigenvalues indexed by `F`. -/
-lemma rayleigh_le (S : EigenSystem N T) {F : Finset (Fin N)} {c : ℝ}
-    (hF : ∀ j ∈ F, S.val j ≤ c) {v : E} (hv : v ∈ spectralSpan S.basis F) :
-    ⟪v, T v⟫ ≤ c * ‖v‖ ^ 2 := by
-  classical
-  rw [S.inner_apply_eq_sum v, norm_sq_eq_sum S.basis v, Finset.mul_sum]
-  refine Finset.sum_le_sum fun i _ => ?_
-  by_cases hi : i ∈ F
-  · exact mul_le_mul_of_nonneg_right (hF i hi) (sq_nonneg _)
-  · rw [repr_eq_zero_of_mem_spectralSpan hv hi]
-    simp
-
 /-! ### Traces -/
 
 omit [FiniteDimensional ℝ E] in
@@ -166,14 +109,6 @@ lemma pow_apply_basis (S : EigenSystem N T) (n : ℕ) (i : Fin N) :
       ring_nf
 
 omit [FiniteDimensional ℝ E] in
-/-- The eigenvalues sum to the trace. -/
-lemma trace_eq_sum (S : EigenSystem N T) : LinearMap.trace ℝ E T = ∑ i, S.val i := by
-  rw [trace_eq_sum_inner S.basis T]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [S.apply_basis i, real_inner_smul_right, real_inner_self_eq_norm_sq]
-  simp
-
-omit [FiniteDimensional ℝ E] in
 /-- The `n`-th powers of the eigenvalues sum to the trace of `T ^ n`. -/
 lemma trace_pow_eq_sum (S : EigenSystem N T) (n : ℕ) :
     LinearMap.trace ℝ E (T ^ n) = ∑ i, (S.val i) ^ n := by
@@ -184,35 +119,5 @@ lemma trace_pow_eq_sum (S : EigenSystem N T) (n : ℕ) :
 
 end EigenSystem
 
-omit [FiniteDimensional ℝ E] in
-/-- The eigenvectors span everything. -/
-lemma spectralSpan_univ (b : OrthonormalBasis (Fin N) ℝ E) :
-    spectralSpan b Finset.univ = ⊤ := by
-  have himg : (b '' ((Finset.univ : Finset (Fin N)) : Set (Fin N))) = Set.range b := by
-    simp
-  rw [spectralSpan, himg, ← OrthonormalBasis.coe_toBasis]
-  exact b.toBasis.span_eq
-
-namespace EigenSystem
-
-variable {T : E →ₗ[ℝ] E}
-
-omit [FiniteDimensional ℝ E] in
-/-- **The Perron eigenvalue bounds the whole Rayleigh quotient.**  Used for Lemma
-`lem:spectral-budget`. -/
-lemma rayleigh_top (S : EigenSystem N T) (hN : 0 < N) (v : E) :
-    ⟪v, T v⟫ ≤ S.val ⟨0, hN⟩ * ‖v‖ ^ 2 := by
-  refine S.rayleigh_le (F := Finset.univ) (fun j _ => S.antitone ?_) ?_
-  · exact Fin.le_def.mpr (Nat.zero_le _)
-  · rw [spectralSpan_univ]
-    exact Submodule.mem_top
-
-omit [FiniteDimensional ℝ E] in
-/-- The quadratic form at an eigenvector is the eigenvalue. -/
-lemma inner_basis (S : EigenSystem N T) (i : Fin N) : ⟪S.basis i, T (S.basis i)⟫ = S.val i := by
-  rw [S.apply_basis i, real_inner_smul_right, real_inner_self_eq_norm_sq]
-  simp
-
-end EigenSystem
 
 end EvenCycleApex

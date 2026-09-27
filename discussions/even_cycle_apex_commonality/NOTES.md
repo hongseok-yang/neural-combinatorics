@@ -541,3 +541,60 @@ lake env lean CheckAxioms.lean 162 declarations: 152 print exactly [propext, Cla
   (3 wrapped), 10 a strict subset (those listed at M6 and M7); no sorryAx, no Lean.ofReduceBool
 forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
 ```
+
+## 2026-09-28 — M11 (final audit and documentation)
+
+* **Blueprint names** (`lean/EvenCycleApex/BlueprintNames.lean`, a leaf imported by the root).  The six
+  plan §6 names that the development had under other names or split into several lemmas, as thin
+  restatements: `FiniteKernel.spectral_trace_bounds` (the three trace bounds of `lem:finite-spectral`
+  as one conjunction), `apex_number_moment_lifting` (= `FiniteKernel.apex_number_moment_lifting`),
+  `positive_diagonal_factorization_sound` (= `factorOK_sound`), `graph_normalization_sound`
+  (`evalMask_relabel` ∧ `list_sum_eq_of_packed`, the two halves of `lem:normalform-soundness` in the X3
+  encoding), `rooted_quadratic_expansion` (the signed sum over the submasks of the root mask equals
+  `∑_z ∏ w · typeFactor · Φ_a Φ_b`, the identity inside `block_nonneg`, now stated on its own), and
+  `all_certificate_checks` (for each of the three targets: every group valid, the claimed totals,
+  every target chunk, the final comparison).  All 31 names of plan §6 now print in `CheckAxioms.lean`.
+* **Pruning the copied foundation** (plan M11, DEVIATIONS X1).  Modules: `Smoke.lean` (M0 smoke test)
+  and the five X1 modules (`Spectral/{Interlace,RankOneTrace}`, `Majorization/{Karamata,Bump,RankOne}`)
+  deleted, `Model/StepModel.lean` trimmed to `toMatrix_toEuclideanLin` and `toMatrix_pow` (the only
+  parts `Host/` uses), and `FiniteBridge.lean` lost the two step-graphon corollaries that needed it.
+  Declarations: a reachability scan (a scratch `#eval` over the environment: roots = every declaration
+  outside `Foundation/`, closure under `getUsedConstants`) listed the unreachable copied declarations;
+  their source ranges (`findDeclarationRanges?`, extended over doc comments, attributes and
+  `omit … in` prefixes) were deleted mechanically, except those nested in a used declaration
+  (structure fields, recursors).  274 declarations went, 162 of them from `GraphonL2Operator.lean`
+  (2922 → 172 lines; only the simple-function `L²` approximation is used).  `Spectral/Rayleigh.lean`
+  and `StepDensity.lean` became empty and were deleted; `PathDensity.lean` kept only `good_smul`, which
+  moved to `Graphon.lean`.  Importers repointed (`Kernel → Graphon`, `FiniteBridge → Factored`,
+  `EigenSystem →` Rayleigh's Mathlib imports).  Module docstrings of the pruned files rewritten to
+  describe what is left, and every provenance header records the M11 pruning.  A second scan finds
+  only compiler-generated constants and the structure field `EigenSystem.antitone` unreferenced.
+  `cycleDensity_of_factored` (audited since M0) was among the unused declarations and left the audit.
+  `Host/Regression.lean` (the exact two-point regression hosts of M2) is not on the headline path; it
+  is kept deliberately as a regression test of the host scalars and stays audited.
+* **README.md** in the style of `cycle_commonality/README.md`: the statement, the building
+  instructions, "Reading the statement" (the six files to read and the points to check) and "Reading
+  the proof" (the audit, what is and is not trusted about the certificates, an outline, the layout).
+* **Label map.**  Every `\label` of a statement environment in `even_apex_blueprint.tex` (from line
+  16668 on) has a row in the DASHBOARD table; the only labels without one are sections and the two
+  equations `eq:blueprint-G`, `eq:blueprint-H` (their content is `lem:GH`).  The six rows above now
+  name the blueprint names.
+
+### M11 gate evidence (2026-09-28): plan §0
+
+```text
+1 arbitrary (Ω, μ), arbitrary graphon   #check prints the three headlines with {Ω} [MeasurableSpace Ω]
+                                        {μ} [IsProbabilityMeasure μ] and only `IsGraphon W μ` on W;
+                                        identical to D5
+2 densities are product-measure integrals  homDensity = ∫ … ∂(Measure.pi fun _ => μ) (Graph/HomDensity.lean)
+3 certificates checked in the kernel    decide +kernel only; `all_certificate_checks` audited; no
+                                        Lean.ofReduceBool in any audit line
+4 lake build                            Build completed successfully (8622 jobs); 0 warnings; 17 min 43 s
+5 forbidden tokens                      grep -rnE "sorry|admit|native_decide|decide \+native|ofReduceBool|^axiom"
+                                        over lean/ (library, root, CheckAxioms, Bench): no match
+6 lake env lean CheckAxioms.lean        166 declarations: 156 print exactly [propext, Classical.choice,
+                                        Quot.sound] (3 of them wrapped over lines), 10 a strict subset
+                                        (the ones listed at M6 and M7); no sorryAx, no Lean.ofReduceBool;
+                                        all 31 names of plan §6 among them, each with the full set
+7 DASHBOARD                             M0–M11 ✅ with evidence; label map complete (above)
+```

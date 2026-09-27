@@ -133,6 +133,7 @@ Instead of dyadic cell averages on `[0,1]`, use the audited chain
 exists_stepGraphon_l1_close   (Factored.lean)   : ∀ ε>0, ∃ V, IsGraphon V μ ∧ IsStepKernel V ∧ ‖W−V‖₁ < ε
 IsStepKernel V                (Factored.lean)   : ∃ finite ι, σ : Ω → ι measurable, M, V x y = M (σ x) (σ y)
 cycleDensity_of_factored      (StepDensity.lean): step-kernel cycle density = weighted finite sum
+                              (generalized to every finite graph as step_homDensity_eq_host; pruned in M11)
 StepGraphon / FiniteBridge    (Model/, FiniteBridge.lean): weighted matrix model, trace_weighted_pow_eq_sum
 ```
 
@@ -255,6 +256,7 @@ Spectral/EigenSystem.lean, Model/StepModel.lean (StepGraphon, mat, unit), Finite
 ```
 
 Delete nothing from copied files during a milestone; prune unused declarations only in M11.
+(Done in M11: nine of these modules and 274 unused declarations were removed; DEVIATIONS X1.)
 Copied code is still subject to the transitive `#print axioms` audit.
 
 ### D8. Real powers

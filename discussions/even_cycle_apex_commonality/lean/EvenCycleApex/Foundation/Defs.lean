@@ -1,27 +1,23 @@
 -- Provenance (plan D7): copied from
 --   discussions/schur_decomposition/cycle_commonality/lean/CycleCommonality/Defs.lean
 --   at neural-combinatorics commit e2d96440.
--- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex only.
+-- Changes: import paths and the namespace prefix CycleCommonality -> EvenCycleApex; pruned in M11
+-- (declarations unused by this development removed, module docstring updated to match).
 import EvenCycleApex.Foundation.Kernel
 
 /-!
-# Graphons and their cycle densities
+# The complement and the cycle density of a kernel
 
-`Model/StepModel.lean` works with a finite weighted model, in which the cycle densities are
-*defined* as traces of matrix powers.  This file gives the notions the theorem is about for an
-arbitrary graphon on an arbitrary probability space `(Ω, μ)`.
-
-`IsGraphon W μ` is in `Foundation/Graphon.lean`: symmetric, jointly measurable, `[0,1]`-valued.  The
-kernel operations `comp`, `compPow` and `trace` are in `Foundation/Kernel.lean`.
-
-`cycleDensity W μ r` is `t(C_r, W)`, in the form the argument runs in: a trace of a kernel power.
-`Fubini.lean` proves it is the integral
+`cmpl W = 1 − W` (`isGraphon_cmpl`: the complement of a graphon is a graphon), and
+`cycleDensity W μ r = t(C_r, W)` in the form of a trace of a kernel power.  `Fubini.lean` proves
+it is the integral
 
 ```
-  t(C_r, W) = ∫_{Ω^r} ∏_{i<r} W(x_i, x_{i+1}) dμ^{⊗r}        (indices cyclic),
+  t(C_r, W) = ∫_{Ω^r} ∏_{i<r} W(x_i, x_{i+1}) dμ^{⊗r}        (indices cyclic).
 ```
 
-which is the homomorphism-density definition used throughout this development.
+The public statements use `homDensity` (`Graph/HomDensity.lean`); `cycleDensity` is used only
+inside the transfer and equality arguments, where the two are identified.
 -/
 
 open MeasureTheory EvenCycleApex.Foundation
@@ -39,23 +35,7 @@ def cmpl (W : Ω → Ω → ℝ) : Ω → Ω → ℝ := fun x y => 1 - W x y
 noncomputable def cycleDensity (W : Ω → Ω → ℝ) (μ : Measure Ω) (r : ℕ) : ℝ :=
   trace μ (compPow μ W (r - 1))
 
-lemma cycleDensity_def (W : Ω → Ω → ℝ) (μ : Measure Ω) (r : ℕ) :
-    cycleDensity W μ r = trace μ (compPow μ W (r - 1)) := rfl
-
 variable {μ : Measure Ω} [IsProbabilityMeasure μ] {W : Ω → Ω → ℝ}
-
-lemma goodK_cmpl (hW : IsGraphon W μ) : GoodK (cmpl W) := by
-  refine ⟨measurable_const.sub hW.meas, 1, zero_le_one, fun x y => ?_⟩
-  have h0 := hW.nonneg x y
-  have h1 := hW.le_one x y
-  show |1 - W x y| ≤ 1
-  rw [abs_le]
-  constructor <;> linarith
-
-lemma cmpl_cmpl (V : Ω → Ω → ℝ) : cmpl (cmpl V) = V := by
-  funext x y
-  show 1 - (1 - V x y) = V x y
-  ring
 
 /-- The complement of a graphon is a graphon. -/
 lemma isGraphon_cmpl (hW : IsGraphon W μ) : IsGraphon (cmpl W) μ where

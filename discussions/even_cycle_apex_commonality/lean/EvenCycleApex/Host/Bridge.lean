@@ -9,8 +9,8 @@ Blueprint `lem:step-matrix`, weighted version (plan D3).
 * `step_homDensity_eq_host`: if `K x y = M (σ x) (σ y)` for a measurable `σ : Ω → Fin d`, then for
   **every** finite graph `F`, `t(F, K)` on `(Ω, μ)` equals the host density of `F` in `M` with the
   cell weights `wᵢ = μ(σ⁻¹{i})`.  The proof pushes `μ^{⊗v}` forward along `σ` coordinatewise and
-  evaluates the integral over the finite space as a sum (the argument of the copied
-  `cycleDensity_of_factored`, for an arbitrary edge set).
+  evaluates the integral over the finite space as a sum (the argument of `cycleDensity_of_factored`
+  in `cycle_commonality`'s `StepDensity.lean`, for an arbitrary edge set).
 * `exists_host_of_isStepKernel`: a step graphon (`IsGraphon` + `IsStepKernel`, the output of
   `exists_stepGraphon_l1_close`) factors through a measurable map onto `Fin d` whose matrix is
   symmetric and `[0,1]`-valued at **every** entry.  Restricting the finite type of the step kernel to
