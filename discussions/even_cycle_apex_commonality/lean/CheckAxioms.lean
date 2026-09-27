@@ -84,3 +84,28 @@ open EvenCycleApex
 #print axioms EvenCycleApex.FiniteKernel.two_apex_fourth_moment_ge_one
 #print axioms EvenCycleApex.FiniteKernel.two_apex_bound
 #print axioms EvenCycleApex.commonality_two_apices
+
+-- M6: certificate language and soundness (checker not yet evaluated)
+#print axioms EvenCycleApex.evalMask_relabel
+#print axioms EvenCycleApex.maskEdges_relabel
+#print axioms EvenCycleApex.edgeDensity_rooted_split
+#print axioms EvenCycleApex.evalMask_skeleton
+#print axioms EvenCycleApex.prod_one_add_subMasks
+#print axioms EvenCycleApex.sgnGo_eq
+#print axioms EvenCycleApex.typeFactor_expand
+#print axioms EvenCycleApex.typeFactor_nonneg
+#print axioms EvenCycleApex.block_nonneg
+#print axioms EvenCycleApex.factorOK_sound
+#print axioms EvenCycleApex.digits_zero
+#print axioms EvenCycleApex.list_sum_eq_of_packed
+#print axioms EvenCycleApex.accList_eq
+#print axioms EvenCycleApex.GroupCert.accRows_eq
+#print axioms EvenCycleApex.accTarget_eq
+#print axioms EvenCycleApex.GroupCert.itemSum_nonneg
+#print axioms EvenCycleApex.cert_sound
+#print axioms EvenCycleApex.cert_sound_of_totals
+#print axioms EvenCycleApex.schemas_ok
+#print axioms EvenCycleApex.schema_dims
+#print axioms EvenCycleApex.meanThree_nonneg_of_checks
+#print axioms EvenCycleApex.negMajority_nonneg_of_checks
+#print axioms EvenCycleApex.posMajority_nonneg_of_checks

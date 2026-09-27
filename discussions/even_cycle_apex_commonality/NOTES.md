@@ -330,3 +330,65 @@ lake build                     Build completed successfully (8609 jobs); 0 warni
 lake env lean CheckAxioms.lean 68 declarations, all [propext, Classical.choice, Quot.sound]
 forbidden-token scan: none
 ```
+
+## 2026-09-27 — M6 (certificate language and soundness)
+
+Files `lean/EvenCycleApex/Certificate/{Mask,Rooted,Accum,LDL,Checker,Targets,Schema,Sound}.lean`;
+generator `tools/gen_cert_data.py` (so far: `schema`).
+
+**Soundness chain** (`cert_sound`, restated on natural-number totals as `cert_sound_of_totals`):
+
+1. *Masks* (`Mask.lean`): `maskEdges g` = the sorted pairs at the set bits; `maskEdges_lor`;
+   `relabel g code` (kernel primitives, permutation in 3-bit fields) with `maskEdges_relabel` and
+   `evalMask_relabel` (`lem:normalform-soundness` for one mask).
+2. *Rooted splitting* (`Rooted.lean`): `edgeDensity_rooted_split` on `Fin (r + (k + (k + p)))`
+   (roots, first copy, second copy, padding summing to one); `evalMask_skeleton` reads a six-vertex
+   skeleton `h ∪ F_a ∪ σF_b` there through `Fin.cast` and pull-backs (`pull`); the second copy is the
+   relabelling by the block swap `σ`, checked by `swapOK`.
+3. *Root types*: the checker enumerates the submasks of the root mask (`subMasks`, bit recursion);
+   `prod_one_add_subMasks` expands `∏_{e ∈ R} (1 + f_e)` over them, `sgnGo_eq` gives the sign
+   `(−1)^{|h ∖ t|}`, `typeFactor_expand` assembles `∑_h (−1)^{|h∖t|} ∏_h U = ∏_{e∈R} (1 ± U_e)`
+   (`= 2^{C(r,2)} p_t`; the blueprint's normalization `2^{6−C(r,2)}` is carried as the group weight).
+   `block_nonneg`: `∑_{a,b} A_ab ∑_h (−1)^{|h∖t|} t(h ∪ F_a ∪ σF_b) = ∑_z ∏w · ∏(1 ± U) · Φᵀ A Φ ≥ 0`
+   for positive semidefinite `A`.
+4. *LDLᵀ* (`LDL.lean`): `factorOK` (core `Rat`/`mkRat`, lockstep `all2`) checks `δ > 0` and every
+   entry of `L diag(δ) Lᵀ`; `factorOK_sound` proves positive semidefiniteness (`xᵀAx = ∑ δ (Lᵀx)²`),
+   which is all that is used (definiteness is not needed).
+5. *Packed accumulators* (`Accum.lean`): `accStep` (forced), `accList_eq` (closed form `posOf`,
+   `negOf`, `massOf`), `digits_zero` (base-`B` digits are unique when `|D_o| < B`),
+   `list_sum_eq_of_packed`: equal packed values and total mass `< 2^128` ⇒ equal orbit-wise sums
+   ⇒ equal `∑ c · f(o)` for every `f`.  No bound on the number of orbits is needed (any finite list),
+   and the orbit representatives can be any function `rep` — only `evalMask K (rep o)` is used.
+6. *Checker* (`Checker.lean`): a `GroupCert` = schema + witnesses `W a b` (per skeleton, in
+   `subMasks` order) + matrices merged entrywise `M a b = [A⁽ʲ⁾_ab]ⱼ` + LDL data.  `GroupCert.valid`
+   (schema checks, `witRow` for every row, `ldlOK` for every block) ⇒ `itemSum_nonneg`.  The kernel
+   loops `accT`/`accCols`/`accRows` (CPS, forced) and `accTarget` equal `accList` of the item lists
+   (`accRows_eq`, `accTarget_eq`), so chunk results can be checked against literals (`claimOK`,
+   `accRows_claim`, `accTarget_claim`, `itemsRows_add`).
+7. *Targets* (`Targets.lean`): built from the literal edge lists `E_s`, `B_s` and the masks of
+   `def:certificate-targets` (`parityPoly` by dense submask enumeration, `polyScale`, `polyMul`,
+   `mono`).  Cross-check: `#eval` of the three Lean targets, merged by mask, equals
+   `independent_audit.targets()` exactly (992, 6150, 6151 nonzero monomials; 1056, 6349, 6349 listed).
+8. *Schema* (`Schema.lean`, generated): five groups `r = 0, …, 4`, `schemas_ok` and `schema_dims`
+   (`[3, 5, 19, 19, 7 × 4, 15 × 11]`) by `decide`.
+
+Design notes.  (i) Polynomials are monomial lists, duplicates allowed; nothing needs a vector in
+`ℚ^Mask`.  (ii) The group weights `2^{6−C(r,2)}` and the target scale `64𝒟` enter only the final
+natural-number comparison (`cert_sound_of_totals`), so accumulations use the raw integer entries.
+(iii) The M0 data files `Certificate/Data/{Matrices,LDL}_*.lean` are in per-block layout and
+`Data/Perm.lean` is the superseded global table; M7 regenerates the data in the `GroupCert` layout
+and removes `Perm.lean`.
+
+### M6 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8617 jobs); 0 warnings
+lake env lean CheckAxioms.lean 85 declarations; 79 print exactly [propext, Classical.choice, Quot.sound],
+  6 a subset (accList_eq, schemas_ok: [propext]; accRows_eq, accTarget_eq: [propext, Quot.sound];
+  schema_dims: none; one line wrapped) — including cert_sound, cert_sound_of_totals,
+  meanThree_nonneg_of_checks, negMajority_nonneg_of_checks, posMajority_nonneg_of_checks,
+  block_nonneg, factorOK_sound, list_sum_eq_of_packed, evalMask_skeleton
+forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
+targets vs independent_audit.targets(): equal (mean_three 992, negative_majority 6150,
+  positive_majority 6151 merged monomials)
+```

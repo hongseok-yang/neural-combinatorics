@@ -47,3 +47,12 @@ import EvenCycleApex.Finite.OneApex
 -- M5: two apices, certificate-free (plan D10).
 import EvenCycleApex.Finite.TwoApex
 import EvenCycleApex.Transfer
+-- M6: certificate language and soundness (encoding of DEVIATIONS X3).
+import EvenCycleApex.Certificate.Mask
+import EvenCycleApex.Certificate.Rooted
+import EvenCycleApex.Certificate.Accum
+import EvenCycleApex.Certificate.LDL
+import EvenCycleApex.Certificate.Checker
+import EvenCycleApex.Certificate.Targets
+import EvenCycleApex.Certificate.Schema
+import EvenCycleApex.Certificate.Sound

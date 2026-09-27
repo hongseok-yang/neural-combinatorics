@@ -11,7 +11,7 @@ design decision in the plan).
 Hardness: Easy · Medium · Hard · Very hard — an estimate for an axiom-free Lean proof, not for the
 paper argument.
 
-Last updated: 2026-09-27 (M0–M5 passed; **headlines: commonality for k = 1 and k = 2, no certificate**.  `mean_two` excluded, DEVIATIONS X2; certificate checker encoding redesigned after the spike, DEVIATIONS X3)
+Last updated: 2026-09-27 (M0–M6 passed; **headlines: commonality for k = 1 and k = 2, no certificate**; certificate checker and its soundness proved, kernel evaluation next (M7).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
 
 ## Milestones
 
@@ -23,14 +23,14 @@ Last updated: 2026-09-27 (M0–M5 passed; **headlines: commonality for k = 1 and
 | M3 | Conditional second spectral moments: `h_s, D_s, Π_s, B_s, Q♯_s`, zero-denominator branches, trace representation `A_{n/2,s} = E Tr B_sⁿ ≥ E(Q♯_s)ⁿ`, quartic support, codegree and diamond identities | ✅ | Hard | `FiniteKernel.conditional_trace_bound`, `FiniteKernel.diamond_lower_bound`: `[propext, Classical.choice, Quot.sound]` (49 audited); 8604 jobs, 0 warnings; codegree identities deferred to M5/M8 where used; 2026-09-27 |
 | M4 | Moment inequalities (finite Cauchy–Schwarz/Jensen, two-point majorization, length lifting, apex lifting), finite one-apex bound, transfer lemma, **first headline: commonality for k = 1** | ✅ | Medium | `#print axioms EvenCycleApex.commonality_one_apex`: `[propext, Classical.choice, Quot.sound]` (61 audited); 8608 jobs, 0 warnings; 2026-09-27 |
 | M5 | **Second headline: commonality for k = 2, certificate-free** (plan D10): `EΠ₂ = A_{2,1}`, `Z₂ = R₄ ≤ 1+6b+c`, the scalar inequality `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)`, `E(Q♯₂)⁴ ≥ 1`, finite bound, transfer | ✅ | Medium | `#print axioms EvenCycleApex.commonality_two_apices`: `[propext, Classical.choice, Quot.sound]` (68 audited); no `Certificate/` import on the path; 8609 jobs, 0 warnings; 2026-09-27 |
-| M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ❌ | Hard | `checker_sound` for `mean_three`, `P₋`, `P₊` (checker not yet evaluated) |
+| M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ✅ | Hard | `meanThree_nonneg_of_checks`, `negMajority_nonneg_of_checks`, `posMajority_nonneg_of_checks` (from `cert_sound`): `[propext, Classical.choice, Quot.sound]` (85 audited, every one within that set); targets agree with `independent_audit.py` on all 992 / 6150 / 6151 merged monomials; `schemas_ok`, `schema_dims` by `decide`; 8617 jobs, 0 warnings; 2026-09-27 |
 | M7 | Kernel-checked certificate data: `decide +kernel` for 32,768 relabelling witnesses, three 156-orbit coefficient identities, 57 rational factorizations | ❌ | Very hard | `three_universal_graph_inequalities`; no `Lean.ofReduceBool`, no `sorryAx`; kernel times recorded |
 | M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ❌ | Hard | `FiniteKernel.three_apex_relative` |
 | M9 | All k ≥ 3 by apex lifting, `thm:finite-main`, transfer; **headlines H1 `commonality_all_even_all_apices` and H3 `apex_relative_of_three_le`** | ❌ | Medium | both audited; statements match plan §1 D5 |
 | M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ❌ | Hard | audited, both directions |
 | M11 | Final audit: prune, `CheckAxioms.lean` coverage of plan §6, README, `DEVIATIONS.md`, complete label map, forbidden-token scan | ❌ | Easy | every item of plan §0 passes |
 
-Overall: **6 / 12 milestones complete** (M0–M5).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free) (targets: all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
+Overall: **7 / 12 milestones complete** (M0–M6).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free) (targets: all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
 
 ## Blueprint statements
 
@@ -49,17 +49,17 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:moment-basics | 16811 | finite Cauchy–Schwarz, Jensen `E X^q ≥ (E X^p)^{q/p}`, `Σx^s ≤ (Σx)^s` | `moment_monotone` (Jensen), `sum_rpow_le_rpow_sum`; Cauchy–Schwarz is Mathlib's `sum_sq_le_sum_mul_sum_of_sq_le_mul` | M4 | ✅ | Medium |
 | lem:pair-majorization | 16844 | two-coordinate power comparison, real `s ≥ 1` | `two_coordinate_power_comparison` (+ `convex_two_point`) | M4 | ✅ | Medium |
 | lem:length-lifting | 16868 | `E V^p ≥ (r_+^{p/4} + r_−^{p/4})/2` from two fourth moments | `length_lifting_two_fourth_moments` | M4 | ✅ | Medium |
-| def:graph-polynomial | 16904 | 15 pairs of `Fin 6`, masks, `eval_U`, disjoint product | `GraphPolynomial` (`evalMask`) | M6 | ❌ | Medium |
-| def:certificate-targets | 16932 | parity polynomials, `E_s, B_s`, the targets `P_mean,3`, `P₋`, `P₊` (`P_mean,2` excluded, D10) | `CertificateTargets` | M6 | ❌ | Medium |
-| def:rooted-features | 16977 | `Φ_F`, type factor `p_t`, quadratic form `𝓘` | `rootedFeature` | M6 | ❌ | Medium |
-| lem:rooted-positivity | 17002 | `𝓘 ≥ 0` for PSD `Q` | `rooted_quadratic_nonnegative` | M6 | ❌ | Easy |
-| lem:ldl-soundness | 17017 | unit-lower `L`, `δ > 0`, `A = L diag δ Lᵀ` ⇒ `A/𝒟` PSD | `positive_diagonal_factorization_sound` | M6 | ❌ | Easy |
-| lem:rooted-expansion | 17040 | `64𝒟·𝓘 = eval(…)` | `rooted_quadratic_expansion` | M6 | ❌ | Hard |
-| def:feature-schema | 17069 | the 19 blocks `(r,t,k,Φ)` | `CertificateFeatureSchema` | M6 | ❌ | Easy |
-| def:certificate-data | 17104 | `𝒟`, the integer matrices (57 on the proof path) | `CertificateData` (`Certificate/Data/Matrices_*`, `LDL_*`) | M0/M7 | 🚧 (data generated and elaborated; checked in M7) | Easy |
-| lem:normalform-soundness | 17137 | valid witnesses ⇒ `N(P)=N(Q)` ⇒ `eval P = eval Q` | `graph_normalization_sound` | M6 | ❌ | Medium |
+| def:graph-polynomial | 16904 | 15 pairs of `Fin 6`, masks, `eval_U`, disjoint product | `pairOf`, `maskEdges`, `evalMask`, `maskEdges_lor`; polynomials as monomial lists `GraphPoly`, `evalPoly` | M6 | ✅ | Medium |
+| def:certificate-targets | 16932 | parity polynomials, `E_s, B_s`, the targets `P_mean,3`, `P₋`, `P₊` (`P_mean,2` excluded, D10) | `parityPoly`, `edgesE`, `edgesB`, `polyF`, `polyPtri`, `polyC`, `targetMeanThree`, `targetNeg`, `targetPos` (+ `evalPoly_append/scale/mono/mul`) | M6 | ✅ | Medium |
+| def:rooted-features | 16977 | `Φ_F`, type factor `p_t`, quadratic form `𝓘` | `featDensity`, `pull`; `typeFactor` = `2^{C(r,2)} p_t` | M6 | ✅ | Medium |
+| lem:rooted-positivity | 17002 | `𝓘 ≥ 0` for PSD `Q` | `block_nonneg` (+ `typeFactor_nonneg`) | M6 | ✅ | Easy |
+| lem:ldl-soundness | 17017 | unit-lower `L`, `δ > 0`, `A = L diag δ Lᵀ` ⇒ `A/𝒟` PSD | `factorOK_sound` (checker `factorOK` checks `δ > 0`; positive semidefiniteness, all that is used, needs only `δ ≥ 0`) | M6 | ✅ | Easy |
+| lem:rooted-expansion | 17040 | `64𝒟·𝓘 = eval(…)` | `edgeDensity_rooted_split`, `evalMask_skeleton`, `typeFactor_expand` (+ `prod_one_add_subMasks`, `sgnGo_eq`); the factor `2^{6−C(r,2)}` is the group weight | M6 | ✅ | Hard |
+| def:feature-schema | 17069 | the 19 blocks `(r,t,k,Φ)` | `schema0` … `schema4`, `schemas`, `schemas_ok`, `schema_dims` | M6 | ✅ | Easy |
+| def:certificate-data | 17104 | `𝒟`, the integer matrices (57 on the proof path) | `GroupCert` data (`Certificate/Data/`) | M0/M7 | 🚧 (M0 files in per-block layout; M7 regenerates them in the merged layout of `GroupCert`) | Easy |
+| lem:normalform-soundness | 17137 | valid witnesses ⇒ `N(P)=N(Q)` ⇒ `eval P = eval Q` | `evalMask_relabel`, `evalMask_of_witOK` (per occurring mask, X3), `list_sum_eq_of_packed` (orbit-wise sums via `digits_zero`) | M6 | ✅ | Medium |
 | prop:checked-data | 17152 | 57 factorizations, 32,768 witnesses, identity (C) ×3 | `all_certificate_checks` | M7 | ❌ | Very hard |
-| thm:certificate-inequalities | 17205 | `eval(P_mean,3), eval(P₋), eval(P₊) ≥ 0` (`eval(P_mean,2) ≥ 0` excluded, D10) | `three_universal_graph_inequalities` | M7 | ❌ | Medium |
+| thm:certificate-inequalities | 17205 | `eval(P_mean,3), eval(P₋), eval(P₊) ≥ 0` (`eval(P_mean,2) ≥ 0` excluded, D10) | `three_universal_graph_inequalities` | M7 | 🚧 (soundness ✅ `cert_sound`, `*_nonneg_of_checks`; kernel evaluation in M7) | Medium |
 | def:finite-scalars | 17234 | `T, f, m, a, b, c, r, v, p_3, τ, K, L_0, r_{σ,4}` on the host | `FiniteKernel.{f, m, a, b, cod, c, r, p3, τ, q, rσ4, R, T, TS}` | M2 | ✅ | Medium |
 | lem:finite-spectral | 17267 | eigen-expansion; `Tr Bⁿ ≥ ‖Bg‖ⁿ`, `≥ \|⟨g,Bg⟩\|ⁿ`, `≤ (Tr B⁴)^{n/4}` | `normSq_pow_le_trace_pow`, `rayleigh_pow_le_trace_pow`, `trace_pow_le_trace_four_rpow` | M2 | ✅ | Medium |
 | lem:cycle-trace | 17301 | `t(C_n, L) = Tr (T_L)ⁿ` | `hostDensity_cycle_eq_trace` | M2 | ✅ | Easy |
