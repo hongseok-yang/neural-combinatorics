@@ -475,3 +475,31 @@ lake env lean CheckAxioms.lean 130 declarations: 120 print exactly [propext, Cla
   (3 wrapped), 10 a strict subset (those listed at M6 and M7)
 forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
 ```
+
+## 2026-09-27 — M9 (every apex number; headlines H1 and H3)
+
+Files `lean/EvenCycleApex/Finite/AllApices.lean`, `lean/EvenCycleApex/Main.lean`.
+
+* `FiniteKernel.apex_relative_host`: `A_{n/2,k} ≥ R_n` for `k ≥ 3` from `apex_number_moment_lifting`
+  (`s = 3`) and `A_{n/2,3} ≥ R_n ≥ 1`: `R_n = R_n^{k/3} / R_n^{k/3−1} ≤ A_{n/2,3}^{k/3} / R_n^{k/3−1} ≤
+  A_{n/2,k}`.  `one_le_A` (every `k ≥ 1`), `all_even_apex_bounds` (`thm:finite-main`).
+* `le_of_step_graphons`: a host inequality `F ≤ G` between `L¹`-Lipschitz functionals passes to every
+  graphon (choose a step graphon `V` with `(C_F + C_G)‖W − V‖₁ < δ`).  With
+  `normalizedCycleDensity_step` / `_lipschitz` (the cycle analogues of M4's apex lemmas):
+  `normalizedCycleDensity_le_apex_of_hosts` and `one_le_normalizedCycleDensity`.
+* **H1** `commonality_all_even_all_apices` and **H3** `apex_relative_of_three_le` (with the companion
+  `one_le_cycle_normalized` for `R_n ≥ 1`, the "together with" of D5).  The elaborated statements were
+  printed (`#check`) and are identical to plan D5.
+* The explicit graphon forms of the one- and two-apex bounds (`thm:graphon-main`, needed by H2) use the
+  integral scalars `X, b, c` of `def:integral-scalars` and are part of M10.
+
+### M9 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8626 jobs); 0 warnings
+#print axioms EvenCycleApex.commonality_all_even_all_apices  [propext, Classical.choice, Quot.sound]
+#print axioms EvenCycleApex.apex_relative_of_three_le        [propext, Classical.choice, Quot.sound]
+lake env lean CheckAxioms.lean 141 declarations: 131 print exactly [propext, Classical.choice, Quot.sound]
+  (3 wrapped), 10 a strict subset (those listed at M6 and M7); no sorryAx, no Lean.ofReduceBool
+forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
+```

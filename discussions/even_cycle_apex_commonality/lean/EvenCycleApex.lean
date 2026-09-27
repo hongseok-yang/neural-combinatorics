@@ -68,3 +68,6 @@ import EvenCycleApex.Finite.ThreeApexGraphs
 import EvenCycleApex.Finite.ThreeApexMoments
 import EvenCycleApex.Finite.ThreeApexScalars
 import EvenCycleApex.Finite.ThreeApex
+-- M9: every apex number; headlines H1 and H3.
+import EvenCycleApex.Finite.AllApices
+import EvenCycleApex.Main

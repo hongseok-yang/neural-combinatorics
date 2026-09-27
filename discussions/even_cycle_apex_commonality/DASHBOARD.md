@@ -11,7 +11,7 @@ design decision in the plan).
 Hardness: Easy · Medium · Hard · Very hard — an estimate for an axiom-free Lean proof, not for the
 paper argument.
 
-Last updated: 2026-09-27 (M0–M8 passed; **headlines: commonality for k = 1 and k = 2, no certificate**; the three certificate inequalities kernel-checked; **`A_{n/2,3} ≥ R_n` on every finite host** (`FiniteKernel.three_apex_relative`).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
+Last updated: 2026-09-27 (M0–M9 passed; **headlines H1 (commonality of `C_n^{+k}` for every even `n ≥ 4` and every `k ≥ 1`) and H3 (`A_{n/2,k} ≥ R_n ≥ 1` for `k ≥ 3`) proved**, axiom-clean; equality H2 next (M10).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
 
 ## Milestones
 
@@ -26,11 +26,11 @@ Last updated: 2026-09-27 (M0–M8 passed; **headlines: commonality for k = 1 and
 | M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ✅ | Hard | `meanThree_nonneg_of_checks`, `negMajority_nonneg_of_checks`, `posMajority_nonneg_of_checks` (from `cert_sound`): `[propext, Classical.choice, Quot.sound]` (91 audited, every one within that set); targets agree with `independent_audit.py` on all 992 / 6150 / 6151 merged monomials; `schemas_ok`, `schema_dims` by `decide`; 8617 jobs, 0 warnings; 2026-09-27 |
 | M7 | Kernel-checked certificate data: `decide +kernel` for the relabelling witnesses (per occurrence, X3: 15,548 skeletons + 13,754 target monomials), three orbit-coefficient identities (C), 57 rational factorizations | ✅ | Very hard | `three_universal_graph_inequalities`: `[propext, Classical.choice, Quot.sound]`; no `Lean.ofReduceBool`, no `sorryAx` (104 audited); single-threaded wall per check file 60 / 69 / 118 / 118 s (budget table); peak 5.6 GB for the whole chain; 8620 jobs, 0 warnings; 2026-09-27 |
 | M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ✅ | Hard | `FiniteKernel.three_apex_relative`: `[propext, Classical.choice, Quot.sound]` (130 audited, every one within that set); 8624 jobs, 0 warnings; 2026-09-27 |
-| M9 | All k ≥ 3 by apex lifting, `thm:finite-main`, transfer; **headlines H1 `commonality_all_even_all_apices` and H3 `apex_relative_of_three_le`** | ❌ | Medium | both audited; statements match plan §1 D5 |
+| M9 | All k ≥ 3 by apex lifting, `thm:finite-main`, transfer; **headlines H1 `commonality_all_even_all_apices` and H3 `apex_relative_of_three_le`** | ✅ | Medium | `commonality_all_even_all_apices`, `apex_relative_of_three_le` (+ `one_le_cycle_normalized`): `[propext, Classical.choice, Quot.sound]` (141 audited, every one within that set); elaborated statements printed and identical to D5; 8626 jobs, 0 warnings; 2026-09-27 |
 | M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ❌ | Hard | audited, both directions |
 | M11 | Final audit: prune, `CheckAxioms.lean` coverage of plan §6, README, `DEVIATIONS.md`, complete label map, forbidden-token scan | ❌ | Easy | every item of plan §0 passes |
 
-Overall: **9 / 12 milestones complete** (M0–M8).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free); the finite three-apex bound `A_{n/2,3} ≥ R_n` (targets: all k and H3 at M9, equality at M10).  Certificates are used only for k ≥ 3.
+Overall: **10 / 12 milestones complete** (M0–M9).  Headlines reached: **H1 for every `k ≥ 1`** (`commonality_all_even_all_apices`; certificate-free for `k ≤ 2`) and **H3** (`apex_relative_of_three_le`, with `one_le_cycle_normalized`).  Remaining: H2 (equality, M10) and the final audit (M11).
 
 ## Blueprint statements
 
@@ -43,7 +43,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | def:densities | 16668 | kernels, `t(F,L)`, `M(F,W)`, `F^{+k}`, `C_n`, `P_j`, `K_{u,v}` | `homDensity`, `apexCycle`, Mathlib's `SimpleGraph.cycleGraph` | M1 | ✅ | Medium |
 | lem:counts | 16694 | `\|V(C_n^{+k})\| = n+k`, `\|E\| = n(k+1)` | `apexCycle_edgeCount` | M1 | ✅ | Easy |
 | def:normalization | 16710 | `U = 2W−1`, `S_σ`, `A_{n/2,k}`, `R_n`, `E_σ t(F,S_σ) = 2^{\|E\|−1}M(F,W)` | `normalizedApexDensity`, `colour_normalization` | M1 | ✅ | Medium |
-| thm:main | 16731 | H1 + H2 + H3 | `commonality_all_even_all_apices` (+ equality, relative) | M9/M10 | ❌ | — |
+| thm:main | 16731 | H1 + H2 + H3 | `commonality_all_even_all_apices` (H1), `apex_relative_of_three_le` + `one_le_cycle_normalized` (H3), `commonality_equality_iff_constant` (H2, M10) | M9/M10 | 🚧 (H1 ✅, H3 ✅; H2 in M10) | — |
 | lem:density-algebra | 16769 | relabelling, isolated vertices, disjoint unions, a.e. equality | `homDensity_comap_equiv` (graphon relabelling); hosts: `edgeDensity_map_equiv`, `edgeDensity_eq_of_iso`, `edgeDensity_castAdd` (isolated vertices), `edgeDensity_append` (disjoint unions); a.e. equality not needed (pointwise `IsGraphon`, D1) | M1 / M2 | ✅ | Hard |
 | lem:parity | 16789 | complementation; even/odd parity expansion | `colour_parity_expansion`, `colour_parity_expansion_odd`, `edgeDensity_colour_even/odd` | M2 | ✅ | Easy |
 | lem:moment-basics | 16811 | finite Cauchy–Schwarz, Jensen `E X^q ≥ (E X^p)^{q/p}`, `Σx^s ≤ (Σx)^s` | `moment_monotone` (Jensen), `sum_rpow_le_rpow_sum`; Cauchy–Schwarz is Mathlib's `sum_sq_le_sum_mul_sum_of_sq_le_mul` | M4 | ✅ | Medium |
@@ -83,7 +83,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | thm:finite-three | 17819 | `A_{n/2,3} ≥ R_n` on finite hosts | `FiniteKernel.three_apex_relative` (+ `one_le_A_three`) | M8 | ✅ | Medium |
 | lem:apex-lifting | 17842 | `A_{n/2,k} ≥ A_{n/2,s}^{k/s} / R_n^{k/s−1}` | `FiniteKernel.apex_number_moment_lifting` (host version; + `hostDensity_apexCycle_eq_xi`) | M4 | ✅ | Medium |
 | lem:diamond | 17875 | `Z_1 = 1+b`, `X = 1+2a+8b+c+4q`, `\|q\| ≤ √(bc)`, `X ≥ 1+2b+c/3` | `FiniteKernel.diamond_lower_bound` (`\|q\| ≤ √(bc)` as `q² ≤ bc`) | M3 | ✅ | Medium |
-| thm:finite-main | 17918 | finite host: `A_{n/2,1} ≥ (X²/(1+b))^{n/4} ≥ 1`; `A_{n/2,2} ≥ Θ(b,c)^{n/4} ≥ 1` with `Θ = (1+2b+c/3)⁴/((1+b)²(1+6b+c))` (D10; blueprint has `R_4^{n/4}`); `A_{n/2,k} ≥ R_n ≥ 1` (k≥3) | `FiniteKernel.all_even_apex_bounds` | M4 (k=1), M5 (k=2), M8 (k=3), M9 (all) | 🚧 (k = 1 ✅ `FiniteKernel.one_apex_bound`; k = 2 ✅ `FiniteKernel.two_apex_bound`; k = 3 ✅ `FiniteKernel.three_apex_relative`; k ≥ 4 in M9) | Medium |
+| thm:finite-main | 17918 | finite host: `A_{n/2,1} ≥ (X²/(1+b))^{n/4} ≥ 1`; `A_{n/2,2} ≥ Θ(b,c)^{n/4} ≥ 1` with `Θ = (1+2b+c/3)⁴/((1+b)²(1+6b+c))` (D10; blueprint has `R_4^{n/4}`); `A_{n/2,k} ≥ R_n ≥ 1` (k≥3) | `FiniteKernel.all_even_apex_bounds` (+ `apex_relative_host`, `one_le_A`) | M4 (k=1), M5 (k=2), M8 (k=3), M9 (all) | ✅ | Medium |
 | lem:representative | 17958 | pointwise symmetric representative on `[0,1]` | — (pointwise `IsGraphon`, plan D1) | — | — | — |
 | def:dyadic | 17984 | dyadic cell averages | — (replaced by L¹ step approximation, plan D3) | — | — | — |
 | lem:dyadic-properties | 18000 | contraction etc. | — (replaced) | — | — | — |
@@ -93,7 +93,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:step-matrix | 18105 | step density = finite-host density, any `F` | `step_homDensity_eq_host` (weighted), `exists_host_of_isStepKernel` | M2 | ✅ | Hard |
 | def:integral-scalars | 18123 | `f, m, a, b, K, c, r, p_3, τ, q, X` as integrals | `graphonScalars` | M10 | ❌ | Easy |
 | lem:integral-moments | 18145 | `b = t(P_2)`, `c = ∫∫K²`, `R_4` identity, diamond bound, L¹ continuity | `integral_scalar_identities` | M10 | ❌ | Medium |
-| thm:graphon-main | 18176 | the three bounds for every graphon (k=2 bound as in D10) | `all_even_graphon_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (k = 1 ✅, k = 2 ✅ via `one_le_normalizedApexDensity_of_hosts`; k ≥ 3 in M9) | Medium |
+| thm:graphon-main | 18176 | the three bounds for every graphon (k=2 bound as in D10) | `all_even_graphon_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (`A ≥ 1` for all k ✅ via `one_le_normalizedApexDensity_of_hosts`; `A_{n/2,k} ≥ R_n` for k ≥ 3 ✅ `normalizedCycleDensity_le_apex_of_hosts`; the explicit graphon bounds `(X²/(1+b))^{n/4}`, `Θ(b,c)^{n/4}` need the integral scalars of M10) | Medium |
 | lem:c-zero | 18211 | `c = 0 ⟺ U = 0` a.e. | `fourth_signed_cycle_zero_iff` (finite-rank L² route, plan D9) | M10 | ❌ | Hard |
 | lem:spectral-interpolation | 18234 | `Σx⁴ ≤ (Σx²)^{(n−4)/(n−2)} (Σxⁿ)^{2/(n−2)}` | `finite_spectral_remainder_interpolation` | M10 | ❌ | Medium |
 | lem:spectral-concentration | 18257 | `1 ≤ Tr B⁴ ≤ t^{4/n} + 4^{(n−4)/(n−2)} (t−1)^{2/(n−2)}` | `finite_fourth_trace_from_even_trace` | M10 | ❌ | Medium |
@@ -106,7 +106,9 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | — | — | pair marginal of `Measure.pi` | `pairMarginal_measurePreserving` (new, plan §2.1) | M1 | ✅ | Hard |
 | — | — | headline for one apex | `commonality_one_apex` | M4 | ✅ | — |
 | — | — | headline for two apices (certificate-free) | `commonality_two_apices` | M5 | ✅ | — |
-| — | — | headline H3 | `apex_relative_of_three_le` | M9 | ❌ | — |
+| — | — | headline H1 (every `k ≥ 1`) | `commonality_all_even_all_apices` | M9 | ✅ | — |
+| — | — | transfer of a closed host inequality `F ≤ G` (both `L¹`-Lipschitz) to every graphon | `le_of_step_graphons` (+ `normalizedCycleDensity_step`, `normalizedCycleDensity_lipschitz`) | M9 | ✅ | Medium |
+| — | — | headline H3 | `apex_relative_of_three_le` (+ `one_le_cycle_normalized`) | M9 | ✅ | — |
 
 ## Kernel-check budget (M0 spike and M7)
 

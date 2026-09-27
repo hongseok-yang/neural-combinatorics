@@ -152,3 +152,16 @@ open EvenCycleApex
 #print axioms EvenCycleApex.FiniteKernel.weighted_fourth_reference
 #print axioms EvenCycleApex.FiniteKernel.three_apex_relative
 #print axioms EvenCycleApex.FiniteKernel.one_le_A_three
+
+-- M9: every apex number; headlines H1 and H3
+#print axioms EvenCycleApex.FiniteKernel.apex_relative_host
+#print axioms EvenCycleApex.FiniteKernel.one_le_A
+#print axioms EvenCycleApex.FiniteKernel.all_even_apex_bounds
+#print axioms EvenCycleApex.normalizedCycleDensity_step
+#print axioms EvenCycleApex.normalizedCycleDensity_lipschitz
+#print axioms EvenCycleApex.le_of_step_graphons
+#print axioms EvenCycleApex.normalizedCycleDensity_le_apex_of_hosts
+#print axioms EvenCycleApex.one_le_normalizedCycleDensity
+#print axioms EvenCycleApex.commonality_all_even_all_apices
+#print axioms EvenCycleApex.apex_relative_of_three_le
+#print axioms EvenCycleApex.one_le_cycle_normalized
