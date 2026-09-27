@@ -111,3 +111,58 @@ lake env lean CheckAxioms.lean
 'EvenCycleApex.cycleDensity_of_factored' depends on axioms: [propext, Classical.choice, Quot.sound]
 forbidden-token scan (native_decide, decide +native, sorry, admit, ofReduceBool, axiom): none
 ```
+
+## 2026-09-27 — M1 (graph densities on an arbitrary probability space)
+
+Files `lean/EvenCycleApex/Graph/{Apex,HomDensity,PairMarginal,Lipschitz,DensityAlgebra}.lean`.
+
+* **Graphs.**  `cycleGraph n` is Mathlib's `SimpleGraph.cycleGraph` (with its `DecidableRel`
+  instance), so the public statements use the library definition.  `apexCycle n k` is defined by
+  `Fin.addCases` on both endpoints; the four simp lemmas `apexCycle_adj_castAdd_castAdd` (↔ cycle
+  adjacency), `…_castAdd_natAdd`, `…_natAdd_castAdd` (always) and `apexCycle_not_adj_natAdd_natAdd`
+  are its characterization; decidability by the same case split.
+* **Edge counts.**  `edgePairs F` (ordered pairs `i < j`, the index set of `homDensity`) is put in
+  bijection with Mathlib's `edgeFinset` (`card_edgePairs`), so counts come from the handshake lemma
+  `sum_degrees_eq_twice_card_edges`: `cycleGraph_card_edgePairs` from Mathlib's
+  `cycleGraph_degree_three_le`, and `apexCycle_edgeCount` from the degrees `2 + k` (cycle vertex)
+  and `n` (apex), split with `Fin.sum_univ_add`.
+* **Density and normalization.**  `homDensity` is literally plan D4.  `signedKernel W = 2W − 1`,
+  `colourKernel σ U = 1 + σU`; `colour_normalization` is `(t(F,S₊) + t(F,S₋))/2 = 2^|E|/2 · M(F,W)`
+  (a pointwise identity: `S₊ = 2W`, `S₋ = 2(1 − W)`, and `homDensity_const_mul`).
+  `normalizedApexDensity`/`normalizedCycleDensity` are D5's `A_{n/2,k}`/`R_n`, and
+  `normalizedApexDensity_eq_colour_mean` rewrites `A_{n/2,k}` as the colour average (uses
+  `apexCycle_edgeCount`).
+* **Pair marginal** (plan §2.1, risk E did not materialize): `Measure.prod_eq` on rectangles; the
+  preimage of `s ×ˢ t` is the box `Set.univ.pi` with `s` at `i`, `t` at `j`; `Measure.pi_pi` plus
+  a factorization `μ(box l) = [l = i ? μ s : 1]·[l = j ? μ t : 1]` and `Finset.prod_ite_eq'`.
+* **Lipschitz.**  Telescoping `abs_prod_sub_prod_le` (`|∏f − ∏g| ≤ B^{|s|−1} Σ|f − g|`, by
+  `Finset.induction_on`; the `B · B^{|s|−1} ≤ B^{|s|}` step splits on `s = ∅`).  Then
+  `homDensity_L1_lipschitz` with the blueprint's exact constant `e B^{e−1}`, and the graphon form
+  `commonalityM_L1_lipschitz`: `|M(F,W) − M(F,V)| ≤ 2e‖W − V‖₁` (what the transfer uses).
+* **Density algebra.**  `homDensity_comap_equiv`: relabelling by a permutation, for symmetric `L`
+  (`MeasurableEquiv.piCongrLeft` change of variables, edges reindexed by `sortPair`).  Isolated
+  vertices and disjoint unions are only used on finite hosts (certificate masks, `a = m²`, `mτ`);
+  they are proved there in M2 as finite-sum identities, not at graphon level.
+* **Statement lock check.**  The three D5 headline statements, with `sorry` placeholders in a
+  scratch file outside `lean/`, elaborate against these definitions.
+* Lean gotchas: `Sym2.mk` is curried in this Mathlib — use `s(a, b)`; `Measurable.comp` against a
+  lambda needs the inner map's type stated first (`have h : Measurable fun x => (x a, x b) := …`);
+  `MeasurableEquiv.piCongrLeft_apply_apply` needs `(β := fun _ => Ω)`; `integral_finset_sum` and
+  `integrable_finset_sum` are deprecated in favour of `…finsetSum`; keep `[MeasurableSpace Ω]` out of
+  sections with pure kernel algebra, or the unused-section-variable linter warns.
+
+### M1 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8591 jobs); 0 warnings
+'EvenCycleApex.apexCycle_edgeCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.cycleGraph_card_edgePairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.colour_normalization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.normalizedApexDensity_eq_colour_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.normalizedCycleDensity_eq_colour_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.pairMarginal_measurePreserving' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.integral_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.homDensity_L1_lipschitz' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.commonalityM_L1_lipschitz' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EvenCycleApex.homDensity_comap_equiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+```

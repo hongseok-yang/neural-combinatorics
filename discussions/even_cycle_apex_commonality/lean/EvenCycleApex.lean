@@ -19,3 +19,9 @@ import EvenCycleApex.Foundation.Majorization.RankOne
 import EvenCycleApex.Foundation.Model.StepModel
 import EvenCycleApex.Foundation.FiniteBridge
 import EvenCycleApex.Smoke
+-- M1: graph densities on an arbitrary probability space.
+import EvenCycleApex.Graph.Apex
+import EvenCycleApex.Graph.HomDensity
+import EvenCycleApex.Graph.PairMarginal
+import EvenCycleApex.Graph.Lipschitz
+import EvenCycleApex.Graph.DensityAlgebra
