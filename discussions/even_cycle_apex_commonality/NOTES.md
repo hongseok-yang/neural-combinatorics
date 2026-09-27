@@ -166,3 +166,57 @@ lake build                     Build completed successfully (8591 jobs); 0 warni
 'EvenCycleApex.commonalityM_L1_lipschitz' depends on axioms: [propext, Classical.choice, Quot.sound]
 'EvenCycleApex.homDensity_comap_equiv' depends on axioms: [propext, Classical.choice, Quot.sound]
 ```
+
+## 2026-09-27 — M2 (weighted finite host)
+
+Files `lean/EvenCycleApex/Host/{Defs,Bridge,EdgeDensity,Matrix,Spectral,Scalars,ScalarBounds,EvenCycle,Regression}.lean`.
+
+* **Host structure (plan D2, choice recorded).**  `FiniteKernel d` bundles weights `w` and the
+  signed kernel `U`.  Weights are required to be **nonnegative**, not positive: the step bridge then
+  needs no restriction to cells of positive mass, and every blueprint argument survives with "at
+  every point" read as "at every point of positive mass" (e.g. `D_s = 0 ⟹ w(x) h(x) = 0`).
+* **Step bridge.**  `step_homDensity_eq_host` (any graph `F`, cell weights `μ(σ⁻¹{i})`), the
+  argument of `cycleDensity_of_factored` for an arbitrary edge set.  `exists_host_of_isStepKernel`
+  restricts a step graphon to the range of its cell map so its matrix is symmetric and `[0,1]`-valued
+  at every entry.
+* **Density algebra on hosts** (`EdgeDensity.lean`), on raw edge sets `Finset (Fin v × Fin v)`:
+  relabelling by an equivalence (`edgeDensity_map_equiv`), by a permutation with re-sorted pairs for
+  symmetric kernels (`edgeDensity_image_sortPair`, `edgeDensity_eq_of_iso` — the permutation only has
+  to exist, so `decide` finds it), disjoint unions (`edgeDensity_append`), isolated vertices
+  (`edgeDensity_castAdd`), and `lem:parity` both as an algebraic identity
+  (`colour_parity_expansion[_odd]`) and for densities (`edgeDensity_colour_even/odd`).  With this,
+  the host part of `lem:density-algebra` is complete.
+* **Small graphs are evaluated by `simp`.**  `sum_fun_fin_succ` expands a sum over
+  `Fin (n+1) → Fin d` with `Matrix.vecCons`; `simp` then evaluates every vertex index (with `Fin.cons`
+  it got stuck at index `2`).  Combined with `decide` for edge-set equalities, powersets and the
+  existence of an isomorphism (24 permutations of `Fin 4` in a few seconds), `lem:fourth-traces`
+  became: parity over the four edges of `C₄`, then 14 subgraphs each recognised as an edge, a path, a
+  matching, a three-edge path or `C₄`.  This is the method for the diamond and codegree expansions
+  in M3.
+* **Spectral.**  `lem:finite-spectral` for any real symmetric matrix, stated with `dotProduct`/
+  `mulVec`; internally the copied `EigenSystem` of `Matrix.toEuclideanLin B`.  The bridges are
+  definitional (`toEuclideanLin A (toLp x) = toLp (A *ᵥ x)`, `⟪toLp x, toLp y⟫ = y ⬝ᵥ x`).  The
+  weighted Jensen inequalities `Real.pow_arith_mean_le_arith_mean_pow[_of_even]` give the lower
+  bounds; `sum_rpow_le_rpow_sum` (third part of `lem:moment-basics`, proved here) the upper bound.
+* **Scalars** are defined as the blueprint's explicit iterated sums, with lemmas identifying them
+  with edge-set densities and traces; `lem:scalar-bounds` including `‖T‖_op ≤ r` and `|p₃| ≤ br`
+  (via `p₃ = ⟨F, TF⟩`, `F = Tu`, `‖F‖² = b`) and `c = ∑ wᵢwⱼK(i,j)²`.  The blueprint's host-level
+  `c = 0 ⟺ U = 0` is not formalized: only the graphon version (M10, D9) is used.
+* **Regression.**  The three exact 2-point hosts of `verify_algebra.py` reproduce all its values
+  (`m, b, c, τ, p₃, R₄, r_{±,4}`), with `R₄` and `r_{±,4}` computed from scratch as four-cycle
+  densities of `S_σ` — an independent check of `fourth_colour_traces`' normalization.
+* Lean gotchas: `Real.rpow_le_self_of_le_one` (nonnegative base) instead of
+  `rpow_le_rpow_of_exponent_ge` (positive base); `Sym2.map_pair_eq` → `Sym2.map_mk`; `diag` is
+  ambiguous under `open Finset Matrix` (use `Matrix.diag_apply`); a `←` rewrite whose pattern is an
+  implicit-size `edgeDensity` can match the wrong side — rewrite with an explicit equation instead.
+
+### M2 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8600 jobs); 0 warnings
+lake env lean CheckAxioms.lean 38 declarations, all [propext, Classical.choice, Quot.sound], including
+  step_homDensity_eq_host, hostDensity_cycle_eq_trace, normSq_pow_le_trace_pow,
+  rayleigh_pow_le_trace_pow, trace_pow_le_trace_four_rpow, FiniteKernel.fourth_colour_traces,
+  FiniteKernel.basic_scalar_bounds, FiniteKernel.even_cycle_lower_bound, Regression.host{1,2,3}_*
+forbidden-token scan: none
+```

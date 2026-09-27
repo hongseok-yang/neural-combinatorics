@@ -36,6 +36,13 @@ lemma sortPair_mem_edgePairs {v : ℕ} {F : SimpleGraph (Fin v)} [DecidableRel F
   · rw [sortPair_of_lt hab]; exact mem_edgePairs.mpr ⟨hab, h⟩
   · rw [sortPair_of_gt hab]; exact mem_edgePairs.mpr ⟨hab, h.symm⟩
 
+/-- `sortPair a b` represents the unordered pair `{a, b}`. -/
+lemma sym2_sortPair_eq {v : ℕ} (a b : Fin v) : s((sortPair a b).1, (sortPair a b).2) = s(a, b) := by
+  unfold sortPair
+  split_ifs
+  · rfl
+  · exact Sym2.eq_swap
+
 /-- A symmetric function of an unordered pair does not see the order. -/
 lemma apply_sortPair {v : ℕ} {β : Type*} (g : Fin v → Fin v → β) (hg : ∀ a b, g a b = g b a)
     (a b : Fin v) : g (sortPair a b).1 (sortPair a b).2 = g a b := by

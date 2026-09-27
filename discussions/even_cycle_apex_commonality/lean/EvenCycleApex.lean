@@ -25,3 +25,13 @@ import EvenCycleApex.Graph.HomDensity
 import EvenCycleApex.Graph.PairMarginal
 import EvenCycleApex.Graph.Lipschitz
 import EvenCycleApex.Graph.DensityAlgebra
+-- M2: the weighted finite host.
+import EvenCycleApex.Host.Defs
+import EvenCycleApex.Host.Bridge
+import EvenCycleApex.Host.EdgeDensity
+import EvenCycleApex.Host.Matrix
+import EvenCycleApex.Host.Spectral
+import EvenCycleApex.Host.Scalars
+import EvenCycleApex.Host.ScalarBounds
+import EvenCycleApex.Host.EvenCycle
+import EvenCycleApex.Host.Regression
