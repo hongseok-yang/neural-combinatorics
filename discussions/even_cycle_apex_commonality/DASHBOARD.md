@@ -11,7 +11,7 @@ design decision in the plan).
 Hardness: Easy · Medium · Hard · Very hard — an estimate for an axiom-free Lean proof, not for the
 paper argument.
 
-Last updated: 2026-09-27 (M0–M9 passed; **headlines H1 (commonality of `C_n^{+k}` for every even `n ≥ 4` and every `k ≥ 1`) and H3 (`A_{n/2,k} ≥ R_n ≥ 1` for `k ≥ 3`) proved**, axiom-clean; equality H2 next (M10).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
+Last updated: 2026-09-28 (M0–M10 passed; **all three headlines proved, axiom-clean**: H1 `commonality_all_even_all_apices`, H2 `commonality_equality_iff_constant`, H3 `apex_relative_of_three_le`.  Final audit next (M11).  `mean_two` excluded, DEVIATIONS X2; checker encoding X3; equality route X4)
 
 ## Milestones
 
@@ -27,10 +27,10 @@ Last updated: 2026-09-27 (M0–M9 passed; **headlines H1 (commonality of `C_n^{+
 | M7 | Kernel-checked certificate data: `decide +kernel` for the relabelling witnesses (per occurrence, X3: 15,548 skeletons + 13,754 target monomials), three orbit-coefficient identities (C), 57 rational factorizations | ✅ | Very hard | `three_universal_graph_inequalities`: `[propext, Classical.choice, Quot.sound]`; no `Lean.ofReduceBool`, no `sorryAx` (104 audited); single-threaded wall per check file 60 / 69 / 118 / 118 s (budget table); peak 5.6 GB for the whole chain; 8620 jobs, 0 warnings; 2026-09-27 |
 | M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ✅ | Hard | `FiniteKernel.three_apex_relative`: `[propext, Classical.choice, Quot.sound]` (130 audited, every one within that set); 8624 jobs, 0 warnings; 2026-09-27 |
 | M9 | All k ≥ 3 by apex lifting, `thm:finite-main`, transfer; **headlines H1 `commonality_all_even_all_apices` and H3 `apex_relative_of_three_le`** | ✅ | Medium | `commonality_all_even_all_apices`, `apex_relative_of_three_le` (+ `one_le_cycle_normalized`): `[propext, Classical.choice, Quot.sound]` (141 audited, every one within that set); elaborated statements printed and identical to D5; 8626 jobs, 0 warnings; 2026-09-27 |
-| M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ❌ | Hard | audited, both directions |
+| M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ✅ | Hard | `commonality_equality_iff_constant`: `[propext, Classical.choice, Quot.sound]` (162 audited, every one within that set), both directions; elaborated statement identical to D5; route per DEVIATIONS X4; 8630 jobs, 0 warnings; 2026-09-28 |
 | M11 | Final audit: prune, `CheckAxioms.lean` coverage of plan §6, README, `DEVIATIONS.md`, complete label map, forbidden-token scan | ❌ | Easy | every item of plan §0 passes |
 
-Overall: **10 / 12 milestones complete** (M0–M9).  Headlines reached: **H1 for every `k ≥ 1`** (`commonality_all_even_all_apices`; certificate-free for `k ≤ 2`) and **H3** (`apex_relative_of_three_le`, with `one_le_cycle_normalized`).  Remaining: H2 (equality, M10) and the final audit (M11).
+Overall: **11 / 12 milestones complete** (M0–M10).  **All headlines reached**: H1 `commonality_all_even_all_apices` (every even `n ≥ 4`, every `k ≥ 1`; certificate-free for `k ≤ 2`), H2 `commonality_equality_iff_constant`, H3 `apex_relative_of_three_le` (+ `one_le_cycle_normalized`).  Remaining: M11 (final audit, pruning, README).
 
 ## Blueprint statements
 
@@ -43,7 +43,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | def:densities | 16668 | kernels, `t(F,L)`, `M(F,W)`, `F^{+k}`, `C_n`, `P_j`, `K_{u,v}` | `homDensity`, `apexCycle`, Mathlib's `SimpleGraph.cycleGraph` | M1 | ✅ | Medium |
 | lem:counts | 16694 | `\|V(C_n^{+k})\| = n+k`, `\|E\| = n(k+1)` | `apexCycle_edgeCount` | M1 | ✅ | Easy |
 | def:normalization | 16710 | `U = 2W−1`, `S_σ`, `A_{n/2,k}`, `R_n`, `E_σ t(F,S_σ) = 2^{\|E\|−1}M(F,W)` | `normalizedApexDensity`, `colour_normalization` | M1 | ✅ | Medium |
-| thm:main | 16731 | H1 + H2 + H3 | `commonality_all_even_all_apices` (H1), `apex_relative_of_three_le` + `one_le_cycle_normalized` (H3), `commonality_equality_iff_constant` (H2, M10) | M9/M10 | 🚧 (H1 ✅, H3 ✅; H2 in M10) | — |
+| thm:main | 16731 | H1 + H2 + H3 | `commonality_all_even_all_apices` (H1), `apex_relative_of_three_le` + `one_le_cycle_normalized` (H3), `commonality_equality_iff_constant` (H2) | M9/M10 | ✅ | — |
 | lem:density-algebra | 16769 | relabelling, isolated vertices, disjoint unions, a.e. equality | `homDensity_comap_equiv` (graphon relabelling); hosts: `edgeDensity_map_equiv`, `edgeDensity_eq_of_iso`, `edgeDensity_castAdd` (isolated vertices), `edgeDensity_append` (disjoint unions); a.e. equality not needed (pointwise `IsGraphon`, D1) | M1 / M2 | ✅ | Hard |
 | lem:parity | 16789 | complementation; even/odd parity expansion | `colour_parity_expansion`, `colour_parity_expansion_odd`, `edgeDensity_colour_even/odd` | M2 | ✅ | Easy |
 | lem:moment-basics | 16811 | finite Cauchy–Schwarz, Jensen `E X^q ≥ (E X^p)^{q/p}`, `Σx^s ≤ (Σx)^s` | `moment_monotone` (Jensen), `sum_rpow_le_rpow_sum`; Cauchy–Schwarz is Mathlib's `sum_sq_le_sum_mul_sum_of_sq_le_mul` | M4 | ✅ | Medium |
@@ -91,14 +91,14 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:dyadic-convergence | 18054 | `P_jF → F` in L¹ | — (replaced) | — | — | — |
 | lem:L1-counting | 18074 | `\|t(F,L) − t(F,L')\| ≤ e B^{e−1} ‖L−L'‖₁` | `homDensity_L1_lipschitz` (+ `commonalityM_L1_lipschitz`) | M1 | ✅ | Hard |
 | lem:step-matrix | 18105 | step density = finite-host density, any `F` | `step_homDensity_eq_host` (weighted), `exists_host_of_isStepKernel` | M2 | ✅ | Hard |
-| def:integral-scalars | 18123 | `f, m, a, b, K, c, r, p_3, τ, q, X` as integrals | `graphonScalars` | M10 | ❌ | Easy |
-| lem:integral-moments | 18145 | `b = t(P_2)`, `c = ∫∫K²`, `R_4` identity, diamond bound, L¹ continuity | `integral_scalar_identities` | M10 | ❌ | Medium |
-| thm:graphon-main | 18176 | the three bounds for every graphon (k=2 bound as in D10) | `all_even_graphon_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (`A ≥ 1` for all k ✅ via `one_le_normalizedApexDensity_of_hosts`; `A_{n/2,k} ≥ R_n` for k ≥ 3 ✅ `normalizedCycleDensity_le_apex_of_hosts`; the explicit graphon bounds `(X²/(1+b))^{n/4}`, `Θ(b,c)^{n/4}` need the integral scalars of M10) | Medium |
-| lem:c-zero | 18211 | `c = 0 ⟺ U = 0` a.e. | `fourth_signed_cycle_zero_iff` (finite-rank L² route, plan D9) | M10 | ❌ | Hard |
-| lem:spectral-interpolation | 18234 | `Σx⁴ ≤ (Σx²)^{(n−4)/(n−2)} (Σxⁿ)^{2/(n−2)}` | `finite_spectral_remainder_interpolation` | M10 | ❌ | Medium |
-| lem:spectral-concentration | 18257 | `1 ≤ Tr B⁴ ≤ t^{4/n} + 4^{(n−4)/(n−2)} (t−1)^{2/(n−2)}` | `finite_fourth_trace_from_even_trace` | M10 | ❌ | Medium |
-| lem:even-cycle-equality | 18281 | `R_n = 1 ⟺ W = 1/2` a.e. | `even_cycle_equality_iff_constant` (mean-zero renormalized approximants, plan D9) | M10 | ❌ | Hard |
-| cor:main-equality | 18317 | H2 and the unnormalized H1 (k=2 strictness from `Θ(b,c) > 1` when `c > 0`) | `commonality_equality_iff_constant` | M10 | ❌ | Medium |
+| def:integral-scalars | 18123 | `f, m, a, b, K, c, r, p_3, τ, q, X` as integrals | `graphonM`, `graphonB`, `graphonC`, `graphonQ`, `graphonX` (signed densities, `signedDensity`), `K₂ = comp μ U U`; `f, r, p_3, τ` are not used on the graphon side | M10 | ✅ | Easy |
+| lem:integral-moments | 18145 | `b = t(P_2)`, `c = ∫∫K²`, `R_4` identity, diamond bound, L¹ continuity | `graphonB_nonneg`, `graphonC_eq_integral_sq`, `graphonC_nonneg`, `R_four_graphon`, `graphonX_ge`, `L1ContAt` for every scalar (`graphonM_cont` … `graphonX_cont`, `signedDensity_lipschitz`, `colourDensity_lipschitz`) | M10 | ✅ | Medium |
+| thm:graphon-main | 18176 | the three bounds for every graphon (k=2 bound as in D10) | `all_even_graphon_apex_bounds` (+ `one_apex_graphon_bound`, `two_apex_graphon_bound`) | M4, M5, M9, M10 | ✅ | Medium |
+| lem:c-zero | 18211 | `c = 0 ⟺ U = 0` a.e. | `fourth_signed_cycle_zero_iff` (+ `signedKernel_ae_zero_of_graphonC`, `integral_U_mul_eq_zero`; finite-rank L² route, plan D9) | M10 | ✅ | Hard |
+| lem:spectral-interpolation | 18234 | `Σx⁴ ≤ (Σx²)^{(n−4)/(n−2)} (Σxⁿ)^{2/(n−2)}` | `finite_spectral_remainder_interpolation` (Hölder) | M10 | ✅ | Medium |
+| lem:spectral-concentration | 18257 | `1 ≤ Tr B⁴ ≤ t^{4/n} + 4^{(n−4)/(n−2)} (t−1)^{2/(n−2)}` | `finite_fourth_trace_from_even_trace` (for any Rayleigh value `ρ ≥ 0`: `Tr B⁴ ≤ t^{4/n} + 4^{(n−4)/(n−2)} max(t − ρⁿ, 0)^{2/(n−2)}`; the blueprint form is `ρ = 1`), host form `FiniteKernel.R_four_le_fourthBound` (X4) | M10 | ✅ | Medium |
+| lem:even-cycle-equality | 18281 | `R_n = 1 ⟺ W = 1/2` a.e. | `even_cycle_equality_iff_constant` (transfers of continuous finite inequalities, DEVIATIONS X4) | M10 | ✅ | Hard |
+| cor:main-equality | 18317 | H2 and the unnormalized H1 (k=2 strictness from `Θ(b,c) > 1` when `c > 0`) | `commonality_equality_iff_constant` | M10 | ✅ | Medium |
 | — (D10) | — | `EΠ₂ = A_{2,1}`: the graph of `Π₂` is `K_{1,2,2} = C₄⁺¹` (relabelling on the host) | `FiniteKernel.twoApex_Pi_eq_oneApex` (new) | M5 | ✅ | Medium |
 | — (D10) | — | `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)` for `b, c ≥ 0`, strict unless `b = c = 0` | `two_apex_scalar_inequality` (new) | M5 | ✅ | Easy |
 | — (D10) | — | `E(Q♯₂)⁴ ≥ Θ(b,c) ≥ 1` on every finite host | `FiniteKernel.two_apex_fourth_moment_ge_one` (new) | M5 | ✅ | Medium |
@@ -109,6 +109,8 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | — | — | headline H1 (every `k ≥ 1`) | `commonality_all_even_all_apices` | M9 | ✅ | — |
 | — | — | transfer of a closed host inequality `F ≤ G` (both `L¹`-Lipschitz) to every graphon | `le_of_step_graphons` (+ `normalizedCycleDensity_step`, `normalizedCycleDensity_lipschitz`) | M9 | ✅ | Medium |
 | — | — | headline H3 | `apex_relative_of_three_le` (+ `one_le_cycle_normalized`) | M9 | ✅ | — |
+| — | — | headline H2 | `commonality_equality_iff_constant` | M10 | ✅ | — |
+| — | — | transfer of an inequality between `L¹`-continuous functionals; densities up to null sets | `le_of_step_graphons_cont`, `le_of_hosts_cont`, `L1ContAt`; `homDensity_congr_ae`, `commonalityM_of_half` | M10 | ✅ | Medium |
 
 ## Kernel-check budget (M0 spike and M7)
 

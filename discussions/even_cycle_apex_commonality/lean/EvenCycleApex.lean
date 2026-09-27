@@ -71,3 +71,8 @@ import EvenCycleApex.Finite.ThreeApex
 -- M9: every apex number; headlines H1 and H3.
 import EvenCycleApex.Finite.AllApices
 import EvenCycleApex.Main
+-- M10: equality; headline H2.
+import EvenCycleApex.Equality.Spectral
+import EvenCycleApex.Equality.Functionals
+import EvenCycleApex.Equality.CZero
+import EvenCycleApex.Equality.Main

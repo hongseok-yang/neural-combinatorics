@@ -165,3 +165,26 @@ open EvenCycleApex
 #print axioms EvenCycleApex.commonality_all_even_all_apices
 #print axioms EvenCycleApex.apex_relative_of_three_le
 #print axioms EvenCycleApex.one_le_cycle_normalized
+
+-- M10: equality; headline H2
+#print axioms EvenCycleApex.finite_spectral_remainder_interpolation
+#print axioms EvenCycleApex.finite_fourth_trace_from_even_trace
+#print axioms EvenCycleApex.FiniteKernel.R_four_le_fourthBound
+#print axioms EvenCycleApex.le_of_step_graphons_cont
+#print axioms EvenCycleApex.le_of_hosts_cont
+#print axioms EvenCycleApex.signedDensity_lipschitz
+#print axioms EvenCycleApex.colourDensity_lipschitz
+#print axioms EvenCycleApex.graphonScalars_step
+#print axioms EvenCycleApex.graphonC_eq_integral_sq
+#print axioms EvenCycleApex.integral_U_mul_eq_zero
+#print axioms EvenCycleApex.signedKernel_ae_zero_of_graphonC
+#print axioms EvenCycleApex.graphon_half_of_graphonC_zero
+#print axioms EvenCycleApex.homDensity_congr_ae
+#print axioms EvenCycleApex.commonalityM_of_half
+#print axioms EvenCycleApex.one_apex_graphon_bound
+#print axioms EvenCycleApex.two_apex_graphon_bound
+#print axioms EvenCycleApex.all_even_graphon_apex_bounds
+#print axioms EvenCycleApex.even_cycle_equality_iff_constant
+#print axioms EvenCycleApex.commonality_equality_iff_constant
+#print axioms EvenCycleApex.R_four_graphon
+#print axioms EvenCycleApex.fourth_signed_cycle_zero_iff

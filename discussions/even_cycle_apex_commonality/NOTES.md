@@ -503,3 +503,41 @@ lake env lean CheckAxioms.lean 141 declarations: 131 print exactly [propext, Cla
   (3 wrapped), 10 a strict subset (those listed at M6 and M7); no sorryAx, no Lean.ofReduceBool
 forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
 ```
+
+## 2026-09-28 — M10 (equality; headline H2)
+
+Files `lean/EvenCycleApex/Equality/{Spectral,Functionals,CZero,Main}.lean`; route recorded as
+DEVIATIONS X4 before the code (plan D9 allows it).
+
+* **Spectral** (`Spectral.lean`).  `finite_spectral_remainder_interpolation` by Hölder
+  (`Real.inner_le_Lp_mul_Lq_of_nonneg`, exponents `(n−2)/(n−4)` and `(n−2)/2`);
+  `finite_fourth_trace_from_even_trace` for any Rayleigh value `ρ ≥ 0` (top eigenvalue `≥ ρ`,
+  `λ⁴ ≤ t^{4/n}`, interpolation for the rest with `∑λᵢ² ≤ Tr B² ≤ 4`); host form
+  `R_four_le_fourthBound`: `R₄ ≤ ½∑_σ fourthBound(t(C_n, S_σ), 1 + σm)` with `Tr T_{S_σ}² ≤ 4`.
+* **Functionals** (`Functionals.lean`).  `L1ContAt` (ε–δ continuity along graphons), closed under
+  pairing and composition with functions continuous at the value; `le_of_step_graphons_cont` /
+  `le_of_hosts_cont` (transfer of host inequalities).  Signed and colour densities with step values
+  and Lipschitz bounds; `graphonM`, `graphonB`, `graphonC`, `graphonQ`, `graphonX` (`graphOf` builds
+  the small graphs from their edge pairs).
+* **`lem:c-zero`** (`CZero.lean`, D9).  `c = trace((U∘U)∘(U∘U)) = ∫∫ K₂²` (Foundation's `comp_assoc`,
+  `cycleDensity_eq_integral`); `c = 0` ⇒ `K₂ = 0` a.e. ⇒ `Tφ = 0` a.e. for bounded `φ` (self-adjointness
+  and `∫ (Tφ)² = ⟨φ, K₂φ⟩`) ⇒ all bilinear forms `∫∫ U ψ ⊗ φ` vanish ⇒ with a finite-rank
+  `L²` approximant `V`, `∫U² = ∫U(U − V) ≤ ½∫U² + ½∫(U − V)²`, so `∫U² ≤ δ` for every `δ` ⇒ `U = 0` a.e.
+* **Equality** (`Main.lean`).  `homDensity_congr_ae` (pair marginals of `Measure.pi`),
+  `commonalityM_of_half`; graphon forms `graphonB_nonneg`, `graphonC_nonneg`, `graphonX_ge`,
+  `one_add_graphonC_le`, `cycle_ge_mean`, `colour_cycle_ge_graphon`, `R_four_le_graphon`,
+  `R_four_graphon`; `one_apex_graphon_bound`, `two_apex_graphon_bound`,
+  `all_even_graphon_apex_bounds` (`thm:graphon-main`); `even_cycle_equality_iff_constant`
+  (`m = 0`, `t(C_n,S_±) = 1`, `R₄ ≤ 1`, `c = 0`); **H2 `commonality_equality_iff_constant`**
+  (`k = 1`: `(X²/(1+b))^{n/4} ≤ 1` with `X ≥ 1 + 2b + c/3` forces `c = 0`; `k = 2`: `Θ(b,c) ≤ 1` forces
+  `c = 0`; `k ≥ 3`: `R_n = 1`).  Elaborated statement printed and identical to D5.
+
+### M10 gate evidence (2026-09-28)
+
+```text
+lake build                     Build completed successfully (8630 jobs); 0 warnings
+#print axioms EvenCycleApex.commonality_equality_iff_constant  [propext, Classical.choice, Quot.sound]
+lake env lean CheckAxioms.lean 162 declarations: 152 print exactly [propext, Classical.choice, Quot.sound]
+  (3 wrapped), 10 a strict subset (those listed at M6 and M7); no sorryAx, no Lean.ofReduceBool
+forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
+```
