@@ -220,3 +220,43 @@ lake env lean CheckAxioms.lean 38 declarations, all [propext, Classical.choice, 
   FiniteKernel.basic_scalar_bounds, FiniteKernel.even_cycle_lower_bound, Regression.host{1,2,3}_*
 forbidden-token scan: none
 ```
+
+## 2026-09-27 — M3 (conditional second spectral moments)
+
+Files `lean/EvenCycleApex/Graph/ApexEdges.lean`, `lean/EvenCycleApex/Conditional/{Defs,Trace,Diamond}.lean`.
+
+* **Sampling space.**  `Sample d s = Bool × (Fin s → Fin d)`, `prob = ½ ∏ w(zⱼ)`, `E F = ∑ prob · F`.
+  All conditional quantities are functions of a sample; `x / 0 = 0` gives the blueprint's `D = 0`
+  branches of `Q` and `Q♯ = √(Π/D)` for free, and `D = 0 ⟹ w·h = 0` (nonnegative weights) gives
+  `N = Π = 0`.
+* **`prop:conditional-trace`.**  `edgePairs_apexCycle` (sorted edges of `C_n^{+s}` = cycle edges on
+  `castAdd` ∪ the `n s` pairs `(castAdd i, natAdd j)`) → `hostDensity_apexCycle` (split the vertex map
+  by `Fin.append`) → per colour `t(C_n^{+s}, S_σ) = ∑_z ∏w(z) Tr B_{σ,z}ⁿ` (the closed-walk expansion
+  with weights `w·h`; `∏ᵢ h(xᵢ) = ∏ᵢ∏ⱼ S(xᵢ, zⱼ)`).  No `ξ(x)^s` is needed here.  `Tr Bⁿ ≥ (Q♯)ⁿ`
+  from `normSq_pow_le_trace_pow` at `gₓ = √(wₓhₓ)/√D` (`‖Bg‖² = (Q♯)²`), and `0 = (Q♯)ⁿ ≤ Tr Bⁿ` when
+  `D = 0`.
+* **`lem:quartic-support`.**  `(Q♯)⁴ − (2Π − D²) = (Π/D − D)²`; `E Π = E D (Q♯)²` and weighted
+  Cauchy–Schwarz (`sum_sq_le_sum_mul_sum_of_sq_le_mul`, no square roots needed).
+* **`lem:diamond`.**  `Z₁ = 1 + b` by direct algebra (`D₁ = 1 + σ f(t)`); `E Π₁` is the colour average
+  of the diamond density, and parity over its 5 edges gives 16 even subsets, each recognised by
+  `decide` (1 empty, 2 matchings, 8 paths, 1 four-cycle, 4 triangles with a pendant):
+  `X = 1 + 2a + 8b + c + 4q`.  `q² ≤ bc` by Cauchy–Schwarz on pairs with `c = ∑ wᵢwⱼ K(i,j)²`;
+  `X ≥ 1 + 2b + c/3` by `nlinarith` from `(6b − 2c/3)² ≥ 0`.  The blueprint's `|q| ≤ √(bc)` is stated
+  as `q² ≤ bc`.
+* **Deferred to where they are consumed** (no change of statement): `lem:codegree-moments` —
+  `Z₂ = R₄` and `E Π₂ = A_{2,1}` in M5 (plan D10), `Z₃ ≥ R₄^{3/2}` and the `K_{1,2,3}`/`K_{2,3}`
+  identities in M8; `def:three-apex-polynomial` in M8; the variance identity of
+  `lem:conditional-vector` (not used by any later step).
+* Lean gotchas: in statements, `K.E (fun ω => …)` needs `ω : Sample d s` — the section's `s` is not
+  inferred through `E`; `rw [← colour_true]` also rewrites the `1` inside `-1`; `simp (disch := decide)
+  only [sum_insert, sum_singleton]` expands a sum over an explicit finset of finsets in one step.
+
+### M3 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8604 jobs); 0 warnings
+lake env lean CheckAxioms.lean 49 declarations, all [propext, Classical.choice, Quot.sound], including
+  FiniteKernel.conditional_trace_bound, FiniteKernel.sharp_fourth_support,
+  FiniteKernel.diamond_lower_bound, FiniteKernel.hostDensity_apexCycle_eq_sum_trace
+forbidden-token scan: none
+```

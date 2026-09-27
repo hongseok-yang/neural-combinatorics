@@ -48,3 +48,16 @@ open EvenCycleApex
 #print axioms EvenCycleApex.Regression.host2_traces
 #print axioms EvenCycleApex.Regression.host3_scalars
 #print axioms EvenCycleApex.Regression.host3_traces
+
+-- M3: conditional second spectral moments
+#print axioms EvenCycleApex.edgePairs_apexCycle
+#print axioms EvenCycleApex.hostDensity_apexCycle
+#print axioms EvenCycleApex.FiniteKernel.condQ_le_condQs
+#print axioms EvenCycleApex.FiniteKernel.condD_mul_condQs_sq
+#print axioms EvenCycleApex.FiniteKernel.condQs_le
+#print axioms EvenCycleApex.FiniteKernel.condB_condVec_normSq
+#print axioms EvenCycleApex.FiniteKernel.condVec_rayleigh
+#print axioms EvenCycleApex.FiniteKernel.hostDensity_apexCycle_eq_sum_trace
+#print axioms EvenCycleApex.FiniteKernel.conditional_trace_bound
+#print axioms EvenCycleApex.FiniteKernel.sharp_fourth_support
+#print axioms EvenCycleApex.FiniteKernel.diamond_lower_bound

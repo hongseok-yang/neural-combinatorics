@@ -35,3 +35,8 @@ import EvenCycleApex.Host.Scalars
 import EvenCycleApex.Host.ScalarBounds
 import EvenCycleApex.Host.EvenCycle
 import EvenCycleApex.Host.Regression
+-- M3: conditional second spectral moments.
+import EvenCycleApex.Graph.ApexEdges
+import EvenCycleApex.Conditional.Defs
+import EvenCycleApex.Conditional.Trace
+import EvenCycleApex.Conditional.Diamond
