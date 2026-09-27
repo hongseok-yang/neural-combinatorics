@@ -61,3 +61,17 @@ open EvenCycleApex
 #print axioms EvenCycleApex.FiniteKernel.conditional_trace_bound
 #print axioms EvenCycleApex.FiniteKernel.sharp_fourth_support
 #print axioms EvenCycleApex.FiniteKernel.diamond_lower_bound
+
+-- M4: one apex, end to end
+#print axioms EvenCycleApex.FiniteKernel.E_pow_ge_rpow
+#print axioms EvenCycleApex.FiniteKernel.one_apex_bound
+#print axioms EvenCycleApex.normalizedApexDensity_step
+#print axioms EvenCycleApex.normalizedApexDensity_lipschitz
+#print axioms EvenCycleApex.one_le_normalizedApexDensity_of_hosts
+#print axioms EvenCycleApex.commonality_one_apex
+#print axioms EvenCycleApex.moment_monotone
+#print axioms EvenCycleApex.convex_two_point
+#print axioms EvenCycleApex.two_coordinate_power_comparison
+#print axioms EvenCycleApex.length_lifting_two_fourth_moments
+#print axioms EvenCycleApex.hostDensity_apexCycle_eq_xi
+#print axioms EvenCycleApex.FiniteKernel.apex_number_moment_lifting

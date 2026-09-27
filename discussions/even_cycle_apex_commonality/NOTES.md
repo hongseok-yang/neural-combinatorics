@@ -260,3 +260,44 @@ lake env lean CheckAxioms.lean 49 declarations, all [propext, Classical.choice, 
   FiniteKernel.diamond_lower_bound, FiniteKernel.hostDensity_apexCycle_eq_sum_trace
 forbidden-token scan: none
 ```
+
+## 2026-09-27 — M4 (moment inequalities; first headline, one apex)
+
+Files `lean/EvenCycleApex/Moments/{Basic,ApexLifting}.lean`, `lean/EvenCycleApex/Finite/OneApex.lean`,
+`lean/EvenCycleApex/Transfer.lean`.
+
+* **Finite one-apex bound** (`FiniteKernel.one_apex_bound`): `A_{n/2,1} ≥ E(Q♯)ⁿ ≥ (E(Q♯)⁴)^{n/4} ≥
+  (X²/(1+b))^{n/4} ≥ 1` — conditional trace, weighted Jensen at the real exponent `n/4`
+  (`E_pow_ge_rpow`, from `Real.rpow_arith_mean_le_arith_mean_rpow`), quartic support with `Z₁ = 1+b`,
+  diamond.  `(x⁴)^{n/4} = xⁿ` is `pow_four_rpow` (plan D8: natural powers except where the exponent is
+  genuinely real).
+* **Transfer** (plan D3): `hostOfStep` builds the finite kernel of a step graphon (cell masses,
+  `U = 2M − 1`); `normalizedApexDensity_step` identifies `A_{n/2,k}` of the step graphon with the
+  host's (`step_homDensity_eq_host` for both colour kernels); `normalizedApexDensity_lipschitz`:
+  `|A(W) − A(V)| ≤ 2^{n(k+1)} n(k+1) ‖W − V‖₁`; `one_le_normalizedApexDensity_of_hosts`: a finite
+  bound `1 ≤ K.A n k` on all hosts gives `1 ≤ A_{n/2,k}(W)` for every graphon (choose `V` with
+  `C‖W − V‖₁ < δ`, then `le_of_forall_pos_lt_add`).  It is stated for every `k`, so M5 and M9 reuse
+  it unchanged.
+* **Headline** `commonality_one_apex`: exactly plan D5's H1 shape at `k = 1`
+  (`2 / 2 ^ (n * (1 + 1)) ≤ homDensity (apexCycle n 1) W μ + homDensity (apexCycle n 1) (cmpl W) μ`),
+  for every graphon on every probability space; the elaborated statement was printed and checked
+  against `homDensity`, `IsGraphon`, `cmpl`.
+* **Moments** (`Moments/Basic.lean`): `moment_monotone` (Jensen, `1 ≤ p ≤ q`), `convex_two_point`
+  (two-point Karamata straight from `ConvexOn`'s definition, instead of slope lemmas),
+  `two_coordinate_power_comparison` (`lem:pair-majorization`, four sorting cases reduced to one),
+  `length_lifting_two_fourth_moments` (`lem:length-lifting`, real exponent `q ≥ 4`).
+* **Apex lifting** (`Moments/ApexLifting.lean`): `hostDensity_apexCycle_eq_xi`
+  (`t(C_n^{+s}, L) = ∑ₓ ∏w · cyc · ξ(x)^s` with the apex codegree `ξ`, via `Fintype.prod_sum`) and
+  `FiniteKernel.apex_number_moment_lifting` (`lem:apex-lifting` on hosts; Jensen for `ν / R_n`).  The
+  blueprint states it on any probability space; only the host version is used (finite-first, then
+  transfer), so this is the version formalized.
+
+### M4 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8608 jobs); 0 warnings
+#print axioms EvenCycleApex.commonality_one_apex
+  'EvenCycleApex.commonality_one_apex' depends on axioms: [propext, Classical.choice, Quot.sound]
+lake env lean CheckAxioms.lean 61 declarations, all [propext, Classical.choice, Quot.sound]
+forbidden-token scan: none
+```

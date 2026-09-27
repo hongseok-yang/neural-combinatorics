@@ -40,3 +40,8 @@ import EvenCycleApex.Graph.ApexEdges
 import EvenCycleApex.Conditional.Defs
 import EvenCycleApex.Conditional.Trace
 import EvenCycleApex.Conditional.Diamond
+-- M4: moment inequalities, and one apex end to end.
+import EvenCycleApex.Moments.Basic
+import EvenCycleApex.Moments.ApexLifting
+import EvenCycleApex.Finite.OneApex
+import EvenCycleApex.Transfer
