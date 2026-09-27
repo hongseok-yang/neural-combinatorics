@@ -63,3 +63,8 @@ import EvenCycleApex.Certificate.Checks.MeanThree
 import EvenCycleApex.Certificate.Checks.Neg
 import EvenCycleApex.Certificate.Checks.Pos
 import EvenCycleApex.Certificate.Main
+-- M8: three apices.
+import EvenCycleApex.Finite.ThreeApexGraphs
+import EvenCycleApex.Finite.ThreeApexMoments
+import EvenCycleApex.Finite.ThreeApexScalars
+import EvenCycleApex.Finite.ThreeApex

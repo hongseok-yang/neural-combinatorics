@@ -433,3 +433,45 @@ lake env lean CheckAxioms.lean 104 declarations: 94 print exactly [propext, Clas
   no Lean.ofReduceBool, no sorryAx
 forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
 ```
+
+## 2026-09-27 — M8 (three apices)
+
+Files `lean/EvenCycleApex/Finite/{ThreeApexGraphs,ThreeApexMoments,ThreeApexScalars,ThreeApex}.lean`.
+
+* **Six-vertex expansions** (`ThreeApexGraphs`).  `E_z[G(z) Π₃]` and `E_z[G(z) D₃²]` are six-vertex sums
+  over `E₃` (`pi3Edges`) and `B₃` (`d3Edges`, vertex 3 isolated) for any apex function `G`
+  (`sum_three_apex_Pi`, `sum_three_apex_D_sq`; M5's iterated-sum technique).  The parity polynomials of
+  `Targets.lean` are colour averages: `colour_even_mask` / `colour_odd_mask` (pointwise, via
+  `prod_one_add_subMasks` and `bitCount = |bits|`), hence `evalPoly_parityPoly_even/odd`.  Pointwise
+  values `polyAt` make the labelled product factor on disjoint edge sets (`polyAt_mul`).
+* **Identifications** (`ThreeApexMoments`).  `𝒥₀ = eval(F₀)`, `𝒥_σ = eval(F₁)`, `𝒥_𝒫 = eval(P_△·F₀)`
+  (`J0_eq`, `Jσ_eq`, `JP_eq`), `EΠ₃ − Z₃ = eval(P_mean,3)`, the scalar masks (`R₄, m, τ, a, mτ, p₃`, by
+  `castAddEdges`/`natAddEdges` and the M2 small-graph lemmas), `G = eval(P₋)`, `H = eval(P₊)`
+  (`certG_eq`, `certH_eq`), and `G, H ≥ 0` from `three_universal_graph_inequalities`.
+* **Scalars** (`ThreeApexScalars`).  `Z_s = E C_σ^s` (`Z_eq_codeg`, `Fintype.prod_sum`), `Z₃ ≥ R₄^{3/2}`
+  (`moment_monotone` at `p = 2, q = 3` with `Z₂ = R₄`), `reference_mean_bounds`, `amplification_real`
+  (two cases `r ≤ 1/2` and `r > 1/2`, the second through `x³ − Ax² + 4A³/27 = (x − 2A/3)²(x + A/3)` and
+  the blueprint's expansion in `t = r − 1/2`), `auxiliary_scalar_nonnegative` (no sign condition on
+  `m`), `abs_majority_le`, `E_majority`.
+* **Weighted reference and finite three** (`ThreeApex`).  The three cases of the blueprint for `m ≥ 0`
+  (`weighted_fourth_reference_of_nonneg`; both polynomial identities checked by `ring`), the general
+  statement by the colour swap `E_neg`/`condQs_neg` for the complementary kernel `−U`
+  (`weighted_fourth_reference`), and `three_apex_relative` (`A_{n/2,3} ≥ R_n`, every kernel) from
+  `length_lifting_two_fourth_moments` and `trace_pow_le_trace_four_rpow`; `m < 0` again through `−U`
+  (`neg_A`, `neg_R`, `neg_m`).
+* **Not formalized** (not used on the proof path): the normalizations `EΠ_s = 2^{3s+1} M(K_{1,2,s},W)`
+  and `Z_s = 2^{2s−1} M(K_{2,s},W)` of `lem:codegree-moments`; the finite-host identities used instead are
+  listed above.
+* Touching `Certificate/Rooted.lean` (making five helper lemmas public) re-runs the kernel-check
+  chain on the next build (≈ 7.7 min); later milestones avoid editing the certificate modules.
+
+### M8 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8624 jobs); 0 warnings
+#print axioms EvenCycleApex.FiniteKernel.three_apex_relative
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+lake env lean CheckAxioms.lean 130 declarations: 120 print exactly [propext, Classical.choice, Quot.sound]
+  (3 wrapped), 10 a strict subset (those listed at M6 and M7)
+forbidden-token scan (sorry, admit, native_decide, decide +native, ofReduceBool, axiom): none
+```

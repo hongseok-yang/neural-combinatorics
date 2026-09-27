@@ -124,3 +124,31 @@ open EvenCycleApex
 #print axioms EvenCycleApex.Checks.pos_t6
 #print axioms EvenCycleApex.Checks.posMajority_nonneg
 #print axioms EvenCycleApex.three_universal_graph_inequalities
+
+-- M8: three apices
+#print axioms EvenCycleApex.sum_three_apex_Pi
+#print axioms EvenCycleApex.sum_three_apex_D_sq
+#print axioms EvenCycleApex.evalPoly_parityPoly_even
+#print axioms EvenCycleApex.evalPoly_parityPoly_odd
+#print axioms EvenCycleApex.polyAt_mul
+#print axioms EvenCycleApex.FiniteKernel.J0_eq
+#print axioms EvenCycleApex.FiniteKernel.Jσ_eq
+#print axioms EvenCycleApex.FiniteKernel.JP_eq
+#print axioms EvenCycleApex.FiniteKernel.EPi_three_sub_Z_three
+#print axioms EvenCycleApex.FiniteKernel.evalPoly_polyC
+#print axioms EvenCycleApex.FiniteKernel.evalMask_MT
+#print axioms EvenCycleApex.FiniteKernel.certG_eq
+#print axioms EvenCycleApex.FiniteKernel.certH_eq
+#print axioms EvenCycleApex.FiniteKernel.weighted_certificate_inequalities
+#print axioms EvenCycleApex.FiniteKernel.Z_eq_codeg
+#print axioms EvenCycleApex.FiniteKernel.Z_three_ge
+#print axioms EvenCycleApex.FiniteKernel.reference_mean_bounds
+#print axioms EvenCycleApex.amplification_real
+#print axioms EvenCycleApex.FiniteKernel.fourth_cycle_amplification
+#print axioms EvenCycleApex.FiniteKernel.auxiliary_scalar_nonnegative
+#print axioms EvenCycleApex.FiniteKernel.abs_majority_le
+#print axioms EvenCycleApex.FiniteKernel.E_majority
+#print axioms EvenCycleApex.FiniteKernel.weighted_fourth_reference_of_nonneg
+#print axioms EvenCycleApex.FiniteKernel.weighted_fourth_reference
+#print axioms EvenCycleApex.FiniteKernel.three_apex_relative
+#print axioms EvenCycleApex.FiniteKernel.one_le_A_three

@@ -11,7 +11,7 @@ design decision in the plan).
 Hardness: Easy · Medium · Hard · Very hard — an estimate for an axiom-free Lean proof, not for the
 paper argument.
 
-Last updated: 2026-09-27 (M0–M7 passed; **headlines: commonality for k = 1 and k = 2, no certificate**; **the three certificate inequalities are kernel-checked** (`three_universal_graph_inequalities`).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
+Last updated: 2026-09-27 (M0–M8 passed; **headlines: commonality for k = 1 and k = 2, no certificate**; the three certificate inequalities kernel-checked; **`A_{n/2,3} ≥ R_n` on every finite host** (`FiniteKernel.three_apex_relative`).  `mean_two` excluded, DEVIATIONS X2; checker encoding per DEVIATIONS X3)
 
 ## Milestones
 
@@ -25,12 +25,12 @@ Last updated: 2026-09-27 (M0–M7 passed; **headlines: commonality for k = 1 and
 | M5 | **Second headline: commonality for k = 2, certificate-free** (plan D10): `EΠ₂ = A_{2,1}`, `Z₂ = R₄ ≤ 1+6b+c`, the scalar inequality `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)`, `E(Q♯₂)⁴ ≥ 1`, finite bound, transfer | ✅ | Medium | `#print axioms EvenCycleApex.commonality_two_apices`: `[propext, Classical.choice, Quot.sound]` (68 audited); no `Certificate/` import on the path; 8609 jobs, 0 warnings; 2026-09-27 |
 | M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ✅ | Hard | `meanThree_nonneg_of_checks`, `negMajority_nonneg_of_checks`, `posMajority_nonneg_of_checks` (from `cert_sound`): `[propext, Classical.choice, Quot.sound]` (91 audited, every one within that set); targets agree with `independent_audit.py` on all 992 / 6150 / 6151 merged monomials; `schemas_ok`, `schema_dims` by `decide`; 8617 jobs, 0 warnings; 2026-09-27 |
 | M7 | Kernel-checked certificate data: `decide +kernel` for the relabelling witnesses (per occurrence, X3: 15,548 skeletons + 13,754 target monomials), three orbit-coefficient identities (C), 57 rational factorizations | ✅ | Very hard | `three_universal_graph_inequalities`: `[propext, Classical.choice, Quot.sound]`; no `Lean.ofReduceBool`, no `sorryAx` (104 audited); single-threaded wall per check file 60 / 69 / 118 / 118 s (budget table); peak 5.6 GB for the whole chain; 8620 jobs, 0 warnings; 2026-09-27 |
-| M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ❌ | Hard | `FiniteKernel.three_apex_relative` |
+| M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ✅ | Hard | `FiniteKernel.three_apex_relative`: `[propext, Classical.choice, Quot.sound]` (130 audited, every one within that set); 8624 jobs, 0 warnings; 2026-09-27 |
 | M9 | All k ≥ 3 by apex lifting, `thm:finite-main`, transfer; **headlines H1 `commonality_all_even_all_apices` and H3 `apex_relative_of_three_le`** | ❌ | Medium | both audited; statements match plan §1 D5 |
 | M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ❌ | Hard | audited, both directions |
 | M11 | Final audit: prune, `CheckAxioms.lean` coverage of plan §6, README, `DEVIATIONS.md`, complete label map, forbidden-token scan | ❌ | Easy | every item of plan §0 passes |
 
-Overall: **8 / 12 milestones complete** (M0–M7).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free) (targets: all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
+Overall: **9 / 12 milestones complete** (M0–M8).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free); the finite three-apex bound `A_{n/2,3} ≥ R_n` (targets: all k and H3 at M9, equality at M10).  Certificates are used only for k ≥ 3.
 
 ## Blueprint statements
 
@@ -71,19 +71,19 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:conditional-vector | 17459 | `g_s` unit, `⟨g_s,B_s g_s⟩ = Q_s`, `‖B_s g_s‖² = (Q♯_s)²`, variance | `FiniteKernel.{condVec_dot_self, condVec_rayleigh, condB_condVec_normSq}` (variance identity unused, not formalized) | M3 | ✅ | Medium |
 | prop:conditional-trace | 17485 | `A_{n/2,s} = E Tr B_sⁿ ≥ E (Q♯_s)ⁿ` | `FiniteKernel.conditional_trace_bound` (+ `hostDensity_apexCycle_eq_sum_trace`) | M3 | ✅ | Hard |
 | lem:quartic-support | 17511 | `(Q♯_s)⁴ ≥ 2Π_s − D_s²`; `E(Q♯_s)⁴ ≥ (EΠ_s)²/Z_s` | `FiniteKernel.sharp_fourth_support` (+ `condQs_four_ge`) | M3 | ✅ | Easy |
-| lem:codegree-moments | 17537 | `Z_s = E C_σ^s`, `Z_2 = R_4`, `Z_3 ≥ R_4^{3/2}`, `EΠ_s = 2^{3s+1} M(K_{1,2,s})`, `Z_s = 2^{2s−1} M(K_{2,s})`; `EΠ_3 − Z_3 = eval(P_mean,3)` | `FiniteKernel.codegree_moment_identities` | M5 / M8 | 🚧 (`Z₂ = R₄` ✅ `FiniteKernel.Z_two`; `s = 3` parts in M8) | Hard |
-| def:three-apex-polynomial | 17571 | `ℱ = 2Π_3 − D_3²`, `𝒥_0 = Eℱ` | `FiniteKernel.threeApexPolynomial` | M8 | ❌ | Easy |
-| cor:reference-mean | 17582 | three-apex part: `EΠ_3 ≥ Z_3`, `E(Q♯_3)⁴ ≥ 𝒥_0 ≥ Z_3 ≥ R_4^{3/2} ≥ R_4 ≥ 1` (two-apex part replaced by D10) | `FiniteKernel.reference_mean_bounds` | M8 | ❌ | Medium |
-| lem:amplification | 17613 | `R_4^{3/2} ≥ R_4 + 4br` | `FiniteKernel.fourth_cycle_amplification` | M8 | ❌ | Medium |
-| lem:auxiliary-D | 17656 | `𝒟 = 2𝒥_0 − R_4 − 4p_3 − 1 ≥ 0` | `FiniteKernel.auxiliary_scalar_nonnegative` | M8 | ❌ | Easy |
-| def:majority | 17678 | `𝒫`, `μ = 3m − τ`, `𝒥_σ`, `𝒥_𝒫` | `FiniteKernel.majorityMoments` | M8 | ❌ | Easy |
-| lem:majority-bounds | 17694 | `\|𝒫\| ≤ 2`, `E𝒫 = μ` | `FiniteKernel.majority_bound_and_mean` | M8 | ❌ | Medium |
-| lem:GH | 17713 | `G = eval(P₋) ≥ 0`, `H = eval(P₊) ≥ 0` | `FiniteKernel.weighted_certificate_inequalities` | M8 | ❌ | Hard |
-| thm:weighted-reference | 17743 | density `ω` with `0≤ω≤2`, `Eω=1`, `Eω(Q♯_3)⁴ ≥ max(r_{+,4}, r_{−,4})` | `FiniteKernel.weighted_fourth_reference` | M8 | ❌ | Hard |
-| thm:finite-three | 17819 | `A_{n/2,3} ≥ R_n` on finite hosts | `FiniteKernel.three_apex_relative` | M8 | ❌ | Medium |
+| lem:codegree-moments | 17537 | `Z_s = E C_σ^s`, `Z_2 = R_4`, `Z_3 ≥ R_4^{3/2}`, `EΠ_s = 2^{3s+1} M(K_{1,2,s})`, `Z_s = 2^{2s−1} M(K_{2,s})`; `EΠ_3 − Z_3 = eval(P_mean,3)` | `FiniteKernel.Z_eq_codeg` (+ `codeg_nonneg`), `FiniteKernel.Z_two`, `FiniteKernel.Z_three_ge`, `FiniteKernel.EPi_three_sub_Z_three`; the normalizations `EΠ_s = 2^{3s+1}M(K_{1,2,s})`, `Z_s = 2^{2s−1}M(K_{2,s})` are not used on the proof path and are not formalized (NOTES, M8) | M5 / M8 | ✅ | Hard |
+| def:three-apex-polynomial | 17571 | `ℱ = 2Π_3 − D_3²`, `𝒥_0 = Eℱ` | `FiniteKernel.threeF`, `FiniteKernel.J0` (`J0_eq : 𝒥₀ = eval(F₀)`) | M8 | ✅ | Easy |
+| cor:reference-mean | 17582 | three-apex part: `EΠ_3 ≥ Z_3`, `E(Q♯_3)⁴ ≥ 𝒥_0 ≥ Z_3 ≥ R_4^{3/2} ≥ R_4 ≥ 1` (two-apex part replaced by D10) | `FiniteKernel.EPi_three_ge_Z_three`, `FiniteKernel.reference_mean_bounds` | M8 | ✅ | Medium |
+| lem:amplification | 17613 | `R_4^{3/2} ≥ R_4 + 4br` | `FiniteKernel.fourth_cycle_amplification` (+ `amplification_real`) | M8 | ✅ | Medium |
+| lem:auxiliary-D | 17656 | `𝒟 = 2𝒥_0 − R_4 − 4p_3 − 1 ≥ 0` | `FiniteKernel.auxiliary_scalar_nonnegative` (`auxD`) | M8 | ✅ | Easy |
+| def:majority | 17678 | `𝒫`, `μ = 3m − τ`, `𝒥_σ`, `𝒥_𝒫` | `FiniteKernel.majority`, `FiniteKernel.μ`, `FiniteKernel.Jσ`, `FiniteKernel.JP` (`Jσ_eq`, `JP_eq`) | M8 | ✅ | Easy |
+| lem:majority-bounds | 17694 | `\|𝒫\| ≤ 2`, `E𝒫 = μ` | `FiniteKernel.abs_majority_le`, `FiniteKernel.E_majority` | M8 | ✅ | Medium |
+| lem:GH | 17713 | `G = eval(P₋) ≥ 0`, `H = eval(P₊) ≥ 0` | `FiniteKernel.weighted_certificate_inequalities` (`certG_eq`, `certH_eq`; scalar masks `evalPoly_polyC`, `evalMask_M/T/A/MT/P3`) | M8 | ✅ | Hard |
+| thm:weighted-reference | 17743 | density `ω` with `0≤ω≤2`, `Eω=1`, `Eω(Q♯_3)⁴ ≥ max(r_{+,4}, r_{−,4})` | `FiniteKernel.weighted_fourth_reference` (every kernel; the three cases in `weighted_fourth_reference_of_nonneg`, `m < 0` by the colour swap `E_neg`) | M8 | ✅ | Hard |
+| thm:finite-three | 17819 | `A_{n/2,3} ≥ R_n` on finite hosts | `FiniteKernel.three_apex_relative` (+ `one_le_A_three`) | M8 | ✅ | Medium |
 | lem:apex-lifting | 17842 | `A_{n/2,k} ≥ A_{n/2,s}^{k/s} / R_n^{k/s−1}` | `FiniteKernel.apex_number_moment_lifting` (host version; + `hostDensity_apexCycle_eq_xi`) | M4 | ✅ | Medium |
 | lem:diamond | 17875 | `Z_1 = 1+b`, `X = 1+2a+8b+c+4q`, `\|q\| ≤ √(bc)`, `X ≥ 1+2b+c/3` | `FiniteKernel.diamond_lower_bound` (`\|q\| ≤ √(bc)` as `q² ≤ bc`) | M3 | ✅ | Medium |
-| thm:finite-main | 17918 | finite host: `A_{n/2,1} ≥ (X²/(1+b))^{n/4} ≥ 1`; `A_{n/2,2} ≥ Θ(b,c)^{n/4} ≥ 1` with `Θ = (1+2b+c/3)⁴/((1+b)²(1+6b+c))` (D10; blueprint has `R_4^{n/4}`); `A_{n/2,k} ≥ R_n ≥ 1` (k≥3) | `FiniteKernel.all_even_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (k = 1 ✅ `FiniteKernel.one_apex_bound`; k = 2 ✅ `FiniteKernel.two_apex_bound`; k ≥ 3 in M9) | Medium |
+| thm:finite-main | 17918 | finite host: `A_{n/2,1} ≥ (X²/(1+b))^{n/4} ≥ 1`; `A_{n/2,2} ≥ Θ(b,c)^{n/4} ≥ 1` with `Θ = (1+2b+c/3)⁴/((1+b)²(1+6b+c))` (D10; blueprint has `R_4^{n/4}`); `A_{n/2,k} ≥ R_n ≥ 1` (k≥3) | `FiniteKernel.all_even_apex_bounds` | M4 (k=1), M5 (k=2), M8 (k=3), M9 (all) | 🚧 (k = 1 ✅ `FiniteKernel.one_apex_bound`; k = 2 ✅ `FiniteKernel.two_apex_bound`; k = 3 ✅ `FiniteKernel.three_apex_relative`; k ≥ 4 in M9) | Medium |
 | lem:representative | 17958 | pointwise symmetric representative on `[0,1]` | — (pointwise `IsGraphon`, plan D1) | — | — | — |
 | def:dyadic | 17984 | dyadic cell averages | — (replaced by L¹ step approximation, plan D3) | — | — | — |
 | lem:dyadic-properties | 18000 | contraction etc. | — (replaced) | — | — | — |

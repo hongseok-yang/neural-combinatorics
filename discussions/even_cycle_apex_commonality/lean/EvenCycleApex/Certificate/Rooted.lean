@@ -421,7 +421,7 @@ lemma subMasks_spec (R : ℕ) : ∀ n, ∀ h ∈ subMasks R n,
       exact ⟨lt_of_lt_of_le hlt (Nat.pow_le_pow_right (by norm_num) (by omega)), hb⟩
 
 /-- Bits below `n + 1` of a number below `2^n` are its bits below `n`. -/
-private lemma filter_succ_low {h n : ℕ} (hh : h < 2 ^ n) :
+lemma filter_succ_low {h n : ℕ} (hh : h < 2 ^ n) :
     univ.filter (fun b : Fin 15 => (b : ℕ) < n + 1 ∧ h.testBit b = true)
       = univ.filter (fun b : Fin 15 => (b : ℕ) < n ∧ h.testBit b = true) := by
   ext b
@@ -437,7 +437,7 @@ private lemma filter_succ_low {h n : ℕ} (hh : h < 2 ^ n) :
     exact ⟨by omega, hbit⟩
 
 /-- Bits below `n + 1` when bit `n` is set. -/
-private lemma filter_succ_set {h n : ℕ} (hn : n < 15) (hbit : h.testBit n = true) :
+lemma filter_succ_set {h n : ℕ} (hn : n < 15) (hbit : h.testBit n = true) :
     univ.filter (fun b : Fin 15 => (b : ℕ) < n + 1 ∧ h.testBit b = true)
       = insert ⟨n, hn⟩ (univ.filter (fun b : Fin 15 => (b : ℕ) < n ∧ h.testBit b = true)) := by
   ext b
@@ -452,7 +452,7 @@ private lemma filter_succ_set {h n : ℕ} (hn : n < 15) (hbit : h.testBit n = tr
     · exact ⟨by omega, hb'⟩
 
 /-- Bits below `n + 1` when bit `n` is clear. -/
-private lemma filter_succ_clear {h n : ℕ} (hbit : h.testBit n = false) :
+lemma filter_succ_clear {h n : ℕ} (hbit : h.testBit n = false) :
     univ.filter (fun b : Fin 15 => (b : ℕ) < n + 1 ∧ h.testBit b = true)
       = univ.filter (fun b : Fin 15 => (b : ℕ) < n ∧ h.testBit b = true) := by
   ext b
@@ -468,7 +468,7 @@ private lemma filter_succ_clear {h n : ℕ} (hbit : h.testBit n = false) :
   · rintro ⟨hb, hb'⟩
     exact ⟨by omega, hb'⟩
 
-private lemma not_mem_filter_self {h n : ℕ} (hn : n < 15) :
+lemma not_mem_filter_self {h n : ℕ} (hn : n < 15) :
     (⟨n, hn⟩ : Fin 15) ∉ univ.filter (fun b : Fin 15 => (b : ℕ) < n ∧ h.testBit b = true) := by
   simp
 
@@ -561,7 +561,7 @@ lemma typeFactor_nonneg {L : Fin d → Fin d → ℝ} (hL : ∀ i j, |L i j| ≤
     have := abs_le.mp (abs_rootU_le hL z (pairOf b))
     split_ifs <;> linarith [this.1, this.2]
 
-private lemma filter_fifteen (g : ℕ) :
+lemma filter_fifteen (g : ℕ) :
     univ.filter (fun b : Fin 15 => (b : ℕ) < 15 ∧ g.testBit b = true)
       = univ.filter (fun b : Fin 15 => g.testBit b = true) := by
   ext b
