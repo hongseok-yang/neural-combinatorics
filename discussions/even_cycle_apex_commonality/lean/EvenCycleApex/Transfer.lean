@@ -1,4 +1,5 @@
 import EvenCycleApex.Finite.OneApex
+import EvenCycleApex.Finite.TwoApex
 import EvenCycleApex.Host.Bridge
 import EvenCycleApex.Graph.Lipschitz
 
@@ -14,7 +15,9 @@ A graphon `W` on any probability space is an `L¹` limit of step graphons
 `L¹`-Lipschitz (`normalizedApexDensity_lipschitz`, from `commonalityM_L1_lipschitz`), so a lower
 bound that holds on all finite hosts passes to `W` (`one_le_normalizedApexDensity_of_hosts`).
 
-**First headline:** `commonality_one_apex`, commonality of `C_n^{+1}` for every even `n ≥ 4`.
+**Headlines:** `commonality_one_apex` and `commonality_two_apices`, commonality of `C_n^{+1}` and
+`C_n^{+2}` for every even `n ≥ 4` — neither uses a computational certificate (plan D10 for two
+apices).
 -/
 
 open MeasureTheory Finset
@@ -100,6 +103,18 @@ theorem commonality_one_apex {W : Ω → Ω → ℝ} (hW : IsGraphon W μ) {n : 
       homDensity (apexCycle n 1) W μ + homDensity (apexCycle n 1) (cmpl W) μ := by
   have h := one_le_normalizedApexDensity_of_hosts (by omega)
     (fun d K => K.one_le_A_one hn hn4) hW
+  rw [normalizedApexDensity, commonalityM] at h
+  rw [div_le_iff₀ (by positivity)]
+  linarith
+
+/-- **Headline, two apices** (certificate-free, plan D10).  For every graphon `W` on every
+probability space and every even `n ≥ 4`, `M(C_n^{+2}, W) ≥ 2^{1 − 3n}`. -/
+theorem commonality_two_apices {W : Ω → Ω → ℝ} (hW : IsGraphon W μ) {n : ℕ} (hn : Even n)
+    (hn4 : 4 ≤ n) :
+    2 / 2 ^ (n * (2 + 1)) ≤
+      homDensity (apexCycle n 2) W μ + homDensity (apexCycle n 2) (cmpl W) μ := by
+  have h := one_le_normalizedApexDensity_of_hosts (by omega)
+    (fun d K => K.one_le_A_two hn hn4) hW
   rw [normalizedApexDensity, commonalityM] at h
   rw [div_le_iff₀ (by positivity)]
   linarith

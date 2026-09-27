@@ -75,3 +75,12 @@ open EvenCycleApex
 #print axioms EvenCycleApex.length_lifting_two_fourth_moments
 #print axioms EvenCycleApex.hostDensity_apexCycle_eq_xi
 #print axioms EvenCycleApex.FiniteKernel.apex_number_moment_lifting
+
+-- M5: two apices, certificate-free (plan D10)
+#print axioms EvenCycleApex.two_apex_scalar_inequality
+#print axioms EvenCycleApex.one_lt_twoApexTheta
+#print axioms EvenCycleApex.FiniteKernel.Z_two
+#print axioms EvenCycleApex.FiniteKernel.twoApex_Pi_eq_oneApex
+#print axioms EvenCycleApex.FiniteKernel.two_apex_fourth_moment_ge_one
+#print axioms EvenCycleApex.FiniteKernel.two_apex_bound
+#print axioms EvenCycleApex.commonality_two_apices

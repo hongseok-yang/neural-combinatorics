@@ -11,7 +11,7 @@ design decision in the plan).
 Hardness: Easy · Medium · Hard · Very hard — an estimate for an axiom-free Lean proof, not for the
 paper argument.
 
-Last updated: 2026-09-27 (M0–M4 passed; **first headline: commonality for k = 1**.  `mean_two` excluded, DEVIATIONS X2; certificate checker encoding redesigned after the spike, DEVIATIONS X3)
+Last updated: 2026-09-27 (M0–M5 passed; **headlines: commonality for k = 1 and k = 2, no certificate**.  `mean_two` excluded, DEVIATIONS X2; certificate checker encoding redesigned after the spike, DEVIATIONS X3)
 
 ## Milestones
 
@@ -22,7 +22,7 @@ Last updated: 2026-09-27 (M0–M4 passed; **first headline: commonality for k = 
 | M2 | Finite weighted host: densities as sums, bridge to step graphons, Euclidean matrix model, spectral trace bounds, parity expansion, scalar moments, even-cycle lower bound, exact 2-point regression hosts | ✅ | Hard | `step_homDensity_eq_host`, `FiniteKernel.even_cycle_lower_bound`, `Regression.host{1,2,3}_{scalars,traces}`: `[propext, Classical.choice, Quot.sound]` (38 audited); 8600 jobs, 0 warnings; 2026-09-27 |
 | M3 | Conditional second spectral moments: `h_s, D_s, Π_s, B_s, Q♯_s`, zero-denominator branches, trace representation `A_{n/2,s} = E Tr B_sⁿ ≥ E(Q♯_s)ⁿ`, quartic support, codegree and diamond identities | ✅ | Hard | `FiniteKernel.conditional_trace_bound`, `FiniteKernel.diamond_lower_bound`: `[propext, Classical.choice, Quot.sound]` (49 audited); 8604 jobs, 0 warnings; codegree identities deferred to M5/M8 where used; 2026-09-27 |
 | M4 | Moment inequalities (finite Cauchy–Schwarz/Jensen, two-point majorization, length lifting, apex lifting), finite one-apex bound, transfer lemma, **first headline: commonality for k = 1** | ✅ | Medium | `#print axioms EvenCycleApex.commonality_one_apex`: `[propext, Classical.choice, Quot.sound]` (61 audited); 8608 jobs, 0 warnings; 2026-09-27 |
-| M5 | **Second headline: commonality for k = 2, certificate-free** (plan D10): `EΠ₂ = A_{2,1}`, `Z₂ = R₄ ≤ 1+6b+c`, the scalar inequality `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)`, `E(Q♯₂)⁴ ≥ 1`, finite bound, transfer | ❌ | Medium | `#print axioms EvenCycleApex.commonality_two_apices` clean |
+| M5 | **Second headline: commonality for k = 2, certificate-free** (plan D10): `EΠ₂ = A_{2,1}`, `Z₂ = R₄ ≤ 1+6b+c`, the scalar inequality `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)`, `E(Q♯₂)⁴ ≥ 1`, finite bound, transfer | ✅ | Medium | `#print axioms EvenCycleApex.commonality_two_apices`: `[propext, Classical.choice, Quot.sound]` (68 audited); no `Certificate/` import on the path; 8609 jobs, 0 warnings; 2026-09-27 |
 | M6 | Certificate language and soundness: masks, the three targets from literal edge sets, 19-block schema, rooted quadratic forms, rooted expansion, LDLᵀ soundness, relabelling soundness, checker definition, `checker = true → 0 ≤ eval target` | ❌ | Hard | `checker_sound` for `mean_three`, `P₋`, `P₊` (checker not yet evaluated) |
 | M7 | Kernel-checked certificate data: `decide +kernel` for 32,768 relabelling witnesses, three 156-orbit coefficient identities, 57 rational factorizations | ❌ | Very hard | `three_universal_graph_inequalities`; no `Lean.ofReduceBool`, no `sorryAx`; kernel times recorded |
 | M8 | Three apices: fourth-cycle amplification, auxiliary scalar, majority polynomial, interpretation of the `P±` certificates as `G, H`, weighted fourth-moment comparison with the three densities `ω`, `A_{n/2,3} ≥ R_n` on finite hosts | ❌ | Hard | `FiniteKernel.three_apex_relative` |
@@ -30,7 +30,7 @@ Last updated: 2026-09-27 (M0–M4 passed; **first headline: commonality for k = 
 | M10 | Equality: integral scalar identities and continuity, `c = 0 ⟺ U = 0` a.e. (finite-rank L² route), spectral remainder interpolation, even-cycle equality, **headline H2 `commonality_equality_iff_constant`** | ❌ | Hard | audited, both directions |
 | M11 | Final audit: prune, `CheckAxioms.lean` coverage of plan §6, README, `DEVIATIONS.md`, complete label map, forbidden-token scan | ❌ | Easy | every item of plan §0 passes |
 
-Overall: **5 / 12 milestones complete** (M0–M4).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) (targets: k = 2 at M5, all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
+Overall: **6 / 12 milestones complete** (M0–M5).  Headlines reached: **H1 for k = 1** (`commonality_one_apex`) and **k = 2** (`commonality_two_apices`, certificate-free) (targets: all k at M9, equality at M10).  Certificates are needed only from M6 on, i.e. only for k ≥ 3.
 
 ## Blueprint statements
 
@@ -71,7 +71,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:conditional-vector | 17459 | `g_s` unit, `⟨g_s,B_s g_s⟩ = Q_s`, `‖B_s g_s‖² = (Q♯_s)²`, variance | `FiniteKernel.{condVec_dot_self, condVec_rayleigh, condB_condVec_normSq}` (variance identity unused, not formalized) | M3 | ✅ | Medium |
 | prop:conditional-trace | 17485 | `A_{n/2,s} = E Tr B_sⁿ ≥ E (Q♯_s)ⁿ` | `FiniteKernel.conditional_trace_bound` (+ `hostDensity_apexCycle_eq_sum_trace`) | M3 | ✅ | Hard |
 | lem:quartic-support | 17511 | `(Q♯_s)⁴ ≥ 2Π_s − D_s²`; `E(Q♯_s)⁴ ≥ (EΠ_s)²/Z_s` | `FiniteKernel.sharp_fourth_support` (+ `condQs_four_ge`) | M3 | ✅ | Easy |
-| lem:codegree-moments | 17537 | `Z_s = E C_σ^s`, `Z_2 = R_4`, `Z_3 ≥ R_4^{3/2}`, `EΠ_s = 2^{3s+1} M(K_{1,2,s})`, `Z_s = 2^{2s−1} M(K_{2,s})`; `EΠ_3 − Z_3 = eval(P_mean,3)` | `FiniteKernel.codegree_moment_identities` | M5 / M8 | 🚧 (`Z₂ = R₄`, `EΠ₂ = A_{2,1}` in M5; `s = 3` parts in M8) | Hard |
+| lem:codegree-moments | 17537 | `Z_s = E C_σ^s`, `Z_2 = R_4`, `Z_3 ≥ R_4^{3/2}`, `EΠ_s = 2^{3s+1} M(K_{1,2,s})`, `Z_s = 2^{2s−1} M(K_{2,s})`; `EΠ_3 − Z_3 = eval(P_mean,3)` | `FiniteKernel.codegree_moment_identities` | M5 / M8 | 🚧 (`Z₂ = R₄` ✅ `FiniteKernel.Z_two`; `s = 3` parts in M8) | Hard |
 | def:three-apex-polynomial | 17571 | `ℱ = 2Π_3 − D_3²`, `𝒥_0 = Eℱ` | `FiniteKernel.threeApexPolynomial` | M8 | ❌ | Easy |
 | cor:reference-mean | 17582 | three-apex part: `EΠ_3 ≥ Z_3`, `E(Q♯_3)⁴ ≥ 𝒥_0 ≥ Z_3 ≥ R_4^{3/2} ≥ R_4 ≥ 1` (two-apex part replaced by D10) | `FiniteKernel.reference_mean_bounds` | M8 | ❌ | Medium |
 | lem:amplification | 17613 | `R_4^{3/2} ≥ R_4 + 4br` | `FiniteKernel.fourth_cycle_amplification` | M8 | ❌ | Medium |
@@ -83,7 +83,7 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | thm:finite-three | 17819 | `A_{n/2,3} ≥ R_n` on finite hosts | `FiniteKernel.three_apex_relative` | M8 | ❌ | Medium |
 | lem:apex-lifting | 17842 | `A_{n/2,k} ≥ A_{n/2,s}^{k/s} / R_n^{k/s−1}` | `FiniteKernel.apex_number_moment_lifting` (host version; + `hostDensity_apexCycle_eq_xi`) | M4 | ✅ | Medium |
 | lem:diamond | 17875 | `Z_1 = 1+b`, `X = 1+2a+8b+c+4q`, `\|q\| ≤ √(bc)`, `X ≥ 1+2b+c/3` | `FiniteKernel.diamond_lower_bound` (`\|q\| ≤ √(bc)` as `q² ≤ bc`) | M3 | ✅ | Medium |
-| thm:finite-main | 17918 | finite host: `A_{n/2,1} ≥ (X²/(1+b))^{n/4} ≥ 1`; `A_{n/2,2} ≥ Θ(b,c)^{n/4} ≥ 1` with `Θ = (1+2b+c/3)⁴/((1+b)²(1+6b+c))` (D10; blueprint has `R_4^{n/4}`); `A_{n/2,k} ≥ R_n ≥ 1` (k≥3) | `FiniteKernel.all_even_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (k = 1 ✅ `FiniteKernel.one_apex_bound`; k = 2 in M5; k ≥ 3 in M9) | Medium |
+| thm:finite-main | 17918 | finite host: `A_{n/2,1} ≥ (X²/(1+b))^{n/4} ≥ 1`; `A_{n/2,2} ≥ Θ(b,c)^{n/4} ≥ 1` with `Θ = (1+2b+c/3)⁴/((1+b)²(1+6b+c))` (D10; blueprint has `R_4^{n/4}`); `A_{n/2,k} ≥ R_n ≥ 1` (k≥3) | `FiniteKernel.all_even_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (k = 1 ✅ `FiniteKernel.one_apex_bound`; k = 2 ✅ `FiniteKernel.two_apex_bound`; k ≥ 3 in M9) | Medium |
 | lem:representative | 17958 | pointwise symmetric representative on `[0,1]` | — (pointwise `IsGraphon`, plan D1) | — | — | — |
 | def:dyadic | 17984 | dyadic cell averages | — (replaced by L¹ step approximation, plan D3) | — | — | — |
 | lem:dyadic-properties | 18000 | contraction etc. | — (replaced) | — | — | — |
@@ -93,19 +93,19 @@ step with the code: a row becomes ✅ only when the named declaration builds and
 | lem:step-matrix | 18105 | step density = finite-host density, any `F` | `step_homDensity_eq_host` (weighted), `exists_host_of_isStepKernel` | M2 | ✅ | Hard |
 | def:integral-scalars | 18123 | `f, m, a, b, K, c, r, p_3, τ, q, X` as integrals | `graphonScalars` | M10 | ❌ | Easy |
 | lem:integral-moments | 18145 | `b = t(P_2)`, `c = ∫∫K²`, `R_4` identity, diamond bound, L¹ continuity | `integral_scalar_identities` | M10 | ❌ | Medium |
-| thm:graphon-main | 18176 | the three bounds for every graphon (k=2 bound as in D10) | `all_even_graphon_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (k = 1 ✅ `commonality_one_apex` via `one_le_normalizedApexDensity_of_hosts`) | Medium |
+| thm:graphon-main | 18176 | the three bounds for every graphon (k=2 bound as in D10) | `all_even_graphon_apex_bounds` | M4 (k=1), M5 (k=2), M9 (all) | 🚧 (k = 1 ✅, k = 2 ✅ via `one_le_normalizedApexDensity_of_hosts`; k ≥ 3 in M9) | Medium |
 | lem:c-zero | 18211 | `c = 0 ⟺ U = 0` a.e. | `fourth_signed_cycle_zero_iff` (finite-rank L² route, plan D9) | M10 | ❌ | Hard |
 | lem:spectral-interpolation | 18234 | `Σx⁴ ≤ (Σx²)^{(n−4)/(n−2)} (Σxⁿ)^{2/(n−2)}` | `finite_spectral_remainder_interpolation` | M10 | ❌ | Medium |
 | lem:spectral-concentration | 18257 | `1 ≤ Tr B⁴ ≤ t^{4/n} + 4^{(n−4)/(n−2)} (t−1)^{2/(n−2)}` | `finite_fourth_trace_from_even_trace` | M10 | ❌ | Medium |
 | lem:even-cycle-equality | 18281 | `R_n = 1 ⟺ W = 1/2` a.e. | `even_cycle_equality_iff_constant` (mean-zero renormalized approximants, plan D9) | M10 | ❌ | Hard |
 | cor:main-equality | 18317 | H2 and the unnormalized H1 (k=2 strictness from `Θ(b,c) > 1` when `c > 0`) | `commonality_equality_iff_constant` | M10 | ❌ | Medium |
-| — (D10) | — | `EΠ₂ = A_{2,1}`: the graph of `Π₂` is `K_{1,2,2} = C₄⁺¹` (relabelling on the host) | `FiniteKernel.twoApex_Pi_eq_oneApex` (new) | M5 | ❌ | Medium |
-| — (D10) | — | `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)` for `b, c ≥ 0`, strict unless `b = c = 0` | `two_apex_scalar_inequality` (new) | M5 | ❌ | Easy |
-| — (D10) | — | `E(Q♯₂)⁴ ≥ Θ(b,c) ≥ 1` on every finite host | `FiniteKernel.two_apex_fourth_moment_ge_one` (new) | M5 | ❌ | Medium |
+| — (D10) | — | `EΠ₂ = A_{2,1}`: the graph of `Π₂` is `K_{1,2,2} = C₄⁺¹` (relabelling on the host) | `FiniteKernel.twoApex_Pi_eq_oneApex` (new) | M5 | ✅ | Medium |
+| — (D10) | — | `(1+2b+c/3)⁴ ≥ (1+b)²(1+6b+c)` for `b, c ≥ 0`, strict unless `b = c = 0` | `two_apex_scalar_inequality` (new) | M5 | ✅ | Easy |
+| — (D10) | — | `E(Q♯₂)⁴ ≥ Θ(b,c) ≥ 1` on every finite host | `FiniteKernel.two_apex_fourth_moment_ge_one` (new) | M5 | ✅ | Medium |
 | — | — | transfer of a closed density inequality from finite hosts to graphons | `one_le_normalizedApexDensity_of_hosts` (+ `hostOfStep`, `normalizedApexDensity_step`, `normalizedApexDensity_lipschitz`) | M4 | ✅ | Medium |
 | — | — | pair marginal of `Measure.pi` | `pairMarginal_measurePreserving` (new, plan §2.1) | M1 | ✅ | Hard |
 | — | — | headline for one apex | `commonality_one_apex` | M4 | ✅ | — |
-| — | — | headline for two apices (certificate-free) | `commonality_two_apices` | M5 | ❌ | — |
+| — | — | headline for two apices (certificate-free) | `commonality_two_apices` | M5 | ✅ | — |
 | — | — | headline H3 | `apex_relative_of_three_le` | M9 | ❌ | — |
 
 ## Kernel-check budget (M0 spike; totals to be filled in M7)

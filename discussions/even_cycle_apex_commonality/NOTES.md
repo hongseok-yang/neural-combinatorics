@@ -301,3 +301,32 @@ lake build                     Build completed successfully (8608 jobs); 0 warni
 lake env lean CheckAxioms.lean 61 declarations, all [propext, Classical.choice, Quot.sound]
 forbidden-token scan: none
 ```
+
+## 2026-09-27 — M5 (two apices, certificate-free, plan D10)
+
+File `lean/EvenCycleApex/Finite/TwoApex.lean`; headline in `lean/EvenCycleApex/Transfer.lean`.
+
+* `two_apex_scalar_inequality`: `(1 + 2b + c/3)⁴ − (1 + b)²(1 + 6b + c) = c/3 + 11b² + 6bc + 2c²/3 +
+  26b³ + 15b²c + 8bc²/3 + 4c³/27 + (2b + c/3)⁴` (checked by `ring`), so `Θ(b, c) ≥ 1`, and `Θ > 1` when
+  `c > 0` (`one_lt_twoApexTheta`, for H2).
+* `Z_two` (`Z₂ = R₄`): `E D₂²` is the colour average of the four-cycle `z₀ – x – z₁ – y`; the
+  iterated-sum identity needs one `sum_comm` and the kernel's symmetry.
+* `twoApex_Pi_eq_oneApex` (`E Π₂ = A_{2,1}`): `E_z Π₂` is the density of the 8-edge graph
+  `K_{1,2,2}` on `Fin 5` (`pi2Edges`); `edgePairs (apexCycle 4 1)` is computed by `decide`, and the
+  relabelling between them is found by `decide` over `Equiv.Perm (Fin 5)` (0.2 s).
+* `two_apex_fourth_moment_ge_one`: `Θ(b, c) ≤ E (Q♯₂)⁴` — quartic support with `Z₂ = R₄ ≥ 1`,
+  `E Π₂ = A_{2,1} ≥ X²/(1+b)` (the `k = 1` bound at `n = 4`, exponent `4/4 = 1`),
+  `X ≥ 1 + 2b + c/3 ≥ 0`, `R₄ ≤ 1 + 6b + c` (`a ≤ b`).
+* `two_apex_bound`: `A_{n/2,2} ≥ Θ^{n/4} ≥ 1`; `commonality_two_apices` via the unchanged transfer.
+* The `k ≤ 2` path imports no `Certificate/` module (checked with `grep` on the imports of
+  `Finite/`, `Moments/`, `Conditional/`, `Transfer.lean`).
+
+### M5 gate evidence (2026-09-27)
+
+```text
+lake build                     Build completed successfully (8609 jobs); 0 warnings
+#print axioms EvenCycleApex.commonality_two_apices
+  'EvenCycleApex.commonality_two_apices' depends on axioms: [propext, Classical.choice, Quot.sound]
+lake env lean CheckAxioms.lean 68 declarations, all [propext, Classical.choice, Quot.sound]
+forbidden-token scan: none
+```

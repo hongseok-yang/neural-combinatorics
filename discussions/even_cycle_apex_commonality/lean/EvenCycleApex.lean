@@ -44,4 +44,6 @@ import EvenCycleApex.Conditional.Diamond
 import EvenCycleApex.Moments.Basic
 import EvenCycleApex.Moments.ApexLifting
 import EvenCycleApex.Finite.OneApex
+-- M5: two apices, certificate-free (plan D10).
+import EvenCycleApex.Finite.TwoApex
 import EvenCycleApex.Transfer
