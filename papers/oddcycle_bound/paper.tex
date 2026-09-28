@@ -796,18 +796,16 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 \end{proof}
 
 We next derive the corresponding formula for path densities, which supplies the correction term in \eqref{eq:intro-commonality}.
-Unlike a cycle, a path has fixed endpoints, so its excursion expansion has no
-cyclic multiplicity factor.
-Let $P_k$ denote the path with $k$ edges, and define the scalar
+Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
 \begin{equation*}
-  x_k=\tP kU=e^{\mathsf T}M_U^ke.
+  \tP kU=e^{\mathsf T}M_U^ke.
 \end{equation*}
 
 \begin{lemma}[Path densities by excursions]
 \label{lem:path-excursions}
   For every $k\ge0$,
   \begin{equation}\label{eq:path-expansion}
-    x_k=q^k+
+    \tP kU=q^k+
     \sum_{r=1}^{\lfloor k/2\rfloor}
       \int\!\cdots\!\int
       h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
@@ -816,13 +814,13 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
 \end{lemma}
 
 \begin{proof}
-  For $k=0$ and $k=1$, the formula gives $x_0=e^{\mathsf T}e=1$ and
-  $x_1=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
+  For $k=0$ and $k=1$, the formula gives $\tP0U=e^{\mathsf T}e=1$ and
+  $\tP1U=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
   Now let $k\ge2$. Since $Pe=e$ and $e^{\mathsf T}P=e^{\mathsf T}$,
-  we may insert $P$ at both ends of the product defining $x_k$.
+  we may insert $P$ at both ends of the matrix expression for $\tP kU$.
   Inserting $P+Q=I$ between its $k$ copies of $M_U$ and expanding gives
   \[
-    x_k=
+    \tP kU=
     \sum_{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}}
       e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe.
   \]
@@ -892,7 +890,7 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   Summing \eqref{eq:path-r-excursions} over $r$ and including the word
   consisting only of $P$ gives
   \[
-    x_k=q^k+
+    \tP kU=q^k+
     \sum_{r=1}^{\lfloor k/2\rfloor}
       \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
                       \sum_{i=0}^r\alpha_i+
@@ -903,7 +901,7 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   Applying the moment identity \eqref{eq:moments} now gives
   \[
     \begin{aligned}
-      x_k={}&q^k+
+      \tP kU={}&q^k+
       \sum_{r=1}^{\lfloor k/2\rfloor}
       \int\!\cdots\!\int
       \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
@@ -979,7 +977,7 @@ The following lemma completes the reduction announced at the start of this secti
   same range $1\le r\le(m-1)/2$, and its polynomial degree is
   $(m-1)-2r=n-1$. Thus,
   \[
-    x_{m-1}=q^{m-1}+
+    \tP{m-1}U=q^{m-1}+
     \sum_{r=1}^{(m-1)/2}
       \int\!\cdots\!\int
       h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
@@ -1000,10 +998,10 @@ The following lemma completes the reduction announced at the start of this secti
   which is $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:Pmr}.  Therefore,
   \begin{equation}\label{eq:commonality-gap}
-    \tC mW+\tC mU-x_{m-1}
+    \tC mW+\tC mU-\tP{m-1}U
     =p^m+q^m-q^{m-1}+\Phi_m.
   \end{equation}
-  Recalling $x_{m-1}=\tP{m-1}U$, this identifies $\Phi_m$ as the
+  This identifies $\Phi_m$ as the
   difference between the two sides of \eqref{eq:intro-commonality}.
   In particular, $\Phi_m\ge0$ gives
   \[
@@ -1025,14 +1023,14 @@ The following lemma completes the reduction announced at the start of this secti
       &\le\int_{[0,1]^m}
         U(x_1,x_2)\cdots U(x_{m-1},x_m)
         \dd x_1\cdots\dd x_m
-       =x_{m-1}.
+       =\tP{m-1}U.
     \end{aligned}
   \end{equation}
   Since $q^m-q^{m-1}=-pq^{m-1}$, rearranging
   \eqref{eq:commonality-gap} gives
   \[
     \tC mW-\bigl(p^m-pq^{m-1}\bigr)
-    =\Phi_m+x_{m-1}-\tC mU
+    =\Phi_m+\tP{m-1}U-\tC mU
     \ge\Phi_m,
   \]
   where the last inequality follows from \eqref{eq:cycle-path}.
