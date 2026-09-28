@@ -808,7 +808,7 @@ Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
     \tP kU=q^k+
     \sum_{r=1}^{\lfloor k/2\rfloor}
       \int\!\cdots\!\int
-      h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
+      h_{k-2r}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \end{equation}
 \end{lemma}
@@ -872,9 +872,9 @@ Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
   condition constructs exactly one word: start with $\alpha_0+1$ copies
   of $P$, then $\beta_1+1$ copies of $Q$, then $\alpha_1+1$ copies of $P$,
   and continue through the final $P$-block of length $\alpha_r+1$.
-  The endpoints fix the starting position, so each tuple contributes
-  once, with no choice of a marked boundary or cyclic placement.
-  Summing the displayed weights over these tuples therefore gives
+  By this one-to-one correspondence, summing the terms in
+  \eqref{eq:path-projection-expansion} over the admissible block-length
+  tuples gives
   \begin{equation}\label{eq:path-r-excursions}
     \begin{aligned}
       &\sum_{\substack{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}\\
@@ -915,7 +915,7 @@ Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
     \end{aligned}
   \]
   The inner sum is
-  $h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)$ by
+  $h_{k-2r}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:h-def}: the $r+1$ exponents $\alpha_0,\ldots,\alpha_r$
   account for the $r+1$ copies of $q$, and the exponents
   $\beta_1,\ldots,\beta_r$ belong to $\lambda_1,\ldots,\lambda_r$.
@@ -940,7 +940,7 @@ The following lemma completes the reduction announced at the start of this secti
       h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
       +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
     \Bigr]\notag\\
-    &-h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r).
+    &-h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r).
     \label{eq:Pmr}
   \end{align}
   The sum of integrals
@@ -982,7 +982,7 @@ The following lemma completes the reduction announced at the start of this secti
     \tP{m-1}U=q^{m-1}+
     \sum_{r=1}^{(m-1)/2}
       \int\!\cdots\!\int
-      h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
+      h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \]
   For each fixed number $r$ of excursions, the two cycle integrals and
@@ -995,7 +995,7 @@ The following lemma completes the reduction announced at the start of this secti
       h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
       +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
     \Bigr]
-    -h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r),
+    -h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r),
   \]
   which is $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:Pmr}.  Therefore,
@@ -1843,7 +1843,7 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
     \qquad
     h_1(\rep qr,\lambda_1,\ldots,\lambda_r)=rq+\sum_{i=1}^r\lambda_i,
   \]
-  and the subtracted term is $h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)=h_0=1$.
+  and the subtracted term is $h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)=h_0=1$.
   The eigenvalues cancel when the two linear forms are added, and $p+q=1$, so the
   integrand for this $r$ is the constant
   \[
