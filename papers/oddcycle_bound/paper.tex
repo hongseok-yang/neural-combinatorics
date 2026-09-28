@@ -1033,7 +1033,7 @@ nonnegative when $p\ge1/2$. Consequently, the inequalities in
 larger range $p\ge1/2$.
 
 \begin{proposition}\label{prop:short-cycles}
-  Suppose that $0\le q\le1/2$ and set $p=1-q$. For $m\in\{3,5,7\}$,
+  Suppose that $0\le q\le1/2$ and set $p=1-q$. For all $m\in\{3,5,7\}$,
   $1\le r\le(m-1)/2$, and $\lambda_1,\ldots,\lambda_r\in\R$, we have
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0.
@@ -1113,8 +1113,7 @@ larger range $p\ge1/2$.
     \begin{aligned}
       D(q)&=288q^2-336q+119,\\
       C(q)&=24q^3-42q^2+28q-7,\\
-      N(q)&=5184q^6-18144q^5+28602q^4-25802q^3\\
-          &\qquad+13874q^2-4165q+539.
+      N(q)&=5184q^6-18144q^5+28602q^4-25802q^3 +13874q^2-4165q+539.
     \end{aligned}
   \]
   Direct expansion gives
@@ -1154,22 +1153,22 @@ larger range $p\ge1/2$.
   \]
   Completing squares gives
   \[
-    \begin{aligned}
-      P_{7,2}(q;\lambda_1,\lambda_2)={}&
-      \frac32(\lambda_1-\lambda_2)^2
-      +\frac92\left(\lambda_1+\lambda_2+2q-\frac76\right)^2\\
-      &+18\left(q-\frac7{12}\right)^2+\frac74>0.
-    \end{aligned}
+      P_{7,2}(q;\lambda_1,\lambda_2)=
+      \left(\frac32(\lambda_1-\lambda_2)^2
+      +\frac92\left(\lambda_1+\lambda_2+2q-\frac76\right)^2
+      +18\left(q-\frac7{12}\right)^2+\frac74\right)>0.
   \]
   Finally, for $r=3$, we have $n=1$, so
   \[
     \begin{aligned}
       P_{7,3}(q;\lambda_1,\lambda_2,\lambda_3)
       ={}&\frac73\bigl[
-        h_1(p,p,p,-\lambda_1,-\lambda_2,-\lambda_3)\\
-        &\qquad\quad+h_1(q,q,q,\lambda_1,\lambda_2,\lambda_3)\bigr]-1\\
+        h_1(p,p,p,-\lambda_1,-\lambda_2,-\lambda_3)
+        +h_1(q,q,q,\lambda_1,\lambda_2,\lambda_3)\bigr]-1\\
       ={}&\frac73\bigl[(3p-\lambda_1-\lambda_2-\lambda_3)
-        +(3q+\lambda_1+\lambda_2+\lambda_3)\bigr]-1=6.
+        +(3q+\lambda_1+\lambda_2+\lambda_3)\bigr]-1
+      \\
+      ={}&6.
     \end{aligned}
   \]
 
@@ -1177,8 +1176,13 @@ larger range $p\ge1/2$.
   $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
   $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
   Since $\mu$ is a nonnegative measure, \eqref{eq:Phi-expansion} gives
-  $\Phi_m\ge0$, and
-  \Cref{lem:polynomial-reduction} proves both inequalities.
+  $\Phi_m\ge0$.
+  By \Cref{lem:polynomial-reduction} and the discussion following its
+  statement, this proves the strengthened inequality in
+  \Cref{thm:commonality} for $m\in\{3,5,7\}$ and $p\ge1/2$.
+  The comparison following \Cref{thm:commonality} then gives the
+  odd-cycle bound in \Cref{thm:main} for the same cycle lengths and
+  edge densities.
 \end{proof}
 
 \section{Positivity of the excursion polynomials}
