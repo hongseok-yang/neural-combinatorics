@@ -819,12 +819,13 @@ Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
   Now let $k\ge2$. Since $Pe=e$ and $e^{\mathsf T}P=e^{\mathsf T}$,
   we may insert $P$ at both ends of the matrix expression for $\tP kU$.
   Inserting $P+Q=I$ between its $k$ copies of $M_U$ and expanding gives
-  \[
+  \begin{equation}\label{eq:path-projection-expansion}
     \tP kU=
     \sum_{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}}
       e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe.
-  \]
-  Associate each summand with the word $PR_1\cdots R_{k-1}P$.
+  \end{equation}
+  Associate each summand in \eqref{eq:path-projection-expansion} with
+  the word $PR_1\cdots R_{k-1}P$.
   This word has $k+1$ letters, separated by the $k$ copies of $M_U$.
   We read it from its fixed left endpoint to its fixed right endpoint;
   its first and last letters are separate occurrences of $P$.
@@ -852,7 +853,8 @@ Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
     \sum_{i=0}^r\alpha_i+\sum_{i=1}^r\beta_i=k-2r.
   \]
   In particular, $r\le\lfloor k/2\rfloor$.
-  To evaluate the summand, use the same block identities as in the proof
+  To evaluate the summand in \eqref{eq:path-projection-expansion}
+  associated with this word, use the same block identities as in the proof
   of \Cref{lem:cycle-excursions}: each internal step in a $P$-block
   contributes $q$, and the excursion through the $i$th $Q$-block
   contributes $g^{\mathsf T}A^{\beta_i}g$.
