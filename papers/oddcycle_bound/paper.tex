@@ -952,10 +952,19 @@ The following lemma completes the reduction announced at the start of this secti
   \end{equation}
   is the difference between the left- and right-hand sides of
   \eqref{eq:intro-commonality}.
-  Thus, $\Phi_m\ge0$ implies \Cref{thm:main,thm:commonality}.
-  In particular, it suffices to prove that each $P_{m,r}$ is nonnegative
-  on $[-1/2,1/2]^r$.
 \end{lemma}
+
+\Cref{lem:polynomial-reduction} reduces the strengthened inequality
+\eqref{eq:intro-commonality} to proving $\Phi_m\ge0$ for step graphons.
+Since $\mu$ is nonnegative and supported on $[-1/2,1/2]$, it suffices to
+prove, for every $1\le r\le(m-1)/2$, that
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0
+  \qquad\text{for all }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r,
+\]
+where $q=1-p$.
+The comparison between cycle and path densities given after the proof
+then yields the odd-cycle bound in \Cref{thm:main}.
 
 \begin{proof}
   Adding the cycle expansions \eqref{eq:cycle-U} and
@@ -1005,46 +1014,43 @@ The following lemma completes the reduction announced at the start of this secti
   \end{equation}
   This identifies $\Phi_m$ as the
   difference between the two sides of \eqref{eq:intro-commonality}.
-  In particular, $\Phi_m\ge0$ gives
-  \[
-    \tC mW+\tC mU
-    \ge p^m+q^m+\tP{m-1}U-q^{m-1},
-  \]
-  proving \Cref{thm:commonality}.
-
-  To deduce the bound for $\tC mW$ alone, compare the cycle density of
-  $U$ with its path density. Since $0\le U\le1$, removing the closing
-  factor $U(x_m,x_1)$ from the cycle-density integrand can only increase
-  it. The remaining factors describe the path with $m-1$ edges, so
-  \begin{equation}\label{eq:cycle-path}
-    \begin{aligned}
-      \tC mU
-      &=\int_{[0,1]^m}
-        U(x_1,x_2)\cdots U(x_{m-1},x_m)U(x_m,x_1)
-        \dd x_1\cdots\dd x_m\\
-      &\le\int_{[0,1]^m}
-        U(x_1,x_2)\cdots U(x_{m-1},x_m)
-        \dd x_1\cdots\dd x_m
-       =\tP{m-1}U.
-    \end{aligned}
-  \end{equation}
-  Since $q^m-q^{m-1}=-pq^{m-1}$, rearranging
-  \eqref{eq:commonality-gap} gives
-  \[
-    \tC mW-\bigl(p^m-pq^{m-1}\bigr)
-    =\Phi_m+\tP{m-1}U-\tC mU
-    \ge\Phi_m,
-  \]
-  where the last inequality follows from \eqref{eq:cycle-path}.
-  Thus, $\Phi_m\ge0$ also proves \Cref{thm:main}.
-
-  Finally, $\mu$ is nonnegative and supported on $[-1/2,1/2]$ by
-  \Cref{sec:matrix-reduction}.
-  If each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$, every integral in
-  \eqref{eq:Phi-expansion} is nonnegative, and hence $\Phi_m\ge0$.
-  This proves both inequalities for step graphons;
-  \Cref{lem:step-reduction} then extends them to arbitrary graphons.
 \end{proof}
+
+We now explain how the gap identity \eqref{eq:commonality-gap} gives
+the desired bounds. If $\Phi_m\ge0$, then
+\[
+  \tC mW+\tC mU
+  \ge p^m+q^m+\tP{m-1}U-q^{m-1},
+\]
+which is the strengthened inequality \eqref{eq:intro-commonality}.
+
+To deduce the bound for $\tC mW$ alone, compare the cycle density of
+$U$ with its path density. Since $0\le U\le1$, removing the closing
+factor $U(x_m,x_1)$ from the cycle-density integrand can only increase
+it. The remaining factors describe the path with $m-1$ edges, so
+\begin{equation}\label{eq:cycle-path}
+  \begin{aligned}
+    \tC mU
+    &=\int_{[0,1]^m}
+      U(x_1,x_2)\cdots U(x_{m-1},x_m)U(x_m,x_1)
+      \dd x_1\cdots\dd x_m\\
+    &\le\int_{[0,1]^m}
+      U(x_1,x_2)\cdots U(x_{m-1},x_m)
+      \dd x_1\cdots\dd x_m
+     =\tP{m-1}U.
+  \end{aligned}
+\end{equation}
+Since $q^m-q^{m-1}=-pq^{m-1}$, rearranging
+\eqref{eq:commonality-gap} gives
+\[
+  \tC mW-\bigl(p^m-pq^{m-1}\bigr)
+  =\Phi_m+\tP{m-1}U-\tC mU
+  \ge\Phi_m,
+\]
+where the last inequality follows from \eqref{eq:cycle-path}.
+Thus, $\Phi_m\ge0$ also gives the odd-cycle bound \eqref{eq:intro-main}.
+Once these two inequalities are established for step graphons,
+\Cref{lem:step-reduction} extends them to arbitrary graphons.
 
 \section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
 \label{sec:short-cycles}
