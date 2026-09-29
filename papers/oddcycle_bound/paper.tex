@@ -1609,7 +1609,13 @@ polynomial as a Beta expectation.
 \end{proof}
 
 \begin{lemma}\label{lem:pge23-ell-negative}
-  If $0\le q\le1/2$ and $\lambda\le0$, then $\widetilde P_{m,r}(q,\lambda)\ge0$.
+  Let $m\ge3$ be odd, let $r$ be an integer satisfying
+  $1\le r\le(m-1)/2$, and set $n=m-2r$.
+  If $0\le q\le1/2$ and $\lambda\le0$, then the diagonal polynomial
+  defined in \eqref{eq:pge23-Ptilde} satisfies
+  \[
+    \widetilde P_{m,r}(q,\lambda)\ge0.
+  \]
 \end{lemma}
 
 \begin{proof}
@@ -1622,9 +1628,13 @@ polynomial as a Beta expectation.
   \end{align*}
   This identity follows by expanding
   $(1-u)((1-u)^{n-1}-u^{n-1})=(1-u)^n-u^{n-1}+u^n$.
-  By \eqref{eq:pge23-n}, $m/n-1=2r/n>0$, and $n-1$ is even.
-  The second term is therefore always nonnegative. The first is
-  nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, both of which hold
+  Since $n=m-2r>0$, we have $m/n-1=2r/n>0$.
+  Also, $n$ is odd, so $n-1$ is even.
+  In the last line of the displayed decomposition, the second term
+  $\left(\frac{m}{n}-1\right)u^{n-1}$ is therefore nonnegative for every
+  $u\in\R$.
+  The first term, $\frac{m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)$,
+  is nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, both of which hold
   for $u\le1/2$.
 
   Since $X\sim\BetaLaw(r,r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\lambda\le0$ gives
