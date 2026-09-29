@@ -1749,18 +1749,73 @@ $0\le q\le1/3$ using an odd-to-even Gamma moment bound.
   This proves the second identity in the lemma.
 \end{proof}
 
-We now turn to the required nonnegativity of $\E\rho_{n,m}(q+xY)$,
-writing $x=1/t$. We center $\rho_{n,m}$ at $u=1/2$.
-The resulting expansion is a positive linear
-combination of a constant and terms of the form
+We now seek to prove $\E\rho_{n,m}(q+xY)\ge0$ for $0\le q\le1/3$,
+where $x=1/t>0$. To obtain a useful expression for this expectation, we
+substitute $u=\frac12+v$ into the defining formula \eqref{eq:pge23-rho}
+for $\rho_{n,m}(u)$ and expand $\rho_{n,m}(\frac12+v)$ as a polynomial
+in $v$. The choice of $1/2$ uses the symmetry of
+$u^n+(1-u)^n$ under exchanging $u$ and $1-u$.
+Set
 \[
-  2(r+j)v^{2j}-jv^{2j-1},
-  \qquad j\ge1,
+  A_n(u)=u^n+(1-u)^n.
 \]
-evaluated at the random variable $v=q+xY-1/2$. The even moment is
-nonnegative, whereas the odd moment has no fixed sign. We therefore need to
-control the odd moment by the even one. The following lemma provides exactly
-this comparison, uniformly in the scaling of $Y$.
+We rewrite $\rho_{n,m}$ through $A_n$ and $A_n'$.
+From $A_n'(u)=n\bigl(u^{n-1}-(1-u)^{n-1}\bigr)$,
+\[
+  (1-u)A_n'(u)
+  =n(1-u)u^{n-1}-n(1-u)^n
+  =nu^{n-1}-nu^n-n(1-u)^n
+  =nu^{n-1}-nA_n(u),
+\]
+that is, $u^{n-1}=A_n(u)+\frac1n(1-u)A_n'(u)$.
+Substituting this into \eqref{eq:pge23-rho} and using $m-n=2r$ gives
+\begin{equation}\label{eq:pge23-rho-derivative}
+  n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
+\end{equation}
+
+Substituting $u=\frac12+v$ pairs the powers of $\frac12+v$ and
+$\frac12-v$, so the odd powers of $v$ cancel. The binomial theorem gives
+\begin{equation*}
+  A_n\left(\frac{1}{2}+v\right)
+  =\left(\frac12+v\right)^n+\left(\frac12-v\right)^n
+  =2\sum_{2j\le n}\binom n{2j}\left(\frac12\right)^{n-2j}v^{2j}
+  =\sum_{j=0}^{(n-1)/2}a_jv^{2j},
+\end{equation*}
+where $a_j=2^{2j+1-n}\binom n{2j}>0$.
+Differentiating in $v$ gives
+$A_n'(\frac12+v)=\sum_{j\ge1}2ja_jv^{2j-1}$.
+Substitute these two expansions into \eqref{eq:pge23-rho-derivative},
+with $1-u=\frac12-v$, to obtain
+\begin{align}
+  n\rho_{n,m}\left(\frac{1}{2}+v\right)
+  &=2r\sum_{j\ge0}a_jv^{2j}
+   -\left(\frac12-v\right)\sum_{j\ge1}2ja_jv^{2j-1} \nonumber \\
+  &=2ra_0+
+   \sum_{j=1}^{(n-1)/2}
+   a_j\bigl(2rv^{2j}-jv^{2j-1}+2jv^{2j}\bigr) \nonumber \\
+  &=2ra_0+
+   \sum_{j=1}^{(n-1)/2}
+   a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).\label{eq:pge23-rho-centered}
+\end{align}
+
+The identity \eqref{eq:pge23-rho-centered} expresses
+$n\rho_{n,m}(\frac12+v)$ as the positive constant $2ra_0$ plus the
+bracketed expressions multiplied by the positive coefficients $a_j$.
+The bracketed expressions themselves need not be nonnegative.
+At $u=q+xY$, we have $v=q+xY-1/2$, so their expectations are
+\[
+  2(r+j)\E v^{2j}-j\E v^{2j-1}.
+\]
+The even moment $\E v^{2j}$ is nonnegative, whereas the odd moment
+$\E v^{2j-1}$ can have either sign. Since $n>0$ and all the $a_j$ are
+positive, it suffices to prove
+\[
+  j\E v^{2j-1}\le2(r+j)\E v^{2j},
+  \qquad 1\le j\le(n-1)/2.
+\]
+The following lemma gives an odd-to-even moment bound for variables of the
+form $zY-1$. In \Cref{prop:pge23-gamma-positive}, we apply it to $v$ by
+rescaling.
 
 \begin{lemma}[Uniform odd-to-even Gamma moment bound]\label{lem:pge23-gamma-moment}
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
@@ -1786,49 +1841,6 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 \end{proposition}
 
 \begin{proof}
-  Set
-  \[
-    A_n(u)=u^n+(1-u)^n.
-  \]
-  We rewrite $\rho_{n,m}$ through $A_n$ and $A_n'$.
-  From $A_n'(u)=n\bigl(u^{n-1}-(1-u)^{n-1}\bigr)$,
-  \[
-    (1-u)A_n'(u)
-    =n(1-u)u^{n-1}-n(1-u)^n
-    =nu^{n-1}-nu^n-n(1-u)^n
-    =nu^{n-1}-nA_n(u),
-  \]
-  that is, $u^{n-1}=A_n(u)+\frac1n(1-u)A_n'(u)$.
-  Substituting this into \eqref{eq:pge23-rho} and using $m-n=2r$ gives
-  \begin{equation}\label{eq:pge23-rho-derivative}
-    n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
-  \end{equation}
-
-  Now expand around $u=1/2$.
-  With $u=\frac12+v$, the binomial theorem gives
-  \begin{equation*}
-    A_n\left(\frac{1}{2}+v\right)
-    =\left(\frac12+v\right)^n+\left(\frac12-v\right)^n
-    =2\sum_{2j\le n}\binom n{2j}\left(\frac12\right)^{n-2j}v^{2j}
-    =\sum_{j=0}^{(n-1)/2}a_jv^{2j},
-  \end{equation*}
-  where $a_j=2^{2j+1-n}\binom n{2j}>0$.
-  Differentiating in $v$ gives
-  $A_n'(\frac12+v)=\sum_{j\ge1}2ja_jv^{2j-1}$.
-  Substitute these two expansions into \eqref{eq:pge23-rho-derivative},
-  with $1-u=\frac12-v$, to obtain
-  \begin{align}
-    n\rho_{n,m}\left(\frac{1}{2}+v\right)
-    &=2r\sum_{j\ge0}a_jv^{2j}
-     -\left(\frac12-v\right)\sum_{j\ge1}2ja_jv^{2j-1} \nonumber \\
-    &=2ra_0+
-     \sum_{j=1}^{(n-1)/2}
-     a_j\bigl(2rv^{2j}-jv^{2j-1}+2jv^{2j}\bigr) \nonumber \\
-    &=2ra_0+
-     \sum_{j=1}^{(n-1)/2}
-     a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).\label{eq:pge23-rho-centered}
-  \end{align}
-
   At $u=q+xY$, the $v$ in \eqref{eq:pge23-rho-centered} equals
   \[
     v=q+xY-\frac{1}{2}=xY-\delta=\delta(zY-1),
