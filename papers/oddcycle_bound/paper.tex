@@ -1668,6 +1668,8 @@ This formula follows by the change of variable $w=t(\lambda+s)$ in the
 defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 
 \begin{lemma}[Laplace--Gamma representation]\label{lem:pge23-laplace-gamma}
+  Let $m\ge3$ be odd, let $r$ be an integer satisfying
+  $1\le r\le(m-1)/2$, and set $n=m-2r$.
   Let $Y\sim\GammaLaw(r,1)$, where the parameters denote shape and rate.
   If $\lambda>0$, then
   \begin{equation}\label{eq:pge23-laplace-gamma}
@@ -1684,6 +1686,15 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
       \E\!\left[\rho_{n,m}\!\left(q+\frac{\lambda}{Z}Y\right)\right].
   \end{equation}
 \end{lemma}
+
+In \eqref{eq:pge23-laplace-gamma}, the parameter $\lambda$ occurs only in
+the positive prefactor $\lambda^{n+r}$ and the positive weight
+$t^{m-r-1}e^{-\lambda t}$. The expectation
+$\E\rho_{n,m}(q+Y/t)$ is independent of $\lambda$.
+Thus, to prove $\widetilde P_{m,r}(q,\lambda)\ge0$ for every $\lambda>0$,
+it suffices to prove that this expectation is nonnegative for every $t>0$.
+After establishing the representation, we prove this averaged positivity for
+$0\le q\le1/3$ using an odd-to-even Gamma moment bound.
 
 \begin{proof}
   Insert \eqref{eq:pge23-laplace-kernel} into
@@ -1736,15 +1747,9 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
   $q=1-p$ and $n=m-2r$.
 \end{proof}
 
-In \eqref{eq:pge23-laplace-gamma}, the parameter $\lambda$ occurs only in
-the positive prefactor $\lambda^{n+r}$ and the positive weight
-$t^{m-r-1}e^{-\lambda t}$. The expectation
-$\E\rho_{n,m}(q+Y/t)$ is independent of $\lambda$. It is therefore enough
-to prove that this expectation is nonnegative for every $t>0$; the result
-will then follow for every $\lambda>0$ at once.
-
-To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we center
-$\rho_{n,m}$ at $u=1/2$. The resulting expansion is a positive linear
+We now turn to the required nonnegativity of $\E\rho_{n,m}(q+xY)$,
+writing $x=1/t$. We center $\rho_{n,m}$ at $u=1/2$.
+The resulting expansion is a positive linear
 combination of a constant and terms of the form
 \[
   2(r+j)v^{2j}-jv^{2j-1},
