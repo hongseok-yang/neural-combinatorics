@@ -1188,10 +1188,36 @@ larger range $p\ge1/2$.
 \section{Positivity of the excursion polynomials}
 \label{sec:excursion-positivity}
 
+We now complete the proof of the strengthened extended-commonality inequality
+in \Cref{thm:commonality} and hence the odd-cycle Goodman bound in
+\Cref{thm:main}.
+The excursion expansion in \Cref{sec:excursions} reduces this task to showing that
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0
+\]
+whenever $0\le q\le1/3$, $m\ge3$ is odd, $1\le r\le(m-1)/2$, and each
+$\lambda_i\in[-1/2,1/2]$.
+Indeed, these polynomials are integrated against nonnegative measures to give
+the gap in the strengthened inequality.
+\Cref{sec:short-cycles} verified their positivity for the first three odd cycles;
+this section supplies an argument uniform in the cycle length.
+
+The proof proceeds by successive simplifications of this polynomial inequality.
+First, Dirichlet averaging reduces it to the case in which all spectral
+variables equal a single value $\ell$.
+We then express this diagonal polynomial through a Beta expectation.
+This representation gives nonnegativity directly when $\ell\le0$.
+For $\ell>0$, a further integral representation reduces the problem to
+comparing odd and even moments of a shifted Gamma random variable.
+A uniform moment bound, proved by an ODE argument in \Cref{app:gamma-moment},
+supplies the required comparison.
+
+Combining these steps proves both main inequalities.
+\Cref{sec:equality-stability} then examines when equality can hold and deduces
+qualitative stability.
+
 Fix an odd integer $m\ge3$ and $1\le r\le(m-1)/2$. Then, $n=m-2r$ is a positive odd integer.
-Our first goal is to replace the $r$ spectral variables in $P_{m,r}$ by a
-single variable $\ell$.
-Define the diagonal polynomial
+To carry out the first step, define the diagonal polynomial
 \begin{equation}\label{eq:pge23-Ptilde}
   \widetilde P_{m,r}(q,\ell)
   =P_{m,r}(q;\ell,\ldots,\ell).
