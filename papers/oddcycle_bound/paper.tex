@@ -2277,8 +2277,10 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   Now assume $z>0$, write $b=1/z$, and define
   \[
     F(b)=\E(Y-b)^{2j},
-    \qquad\text{so that}\qquad
-    F'(b)=-2j\,\E(Y-b)^{2j-1}.
+    \quad\text{so that}\quad
+    F'(b)=-2j\,\E(Y-b)^{2j-1},
+    \quad
+    F''(b)=2j(2j-1)\,\E(Y-b)^{2j-2}.
   \]
   Since $zY-1=z(Y-b)$, dividing \eqref{eq:pge23-gamma-moment2} by
   $z^{2j}>0$ gives the equivalent inequality
@@ -2318,30 +2320,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
 
   \smallskip
   \noindent\emph{Reduction to one critical point.}
-  We next determine the sign of $H'$ at a zero of $H$.
-  Differentiating \eqref{eq:pge23-gamma-H} and then eliminating $F''$ by \eqref{eq:pge23-gamma-ODE}, we obtain
-  \[
-    H'(b)=\left(r+j+\frac{3}{2}\right)F'(b)+\frac{3b}{2}F''(b)
-    =3jF(b)+\left(\frac{5r}{2}+4j-\frac{3b}{2}\right)F'(b).
-  \]
-  At a zero of $H$ we have $F'(b)=-\frac{2(r+j)}{3b}F(b)$ by \eqref{eq:pge23-gamma-H}, and substituting this leaves
-  \begin{equation}\label{eq:pge23-gamma-crossing}
-    \frac{H'(b)}{F(b)}
-    =\frac{3(r+4j)b-(r+j)(5r+8j)}{3b}.
-  \end{equation}
-  Set
-  \begin{equation*}
-    b_*:=\frac{(r+j)(5r+8j)}{3(r+4j)}.
-  \end{equation*}
-  Since $F(b)=\E(Y-b)^{2j}>0$, formula \eqref{eq:pge23-gamma-crossing} shows that at a zero $b$ of $H$ we have $H'(b)>0$ if $b>b_*$, and $H'(b)<0$ if $b<b_*$.
-  If $H(b_*)=0$, then $H'(b_*)=0$. Differentiating the formula for $H'$
-  above and using \eqref{eq:pge23-gamma-ODE} gives
-  \[
-    H''(b_*)=\frac{r+4j}{b_*}F(b_*)>0.
-  \]
-  Thus, if $b_*$ is a zero of $H$, it is a strict local minimum and
-  cannot be an endpoint of an interval on which $H$ is negative.
-  Now
+  First observe that
   \[
     H(0)=(r+j)\E Y^{2j}>0,
     \qquad
@@ -2351,7 +2330,43 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   so $H$ is positive at both ends of $[0,\infty)$.
   If $H$ were negative somewhere, the maximal interval of negativity containing that point
   would have a first zero, where $H'\le0$, and a later zero, where
-  $H'\ge0$. The first therefore lies below $b_*$ and the second above it,
+  $H'\ge0$.
+
+  To locate these endpoints, we next determine the sign of $H'$ at a zero of $H$.
+  Differentiating \eqref{eq:pge23-gamma-H} and then eliminating $F''$ by \eqref{eq:pge23-gamma-ODE}, we obtain
+  \[
+    H'(b)=\left(r+j+\frac{3}{2}\right)F'(b)+\frac{3b}{2}F''(b)
+    =3jF(b)+\left(\frac{5r}{2}+4j-\frac{3b}{2}\right)F'(b).
+  \]
+  Let $b_0>0$ be a zero of $H$, so that $H(b_0)=0$. By \eqref{eq:pge23-gamma-H}, we have
+  \[
+    F'(b_0)=-\frac{2(r+j)}{3b_0}F(b_0),
+  \]
+  and substituting this gives
+  \begin{equation}\label{eq:pge23-gamma-crossing}
+    \frac{H'(b_0)}{F(b_0)}
+    =\frac{3(r+4j)b_0-(r+j)(5r+8j)}{3b_0}.
+  \end{equation}
+  Set $b_*$ to be the point where the numerator in \eqref{eq:pge23-gamma-crossing} vanishes, i.e.,
+  \begin{equation*}
+    b_*:=\frac{(r+j)(5r+8j)}{3(r+4j)}.
+  \end{equation*}
+  Since $F(b_0)=\E(Y-b_0)^{2j}>0$, we distinguish three cases using
+  \eqref{eq:pge23-gamma-crossing}.
+  \begin{enumerate}[label=(\roman*)]
+    \item If $b_0<b_*$, then $H'(b_0)<0$.
+    \item If $b_0>b_*$, then $H'(b_0)>0$.
+    \item If $b_0=b_*$, then $H(b_*)=H(b_0)=0$ and $H'(b_*)=0$.
+    Differentiating the formula for $H'$ above and using
+    \eqref{eq:pge23-gamma-ODE} gives
+    \[
+      H''(b_*)=\frac{r+4j}{b_*}F(b_*)>0.
+    \]
+    Thus $b_*$ is a strict local minimum of $H$ and cannot be an endpoint
+    of an interval on which $H$ is negative.
+  \end{enumerate}
+  The first endpoint of the interval of negativity would therefore lie below $b_*$
+  and the second above it,
   so this interval would contain $b_*$ and give $H(b_*)<0$.
   To rule out this possibility, it remains only to prove
   \begin{equation}\label{eq:pge23-gamma-Hbstar}
