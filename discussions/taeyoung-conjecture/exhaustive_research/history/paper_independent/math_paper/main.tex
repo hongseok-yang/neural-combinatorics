@@ -1,0 +1,647 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=30mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{pdflscape}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+
+\numberwithin{equation}{section}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\PhiH}{\Phi_H}
+\newcommand{\join}{\mathbin{\vee}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Atlas}{\operatorname{Atlas}}
+\newcommand{\Tail}{\operatorname{Tail}}
+
+\title{A Complete Six-Vertex Classification for a Chromatic Graphon Lower Bound}
+\author{Author names to be confirmed\thanks{The author list and affiliations will be inserted after confirmation.}}
+\date{Draft of \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a finite graph $H$, let
+\[
+ \Phi_H(p)=(1-p)^{v(H)}\chi_H\!\left(\frac1{1-p}\right),
+\]
+where the value at $p=1$ is defined by polynomial continuation.  We classify
+the inequality $t(H,W)\geq\Phi_H(p)$ on the interval
+$p\geq1-1/(\chi(H)-1)$ for every non-bipartite graph $H$ on at most six
+vertices having neither isolated vertices nor an isolated-edge component.
+There are $117$ such isomorphism classes.  The inequality holds for $94$ and
+fails for $23$.  The positive side combines odd-cycle and pure-chordal
+theorems, rooted and link inequalities, closure operations, row-specific
+analytic arguments, and exact rational interval sum-of-squares certificates.
+Every negative row has an explicit rational step-graphon witness; nineteen
+come from tensor products of balanced Tur\'{a}n graphons.  Lean sources state
+the row theorem for arbitrary probability spaces and arbitrary measurable
+symmetric $[0,1]$-valued kernels.  Exact scripts regenerate the catalogue and
+the counterexample arithmetic.
+\end{abstract}
+
+\section{Introduction}
+
+Let $W\colon\Omega^2\to[0,1]$ be a symmetric measurable kernel on a
+probability space $(\Omega,\mu)$, in the graphon framework of
+Lov\'asz~\cite{Lovasz2012}.  For a finite simple graph $H$, its
+homomorphism density is
+\begin{equation}
+ t(H,W)=\int_{\Omega^{V(H)}}
+ \prod_{uv\in E(H)}W(x_u,x_v)
+ \prod_{u\in V(H)}\dd\mu(x_u).
+ \label{eq:hom-density}
+\end{equation}
+The edge density is $p=t(K_2,W)$.  At a balanced complete $k$-partite
+graphon $T_k$,
+\begin{equation}
+ p=1-\frac1k,
+ \qquad
+ t(H,T_k)=\frac{\chi_H(k)}{k^{v(H)}}=\Phi_H(p).
+ \label{eq:turan-equality}
+\end{equation}
+This equality motivates the following question.
+
+\begin{definition}
+\label{def:positive}
+Let $H$ be non-bipartite.  We call $H$ \emph{positive} when every graphon $W$
+of edge density
+\begin{equation}
+ p\in I_H:=\left[1-\frac1{\chi(H)-1},1\right]
+ \label{eq:required-interval}
+\end{equation}
+satisfies $t(H,W)\geq\Phi_H(p)$.  We call $H$ \emph{negative} when such a
+graphon and such a $p$ violate the inequality.
+\end{definition}
+
+The finite scope considered here consists of the NetworkX Graph Atlas
+isomorphism classes on at most six vertices that are non-bipartite and have
+neither isolated vertices nor an isolated-edge component.  The exclusions
+remove factors that do not belong to the connected non-bipartite core of the
+question.  A direct graph-atlas enumeration gives $117$ classes.
+
+\begin{theorem}[Six-vertex classification]
+\label{thm:classification}
+Among the $117$ classes in the stated scope, exactly $94$ are positive and
+$23$ are negative.  The negative Atlas indices are
+\begin{equation}
+\begin{split}
+ 48,50,129,140,141,143,149,152,158,159,166,170,172,173,{}\\
+ 182,184,186,189,190,197,198,204,206.
+\end{split}
+\label{eq:negative-list}
+\end{equation}
+Every other class in \Cref{tab:classification} is positive.
+\end{theorem}
+
+The theorem has two independently checkable parts.  For a negative row, a
+finite rational sum evaluates both sides of the proposed inequality.  For a
+positive row, the supplementary Lean theorem quantifies over arbitrary
+probability spaces and graphons.  The proof is therefore not restricted to
+finite graphs or step graphons.
+
+The reusable mathematics is more informative than the row count.  Nineteen
+positive rows follow from one pure-chordal theorem.  Five arise from a theorem
+for cones over forests, and many others follow from rooted attachment or
+closure arguments.  At the remaining rows, exact certificates replace a
+large numerical search object by rational identities designed for formal
+checking.  On the negative side, nineteen witnesses have one common tensor
+construction; only four need local perturbations.
+
+\paragraph{Proof archive.}
+The supplementary archive contains the Lean development, exact certificate
+files, rational checking scripts, and the generated tables included below.
+Paths in \Cref{tab:row-sources} are relative to that archive.  The catalogue
+table is regenerated by
+\path{math_paper/scripts/generate_classification.py}; the negative
+arithmetic is regenerated by
+\path{math_paper/scripts/verify_negative_witnesses.py}.
+
+\section{The chromatic target}
+
+Write $n=v(H)$ and expand the chromatic polynomial as
+$\chi_H(x)=\sum_{j=0}^n c_jx^j$.  Then
+\begin{equation}
+ \Phi_H(p)=\sum_{j=0}^n c_j(1-p)^{n-j},
+ \label{eq:target-polynomial}
+\end{equation}
+so $\Phi_H$ is a polynomial in $p$ and its endpoint value is unambiguous.
+For a clique, put
+\begin{equation}
+ A_r(p):=\Phi_{K_r}(p)
+ =\prod_{i=1}^{r-1}\bigl(ip-(i-1)\bigr).
+ \label{eq:clique-target}
+\end{equation}
+In particular, $A_2(p)=p$, $A_3(p)=p(2p-1)$, and
+$A_4(p)=p(2p-1)(3p-2)$.
+
+The target is compatible with several graph operations.  If $H=H_1\sqcup
+H_2$, then
+\begin{equation}
+ t(H,W)=t(H_1,W)t(H_2,W),
+ \qquad
+ \Phi_H(p)=\Phi_{H_1}(p)\Phi_{H_2}(p).
+ \label{eq:component-product}
+\end{equation}
+If $H$ is made from $N$ copies of a graph $F$ by identifying one chosen
+vertex in every copy, then
+\begin{equation}
+ \chi_H(x)=\frac{\chi_F(x)^N}{x^{N-1}},
+ \qquad
+ \Phi_H(p)=\Phi_F(p)^N.
+ \label{eq:vertex-amalgam-target}
+\end{equation}
+If instead the copies share one chosen edge, then
+\begin{equation}
+ \chi_H(x)=\frac{\chi_F(x)^N}{(x(x-1))^{N-1}},
+ \qquad
+ \Phi_H(p)=\frac{\Phi_F(p)^N}{p^{N-1}}.
+ \label{eq:edge-amalgam-target}
+\end{equation}
+These identities follow by fixing the colours on the shared vertex or edge
+and then colouring the copies independently.
+
+\section{Analytic mechanisms for positive rows}
+
+This section gives the common inequalities used in the positive
+classification.  The specialized row arguments are indexed in
+\Cref{tab:row-sources}; their Lean counterparts are identified there as
+well.
+
+\subsection{A weighted rooted triangle inequality}
+
+Set
+\begin{equation}
+ d(x)=\int_\Omega W(x,y)\dd\mu(y),
+ \qquad
+ \tau(x)=\int_{\Omega^2}W(x,y)W(x,z)W(y,z)
+ \dd\mu(y)\dd\mu(z).
+ \label{eq:rooted-quantities}
+\end{equation}
+
+\begin{lemma}[Weighted rooted Goodman inequality]
+\label{lem:weighted-goodman}
+If $p>0$ and $h$ is a nonnegative integer, then
+\begin{equation}
+ \int_\Omega d(x)^h\tau(x)\dd\mu(x)
+ \geq \frac{2p-1}{p}\int_\Omega d(x)^{h+2}\dd\mu(x).
+ \label{eq:weighted-goodman}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put $M_j=\int d(x)^j\dd\mu(x)$, let $T_W$ be the integral operator with
+kernel $W$, and define
+\[
+ I_h=\int d^h\tau,
+ \qquad
+ J_h=\ip{d^h}{T_Wd}.
+\]
+The inequality $ab\geq a+b-1$ on $[0,1]^2$, applied to $W(x,y)$ and
+$W(x,z)$ and then multiplied by $d(x)^hW(y,z)$, gives
+\begin{equation}
+ I_h\geq2J_h-pM_h.
+ \label{eq:I-J}
+\end{equation}
+Let $U=1-W$, $u=T_U\one=1-d$, and $q=1-p$.  Since
+$T_Wd=d-q\one+T_Uu$,
+\begin{equation}
+ J_h=M_{h+1}-qM_h+\ip{d^h}{T_Uu}.
+ \label{eq:J-decomposition}
+\end{equation}
+Symmetry of $U$ shows that twice
+\[
+ \ip{d^h}{T_Uu}-\int d(x)^hu(x)^2\dd\mu(x)
+\]
+equals
+\[
+ \int_{\Omega^2}U(x,y)(u(y)-u(x))(d(x)^h-d(y)^h)
+ \dd\mu(x)\dd\mu(y).
+\]
+This is nonnegative because $d=1-u$.  Hence
+\[
+ J_h\geq M_{h+2}-M_{h+1}+pM_h.
+\]
+Using this in \eqref{eq:I-J} and subtracting the right-hand side of
+\eqref{eq:weighted-goodman} gives
+\[
+ \frac1p\left(M_{h+2}-2pM_{h+1}+p^2M_h\right)
+ =\frac1p\int d(x)^h(d(x)-p)^2\dd\mu(x)\geq0.
+\]
+\end{proof}
+
+This lemma supplies the rooted triangle--tree, book, page, broom, and several
+leaf-attachment rows in the catalogue.  A second local form is also useful.
+With $B(x)=(T_Wd)(x)$,
+\begin{equation}
+ \tau(x)\geq\max\{2B(x)-p,0\}.
+ \label{eq:pointwise-goodman}
+\end{equation}
+Indeed, the same inequality $ab\geq a+b-1$, now integrated only in the two
+free variables, yields $\tau(x)\geq2B(x)-p$; nonnegativity supplies the other
+branch.
+
+\subsection{Cones over forests}
+
+For $d(x)>0$, let $W_x$ be $W$ on the probability measure
+$d\mu_x(y)=W(x,y)d\mu(y)/d(x)$, and let
+$z_x=t(K_2,W_x)=\tau(x)/d(x)^2$.  At $d(x)=0$ set $z_x=0$.
+
+\begin{theorem}[Cones over forests]
+\label{thm:forest-cone}
+Let $F$ be a forest with $n$ vertices, $e\geq1$ edges, and $c$ connected
+components.  If $H=K_1\join F$ and $p\geq1/2$, then
+\begin{equation}
+ t(H,W)\geq p^c(2p-1)^e=\Phi_H(p).
+ \label{eq:forest-cone}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The forest case of Sidorenko's inequality
+\cite[Section~5.2]{Lovasz2012} gives $t(F,W_x)\geq z_x^e$.
+Conditioning on the image of the universal vertex gives
+\begin{equation}
+ t(H,W)=\int_\Omega d(x)^nt(F,W_x)\dd\mu(x).
+ \label{eq:cone-link}
+\end{equation}
+By \Cref{lem:weighted-goodman},
+\[
+ \frac{\int d(x)^nz_x\dd\mu(x)}{\int d(x)^n\dd\mu(x)}
+ \geq2-\frac1p.
+\]
+Apply Jensen's inequality first to $z\mapsto z^e$ with weight $d^n$ and
+then to $d\mapsto d^n$.  Since a forest has $n=c+e$,
+\[
+ t(H,W)\geq p^n\left(2-\frac1p\right)^e
+ =p^c(2p-1)^e.
+\]
+The chromatic-polynomial identity follows by colouring the cone vertex first
+and then the forest.
+\end{proof}
+
+This theorem proves Atlas $40,111,117,135,$ and $136$.  Closely related
+normalized-link arguments prove Atlas $49$, $156$, and $165$.  The six cone
+lifts are Atlas $177$, $179$, $183$, $192$, $200$, and $205$.  Atlas $196$
+follows by applying a
+normalized-link cone theorem to the exact Atlas $43$ inequality.
+
+\subsection{Odd cycles and pure chordal graphs}
+
+\begin{theorem}[Odd-cycle bound]
+\label{thm:odd-cycle}
+For every odd $m\geq3$ and every graphon of edge density $p$,
+\begin{equation}
+ t(C_m,W)\geq p^m-p(1-p)^{m-1}=\Phi_{C_m}(p).
+ \label{eq:odd-cycle}
+\end{equation}
+\end{theorem}
+
+The proof separates $m=3,5,7$ from $m\geq9$.  For the three small values,
+Goodman's triangle inequality~\cite{Goodman1959} is the case $m=3$.
+For the three small values, inclusion--exclusion in $U=1-W$ reduces the inequality to sums of squares in
+path moments.  For $m\geq9$, the integral operator of $U$ is split into its
+constant direction and the mean-zero subspace.  The resulting spectral
+moments are bounded separately on $p\geq2/3$ and $1/2<p<2/3$.  This is the
+proof formalized for Atlas $7$ and $38$; it is independent of the earlier
+odd-cycle project.  The full derivation is supplied with the archive and is
+connected to these two row theorems in \Cref{tab:row-sources}.
+
+The second large family is chordal.  For $r\geq3$, a \emph{pure
+$r$-chordal graph} is a chordal graph whose maximal cliques all have order
+$r$.
+
+\begin{theorem}[Pure chordal bound]
+\label{thm:pure-chordal}
+If $H$ is pure $r$-chordal, then for every graphon $W$ with
+$p\geq1-1/(r-1)$,
+\begin{equation}
+ t(H,W)\geq\Phi_H(p).
+ \label{eq:pure-chordal}
+\end{equation}
+\end{theorem}
+
+A clique-tree decomposition writes $H$ as $K_r$ bags joined along clique
+separators.  Entropy gluing bounds the density of the resulting junction by
+the bag densities divided by the separator densities.  The graphon
+Moon and Moser's clique-ratio recurrence~\cite{MoonMoser1962} compares
+consecutive clique densities, while the
+chromatic polynomial of the same clique tree factors into the corresponding
+$A_r/A_s$ terms from \eqref{eq:clique-target}; see also Agnarsson's
+factorization for chordal graphs~\cite{Agnarsson2003}.  Multiplying these comparisons
+proves \eqref{eq:pure-chordal}.  A regularization step removes divisions by
+zero.  This proof gives the nineteen pure-chordal rows listed in
+\Cref{tab:classification} and does not require connectedness.
+
+\subsection{Closure and row-specific arguments}
+
+Three closure rules reduce further rows to smaller ones.
+
+\begin{proposition}[Closure rules]
+\label{prop:closures}
+Suppose all target functions below are nonnegative on the interval under
+consideration.
+\begin{enumerate}[label=(\roman*)]
+\item Positivity is preserved under disjoint union.
+\item If $H$ is a vertex self-amalgam of $N$ copies of $F$, then
+$t(H,W)\geq t(F,W)^N$, and \eqref{eq:vertex-amalgam-target} transfers the
+bound from $F$ to $H$.
+\item If $H$ is an edge self-amalgam of $N$ copies of $F$, then a rooted
+Cauchy--Schwarz argument gives
+$t(H,W)\geq t(F,W)^N/p^{N-1}$, matching
+\eqref{eq:edge-amalgam-target}.
+\item Let $\operatorname{Wh}(F)$ attach one leaf to every vertex of $F$.
+If $\Phi_F$ is nondecreasing on the required interval, then
+\[
+ t(\operatorname{Wh}(F),W)\geq p^{v(F)}\Phi_F(p)
+ =\Phi_{\operatorname{Wh}(F)}(p).
+\]
+\end{enumerate}
+\end{proposition}
+
+The proof of each item conditions on the common rooted variables and applies
+H\"older, Cauchy--Schwarz, or Jensen as appropriate.  In the whiskering
+case, conditioning on the original vertices inserts one degree factor per
+vertex; a change of measure followed by monotonicity of $\Phi_F$ yields the
+stated bound.
+
+The remaining analytic rows use a short list of two-dimensional reductions:
+supporting planes for rooted density profiles, an exact square for Atlas
+$145$, a Hilbert-space projection for Atlas $148$, and a concrete
+clique--odd-cycle inequality for Atlas $187$.  The Atlas $126$ and $148$
+arguments use the triangle-density profile proved by Fisher~\cite{Fisher1989}
+and subsumed by Reiher's clique-density theorem~\cite{Reiher2016}.  The
+triangle three-edge-tail argument uses the odd-walk inequality of Blekherman
+and Raymond~\cite{BlekhermanRaymond2023}.  Each reduction ends in a
+univariate polynomial inequality on the required interval.  The polynomial
+steps are checked with rational factorization or Bernstein coefficients.
+The row-to-proof index in \Cref{tab:row-sources} distinguishes these methods
+from the exact rooted certificates in the next section.
+
+\section{Exact rooted certificates}
+
+The difficult positive rows are proved by rational identities over rooted
+graph densities.  We briefly describe the common semantics.
+
+Choose labelled root vertices and sample their images in $\Omega$.  Each
+possible edge is represented by a Bernoulli variable whose conditional mean
+is the corresponding value of $W$.  Repeated occurrences of the same
+labelled edge use the same Bernoulli variable.  This convention is essential:
+using independent copies would replace a factor $W$ by $W^2$ and would not
+represent the graph density.
+
+For a finite vector $v$ of rooted expressions and a rational positive
+semidefinite matrix $Q$, the conditional expectation of $v^{\mathsf T}Qv$
+is nonnegative.  An interval certificate combines such terms with the
+nonnegative factors $p-a$ and $b-p$:
+\begin{equation}
+ t(H,W)-\Phi_H(p)
+ =\mathbb E\!\left[v_0^{\mathsf T}Q_0v_0
+ +(p-a)v_1^{\mathsf T}Q_1v_1
+ +(b-p)v_2^{\mathsf T}Q_2v_2+R\right],
+ \label{eq:interval-sos}
+\end{equation}
+where $R$ is a rational linear combination already known to be nonnegative.
+Every equality in \eqref{eq:interval-sos} is checked coefficientwise, and
+each $Q_i$ is supplied by a rational Gram factorization or a strict diagonal
+dominance proof.
+
+\begin{proposition}[Certificate rows]
+\label{prop:certificate-rows}
+The following exact certificates prove the indicated rows throughout their
+required intervals.
+\begin{enumerate}[label=(\roman*)]
+\item Atlas $43$: a three-root identity on $[1/2,1]$ with $91$ nonzero
+coefficients and two rational Gram corrections of orders $107$ and $48$.
+\item Atlas
+$118,122,124,147,151,153,157,168,169,171,174,181,185,188,194,199$:
+four-root interval identities, each with $407$ coefficient equations.
+\item Atlas $130$ on $[1/2,2/3]$ and Atlas $203$ on $[2/3,3/4]$:
+induced rooted identities using $28$ positive integer Gram factors and
+$936$ coefficient equations.  Four-root identities cover $[2/3,1]$ for
+Atlas $130$ and $[3/4,1]$ for Atlas $203$.
+\item Atlas $127$: a direct ground-$6$ split certificate on $[1/2,1]$.
+\end{enumerate}
+\end{proposition}
+
+The direct ground-$6$ certificate in part (iv) is the proof used for Atlas
+$127$ in this classification.  A stronger smoothed-Goodman statement was
+also investigated, but it is not needed for the row theorem and is not used
+here.  Atlas $43$ enters Atlas $196$ through the normalized-link implication
+mentioned after \Cref{thm:forest-cone}.
+
+The numerical searches that suggested these identities are not proof
+inputs.  The final files contain rational coefficients, exact polynomial
+equalities, and nonnegativity decompositions.  The Lean development connects
+their rooted semantics to \eqref{eq:hom-density}.
+
+\section{Exact counterexamples}
+
+Let $\boldsymbol\mu=(\mu_1,\ldots,\mu_s)$ be rational nonnegative masses
+summing to one, and let $A\in[0,1]^{s\times s}$ be a symmetric rational
+matrix.  The associated step graphon satisfies
+\begin{align}
+ p&=\sum_{i,j=1}^s\mu_i\mu_jA_{ij},
+ \label{eq:step-edge-density}\\
+ t(H,W)&=\sum_{f:V(H)\to[s]}
+ \prod_{u\in V(H)}\mu_{f(u)}
+ \prod_{uv\in E(H)}A_{f(u),f(v)}.
+ \label{eq:step-hom-density}
+\end{align}
+Thus every counterexample in \Cref{tab:negative-witnesses} is a finite exact
+rational computation.
+
+\subsection{Tensor products of Tur\'{a}n graphons}
+
+On $[a]\times[b]$ with the uniform measure, define
+\begin{equation}
+ (T_a\otimes T_b)((i,j),(i',j'))
+ =\one_{i\ne i'}\one_{j\ne j'}.
+ \label{eq:tensor-turan}
+\end{equation}
+
+\begin{lemma}[Tensor evaluation]
+\label{lem:tensor-evaluation}
+For every finite graph $H$,
+\begin{equation}
+ p=\left(1-\frac1a\right)\left(1-\frac1b\right),
+ \qquad
+ t(H,T_a\otimes T_b)=
+ \frac{\chi_H(a)\chi_H(b)}{(ab)^{v(H)}}.
+ \label{eq:tensor-evaluation}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+An edge is present precisely when its two coordinates differ in both
+positions, which gives the formula for $p$.  A homomorphism to the step graph
+is exactly an ordered pair of proper colourings, one with $a$ colours and one
+with $b$ colours.  There are $\chi_H(a)\chi_H(b)$ such pairs among
+$(ab)^{v(H)}$ maps.
+\end{proof}
+
+Substitution into \eqref{eq:tensor-evaluation} proves strict failure for
+nineteen of the rows in \eqref{eq:negative-list}.  The exact values appear in
+\Cref{tab:negative-witnesses}.
+
+\subsection{Four local witnesses}
+
+Atlas $166$ and $172$ use uniform masses on four parts and
+\begin{equation}
+ A=\frac14
+ \begin{pmatrix}
+ 0&1&4&4\\1&0&4&4\\4&4&0&1\\4&4&1&0
+ \end{pmatrix}.
+ \label{eq:two-scale-matrix}
+\end{equation}
+Atlas $206$ uses uniform masses on three parts and
+\begin{equation}
+ A=\frac14
+ \begin{pmatrix}
+ 1&4&4\\4&0&4\\4&4&0
+ \end{pmatrix}.
+ \label{eq:one-diagonal-matrix}
+\end{equation}
+These give $p=9/16$ and $p=25/36$, respectively.
+
+For Atlas $152$, use the five masses
+\begin{equation}
+ \boldsymbol\mu=\frac1{3750000}
+ (1870752,2998,1875000,125,1125)
+ \label{eq:atlas152-masses}
+\end{equation}
+and
+\begin{equation}
+ A=\frac1{16}
+ \begin{pmatrix}
+ 0&0&16&16&0\\
+ 0&0&16&0&16\\
+ 16&16&0&1&16\\
+ 16&0&1&0&0\\
+ 0&16&16&0&0
+ \end{pmatrix}.
+ \label{eq:atlas152-matrix}
+\end{equation}
+Equations \eqref{eq:step-edge-density}--\eqref{eq:step-hom-density} give the
+strict rational gaps in \Cref{tab:negative-witnesses}.  This finishes the
+negative half of \Cref{thm:classification}.
+
+\section{Formal verification}
+
+The Lean definition of a graphon uses an arbitrary probability space and a
+symmetric measurable kernel with values in $[0,1]$.  For each Atlas row, the
+example module proves either \texttt{SatisfiesLowerBound} or
+\texttt{ViolatesLowerBound}.  A source scan finds all $117$ modules marked
+\texttt{.verified} and no occurrence of \texttt{sorry} in those modules.
+
+The formal proof is intentionally row-oriented.  Some analytic notes state a
+more general theorem, while Lean proves only the specialization needed for a
+catalogue row.  The pure-chordal, rooted-SOS, and common negative constructions
+have reusable method-level formalizations; several specialized analytic rows
+instead expose only their final row theorem.  \Cref{tab:row-sources} names the
+mathematical and Lean source for every row, so these scopes can be checked
+without inferring a general theorem from a row specialization.
+
+Twenty compact or specialized rows have retained sequential-build
+measurements, reproduced in \Cref{tab:verification-cost}.  Their combined
+time was $701.5$ minutes and the largest measured peak memory was
+$11.91$ GiB.  Atlas $43$ used a separate $1097$-module sequential check:
+$6.02$ hours and $15.4$ GiB peak memory.  A parallel attempt on a $64$ GiB
+machine exhausted memory.  These measurements concern proof checking, not
+the mathematical truth of the identities.
+
+The author reports a successful full verification of the complete
+development on another device.  The directory from that run and its exact
+start and end times are unavailable in the present archive.  We therefore
+separate that author-attested full build from the retained row-level
+measurements and from the reproducible source scan.
+
+\section{Proof of the classification theorem}
+
+\begin{proof}[Proof of \Cref{thm:classification}]
+The generation script enumerates the Graph Atlas, applies the stated scope
+conditions, and independently checks each graph6 identifier, vertex count,
+edge count, chromatic number, and chromatic polynomial.  It obtains $117$
+rows.
+
+For the $23$ indices in \eqref{eq:negative-list}, the rational checker uses
+\Cref{lem:tensor-evaluation} or
+\eqref{eq:step-edge-density}--\eqref{eq:atlas152-matrix} and verifies
+$t(H,W)-\Phi_H(p)<0$.  All witness densities lie in $I_H$.
+
+For each remaining row, \Cref{tab:classification} assigns one of the
+positive methods in Sections 3--4, and \Cref{tab:row-sources} identifies the
+corresponding mathematical source and Lean theorem.  The generated audit
+checks that each of these $94$ modules has theorem kind
+\texttt{SatisfiesLowerBound}; the formal theorem unfolds to the inequality in
+\Cref{def:positive} for every graphon and every $p\in I_H$.  The two sets are
+disjoint and contain all $117$ rows.  Hence $94$ rows are positive and $23$
+are negative.
+\end{proof}
+
+\section{Discussion}
+
+The classification has three mathematical features.  First, most positive
+rows do not need case-specific semidefinite searches: clique-tree gluing,
+rooted Goodman inequalities, links, and closure operations cover broad
+families.  Second, the hard positive cases admit compact exact replacements
+for much larger search outputs.  Third, the negative side is even more
+uniform: tensor products of Tur\'{a}n graphons settle nineteen of twenty-three
+rows.
+
+The order-six boundary should not be interpreted as a claim about all finite
+graphs.  Nor does the present work supply a simple graph-theoretic
+characterization of positivity.  Its conclusion is a complete finite
+classification together with reusable sufficient conditions and explicit
+obstructions.  The machine-checked artifacts also make clear which claims are
+general graphon theorems and which are formalized only at a fixed Atlas row.
+
+\paragraph{AI assistance disclosure.}
+OpenAI Codex drafted this manuscript from the project sources and generated
+some of the organizational prose.  The mathematical claims are tied to the
+exact scripts, certificates, and Lean sources described above.  The authors
+remain responsible for the submitted text and conclusions.  A separate
+companion article studies the use of ChatGPT Pro, Codex, and Claude Code in
+the proof campaign~\cite{CompanionAI2026}.
+
+\appendix
+
+\section{Complete classification}
+\label{app:classification}
+\input{generated/classification_table.tex}
+
+\section{Row-to-source index}
+\label{app:row-sources}
+\input{generated/row_sources_table.tex}
+
+\section{Exact negative evaluations}
+\label{app:negative}
+\input{generated/negative_witnesses_table.tex}
+
+\section{Retained Lean build measurements}
+\label{app:verification}
+\input{generated/verification_table.tex}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
