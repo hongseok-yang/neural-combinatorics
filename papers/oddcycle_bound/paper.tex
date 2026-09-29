@@ -122,8 +122,8 @@
   This is the first of two papers establishing the bound for all edge densities.
   A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
   Our result also yields a strengthening of Kim and Lee's extended-commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
-  Our proof combines spectral techniques, generating functions, probabilistic averaging, and an ODE argument.
-  The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the ODE controls the remaining competition between positive and negative terms.
+  Our proof combines spectral techniques, generating functions, probabilistic averaging, and an odd-to-even Gamma moment inequality.
+  The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the moment inequality bounds the potentially negative odd-moment contributions by nonnegative even-moment contributions.
   Together, these tools give a single argument that is uniform in $m$.
   The lower-bound theorem has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
 \end{abstract}
@@ -366,7 +366,7 @@ Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suf
 \end{equation}
 Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
-Finally, we prove \eqref{eq:intro-diagonal-positive} using an ODE argument.
+Finally, we prove \eqref{eq:intro-diagonal-positive} using an inequality between odd and even moments of a shifted Gamma random variable.
 An integral representation of $P_{m,r}(1-p;\lambda,\ldots,\lambda)$ establishes \eqref{eq:intro-diagonal-positive} when $\lambda\le0$ (\Cref{lem:pge23-ell-negative}).
 For $\lambda>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
 The Gamma expectation formula \eqref{eq:pge23-gamma-expectation} gives
@@ -380,20 +380,16 @@ To prove \eqref{eq:intro-diagonal-positive} for $\lambda>0$, it suffices to show
 \begin{equation}\label{eq:intro-expectation-positive}
   \E_Y\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\lambda}{z}Y\right)\right]\ge0.
 \end{equation}
-Writing $F_j(b)=\E(Y-b)^{2j}$ for integers $j\ge1$, \eqref{eq:intro-expectation-positive} follows for $p\ge2/3$ from the bound
+For all integers $r,j\ge1$ and all real shifts $b\ge0$, we prove the odd-to-even moment bound
 \begin{equation}\label{eq:intro-moment-bound}
-  (r+j)F_j(b)+\frac{3b}{2}F_j'(b)\ge0
-  \qquad(j\ge1,\ b\ge0),
+  3jb\,\E(Y-b)^{2j-1}\le(r+j)\,\E(Y-b)^{2j}.
 \end{equation}
+This bound yields \eqref{eq:intro-expectation-positive} for $p\ge2/3$,
 as shown in the proof of \Cref{prop:pge23-gamma-positive}.
-The function $F_j$ satisfies the differential equation
-\begin{equation}\label{eq:intro-moment-ode}
-  bF_j''(b)+(b-r-2j+1)F_j'(b)-2jF_j(b)=0.
-\end{equation}
-If the left-hand side of \eqref{eq:intro-moment-bound} were negative for some $b\ge0$, the ODE \eqref{eq:intro-moment-ode} would force the same expression to be negative at a particular point determined only by $r$ and $j$.
-An integral estimate shows that this expression is nonnegative at that point, giving a contradiction and proving the moment bound \eqref{eq:intro-moment-bound} for every $b\ge0$.
+We state its rescaled form in \Cref{lem:pge23-gamma-moment} and prove it in
+\Cref{app:gamma-moment}, using a differential equation satisfied by the even moments.
 
-The moment bound ensures that the expectation over $Y$ in \eqref{eq:intro-expectation-positive} is nonnegative; this is the only step requiring $p\ge2/3$.
+The application of the moment bound in \Cref{prop:pge23-gamma-positive} is the only step requiring $p\ge2/3$.
 Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:intro-diagonal-positive} for $\lambda>0$, completing the fourth reduction.
 The Dirichlet averaging identity extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
 These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
@@ -1207,8 +1203,8 @@ beginning with a representation through a Beta expectation.
 This representation gives nonnegativity directly when $\lambda\le0$.
 For $\lambda>0$, a further integral representation reduces the problem to
 comparing odd and even moments of a shifted Gamma random variable.
-A uniform moment bound, proved by an ODE argument in \Cref{app:gamma-moment},
-supplies the required comparison.
+The uniform odd-to-even Gamma moment bound in \Cref{lem:pge23-gamma-moment},
+proved in \Cref{app:gamma-moment}, supplies the required comparison.
 Together, the diagonal reduction and the proof of diagonal positivity establish
 \eqref{eq:pge23-positivity-goal}, completing the proofs of
 \Cref{thm:commonality,thm:main}.
