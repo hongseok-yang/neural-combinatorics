@@ -1,0 +1,243 @@
+\section{Curated chronological excerpts}
+\label{app:excerpts}
+The selection rule includes exchanges that changed mathematical correctness, proof status, verification scope, resource policy, or research direction. Wording and typographical errors are retained.  Export-only HTML spacing markers are omitted, and mathematical Unicode glyphs receive equivalent LaTeX typesetting.  Ellipses are not inserted inside an excerpt.
+
+\subsection{The Atlas 43 semantic repair}
+\subsubsection*{Excerpt B.1.1}
+\phantomsection\label{ex:B11}
+\noindent\textit{25 August 2026, 13:21 KST; Codex gpt-5.6-sol, xhigh; session 01a03722, turn 1; prompt A.38; speaker: human author.}
+\begin{quote}\small\ttfamily\raggedright
+Thank you. There are lots of unverified (unformalised) proofs now. Would you please work on implementing the lean proof? You may find the lean proof existing first to see how the proofs are organised.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.1.2}
+\phantomsection\label{ex:B12}
+\noindent\textit{25 August 2026, 14:04 KST; same session and turn; speaker: Codex.}
+\begin{quote}\small\ttfamily\raggedright
+Key finding: the incoming SOS identity was unsound as written. Shared labelled edges were treated as though `W(x,y)\textsuperscript{2} = W(x,y)`. For `W \(\equiv\) 1/2`, the claimed sides evaluate to `0.015625` and approximately `0.0038337`. I repaired the formulation using shared Bernoulli edge variables.
+\par
+\medskip
+Atlas 43 remains marked `believed`: the remaining task is importing the large rational certificate and verifying its 91 coefficient equations in Lean, then connecting that result to `Graph043.status`.
+\par
+\end{quote}
+
+\subsection{Memory failure and sequential checking}
+\subsubsection*{Excerpt B.2.1}
+\phantomsection\label{ex:B21}
+\noindent\textit{22 September 2026, 13:27 KST; Claude Code claude-fable-5-1, high; session d19b441c, turn 6; prompt A.74; speaker: human author.}
+\begin{quote}\small\ttfamily\raggedright
+We ran out of memory and whole computer stopped. Was the previous verirfication verified module in parallel? If so, we might try sequential build, with at most one file to build. Also, consider 16 or 32 GB RAM usage upper limit.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.2.2}
+\phantomsection\label{ex:B22}
+\noindent\textit{22 September 2026, 14:30 KST; same session and turn; speaker: Claude Fable.}
+\begin{quote}\small\ttfamily\raggedright
+1. **The crash was mine.** I ran a bare `lake build`, which spawned 8 workers at \textasciitilde{}13.5 GB each. Codex's runs were always sequential via `experiments/verify\_lean\_modules.py`. I've saved that as a memory rule and noted it in the plan and the record so it can't recur.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.2.3}
+\phantomsection\label{ex:B23}
+\noindent\textit{22 September 2026, 22:07 KST; same session, turn 8; speaker: Claude Fable.}
+\begin{quote}\small\ttfamily\raggedright
+**Atlas 43 and 196 are \(\checkmark\) Verified again**, on real evidence this time:
+\par
+- All 1,097 modules of the Atlas 43 chain compiled sequentially and correctly (6.0 h total, mean 20 s/module, peak 15.4 GiB on `CoresRows56`, which needs `-M 16384`; nothing needed more than 16 GiB).
+\par
+- `Graph043.status` and `Graph196.status` are the real proofs and audit to `[propext, Classical.choice, Quot.sound]`.
+\par
+- Table: **112 verified, 5 believed** (127, 153, 171, 174, 188), 0 unresolved. The row cells cite the record and the six-hour cost.
+\par
+\end{quote}
+
+\subsection{Replacing the Atlas 127 proof object}
+\subsubsection*{Excerpt B.3.1}
+\phantomsection\label{ex:B31}
+\noindent\textit{23 September 2026, 08:02 KST; Claude Code claude-opus-5, xhigh; session 272ea172, turn 2; prompt A.83; speaker: human author.}
+\begin{quote}\small\ttfamily\raggedright
+Okay, now we have huge one problem, 127. I don't think current proof direction is feasible. Would you please guess how many proof files it need, and how long it would take to compile them without actually trying entire compilation? Please make sure to delete generated files after this check.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.3.2}
+\phantomsection\label{ex:B32}
+\noindent\textit{23 September 2026, 11:44 KST; same session and turn; speaker: Claude Opus.}
+\begin{quote}\small\ttfamily\raggedright
+\#\# Atlas 127: not feasible on the current route
+\par
+\medskip
+**The blocker is not total cost --- it's that one block cannot be done at all.**
+\par
+\medskip
+I synthesized a block module at Atlas 127's largest order using the real generator's own emitters (`matrix`, `packed\_product`), with true statements so the kernel checks actually run. Two measurements, each a single sequential module under the standard 16 GiB watchdog:
+\par
+\medskip
+| synthetic block | source | result |
+\par
+|---|---|---|
+\par
+| order 102 (matches today's largest) | 2.1 MB | Data 133.9 s / 6.54 GiB, checks 114.9 s / 9.13 GiB --- **passes** |
+\par
+| order 272 (Atlas 127's largest) | 15.0 MB | Data alone: 2,259 s, **16.20 GiB --- killed by the memory cap, never reached the checks** |
+\par
+\medskip
+The order-102 run reproduces the real `Block01` (303 s / 11.90 GiB) closely, so the harness is faithful and if anything optimistic.
+\par
+\medskip
+Atlas 127 has **11 blocks of order 252--272** (the m=4 flag types), carrying 776,564 of its 1,431,052 Gram entries. Each one exceeds the per-row envelope on memory before any proof obligation is attempted. The `Data` tables can be split across modules, but a congruence PSD proof over a 272\(\times\)272 matrix is a single kernel evaluation and cannot be split --- so no amount of file-splitting rescues these 11 blocks. The other 173 blocks (order \(\leq\) 109) are individually fine.
+\par
+\medskip
+**Files: roughly 800--1,200.**
+\par
+- \textasciitilde{}420 for the 184 PSD blocks (133 order-64 blocks at 2 files each; the 11 large blocks needing 5--6 each even to hold their data)
+\par
+- \textasciitilde{}150 for the slack tables (10--20 M integers \(\Rightarrow\) \textasciitilde{}375 MB of source at \textasciitilde{}2.5 MB/module)
+\par
+- \textasciitilde{}250 for the 12,346 slack inequality checks, chunked as the S4 contraction checks are
+\par
+- plus coloring and assembly
+\par
+\medskip
+**Time: roughly 25--40 hours sequential**, from the measured 120--200 s per MB of generated source across \textasciitilde{}660 MB total. For scale, Atlas 43's retired 1,097-module chain took 6 h.
+\par
+\medskip
+That is 25--40\(\times\) the 3,600 s per-row envelope, in \textasciitilde{}10\(\times\) the file budget.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.3.3}
+\phantomsection\label{ex:B33}
+\noindent\textit{23 September 2026, 11:44 KST; same session, turn 3; prompt A.84; speaker: human author.}
+\begin{quote}\small\ttfamily\raggedright
+I see. One small theorem taking more than one day to compile is a bit overkill... Can you think of some directions that we can reduce the size of proof and get in feasible size?
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.3.4}
+\phantomsection\label{ex:B34}
+\noindent\textit{23 September 2026, 12:00 KST; same session and turn; speaker: Claude Opus.}
+\begin{quote}\small\ttfamily\raggedright
+**The decisive direction works --- at least at its first gate.** Atlas 127's own catalogue bound is feasible in the ground-6 four-root cone that just verified sixteen rows:
+\par
+\medskip
+```
+\par
+atlas=127 interval=[1/2,1] equations=407 rank=407 augmented=407
+\par
+status=optimal  max\_residual=1.99e-06
+\par
+G0\_4 rank 57/64   G0\_31 rank 101/104   G0\_22 rank 65/68   G0\_211 60/60 ...
+\par
+```
+\par
+\medskip
+Same signature as every row that later rationalized successfully. No files were written (no `--save`).
+\par
+\medskip
+\#\# Why this is the answer
+\par
+\medskip
+The 25--40 hour estimate is for formalizing the **smoothed Goodman theorem**, `t(\(\theta\)\textsubscript{1},\textsubscript{2},\textsubscript{4},W) \(\geq\) (2p-1)t(C\textsubscript{5},W)` --- a standalone result that is strictly stronger than what Atlas 127 needs. Atlas 127 only needs `\(\Phi\)\textsubscript{1}\textsubscript{2}\textsubscript{7}(p) \(\leq\) t(127,W)` for `p \(\geq\) 1/2`. The plan's row 20 says exactly this ("First seek a smaller direct certificate for the catalogue bound"), and as far as I can tell it was never tried --- 127 appears nowhere in the interval-SOS table or the campaign records.
+\par
+\medskip
+If the rationalization goes through, Atlas 127 becomes a single-interval row like 118/122/124: **\textasciitilde{}89 files, \textasciitilde{}25 minutes, \textasciitilde{}9 GiB** --- inside the normal envelope, with no new machinery at all. The whole downstream pipeline accepts `[1/2,1]` unchanged.
+\par
+\medskip
+Two honest caveats. Numerical feasibility is not exact feasibility; the double root of \(\Phi\)\textsubscript{1}\textsubscript{2}\textsubscript{7} at p = 1/2 makes the bound tangent to second order there, which is harder to round than the simple roots the other rows had. And this verifies *the row*, not *the theorem* --- the smoothed Goodman paper would remain unformalized.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.3.5}
+\phantomsection\label{ex:B35}
+\noindent\textit{23 September 2026, 12:49 KST; same session, turn 4; response to prompt A.85; speaker: Claude Opus.}
+\begin{quote}\small\ttfamily\raggedright
+\#\# Rationalization works. Atlas 127 is an ordinary two-piece row.
+\par
+\medskip
+Both gates pass, with margins better than several rows already verified.
+\par
+\medskip
+| | `[1/2,2/3]` | `[2/3,1]` |
+\par
+|---|---|---|
+\par
+| margin SDP | CLARABEL `optimal`, 2.24e-05, all blocks full rank | CLARABEL `optimal`, 1.47e-04, all full rank |
+\par
+| exact interval SOS | **all 407 equations verified**, min DD margin **0.99585** | **all 407 verified**, min DD margin **0.99972** |
+\par
+| compact face | min DD margin **0.9999985**, denominator **18 digits** | min DD margin **0.9999994**, denominator **17 digits** |
+\par
+| independent audit | passed --- 407 equations, 10 positive matrices | passed |
+\par
+| block orders | 57, 101, 65, 60, 12 / 32, 52, 34, 30, 6 | 50, 98, 62, 60, 12 / 23, 48, 30, 30, 6 |
+\par
+\medskip
+Both `phi` fields back-substitute exactly to \(\Phi\)\textsubscript{1}\textsubscript{2}\textsubscript{7} = 8p\textsuperscript{5} - 16p\textsuperscript{4} + 14p\textsuperscript{3} - 6p\textsuperscript{2} + p, and the pieces meet at 2/3 and cover the full admissible `[1/2, 1]` for \(\chi\) = 3. The block orders are identical to Atlas 151's, and the denominators are **shorter** than all four rows I verified today (188: 19 digits, 171: 22, 174: 23, 153: 19).
+\par
+\medskip
+So Atlas 127 projects as a standard `Lower`/`Upper` row --- **\textasciitilde{}97 files, \textasciitilde{}40 minutes, \textasciitilde{}11.9 GiB** --- needing no new machinery, no low module, and no changes to the pipeline. That replaces the \textasciitilde{}1,000-file, 25--40-hour ground-8 route.
+\par
+\medskip
+**The single interval was the whole problem.** `[1/2,1]` has maximum margin exactly 0 (CLARABEL -6.9e-08, SCS +3.5e-08, ranks collapsing to 32/50 and 59/98) --- every feasible Gram is singular there, so the Cholesky in the rationalizer cannot round it. Split at 2/3, both pieces are strictly interior at full rank. My earlier guess that \(\Phi\)\textsubscript{1}\textsubscript{2}\textsubscript{7}'s double root at p = 1/2 was to blame was wrong: Atlas 151 has the same `(2p-1)\textsuperscript{2}` tangency and rationalized fine, because it was split. This also retroactively explains the handoff's remark that the August campaign split every row at 2/3 "possibly only for conditioning" --- for 127 the split is not cosmetic, it is the difference between a degenerate and a non-degenerate cone.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.3.6}
+\phantomsection\label{ex:B36}
+\noindent\textit{23 September 2026, 13:44 KST; same session, turn 5; response to prompt A.86; speaker: Claude Opus.}
+\begin{quote}\small\ttfamily\raggedright
+Atlas 127 is verified and committed (`87a8e439f`).
+\par
+\medskip
+| | |
+\par
+|---|---|
+\par
+| fresh sequential build | **2,609.6 s**, 97 files, peak **11.90 GiB** |
+\par
+| installed recheck | 7.8 s --- combined **2,617.5 s** |
+\par
+| axioms | `propext`, `Classical.choice`, `Quot.sound` only, in both the fresh catalogue compile and the recheck |
+\par
+| envelope | 97 \(\leq\) 100 files, 2,617 \(\leq\) 3,600 s, 11.90 \(\leq\) 16 GiB |
+\par
+\medskip
+**All 117 classification rows are now Lean-verified --- 0 believed, 0 unresolved.**
+\par
+\medskip
+It went through as an ordinary two-piece `Lower`/`Upper` row, no new machinery, no low module: the certificates rationalized as predicted, the compact denominators came out at 18 and 17 digits (the shortest of the recent rows), and the build landed within 2 \% of Atlas 151, whose block orders are identical.
+\par
+\end{quote}
+
+\subsection{The long Codex certificate turn}
+\subsubsection*{Excerpt B.4.1}
+\phantomsection\label{ex:B41}
+\noindent\textit{25 August 2026, 01:34 KST; Codex gpt-5.6-sol, xhigh; session 01a0349f, turn 0; prompt D.87; speaker: human author.}
+\begin{quote}\small\ttfamily\raggedright
+/goal Would you please read the GRAPH\textbackslash{}\_CLASSIFICATION\textbackslash{}\_UP\textbackslash{}\_TO\textbackslash{}\_6\textbackslash{}\_VERTICES.md, and see some related files if you need, and try to prove remaining instances that they satisfy the conjectured lower bound? I think most of the instances are heavily tested for counterexample, so unless you have strong clue that it is negative, try to prove in the positive direction. Work until you prove all remaining 20 instances (14 open + 6 partial) as positive or negative.
+\par
+\end{quote}
+
+\subsubsection*{Excerpt B.4.2}
+\phantomsection\label{ex:B42}
+\noindent\textit{25 August 2026, 12:03 KST; same session and turn; speaker: Codex.}
+\begin{quote}\small\ttfamily\raggedright
+Outcome:
+\par
+\medskip
+- 18 of the 20 remaining cases are now proved positive.
+\par
+- Atlas 130 and 203 remain partial:
+\par
+  - Atlas 130: proved on \textbackslash{}(p\textbackslash{}in[2/3,1]\textbackslash{}); \textbackslash{}([1/2,2/3)\textbackslash{}) unresolved.
+\par
+  - Atlas 203: proved on \textbackslash{}(p\textbackslash{}in[3/4,1]\textbackslash{}); \textbackslash{}([2/3,3/4)\textbackslash{}) unresolved.
+\par
+- No negative instance was found.
+\par
+- The final Atlas 203 CVXOPT job ran about 42 minutes, failed at the solver level, and produced no certificate or mathematical conclusion.
+\par
+\end{quote}
