@@ -2388,7 +2388,10 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     x^{2j-1}(x-c)(x+b_*)^{r-1}e^{-x}\dd x.
   \end{equation}
 
-  Set
+  The integrand changes sign, so this representation does not immediately
+  establish positivity. We therefore seek a more useful representation by
+  integration by parts. To obtain the factor
+  $x^{2j-1}(x+b_*)^{r-1}e^{-x}$ upon differentiation, set
   \begin{equation*}
     G(x)=x^{2j}(x+b_*)^re^{-x},
     \qquad -b_*\le x<\infty,
@@ -2416,51 +2419,31 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     \frac{\Gamma(r)e^{b_*}}{r+j}H(b_*)
     =-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x.
   \]
-  Although the displayed quotient has a denominator $x+d$, the factorization
-  \eqref{eq:pge23-gamma-Gprime} shows that its apparent singularity at
-  $x=-d$ is removable.
+  The factor $x+d$ in \eqref{eq:pge23-gamma-Gprime} cancels the denominator,
+  so $G'(x)/(x+d)$ extends continuously to $x=-d$.
+  To integrate by parts across this point, we use $G(x)-G(-d)$ as a
+  primitive of $G'(x)$. Since $G'(-d)=0$, Taylor's theorem gives
+  $G(x)-G(-d)=O((x+d)^2)$ as $x\to-d$. Thus
+  $(G(x)-G(-d))/(x+d)$ tends to zero, while
+  $(G(x)-G(-d))/(x+d)^2$ extends continuously to $x=-d$.
 
-  We integrate by parts on the two sides of $-d$.
-  Away from $x=-d$,
-  \[
-    \frac{\dd}{\dd x}\left(-\frac{G(x)-G(-d)}{x+d}\right)
-    =-\frac{G'(x)}{x+d}+\frac{G(x)-G(-d)}{(x+d)^2}
-  \]
-  holds, so for $0<\varepsilon<b_*-d$ we have
-  \begin{align*}
-    -\int_{-b_*}^{-d-\varepsilon}\frac{G'(x)}{x+d}\dd x
-    &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d-\varepsilon}
-    -\int_{-b_*}^{-d-\varepsilon}\frac{G(x)-G(-d)}{(x+d)^2}\dd x,\\
-    -\int_{-d+\varepsilon}^{\infty}\frac{G'(x)}{x+d}\dd x
-    &=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}
-    -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
-  \end{align*}
-  Here $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$, so the two outer
-  boundary terms contribute $G(-d)/(b_*-d)$. The boundary terms at
-  $-d\pm\varepsilon$ vanish as $\varepsilon\downarrow0$, because
-  $G(-d\pm\varepsilon)-G(-d)=O(\varepsilon^2)$ by $G'(-d)=0$.
-  For the same reason, $(G(x)-G(-d))/(x+d)^2$ extends continuously to
-  $x=-d$, allowing the two remaining integrals to be combined.
-  Hence
+  Integration by parts on either side of $-d$ therefore yields
   \begin{align}
-    -\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x
-    &=\lim_{\varepsilon\downarrow0}
-    \left(-\int_{-b_*}^{-d-\varepsilon}\frac{G'(x)}{x+d}\dd x
-    -\int_{-d+\varepsilon}^{\infty}\frac{G'(x)}{x+d}\dd x\right)\notag\\
-    &=\lim_{\varepsilon\downarrow0}
-    \left(\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d-\varepsilon}
-    +\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d+\varepsilon}^{\infty}\right.\notag\\
-    &\qquad\left.-\int_{-b_*}^{-d-\varepsilon}\frac{G(x)-G(-d)}{(x+d)^2}\dd x
-    -\int_{-d+\varepsilon}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x\right)\notag\\
-    &=\frac{G(-d)}{b_*-d}
-    -\int_{-b_*}^{\infty}\frac{G(x)-G(-d)}{(x+d)^2}\dd x.
+    &-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x\notag\\
+    &\quad=\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-b_*}^{-d}
+    +\left[-\frac{G(x)-G(-d)}{x+d}\right]_{-d}^{\infty}
+    +\int_{-b_*}^{\infty}\frac{G(-d)-G(x)}{(x+d)^2}\dd x\notag\\
+    &\quad=\frac{G(-d)}{b_*-d}
+    +\int_{-b_*}^{\infty}\frac{G(-d)-G(x)}{(x+d)^2}\dd x,
     \label{eq:pge23-gamma-ibp-max}
   \end{align}
-  Since $G(-d)=d^{2j}(b_*-d)^re^{d}>0$, the first term is positive.
-  For the second term, $(x+d)^{-2}$ is positive as well, so its sign is decided by that of $G(x)-G(-d)$.
-  Consequently, if $G(-d)$ is the global maximum of $G$, then the second
-  term is nonnegative and \eqref{eq:pge23-gamma-Hbstar} follows. It remains
-  to prove that $G(x)\le G(-d)$ for every $x\ge-b_*$.
+  where the evaluations at $-d$ are understood by continuity, and we used
+  $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$.
+
+  Since $G(-d)=d^{2j}(b_*-d)^re^{d}>0$ and $b_*-d>0$, the term
+  $G(-d)/(b_*-d)$ is positive. If $G(x)\le G(-d)$ for every
+  $x\ge-b_*$, the integral is nonnegative as well, giving $H(b_*)>0$.
+  It therefore suffices to prove that $G(x)\le G(-d)$ for every $x\ge-b_*$.
 
   \smallskip
   \noindent\emph{Comparison of the two local maxima.}
@@ -2559,8 +2542,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \eqref{eq:pge23-gamma-L-rational} is negative. Hence $L<0$ throughout
   $(0,\infty)$.
   The ratio \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$,
-  so $G$ attains its maximum at $-d$. Thus, the integrand $G(x)-G(-d)$ in
-  \eqref{eq:pge23-gamma-ibp-max} is nonpositive.
+  so $G$ attains its maximum at $-d$. Thus, the integrand in
+  \eqref{eq:pge23-gamma-ibp-max} is nonnegative.
   The right-hand side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
   giving $H(b_*)>0$. The crossing argument yields $H(b)\ge0$ for every
   $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
