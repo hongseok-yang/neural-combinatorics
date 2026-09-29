@@ -1807,15 +1807,14 @@ At $u=q+xY$, we have $v=q+xY-1/2$, so their expectations are
   2(r+j)\E v^{2j}-j\E v^{2j-1}.
 \]
 The even moment $\E v^{2j}$ is nonnegative, whereas the odd moment
-$\E v^{2j-1}$ can have either sign. Since $n>0$ and all the $a_j$ are
-positive, it suffices to prove
+$\E v^{2j-1}$ can have either sign. Since all the $a_j$ are positive,
+it suffices to prove
 \[
   j\E v^{2j-1}\le2(r+j)\E v^{2j},
   \qquad 1\le j\le(n-1)/2.
 \]
 The following lemma gives an odd-to-even moment bound for variables of the
-form $zY-1$. In \Cref{prop:pge23-gamma-positive}, we apply it to $v$ by
-rescaling.
+form $zY-1$.
 
 \begin{lemma}[Uniform odd-to-even Gamma moment bound]\label{lem:pge23-gamma-moment}
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
@@ -1828,8 +1827,23 @@ rescaling.
 
 For $z>0$, this is the moment bound \eqref{eq:intro-moment-bound}
 after rescaling with $b=1/z$.
-The proof is given in \Cref{app:gamma-moment}. We first show how the
-lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
+The proof is given in \Cref{app:gamma-moment}.
+
+The next proposition uses \Cref{lem:pge23-gamma-moment} with the same
+Gamma shape parameter $r$ and, for each summand in
+\eqref{eq:pge23-rho-centered}, its index $j$. For $0\le q\le1/3$
+and $x\ge0$, we set
+\[
+  \delta=\frac12-q\ge\frac16,
+  \qquad z=\frac{x}{\delta}\ge0,
+  \qquad v=q+xY-\frac12=\delta(zY-1).
+\]
+Thus, the lemma bounds the moments of $v/\delta=zY-1$.
+Using $\E v^k=\delta^k\E(zY-1)^k$, the proposition proves that each bracketed term in
+\eqref{eq:pge23-rho-centered} has nonnegative expectation. This gives
+the nonnegativity of
+$\E\rho_{n,m}(q+xY)$ needed in the Laplace--Gamma representation
+\eqref{eq:pge23-laplace-gamma}.
 
 \begin{proposition}[Shifted-Gamma positivity]\label{prop:pge23-gamma-positive}
   Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
@@ -1841,15 +1855,8 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 \end{proposition}
 
 \begin{proof}
-  At $u=q+xY$, the $v$ in \eqref{eq:pge23-rho-centered} equals
-  \[
-    v=q+xY-\frac{1}{2}=xY-\delta=\delta(zY-1),
-    \quad \text{where} \quad
-    \delta=\frac{1}{2}-q\ge\frac{1}{2}-\frac{1}{3}=\frac{1}{6},
-    \qquad
-    z=\frac{x}{\delta},
-  \]
-  which is the form occurring in \Cref{lem:pge23-gamma-moment}.
+  Use $v$, $z$, and $\delta$ as defined immediately before the proposition,
+  so $v=\delta(zY-1)$ and $\delta\ge1/6$.
   Taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to
   bound each summand.
   For $j\ge1$,
