@@ -1,0 +1,2135 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{authblk}
+\usepackage{hyperref}
+\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+\renewcommand{\Affilfont}{\small}
+\renewcommand{\Authfont}{\normalsize}
+
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+% The environments above share the theorem counter, so cleveref would name
+% them all "Theorem"; these aliases restore the correct names.
+\usepackage{etoolbox}
+\AtBeginEnvironment{proposition}{\crefalias{theorem}{proposition}}
+\AtBeginEnvironment{lemma}{\crefalias{theorem}{lemma}}
+\AtBeginEnvironment{corollary}{\crefalias{theorem}{corollary}}
+\AtBeginEnvironment{definition}{\crefalias{theorem}{definition}}
+\AtBeginEnvironment{remark}{\crefalias{theorem}{remark}}
+
+\numberwithin{equation}{section}
+
+\newcommand{\one}{\mathbf 1}
+\newcommand{\R}{\mathbb R}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\pos}[1]{\left(#1\right)_{+}}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\E}{\mathbb E}
+\newcommand{\BetaLaw}{\operatorname{Beta}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\newcommand*{\tk}[1]{\textcolor{blue}{\textbf{[TK: #1]}}}
+\newcommand*{\jl}[1]{\textcolor{red!70!black}{\textbf{[JL: #1]}}}
+\newcommand*{\jb}[1]{\textcolor{green!50!black}{\textbf{[JB: #1]}}}
+\newcommand*{\si}[1]{\textcolor{orange!80!black}{\textbf{[SI: #1]}}}
+\newcommand*{\jk}[1]{\textcolor{purple}{\textbf{[JK: #1]}}}
+\newcommand*{\hy}[1]{\textcolor{teal}{\textbf{[HY: #1]}}}
+
+\newcommand{\dens}[2]{t(#1,#2)}
+\newcommand{\tC}[2]{t(C_{#1},#2)}
+\newcommand{\tP}[2]{t(P_{#1},#2)}
+\newcommand{\edens}[1]{t(K_{2},#1)}
+
+\newcommand{\goodman}[2]{#1^{#2}-#1(1-#1)^{#2-1}}
+\newcommand{\goal}{\goodman{p}{m}}
+
+\newcommand{\Tker}[1]{T_{#1}}
+\newcommand{\dW}{d_W}
+
+\newcommand{\coeff}[1]{[z^{#1}]}
+\newcommand{\nld}[1]{-\log\det(I-z#1)}
+
+\newcommand{\resm}{(I-zA)^{-1}}
+\newcommand{\resp}{(I+zA)^{-1}}
+\newcommand{\gresm}{\ip g{\resm g}}
+\newcommand{\gresp}{\ip g{\resp g}}
+
+\newcommand{\specmu}{\sum_i\norm{P_ig}^2\,\delta_{\lambda_i}}
+\newcommand{\dmu}{\dd\mu(\lambda)}
+\newcommand{\intmu}[1]{\int #1\dmu}
+\newcommand{\gA}[1]{\ip g{A^{#1}g}}
+
+\newcommand{\intsq}{\int_{[0,1]^2}}
+\newcommand{\intcube}[1]{\int_{[0,1]^{#1}}}
+\newcommand{\ddxy}{\dd x\dd y}
+
+\newcommand{\rep}[2]{#1^{\times #2}}
+
+\newcommand{\blockmat}[4]{\begin{pmatrix}#1&#2\\#3&#4\end{pmatrix}}
+\newcommand{\sblockmat}[4]{\left(\begin{smallmatrix}#1&#2\\#3&#4\end{smallmatrix}\right)}
+
+\title{Goodman-type lower bounds for odd cycles I: The dense regime}
+\author[1,2]{Taeyoung~Kim}
+\author[3]{Jineon~Baek}
+\author[4]{Seonghyuk~Im}
+\author[2]{Joonkyung~Lee}
+\author[1,2]{Hongseok~Yang}
+\affil[1]{School of Computing, KAIST, Korea}
+\affil[2]{School of Computational Sciences, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[3]{June E Huh Center for Mathematical Challenges, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[4]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[ ]{\newline\texttt{taeyoungkim21@kaist.ac.kr}, \texttt{{jineon.kias}@gmail.com}, \texttt{seonghyuk@kias.re.kr}, \texttt{joonkyunglee@kias.re.kr}, \texttt{hongseokyang@kias.re.kr}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  A graph is bipartite exactly when it contains no odd cycle.
+  This characterization makes odd-cycle counts a natural quantitative measure of departure from bipartiteness and leads to the problem of determining how many odd cycles are forced by a prescribed edge density.
+  Goodman's triangle inequality provides a well-known lower bound in the triangle case.
+  We establish its analogue for every odd cycle in the dense regime: in the language of graph limits, for every odd integer $m\ge3$, every graphon $W$ with $\edens W=p\ge2/3$ satisfies
+  \[
+    \tC mW\ge p^m-p(1-p)^{m-1}.
+  \]
+  Here $\tC mW$ denotes the $C_m$-density of $W$.
+  At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality.
+  For $k\ge3$, we also obtain uniqueness up to graphon equivalence and qualitative stability.
+  Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
+  This is the first of two papers establishing the bound for all edge densities.
+  A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
+  At every edge density, we also obtain a density-weighted strengthening of Kim and Lee's extended-commonality inequality~\cite{kim2024extended} for odd cycles.
+  Our proof combines spectral cancellation, cycle and path excursion expansions, Dirichlet/Beta averaging, and elementary spectral moment estimates.
+  The density-weighted comparison has a positive expectation representation at every edge density; a separate comparison of complementary even-path corrections yields the dense-regime bound.
+  Together, these tools give a single argument that is uniform in $m$, with an explicit degree-variance remainder.
+  The one-colour lower-bound theorem has also been formally verified in Lean~4 by a separate argument; the code is available at \url{ADDLINKLATER}.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+How does a graph's global edge density force specific local configurations?
+Extremal graph theory first addresses the threshold form of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
+The Erd\H os--Stone--Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
+The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding this threshold by a fixed amount forces a positive density of copies of $H$.
+These results identify when copies of $H$ become unavoidable, but leave open the quantitative problem studied here: among graphs of edge density $p$, how small can the density of $H$ be?
+
+Odd cycles are a natural family for this problem because a graph is bipartite exactly when it contains no odd cycle.
+Their densities therefore provide a quantitative measure of departure from bipartiteness, with a threshold at $p=1/2$.
+Bipartite graphs can have any asymptotic edge density $p\le1/2$ while avoiding all odd cycles.
+Once $p>1/2$, the theorems above force a positive density of every fixed odd cycle.
+We seek an explicit lower bound for these densities throughout this range.
+
+For complete subgraphs, the corresponding question is the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
+Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is attained by the balanced complete $k$-partite graph at each edge density $p=1-1/k$, $k\ge2$, but is not generally sharp between these densities.
+The exact minimum follows a more intricate, piecewise-defined curve.
+Razborov~\cite{razborov2008minimal} determined this curve for triangles using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, establishing the asymptotic minimum conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
+The asymptotic structure of extremal and almost extremal graphs was characterized by Pikhurko and Razborov~\cite{pikhurko2017asymptotic} for triangles and by Kim, Liu, Pikhurko and Sharifzadeh~\cite{kim2020asymptotic} for general cliques.
+
+For odd cycles, our aim is an analogue of Goodman's polynomial bound: a simple formula that works uniformly for every odd cycle length, with no case distinctions in $p$.
+We seek equality at each density $p=1-1/k$, where the balanced complete $k$-partite graph supplies the candidate extremal value, while allowing the bound to be nonoptimal between these densities.
+
+We formulate the problem using graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities~\cite{lovasz2012large,lovasz2006limits}.
+A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
+For a finite graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H)$, its \emph{homomorphism density} in $W$ is
+\[
+  \dens HW=\intcube{v}\prod_{ij\in E(H)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
+\]
+and the \emph{edge density} of $W$ is $\edens W=\intsq W(x,y)\ddxy=p$.
+Thus, for an odd integer $m\ge3$ and a fixed edge density $p\in[0,1]$, we seek a simple lower bound for
+\[
+  \inf\bigl\{\tC mW: W\text{ is a graphon with }\edens W=p\bigr\},
+\]
+where $C_m$ denotes the cycle of length $m$.
+The spectral characterization of cycle densities suggests a candidate bound.
+Associate with a graphon $W$ the integral operator $\Tker W$ on $L^2[0,1]$ defined by
+\[
+  (\Tker{W}f)(x)=\int_0^1 W(x,y)f(y)\dd y.
+\]
+Because $W$ is symmetric, $\Tker W$ is self-adjoint.
+If $(\lambda_i)_i$ are its eigenvalues, then the trace formula~\cite{lovasz2012large} gives
+\[
+  \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m.
+\]
+Thus, cycle densities are power sums of the eigenvalues of $\Tker W$.
+
+For balanced complete multipartite graphons, these eigenvalues can be computed explicitly.
+For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graphon defined by
+\[
+  W_k(x,y)=
+  \begin{cases}
+    1&\text{if }\lfloor kx\rfloor\ne\lfloor ky\rfloor,\\
+    0&\text{otherwise}.
+\end{cases}
+\]
+Its edge density is $p=1-1/k$.
+Write $I_1,\ldots,I_k$ for the $k$ equal parts.
+If $f$ takes the constant value $c_i$ on each part $I_i$, then
+\[
+  (\Tker{W_k}f)(x)=\sum_{j\ne i}\int_{I_j}f(y)\dd y
+  =\frac1k\sum_{j=1}^k c_j-\frac{c_i}{k},\qquad x\in I_i.
+\]
+Thus, the constant function has eigenvalue $(k-1)/k=p$, while the partwise constant functions with $\sum_i c_i=0$ form a $(k-1)$-dimensional eigenspace with eigenvalue $-1/k$.
+Every function decomposes into its partwise averages and a remainder whose integral on each part is zero.
+The operator maps this remainder to zero, so all remaining eigenvalues are zero.
+The trace formula therefore gives, for odd $m$,
+\begin{equation}\label{eq:intro-kpartite-value}
+  \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m=\goal.
+\end{equation}
+At each density $p=1-1/k$, this construction gives an upper bound on the minimum $C_m$-density.
+Motivated by this expression and Goodman's triangle inequality, we ask whether $\goal$ is also a lower bound for every graphon.
+Such a bound would establish the optimality of $W_k$ at these densities, while allowing the bound to be nonoptimal between them.
+
+In the dense range $p\ge2/3$ considered here, this polynomial bound was previously known only for $C_3$ and $C_5$.
+For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=p$ satisfies
+\begin{equation}\label{eq:intro-goodman}
+  \tC3W\ge2p^2-p=\goodman p3.
+\end{equation}
+For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, $W_k$ minimizes the $C_5$-density among graphons $W$ with $\edens W=1-1/k$.
+They establish the lower bound by a flag algebra computation and also prove a stability theorem describing graphs whose $C_5$-density is close to the minimum.
+Although their theorem is stated only for integer $k\ge3$, a direct inspection of their flag algebra certificate shows that it remains valid for every real $k\ge3$.
+Substituting $k=1/(1-p)$ yields $\tC5W\ge\goodman p5$ for $2/3\le p<1$; the case $p=1$ is immediate.
+
+Our main result extends this bound to every odd cycle in the dense range.
+
+\begin{theorem}[Odd-cycle Goodman bound for $p\ge2/3$]\label{thm:main}
+  Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
+  Then,
+  \begin{equation}\label{eq:intro-main}
+    \tC mW\ge\goal.
+  \end{equation}
+\end{theorem}
+
+This is the first of two papers establishing the bound at every edge density.
+A companion paper treats $1/2<p<2/3$, and the case $p\le1/2$ is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
+At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact extremal value.
+
+\begin{corollary}\label{cor:kpartite}
+  For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimizes the $C_m$-density among graphons $W$ with $\edens W=1-1/k$.
+  For $k\ge3$, it is the unique minimizer up to graphon equivalence.
+\end{corollary}
+
+For $k\ge3$, \eqref{eq:intro-kpartite-value} shows that $W_k$ attains the lower bound in \Cref{thm:main}.
+For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$, while every graphon has nonnegative $C_m$-density.
+The uniqueness assertion follows from the equality analysis in \Cref{sec:equality-stability}, where graphon equivalence is defined by zero cut distance.
+It also gives qualitative stability: at each fixed density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum must approach $W_k$ in cut distance (\Cref{cor:stability}).
+
+\paragraph{A stronger two-colour theorem.}
+Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
+This inequality strengthens a density-sensitive form of \emph{commonality} for odd cycles.
+A graph $H$ with $e(H)$ edges is common if
+\[
+  \dens HW+\dens H{1-W}\ge2^{1-e(H)}
+\]
+for every graphon $W$.
+Here $W$ and $1-W$ represent the two colours; the inequality says that the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
+Goodman's theorem shows that the triangle is common.
+Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
+Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
+
+Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
+\begin{equation}\label{eq:intro-extended-commonality}
+  \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)}.
+\end{equation}
+This answers a question of Sidorenko~\cite{sidorenko1989cycles}.
+It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
+Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
+
+For odd cycles, our second main theorem strengthens
+\eqref{eq:intro-extended-commonality} at every edge density by a
+symmetric, density-weighted path correction. Throughout, $P_k$ denotes
+the path with $k$ edges.
+
+\begin{theorem}[Density-weighted extended commonality]
+\label{thm:weighted-commonality}
+  Let $m\ge3$ be odd, and let $W$ be a graphon with
+  $\edens W=p$ and $q=1-p$. Then
+  \begin{equation}\label{eq:intro-weighted-commonality}
+    \begin{aligned}
+      \tC mW+\tC m{1-W}\ge{}&p^m+q^m\\
+      &+\frac{m}{m-1}p\bigl(\tP{m-1}W-p^{m-1}\bigr)\\
+      &+\frac{m}{m-1}q\bigl(\tP{m-1}{1-W}-q^{m-1}\bigr).
+    \end{aligned}
+  \end{equation}
+  Equality holds if and only if $W$ has constant degree $p$, that is,
+  $\int_0^1W(x,y)\dd y=p$ for almost every $x$.
+\end{theorem}
+
+The Blakley--Roy inequality~\cite{blakley1965holder} (independently
+proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives
+$\tP{m-1}W\ge p^{m-1}$ and
+$\tP{m-1}{1-W}\ge q^{m-1}$. Thus both path corrections are
+nonnegative, and \Cref{thm:weighted-commonality} implies the
+odd-cycle case of \eqref{eq:intro-extended-commonality}. Its right-hand
+side is strictly larger than $p^m+q^m$ for every nonregular graphon;
+we verify this using even path moments in \Cref{sec:dense-paths}.
+The weights $p$ and $q$ vary continuously with the edge density, and
+\eqref{eq:intro-weighted-commonality} is unchanged by interchanging
+$W$ and $1-W$.
+
+The proof also gives a form that retains an explicit degree-variance
+term:
+\begin{equation}\label{eq:intro-weighted-variance}
+  \begin{aligned}
+    \tC mW+\tC m{1-W}\ge{}&
+      p\,\tP{m-1}W+q\,\tP{m-1}{1-W}\\
+      &+(m-1)\bigl(\tP2W-p^2\bigr)^{(m-1)/2}.
+  \end{aligned}
+\end{equation}
+This inequality also holds at every edge density. The two formulations
+are obtained from the same positive expectation identity by two
+choices of its coefficient, as shown in
+\Cref{prop:weighted-variance}. The coefficient-one formulation
+\eqref{eq:intro-weighted-variance} retains the variance remainder
+needed for the dense-regime equality analysis.
+
+To deduce the one-colour bound, we compare the two even-path
+corrections. In \Cref{lem:dense-path-comparison} we prove
+\begin{equation}\label{eq:intro-path-comparison}
+  \tP kW-p^k\ge\tP k{1-W}-q^k
+  \qquad\text{for every even $k\ge2$, if $p\ge2/3$.}
+\end{equation}
+Combining this comparison with
+\eqref{eq:intro-weighted-variance} yields the following dense-regime
+consequence.
+
+\begin{corollary}[Complementary-path correction in the dense regime]
+\label{thm:commonality}
+  Let $m\ge3$ be odd, and let $W$ be a graphon with
+  $\edens W=p\ge2/3$. Set $q=1-p$. Then
+  \begin{equation}\label{eq:intro-commonality}
+    \tC mW+\tC m{1-W}\ge p^m+q^m+
+       \bigl[\tP{m-1}{1-W}-q^{m-1}\bigr].
+  \end{equation}
+\end{corollary}
+
+Indeed, applying \eqref{eq:intro-path-comparison} with $k=m-1$
+and using $p+q=1$ gives
+\begin{align*}
+  &p\bigl(\tP{m-1}W-p^{m-1}\bigr)
+    +q\bigl(\tP{m-1}{1-W}-q^{m-1}\bigr)\\
+  &\qquad\ge
+    (p+q)\bigl(\tP{m-1}{1-W}-q^{m-1}\bigr)
+    =\tP{m-1}{1-W}-q^{m-1}.
+\end{align*}
+After the baseline terms are restored, this proves
+\eqref{eq:intro-commonality}, and retaining the variance term gives
+\Cref{prop:regularity-gap}. Equality in
+\eqref{eq:intro-commonality} holds exactly when $W$ has constant
+degree $p$. This includes the constant graphon $W\equiv p$ and,
+when $p=1-1/k$ with $k\ge3$, $W_k$. Exchanging $W$ and $1-W$
+gives the corresponding complementary-path statement for $p\le1/3$.
+
+The dense-regime statement immediately implies \Cref{thm:main}.
+Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives
+$\tC m{1-W}\le\tP{m-1}{1-W}$. Rearranging
+\eqref{eq:intro-commonality} and using
+$q^m-q^{m-1}=-pq^{m-1}$, we obtain
+\[
+  \tC mW-\bigl(\goal\bigr)
+  \ge\tP{m-1}{1-W}-\tC m{1-W}\ge0.
+\]
+
+\paragraph{Proof strategy: spectral cancellation, averaging, and path comparison.}
+The trace formula expresses the cycle densities as
+$\tC mW=\Tr(\Tker W^m)$ and
+$\tC m{1-W}=\Tr(\Tker{1-W}^m)$. We separate constant functions
+from zero-average functions. More precisely, for $f\in L^2[0,1]$,
+write $f=c\one+f_0$, where $c=\int_0^1f$ and $\int_0^1f_0=0$,
+and define the orthogonal projections
+\[
+  \Pi_{\mathrm c}f=c\one,
+  \qquad \Pi_0f=f_0.
+\]
+For either $T=\Tker W$ or $T=\Tker{1-W}$, insertion of
+$\Pi_{\mathrm c}+\Pi_0=I$ in the trace separates three types of terms:
+those using only constants, those using only zero-average functions,
+and those visiting both subspaces. The first contributions sum to
+$p^m+q^m$. The second contributions cancel when $m$ is odd, since
+$\Tker W+\Tker{1-W}$ is the projection onto constants.
+
+The remaining terms can be organized by the number $r$ of passages
+from the constant subspace into its orthogonal complement and back.
+We call these passages \emph{excursions}. For a step graphon, the
+block decomposition of the two operators defines a finite nonnegative
+spectral measure $\mu$ with
+\[
+  \mu(\R)=\tP2W-p^2.
+\]
+The cycle and path excursion expansions express the difference
+between the two sides of the density-weighted inequality as a sum of
+integrals of complete homogeneous symmetric polynomials against
+$\mu^{\otimes r}$. The same-density step approximation then reduces
+the general graphon case to these finite-matrix identities.
+
+The choice of density weights is important. Multiplication of a path
+term by its edge density uses the elementary recurrence
+\[
+  a\,h_{n-1}(a^{\times(r+1)},\boldsymbol b)
+  =h_n(a^{\times(r+1)},\boldsymbol b)
+   -h_n(a^{\times r},\boldsymbol b).
+\]
+It converts the cycle--path comparison into a comparison of two
+Dirichlet averages with adjacent parameters. If
+$X\sim\BetaLaw(r,r)$ and $L$ is an independent uniformly weighted
+convex combination of the spectral variables, the two linear forms
+\[
+  pX-(1-X)L,
+  \qquad qX+(1-X)L
+\]
+sum to $X>0$. Their $(m-2r)$th powers therefore have positive sum,
+because $m-2r$ is odd. For the coefficient $m/(m-1)$ in
+\Cref{thm:weighted-commonality}, the remaining multiplier is a
+positive constant times
+\[
+  r-1+m(1-X)>0.
+\]
+Thus each weighted excursion integrand is positive for every real
+tuple of spectral variables. The coefficient-one version gives
+\eqref{eq:intro-weighted-variance} by retaining its top excursion
+term. These arguments require no restriction on $p$.
+
+The density assumption enters only in the comparison
+\eqref{eq:intro-path-comparison}. For paths with two or four edges,
+this follows directly from the complementary block matrices and the
+bound $\|A\|\le1/2$ for the zero-average compression of
+$\Tker{1-W}$. For longer even paths, Jensen's inequality bounds the
+path correction for $W$ from below by its degree variance, while the
+operator-norm estimate
+$\|\Tker{1-W}\|^2\le q$ bounds the complementary correction from
+above by the same quantity. An elementary finite-sum estimate makes
+the two bounds comparable when $p\ge2/3$. This proves
+\Cref{thm:commonality}, after which edge deletion gives
+\Cref{thm:main}.
+
+\paragraph{Organization.}
+\Cref{sec:matrix-reduction} sets up the finite-matrix representation
+and identifies the spectral quantities used in the proof.
+\Cref{sec:excursions} develops the cycle and path expansions, including
+the density-weighted comparison. \Cref{sec:short-cycles} retains the
+direct polynomial proof of the complementary-path bound for
+$C_3,C_5,C_7$ in the larger range $p\ge1/2$.
+\Cref{sec:excursion-positivity} proves the all-density weighted
+inequalities by Dirichlet/Beta averaging, establishes the dense
+complementary-path comparison, and completes the main proofs.
+\Cref{sec:equality-stability} identifies the equality cases and
+deduces qualitative stability. We close with further questions in
+\Cref{sec:conclusion}.
+
+\section{Matrix reduction and spectral measure}
+\label{sec:matrix-reduction}
+
+Let $W\colon[0,1]^2\to[0,1]$ be a graphon with edge density
+$\edens W=p\in[0,1]$. Write
+\[
+  U=1-W,
+  \qquad
+  q=1-p.
+\]
+Thus, $U$ is the complementary graphon and has edge density $q$.
+The assumption $p\ge2/3$ will be needed only for the complementary even-path comparison in \Cref{sec:dense-paths}. The matrix identities, excursion expansions, and density-weighted inequalities hold at every edge density.
+
+To prove \Cref{thm:weighted-commonality,thm:commonality,thm:main} by finite matrix calculations, we first restrict attention to \emph{step graphons}: graphons that are constant on each product of two parts of a finite measurable partition of $[0,1]$.
+We will use partitions into intervals of equal length, so these products form a grid of equally sized rectangles.
+Each such graphon is specified by the finite matrix of its values, and its cycle and path densities can be expressed through matrix products.
+The following lemma justifies this restriction. It applies to all the cycle and path inequalities below, including their degree-variance terms.
+
+\begin{lemma}[Step-graphon reduction]
+\label{lem:step-reduction}
+  Every graphon $W$ admits a sequence of graphons, each constant on
+  the rectangles of a partition into equal-length intervals, with
+  exactly the same edge density as $W$, converging to $W$ in
+  $L^1([0,1]^2)$. Their homomorphism densities, and those of their
+  complements, converge for every finite graph. Consequently, it
+  suffices to prove the inequalities in
+  \Cref{thm:weighted-commonality,thm:commonality,thm:main} for such
+  step graphons. The same conclusion applies to inequalities
+  involving degree variance $\tP2W-p^2$.
+\end{lemma}
+Starting from an arbitrary graphon $W$, divide $[0,1]$ into $N$ equal intervals and replace $W$ on each rectangle $I_a\times I_b$ by its average value there.
+This produces a step graphon with exactly the same edge density as $W$.
+Starting with two equal intervals and repeatedly halving each partition interval gives increasingly fine grids, with $N=2,4,8,\ldots$ parts.
+Averaging $W$ on each of these grids produces a sequence of step graphons whose cycle and path densities, and those of their complements, converge to the corresponding densities of $W$ and $1-W$.
+Thus, each of the stated inequalities passes from this sequence to $W$ by taking limits.
+The proof is given in \Cref{app:step-reduction}.
+
+We may therefore fix such a step graphon with partition intervals
+$I_1,\ldots,I_N$.
+A \emph{step kernel} on this partition is a symmetric function $K\colon[0,1]^2\to\R$ that is constant on each rectangle $I_a\times I_b$.
+It is a step graphon when its values lie in $[0,1]$; in particular, $W$, $U$, and the constant-one graphon are step kernels on this partition.
+Write $K_{ab}$ for the value of $K$ on $I_a\times I_b$, and define the $N\times N$ matrix
+$M_K$ and the vector $e\in\R^N$ by
+\begin{equation*}
+  M_K=\left(\frac{K_{ab}}N\right)_{a,b=1}^N,
+  \qquad
+  e=\frac1{\sqrt N}(1,\ldots,1)^{\mathsf T}.
+\end{equation*}
+Then, $M_K$ is symmetric and $\norm e=1$. For a step graphon $K$, this normalization expresses the relevant graph densities through matrix powers:
+\begin{align}
+  \Tr(M_K^j)
+  &=\frac1{N^j}\sum_{a_1,\ldots,a_j=1}^N
+    K_{a_1a_2}\cdots K_{a_ja_1}
+   =\dens{C_j}K \qquad (j\ge3),\notag\\
+  e^{\mathsf T}M_K^ke
+  &=\frac1{N^{k+1}}\sum_{a_0,\ldots,a_k=1}^N
+    K_{a_0a_1}\cdots K_{a_{k-1}a_k}
+   =\dens{P_k}K \qquad (k\ge1),\notag\\
+  e^{\mathsf T}M_Ke
+  &=\frac1{N^2}\sum_{a,b=1}^NK_{ab}
+   =\edens K. \label{eq:edge-matrix}
+\end{align}
+
+Let $\mathcal E_0=e^\perp$, and let $I$ be the $N\times N$ identity
+matrix. The matrices
+\[
+  P=ee^{\mathsf T},
+  \qquad
+  Q=I-P
+\]
+are the orthogonal projections of $\R^N$ onto $\R e$ and $\mathcal E_0$,
+respectively. They are the matrix counterparts of the projections
+$\Pi_{\mathrm c}$ and $\Pi_0$ used in the introduction.
+Relative to the decomposition $\R e\oplus\mathcal E_0$, these projections have the block forms
+\begin{equation}\label{eq:block-PQ}
+  P=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+  \qquad
+  Q=\begin{pmatrix}0&0\\0&I_{\mathcal E_0}\end{pmatrix},
+\end{equation}
+where $I_{\mathcal E_0}$ is the identity on $\mathcal E_0$.
+
+Define the vector $g\in\R^N$ and the symmetric linear map
+$A\colon\mathcal E_0\to\mathcal E_0$ by
+\begin{equation*}
+  g=M_Ue-qe,
+  \qquad
+  A=QM_UQ\big|_{\mathcal E_0}.
+\end{equation*}
+The edge identity \eqref{eq:edge-matrix} gives
+\[
+  e^{\mathsf T}g=e^{\mathsf T}M_Ue-q=0,
+\]
+so $g\in\mathcal E_0$.
+The constant-one graphon has matrix $M_1=P$, and hence $M_W=P-M_U$.
+Therefore, relative to $\R e\oplus\mathcal E_0$,
+\begin{equation}\label{eq:block-UW}
+  M_U=
+  \begin{pmatrix}
+    q&g^{\mathsf T}\\
+    g&A
+  \end{pmatrix},
+  \qquad
+  M_W=
+  \begin{pmatrix}
+    p&-g^{\mathsf T}\\
+    -g&-A
+  \end{pmatrix}.
+\end{equation}
+
+\begin{lemma}[Eigenvalue bound]\label{lem:half-norm}
+  Every eigenvalue of $A$ lies in $[-1/2,1/2]$.
+\end{lemma}
+
+\begin{proof}
+  Throughout this proof, vector coordinates and matrix entries refer to the standard basis of $\R^N$, indexed by the partition intervals $I_1,\ldots,I_N$.
+  In these coordinates,
+  \[
+    0\le (M_U)_{ab}=\frac{U_{ab}}{N}\le\frac1N=(M_1)_{ab},
+    \qquad 1\le a,b\le N,
+  \]
+  so $0\le M_U\le M_1$ entrywise.
+  Let $f\in\mathcal E_0$ with $\norm f=1$, and define its coordinatewise
+  positive and negative parts by
+  \[
+    (f_+)_i=\max\{f_i,0\},
+    \qquad
+    (f_-)_i=\max\{-f_i,0\}.
+  \]
+  Both vectors have nonnegative entries, and $f=f_+-f_-$ and $|f|=f_++f_-$.
+  Since $e^{\mathsf T}f=0$,
+  \[
+    e^{\mathsf T}f_+=e^{\mathsf T}f_-=:a,
+    \qquad
+    2a=e^{\mathsf T}|f|\le\norm e\norm f=1.
+  \]
+  Expanding $f=f_+-f_-$ gives
+  \[
+    f^{\mathsf T}M_Uf
+    =f_+^{\mathsf T}M_Uf_+
+     -f_+^{\mathsf T}M_Uf_-
+     -f_-^{\mathsf T}M_Uf_+
+     +f_-^{\mathsf T}M_Uf_-.
+  \]
+  Since $f_+$, $f_-$, and $M_U$ have nonnegative entries,
+  $f_+^{\mathsf T}M_Uf_-$ and $f_-^{\mathsf T}M_Uf_+$ are nonnegative.
+  Dropping these terms gives
+  \[
+    f^{\mathsf T}M_Uf
+    \le f_+^{\mathsf T}M_Uf_++f_-^{\mathsf T}M_Uf_-
+      \le2a^2\le\frac12,
+  \]
+  where the second inequality uses the entrywise comparison $M_U\le M_1$
+  in the standard coordinates, the nonnegative entries of $f_+$ and $f_-$,
+  and the identities $f_+^{\mathsf T}M_1f_+=f_-^{\mathsf T}M_1f_-=a^2$.  Similarly,
+  $f_+^{\mathsf T}M_Uf_+$ and $f_-^{\mathsf T}M_Uf_-$ are nonnegative,
+  so dropping these terms gives
+  \[
+    f^{\mathsf T}M_Uf
+    \ge-f_+^{\mathsf T}M_Uf_--f_-^{\mathsf T}M_Uf_+
+      \ge-2a^2\ge-\frac12.
+  \]
+  Here the second inequality again uses the entrywise comparison $M_U\le M_1$
+  in the standard coordinates and the nonnegative entries of $f_+$ and $f_-$,
+  together with $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
+  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh--Ritz
+  characterization of the eigenvalues of the symmetric map $A$ proves the
+  claim.
+\end{proof}
+
+Let $\lambda_1,\ldots,\lambda_{N-1}$ be the eigenvalues of $A$, counted
+with multiplicity, and choose corresponding orthonormal eigenvectors
+$u_1,\ldots,u_{N-1}$ of $\mathcal E_0$. For each $i$, let $P_i$ be the
+orthogonal projection onto the one-dimensional subspace spanned by $u_i$.
+Define the finite nonnegative measure
+\begin{equation*}
+  \mu=\sum_{i=1}^{N-1}\norm{P_ig}^2\delta_{\lambda_i}.
+\end{equation*}
+The measure $\mu$ is independent of the choice of orthonormal eigenvectors
+within each eigenspace.  Here $\delta_{\lambda_i}$ is the unit point mass
+at $\lambda_i$.  By \Cref{lem:half-norm},
+\begin{equation}\label{eq:moments}
+  \supp\mu\subseteq[-1/2,1/2],
+  \qquad
+  g^{\mathsf T}A^jg=\int\lambda^j\dd\mu(\lambda),
+  \qquad
+  \mu(\R)=\norm g^2.
+\end{equation}
+The total mass also has the graphon expression
+\begin{equation}\label{eq:degree-variance-mass}
+  \mu(\R)=\norm g^2
+    =\tP2U-q^2=\tP2W-p^2
+    =\int_0^1\left(\int_0^1W(x,y)\dd y-p\right)^2\dd x.
+\end{equation}
+Indeed, $M_Ue$ records the degrees of $U$ on the partition intervals,
+with normalization $1/\sqrt N$, and the degree functions of $W$ and
+$U$ sum to one. Thus the quantities $g^{\mathsf T}A^jg$ are moments
+of a single nonnegative measure. In the next section, we integrate
+polynomials against this measure to express both the weighted
+cycle--path comparison and the separate complementary-path gap.
+The spectral support bound is needed later for the four-edge path
+comparison, but not for the positivity of the weighted polynomials.
+
+\section{Excursion expansions}
+\label{sec:excursions}
+
+\Cref{sec:matrix-reduction} expresses cycle and path densities through
+finite matrices and represents $g^{\mathsf T}A^jg$ as moments of
+$\mu$. We now derive the corresponding cycle and path excursion
+expansions. Combining them gives the density-weighted expansion in
+\Cref{lem:weighted-expansion}, which will prove the all-density
+inequality in \Cref{sec:excursion-positivity}. We also retain the
+complementary-path expansion in \Cref{lem:polynomial-reduction} for
+the direct short-cycle argument in \Cref{sec:short-cycles}.
+
+To obtain these formulas, we expand matrix powers by inserting $P+Q=I$.
+For an odd integer $m\ge3$, the cycle density of $U$ satisfies
+\begin{equation}\label{eq:trace-projection-expansion}
+  \tC mU=\Tr(M_U^m)
+  =\sum_{R_1,\ldots,R_m\in\{P,Q\}}
+    \Tr(R_1M_UR_2M_U\cdots R_mM_U).
+\end{equation}
+We associate each summand with the sequence $R_1\cdots R_m$, called a \emph{word} in $P$ and $Q$.
+This word records the projection choices; the actual matrix product contains an application of $M_U$ between consecutive projections.
+For trace terms, we regard the word as cyclic, so its last and first letters are consecutive.
+
+A \emph{block} is a maximal consecutive run of the same letter.
+Thus, in a word containing both $P$ and $Q$, each $Q$-block has a $P$ immediately before and after it.
+For example, the segment
+\[
+  P\,\underbrace{QQ}_{\text{one $Q$-block}}\,P
+\]
+of a word corresponds to the matrix segment $P M_U Q M_U Q M_U P$.
+Reading this product from right to left, the rightmost $P$ retains the component in $\R e$.
+An application of $M_U$ followed by $Q$ then retains the component in $\mathcal E_0$; the next application of $M_U$ followed by $Q$ retains a component in $\mathcal E_0$ again; the final application of $M_U$ followed by $P$ returns to $\R e$.
+We call this passage from $\R e$ into $\mathcal E_0$ and back an \emph{excursion}.
+Using the block forms of $P$ and $Q$ in \eqref{eq:block-PQ} and of $M_U$ in \eqref{eq:block-UW}, we obtain
+\[
+  P M_U Q M_U Q M_U P=(g^{\mathsf T}Ag)P.
+\]
+Here the outward transition contributes $g$, the step within $\mathcal E_0$ contributes $A$, and the return contributes $g^{\mathsf T}$.
+More generally, a block of $\beta+1$ letters $Q$ has $\beta$ steps within $\mathcal E_0$ and contributes the scalar factor $g^{\mathsf T}A^\beta g$.
+By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{sec:matrix-reduction}.
+
+We organize the summands by first fixing the number $r$ of excursions in a word.
+For each fixed $r$, we sum over the possible lengths of the individual $P$-blocks and $Q$-blocks.
+The resulting sums of monomials are expressed using complete homogeneous symmetric polynomials, which we now define.
+For variables $y_1,\ldots,y_k$, the complete homogeneous symmetric
+polynomial of degree $d$ is
+\begin{equation}\label{eq:h-def}
+  h_d(y_1,\ldots,y_k)
+  =\sum_{\substack{\gamma_1,\ldots,\gamma_k\ge0\\
+                    \gamma_1+\cdots+\gamma_k=d}}
+   y_1^{\gamma_1}\cdots y_k^{\gamma_k},
+  \qquad h_0=1.
+\end{equation}
+We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
+
+\begin{lemma}[Cycle densities by excursions]
+\label{lem:cycle-excursions}
+  For every odd $m\ge3$,
+  \begin{align}
+    \tC mU
+    ={}&q^m+\Tr(A^m)
+    +\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i),
+    \label{eq:cycle-U}\\
+    \tC mW
+    ={}&p^m-\Tr(A^m)
+    +\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      h_{m-2r}(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \label{eq:cycle-W}
+  \end{align}
+\end{lemma}
+
+\begin{proof}
+  Consider the summands in \eqref{eq:trace-projection-expansion}, indexed by the words $R_1\cdots R_m$.
+  If $R_i=P$ for
+  every $i$, the summand is $q^m$; if $R_i=Q$ for every $i$, it is
+  $\Tr(A^m)$.
+
+  Now consider a word containing both $P$ and $Q$.
+  Choose a boundary where $Q$ is followed by $P$ in cyclic order, and rotate the word so that this $P$ is its first letter and the preceding $Q$ is its last letter.
+  Cyclicity of the trace preserves the value of the summand under this rotation.
+  Let $r$ be the number of $Q$-blocks in the resulting linear word; there are also $r$ $P$-blocks.
+  Since the cut is between different letters, no cyclic block is split, so $r$ is also the number of cyclic $Q$-blocks in the original word and does not depend on the chosen boundary.
+  For $1\le i\le r$, let $\alpha_i+1$ be the
+  number of letters in the $i$th $P$-block, and let $\beta_i+1$ be the
+  number of letters in the $Q$-block that follows it. For example, the
+  following cyclic word has $r=2$ and odd length $13$:
+  \[
+    \underbrace{PPP}_{\alpha_1=2}\,
+    \underbrace{QQQ}_{\beta_1=2}\,
+    \underbrace{PPPPP}_{\alpha_2=4}\,
+    \underbrace{QQ}_{\beta_2=1}
+  \]
+  Counting the letters gives $\sum_{i=1}^r((\alpha_i+1)+(\beta_i+1))=m$.
+  To evaluate the corresponding trace, use the block forms in \eqref{eq:block-PQ} and \eqref{eq:block-UW}:
+  \[
+    P M_U P=qP,
+    \qquad
+    P M_U(Q M_U)^{\beta_i+1}P
+    =(g^{\mathsf T}A^{\beta_i}g)P.
+  \]
+  The $P$-block has $\alpha_i$ internal steps, each contributing $q$, while the following $Q$-block gives one excursion.
+  Thus, the pair of blocks, ending at the next $P$, satisfies
+  \[
+    (P M_U)^{\alpha_i+1}(Q M_U)^{\beta_i+1}P
+    =q^{\alpha_i}(g^{\mathsf T}A^{\beta_i}g)P.
+  \]
+  Since the normalized product begins with $P$, appending a final $P$ does not change its trace, by $P^2=P$ and cyclicity.
+  Applying the displayed identity successively, from the last pair of blocks to the first, leaves the product of their scalar factors times $P$.
+  Taking the trace and using $\Tr(P)=1$, we obtain the length condition and trace formula
+  \begin{equation}\label{eq:excursion-length-weight}
+    \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,
+    \qquad
+    \Tr(R_1M_UR_2M_U\cdots R_mM_U)
+    =q^{\alpha_1+\cdots+\alpha_r}
+     \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \end{equation}
+
+  To sum over all words with $r$ cyclic $Q$-blocks, we count pairs consisting
+  of a word $R_1\cdots R_m$, whose positions are labelled $1,\ldots,m$, and
+  a marked boundary where $Q$ is followed by $P$.
+  The mark specifies where to start reading the word in cyclic order, and
+  hence which pair of blocks is recorded as $(\alpha_1,\beta_1)$.
+  Reading from the mark begins with $P$ and ends with $Q$, so no block is
+  split. Each word has exactly $r$ eligible boundaries and therefore gives
+  $r$ marked words.
+
+  Conversely, fix an ordered tuple
+  $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ of nonnegative integers
+  satisfying the length condition in \eqref{eq:excursion-length-weight}.
+  Choose any position $j\in\{1,\ldots,m\}$ for the first $P$ of its first
+  block, and fill the positions in cyclic order with $\alpha_1+1$ copies
+  of $P$, then $\beta_1+1$ copies of $Q$, and so on, wrapping from position
+  $m$ back to position $1$. Mark the boundary immediately before $j$.
+  The block lengths are positive and sum to $m$, so every choice of $j$
+  gives a word with exactly $r$ cyclic $Q$-blocks.
+  Beginning with $P$ and ending with $Q$ refers to reading from the mark;
+  the original trace sum allows any letters at positions $1$ and $m$.
+  Thus, each tuple gives $m$ marked words. Even if two placements produce
+  the same letters because the word is periodic, their marked boundaries
+  occupy different labelled positions, so the marked words are distinct.
+
+  These constructions are inverse: a marked word determines both the
+  ordered tuple and the position $j$ immediately after its mark.
+  Give each marked word the weight $\Tr(R_1M_U\cdots R_mM_U)$.
+  By cyclicity of the trace and \eqref{eq:excursion-length-weight}, this
+  weight depends only on the tuple, not on $j$.
+  Summing the weights using the two descriptions therefore gives
+  \begin{equation}\label{eq:U-r-excursions}
+      \Bigg(
+        r\!\!\!\!
+        \sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
+                       R_1\cdots R_m\text{ has }r\text{ cyclic $Q$-blocks}}}
+        \Tr(R_1M_U\cdots R_mM_U)\Bigg)
+      =
+      \Bigg(
+        m \!\!\!\!
+        \sum_{\substack{\alpha_1,\beta_1,\ldots,
+                          \alpha_r,\beta_r\ge0\\
+                          \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+        q^{\alpha_1+\cdots+\alpha_r}
+        \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g\Bigg).
+  \end{equation}
+  Dividing \eqref{eq:U-r-excursions} by $r$ gives the factor $m/r$.
+  Summing over $r$ and including the two unmixed words gives
+  \[
+    \tC mU=q^m+\Tr(A^m)
+    +\sum_{r=1}^{(m-1)/2}\frac mr
+      \sum_{\substack{\alpha_1,\beta_1,\ldots,
+                        \alpha_r,\beta_r\ge0\\
+                        \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+      q^{\alpha_1+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \]
+  Applying the moment identity \eqref{eq:moments} now gives
+  \[
+    \begin{aligned}
+      \tC mU={}&q^m+\Tr(A^m)\\
+      &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+      \sum_{\substack{\alpha_1,\beta_1,\ldots,
+                        \alpha_r,\beta_r\ge0\\
+                        \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
+      q^{\alpha_1+\cdots+\alpha_r}
+      \lambda_1^{\beta_1}\cdots\lambda_r^{\beta_r}
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \]
+  The inner sum is
+  $h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)$ by
+  \eqref{eq:h-def}.  This proves \eqref{eq:cycle-U}.
+
+  For $M_W$, the block identity \eqref{eq:block-UW} replaces
+  $(q,g,A)$ by $(p,-g,-A)$.  The two crossing signs cancel in each block,
+  while
+  \[
+    (-g)^{\mathsf T}(-A)^{\beta_i}(-g)
+    =(-1)^{\beta_i}g^{\mathsf T}A^{\beta_i}g.
+  \]
+  Hence $q$ becomes $p$, every $\lambda_i$ becomes $-\lambda_i$, and
+  $\Tr(A^m)$ becomes $-\Tr(A^m)$.  This proves \eqref{eq:cycle-W}.
+\end{proof}
+
+We next derive the corresponding formula for path densities, which supplies the corrections in both \eqref{eq:intro-weighted-commonality} and \eqref{eq:intro-commonality}.
+Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
+\begin{equation*}
+  \tP kU=e^{\mathsf T}M_U^ke.
+\end{equation*}
+
+\begin{lemma}[Path densities by excursions]
+\label{lem:path-excursions}
+  For every $k\ge0$,
+  \begin{equation}\label{eq:path-expansion}
+    \tP kU=q^k+
+    \sum_{r=1}^{\lfloor k/2\rfloor}
+      \int\!\cdots\!\int
+      h_{k-2r}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  For $k=0$ and $k=1$, the formula gives $\tP0U=e^{\mathsf T}e=1$ and
+  $\tP1U=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
+  Now let $k\ge2$. Since $Pe=e$ and $e^{\mathsf T}P=e^{\mathsf T}$,
+  we may insert $P$ at both ends of the matrix expression for $\tP kU$.
+  Inserting $P+Q=I$ between its $k$ copies of $M_U$ and expanding gives
+  \begin{equation}\label{eq:path-projection-expansion}
+    \tP kU=
+    \sum_{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}}
+      e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe.
+  \end{equation}
+  Associate each summand in \eqref{eq:path-projection-expansion} with
+  the word $PR_1\cdots R_{k-1}P$.
+  This word has $k+1$ letters, separated by the $k$ copies of $M_U$.
+  We read it from its fixed left endpoint to its fixed right endpoint;
+  its first and last letters are separate occurrences of $P$.
+  If every letter is $P$, the identity $P M_U P=qP$ gives the summand
+  $q^k e^{\mathsf T}Pe=q^k$.
+
+  Now fix the number $r\ge1$ of $Q$-blocks in a word.
+  Because the word starts and ends with $P$, it has $r+1$ $P$-blocks,
+  alternating with the $r$ $Q$-blocks. Let
+  $\alpha_0+1,\ldots,\alpha_r+1$ be the numbers of letters in the
+  successive $P$-blocks, and let $\beta_1+1,\ldots,\beta_r+1$ be the
+  numbers of letters in the successive $Q$-blocks.  For example, the
+  following word has $r=2$:
+  \[
+    \underbrace{PP}_{\alpha_0=1}\,
+    \underbrace{QQ}_{\beta_1=1}\,
+    \underbrace{PP}_{\alpha_1=1}\,
+    \underbrace{Q}_{\beta_2=0}\,
+    \underbrace{PP}_{\alpha_2=1}.
+  \]
+  Counting the $k+1$ letters gives
+  \[
+    \sum_{i=0}^r(\alpha_i+1)+\sum_{i=1}^r(\beta_i+1)=k+1,
+    \qquad
+    \sum_{i=0}^r\alpha_i+\sum_{i=1}^r\beta_i=k-2r.
+  \]
+  In particular, $r\le\lfloor k/2\rfloor$.
+  To evaluate the summand in \eqref{eq:path-projection-expansion}
+  associated with this word, use the same block identities as in the proof
+  of \Cref{lem:cycle-excursions}: each internal step in a $P$-block
+  contributes $q$, and the excursion through the $i$th $Q$-block
+  contributes $g^{\mathsf T}A^{\beta_i}g$.
+  Collapsing these blocks leaves the product of their scalar factors
+  times $P$. Since $e^{\mathsf T}Pe=1$, the summand is
+  \[
+    e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe
+    =q^{\alpha_0+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \]
+
+  Reading the blocks from left to right determines the ordered tuple
+  $(\alpha_0,\beta_1,\alpha_1,\ldots,\beta_r,\alpha_r)$ uniquely.
+  Conversely, any tuple of nonnegative integers satisfying the length
+  condition constructs exactly one word: start with $\alpha_0+1$ copies
+  of $P$, then $\beta_1+1$ copies of $Q$, then $\alpha_1+1$ copies of $P$,
+  and continue through the final $P$-block of length $\alpha_r+1$.
+  By this one-to-one correspondence, summing the terms in
+  \eqref{eq:path-projection-expansion} over the admissible block-length
+  tuples gives
+  \begin{equation}\label{eq:path-r-excursions}
+    \begin{aligned}
+      &\sum_{\substack{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}\\
+                       PR_1\cdots R_{k-1}P
+                       \text{ has }r\text{ $Q$-blocks}}}
+        e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe\\
+      &\qquad\qquad\qquad {}=
+      \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
+                      \sum_{i=0}^r\alpha_i+
+                      \sum_{i=1}^r\beta_i=k-2r}}
+      q^{\alpha_0+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+    \end{aligned}
+  \end{equation}
+  Summing \eqref{eq:path-r-excursions} over $r$ and including the word
+  consisting only of $P$ gives
+  \[
+    \tP kU=q^k+
+    \sum_{r=1}^{\lfloor k/2\rfloor}
+      \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
+                      \sum_{i=0}^r\alpha_i+
+                      \sum_{i=1}^r\beta_i=k-2r}}
+      q^{\alpha_0+\cdots+\alpha_r}
+      \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g.
+  \]
+  Applying the moment identity \eqref{eq:moments} now gives
+  \[
+    \begin{aligned}
+      \tP kU={}&q^k+
+      \sum_{r=1}^{\lfloor k/2\rfloor}
+      \int\!\cdots\!\int
+      \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
+                      \sum_{i=0}^r\alpha_i+
+                      \sum_{i=1}^r\beta_i=k-2r}}
+      q^{\alpha_0+\cdots+\alpha_r}
+      \lambda_1^{\beta_1}\cdots\lambda_r^{\beta_r}
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \]
+  The inner sum is
+  $h_{k-2r}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)$ by
+  \eqref{eq:h-def}: the $r+1$ exponents $\alpha_0,\ldots,\alpha_r$
+  account for the $r+1$ copies of $q$, and the exponents
+  $\beta_1,\ldots,\beta_r$ belong to $\lambda_1,\ldots,\lambda_r$.
+  Their total degree is $k-2r$, as required.
+  This proves \eqref{eq:path-expansion}.
+\end{proof}
+
+The path expansion for $W$ follows by replacing $(q,g,A)$ with
+$(p,-g,-A)$ in \Cref{lem:path-excursions}. The crossing signs again
+cancel in pairs, so
+\begin{equation}\label{eq:path-expansion-W}
+  \tP kW=p^k+
+  \sum_{r=1}^{\lfloor k/2\rfloor}
+    \int\!\cdots\!\int
+    h_{k-2r}(\rep p{(r+1)},-\lambda_1,\ldots,-\lambda_r)
+    \prod_{i=1}^r\dd\mu(\lambda_i).
+\end{equation}
+We can now form the density-weighted comparison for any real
+coefficient $c$. The identity below is algebraic; the restriction on
+$c$ used to prove positivity will be imposed in
+\Cref{sec:excursion-positivity}.
+
+\begin{lemma}[Density-weighted excursion expansion]
+\label{lem:weighted-expansion}
+  Let $m\ge3$ be odd, let $c\in\R$, and, for
+  $1\le r\le(m-1)/2$, set $n=m-2r$. Define
+  \begin{align}
+    F^{(c)}_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac mr\Bigl[
+      h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
+      \Bigr]\notag\\
+    &-cp\,h_{n-1}(\rep p{(r+1)},-\lambda_1,\ldots,-\lambda_r)
+      \notag\\
+    &-cq\,h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r),
+    \label{eq:weighted-polynomial}
+  \end{align}
+  where $p=1-q$. Then
+  \begin{equation}\label{eq:weighted-expansion}
+    \begin{aligned}
+      &\tC mW+\tC mU-p^m-q^m\\
+      &\quad-c\Bigl[p\bigl(\tP{m-1}W-p^{m-1}\bigr)
+               +q\bigl(\tP{m-1}U-q^{m-1}\bigr)\Bigr]\\
+      &\qquad=\sum_{r=1}^{(m-1)/2}
+        \int\!\cdots\!\int
+        F^{(c)}_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+        \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Add \eqref{eq:cycle-U} and \eqref{eq:cycle-W}; the two terms
+  $\Tr(A^m)$ cancel. Subtract $cp$ times
+  \eqref{eq:path-expansion-W} with $k=m-1$, and $cq$ times
+  \eqref{eq:path-expansion} with $k=m-1$, after removing their
+  respective constant terms. All four excursion sums have the same
+  index range and product measure. At excursion number $r$, the
+  cycle degree is $n=m-2r$ and the path degree is $n-1$.
+  Combining their integrands gives
+  \eqref{eq:weighted-polynomial}, proving the identity.
+\end{proof}
+
+For the separate short-cycle argument in \Cref{sec:short-cycles},
+it is useful to record the analogous expansion for the
+complementary-path correction without density weights.
+
+\begin{lemma}[Reduction to excursion polynomials]
+\label{lem:polynomial-reduction}
+  Let $m\ge3$ be odd. For $1\le r\le(m-1)/2$, let
+  \begin{equation}\label{eq:pge23-n}
+    n=m-2r,
+  \end{equation}
+  which is a positive odd integer, and define the excursion polynomial,
+  symmetric in $\lambda_1,\ldots,\lambda_r$, by
+  \begin{align}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac mr\Bigl[
+      h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
+    \Bigr]\notag\\
+    &-h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r).
+    \label{eq:Pmr}
+  \end{align}
+  The sum of integrals
+  \begin{equation}\label{eq:Phi-expansion}
+    \Phi_m:=\sum_{r=1}^{(m-1)/2}
+      \int\!\cdots\!\int
+      P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i)
+  \end{equation}
+  is the difference between the left- and right-hand sides of
+  \eqref{eq:intro-commonality}.
+\end{lemma}
+
+\begin{proof}
+  Adding the cycle expansions \eqref{eq:cycle-U} and
+  \eqref{eq:cycle-W} cancels $\Tr(A^m)$ with $-\Tr(A^m)$ and gives the
+  following identity, with $n=m-2r$ in each summand:
+  \[
+    \begin{aligned}
+      \tC mW+\tC mU
+      ={}p^m+q^m
+      &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+        h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i)\\
+      &+\sum_{r=1}^{(m-1)/2}\frac mr
+      \int\!\cdots\!\int
+        h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+    \end{aligned}
+  \]
+  For $k=m-1$, the path expansion \eqref{eq:path-expansion} uses the
+  same range $1\le r\le(m-1)/2$, and its polynomial degree is
+  $(m-1)-2r=n-1$. Thus,
+  \[
+    \tP{m-1}U=q^{m-1}+
+    \sum_{r=1}^{(m-1)/2}
+      \int\!\cdots\!\int
+      h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
+  \]
+  For each fixed number $r$ of excursions, the two cycle integrals and
+  the path integral use the same product measure
+  $\prod_{i=1}^r\dd\mu(\lambda_i)$.
+  Subtracting the path contribution from the sum of the cycle
+  contributions therefore combines their integrands into
+  \[
+    \frac mr\Bigl[
+      h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
+    \Bigr]
+    -h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r),
+  \]
+  which is $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ by
+  \eqref{eq:Pmr}.  Therefore,
+  \begin{equation}\label{eq:commonality-gap}
+    \tC mW+\tC mU-\tP{m-1}U
+    =p^m+q^m-q^{m-1}+\Phi_m.
+  \end{equation}
+  This identifies $\Phi_m$ as the
+  difference between the two sides of \eqref{eq:intro-commonality}.
+\end{proof}
+
+For any fixed $m$ and density, pointwise nonnegativity of all the
+polynomials $P_{m,r}$ on $[-1/2,1/2]^r$ is sufficient to prove
+\eqref{eq:intro-commonality}, since $\mu$ is nonnegative and supported
+on that interval. \Cref{sec:short-cycles} uses this sufficient
+condition for $C_3,C_5,C_7$. For arbitrary odd $m$, the proof in
+\Cref{sec:excursion-positivity} instead uses the weighted polynomials
+$F^{(c)}_{m,r}$ and a comparison of complementary path densities.
+No pointwise sign assertion for the original $P_{m,r}$ at general
+cycle lengths is needed in that argument.
+
+\section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
+\label{sec:short-cycles}
+
+In this section, we consider the first three odd cycles to illustrate the
+general excursion argument through explicit low-degree computations. The
+identities used in \Cref{lem:polynomial-reduction} do not require
+$p\ge2/3$, and for these cycles, every excursion polynomial is pointwise
+nonnegative when $p\ge1/2$. Consequently, the inequalities in
+\Cref{thm:main,thm:commonality} hold for $m\in\{3,5,7\}$ throughout the
+larger range $p\ge1/2$.
+
+\begin{proposition}\label{prop:short-cycles}
+  Suppose that $0\le q\le1/2$ and set $p=1-q$. For all $m\in\{3,5,7\}$,
+  $1\le r\le(m-1)/2$, and $\lambda_1,\ldots,\lambda_r\in\R$, we have
+  \[
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0.
+  \]
+  Consequently, the inequalities in \Cref{thm:main,thm:commonality} hold
+  for $m\in\{3,5,7\}$ whenever $p\ge1/2$.
+\end{proposition}
+
+\begin{proof}
+  For $m=3$, only $r=1$ occurs, and
+  \[
+    \begin{aligned}
+      P_{3,1}(q;\lambda)
+      &=3\bigl[h_1(p,-\lambda)+h_1(q,\lambda)\bigr]
+        -h_0(q,q,\lambda)\\
+      &=3\bigl[(p-\lambda)+(q+\lambda)\bigr]-1=2.
+    \end{aligned}
+  \]
+
+  For $m=5$ and $r=1$, we have $n=3$, and hence
+  \[
+    \begin{aligned}
+      P_{5,1}(q;\lambda)
+      ={}&5\bigl[h_3(p,-\lambda)+h_3(q,\lambda)\bigr]
+          -h_2(q,q,\lambda)\\
+      ={}&5\bigl[(p^3+q^3)+(q^2-p^2)\lambda
+                  +(p+q)\lambda^2\bigr]
+         -(3q^2+2q\lambda+\lambda^2)\\
+      ={}&5\bigl[(1-3q+3q^2)+(2q-1)\lambda+\lambda^2\bigr]
+         -(3q^2+2q\lambda+\lambda^2)\\
+      ={}&4\lambda^2+(8q-5)\lambda+12q^2-15q+5.
+    \end{aligned}
+  \]
+  Completing squares gives
+  \[
+    P_{5,1}(q;\lambda)
+    =4\left(\lambda+q-\frac58\right)^2
+     +8\left(q-\frac58\right)^2+\frac5{16}>0.
+  \]
+  For $r=2$, we have $n=1$, so
+  \[
+    \begin{aligned}
+      P_{5,2}(q;\lambda_1,\lambda_2)
+      ={}&\frac52\bigl[
+        h_1(p,p,-\lambda_1,-\lambda_2)
+        +h_1(q,q,\lambda_1,\lambda_2)\bigr]\\
+        &-h_0(q,q,q,\lambda_1,\lambda_2)\\
+      ={}&\frac52\bigl[(2p-\lambda_1-\lambda_2)
+                       +(2q+\lambda_1+\lambda_2)\bigr]-1=4.
+    \end{aligned}
+  \]
+  For $m=7$ and $r=1$, we have $n=5$.  Therefore,
+  \[
+    \begin{aligned}
+      P_{7,1}(q;\lambda)
+      ={}&7\bigl[h_5(p,-\lambda)+h_5(q,\lambda)\bigr]
+          -h_4(q,q,\lambda)\\
+      ={}&7\bigl[p^5+q^5+(q^4-p^4)\lambda
+          +(p^3+q^3)\lambda^2+(q^2-p^2)\lambda^3
+          +(p+q)\lambda^4\bigr]\\
+         &-(5q^4+4q^3\lambda+3q^2\lambda^2
+             +2q\lambda^3+\lambda^4)\\
+      ={}&7\bigl[(1-5q+10q^2-10q^3+5q^4)
+          +(4q^3-6q^2+4q-1)\lambda\\
+         &\qquad +(1-3q+3q^2)\lambda^2
+          +(2q-1)\lambda^3+\lambda^4\bigr]\\
+         &-(5q^4+4q^3\lambda+3q^2\lambda^2
+             +2q\lambda^3+\lambda^4)\\
+      ={}&6\lambda^4+(12q-7)\lambda^3
+          +(18q^2-21q+7)\lambda^2\\
+         &+(24q^3-42q^2+28q-7)\lambda
+          +30q^4-70q^3+70q^2-35q+7.
+    \end{aligned}
+  \]
+  Define
+  \[
+    \begin{aligned}
+      D(q)&=288q^2-336q+119,\\
+      C(q)&=24q^3-42q^2+28q-7,\\
+      N(q)&=5184q^6-18144q^5+28602q^4-25802q^3 +13874q^2-4165q+539.
+    \end{aligned}
+  \]
+  Direct expansion gives
+  \[
+    P_{7,1}(q;\lambda)=
+      6\left(\lambda^2+\left(q-\frac7{12}\right)\lambda\right)^2+\frac{D(q)}{24}
+      \left(\lambda+\frac{12C(q)}{D(q)}\right)^2
+      +\frac{N(q)}{D(q)}.
+  \]
+  With $y=1/2-q\ge0$,
+  \[
+    D(q)=288y^2+48y+23>0
+  \]
+  and
+  \[
+    8N(q)=41472y^6+20736y^5+21456y^4+7984y^3+2032y^2+316y+11>0.
+  \]
+  Hence $P_{7,1}(q;\lambda)>0$.
+
+  For $r=2$, we have $n=3$, and
+  \[
+    \begin{aligned}
+      P_{7,2}(q;\lambda_1,\lambda_2)
+      ={}&\frac72\bigl[
+        h_3(p,p,-\lambda_1,-\lambda_2)
+        +h_3(q,q,\lambda_1,\lambda_2)\bigr]\\
+        &-h_2(q,q,q,\lambda_1,\lambda_2)\\
+      ={}&\frac72\bigl[4(p^3+q^3)
+        +3(q^2-p^2)(\lambda_1+\lambda_2)
+        +2(\lambda_1^2+\lambda_1\lambda_2+\lambda_2^2)\bigr]\\
+        &-\bigl[6q^2+3q(\lambda_1+\lambda_2)
+          +(\lambda_1^2+\lambda_1\lambda_2+\lambda_2^2)\bigr]\\
+      ={}&6(\lambda_1^2+\lambda_1\lambda_2+\lambda_2^2)
+        +\left(18q-\frac{21}{2}\right)(\lambda_1+\lambda_2)\\
+        &+36q^2-42q+14.
+    \end{aligned}
+  \]
+  Completing squares gives
+  \[
+      P_{7,2}(q;\lambda_1,\lambda_2)=
+      \left(\frac32(\lambda_1-\lambda_2)^2
+      +\frac92\left(\lambda_1+\lambda_2+2q-\frac76\right)^2
+      +18\left(q-\frac7{12}\right)^2+\frac74\right)>0.
+  \]
+  Finally, for $r=3$, we have $n=1$, so
+  \[
+    \begin{aligned}
+      P_{7,3}(q;\lambda_1,\lambda_2,\lambda_3)
+      ={}&\frac73\bigl[
+        h_1(p,p,p,-\lambda_1,-\lambda_2,-\lambda_3)
+        +h_1(q,q,q,\lambda_1,\lambda_2,\lambda_3)\bigr]-1\\
+      ={}&\frac73\bigl[(3p-\lambda_1-\lambda_2-\lambda_3)
+        +(3q+\lambda_1+\lambda_2+\lambda_3)\bigr]-1
+      \\
+      ={}&6.
+    \end{aligned}
+  \]
+
+  We have proved that
+  $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
+  $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
+  Since $\mu$ is a nonnegative measure, \eqref{eq:Phi-expansion} gives
+  $\Phi_m\ge0$.
+  By \Cref{lem:polynomial-reduction} and the discussion following its
+  statement, this proves the strengthened inequality in
+  \Cref{thm:commonality} for $m\in\{3,5,7\}$ and $p\ge1/2$.
+  The comparison following \Cref{thm:commonality} then gives the
+  odd-cycle bound in \Cref{thm:main} for the same cycle lengths and
+  edge densities.
+\end{proof}
+
+\section{Density-weighted inequalities and the dense regime}
+\label{sec:excursion-positivity}
+
+We first prove \Cref{thm:weighted-commonality} and
+\eqref{eq:intro-weighted-variance} at every edge density.
+The weighted excursion integrands in
+\eqref{eq:weighted-polynomial} admit a positive Dirichlet/Beta
+representation. We then compare complementary even-path corrections
+when $p\ge2/3$, obtaining \Cref{thm:commonality} and
+\Cref{thm:main}. The proof for arbitrary odd $m$ does not require
+pointwise nonnegativity of the unweighted polynomials $P_{m,r}$.
+
+\subsection{Dirichlet and Beta averaging}
+\label{sec:weighted-averaging}
+
+We begin with the elementary averaging identity used in the proof.
+
+\begin{lemma}[Dirichlet representation]
+\label{lem:pge23-dirichlet-moment}
+  Let $k\ge1$ and $j\ge0$ be integers, let
+  $x_1,\ldots,x_k\in\R$, and let
+  $(\Theta_1,\ldots,\Theta_k)$ be uniformly distributed on the
+  simplex
+  \[
+    \Theta_i\ge0,\qquad \sum_{i=1}^k\Theta_i=1.
+  \]
+  Equivalently, this vector has the
+  $\operatorname{Dirichlet}(1,\ldots,1)$ distribution; for $k=1$,
+  this means $\Theta_1=1$. Then
+  \begin{equation}\label{eq:pge23-dirichlet-moment}
+    h_j(x_1,\ldots,x_k)
+      =\binom{j+k-1}{k-1}
+        \E\left(\sum_{i=1}^k\Theta_i x_i\right)^j.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  The uniform distribution on the simplex has monomial moments
+  \begin{equation}\label{eq:simplex-monomial-moment}
+    \E\prod_{i=1}^k\Theta_i^{\alpha_i}
+      =\frac{(k-1)!\prod_{i=1}^k\alpha_i!}
+             {(\alpha_1+\cdots+\alpha_k+k-1)!}
+      \qquad(\alpha_i\ge0).
+  \end{equation}
+  For completeness, these moments follow by integrating successively
+  over the simplex and using
+  \[
+    \int_0^1x^a(1-x)^b\dd x=\frac{a!b!}{(a+b+1)!}
+    \qquad(a,b\text{ nonnegative integers}).
+  \]
+  The latter formula follows by integration by parts, starting with
+  $a=0$. For the simplex integral, conditioning on the first
+  coordinate leaves a simplex scaled by $1-\Theta_1$; induction on
+  $k$ gives \eqref{eq:simplex-monomial-moment}, with the normalizing
+  factor $(k-1)!$. For $k=1$ the same formula is immediate.
+
+  Expanding by the multinomial theorem and applying
+  \eqref{eq:simplex-monomial-moment} gives
+  \begin{align*}
+    \E\left(\sum_{i=1}^k\Theta_i x_i\right)^j
+      &=\sum_{\alpha_1+\cdots+\alpha_k=j}
+        \frac{j!}{\prod_i\alpha_i!}
+        \frac{(k-1)!\prod_i\alpha_i!}{(j+k-1)!}
+        \prod_i x_i^{\alpha_i}\\
+      &=\frac{j!(k-1)!}{(j+k-1)!}\,
+          h_j(x_1,\ldots,x_k),
+  \end{align*}
+  which proves the identity.
+\end{proof}
+
+We use the Beta distribution only with positive integer parameters.
+For $s,r\ge1$, its density on $(0,1)$ is
+\begin{equation}\label{eq:beta-density}
+  \frac{(s+r-1)!}{(s-1)!(r-1)!}\,
+    x^{s-1}(1-x)^{r-1}.
+\end{equation}
+The following grouped version of the Dirichlet representation keeps
+the spectral variables arbitrary, so no separate diagonal reduction
+is needed.
+
+\begin{lemma}[Grouped Dirichlet representation]
+\label{lem:grouped-dirichlet}
+  Let $s,r\ge1$ and $d\ge0$ be integers, and let
+  $a,b_1,\ldots,b_r\in\R$. Let
+  $X\sim\BetaLaw(s,r)$ and let
+  $(\Theta_1,\ldots,\Theta_r)$ be independent of $X$ and uniformly
+  distributed on the $(r-1)$-simplex. Set
+  $L=\sum_{i=1}^r\Theta_i b_i$. Then
+  \begin{equation}\label{eq:grouped-dirichlet}
+    h_d(a^{\times s},b_1,\ldots,b_r)
+      =\binom{d+s+r-1}{s+r-1}
+        \E\bigl(aX+(1-X)L\bigr)^d.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  From \eqref{eq:beta-density}, for $0\le j\le d$,
+  \[
+    \E\bigl[X^{d-j}(1-X)^j\bigr]
+      =\frac{(s+r-1)!(s+d-j-1)!(r+j-1)!}
+       {(s-1)!(r-1)!(s+r+d-1)!}.
+  \]
+  By \Cref{lem:pge23-dirichlet-moment},
+  \[
+    \E L^j=\frac{h_j(b_1,\ldots,b_r)}{\binom{j+r-1}{r-1}}.
+  \]
+  Expand the expectation in \eqref{eq:grouped-dirichlet} by the
+  binomial theorem and use independence. After multiplication by
+  $\binom{d+s+r-1}{s+r-1}$, the coefficient of
+  $a^{d-j}h_j(b_1,\ldots,b_r)$ is
+  \[
+    \binom{d+s+r-1}{s+r-1}\binom dj
+    \frac{\E[X^{d-j}(1-X)^j]}{\binom{j+r-1}{r-1}}
+       =\binom{d-j+s-1}{s-1}.
+  \]
+  On the other hand, grouping the monomials of $h_d$ by their total
+  degree $j$ in the $b_i$ gives
+  \[
+    h_d(a^{\times s},b_1,\ldots,b_r)
+      =\sum_{j=0}^d\binom{d-j+s-1}{s-1}
+         a^{d-j}h_j(b_1,\ldots,b_r).
+  \]
+  This proves the formula, including $d=0$ and $r=1$.
+\end{proof}
+
+\subsection{Positivity of the weighted excursion integrands}
+
+\begin{lemma}[Positive weighted expectation]
+\label{lem:weighted-positivity}
+  Let $m\ge3$ be odd, let $1\le r\le(m-1)/2$, and set $n=m-2r$.
+  Let $p+q=1$, and let $\lambda_1,\ldots,\lambda_r\in\R$.
+  Take independent random variables
+  \[
+    X\sim\BetaLaw(r,r),\qquad
+    (\Theta_1,\ldots,\Theta_r)
+       \sim\operatorname{Dirichlet}(1,\ldots,1),
+  \]
+  and write
+  \[
+    L=\sum_{i=1}^r\Theta_i\lambda_i,\qquad
+    a=pX-(1-X)L,\qquad b=qX+(1-X)L.
+  \]
+  For every $c\in\R$,
+  \begin{equation}\label{eq:weighted-positive-expectation}
+    F^{(c)}_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+      =\frac1r\binom{m-1}{2r-1}
+       \E\bigl[(m+cr-cmX)(a^n+b^n)\bigr].
+  \end{equation}
+  In particular,
+  \begin{equation}\label{eq:weighted-pointwise-positive}
+    F^{(c)}_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0
+       \qquad\text{if }0\le c\le\frac{m}{m-1}.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Separating the exponent of an additional copy of a variable gives
+  the recurrence
+  \begin{equation}\label{eq:h-additional-coordinate}
+    a\,h_{n-1}(a^{\times(r+1)},\boldsymbol b)
+      =h_n(a^{\times(r+1)},\boldsymbol b)
+       -h_n(a^{\times r},\boldsymbol b).
+  \end{equation}
+  Indeed, the monomials on the right that do not use the additional
+  coordinate cancel. Factoring $a$ from each remaining monomial
+  leaves all monomials of degree $n-1$ in the enlarged list. This
+  proof also covers $a=0$; no division by $a$ is used.
+
+  For this proof only, abbreviate the two sums of homogeneous
+  polynomials by
+  \begin{align*}
+    H={}&h_n(p^{\times r},-\lambda_1,\ldots,-\lambda_r)
+          +h_n(q^{\times r},\lambda_1,\ldots,\lambda_r),\\
+    \widehat H={}&h_n(p^{\times(r+1)},-\lambda_1,\ldots,-\lambda_r)
+          +h_n(q^{\times(r+1)},\lambda_1,\ldots,\lambda_r).
+  \end{align*}
+  Applying \eqref{eq:h-additional-coordinate} to both path terms
+  in \eqref{eq:weighted-polynomial} gives
+  \begin{equation}\label{eq:weighted-H-recurrence}
+    F^{(c)}_{m,r}=\left(\frac mr+c\right)H-c\widehat H.
+  \end{equation}
+  Since $n+2r=m$, \Cref{lem:grouped-dirichlet} with $s=r$ gives
+  \[
+    H=\binom{m-1}{2r-1}\E(a^n+b^n).
+  \]
+  For $\widehat H$, the same lemma uses $s=r+1$, so the law of
+  the constant-coordinate weight is $\BetaLaw(r+1,r)$. By
+  \eqref{eq:beta-density}, its density is $2x$ times the
+  $\BetaLaw(r,r)$ density. The independent variable $L$ has the
+  same law in both representations. Consequently,
+  \begin{align*}
+    \widehat H
+      &=2\binom m{2r}\E\bigl[X(a^n+b^n)\bigr]\\
+      &=\frac mr\binom{m-1}{2r-1}
+          \E\bigl[X(a^n+b^n)\bigr].
+  \end{align*}
+  Substitution in \eqref{eq:weighted-H-recurrence} proves
+  \eqref{eq:weighted-positive-expectation}. All expectations are
+  finite: $X\in(0,1)$ and $L$ lies between the smallest and largest
+  of the finitely many fixed spectral variables.
+
+  To prove positivity, first note that $a+b=X>0$. Since $n$ is
+  positive and odd, the function $u\mapsto u^n$ is strictly
+  increasing on $\R$. Thus $a>-b$ implies
+  \[
+    a^n+b^n>0.
+  \]
+  If $c=0$, the other factor in the expectation is $m>0$.
+  If $0<c\le m/(m-1)$, then
+  \[
+    m+cr-cmX
+      =m-c(m-r)+cm(1-X)>0,
+  \]
+  because $m-r\le m-1$, so $m-c(m-r)\ge0$, while
+  $cm(1-X)>0$ almost surely. The positive constant outside the
+  expectation completes the proof. Neither this argument nor the
+  identity requires a spectral support bound.
+\end{proof}
+
+\begin{proposition}[Weighted inequalities with degree variation]
+\label{prop:weighted-variance}
+  Let $m\ge3$ be odd, let $W$ be any graphon with $\edens W=p$
+  and $q=1-p$, and let $0\le c\le m/(m-1)$. Then
+  \begin{equation}\label{eq:weighted-variance-general}
+    \begin{aligned}
+      \tC mW+\tC m{1-W}\ge{}&p^m+q^m\\
+      &+c\Bigl[p\bigl(\tP{m-1}W-p^{m-1}\bigr)
+         +q\bigl(\tP{m-1}{1-W}-q^{m-1}\bigr)\Bigr]\\
+      &+(m-c)\bigl(\tP2W-p^2\bigr)^{(m-1)/2}.
+    \end{aligned}
+  \end{equation}
+\end{proposition}
+
+\begin{proof}
+  First suppose that $W$ is a step graphon and use the measure
+  $\mu$ of \Cref{sec:matrix-reduction}. All integrands in
+  \eqref{eq:weighted-expansion} are nonnegative by
+  \Cref{lem:weighted-positivity}. For $r=(m-1)/2$, we have $n=1$,
+  so \eqref{eq:weighted-polynomial} gives the constant
+  \[
+    F^{(c)}_{m,(m-1)/2}
+      =\frac mr\left(rp-\sum_i\lambda_i
+                       +rq+\sum_i\lambda_i\right)-cp-cq
+      =m-c.
+  \]
+  Retaining only this term in \eqref{eq:weighted-expansion} gives
+  the lower bound $(m-c)\mu(\R)^{(m-1)/2}$ for its left-hand side.
+  By \eqref{eq:degree-variance-mass},
+  $\mu(\R)=\tP2W-p^2$, proving the inequality for step graphons.
+
+  Approximate an arbitrary graphon by the same-density step
+  graphons of \Cref{lem:step-reduction}. All densities in the
+  inequality converge, including $\tP2W$, and $p,q$ remain fixed.
+  The map $x\mapsto x^{(m-1)/2}$ is continuous on $[0,\infty)$,
+  so the inequality passes to the limit.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:weighted-commonality} and
+\eqref{eq:intro-weighted-variance}]
+  Apply \Cref{prop:weighted-variance} with $c=m/(m-1)$ and discard
+  its last, nonnegative term. This proves
+  \eqref{eq:intro-weighted-commonality}. With $c=1$, the baseline
+  terms cancel against the subtracted path baselines, giving
+  \eqref{eq:intro-weighted-variance}.
+
+  For equality in \eqref{eq:intro-weighted-commonality}, retaining
+  the last term of \eqref{eq:weighted-variance-general} gives the
+  strictly positive coefficient
+  \[
+    m-\frac{m}{m-1}=\frac{m(m-2)}{m-1}>0.
+  \]
+  Equality therefore forces $\tP2W=p^2$, or equivalently that
+  $W$ is $p$-regular. Conversely, if $W$ is $p$-regular, then
+  $\Tker W\one=p\one$ and
+  $\Tker{1-W}\one=q\one$, so both path corrections vanish.
+  The two self-adjoint operators preserve $\one^\perp$ and are
+  negatives of each other there. Their nonconstant contributions
+  to the odd traces cancel, giving
+  $\tC mW+\tC m{1-W}=p^m+q^m$. The trace sums converge absolutely
+  because the operators are Hilbert--Schmidt and $m\ge3$.
+  Thus every regular graphon gives equality. The endpoint densities
+  $p=0$ and $p=1$ are included; then $W$ is constant almost
+  everywhere.
+\end{proof}
+
+\subsection{Comparison of complementary even paths}
+\label{sec:dense-paths}
+
+This is the only part of the proof that requires $p\ge2/3$.
+
+\begin{lemma}[Complementary even-path comparison]
+\label{lem:dense-path-comparison}
+  Let $W$ be a graphon with $\edens W=p\ge2/3$, and set $q=1-p$.
+  For every even integer $k\ge2$,
+  \begin{equation}\label{eq:dense-path-comparison}
+    \tP kW-p^k\ge\tP k{1-W}-q^k.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  We first work with a step graphon and the block matrices
+  \eqref{eq:block-UW}. If $q=0$, then $W=1$ almost everywhere and
+  both sides of \eqref{eq:dense-path-comparison} are zero.
+  Hence assume $0<q\le1/3$. Recall that
+  \begin{equation}\label{eq:complementary-second-moments}
+    \tP2W-p^2=\norm g^2=\tP2U-q^2.
+  \end{equation}
+  This proves the case $k=2$.
+
+  For $k=4$, the first columns of the squares of the block
+  matrices are
+  \[
+    M_U^2e=\binom{q^2+\norm g^2}{qg+Ag},\qquad
+    M_W^2e=\binom{p^2+\norm g^2}{-pg+Ag}.
+  \]
+  Since $\tP4U=\norm{M_U^2e}^2$ and
+  $\tP4W=\norm{M_W^2e}^2$, expansion gives
+  \begin{align*}
+    \tP4W-p^4
+       &=3p^2\norm g^2+\norm g^4-2p\ip g{Ag}+\norm{Ag}^2,\\
+    \tP4U-q^4
+       &=3q^2\norm g^2+\norm g^4+2q\ip g{Ag}+\norm{Ag}^2.
+  \end{align*}
+  Subtracting and using $p+q=1$ gives
+  \begin{equation}\label{eq:four-path-difference}
+    (\tP4W-p^4)-(\tP4U-q^4)
+       =3(p-q)\norm g^2-2\ip g{Ag}.
+  \end{equation}
+  By \Cref{lem:half-norm},
+  $\ip g{Ag}\le\tfrac12\norm g^2$, so this is at least
+  $(6p-4)\norm g^2\ge0$.
+
+  Now let $k\ge6$ be even. We compare each path correction to
+  $\norm g^2$. For any real symmetric matrix $M$, choose an
+  orthonormal eigenbasis $v_i$ with eigenvalues $\xi_i$, and put
+  $w_i=|\ip e{v_i}|^2$. These weights are nonnegative and sum
+  to one, and
+  \[
+    e^{\mathsf T}M^je=\sum_i w_i\xi_i^j
+       \qquad(j\ge0).
+  \]
+  In particular, for $M=M_W$, Jensen's inequality applied to
+  $u\mapsto u^{k/2}$ on $[0,\infty)$ gives
+  \[
+    \tP kW\ge(\tP2W)^{k/2}
+       =(p^2+\norm g^2)^{k/2}.
+  \]
+  The binomial theorem, with $k/2$ a positive integer, yields
+  \begin{equation}\label{eq:even-path-lower}
+    \tP kW-p^k\ge\frac k2p^{k-2}\norm g^2.
+  \end{equation}
+
+  For the complementary matrix $M_U$, use eigenvalues $\xi_i$
+  and weights $w_i$ as above. Their first and centered second
+  moments satisfy
+  \[
+    \sum_iw_i\xi_i=q,\qquad
+    \sum_iw_i(\xi_i-q)^2=\norm g^2.
+  \]
+  In the standard coordinates indexed by the partition,
+  \[
+    \|M_U\|_{\mathrm{op}}^2
+      \le\Tr(M_U^2)
+      =\frac1{N^2}\sum_{a,b=1}^N U_{ab}^2
+      \le\frac1{N^2}\sum_{a,b=1}^N U_{ab}=q.
+  \]
+  Thus $|\xi_i|\le\sqrt q$ for every $i$. For any real $z$,
+  the exact polynomial identity
+  \begin{equation}\label{eq:power-remainder}
+    z^k-q^k-kq^{k-1}(z-q)
+      =(z-q)^2\sum_{j=0}^{k-2}(j+1)q^j z^{k-2-j}
+  \end{equation}
+  follows by multiplying out the right side. Since $q\ge0$
+  and $|\xi_i|\le\sqrt q$, each summand on the right is at most
+  $(j+1)q^j(\sqrt q)^{k-2-j}$. After taking the weighted sum,
+  the linear term on the left vanishes. Therefore
+  \begin{equation}\label{eq:even-path-upper-sum}
+    \tP kU-q^k
+      \le\norm g^2\sum_{j=0}^{k-2}
+          (j+1)q^j(\sqrt q)^{k-2-j}.
+  \end{equation}
+  This uses only upper bounds on the remainder polynomial; its
+  individual terms need not be nonnegative at negative eigenvalues.
+
+  The density hypothesis gives
+  \[
+    \frac qp\le\frac12,\qquad
+    \frac{\sqrt q}{p}\le1,\qquad
+    \frac q{p^2}\le\frac34.
+  \]
+  For $0\le j\le k-4$, there are at least two powers of
+  $\sqrt q/p$, so
+  \[
+    \left(\frac qp\right)^j
+      \left(\frac{\sqrt q}{p}\right)^{k-2-j}
+      \le\frac34\,2^{-j}.
+  \]
+  For the last two terms use respectively
+  $(\sqrt q/p)\le1$ and $(q/p)\le1/2$. Hence
+  \begin{align}
+    &\frac1{p^{k-2}}\sum_{j=0}^{k-2}
+         (j+1)q^j(\sqrt q)^{k-2-j}\notag\\
+    &\quad\le
+      \frac34\sum_{j=0}^{k-4}\frac{j+1}{2^j}
+      +\frac{k-2}{2^{k-3}}+\frac{k-1}{2^{k-2}}
+       =3-2^{3-k}\le\frac k2.
+    \label{eq:finite-sum-bound}
+  \end{align}
+  For the equality, use
+  $\sum_{j=0}^{k-4}(j+1)2^{-j}
+    =4-(k-1)2^{-(k-4)}$; the final inequality follows from
+  $k\ge6$. Combining \eqref{eq:even-path-upper-sum} and
+  \eqref{eq:finite-sum-bound} gives
+  \[
+    \tP kU-q^k\le\frac k2p^{k-2}\norm g^2.
+  \]
+  Comparison with \eqref{eq:even-path-lower} proves the result
+  for every even $k\ge6$.
+
+  Finally, the same-density approximation in
+  \Cref{lem:step-reduction} passes the result to arbitrary
+  graphons, including the cases $k=2,4$.
+\end{proof}
+
+The Jensen step above also proves, without a density restriction,
+\[
+  \tP kW\ge(\tP2W)^{k/2}\ge p^k
+  \qquad(k\ge2\text{ even}).
+\]
+If $W$ is nonregular, then $\tP2W>p^2$, so the last inequality
+is strict. The same holds for $1-W$, and a nonregular graphon
+has $0<p,q<1$. This verifies the strict improvement over
+$p^m+q^m$ claimed after \Cref{thm:weighted-commonality}.
+
+\begin{proof}[Proof of \Cref{thm:commonality,thm:main}]
+  Let $p\ge2/3$ and apply \Cref{lem:dense-path-comparison}
+  with $k=m-1$. The identity $p+q=1$ gives
+  \begin{align*}
+    &p\bigl(\tP{m-1}W-p^{m-1}\bigr)
+       +q\bigl(\tP{m-1}{1-W}-q^{m-1}\bigr)\\
+    &\qquad\ge\tP{m-1}{1-W}-q^{m-1}.
+  \end{align*}
+  Using \eqref{eq:intro-weighted-variance}, we obtain the
+  quantitative inequality
+  \begin{equation}\label{eq:dense-variance-bound}
+    \begin{aligned}
+      \tC mW+\tC m{1-W}\ge{}&p^m+q^m
+        +\tP{m-1}{1-W}-q^{m-1}\\
+        &+(m-1)\bigl(\tP2W-p^2\bigr)^{(m-1)/2}.
+    \end{aligned}
+  \end{equation}
+  Discarding its last term proves \Cref{thm:commonality}.
+  Deleting an edge from the complementary cycle gives
+  $\tC m{1-W}\le\tP{m-1}{1-W}$, and hence
+  \[
+    \tC mW\ge p^m+q^m-q^{m-1}=p^m-pq^{m-1}.
+  \]
+  This proves \Cref{thm:main}. Retaining the variance term also
+  gives
+  \begin{equation}\label{eq:one-colour-variance-bound}
+    \tC mW\ge p^m-pq^{m-1}
+      +(m-1)\bigl(\tP2W-p^2\bigr)^{(m-1)/2}.
+  \end{equation}
+\end{proof}
+
+\begin{remark}[Role of the density assumption]
+\label{rem:pge23-threshold}
+  The weighted inequalities are valid at every edge density.
+  The hypothesis $p\ge2/3$ is used only in
+  \Cref{lem:dense-path-comparison}: for $k=4$ it ensures
+  $6p-4\ge0$, and for $k\ge6$ it supplies the three ratio bounds
+  used in \eqref{eq:finite-sum-bound}. Thus the dense one-colour
+  bound follows from an all-density two-colour inequality and a
+  separate comparison of paths, rather than from a sign condition
+  on each of the original polynomials $P_{m,r}$.
+\end{remark}
+
+\section{Equality and qualitative stability}
+\label{sec:equality-stability}
+
+The two inequalities used in the proof impose different conditions on equality.
+Equality in \Cref{thm:commonality} forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
+Together, these conditions identify the balanced complete multipartite graphons as the only graphons attaining the bound when $2/3\le p<1$.
+
+For a graphon $W$ of edge density $p$, define its degree function by
+\[
+  \dW(x)=\int_0^1 W(x,y)\dd y.
+\]
+We call $W$ \emph{$p$-regular} if $\dW(x)=p$ for almost every $x$.
+The gap $\Phi_m$ of \eqref{eq:Phi-expansion} is a sum of integrals against the spectral measure $\mu$ of a step graphon.
+With $U=1-W$ and $q=1-p$, solving \eqref{eq:commonality-gap} for $\Phi_m$ and using $q^m-q^{m-1}=-pq^{m-1}$ turns it into
+\begin{equation}\label{eq:equality-gap}
+  \Phi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr),
+\end{equation}
+a combination of homomorphism densities in which no eigenvalue appears.
+We take \eqref{eq:equality-gap} as the definition of the gap for an arbitrary graphon $W$; for step graphons it agrees with $\Phi_m$.
+Thus, $\Phi_m(W)$ is the difference between the two sides of \eqref{eq:intro-commonality}.
+The density-weighted variance estimate and the complementary-path comparison give an explicit lower bound in terms of degree variation.
+
+\begin{proposition}[Degree variation and equality in the two-colour bound]
+\label{prop:regularity-gap}
+  Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
+  Then,
+  \begin{equation}\label{eq:degree-variance-gap}
+    \Phi_m(W)\ge(m-1)
+    \left(\int_0^1(\dW(x)-p)^2\dd x\right)^{(m-1)/2}.
+  \end{equation}
+  In particular, equality holds in \Cref{thm:commonality} if and only if $W$ is $p$-regular.
+\end{proposition}
+
+\begin{proof}
+  By \eqref{eq:dense-variance-bound},
+  \[
+    \Phi_m(W)\ge(m-1)\bigl(\tP2W-p^2\bigr)^{(m-1)/2}.
+  \]
+  Since
+  \[
+    \tP2W-p^2=\int_0^1(\dW(x)-p)^2\dd x,
+  \]
+  this is \eqref{eq:degree-variance-gap}. Here we use the weighted
+  variance bound and the comparison of the two path corrections;
+  no pointwise sign assertion for the original polynomials
+  $P_{m,r}$ is needed.
+
+  If $\Phi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
+
+  Conversely, suppose that $W$ is $p$-regular.
+  The degree function of $U=1-W$ is then the constant $q$, so
+  \[
+    \Tker W\one=\dW=p\one,
+    \qquad
+    \Tker U\one=q\one .
+  \]
+  Both operators are self-adjoint, so each leaves the orthogonal complement
+  $\one^\perp=\{f\in L^2[0,1]:\int_0^1f(x)\dd x=0\}$ invariant.
+  On $\one^\perp$ the two operators are negatives of each other: the identity
+  $W+U\equiv1$ gives
+  \[
+    \Tker Wf+\Tker Uf=\Bigl(\int_0^1f(y)\dd y\Bigr)\one=\ip f\one\one
+    \qquad\text{for all }f\in L^2[0,1],
+  \]
+  which is the orthogonal projection onto the constants and therefore vanishes on
+  $\one^\perp$.
+  Write $\nu_1,\nu_2,\ldots$ for the eigenvalues of the restriction of $\Tker W$ to
+  $\one^\perp$.
+  The eigenvalues of $\Tker W$ are then $p$ together with the $\nu_j$, and those of
+  $\Tker U$ are $q$ together with the $-\nu_j$.
+  Since $m$ is odd, the terms $\nu_j^m$ and $(-\nu_j)^m$ cancel in pairs, so the
+  trace formula gives
+  \[
+    \tC mW+\tC mU
+    =\Bigl(p^m+\sum_j\nu_j^m\Bigr)+\Bigl(q^m+\sum_j(-\nu_j)^m\Bigr)
+    =p^m+q^m.
+  \]
+  Iterating $\Tker U\one=q\one$ gives $\Tker U^{m-1}\one=q^{m-1}\one$, whence
+  \[
+    \tP{m-1}U=\ip\one{\Tker U^{m-1}\one}=q^{m-1}.
+  \]
+  Substituting both evaluations in \eqref{eq:equality-gap} and using $1-p=q$,
+  \[
+    \Phi_m(W)
+    =\bigl(p^m+q^m\bigr)-q^{m-1}-\bigl(p^m-pq^{m-1}\bigr)
+    =q^m-(1-p)q^{m-1}
+    =0. \qedhere
+  \]
+\end{proof}
+
+The one-colour gap decomposes as
+\begin{equation}\label{eq:one-colour-gap}
+  \tC mW-\bigl(p^m-pq^{m-1}\bigr)
+  =\Phi_m(W)+\bigl[\tP{m-1}U-\tC mU\bigr].
+\end{equation}
+Both terms on the right are nonnegative.
+Thus, a small one-colour gap also forces small degree variation, and equality requires the cycle--path comparison to be an equality as well.
+
+\begin{proposition}[Equality in the odd-cycle bound]
+\label{prop:main-equality}
+  Let $m\ge3$ be odd, and let $W$ have edge density $2/3\le p<1$.
+  Equality holds in \Cref{thm:main} if and only if $p=1-1/k$ for an integer $k\ge3$ and, up to a measure-preserving relabelling and null sets, $W=W_k$.
+\end{proposition}
+
+\begin{proof}
+  The converse follows from \eqref{eq:intro-kpartite-value}.
+  For the forward implication, \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} show that $W$ is $p$-regular and
+  \[
+    \tC mU=\tP{m-1}U=q^{m-1},\qquad q=1-p>0.
+  \]
+  The graphon $U$ is $q$-regular.
+  Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$ and apply the Cauchy--Schwarz
+  inequality to the two factors: for $f\in L^2[0,1]$ and almost every $x$,
+  \[
+    \bigl|\Tker Uf(x)\bigr|^2
+    =\left|\int_0^1 U(x,y)^{1/2}\cdot U(x,y)^{1/2}f(y)\dd y\right|^2
+    \le\left(\int_0^1 U(x,y)\dd y\right)
+      \left(\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y\right).
+  \]
+  The first factor is the degree of $U$ at $x$, which equals $q$, so
+  \[
+    \bigl|\Tker Uf(x)\bigr|^2\le q\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y .
+  \]
+  Integrating in $x$, exchanging the order of integration, and using $q$-regularity a
+  second time, now in the variable $y$,
+  \[
+    \norm{\Tker Uf}_2^2
+    \le q\int_0^1\bigl|f(y)\bigr|^2
+      \left(\int_0^1 U(x,y)\dd x\right)\dd y
+    =q^2\norm f_2^2 .
+  \]
+  Hence $\Tker U$ has operator norm at most $q$, and being self-adjoint, every
+  eigenvalue $\lambda_i$ of $\Tker U$ lies in $[-q,q]$.
+  Since $m$ is odd and $0\le U\le1$,
+  \begin{equation}\label{eq:regular-complement-cycle}
+    q^{m-1}=\sum_i\lambda_i^m
+    \le q^{m-2}\sum_i\lambda_i^2
+    =q^{m-2}\intsq U(x,y)^2\ddxy
+    \le q^{m-1}.
+  \end{equation}
+  Equality throughout implies that $U$ takes values in $\{0,1\}$ almost everywhere and every nonzero $\lambda_i$ equals $q$.
+  The operator $\Tker U$ is self-adjoint and Hilbert--Schmidt.
+  Since every nonzero eigenvalue equals $q$, the spectral theorem gives
+  \[
+    \Tker U=qP,
+    \qquad P=\text{the orthogonal projection onto }\ker(\Tker U-q).
+  \]
+  Since $P^2=P$, this gives $\Tker U^2=q^2P^2=q^2P=q\Tker U$.
+  Comparing the kernels of these two Hilbert--Schmidt operators,
+  \begin{equation}\label{eq:equal-neighbourhoods}
+    \int_0^1 U(x,z)U(y,z)\dd z=qU(x,y)
+    \quad\text{for almost every }(x,y).
+  \end{equation}
+
+  Write $N(x)=\{y:U(x,y)=1\}$ and $|A|$ for the Lebesgue measure of $A\subseteq[0,1]$, so that $|N(x)|=q$ for almost every $x$.
+  The left side of \eqref{eq:equal-neighbourhoods} is $|N(x)\cap N(y)|$ and $U$ is $\{0,1\}$-valued, so for almost every pair $(x,y)$,
+  \[
+    \bigl|N(x)\cap N(y)\bigr|
+    =\begin{cases}
+      q&\text{if }U(x,y)=1,\\
+      0&\text{if }U(x,y)=0.
+    \end{cases}
+  \]
+  Two sets of measure $q$ meeting in measure $q$ coincide, so adjacent points have equal neighbourhoods and nonadjacent points have disjoint ones.
+  The remaining identities between sets and between kernels hold up to null sets, which we no longer state.
+
+  Fix $x$ at which this dichotomy holds for almost every $y$, and put $B=N(x)$.
+  Each $y\in B$ is adjacent to $x$, so $N(y)=B$; hence $U=1$ on $B\times B$, and $U=0$ between $B$ and $[0,1]\setminus B$ because $N(y)=B$ leaves $y$ no neighbour outside $B$.
+  Points outside $B$ therefore keep all $q$ of their neighbours outside $B$, so the same argument applied to $[0,1]\setminus B$ extracts a further set of measure $q$, and so on.
+  A remainder of measure strictly between $0$ and $q$ is impossible, since its points have degree $q$ and no neighbours in the sets already extracted.
+  These sets thus partition $[0,1]$, their number $k$ satisfies $kq=1$, and $U$ is the union of the $k$ disjoint cliques $B\times B$.
+  The complement of $U$ is $W_k$ after relabelling; $p\ge2/3$ implies $k\ge3$.
+\end{proof}
+
+At $p=1$, the only graphon is $W=1$ almost everywhere, which also attains equality.
+This completes the uniqueness assertion in \Cref{cor:kpartite}.
+
+To state stability, recall the cut norm and cut distance:
+\[
+  \norm F_\square=\sup_{S,T\subseteq[0,1]}
+    \left|\int_{S\times T}F(x,y)\ddxy\right|,
+  \qquad
+  \delta_\square(W,V)=\inf_\varphi\norm{W-V^\varphi}_\square.
+\]
+Here $S,T$ are measurable, $\varphi$ ranges over measure-preserving bijections of $[0,1]$ modulo null sets, and $V^\varphi(x,y)=V(\varphi(x),\varphi(y))$.
+Graphons at zero cut distance are called \emph{equivalent}.
+The space of graphons modulo this equivalence is compact in cut distance, and homomorphism densities are continuous in this metric~\cite{borgs2008convergent,lovasz2012large}.
+
+\begin{corollary}[Qualitative stability]\label{cor:stability}
+  Fix an odd integer $m\ge3$ and an integer $k\ge3$, and set $p_k=1-1/k$.
+  For every $\varepsilon>0$ there exists $\delta>0$ such that every graphon $W$ with
+  \[
+    \bigl|\edens W-p_k\bigr|\le\delta,
+    \qquad
+    \tC mW\le p_k^m-p_k(1-p_k)^{m-1}+\delta
+  \]
+  satisfies $\delta_\square(W,W_k)<\varepsilon$.
+\end{corollary}
+
+\begin{proof}
+  Suppose the conclusion fails for some $\varepsilon>0$.
+  Taking $\delta=1/j$ for $j\in\mathbb N$ produces graphons $W^{(j)}$ with
+  \[
+    \bigl|\edens{W^{(j)}}-p_k\bigr|\le\frac1j,
+    \qquad
+    \tC m{W^{(j)}}\le p_k^m-p_k(1-p_k)^{m-1}+\frac1j,
+    \qquad
+    \delta_\square(W^{(j)},W_k)\ge\varepsilon .
+  \]
+  By compactness, after passing to a subsequence and relabelling, $W^{(j)}$ converges in cut distance to a graphon $W$.
+  Edge and cycle densities are continuous in cut distance, so the first two conditions pass to the limit as
+  \[
+    \edens W=p_k,
+    \qquad
+    \tC mW\le p_k^m-p_k(1-p_k)^{m-1}.
+  \]
+  Since $k\ge3$ gives $p_k\ge2/3$, \Cref{thm:main} applies to $W$ and supplies the reverse inequality, so $\tC mW=p_k^m-p_k(1-p_k)^{m-1}$; that is, equality holds in \Cref{thm:main}.
+  \Cref{prop:main-equality} then makes $W$ equivalent to $W_k$.
+  Finally, $\delta_\square(W^{(j)},W_k)\to\delta_\square(W,W_k)=0$, because $\delta_\square$ obeys the triangle inequality and $\delta_\square(W^{(j)},W)\to0$.
+  This contradicts $\delta_\square(W^{(j)},W_k)\ge\varepsilon$.
+\end{proof}
+
+\section{Concluding remarks and further questions}
+\label{sec:conclusion}
+
+For the one-colour Goodman bound at general odd cycle lengths, the
+only nontrivial range not covered in the present paper is
+$p\in(1/2,2/3)$; \Cref{prop:short-cycles} already covers this range
+for $C_3$, $C_5$, and $C_7$. In contrast, the density-weighted
+inequality in \Cref{thm:weighted-commonality} is valid at every edge
+density. To obtain the one-colour bound, we use
+\Cref{lem:dense-path-comparison} to replace its weighted path
+corrections by the complementary-path correction in
+\Cref{thm:commonality}, and then delete one edge from the
+complementary cycle. The density assumption enters only in that
+path comparison. The complementary-path inequality itself can fail
+when $1/2<p<2/3$, so the all-density weighted theorem does not
+justify extending this deduction to the entire middle range.
+The companion paper proves the original one-colour bound on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
+
+For a concrete failure of the complementary-path inequality, partition
+$[0,1]$ into two sets of measure $1/2$ and let $W$ have value matrix
+\[
+  W=\frac1{250}\begin{pmatrix}50&193\\193&65\end{pmatrix}.
+\]
+Then $p=501/1000$, $q=499/1000$, and exact matrix multiplication gives
+\begin{equation}\label{eq:nine-cycle-counterexample}
+  \tC9W+\tC9{1-W}-p^9-q^9
+     -\bigl(\tP8{1-W}-q^8\bigr)
+       =-\frac{227031617768589}{5\cdot10^{21}}<0.
+\end{equation}
+This does not contradict \Cref{thm:weighted-commonality}: its
+correction uses both path densities with different coefficients.
+
+At each density $1-1/k$ with $k\ge3$, the present argument determines both the minimum odd-cycle density and the unique extremal graphon, with qualitative stability.
+The degree-variance estimate \eqref{eq:degree-variance-gap} quantifies one part of this structure: a small gap forces degrees to be nearly constant.
+The subsequent compactness argument gives no explicit rate of convergence to $W_k$ in cut distance; obtaining such a rate would strengthen the structural conclusion.
+
+The Goodman-style perspective extends naturally beyond odd cycles. For a
+nonbipartite graph $H$, let $\chi_H$ be its chromatic polynomial, let
+$\chi(H)$ be its chromatic number, and let $v(H)$ be its number of vertices.
+Define
+\[
+  G_H(p):=\chi_H\left(\frac{1}{1-p}\right)(1-p)^{v(H)}.
+\]
+Although this formula is written using $1/(1-p)$, it is a polynomial in
+$p$: expanding the chromatic polynomial cancels every denominator. At
+$p=1$, we use this polynomial's continuous extension.
+We say that $H$ satisfies its \emph{Goodman-style bound} if every graphon
+$W$ with $\edens W=p\ge1-1/(\chi(H)-1)$ satisfies
+\[
+  \dens HW\ge G_H(p).
+\]
+The definition is motivated by the balanced complete $k$-partite graphons $W_k$:
+at $p=1-1/k$,
+\[
+  G_H(1-1/k)=\frac{\chi_H(k)}{k^{v(H)}}=\dens H{W_k}.
+\]
+Consequently, if $W_k$ minimizes the $H$-density at edge density $1-1/k$
+for every integer $k\ge\chi(H)-1$, then the Goodman-style bound is tight at
+all of these distinguished densities. Moreover, $G_H$ is the unique
+polynomial in $p$ that takes these values for every such $k$.
+
+This leads to a broader question: which nonbipartite graphs satisfy their
+Goodman-style bounds? We record several examples and obstructions whose
+proofs lie beyond the scope of this paper.
+\begin{itemize}
+  \item If a graph is chordal and all its maximal cliques are of the same size, then it has the Goodman-style bound.
+  \item The join of a clique $K_r$ and an odd cycle $C_{2k+1}$ has the
+  Goodman-style bound. In particular, taking $r=1$ gives the joins
+  $K_1\vee C_{2k+1}$, often called odd wheels.
+  \item If the girth of a graph is even, then the graph does not have the
+  Goodman-style bound.
+\end{itemize}
+
+\medskip
+\noindent\textbf{AI use disclosure.}
+The original proof was discovered during two weeks of interaction with
+ChatGPT~5.5 and Fable~5. We subsequently revised the argument to emphasize
+its combinatorial interpretation and improve its readability. The
+replacement by density-weighted averaging and complementary-path
+comparison was also developed with AI assistance.
+
+\noindent\textbf{Differences between the Lean verification and the present proof.}
+The formal verification reported here concerns the one-colour
+lower-bound theorem. The density-weighted inequality and the
+replacement proof in \Cref{sec:excursion-positivity} are not claimed
+to be included in that verification; the present argument replaces
+the earlier odd-to-even Gamma-moment route by Dirichlet/Beta
+averaging and a complementary even-path comparison. The equality
+and stability consequences in \Cref{sec:equality-stability} are also
+not included in the formal verification reported here.
+\tk{TODO: Add the precise Lean theorem names, repository links, and
+verification coverage for the final version.}
+
+\noindent{\textbf{Acknowledgements.}}
+\tk{TODO: Add acknowledgements.}
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\appendix
+\crefalias{section}{appendix}
+
+\section{Proof of the step-graphon reduction}
+\label{app:step-reduction}
+
+\begin{proof}[Proof of \Cref{lem:step-reduction}]
+  For an integer $s\ge1$, set $N=2^s$. Let $I_1,\ldots,I_N$ be the
+  intervals of length $1/N$, and
+  define
+  \[
+    W_s(x,y)=N^2\int_{I_a\times I_b}W(u,v)\dd u\dd v
+    \qquad ((x,y)\in I_a\times I_b).
+  \]
+  Each $W_s$ is a symmetric graphon with exactly the same edge density as
+  $W$:
+  \[
+    \int_{[0,1]^2}W_s
+    =\sum_{a,b=1}^N\int_{I_a\times I_b}W=p.
+  \]
+  Moreover,
+  \begin{equation}\label{eq:step-L1}
+    \norm{W_s-W}_1\longrightarrow0
+    \qquad(s\to\infty).
+  \end{equation}
+  To verify the convergence, let $S$ be a function constant on the
+  level-$s_0$ dyadic rectangles. For $s\ge s_0$, cell averaging fixes
+  $S$ and is an $L^1$-contraction, so
+  \[
+    \norm{W_s-W}_1
+    \le \norm{W_s-S}_1+\norm{S-W}_1
+    \le2\norm{W-S}_1.
+  \]
+  Dyadic step functions are dense in $L^1([0,1]^2)$, proving
+  \eqref{eq:step-L1}.
+
+  If $F$ is a finite graph, telescoping its edge factors gives
+  \[
+    \left|\dens F{W_s}-\dens FW\right|
+    \le |E(F)|\norm{W_s-W}_1.
+  \]
+  The same bound holds for $U_s=1-W_s$ and $U=1-W$. Hence all
+  homomorphism densities in the stated inequalities converge, while
+  $p$ and $q$ remain unchanged. The degree variance also converges,
+  since it equals $\tP2{W_s}-p^2$. Applying any of these inequalities
+  to each $W_s$ and passing to the limit proves the lemma.
+\end{proof}
+
+\end{document}
