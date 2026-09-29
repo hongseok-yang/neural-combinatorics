@@ -216,7 +216,7 @@ Our main result extends this bound to every odd cycle in the dense range.
 
 \begin{theorem}[Odd-cycle Goodman bound for $p\ge2/3$]\label{thm:main}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
-  Then
+  Then,
   \begin{equation}\label{eq:intro-main}
     \tC mW\ge\goal.
   \end{equation}
@@ -361,24 +361,24 @@ The Dirichlet averaging identity (\Cref{lem:pge23-dirichlet}) gives
 \]
 Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suffices to prove
 \begin{equation}\label{eq:intro-diagonal-positive}
-  P_{m,r}(1-p;\ell,\ldots,\ell)\ge0
-  \qquad\text{for every }\ell\in[-1/2,1/2].
+  P_{m,r}(1-p;\lambda,\ldots,\lambda)\ge0
+  \qquad\text{for every }\lambda\in[-1/2,1/2].
 \end{equation}
 Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
 Finally, we prove \eqref{eq:intro-diagonal-positive} using an ODE argument.
-An integral representation of $P_{m,r}(1-p;\ell,\ldots,\ell)$ establishes \eqref{eq:intro-diagonal-positive} when $\ell\le0$ (\Cref{lem:pge23-ell-negative}).
-For $\ell>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
+An integral representation of $P_{m,r}(1-p;\lambda,\ldots,\lambda)$ establishes \eqref{eq:intro-diagonal-positive} when $\lambda\le0$ (\Cref{lem:pge23-ell-negative}).
+For $\lambda>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
 The Gamma expectation formula \eqref{eq:pge23-gamma-expectation} gives
 \[
-  P_{m,r}(1-p;\ell,\ldots,\ell)
+  P_{m,r}(1-p;\lambda,\ldots,\lambda)
   =\binom{m-r-1}{r}
-    \E\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\ell}{Z}Y\right)\right],
+    \E\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\lambda}{Z}Y\right)\right],
 \]
 where $\rho_{m-2r,m}$ is the polynomial defined in \eqref{eq:pge23-rho}.
-To prove \eqref{eq:intro-diagonal-positive} for $\ell>0$, it suffices to show that, for each fixed $z>0$, the expectation over $Y$ satisfies
+To prove \eqref{eq:intro-diagonal-positive} for $\lambda>0$, it suffices to show that, for each fixed $z>0$, the expectation over $Y$ satisfies
 \begin{equation}\label{eq:intro-expectation-positive}
-  \E_Y\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\ell}{z}Y\right)\right]\ge0.
+  \E_Y\!\left[\rho_{m-2r,m}\!\left(1-p+\frac{\lambda}{z}Y\right)\right]\ge0.
 \end{equation}
 Writing $F_j(b)=\E(Y-b)^{2j}$ for integers $j\ge1$, \eqref{eq:intro-expectation-positive} follows for $p\ge2/3$ from the bound
 \begin{equation}\label{eq:intro-moment-bound}
@@ -394,7 +394,7 @@ If the left-hand side of \eqref{eq:intro-moment-bound} were negative for some $b
 An integral estimate shows that this expression is nonnegative at that point, giving a contradiction and proving the moment bound \eqref{eq:intro-moment-bound} for every $b\ge0$.
 
 The moment bound ensures that the expectation over $Y$ in \eqref{eq:intro-expectation-positive} is nonnegative; this is the only step requiring $p\ge2/3$.
-Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:intro-diagonal-positive} for $\ell>0$, completing the fourth reduction.
+Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:intro-diagonal-positive} for $\lambda>0$, completing the fourth reduction.
 The Dirichlet averaging identity extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
 These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
 The deduction preceding this overview then gives \Cref{thm:main}.
@@ -613,11 +613,11 @@ For trace terms, we regard the word as cyclic, so its last and first letters are
 
 A \emph{block} is a maximal consecutive run of the same letter.
 Thus, in a word containing both $P$ and $Q$, each $Q$-block has a $P$ immediately before and after it.
-For example, the projection pattern
+For example, the segment
 \[
   P\,\underbrace{QQ}_{\text{one $Q$-block}}\,P
 \]
-corresponds to the matrix segment $P M_U Q M_U Q M_U P$.
+of a word corresponds to the matrix segment $P M_U Q M_U Q M_U P$.
 Reading this product from right to left, the rightmost $P$ retains the component in $\R e$.
 An application of $M_U$ followed by $Q$ then retains the component in $\mathcal E_0$; the next application of $M_U$ followed by $Q$ retains a component in $\mathcal E_0$ again; the final application of $M_U$ followed by $P$ returns to $\R e$.
 We call this passage from $\R e$ into $\mathcal E_0$ and back an \emph{excursion}.
@@ -796,37 +796,36 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 \end{proof}
 
 We next derive the corresponding formula for path densities, which supplies the correction term in \eqref{eq:intro-commonality}.
-Unlike a cycle, a path has fixed endpoints, so its excursion expansion has no
-cyclic multiplicity factor.
-Let $P_k$ denote the path with $k$ edges, and define the scalar
+Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
 \begin{equation*}
-  x_k=\tP kU=e^{\mathsf T}M_U^ke.
+  \tP kU=e^{\mathsf T}M_U^ke.
 \end{equation*}
 
 \begin{lemma}[Path densities by excursions]
 \label{lem:path-excursions}
   For every $k\ge0$,
   \begin{equation}\label{eq:path-expansion}
-    x_k=q^k+
+    \tP kU=q^k+
     \sum_{r=1}^{\lfloor k/2\rfloor}
       \int\!\cdots\!\int
-      h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
+      h_{k-2r}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \end{equation}
 \end{lemma}
 
 \begin{proof}
-  For $k=0$ and $k=1$, the formula gives $x_0=e^{\mathsf T}e=1$ and
-  $x_1=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
+  For $k=0$ and $k=1$, the formula gives $\tP0U=e^{\mathsf T}e=1$ and
+  $\tP1U=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
   Now let $k\ge2$. Since $Pe=e$ and $e^{\mathsf T}P=e^{\mathsf T}$,
-  we may insert $P$ at both ends of the product defining $x_k$.
+  we may insert $P$ at both ends of the matrix expression for $\tP kU$.
   Inserting $P+Q=I$ between its $k$ copies of $M_U$ and expanding gives
-  \[
-    x_k=
+  \begin{equation}\label{eq:path-projection-expansion}
+    \tP kU=
     \sum_{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}}
       e^{\mathsf T}P M_U R_1M_U\cdots R_{k-1}M_UPe.
-  \]
-  Associate each summand with the word $PR_1\cdots R_{k-1}P$.
+  \end{equation}
+  Associate each summand in \eqref{eq:path-projection-expansion} with
+  the word $PR_1\cdots R_{k-1}P$.
   This word has $k+1$ letters, separated by the $k$ copies of $M_U$.
   We read it from its fixed left endpoint to its fixed right endpoint;
   its first and last letters are separate occurrences of $P$.
@@ -854,7 +853,8 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
     \sum_{i=0}^r\alpha_i+\sum_{i=1}^r\beta_i=k-2r.
   \]
   In particular, $r\le\lfloor k/2\rfloor$.
-  To evaluate the summand, use the same block identities as in the proof
+  To evaluate the summand in \eqref{eq:path-projection-expansion}
+  associated with this word, use the same block identities as in the proof
   of \Cref{lem:cycle-excursions}: each internal step in a $P$-block
   contributes $q$, and the excursion through the $i$th $Q$-block
   contributes $g^{\mathsf T}A^{\beta_i}g$.
@@ -872,9 +872,9 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   condition constructs exactly one word: start with $\alpha_0+1$ copies
   of $P$, then $\beta_1+1$ copies of $Q$, then $\alpha_1+1$ copies of $P$,
   and continue through the final $P$-block of length $\alpha_r+1$.
-  The endpoints fix the starting position, so each tuple contributes
-  once, with no choice of a marked boundary or cyclic placement.
-  Summing the displayed weights over these tuples therefore gives
+  By this one-to-one correspondence, summing the terms in
+  \eqref{eq:path-projection-expansion} over the admissible block-length
+  tuples gives
   \begin{equation}\label{eq:path-r-excursions}
     \begin{aligned}
       &\sum_{\substack{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}\\
@@ -892,7 +892,7 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   Summing \eqref{eq:path-r-excursions} over $r$ and including the word
   consisting only of $P$ gives
   \[
-    x_k=q^k+
+    \tP kU=q^k+
     \sum_{r=1}^{\lfloor k/2\rfloor}
       \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
                       \sum_{i=0}^r\alpha_i+
@@ -903,7 +903,7 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
   Applying the moment identity \eqref{eq:moments} now gives
   \[
     \begin{aligned}
-      x_k={}&q^k+
+      \tP kU={}&q^k+
       \sum_{r=1}^{\lfloor k/2\rfloor}
       \int\!\cdots\!\int
       \sum_{\substack{\alpha_0,\ldots,\alpha_r,\beta_1,\ldots,\beta_r\ge0\\
@@ -915,7 +915,7 @@ Let $P_k$ denote the path with $k$ edges, and define the scalar
     \end{aligned}
   \]
   The inner sum is
-  $h_{k-2r}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)$ by
+  $h_{k-2r}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:h-def}: the $r+1$ exponents $\alpha_0,\ldots,\alpha_r$
   account for the $r+1$ copies of $q$, and the exponents
   $\beta_1,\ldots,\beta_r$ belong to $\lambda_1,\ldots,\lambda_r$.
@@ -940,7 +940,7 @@ The following lemma completes the reduction announced at the start of this secti
       h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
       +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
     \Bigr]\notag\\
-    &-h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r).
+    &-h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r).
     \label{eq:Pmr}
   \end{align}
   The sum of integrals
@@ -952,10 +952,24 @@ The following lemma completes the reduction announced at the start of this secti
   \end{equation}
   is the difference between the left- and right-hand sides of
   \eqref{eq:intro-commonality}.
-  Thus, $\Phi_m\ge0$ implies \Cref{thm:main,thm:commonality}.
-  In particular, it suffices to prove that each $P_{m,r}$ is nonnegative
-  on $[-1/2,1/2]^r$.
 \end{lemma}
+
+\Cref{lem:polynomial-reduction} reduces the strengthened inequality in
+\Cref{thm:commonality} to proving $\Phi_m\ge0$ for step graphons.
+Since $\mu$ is nonnegative and supported on $[-1/2,1/2]$, it suffices to
+prove, for every $1\le r\le(m-1)/2$, that
+\[
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0
+  \qquad\text{for all }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r,
+\]
+where $q=1-p$.
+This polynomial nonnegativity makes every integral in
+\eqref{eq:Phi-expansion} nonnegative, giving $\Phi_m\ge0$ and hence
+\Cref{thm:commonality} for step graphons.
+The comparison following \Cref{thm:commonality} shows that this
+strengthened inequality also implies the odd-cycle bound in \Cref{thm:main}.
+\Cref{lem:step-reduction} then extends the inequalities in
+\Cref{thm:main,thm:commonality} from step graphons to arbitrary graphons.
 
 \begin{proof}
   Adding the cycle expansions \eqref{eq:cycle-U} and
@@ -964,7 +978,7 @@ The following lemma completes the reduction announced at the start of this secti
   \[
     \begin{aligned}
       \tC mW+\tC mU
-      ={}&p^m+q^m\\
+      ={}p^m+q^m
       &+\sum_{r=1}^{(m-1)/2}\frac mr
       \int\!\cdots\!\int
         h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
@@ -979,10 +993,10 @@ The following lemma completes the reduction announced at the start of this secti
   same range $1\le r\le(m-1)/2$, and its polynomial degree is
   $(m-1)-2r=n-1$. Thus,
   \[
-    x_{m-1}=q^{m-1}+
+    \tP{m-1}U=q^{m-1}+
     \sum_{r=1}^{(m-1)/2}
       \int\!\cdots\!\int
-      h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)
+      h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \]
   For each fixed number $r$ of excursions, the two cycle integrals and
@@ -995,55 +1009,16 @@ The following lemma completes the reduction announced at the start of this secti
       h_n(\rep pr,-\lambda_1,\ldots,-\lambda_r)
       +h_n(\rep qr,\lambda_1,\ldots,\lambda_r)
     \Bigr]
-    -h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r),
+    -h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r),
   \]
   which is $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)$ by
   \eqref{eq:Pmr}.  Therefore,
   \begin{equation}\label{eq:commonality-gap}
-    \tC mW+\tC mU-x_{m-1}
+    \tC mW+\tC mU-\tP{m-1}U
     =p^m+q^m-q^{m-1}+\Phi_m.
   \end{equation}
-  Recalling $x_{m-1}=\tP{m-1}U$, this identifies $\Phi_m$ as the
+  This identifies $\Phi_m$ as the
   difference between the two sides of \eqref{eq:intro-commonality}.
-  In particular, $\Phi_m\ge0$ gives
-  \[
-    \tC mW+\tC mU
-    \ge p^m+q^m+\tP{m-1}U-q^{m-1},
-  \]
-  proving \Cref{thm:commonality}.
-
-  To deduce the bound for $\tC mW$ alone, compare the cycle density of
-  $U$ with its path density. Since $0\le U\le1$, removing the closing
-  factor $U(x_m,x_1)$ from the cycle-density integrand can only increase
-  it. The remaining factors describe the path with $m-1$ edges, so
-  \begin{equation}\label{eq:cycle-path}
-    \begin{aligned}
-      \tC mU
-      &=\int_{[0,1]^m}
-        U(x_1,x_2)\cdots U(x_{m-1},x_m)U(x_m,x_1)
-        \dd x_1\cdots\dd x_m\\
-      &\le\int_{[0,1]^m}
-        U(x_1,x_2)\cdots U(x_{m-1},x_m)
-        \dd x_1\cdots\dd x_m
-       =x_{m-1}.
-    \end{aligned}
-  \end{equation}
-  Since $q^m-q^{m-1}=-pq^{m-1}$, rearranging
-  \eqref{eq:commonality-gap} gives
-  \[
-    \tC mW-\bigl(p^m-pq^{m-1}\bigr)
-    =\Phi_m+x_{m-1}-\tC mU
-    \ge\Phi_m,
-  \]
-  where the last inequality follows from \eqref{eq:cycle-path}.
-  Thus, $\Phi_m\ge0$ also proves \Cref{thm:main}.
-
-  Finally, $\mu$ is nonnegative and supported on $[-1/2,1/2]$ by
-  \Cref{sec:matrix-reduction}.
-  If each $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$, every integral in
-  \eqref{eq:Phi-expansion} is nonnegative, and hence $\Phi_m\ge0$.
-  This proves both inequalities for step graphons;
-  \Cref{lem:step-reduction} then extends them to arbitrary graphons.
 \end{proof}
 
 \section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
@@ -1052,13 +1027,13 @@ The following lemma completes the reduction announced at the start of this secti
 In this section, we consider the first three odd cycles to illustrate the
 general excursion argument through explicit low-degree computations. The
 identities used in \Cref{lem:polynomial-reduction} do not require
-$p\ge2/3$, and for these cycles every excursion polynomial is pointwise
+$p\ge2/3$, and for these cycles, every excursion polynomial is pointwise
 nonnegative when $p\ge1/2$. Consequently, the inequalities in
 \Cref{thm:main,thm:commonality} hold for $m\in\{3,5,7\}$ throughout the
 larger range $p\ge1/2$.
 
 \begin{proposition}\label{prop:short-cycles}
-  Suppose that $0\le q\le1/2$ and set $p=1-q$. For $m\in\{3,5,7\}$,
+  Suppose that $0\le q\le1/2$ and set $p=1-q$. For all $m\in\{3,5,7\}$,
   $1\le r\le(m-1)/2$, and $\lambda_1,\ldots,\lambda_r\in\R$, we have
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0.
@@ -1138,8 +1113,7 @@ larger range $p\ge1/2$.
     \begin{aligned}
       D(q)&=288q^2-336q+119,\\
       C(q)&=24q^3-42q^2+28q-7,\\
-      N(q)&=5184q^6-18144q^5+28602q^4-25802q^3\\
-          &\qquad+13874q^2-4165q+539.
+      N(q)&=5184q^6-18144q^5+28602q^4-25802q^3 +13874q^2-4165q+539.
     \end{aligned}
   \]
   Direct expansion gives
@@ -1179,22 +1153,22 @@ larger range $p\ge1/2$.
   \]
   Completing squares gives
   \[
-    \begin{aligned}
-      P_{7,2}(q;\lambda_1,\lambda_2)={}&
-      \frac32(\lambda_1-\lambda_2)^2
-      +\frac92\left(\lambda_1+\lambda_2+2q-\frac76\right)^2\\
-      &+18\left(q-\frac7{12}\right)^2+\frac74>0.
-    \end{aligned}
+      P_{7,2}(q;\lambda_1,\lambda_2)=
+      \left(\frac32(\lambda_1-\lambda_2)^2
+      +\frac92\left(\lambda_1+\lambda_2+2q-\frac76\right)^2
+      +18\left(q-\frac7{12}\right)^2+\frac74\right)>0.
   \]
   Finally, for $r=3$, we have $n=1$, so
   \[
     \begin{aligned}
       P_{7,3}(q;\lambda_1,\lambda_2,\lambda_3)
       ={}&\frac73\bigl[
-        h_1(p,p,p,-\lambda_1,-\lambda_2,-\lambda_3)\\
-        &\qquad\quad+h_1(q,q,q,\lambda_1,\lambda_2,\lambda_3)\bigr]-1\\
+        h_1(p,p,p,-\lambda_1,-\lambda_2,-\lambda_3)
+        +h_1(q,q,q,\lambda_1,\lambda_2,\lambda_3)\bigr]-1\\
       ={}&\frac73\bigl[(3p-\lambda_1-\lambda_2-\lambda_3)
-        +(3q+\lambda_1+\lambda_2+\lambda_3)\bigr]-1=6.
+        +(3q+\lambda_1+\lambda_2+\lambda_3)\bigr]-1
+      \\
+      ={}&6.
     \end{aligned}
   \]
 
@@ -1202,20 +1176,51 @@ larger range $p\ge1/2$.
   $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
   $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
   Since $\mu$ is a nonnegative measure, \eqref{eq:Phi-expansion} gives
-  $\Phi_m\ge0$, and
-  \Cref{lem:polynomial-reduction} proves both inequalities.
+  $\Phi_m\ge0$.
+  By \Cref{lem:polynomial-reduction} and the discussion following its
+  statement, this proves the strengthened inequality in
+  \Cref{thm:commonality} for $m\in\{3,5,7\}$ and $p\ge1/2$.
+  The comparison following \Cref{thm:commonality} then gives the
+  odd-cycle bound in \Cref{thm:main} for the same cycle lengths and
+  edge densities.
 \end{proof}
 
 \section{Positivity of the excursion polynomials}
 \label{sec:excursion-positivity}
 
+We now complete the proof of the strengthened extended-commonality inequality
+in \Cref{thm:commonality} and hence the odd-cycle Goodman bound in
+\Cref{thm:main}.
+The excursion expansion in \Cref{sec:excursions} reduces this task to showing that
+\begin{equation}\label{eq:pge23-positivity-goal}
+  P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0
+\end{equation}
+whenever $0\le q\le1/3$, $m\ge3$ is odd, $1\le r\le(m-1)/2$, and each
+$\lambda_i\in[-1/2,1/2]$.
+\Cref{sec:short-cycles} verified the positivity of $P_{m,r}$ for the first three odd cycles;
+this section supplies an argument uniform in the cycle length.
+We prove \eqref{eq:pge23-positivity-goal} in two steps.
+First, Dirichlet averaging reduces the inequality to the case in which all
+spectral variables $\lambda_1,\ldots,\lambda_r$ equal a common value $\lambda$.
+Second, we prove that the resulting diagonal polynomial is nonnegative,
+beginning with a representation through a Beta expectation.
+This representation gives nonnegativity directly when $\lambda\le0$.
+For $\lambda>0$, a further integral representation reduces the problem to
+comparing odd and even moments of a shifted Gamma random variable.
+A uniform moment bound, proved by an ODE argument in \Cref{app:gamma-moment},
+supplies the required comparison.
+Together, the diagonal reduction and the proof of diagonal positivity establish
+\eqref{eq:pge23-positivity-goal}, completing the proofs of
+\Cref{thm:commonality,thm:main}.
+\Cref{sec:equality-stability} characterizes equality in both inequalities and
+deduces qualitative stability of the balanced complete multipartite graphons
+at densities $p=1-1/k$, $k\ge3$.
+
 Fix an odd integer $m\ge3$ and $1\le r\le(m-1)/2$. Then, $n=m-2r$ is a positive odd integer.
-Our first goal is to replace the $r$ spectral variables in $P_{m,r}$ by a
-single variable $\ell$.
-Define the diagonal polynomial
+To carry out the first step, define the diagonal polynomial
 \begin{equation}\label{eq:pge23-Ptilde}
-  \widetilde P_{m,r}(q,\ell)
-  =P_{m,r}(q;\ell,\ldots,\ell).
+  \widetilde P_{m,r}(q,\lambda)
+  =P_{m,r}(q;\lambda,\ldots,\lambda).
 \end{equation}
 
 \begin{lemma}[Dirichlet diagonalization]\label{lem:pge23-dirichlet}
@@ -1223,7 +1228,7 @@ Define the diagonal polynomial
   \[
     \Theta_i\ge0,\qquad \sum_{i=1}^r\Theta_i=1.
   \]
-  Then
+  Then,
   \begin{equation}\label{eq:pge23-dirichlet-identity}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\E\,\widetilde P_{m,r}
@@ -1233,13 +1238,14 @@ Define the diagonal polynomial
   \begin{equation*}
     \min_{\lambda_i\in[-1/2,1/2]}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-    =\min_{\ell\in[-1/2,1/2]}\widetilde P_{m,r}(q,\ell).
+    =\min_{\lambda\in[-1/2,1/2]}\widetilde P_{m,r}(q,\lambda).
   \end{equation*}
 \end{lemma}
 
 \begin{proof}
   Write $S=\sum_{i=1}^r\Theta_i\lambda_i$.
-  The proof rests on two properties of $h_j$.
+  The proof rests on two properties of the complete homogeneous symmetric
+  polynomials $h_j$ defined in \eqref{eq:h-def}.
 
   First, the moments of $S$ are, up to normalization, the complete
   homogeneous symmetric polynomials:
@@ -1276,7 +1282,7 @@ Define the diagonal polynomial
 
   Second, setting all variables equal in the definition of $h_j$ gives
   \begin{equation}\label{eq:pge23-h-diagonal}
-    h_j(\ell,\ldots,\ell)=\binom{j+r-1}{r-1}\ell^j,
+    h_j(\lambda,\ldots,\lambda)=\binom{j+r-1}{r-1}\lambda^j,
   \end{equation}
   the binomial coefficient being the number of monomials of degree $j$ in $r$ variables.
 
@@ -1287,7 +1293,7 @@ Define the diagonal polynomial
     \sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d
     =\prod_{i=1}^k\frac{1}{1-y_iz}.
   \]
-  Hence the $k$ equal variables and the remaining ones give separate factors:
+  Thus, the $k$ equal variables and the remaining ones give separate factors:
   \[
     \begin{aligned}
       \sum_{d\ge0}h_d(a^{\times k},b_1,\ldots,b_r)z^d
@@ -1323,11 +1329,11 @@ Define the diagonal polynomial
   \]
   where $c_j$ denotes the combined coefficient of $h_j$; it does not
   depend on the $\lambda_i$.
-  Setting $\lambda_1=\cdots=\lambda_r=\ell$ and using
+  Setting $\lambda_1=\cdots=\lambda_r=\lambda$ and using
   \eqref{eq:pge23-h-diagonal},
   \begin{equation*}
-    \widetilde P_{m,r}(q,\ell)
-    =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\ell^j.
+    \widetilde P_{m,r}(q,\lambda)
+    =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\lambda^j.
   \end{equation*}
   On the other hand, the moment identity \eqref{eq:pge23-dirichlet-moment} gives
   \[
@@ -1336,25 +1342,29 @@ Define the diagonal polynomial
     =\E\sum_{j=0}^nc_j\binom{j+r-1}{r-1}S^j
     =\E\,\widetilde P_{m,r}(q,S),
   \]
-  the last equality being $\widetilde P_{m,r}$ with $\ell$ replaced by $S$.
+  the last equality being $\widetilde P_{m,r}$ with $\lambda$ replaced by $S$.
 
   For the second claim, suppose that the $\lambda_i$ lie in
   $[-1/2,1/2]$. Then, every convex combination $S$ lies in the same
   interval, so the right-hand side of
   \eqref{eq:pge23-dirichlet-identity} is at least
-  $\min_\ell\widetilde P_{m,r}(q,\ell)$. Conversely, setting
-  $\lambda_1=\cdots=\lambda_r=\ell$ attains each diagonal value.
+  $\min_{\lambda\in[-1/2,1/2]}\widetilde P_{m,r}(q,\lambda)$.
+  Taking the minimum over $\lambda_1,\ldots,\lambda_r$ shows that the
+  minimum of $P_{m,r}$ on $[-1/2,1/2]^r$ is at least this diagonal minimum.
+  Conversely, setting $\lambda_1=\cdots=\lambda_r=\lambda$ attains each
+  diagonal value, so the minimum of $P_{m,r}$ on $[-1/2,1/2]^r$ is at most
+  the diagonal minimum. The two minima are therefore equal.
 \end{proof}
 
 By \Cref{lem:pge23-dirichlet}, it now suffices to prove
 \begin{equation*}
-  \widetilde P_{m,r}(q,\ell)\ge0
+  \widetilde P_{m,r}(q,\lambda)\ge0
 \end{equation*}
 for
 \[
   0\le q\le\frac{1}{3},
   \quad 1\le r\le\frac{m-1}{2},
-  \quad -\frac{1}{2}\le\ell\le\frac{1}{2}.
+  \quad -\frac{1}{2}\le\lambda\le\frac{1}{2}.
 \]
 This is the first major simplification: it replaces an $r$-variable symmetric
 polynomial by a one-variable polynomial.
@@ -1370,21 +1380,21 @@ Beta distribution.
     \rho_{n,m}(u)
     =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1}.
   \end{equation}
-  Then
+  Then,
   \begin{equation}\label{eq:pge23-beta-second}
-    \widetilde P_{m,r}(q,\ell)
+    \widetilde P_{m,r}(q,\lambda)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \E\left[
-    X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)
+    X^n\rho_{n,m}\left(q+\lambda\frac{1-X}{X}\right)
     \right].
   \end{equation}
-  If $\ell>0$, then
+  If $\lambda>0$, then
   \begin{equation}\label{eq:pge23-beta-integral}
-    \widetilde P_{m,r}(q,\ell)
+    \widetilde P_{m,r}(q,\lambda)
     =\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,
-    \ell^{n+r}
+    \lambda^{n+r}
     \int_0^\infty
-    \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s.
+    \frac{s^{r-1}}{(\lambda+s)^m}\rho_{n,m}(q+s)\dd s.
   \end{equation}
 \end{lemma}
 
@@ -1443,25 +1453,25 @@ Beta distribution.
 
   By the definition \eqref{eq:pge23-Ptilde} of the diagonal polynomial,
   \[
-    \widetilde P_{m,r}(q,\ell)
-    =\frac {m}{r}\bigl[h_n(p^{\times r},(-\ell)^{\times r})
-    +h_n(q^{\times r},\ell^{\times r})\bigr]
-    -h_{n-1}(q^{\times(r+1)},\ell^{\times r}).
+    \widetilde P_{m,r}(q,\lambda)
+    =\frac {m}{r}\bigl[h_n(p^{\times r},(-\lambda)^{\times r})
+    +h_n(q^{\times r},\lambda^{\times r})\bigr]
+    -h_{n-1}(q^{\times(r+1)},\lambda^{\times r}).
   \]
   Apply \eqref{eq:pge23-beta-h} to the first two terms, with
-  $(a,b)=(p,-\ell)$ and $(a,b)=(q,\ell)$, and apply
-  \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\ell)$.
+  $(a,b)=(p,-\lambda)$ and $(a,b)=(q,\lambda)$, and apply
+  \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\lambda)$.
   Define
   \[
-    V_X=qX+\ell(1-X),
+    V_X=qX+\lambda(1-X),
     \qquad
-    W_X=pX-\ell(1-X),
+    W_X=pX-\lambda(1-X),
     \qquad\text{so that } V_X+W_X=X,
   \]
   where the last identity uses $p+q=1$.
   Using $\frac {m}{r}=\frac {n}{r}\cdot\frac {m}{n}$ now gives
   \begin{equation}\label{eq:pge23-beta-first}
-    \widetilde P_{m,r}(q,\ell)
+    \widetilde P_{m,r}(q,\lambda)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \left[
     \frac {m}{n}\E\bigl(V_X^n+W_X^n\bigr)
@@ -1472,7 +1482,7 @@ Beta distribution.
   Since $X\in(0,1)$ almost surely and $V_X+W_X=X$, we may factor out
   $X^n$ by writing
   \[
-    u_X=\frac{V_X}{X}=q+\ell\,\frac{1-X}{X},
+    u_X=\frac{V_X}{X}=q+\lambda\,\frac{1-X}{X},
     \qquad
     V_X=Xu_X,
     \qquad
@@ -1492,43 +1502,43 @@ Beta distribution.
   \]
   by the definition \eqref{eq:pge23-rho} of $\rho_{n,m}$, and this proves \eqref{eq:pge23-beta-second}.
 
-  For $\ell>0$, expand the expectation in \eqref{eq:pge23-beta-second} as an integral against the Beta density,
+  For $\lambda>0$, expand the expectation in \eqref{eq:pge23-beta-second} as an integral against the Beta density,
   \[
-    \E\left[X^n\rho_{n,m}\left(q+\ell\frac{1-X}{X}\right)\right]
+    \E\left[X^n\rho_{n,m}\left(q+\lambda\frac{1-X}{X}\right)\right]
     =\frac{\Gamma(2r)}{\Gamma(r)^2}
     \int_0^1 x^{n+r-1}(1-x)^{r-1}
-    \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x,
+    \rho_{n,m}\left(q+\lambda\frac{1-x}{x}\right)\dd x,
   \]
   and apply the change of variable
   \[
-    s=\ell\frac{1-x}{x},
-    \qquad x=\frac{\ell}{\ell+s},
-    \qquad 1-x=\frac {s}{\ell+s},
-    \qquad \dd x=-\frac{\ell}{(\ell+s)^2}\dd s,
+    s=\lambda\frac{1-x}{x},
+    \qquad x=\frac{\lambda}{\lambda+s},
+    \qquad 1-x=\frac {s}{\lambda+s},
+    \qquad \dd x=-\frac{\lambda}{(\lambda+s)^2}\dd s,
   \]
   under which $x=1$ corresponds to $s=0$, and $x\to0^+$ to $s\to\infty$.
   Thus
   \begin{align*}
     &\int_0^1 x^{n+r-1}(1-x)^{r-1}
-     \rho_{n,m}\left(q+\ell\frac{1-x}{x}\right)\dd x\\
+     \rho_{n,m}\left(q+\lambda\frac{1-x}{x}\right)\dd x\\
     &\qquad=\int_\infty^0
-     \left(\frac{\ell}{\ell+s}\right)^{n+r-1}
-     \left(\frac{s}{\ell+s}\right)^{r-1}
+     \left(\frac{\lambda}{\lambda+s}\right)^{n+r-1}
+     \left(\frac{s}{\lambda+s}\right)^{r-1}
      \rho_{n,m}(q+s)
-     \left(-\frac{\ell}{(\ell+s)^2}\right)\dd s\\
+     \left(-\frac{\lambda}{(\lambda+s)^2}\right)\dd s\\
     &\qquad=\int_0^\infty
-     \frac{\ell^{n+r}s^{r-1}}{(\ell+s)^{n+2r}}\rho_{n,m}(q+s)\dd s
-     =\ell^{n+r}\int_0^\infty
-     \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
+     \frac{\lambda^{n+r}s^{r-1}}{(\lambda+s)^{n+2r}}\rho_{n,m}(q+s)\dd s
+     =\lambda^{n+r}\int_0^\infty
+     \frac{s^{r-1}}{(\lambda+s)^{m}}\rho_{n,m}(q+s)\dd s,
   \end{align*}
   where we reversed the limits of integration and used $n+2r=m$ in the
   final equality.
   Altogether
   \[
-    \widetilde P_{m,r}(q,\ell)
+    \widetilde P_{m,r}(q,\lambda)
     =\binom{m-1}{2r-1}\frac {n}{r}\frac{\Gamma(2r)}{\Gamma(r)^2}\,
-     \ell^{n+r}\int_0^\infty
-     \frac{s^{r-1}}{(\ell+s)^{m}}\rho_{n,m}(q+s)\dd s,
+     \lambda^{n+r}\int_0^\infty
+     \frac{s^{r-1}}{(\lambda+s)^{m}}\rho_{n,m}(q+s)\dd s,
   \]
   and since
   \[
@@ -1542,7 +1552,7 @@ Beta distribution.
 \end{proof}
 
 \begin{lemma}\label{lem:pge23-ell-negative}
-  If $0\le q\le1/2$ and $\ell\le0$, then $\widetilde P_{m,r}(q,\ell)\ge0$.
+  If $0\le q\le1/2$ and $\lambda\le0$, then $\widetilde P_{m,r}(q,\lambda)\ge0$.
 \end{lemma}
 
 \begin{proof}
@@ -1560,51 +1570,51 @@ Beta distribution.
   nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, both of which hold
   for $u\le1/2$.
 
-  Since $X\sim\BetaLaw(r,r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\ell\le0$ gives
+  Since $X\sim\BetaLaw(r,r)$ takes values in $(0,1)$, we have $(1-X)/X\ge0$, so $\lambda\le0$ gives
   \[
-    q+\ell\,\frac{1-X}{X}\le q\le\frac{1}{2}.
+    q+\lambda\,\frac{1-X}{X}\le q\le\frac{1}{2}.
   \]
-  Hence $X^n\rho_{n,m}\bigl(q+\ell(1-X)/X\bigr)\ge0$, and \eqref{eq:pge23-beta-second} gives $\widetilde P_{m,r}(q,\ell)\ge0$.
+  Hence $X^n\rho_{n,m}\bigl(q+\lambda(1-X)/X\bigr)\ge0$, and \eqref{eq:pge23-beta-second} gives $\widetilde P_{m,r}(q,\lambda)\ge0$.
 \end{proof}
 
-So only the case $\ell>0$ remains.
-Unlike the case $\ell\le0$, the argument $q+s$ of $\rho_{n,m}$ in
+So only the case $\lambda>0$ remains.
+Unlike the case $\lambda\le0$, the argument $q+s$ of $\rho_{n,m}$ in
 \eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, where
 $\rho_{n,m}$ can be negative; for example, $\rho_{5,7}(0.7)<0$.
 The integrand can therefore no longer be handled pointwise. We must instead
 prove that the integral as a whole is nonnegative.
 
-Since the constant prefactor and $\ell^{n+r}$ in
+Since the constant prefactor and $\lambda^{n+r}$ in
 \eqref{eq:pge23-beta-integral} are positive, it remains to show that
 \[
   \int_0^\infty
-  \frac{s^{r-1}}{(\ell+s)^m}\rho_{n,m}(q+s)\dd s\ge0.
+  \frac{s^{r-1}}{(\lambda+s)^m}\rho_{n,m}(q+s)\dd s\ge0.
 \]
-The difficulty is that $\ell$ and $s$ are coupled through
-$(\ell+s)^{-m}$. The following Laplace-transform representation separates
+The difficulty is that $\lambda$ and $s$ are coupled through
+$(\lambda+s)^{-m}$. The following Laplace-transform representation separates
 them:
 \begin{equation}\label{eq:pge23-laplace-kernel}
-  \frac{1}{(\ell+s)^m}
-  =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t.
+  \frac{1}{(\lambda+s)^m}
+  =\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\lambda+s)}\dd t.
 \end{equation}
 Indeed, \eqref{eq:pge23-laplace-kernel} follows from the substitution
-$w=t(\ell+s)$.
+$w=t(\lambda+s)$.
 
 \begin{lemma}[Laplace--Gamma representation]\label{lem:pge23-laplace-gamma}
   Let $Y\sim\GammaLaw(r,1)$, where the parameters denote shape and rate.
-  If $\ell>0$, then
+  If $\lambda>0$, then
   \begin{equation}\label{eq:pge23-laplace-gamma}
-    \widetilde P_{m,r}(q,\ell)
-    =\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)}
+    \widetilde P_{m,r}(q,\lambda)
+    =\frac{\lambda^{n+r}}{r\Gamma(n)\Gamma(r)}
     \int_0^\infty
-    t^{m-r-1}e^{-\ell t}
+    t^{m-r-1}e^{-\lambda t}
     \E\rho_{n,m}\left(q+\frac {Y}{t}\right)\dd t.
   \end{equation}
   Equivalently, if $Z\sim\GammaLaw(m-r,1)$ is independent of $Y$, then
   \begin{equation}\label{eq:pge23-gamma-expectation}
-    \widetilde P_{m,r}(q,\ell)
+    \widetilde P_{m,r}(q,\lambda)
     =\binom{m-r-1}{r}
-      \E\!\left[\rho_{n,m}\!\left(q+\frac{\ell}{Z}Y\right)\right].
+      \E\!\left[\rho_{n,m}\!\left(q+\frac{\lambda}{Z}Y\right)\right].
   \end{equation}
 \end{lemma}
 
@@ -1612,13 +1622,13 @@ $w=t(\ell+s)$.
   Insert \eqref{eq:pge23-laplace-kernel} into
   \eqref{eq:pge23-beta-integral} and exchange the two integrals:
   \begin{align*}
-    \widetilde P_{m,r}(q,\ell)
-    &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\ell^{n+r}
+    \widetilde P_{m,r}(q,\lambda)
+    &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\lambda^{n+r}
       \int_0^\infty s^{r-1}\rho_{n,m}(q+s)
-      \left(\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\ell+s)}\dd t\right)
+      \left(\frac{1}{\Gamma(m)}\int_0^\infty t^{m-1}e^{-t(\lambda+s)}\dd t\right)
       \dd s\\
-    &=\frac{\ell^{n+r}}{r\Gamma(n)\Gamma(r)^2}
-      \int_0^\infty t^{m-1}e^{-\ell t}
+    &=\frac{\lambda^{n+r}}{r\Gamma(n)\Gamma(r)^2}
+      \int_0^\infty t^{m-1}e^{-\lambda t}
       \left(\int_0^\infty s^{r-1}e^{-ts}\rho_{n,m}(q+s)\dd s\right)\dd t.
   \end{align*}
   We justify this exchange by verifying absolute integrability. Integrating
@@ -1626,8 +1636,8 @@ $w=t(\ell+s)$.
   \eqref{eq:pge23-laplace-kernel} gives
   \[
     \int_0^\infty\!\!\int_0^\infty
-    s^{r-1}t^{m-1}e^{-t(\ell+s)}\bigl|\rho_{n,m}(q+s)\bigr|\dd t\dd s
-    =\Gamma(m)\int_0^\infty \frac{s^{r-1}}{(\ell+s)^m}
+    s^{r-1}t^{m-1}e^{-t(\lambda+s)}\bigl|\rho_{n,m}(q+s)\bigr|\dd t\dd s
+    =\Gamma(m)\int_0^\infty \frac{s^{r-1}}{(\lambda+s)^m}
     \bigl|\rho_{n,m}(q+s)\bigr|\dd s.
   \]
   It remains to show that the integral on the right is finite.
@@ -1648,8 +1658,8 @@ $w=t(\ell+s)$.
   \]
   where the last equality holds because $Y$ has density $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.
   Substituting this for the inner integral obtained after the exchange gives \eqref{eq:pge23-laplace-gamma}.
-  To obtain \eqref{eq:pge23-gamma-expectation}, substitute $z=\ell t$
-  in this integral. Since $m-r=n+r$, the powers of $\ell$ cancel, and
+  To obtain \eqref{eq:pge23-gamma-expectation}, substitute $z=\lambda t$
+  in this integral. Since $m-r=n+r$, the powers of $\lambda$ cancel, and
   the density $z^{m-r-1}e^{-z}/\Gamma(m-r)$ leaves the prefactor
   \[
     \frac{\Gamma(m-r)}{r\Gamma(n)\Gamma(r)}
@@ -1659,12 +1669,12 @@ $w=t(\ell+s)$.
   $q=1-p$ and $n=m-2r$.
 \end{proof}
 
-In \eqref{eq:pge23-laplace-gamma}, the parameter $\ell$ occurs only in
-the positive prefactor $\ell^{n+r}$ and the positive weight
-$t^{m-r-1}e^{-\ell t}$. The expectation
-$\E\rho_{n,m}(q+Y/t)$ is independent of $\ell$. It is therefore enough
+In \eqref{eq:pge23-laplace-gamma}, the parameter $\lambda$ occurs only in
+the positive prefactor $\lambda^{n+r}$ and the positive weight
+$t^{m-r-1}e^{-\lambda t}$. The expectation
+$\E\rho_{n,m}(q+Y/t)$ is independent of $\lambda$. It is therefore enough
 to prove that this expectation is nonnegative for every $t>0$; the result
-will then follow for every $\ell>0$ at once.
+will then follow for every $\lambda>0$ at once.
 
 To prove that $\E\rho_{n,m}(q+xY)$ is nonnegative, we center
 $\rho_{n,m}$ at $u=1/2$. The resulting expansion is a positive linear
@@ -1789,10 +1799,10 @@ lemma proves the nonnegativity of $\E\rho_{n,m}(q+xY)$.
 
 \begin{proof}[Proof of the main theorems]
   By \Cref{lem:pge23-dirichlet}, it suffices to prove
-  $\widetilde P_{m,r}(q,\ell)\ge0$ for $-1/2\le\ell\le1/2$.
-  This follows from \Cref{lem:pge23-ell-negative} when $\ell\le0$.
-  When $\ell>0$, \Cref{lem:pge23-laplace-gamma} expresses
-  $\widetilde P_{m,r}(q,\ell)$ as an integral of expectations of the form
+  $\widetilde P_{m,r}(q,\lambda)\ge0$ for $-1/2\le\lambda\le1/2$.
+  This follows from \Cref{lem:pge23-ell-negative} when $\lambda\le0$.
+  When $\lambda>0$, \Cref{lem:pge23-laplace-gamma} expresses
+  $\widetilde P_{m,r}(q,\lambda)$ as an integral of expectations of the form
   $\E\rho_{n,m}(q+xY)$, which are nonnegative by
   \Cref{prop:pge23-gamma-positive}.
   Thus, $P_{m,r}\ge0$ on $[-1/2,1/2]^r$.
@@ -1825,7 +1835,7 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
 \begin{proposition}[Degree variation and equality in the two-colour bound]
 \label{prop:regularity-gap}
   Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
-  Then
+  Then,
   \begin{equation}\label{eq:degree-variance-gap}
     \Phi_m(W)\ge(m-1)
     \left(\int_0^1(\dW(x)-p)^2\dd x\right)^{(m-1)/2}.
@@ -1843,7 +1853,7 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
     \qquad
     h_1(\rep qr,\lambda_1,\ldots,\lambda_r)=rq+\sum_{i=1}^r\lambda_i,
   \]
-  and the subtracted term is $h_{n-1}(\rep q{r+1},\lambda_1,\ldots,\lambda_r)=h_0=1$.
+  and the subtracted term is $h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)=h_0=1$.
   The eigenvalues cancel when the two linear forms are added, and $p+q=1$, so the
   integrand for this $r$ is the constant
   \[
@@ -2104,7 +2114,11 @@ The equality and stability consequences in \Cref{sec:equality-stability} are not
 \noindent{\textbf{Acknowledgements.}}
 \tk{TODO: Add acknowledgements.}
 
+\bibliographystyle{abbrv}
+\bibliography{references}
+
 \appendix
+\crefalias{section}{appendix}
 
 \section{Proof of the step-graphon reduction}
 \label{app:step-reduction}
@@ -2442,8 +2456,5 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
   \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
-
-\bibliographystyle{abbrv}
-\bibliography{references}
 
 \end{document}
