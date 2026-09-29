@@ -1457,20 +1457,51 @@ polynomial as a Beta expectation.
 \end{lemma}
 
 \begin{proof}
-  For arbitrary $a,b\in\R$, apply \Cref{lem:pge23-beta-representation}
-  with $j=n$ and differentiate both sides of \eqref{eq:pge23-beta-h}
-  with respect to $a$.
-  On the left, differentiate the generating function
-  $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d
-  =(1-az)^{-r}(1-bz)^{-r}$ to obtain
+  The term $h_{n-1}(q^{\times(r+1)},\lambda^{\times r})$ in
+  $\widetilde P_{m,r}$ has $r+1$ copies of $q$ and $r$ copies of $\lambda$.
+  To handle this term, we first derive a Beta representation for
+  $h_{n-1}(a^{\times(r+1)},b^{\times r})$, valid for arbitrary $a,b\in\R$.
+  By \Cref{lem:pge23-beta-representation} with $j=n$,
+  \[
+    h_n(a^{\times r},b^{\times r})
+    =\binom{n+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^n.
+  \]
+  We differentiate this identity with respect to $a$, keeping $b$ fixed.
+  Since the same variable $a$ occupies all of the first $r$ argument
+  positions, this differentiation changes all $r$ copies together.
+
+  To calculate the derivative on the left, recall the generating function
+  \[
+    \sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d
+    =(1-az)^{-r}(1-bz)^{-r}.
+  \]
+  Differentiating with respect to $a$ gives
   \[
     \sum_{d\ge0}\frac{\partial h_d(a^{\times r},b^{\times r})}{\partial a}z^d
-    =rz\,(1-az)^{-(r+1)}(1-bz)^{-r}
-    =r\sum_{d\ge0}h_d(a^{\times(r+1)},b^{\times r})z^{d+1},
+    =rz\,(1-az)^{-(r+1)}(1-bz)^{-r}.
   \]
-  so that $\partial_a h_n(a^{\times r},b^{\times r}) =r\,h_{n-1}(a^{\times(r+1)},b^{\times r})$.
-  On the right, $\partial_a\bigl(aX+b(1-X)\bigr)^n =nX\bigl(aX+b(1-X)\bigr)^{n-1}$.
-  Hence
+  The product $(1-az)^{-(r+1)}(1-bz)^{-r}$ is the generating function
+  for complete homogeneous symmetric polynomials with $r+1$ copies of $a$
+  and $r$ copies of $b$. Thus, the right-hand side equals
+  \[
+    r\sum_{d\ge0}h_d(a^{\times(r+1)},b^{\times r})z^{d+1}.
+  \]
+  Comparing coefficients of $z^n$, the extra factor $z$ selects the term
+  with $d=n-1$. We therefore obtain
+  \[
+    \frac{\partial}{\partial a}h_n(a^{\times r},b^{\times r})
+    =r\,h_{n-1}(a^{\times(r+1)},b^{\times r}).
+  \]
+
+  On the expectation side, the chain rule gives
+  \[
+    \frac{\partial}{\partial a}\bigl(aX+b(1-X)\bigr)^n
+    =nX\bigl(aX+b(1-X)\bigr)^{n-1}.
+  \]
+  Differentiation may pass through the expectation because the integrand
+  is a finite polynomial in $a,b$, with bounded random coefficients, and
+  the distribution of $X$ does not depend on $a,b$.
+  Combining the derivatives of the two sides and dividing by $r$ gives
   \begin{equation}\label{eq:pge23-beta-h-deriv}
     h_{n-1}(a^{\times(r+1)},b^{\times r})
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
