@@ -49,13 +49,16 @@ EVENTS = [
     ("2026-08-14 01:13:26", "Atlas 123", 87, 1),
     ("2026-08-14 02:11:31", "Atlas 142", 88, 1),
     ("2026-08-14 12:40:57", "Atlas 152 counterexample", 89, 1),
-    ("2026-08-18 14:10:00", "Atlas 137 and 139", 91, 1),
-    ("2026-08-18 15:06:44", "Atlas 145 and 148", 93, 1),
-    ("2026-08-18 19:19:51", "Atlas 160", 94, 1),
+    ("2026-08-18 11:10:00", "Claude Code TODO checkpoint", 89, 84),
+    ("2026-08-18 14:10:00", "Atlas 137 and 139", 91, 84),
+    ("2026-08-18 15:06:44", "Atlas 145 and 148", 93, 84),
+    ("2026-08-18 19:19:51", "Atlas 160", 94, 84),
+    ("2026-08-18 20:14:53", "Full Lean rebuild complete", 94, 94),
     ("2026-08-18 21:11:00", "First bulk Lean commit", 94, 94),
     ("2026-08-18 22:02:00", "Atlas 126", 95, 94),
     ("2026-08-19 03:50:52", "Atlas 178", 96, 94),
-    ("2026-08-19 16:29:00", "Atlas 178 formalized", 96, 95),
+    ("2026-08-19 15:50:00", "Atlas 178 compiled", 96, 95),
+    ("2026-08-19 16:29:00", "Atlas 178 committed", 96, 95),
     ("2026-08-20 23:40:00", "Atlas 127", 97, 95),
     ("2026-08-24 12:02:00", "Partial-bound campaign", 97, 95),
     ("2026-08-25 12:12:00", "Exact rooted-SOS campaign", 115, 95),
@@ -164,15 +167,16 @@ def plot(rows: list[dict]) -> None:
 
     annotations = [
         (3, "16 claims\nwithdrawn", (-5, -42)),
-        (21, "First bulk Lean commit:\n1 to 94", (12, -50)),
-        (27, "Rooted SOS:\n+18 resolved", (8, -52)),
-        (29, "Final two\nresolved", (-18, -52)),
-        (30, "Compact verification\ncampaign begins", (8, -48)),
-        (33, "117 / 117", (-34, -42)),
+        (18, "Claude Code checkpoint:\n84 Lean-marked verified", (10, -48)),
+        (22, "Full rebuild:\n94 verified", (10, -44)),
+        (30, "Rooted SOS:\n+18 resolved", (8, -52)),
+        (32, "Final two\nresolved", (-18, -52)),
+        (33, "Compact verification\ncampaign begins", (8, -48)),
+        (36, "117 / 117", (-34, -42)),
     ]
     for index, label, offset in annotations:
-        y_value = verified[index] if index in {21, 30, 33} else resolved[index]
-        color = "#d66b18" if index in {21, 30, 33} else "#2367a8"
+        y_value = verified[index] if index in {18, 22, 33, 36} else resolved[index]
+        color = "#d66b18" if index in {18, 22, 33, 36} else "#2367a8"
         ax.scatter([x[index]], [y_value], color=color, s=30, zorder=5)
         ax.annotate(
             label,

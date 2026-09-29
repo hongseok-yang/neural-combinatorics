@@ -227,7 +227,7 @@ Evidence is listed in §1.2. The memory notes of session `3d26f2c8` document the
 | CliqueDist, MixedBranch, Broom, AdjTail, OddLeaf, BowtieLeaf (134, 95, 100, 97, 104, 119) | 13 Aug 18:23–23:12 | 14 Aug 09:32–11:57 | ≈13 h |
 | SelfAmalgam (115) | 13 Aug 15:38 | 14 Aug 12:09 | 20.5 h |
 | Negative (19 tensor/even-girth rows) | 13 Aug 12:07 | 14 Aug 12:46–14:08 (touched again 18 Aug 13:26) | ≈25 h |
-| *— no Lean activity from 14 Aug 14:08 to 18 Aug 10:47; Codex's goal run was also idle from 14 Aug 14:12 —* | | | |
+| *— last surviving Lean activity on 14 Aug at 15:10; next surviving activity on 18 Aug at 10:38 —* | | | |
 | `TODO.md`: "84 are `verified`: 65 positive and all 19 negative" | | 18 Aug 11:10 | |
 | OddWalk (102, $t(P_5)^3\ge t(P_3)^5$) | 13 Aug 18:23 | 18 Aug 17:29 | (after the pause) |
 | PagePawBranch (137, 139) | 18 Aug 14:10 | 18 Aug 14:37 | 27 min |
@@ -235,19 +235,19 @@ Evidence is listed in §1.2. The memory notes of session `3d26f2c8` document the
 | Atlas148, Atlas145 | 18 Aug 15:06 | 18 Aug 16:49, 17:05 | 1.7 h, 2 h |
 | ForestCone (40, 135, 136) | 13 Aug 13:18 | 18 Aug 17:31 | (after the pause) |
 | Atlas160 | 18 Aug 19:19 | 18 Aug 20:05 (compiled 19:36–20:05) | 46 min |
-| Full rebuild of the library, then commit `2cb386309` (94 verified) | | 18 Aug 20:08–20:14; commit 21:11 | |
-| Atlas178 | 19 Aug 03:50 | compiled 19 Aug 15:28–15:46; commit 16:29 | ≈12 h |
+| Full rebuild of the library, then commit `2cb386309` (94 verified) | | 18 Aug 20:08–20:14; last row module 20:14:53; commit 21:11 | |
+| Atlas178 | 19 Aug 03:50 | method compiled 19 Aug 15:28–15:46; row module 15:50; commit 16:29 | ≈12 h |
 | Atlas126 certificate modules (later abandoned; the row was finished by Codex in September) | 18 Aug ≈22:00 | compiled 20 Aug 06:55–07:09 | — |
 
 Read together, the timestamps show two modes of work:
-- **Backlog mode (13 Aug 14:44 → 14 Aug 14:08).** Starting from Codex's handoff (A.16, 14:35), the worker formalized the whole first day's output, one method family every 20–60 minutes, with one pause of about 3.5 h (14 Aug 02:21–05:59). Lean-verified rows went from 1 to about 84, with lags of 4–25 h behind the informal proofs.
-- **Pipelined mode (18–19 Aug).** With both agents running at once, each new informal proof was formalized 27 min to 2 h after Codex reported it (Atlas 137/139, 145, 148, 160). The ten rows of that day took the count from 84 to 94.
+- **Backlog mode (13 Aug 14:44 → 14 Aug 15:10).** Starting from Codex's handoff (A.16, 14:35), Claude Code formalized method families in succession, with one pause of about 3.5 h (14 Aug 02:21–05:59). The surviving timestamps do not establish a row-by-row total for this interval.
+- **Pipelined mode (18–19 Aug).** Claude Code's `TODO.md` gives the first firm aggregate checkpoint: 84 verified rows at 18 Aug 11:10. The completed rebuild establishes 94 by 20:14:53, before the 21:11 bulk commit. Atlas 178's row module compiled at 15:50 on 19 August, before its 16:29 commit.
 
 Thirteen compiled modules have no source file any more, which marks abandoned attempts: a PureChordal relabelling module and a scratch test (13 Aug), an Atlas 129 module (14 Aug 14:08), and ten Atlas 126 certificate modules (20 Aug 06:55–07:09). The last show the Lean session was still active on the morning of 20 August.
 
 *Limits of this reconstruction.* A later rewrite of a file erases its earlier times, so each row gives the final write, not the first draft. Build times give the last successful compile, which may be a later rebuild (e.g. 18 Aug 20:08–20:14). The atlas178 source files are dated six minutes *after* their commit, so they were rewritten again (probably by a git operation) without any change in content. The "informal proof ready" column uses the time of Codex's end-of-turn report; the note itself may have existed a little earlier within that turn.
 
-Measured outcome: Lean-verified example files rose from **1 to 94** by 18 August 21:11 and to **95** on 19 August. At the 18 August commit the catalogue stood at 71 positive and 23 negative, so all 94 classified rows were then Lean-verified and none was left as believed.
+Measured outcome: the first firm intermediate checkpoint is **84** Lean-verified rows at 18 August 11:10. The completed rebuild establishes **94** by 20:14:53, before the 21:11 commit, and the Atlas 178 row module establishes **95** at 15:50 on 19 August, before its 16:29 commit. At the 18 August commit the catalogue stood at 71 positive and 23 negative, so all 94 classified rows were then Lean-verified and none was left as believed.
 
 ### 4.5 Phase 4 — Autonomous goal run 2: both directions (18 Aug 11:50 – 19 Aug 20:34; Codex `01a012c6`, gpt-5.6-sol/xhigh)
 
