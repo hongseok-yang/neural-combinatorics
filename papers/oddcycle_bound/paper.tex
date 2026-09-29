@@ -1199,19 +1199,19 @@ whenever $0\le q\le1/3$, $m\ge3$ is odd, $1\le r\le(m-1)/2$, and each
 $\lambda_i\in[-1/2,1/2]$.
 \Cref{sec:short-cycles} verified the positivity of $P_{m,r}$ for the first three odd cycles;
 this section supplies an argument uniform in the cycle length.
-
-The proof proceeds by successive simplifications of the polynomial inequality
-\eqref{eq:pge23-positivity-goal}.
+We prove \eqref{eq:pge23-positivity-goal} in two steps.
 First, Dirichlet averaging reduces the inequality to the case in which all
 spectral variables $\lambda_1,\ldots,\lambda_r$ equal a common value $\lambda$.
-We then express this diagonal polynomial through a Beta expectation.
+Second, we prove that the resulting diagonal polynomial is nonnegative,
+beginning with a representation through a Beta expectation.
 This representation gives nonnegativity directly when $\lambda\le0$.
 For $\lambda>0$, a further integral representation reduces the problem to
 comparing odd and even moments of a shifted Gamma random variable.
 A uniform moment bound, proved by an ODE argument in \Cref{app:gamma-moment},
 supplies the required comparison.
-
-Combining these steps proves both main inequalities.
+Together, the diagonal reduction and the proof of diagonal positivity establish
+\eqref{eq:pge23-positivity-goal}, completing the proofs of
+\Cref{thm:commonality,thm:main}.
 \Cref{sec:equality-stability} then examines when equality can hold and deduces
 qualitative stability.
 
@@ -2108,7 +2108,11 @@ The equality and stability consequences in \Cref{sec:equality-stability} are not
 \noindent{\textbf{Acknowledgements.}}
 \tk{TODO: Add acknowledgements.}
 
+\bibliographystyle{abbrv}
+\bibliography{references}
+
 \appendix
+\crefalias{section}{appendix}
 
 \section{Proof of the step-graphon reduction}
 \label{app:step-reduction}
@@ -2446,8 +2450,5 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
   \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
-
-\bibliographystyle{abbrv}
-\bibliography{references}
 
 \end{document}
