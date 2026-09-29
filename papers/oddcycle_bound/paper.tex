@@ -1216,6 +1216,57 @@ Together, the diagonal reduction and the proof of diagonal positivity establish
 deduces qualitative stability of the balanced complete multipartite graphons
 at densities $p=1-1/k$, $k\ge3$.
 
+We begin with an averaging identity for complete homogeneous symmetric
+polynomials. It will be used both in the diagonal reduction and in the
+Beta representation.
+
+\begin{lemma}[Dirichlet representation]\label{lem:pge23-dirichlet-moment}
+  Let $k\ge1$ and $j\ge0$ be integers, let $x_1,\ldots,x_k\in\R$, and
+  let $(\Theta_1,\ldots,\Theta_k)$ be uniformly distributed on the simplex
+  \[
+    \Theta_i\ge0,\qquad \sum_{i=1}^k\Theta_i=1.
+  \]
+  Equivalently, this vector has the $\operatorname{Dirichlet}(1,\ldots,1)$
+  distribution; for $k=1$, this means $\Theta_1=1$.
+  Then the complete homogeneous symmetric polynomial $h_j$, defined in
+  \eqref{eq:h-def}, admits the representation
+  \begin{equation}\label{eq:pge23-dirichlet-moment}
+    h_j(x_1,\ldots,x_k)
+    =\binom{j+k-1}{k-1}
+    \E\left(\sum_{i=1}^k\Theta_i x_i\right)^j.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Write $S=\sum_{i=1}^k\Theta_i x_i$. The multinomial theorem gives
+  \[
+    S^j=\Bigl(\sum_{i=1}^k\Theta_i x_i\Bigr)^j
+    =\sum_{\alpha_1+\cdots+\alpha_k=j}
+    \frac{j!}{\alpha_1!\cdots\alpha_k!}
+    \prod_{i=1}^k\Theta_i^{\alpha_i}x_i^{\alpha_i},
+  \]
+  where the sum is over nonnegative integer exponents.
+  The Dirichlet moments satisfy
+  \[
+    \E\prod_{i=1}^k\Theta_i^{\alpha_i}
+    =\frac{(k-1)!\,\alpha_1!\cdots\alpha_k!}{(j+k-1)!},
+    \qquad \alpha_1+\cdots+\alpha_k=j.
+  \]
+  Taking expectations therefore gives
+  \begin{align*}
+    \E\,S^j
+    &=\sum_{\alpha_1+\cdots+\alpha_k=j}
+    \frac{j!}{\alpha_1!\cdots\alpha_k!}
+    \cdot\frac{(k-1)!\,\alpha_1!\cdots\alpha_k!}{(j+k-1)!}
+    \prod_{i=1}^k x_i^{\alpha_i}\\
+    &=\frac{j!\,(k-1)!}{(j+k-1)!}
+    \sum_{\alpha_1+\cdots+\alpha_k=j}\prod_{i=1}^k x_i^{\alpha_i}
+    =\frac{h_j(x_1,\ldots,x_k)}{\binom{j+k-1}{k-1}}.
+  \end{align*}
+  Multiplying by $\binom{j+k-1}{k-1}$ proves
+  \eqref{eq:pge23-dirichlet-moment}.
+\end{proof}
+
 Fix an odd integer $m\ge3$ and $1\le r\le(m-1)/2$. Then, $n=m-2r$ is a positive odd integer.
 To carry out the first step, define the diagonal polynomial
 \begin{equation}\label{eq:pge23-Ptilde}
@@ -1244,43 +1295,8 @@ To carry out the first step, define the diagonal polynomial
 
 \begin{proof}
   Write $S=\sum_{i=1}^r\Theta_i\lambda_i$.
-  The proof rests on two properties of the complete homogeneous symmetric
-  polynomials $h_j$ defined in \eqref{eq:h-def}.
-
-  First, the moments of $S$ are, up to normalization, the complete
-  homogeneous symmetric polynomials:
-  \begin{equation}\label{eq:pge23-dirichlet-moment}
-    \E\,S^j
-    =\frac{h_j(\lambda_1,\ldots,\lambda_r)}
-    {\binom{j+r-1}{r-1}}.
-  \end{equation}
-  To see this, expand
-  \[
-    S^j=\Bigl(\sum_{i=1}^r\Theta_i\lambda_i\Bigr)^j
-    =\sum_{\alpha_1+\cdots+\alpha_r=j}
-    \frac{j!}{\alpha_1!\cdots\alpha_r!}
-    \prod_{i=1}^r\Theta_i^{\alpha_i}\lambda_i^{\alpha_i},
-  \]
-  and take expectations.
-  From
-  \[
-    \E\prod_{i=1}^r\Theta_i^{\alpha_i}
-    =\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!},
-    \qquad \alpha_1+\cdots+\alpha_r=j,
-  \]
-  we obtain
-  \begin{align*}
-    \E\,S^j
-    &=\sum_{\alpha_1+\cdots+\alpha_r=j}
-    \frac{j!}{\alpha_1!\cdots\alpha_r!}
-    \cdot\frac{(r-1)!\,\alpha_1!\cdots\alpha_r!}{(j+r-1)!}
-    \prod_{i=1}^r\lambda_i^{\alpha_i}\\
-    &=\frac{j!\,(r-1)!}{(j+r-1)!}
-    \sum_{\alpha_1+\cdots+\alpha_r=j}\prod_{i=1}^r\lambda_i^{\alpha_i}
-    =\frac{h_j(\lambda_1,\ldots,\lambda_r)}{\binom{j+r-1}{r-1}}.
-  \end{align*}
-
-  Second, setting all variables equal in the definition of $h_j$ gives
+  Setting all $r$ variables equal in the definition \eqref{eq:h-def}
+  of the complete homogeneous symmetric polynomial $h_j$ gives
   \begin{equation}\label{eq:pge23-h-diagonal}
     h_j(\lambda,\ldots,\lambda)=\binom{j+r-1}{r-1}\lambda^j,
   \end{equation}
@@ -1335,7 +1351,8 @@ To carry out the first step, define the diagonal polynomial
     \widetilde P_{m,r}(q,\lambda)
     =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\lambda^j.
   \end{equation*}
-  On the other hand, the moment identity \eqref{eq:pge23-dirichlet-moment} gives
+  On the other hand, \Cref{lem:pge23-dirichlet-moment}, applied with
+  $k=r$ and $x_i=\lambda_i$, gives
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\E\,S^j
@@ -1369,10 +1386,50 @@ for
 This is the first major simplification: it replaces an $r$-variable symmetric
 polynomial by a one-variable polynomial.
 
-We next represent this diagonal polynomial as an expectation under a symmetric
-Beta distribution.
+We next obtain a Beta representation for complete homogeneous symmetric
+polynomials whose variables take two repeated values. This follows from the
+Dirichlet representation by grouping the weights corresponding to each value.
 
-\begin{lemma}[Beta formula]\label{lem:pge23-beta}
+\begin{lemma}[Beta representation]\label{lem:pge23-beta-representation}
+  Let $r\ge1$ and $j\ge0$ be integers, let $a,b\in\R$, and let
+  $X\sim\BetaLaw(r,r)$. Then
+  \begin{equation}\label{eq:pge23-beta-h}
+    h_j(a^{\times r},b^{\times r})
+    =\binom{j+2r-1}{2r-1}
+    \E\bigl(aX+b(1-X)\bigr)^j.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Let $(\Theta_1,\ldots,\Theta_{2r})$ have the
+  $\operatorname{Dirichlet}(1,\ldots,1)$ distribution.
+  Recall that this means the vector is uniformly distributed on the simplex
+  \[
+    \Theta_i\ge0\quad(1\le i\le2r),\qquad
+    \sum_{i=1}^{2r}\Theta_i=1.
+  \]
+  The aggregation property of the Dirichlet distribution says that grouping
+  coordinates adds their parameters. Thus, the pair
+  $\bigl(\sum_{i=1}^r\Theta_i,\sum_{i=r+1}^{2r}\Theta_i\bigr)$ has the
+  $\operatorname{Dirichlet}(r,r)$ distribution.
+  A vector with this distribution is distributed as $(X,1-X)$ with
+  $X\sim\BetaLaw(r,r)$, so we may realize $X$ as $\sum_{i=1}^r\Theta_i$.
+  Apply \Cref{lem:pge23-dirichlet-moment} with $k=2r$, taking $x_i=a$
+  for $1\le i\le r$ and $x_i=b$ for $r<i\le2r$. This gives
+  \begin{align*}
+    h_j(a^{\times r},b^{\times r})
+    &=\binom{j+2r-1}{2r-1}
+      \E\left(a\sum_{i=1}^r\Theta_i+
+        b\sum_{i=r+1}^{2r}\Theta_i\right)^j\\
+    &=\binom{j+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^j,
+  \end{align*}
+  which proves \eqref{eq:pge23-beta-h}.
+\end{proof}
+
+We now apply this representation with $j=n=m-2r$ to express the diagonal
+polynomial as a Beta expectation.
+
+\begin{lemma}[Beta formula for the diagonal polynomial]\label{lem:pge23-beta}
   Let $m\ge3$ be odd, let $r$ be an integer satisfying
   $1\le r\le(m-1)/2$, and set $n=m-2r$.
   Let $X\sim\BetaLaw(r,r)$ and define
@@ -1400,41 +1457,9 @@ Beta distribution.
 \end{lemma}
 
 \begin{proof}
-  For arbitrary $a,b\in\R$, we first claim that
-  \begin{equation}\label{eq:pge23-beta-h}
-    h_n(a^{\times r},b^{\times r})
-    =\binom{n+2r-1}{2r-1}
-    \E\bigl(aX+b(1-X)\bigr)^n.
-  \end{equation}
-  Both sides are polynomials in $a$ and $b$, so it suffices to compare the
-  coefficient of $a^kb^{n-k}$.
-  On the left, the splitting identity \eqref{eq:pge23-h-split} and the diagonal value \eqref{eq:pge23-h-diagonal} give
-  \[
-    h_n(a^{\times r},b^{\times r})
-    =\sum_{k=0}^n h_k(a^{\times r})\,h_{n-k}(b^{\times r})
-    =\sum_{k=0}^n\binom{k+r-1}{r-1}\binom{n-k+r-1}{r-1}a^kb^{n-k}.
-  \]
-  On the right, the binomial theorem and the Beta moments
-  \[
-    \E\bigl[X^k(1-X)^{n-k}\bigr]
-    =\frac{\Gamma(2r)}{\Gamma(r)^2}
-    \cdot\frac{\Gamma(r+k)\,\Gamma(r+n-k)}{\Gamma(2r+n)}
-    =\frac{(2r-1)!}{((r-1)!)^2}
-    \cdot\frac{(k+r-1)!\,(n-k+r-1)!}{(n+2r-1)!}
-  \]
-  give
-  \[
-    \binom{n+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^n
-    =\sum_{k=0}^n\binom{n+2r-1}{2r-1}\binom nk
-    \E\bigl[X^k(1-X)^{n-k}\bigr]a^kb^{n-k}.
-  \]
-  The two coefficients agree. Indeed, writing every factor in factorials
-  turns both into
-  $(r+k-1)!\,(r+n-k-1)!/\bigl(k!\,(n-k)!\,((r-1)!)^2\bigr)$;
-  on the right, the factors $(2r-1)!$, $n!$, and $(2r+n-1)!$ cancel
-  against those of $\binom{n+2r-1}{2r-1}\binom nk$.
-
-  Next we differentiate both sides of \eqref{eq:pge23-beta-h} with respect to $a$.
+  For arbitrary $a,b\in\R$, apply \Cref{lem:pge23-beta-representation}
+  with $j=n$ and differentiate both sides of \eqref{eq:pge23-beta-h}
+  with respect to $a$.
   On the left, differentiate the generating function
   $\sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d
   =(1-az)^{-r}(1-bz)^{-r}$ to obtain
@@ -1459,7 +1484,7 @@ Beta distribution.
     +h_n(q^{\times r},\lambda^{\times r})\bigr]
     -h_{n-1}(q^{\times(r+1)},\lambda^{\times r}).
   \]
-  Apply \eqref{eq:pge23-beta-h} to the first two terms, with
+  Apply \Cref{lem:pge23-beta-representation} with $j=n$ to the first two terms, taking
   $(a,b)=(p,-\lambda)$ and $(a,b)=(q,\lambda)$, and apply
   \eqref{eq:pge23-beta-h-deriv} to the third, with $(a,b)=(q,\lambda)$.
   Define
