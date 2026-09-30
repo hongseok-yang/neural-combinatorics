@@ -274,7 +274,10 @@ For $p\ge2/3$, equality holds in \eqref{eq:intro-commonality} exactly when $W$ h
 This includes the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, $W_k$.
 
 This stronger statement immediately implies \Cref{thm:main}.
-Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives $\tC m{1-W}\le\tP{m-1}{1-W}$.
+Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives
+\begin{equation}\label{eq:cycle-path-comparison}
+  \tC m{1-W}\le\tP{m-1}{1-W}.
+\end{equation}
 Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^{m-1}$, we obtain
 \[
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}{1-W}-\tC m{1-W}\ge0.
@@ -316,10 +319,13 @@ For either $T=\Tker W$ or $T=\Tker{1-W}$, the trace decomposes as
 The first term retains only the constant component, the second retains only the zero-average component, and the final sum includes every sequence using both components.
 For $\Tker W$ and $\Tker{1-W}$, the first contributions sum to $p^m+(1-p)^m$, while the second contributions cancel for odd $m$.
 It therefore remains to show that the two sums involving both components together are at least the path-density correction.
-We carry out this decomposition using finite-matrix representations of graphons that are constant on a finite grid of rectangles; an approximation argument gives the result for general graphons.
+We carry out this decomposition using finite-matrix representations of
+\emph{step graphons}: graphons that are constant on each product of two
+parts of a finite measurable partition of $[0,1]$.
+An approximation argument gives the result for general graphons.
 
 Second, we reduce this comparison to polynomial nonnegativity.
-For a step graphon, the trace decomposition from the first step gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
+For such a step graphon, the trace decomposition from the first step gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
 \[
   \begin{aligned}
     & \Bigl(\tC mW+\tC m{1-W}-p^m-(1-p)^m\Bigr)
@@ -1908,39 +1914,55 @@ $\E\rho_{n,m}(q+xY)$ needed in the Laplace--Gamma representation
 \section{Equality and qualitative stability}
 \label{sec:equality-stability}
 
-The two inequalities used in the proof impose different conditions on equality.
-Equality in \Cref{thm:commonality} forces constant degrees; equality in the cycle--path comparison then forces the complement to be a union of equal cliques.
+This section characterizes equality in the odd-cycle Goodman bound \eqref{eq:intro-main}
+by analyzing the two inequalities used to derive it: the strengthened
+extended-commonality inequality \eqref{eq:intro-commonality} and the
+cycle--path comparison \eqref{eq:cycle-path-comparison}.
+We first prove in \Cref{prop:regularity-gap} that equality in
+\eqref{eq:intro-commonality} forces $W$ to have constant degree $p$.
+We then show in \Cref{prop:main-equality} that, under this regularity condition,
+equality in \eqref{eq:cycle-path-comparison} forces the complement $1-W$
+to be a union of equal cliques.
 Together, these conditions identify the balanced complete multipartite graphons as the only graphons attaining the bound when $2/3\le p<1$.
+Finally, we use this uniqueness and graphon compactness to prove qualitative
+stability at densities $p=1-1/k$, $k\ge3$, in \Cref{cor:stability}.
 
 For a graphon $W$ of edge density $p$, define its degree function by
 \[
   \dW(x)=\int_0^1 W(x,y)\dd y.
 \]
 We call $W$ \emph{$p$-regular} if $\dW(x)=p$ for almost every $x$.
-The gap $\Phi_m$ of \eqref{eq:Phi-expansion} is a sum of integrals against the spectral measure $\mu$ of a step graphon.
-With $U=1-W$ and $q=1-p$, solving \eqref{eq:commonality-gap} for $\Phi_m$ and using $q^m-q^{m-1}=-pq^{m-1}$ turns it into
+With $U=1-W$ and $q=1-p$, define $\Psi_m(W)$ for any graphon $W$
+as the difference between the left- and right-hand sides of
+\eqref{eq:intro-commonality}:
 \begin{equation}\label{eq:equality-gap}
-  \Phi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr),
+  \Psi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr).
 \end{equation}
-a combination of homomorphism densities in which no eigenvalue appears.
-We take \eqref{eq:equality-gap} as the definition of the gap for an arbitrary graphon $W$; for step graphons it agrees with $\Phi_m$.
-Thus, $\Phi_m(W)$ is the difference between the two sides of \eqref{eq:intro-commonality}.
-The excursion expansion gives an explicit lower bound in terms of degree variation.
+For a step graphon, \Cref{lem:polynomial-reduction} gives
+$\Psi_m(W)=\Phi_m$, where $\Phi_m$ is the sum of spectral integrals
+in \eqref{eq:Phi-expansion}.
+In the following proposition, we first use \eqref{eq:Phi-expansion} to
+bound $\Psi_m(W)$ in terms of degree variation for step graphons.
+We then extend the bound to arbitrary graphons using the same-density
+step-graphon approximations in \Cref{lem:step-reduction}.
 
 \begin{proposition}[Degree variation and equality in the two-colour bound]
 \label{prop:regularity-gap}
   Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
   Then,
   \begin{equation}\label{eq:degree-variance-gap}
-    \Phi_m(W)\ge(m-1)
+    \Psi_m(W)\ge(m-1)
     \left(\int_0^1(\dW(x)-p)^2\dd x\right)^{(m-1)/2}.
   \end{equation}
-  In particular, equality holds in \Cref{thm:commonality} if and only if $W$ is $p$-regular.
+  Moreover, $\Psi_m(W)=0$ if and only if $W$ is $p$-regular.
+  Consequently, equality holds in \eqref{eq:intro-commonality} of
+  \Cref{thm:commonality} if and only if $W$ is $p$-regular.
 \end{proposition}
 
 \begin{proof}
   First suppose that $W$ is a step graphon as in \Cref{sec:matrix-reduction}.
-  We keep only the top term $r=(m-1)/2$ of the sum \eqref{eq:Phi-expansion}.
+  Since $\Psi_m(W)=\Phi_m$, we use the sum \eqref{eq:Phi-expansion}
+  and keep only its top term $r=(m-1)/2$.
   For this $r$ the degree $n=m-2r$ in \eqref{eq:Pmr} equals one, so the two
   complete homogeneous polynomials of degree $n$ are linear,
   \[
@@ -1958,7 +1980,7 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
   All other integrands in \eqref{eq:Phi-expansion} are nonnegative by \Cref{sec:excursion-positivity}.
   Discarding them and integrating the constant $m-1$ against the $r$-fold product of $\mu$ gives
   \[
-    \Phi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
+    \Psi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
   \]
   By the normalization of $g=M_Ue-qe$ and \eqref{eq:moments},
   \[
@@ -1966,9 +1988,9 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
     =\int_0^1(\dW(x)-p)^2\dd x,
   \]
   proving \eqref{eq:degree-variance-gap} for step graphons.
-  The same-density approximations in \Cref{lem:step-reduction} extend it to every graphon: the densities defining $\Phi_m(W)$ converge, as does the degree variance, which equals $\tP2W-p^2$.
+  The same-density approximations in \Cref{lem:step-reduction} extend it to every graphon: the densities defining $\Psi_m(W)$ converge, as does the degree variance, which equals $\tP2W-p^2$.
 
-  If $\Phi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
+  If $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
 
   Conversely, suppose that $W$ is $p$-regular.
   The degree function of $U=1-W$ is then the constant $q$, so
@@ -2004,7 +2026,7 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
   \]
   Substituting both evaluations in \eqref{eq:equality-gap} and using $1-p=q$,
   \[
-    \Phi_m(W)
+    \Psi_m(W)
     =\bigl(p^m+q^m\bigr)-q^{m-1}-\bigl(p^m-pq^{m-1}\bigr)
     =q^m-(1-p)q^{m-1}
     =0. \qedhere
@@ -2014,7 +2036,7 @@ The excursion expansion gives an explicit lower bound in terms of degree variati
 The one-colour gap decomposes as
 \begin{equation}\label{eq:one-colour-gap}
   \tC mW-\bigl(p^m-pq^{m-1}\bigr)
-  =\Phi_m(W)+\bigl[\tP{m-1}U-\tC mU\bigr].
+  =\Psi_m(W)+\bigl[\tP{m-1}U-\tC mU\bigr].
 \end{equation}
 Both terms on the right are nonnegative.
 Thus, a small one-colour gap also forces small degree variation, and equality requires the cycle--path comparison to be an equality as well.
