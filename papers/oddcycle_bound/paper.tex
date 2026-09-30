@@ -109,7 +109,7 @@
 
 \begin{abstract}
   A graph is bipartite exactly when it contains no odd cycle.
-  This characterization makes odd-cycle counts a natural quantitative measure of departure from bipartiteness and leads to the problem of determining how many odd cycles are forced by a prescribed edge density.
+  This characterisation makes odd-cycle counts a natural quantitative measure of departure from bipartiteness and leads to the problem of determining how many odd cycles are forced by a prescribed edge density.
   Goodman's triangle inequality provides a well-known lower bound in the triangle case.
   We establish its analogue for every odd cycle in the dense regime: in the language of graph limits, for every odd integer $m\ge3$, every graphon $W$ with $\edens W=p\ge2/3$ satisfies
   \[
@@ -118,10 +118,10 @@
   Here $\tC mW$ denotes the $C_m$-density of $W$.
   At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality.
   For $k\ge3$, we also obtain uniqueness up to graphon equivalence and qualitative stability.
-  Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
+  Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y}, and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
   This is the first of two papers establishing the bound for all edge densities.
   A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
-  Our result also yields a strengthening of Kim and Lee's extended commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
+  We also prove a strengthening of Kim and Lee's extended commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
   Our proof combines spectral techniques, generating functions, probabilistic averaging, and an odd-to-even moment bound for Gamma random variables.
   The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the moment bound controls the potentially negative odd-moment contributions using nonnegative even-moment contributions.
   Together, these tools give a single argument that is uniform in $m$.
@@ -146,14 +146,14 @@ For complete subgraphs, the corresponding question is the classical Erd\H os-Rad
 Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is attained by the balanced complete $k$-partite graph at each edge density $p=1-1/k$, $k\ge2$, but is not generally sharp between these densities.
 The exact minimum follows a more intricate, piecewise-defined curve.
 Razborov~\cite{razborov2008minimal} determined this curve for triangles using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, establishing the asymptotic minimum conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
-The asymptotic structure of extremal and almost extremal graphs was characterized by Pikhurko and Razborov~\cite{pikhurko2017asymptotic} for triangles and by Kim, Liu, Pikhurko and Sharifzadeh~\cite{kim2020asymptotic} for general cliques.
+The asymptotic structure of extremal and almost extremal graphs was characterised by Pikhurko and Razborov~\cite{pikhurko2017asymptotic} for triangles and by Kim, Liu, Pikhurko, and Sharifzadeh~\cite{kim2020asymptotic} for general cliques.
 
 For odd cycles, our aim is an analogue of Goodman's polynomial bound: a simple formula that works uniformly for every odd cycle length, with no case distinctions in $p$.
 We seek equality at each density $p=1-1/k$, where the balanced complete $k$-partite graph supplies the candidate extremal value, while allowing the bound to be nonoptimal between these densities.
 
 We formulate the problem using graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities~\cite{lovasz2012large,lovasz2006limits}.
 A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
-For a finite graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H)$, its \emph{homomorphism density} in $W$ is
+For a finite simple graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H)$, its \emph{homomorphism density} in $W$ is
 \[
   \dens HW=\intcube{v}\prod_{ij\in E(H)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
 \]
@@ -163,29 +163,34 @@ Thus, for an odd integer $m\ge3$ and a fixed edge density $p\in[0,1]$, we seek a
   \inf\bigl\{\tC mW: W\text{ is a graphon with }\edens W=p\bigr\},
 \]
 where $C_m$ denotes the cycle of length $m$.
-The spectral characterization of cycle densities suggests a candidate bound.
+The spectral characterisation of cycle densities suggests a candidate bound.
 Associate with a graphon $W$ the integral operator $\Tker W$ on $L^2[0,1]$ defined by
 \[
   (\Tker{W}f)(x)=\int_0^1 W(x,y)f(y)\dd y.
 \]
-Because $W$ is symmetric, $\Tker W$ is self-adjoint.
-If $(\lambda_i)_i$ are its eigenvalues, then the trace formula~\cite{lovasz2012large} gives
+Because $W$ is symmetric and square-integrable, $\Tker W$ is a compact
+self-adjoint operator. Its nonzero eigenvalues $(\lambda_i)_i$, counted
+with multiplicity, satisfy
+$\sum_i\lambda_i^2=\intsq W(x,y)^2\ddxy<\infty$.
+Consequently, the power sums below converge absolutely for $m\ge3$,
+and the trace formula~\cite{lovasz2012large} gives
 \[
   \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m.
 \]
 Thus, cycle densities are power sums of the eigenvalues of $\Tker W$.
 
 For balanced complete multipartite graphons, these eigenvalues can be computed explicitly.
-For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graphon defined by
+For an integer $k\ge2$, partition $[0,1]$ into intervals
+$I_1,\ldots,I_k$ of length $1/k$, and define the balanced complete
+$k$-partite graphon $W_k$ by
 \[
   W_k(x,y)=
   \begin{cases}
-    1&\text{if }\lfloor kx\rfloor\ne\lfloor ky\rfloor,\\
+    1&\text{if }x\in I_i,\ y\in I_j,\text{ and }i\ne j,\\
     0&\text{otherwise}.
 \end{cases}
 \]
 Its edge density is $p=1-1/k$.
-Write $I_1,\ldots,I_k$ for the $k$ equal parts.
 If $f$ takes the constant value $c_i$ on each part $I_i$, then
 \[
   (\Tker{W_k}f)(x)=\sum_{j\ne i}\int_{I_j}f(y)\dd y
@@ -202,14 +207,17 @@ At each density $p=1-1/k$, this construction gives an upper bound on the minimum
 Motivated by this expression and Goodman's triangle inequality, we ask whether $\goal$ is also a lower bound for every graphon.
 Such a bound would establish the optimality of $W_k$ at these densities, while allowing the bound to be nonoptimal between them.
 
-In the dense range $p\ge2/3$ considered here, this polynomial bound was previously known only for $C_3$ and $C_5$.
+The triangle and five-cycle cases provide the main precedents for this polynomial bound in the dense range $p\ge2/3$.
 For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=p$ satisfies
 \begin{equation}\label{eq:intro-goodman}
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
-For $m=5$, Bennett, Dudek, Lidick\'y and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, $W_k$ minimizes the $C_5$-density among graphons $W$ with $\edens W=1-1/k$.
+For $m=5$, Bennett, Dudek, Lidick\'y, and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, $W_k$ minimises the $C_5$-density among graphons $W$ with $\edens W=1-1/k$.
 They establish the lower bound by a flag algebra computation and also prove a stability theorem describing graphs whose $C_5$-density is close to the minimum.
-Although their theorem is stated only for integer $k\ge3$, a direct inspection of their flag algebra certificate shows that it remains valid for every real $k\ge3$.
+Although their theorem is stated only for integer $k\ge3$, the lower-bound
+certificate in their Section~2.2.2 remains valid for every real $k\ge3$:
+its matrix remains positive semidefinite, and its coefficient inequalities
+hold throughout this real interval.
 Substituting $k=1/(1-p)$ yields $\tC5W\ge\goodman p5$ for $2/3\le p<1$; the case $p=1$ is immediate.
 
 Our main result extends this bound to every odd cycle in the dense range.
@@ -227,8 +235,8 @@ A companion paper treats $1/2<p<2/3$, and the case $p\le1/2$ is immediate becaus
 At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact extremal value.
 
 \begin{corollary}\label{cor:kpartite}
-  For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimizes the $C_m$-density among graphons $W$ with $\edens W=1-1/k$.
-  For $k\ge3$, it is the unique minimizer up to graphon equivalence.
+  For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimises the $C_m$-density among graphons $W$ with $\edens W=1-1/k$.
+  For $k\ge3$, it is the unique minimiser up to graphon equivalence.
 \end{corollary}
 
 For $k\ge3$, \eqref{eq:intro-kpartite-value} shows that $W_k$ attains the lower bound in \Cref{thm:main}.
@@ -244,9 +252,9 @@ A graph $H$ with $e(H)$ edges is common if
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
 \]
 for every graphon $W$.
-Here $W$ and $1-W$ represent the probabilities of colouring an edge red or blue, respectively; the inequality says that the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
+Here $W$ and $1-W$ represent the probabilities of colouring an edge red or blue, respectively; the inequality says that the uniform random colouring asymptotically minimises the number of monochromatic copies of $H$.
 Goodman's theorem shows that the triangle is common.
-Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
+Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek, and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
 Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
 
 Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
@@ -254,7 +262,7 @@ Kim and Lee~\cite{kim2024extended} established the following density-sensitive s
   \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)}.
 \end{equation}
 This answers a question of Sidorenko~\cite{sidorenko1989cycles}.
-It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
+It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison, and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
@@ -322,6 +330,8 @@ It therefore remains to show that the two sums involving both components togethe
 We carry out this decomposition using finite-matrix representations of
 \emph{step graphons}: graphons that are constant on each product of two
 parts of a finite measurable partition of $[0,1]$.
+Here a finite measurable partition means finitely many disjoint measurable
+sets whose union is $[0,1]$.
 An approximation argument gives the result for general graphons.
 
 Second, we reduce this comparison to polynomial nonnegativity.
@@ -345,7 +355,7 @@ For such a step graphon, the trace decomposition from the first step gives the f
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \end{aligned}
 \]
-The first equality records the outcome of the first reduction.
+The first equality is the trace decomposition from the first reduction.
 The second expresses the remaining trace sums, after subtracting the path-density correction, in terms of explicit polynomials.
 Here $\mu$ is a finite nonnegative measure determined by $W$, supported on $[-1/2,1/2]$, and constructed in \Cref{sec:matrix-reduction}; the $P_{m,r}$ are symmetric polynomials defined in \eqref{eq:Pmr}.
 The index $r$ counts passages from the constant component into the zero-average component and back, called \emph{excursions}.
@@ -406,7 +416,7 @@ The Dirichlet averaging identity extends this nonnegativity to the multivariable
 These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
 The deduction preceding this overview then gives \Cref{thm:main}.
 
-\paragraph{Organization.}
+\paragraph{Organisation.}
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
 \Cref{sec:excursions} develops the excursion expansion and reduces \Cref{thm:commonality} to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
@@ -456,7 +466,7 @@ $M_K$ and the vector $e\in\R^N$ by
   \qquad
   e=\frac1{\sqrt N}(1,\ldots,1)^{\mathsf T}.
 \end{equation*}
-Then, $M_K$ is symmetric and $\norm e=1$. For a step graphon $K$, this normalization expresses the relevant graph densities through matrix powers:
+Then, $M_K$ is symmetric and $\norm e=1$. For a step graphon $K$, this normalisation expresses the relevant graph densities through matrix powers:
 \begin{align}
   \Tr(M_K^j)
   &=\frac1{N^j}\sum_{a_1,\ldots,a_j=1}^N
@@ -573,7 +583,7 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
   in the standard coordinates and the nonnegative entries of $f_+$ and $f_-$,
   together with $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
   Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh-Ritz
-  characterization of the eigenvalues of the symmetric map $A$ proves the
+  characterisation of the eigenvalues of the symmetric map $A$ proves the
   claim.
 \end{proof}
 
@@ -587,7 +597,8 @@ Define the finite nonnegative measure
 \end{equation*}
 The measure $\mu$ is independent of the choice of orthonormal eigenvectors
 within each eigenspace.  Here $\delta_{\lambda_i}$ is the unit point mass
-at $\lambda_i$.  By \Cref{lem:half-norm},
+at $\lambda_i$. By \Cref{lem:half-norm} and the spectral decomposition
+of $A$, for every integer $j\ge0$,
 \begin{equation}\label{eq:moments}
   \supp\mu\subseteq[-1/2,1/2],
   \qquad
@@ -615,7 +626,7 @@ For an odd integer $m\ge3$, the cycle density of $U$ satisfies
     \Tr(R_1M_UR_2M_U\cdots R_mM_U).
 \end{equation}
 We associate each summand with the sequence $R_1\cdots R_m$, called a \emph{word} in $P$ and $Q$.
-This word records the projection choices; the actual matrix product contains an application of $M_U$ between consecutive projections.
+This word specifies the projection choices; the matrix product contains a copy of $M_U$ between consecutive projections.
 For trace terms, we regard the word as cyclic, so its last and first letters are consecutive.
 
 A \emph{block} is a maximal consecutive run of the same letter.
@@ -636,11 +647,11 @@ Here the outward transition contributes $g$, the step within $\mathcal E_0$ cont
 More generally, a block of $\beta+1$ letters $Q$ has $\beta$ steps within $\mathcal E_0$ and contributes the scalar factor $g^{\mathsf T}A^\beta g$.
 By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{sec:matrix-reduction}.
 
-We organize the summands by first fixing the number $r$ of excursions in a word.
+We organise the summands by first fixing the number $r$ of excursions in a word.
 For each fixed $r$, we sum over the possible lengths of the individual $P$-blocks and $Q$-blocks.
 The resulting sums of monomials are expressed using complete homogeneous symmetric polynomials, which we now define.
-For variables $y_1,\ldots,y_k$, the complete homogeneous symmetric
-polynomial of degree $d$ is
+For integers $k\ge1$ and $d\ge0$ and variables $y_1,\ldots,y_k$, the
+complete homogeneous symmetric polynomial of degree $d$ is
 \begin{equation}\label{eq:h-def}
   h_d(y_1,\ldots,y_k)
   =\sum_{\substack{\gamma_1,\ldots,\gamma_k\ge0\\
@@ -649,6 +660,9 @@ polynomial of degree $d$ is
   \qquad h_0=1.
 \end{equation}
 We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
+In \eqref{eq:h-def}, the exponents $\gamma_i$ are nonnegative integers.
+All repeated integrals against $\mu$ below are over $[-1/2,1/2]$,
+which contains its support, unless another domain is specified.
 
 \begin{lemma}[Cycle densities by excursions]
 \label{lem:cycle-excursions}
@@ -706,8 +720,8 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
     (P M_U)^{\alpha_i+1}(Q M_U)^{\beta_i+1}P
     =q^{\alpha_i}(g^{\mathsf T}A^{\beta_i}g)P.
   \]
-  Since the normalized product begins with $P$, appending a final $P$ does not change its trace, by $P^2=P$ and cyclicity.
-  Applying the displayed identity successively, from the last pair of blocks to the first, leaves the product of their scalar factors times $P$.
+  Since the normalised product begins with $P$, appending a final $P$ does not change its trace, by $P^2=P$ and cyclicity.
+  Applying this identity for each pair of blocks, from the last pair to the first, leaves the product of their scalar factors times $P$.
   Taking the trace and using $\Tr(P)=1$, we obtain the length condition and trace formula
   \begin{equation}\label{eq:excursion-length-weight}
     \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r,
@@ -721,7 +735,7 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
   of a word $R_1\cdots R_m$, whose positions are labelled $1,\ldots,m$, and
   a marked boundary where $Q$ is followed by $P$.
   The mark specifies where to start reading the word in cyclic order, and
-  hence which pair of blocks is recorded as $(\alpha_1,\beta_1)$.
+  hence which pair of blocks has indices $(\alpha_1,\beta_1)$.
   Reading from the mark begins with $P$ and ends with $Q$, so no block is
   split. Each word has exactly $r$ eligible boundaries and therefore gives
   $r$ marked words.
@@ -751,6 +765,7 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
       \Bigg(
         r\!\!\!\!
         \sum_{\substack{R_1\cdots R_m\in\{P,Q\}^m\\
+                       \text{both $P$ and $Q$ occur}\\
                        R_1\cdots R_m\text{ has }r\text{ cyclic $Q$-blocks}}}
         \Tr(R_1M_U\cdots R_mM_U)\Bigg)
       =
@@ -803,7 +818,8 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 \end{proof}
 
 We next derive the corresponding formula for path densities, which supplies the correction term in \eqref{eq:intro-commonality}.
-Let $P_k$ denote the path with $k$ edges. Its homomorphism density is
+Let $P_k$ denote the path with $k$ edges, with $P_0$ a single vertex.
+Its homomorphism density is
 \begin{equation*}
   \tP kU=e^{\mathsf T}M_U^ke.
 \end{equation*}
@@ -935,7 +951,8 @@ The following lemma completes the reduction announced at the start of this secti
 
 \begin{lemma}[Reduction to excursion polynomials]
 \label{lem:polynomial-reduction}
-  Let $m\ge3$ be odd. For $1\le r\le(m-1)/2$, let
+  Let $m\ge3$ be odd, and write $p=1-q$. For each integer
+  $1\le r\le(m-1)/2$, let
   \begin{equation}\label{eq:pge23-n}
     n=m-2r,
   \end{equation}
@@ -1180,6 +1197,7 @@ larger range $p\ge1/2$.
   \]
 
   We have proved that
+  for $m\in\{3,5,7\}$ and $1\le r\le(m-1)/2$,
   $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
   $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
   Since $\mu$ is a nonnegative measure, \eqref{eq:Phi-expansion} gives
@@ -1220,7 +1238,7 @@ proved in \Cref{app:gamma-moment}, supplies the required comparison.
 Together, the diagonal reduction and the proof of diagonal positivity establish
 \eqref{eq:pge23-positivity-goal}, completing the proofs of
 \Cref{thm:commonality,thm:main}.
-\Cref{sec:equality-stability} characterizes equality in both inequalities and
+\Cref{sec:equality-stability} characterises equality in both inequalities and
 deduces qualitative stability of the balanced complete multipartite graphons
 at densities $p=1-1/k$, $k\ge3$.
 
@@ -1283,6 +1301,8 @@ To carry out the first step, define the diagonal polynomial
 \end{equation}
 
 \begin{lemma}[Diagonal reduction by Dirichlet averaging]\label{lem:pge23-dirichlet}
+  Let $q,\lambda_1,\ldots,\lambda_r\in\R$, with $p=1-q$ in
+  the definition \eqref{eq:Pmr} of $P_{m,r}$.
   Let $(\Theta_1,\ldots,\Theta_r)$ be uniformly distributed on the simplex
   \[
     \Theta_i\ge0,\qquad \sum_{i=1}^r\Theta_i=1.
@@ -1427,7 +1447,7 @@ and density zero outside this interval.
   $\bigl(\sum_{i=1}^r\Theta_i,\sum_{i=r+1}^{2r}\Theta_i\bigr)$ has the
   $\operatorname{Dirichlet}(r,r)$ distribution.
   A vector with this distribution is distributed as $(X,1-X)$ with
-  $X\sim\BetaLaw(r,r)$, so we may realize $X$ as $\sum_{i=1}^r\Theta_i$.
+  $X\sim\BetaLaw(r,r)$, so we may realise $X$ as $\sum_{i=1}^r\Theta_i$.
   Apply \Cref{lem:pge23-dirichlet-moment} with $k=2r$, taking $x_i=a$
   for $1\le i\le r$ and $x_i=b$ for $r<i\le2r$. This gives
   \begin{align*}
@@ -1452,7 +1472,7 @@ polynomial as a Beta expectation.
     =\frac {m}{n}\bigl(u^n+(1-u)^n\bigr)-u^{n-1},
     \qquad u\in\R.
   \end{equation}
-  Then,
+  Then, for every $q,\lambda\in\R$,
   \begin{equation}\label{eq:pge23-beta-second}
     \widetilde P_{m,r}(q,\lambda)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
@@ -1602,7 +1622,7 @@ polynomial as a Beta expectation.
      =\lambda^{n+r}\int_0^\infty
      \frac{s^{r-1}}{(\lambda+s)^{m}}\rho_{n,m}(q+s)\dd s,
   \end{align*}
-  where we reversed the limits of integration and used $n+2r=m$ in the
+  where we reversed the order of the endpoints and used $n+2r=m$ in the
   final equality.
   Altogether
   \[
@@ -1644,7 +1664,7 @@ polynomial as a Beta expectation.
   $(1-u)((1-u)^{n-1}-u^{n-1})=(1-u)^n-u^{n-1}+u^n$.
   Since $n=m-2r>0$, we have $m/n-1=2r/n>0$.
   Also, $n$ is odd, so $n-1$ is even.
-  In the last line of the displayed decomposition, the second term
+  In this decomposition of $\rho_{n,m}(u)$, the second term
   $\left(\frac{m}{n}-1\right)u^{n-1}$ is therefore nonnegative for every
   $u\in\R$.
   The first term, $\frac{m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)$,
@@ -1685,7 +1705,7 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
   Let $m\ge3$ be odd, let $r$ be an integer satisfying
   $1\le r\le(m-1)/2$, and set $n=m-2r$.
   Let $Y\sim\GammaLaw(r,1)$, where the parameters denote shape and rate.
-  If $\lambda>0$, then
+  For every $q\in\R$ and $\lambda>0$,
   \begin{equation}\label{eq:pge23-laplace-gamma}
     \widetilde P_{m,r}(q,\lambda)
     =\frac{\lambda^{n+r}}{r\Gamma(n)\Gamma(r)}
@@ -1734,8 +1754,9 @@ Gamma moment bound in \Cref{lem:pge23-gamma-moment}.
     \bigl|\rho_{n,m}(q+s)\bigr|\dd s.
   \]
   It remains to show that the integral on the right is finite.
-  Because $n$ is odd, the leading terms in $u^n+(1-u)^n$ cancel, so
-  $\rho_{n,m}(u)$ is a polynomial of degree $n-1$ in $u$.
+  Because $n$ is odd, the terms of degree $n$ in $u^n+(1-u)^n$ cancel.
+  The coefficient of $u^{n-1}$ in $\rho_{n,m}(u)$ is $m-1>0$, so
+  $\rho_{n,m}(u)$ has degree $n-1$ in $u$.
   Since $n=m-2r$, the integrand is therefore
   $O(s^{r+n-2-m})=O(s^{-r-2})$ as $s\to\infty$, and hence is
   integrable at infinity. As $s\to0$,
@@ -1928,8 +1949,8 @@ $\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
 \section{Equality and qualitative stability}
 \label{sec:equality-stability}
 
-This section characterizes equality in the odd-cycle Goodman bound \eqref{eq:intro-main}
-by analyzing the two inequalities used to derive it: the strengthened
+This section characterises equality in the odd-cycle Goodman bound \eqref{eq:intro-main}
+by analysing the two inequalities used to derive it: the strengthened
 extended commonality inequality \eqref{eq:intro-commonality} and the
 comparison between cycle and path densities \eqref{eq:cycle-path-comparison}.
 We first prove in \Cref{prop:regularity-gap} that equality in
@@ -2095,7 +2116,7 @@ the proof of \Cref{lem:step-reduction}.
   \]
 \end{proof}
 
-We now use \Cref{prop:regularity-gap} to characterize equality in the
+We now use \Cref{prop:regularity-gap} to characterise equality in the
 odd-cycle Goodman bound \eqref{eq:intro-main}.
 By the definition of $\Psi_m(W)$ in \eqref{eq:equality-gap}, the difference
 between the left- and right-hand sides of that bound is
@@ -2115,7 +2136,7 @@ complete multipartite graphon.
 
 \begin{proposition}[Equality in the odd-cycle bound]
 \label{prop:main-equality}
-  Let $m\ge3$ be odd, and let $W$ have edge density $2/3\le p<1$.
+  Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $2/3\le p<1$.
   Equality holds in \Cref{thm:main} if and only if $p=1-1/k$ for an integer $k\ge3$ and, up to a measure-preserving relabelling and null sets, $W=W_k$.
 \end{proposition}
 
@@ -2164,6 +2185,8 @@ complete multipartite graphon.
     =\lambda_i^2|\lambda_i|^{m-2}
     \le q^{m-2}\lambda_i^2.
   \]
+  Since $U$ is square-integrable, its eigenvalues, counted with
+  multiplicity, satisfy $\sum_i\lambda_i^2=\intsq U(x,y)^2\ddxy$.
   The trace formula and the pointwise inequality $U^2\le U$ therefore give
   \begin{equation}\label{eq:regular-complement-cycle}
     q^{m-1}=\sum_i\lambda_i^m
@@ -2177,17 +2200,15 @@ complete multipartite graphon.
   Equality in the eigenvalue inequality forces $|\lambda_i|=q$ for every
   nonzero eigenvalue. Since $m$ is odd, a negative eigenvalue would satisfy
   $\lambda_i^m<|\lambda_i|^m$, so every nonzero $\lambda_i$ equals $q$.
-  The operator $\Tker U$ is self-adjoint and Hilbert-Schmidt, so the spectral theorem
-  writes it as $\sum_i\lambda_iP_i$ over its nonzero eigenvalues, with $P_i$ the
-  orthogonal projection onto the eigenspace of $\lambda_i$.
-  All these eigenvalues equal $q$, so the sum collapses to
+  The spectral theorem now gives
   \[
     \Tker U=qP,
     \qquad P=\text{the orthogonal projection onto }\ker(\Tker U-q).
   \]
   Since $P^2=P$, this gives $\Tker U^2=q^2P^2=q^2P=q\Tker U$.
-  Comparing the integral kernels of $\Tker U^2$ and $q\Tker U$, and using
-  the symmetry of $U$, gives
+  Square-integrable kernels defining the same integral operator agree
+  almost everywhere. Comparing the kernels of $\Tker U^2$ and
+  $q\Tker U$, and using the symmetry of $U$, therefore gives
   \begin{equation}\label{eq:equal-neighbourhoods}
     \int_0^1 U(x,z)U(y,z)\dd z=qU(x,y)
     \quad\text{for almost every }(x,y).
@@ -2366,75 +2387,140 @@ The space of graphons modulo this equivalence is compact in cut distance, and ho
 \section{Concluding remarks and further questions}
 \label{sec:conclusion}
 
-For general odd cycle lengths, the only nontrivial range not covered in the present paper is $p\in(1/2,2/3)$; \Cref{prop:short-cycles} already covers this range for $C_3$, $C_5$, and $C_7$.
-The present proof first establishes the strengthened extended commonality
-inequality \eqref{eq:intro-commonality} of \Cref{thm:commonality}.
-This inequality can fail when $1/2<p<2/3$, so the argument does not extend
-to this range.
-The density restriction enters in \Cref{prop:pge23-gamma-positive}, where
-we apply the odd-to-even Gamma moment bound of \Cref{lem:pge23-gamma-moment}
-to show that $\E\rho_{n,m}(q+xY)\ge0$.
-As explained in \Cref{rem:pge23-threshold}, this step requires $q\le1/3$,
-or equivalently $p\ge2/3$.
-The companion paper proves the odd-cycle Goodman bound \eqref{eq:intro-main} on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
+We have proved that Goodman's polynomial lower bound for triangles extends
+to every odd cycle in the dense range. For every odd $m\ge3$ and every
+graphon $W$ of edge density $p\ge2/3$, \Cref{thm:main} gives
+\[
+  \tC mW\ge p^m-p(1-p)^{m-1}.
+\]
+At each density $p=1-1/k$ with $k\ge3$, the balanced complete
+$k$-partite graphon $W_k$ attains this bound. The formula therefore
+determines the exact minimum odd-cycle density at all these densities.
 
-At each density $1-1/k$ with $k\ge3$, the present argument determines both the minimum odd-cycle density and the unique extremal graphon, with qualitative stability.
-The degree-variance estimate \eqref{eq:degree-variance-gap} quantifies one part of this structure: a small gap forces degrees to be nearly constant.
-The subsequent compactness argument gives no explicit rate of convergence to $W_k$ in cut distance; obtaining such a rate would strengthen the structural conclusion.
+The proof treats every odd cycle length through the same sequence of
+reductions. The key intermediate result is the strengthened extended commonality
+inequality \eqref{eq:intro-commonality} of \Cref{thm:commonality}, which
+bounds $\tC mW+\tC m{1-W}$ from below with an explicit path-density
+correction. To prove it, we use cancellation between $W$ and its
+complement in the spectral expansion to express the gap as a sum of
+integrals of excursion polynomials. Dirichlet
+averaging reduces their nonnegativity to a one-variable problem. Beta and
+Gamma expectation representations then allow the odd-to-even Gamma moment
+bound of \Cref{lem:pge23-gamma-moment} to complete the proof.
 
-The Goodman-style perspective extends naturally beyond odd cycles. For a
-nonbipartite graph $H$, let $\chi_H$ be its chromatic polynomial, let
+Within the same density range, the equality analysis also determines the
+extremal structure.
+Equality in the strengthened extended commonality inequality
+\eqref{eq:intro-commonality} holds precisely when $W$ has constant degree
+(\Cref{prop:regularity-gap}). Equality in the odd-cycle Goodman bound
+\eqref{eq:intro-main}, for $p<1$, further forces its complement to be a
+union of equal cliques (\Cref{prop:main-equality}). Thus, at each density
+$1-1/k$ with $k\ge3$, $W_k$ is the unique minimiser up to graphon
+equivalence. For fixed $m$ and $k$, \Cref{cor:stability} shows that graphons
+whose edge and cycle densities approach those of $W_k$ must approach
+$W_k$ in cut distance.
+
+The restriction $p\ge2/3$ enters when we apply the odd-to-even Gamma
+moment bound to prove the nonnegativity of
+$\E\rho_{n,m}(q+xY)$ in \Cref{prop:pge23-gamma-positive};
+\Cref{rem:pge23-threshold} identifies the coefficient that requires this
+restriction. The strengthened extended commonality inequality can fail
+when $1/2<p<2/3$, so the general argument does not extend directly to
+that interval. For example, let $W$ be constant on the products of two
+parts of measure $1/2$, with value matrix
+\[
+  \frac1{250}\begin{pmatrix}50&193\\193&65\end{pmatrix}.
+\]
+Then $p=501/1000$, and the matrix formulas in
+\Cref{sec:matrix-reduction} give
+\[
+  \Psi_9(W)=-\frac{227031617768589}{5\cdot10^{21}}<0.
+\]
+Thus, this graphon violates \eqref{eq:intro-commonality} for $m=9$.
+For $C_3$, $C_5$, and $C_7$, the direct computations in
+\Cref{prop:short-cycles} prove both main inequalities throughout $p\ge1/2$.
+The companion paper proves the odd-cycle Goodman bound
+\eqref{eq:intro-main} for all odd cycle lengths on $1/2<p<2/3$ by different
+methods.
+
+A natural next question is quantitative stability. The degree-variance
+estimate \eqref{eq:degree-variance-gap} already controls the variation in
+degrees through the gap $\Psi_m(W)$ in
+\eqref{eq:intro-commonality}. The proof of \Cref{cor:stability} gives no
+explicit rate for the cut distance. At a fixed edge density $p=1-1/k$,
+$k\ge3$, one can ask for an explicit bound on
+$\delta_\square(W,W_k)$ in terms of the cycle-density excess
+$\tC mW-\tC m{W_k}$.
+
+The balanced complete multipartite graphons also suggest polynomial
+bounds for other nonbipartite graphs. For such a graph $H$, let
+$\chi_H$ be its chromatic polynomial, let
 $\chi(H)$ be its chromatic number, and let $v(H)$ be its number of vertices.
 Define
 \[
   G_H(p):=\chi_H\left(\frac{1}{1-p}\right)(1-p)^{v(H)}.
 \]
-Although this formula is written using $1/(1-p)$, it is a polynomial in
-$p$: expanding the chromatic polynomial cancels every denominator. At
-$p=1$, we use this polynomial's continuous extension.
+Since $\chi_H$ has degree $v(H)$, substituting $1/(1-p)$ produces terms
+whose denominators are $(1-p)^j$ with $0\le j\le v(H)$.
+The factor $(1-p)^{v(H)}$ therefore cancels every denominator, leaving
+a polynomial in $p$. At $p=1$, we evaluate this polynomial.
+At $p=1-1/k$, the number of proper $k$-colourings of $H$ gives
+\[
+  G_H(1-1/k)=\frac{\chi_H(k)}{k^{v(H)}}=\dens H{W_k}.
+\]
+Thus, $G_H$ is the unique polynomial in $p$ agreeing with these
+multipartite densities for every integer $k\ge\chi(H)-1$.
+For odd $m$, this construction recovers the polynomial studied here:
+\[
+  G_{C_m}(p)=p^m-p(1-p)^{m-1}.
+\]
 We say that $H$ satisfies its \emph{Goodman-style bound} if every graphon
 $W$ with $\edens W=p\ge1-1/(\chi(H)-1)$ satisfies
 \[
   \dens HW\ge G_H(p).
 \]
-The definition is motivated by the balanced complete $k$-partite graphons $W_k$:
-at $p=1-1/k$,
-\[
-  G_H(1-1/k)=\frac{\chi_H(k)}{k^{v(H)}}=\dens H{W_k}.
-\]
-Consequently, if $W_k$ minimizes the $H$-density at edge density $1-1/k$
-for every integer $k\ge\chi(H)-1$, then the Goodman-style bound is tight at
-all of these distinguished densities. Moreover, $G_H$ is the unique
-polynomial in $p$ that takes these values for every such $k$.
+For such a graph $H$, every $W_k$ with $k\ge\chi(H)-1$ attains the
+bound and hence minimises the $H$-density at its edge density.
 
 This leads to a broader question: which nonbipartite graphs satisfy their
-Goodman-style bounds? We record several examples and obstructions whose
-proofs lie beyond the scope of this paper.
+Goodman-style bounds? The following examples and obstruction give some
+directions for this classification; their proofs lie beyond the scope of
+this paper.
+% TODO: Add a reference for these results beyond odd cycles.
 \begin{itemize}
-  \item If a graph is chordal and all its maximal cliques are of the same size, then it has the Goodman-style bound.
-  \item The join of a clique $K_r$ and an odd cycle $C_{2k+1}$ has the
-  Goodman-style bound. In particular, taking $r=1$ gives the joins
-  $K_1\vee C_{2k+1}$, often called odd wheels.
-  \item If the girth of a graph is even, then the graph does not have the
-  Goodman-style bound.
+  \item A nonbipartite chordal graph whose maximal cliques all have the
+  same size satisfies its Goodman-style bound. A graph is chordal if
+  every cycle of length at least four has an edge joining two
+  nonconsecutive vertices of that cycle.
+  \item For integers $r\ge1$ and $k\ge1$, the join
+  $K_r\vee C_{2k+1}$ satisfies its Goodman-style bound. The join is
+  obtained from the two disjoint graphs by adding every edge between
+  them. Taking $r=1$ gives the odd wheels.
+  \item A nonbipartite graph of even girth does not satisfy its
+  Goodman-style bound. Here the girth is the length of a shortest cycle.
 \end{itemize}
+Characterising the graphs that satisfy their Goodman-style bounds would
+explain when the values attained by balanced complete multipartite graphons
+yield a polynomial lower bound valid also at the densities between those
+points of equality.
 
-\medskip
-\noindent\textbf{AI use disclosure.}
+\paragraph{AI use disclosure}
 AI assistance in this work involved GPT Pro 5.5 and 5.6,
 GPT Sol 5.6, GPT Astra 6.0, Claude Opus XY, and Claude Fable 5.0. 
 
-\noindent\textbf{Lean formalization}
+\paragraph{Lean formalisation}
 The equality and stability consequences in \Cref{sec:equality-stability} are not included in the formal verification reported here.
 \tk{TODO: Write here about deviation that lean verification and current proof.}
 
-\noindent{\textbf{Acknowledgements.}}
-\tk{TODO: Add acknowledgements.}
+\paragraph{Acknowledgements}
 We would like to thank Gyeongwon Jeong, Jang Soo Kim, Sangho Lim, and
 Seonghun Park for helpful discussions.
 S. Im was supported by a KIAS individual Grant (AP109501) at Korea Institute for Advanced Study.
 T. Kim and H. Yang were supported by the National Research Foundation of Korea (NRF)
 grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
+J. Lee was supported by Samsung STF Grant SSTF-BA2201-02 and
+the National Research Foundation of Korea (NRF) grant
+funded by the Korean Government (MSIT) (No.~NRF-2022R1C1C1010300).
 
 
 
@@ -2467,8 +2553,12 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
     \qquad(s\to\infty).
   \end{equation}
   To verify the convergence, let $S$ be a function constant on the
-  level-$s_0$ dyadic rectangles. For $s\ge s_0$, cell averaging fixes
-  $S$ and is an $L^1$-contraction, so
+  rectangles obtained by dividing each coordinate interval into
+  $2^{s_0}$ equal parts. For $s\ge s_0$, each averaging cell lies in
+  one of these rectangles, so its average of $S$ equals $S$ itself.
+  On each cell, the absolute value of the average of $W-S$ is at most
+  the average of $|W-S|$. Summing over the cells gives
+  $\norm{W_s-S}_1\le\norm{W-S}_1$, and hence
   \[
     \norm{W_s-W}_1
     \le \norm{W_s-S}_1+\norm{S-W}_1
@@ -2477,13 +2567,18 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
   Dyadic step functions are dense in $L^1([0,1]^2)$, proving
   \eqref{eq:step-L1}.
 
-  If $F$ is a finite graph, telescoping its edge factors gives
+  If $F$ is a finite simple graph, subtract the two products defining
+  $\dens F{W_s}$ and $\dens FW$ by replacing one edge factor at a time.
+  Each resulting term contains one factor $W_s-W$; all other factors
+  lie in $[0,1]$. Integrating its absolute value bounds that term by
+  $\norm{W_s-W}_1$. There are $|E(F)|$ terms, so
   \[
     \left|\dens F{W_s}-\dens FW\right|
     \le |E(F)|\norm{W_s-W}_1.
   \]
   The same bound holds for $U_s=1-W_s$ and $U=1-W$. Hence all cycle and
-  path densities in the two inequalities converge, while $p$ and $q$
+  path densities in \eqref{eq:intro-main} and
+  \eqref{eq:intro-commonality} converge, while $p$ and $q$
   remain unchanged.
   Applying the two inequalities to each $W_s$ and passing to the limit
   proves the lemma.
@@ -2527,11 +2622,13 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \noindent\emph{The differential equation.}
 
   For every polynomial $f$, integration by parts against the density of
-  $Y\sim\GammaLaw(r,1)$ gives
+  $Y\sim\GammaLaw(r,1)$ gives the identity below; the boundary term
+  $y^re^{-y}f(y)$ vanishes both at $0$ and as $y\to\infty$:
   \begin{equation*}
     \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr].
   \end{equation*}
-  Apply this identity to $f(y)=(y-b)^k$ and write $I_k(b)=\E(Y-b)^k$.
+  For an integer $k\ge1$, apply this identity to $f(y)=(y-b)^k$
+  and write $I_\ell(b)=\E(Y-b)^\ell$ for integers $\ell\ge0$.
   The two sides are
   \begin{align*}
     \E[Y f'(Y)] &= k\E\bigl[(Y-b)(Y-b)^{k-1}+b(Y-b)^{k-1}\bigr] = kI_k(b)+kbI_{k-1}(b),\\
@@ -2706,13 +2803,25 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     {t(t+1)^2(4t+1)^3(8t+5)^2}.
     \label{eq:pge23-gamma-Lsecond}
   \end{align}
-  Every factor of \eqref{eq:pge23-gamma-Lsecond} other than the quartic $P(t)=128t^4+224t^3+120t^2-28t-25$ is positive for $t>0$, so $L''$ and $P$ have opposite signs.
+  In \eqref{eq:pge23-gamma-Lsecond}, the denominator and the factor
+  $32t^2+25t+2$ are positive for $t>0$. The initial minus sign therefore
+  makes the sign of $L''$ opposite to that of the quartic
+  $P(t)=128t^4+224t^3+120t^2-28t-25$.
   The coefficients of $P$ change sign once, so by Descartes' rule of signs $P$ has at most one positive root.
   Since $P(0)=-25<0$ and $P(t)\to\infty$, it has exactly one positive
   root $t_0$. Consequently, $L'$ increases on $(0,t_0)$ and decreases on
   $(t_0,\infty)$.
 
-  We now evaluate $L'$ at three points to locate its two zeros.
+  We now determine the sign of $L'$ near $0$, at $1$, and at $3/2$
+  to locate its two zeros.
+  We will use the elementary bounds $\log2<7/10$ and
+  $\log13<13/5$. The positive terms in the exponential series give
+  \[
+    e^{7/10}>\sum_{\ell=0}^{3}\frac{(7/10)^\ell}{\ell!}>2,
+    \qquad
+    e^{13/5}>\sum_{\ell=0}^{6}\frac{(13/5)^\ell}{\ell!}>13,
+  \]
+  which prove both bounds by taking logarithms.
   As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:pge23-gamma-Lprime} tends to $-14/15$, so $L'(t)\to-\infty$.
   At $t=1$ we have $A(1)=39/20$ and the rational term equals $2419/1950$, so the bound
   \[
@@ -2720,7 +2829,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \]
   gives $2\log A(1)\ge\frac{76}{59}$ and
   \[
-    L'(1)\ge\frac{76}{59}-\frac{2419}{1950} \approxeq 0.047622\ldots>0.
+    L'(1)\ge\frac{76}{59}-\frac{2419}{1950}
+    =\frac{5479}{115050}>0.
   \]
   At $t=3/2$ we have $A(3/2)=153/70$ and the rational term equals $19847/12495$; concavity of the logarithm at $x=2$ gives
   \[
@@ -2731,7 +2841,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \[
     L'\left(\frac{3}{2}\right)
     <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}
-    \approxeq -0.002681\ldots<0.
+    =-\frac{67}{24990}<0.
   \]
 
   Since $L'$ first increases and then decreases, these signs show that it
@@ -2764,7 +2874,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \end{equation}
   On $[1,3/2]$ we have $96t-191<0$ and $t^2\ge1$, so the cubic numerator is at most $(96t-191)-16t+46=80t-145\le-25$, and $L(t)<0$ there as well.
 
-  To summarize, the signs of $L'$ and $L''$ in
+  To summarise, the signs of $L'$ and $L''$ in
   \eqref{eq:pge23-gamma-Lprime} and \eqref{eq:pge23-gamma-Lsecond} leave only two
   candidates for the supremum of $L$: its negative limit at $0$ and one
   local maximum in $[1,3/2]$. On that interval, the rational bound
