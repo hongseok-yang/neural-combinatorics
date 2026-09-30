@@ -2196,8 +2196,8 @@ complete multipartite graphon.
   Thus, the two neighbourhoods differ only on a set of measure zero.
   For almost every pair with $U(x,y)=0$, their intersection has measure
   zero, so the neighbourhoods are disjoint apart from a set of measure zero.
-  In the construction below, equality and disjointness of sets are understood
-  in this sense. Statements that $U=1$ or $U=0$ on a region mean that the
+  In the construction below, equality, containment, and disjointness of sets
+  are understood up to null sets. Statements that $U=1$ or $U=0$ on a region mean that the
   asserted value holds for almost every pair of points in that region.
 
   We now partition $[0,1]$ into disjoint sets $B_1,\ldots,B_k$ of
@@ -2222,11 +2222,27 @@ complete multipartite graphon.
   Suppose the invariant holds at stage $j$ and $|R_j|>0$.
   Condition (ii) supplies the two requirements $|N(x)|=q$ and
   $|N(x)\setminus R_j|=0$ for almost every $x\in R_j$.
-  We also need the neighbourhood relations above to hold for almost
-  every $y$ with this fixed $x$. Since they hold for almost every pair
-  $(x,y)$, Fubini's theorem gives this additional property for almost
-  every $x$. The union of the exceptional null sets cannot exhaust
-  $R_j$, so we can choose $x\in R_j$ satisfying all these requirements.
+  Choose $x\in R_j$ satisfying these two requirements and such that
+  \[
+    U(x,y)=1\quad\Longrightarrow\quad N(y)=N(x)
+    \qquad\text{for almost every }y\in[0,1].
+  \]
+  To justify this choice, let $E\subseteq[0,1]^2$ be the set of pairs
+  $(x,y)$ for which this implication fails. We have already proved the
+  implication for almost every pair, so $E$ has two-dimensional
+  Lebesgue measure zero. Fubini's theorem applied to its indicator
+  function $\one_E$ gives
+  \[
+    0=\intsq\one_E(x,y)\ddxy
+    =\int_0^1\left(\int_0^1\one_E(x,y)\dd y\right)\dd x.
+  \]
+  The inner integral is the measure of the set of $y$ for which the
+  implication fails at a given $x$. It is nonnegative, so its integral
+  being zero forces it to be zero for almost every $x$. Thus, for
+  almost every $x$, the implication holds for almost every $y$, as
+  required. Excluding these exceptional choices of $x$ and those
+  excluded by condition (ii) still removes only a null set from $R_j$.
+  Since $|R_j|>0$, a point satisfying all the requirements exists.
   Set
   \[
     B_{j+1}=N(x)\cap R_j,
@@ -2236,12 +2252,34 @@ complete multipartite graphon.
   $q$. For almost every $y\in B_{j+1}$, we have
   $U(x,y)=1$, so the neighbourhood relation gives
   $N(y)=N(x)=B_{j+1}$. This verifies condition (i) for the new block;
-  the earlier blocks are unchanged. In particular, $U=0$ between
-  $B_{j+1}$ and its complement. By symmetry and Fubini's theorem,
-  $|N(y)\cap B_{j+1}|=0$ for almost every $y\in R_{j+1}$.
-  Together with condition (ii) at stage $j$, this gives
-  $|N(y)\setminus R_{j+1}|=0$ for almost every $y\in R_{j+1}$,
-  while $|N(y)|=q$ still holds. Thus, condition (ii) is also preserved.
+  the earlier blocks are unchanged.
+
+  To verify condition (ii), we must show that almost every point of
+  $R_{j+1}$ still has a neighbourhood of measure $q$ contained in
+  $R_{j+1}$. For almost every $z\in B_{j+1}$, the identity
+  $N(z)=B_{j+1}$ shows that $z$ has no neighbours in $R_{j+1}$.
+  Symmetry of $U$ and Fubini's theorem therefore give
+  \[
+    \begin{aligned}
+      0&=\int_{B_{j+1}}\int_{R_{j+1}}U(z,y)\dd y\dd z\\
+       &=\int_{R_{j+1}}\int_{B_{j+1}}U(y,z)\dd z\dd y
+        =\int_{R_{j+1}}|N(y)\cap B_{j+1}|\dd y.
+    \end{aligned}
+  \]
+  Since the last integrand is nonnegative, it is zero for almost every
+  $y\in R_{j+1}$. Thus, almost every point of the new remainder has
+  no neighbours in the block just removed. This means that the point's neighbours outside
+  $R_{j+1}$ must therefore lie outside $R_j$, since
+  $R_{j+1}=R_j\setminus B_{j+1}$. Consequently,
+  for almost every $y\in R_{j+1}$,
+  \[
+    |N(y)\setminus R_{j+1}|
+    =|N(y)\setminus R_j|=0,
+  \]
+  where the last equality follows from condition (ii) at stage $j$.
+  Since $R_{j+1}\subseteq R_j$, condition (ii) at stage $j$ also
+  gives $|N(y)|=q$ for almost every $y\in R_{j+1}$. This verifies
+  both requirements of condition (ii) at stage $j+1$.
 
   Each step removes measure $q>0$, so $|R_j|=1-jq$ and at most
   $\lfloor1/q\rfloor$ steps are possible. The construction can continue
