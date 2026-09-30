@@ -2200,17 +2200,57 @@ complete multipartite graphon.
   in this sense. Statements that $U=1$ or $U=0$ on a region mean that the
   asserted value holds for almost every pair of points in that region.
 
-  Choose $x$ with $|N(x)|=q$ for which these neighbourhood relations hold
-  for almost every $y$, and put $B=N(x)$.
-  For almost every $y\in B$, we have $U(x,y)=1$ and hence $N(y)=B$.
-  Therefore, $U=1$ on $B\times B$ and $U=0$ between $B$ and
-  $[0,1]\setminus B$.
-  Almost every point outside $B$ therefore has degree $q$ within
-  $[0,1]\setminus B$, so the same argument applied to this remaining set
-  extracts a further set of measure $q$, and so on.
-  A remainder of measure strictly between $0$ and $q$ is impossible, since its points have degree $q$ and no neighbours in the sets already extracted.
-  These sets thus partition $[0,1]$, their number $k$ satisfies $kq=1$, and $U$ is the union of the $k$ disjoint cliques $B\times B$.
-  The complement of $U$ is $W_k$ after relabelling; $p\ge2/3$ implies $k\ge3$.
+  We now partition $[0,1]$ into disjoint sets $B_1,\ldots,B_k$ of
+  measure $q$, with $U=1$ within each set and $U=0$ between different
+  sets. At stage $j$, we have chosen pairwise disjoint measurable sets
+  $B_1,\ldots,B_j$, and the remaining set is
+  \[
+    R_j=[0,1]\setminus\bigcup_{i=1}^j B_i.
+  \]
+  We maintain the following invariant:
+  \begin{enumerate}[label=(\roman*)]
+    \item For each $i\le j$, $|B_i|=q$ and $N(y)=B_i$ for almost
+      every $y\in B_i$. Thus, $B_i$ is a clique with no edges to its
+      complement.
+    \item For almost every $x\in R_j$, $|N(x)|=q$ and
+      $|N(x)\setminus R_j|=0$. Thus, almost every point in the
+      remainder still has all its neighbours in the remainder.
+  \end{enumerate}
+  Initially, $j=0$ and $R_0=[0,1]$. Condition (i) is vacuous, and
+  condition (ii) follows from the $q$-regularity of $U$.
+
+  Suppose the invariant holds at stage $j$ and $|R_j|>0$.
+  Condition (ii) supplies the two requirements $|N(x)|=q$ and
+  $|N(x)\setminus R_j|=0$ for almost every $x\in R_j$.
+  We also need the neighbourhood relations above to hold for almost
+  every $y$ with this fixed $x$. Since they hold for almost every pair
+  $(x,y)$, Fubini's theorem gives this additional property for almost
+  every $x$. The union of the exceptional null sets cannot exhaust
+  $R_j$, so we can choose $x\in R_j$ satisfying all these requirements.
+  Set
+  \[
+    B_{j+1}=N(x)\cap R_j,
+    \qquad R_{j+1}=R_j\setminus B_{j+1}.
+  \]
+  The new block is disjoint from the earlier blocks and has measure
+  $q$. For almost every $y\in B_{j+1}$, we have
+  $U(x,y)=1$, so the neighbourhood relation gives
+  $N(y)=N(x)=B_{j+1}$. This verifies condition (i) for the new block;
+  the earlier blocks are unchanged. In particular, $U=0$ between
+  $B_{j+1}$ and its complement. By symmetry and Fubini's theorem,
+  $|N(y)\cap B_{j+1}|=0$ for almost every $y\in R_{j+1}$.
+  Together with condition (ii) at stage $j$, this gives
+  $|N(y)\setminus R_{j+1}|=0$ for almost every $y\in R_{j+1}$,
+  while $|N(y)|=q$ still holds. Thus, condition (ii) is also preserved.
+
+  Each step removes measure $q>0$, so $|R_j|=1-jq$ and at most
+  $\lfloor1/q\rfloor$ steps are possible. The construction can continue
+  whenever the remainder has positive measure, so it must end with
+  $|R_k|=0$ for some $k$. Hence $B_1,\ldots,B_k$ cover $[0,1]$
+  up to a null set and $kq=1$. By condition (i), $U$ consists of the
+  $k$ disjoint cliques $B_i\times B_i$, so its complement is $W_k$
+  after relabelling.
+  Finally, $p=1-1/k\ge2/3$ implies $k\ge3$.
 \end{proof}
 
 At $p=1$, the only graphon is $W=1$ almost everywhere, which also attains equality.
