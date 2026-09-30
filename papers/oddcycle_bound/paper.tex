@@ -2143,8 +2143,12 @@ complete multipartite graphon.
   \]
   This proves the operator-norm bound. Since $\Tker U$ is self-adjoint,
   its eigenvalues $\lambda_i$ lie in $[-q,q]$.
-  As $m$ is odd, each eigenvalue satisfies
-  $\lambda_i^m\le q^{m-2}\lambda_i^2$.
+  Since $|\lambda_i|\le q$ and $m\ge3$, each eigenvalue satisfies
+  \[
+    \lambda_i^m\le|\lambda_i|^m
+    =\lambda_i^2|\lambda_i|^{m-2}
+    \le q^{m-2}\lambda_i^2.
+  \]
   The trace formula and the pointwise inequality $U^2\le U$ therefore give
   \begin{equation}\label{eq:regular-complement-cycle}
     q^{m-1}=\sum_i\lambda_i^m
@@ -2155,8 +2159,9 @@ complete multipartite graphon.
   The two ends of \eqref{eq:regular-complement-cycle} agree, so equality
   holds in both inequalities. Equality in the last inequality forces
   $U^2=U$ almost everywhere, so $U$ takes values in $\{0,1\}$.
-  Equality in the eigenvalue inequality forces every nonzero $\lambda_i$
-  to equal $q$.
+  Equality in the eigenvalue inequality forces $|\lambda_i|=q$ for every
+  nonzero eigenvalue. Since $m$ is odd, a negative eigenvalue would satisfy
+  $\lambda_i^m<|\lambda_i|^m$, so every nonzero $\lambda_i$ equals $q$.
   The operator $\Tker U$ is self-adjoint and Hilbert--Schmidt, so the spectral theorem
   writes it as $\sum_i\lambda_iP_i$ over its nonzero eigenvalues, with $P_i$ the
   orthogonal projection onto the eigenspace of $\lambda_i$.
