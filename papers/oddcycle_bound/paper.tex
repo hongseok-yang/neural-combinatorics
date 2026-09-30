@@ -1938,14 +1938,16 @@ as the difference between the left- and right-hand sides of
 \begin{equation}\label{eq:equality-gap}
   \Psi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr).
 \end{equation}
-For a step graphon, \Cref{lem:polynomial-reduction} gives
+For a step graphon on a partition into intervals of equal length,
+\Cref{lem:polynomial-reduction} gives
 $\Psi_m(W)=\Phi_m$, where $\Phi_m$ is the sum of spectral integrals
 in \eqref{eq:Phi-expansion}.
 In the following proposition, we first use \eqref{eq:Phi-expansion} to
-bound $\Psi_m(W)$ in terms of degree variation for step graphons $W$.
+bound $\Psi_m(W)$ in terms of degree variation for step graphons $W$ of this form.
 We then extend the bound to arbitrary graphons by approximating $W$ with
-step graphons of the same edge density, as done in the proof of
-\Cref{lem:step-reduction}.
+step graphons on successively finer partitions into intervals of equal
+length. These approximations preserve the edge density of $W$, as in
+the proof of \Cref{lem:step-reduction}.
 
 \begin{proposition}[Degree variation and equality in the two-colour bound]
 \label{prop:regularity-gap}
@@ -1961,10 +1963,12 @@ step graphons of the same edge density, as done in the proof of
 \end{proposition}
 
 \begin{proof}
-  First suppose that $W$ is a step graphon as in \Cref{sec:matrix-reduction}.
+  First suppose that $W$ is constant on each rectangle $I_a\times I_b$,
+  where $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$,
+  as in \Cref{sec:matrix-reduction}.
   Since $\Psi_m(W)=\Phi_m$, we use the sum \eqref{eq:Phi-expansion}
   and keep only its top term $r=(m-1)/2$.
-  For this $r$ the degree $n=m-2r$ in \eqref{eq:Pmr} equals one, so the two
+  For this $r$, the degree $n=m-2r$ in \eqref{eq:Pmr} equals one, so the two
   complete homogeneous polynomials of degree $n$ are linear,
   \[
     h_1(\rep pr,-\lambda_1,\ldots,-\lambda_r)=rp-\sum_{i=1}^r\lambda_i,
@@ -1978,21 +1982,42 @@ step graphons of the same edge density, as done in the proof of
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
     =\frac mr\bigl(rp+rq\bigr)-1=m-1.
   \]
-  All other integrands in \eqref{eq:Phi-expansion} are nonnegative by \Cref{sec:excursion-positivity}.
+  The polynomial nonnegativity \eqref{eq:pge23-positivity-goal}, proved in
+  \Cref{sec:excursion-positivity}, makes every integrand in
+  \eqref{eq:Phi-expansion} nonnegative on the support of $\mu$,
+  so all remaining integrals are nonnegative.
   Discarding them and integrating the constant $m-1$ against the $r$-fold product of $\mu$ gives
   \[
     \Psi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
   \]
-  By the normalization of $g=M_Ue-qe$ and \eqref{eq:moments},
+  To obtain \eqref{eq:degree-variance-gap} from this bound, we use the identity
   \[
     \mu(\R)=\norm g^2
+    =\int_0^1(\dW(x)-p)^2\dd x.
+  \]
+  The first equality is given by \eqref{eq:moments}.
+  To verify the second, let $d_a$ be the constant value of $\dW$
+  on the partition interval $I_a$, so
+  $d_a=\frac1N\sum_{b=1}^N W_{ab}$.
+  The definitions $g=M_Ue-qe$, $e_a=1/\sqrt N$, and
+  $(M_U)_{ab}=U_{ab}/N$ give
+  \[
+    g_a=\frac1{\sqrt N}\left(\frac1N\sum_{b=1}^N U_{ab}-q\right)
+    =\frac{1-d_a-q}{\sqrt N}
+    =\frac{p-d_a}{\sqrt N},
+  \]
+  where we used $U=1-W$ and $q=1-p$.
+  Since each $I_a$ has length $1/N$, we obtain
+  \[
+    \norm g^2=\frac1N\sum_{a=1}^N(p-d_a)^2
     =\int_0^1(\dW(x)-p)^2\dd x,
   \]
-  proving \eqref{eq:degree-variance-gap} for step graphons.
-  Approximating $W$ by step graphons of the same edge density, as in the
-  proof of \Cref{lem:step-reduction}, extends the bound to every graphon:
-  the densities defining $\Psi_m(W)$ converge, as does the degree variance,
-  which equals $\tP2W-p^2$.
+  proving \eqref{eq:degree-variance-gap} for step graphons of this form.
+  For an arbitrary $W$, use the step-graphon approximations on partitions
+  into intervals of equal length constructed in the proof of
+  \Cref{lem:step-reduction}. Each approximation has the same edge density
+  as $W$. The densities defining $\Psi_m(W)$ converge, as does the degree
+  variance, which equals $\tP2W-p^2$, so the bound passes to the limit.
 
   If $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
 
