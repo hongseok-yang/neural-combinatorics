@@ -121,9 +121,9 @@
   Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y} and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
   This is the first of two papers establishing the bound for all edge densities.
   A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
-  Our result also yields a strengthening of Kim and Lee's extended-commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
-  Our proof combines spectral techniques, generating functions, probabilistic averaging, and an odd-to-even Gamma moment inequality.
-  The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the moment inequality bounds the potentially negative odd-moment contributions by nonnegative even-moment contributions.
+  Our result also yields a strengthening of Kim and Lee's extended commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
+  Our proof combines spectral techniques, generating functions, probabilistic averaging, and an odd-to-even moment bound for Gamma random variables.
+  The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the moment bound controls the potentially negative odd-moment contributions using nonnegative even-moment contributions.
   Together, these tools give a single argument that is uniform in $m$.
   The lower-bound theorem has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
 \end{abstract}
@@ -132,7 +132,7 @@
 
 How does a graph's global edge density force specific local configurations?
 Extremal graph theory first addresses the threshold form of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
-The Erd\H os--Stone--Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
+The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
 The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding this threshold by a fixed amount forces a positive density of copies of $H$.
 These results identify when copies of $H$ become unavoidable, but leave open the quantitative problem studied here: among graphs of edge density $p$, how small can the density of $H$ be?
 
@@ -142,7 +142,7 @@ Bipartite graphs can have any asymptotic edge density $p\le1/2$ while avoiding a
 Once $p>1/2$, the theorems above force a positive density of every fixed odd cycle.
 We seek an explicit lower bound for these densities throughout this range.
 
-For complete subgraphs, the corresponding question is the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
+For complete subgraphs, the corresponding question is the classical Erd\H os-Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is attained by the balanced complete $k$-partite graph at each edge density $p=1-1/k$, $k\ge2$, but is not generally sharp between these densities.
 The exact minimum follows a more intricate, piecewise-defined curve.
 Razborov~\cite{razborov2008minimal} determined this curve for triangles using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, establishing the asymptotic minimum conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
@@ -236,7 +236,7 @@ For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$,
 The uniqueness assertion follows from the equality analysis in \Cref{sec:equality-stability}, where graphon equivalence is defined by zero cut distance.
 It also gives qualitative stability: at each fixed density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum must approach $W_k$ in cut distance (\Cref{cor:stability}).
 
-\paragraph{A stronger two-colour theorem.}
+\paragraph{Strengthened extended commonality.}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
 This inequality strengthens a density-sensitive form of \emph{commonality} for odd cycles.
 A graph $H$ with $e(H)$ edges is common if
@@ -244,7 +244,7 @@ A graph $H$ with $e(H)$ edges is common if
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
 \]
 for every graphon $W$.
-Here $W$ and $1-W$ represent the two colours; the inequality says that the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
+Here $W$ and $1-W$ represent the probabilities of colouring an edge red or blue, respectively; the inequality says that the uniform random colouring asymptotically minimizes the number of monochromatic copies of $H$.
 Goodman's theorem shows that the triangle is common.
 Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
 Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
@@ -267,7 +267,7 @@ For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:int
   \end{equation}
 \end{theorem}
 
-The Blakley--Roy inequality~\cite{blakley1965holder} (independently proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
+The Blakley-Roy inequality~\cite{blakley1965holder} (independently proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
 Thus, the path-density correction is nonnegative, and \eqref{eq:intro-commonality} strengthens extended commonality.
 Exchanging $W$ and $1-W$ gives the corresponding statement for $p\le1/3$.
 For $p\ge2/3$, equality holds in \eqref{eq:intro-commonality} exactly when $W$ has constant degree $p$, meaning that $\int_0^1 W(x,y)\dd y=p$ for almost every $x$ (\Cref{prop:regularity-gap}).
@@ -371,9 +371,15 @@ Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suf
 \end{equation}
 Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
-Finally, we prove \eqref{eq:intro-diagonal-positive} using an inequality between odd and even moments of a shifted Gamma random variable.
+Finally, we prove \eqref{eq:intro-diagonal-positive} using an inequality
+between odd and even moments of $Y-b$, where $Y$ has a Gamma distribution
+and $b\ge0$ is a real shift.
+We write $\GammaLaw(a,1)$ for the Gamma distribution with shape $a>0$
+and rate $1$, whose density is $y^{a-1}e^{-y}/\Gamma(a)$ for $y>0$.
+Here $\Gamma(a)=\int_0^\infty y^{a-1}e^{-y}\dd y$ is the Gamma function.
 An integral representation of $P_{m,r}(1-p;\lambda,\ldots,\lambda)$ establishes \eqref{eq:intro-diagonal-positive} when $\lambda\le0$ (\Cref{lem:pge23-ell-negative}).
-For $\lambda>0$, let $Y$ and $Z$ be independent Gamma random variables with shapes $r$ and $m-r$, respectively, both with rate $1$.
+For $\lambda>0$, let $Y\sim\GammaLaw(r,1)$ and
+$Z\sim\GammaLaw(m-r,1)$ be independent.
 The Gamma expectation formula \eqref{eq:pge23-gamma-expectation} gives
 \[
   P_{m,r}(1-p;\lambda,\ldots,\lambda)
@@ -560,13 +566,13 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
   so dropping these terms gives
   \[
     f^{\mathsf T}M_Uf
-    \ge-f_+^{\mathsf T}M_Uf_--f_-^{\mathsf T}M_Uf_+
+    \ge-f_+^{\mathsf T}M_Uf_- - f_-^{\mathsf T}M_Uf_+
       \ge-2a^2\ge-\frac12.
   \]
   Here the second inequality again uses the entrywise comparison $M_U\le M_1$
   in the standard coordinates and the nonnegative entries of $f_+$ and $f_-$,
   together with $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
-  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh--Ritz
+  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh-Ritz
   characterization of the eigenvalues of the symmetric map $A$ proves the
   claim.
 \end{proof}
@@ -1189,7 +1195,7 @@ larger range $p\ge1/2$.
 \section{Positivity of the excursion polynomials}
 \label{sec:excursion-positivity}
 
-We now complete the proof of the strengthened extended-commonality inequality
+We now complete the proof of the strengthened extended commonality inequality
 in \Cref{thm:commonality} and hence the odd-cycle Goodman bound in
 \Cref{thm:main}.
 The excursion expansion in \Cref{sec:excursions} reduces this task to showing that
@@ -1207,7 +1213,8 @@ Second, we prove that the resulting diagonal polynomial is nonnegative,
 beginning with a representation through a Beta expectation.
 This representation gives nonnegativity directly when $\lambda\le0$.
 For $\lambda>0$, a further integral representation reduces the problem to
-comparing odd and even moments of a shifted Gamma random variable.
+comparing odd and even moments of $zY-1$, where $Y\sim\GammaLaw(r,1)$
+and $z\ge0$.
 The uniform odd-to-even Gamma moment bound in \Cref{lem:pge23-gamma-moment},
 proved in \Cref{app:gamma-moment}, supplies the required comparison.
 Together, the diagonal reduction and the proof of diagonal positivity establish
@@ -1275,7 +1282,7 @@ To carry out the first step, define the diagonal polynomial
   =P_{m,r}(q;\lambda,\ldots,\lambda).
 \end{equation}
 
-\begin{lemma}[Dirichlet diagonalization]\label{lem:pge23-dirichlet}
+\begin{lemma}[Diagonal reduction by Dirichlet averaging]\label{lem:pge23-dirichlet}
   Let $(\Theta_1,\ldots,\Theta_r)$ be uniformly distributed on the simplex
   \[
     \Theta_i\ge0,\qquad \sum_{i=1}^r\Theta_i=1.
@@ -1390,6 +1397,12 @@ polynomial by a one-variable polynomial.
 We next obtain a Beta representation for complete homogeneous symmetric
 polynomials whose variables take two repeated values. This follows from the
 Dirichlet representation by grouping the weights corresponding to each value.
+For $r\ge1$, the notation $X\sim\BetaLaw(r,r)$ means that $X$ has density
+\[
+  \frac{\Gamma(2r)}{\Gamma(r)^2}x^{r-1}(1-x)^{r-1},
+  \qquad 0<x<1,
+\]
+and density zero outside this interval.
 
 \begin{lemma}[Beta representation]\label{lem:pge23-beta-representation}
   Let $r\ge1$ and $j\ge0$ be integers, let $a,b\in\R$, and let
@@ -1668,7 +1681,7 @@ them:
 This formula follows by the change of variable $w=t(\lambda+s)$ in the
 defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 
-\begin{lemma}[Laplace--Gamma representation]\label{lem:pge23-laplace-gamma}
+\begin{lemma}[Gamma representation of the diagonal polynomial]\label{lem:pge23-laplace-gamma}
   Let $m\ge3$ be odd, let $r$ be an integer satisfying
   $1\le r\le(m-1)/2$, and set $n=m-2r$.
   Let $Y\sim\GammaLaw(r,1)$, where the parameters denote shape and rate.
@@ -1694,8 +1707,9 @@ $t^{m-r-1}e^{-\lambda t}$. The expectation
 $\E\rho_{n,m}(q+Y/t)$ is independent of $\lambda$.
 Thus, to prove $\widetilde P_{m,r}(q,\lambda)\ge0$ for every $\lambda>0$,
 it suffices to prove that this expectation is nonnegative for every $t>0$.
-After establishing the representation, we prove this averaged positivity for
-$0\le q\le1/3$ using an odd-to-even Gamma moment bound.
+After establishing the representation, we prove
+$\E\rho_{n,m}(q+Y/t)\ge0$ for $0\le q\le1/3$ using the odd-to-even
+Gamma moment bound in \Cref{lem:pge23-gamma-moment}.
 
 \begin{proof}
   Insert \eqref{eq:pge23-laplace-kernel} into
@@ -1843,10 +1857,10 @@ Thus, the lemma bounds the moments of $v/\delta=zY-1$.
 Using $\E v^k=\delta^k\E(zY-1)^k$, the proposition proves that each bracketed term in
 \eqref{eq:pge23-rho-centered} has nonnegative expectation. This gives
 the nonnegativity of
-$\E\rho_{n,m}(q+xY)$ needed in the Laplace--Gamma representation
+$\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
 \eqref{eq:pge23-laplace-gamma}.
 
-\begin{proposition}[Shifted-Gamma positivity]\label{prop:pge23-gamma-positive}
+\begin{proposition}[Nonnegativity of the Gamma expectation]\label{prop:pge23-gamma-positive}
   Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
   If $0\le q\le1/3$, then for every $x\ge0$,
   \begin{equation}\label{eq:pge23-shifted-positive}
@@ -1916,8 +1930,8 @@ $\E\rho_{n,m}(q+xY)$ needed in the Laplace--Gamma representation
 
 This section characterizes equality in the odd-cycle Goodman bound \eqref{eq:intro-main}
 by analyzing the two inequalities used to derive it: the strengthened
-extended-commonality inequality \eqref{eq:intro-commonality} and the
-cycle--path comparison \eqref{eq:cycle-path-comparison}.
+extended commonality inequality \eqref{eq:intro-commonality} and the
+comparison between cycle and path densities \eqref{eq:cycle-path-comparison}.
 We first prove in \Cref{prop:regularity-gap} that equality in
 \eqref{eq:intro-commonality} forces $W$ to have constant degree $p$.
 We then show in \Cref{prop:main-equality} that, under this regularity condition,
@@ -1943,13 +1957,14 @@ For a step graphon on a partition into intervals of equal length,
 $\Psi_m(W)=\Phi_m$, where $\Phi_m$ is the sum of spectral integrals
 in \eqref{eq:Phi-expansion}.
 In the following proposition, we first use \eqref{eq:Phi-expansion} to
-bound $\Psi_m(W)$ in terms of degree variation for step graphons $W$ of this form.
+bound $\Psi_m(W)$ in terms of the degree variance
+$\int_0^1(\dW(x)-p)^2\dd x$ for step graphons $W$ of this form.
 We then extend the bound to arbitrary graphons by approximating $W$ with
 step graphons on successively finer partitions into intervals of equal
 length. These approximations preserve the edge density of $W$, as in
 the proof of \Cref{lem:step-reduction}.
 
-\begin{proposition}[Degree variation and equality in the two-colour bound]
+\begin{proposition}[Degree variance and equality in strengthened extended commonality]
 \label{prop:regularity-gap}
   Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
   Then,
@@ -2090,7 +2105,7 @@ between the left- and right-hand sides of that bound is
 \end{equation}
 For $p\ge2/3$, the first term on the right is nonnegative by
 \Cref{prop:regularity-gap}, and the bracketed term is nonnegative by
-the cycle--path comparison \eqref{eq:cycle-path-comparison}.
+the comparison between cycle and path densities \eqref{eq:cycle-path-comparison}.
 Equality in \eqref{eq:intro-main} therefore holds exactly when both terms
 vanish. By \Cref{prop:regularity-gap}, this is equivalent to $W$ being
 $p$-regular and $\tC mU=\tP{m-1}U$.
@@ -2120,7 +2135,7 @@ complete multipartite graphon.
   We use this cycle density to determine the possible eigenvalues of
   $\Tker U$. We first show that its operator norm is at most $q$.
   Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$.
-  For $f\in L^2[0,1]$, applying the Cauchy--Schwarz inequality in the
+  For $f\in L^2[0,1]$, applying the Cauchy-Schwarz inequality in the
   variable $y$ gives
   \[
     \bigl|\Tker Uf(x)\bigr|^2
@@ -2162,7 +2177,7 @@ complete multipartite graphon.
   Equality in the eigenvalue inequality forces $|\lambda_i|=q$ for every
   nonzero eigenvalue. Since $m$ is odd, a negative eigenvalue would satisfy
   $\lambda_i^m<|\lambda_i|^m$, so every nonzero $\lambda_i$ equals $q$.
-  The operator $\Tker U$ is self-adjoint and Hilbert--Schmidt, so the spectral theorem
+  The operator $\Tker U$ is self-adjoint and Hilbert-Schmidt, so the spectral theorem
   writes it as $\sum_i\lambda_iP_i$ over its nonzero eigenvalues, with $P_i$ the
   orthogonal projection onto the eigenspace of $\lambda_i$.
   All these eigenvalues equal $q$, so the sum collapses to
@@ -2336,19 +2351,32 @@ The space of graphons modulo this equivalence is compact in cut distance, and ho
   \]
   Since $k\ge3$ gives $p_k\ge2/3$, \Cref{thm:main} applies to $W$ and supplies the reverse inequality, so $\tC mW=p_k^m-p_k(1-p_k)^{m-1}$; that is, equality holds in \Cref{thm:main}.
   \Cref{prop:main-equality} then makes $W$ equivalent to $W_k$.
-  Finally, $\delta_\square(W^{(j)},W_k)\to\delta_\square(W,W_k)=0$, because $\delta_\square$ obeys the triangle inequality and $\delta_\square(W^{(j)},W)\to0$.
-  This contradicts $\delta_\square(W^{(j)},W_k)\ge\varepsilon$.
+  The triangle inequality gives
+  \[
+    \begin{aligned}
+      \delta_\square(W^{(j)},W_k)
+      &\le\delta_\square(W^{(j)},W)+\delta_\square(W,W_k)\\
+      &=\delta_\square(W^{(j)},W)\longrightarrow0.
+    \end{aligned}
+  \]
+  This contradicts $\delta_\square(W^{(j)},W_k)\ge\varepsilon>0$
+  for every $j$.
 \end{proof}
 
 \section{Concluding remarks and further questions}
 \label{sec:conclusion}
 
 For general odd cycle lengths, the only nontrivial range not covered in the present paper is $p\in(1/2,2/3)$; \Cref{prop:short-cycles} already covers this range for $C_3$, $C_5$, and $C_7$.
-The present proof first establishes the stronger two-colour inequality in
-\Cref{thm:commonality}. That inequality can fail when $1/2<p<2/3$, so the
-argument does not extend to this range.
-Within our argument, the obstruction appears precisely in the shifted-Gamma comparison, where $q\le1/3$---equivalently, $p\ge2/3$---is needed.
-The companion paper proves the original one-colour bound on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
+The present proof first establishes the strengthened extended commonality
+inequality \eqref{eq:intro-commonality} of \Cref{thm:commonality}.
+This inequality can fail when $1/2<p<2/3$, so the argument does not extend
+to this range.
+The density restriction enters in \Cref{prop:pge23-gamma-positive}, where
+we apply the odd-to-even Gamma moment bound of \Cref{lem:pge23-gamma-moment}
+to show that $\E\rho_{n,m}(q+xY)\ge0$.
+As explained in \Cref{rem:pge23-threshold}, this step requires $q\le1/3$,
+or equivalently $p\ge2/3$.
+The companion paper proves the odd-cycle Goodman bound \eqref{eq:intro-main} on $1/2<p<2/3$ by different methods; that proof has also been verified in Lean~4 and is available at \url{ADDLINK}.
 
 At each density $1-1/k$ with $k\ge3$, the present argument determines both the minimum odd-cycle density and the unique extremal graphon, with qualitative stability.
 The degree-variance estimate \eqref{eq:degree-variance-gap} quantifies one part of this structure: a small gap forces degrees to be nearly constant.
@@ -2393,16 +2421,22 @@ proofs lie beyond the scope of this paper.
 
 \medskip
 \noindent\textbf{AI use disclosure.}
-This proof was discovered during two weeks of interaction with ChatGPT~5.5
-and Fable~5. We subsequently revised the argument to emphasize its
-combinatorial interpretation and improve its readability.
+AI assistance in this work involved GPT Pro 5.5 and 5.6,
+GPT Sol 5.6, GPT Astra 6.0, Claude Opus XY, and Claude Fable 5.0. 
 
-\noindent\textbf{Differences between the Lean verification and the present proof.}
+\noindent\textbf{Lean formalization}
 The equality and stability consequences in \Cref{sec:equality-stability} are not included in the formal verification reported here.
 \tk{TODO: Write here about deviation that lean verification and current proof.}
 
 \noindent{\textbf{Acknowledgements.}}
 \tk{TODO: Add acknowledgements.}
+We would like to thank Gyeongwon Jeong, Jang Soo Kim, Sangho Lim, and
+Seonghun Park for helpful discussions.
+S. Im was supported by a KIAS individual Grant (AP109501) at Korea Institute for Advanced Study.
+T. Kim and H. Yang were supported by the National Research Foundation of Korea (NRF)
+grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
+
+
 
 \bibliographystyle{abbrv}
 \bibliography{references}
@@ -2483,7 +2517,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     H(b):=(r+j)F(b)+\frac{3b}{2}F'(b)\ge0.
   \end{equation}
 
-  The proof has three stages. The Gamma Stein identity first gives a
+  The proof has three stages. Integration by parts against the Gamma density first gives a
   differential equation for $F$. If $H$ were negative anywhere, that
   equation would force $H(b_*)<0$ at an explicit point $b_*$.
   Finally, an integral representation shows that $H(b_*)\ge0$ by comparing
@@ -2492,13 +2526,13 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \smallskip
   \noindent\emph{The differential equation.}
 
-  For $I_k(b)=\E(Y-b)^k$, apply the Stein identity for the Gamma
-  distribution $Y\sim\GammaLaw(r,1)$,
+  For every polynomial $f$, integration by parts against the density of
+  $Y\sim\GammaLaw(r,1)$ gives
   \begin{equation*}
-    \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr],
+    \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr].
   \end{equation*}
-  to $f(y)=(y-b)^k$.
-  Its two sides are
+  Apply this identity to $f(y)=(y-b)^k$ and write $I_k(b)=\E(Y-b)^k$.
+  The two sides are
   \begin{align*}
     \E[Y f'(Y)] &= k\E\bigl[(Y-b)(Y-b)^{k-1}+b(Y-b)^{k-1}\bigr] = kI_k(b)+kbI_{k-1}(b),\\
     \E[(Y-r)f(Y)] &= \E\bigl[(Y-b)(Y-b)^k + (b-r)(Y-b)^k\bigr] = I_{k+1}(b)-(r-b)I_k(b),
@@ -2514,7 +2548,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \end{equation}
 
   \smallskip
-  \noindent\emph{Reduction to one critical point.}
+  \noindent\emph{Reduction to a single value of $b$.}
   First observe that
   \[
     H(0)=(r+j)\E Y^{2j}>0,
@@ -2740,8 +2774,9 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   so $G$ attains its maximum at $-d$. Thus, the integrand in
   \eqref{eq:pge23-gamma-ibp-max} is nonnegative.
   The right-hand side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
-  giving $H(b_*)>0$. The crossing argument yields $H(b)\ge0$ for every
-  $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
+  giving $H(b_*)>0$. The earlier analysis of the zeros of $H$ shows that
+  if $H$ were negative anywhere, then $H(b_*)<0$. Thus, $H(b)\ge0$ for
+  every $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
   \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
 
