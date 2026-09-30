@@ -2080,13 +2080,23 @@ the proof of \Cref{lem:step-reduction}.
   \]
 \end{proof}
 
-The one-colour gap decomposes as
+We now use \Cref{prop:regularity-gap} to characterize equality in the
+odd-cycle Goodman bound \eqref{eq:intro-main}.
+By the definition of $\Psi_m(W)$ in \eqref{eq:equality-gap}, the difference
+between the left- and right-hand sides of that bound is
 \begin{equation}\label{eq:one-colour-gap}
   \tC mW-\bigl(p^m-pq^{m-1}\bigr)
   =\Psi_m(W)+\bigl[\tP{m-1}U-\tC mU\bigr].
 \end{equation}
-Both terms on the right are nonnegative.
-Thus, a small one-colour gap also forces small degree variation, and equality requires the cycle--path comparison to be an equality as well.
+For $p\ge2/3$, the first term on the right is nonnegative by
+\Cref{prop:regularity-gap}, and the bracketed term is nonnegative by
+the cycle--path comparison \eqref{eq:cycle-path-comparison}.
+Equality in \eqref{eq:intro-main} therefore holds exactly when both terms
+vanish. By \Cref{prop:regularity-gap}, this is equivalent to $W$ being
+$p$-regular and $\tC mU=\tP{m-1}U$.
+The next proposition shows that, for $p<1$, these two conditions force
+$U=1-W$ to be a union of equal cliques, and hence $W$ to be a balanced
+complete multipartite graphon.
 
 \begin{proposition}[Equality in the odd-cycle bound]
 \label{prop:main-equality}
@@ -2095,12 +2105,20 @@ Thus, a small one-colour gap also forces small degree variation, and equality re
 \end{proposition}
 
 \begin{proof}
-  The converse follows from \eqref{eq:intro-kpartite-value}.
-  For the forward implication, \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} show that $W$ is $p$-regular and
+  The backward implication follows from \eqref{eq:intro-kpartite-value}.
+  For the forward implication, suppose that equality holds in
+  \eqref{eq:intro-main}, and write $U=1-W$ and $q=1-p>0$.
+  Then \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} imply
+  that $W$ is $p$-regular and $\tC mU=\tP{m-1}U$.
+  Since $d_U(x)=1-\dW(x)=q$ almost everywhere, $U$ is $q$-regular
+  and $\Tker U\one=q\one$. Consequently,
   \[
-    \tC mU=\tP{m-1}U=q^{m-1},\qquad q=1-p>0.
+    \tC mU=\tP{m-1}U
+    =\ip\one{\Tker U^{m-1}\one}=q^{m-1}.
   \]
-  The graphon $U$ is $q$-regular.
+
+  We use this cycle density to determine the possible eigenvalues of
+  $\Tker U$. We first show that its operator norm is at most $q$.
   Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$ and apply the Cauchy--Schwarz
   inequality to the two factors: for $f\in L^2[0,1]$ and almost every $x$,
   \[
@@ -2121,16 +2139,22 @@ Thus, a small one-colour gap also forces small degree variation, and equality re
       \left(\int_0^1 U(x,y)\dd x\right)\dd y
     =q^2\norm f_2^2 .
   \]
-  Hence $\Tker U$ has operator norm at most $q$, and being self-adjoint, every
-  eigenvalue $\lambda_i$ of $\Tker U$ lies in $[-q,q]$.
-  Since $m$ is odd and $0\le U\le1$,
+  This proves the operator-norm bound. Since $\Tker U$ is self-adjoint,
+  its eigenvalues $\lambda_i$ lie in $[-q,q]$.
+  As $m$ is odd, each eigenvalue satisfies
+  $\lambda_i^m\le q^{m-2}\lambda_i^2$.
+  The trace formula and the pointwise inequality $U^2\le U$ therefore give
   \begin{equation}\label{eq:regular-complement-cycle}
     q^{m-1}=\sum_i\lambda_i^m
     \le q^{m-2}\sum_i\lambda_i^2
     =q^{m-2}\intsq U(x,y)^2\ddxy
     \le q^{m-1}.
   \end{equation}
-  Equality throughout implies that $U$ takes values in $\{0,1\}$ almost everywhere and every nonzero $\lambda_i$ equals $q$.
+  The two ends of \eqref{eq:regular-complement-cycle} agree, so equality
+  holds in both inequalities. Equality in the last inequality forces
+  $U^2=U$ almost everywhere, so $U$ takes values in $\{0,1\}$.
+  Equality in the eigenvalue inequality forces every nonzero $\lambda_i$
+  to equal $q$.
   The operator $\Tker U$ is self-adjoint and Hilbert--Schmidt, so the spectral theorem
   writes it as $\sum_i\lambda_iP_i$ over its nonzero eigenvalues, with $P_i$ the
   orthogonal projection onto the eigenspace of $\lambda_i$.
