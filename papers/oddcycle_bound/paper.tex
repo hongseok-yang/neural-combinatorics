@@ -2187,12 +2187,27 @@ complete multipartite graphon.
       0&\text{if }U(x,y)=0.
     \end{cases}
   \]
-  Two sets of measure $q$ meeting in measure $q$ coincide, so adjacent points have equal neighbourhoods and nonadjacent points have disjoint ones.
-  The remaining identities between sets and between kernels hold up to null sets, which we no longer state.
+  For almost every pair $(x,y)$ with $U(x,y)=1$, both neighbourhoods
+  and their intersection have measure $q$. Hence
+  \[
+    |N(x)\setminus N(y)|=|N(y)\setminus N(x)|
+    =q-|N(x)\cap N(y)|=0.
+  \]
+  Thus, the two neighbourhoods differ only on a set of measure zero.
+  For almost every pair with $U(x,y)=0$, their intersection has measure
+  zero, so the neighbourhoods are disjoint apart from a set of measure zero.
+  In the construction below, equality and disjointness of sets are understood
+  in this sense. Statements that $U=1$ or $U=0$ on a region mean that the
+  asserted value holds for almost every pair of points in that region.
 
-  Fix $x$ at which this dichotomy holds for almost every $y$, and put $B=N(x)$.
-  Each $y\in B$ is adjacent to $x$, so $N(y)=B$; hence $U=1$ on $B\times B$, and $U=0$ between $B$ and $[0,1]\setminus B$ because $N(y)=B$ leaves $y$ no neighbour outside $B$.
-  Points outside $B$ therefore keep all $q$ of their neighbours outside $B$, so the same argument applied to $[0,1]\setminus B$ extracts a further set of measure $q$, and so on.
+  Choose $x$ with $|N(x)|=q$ for which these neighbourhood relations hold
+  for almost every $y$, and put $B=N(x)$.
+  For almost every $y\in B$, we have $U(x,y)=1$ and hence $N(y)=B$.
+  Therefore, $U=1$ on $B\times B$ and $U=0$ between $B$ and
+  $[0,1]\setminus B$.
+  Almost every point outside $B$ therefore has degree $q$ within
+  $[0,1]\setminus B$, so the same argument applied to this remaining set
+  extracts a further set of measure $q$, and so on.
   A remainder of measure strictly between $0$ and $q$ is impossible, since its points have degree $q$ and no neighbours in the sets already extracted.
   These sets thus partition $[0,1]$, their number $k$ satisfies $kq=1$, and $U$ is the union of the $k$ disjoint cliques $B\times B$.
   The complement of $U$ is $W_k$ after relabelling; $p\ge2/3$ implies $k\ge3$.
