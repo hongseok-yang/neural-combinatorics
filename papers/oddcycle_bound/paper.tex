@@ -2108,7 +2108,7 @@ complete multipartite graphon.
   The backward implication follows from \eqref{eq:intro-kpartite-value}.
   For the forward implication, suppose that equality holds in
   \eqref{eq:intro-main}, and write $U=1-W$ and $q=1-p>0$.
-  Then \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} imply
+  Then, \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} imply
   that $W$ is $p$-regular and $\tC mU=\tP{m-1}U$.
   Since $d_U(x)=1-\dW(x)=q$ almost everywhere, $U$ is $q$-regular
   and $\Tker U\one=q\one$. Consequently,
@@ -2119,15 +2119,17 @@ complete multipartite graphon.
 
   We use this cycle density to determine the possible eigenvalues of
   $\Tker U$. We first show that its operator norm is at most $q$.
-  Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$ and apply the Cauchy--Schwarz
-  inequality to the two factors: for $f\in L^2[0,1]$ and almost every $x$,
+  Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$.
+  For $f\in L^2[0,1]$, applying the Cauchy--Schwarz inequality in the
+  variable $y$ gives
   \[
     \bigl|\Tker Uf(x)\bigr|^2
     =\left|\int_0^1 U(x,y)^{1/2}\cdot U(x,y)^{1/2}f(y)\dd y\right|^2
     \le\left(\int_0^1 U(x,y)\dd y\right)
       \left(\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y\right).
   \]
-  The first factor is the degree of $U$ at $x$, which equals $q$, so
+  The first factor is the degree $d_U(x)$. Since $U$ is $q$-regular,
+  $d_U(x)=q$ for almost every $x$, giving
   \[
     \bigl|\Tker Uf(x)\bigr|^2\le q\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y .
   \]
