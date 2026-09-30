@@ -2013,11 +2013,29 @@ the proof of \Cref{lem:step-reduction}.
     =\int_0^1(\dW(x)-p)^2\dd x,
   \]
   proving \eqref{eq:degree-variance-gap} for step graphons of this form.
-  For an arbitrary $W$, use the step-graphon approximations on partitions
-  into intervals of equal length constructed in the proof of
-  \Cref{lem:step-reduction}. Each approximation has the same edge density
-  as $W$. The densities defining $\Psi_m(W)$ converge, as does the degree
-  variance, which equals $\tP2W-p^2$, so the bound passes to the limit.
+
+  For an arbitrary $W$, let $W_s$ be the step-graphon approximations on
+  partitions into intervals of equal length constructed in the proof of
+  \Cref{lem:step-reduction}. Each $W_s$ has the same edge density $p$ as
+  $W$, so the bound just proved gives
+  \[
+    \Psi_m(W_s)\ge(m-1)
+    \left(\int_0^1(d_{W_s}(x)-p)^2\dd x\right)^{(m-1)/2}.
+  \]
+  All homomorphism densities of $W_s$ and $1-W_s$ converge to those of
+  $W$ and $1-W$, respectively. By the definition \eqref{eq:equality-gap},
+  the left-hand side therefore converges to $\Psi_m(W)$.
+  For the right-hand side, express the degree variance through the
+  two-edge path density:
+  \begin{align*}
+    \int_0^1(d_{W_s}(x)-p)^2\dd x
+    =\Big(\tP2{W_s}-p^2\Big)
+    \longrightarrow\Big(\tP2W-p^2\Big)
+    =\int_0^1(\dW(x)-p)^2\dd x.
+  \end{align*}
+  Thus, the right-hand side also converges to the corresponding expression
+  for $W$. Taking limits in the inequality proves
+  \eqref{eq:degree-variance-gap} for arbitrary graphons.
 
   If $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
 
