@@ -1,0 +1,89 @@
+# Verification dashboard — independent apices of trees
+
+Single live status page for the Lean formalization described in
+[`TREES_VERIFICATION_PLAN.md`](TREES_VERIFICATION_PLAN.md) of
+[`trees_apices_commonness.tex`](trees_apices_commonness.tex).  Maintained by the formalizing agent;
+every status change must cite its evidence.  The even-cycle dashboard
+[`DASHBOARD.md`](DASHBOARD.md) is frozen and is not touched by this work.
+
+Status legend: ✅ done (gate passed, evidence recorded) · 🚧 under construction (started, gate not
+passed; a one-line reason if blocked) · ❌ not started · — not applicable (replaced or excluded by a
+design decision in the plan).
+
+Hardness: Easy · Medium · Hard — an estimate for an axiom-free Lean proof, not for the paper argument.
+
+Last updated: 2026-10-02 (T0 ✅; T1 next)
+
+## Milestones
+
+| Milestone | What it is | Status | Hardness | Gate / evidence |
+|---|---|:---:|:---:|---|
+| T0 | `TreeApex` library in the existing package (T-D7), index, `CheckAxiomsTree.lean`, smoke theorem, import-closure check, regression script with `--host` | ✅ | Easy | `smoke_density_near_host` `[propext, Classical.choice, Quot.sound]`; `CheckImportsTree.lean` OK (16 light modules); script 300+200 trials, `--negative` trips; 2026-10-02 |
+| T1 | `apexGraph` and its edge split, `apexCycle_eq_apexGraph`, connectivity, edge count, `K₂ P₃ K₃`, `RecTree`/`treeGraph`/`treeEdges`, the `IsTree ↔ RecTree` bridge, `apexGraph_comap`, density invariance | ❌ | Hard | — |
+| T2 | `ProbHost`, scalars `deg cod tri E D R` and their `hostDensity` identifications and bounds, reference weights `ρ_Y ρ_B ρ_T`, `hostDensity_apexGraph_treeGraph`, leaf recursion, doubled host and block identity, Goodman on hosts, two regression hosts | ❌ | Medium | — |
+| T3 | Finite relative entropy: `relEnt`, Gibbs, `KL ≥ 0`, product chain rule, reindexing, marginal/conditional conventions, Jensen for `log` | ❌ | Medium | — |
+| T4 | Triangle law (`h_ge`, `I_le`) and book law (`relEnt_book`, `g_eq`, `pages_kl`, `g_ge`) | ❌ | Hard | — |
+| T5 | Tree law TE1–TE5 and **`finite_counting_inequality`** (weighted `thm:finite`) | ❌ | Hard | — |
+| T6 | Doubled-host two-colour inequality, `commonness_scalar`, **`host_commonness`**, star case | ❌ | Medium | — |
+| T7 | Transfer layer; **headlines `tree_apex_one_colour`, `tree_apex_two_colour_polynomial`, `half_le_commonalityM_path`, `goodman_identity`, `tree_apex_two_colour`, `tree_apex_common`** | ❌ | Medium | — |
+| T8 | (optional) Appendix A: `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` | ❌ | Easy–Medium | — |
+| T9 | Final audit: `CheckAxiomsTree.lean` coverage of plan §6, README section, label map, forbidden-token scan, import-closure check | ❌ | Easy | — |
+
+Overall: **1 / 10 milestones complete** (T0).  Headlines: P1 `tree_apex_one_colour`, P2
+`tree_apex_two_colour` (+ polynomial form), P3 `goodman_identity` + `half_le_commonalityM_path`,
+P4 `tree_apex_common`; optional P5 `tree_sidorenko`, `tree_common`.
+
+## Paper statements
+
+One row per labelled statement of the paper (line numbers refer to `trees_apices_commonness.tex`).
+Weighted forms are those of plan §2.4–2.6 (decision T-D4).  Keep this table in step with the code:
+a row becomes ✅ only when the named declaration builds and passes `#print axioms`.
+
+| Label | Line | Statement | Lean name (`TreeApex.`) | Milestone | Status | Hardness |
+|---|---:|---|---|:---:|:---:|:---:|
+| sec:statements | 78 | `T^{+k}`, `t(F,W)`, `m(F,W)`, `P₃`, `B_k` | `apexGraph`; `homDensity`, `commonalityM` (even-cycle); `pathGraph 3`, `⊤ : SimpleGraph (Fin 2/3)` | T1 | ❌ | Easy |
+| eq:sizes | 92 | `v(T^{+k}) = n + k`, `e(T^{+k}) = (k+1)n − 1` | `apexGraph_edgeCount` | T1 | ❌ | Easy |
+| eq:common-definition | 112 | `m(F,W) ≥ 2^{1−e(F)}` | the form of `tree_apex_common` (`4 / 2^((k+1)n)`) | T7 | ❌ | — |
+| thm:common | 119 | `T^{+k}` common for every tree, every `k ≥ 1` | `tree_apex_common` (+ `tree_apex_common'`) | T7 | ❌ | Medium |
+| thm:two-color | 126 | `σ ≥ 1/2`; `m(T^{+k}) ≥ τ^{k(n−1)} / σ^{(k−1)(n−2)}` | `half_le_commonalityM_path`, `tree_apex_two_colour`, `tree_apex_two_colour_polynomial` | T7 | ❌ | Medium |
+| thm:one-color | 143 | `t(T^{+k}) t(K₂)^{n+k−3} t(P₃)^{(k−1)(n−2)} ≥ t(K₃)^{k(n−1)}` | `tree_apex_one_colour` (+ `tree_apex_one_colour'`) | T7 | ❌ | Medium |
+| lem:entropy | 196 | chain rule, support bound, conditioning, subadditivity, `I ≥ 0`, `eq:mi-subadditivity` | — replaced (T-D4): `relEnt_prod` (chain rule, product form), `relEnt_le_log_sum` (support bound), `relEnt_nonpos_of_law` (`KL ≥ 0`, used for `eq:mi-subadditivity` in `pages_kl`) | T3 | ❌ | Medium |
+| lem:tree-extension | 260 | Markov extension along a tree; edge marginals; `eq:tree-entropy` | `treeLaw`, `treeLaw_sum` (TE1), `treeLaw_marginal_vertex` (TE2), `treeLaw_marginal_edge` (TE3), `relEnt_treeLaw` (TE4), `treeLaw_support` (TE5) | T5 | ❌ | Hard |
+| eq:exchangeability | 263 | `Q(s,x,y) = Q(s,y,x)` | `bookLaw_swap` | T4 | ❌ | Easy |
+| eq:tree-law | 306 | the product law conditional on `S` | `treeLaw` (definition) | T5 | ❌ | Medium |
+| thm:finite | 350 | `hom(T^{+k}) E^{n+k−3} D^{(k−1)(n−2)} ≥ R^{k(n−1)}` on finite hosts | `finite_counting_inequality` (weighted hosts, plan §2.5) | T5 | ❌ | Hard |
+| eq:triangle-entropy | 377 | `H(X,Y,Z) = log R` | `relEnt_triangle` (`relEnt ρ₃ P = log R`) | T4 | ❌ | Easy |
+| lem:triangle | 385 | `h ≥ log(R/E)`, `I ≤ log(D/R)`, `eq:triangle-symmetry` | `h_ge` (T1), `I_le` (T2); symmetry inlined in the definitions of `h`, `A`, `I` | T4 | ❌ | Hard |
+| eq:triangle-neighborhood-counts | 428 | `Σ a(x) = R`, `Σ d(x)² = D`, `P(X=x) = a(x)/R` | `R_eq_sum_tri`, `D_eq_sum_deg_sq`, `triangleLaw_vertex` | T2 / T4 | ❌ | Easy |
+| lem:book | 484 | `eq:book-entropy`, `eq:book-extension` | `relEnt_book` (B1, as an identity `= log R + (k−1)h`), `g_ge` (B2) | T4 | ❌ | Hard |
+| eq:pages-mi | 514 | `I(Y;Z₁..Z_k∣X) ≤ kI` | `pages_kl` (the `KL ≥ 0` step, per `x`) | T4 | ❌ | Medium |
+| eq:support-global | 560 | `log hom(T^{+k}) ≥ H_P(S,X⃗)` | `relEnt_le_log_sum` applied to `treeLaw`/`ρ_T` inside `finite_counting_inequality` | T5 | ❌ | Easy |
+| rem:arbitrary-k | 581 | remark | — | — | — | — |
+| lem:approximation | 600 | W-random graphs converge | — replaced by L¹ transfer (T-D3): `le_of_step_graphons_cont` (copied), `homDensity_L1_lipschitz`, `step_homDensity_eq_host` (even-cycle) | T7 | — | — |
+| eq:collision-bound | 656 | injective vs. all maps | — replaced (T-D3) | — | — | — |
+| eq:exponents, eq:vertex-balance | 678 | `a, b, c`; `(n+k) + 2a + 3b = 3c` | `vertex_balance` (`omega`/`ring`), used in `host_two_colour_polynomial` | T6 | ❌ | Easy |
+| eq:disjoint-union | 709 | the two-block graphon `U` on `[0,1]` | — replaced by `ProbHost.double` (T-D8) | T2 | — | — |
+| eq:connected-blocks | 718 | `t(F,U) = 2^{−v} m(F,W)` for connected `F` | `hostDensity_double_of_connected` (host form) | T2 | ❌ | Medium |
+| eq:two-color-polynomial | 748 | `m(T^{+k}) σ^b ≥ τ^c` | `host_two_colour_polynomial` (host), `tree_apex_two_colour_polynomial` (graphon) | T6 / T7 | ❌ | Medium |
+| lem:goodman | 757 | `σ ≥ 1/2`, `τ = (3/2)σ − 1/2`, `τ ≥ 1/4`, `τ/σ ≥ 1/2` | `host_half_le_sigma`, `host_goodman_identity` (host); `half_le_commonalityM_path`, `goodman_identity` (graphon); the bounds inside `commonness_scalar` | T2 / T7 | ❌ | Medium |
+| proof of thm:common (display) | 807 | `τ^c/σ^b ≥ 2^{2−(k+1)n}`; the star `K_{1,k}` | `commonness_scalar`, `host_commonness`, `host_star_commonness` | T6 | ❌ | Medium |
+| remark (sharpness) | 838 | equality at `W ≡ 1/2`; role of the tree hypothesis | — (not a theorem) | — | — | — |
+| prop:tree-sidorenko | 858 | `t(T) ≥ t(K₂)^{n−1}`; `T` common | `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` (optional T8) | T8 | ❌ | Medium |
+| app:finite-commonness | 891 | finite Ramsey-multiplicity formulation | — out of scope (T-D11) | — | — | — |
+| — (T-D2) | — | the weighted host with `[0,1]` kernel; step graphons as hosts | `ProbHost`, `hostOfStep'`, `Mh`; step identification lemmas | T2 / T7 | ❌ | Easy |
+| — (T-D4) | — | `relEnt`, Gibbs, `KL ≥ 0`, product chain rule, reindexing | `relEnt`, `relEnt_le_log_sum`, `relEnt_nonpos_of_law`, `relEnt_prod`, `relEnt_equiv`, `log_jensen` | T3 | ❌ | Medium |
+| — (T-D6) | — | every Mathlib tree on `Fin (m+1)` is a relabelled recursive tree | `RecTree`, `treeGraph`, `exists_recTree_iso`, `apexGraph_comap`, `homDensity_apexGraph_of_iso` | T1 | ❌ | Hard |
+| — (cross-check) | — | `apexCycle n k = apexGraph (cycleGraph n) k` | `apexCycle_eq_apexGraph` | T1 | ❌ | Easy |
+| — | — | reference weights and their identification with `hostDensity` | `ρ_Y`, `ρ_B`, `ρ_T`, `hostDensity_apexGraph_treeGraph`, `treeWeight_snoc` | T2 | ❌ | Medium |
+| — | — | headline P4 | `tree_apex_common` | T7 | ❌ | — |
+
+## Build and audit record
+
+| Check | Result | Date |
+|---|---|---|
+| `python tools/tree_entropy_check.py 300 20261002` | 300 trials (264 with `R > 0`), all checks passed; negative controls trip | 2026-10-02 |
+| `python tools/tree_entropy_check.py 200 7` | 200 trials, all checks passed | 2026-10-02 |
+| `lake build TreeApex` | Build completed successfully (8576 jobs); `lake build --no-build EvenCycleApex` all up-to-date (8622 jobs) | 2026-10-02 |
+| `lake env lean CheckAxiomsTree.lean` | 1 declaration (T0 smoke), all `[propext, Classical.choice, Quot.sound]` | 2026-10-02 |
+| import closure of `TreeApex` (T-D7) | `lake env lean CheckImportsTree.lean`: Foundation (8), Graph (5), Host.{Defs, Bridge, EdgeDensity}; no heavy module | 2026-10-02 |
+| `python tools/tree_entropy_check.py --negative` | asymmetric kernel trips 200/200, perturbed log trips 157/200 | 2026-10-02 |

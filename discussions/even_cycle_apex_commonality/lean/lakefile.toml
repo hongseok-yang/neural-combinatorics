@@ -11,3 +11,8 @@ name = "EvenCycleApex"
 # The certificate data files are leaves (imported by nothing yet); name them here so that
 # `lake build` elaborates them.  `Bench/` (the M0 kernel spike) is deliberately outside the library.
 globs = ["EvenCycleApex", "EvenCycleApex.Certificate.Data.+"]
+
+# Trees with independent apices (TREES_VERIFICATION_PLAN.md, T-D7).  Imports only the light
+# even-cycle modules (Foundation, Graph, Host/Defs, Host/Bridge, Host/EdgeDensity).
+[[lean_lib]]
+name = "TreeApex"
