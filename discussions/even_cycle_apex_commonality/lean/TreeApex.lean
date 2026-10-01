@@ -4,8 +4,11 @@ import TreeApex.Smoke
 -- T1: apex graphs, recursive trees, the IsTree bridge.
 import TreeApex.Graph.Apex
 import TreeApex.Graph.RecTree
--- T2: weighted hosts and their scalars.
+-- T2: weighted hosts, their scalars, the doubled host, Goodman, regression hosts.
 import TreeApex.Host.ProbHost
+import TreeApex.Host.Double
+import TreeApex.Host.Goodman
+import TreeApex.Host.Regression
 -- T3: finite relative entropy; generic extension along a tree.
 import TreeApex.Entropy.RelEnt
 import TreeApex.Entropy.TreeLaw
@@ -14,3 +17,5 @@ import TreeApex.Entropy.Triangle
 import TreeApex.Entropy.Book
 -- T5: the finite counting inequality.
 import TreeApex.Finite.OneColour
+-- T6: two colours and commonness on hosts.
+import TreeApex.Finite.TwoColour

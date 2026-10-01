@@ -183,3 +183,38 @@ lake env lean CheckAxiomsTree.lean        41 declarations, all [propext, Classic
   SymLaw.relEnt_treeLaw, SymLaw.relEnt_book_add_le_log, ProbHost.h_ge, ProbHost.I_le,
   ProbHost.relEnt_book, ProbHost.pages_kl, ProbHost.g_ge, ProbHost.finite_counting_inequality
 ```
+
+## 2026-10-02 — T2 (rest) and T6
+
+* `Host/Double.lean`: `Mc = 1 − M`, `Mh F = t(F, M) + t(F, 1 − M)`, `colM b` (`M` on `true`,
+  `1 − M` on `false`), `compl`, `double : ProbHost (Bool × V)` (weights `w/2`, kernel `colM` on equal
+  colours, `0` across), `exists_bichromatic_edge` (`Walk.exists_boundary_dart` on the set of
+  `true`-coloured vertices; the sorted pair of the dart is in `edgePairs F`),
+  `hostDens_double_of_connected` (reindex `Fin v → Bool × V` by
+  `Equiv.arrowProdEquivProdArrow`, then `Fintype.sum_eq_add` at the two constant colourings).
+* `Host/Goodman.lean`: `sum3_add` and the seven triple sums (`sum3_one`, `sum3_xy/xz/yz`,
+  `sum3_xy_xz/xy_yz/xz_yz`), `Mh_K₂`, `sigma_eq` (`σ = 1 − 2E + 2D`), `tau_eq` (`τ = 1 − 3E + 3D`),
+  `host_half_le_sigma` (`σ − 1/2 = 2 ∑ w (deg − 1/2)²`), `host_goodman_identity`.
+* `Host/Regression.lean`: `regHost₁`, `regHost₂` and the ten values of the T0 table, `σ_h`, `τ_h`
+  evaluated from the raw triple sums in `M` and `1 − M` (independent of Goodman's identity); all
+  match `tools/tree_entropy_check.py --host`.
+* `Finite/TwoColour.lean`: `double_E/D/R` (`1/4`, `σ/8`, `τ/8`), `vertex_balance`,
+  `host_two_colour_polynomial` (`finite_counting_inequality'` on `K.double`; the identity
+  `8^c = 2^{n+k} 4^a 8^b`), `commonness_scalar` (base-2 bookkeeping with an opaque `u = 1/2` so that
+  `ring` handles the variable exponents), `host_commonness`, `hostDens_star`
+  (`t(K_{1,k}, L) = ∑ w_x (∑ w_z L_xz)^k`), `host_star_commonness` (`add_pow_le`).
+* Lean gotchas: `set u : ℝ := 1/2` makes `u` a let-binding that `linarith`/`ring` see through
+  inconsistently — use `obtain ⟨u, hu⟩ : ∃ u : ℝ, u = 1/2 := ⟨_, rfl⟩`; `simp only [← sum_add_distrib]`
+  does not merge nested triple sums — prove `sum3_add` by three explicit `rw`; `norm_num` cannot
+  evaluate `![a, b, c] 2` but the `Matrix.cons_val` simproc can (`norm_num [Matrix.cons_val]`).
+
+### T2 and T6 gate evidence (2026-10-02)
+
+```text
+lake build TreeApex                       Build completed successfully (8589 jobs); no warnings
+lake env lean CheckAxiomsTree.lean        65 declarations; all [propext, Classical.choice,
+  Quot.sound] or a subset (apexGraph_connected, apexGraph_comap: [propext, Quot.sound];
+  vertex_balance: [propext]); including hostDens_double_of_connected, host_half_le_sigma,
+  host_goodman_identity, regHost₁/₂ (10 values), host_two_colour_polynomial, commonness_scalar,
+  host_commonness, host_star_commonness
+```
