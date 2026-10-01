@@ -218,3 +218,40 @@ lake env lean CheckAxiomsTree.lean        65 declarations; all [propext, Classic
   host_goodman_identity, regHost₁/₂ (10 values), host_two_colour_polynomial, commonness_scalar,
   host_commonness, host_star_commonness
 ```
+
+## 2026-10-02 — T7: transfer and the headlines P1–P4
+
+* `TreeApex/Transfer.lean`: the `L1ContAt` layer copied from
+  `EvenCycleApex/Equality/Functionals.lean @ 12b365e3` (provenance header; only imports and the
+  namespace changed): `L1ContAt`, `.of_lipschitz`, `.const`, `.prod`, `.comp`,
+  `le_of_step_graphons_cont`, `le_of_hosts_cont`.  New: `L1ContAt.mul`, `L1ContAt.pow`,
+  `homDensity_cont` (Lipschitz constant `e(F)` from `homDensity_L1_lipschitz` with `B = 1`),
+  `commonalityM_cont`, `stepHost` (the `ProbHost (Fin d)` of a step graphon), `homDensity_step`,
+  `homDensity_cmpl_step`, `commonalityM_step` (two instances of `step_homDensity_eq_host`).
+  The plan's alternative (moving the layer into the frozen even-cycle library) was not needed.
+* `TreeApex/Main.lean`: `half_le_commonalityM_path`, `goodman_identity` (two transfers,
+  `le_antisymm`); for recursive trees `treeGraph_apex_one_colour`,
+  `treeGraph_apex_two_colour_polynomial`, `treeGraph_star_common` (each one `le_of_hosts_cont`
+  with the host theorem); for every Mathlib tree `tree_apex_one_colour`,
+  `tree_apex_two_colour_polynomial`, `tree_apex_two_colour` (`div_le_iff₀`, `σ ≥ 1/2`),
+  `tree_apex_common` (`n = 1`: the star; `n ≥ 2`: `commonness_scalar` applied at the graphon level
+  to P2 and P3, as in the paper's display), and the primed forms `tree_apex_one_colour'`,
+  `tree_apex_two_colour_polynomial'` (`n = m + 2`, `k = j + 1`).  The bridge enters through
+  `exists_recTree_iso`, `homDensity_apexGraph_of_iso`, `commonalityM_apexGraph_of_iso`.
+* `CheckStatementsTree.lean`: `#check` of the headlines, `#print apexGraph`, and each T-D5
+  statement copied verbatim from the plan as an `example` closed by the theorem (the line-by-line
+  comparison of the T7 gate, done by the elaborator), plus `apexGraph_edgeCount` documenting
+  `4 / 2^((k+1)n) = 2^{1−e(T^{+k})}`.
+* No deviation from T-D5: the statements are exactly the locked shapes.
+
+### T7 gate evidence (2026-10-02)
+
+```text
+lake build TreeApex                       Build completed successfully (8591 jobs); no warnings
+lake env lean CheckAxiomsTree.lean        80 declarations; all [propext, Classical.choice,
+  Quot.sound] or a subset; the six headlines and the two primed corollaries exactly
+  [propext, Classical.choice, Quot.sound]
+lake env lean CheckStatementsTree.lean    no errors (the verbatim T-D5 statements are proved)
+lake env lean CheckImportsTree.lean       import closure OK: no heavy EvenCycleApex module
+grep forbidden tokens in lean/TreeApex    none
+```

@@ -81,3 +81,20 @@ import TreeApex
 #print axioms TreeApex.ProbHost.host_commonness
 #print axioms TreeApex.ProbHost.hostDens_star
 #print axioms TreeApex.ProbHost.host_star_commonness
+
+-- T7: transfer and headlines
+#print axioms TreeApex.le_of_hosts_cont
+#print axioms TreeApex.homDensity_cont
+#print axioms TreeApex.commonalityM_cont
+#print axioms TreeApex.commonalityM_step
+#print axioms TreeApex.treeGraph_apex_one_colour
+#print axioms TreeApex.treeGraph_apex_two_colour_polynomial
+#print axioms TreeApex.treeGraph_star_common
+#print axioms TreeApex.tree_apex_one_colour
+#print axioms TreeApex.tree_apex_two_colour_polynomial
+#print axioms TreeApex.half_le_commonalityM_path
+#print axioms TreeApex.goodman_identity
+#print axioms TreeApex.tree_apex_two_colour
+#print axioms TreeApex.tree_apex_common
+#print axioms TreeApex.tree_apex_one_colour'
+#print axioms TreeApex.tree_apex_two_colour_polynomial'

@@ -19,3 +19,6 @@ import TreeApex.Entropy.Book
 import TreeApex.Finite.OneColour
 -- T6: two colours and commonness on hosts.
 import TreeApex.Finite.TwoColour
+-- T7: transfer to graphons; headlines P1–P4.
+import TreeApex.Transfer
+import TreeApex.Main
