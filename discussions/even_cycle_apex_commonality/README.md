@@ -19,8 +19,10 @@ Then, for every graphon `W` on every probability space `(Ω, μ)`:
 
 `W : Ω² → [0,1]` is symmetric and jointly measurable, and `(Ω, μ)` is an arbitrary probability
 space — not `[0,1]`, not finite, not standard Borel, and `W` is not a step function.  The proof
-followed is `even_apex_blueprint.tex`, with the changes listed in `VERIFICATION_PLAN.md` (D1–D10)
-and `DEVIATIONS.md` (X1–X4).  The Lean development is in `lean/`.
+followed is the blueprint `even_apex_blueprint.tex`, with the changes listed in its verification
+plan (decisions D1–D10) and in `DEVIATIONS.md` (X1–X4); the blueprint and the plan are not part of
+this repository (see "Files not in the repository" at the end).  The Lean development is in
+`lean/`.
 
 The results are in `EvenCycleApex`:
 
@@ -36,8 +38,7 @@ The results are in `EvenCycleApex`:
 ## Building
 
 Requires Lean `v4.31.0` (via `elan`) and mathlib `v4.31.0`.  On the development machine
-`lean/.lake/packages` is a junction to an already built copy (`VERIFICATION_PLAN.md` §1.6);
-elsewhere `lake exe cache get` downloads the prebuilt mathlib.  In `lean/`:
+`lean/.lake/packages` is a junction to an already built copy; elsewhere `lake exe cache get` downloads the prebuilt mathlib.  In `lean/`:
 
 ```
 lake build                        # must end "Build completed successfully"
@@ -81,8 +82,8 @@ Points worth checking explicitly:
 
 ## Reading the proof
 
-`lake env lean CheckAxioms.lean` prints, for each audited result (the list of
-`VERIFICATION_PLAN.md` §6 and every milestone's key lemmas, 166 in all), the axioms it depends on.
+`lake env lean CheckAxioms.lean` prints, for each audited result (the verification plan's §6
+list and every milestone's key lemmas, 166 in all), the axioms it depends on.
 Every line reads
 
 ```
@@ -144,7 +145,6 @@ lean/EvenCycleApex/
   Equality/          continuity of the scalar bounds, c = 0 ⟺ U = 0, the equality case (H2)
   Foundation/        copied from schur_decomposition/cycle_commonality (plan D7) and pruned to
                      what is used: graphons, kernel algebra, Fubini, L¹ step approximation
-lean/Bench/          the M0 kernel-performance spike (not part of the library)
 tools/gen_cert_data.py   certificate JSON → Certificate/Data/*.lean and Checks/*.lean
 ```
 
@@ -153,7 +153,8 @@ engineering log, with the gate evidence of each milestone.
 
 ## Trees with independent apices
 
-A second library, `TreeApex`, in the same Lake package formalizes `trees_apices_commonness.tex`.
+A second library, `TreeApex`, in the same Lake package formalizes the paper *Commonness of
+independent apices of trees* (`trees_apices_commonness.tex`, not part of this repository).
 For a tree `T` on `n` vertices and `k ≥ 1`, `T^{+k}` is `T` together with `k` new vertices, each
 joined to every vertex of `T` and to no other new vertex.  With `t`, `m` as above, `σ = m(P₃, W)` and
 `τ = m(K₃, W)` (`P₃` the path with two edges), for every graphon `W` on every probability space:
@@ -166,9 +167,9 @@ joined to every vertex of `T` and to no other new vertex.  With `t`, `m` as abov
   P5  (appendix A)          t(T) ≥ t(K₂)^{n−1}  (n ≥ 2)  and  m(T) ≥ 2^{2−n}
 ```
 
-The plan is `TREES_VERIFICATION_PLAN.md` (decisions T-D1–T-D11); changes to it are recorded in
-`TREES_DEVIATIONS.md`, the status and the label-to-name map in `TREES_DASHBOARD.md`, and the log
-with every gate's evidence in `TREES_NOTES.md`.
+The verification plan (decisions T-D1–T-D11) is not part of this repository; every change to it
+is recorded in `TREES_DEVIATIONS.md`, the status and the label-to-name map in `TREES_DASHBOARD.md`,
+and the log with every gate's evidence in `TREES_NOTES.md`.
 
 | | |
 |---|---|
@@ -186,7 +187,6 @@ lake build TreeApex                    # builds only TreeApex and the light even
 lake env lean CheckAxiomsTree.lean     # axiom audit (plan §6 list and every milestone's key lemmas)
 lake env lean CheckStatementsTree.lean # the headline statements, copied verbatim from the plan, are proved
 lake env lean CheckImportsTree.lean    # import closure: no certificate or spectral module of EvenCycleApex
-python tools/tree_entropy_check.py     # numerical regression of the weighted statements (--host, --negative)
 ```
 
 `TreeApex` uses no computational certificate.  Its import closure contains only
@@ -257,3 +257,19 @@ lean/TreeApex/
   Appendix/        appendix A: tree Sidorenko and commonness of trees
   Smoke.lean       the T0 smoke test of the imported pipeline
 ```
+
+## Files not in the repository
+
+The dashboards and notes refer to working files that are kept outside the repository: the
+verification plans and agent prompts (`VERIFICATION_PLAN.md`, `OPUS_PROMPT.md`,
+`TREES_VERIFICATION_PLAN.md`, `TREES_OPUS_PROMPT.md`), the mathematical sources
+(`even_apex_blueprint.tex`, `trees_apices_commonness.tex`), the independent numerical checkers
+(`certificates/independent_audit.py`, `certificates/verify_algebra.py`,
+`certificates/verify_six_vertex.py`, `certificates/run_verification.sh`,
+`tools/tree_entropy_check.py`), the extractor of the blueprint's embedded files
+(`tools/extract_embedded.py`) and the M0 kernel-performance spike (`lean/Bench/`,
+`tools/gen_bench.py`).  None of them is needed to build or audit the Lean development.  The
+certificate data under `lean/EvenCycleApex/Certificate/` is regenerated by
+`python tools/gen_cert_data.py {schema,data,checks}` from the tracked files
+`certificates/*_sos.json` and `certificates/lean-data/*.json` (the witness files that
+`independent_audit.py --export` produced).

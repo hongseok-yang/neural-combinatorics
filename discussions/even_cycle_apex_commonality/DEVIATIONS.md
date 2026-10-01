@@ -1,7 +1,7 @@
 # Deviations from the verification plan
 
 Every change to a public statement, to an imported dependency, or to the architecture of
-[`VERIFICATION_PLAN.md`](VERIFICATION_PLAN.md) §1–§2 is recorded here *before* downstream code relies
+`VERIFICATION_PLAN.md` (kept outside the repository) §1–§2 is recorded here *before* downstream code relies
 on it.  Plan decisions D1–D10 are already-approved deviations from the blueprint's literal route and
 are not repeated.  Public statement shapes (plan D5) are unchanged by every entry below.
 

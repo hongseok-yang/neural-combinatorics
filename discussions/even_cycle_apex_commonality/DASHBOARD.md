@@ -1,7 +1,7 @@
 # Verification dashboard — even cycles with independent apices
 
 Single live status page for the Lean formalization described in
-[`VERIFICATION_PLAN.md`](VERIFICATION_PLAN.md) of [`even_apex_blueprint.tex`](even_apex_blueprint.tex).
+`VERIFICATION_PLAN.md` of `even_apex_blueprint.tex` (both kept outside the repository; see `README.md`).
 Maintained by the formalizing agent; every status change must cite its evidence.
 
 Status legend: ✅ done (gate passed, evidence recorded) · 🚧 under construction (started, gate not

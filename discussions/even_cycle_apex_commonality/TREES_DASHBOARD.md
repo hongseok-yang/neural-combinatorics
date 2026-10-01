@@ -1,10 +1,9 @@
 # Verification dashboard — independent apices of trees
 
-Single live status page for the Lean formalization described in
-[`TREES_VERIFICATION_PLAN.md`](TREES_VERIFICATION_PLAN.md) of
-[`trees_apices_commonness.tex`](trees_apices_commonness.tex).  Maintained by the formalizing agent;
+Single live status page for the Lean formalization described in `TREES_VERIFICATION_PLAN.md` of
+`trees_apices_commonness.tex` (both kept outside the repository; see `README.md`).  Maintained by the formalizing agent;
 every status change must cite its evidence.  The even-cycle dashboard
-[`DASHBOARD.md`](DASHBOARD.md) is frozen and is not touched by this work.
+[`DASHBOARD.md`](DASHBOARD.md) is frozen (apart from unlinking files that left the repository).
 
 Status legend: ✅ done (gate passed, evidence recorded) · 🚧 under construction (started, gate not
 passed; a one-line reason if blocked) · ❌ not started · — not applicable (replaced or excluded by a

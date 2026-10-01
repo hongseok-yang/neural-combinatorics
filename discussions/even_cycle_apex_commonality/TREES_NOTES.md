@@ -1,6 +1,6 @@
 # Notes — independent apices of trees
 
-Chronological log for [`TREES_VERIFICATION_PLAN.md`](TREES_VERIFICATION_PLAN.md): decisions taken inside
+Chronological log for `TREES_VERIFICATION_PLAN.md` (kept outside the repository): decisions taken inside
 the plan's freedom, Lean gotchas, blockers, and gate evidence.  Live status is in
 [`TREES_DASHBOARD.md`](TREES_DASHBOARD.md).
 
