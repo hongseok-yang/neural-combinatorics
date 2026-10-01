@@ -81,3 +81,45 @@ python tools/tree_entropy_check.py 200 7          200 trials, 169 with R > 0, 31
 python tools/tree_entropy_check.py --negative     asymmetric kernel tripped 200/200; perturbed log tripped 157/200
 python tools/tree_entropy_check.py --host         the two hosts above
 ```
+
+## 2026-10-02 — T1: graphs, recursive trees, the `IsTree` bridge
+
+* `TreeApex/Graph/Apex.lean`: `apexGraph G k` (no decidability needed for the definition; the
+  `DecidableRel` instance takes `[DecidableRel G.Adj]`), the four adjacency `simp` lemmas,
+  `apexCycle_eq_apexGraph` (`rfl`), `edgePairs_apexGraph` / `prod_edgePairs_apexGraph` (verbatim
+  `ApexEdges.lean`, `crossEdges` imported), `card_edgePairs_apexGraph`, `apexGraph_edgeCount`
+  (from `IsTree.card_edgeFinset` via the even-cycle `card_edgePairs`), `apexGraph_connected`
+  (`0 < n`, `0 < k`), `apexEquiv e k` (extension by the identity on the apices, via
+  `finSumFinEquiv`) and `apexGraph_comap`, the `DecidableRel (pathGraph m).Adj` instance (Mathlib
+  has none; plan risk F), `edgePairs_K₂/P₃/K₃` by `decide`, connectivity of the three small graphs.
+* `TreeApex/Graph/RecTree.lean`.  **Representation change inside T-D6's freedom:** instead of the
+  subtype `RecTree m = {par // ∀ i < m, par i ≤ i}`, a recursive tree is any `par : ℕ → ℕ` with
+  parent `parV par i = min (par i) i` of vertex `i + 1`.  No proof obligations travel with `par`,
+  and the restriction to `m` vertices is the same function.  `treeGraph par m`,
+  `edgePairs_treeGraph` (image of `i ↦ (parV par i, i.succ)`), `prod_edgePairs_treeGraph`.
+* **Bridge, route A, closed in one pass.**  Generic part on any tree `T` with root `r`:
+  `rootPath` (a shortest path, `Connected.exists_path_of_dist`), `treeParent` = its penultimate
+  vertex, `dist_treeParent` (`dist v = dist (parent v) + 1`, from `IsAcyclic.path_concat`),
+  `eq_treeParent_of_adj` (a neighbour closer to the root is the parent: if it lies on the
+  root path of `b`, `path_concat` identifies the penultimate vertex; otherwise
+  `mem_support_of_ne_mem_support_of_adj_of_isPath` puts `b` on the root path of `a` and
+  `path_concat` gives `dist a = dist b + 1`).  On `Fin (m + 1)`: `bfsOrder = Tuple.sort (dist 0)`,
+  `bfsOrder_lt` (closer to the root ⇒ earlier), `bfsOrder_zero`, `bfsPar`, `parV_bfsPar`
+  (`par i ≤ i`, so the clamp is inactive), `exists_recTree_iso`:
+  `T = (treeGraph (bfsPar hT) m).comap (bfsOrder).symm`; the forward direction splits on
+  `IsTree.dist_ne_of_adj`.
+* `homDensity_congr` (density independent of the `DecidableRel` instance, by `subst; congr`),
+  `homDensity_apexGraph_of_iso`, `homDensity_tree_of_iso`.
+* Lean gotchas: a section variable used only inside proofs (`hT`) must be `include`d; then
+  `omit hT in` for lemmas that do not need it.
+
+### T1 gate evidence (2026-10-02)
+
+```text
+lake build TreeApex                       Build completed successfully (8579 jobs); no warnings
+lake env lean CheckAxiomsTree.lean        16 declarations; every line [propext, Classical.choice,
+  Quot.sound] except apexGraph_connected, apexGraph_comap: [propext, Quot.sound]
+  including exists_recTree_iso, prod_edgePairs_apexGraph, apexGraph_edgeCount,
+  homDensity_apexGraph_of_iso
+grep forbidden tokens in lean/TreeApex    none
+```

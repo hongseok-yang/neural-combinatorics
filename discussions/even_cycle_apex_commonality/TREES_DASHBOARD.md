@@ -12,14 +12,14 @@ design decision in the plan).
 
 Hardness: Easy · Medium · Hard — an estimate for an axiom-free Lean proof, not for the paper argument.
 
-Last updated: 2026-10-02 (T0 ✅; T1 next)
+Last updated: 2026-10-02 (T0, T1 ✅; T2 next)
 
 ## Milestones
 
 | Milestone | What it is | Status | Hardness | Gate / evidence |
 |---|---|:---:|:---:|---|
 | T0 | `TreeApex` library in the existing package (T-D7), index, `CheckAxiomsTree.lean`, smoke theorem, import-closure check, regression script with `--host` | ✅ | Easy | `smoke_density_near_host` `[propext, Classical.choice, Quot.sound]`; `CheckImportsTree.lean` OK (16 light modules); script 300+200 trials, `--negative` trips; 2026-10-02 |
-| T1 | `apexGraph` and its edge split, `apexCycle_eq_apexGraph`, connectivity, edge count, `K₂ P₃ K₃`, `RecTree`/`treeGraph`/`treeEdges`, the `IsTree ↔ RecTree` bridge, `apexGraph_comap`, density invariance | ❌ | Hard | — |
+| T1 | `apexGraph` and its edge split, `apexCycle_eq_apexGraph`, connectivity, edge count, `K₂ P₃ K₃`, `RecTree`/`treeGraph`/`treeEdges`, the `IsTree ↔ RecTree` bridge, `apexGraph_comap`, density invariance | ✅ | Hard | `exists_recTree_iso`, `prod_edgePairs_apexGraph`, `apexGraph_edgeCount`, `homDensity_apexGraph_of_iso` (15 decls) `[propext, Classical.choice, Quot.sound]` or a subset; 2026-10-02 |
 | T2 | `ProbHost`, scalars `deg cod tri E D R` and their `hostDensity` identifications and bounds, reference weights `ρ_Y ρ_B ρ_T`, `hostDensity_apexGraph_treeGraph`, leaf recursion, doubled host and block identity, Goodman on hosts, two regression hosts | ❌ | Medium | — |
 | T3 | Finite relative entropy: `relEnt`, Gibbs, `KL ≥ 0`, product chain rule, reindexing, marginal/conditional conventions, Jensen for `log` | ❌ | Medium | — |
 | T4 | Triangle law (`h_ge`, `I_le`) and book law (`relEnt_book`, `g_eq`, `pages_kl`, `g_ge`) | ❌ | Hard | — |
@@ -29,7 +29,7 @@ Last updated: 2026-10-02 (T0 ✅; T1 next)
 | T8 | (optional) Appendix A: `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` | ❌ | Easy–Medium | — |
 | T9 | Final audit: `CheckAxiomsTree.lean` coverage of plan §6, README section, label map, forbidden-token scan, import-closure check | ❌ | Easy | — |
 
-Overall: **1 / 10 milestones complete** (T0).  Headlines: P1 `tree_apex_one_colour`, P2
+Overall: **2 / 10 milestones complete** (T0, T1).  Headlines: P1 `tree_apex_one_colour`, P2
 `tree_apex_two_colour` (+ polynomial form), P3 `goodman_identity` + `half_le_commonalityM_path`,
 P4 `tree_apex_common`; optional P5 `tree_sidorenko`, `tree_common`.
 
@@ -41,8 +41,8 @@ a row becomes ✅ only when the named declaration builds and passes `#print axio
 
 | Label | Line | Statement | Lean name (`TreeApex.`) | Milestone | Status | Hardness |
 |---|---:|---|---|:---:|:---:|:---:|
-| sec:statements | 78 | `T^{+k}`, `t(F,W)`, `m(F,W)`, `P₃`, `B_k` | `apexGraph`; `homDensity`, `commonalityM` (even-cycle); `pathGraph 3`, `⊤ : SimpleGraph (Fin 2/3)` | T1 | ❌ | Easy |
-| eq:sizes | 92 | `v(T^{+k}) = n + k`, `e(T^{+k}) = (k+1)n − 1` | `apexGraph_edgeCount` | T1 | ❌ | Easy |
+| sec:statements | 78 | `T^{+k}`, `t(F,W)`, `m(F,W)`, `P₃`, `B_k` | `apexGraph`; `homDensity`, `commonalityM` (even-cycle); `pathGraph 3`, `⊤ : SimpleGraph (Fin 2/3)`; `edgePairs_K₂/P₃/K₃` | T1 | ✅ | Easy |
+| eq:sizes | 92 | `v(T^{+k}) = n + k`, `e(T^{+k}) = (k+1)n − 1` | `apexGraph_edgeCount` | T1 | ✅ | Easy |
 | eq:common-definition | 112 | `m(F,W) ≥ 2^{1−e(F)}` | the form of `tree_apex_common` (`4 / 2^((k+1)n)`) | T7 | ❌ | — |
 | thm:common | 119 | `T^{+k}` common for every tree, every `k ≥ 1` | `tree_apex_common` (+ `tree_apex_common'`) | T7 | ❌ | Medium |
 | thm:two-color | 126 | `σ ≥ 1/2`; `m(T^{+k}) ≥ τ^{k(n−1)} / σ^{(k−1)(n−2)}` | `half_le_commonalityM_path`, `tree_apex_two_colour`, `tree_apex_two_colour_polynomial` | T7 | ❌ | Medium |
@@ -72,8 +72,8 @@ a row becomes ✅ only when the named declaration builds and passes `#print axio
 | app:finite-commonness | 891 | finite Ramsey-multiplicity formulation | — out of scope (T-D11) | — | — | — |
 | — (T-D2) | — | the weighted host with `[0,1]` kernel; step graphons as hosts | `ProbHost`, `hostOfStep'`, `Mh`; step identification lemmas | T2 / T7 | ❌ | Easy |
 | — (T-D4) | — | `relEnt`, Gibbs, `KL ≥ 0`, product chain rule, reindexing | `relEnt`, `relEnt_le_log_sum`, `relEnt_nonpos_of_law`, `relEnt_prod`, `relEnt_equiv`, `log_jensen` | T3 | ❌ | Medium |
-| — (T-D6) | — | every Mathlib tree on `Fin (m+1)` is a relabelled recursive tree | `RecTree`, `treeGraph`, `exists_recTree_iso`, `apexGraph_comap`, `homDensity_apexGraph_of_iso` | T1 | ❌ | Hard |
-| — (cross-check) | — | `apexCycle n k = apexGraph (cycleGraph n) k` | `apexCycle_eq_apexGraph` | T1 | ❌ | Easy |
+| — (T-D6) | — | every Mathlib tree on `Fin (m+1)` is a relabelled recursive tree | `treeGraph par m` (clamped parents `parV`, no `RecTree` subtype), `edgePairs_treeGraph`, `prod_edgePairs_treeGraph`, `exists_recTree_iso` (BFS route A), `apexGraph_comap`, `homDensity_apexGraph_of_iso`, `homDensity_tree_of_iso` | T1 | ✅ | Hard |
+| — (cross-check) | — | `apexCycle n k = apexGraph (cycleGraph n) k` | `apexCycle_eq_apexGraph` (`rfl`) | T1 | ✅ | Easy |
 | — | — | reference weights and their identification with `hostDensity` | `ρ_Y`, `ρ_B`, `ρ_T`, `hostDensity_apexGraph_treeGraph`, `treeWeight_snoc` | T2 | ❌ | Medium |
 | — | — | headline P4 | `tree_apex_common` | T7 | ❌ | — |
 
@@ -84,6 +84,6 @@ a row becomes ✅ only when the named declaration builds and passes `#print axio
 | `python tools/tree_entropy_check.py 300 20261002` | 300 trials (264 with `R > 0`), all checks passed; negative controls trip | 2026-10-02 |
 | `python tools/tree_entropy_check.py 200 7` | 200 trials, all checks passed | 2026-10-02 |
 | `lake build TreeApex` | Build completed successfully (8576 jobs); `lake build --no-build EvenCycleApex` all up-to-date (8622 jobs) | 2026-10-02 |
-| `lake env lean CheckAxiomsTree.lean` | 1 declaration (T0 smoke), all `[propext, Classical.choice, Quot.sound]` | 2026-10-02 |
+| `lake env lean CheckAxiomsTree.lean` | 16 declarations (T0–T1), all `[propext, Classical.choice, Quot.sound]` or a subset | 2026-10-02 |
 | import closure of `TreeApex` (T-D7) | `lake env lean CheckImportsTree.lean`: Foundation (8), Graph (5), Host.{Defs, Bridge, EdgeDensity}; no heavy module | 2026-10-02 |
 | `python tools/tree_entropy_check.py --negative` | asymmetric kernel trips 200/200, perturbed log trips 157/200 | 2026-10-02 |
