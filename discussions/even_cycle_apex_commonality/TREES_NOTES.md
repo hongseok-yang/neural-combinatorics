@@ -255,3 +255,29 @@ lake env lean CheckStatementsTree.lean    no errors (the verbatim T-D5 statement
 lake env lean CheckImportsTree.lean       import closure OK: no heavy EvenCycleApex module
 grep forbidden tokens in lean/TreeApex    none
 ```
+
+## 2026-10-02 — T8: appendix A (trees themselves)
+
+* `TreeApex/Appendix/Sidorenko.lean`.  Plan §2.8 offered two routes; neither the `k = 0` book nor
+  a separate direct proof was needed: the edge law `Q(x, y) = w_x w_y M_xy / E` is an instance of
+  the generic `SymLaw` with `S = Unit` (`edgeLaw`, `edgeRef` with `ρ_S = 1`, `ν = w`, `η = M`), so
+  the tree law, its support and `relEnt_book_add_le_log` are reused unchanged.
+  `hostDens_treeGraph` (closed form), `hostDens_treeGraph_eq_sum_treeWeight`, `relEnt_edge`
+  (`= log E`), `edgeLaw_Q`, `edgeLaw_marg` (`μ(a) = w_a deg_a / E`), `edge_condRelEnt_ge`
+  (`g = ∑ μ log deg ≥ log E` by Gibbs against the law `w`), `host_tree_sidorenko'`
+  (`E^{m+1} ≤ t(T)`, tree on `m + 2` vertices), `hostDens_treeGraph_zero` (one vertex: `t = 1`),
+  `E_le_one`, `host_tree_common` (`add_pow_le` with `t(K₂, 1 − M) = 1 − E` from `Mh_K₂`), and the
+  graphon forms `tree_sidorenko`, `tree_common` (T-D5 shapes, checked verbatim in
+  `CheckStatementsTree.lean`).
+* Lean gotcha: after `Fintype.sum_unique` the `Unit` point appears as `default`, not `()`; state
+  lemmas such as `edgeLaw_marg` for an arbitrary `u : Unit`.
+
+### T8 gate evidence (2026-10-02)
+
+```text
+lake build TreeApex                       Build completed successfully (8592 jobs); no warnings
+lake env lean CheckAxiomsTree.lean        86 declarations; tree_sidorenko, tree_common,
+  host_tree_sidorenko', host_tree_common, relEnt_edge, edge_condRelEnt_ge all
+  [propext, Classical.choice, Quot.sound]
+lake env lean CheckStatementsTree.lean    no errors (P5 statements included)
+```

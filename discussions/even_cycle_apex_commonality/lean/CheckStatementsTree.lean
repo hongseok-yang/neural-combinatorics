@@ -10,6 +10,8 @@ import TreeApex
 #check @TreeApex.tree_apex_common
 #check @TreeApex.tree_apex_one_colour'
 #check @TreeApex.tree_apex_two_colour_polynomial'
+#check @TreeApex.tree_sidorenko
+#check @TreeApex.tree_common
 #print TreeApex.apexGraph
 
 /-! The T-D5 statements, copied verbatim from the plan, each closed by the corresponding theorem. -/
@@ -55,5 +57,13 @@ example (hW : IsGraphon W μ) (hT : T.IsTree) (hk : 1 ≤ k) :
 /-- `4 / 2^((k+1)n)` is `2^{1 − e(T^{+k})}`: the edge count is `(k+1)n − 1`. -/
 example (hT : T.IsTree) : (edgePairs (apexGraph T k)).card = (k + 1) * n - 1 :=
   apexGraph_edgeCount T hT
+
+example (hW : IsGraphon W μ) (hT : T.IsTree) (hn : 2 ≤ n) :
+    homDensity (⊤ : SimpleGraph (Fin 2)) W μ ^ (n - 1) ≤ homDensity T W μ :=
+  tree_sidorenko T hW hT hn
+
+example (hW : IsGraphon W μ) (hT : T.IsTree) :
+    4 / 2 ^ n ≤ homDensity T W μ + homDensity T (cmpl W) μ :=
+  tree_common T hW hT
 
 end StatementLock

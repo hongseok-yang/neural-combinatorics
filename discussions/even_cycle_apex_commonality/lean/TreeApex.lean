@@ -22,3 +22,5 @@ import TreeApex.Finite.TwoColour
 -- T7: transfer to graphons; headlines P1–P4.
 import TreeApex.Transfer
 import TreeApex.Main
+-- T8 (optional): appendix A, trees themselves.
+import TreeApex.Appendix.Sidorenko

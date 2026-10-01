@@ -98,3 +98,11 @@ import TreeApex
 #print axioms TreeApex.tree_apex_common
 #print axioms TreeApex.tree_apex_one_colour'
 #print axioms TreeApex.tree_apex_two_colour_polynomial'
+
+-- T8: appendix A
+#print axioms TreeApex.ProbHost.relEnt_edge
+#print axioms TreeApex.ProbHost.edge_condRelEnt_ge
+#print axioms TreeApex.ProbHost.host_tree_sidorenko'
+#print axioms TreeApex.ProbHost.host_tree_common
+#print axioms TreeApex.tree_sidorenko
+#print axioms TreeApex.tree_common

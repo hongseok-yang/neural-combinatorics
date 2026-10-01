@@ -12,7 +12,7 @@ design decision in the plan).
 
 Hardness: Easy · Medium · Hard — an estimate for an axiom-free Lean proof, not for the paper argument.
 
-Last updated: 2026-10-02 (T0–T7 ✅: all headlines P1–P4 proved; T8 optional, T9 next)
+Last updated: 2026-10-02 (T0–T8 ✅: P1–P5 proved; T9 next)
 
 ## Milestones
 
@@ -26,10 +26,10 @@ Last updated: 2026-10-02 (T0–T7 ✅: all headlines P1–P4 proved; T8 optional
 | T5 | Tree law TE1–TE5 and **`finite_counting_inequality`** (weighted `thm:finite`) | ✅ | Hard | `ProbHost.finite_counting_inequality` `[propext, Classical.choice, Quot.sound]`; TE1/TE2/TE4/TE5 in `Entropy/TreeLaw.lean` (generic), TE3 not needed; 2026-10-02 |
 | T6 | Doubled-host two-colour inequality, `commonness_scalar`, **`host_commonness`**, star case | ✅ | Medium | `host_commonness`, `host_star_commonness`, `host_two_colour_polynomial`, `commonness_scalar` `[propext, Classical.choice, Quot.sound]`; 2026-10-02 |
 | T7 | Transfer layer; **headlines `tree_apex_one_colour`, `tree_apex_two_colour_polynomial`, `half_le_commonalityM_path`, `goodman_identity`, `tree_apex_two_colour`, `tree_apex_common`** | ✅ | Medium | all six + `tree_apex_one_colour'`, `tree_apex_two_colour_polynomial'` `[propext, Classical.choice, Quot.sound]`; T-D5 statements restated verbatim in `CheckStatementsTree.lean` and closed by the theorems; 2026-10-02 |
-| T8 | (optional) Appendix A: `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` | ❌ | Easy–Medium | — |
+| T8 | (optional) Appendix A: `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` | ✅ | Easy–Medium | `tree_sidorenko`, `tree_common` `[propext, Classical.choice, Quot.sound]` (edge law as a `SymLaw` over `Unit`); 2026-10-02 |
 | T9 | Final audit: `CheckAxiomsTree.lean` coverage of plan §6, README section, label map, forbidden-token scan, import-closure check | ❌ | Easy | — |
 
-Overall: **8 / 10 milestones complete** (T0–T7); the user's goal P4 (`tree_apex_common`) is proved.  Headlines: P1 `tree_apex_one_colour`, P2
+Overall: **9 / 10 milestones complete** (T0–T8); the user's goal P4 (`tree_apex_common`) and the optional P5 are proved.  Headlines: P1 `tree_apex_one_colour`, P2
 `tree_apex_two_colour` (+ polynomial form), P3 `goodman_identity` + `half_le_commonalityM_path`,
 P4 `tree_apex_common`; optional P5 `tree_sidorenko`, `tree_common`.
 
@@ -68,7 +68,7 @@ a row becomes ✅ only when the named declaration builds and passes `#print axio
 | lem:goodman | 757 | `σ ≥ 1/2`, `τ = (3/2)σ − 1/2`, `τ ≥ 1/4`, `τ/σ ≥ 1/2` | `ProbHost.host_half_le_sigma`, `host_goodman_identity` (host, via `sigma_eq`, `tau_eq`, `Mh_K₂`); `half_le_commonalityM_path`, `goodman_identity` (graphon); the bounds inside `commonness_scalar` | T2 / T7 | ✅ | Medium |
 | proof of thm:common (display) | 807 | `τ^c/σ^b ≥ 2^{2−(k+1)n}`; the star `K_{1,k}` | `ProbHost.commonness_scalar`, `host_commonness`, `hostDens_star`, `host_star_commonness` | T6 | ✅ | Medium |
 | remark (sharpness) | 838 | equality at `W ≡ 1/2`; role of the tree hypothesis | — (not a theorem) | — | — | — |
-| prop:tree-sidorenko | 858 | `t(T) ≥ t(K₂)^{n−1}`; `T` common | `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` (optional T8) | T8 | ❌ | Medium |
+| prop:tree-sidorenko | 858 | `t(T) ≥ t(K₂)^{n−1}`; `T` common | `ProbHost.host_tree_sidorenko'`, `host_tree_common`, `tree_sidorenko`, `tree_common` (T8) | T8 | ✅ | Medium |
 | app:finite-commonness | 891 | finite Ramsey-multiplicity formulation | — out of scope (T-D11) | — | — | — |
 | — (T-D2) | — | the weighted host with `[0,1]` kernel; step graphons as hosts | `ProbHost` (any `Fintype`), `hostDens`, `Mh`, `Mc`, `double`; `stepHost`, `homDensity_step`, `homDensity_cmpl_step`, `commonalityM_step` | T2 / T7 | ✅ | Easy |
 | — (T-D4) | — | `relEnt`, Gibbs, `KL ≥ 0`, product chain rule, reindexing | `relEnt`, `relEnt_le_log_sum`, `relEnt_nonpos_of_law`, `relEnt_prod`, `relEnt_equiv`, `relEnt_congr`, `relEnt_one` (`log_jensen` not needed) | T3 | ✅ | Medium |
@@ -84,7 +84,7 @@ a row becomes ✅ only when the named declaration builds and passes `#print axio
 | `python tools/tree_entropy_check.py 300 20261002` | 300 trials (264 with `R > 0`), all checks passed; negative controls trip | 2026-10-02 |
 | `python tools/tree_entropy_check.py 200 7` | 200 trials, all checks passed | 2026-10-02 |
 | `lake build TreeApex` | Build completed successfully (8576 jobs); `lake build --no-build EvenCycleApex` all up-to-date (8622 jobs) | 2026-10-02 |
-| `lake env lean CheckAxiomsTree.lean` | 80 declarations (T0–T7), all `[propext, Classical.choice, Quot.sound]` or a subset | 2026-10-02 |
-| `lake env lean CheckStatementsTree.lean` | the six T-D5 headline statements, copied verbatim from the plan, elaborate and are closed by the theorems | 2026-10-02 |
+| `lake env lean CheckAxiomsTree.lean` | 86 declarations (T0–T8), all `[propext, Classical.choice, Quot.sound]` or a subset | 2026-10-02 |
+| `lake env lean CheckStatementsTree.lean` | the eight T-D5 statements (P1–P5), copied verbatim from the plan, elaborate and are closed by the theorems | 2026-10-02 |
 | import closure of `TreeApex` (T-D7) | `lake env lean CheckImportsTree.lean`: Foundation (8), Graph (5), Host.{Defs, Bridge, EdgeDensity}; no heavy module (re-checked after T7) | 2026-10-02 |
 | `python tools/tree_entropy_check.py --negative` | asymmetric kernel trips 200/200, perturbed log trips 157/200 | 2026-10-02 |
