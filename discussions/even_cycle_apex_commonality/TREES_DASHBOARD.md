@@ -12,7 +12,7 @@ design decision in the plan).
 
 Hardness: Easy · Medium · Hard — an estimate for an axiom-free Lean proof, not for the paper argument.
 
-Last updated: 2026-10-02 (T0–T8 ✅: P1–P5 proved; T9 next)
+Last updated: 2026-10-02 (complete: T0–T9 ✅; P1–P5 proved, axiom-clean; deviations Y1–Y10 in `TREES_DEVIATIONS.md`, all internal)
 
 ## Milestones
 
@@ -27,9 +27,9 @@ Last updated: 2026-10-02 (T0–T8 ✅: P1–P5 proved; T9 next)
 | T6 | Doubled-host two-colour inequality, `commonness_scalar`, **`host_commonness`**, star case | ✅ | Medium | `host_commonness`, `host_star_commonness`, `host_two_colour_polynomial`, `commonness_scalar` `[propext, Classical.choice, Quot.sound]`; 2026-10-02 |
 | T7 | Transfer layer; **headlines `tree_apex_one_colour`, `tree_apex_two_colour_polynomial`, `half_le_commonalityM_path`, `goodman_identity`, `tree_apex_two_colour`, `tree_apex_common`** | ✅ | Medium | all six + `tree_apex_one_colour'`, `tree_apex_two_colour_polynomial'` `[propext, Classical.choice, Quot.sound]`; T-D5 statements restated verbatim in `CheckStatementsTree.lean` and closed by the theorems; 2026-10-02 |
 | T8 | (optional) Appendix A: `host_tree_sidorenko`, `tree_sidorenko`, `tree_common` | ✅ | Easy–Medium | `tree_sidorenko`, `tree_common` `[propext, Classical.choice, Quot.sound]` (edge law as a `SymLaw` over `Unit`); 2026-10-02 |
-| T9 | Final audit: `CheckAxiomsTree.lean` coverage of plan §6, README section, label map, forbidden-token scan, import-closure check | ❌ | Easy | — |
+| T9 | Final audit: `CheckAxiomsTree.lean` coverage of plan §6, README section, label map, forbidden-token scan, import-closure check | ✅ | Easy | §6 list audited under the plan's exact names (`PaperNames.lean`), 114 audit lines all standard; README section "Trees with independent apices"; even-cycle `CheckAxioms.lean` 166 declarations unchanged and clean; `lean/EvenCycleApex*` and `CheckAxioms.lean` byte-identical to 12b365e3; 2026-10-02 |
 
-Overall: **9 / 10 milestones complete** (T0–T8); the user's goal P4 (`tree_apex_common`) and the optional P5 are proved.  Headlines: P1 `tree_apex_one_colour`, P2
+Overall: **10 / 10 milestones complete.**  The user's goal P4 (`tree_apex_common`) and the optional P5 are proved.  Headlines: P1 `tree_apex_one_colour`, P2
 `tree_apex_two_colour` (+ polynomial form), P3 `goodman_identity` + `half_le_commonalityM_path`,
 P4 `tree_apex_common`; optional P5 `tree_sidorenko`, `tree_common`.
 
@@ -81,10 +81,14 @@ a row becomes ✅ only when the named declaration builds and passes `#print axio
 
 | Check | Result | Date |
 |---|---|---|
-| `python tools/tree_entropy_check.py 300 20261002` | 300 trials (264 with `R > 0`), all checks passed; negative controls trip | 2026-10-02 |
+| `python tools/tree_entropy_check.py 300 20261002` | 300 trials (264 with `R > 0`), all checks passed (re-run at T9) | 2026-10-02 |
 | `python tools/tree_entropy_check.py 200 7` | 200 trials, all checks passed | 2026-10-02 |
 | `lake build TreeApex` | Build completed successfully (8576 jobs); `lake build --no-build EvenCycleApex` all up-to-date (8622 jobs) | 2026-10-02 |
-| `lake env lean CheckAxiomsTree.lean` | 86 declarations (T0–T8), all `[propext, Classical.choice, Quot.sound]` or a subset | 2026-10-02 |
+| `lake env lean CheckAxiomsTree.lean` | 114 audit lines (86 declarations of T0–T8 and the 31 names of plan §6, overlapping), all `[propext, Classical.choice, Quot.sound]` or a subset; no `sorryAx`, no `Lean.ofReduceBool` | 2026-10-02 |
+| `lake build` (default target `EvenCycleApex`) | Build completed successfully (8622 jobs), nothing rebuilt | 2026-10-02 |
+| `lake env lean CheckAxioms.lean` (even-cycle, unchanged) | 166 declarations, all `[propext, Classical.choice, Quot.sound]` or a subset | 2026-10-02 |
+| `git diff 12b365e3 -- lean/EvenCycleApex lean/EvenCycleApex.lean lean/CheckAxioms.lean` | empty (the even-cycle library is untouched; `lakefile.toml` gains only the `TreeApex` block) | 2026-10-02 |
+| forbidden tokens (`sorry`, `admit`, `native_decide`, `decide +native`, `ofReduceBool`, `axiom`) in `lean/TreeApex*`, `lean/Check*Tree.lean` | none | 2026-10-02 |
 | `lake env lean CheckStatementsTree.lean` | the eight T-D5 statements (P1–P5), copied verbatim from the plan, elaborate and are closed by the theorems | 2026-10-02 |
 | import closure of `TreeApex` (T-D7) | `lake env lean CheckImportsTree.lean`: Foundation (8), Graph (5), Host.{Defs, Bridge, EdgeDensity}; no heavy module (re-checked after T7) | 2026-10-02 |
 | `python tools/tree_entropy_check.py --negative` | asymmetric kernel trips 200/200, perturbed log trips 157/200 | 2026-10-02 |

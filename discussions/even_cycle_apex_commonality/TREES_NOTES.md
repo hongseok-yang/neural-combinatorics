@@ -281,3 +281,43 @@ lake env lean CheckAxiomsTree.lean        86 declarations; tree_sidorenko, tree_
   [propext, Classical.choice, Quot.sound]
 lake env lean CheckStatementsTree.lean    no errors (P5 statements included)
 ```
+
+## 2026-10-02 — T9: final audit and documentation
+
+* `TreeApex/PaperNames.lean`: the plan's §6 names that differ from the development's (14:
+  `hostDensity_apexGraph_treeGraph`, `hostDensity_double_of_connected`, `host_goodman_identity`,
+  `host_half_le_sigma`, `h_ge`, `I_le`, `relEnt_book`, `g_ge`, `relEnt_treeLaw`,
+  `finite_counting_inequality`, `host_two_colour_polynomial`, `commonness_scalar`,
+  `host_commonness`, `host_star_commonness`), each a one-line restatement.  Every paper label has a
+  declaration of the same meaning (dashboard table), so no further paper-label aliases were needed.
+* `CheckAxiomsTree.lean` ends with the §6 list verbatim (31 names).
+* `TREES_DEVIATIONS.md` created: Y1–Y10, all internal (host over any `Fintype`, clamped parents,
+  plan items not needed, tree law from one vertex, pages step as one `KL`, generic `SymLaw`, §6
+  names in namespaces, no `tree_apex_common'`, extra check files, axiom subsets).  These were
+  logged here as design notes when made; the file collects the ones that depart from the plan's
+  literal text.
+* `README.md`: new section "Trees with independent apices" (results table, building and auditing,
+  reading the statement, reading the proof, layout).  Only `README.md`, the `TREES_*` files,
+  `tools/tree_entropy_check.py`, `lean/lakefile.toml` (one block) and new files under `lean/` were
+  touched.
+* Regression script re-run (300 + 200 trials, negative controls).
+
+### T9 gate evidence (2026-10-02) — plan §0 items
+
+```text
+1. P1–P4 for arbitrary (Ω, μ), IsGraphon W μ, Mathlib IsTree on Fin n      CheckStatementsTree.lean
+   (the T-D5 statements verbatim, proved); P5 likewise
+2. densities are EvenCycleApex.homDensity / commonalityM; graphs apexGraph T k, ⊤ : Fin 2/3,
+   pathGraph 3                                                             same file
+3. no computational certificate; no native_decide                          token scan: none
+4. lake build TreeApex                     Build completed successfully (8593 jobs); no warnings
+   lake build (EvenCycleApex)              Build completed successfully (8622 jobs), nothing rebuilt
+5. no sorry/admit/axiom/native_decide under lean/TreeApex                  token scan: none
+6. lake env lean CheckAxiomsTree.lean      114 lines, all [propext, Classical.choice, Quot.sound]
+   or a subset (apexGraph_connected, apexGraph_comap: [propext, Quot.sound]; vertex_balance:
+   [propext]); no sorryAx, no Lean.ofReduceBool; the §6 list under the plan's exact names
+7. TREES_DASHBOARD.md                      every milestone ✅, label map complete
+even-cycle CheckAxioms.lean (unchanged)    166 declarations, all standard
+git diff 12b365e3 -- lean/EvenCycleApex lean/EvenCycleApex.lean lean/CheckAxioms.lean    empty
+lake env lean CheckImportsTree.lean        import closure OK: no heavy EvenCycleApex module
+```

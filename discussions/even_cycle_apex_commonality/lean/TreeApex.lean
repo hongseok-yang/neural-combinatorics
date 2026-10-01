@@ -24,3 +24,5 @@ import TreeApex.Transfer
 import TreeApex.Main
 -- T8 (optional): appendix A, trees themselves.
 import TreeApex.Appendix.Sidorenko
+-- T9: the plan's declaration names (§6).
+import TreeApex.PaperNames

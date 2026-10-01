@@ -150,3 +150,110 @@ tools/gen_cert_data.py   certificate JSON → Certificate/Data/*.lean and Checks
 
 `DASHBOARD.md` maps every labelled statement of the blueprint to its Lean name; `NOTES.md` is the
 engineering log, with the gate evidence of each milestone.
+
+## Trees with independent apices
+
+A second library, `TreeApex`, in the same Lake package formalizes `trees_apices_commonness.tex`.
+For a tree `T` on `n` vertices and `k ≥ 1`, `T^{+k}` is `T` together with `k` new vertices, each
+joined to every vertex of `T` and to no other new vertex.  With `t`, `m` as above, `σ = m(P₃, W)` and
+`τ = m(K₃, W)` (`P₃` the path with two edges), for every graphon `W` on every probability space:
+
+```
+  P1  (one colour, n ≥ 2)   t(T^{+k}) · t(K₂)^{n+k−3} · t(P₃)^{(k−1)(n−2)} ≥ t(K₃)^{k(n−1)}
+  P2  (two colours, n ≥ 2)  m(T^{+k}) ≥ τ^{k(n−1)} / σ^{(k−1)(n−2)}
+  P3  (Goodman)             σ ≥ 1/2,  τ = (3/2)σ − 1/2
+  P4  (commonness)          m(T^{+k}) ≥ 2^{1 − e(T^{+k})} = 2^{2 − (k+1)n}          (every tree, every k ≥ 1)
+  P5  (appendix A)          t(T) ≥ t(K₂)^{n−1}  (n ≥ 2)  and  m(T) ≥ 2^{2−n}
+```
+
+The plan is `TREES_VERIFICATION_PLAN.md` (decisions T-D1–T-D11); changes to it are recorded in
+`TREES_DEVIATIONS.md`, the status and the label-to-name map in `TREES_DASHBOARD.md`, and the log
+with every gate's evidence in `TREES_NOTES.md`.
+
+| | |
+|---|---|
+| `tree_apex_one_colour` | P1 |
+| `tree_apex_two_colour`, `tree_apex_two_colour_polynomial` | P2 (divided and polynomial forms) |
+| `half_le_commonalityM_path`, `goodman_identity` | P3 |
+| `tree_apex_common` | P4 |
+| `tree_sidorenko`, `tree_common` | P5 |
+| `tree_apex_one_colour'`, `tree_apex_two_colour_polynomial'` | P1, P2 without natural subtraction (`n = m + 2`, `k = j + 1`) |
+
+### Building and auditing
+
+```
+lake build TreeApex                    # builds only TreeApex and the light even-cycle modules it imports
+lake env lean CheckAxiomsTree.lean     # axiom audit (plan §6 list and every milestone's key lemmas)
+lake env lean CheckStatementsTree.lean # the headline statements, copied verbatim from the plan, are proved
+lake env lean CheckImportsTree.lean    # import closure: no certificate or spectral module of EvenCycleApex
+python tools/tree_entropy_check.py     # numerical regression of the weighted statements (--host, --negative)
+```
+
+`TreeApex` uses no computational certificate.  Its import closure contains only
+`EvenCycleApex.Foundation.*`, `EvenCycleApex.Graph.*` and `EvenCycleApex.Host.{Defs, Bridge,
+EdgeDensity}`, so building it never triggers the 18-minute certificate chain.  A bare `lake build`
+still builds only `EvenCycleApex` (`defaultTargets` is unchanged).
+
+### Reading the statement
+
+| Read | For |
+|---|---|
+| `lean/TreeApex/Main.lean` | P1–P4 |
+| `lean/TreeApex/Appendix/Sidorenko.lean` | P5 (`tree_sidorenko`, `tree_common`, at the end) |
+| `lean/TreeApex/Graph/Apex.lean` | `apexGraph T k` (`T^{+k}`) |
+| `lean/EvenCycleApex/Graph/HomDensity.lean` | `homDensity`, `commonalityM` (shared with the even-cycle theorems) |
+| `lean/EvenCycleApex/Foundation/Defs.lean`, `Foundation/Graphon.lean` | `cmpl`, `IsGraphon` |
+
+Points worth checking explicitly:
+
+* `T` is any `SimpleGraph (Fin n)` with Mathlib's `T.IsTree` (connected and acyclic); no tree
+  encoding appears in the statements.  `apexGraph T k` lives on `Fin (n + k)`: `T` on the first `n`
+  vertices, each of the last `k` adjacent to all of the first `n`, and no two of the last `k`
+  adjacent.  `apexCycle_eq_apexGraph` shows that the even-cycle `apexCycle n k` is
+  `apexGraph (cycleGraph n) k` (by `rfl`).
+* `K₂` and `K₃` are `⊤ : SimpleGraph (Fin 2)` and `⊤ : SimpleGraph (Fin 3)`; `P₃` is Mathlib's
+  `pathGraph 3`.
+* `2^{2−(k+1)n}` is written `4 / 2 ^ ((k + 1) * n)`; `apexGraph_edgeCount` proves
+  `|E(T^{+k})| = (k + 1) n − 1`, so this is `2^{1 − e(T^{+k})}`.  Exponents with natural subtraction
+  (`n − 1`, `n + k − 3`, `(k − 1)(n − 2)`) occur only under `2 ≤ n`, `1 ≤ k`, where they are exact.
+* P4 has no `n ≥ 2` hypothesis: the one-vertex tree (`T^{+k}` is the star `K_{1,k}`) is included.
+
+### Reading the proof
+
+Every density inequality is first proved on a finite weighted host with a `[0,1]` kernel
+(`ProbHost`: weights `w ≥ 0` of mass one, symmetric `M`) and then transferred to graphons by the
+even-cycle library's `L¹` step approximation (`Transfer.lean`, which copies that library's
+`L1ContAt` layer with a provenance header).  The paper proves its finite inequality for simple
+graphs and passes to graphons through W-random graphs; on weighted hosts its entropies become
+relative entropies `relEnt ρ p = ∑ p log (ρ / p)` against the host's reference weights, and the one
+analytic input is Gibbs' inequality `relEnt ρ p ≤ log ∑ ρ`.  In order:
+
+* `Entropy/RelEnt.lean`: Gibbs (from `log u ≤ u − 1`), `KL ≥ 0`, the chain rule.
+* `Entropy/TreeLaw.lean`: the paper's extension along a tree, for any symmetric finite law `Q`:
+  the Markov tree law is a law with the right vertex marginals and support, and
+  `relEnt ρ_{m+1} P_{m+1} = relEnt ρ_B Q + m g`.
+* `Entropy/Triangle.lean`, `Entropy/Book.lean`: the random triangle (`h ≥ log R − log E`,
+  `I ≤ log D − log R`) and the book law of conditionally independent pages
+  (`relEnt ρ_B Q = log R + (k − 1) h`, `g ≥ k log R − log E − (k − 1) log D`).
+* `Finite/OneColour.lean`: `finite_counting_inequality`, the paper's `thm:finite` on weighted hosts.
+* `Host/Double.lean`, `Host/Goodman.lean`, `Finite/TwoColour.lean`: the two colours on one doubled
+  host (`Bool × V`; `t(F, double) = m(F) / 2^{v(F)}` for connected `F`), Goodman's identity, and
+  commonness on hosts, including the star.
+* `Graph/RecTree.lean`: every Mathlib tree on `Fin n` is a relabelled recursive tree
+  (`exists_recTree_iso`, vertices listed by distance from a root), and densities are invariant
+  under the relabelling.
+
+```
+lean/TreeApex.lean             index, one import group per milestone
+lean/CheckAxiomsTree.lean      the axiom audit;  CheckStatementsTree.lean, CheckImportsTree.lean as above
+lean/TreeApex/
+  Main.lean        P1–P4 for every tree, by transfer from hosts and the tree bridge
+  Transfer.lean    the L¹ transfer (copied layer), continuity of densities, step graphons as hosts
+  PaperNames.lean  the plan's §6 declaration names, where the development's names differ
+  Graph/           apexGraph and its edges, recursive trees, the IsTree bridge
+  Host/            ProbHost and its scalars, the doubled host, Goodman, two regression hosts
+  Entropy/         relative entropy, the generic tree extension, the triangle and the book
+  Finite/          the finite counting inequality, two colours and commonness on hosts
+  Appendix/        appendix A: tree Sidorenko and commonness of trees
+  Smoke.lean       the T0 smoke test of the imported pipeline
+```

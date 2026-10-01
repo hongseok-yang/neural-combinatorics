@@ -106,3 +106,36 @@ import TreeApex
 #print axioms TreeApex.ProbHost.host_tree_common
 #print axioms TreeApex.tree_sidorenko
 #print axioms TreeApex.tree_common
+
+-- T9: plan §6 coverage, exactly the names of the plan's list
+#print axioms TreeApex.apexCycle_eq_apexGraph
+#print axioms TreeApex.prod_edgePairs_apexGraph
+#print axioms TreeApex.apexGraph_edgeCount
+#print axioms TreeApex.apexGraph_connected
+#print axioms TreeApex.exists_recTree_iso
+#print axioms TreeApex.homDensity_apexGraph_of_iso
+#print axioms TreeApex.hostDensity_apexGraph_treeGraph
+#print axioms TreeApex.hostDensity_double_of_connected
+#print axioms TreeApex.host_goodman_identity
+#print axioms TreeApex.host_half_le_sigma
+#print axioms TreeApex.relEnt_le_log_sum
+#print axioms TreeApex.relEnt_nonpos_of_law
+#print axioms TreeApex.relEnt_prod
+#print axioms TreeApex.h_ge
+#print axioms TreeApex.I_le
+#print axioms TreeApex.relEnt_book
+#print axioms TreeApex.g_ge
+#print axioms TreeApex.relEnt_treeLaw
+#print axioms TreeApex.finite_counting_inequality
+#print axioms TreeApex.host_two_colour_polynomial
+#print axioms TreeApex.commonness_scalar
+#print axioms TreeApex.host_commonness
+#print axioms TreeApex.host_star_commonness
+#print axioms TreeApex.tree_apex_one_colour
+#print axioms TreeApex.tree_apex_two_colour_polynomial
+#print axioms TreeApex.half_le_commonalityM_path
+#print axioms TreeApex.goodman_identity
+#print axioms TreeApex.tree_apex_two_colour
+#print axioms TreeApex.tree_apex_common
+#print axioms TreeApex.tree_sidorenko
+#print axioms TreeApex.tree_common
