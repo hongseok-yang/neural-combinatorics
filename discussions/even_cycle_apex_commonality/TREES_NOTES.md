@@ -123,3 +123,63 @@ lake env lean CheckAxiomsTree.lean        16 declarations; every line [propext, 
   homDensity_apexGraph_of_iso
 grep forbidden tokens in lean/TreeApex    none
 ```
+
+## 2026-10-02 — T3, T4, T5 (and the scalar part of T2)
+
+Order: T3 was pulled forward (plan §4 allows it), then T2's scalars, T4, T5.  The doubled host,
+Goodman and the regression hosts (rest of T2) come with T6.
+
+* **T3 `Entropy/RelEnt.lean`.**  `relEnt`, `relEnt_congr` (evaluate the log on the support only —
+  the workhorse of every later log computation), `relEnt_one`, `relEnt_equiv`, `sum_pos_of_support`,
+  `relEnt_le_log_sum` (Gibbs), `relEnt_nonpos_of_law`, `relEnt_prod`.  Gibbs is proved from
+  `Real.log_le_sub_one_of_pos` termwise (`p log(ρ/p) − p log Z ≤ ρ/Z − p`), so neither
+  `ConcaveOn.le_map_sum` nor a separate `log_jensen` is needed.  `relEnt_prod` needs no
+  nonnegativity at all, only the row sums and the two support conditions.
+* **T3+ `Entropy/TreeLaw.lean` (generic `lem:tree-extension`).**  Structures `SymLaw S X`
+  (symmetric law `Q`) and `RefFactors L` (`ρ_S`, `ν`, `η`, nonnegative, nonzero on `supp Q`); `marg`,
+  `kern` (`Q / marg`, zero rows off the support), `marg_mul_kern` (holds also when `marg = 0`),
+  `treeLaw` (recursion from one vertex, `Fin.init`/`Fin.last`; `treeLaw_snoc` by `simp`),
+  `RefFactors.treeWeight` (closed product; `treeWeight_snoc` by `Fin.prod_univ_castSucc`),
+  `treeLaw_support` (TE5 together with "every vertex marginal is nonzero"), `treeLaw_sum_last`
+  (pointwise consistency), `treeLaw_sum` (TE1), `treeLaw_marginal` (TE2 with test functions),
+  `relEnt_treeLaw_succ` (`relEnt_equiv` along `snocEquiv'`, then `relEnt_prod`, then TE2 at the
+  parent of the new leaf), `relEnt_treeLaw_one` (`P₁ = Q` via `piFinTwoEquiv`), `relEnt_treeLaw`
+  (TE4), `relEnt_book_add_le_log`, `sum_treeWeight_pos`.
+* **T2 (part) `Host/ProbHost.lean`.**  `ProbHost V` over any `Fintype V` (design note above),
+  `hostDens` (`= hostDensity` by `rfl` on `Fin d`), `sum_fun_succ` (the even-cycle `vecCons`
+  idiom), `hostDens_K₂/P₃/K₃` in any kernel, the scalars, bounds (`cod_le_deg`, `tri_le_deg_sq`,
+  `R ≤ D ≤ E`, `pos_of_R_pos`), support lemmas (`cod_pos_of`, `tri_pos_of`, `deg_pos_of_tri_pos`),
+  `hostDens_K₂_eq/P₃_eq/K₃_eq`.
+* **T4 `Entropy/Triangle.lean`.**  `P₂`, `P₁`, `h`, `A`, `Ldeg`; `h_ge` (Gibbs on `V × V` against
+  `w w M`); `A_sub_Ldeg_le_h` (`KL ≥ 0` against the law `w_x tri_x w_y M_xy / (R deg_x)`),
+  `two_Ldeg_sub_A_le` (Gibbs on `V` against `w_x deg_x² / R`), `I_le`.  The paper's
+  `eq:triangle-entropy` (`H(X,Y,Z) = log R`) is not needed as a separate statement: only `P₂`, `P₁`
+  enter.
+* **T4 `Entropy/Book.lean`.**  `sum_pages_prod`, `sum_pages_prod_mul` (one distinguished page, via
+  `Fintype.prod_sum` and `Fin.prod_univ_succAbove`), `bookQ = bookNum / (R cod^j)` with `k = j + 1`,
+  `sum_bookQ_pages` (`= P₂`), `bookLaw : SymLaw`, `bookRef : RefFactors` (`bookWeight_eq`:
+  `ρ_B = bookNum`), `relEnt_book` (B1), `bookPhi`, `g_eq`, `sum_bookQ_page`, `sum_marg_page` (every
+  page has the pair law `P₂` with the shared vertex), `sum_marg_pages`, `marg_support`, `pages_kl`,
+  `g_ge` (B2).
+* **T5 `Finite/OneColour.lean`.**  `hostDens_apexGraph_treeGraph` (closed form for any `k`;
+  `appendEquiv`, `Fin.prod_univ_add`, the two edge-product lemmas with the function given
+  explicitly), `hostDens_eq_sum_treeWeight` (`rfl` after `Fintype.sum_prod_type`),
+  `finite_counting_inequality'` (`n = m + 2`, `k = j + 1`) and `finite_counting_inequality` (plan
+  form: `m ≥ 1`, `k ≥ 1`, tree on `m + 1` vertices, exponents `k m`, `m + k − 2`, `(k−1)(m−1)`).
+* Lean gotchas: `rw` with `prod_edgePairs_*` cannot solve the higher-order pattern
+  `?g p.1 p.2` — pass the function explicitly; `set x := … with h` does not capture occurrences that
+  appear only after a later `unfold`/`simp` (goals then mix `L.marg` and `(K.bookLaw j hR).marg`),
+  so the book proofs use the terms directly or `let`; `Fin (0 + 1)`/`Fin (1 + 1)` products need
+  `Fin.prod_univ_succ`/`Fin.prod_univ_zero` rather than `Fin.prod_univ_one/two`; in Git Bash a
+  heredoc containing `'` can confuse the tool wrapper — write long Lean snippets with the file tool
+  and splice them with Python.
+
+### T3–T5 gate evidence (2026-10-02)
+
+```text
+lake build TreeApex                       Build completed successfully (8585 jobs); no warnings
+lake env lean CheckAxiomsTree.lean        41 declarations, all [propext, Classical.choice,
+  Quot.sound] (two T1 lemmas: [propext, Quot.sound]); including relEnt_le_log_sum, relEnt_prod,
+  SymLaw.relEnt_treeLaw, SymLaw.relEnt_book_add_le_log, ProbHost.h_ge, ProbHost.I_le,
+  ProbHost.relEnt_book, ProbHost.pages_kl, ProbHost.g_ge, ProbHost.finite_counting_inequality
+```
