@@ -125,7 +125,7 @@
   Our proof combines spectral techniques, generating functions, probabilistic averaging, and an odd-to-even moment bound for Gamma random variables.
   The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the moment bound controls the potentially negative odd-moment contributions using nonnegative even-moment contributions.
   Together, these tools give a single argument that is uniform in $m$.
-  The lower-bound theorem has also been formally verified in Lean~4; the code is available at \url{ADDLINKLATER}.
+  The lower-bound theorem has also been formally verified in Lean~4; the code is available at \url{https://github.com/mekty2012/OddCycleGoodman}.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -2474,7 +2474,7 @@ For odd $m$, this construction recovers the polynomial studied here:
 \[
   G_{C_m}(p)=p^m-p(1-p)^{m-1}.
 \]
-We say that $H$ satisfies its \emph{Goodman-style bound} if every graphon
+We say that $H$ satisfies its \emph{Goodman-type bound} if every graphon
 $W$ with $\edens W=p\ge1-1/(\chi(H)-1)$ satisfies
 \[
   \dens HW\ge G_H(p).
@@ -2483,30 +2483,48 @@ For such a graph $H$, every $W_k$ with $k\ge\chi(H)-1$ attains the
 bound and hence minimises the $H$-density at its edge density.
 
 This leads to a broader question: which nonbipartite graphs satisfy their
-Goodman-style bounds? The following examples and obstruction give some
+Goodman-type bounds? The following examples and obstruction give some
 directions for this classification; their proofs lie beyond the scope of
 this paper.
 % TODO: Add a reference for these results beyond odd cycles.
 \begin{itemize}
   \item A nonbipartite chordal graph whose maximal cliques all have the
-  same size satisfies its Goodman-style bound. A graph is chordal if
+  same size satisfies its Goodman-type bound. A graph is chordal if
   every cycle of length at least four has an edge joining two
   nonconsecutive vertices of that cycle.
   \item For integers $r\ge1$ and $k\ge1$, the join
-  $K_r\vee C_{2k+1}$ satisfies its Goodman-style bound. The join is
+  $K_r\vee C_{2k+1}$ satisfies its Goodman-type bound. The join is
   obtained from the two disjoint graphs by adding every edge between
   them. Taking $r=1$ gives the odd wheels.
   \item A nonbipartite graph of even girth does not satisfy its
-  Goodman-style bound. Here the girth is the length of a shortest cycle.
+  Goodman-type bound. Here the girth is the length of a shortest cycle.
 \end{itemize}
-Characterising the graphs that satisfy their Goodman-style bounds would
+Characterising the graphs that satisfy their Goodman-type bounds would
 explain when the values attained by balanced complete multipartite graphons
 yield a polynomial lower bound valid also at the densities between those
 points of equality.
 
 \paragraph{AI use disclosure}
-AI assistance in this work involved GPT Pro 5.5 and 5.6,
-GPT Sol 5.6, GPT Astra 6.0, Claude Opus XY, and Claude Fable 5.0. 
+The problem studied here arose from the neural graphon representation
+framework of Kim, Baek, Lee, and Yang~\cite{Kim2026graphon}.
+The authors guided the initial proof development, which involved preliminary
+computations and a week of interactive proof search with GPT 5.5,
+GPT 5.5 Pro, and Claude Fable 5.0.
+The authors also suggested directions for simplifying the proof and seeking
+a combinatorial interpretation.
+GPT 5.5 Pro assisted with the subsequent simplification and exposition of
+the argument, including the introduction of the excursion-based proof and
+the revision of the argument following \Cref{lem:pge23-ell-negative} using
+\Cref{lem:pge23-gamma-moment}.
+The authors independently verified the written proof.
+
+The authors guided the Lean formalisation of the proof, which was carried
+out with assistance from Claude Fable 5.1 and Claude Opus 4.8.
+They checked the Lean formalisation and verified that its definitions and
+theorem statements agreed with those in the paper.
+GPT 5.6 Sol and Claude Opus 4.8 also assisted with drafting and revising
+the manuscript.
+The authors take full responsibility for the content of the paper.
 
 \paragraph{Lean formalisation}
 The equality and stability consequences in \Cref{sec:equality-stability} are not included in the formal verification reported here.
