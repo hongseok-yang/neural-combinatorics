@@ -108,24 +108,17 @@
 \maketitle
 
 \begin{abstract}
-  A graph is bipartite exactly when it contains no odd cycle.
-  This characterisation makes odd-cycle counts a natural quantitative measure of departure from bipartiteness and leads to the problem of determining how many odd cycles are forced by a prescribed edge density.
-  Goodman's triangle inequality provides a well-known lower bound in the triangle case.
-  We establish its analogue for every odd cycle in the dense regime: in the language of graph limits, for every odd integer $m\ge3$, every graphon $W$ with $\edens W=p\ge2/3$ satisfies
+  Goodman proved a lower bound on triangle counts which, in graphon language, states that every graphon of edge density $p$ has triangle density at least $2p^2-p$.
+  Bennett, Dudek, Lidick\'{y}, and Pikhurko established the corresponding bound for $C_5$, determining its minimum density at every Tur\'an density $p=1-1/k$ with an integer $k\ge3$.
+  We extend this bound to every odd cycle in the dense regime: for every odd integer $m\ge3$ and every graphon $W$ with edge density $p\ge2/3$,
   \[
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
-  Here $\tC mW$ denotes the $C_m$-density of $W$.
-  At every density $p=1-1/k$ with an integer $k\ge2$, the balanced complete $k$-partite graphon attains equality.
-  For $k\ge3$, we also obtain uniqueness up to graphon equivalence and qualitative stability.
-  Our theorem extends the $C_5$ bound of Bennett, Dudek, Lidick\'{y}, and Pikhurko~\cite{bennett2020minimizing} to every odd cycle.
-  This is the first of two papers establishing the bound for all edge densities.
-  A companion paper treats $1/2<p<2/3$; for $p\le1/2$, the inequality is immediate because its right-hand side is nonpositive.
-  We also prove a strengthening of Kim and Lee's extended commonality inequality~\cite{kim2024extended} for odd cycles throughout the same density range.
-  Our proof combines spectral techniques, generating functions, probabilistic averaging, and an odd-to-even moment bound for Gamma random variables.
-  The spectral viewpoint reveals a useful cancellation between a graphon and its complement, probabilistic averaging reduces polynomial inequalities in arbitrarily many spectral variables to a one-variable integral inequality, and the moment bound controls the potentially negative odd-moment contributions using nonnegative even-moment contributions.
-  Together, these tools give a single argument that is uniform in $m$.
-  The lower-bound theorem has also been formally verified in Lean~4; the code is available at \url{https://github.com/mekty2012/OddCycleGoodman}.
+  For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
+  We also prove a strengthening of Kim and Lee's extended commonality inequality for odd cycles in the same density range.
+  We develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
+  We establish their positivity through a uniform inequality comparing odd and even moments of shifted Gamma random variables, giving a single argument for all odd cycle lengths.
+  We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -212,15 +205,8 @@ For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=
 \begin{equation}\label{eq:intro-goodman}
   \tC3W\ge2p^2-p=\goodman p3.
 \end{equation}
-For $m=5$, Bennett, Dudek, Lidick\'y, and Pikhurko~\cite{bennett2020minimizing} proved that, for every integer $k\ge3$, $W_k$ minimises the $C_5$-density among graphons $W$ with $\edens W=1-1/k$.
-They establish the lower bound by a flag algebra computation and also prove a stability theorem describing graphs whose $C_5$-density is close to the minimum.
-Although their theorem is stated only for integer $k\ge3$, the lower-bound
-certificate in their Section~2.2.2 remains valid for every real $k\ge3$:
-its matrix remains positive semidefinite, and its coefficient inequalities
-hold throughout this real interval.
-Substituting $k=1/(1-p)$ yields $\tC5W\ge\goodman p5$ for $2/3\le p<1$; the case $p=1$ is immediate.
-
-Our main result extends this bound to every odd cycle in the dense range.
+Bennett, Dudek, Lidick\'y, and Pikhurko~\cite{bennett2020minimizing} established the corresponding bound for $C_5$, determining its minimum density at every Tur\'an density $p=1-1/k$ with an integer $k\ge3$.
+Our theorem extends this bound to every odd cycle through a uniform analytic argument.
 
 \begin{theorem}[Odd-cycle Goodman bound for $p\ge2/3$]\label{thm:main}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
@@ -2527,6 +2513,7 @@ the manuscript.
 The authors take full responsibility for the content of the paper.
 
 \paragraph{Lean formalisation}
+The formalisation code is available at \url{https://github.com/mekty2012/OddCycleGoodman}.
 The equality and stability consequences in \Cref{sec:equality-stability} are not included in the formal verification reported here.
 \tk{TODO: Write here about deviation that lean verification and current proof.}
 
