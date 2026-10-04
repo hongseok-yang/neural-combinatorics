@@ -125,112 +125,59 @@
 
 \section{Introduction}\label{sec:intro}
 
-How does a graph's global edge density force specific local configurations?
-Extremal graph theory first addresses the threshold form of this question: how dense can a graph be while avoiding a prescribed subgraph $H$?
+Determining the (asymptotic) minimum density of a fixed graph $H$ at a prescribed edge density is a classical problem in extremal graph theory.
+Here subgraph densities are normalised by counting labelled copies of $H$ and dividing by $n^{|V(H)|}$, where $n$ is the number of vertices of the host graph.
+A typical examples are Tur\'an-type problems, which ask how dense a graph can be while the $H$-density remains zero.
 The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
-The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding this threshold by a fixed amount forces a positive density of copies of $H$.
-These results identify when copies of $H$ become unavoidable, but leave open the quantitative problem studied here: among graphs of edge density $p$, how small can the density of $H$ be?
 
-Odd cycles are a natural family for this problem because a graph is bipartite exactly when it contains no odd cycle.
-Their densities therefore provide a quantitative measure of departure from bipartiteness, with a threshold at $p=1/2$.
-Bipartite graphs can have any asymptotic edge density $p\le1/2$ while avoiding all odd cycles.
-Once $p>1/2$, the theorems above force a positive density of every fixed odd cycle.
-We seek an explicit lower bound for these densities throughout this range.
 
-For complete subgraphs, the corresponding question is the classical Erd\H os-Rademacher, or clique-density, problem~\cite{erdos1962number}.
-Goodman~\cite{goodman1959sets} found a simple polynomial lower bound for triangles that is attained by the balanced complete $k$-partite graph at each edge density $p=1-1/k$, $k\ge2$, but is not generally sharp between these densities.
-The exact minimum follows a more intricate, piecewise-defined curve.
-Razborov~\cite{razborov2008minimal} determined this curve for triangles using flag algebras, Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, establishing the asymptotic minimum conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
+The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces $\Omega(1)$ $H$-density.
+More quantitatively, Sidorenko~\cite{} conjectured that for a bipartite graph $H$, the minimum $H$-density among graphs of edge density $p$ is asymptotically attained by the random graph with edge density $p$. 
+This conjecture has been proved for several classes of bipartite graphs, including even cycles~\cite{}, but remains open in general.
+
+For complete graphs, the corresponding question is the classical Erd\H os-Rademacher, or clique-density, problem~\cite{erdos1962number}.
+Goodman~\cite{goodman1959sets} proved a simple lower bound on triangle counts, which implies that the asymptotic triangle density at edge density $p$ is at least $2p^2-p$.
+At each density $p=1-1/k$ with an integer $k\ge2$, this bound is asymptotically attained by balanced complete $k$-partite graphs.
+Between these densities, the exact asymptotic minimum follows a more intricate, piecewise-defined curve, which was determined by Razborov~\cite{razborov2008minimal} using flag algebras.
+Nikiforov~\cite{nikiforov2010number} treated $K_4$, and Reiher~\cite{reiher2016clique} proved the clique density theorem for every complete graph, establishing the asymptotic minimum conjectured by Lov\'asz and Simonovits~\cite{lovasz1983number}.
 The asymptotic structure of extremal and almost extremal graphs was characterised by Pikhurko and Razborov~\cite{pikhurko2017asymptotic} for triangles and by Kim, Liu, Pikhurko, and Sharifzadeh~\cite{kim2020asymptotic} for general cliques.
 
-For odd cycles, our aim is an analogue of Goodman's polynomial bound: a simple formula that works uniformly for every odd cycle length, with no case distinctions in $p$.
-We seek equality at each density $p=1-1/k$, where the balanced complete $k$-partite graph supplies the candidate extremal value, while allowing the bound to be nonoptimal between these densities.
+The case of odd cycles is less well understood than that of cliques.
+Odd cycles do not satisfy Sidorenko's lower bound: bipartite graphs have zero odd-cycle density even at positive edge density.
+Bennett, Dudek, Lidick\'{y}, and Pikhurko~\cite{} determined the asymptotic minimum $C_5$-density at every density $p=1-1/k$ with an integer $k\ge3$: it equals $p^5-p(1-p)^4$, with balanced complete $k$-partite graphs attaining this value asymptotically.
 
-We formulate the problem using graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities~\cite{lovasz2012large,lovasz2006limits}.
+Our aim is a Goodman-type polynomial lower bound that holds uniformly for all odd cycle lengths and is sharp at the same multipartite densities.
+We formulate our results using graphons, which encode limits of dense graphs and express asymptotic edge and subgraph densities as analytic quantities~\cite{lovasz2012large,lovasz2006limits}.
 A \emph{graphon} is a symmetric measurable function $W\colon[0,1]^2\to[0,1]$.
 For a finite simple graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H)$, its \emph{homomorphism density} in $W$ is
 \[
   \dens HW=\intcube{v}\prod_{ij\in E(H)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
 \]
 and the \emph{edge density} of $W$ is $\edens W=\intsq W(x,y)\ddxy=p$.
-Thus, for an odd integer $m\ge3$ and a fixed edge density $p\in[0,1]$, we seek a simple lower bound for
-\[
-  \inf\bigl\{\tC mW: W\text{ is a graphon with }\edens W=p\bigr\},
-\]
-where $C_m$ denotes the cycle of length $m$.
-The spectral characterisation of cycle densities suggests a candidate bound.
-Associate with a graphon $W$ the integral operator $\Tker W$ on $L^2[0,1]$ defined by
-\[
-  (\Tker{W}f)(x)=\int_0^1 W(x,y)f(y)\dd y.
-\]
-Because $W$ is symmetric and square-integrable, $\Tker W$ is a compact
-self-adjoint operator. Its nonzero eigenvalues $(\lambda_i)_i$, counted
-with multiplicity, satisfy
-$\sum_i\lambda_i^2=\intsq W(x,y)^2\ddxy<\infty$.
-Consequently, the power sums below converge absolutely for $m\ge3$,
-and the trace formula~\cite{lovasz2012large} gives
-\[
-  \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m.
-\]
-Thus, cycle densities are power sums of the eigenvalues of $\Tker W$.
+These densities are the limits of the normalised labelled copy counts along convergent sequences of finite graphs.
+Consequently, asymptotic lower bounds on subgraph densities in finite graphs become exact inequalities for graphons.
 
-For balanced complete multipartite graphons, these eigenvalues can be computed explicitly.
-For an integer $k\ge2$, partition $[0,1]$ into intervals
-$I_1,\ldots,I_k$ of length $1/k$, and define the balanced complete
-$k$-partite graphon $W_k$ by
-\[
-  W_k(x,y)=
-  \begin{cases}
-    1&\text{if }x\in I_i,\ y\in I_j,\text{ and }i\ne j,\\
-    0&\text{otherwise}.
-\end{cases}
-\]
-Its edge density is $p=1-1/k$.
-If $f$ takes the constant value $c_i$ on each part $I_i$, then
-\[
-  (\Tker{W_k}f)(x)=\sum_{j\ne i}\int_{I_j}f(y)\dd y
-  =\frac1k\sum_{j=1}^k c_j-\frac{c_i}{k},\qquad x\in I_i.
-\]
-Thus, the constant function has eigenvalue $(k-1)/k=p$, while the partwise constant functions with $\sum_i c_i=0$ form a $(k-1)$-dimensional eigenspace with eigenvalue $-1/k$.
-Every function decomposes into its partwise averages and a remainder whose integral on each part is zero.
-The operator maps this remainder to zero, so all remaining eigenvalues are zero.
-The trace formula therefore gives, for odd $m$,
+For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graphon: it has $k$ parts of equal measure, takes the value $1$ between distinct parts, and takes the value $0$ within each part.
+Its edge density is $p=1-1/k$, and for every odd $m\ge3$, the density of the $m$-cycle $C_m$ in $W_k$ is given by
 \begin{equation}\label{eq:intro-kpartite-value}
-  \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m=\goal.
+  \tC m{W_k}=\goal.
 \end{equation}
-At each density $p=1-1/k$, this construction gives an upper bound on the minimum $C_m$-density.
-Motivated by this expression and Goodman's triangle inequality, we ask whether $\goal$ is also a lower bound for every graphon.
-Such a bound would establish the optimality of $W_k$ at these densities, while allowing the bound to be nonoptimal between them.
-
-The triangle and five-cycle cases provide the main precedents for this polynomial bound in the dense range $p\ge2/3$.
-For $m=3$, it is exactly Goodman's inequality: every graphon $W$ with $\edens W=p$ satisfies
-\begin{equation}\label{eq:intro-goodman}
-  \tC3W\ge2p^2-p=\goodman p3.
-\end{equation}
-Bennett, Dudek, Lidick\'y, and Pikhurko~\cite{bennett2020minimizing} established the corresponding bound for $C_5$, determining its minimum density at every Tur\'an density $p=1-1/k$ with an integer $k\ge3$.
-Our theorem extends this bound to every odd cycle through a uniform analytic argument.
-
+This suggests a common form for the triangle and five-cycle bounds.
+Our main result extends this bound to every odd cycle in the dense regime $p\ge2/3$.
 \begin{theorem}[Odd-cycle Goodman bound for $p\ge2/3$]\label{thm:main}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
   Then,
   \begin{equation}\label{eq:intro-main}
     \tC mW\ge\goal.
   \end{equation}
+  Equality holds if and only if $W$ is equivalent to $W_k$ for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
+
+Graphon equivalence means zero cut distance. See ... for the detailed definition and statement.
+We also establish qualitative stability: at each density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum approach $W_k$ in cut distance (\Cref{cor:stability}).
 
 The remaining nontrivial range $1/2<p<2/3$ will be treated in a companion paper using different methods.
 For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
-At the edge densities $p=1-1/k$ with $k\ge3$, \Cref{thm:main} yields the exact extremal value.
-
-\begin{corollary}\label{cor:kpartite}
-  For every integer $k\ge2$ and every odd $m\ge3$, the balanced complete $k$-partite graphon $W_k$ minimises the $C_m$-density among graphons $W$ with $\edens W=1-1/k$.
-  For $k\ge3$, it is the unique minimiser up to graphon equivalence.
-\end{corollary}
-
-For $k\ge3$, \eqref{eq:intro-kpartite-value} shows that $W_k$ attains the lower bound in \Cref{thm:main}.
-For $k=2$, the conclusion follows because $W_2$ is bipartite, so $\tC m{W_2}=0$, while every graphon has nonnegative $C_m$-density.
-The uniqueness assertion follows from the equality analysis in \Cref{sec:equality-stability}, where graphon equivalence is defined by zero cut distance.
-It also gives qualitative stability: at each fixed density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum must approach $W_k$ in cut distance (\Cref{cor:stability}).
 
 \paragraph{Strengthened extended commonality.}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
@@ -280,6 +227,7 @@ Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^
 \]
 
 \paragraph{Proof strategy: four reductions.}
+Let $\Tker W$ denote the integral operator with kernel $W$, defined in \Cref{sec:matrix-reduction}.
 The trace formula expresses the two cycle densities as
 \[
   \tC mW=\Tr(\Tker W^m),
@@ -402,7 +350,7 @@ The application of the moment bound in \Cref{prop:pge23-gamma-positive} is the o
 Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:intro-diagonal-positive} for $\lambda>0$, completing the fourth reduction.
 The Dirichlet averaging identity extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
 These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
-The deduction preceding this overview then gives \Cref{thm:main}.
+The deduction preceding this overview then gives the odd-cycle bound in \Cref{thm:main}.
 
 \paragraph{Organisation.}
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
@@ -414,6 +362,36 @@ We close with further questions in \Cref{sec:conclusion}.
 \section{Matrix reduction and spectral measure}
 \label{sec:matrix-reduction}
 
+For a graphon $W$, define the integral operator $\Tker W$ on $L^2[0,1]$ by
+\[
+  (\Tker Wf)(x)=\int_0^1 W(x,y)f(y)\dd y.
+\]
+Since $W$ is symmetric and square-integrable, $\Tker W$ is a compact self-adjoint Hilbert--Schmidt operator.
+Its nonzero eigenvalues $(\lambda_i)_i$, counted with multiplicity, satisfy
+\begin{equation}\label{eq:graphon-hilbert-schmidt}
+  \sum_i\lambda_i^2=\intsq W(x,y)^2\ddxy<\infty.
+\end{equation}
+The eigenvalues are bounded, so their power sums converge absolutely for every integer $m\ge3$.
+Thus, $\Tker W^m$ is trace class, and the cycle trace formula~\cite{lovasz2012large} gives
+\begin{equation}\label{eq:graphon-cycle-trace}
+  \tC mW=\Tr(\Tker W^m)=\sum_i\lambda_i^m.
+\end{equation}
+For the path $P_\ell$ with $\ell\ge1$ edges, repeated integration gives
+\begin{equation}\label{eq:graphon-path-operator}
+  \tP\ell W=\ip\one{\Tker W^\ell\one},
+\end{equation}
+where $\one$ is the constant function equal to one.
+
+For $W_k$, the operator vanishes on functions whose integral on each part is zero.
+On the space of partwise constant functions, it is represented by $(J_k-I_k)/k$, where $J_k$ is the $k\times k$ all-ones matrix and $I_k$ is the identity matrix.
+Its eigenvalues are therefore $p=1-1/k$, $-1/k$ with multiplicity $k-1$, and zero.
+The cycle trace formula \eqref{eq:graphon-cycle-trace} gives, for odd $m\ge3$,
+\[
+  \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m
+  =p^m-p(1-p)^{m-1},
+\]
+proving the multipartite density formula \eqref{eq:intro-kpartite-value}.
+
 Let $W\colon[0,1]^2\to[0,1]$ be a graphon with edge density
 $\edens W=p\ge2/3$, as in \Cref{thm:main,thm:commonality}. Write
 \[
@@ -424,14 +402,14 @@ $\edens W=p\ge2/3$, as in \Cref{thm:main,thm:commonality}. Write
 Thus, $U$ is the complementary graphon and has edge density $q$.
 The assumption $p\ge2/3$ will be needed only for the positivity argument in \Cref{sec:excursion-positivity}; the matrix identities and excursion expansions developed before that point hold at every edge density.
 
-To prove \Cref{thm:main,thm:commonality} by finite matrix calculations, we first restrict attention to \emph{step graphons}: graphons that are constant on each product of two parts of a finite measurable partition of $[0,1]$.
+To prove the inequalities in \Cref{thm:main,thm:commonality} by finite matrix calculations, we first restrict attention to \emph{step graphons}: graphons that are constant on each product of two parts of a finite measurable partition of $[0,1]$.
 We will use partitions into intervals of equal length, so these products form a grid of equally sized rectangles.
 Each such graphon is specified by the finite matrix of its values, and its cycle and path densities can be expressed through matrix products.
 The following lemma justifies this restriction: proving the two inequalities in those theorems for all such graphons, with no bound on the number of parts, proves them for arbitrary graphons as well.
 
 \begin{lemma}[Step-graphon reduction]
 \label{lem:step-reduction}
-  It suffices to prove \Cref{thm:main,thm:commonality} for graphons that
+  It suffices to prove the inequalities in \Cref{thm:main,thm:commonality} for graphons that
   are constant on each rectangle $I_a\times I_b$, where
   $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$
   and $N$ ranges over all positive integers.
@@ -1924,7 +1902,7 @@ $\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
   does not establish that the expectation itself is nonnegative.
 \end{remark}
 
-\begin{proof}[Proof of the main theorems (\Cref{thm:main,thm:commonality})]
+\begin{proof}[Proof of the inequalities in \Cref{thm:main,thm:commonality}]
   By \Cref{lem:polynomial-reduction,lem:pge23-dirichlet}, it suffices to prove
   $\widetilde P_{m,r}(q,\lambda)\ge0$ for $-1/2\le\lambda\le1/2$.
   This follows from \Cref{lem:pge23-ell-negative} when $\lambda\le0$.
@@ -2317,7 +2295,7 @@ complete multipartite graphon.
 
 At $p=1$, the only graphon is $W=1$ almost everywhere, which attains equality
 in the odd-cycle Goodman bound \eqref{eq:intro-main} of \Cref{thm:main}.
-This completes the uniqueness assertion in \Cref{cor:kpartite}.
+This completes the uniqueness assertion in \Cref{thm:main}.
 
 To state stability, recall the cut norm and cut distance:
 \[
