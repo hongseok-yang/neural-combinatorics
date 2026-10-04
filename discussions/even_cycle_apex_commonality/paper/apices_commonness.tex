@@ -1,0 +1,1573 @@
+% Compile with pdflatex, bibtex, pdflatex, pdflatex.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs,booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\maj}{\mathcal P}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\setlength{\emergencystretch}{3em}
+\hypersetup{pdftitle={Commonness of independent apices of trees and even cycles},
+ pdfauthor={Taeyoung Kim},
+ pdfsubject={Ramsey multiplicity, entropy, and exact flag algebra certificates},
+ pdfkeywords={common graphs, independent apices, trees, even cycles, entropy, flag algebras}}
+\title{Commonness of independent apices of trees and even cycles}
+\author{Taeyoung Kim}
+\date{October 2, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $H^{+k}$ denote the graph obtained from $H$ by adjoining an
+independent set of $k$ vertices, each joined to every vertex of $H$.
+We prove that $H^{+k}$ is common for every positive integer $k$ when
+$H$ is a tree or an even cycle. These results establish two infinite
+families of the independent-apex conjecture of Grzesik, Lee,
+Lidick\'y, and Volec. For tree bases, we obtain a sharp density
+inequality by extending the law of a random book along the tree and
+estimating its relative entropy against the homomorphism weight. For even
+cycles, four exact six-vertex flag algebra certificates yield a
+weighted fourth-moment comparison. Spectral inequalities and
+convexity then extend this comparison to all even cycle lengths and
+all apex numbers. For at least three apices, we obtain a stronger
+comparison with the monochromatic density of the base cycle. Equality
+in the commonness bound for an apex of an even cycle holds exactly
+at the constant graphon $1/2$.
+\end{abstract}
+
+\smallskip
+\noindent\textit{2020 Mathematics Subject Classification.}
+Primary 05C35; secondary 05C60, 94A17.
+\par\smallskip
+\noindent\textit{Keywords.} Ramsey multiplicity, common graphs,
+independent apices, entropy, flag algebras.
+
+\section{Introduction}\label{sec:intro}
+
+The Ramsey multiplicity problem asks how few monochromatic copies
+of a fixed graph can occur in a two-coloring of a large complete
+graph. An independent fair coloring supplies a natural benchmark:
+a graph with $e\geq1$ edges is monochromatic with probability $2^{1-e}$.
+A graph is called \emph{common} if no coloring improves this
+benchmark asymptotically. Goodman's theorem shows that the triangle
+is common \cite{Goodman}, whereas Thomason proved that every
+complete graph of order at least four is uncommon \cite{Thomason}.
+The resulting distinction makes it natural to seek graph operations
+that preserve commonness.
+
+We work with graphons. For a symmetric measurable function
+$W:[0,1]^2\to[0,1]$ and a finite simple graph $F$, define
+\[
+ t(F,W)=\int_{[0,1]^{V(F)}}\prod_{uv\in E(F)}W(x_u,x_v)
+                    \prod_{u\in V(F)}\dd x_u,
+ \qquad M(F,W)=t(F,W)+t(F,1-W).
+\]
+If $e(F)=|E(F)|$, commonness is equivalent to
+\begin{equation}\label{eq:common}
+ M(F,W)\geq2^{1-e(F)}\qquad\text{for every graphon }W.
+\end{equation}
+The constant graphon $W\equiv1/2$ attains equality. A direct
+comparison with finite colorings is given in
+Appendix~\ref{app:finite}.
+
+For $k\geq1$, write $H^{+k}$ for the graph with vertex set
+$V(H)\sqcup\{z_1,\ldots,z_k\}$ and edge set
+\[
+ E(H)\cup\{vz_i:v\in V(H),\ 1\leq i\leq k\}.
+\]
+The added vertices are pairwise nonadjacent; we call them independent
+apices. This operation connects commonness with Sidorenko's
+conjecture. A bipartite graph $H$ has the \emph{Sidorenko property}
+if
+\[
+ t(H,W)\geq t(K_2,W)^{e(H)}\qquad\text{for every graphon }W.
+\]
+Sidorenko's conjecture asserts this property for every bipartite
+graph \cite{SidorenkoCorrelation}. Applying it to both colors and
+using convexity immediately gives commonness of $H$. Sidorenko
+proved the stronger fact that $H^{+1}$ is common whenever $H$ is
+connected and has the Sidorenko property \cite{SidorenkoFriendly}.
+
+Grzesik, Lee, Lidick\'y, and Volec proposed extending this result to
+arbitrarily many independent apices \cite[Conjecture~1.3]{GLLV}.
+
+\begin{conjecture}[Grzesik--Lee--Lidick\'y--Volec]\label{conj:apices}
+If $H$ is a connected bipartite graph with the Sidorenko property,
+then $H^{+k}$ is common for every positive integer $k$.
+\end{conjecture}
+
+Their paper verifies the conjecture for connected bipartite bases
+on at most five vertices \cite[Theorem~1.4]{GLLV}. It also treats
+the graphs $C_{2\ell}^{+2}$, or even beachballs, for all $\ell\geq2$
+\cite[Theorem~4.3]{GLLV}. The one-apex even-cycle case is the
+commonness theorem for even wheels. More recently, Kr\'a\v l, Krnc,
+and Lamaison proved that $T^{+k}$ is common for every tree $T$ when
+$1\leq k\leq5$ \cite[Theorem~1]{KKL}.
+The results below remove the restriction on the apex number for
+trees and establish the entire even-cycle family. Thus the tree
+result extends the known range beyond five apices, while the new
+range for even cycles is three or more apices.
+
+\subsection{Main results}
+
+Throughout, $P_j$ is the path with $j$ edges, and a tree is finite,
+connected, and nonempty. In particular, $P_2$ has three vertices.
+
+\begin{theorem}[Tree apices]\label{thm:trees}
+For every tree $T$ and every integer $k\geq1$, the graph $T^{+k}$
+is common. More precisely, if $T$ has $n\geq2$ vertices, then
+\begin{equation}\label{eq:tree-two-color}
+ M(T^{+k},W)\geq
+ \frac{M(K_3,W)^{k(n-1)}}{M(P_2,W)^{(k-1)(n-2)}}
+\end{equation}
+for every graphon $W$. The denominator is positive, and equality
+holds at $W\equiv1/2$.
+\end{theorem}
+
+The entropy argument actually proves a one-color inequality.
+
+\begin{theorem}\label{thm:tree-one-color}
+For a tree $T$ on $n\geq2$ vertices, an integer $k\geq1$, and a
+graphon $W$,
+\begin{equation}\label{eq:tree-one-color}
+ t(T^{+k},W)t(K_2,W)^{n+k-3}
+ t(P_2,W)^{(k-1)(n-2)}\geq t(K_3,W)^{k(n-1)}.
+\end{equation}
+Factors with exponent zero are omitted. Every constant graphon
+attains equality.
+\end{theorem}
+
+To see why Theorem~\ref{thm:tree-one-color} implies commonness,
+apply it to the graphon consisting of copies of $W$ and $1-W$ on
+two blocks of measure $1/2$, with zero between the blocks. For a
+connected graph $F$, its density becomes $2^{-|V(F)|}M(F,W)$.
+The vertex counts make these powers of two cancel, and
+$M(K_2,W)=1$. Writing $\sigma=M(P_2,W)$ and $\tau=M(K_3,W)$,
+we therefore obtain
+\[
+ M(T^{+k},W)\geq
+ \tau^k\bigl[\tau(\tau/\sigma)^{k-1}\bigr]^{n-2}
+ \geq 2^{2-(k+1)n}=2^{1-e(T^{+k})}.
+\]
+The second inequality follows from Goodman's identity
+$\tau=\tfrac32\sigma-\tfrac12$ and $\sigma\geq\tfrac12$, which
+give $\tau\geq\tfrac14$ and $\tau/\sigma\geq\tfrac12$
+\cite{Goodman}. This proves commonness for $n\geq2$; the
+one-vertex tree gives a star, whose commonness follows from
+convexity. The details appear in Section~\ref{sec:trees}.
+
+\begin{theorem}[Even-cycle apices]\label{thm:cycles}
+For every even $n\geq4$, every integer $k\geq1$, and every graphon $W$,
+\begin{equation}\label{eq:cycle-common}
+ M(C_n^{+k},W)\geq2^{1-n(k+1)}.
+\end{equation}
+Equality holds if and only if $W=1/2$ almost everywhere.
+If $k\geq3$, then
+\begin{equation}\label{eq:cycle-relative}
+ M(C_n^{+k},W)\geq2^{-nk}M(C_n,W)\geq2^{1-n(k+1)}.
+\end{equation}
+\end{theorem}
+
+The edge counts are $e(T^{+k})=(k+1)n-1$ and
+$e(C_n^{+k})=n(k+1)$, so the displayed commonness bounds have the
+required random-coloring normalization.
+
+\subsection{Two proof mechanisms}
+
+The tree argument uses relative entropy to turn a branching law
+into a lower bound on a homomorphism density. This approach to
+Sidorenko-type inequalities originates in Li and Szegedy's
+logarithmic calculus \cite{LiSzegedy} and Szegedy's systematic
+information-theoretic framework \cite{SzegedyEntropy}. The
+tree-arrangeability work of Kim, Choongbum Lee, and Joonkyung Lee
+\cite{KLL}, and the branching random walks of Conlon, Kim,
+Choongbum Lee, and Joonkyung Lee \cite{CKLL}, develop the relevant
+tree-based constructions. Higher tree decompositions were studied
+by the same four authors \cite{CKLLHigher}.
+Joonkyung Lee further applied entropy to graphs assembled along
+tree decompositions in the setting of locally dense graphs
+\cite{LeeLocal}.
+Our local distribution is the normalized triangle density on a
+finite weighted host. Conditionally independent extensions of its
+common edge produce the apex set. Gibbs' inequality controls the
+entropy cost of these extensions, and a branching construction
+spreads the resulting edge law over the entire tree.
+
+For cycles, we use the positivity principle of Razborov's flag
+algebra method \cite{Razborov}, which also underlies the
+computer-assisted part of \cite{GLLV}. We give it in a signed
+homomorphism-density basis: a nonnegative rooted quadratic form
+expands into a finite linear combination of signed graph densities.
+Four exact identities on six vertices provide the needed comparison
+at the fourth moment. The main analytic step converts this
+comparison into a statement that retains the larger of the two
+color moments. Convexity then raises the cycle length without
+losing the distinction between the colors.
+
+Section~\ref{sec:prelim} gives the approximation tools.
+Section~\ref{sec:trees} develops the entropy argument, and
+Section~\ref{sec:cycles} proves the spectral and moment comparisons.
+The precise certificate data and verification are described in
+Appendix~\ref{app:certificates}. The results apply to two classes
+of connected Sidorenko graphs; they do not establish
+Conjecture~\ref{conj:apices} for arbitrary Sidorenko bases.
+
+\section{Density and approximation tools}\label{sec:prelim}
+
+We use $t(F,L)$ for any bounded symmetric real kernel $L$ on a
+probability space, with the same integral definition as above.
+Vertex relabeling and the addition of isolated vertices leave the
+density unchanged. Fubini's theorem also gives
+\[
+ t(F_1\sqcup F_2,L)=t(F_1,L)t(F_2,L).
+\]
+All graphs whose densities occur are simple. Thus changing $L$ on
+a null set leaves their densities unchanged: the exceptional set
+for any edge has zero measure under its two distinct vertex
+coordinates.
+
+\begin{lemma}[Continuity]\label{lem:continuity}
+If $F$ has $e\geq1$ edges and $|L|,|L'|\leq B$ for $B\geq1$, then
+\[
+ |t(F,L)-t(F,L')|\leq eB^{e-1}\|L-L'\|_1.
+\]
+Every graphon is the $L^1$ limit of symmetric step graphons on
+finite equal-size dyadic partitions. Cell averaging preserves its
+range and its integral.
+\end{lemma}
+\begin{proof}
+Telescope the difference of the two edge products. Each summand
+has one factor $L-L'$ and $e-1$ factors bounded by $B$. Its absolute
+integral is at most $B^{e-1}\|L-L'\|_1$, proving the estimate.
+For the approximation, let $Q_jL$ be the average of $L$ on each
+product of dyadic intervals of length $2^{-j}$. This operation
+contracts $L^1$ and fixes every coarser dyadic step function.
+Such step functions are dense in $L^1$: approximate by simple
+functions and approximate their measurable sets in measure by
+finite unions of dyadic rectangles. If $G$ is such an approximation,
+then for all sufficiently large $j$,
+\[
+ \|Q_jL-L\|_1\leq\|Q_j(L-G)\|_1+\|G-L\|_1\leq2\|G-L\|_1.
+\]
+This proves convergence. Symmetry, bounds, and the integral are
+preserved on each cell.
+\end{proof}
+
+On a finite graph $G$, we count all labeled homomorphisms and write
+$t(F,G)=\hom(F,G)/|V(G)|^{|V(F)|}$. Hosts may have loops when
+explicitly stated; source graphs remain simple.
+
+\begin{lemma}[Approximation by finite graphs]\label{lem:finite-approx}
+Given a graphon $W$ and finitely many simple graphs $F_1,\ldots,F_s$,
+there are finite simple graphs $G_j$ such that
+$t(F_i,G_j)\to t(F_i,W)$ for every $i$.
+\end{lemma}
+\begin{proof}
+Sample independent uniform points $X_1,\ldots,X_N$ and, conditional
+on these points, insert each edge $ab$ independently with probability
+$W(X_a,X_b)$. For a graph $F$ with $v$ vertices, let $Y_F$ be the
+average homomorphism indicator over injective maps into this host.
+Then $\E Y_F=t(F,W)$. Indicators for maps with disjoint images are
+independent. For any fixed image, the proportion of injective maps
+meeting it is at most $v^2/N$, so $\operatorname{Var}(Y_F)\leq v^2/N$.
+The difference between $Y_F$ and the ordinary homomorphism density
+is at most $\binom v2/N$, by the collision bound. Thus each density
+converges in probability to its graphon value. A union bound gives
+simultaneous convergence for the finite list, from which a
+deterministic sequence of realizations can be chosen.
+\end{proof}
+
+We shall repeatedly use the probability-space moment inequality
+\begin{equation}\label{eq:moments}
+ \E X^q\geq(\E X^p)^{q/p}
+ \qquad(X\geq0,\ 1\leq p\leq q),
+\end{equation}
+which follows from Jensen. All real powers below have nonnegative
+bases and positive exponents, unless an exponent-zero factor is
+explicitly omitted.
+
+\section{Tree apices through relative entropy}\label{sec:trees}
+
+\subsection{Relative entropy and a branching law}
+
+For a probability law $p$ on a finite set and a nonnegative
+reference weight $\rho$ that is positive on the support of $p$,
+define
+\begin{equation}\label{eq:relative-entropy}
+ \mathcal H_\rho(p)=\sum_{a:p(a)>0}
+                    p(a)\log\frac{\rho(a)}{p(a)}.
+\end{equation}
+All logarithms are natural. If $Z_\rho=\sum_a\rho(a)$, then
+\begin{equation}\label{eq:gibbs}
+ \mathcal H_\rho(p)
+ =\log Z_\rho-D_{\mathrm{KL}}(p\|\rho/Z_\rho)
+ \leq\log Z_\rho.
+\end{equation}
+Here the Kullback--Leibler divergence is
+\[
+ D_{\mathrm{KL}}(p\|q)=\sum_{a:p(a)>0}p(a)\log\frac{p(a)}{q(a)}.
+\]
+In particular, $\mathcal H_\rho(p)=-D_{\mathrm{KL}}(p\|\rho)$
+when $\rho$ is a probability law.
+For any probability law $q$ positive on the support of $p$,
+the inequality $\log u\leq u-1$ gives
+\[
+ \sum_{a:p(a)>0}p(a)\log\frac{q(a)}{p(a)}
+ \leq\sum_{a:p(a)>0}q(a)-1\leq0.
+\]
+This proves Gibbs' inequality and \eqref{eq:gibbs}.
+Taking $\rho\equiv1$ recovers Shannon entropy and its support
+bound. More generally, if $\rho$ is the weight of a vertex map
+in a homomorphism density, then $Z_\rho$ is precisely that
+density. This choice absorbs the normalization into the entropy
+calculation.
+
+The branching construction below is the conditional version of
+the random walk used in \cite[Section~2]{CKLL}, with reference
+weights attached to the same tree.
+
+\begin{lemma}[Tree extension]\label{lem:tree-extension}
+Let $S,V$ be finite sets, and let $Q(s,x,y)$ be a probability
+law on $S\times V\times V$ that is symmetric in $x,y$. Put
+$\mu(s,x)=\sum_yQ(s,x,y)$ and
+$\kappa_s(x,y)=Q(s,x,y)/\mu(s,x)$ whenever $\mu(s,x)>0$.
+Let $\rho_S(s)$, $\nu_s(x)$, and a symmetric $\eta(x,y)$ be
+nonnegative reference factors such that
+\[
+ b(s,x,y)=\rho_S(s)\nu_s(x)\nu_s(y)\eta(x,y)>0
+ \qquad\text{whenever }Q(s,x,y)>0.
+\]
+For every tree $T$ on $n\geq2$ vertices, there is an extension
+$P_T$ of $Q$ with the original law on every edge and with
+\begin{equation}\label{eq:extension-entropy}
+ \mathcal H_{\rho_T}(P_T)=\mathcal H_b(Q)+(n-2)g,
+\end{equation}
+where
+\begin{align*}
+ \rho_T(s,\mathbf x)
+   &=\rho_S(s)\prod_{v\in V(T)}\nu_s(x_v)
+                    \prod_{uv\in E(T)}\eta(x_u,x_v),\\
+ g&=\sum_{Q(s,x,y)>0}Q(s,x,y)
+                 \log\frac{\nu_s(y)\eta(x,y)}{\kappa_s(x,y)}.
+\end{align*}
+Moreover, $\rho_T$ is positive on the support of $P_T$.
+\end{lemma}
+\begin{proof}
+Start from an edge $uv$ and sample $(s,x_u,x_v)$ with law $Q$.
+Orient the remaining edges away from this edge and sample each
+new vertex from $\kappa_s$ at its parent. Rows with
+$\mu(s,x)=0$ may be assigned arbitrary probability laws: such
+states are never visited. Symmetry gives
+\[
+ \sum_x\mu(s,x)\kappa_s(x,y)
+   =\sum_xQ(s,x,y)=\mu(s,y).
+\]
+Induction therefore gives marginal $\mu$ at each vertex and
+law $Q$ on each edge. The reference factors are positive on
+every sampled edge, proving the support assertion.
+
+On this support, $\rho_T/P_T$ is the product of $b/Q$ on the
+initial edge and $\nu_s(y)\eta(x,y)/\kappa_s(x,y)$ for each of
+the $n-2$ subsequently added vertices. Taking logarithms and
+expectations proves \eqref{eq:extension-entropy}.
+\end{proof}
+
+\subsection{The weighted triangle law}
+
+A finite weighted host consists of a finite set $V$, weights
+$w_x\geq0$ with $\sum_xw_x=1$, and a symmetric kernel
+$M:V^2\to[0,1]$. Diagonal entries are allowed. Its density is
+\[
+ t(F,M)=\sum_{\varphi:V(F)\to V}
+         \prod_{v\in V(F)}w_{\varphi(v)}
+         \prod_{uv\in E(F)}M(\varphi(u),\varphi(v)).
+\]
+Define
+\begin{align*}
+ d(x)&=\sum_yw_yM(x,y),&
+ r(x,y)&=\sum_zw_zM(x,z)M(y,z),\\
+ a(x)&=\sum_yw_yM(x,y)r(x,y),&
+ E&=t(K_2,M),\quad D=t(P_2,M),\quad R=t(K_3,M).
+\end{align*}
+Thus $E=\sum_xw_xd(x)$, $D=\sum_xw_xd(x)^2$, and
+$R=\sum_xw_xa(x)$. Assume $R>0$. Sample the triangle law
+\[
+ p_\triangle(x,y,z)
+   =\frac{w_xw_yw_zM(x,y)M(x,z)M(y,z)}{R}.
+\]
+It is invariant under coordinate permutations, and its pair and
+vertex marginals are
+\[
+ p_2(x,y)=\frac{w_xw_yM(x,y)r(x,y)}{R},\qquad
+ p_1(x)=\frac{w_xa(x)}{R}.
+\]
+Put
+\[
+ h=\sum_{x,y}p_2(x,y)\log r(x,y),\qquad
+ \alpha=\sum_xp_1(x)\log a(x).
+\]
+Terms with zero probability are omitted here and below.
+Since $0\leq a(x)\leq d(x)^2\leq d(x)$, the assumption
+$R>0$ implies $D,E>0$.
+
+\begin{lemma}\label{lem:triangle}
+The weighted triangle law satisfies
+\begin{equation}\label{eq:triangle-estimates}
+ h\geq\log(R/E),\qquad \alpha-2h\leq\log(D/R).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Apply \eqref{eq:gibbs} to $p_2$ with reference
+$\rho(x,y)=w_xw_yM(x,y)$, whose total mass is $E$.
+On the support of $p_2$, $\rho/p_2=R/r(x,y)$, so
+$\log R-h\leq\log E$.
+
+For the second estimate, write
+$\ell=\sum_xp_1(x)\log d(x)$. The comparison law
+\[
+ q(x,y)=p_1(x)\frac{w_yM(x,y)}{d(x)}
+\]
+is set to zero when $d(x)=0$. It has total mass one and is
+positive wherever $p_2$ is positive. Therefore
+\[
+ \alpha-\ell-h=\mathcal H_q(p_2)\leq0.
+\]
+Applying \eqref{eq:gibbs} to $p_1$ with reference
+$\widetilde\rho(x)=w_xd(x)^2/R$, of total mass $D/R$, gives
+\[
+ 2\ell-\alpha=\mathcal H_{\widetilde\rho}(p_1)
+                    \leq\log(D/R).
+\]
+Adding twice the first inequality to the second proves
+$\alpha-2h\leq\log(D/R)$.
+\end{proof}
+
+\subsection{The book law and the page estimate}
+
+Retain the pair $(X,Y)$ with law $p_2$. Conditional on it,
+sample $Z_1,\ldots,Z_k$ independently with probabilities
+$w_zM(X,z)M(Y,z)/r(X,Y)$. Write $s=(z_1,\ldots,z_k)$ and set
+\[
+ \rho_S(s)=\prod_{i=1}^kw_{z_i},\qquad
+ \nu_s(x)=w_x\prod_{i=1}^kM(x,z_i),\qquad \eta(x,y)=M(x,y).
+\]
+The resulting book law is symmetric in $x,y$ and has the form
+\begin{equation}\label{eq:book-law}
+ Q(s,x,y)=\frac{b(s,x,y)}{R\,r(x,y)^{k-1}},\qquad
+ b(s,x,y)=\rho_S(s)\nu_s(x)\nu_s(y)M(x,y),
+\end{equation}
+with $Q=0$ when $r(x,y)=0$. Every triple $(X,Y,Z_i)$ has
+law $p_\triangle$. Let $\mu(s,x)=\sum_yQ(s,x,y)$ and let $g$
+be the conditional relative entropy in
+Lemma~\ref{lem:tree-extension}, for these reference factors.
+
+\begin{lemma}\label{lem:book}
+For the book law,
+\begin{align}
+ \mathcal H_b(Q)&\geq k\log R-(k-1)\log E,
+                                      \label{eq:book-total}\\
+ g&\geq k\log R-\log E-(k-1)\log D.
+                                      \label{eq:book-step}
+\end{align}
+\end{lemma}
+\begin{proof}
+Since $b/Q=Rr(x,y)^{k-1}$ on the support,
+\[
+ \mathcal H_b(Q)=\log R+(k-1)h.
+\]
+The first estimate follows from \eqref{eq:triangle-estimates}.
+
+For the second, compare $\mu$ with the probability law
+\[
+ \lambda(s,x)=p_1(x)\prod_{i=1}^k\frac{p_2(x,z_i)}{p_1(x)},
+\]
+set to zero when $p_1(x)=0$. This law has independently sampled
+pages conditional on $X=x$. It is positive on the support of
+$\mu$, because each $(X,Z_i)$ marginal of the book law is $p_2$.
+Using the explicit marginals, on the support of $Q$ we have
+\[
+ \frac{\nu_s(y)M(x,y)}{\kappa_s(x,y)}
+ =\frac{\mu(s,x)}{\lambda(s,x)}
+   \frac{r(x,y)^{k-1}\prod_{i=1}^kr(x,z_i)}{a(x)^{k-1}}.
+\]
+Taking logarithms and expectations gives the identity
+\begin{equation}\label{eq:pages-kl}
+ g=h-(k-1)(\alpha-2h)+D_{\mathrm{KL}}(\mu\|\lambda).
+\end{equation}
+Indeed, each $\log r(X,Z_i)$ has expectation $h$, as does
+$\log r(X,Y)$, while $\log a(X)$ has expectation $\alpha$.
+Nonnegativity of the divergence and
+\eqref{eq:triangle-estimates} now yield
+\[
+ g\geq\log(R/E)-(k-1)\log(D/R),
+\]
+which is \eqref{eq:book-step}.
+\end{proof}
+
+\subsection{The density bound and transfer to graphons}
+
+\begin{proposition}\label{prop:tree-finite}
+For every finite weighted host, every tree $T$ on $n\geq2$
+vertices, and every $k\geq1$,
+\begin{equation}\label{eq:tree-finite}
+ t(T^{+k},M)E^{n+k-3}D^{(k-1)(n-2)}\geq R^{k(n-1)}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+If $R=0$, the right side vanishes. Otherwise extend the book law
+along $T$ by Lemma~\ref{lem:tree-extension}. Its reference weight
+is
+\[
+ \rho_T(s,\mathbf x)
+ =\left(\prod_{i=1}^kw_{z_i}\right)
+  \left(\prod_{v\in V(T)}w_{x_v}\prod_{i=1}^kM(x_v,z_i)\right)
+  \prod_{uv\in E(T)}M(x_u,x_v).
+\]
+Its total mass is exactly $t(T^{+k},M)$, and it is positive on
+the support of the extension. Gibbs' inequality, followed by
+\eqref{eq:extension-entropy} and Lemma~\ref{lem:book}, gives
+\begin{align*}
+ \log t(T^{+k},M)
+ &\geq\mathcal H_{\rho_T}(P_T)
+       =\mathcal H_b(Q)+(n-2)g\\
+ &\geq k(n-1)\log R-(n+k-3)\log E
+                       -(k-1)(n-2)\log D.
+\end{align*}
+Exponentiating proves \eqref{eq:tree-finite}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:tree-one-color}]
+Every step graphon is a finite weighted host: its vertex weights
+are the measures of its cells, and its kernel entries are the
+cell values. Proposition~\ref{prop:tree-finite} therefore gives
+\eqref{eq:tree-one-color} for step graphons.
+Lemma~\ref{lem:continuity} extends it to every graphon, since
+both sides are continuous polynomials in four fixed densities.
+For $W\equiv p$, put $a=n+k-3$, $b=(k-1)(n-2)$, and
+$c=k(n-1)$. The total edge exponent on the left is
+$((k+1)n-1)+a+2b=3c$, equal to that on the right.
+This proves the equality assertion, including $p=0$.
+\end{proof}
+
+\subsection{Combining the colors}
+
+Put $a=n+k-3$, $b=(k-1)(n-2)$, and $c=k(n-1)$.
+The vertex counts satisfy
+\begin{equation}\label{eq:vertex-balance}
+ (n+k)+2a+3b=3c.
+\end{equation}
+Let $W\sqcup(1-W)$ be the graphon with two blocks of measure $1/2$,
+carrying rescaled copies of $W$ and $1-W$, and zero between the
+blocks. For every connected graph $F$,
+\begin{equation}\label{eq:disjoint-colors}
+ t(F,W\sqcup(1-W))=2^{-|V(F)|}M(F,W).
+\end{equation}
+Indeed, a nonzero contribution from a connected graph with an edge
+must lie in one block. Each block contributes its density times
+$2^{-|V(F)|}$; the single-vertex case is immediate.
+Apply Theorem~\ref{thm:tree-one-color} to this graphon and use
+\eqref{eq:vertex-balance}. Since $M(K_2,W)=1$, the powers of two
+cancel to give
+\begin{equation}\label{eq:tree-polynomial-colors}
+ M(T^{+k},W)M(P_2,W)^{(k-1)(n-2)}
+ \geq M(K_3,W)^{k(n-1)}.
+\end{equation}
+
+For completeness, put $\sigma=M(P_2,W)$ and $\tau=M(K_3,W)$.
+Goodman's identity \cite{Goodman} takes the form
+\begin{equation}\label{eq:goodman}
+ \sigma\geq\tfrac12,\qquad
+ \tau=\tfrac32\sigma-\tfrac12\geq\tfrac14,
+ \qquad \tau/\sigma\geq\tfrac12.
+\end{equation}
+To see this directly, if $d_W(x)=\int W(x,y)\dd y$, then
+\[
+ \sigma=\int\bigl(d_W^2+(1-d_W)^2\bigr)
+         =\tfrac12+2\int(d_W-\tfrac12)^2.
+\]
+Integrating
+$abc+(1-a)(1-b)(1-c)=1-a-b-c+ab+bc+ca$
+around a triangle yields the identity relating $\tau$ and $\sigma$.
+The other bounds follow immediately.
+
+\begin{proof}[Proof of Theorem~\ref{thm:trees}]
+Division in \eqref{eq:tree-polynomial-colors} is valid by
+\eqref{eq:goodman}, proving \eqref{eq:tree-two-color}. Moreover,
+\begin{align*}
+ M(T^{+k},W)
+ &\geq\tau^k\left[\tau(\tau/\sigma)^{k-1}\right]^{n-2}\\
+ &\geq 4^{-k}\left[\tfrac14\,2^{-(k-1)}\right]^{n-2}
+   =2^{2-(k+1)n}.
+\end{align*}
+This is the commonness bound when $n\geq2$. If $T$ has one vertex,
+then $T^{+k}=K_{1,k}$, and pointwise convexity gives
+\[
+ M(K_{1,k},W)=\int\bigl(d_W(x)^k+(1-d_W(x))^k\bigr)\dd x
+             \geq2^{1-k}.
+\]
+Finally, $W\equiv1/2$ has $\sigma=1/2$ and $\tau=1/4$, and
+attains the quantitative bound.
+\end{proof}
+
+\section{Even-cycle apices through fourth moments}\label{sec:cycles}
+
+The proof starts on a finite uniform probability space with $d$
+points. Lemma~\ref{lem:continuity} will transfer the final bounds
+to graphons. Given $W$, use its signed kernel $U=2W-1$ and write
+\[
+ S_\varepsilon=1+\varepsilon U,\qquad \varepsilon\in\{-1,1\},
+\]
+where the sign is sampled uniformly. Averages over host coordinates
+use the uniform probability measure. Thus $S_+=2W$ and
+$S_-=2(1-W)$, and
+\begin{equation}\label{eq:signed-average}
+ \E_\varepsilon t(F,S_\varepsilon)=2^{e(F)-1}M(F,W).
+\end{equation}
+Expanding its left side keeps the even edge subsets of $F$;
+multiplication by $\varepsilon$ instead keeps the odd subsets.
+
+\subsection{Base-cycle traces}
+
+Use the inner product $\ip xy_d=d^{-1}\sum_i x_i y_i$, so the
+constant vector $\one$ has norm one. The operator associated with
+a kernel $L$ is $T_L=L/d$. Expanding the trace gives
+\begin{equation}\label{eq:cycle-trace}
+ t(C_n,L)=\Tr T_L^n\qquad(n\geq3).
+\end{equation}
+If $B$ is real symmetric, $g$ is
+a unit vector, and $n\geq4$ is even, diagonalization gives
+\begin{equation}\label{eq:spectral}
+ \Tr B^n\geq\|Bg\|^n\geq|\ip g{Bg}|^n,
+ \qquad \Tr B^n\leq(\Tr B^4)^{n/4}.
+\end{equation}
+For the last inequality, apply
+$\sum_i x_i^s\leq(\sum_i x_i)^s$ to the nonnegative fourth
+powers of the eigenvalues, with $s=n/4$.
+
+The signed densities needed below satisfy
+\begin{align}
+ 0&\leq t(K_2,U)^2\leq t(P_2,U)\leq1,
+ \qquad 0\leq t(C_4,U)\leq1,\notag\\
+ |t(P_3,U)|&\leq t(P_2,U)t(C_4,U)^{1/4}.
+ \label{eq:scalar-bounds}
+\end{align}
+Indeed, $t(P_2,U)=\|T_U\one\|^2$, whereas
+$t(K_2,U)=\ip\one{T_U\one}_d$.
+Also $\Tr T_U^2=\E U^2\leq1$ implies
+$\Tr T_U^4\leq1$ and
+$\|T_U\|_\op\leq t(C_4,U)^{1/4}$.
+Apply this operator bound to
+$t(P_3,U)=\ip{T_U\one}{T_U(T_U\one)}_d$.
+
+Expanding around a four-cycle gives
+\begin{align}
+ 8M(C_4,W)&=1+2t(K_2,U)^2+4t(P_2,U)+t(C_4,U),\notag\\
+ t(C_4,S_\varepsilon)
+ &=8M(C_4,W)+4\varepsilon\bigl(t(K_2,U)+t(P_3,U)\bigr).
+ \label{eq:fourth-colors}
+\end{align}
+The six two-edge subsets consist of two matchings and four
+adjacent pairs, while the four three-edge subsets are paths.
+This explains all coefficients. The Rayleigh value of
+$T_{S_\varepsilon}$ at $\one$ is $1+\varepsilon t(K_2,U)$.
+Thus, for even $n\geq4$,
+\begin{equation}\label{eq:even-base}
+ 2^{n-1}M(C_n,W)
+ \geq\frac{(1+t(K_2,U))^n+(1-t(K_2,U))^n}{2}
+ \geq1+\binom n2t(K_2,U)^2\geq1.
+\end{equation}
+
+\subsection{Conditioning on the apices}
+
+For $s\geq1$, sample the sign and independent apex coordinates
+$z_1,\ldots,z_s$. Define
+\[
+ h_s(x)=\prod_{i=1}^s S_\varepsilon(z_i,x),\qquad
+ D_s=\E_xh_s(x),\qquad
+ \Pi_s=\E_xh_s(x)\bigl(\E_yS_\varepsilon(x,y)h_s(y)\bigr)^2.
+\]
+Let $V_s=(\Pi_s/D_s)^{1/2}$ when $D_s>0$, and let $V_s=0$
+otherwise. If $D_s=0$, nonnegativity forces $h_s=0$, and hence
+$\Pi_s=0$. In particular, $D_sV_s^2=\Pi_s$ in all cases.
+Since $0\leq S_\varepsilon\leq2$, we have $\Pi_s\leq4D_s^3$ and
+$0\leq V_s\leq2D_s\leq2^{s+1}$. Thus all moments below are finite.
+Unless subscripts specify otherwise, expectations in this part of
+the proof include the sign and all apex coordinates.
+
+\begin{lemma}\label{lem:conditional}
+For every even $n\geq4$,
+\begin{equation}\label{eq:conditional-cycle}
+ 2^{n(s+1)-1}M(C_n^{+s},W)\geq\E V_s^n.
+\end{equation}
+If $\E D_s^2>0$, then
+\begin{equation}\label{eq:fourth-support}
+ V_s^4\geq2\Pi_s-D_s^2,
+ \qquad \E V_s^4\geq\frac{(\E\Pi_s)^2}{\E D_s^2}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Put $B_s=\diag(\sqrt{h_s})T_{S_\varepsilon}\diag(\sqrt{h_s})$.
+Expanding its trace puts a factor $h_s$ at every cycle vertex,
+so $\E\Tr B_s^n=2^{n(s+1)-1}M(C_n^{+s},W)$.
+When $D_s>0$, the vector
+$g_s=\sqrt{h_s/D_s}$ has norm one and
+$\|B_sg_s\|^2=\Pi_s/D_s=V_s^2$. Equation~\eqref{eq:spectral}
+therefore proves \eqref{eq:conditional-cycle}; the zero case has
+$B_s=0$.
+For positive $D_s$, the first inequality in
+\eqref{eq:fourth-support} is the identity
+\[
+ V_s^4-2\Pi_s+D_s^2=(\Pi_s/D_s-D_s)^2.
+\]
+It remains valid in the zero case. Finally, Cauchy--Schwarz applied
+to $\E\Pi_s=\E D_sV_s^2$ proves the second assertion.
+\end{proof}
+
+These conditional quantities have simple density interpretations:
+\begin{equation}\label{eq:conditional-densities}
+ \E D_s^2=2^{2s-1}M(K_{2,s},W),\qquad
+ \E\Pi_s=2^{3s+1}M(K_{1,2,s},W).
+\end{equation}
+Here $K_{1,2,s}$ is the complete tripartite graph: the $s$ apices
+meet three further vertices, and one of those vertices meets the
+other two. In particular, integrating the apices individually and
+applying \eqref{eq:moments} gives
+\begin{align}
+ \E D_2^2&=8M(C_4,W),\notag\\
+ \E D_3^2
+ &=\E_{\varepsilon,x,y}
+     \bigl(\E_zS_\varepsilon(x,z)S_\varepsilon(y,z)\bigr)^3
+ \geq\bigl(8M(C_4,W)\bigr)^{3/2}.
+ \label{eq:codegree}
+\end{align}
+
+For three apices, introduce
+\begin{equation}\label{eq:majority}
+ \maj=U(z_1,z_2)+U(z_1,z_3)+U(z_2,z_3)
+                  -U(z_1,z_2)U(z_1,z_3)U(z_2,z_3)
+\end{equation}
+Its mean and its role in the conditional fourth-moment bound are
+recorded as
+\[
+ \mu=\E\maj=3t(K_2,U)-t(K_3,U),\qquad F=2\Pi_3-D_3^2.
+\]
+The polynomial $x+y+z-xyz$ is multiaffine on $[-1,1]^3$ and has
+values $\pm2$ at its corners. Therefore
+\begin{equation}\label{eq:majority-bounds}
+ |\maj|\leq2.
+\end{equation}
+
+The following is the entire certificate input to the proof.
+
+\begin{lemma}[Six-vertex inequalities]\label{lem:cert-input}
+For every $W$ and its signed kernel $U=2W-1$,
+\begin{equation}\label{eq:mean-input}
+ M(K_{1,2,2},W)\geq\frac{M(C_4,W)}{16},\qquad
+ M(K_{1,2,3},W)\geq\frac{M(K_{2,3},W)}{32}.
+\end{equation}
+Moreover, the conditional quantity $F$ satisfies
+\begin{align}
+ \E(3+\varepsilon-\maj)F
+ &\geq24M(C_4,W)+13t(K_2,U)+t(K_3,U)\notag\\
+ &\qquad+12t(K_2,U)^2-4t(K_2,U)t(K_3,U)+12t(P_3,U),
+ \label{eq:G}\\
+ \E(6+\varepsilon+\maj)F
+ &\geq48M(C_4,W)+19t(K_2,U)+23t(K_3,U)\notag\\
+ &\qquad-12t(K_2,U)^2+4t(K_2,U)t(K_3,U)+24t(P_3,U).
+ \label{eq:H}
+\end{align}
+\end{lemma}
+\begin{proof}
+Appendix~\ref{app:certificates} specifies four rational sums of
+nonnegative rooted quadratic forms. Their evaluated targets are
+respectively $\E\Pi_2-\E D_2^2$, $\E\Pi_3-\E D_3^2$, and
+the left sides minus the right sides of \eqref{eq:G} and
+\eqref{eq:H}. The interpretation
+\eqref{eq:conditional-densities} gives \eqref{eq:mean-input}.
+The coefficient identities and positive factorizations are checked
+exactly there. In particular, the inequalities impose no sign
+condition on $t(K_2,U)$.
+\end{proof}
+
+Combining \eqref{eq:fourth-support}, \eqref{eq:codegree}, and
+\eqref{eq:mean-input} gives
+\begin{equation}\label{eq:unweighted}
+ \E V_2^4\geq8M(C_4,W),\qquad
+ \E V_3^4\geq\E F\geq\bigl(8M(C_4,W)\bigr)^{3/2}
+                          \geq8M(C_4,W)\geq1.
+\end{equation}
+The variable $F$ itself need not be nonnegative. Its usefulness
+comes from lying below $V_3^4$ pointwise.
+
+\subsection{Retaining the larger color moment}
+
+The average bound in \eqref{eq:unweighted} does not by itself
+compare higher moments separately for the two colors. We need a
+probability weight that recovers the larger fourth color trace.
+The following scalar inequality will be applied to the densities
+in \eqref{eq:fourth-colors}.
+
+\begin{lemma}[Scalar estimate]\label{lem:scalar-comparison}
+If $b\geq0$, $0\leq r\leq1$, and $a\geq1+4b+r^4$, then
+\begin{equation}\label{eq:scalar-comparison}
+ a^{3/2}\geq a+4br.
+\end{equation}
+\end{lemma}
+\begin{proof}
+If $r\leq1/2$, then $a\geq1$ gives
+\[
+ a^{3/2}-a=\frac{a(a-1)}{\sqrt a+1}
+             \geq\frac{a-1}{2}\geq2b\geq4br.
+\]
+If $r\geq1/2$, the function $y^{3/2}-y$ is increasing on
+$[1,\infty)$, so it suffices to take $a=1+4b+r^4$.
+For $x=\sqrt{1+4b+r^4}$ the required difference becomes
+$x^3-(1+r)x^2+r+r^5$. The identity
+\begin{align*}
+ x^3-(1+r)x^2+r+r^5
+ &=(x-\tfrac23(1+r))^2(x+\tfrac13(1+r))\\
+ &\qquad+\tfrac1{27}\bigl(27r^5-4(1+r)^3+27r\bigr)
+\end{align*}
+reduces its nonnegativity to that of the last polynomial.
+With $t=r-1/2\geq0$, this polynomial equals
+\[
+ 27t^5+\frac{135}{2}t^4+\frac{127}{2}t^3
+       +\frac{63}{4}t^2+\frac{135}{16}t+\frac{27}{32},
+\]
+whose coefficients are positive.
+\end{proof}
+
+\begin{proposition}[Weighted comparison]\label{prop:weighted}
+There is a weight $\omega$, depending on the sampled sign and
+three apices, such that
+\begin{equation}\label{eq:weighted}
+ 0\leq\omega\leq2,\qquad \E\omega=1,
+ \qquad \E\omega V_3^4
+       \geq16\max\{t(C_4,W),t(C_4,1-W)\}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Complement first so that $t(K_2,U)\geq0$. By
+\eqref{eq:fourth-colors}, Lemma~\ref{lem:scalar-comparison}
+applies with $a=8M(C_4,W)$, $b=t(P_2,U)$, and
+$r=t(C_4,U)^{1/4}$.
+
+If $t(K_2,U)+t(P_3,U)\leq0$, then the larger color density is
+$t(C_4,1-W)$. The bound \eqref{eq:scalar-bounds} gives
+\begin{align*}
+ \E V_3^4
+ &\geq\bigl(8M(C_4,W)\bigr)^{3/2}\\
+ &\geq8M(C_4,W)+4t(P_2,U)t(C_4,U)^{1/4}\\
+ &\geq8M(C_4,W)-4\bigl(t(K_2,U)+t(P_3,U)\bigr)
+   =16t(C_4,1-W).
+\end{align*}
+Thus $\omega=1$ suffices in this case.
+
+Otherwise $t(C_4,W)$ is larger. We will also use
+\begin{equation}\label{eq:scalar-remainder}
+ 2\E F-8M(C_4,W)-4t(P_3,U)-1\geq0.
+\end{equation}
+Indeed, the negative-color Rayleigh bound gives
+\begin{align*}
+ 8M(C_4,W)-4t(P_3,U)
+ &=16t(C_4,1-W)+4t(K_2,U)\\
+ &\geq(1-t(K_2,U))^4+4t(K_2,U)\geq1,
+\end{align*}
+using $(1-x)^4+4x-1=x^2((x-2)^2+2)$.
+Together with $\E F\geq8M(C_4,W)$ from
+\eqref{eq:unweighted}, this proves \eqref{eq:scalar-remainder}.
+Choose
+\begin{equation}\label{eq:weight-formula}
+ \omega=
+ \begin{cases}
+ (3+2\mu+\varepsilon-\maj)/(3+\mu),&\mu\geq0,\\[2pt]
+ (6-2\mu+\varepsilon+\maj)/(6-\mu),&\mu<0.
+ \end{cases}
+\end{equation}
+
+Suppose first that $\mu\geq0$. By \eqref{eq:majority-bounds},
+the first numerator in \eqref{eq:weight-formula}
+lies between $2\mu$ and $6+2\mu$, and has mean $3+\mu$.
+Thus $0\leq\omega\leq2$ and $\E\omega=1$.
+Multiply the pointwise inequality $V_3^4\geq F$ by this
+nonnegative weight. Substitution of \eqref{eq:G} gives
+\begin{align*}
+ (3+\mu)\bigl(\E\omega V_3^4-16t(C_4,W)\bigr)
+ &\geq(3+2\mu)\E F+\E(\varepsilon-\maj)F
+                                  -16(3+\mu)t(C_4,W)\\
+ &\geq4t(K_2,U)
+     +\mu\bigl(2\E F-8M(C_4,W)-4t(P_3,U)-1\bigr)\geq0.
+\end{align*}
+The second step substitutes \eqref{eq:G},
+$\mu=3t(K_2,U)-t(K_3,U)$, and \eqref{eq:fourth-colors};
+the last uses \eqref{eq:scalar-remainder}.
+
+Finally, if $\mu<0$, the second numerator lies
+between $3-2\mu$ and $9-2\mu$, within $[0,2(6-\mu)]$,
+and has mean $6-\mu$. Its weight is again admissible. Now
+\begin{align*}
+ (6-\mu)\bigl(\E\omega V_3^4-16t(C_4,W)\bigr)
+ &\geq(6-2\mu)\E F+\E(\varepsilon+\maj)F
+                                  -16(6-\mu)t(C_4,W)\\
+ &\geq24t(K_3,U)-8t(K_2,U)\\
+ &\qquad-\mu\bigl(2\E F-8M(C_4,W)-4t(P_3,U)-1\bigr)
+ \geq0.
+\end{align*}
+Here the second step uses \eqref{eq:H}, and $\mu<0$ implies
+$t(K_3,U)>3t(K_2,U)\geq0$. The last step again follows from
+\eqref{eq:scalar-remainder}. This proves all cases.
+If a complementation was made, interchange the sign labels to
+transport the constructed weight back to the original kernel.
+\end{proof}
+
+\subsection{Lifting the cycle length}
+
+\begin{lemma}[Two-moment lifting]\label{lem:length-lifting}
+Let $V\geq0$ be bounded on a probability space. Suppose
+$a,b\geq0$ and a weight $\omega$ satisfy
+\[
+ 0\leq\omega\leq2,\quad\E\omega=1,\quad
+ \E V^4\geq(a+b)/2,\quad
+ \E\omega V^4\geq\max(a,b).
+\]
+Then for every real $q\geq4$,
+\begin{equation}\label{eq:length-lifting}
+ \E V^q\geq\tfrac12(a^{q/4}+b^{q/4}).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Interchanging $a,b$ if necessary, assume $a\geq b$, and set
+$\ell=\E\omega V^4$ and $u=\E(2-\omega)V^4$.
+Then $\ell\geq a$ and $\ell+u\geq a+b$, which imply
+$\ell^s+u^s\geq a^s+b^s$ for $s\geq1$.
+Indeed, if $u\geq b$, compare termwise. Otherwise write
+$u=b-\delta$ with $0<\delta\leq b$. The sum condition gives
+$\ell\geq a+\delta$, and
+$(a+\delta)^s+(b-\delta)^s\geq a^s+b^s$:
+the derivative of $(a+t)^s+(b-t)^s$ is nonnegative for
+$0\leq t\leq\delta$.
+Both $\omega$ and $2-\omega$ have mean one, so Jensen with
+$s=q/4$ under the two weighted probability measures yields
+\[
+ \E V^q\geq\tfrac12(\ell^s+u^s)
+             \geq\tfrac12(a^s+b^s).
+\]
+\end{proof}
+
+Apply this lemma with $V=V_3$, $a=16t(C_4,W)$, and
+$b=16t(C_4,1-W)$. Its hypotheses follow from
+\eqref{eq:unweighted} and Proposition~\ref{prop:weighted}.
+For every even $n\geq4$, \eqref{eq:conditional-cycle},
+\eqref{eq:length-lifting}, and \eqref{eq:spectral} give
+\begin{align}
+ 2^{4n-1}M(C_n^{+3},W)
+ &\geq\E V_3^n\notag\\
+ &\geq2^{n-1}\bigl(t(C_4,W)^{n/4}+t(C_4,1-W)^{n/4}\bigr)
+ \notag\\
+ &\geq2^{n-1}M(C_n,W).
+ \label{eq:three-apices}
+\end{align}
+
+\subsection{Lifting the apex number and handling small numbers}
+
+The apex-number argument applies directly on any probability
+space. Consider a measure $\nu$ on two copies of the space of
+cycle coordinates $x_0,\ldots,x_{n-1}$. On the first copy its
+density is $\prod_{i=0}^{n-1}W(x_i,x_{i+1})$, with $x_n=x_0$;
+on the second copy replace $W$ by $1-W$.
+The total mass is $M(C_n,W)$. On the first copy put
+\[
+ \xi=\int\prod_{i=0}^{n-1}W(z,x_i)\dd z,
+\]
+and make the same replacement on the second.
+Integrating the apex coordinates separately gives
+$M(C_n^{+j},W)=\int\xi^j\dd\nu$ for every $j\geq1$.
+Since $M(C_n,W)>0$ by \eqref{eq:even-base}, normalizing
+$\nu$ and using Jensen gives
+\begin{equation}\label{eq:apex-lifting}
+ M(C_n^{+k},W)\geq
+ \frac{M(C_n^{+s},W)^{k/s}}{M(C_n,W)^{k/s-1}}
+ \qquad(k\geq s\geq1).
+\end{equation}
+Together with \eqref{eq:three-apices}, this proves
+$M(C_n^{+k},W)\geq2^{-nk}M(C_n,W)$ for all $k\geq3$.
+
+For two apices, \eqref{eq:conditional-cycle},
+\eqref{eq:moments}, and \eqref{eq:unweighted} give
+\begin{equation}\label{eq:two-apices}
+ M(C_n^{+2},W)
+ \geq2^{1-3n}\bigl(8M(C_4,W)\bigr)^{n/4}
+ \geq2^{1-3n}.
+\end{equation}
+For one apex, \eqref{eq:conditional-densities} gives
+\[
+ \E D_1^2=2M(P_2,W)=1+t(P_2,U),\qquad
+ \E\Pi_1=16M(K_4-e,W),
+\]
+where $K_4-e=K_{1,2,1}$ is the diamond.
+Its even edge-subsets are the empty graph, two two-edge
+matchings, eight adjacent pairs, one four-cycle, and four
+triangles with a pendant edge. The signed density of the last
+graph has absolute value at most
+$\sqrt{t(P_2,U)t(C_4,U)}$, since Cauchy--Schwarz and $|U|\leq1$
+give
+\[
+ \left|\E_{x,y}U(x,y)
+   \bigl(\E_zU(x,z)\bigr)
+   \bigl(\E_wU(x,w)U(y,w)\bigr)\right|
+ \leq\sqrt{t(P_2,U)t(C_4,U)}.
+\]
+The expansion therefore yields
+\begin{align}
+ 16M(K_4-e,W)
+ &\geq1+2t(K_2,U)^2+8t(P_2,U)+t(C_4,U)\notag\\
+ &\qquad-4\sqrt{t(P_2,U)t(C_4,U)}\label{eq:diamond}\\
+ &\geq1+2t(P_2,U)+\tfrac13t(C_4,U).
+ \label{eq:diamond-bound}
+\end{align}
+The last difference is at least
+$2t(K_2,U)^2+
+ (\sqrt{6t(P_2,U)}-\sqrt{2t(C_4,U)/3})^2$.
+In particular, $16M(K_4-e,W)\geq2M(P_2,W)\geq1$.
+Now \eqref{eq:fourth-support} and \eqref{eq:moments} imply
+\begin{equation}\label{eq:one-apex}
+ M(C_n^{+1},W)
+ \geq2\left(\frac{M(K_4-e,W)^2}{2M(P_2,W)}\right)^{n/4}
+ \geq2^{1-2n}.
+\end{equation}
+Thus every positive apex number is covered on finite uniform
+spaces.
+
+\subsection{Graphons and rigidity}
+
+\begin{proposition}\label{prop:graphon-bounds}
+For every graphon $W$, every even $n\geq4$, and every $k\geq1$,
+the bounds \eqref{eq:one-apex} and \eqref{eq:two-apices} hold,
+and $M(C_n^{+k},W)\geq2^{-nk}M(C_n,W)\geq2^{1-n(k+1)}$
+for $k\geq3$.
+\end{proposition}
+\begin{proof}
+Every quantity in these final bounds is a density of a fixed
+simple graph. Lemma~\ref{lem:continuity} therefore makes it
+continuous under $L^1$ approximation. Each dyadic step graphon
+has precisely the densities of its finite uniform matrix,
+including diagonal cell entries. Apply the finite inequalities
+and pass to the limit. The denominator $2M(P_2,W)$ is at least
+one by \eqref{eq:goodman}, and every power involved is continuous
+on its nonnegative domain. The same approximation transfers the
+signed-density bounds \eqref{eq:scalar-bounds},
+\eqref{eq:fourth-colors}, \eqref{eq:even-base}, and
+\eqref{eq:diamond-bound}, which will be used for equality.
+\end{proof}
+
+We finish by identifying the equality case. We use here the
+standard spectral description of symmetric bounded kernels;
+see \cite{Lovasz} for the graphon and kernel-operator framework.
+For such a kernel $L$, its integral operator $T_L$ is compact,
+self-adjoint, and Hilbert--Schmidt on $L^2([0,1])$.
+For even $n=2\ell\geq4$, Fubini and the spectral theorem give
+\begin{equation}\label{eq:infinite-trace}
+ t(C_n,L)=\|T_L^\ell\|_\HS^2
+          =\sum_i\lambda_i(T_L)^n.
+\end{equation}
+The sums converge because $T_L$ is Hilbert--Schmidt.
+In particular,
+\begin{equation}\label{eq:c-zero}
+ t(C_4,U)=0\quad\Longleftrightarrow\quad
+ U=0\text{ almost everywhere}.
+\end{equation}
+Indeed, a vanishing sum of fourth powers makes $T_U=0$ by the
+compact self-adjoint spectral theorem, and
+$\|T_U\|_\HS^2=\iint U^2$ then vanishes.
+
+\begin{lemma}\label{lem:cycle-equality}
+For every graphon and every even $n\geq4$,
+$M(C_n,W)=2^{1-n}$ holds if and only if
+$W=1/2$ almost everywhere.
+\end{lemma}
+\begin{proof}
+The forward implication starts with the graphon version of
+\eqref{eq:even-base}, which forces $t(K_2,U)=0$. The constant unit
+function consequently has Rayleigh value one for both
+$T_{S_+}$ and $T_{S_-}$. Each operator has a largest eigenvalue
+at least one, so each even cycle trace is at least one.
+Their average is $2^{n-1}M(C_n,W)=1$, hence both traces equal one.
+Equation~\eqref{eq:infinite-trace} then forces each spectrum
+to consist of a single eigenvalue one and otherwise zeros.
+Equality in the Rayleigh bound shows that the constant function
+spans this eigenspace. Therefore each operator is the orthogonal
+projection onto the constants, whose kernel is one almost
+everywhere. It follows that $U=0$ almost everywhere.
+Conversely, $W\equiv1/2$ gives $M(C_n,W)=2^{1-n}$ directly.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:cycles}]
+Proposition~\ref{prop:graphon-bounds} proves
+\eqref{eq:cycle-common} and
+\eqref{eq:cycle-relative}. If $U\ne0$ on a set of positive
+measure, then $t(C_4,U)>0$ by \eqref{eq:c-zero}.
+For $k=1$, \eqref{eq:diamond-bound} gives
+$16M(K_4-e,W)>2M(P_2,W)\geq1$, making
+\eqref{eq:one-apex} strict at $2^{1-2n}$.
+For $k=2$, \eqref{eq:fourth-colors} gives $8M(C_4,W)>1$,
+so \eqref{eq:two-apices} is strict.
+For $k\geq3$, Lemma~\ref{lem:cycle-equality} gives
+$M(C_n,W)>2^{1-n}$, making the relative bound strict at
+$2^{1-n(k+1)}$.
+When $W=1/2$ almost everywhere, every edge factor equals $1/2$
+almost everywhere, and equality follows.
+\end{proof}
+
+\section{Relation to the Lean formalization}\label{sec:lean}
+
+The Lean libraries \code{TreeApex} and \code{EvenCycleApex}
+are developed with Lean~4 \cite{Lean4} and
+mathlib \cite{Mathlib}; both dependencies are pinned to version
+\code{v4.31.0}. The comparison below uses the theorem statements
+and proof dependencies in these libraries.
+
+\subsection{Statements and common foundations}
+
+The principal declarations correspond to the main results as follows.
+Names in the first two rows belong to \code{TreeApex}; those in
+the remaining rows belong to \code{EvenCycleApex}.
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.34\textwidth}p{0.62\textwidth}@{}}
+\toprule
+Paper statement & Lean declaration\\
+\midrule
+Theorem~\ref{thm:trees} &
+\code{tree_apex_common}, \code{tree_apex_two_colour}\\[3pt]
+Theorem~\ref{thm:tree-one-color} & \code{tree_apex_one_colour}\\[3pt]
+Theorem~\ref{thm:cycles}, commonness &
+\code{commonality_all_even_all_apices}\\[3pt]
+Theorem~\ref{thm:cycles}, relative bound &
+\code{apex_relative_of_three_le}, \code{one_le_cycle_normalized}\\[3pt]
+Theorem~\ref{thm:cycles}, equality &
+\code{commonality_equality_iff_constant}\\
+\bottomrule
+\end{tabular}
+\end{center}
+The formal statements allow any probability space $(\Omega,\mu)$,
+whereas the paper works on $[0,1]$. Their graphon hypothesis is
+joint measurability, pointwise symmetry, and values in $[0,1]$;
+the equality conclusion is almost everywhere with respect to
+$\mu\otimes\mu$. Lean's \code{pathGraph 3} is our $P_2$, since
+its parameter counts vertices. The constants are written as
+$4/2^{(k+1)n}$ for trees and $2/2^{n(k+1)}$ for cycles, which
+equal the bounds in Theorems~\ref{thm:trees} and~\ref{thm:cycles}.
+
+Both libraries prove finite inequalities for weighted hosts:
+nonnegative vertex weights sum to one, and the kernel may have
+nonzero diagonal entries. Zero-weight vertices are allowed.
+These hosts represent step graphons on finite measurable
+partitions. Density continuity and $L^1$ approximation then
+transfer closed inequalities to arbitrary graphons, as in the
+paper's tree proof. For cycles, the weighted formulation replaces
+the uniform dyadic matrices used in
+Proposition~\ref{prop:graphon-bounds}. The cycle matrices have
+entries $\sqrt{w_iw_j}L(i,j)$, so their traces compute weighted
+cycle densities.
+
+\subsection{Organization of the tree proof}
+
+The paper and the formalization use the same relative-entropy
+framework on weighted hosts. The definition \code{relEnt} in
+\code{TreeApex/Entropy/RelEnt.lean} is
+$\mathcal H_\rho(p)$ from \eqref{eq:relative-entropy}, and its
+support hypothesis ensures that every logarithm with positive
+probability has a positive argument. Both proofs obtain Gibbs'
+inequality from $\log u\leq u-1$ and apply it directly to
+homomorphism weights.
+
+In \code{Entropy/Triangle.lean}, \code{h_ge} and \code{I_le}
+are exactly the two estimates in \eqref{eq:triangle-estimates};
+the quantity denoted by \code{A} there is our $\alpha$.
+In \code{Entropy/Book.lean}, \code{relEnt_book} establishes
+$\mathcal H_b(Q)=\log R+(k-1)h$. The formal page estimate
+splits the calculation in \eqref{eq:pages-kl} into two steps:
+\code{g_eq} expresses the conditional relative entropy using
+the auxiliary ratio
+\[
+ \Phi(s,x)=\frac{\mu(s,x)R}{\rho_S(s)\nu_s(x)},
+\]
+and \code{pages_kl} applies Gibbs' inequality to $\mu$ and the
+same conditionally independent law $\lambda$ used in the paper.
+Together they give the lower bound from
+\eqref{eq:pages-kl}; the paper records the divergence explicitly
+and combines these steps in a single identity.
+
+The extension in \code{Entropy/TreeLaw.lean} is proved for an
+arbitrary symmetric finite law with reference factors on its
+vertices and edges, as in Lemma~\ref{lem:tree-extension}. Its
+recursion begins with one vertex and adds leaves, whereas the
+paper starts from an edge; the first formal edge recovers the
+book law. It proves
+vertex marginals and support directly, rather than using a
+separate theorem asserting every edge marginal. Internally,
+vertex $i+1$ has parent $\min(\operatorname{par}(i),i)$.
+The theorem \code{exists_recTree_iso} in
+\code{Graph/RecTree.lean} identifies every finite tree with
+such a recursively labeled tree, so this encoding does not
+restrict the tree family. Finally, the two-color construction
+is performed on the weighted host $\{0,1\}\times V$, with weights
+$w_x/2$ on each copy, before transfer to graphons. This is the
+finite version of \eqref{eq:disjoint-colors}. The same generic
+extension also proves the tree Sidorenko inequality in
+\code{TreeApex/Appendix/Sidorenko.lean}.
+
+\subsection{Cycle certificates and the two-apex case}
+
+The three-apex argument follows the conditional spectral moments,
+majority weights, and lifting steps of Section~\ref{sec:cycles}.
+Its certificate input consists of exactly three targets:
+$Q_3$, $Q_-$, and $Q_+$ from Appendix~\ref{app:certificates}.
+In \code{EvenCycleApex/Certificate/Targets.lean}, these are
+constructed from their literal edge sets independently of the
+certificate matrices. The checker verifies rational
+$LDL^{\mathsf T}$ factorizations of the $57$ matrices in these
+three certificates. It checks relabeling witnesses only for
+masks occurring in the expansions, and accumulates coefficients
+in orbit-indexed integers packed in base $2^{128}$.
+A proved bound on the total coefficient mass ensures that
+equality of packed values implies equality in every orbit;
+no completeness claim about a global orbit table is needed.
+The concrete checks use \code{decide +kernel}, and their
+soundness is proved in Lean. Thus the coefficient identities
+and matrix factorizations for these three targets are certified
+by proofs evaluated inside the Lean kernel.
+
+The two-apex proof in \code{Finite/TwoApex.lean} omits $Q_2$
+entirely. In the paper's density notation, it combines
+$\E D_2^2=8M(C_4,W)$,
+$\E\Pi_2=128M(C_4^{+1},W)$, the one-apex diamond bound, and
+$8M(C_4,W)\leq1+6t(P_2,U)+t(C_4,U)$ to obtain
+\begin{equation}\label{eq:lean-two-apex}
+ \E V_2^4\geq
+ \frac{\bigl(1+2t(P_2,U)+t(C_4,U)/3\bigr)^4}
+      {\bigl(1+t(P_2,U)\bigr)^2\bigl(1+6t(P_2,U)+t(C_4,U)\bigr)}
+ \geq1.
+\end{equation}
+The $n/4$ power of this quotient is a lower bound for
+$2^{3n-1}M(C_n^{+2},W)$ for every even $n\geq4$.
+The scalar inequality is verified by expanding the difference
+into nonnegative terms. Moreover, the quotient exceeds one when
+$t(C_4,U)>0$,
+which suffices for rigidity. This is a substantive change in an
+auxiliary conclusion: the Lean development does not establish
+$\E\Pi_2\geq\E D_2^2$ or the paper's stronger two-apex bound
+\eqref{eq:two-apices}.
+It establishes the same commonness and equality conclusions
+with two apices. In particular, the formal theorem
+\code{three_universal_graph_inequalities} covers three of the
+four inequalities in Lemma~\ref{lem:cert-input}.
+
+\subsection{Rigidity and verification scope}
+
+The cycle rigidity proof also follows a different analytic route.
+Instead of applying the compact self-adjoint spectral theorem
+directly as in \eqref{eq:infinite-trace}, Lean first proves a
+finite spectral remainder estimate. For even $n>4$, it transfers
+the continuous inequality
+\begin{align*}
+ 8M(C_4,W)
+ &\leq\frac12\sum_{\varepsilon=\pm1}
+ \Bigl[t(C_n,S_\varepsilon)^{4/n}\\
+ &\qquad+4^{(n-4)/(n-2)}
+   \max\{t(C_n,S_\varepsilon)
+        -(1+\varepsilon t(K_2,U))^n,0\}^{2/(n-2)}\Bigr]
+\end{align*}
+from weighted hosts to graphons. When $M(C_n,W)=2^{1-n}$,
+the mean bound forces $t(K_2,U)=0$ and both signed color cycle
+densities equal one, so this estimate gives $8M(C_4,W)=1$
+and hence $t(C_4,U)=0$. In \code{Equality/CZero.lean},
+this vanishing first gives $U\circ U=0$ almost everywhere. Symmetry
+then makes every bilinear form of $U$ against bounded product
+functions vanish; approximation by finite sums of such products
+in $L^2$ yields $U=0$ almost everywhere. This replaces the
+infinite-dimensional spectral argument while preserving its
+conclusion.
+
+The main graphon inequalities and the cycle equality
+characterization are thus formalized, with the two-apex auxiliary
+bound replaced as explained above. The tree assertions of equality
+at constant graphons follow from \code{homDensity_const}, but
+are not stated as separate tree headline theorems.
+The random-sampling lemma and the equivalence with finite
+Ramsey multiplicity in Appendix~\ref{app:finite} are not part
+of either Lean development. The audit files
+\code{CheckAxioms.lean} and \code{CheckAxiomsTree.lean} check
+the dependencies of the main results and their supporting
+lemmas; their outputs contain only \code{propext},
+\code{Classical.choice}, and \code{Quot.sound}, or subsets
+thereof. In particular, the audited results depend on neither
+unproved placeholders nor an axiom for native computation.
+The checks \code{CheckStatementsTree.lean} and
+\code{CheckImportsTree.lean} additionally verify the tree
+statement signatures and the absence of cycle certificate
+modules from the tree library's import closure.
+
+\section{Further directions}
+
+Trees and even cycles have the Sidorenko property, so the two
+theorems settle Conjecture~\ref{conj:apices} for these base
+families. Their proofs isolate different ways in which the base
+structure can be exploited. On a tree, consistency of local edge
+laws suffices to construct a global homomorphism distribution.
+On a cycle, the closing edge is instead handled by an even
+spectral trace. A proof for more general connected Sidorenko
+bases would need to control the compatibility of the additional
+edges with the chosen local distributions or moments.
+
+The relative comparison for cycles is proved for $k\geq3$.
+The bound \eqref{eq:two-apices} suffices for commonness and
+rigidity with two apices, but does not imply
+$M(C_n^{+2},W)\geq2^{-2n}M(C_n,W)$ for every graphon.
+The sharp tree inequality and the weighted
+fourth-moment comparison are stronger than their commonness
+consequences and may be useful for related density problems.
+
+\appendix
+\section{Exact flag algebra certificates}\label{app:certificates}
+
+We specify the four certificate identities used in
+Lemma~\ref{lem:cert-input}. The presentation uses signed
+homomorphism densities rather than induced colored densities;
+the positivity mechanism is the rooted quadratic-form principle
+of flag algebras \cite{Razborov}. All four certificates use the
+common feature schema described below.
+
+\subsection{Targets in the signed graph algebra}
+
+Label six formal vertices $0,\ldots,5$ and order their fifteen
+unordered pairs lexicographically. A graph is encoded by the
+integer mask of its edge set; $[E]$ denotes its formal basis
+element. Evaluating a linear combination means replacing
+$[E]$ by the homomorphism density of that graph in $U$.
+Unused vertices are isolated and cause no change in evaluation.
+For an edge set $E$, put
+\[
+ \mathsf P_\eta(E)=
+ \sum_{\substack{A\subseteq E\\|A|\equiv\eta\pmod2}}[A]
+ \qquad(\eta=0,1).
+\]
+If two basis graphs have disjoint edge sets, their labeled product
+is defined by taking the union. We only use this product when no
+edge repeats.
+
+For $s=2,3$, let $I_s=\{s,s+1,s+2\}$ and define
+\begin{align*}
+ E_s&=\{ij:0\leq i<s,\ j\in I_s\}
+                    \cup\{s(s+1),s(s+2)\},\\
+ B_s&=\{ij:0\leq i<s,\ j\in\{s+1,s+2\}\}.
+\end{align*}
+Here $ij$ denotes the unordered pair $\{i,j\}$.
+The two mean targets are
+\[
+ Q_s=\mathsf P_0(E_s)-\mathsf P_0(B_s),\qquad s=2,3.
+\]
+Their evaluations are $\E\Pi_s-\E D_s^2$, by expanding the conditional
+integrals. For the weighted targets, set
+\[
+F_\eta=2\mathsf P_\eta(E_3)-\mathsf P_\eta(B_3),\quad
+ B=[01]+[02]+[12]-[01,02,12].
+\]
+Define the two weighted targets directly in this graph basis:
+\begin{align}
+ Q_-={}&3F_0-3\mathsf P_0(\{01,12,23,03\})+F_1-BF_0\notag\\
+ &\quad-13[01]-[01,02,12]-12[01,23]\notag\\
+ &\quad+4[01,23,24,34]-12[01,12,23],
+ \label{eq:target-minus}\\
+ Q_+={}&6F_0-6\mathsf P_0(\{01,12,23,03\})+F_1+BF_0\notag\\
+ &\quad-19[01]-23[01,02,12]+12[01,23]\notag\\
+ &\quad-4[01,23,24,34]-24[01,12,23].
+ \label{eq:target-plus}
+\end{align}
+The product $BF_0$ is legitimate: $B$ uses only pairs among
+$0,1,2$, while $E_3$ and $B_3$ have no such pairs.
+Evaluation sends $F_0,F_1,BF_0$ to
+$\E F,\E\varepsilon F,\E\maj F$, respectively, and sends
+$\mathsf P_0(\{01,12,23,03\})$ to $8M(C_4,W)$.
+The basis graph $[01,23,24,34]$ is a disjoint edge and triangle,
+whose density is $t(K_2,U)t(K_3,U)$.
+Consequently \eqref{eq:target-minus} and
+\eqref{eq:target-plus} evaluate to the left sides minus the
+right sides of \eqref{eq:G} and \eqref{eq:H}.
+
+\subsection{Rooted quadratic forms}
+
+Choose $r$ roots and $\ell$ further vertices. A feature graph $A$
+has no root--root edges. Its rooted density is
+\[
+ \phi_A(\mathbf z)=\int
+           \prod_{ij\in E(A)}U(x_i,x_j)\dd\mathbf x,
+\]
+where the root coordinates are fixed at $\mathbf z$ and the other
+coordinates are integrated independently. For a root type
+$t\subseteq\binom{\{0,\ldots,r-1\}}2$, let
+\[
+ p_t(\mathbf z)=2^{-\binom r2}
+       \prod_{e\in t}(1+U_e)\prod_{e\notin t}(1-U_e).
+\]
+Every factor is nonnegative when $|U|\leq1$.
+For a feature vector $\phi$ and a positive semidefinite matrix $Q$,
+the expression
+\begin{equation}\label{eq:rooted-sos}
+ \int p_t(\mathbf z)\phi(\mathbf z)^{\mathsf T}
+                      Q\phi(\mathbf z)\dd\mathbf z
+\end{equation}
+is therefore nonnegative. This remains true for $r=0$, when the
+root space has one point and $p_t=1$.
+
+Each certificate uses nineteen feature blocks, ordered as follows.
+The root-type integers are binary masks in the lexicographic
+root-pair order.
+\begin{center}
+\begin{tabular}{@{}cccl@{}}
+\toprule
+Roots $r$ & Free vertices $\ell$ & Root types $t$ & Block dimensions\\
+\midrule
+0 & 3 & 0 & 3\\
+1 & 2 & 0 & 5\\
+2 & 2 & 0, 1 & 19, 19\\
+3 & 1 & 0, 1, 3, 7 & four blocks of 7\\
+4 & 1 & $0,1,3,7,11,12,13,15,30,31,63$ & eleven blocks of 15\\
+\bottomrule
+\end{tabular}
+\end{center}
+For $r=0$, the features have edge sets $\{01\}$,
+$\{01,02\}$, and $\{01,02,12\}$, in that order.
+For $r=1,2$, order the permitted edges as
+\[
+ (0,r),(0,r+1),\ldots,(r-1,r),(r-1,r+1),(r,r+1).
+\]
+Enumerate nonempty subsets by increasing binary mask and retain
+a mask exactly when it is at most its image under swapping the
+two free vertices. These are the five and nineteen features
+specified in the table. For $r=3,4$, use every nonempty subset
+of the edges $(i,r)$, $0\leq i<r$, in increasing mask order.
+
+The common matrix denominator is
+\[
+ \mathscr D=90315258984881964711936.
+\]
+For each target, the certificate consists of nineteen integer
+matrices $A_j$ in this block order; the quadratic-form matrices
+are $A_j/\mathscr D$.
+
+\subsection{The finite identities and their verification}
+
+For a block with roots $r$ and $\ell$ free vertices, let
+$A_a'$ be a copy of feature graph $A_a$ using a disjoint set of
+free vertices and the same roots. Expanding \eqref{eq:rooted-sos}
+shows that its formal polynomial, after multiplication by
+$64\mathscr D$, is
+\begin{equation}\label{eq:block-expansion}
+ \mathcal R_j:=2^{6-\binom r2}\sum_{a,b}(A_j)_{ab}
+ \sum_{T\subseteq\binom{\{0,\ldots,r-1\}}2}
+    (-1)^{|T\setminus t_j|}
+       [T\cup E(A_a)\cup E(A_b')].
+\end{equation}
+The root edges and the two free extensions are edge-disjoint,
+which makes every monomial a simple graph. Independent integration
+of the two extensions is exactly multiplication of their rooted
+features.
+
+Let $\mathsf N$ relabel each six-vertex mask to an isomorphism
+representative and extend this map linearly. Since densities are
+invariant under relabeling, equality after applying $\mathsf N$
+implies equality of evaluations for every symmetric kernel.
+The exact certificate identity for each
+$Q\in\{Q_2,Q_3,Q_-,Q_+\}$ is
+\begin{equation}\label{eq:certificate-identity}
+ \mathsf N(64\mathscr D Q)=
+ \mathsf N\left(\sum_{j=1}^{19}\mathcal R_j\right).
+\end{equation}
+Moreover, every integer matrix $A_j$ has a rational factorization
+$A_j=L_j\diag(\delta_j)L_j^{\mathsf T}$ with $L_j$ unit lower
+triangular and all entries of $\delta_j$ strictly positive.
+Consequently $A_j/\mathscr D$ is positive definite, since
+\[
+ x^{\mathsf T}(A_j/\mathscr D)x
+   =\mathscr D^{-1}\sum_i(\delta_j)_i
+                       ((L_j^{\mathsf T}x)_i)^2\geq0.
+\]
+Combining these factorizations, \eqref{eq:block-expansion}, and
+\eqref{eq:certificate-identity} expresses each target evaluation
+as a sum of nineteen integrals of the form
+\eqref{eq:rooted-sos}. This proves Lemma~\ref{lem:cert-input}.
+
+The finite arithmetic in \eqref{eq:certificate-identity} has
+been verified by two independent exact-arithmetic calculations.
+One expands the targets and rooted quadratic forms, compares
+their coefficients on six-vertex isomorphism classes, and checks
+positive definiteness by exact leading principal minors.
+The other constructs explicit relabeling witnesses using
+adjacent transpositions and expands the polynomials by a separate
+convolution procedure. It checks all $32768$ relabeling witnesses
+and all $131072$ coefficient positions across the four targets,
+including zeros. For the $76$ matrices, rational
+$LDL^{\mathsf T}$ factorizations check $956$ positive pivots
+and reconstruct all $13708$ matrix entries exactly.
+The weighted-comparison identities and normalization calculations
+are also verified by exact arithmetic. The Lean verification
+of the three targets $Q_3,Q_-,Q_+$ is described in
+Section~\ref{sec:lean}; the two-apex Lean argument uses the
+alternative bound \eqref{eq:lean-two-apex}.
+
+\section{The finite coloring formulation}\label{app:finite}
+
+We record why \eqref{eq:common} gives the usual Ramsey
+multiplicity statement. Fix a simple graph $F$ with $v$ vertices
+and $e\geq1$ edges. From a red--blue coloring of $K_N$, form its
+red adjacency step graphon on $N$ equal intervals, assigning
+arbitrary colors on the $N$ diagonal cells. Then $N^vM(F,W)$
+counts monochromatic homomorphisms into the resulting looped
+host. At most $\binom v2N^{v-1}$ vertex maps have a collision.
+Each map can be monochromatic in at most one color, since $F$
+has an edge. Thus commonness implies at least
+\[
+ 2^{1-e}N^v-\binom v2N^{v-1}
+\]
+injective labeled monochromatic copies in every coloring.
+Conversely, the expected number in a fair independent coloring is
+$(N)_v2^{1-e}$, so some coloring has at most this many. Dividing
+by $N^v$ and letting $N\to\infty$ identifies the asymptotic
+minimum as $2^{1-e}$. The edgeless case is immediate separately.
+
+Conversely, sample a host from a graphon $W$ as in
+Lemma~\ref{lem:finite-approx} and color its present edges red and
+its absent edges blue. The same expectation and variance calculation
+applies simultaneously to the two colors, so their normalized
+injective counts converge to $t(F,W)$ and $t(F,1-W)$.
+An asymptotic lower bound of $2^{1-e}$ for every finite coloring
+therefore forces $M(F,W)\geq2^{1-e}$. This proves the equivalence
+used in the introduction.
+
+\bibliographystyle{plainurl}
+\bibliography{apices_commonness}
+\end{document}
