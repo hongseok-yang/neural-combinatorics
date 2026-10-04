@@ -125,13 +125,13 @@
 
 \section{Introduction}\label{sec:intro}
 
-Determining the asymptotic minimum density of a fixed graph $H$ at a prescribed edge density is a classical problem in extremal graph theory.
+Determining the (asymptotic) minimum density of a fixed graph $H$ at a prescribed edge density is a classical problem in extremal graph theory.
 Here subgraph densities are normalised by counting labelled copies of $H$ and dividing by $n^{|V(H)|}$, where $n$ is the number of vertices of the host graph.
-Tur\'an-type problems ask how dense a graph can be while avoiding a copy of $H$.
+A typical examples are Tur\'an-type problems, which ask how dense a graph can be while the $H$-density remains zero.
 The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
 
 
-The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces a positive density of copies of $H$.
+The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces $\Omega(1)$ $H$-density.
 More quantitatively, Sidorenko~\cite{} conjectured that for a bipartite graph $H$, the minimum $H$-density among graphs of edge density $p$ is asymptotically attained by the random graph with edge density $p$. 
 This conjecture has been proved for several classes of bipartite graphs, including even cycles~\cite{}, but remains open in general.
 
@@ -158,7 +158,7 @@ These densities are the limits of the normalised labelled copy counts along conv
 Consequently, asymptotic lower bounds on subgraph densities in finite graphs become exact inequalities for graphons.
 
 For an integer $k\ge2$, let $W_k$ denote the balanced complete $k$-partite graphon: it has $k$ parts of equal measure, takes the value $1$ between distinct parts, and takes the value $0$ within each part.
-Its edge density is $p=1-1/k$, and for every odd $m\ge3$, with $C_m$ denoting the cycle of length $m$,
+Its edge density is $p=1-1/k$, and for every odd $m\ge3$, the density of the $m$-cycle $C_m$ in $W_k$ is given by
 \begin{equation}\label{eq:intro-kpartite-value}
   \tC m{W_k}=\goal.
 \end{equation}
@@ -173,7 +173,7 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   Equality holds if and only if $W$ is equivalent to $W_k$ for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
 
-Graphon equivalence means zero cut distance; the equality cases are proved in \Cref{sec:equality-stability}.
+Graphon equivalence means zero cut distance. See ... for the detailed definition and statement.
 We also establish qualitative stability: at each density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum approach $W_k$ in cut distance (\Cref{cor:stability}).
 
 The remaining nontrivial range $1/2<p<2/3$ will be treated in a companion paper using different methods.
