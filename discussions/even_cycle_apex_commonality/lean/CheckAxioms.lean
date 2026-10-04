@@ -1,195 +1,328 @@
-import EvenCycleApex
+import ApicesCommonness
 
-/-! Axiom audit (plan §6).  Every line must read
-`depends on axioms: [propext, Classical.choice, Quot.sound]`. -/
+/-! Axiom audit of the main results and their supporting lemmas.  Every line must read
+`depends on axioms: [propext, Classical.choice, Quot.sound]` or a subset of it. -/
 
-open EvenCycleApex
+open ApicesCommonness
 
-#print axioms EvenCycleApex.exists_stepGraphon_l1_close
-#print axioms EvenCycleApex.EigenSystem.trace_pow_eq_sum
-#print axioms EvenCycleApex.trace_weighted_pow_eq_sum
+/-! ## Main results (`ApicesCommonness/Main.lean`) -/
 
--- M1: graph densities on an arbitrary probability space
-#print axioms EvenCycleApex.apexCycle_edgeCount
-#print axioms EvenCycleApex.cycleGraph_card_edgePairs
-#print axioms EvenCycleApex.colour_normalization
-#print axioms EvenCycleApex.normalizedApexDensity_eq_colour_mean
-#print axioms EvenCycleApex.normalizedCycleDensity_eq_colour_mean
-#print axioms EvenCycleApex.pairMarginal_measurePreserving
-#print axioms EvenCycleApex.integral_pair
-#print axioms EvenCycleApex.homDensity_L1_lipschitz
-#print axioms EvenCycleApex.commonalityM_L1_lipschitz
-#print axioms EvenCycleApex.homDensity_comap_equiv
+#print axioms ApicesCommonness.MainResults.trees_common
+#print axioms ApicesCommonness.MainResults.trees_two_colour
+#print axioms ApicesCommonness.MainResults.trees_one_colour
+#print axioms ApicesCommonness.MainResults.cycles_common
+#print axioms ApicesCommonness.MainResults.cycles_equality_iff
+#print axioms ApicesCommonness.MainResults.cycles_relative
 
--- M2: the weighted finite host
-#print axioms EvenCycleApex.step_homDensity_eq_host
-#print axioms EvenCycleApex.exists_host_of_isStepKernel
-#print axioms EvenCycleApex.edgeDensity_map_equiv
-#print axioms EvenCycleApex.edgeDensity_append
-#print axioms EvenCycleApex.edgeDensity_castAdd
-#print axioms EvenCycleApex.edgeDensity_eq_of_iso
-#print axioms EvenCycleApex.colour_parity_expansion
-#print axioms EvenCycleApex.edgeDensity_colour_even
-#print axioms EvenCycleApex.edgeDensity_colour_odd
-#print axioms EvenCycleApex.hostDensity_cycle_eq_trace
-#print axioms EvenCycleApex.sum_rpow_le_rpow_sum
-#print axioms EvenCycleApex.normSq_pow_le_trace_pow
-#print axioms EvenCycleApex.rayleigh_pow_le_trace_pow
-#print axioms EvenCycleApex.trace_pow_le_trace_four_rpow
-#print axioms EvenCycleApex.FiniteKernel.fourth_colour_traces
-#print axioms EvenCycleApex.FiniteKernel.basic_scalar_bounds
-#print axioms EvenCycleApex.FiniteKernel.even_cycle_lower_bound
-#print axioms EvenCycleApex.Regression.host1_scalars
-#print axioms EvenCycleApex.Regression.host1_traces
-#print axioms EvenCycleApex.Regression.host2_scalars
-#print axioms EvenCycleApex.Regression.host2_traces
-#print axioms EvenCycleApex.Regression.host3_scalars
-#print axioms EvenCycleApex.Regression.host3_traces
+/-! ## Even cycles -/
 
--- M3: conditional second spectral moments
-#print axioms EvenCycleApex.edgePairs_apexCycle
-#print axioms EvenCycleApex.hostDensity_apexCycle
-#print axioms EvenCycleApex.FiniteKernel.condQ_le_condQs
-#print axioms EvenCycleApex.FiniteKernel.condD_mul_condQs_sq
-#print axioms EvenCycleApex.FiniteKernel.condQs_le
-#print axioms EvenCycleApex.FiniteKernel.condB_condVec_normSq
-#print axioms EvenCycleApex.FiniteKernel.condVec_rayleigh
-#print axioms EvenCycleApex.FiniteKernel.hostDensity_apexCycle_eq_sum_trace
-#print axioms EvenCycleApex.FiniteKernel.conditional_trace_bound
-#print axioms EvenCycleApex.FiniteKernel.sharp_fourth_support
-#print axioms EvenCycleApex.FiniteKernel.diamond_lower_bound
+-- foundation
+#print axioms ApicesCommonness.exists_stepGraphon_l1_close
+#print axioms ApicesCommonness.EigenSystem.trace_pow_eq_sum
+#print axioms ApicesCommonness.trace_weighted_pow_eq_sum
 
--- M4: one apex, end to end
-#print axioms EvenCycleApex.FiniteKernel.E_pow_ge_rpow
-#print axioms EvenCycleApex.FiniteKernel.one_apex_bound
-#print axioms EvenCycleApex.normalizedApexDensity_step
-#print axioms EvenCycleApex.normalizedApexDensity_lipschitz
-#print axioms EvenCycleApex.one_le_normalizedApexDensity_of_hosts
-#print axioms EvenCycleApex.commonality_one_apex
-#print axioms EvenCycleApex.moment_monotone
-#print axioms EvenCycleApex.convex_two_point
-#print axioms EvenCycleApex.two_coordinate_power_comparison
-#print axioms EvenCycleApex.length_lifting_two_fourth_moments
-#print axioms EvenCycleApex.hostDensity_apexCycle_eq_xi
-#print axioms EvenCycleApex.FiniteKernel.apex_number_moment_lifting
+-- graph densities on an arbitrary probability space
+#print axioms ApicesCommonness.apexCycle_edgeCount
+#print axioms ApicesCommonness.cycleGraph_card_edgePairs
+#print axioms ApicesCommonness.colour_normalization
+#print axioms ApicesCommonness.normalizedApexDensity_eq_colour_mean
+#print axioms ApicesCommonness.normalizedCycleDensity_eq_colour_mean
+#print axioms ApicesCommonness.pairMarginal_measurePreserving
+#print axioms ApicesCommonness.integral_pair
+#print axioms ApicesCommonness.homDensity_L1_lipschitz
+#print axioms ApicesCommonness.commonalityM_L1_lipschitz
+#print axioms ApicesCommonness.homDensity_comap_equiv
 
--- M5: two apices, certificate-free (plan D10)
-#print axioms EvenCycleApex.two_apex_scalar_inequality
-#print axioms EvenCycleApex.one_lt_twoApexTheta
-#print axioms EvenCycleApex.FiniteKernel.Z_two
-#print axioms EvenCycleApex.FiniteKernel.twoApex_Pi_eq_oneApex
-#print axioms EvenCycleApex.FiniteKernel.two_apex_fourth_moment_ge_one
-#print axioms EvenCycleApex.FiniteKernel.two_apex_bound
-#print axioms EvenCycleApex.commonality_two_apices
+-- the weighted finite host
+#print axioms ApicesCommonness.step_homDensity_eq_host
+#print axioms ApicesCommonness.exists_host_of_isStepKernel
+#print axioms ApicesCommonness.edgeDensity_map_equiv
+#print axioms ApicesCommonness.edgeDensity_append
+#print axioms ApicesCommonness.edgeDensity_castAdd
+#print axioms ApicesCommonness.edgeDensity_eq_of_iso
+#print axioms ApicesCommonness.colour_parity_expansion
+#print axioms ApicesCommonness.edgeDensity_colour_even
+#print axioms ApicesCommonness.edgeDensity_colour_odd
+#print axioms ApicesCommonness.hostDensity_cycle_eq_trace
+#print axioms ApicesCommonness.sum_rpow_le_rpow_sum
+#print axioms ApicesCommonness.normSq_pow_le_trace_pow
+#print axioms ApicesCommonness.rayleigh_pow_le_trace_pow
+#print axioms ApicesCommonness.trace_pow_le_trace_four_rpow
+#print axioms ApicesCommonness.FiniteKernel.fourth_colour_traces
+#print axioms ApicesCommonness.FiniteKernel.basic_scalar_bounds
+#print axioms ApicesCommonness.FiniteKernel.even_cycle_lower_bound
+#print axioms ApicesCommonness.Regression.host1_scalars
+#print axioms ApicesCommonness.Regression.host1_traces
+#print axioms ApicesCommonness.Regression.host2_scalars
+#print axioms ApicesCommonness.Regression.host2_traces
+#print axioms ApicesCommonness.Regression.host3_scalars
+#print axioms ApicesCommonness.Regression.host3_traces
 
--- M6: certificate language and soundness (checker not yet evaluated)
-#print axioms EvenCycleApex.evalMask_relabel
-#print axioms EvenCycleApex.maskEdges_relabel
-#print axioms EvenCycleApex.edgeDensity_rooted_split
-#print axioms EvenCycleApex.evalMask_skeleton
-#print axioms EvenCycleApex.prod_one_add_subMasks
-#print axioms EvenCycleApex.sgnGo_eq
-#print axioms EvenCycleApex.typeFactor_expand
-#print axioms EvenCycleApex.typeFactor_nonneg
-#print axioms EvenCycleApex.block_nonneg
-#print axioms EvenCycleApex.factorOK_sound
-#print axioms EvenCycleApex.digits_zero
-#print axioms EvenCycleApex.list_sum_eq_of_packed
-#print axioms EvenCycleApex.accList_eq
-#print axioms EvenCycleApex.GroupCert.accRows_eq
-#print axioms EvenCycleApex.accTarget_eq
-#print axioms EvenCycleApex.GroupCert.itemSum_nonneg
-#print axioms EvenCycleApex.cert_sound
-#print axioms EvenCycleApex.cert_sound_of_totals
-#print axioms EvenCycleApex.schemas_ok
-#print axioms EvenCycleApex.schema_dims
-#print axioms EvenCycleApex.meanThree_nonneg_of_checks
-#print axioms EvenCycleApex.negMajority_nonneg_of_checks
-#print axioms EvenCycleApex.posMajority_nonneg_of_checks
+-- conditional second spectral moments
+#print axioms ApicesCommonness.edgePairs_apexCycle
+#print axioms ApicesCommonness.hostDensity_apexCycle
+#print axioms ApicesCommonness.FiniteKernel.condQ_le_condQs
+#print axioms ApicesCommonness.FiniteKernel.condD_mul_condQs_sq
+#print axioms ApicesCommonness.FiniteKernel.condQs_le
+#print axioms ApicesCommonness.FiniteKernel.condB_condVec_normSq
+#print axioms ApicesCommonness.FiniteKernel.condVec_rayleigh
+#print axioms ApicesCommonness.FiniteKernel.hostDensity_apexCycle_eq_sum_trace
+#print axioms ApicesCommonness.FiniteKernel.conditional_trace_bound
+#print axioms ApicesCommonness.FiniteKernel.sharp_fourth_support
+#print axioms ApicesCommonness.FiniteKernel.diamond_lower_bound
 
--- M7: kernel-checked certificates
-#print axioms EvenCycleApex.target_chunks
-#print axioms EvenCycleApex.cert_sound_of_chunks
-#print axioms EvenCycleApex.Checks.wit4
-#print axioms EvenCycleApex.Checks.meanThree_ldl4
-#print axioms EvenCycleApex.Checks.meanThree_acc4_10
-#print axioms EvenCycleApex.Checks.meanThree_t1
-#print axioms EvenCycleApex.Checks.meanThree_fin
-#print axioms EvenCycleApex.Checks.meanThree_nonneg
-#print axioms EvenCycleApex.Checks.neg_t6
-#print axioms EvenCycleApex.Checks.negMajority_nonneg
-#print axioms EvenCycleApex.Checks.pos_t6
-#print axioms EvenCycleApex.Checks.posMajority_nonneg
-#print axioms EvenCycleApex.three_universal_graph_inequalities
+-- one apex
+#print axioms ApicesCommonness.FiniteKernel.E_pow_ge_rpow
+#print axioms ApicesCommonness.FiniteKernel.one_apex_bound
+#print axioms ApicesCommonness.normalizedApexDensity_step
+#print axioms ApicesCommonness.normalizedApexDensity_lipschitz
+#print axioms ApicesCommonness.one_le_normalizedApexDensity_of_hosts
+#print axioms ApicesCommonness.commonality_one_apex
+#print axioms ApicesCommonness.moment_monotone
+#print axioms ApicesCommonness.convex_two_point
+#print axioms ApicesCommonness.two_coordinate_power_comparison
+#print axioms ApicesCommonness.length_lifting_two_fourth_moments
+#print axioms ApicesCommonness.hostDensity_apexCycle_eq_xi
+#print axioms ApicesCommonness.FiniteKernel.apex_number_moment_lifting
 
--- M8: three apices
-#print axioms EvenCycleApex.sum_three_apex_Pi
-#print axioms EvenCycleApex.sum_three_apex_D_sq
-#print axioms EvenCycleApex.evalPoly_parityPoly_even
-#print axioms EvenCycleApex.evalPoly_parityPoly_odd
-#print axioms EvenCycleApex.polyAt_mul
-#print axioms EvenCycleApex.FiniteKernel.J0_eq
-#print axioms EvenCycleApex.FiniteKernel.Jσ_eq
-#print axioms EvenCycleApex.FiniteKernel.JP_eq
-#print axioms EvenCycleApex.FiniteKernel.EPi_three_sub_Z_three
-#print axioms EvenCycleApex.FiniteKernel.evalPoly_polyC
-#print axioms EvenCycleApex.FiniteKernel.evalMask_MT
-#print axioms EvenCycleApex.FiniteKernel.certG_eq
-#print axioms EvenCycleApex.FiniteKernel.certH_eq
-#print axioms EvenCycleApex.FiniteKernel.weighted_certificate_inequalities
-#print axioms EvenCycleApex.FiniteKernel.Z_eq_codeg
-#print axioms EvenCycleApex.FiniteKernel.Z_three_ge
-#print axioms EvenCycleApex.FiniteKernel.reference_mean_bounds
-#print axioms EvenCycleApex.amplification_real
-#print axioms EvenCycleApex.FiniteKernel.fourth_cycle_amplification
-#print axioms EvenCycleApex.FiniteKernel.auxiliary_scalar_nonnegative
-#print axioms EvenCycleApex.FiniteKernel.abs_majority_le
-#print axioms EvenCycleApex.FiniteKernel.E_majority
-#print axioms EvenCycleApex.FiniteKernel.weighted_fourth_reference_of_nonneg
-#print axioms EvenCycleApex.FiniteKernel.weighted_fourth_reference
-#print axioms EvenCycleApex.FiniteKernel.three_apex_relative
-#print axioms EvenCycleApex.FiniteKernel.one_le_A_three
+-- two apices, certificate-free
+#print axioms ApicesCommonness.two_apex_scalar_inequality
+#print axioms ApicesCommonness.one_lt_twoApexTheta
+#print axioms ApicesCommonness.FiniteKernel.Z_two
+#print axioms ApicesCommonness.FiniteKernel.twoApex_Pi_eq_oneApex
+#print axioms ApicesCommonness.FiniteKernel.two_apex_fourth_moment_ge_one
+#print axioms ApicesCommonness.FiniteKernel.two_apex_bound
+#print axioms ApicesCommonness.commonality_two_apices
 
--- M9: every apex number; headlines H1 and H3
-#print axioms EvenCycleApex.FiniteKernel.apex_relative_host
-#print axioms EvenCycleApex.FiniteKernel.one_le_A
-#print axioms EvenCycleApex.FiniteKernel.all_even_apex_bounds
-#print axioms EvenCycleApex.normalizedCycleDensity_step
-#print axioms EvenCycleApex.normalizedCycleDensity_lipschitz
-#print axioms EvenCycleApex.le_of_step_graphons
-#print axioms EvenCycleApex.normalizedCycleDensity_le_apex_of_hosts
-#print axioms EvenCycleApex.one_le_normalizedCycleDensity
-#print axioms EvenCycleApex.commonality_all_even_all_apices
-#print axioms EvenCycleApex.apex_relative_of_three_le
-#print axioms EvenCycleApex.one_le_cycle_normalized
+-- certificate language and soundness
+#print axioms ApicesCommonness.evalMask_relabel
+#print axioms ApicesCommonness.maskEdges_relabel
+#print axioms ApicesCommonness.edgeDensity_rooted_split
+#print axioms ApicesCommonness.evalMask_skeleton
+#print axioms ApicesCommonness.prod_one_add_subMasks
+#print axioms ApicesCommonness.sgnGo_eq
+#print axioms ApicesCommonness.typeFactor_expand
+#print axioms ApicesCommonness.typeFactor_nonneg
+#print axioms ApicesCommonness.block_nonneg
+#print axioms ApicesCommonness.factorOK_sound
+#print axioms ApicesCommonness.digits_zero
+#print axioms ApicesCommonness.list_sum_eq_of_packed
+#print axioms ApicesCommonness.accList_eq
+#print axioms ApicesCommonness.GroupCert.accRows_eq
+#print axioms ApicesCommonness.accTarget_eq
+#print axioms ApicesCommonness.GroupCert.itemSum_nonneg
+#print axioms ApicesCommonness.cert_sound
+#print axioms ApicesCommonness.cert_sound_of_totals
+#print axioms ApicesCommonness.schemas_ok
+#print axioms ApicesCommonness.schema_dims
+#print axioms ApicesCommonness.meanThree_nonneg_of_checks
+#print axioms ApicesCommonness.negMajority_nonneg_of_checks
+#print axioms ApicesCommonness.posMajority_nonneg_of_checks
 
--- M10: equality; headline H2
-#print axioms EvenCycleApex.finite_spectral_remainder_interpolation
-#print axioms EvenCycleApex.finite_fourth_trace_from_even_trace
-#print axioms EvenCycleApex.FiniteKernel.R_four_le_fourthBound
-#print axioms EvenCycleApex.le_of_step_graphons_cont
-#print axioms EvenCycleApex.le_of_hosts_cont
-#print axioms EvenCycleApex.signedDensity_lipschitz
-#print axioms EvenCycleApex.colourDensity_lipschitz
-#print axioms EvenCycleApex.graphonScalars_step
-#print axioms EvenCycleApex.graphonC_eq_integral_sq
-#print axioms EvenCycleApex.integral_U_mul_eq_zero
-#print axioms EvenCycleApex.signedKernel_ae_zero_of_graphonC
-#print axioms EvenCycleApex.graphon_half_of_graphonC_zero
-#print axioms EvenCycleApex.homDensity_congr_ae
-#print axioms EvenCycleApex.commonalityM_of_half
-#print axioms EvenCycleApex.one_apex_graphon_bound
-#print axioms EvenCycleApex.two_apex_graphon_bound
-#print axioms EvenCycleApex.all_even_graphon_apex_bounds
-#print axioms EvenCycleApex.even_cycle_equality_iff_constant
-#print axioms EvenCycleApex.commonality_equality_iff_constant
-#print axioms EvenCycleApex.R_four_graphon
-#print axioms EvenCycleApex.fourth_signed_cycle_zero_iff
+-- kernel-checked certificates
+#print axioms ApicesCommonness.target_chunks
+#print axioms ApicesCommonness.cert_sound_of_chunks
+#print axioms ApicesCommonness.Checks.wit4
+#print axioms ApicesCommonness.Checks.meanThree_ldl4
+#print axioms ApicesCommonness.Checks.meanThree_acc4_10
+#print axioms ApicesCommonness.Checks.meanThree_t1
+#print axioms ApicesCommonness.Checks.meanThree_fin
+#print axioms ApicesCommonness.Checks.meanThree_nonneg
+#print axioms ApicesCommonness.Checks.neg_t6
+#print axioms ApicesCommonness.Checks.negMajority_nonneg
+#print axioms ApicesCommonness.Checks.pos_t6
+#print axioms ApicesCommonness.Checks.posMajority_nonneg
+#print axioms ApicesCommonness.three_universal_graph_inequalities
 
--- M11: the blueprint's declaration names (plan §6)
-#print axioms EvenCycleApex.FiniteKernel.spectral_trace_bounds
-#print axioms EvenCycleApex.apex_number_moment_lifting
-#print axioms EvenCycleApex.positive_diagonal_factorization_sound
-#print axioms EvenCycleApex.graph_normalization_sound
-#print axioms EvenCycleApex.rooted_quadratic_expansion
-#print axioms EvenCycleApex.all_certificate_checks
+-- three apices
+#print axioms ApicesCommonness.sum_three_apex_Pi
+#print axioms ApicesCommonness.sum_three_apex_D_sq
+#print axioms ApicesCommonness.evalPoly_parityPoly_even
+#print axioms ApicesCommonness.evalPoly_parityPoly_odd
+#print axioms ApicesCommonness.polyAt_mul
+#print axioms ApicesCommonness.FiniteKernel.J0_eq
+#print axioms ApicesCommonness.FiniteKernel.Jσ_eq
+#print axioms ApicesCommonness.FiniteKernel.JP_eq
+#print axioms ApicesCommonness.FiniteKernel.EPi_three_sub_Z_three
+#print axioms ApicesCommonness.FiniteKernel.evalPoly_polyC
+#print axioms ApicesCommonness.FiniteKernel.evalMask_MT
+#print axioms ApicesCommonness.FiniteKernel.certG_eq
+#print axioms ApicesCommonness.FiniteKernel.certH_eq
+#print axioms ApicesCommonness.FiniteKernel.weighted_certificate_inequalities
+#print axioms ApicesCommonness.FiniteKernel.Z_eq_codeg
+#print axioms ApicesCommonness.FiniteKernel.Z_three_ge
+#print axioms ApicesCommonness.FiniteKernel.reference_mean_bounds
+#print axioms ApicesCommonness.amplification_real
+#print axioms ApicesCommonness.FiniteKernel.fourth_cycle_amplification
+#print axioms ApicesCommonness.FiniteKernel.auxiliary_scalar_nonnegative
+#print axioms ApicesCommonness.FiniteKernel.abs_majority_le
+#print axioms ApicesCommonness.FiniteKernel.E_majority
+#print axioms ApicesCommonness.FiniteKernel.weighted_fourth_reference_of_nonneg
+#print axioms ApicesCommonness.FiniteKernel.weighted_fourth_reference
+#print axioms ApicesCommonness.FiniteKernel.three_apex_relative
+#print axioms ApicesCommonness.FiniteKernel.one_le_A_three
+
+-- every apex number; commonness and the relative bound
+#print axioms ApicesCommonness.FiniteKernel.apex_relative_host
+#print axioms ApicesCommonness.FiniteKernel.one_le_A
+#print axioms ApicesCommonness.FiniteKernel.all_even_apex_bounds
+#print axioms ApicesCommonness.normalizedCycleDensity_step
+#print axioms ApicesCommonness.normalizedCycleDensity_lipschitz
+#print axioms ApicesCommonness.le_of_step_graphons
+#print axioms ApicesCommonness.normalizedCycleDensity_le_apex_of_hosts
+#print axioms ApicesCommonness.one_le_normalizedCycleDensity
+#print axioms ApicesCommonness.commonality_all_even_all_apices
+#print axioms ApicesCommonness.apex_relative_of_three_le
+#print axioms ApicesCommonness.one_le_cycle_normalized
+
+-- the equality case
+#print axioms ApicesCommonness.finite_spectral_remainder_interpolation
+#print axioms ApicesCommonness.finite_fourth_trace_from_even_trace
+#print axioms ApicesCommonness.FiniteKernel.R_four_le_fourthBound
+#print axioms ApicesCommonness.le_of_step_graphons_cont
+#print axioms ApicesCommonness.le_of_hosts_cont
+#print axioms ApicesCommonness.signedDensity_lipschitz
+#print axioms ApicesCommonness.colourDensity_lipschitz
+#print axioms ApicesCommonness.graphonScalars_step
+#print axioms ApicesCommonness.graphonC_eq_integral_sq
+#print axioms ApicesCommonness.integral_U_mul_eq_zero
+#print axioms ApicesCommonness.signedKernel_ae_zero_of_graphonC
+#print axioms ApicesCommonness.graphon_half_of_graphonC_zero
+#print axioms ApicesCommonness.homDensity_congr_ae
+#print axioms ApicesCommonness.commonalityM_of_half
+#print axioms ApicesCommonness.one_apex_graphon_bound
+#print axioms ApicesCommonness.two_apex_graphon_bound
+#print axioms ApicesCommonness.all_even_graphon_apex_bounds
+#print axioms ApicesCommonness.even_cycle_equality_iff_constant
+#print axioms ApicesCommonness.commonality_equality_iff_constant
+#print axioms ApicesCommonness.R_four_graphon
+#print axioms ApicesCommonness.fourth_signed_cycle_zero_iff
+
+-- restatements (Cycles/BlueprintNames.lean)
+#print axioms ApicesCommonness.FiniteKernel.spectral_trace_bounds
+#print axioms ApicesCommonness.apex_number_moment_lifting
+#print axioms ApicesCommonness.positive_diagonal_factorization_sound
+#print axioms ApicesCommonness.graph_normalization_sound
+#print axioms ApicesCommonness.rooted_quadratic_expansion
+#print axioms ApicesCommonness.all_certificate_checks
+
+/-! ## Trees -/
+
+-- the imported transfer pipeline
+#print axioms ApicesCommonness.smoke_density_near_host
+
+-- apex graphs and recursive trees
+#print axioms ApicesCommonness.apexCycle_eq_apexGraph
+#print axioms ApicesCommonness.edgePairs_apexGraph
+#print axioms ApicesCommonness.prod_edgePairs_apexGraph
+#print axioms ApicesCommonness.apexGraph_edgeCount
+#print axioms ApicesCommonness.apexGraph_connected
+#print axioms ApicesCommonness.apexGraph_comap
+#print axioms ApicesCommonness.edgePairs_K₂
+#print axioms ApicesCommonness.edgePairs_P₃
+#print axioms ApicesCommonness.edgePairs_K₃
+#print axioms ApicesCommonness.edgePairs_treeGraph
+#print axioms ApicesCommonness.prod_edgePairs_treeGraph
+#print axioms ApicesCommonness.eq_treeParent_of_adj
+#print axioms ApicesCommonness.exists_recTree_iso
+#print axioms ApicesCommonness.homDensity_apexGraph_of_iso
+#print axioms ApicesCommonness.homDensity_tree_of_iso
+
+-- hosts and scalars
+#print axioms ApicesCommonness.ProbHost.hostDens_K₂_eq
+#print axioms ApicesCommonness.ProbHost.hostDens_P₃_eq
+#print axioms ApicesCommonness.ProbHost.hostDens_K₃_eq
+#print axioms ApicesCommonness.ProbHost.tri_le_deg_sq
+#print axioms ApicesCommonness.ProbHost.cod_pos_of
+#print axioms ApicesCommonness.hostDens_apexGraph_treeGraph
+#print axioms ApicesCommonness.ProbHost.hostDens_double_of_connected
+#print axioms ApicesCommonness.ProbHost.Mh_K₂
+#print axioms ApicesCommonness.ProbHost.sigma_eq
+#print axioms ApicesCommonness.ProbHost.tau_eq
+#print axioms ApicesCommonness.ProbHost.host_half_le_sigma
+#print axioms ApicesCommonness.ProbHost.host_goodman_identity
+#print axioms ApicesCommonness.ProbHost.regHost₁_E
+#print axioms ApicesCommonness.ProbHost.regHost₁_D
+#print axioms ApicesCommonness.ProbHost.regHost₁_R
+#print axioms ApicesCommonness.ProbHost.regHost₁_sigma
+#print axioms ApicesCommonness.ProbHost.regHost₁_tau
+#print axioms ApicesCommonness.ProbHost.regHost₂_E
+#print axioms ApicesCommonness.ProbHost.regHost₂_D
+#print axioms ApicesCommonness.ProbHost.regHost₂_R
+#print axioms ApicesCommonness.ProbHost.regHost₂_sigma
+#print axioms ApicesCommonness.ProbHost.regHost₂_tau
+
+-- relative entropy and the generic tree extension
+#print axioms ApicesCommonness.relEnt_one
+#print axioms ApicesCommonness.relEnt_le_log_sum
+#print axioms ApicesCommonness.relEnt_nonpos_of_law
+#print axioms ApicesCommonness.relEnt_prod
+#print axioms ApicesCommonness.relEnt_equiv
+#print axioms ApicesCommonness.SymLaw.treeLaw_sum
+#print axioms ApicesCommonness.SymLaw.treeLaw_marginal
+#print axioms ApicesCommonness.SymLaw.treeLaw_support
+#print axioms ApicesCommonness.SymLaw.relEnt_treeLaw
+#print axioms ApicesCommonness.SymLaw.relEnt_book_add_le_log
+
+-- the triangle and the book
+#print axioms ApicesCommonness.ProbHost.h_ge
+#print axioms ApicesCommonness.ProbHost.I_le
+#print axioms ApicesCommonness.ProbHost.relEnt_book
+#print axioms ApicesCommonness.ProbHost.g_eq
+#print axioms ApicesCommonness.ProbHost.sum_marg_page
+#print axioms ApicesCommonness.ProbHost.pages_kl
+#print axioms ApicesCommonness.ProbHost.g_ge
+
+-- the finite counting inequality
+#print axioms ApicesCommonness.ProbHost.finite_counting_inequality
+
+-- two colours and commonness on hosts
+#print axioms ApicesCommonness.ProbHost.double_E
+#print axioms ApicesCommonness.ProbHost.double_D
+#print axioms ApicesCommonness.ProbHost.double_R
+#print axioms ApicesCommonness.ProbHost.vertex_balance
+#print axioms ApicesCommonness.ProbHost.host_two_colour_polynomial
+#print axioms ApicesCommonness.ProbHost.commonness_scalar
+#print axioms ApicesCommonness.ProbHost.host_commonness
+#print axioms ApicesCommonness.ProbHost.hostDens_star
+#print axioms ApicesCommonness.ProbHost.host_star_commonness
+
+-- transfer and headlines
+#print axioms ApicesCommonness.homDensity_cont
+#print axioms ApicesCommonness.commonalityM_cont
+#print axioms ApicesCommonness.commonalityM_step
+#print axioms ApicesCommonness.treeGraph_apex_one_colour
+#print axioms ApicesCommonness.treeGraph_apex_two_colour_polynomial
+#print axioms ApicesCommonness.treeGraph_star_common
+#print axioms ApicesCommonness.tree_apex_one_colour
+#print axioms ApicesCommonness.tree_apex_two_colour_polynomial
+#print axioms ApicesCommonness.half_le_commonalityM_path
+#print axioms ApicesCommonness.goodman_identity
+#print axioms ApicesCommonness.tree_apex_two_colour
+#print axioms ApicesCommonness.tree_apex_common
+#print axioms ApicesCommonness.tree_apex_one_colour'
+#print axioms ApicesCommonness.tree_apex_two_colour_polynomial'
+
+-- trees themselves: Sidorenko and commonness
+#print axioms ApicesCommonness.ProbHost.relEnt_edge
+#print axioms ApicesCommonness.ProbHost.edge_condRelEnt_ge
+#print axioms ApicesCommonness.ProbHost.host_tree_sidorenko'
+#print axioms ApicesCommonness.ProbHost.host_tree_common
+#print axioms ApicesCommonness.tree_sidorenko
+#print axioms ApicesCommonness.tree_common
+
+-- restatements (Trees/PaperNames.lean)
+#print axioms ApicesCommonness.hostDensity_apexGraph_treeGraph
+#print axioms ApicesCommonness.hostDensity_double_of_connected
+#print axioms ApicesCommonness.host_goodman_identity
+#print axioms ApicesCommonness.host_half_le_sigma
+#print axioms ApicesCommonness.h_ge
+#print axioms ApicesCommonness.I_le
+#print axioms ApicesCommonness.relEnt_book
+#print axioms ApicesCommonness.g_ge
+#print axioms ApicesCommonness.relEnt_treeLaw
+#print axioms ApicesCommonness.finite_counting_inequality
+#print axioms ApicesCommonness.host_two_colour_polynomial
+#print axioms ApicesCommonness.commonness_scalar
+#print axioms ApicesCommonness.host_commonness
+#print axioms ApicesCommonness.host_star_commonness

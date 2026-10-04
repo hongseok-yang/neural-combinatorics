@@ -1143,17 +1143,17 @@ almost everywhere, and equality follows.
 
 \section{Relation to the Lean formalization}\label{sec:lean}
 
-The Lean libraries \code{TreeApex} and \code{EvenCycleApex}
-are developed with Lean~4 \cite{Lean4} and
+The Lean library \code{ApicesCommonness}
+is developed with Lean~4 \cite{Lean4} and
 mathlib \cite{Mathlib}; both dependencies are pinned to version
 \code{v4.31.0}. The comparison below uses the theorem statements
-and proof dependencies in these libraries.
+and proof dependencies in this library.
 
 \subsection{Statements and common foundations}
 
 The principal declarations correspond to the main results as follows.
-Names in the first two rows belong to \code{TreeApex}; those in
-the remaining rows belong to \code{EvenCycleApex}.
+Names in the first two rows belong to its part \code{Trees}; those in
+the remaining rows belong to its part \code{Cycles}.
 \begin{center}
 \small
 \begin{tabular}{@{}p{0.34\textwidth}p{0.62\textwidth}@{}}
@@ -1181,7 +1181,7 @@ its parameter counts vertices. The constants are written as
 $4/2^{(k+1)n}$ for trees and $2/2^{n(k+1)}$ for cycles, which
 equal the bounds in Theorems~\ref{thm:trees} and~\ref{thm:cycles}.
 
-Both libraries prove finite inequalities for weighted hosts:
+Both parts prove finite inequalities for weighted hosts:
 nonnegative vertex weights sum to one, and the kernel may have
 nonzero diagonal entries. Zero-weight vertices are allowed.
 These hosts represent step graphons on finite measurable
@@ -1197,7 +1197,7 @@ cycle densities.
 
 The paper and the formalization use the same relative-entropy
 framework on weighted hosts. The definition \code{relEnt} in
-\code{TreeApex/Entropy/RelEnt.lean} is
+\code{Trees/Entropy/RelEnt.lean} is
 $\mathcal H_\rho(p)$ from \eqref{eq:relative-entropy}, and its
 support hypothesis ensures that every logarithm with positive
 probability has a positive argument. Both proofs obtain Gibbs'
@@ -1238,7 +1238,7 @@ is performed on the weighted host $\{0,1\}\times V$, with weights
 $w_x/2$ on each copy, before transfer to graphons. This is the
 finite version of \eqref{eq:disjoint-colors}. The same generic
 extension also proves the tree Sidorenko inequality in
-\code{TreeApex/Appendix/Sidorenko.lean}.
+\code{Trees/Appendix/Sidorenko.lean}.
 
 \subsection{Cycle certificates and the two-apex case}
 
@@ -1246,7 +1246,7 @@ The three-apex argument follows the conditional spectral moments,
 majority weights, and lifting steps of Section~\ref{sec:cycles}.
 Its certificate input consists of exactly three targets:
 $Q_3$, $Q_-$, and $Q_+$ from Appendix~\ref{app:certificates}.
-In \code{EvenCycleApex/Certificate/Targets.lean}, these are
+In \code{Cycles/Certificate/Targets.lean}, these are
 constructed from their literal edge sets independently of the
 certificate matrices. The checker verifies rational
 $LDL^{\mathsf T}$ factorizations of the $57$ matrices in these
@@ -1319,17 +1319,18 @@ at constant graphons follow from \code{homDensity_const}, but
 are not stated as separate tree headline theorems.
 The random-sampling lemma and the equivalence with finite
 Ramsey multiplicity in Appendix~\ref{app:finite} are not part
-of either Lean development. The audit files
-\code{CheckAxioms.lean} and \code{CheckAxiomsTree.lean} check
+of the Lean library. The audit file
+\code{CheckAxioms.lean} checks
 the dependencies of the main results and their supporting
-lemmas; their outputs contain only \code{propext},
+lemmas; its output contains only \code{propext},
 \code{Classical.choice}, and \code{Quot.sound}, or subsets
 thereof. In particular, the audited results depend on neither
 unproved placeholders nor an axiom for native computation.
-The checks \code{CheckStatementsTree.lean} and
-\code{CheckImportsTree.lean} additionally verify the tree
-statement signatures and the absence of cycle certificate
-modules from the tree library's import closure.
+The file \code{Main.lean} states
+Theorems~\ref{thm:trees}, \ref{thm:tree-one-color}
+and~\ref{thm:cycles} in full, and the check
+\code{CheckImports.lean} verifies that the parts \code{Trees} and
+\code{Cycles} import nothing from each other.
 
 \section{Further directions}
 
