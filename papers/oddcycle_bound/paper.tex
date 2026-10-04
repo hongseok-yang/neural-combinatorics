@@ -2506,18 +2506,23 @@ the revision of the argument following \Cref{lem:pge23-ell-negative} using
 \Cref{lem:pge23-gamma-moment}.
 The authors independently verified the written proof.
 
-The authors guided the Lean formalisation of the proof, which was carried
-out with assistance from Claude Fable 5.1 and Claude Opus 4.8.
-They checked the Lean formalisation and verified that its definitions and
+Claude Fable 5.1 and Claude Opus 4.8 assisted with the Lean formalisation of the proof, under the authors' guidance.
+The authors checked the Lean formalisation and verified that its definitions and
 theorem statements agreed with those in the paper.
 GPT 5.6 Sol and Claude Opus 4.8 also assisted with drafting and revising
 the manuscript.
-The authors take full responsibility for the content of the paper.
 
 \paragraph{Lean formalisation}
-The formalisation code is available at \url{https://github.com/mekty2012/OddCycleGoodman}.
-The equality and stability consequences in \Cref{sec:equality-stability} are not included in the formal verification reported here.
-\tk{TODO: Write here about deviation that lean verification and current proof.}
+The proof of \Cref{thm:main,cor:kpartite,thm:commonality} are formalised in Lean 4, and the proof of \Cref{cor:stability} is not formalised.
+The formalisation is available at \url{https://github.com/mekty2012/OddCycleGoodman}, and this repository also contains a proof of \Cref{thm:main} for $1/2 \le p < 2/3$, which is not described in this paper.
+
+There are some deviations between the formalisation and the paper.
+First, instead of reducing to step graphons and their matrices (\Cref{lem:step-reduction}), we work with integral operators throughout.
+The measure $\mu$ is replaced by a finitely supported measure with the moments $g^{\mathsf T}A^jg$ for $j\le m$, which is all the argument uses; this measure comes from the spectral theorem applied to the compression of $A$ to the Krylov subspace spanned by $g,Ag,\ldots,A^mg$.
+Second, we prove \Cref{lem:pge23-beta} from a Beta representation of $h_j(a^{\times s},b^{\times t})$ for all $s,t\ge1$, obtained by binomial expansion and termwise Beta integrals; the case $(s,t)=(r+1,r)$ gives the term $h_{n-1}(q^{\times(r+1)},\lambda^{\times r})$.
+Third, we prove \Cref{prop:main-equality} by applying $q$-regularity and the Cauchy--Schwarz inequality to the cycle densities $\tC nU$, viewed as Hilbert--Schmidt inner products of powers of $\Tker U$; the equality cases give $U^2=U$ almost everywhere and \eqref{eq:equal-neighbourhoods} directly.
+Last, in the proof of \Cref{lem:pge23-gamma-moment}, $H'$ is computed directly from the moment recurrence, and we prove $L(t)<0$ by splitting $(0,\infty)$ into a few intervals and using tangent-line bounds for the logarithm on each.
+
 
 \paragraph{Acknowledgements}
 We would like to thank Gyeongwon Jeong, Jang Soo Kim, Sangho Lim, and
