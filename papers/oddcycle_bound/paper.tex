@@ -170,27 +170,38 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   \begin{equation}\label{eq:intro-main}
     \tC mW\ge\goal.
   \end{equation}
-  Equality holds if and only if $W$ is equivalent to $W_k$ for some integer $k\ge3$, or $W\equiv1$.
+  Equality holds if and only if $W$ is equal to $W_k$ up to relabeling for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
 
-Graphon equivalence means zero cut distance. See ... for the detailed definition and statement.
-We also establish qualitative stability: at each density $1-1/k$ with $k\ge3$, graphons whose $C_m$-densities approach the minimum approach $W_k$ in cut distance (\Cref{cor:stability}).
+We also establish qualitative stability in cut-distance (See Section ... for formal definition).
+
+\begin{theorem}[Qualitative stability]\label{cor:stability}
+  Fix an odd integer $m\ge3$.
+  For every integer $k\ge3$ and every $\varepsilon>0$, there exists $\delta>0$ such that every graphon $V$ satisfying
+  \[
+    \bigl|\edens V-(1-1/k)\bigr|\le\delta,
+    \qquad
+    \tC mV\le\tC m{W_k}+\delta
+  \]
+  satisfies $\delta_\square(V,W_k)<\varepsilon$.
+\end{theorem}
 
 The remaining nontrivial range $1/2<p<2/3$ will be treated in a companion paper using different methods.
 For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
 
-\paragraph{Strengthened extended commonality.}
+\subsection{Extended Commonality}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
-This inequality strengthens a density-sensitive form of \emph{commonality} for odd cycles.
-A graph $H$ with $e(H)$ edges is common if
+For a graph $H$, we say that $H$ is \emph{common} if the random red-blue colouring of $E(K_n)$ asymptotically minimises the number of monochromatic copies of $H$.
+In the graphon setting, this notion translates to the inequality
 \[
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
 \]
 for every graphon $W$.
-Here $W$ and $1-W$ represent the probabilities of colouring an edge red or blue, respectively; the inequality says that the uniform random colouring asymptotically minimises the number of monochromatic copies of $H$.
-Goodman's theorem shows that the triangle is common.
-Thomason~\cite{thomason1989disproof} showed that $K_4$ is not common, disproving conjectures of Erd\H os~\cite{erdos1962number} and of Burr and Rosta~\cite{burr1980ramsey}; Jagger, \v{S}\v{t}ov\'{\i}\v{c}ek, and Thomason~\cite{jagger1996multiplicities} later proved that no graph containing $K_4$ is common.
-Sidorenko~\cite{sidorenko1989cycles} proved that every cycle is common.
+The notion of common graphs has been extensively studied in extremal combinatorics. 
+Goodman proved that the triangle is common.
+A famous conjecture by Erd\H{o}s states that all complete graphs are common and Burr and Rosta~\cite{burr1980ramsey} strengthened by conjecturing that all graphs are common.
+This was later disproved by Thomason~\cite{thomason1989disproof}, who showed that $K_4$ is not common.
+Many other graphs have been studied to be common or not common~\cite{jagger1996multiplicities, sidorenko1989cycles}, but the complete classification remains open.
 
 Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
@@ -200,6 +211,7 @@ This answers a question of Sidorenko~\cite{sidorenko1989cycles}.
 It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison, and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
+
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
@@ -208,7 +220,11 @@ For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:int
   \begin{equation}\label{eq:intro-commonality}
     \tC mW+\tC m{1-W}\ge p^m+(1-p)^m+\bigl[\tP{m-1}{1-W}-(1-p)^{m-1}\bigr].
   \end{equation}
+  Furthermore, equality holds if and only if $W$ is $p$-regular, meaning that $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
 \end{theorem}
+\textcolor{red}{SI:working here}
+
+
 
 The Blakley-Roy inequality~\cite{blakley1965holder} (independently proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
 Thus, the path-density correction is nonnegative, and \eqref{eq:intro-commonality} strengthens extended commonality.
@@ -2295,9 +2311,9 @@ complete multipartite graphon.
 
 At $p=1$, the only graphon is $W=1$ almost everywhere, which attains equality
 in the odd-cycle Goodman bound \eqref{eq:intro-main} of \Cref{thm:main}.
-This completes the uniqueness assertion in \Cref{thm:main}.
+This completes the equality assertion in \Cref{thm:main}.
 
-To state stability, recall the cut norm and cut distance:
+For the stability proof, we use the cut norm and cut distance:
 \[
   \norm F_\square=\sup_{S,T\subseteq[0,1]}
     \left|\int_{S\times T}F(x,y)\ddxy\right|,
@@ -2308,18 +2324,8 @@ Here $S,T$ are measurable, $\varphi$ ranges over measure-preserving bijections o
 Graphons at zero cut distance are called \emph{equivalent}.
 The space of graphons modulo this equivalence is compact in cut distance, and homomorphism densities are continuous in this metric~\cite{borgs2008convergent,lovasz2012large}.
 
-\begin{corollary}[Qualitative stability]\label{cor:stability}
+\begin{proof}[Proof of the stability assertion in \Cref{cor:stability}]
   Fix an odd integer $m\ge3$ and an integer $k\ge3$, and set $p_k=1-1/k$.
-  For every $\varepsilon>0$, there exists $\delta>0$ such that every graphon $W$ with
-  \[
-    \bigl|\edens W-p_k\bigr|\le\delta,
-    \qquad
-    \tC mW\le p_k^m-p_k(1-p_k)^{m-1}+\delta
-  \]
-  satisfies $\delta_\square(W,W_k)<\varepsilon$.
-\end{corollary}
-
-\begin{proof}
   Suppose the conclusion fails for some $\varepsilon>0$.
   Taking $\delta=1/j$ for $j\in\mathbb N$ produces graphons $W^{(j)}$ with
   \[
@@ -2491,7 +2497,7 @@ GPT 5.6 Sol and Claude Opus 4.8 also assisted with drafting and revising
 the manuscript.
 
 \paragraph{Lean formalisation}
-The proof of \Cref{thm:main,thm:commonality,prop:main-equality} are formalised in Lean 4, and the proof of \Cref{cor:stability} is not formalised.
+The proofs of \Cref{thm:main,thm:commonality,prop:main-equality} are formalised in Lean 4, while the stability assertion in \Cref{cor:stability} is not formalised.
 The formalisation is available at \url{https://github.com/mekty2012/OddCycleGoodman-lean}, and this repository also contains a proof of \Cref{thm:main} for $1/2 \le p < 2/3$, which is not described in this paper.
 
 There are some deviations between the formalisation and the paper.
