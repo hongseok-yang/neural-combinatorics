@@ -170,7 +170,7 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   Equality holds if and only if $W$ is equal to $W_k$ up to relabeling for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
 
-We also establish qualitative stability in cut-distance (See Section ... for formal definition of $\delta_\square$).
+We also establish qualitative stability in cut-distance (See Section \textcolor{red}{ToDo: Add} for formal definition of $\delta_\square$).
 
 \begin{theorem}[Qualitative stability]\label{cor:stability}
   Fix an odd integer $m\ge3$.
@@ -239,13 +239,15 @@ By \Cref{thm:commonality}, this means that $W$ is $p$-regular and $\tC m{1-W}=\t
 For $p<1$, these conditions force $1-W$ to be a union of equal cliques, as proved in \Cref{prop:main-equality}, giving the balanced complete multipartite graphons $W_k$ with $k\ge3$.
 At $p=1$, $W\equiv1$ almost everywhere and equality holds; the multipartite density formula \eqref{eq:intro-kpartite-value} establishes the converse for $W_k$.
 
-We also remark that \Cref{thm:commonality} is proved for all range of $p\in[0,1]$ for $m \in \{3, 5, 7\}$ (See Section~\ref{sec:short-cycles}) and thus \Cref{thm:main} holds for these values of $m$ as well.
+For $m\in\{3,5,7\}$, the explicit calculations in \Cref{sec:short-cycles} prove the inequality in \Cref{thm:commonality} for all $p\ge1/2$.
+Therefore, the lower bound in \Cref{thm:main} holds for every $p\in[0,1]$ for $C_3, C_5,$ and $C_7$.
 On the other hand, there is a counter example for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for all range of $p\in[0,1]$, one needs a different approach.
 See Section~\ref{sec:conclusion} for the detailed discussion.
 
 \subsection{Proof strategy: four reductions}
 Our proof strategy can be summarized as four reductions that simplify the problem while preserving the essential structure of the inequality.
 Before introducing the reductions, we set up some preliminary observations.
+
 Let $\Tker W$ denote the integral operator with kernel $W$, formally defined in \Cref{sec:matrix-reduction}.
 The trace formula expresses the two cycle densities as
 \[
@@ -282,17 +284,12 @@ For either $T=\Tker W$ or $T=\Tker{1-W}$, the trace decomposes as
 \]
 The first term retains only the constant component, the second retains only the zero-average component, and the final sum includes every sequence using both components.
 For $\Tker W$ and $\Tker{1-W}$, the first contributions sum to $p^m+(1-p)^m$, while the second contributions cancel for odd $m$.
-It therefore remains to show that the two sums involving both components together are at least the path-density correction.
-We carry out this decomposition using finite-matrix representations of
-\emph{step graphons}: graphons that are constant on each product of two
-parts of a finite measurable partition of $[0,1]$.
-Here a finite measurable partition means finitely many disjoint measurable
-sets whose union is $[0,1]$.
-An approximation argument gives the result for general graphons.
+It therefore remains to show that the two sums involving both components together are at least the path-density term.
+We handle these mixed trace terms by approximating $W$ in $L^1$ by step graphons and using finite-matrix calculations (\Cref{lem:step-reduction}).
 
 \paragraph{Step 2: Excursion expansion.}
 We reduce this comparison to polynomial nonnegativity.
-For such a step graphon, the trace decomposition from the first step gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
+Grouping the mixed trace terms into excursions gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
 \[
   \begin{aligned}
     & \Bigl(\tC mW+\tC m{1-W}-p^m-(1-p)^m\Bigr)
