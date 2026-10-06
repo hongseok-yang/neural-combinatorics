@@ -2485,16 +2485,16 @@ computations and a week of interactive proof search with GPT 5.5,
 GPT 5.5 Pro, and Claude Fable 5.0.
 The authors also suggested directions for simplifying the proof and seeking
 a combinatorial interpretation.
-GPT 5.5 Pro assisted with the subsequent simplification and exposition of
-the argument, including the introduction of the excursion-based proof and
+GPT 5.5 Pro and GPT 6.0 Astra assisted with the subsequent simplification and exposition of
+the argument, including the introduction of the excursion-based proof,
 the revision of the argument following \Cref{lem:pge23-ell-negative} using
-\Cref{lem:pge23-gamma-moment}.
+\Cref{lem:pge23-gamma-moment}, and the results on equality and stability.
 The authors independently verified the written proof.
 
 Claude Fable 5.1 and Claude Opus 4.8 assisted with the Lean formalisation of the proof, under the authors' guidance.
 The authors checked the Lean formalisation and verified that its definitions and
 theorem statements agreed with those in the paper.
-GPT 5.6 Sol and Claude Opus 4.8 also assisted with drafting and revising
+GPT 5.6 Sol, GPT 6.0 Astra, and Claude Opus 4.8 also assisted with drafting and revising
 the manuscript.
 
 \paragraph{Lean formalisation}
@@ -2502,11 +2502,11 @@ The proofs of \Cref{thm:main,thm:commonality,prop:main-equality} are formalised 
 The formalisation is available at \url{https://github.com/mekty2012/OddCycleGoodman-lean}, and this repository also contains a proof of \Cref{thm:main} for $1/2 \le p < 2/3$, which is not described in this paper.
 
 There are some deviations between the formalisation and the paper.
-First, instead of reducing to step graphons and their matrices (\Cref{lem:step-reduction}), we work with integral operators throughout.
+First, instead of reducing to step graphons and their matrices (\Cref{lem:step-reduction}), we work with integral operators in the formalisation.
 The measure $\mu$ is replaced by a finitely supported measure with the moments $g^{\mathsf T}A^jg$ for $j\le m$, which is all the argument uses; this measure comes from the spectral theorem applied to the compression of $A$ to the Krylov subspace spanned by $g,Ag,\ldots,A^mg$.
 Second, we prove \Cref{lem:pge23-beta} from a Beta representation of $h_j(a^{\times s},b^{\times t})$ for all $s,t\ge1$, obtained by binomial expansion and termwise Beta integrals; the case $(s,t)=(r+1,r)$ gives the term $h_{n-1}(q^{\times(r+1)},\lambda^{\times r})$.
 Third, we prove \Cref{prop:main-equality} by applying $q$-regularity and the Cauchy--Schwarz inequality to the cycle densities $\tC nU$, viewed as Hilbert--Schmidt inner products of powers of $\Tker U$; the equality cases give $U^2=U$ almost everywhere and \eqref{eq:equal-neighbourhoods} directly.
-Last, in the proof of \Cref{lem:pge23-gamma-moment}, $H'$ is computed directly from the moment recurrence, and we prove $L(t)<0$ by splitting $(0,\infty)$ into a few intervals and using tangent-line bounds for the logarithm on each.
+Finally, in the proof of \Cref{lem:pge23-gamma-moment}, $H'$ is computed directly from the moment recurrence, and we prove $L(t)<0$ by splitting $(0,\infty)$ into a few intervals and using tangent-line bounds for the logarithm on each.
 
 
 \paragraph{Acknowledgements}
