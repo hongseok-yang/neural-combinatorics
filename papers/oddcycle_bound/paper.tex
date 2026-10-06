@@ -128,9 +128,9 @@ A typical examples are Tur\'an-type problems, which ask how dense a graph can be
 The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
 
 
-The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces $\Omega(1)$ $H$-density.
+The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces the $H$-density to be bounded away from zero.
 More quantitatively, Sidorenko~\cite{sidorenko1991inequalities} conjectured that for a bipartite graph $H$, the minimum $H$-density among graphs of edge density $p$ is asymptotically attained by the random graph with edge density $p$. 
-This conjecture has been proved for several classes of bipartite graphs, including even cycles~\cite{sidorenko1991inequalities}, but remains open in general.
+This conjecture has been proved for several classes of bipartite graphs, but remains open in general.
 
 For complete graphs, the corresponding question is the classical Erd\H os-Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} proved a simple lower bound on triangle counts, which implies that the asymptotic triangle density at edge density $p$ is at least $2p^2-p$.
@@ -170,18 +170,7 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   Equality holds if and only if $W$ is equal to $W_k$ up to relabeling for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
 
-We also establish qualitative stability in cut-distance (See Section \textcolor{red}{ToDo: Add} for formal definition of $\delta_\square$).
-
-\begin{theorem}[Qualitative stability]\label{cor:stability}
-  Fix an odd integer $m\ge3$.
-  For every integer $k\ge3$ and every $\varepsilon>0$, there exists $\delta>0$ such that every graphon $V$ satisfying
-  \[
-    \bigl|\edens V-(1-1/k)\bigr|\le\delta,
-    \qquad
-    \tC mV\le\tC m{W_k}+\delta
-  \]
-  satisfies $\delta_\square(V,W_k)<\varepsilon$.
-\end{theorem}
+At each density $p=1-1/k$, $k\ge3$, this uniqueness also yields a stability result in cut distance (\Cref{cor:stability}).
 
 The remaining nontrivial range $1/2<p<2/3$ will be treated in a companion paper using different methods.
 For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
@@ -209,7 +198,9 @@ It also proves the conjecture that every odd cycle is strongly common, posed by 
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
 
-For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density term.
+For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by a  path-density term.
+
+A graphon $W$ is called $p$-regular if $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
@@ -217,7 +208,7 @@ For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:int
   \begin{equation}\label{eq:intro-commonality}
     \tC mW+\tC m{1-W}\ge p^m+(1-p)^m+\bigl[\tP{m-1}{1-W}-(1-p)^{m-1}\bigr].
   \end{equation}
-  Furthermore, equality holds if and only if $W$ is $p$-regular, meaning that $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
+  Equality holds if and only if $W$ is $p$-regular.
 \end{theorem}
 
 
@@ -239,7 +230,7 @@ By \Cref{thm:commonality}, this means that $W$ is $p$-regular and $\tC m{1-W}=\t
 For $p<1$, these conditions force $1-W$ to be a union of equal cliques, as proved in \Cref{prop:main-equality}, giving the balanced complete multipartite graphons $W_k$ with $k\ge3$.
 At $p=1$, $W\equiv1$ almost everywhere and equality holds; the multipartite density formula \eqref{eq:intro-kpartite-value} establishes the converse for $W_k$.
 
-For $m\in\{3,5,7\}$, the explicit calculations in \Cref{sec:short-cycles} prove the inequality in \Cref{thm:commonality} for all $p\ge1/2$.
+We also remark that for $m\in\{3,5,7\}$, the explicit calculations in \Cref{sec:short-cycles} prove the inequality in \Cref{thm:commonality} for all $p\ge1/2$.
 Therefore, the lower bound in \Cref{thm:main} holds for every $p\in[0,1]$ for $C_3, C_5,$ and $C_7$.
 On the other hand, there is a counter example for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for all range of $p\in[0,1]$, one needs a different approach.
 See Section~\ref{sec:conclusion} for the detailed discussion.
@@ -372,6 +363,11 @@ Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:
 The Dirichlet averaging identity extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
 These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
 The deduction preceding this overview then gives the odd-cycle bound in \Cref{thm:main}.
+
+\paragraph{Equality and stability.}
+We bound the gap in the strengthened commonality inequality from below in terms of the degree variance, so equality forces regularity.
+For $p<1$, equality in the comparison between cycle and path densities then forces the complement to be a union of equal cliques, identifying the balanced complete multipartite graphons as the unique extremisers at the corresponding densities.
+Qualitative stability follows from this uniqueness, compactness in cut distance, and continuity of homomorphism densities.
 
 \paragraph{Organisation.}
 \Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
@@ -2328,6 +2324,17 @@ For the stability proof, we use the cut norm and cut distance:
 Here $S,T$ are measurable, $\varphi$ ranges over measure-preserving bijections of $[0,1]$ modulo null sets, and $V^\varphi(x,y)=V(\varphi(x),\varphi(y))$.
 Graphons at zero cut distance are called \emph{equivalent}.
 The space of graphons modulo this equivalence is compact in cut distance, and homomorphism densities are continuous in this metric~\cite{borgs2008convergent,lovasz2012large}.
+
+\begin{corollary}[Qualitative stability]\label{cor:stability}
+  Fix an odd integer $m\ge3$.
+  For every integer $k\ge3$ and every $\varepsilon>0$, there exists $\delta>0$ such that every graphon $V$ satisfying
+  \[
+    \bigl|\edens V-(1-1/k)\bigr|\le\delta,
+    \qquad
+    \tC mV\le\tC m{W_k}+\delta
+  \]
+  satisfies $\delta_\square(V,W_k)<\varepsilon$.
+\end{corollary}
 
 \begin{proof}[Proof of the stability assertion in \Cref{cor:stability}]
   Fix an odd integer $m\ge3$ and an integer $k\ge3$, and set $p_k=1-1/k$.
