@@ -153,7 +153,7 @@ For a finite simple graph $H$ with vertex set $\{1,\ldots,v\}$ and edge set $E(H
 \[
   \dens HW=\intcube{v}\prod_{ij\in E(H)}W(x_i,x_j)\dd x_1\cdots\dd x_v,
 \]
-and the \emph{edge density} of $W$ is $\edens W=\intsq W(x,y)\ddxy=p$.
+and the \emph{edge density} of $W$ is $\edens W=\intsq W(x,y)\ddxy$.
 These densities are the limits of the normalised labelled copy counts along convergent sequences of finite graphs.
 Consequently, asymptotic lower bounds on subgraph densities in finite graphs become exact inequalities for graphons.
 
@@ -247,6 +247,8 @@ On the other hand, there is a counter example for $C_9$ when $p = 501/1000$, sho
 See Section~\ref{sec:conclusion} for the detailed discussion.
 
 \subsection{Proof strategy: four reductions}
+Our proof strategy can be summarized as four reductions that simplify the problem while preserving the essential structure of the inequality.
+Before introducing the reductions, we set up some preliminary observations.
 Let $\Tker W$ denote the integral operator with kernel $W$, formally defined in \Cref{sec:matrix-reduction}.
 The trace formula expresses the two cycle densities as
 \[
@@ -258,7 +260,8 @@ Each trace is the sum of the $m$th powers of the corresponding operator's eigenv
 Our aim is to show that the sum of these two traces exceeds $p^m+(1-p)^m$ by at least the path-density correction in \eqref{eq:intro-commonality}.
 We obtain this bound through four reductions, all uniform in the odd cycle length $m$.
 
-First, we isolate the contribution that must be bounded.
+\paragraph{Step 1: Trace decomposition.}
+We split the space into constant and zero-average functions and expand the two cycle traces with respect to this decomposition.
 For a real-valued function $f\in L^2[0,1]$, write
 \[
   f=c\one+f_0,\qquad
@@ -290,7 +293,8 @@ Here a finite measurable partition means finitely many disjoint measurable
 sets whose union is $[0,1]$.
 An approximation argument gives the result for general graphons.
 
-Second, we reduce this comparison to polynomial nonnegativity.
+\paragraph{Step 2: Excursion expansion.}
+We reduce this comparison to polynomial nonnegativity.
 For such a step graphon, the trace decomposition from the first step gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
 \[
   \begin{aligned}
@@ -321,7 +325,8 @@ The measure supplies nonnegative weights, so it suffices to prove, for every $1\
   \qquad\text{for every }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r.
 \end{equation}
 
-Third, we reduce \eqref{eq:intro-polynomial-positive} to a one-variable inequality.
+\paragraph{Step 3: Dirichlet averaging.}
+We reduce \eqref{eq:intro-polynomial-positive} to a one-variable inequality.
 Choose nonnegative weights $\Theta_1,\ldots,\Theta_r$, summing to one, uniformly at random.
 These weights have the Dirichlet$(1,\ldots,1)$ distribution.
 Set $L=\sum_{i=1}^r\Theta_i\lambda_i$.
@@ -337,7 +342,8 @@ Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suf
 \end{equation}
 Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
-Finally, we prove \eqref{eq:intro-diagonal-positive} using an inequality
+\paragraph{Step 4: Gamma moment bound.}
+We prove \eqref{eq:intro-diagonal-positive} using an inequality
 between odd and even moments of $Y-b$, where $Y$ has a Gamma distribution
 and $b\ge0$ is a real shift.
 We write $\GammaLaw(a,1)$ for the Gamma distribution with shape $a>0$
