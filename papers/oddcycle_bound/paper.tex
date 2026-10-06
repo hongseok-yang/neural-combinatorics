@@ -173,7 +173,7 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   Equality holds if and only if $W$ is equal to $W_k$ up to relabeling for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
 
-We also establish qualitative stability in cut-distance (See Section ... for formal definition).
+We also establish qualitative stability in cut-distance (See Section ... for formal definition of $\delta_\square$).
 
 \begin{theorem}[Qualitative stability]\label{cor:stability}
   Fix an odd integer $m\ge3$.
@@ -191,7 +191,7 @@ For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
 
 \subsection{Extended Commonality}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
-For a graph $H$, we say that $H$ is \emph{common} if the random red-blue colouring of $E(K_n)$ asymptotically minimises the number of monochromatic copies of $H$.
+For a graph $H$, we say that $H$ is \emph{common} if the random red-blue edge colouring of $E(K_n)$ asymptotically minimises the number of monochromatic copies of $H$.
 In the graphon setting, this notion translates to the inequality
 \[
   \dens HW+\dens H{1-W}\ge2^{1-e(H)}
@@ -212,7 +212,7 @@ It also proves the conjecture that every odd cycle is strongly common, posed by 
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
 
 
-For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density correction.
+For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by an explicit path-density term.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
@@ -222,17 +222,13 @@ For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:int
   \end{equation}
   Furthermore, equality holds if and only if $W$ is $p$-regular, meaning that $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
 \end{theorem}
-\textcolor{red}{SI:working here}
 
 
 
 The Blakley-Roy inequality~\cite{blakley1965holder} (independently proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
-Thus, the path-density correction is nonnegative, and \eqref{eq:intro-commonality} strengthens extended commonality.
-Exchanging $W$ and $1-W$ gives the corresponding statement for $p\le1/3$.
-For $p\ge2/3$, equality holds in \eqref{eq:intro-commonality} exactly when $W$ has constant degree $p$, meaning that $\int_0^1 W(x,y)\dd y=p$ for almost every $x$ (\Cref{prop:regularity-gap}).
-This includes the constant graphon $W\equiv p$ and, when $p=1-1/k$ with $k\ge3$, $W_k$.
+Thus, \eqref{eq:intro-commonality} strengthens extended commonality.
 
-This stronger statement immediately implies \Cref{thm:main}.
+The inequality in \Cref{thm:main} follows immediately from \Cref{thm:commonality}.
 Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives
 \begin{equation}\label{eq:cycle-path-comparison}
   \tC m{1-W}\le\tP{m-1}{1-W}.
@@ -241,9 +237,17 @@ Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^
 \[
   \tC mW-\bigl(\goal\bigr)\ge\tP{m-1}{1-W}-\tC m{1-W}\ge0.
 \]
+Equality in \eqref{eq:intro-main} holds precisely when equality holds in both \eqref{eq:intro-commonality} and \eqref{eq:cycle-path-comparison}.
+By \Cref{thm:commonality}, this means that $W$ is $p$-regular and $\tC m{1-W}=\tP{m-1}{1-W}$.
+For $p<1$, these conditions force $1-W$ to be a union of equal cliques, as proved in \Cref{prop:main-equality}, giving the balanced complete multipartite graphons $W_k$ with $k\ge3$.
+At $p=1$, $W\equiv1$ almost everywhere and equality holds; the multipartite density formula \eqref{eq:intro-kpartite-value} establishes the converse for $W_k$.
 
-\paragraph{Proof strategy: four reductions.}
-Let $\Tker W$ denote the integral operator with kernel $W$, defined in \Cref{sec:matrix-reduction}.
+We also remark that \Cref{thm:commonality} is proved for all range of $p\in[0,1]$ for $m \in \{3, 5, 7\}$ (See Section~\ref{sec:short-cycles}) and thus \Cref{thm:main} holds for these values of $m$ as well.
+On the other hand, there is a counter example for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for all range of $p\in[0,1]$, one needs a different approach.
+See Section~\ref{sec:conclusion} for the detailed discussion.
+
+\subsection{Proof strategy: four reductions}
+Let $\Tker W$ denote the integral operator with kernel $W$, formally defined in \Cref{sec:matrix-reduction}.
 The trace formula expresses the two cycle densities as
 \[
   \tC mW=\Tr(\Tker W^m),
