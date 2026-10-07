@@ -369,14 +369,15 @@ For $p<1$, equality in the comparison between cycle and path densities then forc
 Qualitative stability follows from this uniqueness, compactness in cut distance, and continuity of homomorphism densities.
 
 \paragraph{Organisation.}
-\Cref{sec:matrix-reduction} collects graphon preliminaries, develops the finite-matrix representation, and introduces the spectral quantities used in the proof.
+\Cref{sec:preliminaries} collects graphon preliminaries and justifies the reduction to step graphons.
+\Cref{sec:matrix-reduction} develops the finite-matrix representation and introduces the spectral quantities used in the proof.
 \Cref{sec:excursions} develops the excursion expansion and reduces \Cref{thm:commonality} to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 \Cref{sec:equality-stability} identifies the equality cases and deduces qualitative stability.
 We close with further questions in \Cref{sec:conclusion}.
 
-\section{Preliminaries and spectral setup}
-\label{sec:matrix-reduction}
+\section{Graphon preliminaries}
+\label{sec:preliminaries}
 
 \subsection{Graphon preliminaries and operators}
 \label{subsec:graphon-preliminaries}
@@ -428,18 +429,8 @@ The cycle trace formula \eqref{eq:graphon-cycle-trace} gives, for odd $m\ge3$,
 \]
 proving the multipartite density formula \eqref{eq:intro-kpartite-value}.
 
-\subsection{Step graphons and matrix representation}
-\label{subsec:step-matrices}
-
-Let $W\colon[0,1]^2\to[0,1]$ be a graphon with edge density
-$\edens W=p\ge2/3$, as in \Cref{thm:main,thm:commonality}. Write
-\[
-  U=1-W,
-  \qquad
-  q=1-p.
-\]
-Thus, $U$ is the complementary graphon and has edge density $q$.
-The assumption $p\ge2/3$ will be needed only for the positivity argument in \Cref{sec:excursion-positivity}; the matrix identities and excursion expansions developed before that point hold at every edge density.
+\subsection{Step-graphon approximation}
+\label{subsec:step-approximation}
 
 To prove the inequalities in \Cref{thm:main,thm:commonality} by finite matrix calculations, we first restrict attention to \emph{step graphons}: graphons that are constant on each product of two parts of a finite measurable partition of $[0,1]$.
 We will use partitions into intervals of equal length, so these products form a grid of equally sized rectangles.
@@ -460,8 +451,22 @@ Averaging $W$ on each of these grids produces a sequence of step graphons whose 
 Thus, if the two inequalities hold for every graphon in this sequence, they also hold for $W$ by taking limits.
 The proof is given in \Cref{app:step-reduction}.
 
-We may therefore fix such a step graphon with partition intervals
-$I_1,\ldots,I_N$.
+\section{Finite-matrix setup and spectral measure}
+\label{sec:matrix-reduction}
+
+By \Cref{lem:step-reduction}, we may fix a step graphon $W$ with edge density $\edens W=p\ge2/3$, constant on each rectangle $I_a\times I_b$, where $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$.
+Write
+\[
+  U=1-W,
+  \qquad
+  q=1-p.
+\]
+Thus, $U$ is the complementary graphon and has edge density $q$.
+The assumption $p\ge2/3$ will be needed only for the positivity argument in \Cref{sec:excursion-positivity}; the matrix identities and excursion expansions developed before that point hold at every edge density.
+
+\subsection{Matrix representation}
+\label{subsec:step-matrices}
+
 A \emph{step kernel} on this partition is a symmetric function $K\colon[0,1]^2\to\R$ that is constant on each rectangle $I_a\times I_b$.
 It is a step graphon when its values lie in $[0,1]$; in particular, $W$, $U$, and the constant-one graphon are step kernels on this partition.
 Write $K_{ab}$ for the value of $K$ on $I_a\times I_b$, and define the $N\times N$ matrix
