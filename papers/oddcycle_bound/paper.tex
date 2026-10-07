@@ -419,15 +419,7 @@ For the path $P_\ell$ with $\ell\ge1$ edges, repeated integration gives
 \end{equation}
 where $\one$ is the constant function equal to one.
 
-For $W_k$, the operator vanishes on functions whose integral on each part is zero.
-On the space of partwise constant functions, it is represented by $(J_k-I_k)/k$, where $J_k$ is the $k\times k$ all-ones matrix and $I_k$ is the identity matrix.
-Its eigenvalues are therefore $p=1-1/k$, $-1/k$ with multiplicity $k-1$, and zero.
-The cycle trace formula \eqref{eq:graphon-cycle-trace} gives, for odd $m\ge3$,
-\[
-  \tC m{W_k}=p^m+(k-1)\Bigl(-\frac1k\Bigr)^m
-  =p^m-p(1-p)^{m-1},
-\]
-proving the multipartite density formula \eqref{eq:intro-kpartite-value}.
+We note that in the next section, we reduce the problem to the finite matrix calculation so the main inequalities can be verified without using this operator framework, but later stability results will use this.
 
 \subsection{Step-graphon approximation}
 \label{subsec:step-approximation}
@@ -449,10 +441,13 @@ This produces a step graphon with exactly the same edge density as $W$.
 Starting with two equal intervals and repeatedly halving each partition interval gives increasingly fine grids, with $N=2,4,8,\ldots$ parts.
 Averaging $W$ on each of these grids produces a sequence of step graphons whose cycle and path densities, and those of their complements, converge to the corresponding densities of $W$ and $1-W$.
 Thus, if the two inequalities hold for every graphon in this sequence, they also hold for $W$ by taking limits.
-The proof is given in \Cref{app:step-reduction}.
+The formal proof is given in \Cref{app:step-reduction}.
 
 \section{Finite-matrix setup and spectral measure}
 \label{sec:matrix-reduction}
+
+This section prepares the finite-matrix calculation underlying the proof.
+We express cycle and path densities as traces and matrix products, then introduce the spectral quantities used in the excursion expansion in the next section.
 
 By \Cref{lem:step-reduction}, we may fix a step graphon $W$ with edge density $\edens W=p\ge2/3$, constant on each rectangle $I_a\times I_b$, where $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$.
 Write
@@ -493,6 +488,8 @@ Then, $M_K$ is symmetric and $\norm e=1$. For a step graphon $K$, this normalisa
 
 \subsection{Complementary blocks and spectral measure}
 \label{subsec:spectral-setup}
+
+We now separate the constant and zero-average components of $M_W$ and $M_U$, and construct a nonnegative measure $\mu$ whose moments represent the contributions of excursions between these components.
 
 Let $\mathcal E_0=e^\perp$, and let $I$ be the $N\times N$ identity
 matrix. The matrices
@@ -608,17 +605,31 @@ Define the finite nonnegative measure
 \begin{equation*}
   \mu=\sum_{i=1}^{N-1}\norm{P_ig}^2\delta_{\lambda_i}.
 \end{equation*}
-The measure $\mu$ is independent of the choice of orthonormal eigenvectors
-within each eigenspace.  Here $\delta_{\lambda_i}$ is the unit point mass
-at $\lambda_i$. By \Cref{lem:half-norm} and the spectral decomposition
-of $A$, for every integer $j\ge0$,
-\begin{equation}\label{eq:moments}
-  \supp\mu\subseteq[-1/2,1/2],
-  \qquad
-  g^{\mathsf T}A^jg=\int\lambda^j\dd\mu(\lambda),
-  \qquad
-  \mu(\R)=\norm g^2.
-\end{equation}
+Here $\delta_{\lambda_i}$ is the unit point mass at $\lambda_i$.
+
+\begin{lemma}[Spectral measure and moments]\label{lem:spectral-moments}
+  The measure $\mu$ is independent of the choice of orthonormal eigenvectors
+  within each eigenspace. For every integer $j\ge0$,
+  \begin{equation}\label{eq:moments}
+    \supp\mu\subseteq[-1/2,1/2],
+    \qquad
+    g^{\mathsf T}A^jg=\int\lambda^j\dd\mu(\lambda),
+    \qquad
+    \mu(\R)=\norm g^2.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  By the spectral decomposition of $A$,
+  \[
+    g^{\mathsf T}A^jg
+    =\sum_{i=1}^{N-1}\lambda_i^j\norm{P_ig}^2
+    =\int\lambda^j\dd\mu(\lambda).
+  \]
+  Taking $j=0$ gives the total mass identity, and the support bound follows from \Cref{lem:half-norm}.
+  The sum of weights at each eigenvalue is the squared norm of the projection of $g$ onto its eigenspace, so $\mu$ is independent of the eigenbasis.
+\end{proof}
+
 Thus, the quantities $g^{\mathsf T}A^jg$ are moments of a single nonnegative measure $\mu$ supported on $[-1/2,1/2]$.
 In the next section, we use this representation to express the difference between the two sides of \Cref{thm:commonality} as a sum of repeated integrals of polynomials against $\mu$.
 Since $\mu$ is nonnegative, proving that these polynomials are nonnegative will establish the theorem.
