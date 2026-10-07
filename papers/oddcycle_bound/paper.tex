@@ -115,7 +115,7 @@
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
   For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
-  We also prove a strengthening of Kim and Lee's extended commonality inequality for odd cycles in the same density range. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
+  We also prove a strengthening of Kim and Lee's extended commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lowerbound, where $P_{m-1}$ is the path with \(m-1\) edges, in the same density range. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
   We establish their positivity through a uniform inequality comparing odd and even moments of shifted Gamma random variables.
   We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
@@ -130,7 +130,7 @@ The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} a
 
 The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces the $H$-density to be bounded away from zero.
 More quantitatively, Sidorenko~\cite{sidorenko1991inequalities} conjectured that for a bipartite graph $H$, the minimum $H$-density among graphs of edge density $p$ is asymptotically attained by the random graph with edge density $p$. 
-This conjecture has been proved for several classes of bipartite graphs, but remains open in general.
+This conjecture has been proved for several classes of bipartite graphs~\cite{}, and very recently, OpenAI announced a counterexample~\cite{}. But it is still far from completely understood which bipartite graphs satisfy Sidorenko's conjecture.
 
 For complete graphs, the corresponding question is the classical Erd\H os-Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} proved a simple lower bound on triangle counts, which implies that the asymptotic triangle density at edge density $p$ is at least $2p^2-p$.
@@ -199,7 +199,6 @@ Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commona
 
 
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by a  path-density term.
-
 A graphon $W$ is called $p$-regular if $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
