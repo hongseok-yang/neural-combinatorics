@@ -238,7 +238,7 @@ See Section~\ref{sec:conclusion} for the detailed discussion.
 Our proof strategy can be summarized as four reductions that simplify the problem while preserving the essential structure of the inequality.
 Before introducing the reductions, we set up some preliminary observations.
 
-Let $\Tker W$ denote the integral operator with kernel $W$, formally defined in \Cref{sec:matrix-reduction}.
+Let $\Tker W$ denote the integral operator with kernel $W$, formally defined in \Cref{subsec:graphon-preliminaries}.
 The trace formula expresses the two cycle densities as
 \[
   \tC mW=\Tr(\Tker W^m),
@@ -301,7 +301,7 @@ Grouping the mixed trace terms into excursions gives the following expression fo
 \]
 The first equality is the trace decomposition from the first reduction.
 The second expresses the remaining trace sums, after subtracting the path-density correction, in terms of explicit polynomials.
-Here $\mu$ is a finite nonnegative measure determined by $W$, supported on $[-1/2,1/2]$, and constructed in \Cref{sec:matrix-reduction}; the $P_{m,r}$ are symmetric polynomials defined in \eqref{eq:Pmr}.
+Here $\mu$ is a finite nonnegative measure determined by $W$, supported on $[-1/2,1/2]$, and constructed in \Cref{subsec:spectral-setup}; the $P_{m,r}$ are symmetric polynomials defined in \eqref{eq:Pmr}.
 In each mixed trace term, viewed cyclically, the zero-average projections form blocks separated by constant projections.
 Each such block is called an \emph{excursion}, and $r$ counts the number of excursions.
 The measure supplies nonnegative weights, so it suffices to prove, for every $1\le r\le(m-1)/2$, that
@@ -369,14 +369,34 @@ For $p<1$, equality in the comparison between cycle and path densities then forc
 Qualitative stability follows from this uniqueness, compactness in cut distance, and continuity of homomorphism densities.
 
 \paragraph{Organisation.}
-\Cref{sec:matrix-reduction} sets up the finite-matrix representation and identifies the spectral quantities used in the proof.
+\Cref{sec:matrix-reduction} collects graphon preliminaries, develops the finite-matrix representation, and introduces the spectral quantities used in the proof.
 \Cref{sec:excursions} develops the excursion expansion and reduces \Cref{thm:commonality} to the inequalities $P_{m,r}\ge0$.
 \Cref{sec:short-cycles} works out this reduction for $C_3$, $C_5$, and $C_7$, while \Cref{sec:excursion-positivity} proves the inequalities for every odd cycle.
 \Cref{sec:equality-stability} identifies the equality cases and deduces qualitative stability.
 We close with further questions in \Cref{sec:conclusion}.
 
-\section{Matrix reduction and spectral measure}
+\section{Preliminaries and spectral setup}
 \label{sec:matrix-reduction}
+
+\subsection{Graphon preliminaries and operators}
+\label{subsec:graphon-preliminaries}
+
+For an integrable function $F\colon[0,1]^2\to\R$, its \emph{cut norm} is
+\[
+  \norm F_\square=\sup_{S,T\subseteq[0,1]}
+    \left|\int_{S\times T}F(x,y)\ddxy\right|,
+\]
+where the supremum is over measurable sets $S,T\subseteq[0,1]$.
+
+For graphons $W,V$, their \emph{cut distance} is
+\begin{equation}\label{eq:cut-distance}
+  \delta_\square(W,V)=\inf_\varphi\norm{W-V^\varphi}_\square,
+\end{equation}
+where $\varphi$ ranges over measure-preserving bijections of $[0,1]$ modulo null sets, and $V^\varphi(x,y)=V(\varphi(x),\varphi(y))$.
+The cut distance is a pseudometric on graphons.
+Graphons at zero cut distance are called \emph{equivalent}, and identifying equivalent graphons gives a metric space.
+This space is compact, and for every fixed finite simple graph $H$, the map $W\mapsto\dens HW$ is continuous in this metric~\cite{borgs2008convergent,lovasz2012large}.
+In particular, edge, cycle, and path densities are continuous in cut distance.
 
 For a graphon $W$, define the integral operator $\Tker W$ on $L^2[0,1]$ by
 \[
@@ -407,6 +427,9 @@ The cycle trace formula \eqref{eq:graphon-cycle-trace} gives, for odd $m\ge3$,
   =p^m-p(1-p)^{m-1},
 \]
 proving the multipartite density formula \eqref{eq:intro-kpartite-value}.
+
+\subsection{Step graphons and matrix representation}
+\label{subsec:step-matrices}
 
 Let $W\colon[0,1]^2\to[0,1]$ be a graphon with edge density
 $\edens W=p\ge2/3$, as in \Cref{thm:main,thm:commonality}. Write
@@ -460,8 +483,11 @@ Then, $M_K$ is symmetric and $\norm e=1$. For a step graphon $K$, this normalisa
    =\dens{P_k}K \qquad (k\ge1),\notag\\
   e^{\mathsf T}M_Ke
   &=\frac1{N^2}\sum_{a,b=1}^NK_{ab}
-   =\edens K. \label{eq:edge-matrix}
+  =\edens K. \label{eq:edge-matrix}
 \end{align}
+
+\subsection{Complementary blocks and spectral measure}
+\label{subsec:spectral-setup}
 
 Let $\mathcal E_0=e^\perp$, and let $I$ be the $N\times N$ identity
 matrix. The matrices
@@ -627,7 +653,7 @@ Using the block forms of $P$ and $Q$ in \eqref{eq:block-PQ} and of $M_U$ in \eqr
 \]
 Here the outward transition contributes $g$, the step within $\mathcal E_0$ contributes $A$, and the return contributes $g^{\mathsf T}$.
 More generally, a block of $\beta+1$ letters $Q$ has $\beta$ steps within $\mathcal E_0$ and contributes the scalar factor $g^{\mathsf T}A^\beta g$.
-By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{sec:matrix-reduction}.
+By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{subsec:spectral-setup}.
 
 We organise the summands by first fixing the number $r$ of excursions in a word.
 For each fixed $r$, we sum over the possible lengths of the individual $P$-blocks and $Q$-blocks.
@@ -1983,7 +2009,7 @@ the proof of \Cref{lem:step-reduction}.
 \begin{proof}
   First suppose that $W$ is constant on each rectangle $I_a\times I_b$,
   where $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$,
-  as in \Cref{sec:matrix-reduction}.
+  as in \Cref{subsec:step-matrices}.
   Since $\Psi_m(W)=\Phi_m$, we use the sum \eqref{eq:Phi-expansion}
   and keep only its top term $r=(m-1)/2$.
   For this $r$, the degree $n=m-2r$ in \eqref{eq:Pmr} equals one, so the two
@@ -2313,16 +2339,7 @@ At $p=1$, the only graphon is $W=1$ almost everywhere, which attains equality
 in the odd-cycle Goodman bound \eqref{eq:intro-main} of \Cref{thm:main}.
 This completes the equality assertion in \Cref{thm:main}.
 
-For the stability proof, we use the cut norm and cut distance:
-\[
-  \norm F_\square=\sup_{S,T\subseteq[0,1]}
-    \left|\int_{S\times T}F(x,y)\ddxy\right|,
-  \qquad
-  \delta_\square(W,V)=\inf_\varphi\norm{W-V^\varphi}_\square.
-\]
-Here $S,T$ are measurable, $\varphi$ ranges over measure-preserving bijections of $[0,1]$ modulo null sets, and $V^\varphi(x,y)=V(\varphi(x),\varphi(y))$.
-Graphons at zero cut distance are called \emph{equivalent}.
-The space of graphons modulo this equivalence is compact in cut distance, and homomorphism densities are continuous in this metric~\cite{borgs2008convergent,lovasz2012large}.
+The uniqueness just proved, together with compactness and continuity in cut distance (\Cref{subsec:graphon-preliminaries}), gives the following corollary.
 
 \begin{corollary}[Qualitative stability]\label{cor:stability}
   Fix an odd integer $m\ge3$.
@@ -2346,7 +2363,7 @@ The space of graphons modulo this equivalence is compact in cut distance, and ho
     \qquad
     \delta_\square(W^{(j)},W_k)\ge\varepsilon .
   \]
-  By compactness, after passing to a subsequence and relabelling, $W^{(j)}$ converges in cut distance to a graphon $W$.
+  By compactness in cut distance (\Cref{subsec:graphon-preliminaries}), after passing to a subsequence, $W^{(j)}$ converges in cut distance to a graphon $W$.
   Edge and cycle densities are continuous in cut distance, so the first two conditions pass to the limit as
   \[
     \edens W=p_k,
@@ -2415,7 +2432,7 @@ parts of measure $1/2$, with value matrix
   \frac1{250}\begin{pmatrix}50&193\\193&65\end{pmatrix}.
 \]
 Then, $p=501/1000$, and the matrix formulas in
-\Cref{sec:matrix-reduction} give
+\Cref{subsec:step-matrices} give
 \[
   \Psi_9(W)=-\frac{227031617768589}{5\cdot10^{21}}<0.
 \]
