@@ -1173,7 +1173,7 @@ Beta representation.
   \begin{equation}\label{eq:pge23-dirichlet-moment}
     h_j(x_1,\ldots,x_k)
     =\binom{j+k-1}{k-1}
-    \E\left(\sum_{i=1}^k\Theta_i x_i\right)^j.
+    \E\left[\left(\sum_{i=1}^k\Theta_i x_i\right)^j\right].
   \end{equation}
 \end{lemma}
 
@@ -1188,13 +1188,13 @@ Beta representation.
   where the sum is over nonnegative integer exponents.
   The Dirichlet moments satisfy
   \[
-    \E\prod_{i=1}^k\Theta_i^{\alpha_i}
+    \E\left[\prod_{i=1}^k\Theta_i^{\alpha_i}\right]
     =\frac{(k-1)!\,\alpha_1!\cdots\alpha_k!}{(j+k-1)!},
     \qquad \alpha_1+\cdots+\alpha_k=j.
   \]
   Taking expectations therefore gives
   \begin{align*}
-    \E\,S^j
+    \E\left[S^j\right]
     &=\sum_{\alpha_1+\cdots+\alpha_k=j}
     \frac{j!}{\alpha_1!\cdots\alpha_k!}
     \cdot\frac{(k-1)!\,\alpha_1!\cdots\alpha_k!}{(j+k-1)!}
@@ -1224,8 +1224,8 @@ To carry out the first step, define the diagonal polynomial
   Then,
   \begin{equation}\label{eq:pge23-dirichlet-identity}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-    =\E\,\widetilde P_{m,r}
-    \left(q,\sum_{i=1}^r\Theta_i\lambda_i\right).
+    =\E\left[\widetilde P_{m,r}
+    \left(q,\sum_{i=1}^r\Theta_i\lambda_i\right)\right].
   \end{equation}
   Consequently,
   \begin{equation*}
@@ -1247,10 +1247,10 @@ To carry out the first step, define the diagonal polynomial
   It remains to express the terms of $P_{m,r}$ through
   $h_j(\lambda_1,\ldots,\lambda_r)$.
   The generating function of the $h_d$ is
-  \[
+  \begin{equation}\label{eq:pge23-h-generating}
     \sum_{d\ge0}h_d(y_1,\ldots,y_k)z^d
     =\prod_{i=1}^k\frac{1}{1-y_iz}.
-  \]
+  \end{equation}
   Thus, the $k$ equal variables and the remaining ones give separate factors:
   \[
     \begin{aligned}
@@ -1295,12 +1295,12 @@ To carry out the first step, define the diagonal polynomial
   \end{equation*}
   On the other hand, \Cref{lem:pge23-dirichlet-moment}, applied with
   $k=r$ and $x_i=\lambda_i$, gives
-  \[
+  \begin{align*}
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-    =\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\E\,S^j
-    =\E\sum_{j=0}^nc_j\binom{j+r-1}{r-1}S^j
-    =\E\,\widetilde P_{m,r}(q,S),
-  \]
+    &=\sum_{j=0}^nc_j\binom{j+r-1}{r-1}\E\left[S^j\right]\\
+    &=\E\left[\sum_{j=0}^nc_j\binom{j+r-1}{r-1}S^j\right]\\
+    &=\E\left[\widetilde P_{m,r}(q,S)\right],
+  \end{align*}
   the last equality being $\widetilde P_{m,r}$ with $\lambda$ replaced by $S$.
 
   For the second claim, suppose that the $\lambda_i$ lie in
@@ -1345,7 +1345,7 @@ and zero outside this interval.
   \begin{equation}\label{eq:pge23-beta-h}
     h_j(a^{\times r},b^{\times r})
     =\binom{j+2r-1}{2r-1}
-    \E\bigl(aX+b(1-X)\bigr)^j.
+    \E\left[\bigl(aX+b(1-X)\bigr)^j\right].
   \end{equation}
 \end{lemma}
 
@@ -1368,9 +1368,9 @@ and zero outside this interval.
   \begin{align*}
     h_j(a^{\times r},b^{\times r})
     &=\binom{j+2r-1}{2r-1}
-      \E\left(a\sum_{i=1}^r\Theta_i+
-        b\sum_{i=r+1}^{2r}\Theta_i\right)^j\\
-    &=\binom{j+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^j,
+      \E\left[\left(a\sum_{i=1}^r\Theta_i+
+        b\sum_{i=r+1}^{2r}\Theta_i\right)^j\right]\\
+    &=\binom{j+2r-1}{2r-1}\E\left[\bigl(aX+b(1-X)\bigr)^j\right],
   \end{align*}
   which proves \eqref{eq:pge23-beta-h}.
 \end{proof}
@@ -1409,9 +1409,9 @@ polynomial as a Beta expectation.
   By \Cref{lem:pge23-beta-representation} with $j=n$,
   \[
     h_n(a^{\times r},b^{\times r})
-    =\binom{n+2r-1}{2r-1}\E\bigl(aX+b(1-X)\bigr)^n.
+    =\binom{n+2r-1}{2r-1}\E\left[\bigl(aX+b(1-X)\bigr)^n\right].
   \]
-  Differentiating the generating function with respect to $a$ gives
+  Applying \eqref{eq:pge23-h-generating} with $r$ copies each of $a$ and $b$ and differentiating with respect to $a$ gives
   \[
     \frac{\partial}{\partial a}
     \sum_{d\ge0}h_d(a^{\times r},b^{\times r})z^d
@@ -1420,12 +1420,15 @@ polynomial as a Beta expectation.
   Comparing coefficients of $z^n$ yields
   \[
     \frac{\partial}{\partial a}h_n(a^{\times r},b^{\times r})
-    =r\,h_{n-1}(a^{\times(r+1)},b^{\times r}),
+    =r\,h_{n-1}(a^{\times(r+1)},b^{\times r}).
   \]
-  where the derivative changes all $r$ copies of $a$ together.
-  Differentiation passes through the expectation because its integrand is
-  a finite polynomial in $a,b$ with bounded random coefficients, and
-  the distribution of $X$ is independent of $a,b$. Thus,
+  The expectation $\E\left[\bigl(aX+b(1-X)\bigr)^n\right]$ is a polynomial in $a,b$, since $X$ is bounded and its distribution does not depend on these parameters.
+  Differentiating term by term gives
+  \[
+    \frac{\partial}{\partial a}\E\left[\bigl(aX+b(1-X)\bigr)^n\right]
+    =n\,\E\left[X\bigl(aX+b(1-X)\bigr)^{n-1}\right].
+  \]
+  Combining the two derivative identities gives
   \begin{equation}\label{eq:pge23-beta-h-deriv}
     h_{n-1}(a^{\times(r+1)},b^{\times r})
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
@@ -1447,8 +1450,8 @@ polynomial as a Beta expectation.
     \widetilde P_{m,r}(q,\lambda)
     =\binom{n+2r-1}{2r-1}\frac {n}{r}
     \left[
-      \frac {m}{n}\E\bigl(V_X^n+W_X^n\bigr)
-      -\E\bigl(XV_X^{n-1}\bigr)
+      \frac {m}{n}\E\left[V_X^n+W_X^n\right]
+      -\E\left[XV_X^{n-1}\right]
     \right].
   \end{equation}
   Since $X\in(0,1)$ almost surely, write
@@ -1592,7 +1595,7 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
     =\frac{\lambda^{n+r}}{r\Gamma(n)\Gamma(r)}
     \int_0^\infty
     t^{m-r-1}e^{-\lambda t}
-    \E\rho_{n,m}\left(q+\frac {Y}{t}\right)\dd t.
+    \E\left[\rho_{n,m}\left(q+\frac {Y}{t}\right)\right]\dd t.
   \end{equation}
   Equivalently, if $Z\sim\GammaLaw(m-r,1)$ is independent of $Y$, then
   \begin{equation}\label{eq:pge23-gamma-expectation}
@@ -1642,7 +1645,7 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
     =t^{-r}\int_0^\infty y^{r-1}e^{-y}
      \rho_{n,m}\left(q+\frac {y}{t}\right)\dd y
     =\Gamma(r)\,t^{-r}
-     \E\rho_{n,m}\left(q+\frac {Y}{t}\right),
+     \E\left[\rho_{n,m}\left(q+\frac {Y}{t}\right)\right],
   \]
   where the last equality holds because $Y$ has density $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.
   Substituting this for the inner integral obtained after the exchange gives \eqref{eq:pge23-laplace-gamma}.
@@ -1659,11 +1662,11 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 In \eqref{eq:pge23-laplace-gamma}, the parameter $\lambda$ occurs only in
 the positive prefactor $\lambda^{n+r}$ and the positive weight
 $t^{m-r-1}e^{-\lambda t}$. The expectation
-$\E\rho_{n,m}(q+Y/t)$ is independent of $\lambda$.
+$\E\left[\rho_{n,m}(q+Y/t)\right]$ is independent of $\lambda$.
 Thus, to prove $\widetilde P_{m,r}(q,\lambda)\ge0$ for every $\lambda>0$,
 it suffices to prove that this expectation is nonnegative for every $t>0$.
 
-We now seek to prove $\E\rho_{n,m}(q+xY)\ge0$ for $0\le q\le1/3$,
+We now seek to prove $\E\left[\rho_{n,m}(q+xY)\right]\ge0$ for $0\le q\le1/3$,
 where $x=1/t>0$. To obtain a useful expression for this expectation, we
 substitute $u=\frac12+v$ into the defining formula \eqref{eq:pge23-rho}
 for $\rho_{n,m}(u)$ and expand $\rho_{n,m}(\frac12+v)$ as a polynomial
@@ -1718,13 +1721,13 @@ bracketed expressions multiplied by the positive coefficients $a_j$.
 The bracketed expressions themselves need not be nonnegative.
 At $u=q+xY$, we have $v=q+xY-1/2$, so their expectations are
 \[
-  2(r+j)\E v^{2j}-j\E v^{2j-1}.
+  2(r+j)\E\left[v^{2j}\right]-j\E\left[v^{2j-1}\right].
 \]
-The even moment $\E v^{2j}$ is nonnegative, whereas the odd moment
-$\E v^{2j-1}$ can have either sign. Since all the $a_j$ are positive,
+The even moment $\E\left[v^{2j}\right]$ is nonnegative, whereas the odd moment
+$\E\left[v^{2j-1}\right]$ can have either sign. Since all the $a_j$ are positive,
 it suffices to prove
 \[
-  j\E v^{2j-1}\le2(r+j)\E v^{2j},
+  j\E\left[v^{2j-1}\right]\le2(r+j)\E\left[v^{2j}\right],
   \qquad 1\le j\le(n-1)/2.
 \]
 The following lemma gives an odd-to-even moment bound for variables of the
@@ -1734,8 +1737,8 @@ form $zY-1$.
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
   For every $z\ge0$,
   \begin{equation*}
-    3j\,\E(zY-1)^{2j-1}
-    \le(r+j)\,\E(zY-1)^{2j}.
+    3j\,\E\left[(zY-1)^{2j-1}\right]
+    \le(r+j)\,\E\left[(zY-1)^{2j}\right].
   \end{equation*}
 \end{lemma}
 
@@ -1753,17 +1756,17 @@ and $x\ge0$, we set
   \qquad v=q+xY-\frac12=\delta(zY-1).
 \]
 Thus, the lemma bounds the moments of $v/\delta=zY-1$.
-Using $\E v^k=\delta^k\E(zY-1)^k$, the proposition proves that each bracketed term in
+Using $\E\left[v^k\right]=\delta^k\E\left[(zY-1)^k\right]$, the proposition proves that each bracketed term in
 \eqref{eq:pge23-rho-centered} has nonnegative expectation. This gives
 the nonnegativity of
-$\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
+$\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
 \eqref{eq:pge23-laplace-gamma}.
 
 \begin{proposition}[Nonnegativity of the Gamma expectation]\label{prop:pge23-gamma-positive}
   Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
   If $0\le q\le1/3$, then for every $x\ge0$,
   \begin{equation}\label{eq:pge23-shifted-positive}
-    \E\rho_{n,m}(q+xY)\ge0,
+    \E\left[\rho_{n,m}(q+xY)\right]\ge0,
     \qquad Y\sim\GammaLaw(r,1).
   \end{equation}
 \end{proposition}
@@ -1779,20 +1782,20 @@ $\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
     2(r+j)\bigl(\delta(zY-1)\bigr)^{2j}
     -j\bigl(\delta(zY-1)\bigr)^{2j-1}
     \right]\\
-    &\qquad=2(r+j)\delta^{2j}\E(zY-1)^{2j}
-      -j\delta^{2j-1}\E(zY-1)^{2j-1}\\
-    &\qquad\ge2(r+j)\delta^{2j}\E(zY-1)^{2j}
-      -\frac{r+j}{3}\delta^{2j-1}\E(zY-1)^{2j}\\
+    &\qquad=2(r+j)\delta^{2j}\E\left[(zY-1)^{2j}\right]
+      -j\delta^{2j-1}\E\left[(zY-1)^{2j-1}\right]\\
+    &\qquad\ge2(r+j)\delta^{2j}\E\left[(zY-1)^{2j}\right]
+      -\frac{r+j}{3}\delta^{2j-1}\E\left[(zY-1)^{2j}\right]\\
     &\qquad=\delta^{2j}(r+j)
     \left(2-\frac{1}{3\delta}\right)
-    \E(zY-1)^{2j}
+    \E\left[(zY-1)^{2j}\right]
     \ge0,
   \end{align*}
   where the inequality follows from \Cref{lem:pge23-gamma-moment}. The last
-  step uses $2\delta\ge1/3$ and $\E(zY-1)^{2j}\ge0$.
+  step uses $2\delta\ge1/3$ and $\E\left[(zY-1)^{2j}\right]\ge0$.
   Since every $a_j$ is positive, we conclude
   \[
-    n\,\E\rho_{n,m}(q+xY)\ge2ra_0>0,
+    n\,\E\left[\rho_{n,m}(q+xY)\right]\ge2ra_0>0,
   \]
   which proves \eqref{eq:pge23-shifted-positive}.
 \end{proof}
@@ -1807,9 +1810,9 @@ $\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
   $\delta\ge1/6$, or $p\ge2/3$. For $1/2<p<2/3$, the lower bound
   \[
     \delta^{2j}(r+j)\left(2-\frac{1}{3\delta}\right)
-    \E(zY-1)^{2j}
+    \E\left[(zY-1)^{2j}\right]
   \]
-  obtained for $\E[2(r+j)v^{2j}-jv^{2j-1}]$ in the proof of
+  obtained for $\E\left[2(r+j)v^{2j}-jv^{2j-1}\right]$ in the proof of
   \Cref{prop:pge23-gamma-positive} is negative. A negative lower bound
   does not establish that the expectation itself is nonnegative.
 \end{remark}
@@ -1821,7 +1824,7 @@ $\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
   This follows from \Cref{lem:pge23-ell-negative} when $\lambda\le0$.
   When $\lambda>0$, \Cref{lem:pge23-laplace-gamma} expresses
   $\widetilde P_{m,r}(q,\lambda)$ as an integral of expectations of the form
-  $\E\rho_{n,m}(q+xY)$, which are nonnegative by
+  $\E\left[\rho_{n,m}(q+xY)\right]$, which are nonnegative by
   \Cref{prop:pge23-gamma-positive}.
   Thus, $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
   For $m\in\{3,5,7\}$, \Cref{prop:short-cycles} gives the same polynomial nonnegativity throughout the larger range $0\le q\le1/2$.
