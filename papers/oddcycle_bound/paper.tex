@@ -328,7 +328,8 @@ Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suf
 Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
 \paragraph{Step 4: Gamma moment bound.}
-We prove \eqref{eq:intro-diagonal-positive} using an inequality
+For $m\in\{3,5,7\}$, direct computation proves \eqref{eq:intro-diagonal-positive} for all $p\ge1/2$ (\Cref{sec:short-cycles}).
+For the general case, we prove \eqref{eq:intro-diagonal-positive} using an inequality
 between odd and even moments of $Y-b$, where $Y$ has a Gamma distribution
 and $b\ge0$ is a real shift.
 We write $\GammaLaw(a,1)$ for the Gamma distribution with shape $a>0$
@@ -710,8 +711,7 @@ We now make this expansion precise for cycle densities.
   In \eqref{eq:trace-projection-expansion}, the word consisting only of $P$ gives $q^m$, while the word consisting only of $Q$ gives $\Tr(A^m)$.
 
   We now consider the remaining words, which contain both $P$ and $Q$.
-  For a mixed word with $r$ cyclic $Q$-blocks, choose a boundary where $Q$ is followed by $P$ and rotate the word to start with $P$ and end with $Q$.
-  The trace is unchanged, and no block is split.
+  For a mixed word with $r$ cyclic $Q$-blocks, choose a boundary where $Q$ is followed by $P$ and rotate the word to start with $P$ and end with $Q$, which does not change the trace.
   For $1\le i\le r$, write the lengths of the $i$th $P$-block and the following $Q$-block as $\alpha_i+1$ and $\beta_i+1$, respectively, with $\alpha_i,\beta_i\ge0$.
   To evaluate the corresponding trace, use the block forms in \eqref{eq:block-PQ} and \eqref{eq:block-UW} to obtain
   \[
@@ -795,7 +795,7 @@ We now make this expansion precise for cycle densities.
 
 We next derive the corresponding formula for path densities, which supplies the correction term in \eqref{eq:intro-commonality}.
 Let $P_k$ denote the path with $k$ edges, with $P_0$ a single vertex.
-Its homomorphism density is
+Recall from \Cref{subsec:step-matrices} that
 \begin{equation*}
   \tP kU=e^{\mathsf T}M_U^ke.
 \end{equation*}
@@ -816,7 +816,7 @@ Its homomorphism density is
   For $k=0$ and $k=1$, the formula gives $\tP0U=e^{\mathsf T}e=1$ and
   $\tP1U=e^{\mathsf T}M_Ue=q$, respectively, with an empty sum over $r$.
   Now let $k\ge2$. Since $Pe=e$ and $e^{\mathsf T}P=e^{\mathsf T}$,
-  we may insert $P$ at both ends of the matrix expression for $\tP kU$.
+  we have $\tP kU = e^{\mathsf T}PM_U^kPe$.
   Inserting $P+Q=I$ between its $k$ copies of $M_U$ and expanding gives
   \begin{equation}\label{eq:path-projection-expansion}
     \tP kU=
@@ -915,15 +915,18 @@ The following lemma completes the reduction announced at the start of this secti
     &-h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r).
     \label{eq:Pmr}
   \end{align}
-  The sum of integrals
+  Then the sum of integrals
   \begin{equation}\label{eq:Phi-expansion}
     \Phi_m:=\sum_{r=1}^{(m-1)/2}
       \int\!\cdots\!\int
       P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i)
   \end{equation}
-  is the difference between the left- and right-hand sides of
-  \eqref{eq:intro-commonality}.
+  satisfies
+  \[
+    \Phi_m=\tC mW+\tC mU-p^m-q^m
+    -\bigl[\tP{m-1}U-q^{m-1}\bigr].
+  \]
 \end{lemma}
 
 \begin{proof}
@@ -963,39 +966,27 @@ The following lemma completes the reduction announced at the start of this secti
     \tC mW+\tC mU-\tP{m-1}U
     =p^m+q^m-q^{m-1}+\Phi_m.
   \end{equation}
-  This identifies $\Phi_m$ as the
-  difference between the two sides of \eqref{eq:intro-commonality}.
+  By rearranging \eqref{eq:commonality-gap}, we obtain the desired expression for $\Phi_m$.
 \end{proof}
 
 % Begin relocated consequences of the polynomial reduction.
-\Cref{lem:polynomial-reduction} reduces the strengthened inequality in
-\Cref{thm:commonality} to proving $\Phi_m\ge0$ for step graphons.
 Since $\mu$ is nonnegative and supported on $[-1/2,1/2]$, it suffices to
 prove, for every $1\le r\le(m-1)/2$, that
 \[
   P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0
   \qquad\text{for all }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r,
 \]
-where $q=1-p$.
-This polynomial nonnegativity makes every integral in
-\eqref{eq:Phi-expansion} nonnegative, giving $\Phi_m\ge0$ and hence
-\Cref{thm:commonality} for step graphons.
-The comparison following \Cref{thm:commonality} shows that this
-strengthened inequality also implies the odd-cycle bound in \Cref{thm:main}.
-\Cref{lem:step-reduction} then extends the inequalities in
-\Cref{thm:main,thm:commonality} from step graphons to arbitrary graphons.
+where $q=1-p\in[0,1/3]$.
+We prove this polynomial nonnegativity in \Cref{sec:short-cycles,sec:excursion-positivity}.
 % End relocated consequences of the polynomial reduction.
 
 \section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
 \label{sec:short-cycles}
 
-In this section, we consider the first three odd cycles to illustrate the
-general excursion argument through explicit low-degree computations. The
-identities used in \Cref{lem:polynomial-reduction} do not require
+In this section, we prove the strengthened commonality inequality for $C_3$, $C_5$, and $C_7$ by explicitly computing their excursion polynomials.
+The identities used in \Cref{lem:polynomial-reduction} do not require
 $p\ge2/3$, and for these cycles, every excursion polynomial is pointwise
-nonnegative when $p\ge1/2$. Consequently, the inequalities in
-\Cref{thm:main,thm:commonality} hold for $m\in\{3,5,7\}$ throughout the
-larger range $p\ge1/2$.
+nonnegative when $p\ge1/2$.
 
 \begin{proposition}\label{prop:short-cycles}
   Suppose that $0\le q\le1/2$ and set $p=1-q$. For all $m\in\{3,5,7\}$,
