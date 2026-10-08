@@ -311,7 +311,8 @@ The measure supplies nonnegative weights, so it suffices to prove, for every $1\
 \end{equation}
 
 \paragraph{Step 3: Dirichlet averaging.}
-We reduce \eqref{eq:intro-polynomial-positive} to a one-variable inequality.
+For $m\in\{3,5,7\}$, direct computation proves \eqref{eq:intro-polynomial-positive} for all $p\ge1/2$ (\Cref{sec:short-cycles}).
+For the general case, we reduce \eqref{eq:intro-polynomial-positive} to a one-variable inequality.
 Choose nonnegative weights $\Theta_1,\ldots,\Theta_r$, summing to one, uniformly at random.
 These weights have the Dirichlet$(1,\ldots,1)$ distribution.
 Set $L=\sum_{i=1}^r\Theta_i\lambda_i$.
@@ -328,8 +329,7 @@ Since $L\in[-1/2,1/2]$ whenever all the $\lambda_i$ lie in this interval, it suf
 Although the number $r$ of variables can grow with $m$, \eqref{eq:intro-diagonal-positive} is a polynomial inequality in just one variable for each choice of $m$, $r$, and $p$.
 
 \paragraph{Step 4: Gamma moment bound.}
-For $m\in\{3,5,7\}$, direct computation proves \eqref{eq:intro-diagonal-positive} for all $p\ge1/2$ (\Cref{sec:short-cycles}).
-For the general case, we prove \eqref{eq:intro-diagonal-positive} using an inequality
+We prove \eqref{eq:intro-diagonal-positive} using an inequality
 between odd and even moments of $Y-b$, where $Y$ has a Gamma distribution
 and $b\ge0$ is a real shift.
 We write $\GammaLaw(a,1)$ for the Gamma distribution with shape $a>0$
@@ -983,10 +983,8 @@ We prove this polynomial nonnegativity in \Cref{sec:short-cycles,sec:excursion-p
 \section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
 \label{sec:short-cycles}
 
-In this section, we prove the strengthened commonality inequality for $C_3$, $C_5$, and $C_7$ by explicitly computing their excursion polynomials.
-The identities used in \Cref{lem:polynomial-reduction} do not require
-$p\ge2/3$, and for these cycles, every excursion polynomial is pointwise
-nonnegative when $p\ge1/2$.
+In this section, we explicitly compute the excursion polynomials for $C_3$, $C_5$, and $C_7$.
+The resulting positivity proves the inequalities in \Cref{thm:main,thm:commonality} for all $p\ge1/2$; we give this deduction together with the proof of the main inequalities at the end of \Cref{sec:excursion-positivity}.
 
 \begin{proposition}\label{prop:short-cycles}
   Suppose that $0\le q\le1/2$ and set $p=1-q$. For all $m\in\{3,5,7\}$,
@@ -994,8 +992,6 @@ nonnegative when $p\ge1/2$.
   \[
     P_{m,r}(q;\lambda_1,\ldots,\lambda_r)\ge0.
   \]
-  Consequently, the inequalities in \Cref{thm:main,thm:commonality} hold
-  for $m\in\{3,5,7\}$ whenever $p\ge1/2$.
 \end{proposition}
 
 \begin{proof}
@@ -1127,19 +1123,7 @@ nonnegative when $p\ge1/2$.
       ={}&6.
     \end{aligned}
   \]
-
-  We have proved that
-  for $m\in\{3,5,7\}$ and $1\le r\le(m-1)/2$,
-  $P_{m,r}(q;\lambda_1,\ldots,\lambda_r)>0$ for every
-  $0\le q\le1/2$ and every $\lambda_1,\ldots,\lambda_r\in\R$.
-  Since $\mu$ is a nonnegative measure, \eqref{eq:Phi-expansion} gives
-  $\Phi_m\ge0$.
-  By \Cref{lem:polynomial-reduction} and the discussion following its
-  statement, this proves the strengthened inequality in
-  \Cref{thm:commonality} for $m\in\{3,5,7\}$ and $p\ge1/2$.
-  The comparison following \Cref{thm:commonality} then gives the
-  odd-cycle bound in \Cref{thm:main} for the same cycle lengths and
-  edge densities.
+This concludes the proof.
 \end{proof}
 
 \section{Positivity of the excursion polynomials}
@@ -1154,8 +1138,6 @@ The excursion expansion in \Cref{sec:excursions} reduces this task to showing th
 \end{equation}
 whenever $0\le q\le1/3$, $m\ge3$ is odd, $1\le r\le(m-1)/2$, and each
 $\lambda_i\in[-1/2,1/2]$.
-\Cref{sec:short-cycles} verified the positivity of $P_{m,r}$ for the first three odd cycles;
-this section supplies an argument uniform in the cycle length.
 We prove \eqref{eq:pge23-positivity-goal} in two steps.
 First, Dirichlet averaging reduces the inequality to the case in which all
 spectral variables $\lambda_1,\ldots,\lambda_r$ equal a common value $\lambda$.
@@ -1170,9 +1152,6 @@ proved in \Cref{app:gamma-moment}, supplies the required comparison.
 Together, the diagonal reduction and the proof of diagonal positivity establish
 \eqref{eq:pge23-positivity-goal}, completing the proofs of
 \Cref{thm:commonality,thm:main}.
-\Cref{sec:equality-stability} characterises equality in both inequalities and
-deduces qualitative stability of the balanced complete multipartite graphons
-at densities $p=1-1/k$, $k\ge3$.
 
 We begin with an averaging identity for complete homogeneous symmetric
 polynomials. It will be used both in the diagonal reduction and in the
@@ -1185,7 +1164,7 @@ Beta representation.
     \Theta_i\ge0,\qquad \sum_{i=1}^k\Theta_i=1.
   \]
   Equivalently, this vector has the $\operatorname{Dirichlet}(1,\ldots,1)$
-  distribution; for $k=1$, this means $\Theta_1=1$.
+  distribution.
   Then the complete homogeneous symmetric polynomial $h_j$, defined in
   \eqref{eq:h-def}, admits the representation
   \begin{equation}\label{eq:pge23-dirichlet-moment}
@@ -1343,18 +1322,16 @@ for
   \quad 1\le r\le\frac{m-1}{2},
   \quad -\frac{1}{2}\le\lambda\le\frac{1}{2}.
 \]
-This is the first major simplification: it replaces an $r$-variable symmetric
-polynomial by a one-variable polynomial.
 
 We next obtain a Beta representation for complete homogeneous symmetric
 polynomials whose variables take two repeated values. This follows from the
 Dirichlet representation by grouping the weights corresponding to each value.
-For $r\ge1$, the notation $X\sim\BetaLaw(r,r)$ means that $X$ has density
+For $r\ge1$, the notation $X\sim\BetaLaw(r,r)$ means that $X$ has probability density function
 \[
   \frac{\Gamma(2r)}{\Gamma(r)^2}x^{r-1}(1-x)^{r-1},
   \qquad 0<x<1,
 \]
-and density zero outside this interval.
+and zero outside this interval.
 
 \begin{lemma}[Beta representation]\label{lem:pge23-beta-representation}
   Let $r\ge1$ and $j\ge0$ be integers, let $a,b\in\R$, and let
@@ -1869,13 +1846,24 @@ $\E\rho_{n,m}(q+xY)$ needed in the Gamma integral representation
 \end{remark}
 
 \begin{proof}[Proof of the inequalities in \Cref{thm:main,thm:commonality}]
-  By \Cref{lem:polynomial-reduction,lem:pge23-dirichlet}, it suffices to prove
+  First suppose that $W$ is a step graphon on a partition into intervals of equal length, and write $U=1-W$ and $q=1-p$.
+  When $0\le q\le1/3$, \Cref{lem:pge23-dirichlet} reduces polynomial nonnegativity to
   $\widetilde P_{m,r}(q,\lambda)\ge0$ for $-1/2\le\lambda\le1/2$.
   This follows from \Cref{lem:pge23-ell-negative} when $\lambda\le0$.
   When $\lambda>0$, \Cref{lem:pge23-laplace-gamma} expresses
   $\widetilde P_{m,r}(q,\lambda)$ as an integral of expectations of the form
   $\E\rho_{n,m}(q+xY)$, which are nonnegative by
   \Cref{prop:pge23-gamma-positive}.
+  Thus, $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
+  For $m\in\{3,5,7\}$, \Cref{prop:short-cycles} gives the same polynomial nonnegativity throughout the larger range $0\le q\le1/2$.
+
+  In both cases, the nonnegativity of $\mu$ gives $\Phi_m\ge0$, so \Cref{lem:polynomial-reduction} proves \eqref{eq:intro-commonality} for step graphons in the corresponding density ranges.
+  The approximation argument used in \Cref{lem:step-reduction}, which preserves edge density, extends this inequality to arbitrary graphons.
+  Finally, \eqref{eq:cycle-path-comparison} gives
+  \[
+    \tC mW\ge p^m+q^m-q^{m-1}=p^m-pq^{m-1},
+  \]
+  which is \eqref{eq:intro-main}.
 \end{proof}
 
 \section{Equality and qualitative stability}
@@ -2265,7 +2253,7 @@ This completes the equality assertion in \Cref{thm:main}.
 
 The uniqueness just proved, together with compactness and continuity in cut distance (\Cref{subsec:graphon-preliminaries}), gives the following corollary.
 
-\begin{corollary}[Qualitative stability]\label{cor:stability}
+\begin{corollary}[Stability]\label{cor:stability}
   Fix an odd integer $m\ge3$.
   For every integer $k\ge3$ and every $\varepsilon>0$, there exists $\delta>0$ such that every graphon $V$ satisfying
   \[
