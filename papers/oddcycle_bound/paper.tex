@@ -648,23 +648,23 @@ For an odd integer $m\ge3$, the cycle density of $U$ satisfies
     \Tr(R_1M_UR_2M_U\cdots R_mM_U).
 \end{equation}
 Each sequence $R_1\cdots R_m$ of letters $P$ and $Q$, called a \emph{word}, corresponds to exactly one summand in \eqref{eq:trace-projection-expansion}.
+We call a word \emph{mixed} if it contains both $P$ and $Q$.
 For trace terms, we regard the word as cyclic, so its last and first letters are consecutive.
 
 A \emph{block} is a maximal consecutive run of the same letter.
-Thus, in a word containing both $P$ and $Q$, each $Q$-block has a $P$ immediately before and after it.
+Thus, in a mixed word, each $Q$-block has a $P$ immediately before and after it.
 For example, the segment
 \[
   P\,\underbrace{QQ}_{\text{one $Q$-block}}\,P
 \]
 of a word corresponds to the matrix segment $P M_U Q M_U Q M_U P$.
-We call a passage from $\R e$ through $\mathcal E_0$ and back an \emph{excursion}.
-Using the block forms of $P$ and $Q$ in \eqref{eq:block-PQ} and of $M_U$ in \eqref{eq:block-UW}, we obtain
+In a mixed cyclic word, we call each $Q$-block an \emph{excursion}.
+For a $Q$-block of length $\beta+1$, where $\beta\ge0$ is an integer, the corresponding matrix segment satisfies
 \[
-  P M_U Q M_U Q M_U P=(g^{\mathsf T}Ag)P.
+  P M_U(Q M_U)^{\beta+1}P=(g^{\mathsf T}A^\beta g)P.
 \]
-Here the outward transition contributes $g$, the step within $\mathcal E_0$ contributes $A$, and the return contributes $g^{\mathsf T}$.
-More generally, a block of $\beta+1$ letters $Q$ has $\beta$ steps within $\mathcal E_0$ and contributes the scalar factor $g^{\mathsf T}A^\beta g$.
-By \eqref{eq:moments}, this factor is $\int\lambda^\beta\dd\mu(\lambda)$, which connects each excursion to the spectral measure from \Cref{subsec:spectral-setup}.
+By \eqref{eq:moments}, its scalar coefficient is $\int\lambda^\beta\dd\mu(\lambda)$.
+Together with the powers of $q$ from the $P$-blocks, these moments turn the sums over block lengths into polynomial integrals.
 
 We group words by their number $r$ of excursions and their block lengths.
 The resulting monomial sums are complete homogeneous symmetric polynomials, defined as follows.
@@ -681,6 +681,8 @@ We write $\rep ak$ in an argument list when $a$ is repeated $k$ times.
 In \eqref{eq:h-def}, the exponents $\gamma_i$ are nonnegative integers.
 All repeated integrals against $\mu$ below are over $[-1/2,1/2]$,
 which contains its support, unless another domain is specified.
+
+We now make this expansion precise for cycle densities.
 
 \begin{lemma}[Cycle densities by excursions]
 \label{lem:cycle-excursions}
@@ -704,20 +706,27 @@ which contains its support, unless another domain is specified.
 \end{lemma}
 
 \begin{proof}
-  The two unmixed words in \eqref{eq:trace-projection-expansion} contribute $q^m$ and $\Tr(A^m)$.
+  We first prove \eqref{eq:cycle-U}.
+  In \eqref{eq:trace-projection-expansion}, the word consisting only of $P$ gives $q^m$, while the word consisting only of $Q$ gives $\Tr(A^m)$.
 
+  We now consider the remaining words, which contain both $P$ and $Q$.
   For a mixed word with $r$ cyclic $Q$-blocks, choose a boundary where $Q$ is followed by $P$ and rotate the word to start with $P$ and end with $Q$.
   The trace is unchanged, and no block is split.
   For $1\le i\le r$, write the lengths of the $i$th $P$-block and the following $Q$-block as $\alpha_i+1$ and $\beta_i+1$, respectively, with $\alpha_i,\beta_i\ge0$.
-  To evaluate the corresponding trace, use the block forms in \eqref{eq:block-PQ} and \eqref{eq:block-UW}:
+  To evaluate the corresponding trace, use the block forms in \eqref{eq:block-PQ} and \eqref{eq:block-UW} to obtain
   \[
-    P M_U P=qP,
+    Q M_U=\begin{pmatrix}0&0\\g&A\end{pmatrix},
     \qquad
+    (Q M_U)^{\beta_i+1}P
+    =\begin{pmatrix}0&0\\A^{\beta_i}g&0\end{pmatrix}.
+  \]
+  The second identity follows by induction on $\beta_i$: right-multiplication by $P$ gives the case $\beta_i=0$, and left-multiplication by $Q M_U$ multiplies the lower-left block by $A$.
+  The block forms also give $P M_U P=qP$, and left-multiplication of the second identity by $P M_U$ yields
+  \[
     P M_U(Q M_U)^{\beta_i+1}P
     =(g^{\mathsf T}A^{\beta_i}g)P.
   \]
-  The $P$-block has $\alpha_i$ internal steps, each contributing $q$, while the following $Q$-block gives one excursion.
-  Thus, the pair of blocks, ending at the next $P$, satisfies
+  Using $P M_U P=qP$, the pair of blocks, ending at the next $P$, satisfies
   \[
     (P M_U)^{\alpha_i+1}(Q M_U)^{\beta_i+1}P
     =q^{\alpha_i}(g^{\mathsf T}A^{\beta_i}g)P.
@@ -771,7 +780,7 @@ which contains its support, unless another domain is specified.
       h_{m-2r}(\rep qr,\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \end{align*}
-  Summing over $r$ and including the two unmixed words proves \eqref{eq:cycle-U}.
+  Summing over $r$ and adding $q^m+\Tr(A^m)$ proves \eqref{eq:cycle-U}.
 
   For $M_W$, the block identity \eqref{eq:block-UW} replaces
   $(q,g,A)$ by $(p,-g,-A)$.  The two crossing signs cancel in each block,
