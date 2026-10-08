@@ -1147,6 +1147,7 @@ This representation gives nonnegativity directly when $\lambda\le0$.
 For $\lambda>0$, a further integral representation reduces the problem to
 comparing odd and even moments of $zY-1$, where $Y\sim\GammaLaw(r,1)$
 and $z\ge0$.
+Here, for $a>0$, $\GammaLaw(a,1)$ denotes the Gamma distribution with shape $a$ and rate $1$.
 The uniform odd-to-even Gamma moment bound in \Cref{lem:pge23-gamma-moment},
 proved in \Cref{app:gamma-moment}, supplies the required comparison.
 Together, the diagonal reduction and the proof of diagonal positivity establish
@@ -1475,16 +1476,15 @@ polynomial as a Beta expectation.
   \]
   This proves \eqref{eq:pge23-beta-second}.
 
-  \smallskip
-  \noindent\emph{The integral formula.}
-  For $\lambda>0$, the Beta density gives
+  We now derive the integral formula~\eqref{eq:pge23-beta-integral} for the expectation.
+  For $\lambda>0$, the probability density function of the Beta distribution gives
   \[
     \E\left[X^n\rho_{n,m}\left(q+\lambda\frac{1-X}{X}\right)\right]
     =\frac{\Gamma(2r)}{\Gamma(r)^2}
     \int_0^1 x^{n+r-1}(1-x)^{r-1}
     \rho_{n,m}\left(q+\lambda\frac{1-x}{x}\right)\dd x.
   \]
-  Make the substitution
+  We now substitute by 
   \[
     s=\lambda\frac{1-x}{x},
     \qquad
@@ -1544,9 +1544,9 @@ polynomial as a Beta expectation.
   This identity follows by expanding
   $(1-u)((1-u)^{n-1}-u^{n-1})=(1-u)^n-u^{n-1}+u^n$.
   Since $n=m-2r>0$, we have $m/n-1=2r/n>0$.
-  Also, $n$ is odd, so $n-1$ is even.
-  In this decomposition of $\rho_{n,m}(u)$, the second term
-  $\left(\frac{m}{n}-1\right)u^{n-1}$ is therefore nonnegative for every
+  Also, as $n$ is odd, $n-1$ is even.
+  Thus, in this decomposition of $\rho_{n,m}(u)$, the second term
+  $\left(\frac{m}{n}-1\right)u^{n-1}$ is nonnegative for every
   $u\in\R$.
   The first term, $\frac{m}{n}(1-u)\bigl((1-u)^{n-1}-u^{n-1}\bigr)$,
   is nonnegative whenever $1-u\ge0$ and $|1-u|\ge|u|$, both of which hold
@@ -1562,15 +1562,15 @@ polynomial as a Beta expectation.
 \subsection{Gamma representation and the moment bound}
 \label{subsec:gamma-positivity}
 
-Only the case $\lambda>0$ remains.
+It now suffices to consider the case $\lambda>0$.
 Unlike the case $\lambda\le0$, the argument $q+s$ of $\rho_{n,m}$ in
 \eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, where
 $\rho_{n,m}$ can be negative; for example, $\rho_{5,7}(0.7)<0$.
 The integrand can therefore no longer be handled pointwise. We must instead
 prove that the integral as a whole is nonnegative.
 
-Since the constant prefactor and $\lambda^{n+r}$ in
-\eqref{eq:pge23-beta-integral} are positive, it remains to show that
+Since the coefficient multiplying the integral in
+\eqref{eq:pge23-beta-integral} is positive for $\lambda>0$, it remains to show that
 \[
   \int_0^\infty
   \frac{s^{r-1}}{(\lambda+s)^m}\rho_{n,m}(q+s)\dd s\ge0.
@@ -1588,7 +1588,7 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 \begin{lemma}[Gamma representation of the diagonal polynomial]\label{lem:pge23-laplace-gamma}
   Let $m\ge3$ be odd, let $r$ be an integer satisfying
   $1\le r\le(m-1)/2$, and set $n=m-2r$.
-  Let $Y\sim\GammaLaw(r,1)$, where the parameters denote shape and rate.
+  Let $Y\sim\GammaLaw(r,1)$.
   For every $q\in\R$ and $\lambda>0$,
   \begin{equation}\label{eq:pge23-laplace-gamma}
     \widetilde P_{m,r}(q,\lambda)
