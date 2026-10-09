@@ -102,7 +102,7 @@
 \affil[3]{June E Huh Center for Mathematical Challenges, Korea Institute for Advanced Study (KIAS), Korea}
 \affil[4]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
 \affil[ ]{\newline\texttt{taeyoungkim21@kaist.ac.kr}, \texttt{{jineon.kias}@gmail.com}, \texttt{seonghyuk@kias.re.kr}, \texttt{joonkyunglee@kias.re.kr}, \texttt{hongseokyang@kias.re.kr}}
-\date{}
+\date{October 9, 2026}
 
 \begin{document}
 \maketitle
@@ -115,8 +115,8 @@
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
   For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
-  In the same density range, we also strengthen Kim and Lee's density-sensitive commonality inequalityfor odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with \(m-1\) edges. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
-  We establish their positivity through a uniform inequality comparing odd and even moments of shifted Gamma random variables.
+  In the same density range, we also strengthen Kim and Lee's density-sensitive commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with \(m-1\) edges. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
+  We prove the one-variable inequality through a uniform inequality comparing odd and even moments of shifted Gamma random variables.
   We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
 
@@ -125,14 +125,14 @@
 Determining the (asymptotic) minimum density of a fixed graph $H$ at a prescribed edge density is a classical problem in extremal graph theory.
 Here subgraph densities are normalised by counting labelled copies of $H$ and dividing by $n^{|V(H)|}$, where $n$ is the number of vertices of the host graph.
 Typical examples are Tur\'an-type problems, which ask how dense a graph can be while the $H$-density remains zero.
-The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
+The Erd\H os--Stone--Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers this question asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
 
 
 The supersaturation theorem of Erd\H os and Simonovits~\cite{erdos1983supersaturated} further shows that exceeding the threshold $1-1/r$ by a fixed amount forces the $H$-density to be bounded away from zero.
 More quantitatively, Sidorenko~\cite{sidorenko1991inequalities} conjectured that for a bipartite graph $H$, the minimum $H$-density among graphs of edge density $p$ is asymptotically attained by the random graph with edge density $p$. 
 This conjecture has been proved for several classes of bipartite graphs~\cite{conlon2010approximate,conlon2018some,conlon2017finite,conlon2021sidorenko,hatami2010graph,im2026sidorenko,kim2016two,li2025logarithmic,sidorenko1993correlation,szegedy2014information}, and very recently, OpenAI announced a counterexample~\cite{openai2026counterexample}. However, it is still far from completely understood which bipartite graphs satisfy Sidorenko's conjecture.
 
-For complete graphs, the corresponding question is the classical Erd\H os-Rademacher, or clique-density, problem~\cite{erdos1962number}.
+For complete graphs, the corresponding question is the classical Erd\H os--Rademacher, or clique-density, problem~\cite{erdos1962number}.
 Goodman~\cite{goodman1959sets} proved a simple lower bound on triangle counts, which implies that the asymptotic triangle density at edge density $p$ is at least $2p^2-p$.
 At each density $p=1-1/k$ with an integer $k\ge2$, this bound is asymptotically attained by balanced complete $k$-partite graphs.
 Between these densities, the exact asymptotic minimum follows a more intricate, piecewise-defined curve, which was determined by Razborov~\cite{razborov2008minimal} using flag algebras.
@@ -167,15 +167,15 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   \begin{equation}\label{eq:intro-main}
     \tC mW\ge\goal.
   \end{equation}
-  Equality holds if and only if $W$ is equal to $W_k$ up to relabeling for some integer $k\ge3$, or $W\equiv1$.
+  Equality holds if and only if $W$ is equal to $W_k$ up to relabelling for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
 
 At each density $p=1-1/k$, $k\ge3$, this uniqueness also yields a stability result in cut distance (\Cref{cor:stability}).
 
-The remaining nontrivial range $1/2<p<2/3$ will be treated in a companion paper using different methods.
+A companion paper proves the odd-cycle Goodman bound \eqref{eq:intro-main} in the remaining nontrivial range $1/2<p<2/3$ using different methods.
 For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
 
-\subsection{Extension of Commonality}
+\subsection{Extension of commonality}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
 For a graph $H$, we say that $H$ is \emph{common} if the random red-blue edge colouring of $E(K_n)$ asymptotically minimises the number of monochromatic copies of $H$.
 In the graphon setting, this notion translates to the inequality
@@ -185,9 +185,9 @@ In the graphon setting, this notion translates to the inequality
 for every graphon $W$.
 The notion of common graphs has been extensively studied in extremal combinatorics. 
 Goodman~\cite{goodman1959sets} proved that the triangle is common.
-A famous conjecture by Erd\H{o}s states that all complete graphs are common, and Burr and Rosta~\cite{burr1980ramsey} strengthened it by conjecturing that all graphs are common.
+A famous conjecture by Erd\H{o}s~\cite{erdos1962number} states that all complete graphs are common, and Burr and Rosta~\cite{burr1980ramsey} strengthened it by conjecturing that all graphs are common.
 This was later disproved by Thomason~\cite{thomason1989disproof}, who showed that $K_4$ is not common.
-Many other graphs have been studied to determine whether they are common or not common~\cite{grzesik2022tripartite,hatami2012non,jagger1996multiplicities,ko2023common,kral2025common,lee2026disconnected,sidorenko1989cycles}, but the complete classification remains open.
+Many other graphs have been studied to determine whether or not they are common~\cite{grzesik2022tripartite,hatami2012non,jagger1996multiplicities,ko2023common,kral2025common,lee2026disconnected,sidorenko1989cycles}, but the complete classification remains open.
 
 Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening for every path or cycle $H$ and every graphon $W$\footnote{Their result holds more generally for every kernel, that is, every bounded symmetric measurable function $W\colon[0,1]^2\to\mathbb{R}$.} with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
@@ -230,12 +230,12 @@ For $p<1$, these conditions force $1-W$ to be a union of equal cliques, as prove
 At $p=1$, $W\equiv1$ almost everywhere and equality holds; the multipartite density formula \eqref{eq:intro-kpartite-value} establishes the converse for $W_k$.
 
 We also remark that for $m\in\{3,5,7\}$, the explicit calculations in \Cref{sec:short-cycles} prove the inequality in \Cref{thm:commonality} for all $p\ge1/2$.
-Therefore, the lower bound in \Cref{thm:main} holds for every $p\in[0,1]$ for $C_3, C_5,$ and $C_7$.
+Therefore, the lower bound in \Cref{thm:main} holds for every $p\in[0,1]$ for $C_3$, $C_5$, and $C_7$.
 On the other hand, there is a counterexample for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for the full range of $p\in[0,1]$, one needs a different approach.
 See Section~\ref{sec:conclusion} for the detailed discussion.
 
 \subsection{Proof strategy: four reductions}
-Our proof strategy can be summarized as four reductions that simplify the problem while preserving the essential structure of the inequality.
+Our proof strategy can be summarised as four reductions that simplify the problem while preserving the essential structure of the inequality.
 Before introducing the reductions, we set up some preliminary observations.
 
 Let $\Tker W$ denote the integral operator with kernel $W$, formally defined in \Cref{subsec:graphon-preliminaries}.
@@ -279,7 +279,7 @@ We handle these mixed trace terms by approximating $W$ in $L^1$ by step graphons
 
 \paragraph{Step 2: Excursion expansion.}
 We reduce this comparison to polynomial nonnegativity.
-Grouping the mixed trace terms into excursions gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}.
+Grouping the mixed trace terms into excursions gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}:
 \[
   \begin{aligned}
     & \Bigl(\tC mW+\tC m{1-W}-p^m-(1-p)^m\Bigr)
@@ -557,7 +557,7 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
     \qquad
     (f_-)_i=\max\{-f_i,0\}.
   \]
-  Both vectors have nonnegative entries, and $f=f_+-f_-$ and $|f|=f_++f_-$.
+  Both vectors have nonnegative entries, $f=f_+-f_-$, and $|f|=f_++f_-$.
   Since $e^{\mathsf T}f=0$,
   \[
     e^{\mathsf T}f_+=e^{\mathsf T}f_-=:a,
@@ -593,14 +593,14 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
   Here the second inequality again uses the entrywise comparison $M_U\le M_1$
   in the standard coordinates and the nonnegative entries of $f_+$ and $f_-$,
   together with $f_+^{\mathsf T}M_1f_-=f_-^{\mathsf T}M_1f_+=a^2$.
-  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh-Ritz
+  Since $f^{\mathsf T}Af=f^{\mathsf T}M_Uf$, the Rayleigh--Ritz
   characterisation of the eigenvalues of the symmetric map $A$ proves the
   claim.
 \end{proof}
 
 Let $\lambda_1,\ldots,\lambda_{N-1}$ be the eigenvalues of $A$, counted
 with multiplicity, and choose corresponding orthonormal eigenvectors
-$u_1,\ldots,u_{N-1}$ of $\mathcal E_0$. For each $i$, let $P_i$ be the
+$u_1,\ldots,u_{N-1}$ in $\mathcal E_0$. For each $i$, let $P_i$ be the
 orthogonal projection onto the one-dimensional subspace spanned by $u_i$.
 Define the finite nonnegative measure
 \begin{equation*}
@@ -632,7 +632,7 @@ Here $\delta_{\lambda_i}$ is the unit point mass at $\lambda_i$.
 \end{proof}
 
 Thus, the quantities $g^{\mathsf T}A^jg$ are moments of a single nonnegative measure $\mu$ supported on $[-1/2,1/2]$.
-In the next section, we use this representation to express the difference between the two sides of \Cref{thm:commonality} as a sum of repeated integrals of polynomials against $\mu$.
+In the next section, we use this representation to express the difference between the two sides of the inequality \eqref{eq:intro-commonality} in \Cref{thm:commonality} as a sum of repeated integrals of polynomials against $\mu$.
 Since $\mu$ is nonnegative, proving that these polynomials are nonnegative will establish the theorem.
 
 \section{Excursion expansions}
@@ -745,7 +745,7 @@ We now make this expansion precise for cycle densities.
   Each word has exactly $r$ choices of the mark.
   Conversely, an ordered tuple $(\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r)$ of nonnegative integers satisfying the length condition in \eqref{eq:excursion-length-weight}, together with the labelled position $j$ of the first $P$ after the mark, determines exactly one marked word: place the successive $P$- and $Q$-blocks of the specified lengths cyclically from $j$.
   Each tuple therefore gives $m$ marked words, distinct even for periodic words because their marks occupy different labelled positions.
-  These constructions are inverse, and by cyclicity and \eqref{eq:excursion-length-weight}, the trace weight depends only on the tuple.
+  These two constructions are mutually inverse, and by cyclicity and \eqref{eq:excursion-length-weight}, the trace weight depends only on the tuple.
   Summing the weights in these two ways gives
   \begin{equation}\label{eq:U-r-excursions}
       \Bigg(
@@ -1445,7 +1445,8 @@ polynomial as a Beta expectation.
     V_X+W_X=X.
   \]
   Apply \Cref{lem:pge23-beta-representation} to the two cycle terms
-  in \eqref{eq:pge23-Ptilde}, and
+  in the definition \eqref{eq:Pmr} of $P_{m,r}$, with
+  $\lambda_1=\cdots=\lambda_r=\lambda$, and
   \eqref{eq:pge23-beta-h-deriv} to the path term. This gives
   \begin{equation}\label{eq:pge23-beta-first}
     \widetilde P_{m,r}(q,\lambda)
@@ -1563,7 +1564,7 @@ polynomial as a Beta expectation.
 \label{subsec:gamma-positivity}
 
 It now suffices to consider the case $\lambda>0$.
-Unlike the case $\lambda\le0$, the argument $q+s$ of $\rho_{n,m}$ in
+Unlike in the case $\lambda\le0$, the argument $q+s$ of $\rho_{n,m}$ in
 \eqref{eq:pge23-beta-integral} ranges over $[q,\infty)$, where
 $\rho_{n,m}$ can be negative; for example, $\rho_{5,7}(0.7)<0$.
 The integrand can therefore no longer be handled pointwise. We must instead
@@ -1672,7 +1673,7 @@ it suffices to prove that this expectation is nonnegative for every $t>0$.
 We now seek to prove $\E\left[\rho_{n,m}(q+xY)\right]\ge0$ for $0\le q\le1/3$,
 where $x=1/t>0$. The following lemma expands $\rho_{n,m}$ around $u=1/2$.
 
-\begin{lemma}[Centered expansion of $\rho_{n,m}$]\label{lem:pge23-rho-centered}
+\begin{lemma}[Centred expansion of $\rho_{n,m}$]\label{lem:pge23-rho-centered}
   Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
   For $0\le j\le(n-1)/2$, let
   \[
@@ -1771,7 +1772,7 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
     \qquad z=\frac{x}{\delta}\ge0,
     \qquad v=q+xY-\frac12=\delta(zY-1).
   \]
-  Taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to
+  After taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to
   bound each summand.
   For $j\ge1$,
   \begin{align*}
@@ -1899,7 +1900,7 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
   First suppose that $W$ is constant on each rectangle $I_a\times I_b$,
   where $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$,
   as in \Cref{subsec:step-matrices}.
-  Recall from \eqref{eq:Phi-expansion} that
+  \Cref{lem:polynomial-reduction} and the definition \eqref{eq:Phi-expansion} of $\Phi_m$ give
   \[
     \Psi_m(W)=\Phi_m
     =\sum_{r=1}^{(m-1)/2}
@@ -2051,7 +2052,7 @@ multipartite graphon.
   We use this cycle density to determine the possible eigenvalues of
   $\Tker U$. We first show that its operator norm is at most $q$.
   Since $U\ge0$, we may split $U=U^{1/2}\cdot U^{1/2}$.
-  For $f\in L^2[0,1]$, applying the Cauchy-Schwarz inequality in the
+  For $f\in L^2[0,1]$, applying the Cauchy--Schwarz inequality in the
   variable $y$ gives
   \[
     \bigl|\Tker Uf(x)\bigr|^2
@@ -2235,7 +2236,7 @@ The uniqueness just proved, together with compactness and continuity in cut dist
     \qquad
     \delta_\square(W^{(j)},W_k)\ge\varepsilon .
   \]
-  By compactness in cut distance (\Cref{subsec:graphon-preliminaries}), after passing to a subsequence, $W^{(j)}$ converges in cut distance to a graphon $W$.
+  By compactness in cut distance (\Cref{subsec:graphon-preliminaries}), after passing to a subsequence, we may assume that $W^{(j)}$ converges in cut distance to a graphon $W$.
   Edge and cycle densities are continuous in cut distance, so the first two conditions pass to the limit as
   \[
     \edens W=p_k,
@@ -2347,15 +2348,15 @@ explain when the values attained by balanced complete multipartite graphons
 yield a polynomial lower bound valid also at the densities between those
 points of equality.
 
-\paragraph{AI use disclosure}
+\paragraph{AI use disclosure.}
 The problem studied here arose from the neural graphon representation
 framework of Kim, Baek, Lee, and Yang~\cite{kim2026implicit}.
 The authors guided the initial proof development, which involved preliminary
-computations and a week of interactive proof search with GPT 5.5,
-GPT 5.5 Pro, and Claude Fable 5.0.
+computations and a week of interactive proof search with GPT-5.5,
+GPT-5.5 Pro, and Claude Fable 5.0.
 The authors also suggested directions for simplifying the proof and seeking
 a combinatorial interpretation.
-GPT 5.5 Pro and GPT 6.0 Astra assisted with the subsequent simplification and exposition of
+GPT-5.5 Pro and GPT-6.0 Astra assisted with the subsequent simplification and exposition of
 the argument, including the introduction of the excursion-based proof,
 the revision of the argument following \Cref{lem:pge23-ell-negative} using
 \Cref{lem:pge23-gamma-moment}, and the results on equality and stability.
@@ -2364,12 +2365,12 @@ The authors independently verified the written proof.
 Claude Fable 5.1 and Claude Opus 4.8 assisted with the Lean formalisation of the proof, under the authors' guidance.
 The authors checked the Lean formalisation and verified that its definitions and
 theorem statements agreed with those in the paper.
-GPT 5.6 Sol, GPT 6.0 Astra, and Claude Opus 4.8 also assisted with drafting and revising
+GPT-5.6 Sol, GPT-6.0 Astra, and Claude Opus 4.8 also assisted with drafting and revising
 the manuscript.
 
-\paragraph{Lean formalisation}
+\paragraph{Lean formalisation.}
 The proofs of \Cref{thm:main,thm:commonality,prop:main-equality} are formalised in Lean 4, while the stability assertion in \Cref{cor:stability} is not formalised.
-The formalisation is available at \url{https://github.com/mekty2012/OddCycleGoodman-lean}, and this repository also contains a proof of \Cref{thm:main} for $1/2 \le p < 2/3$, which is not described in this paper.
+The formalisation is available at \url{https://github.com/mekty2012/OddCycleGoodman-lean}, and this repository also contains a proof of \Cref{thm:main} for $1/2<p<2/3$, which is not described in this paper.
 
 There are some deviations between the formalisation and the paper.
 First, instead of reducing to step graphons and their matrices (\Cref{lem:step-reduction}), we work with integral operators in the formalisation.
@@ -2380,10 +2381,10 @@ Finally, we prove \Cref{prop:main-equality} by applying $q$-regularity and the C
 
 
 
-\paragraph{Acknowledgements}
+\paragraph{Acknowledgements.}
 We would like to thank Gyeongwon Jeong, Jang Soo Kim, Sangho Lim, and
 Seonghun Park for helpful discussions.
-S. Im was supported by a KIAS individual Grant (AP109501) at Korea Institute for Advanced Study.
+S. Im was supported by a KIAS Individual Grant (AP109501) at the Korea Institute for Advanced Study.
 T. Kim and H. Yang were supported by the National Research Foundation of Korea (NRF)
 grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
 J. Lee was supported by Samsung STF Grant SSTF-BA2201-02 and
