@@ -115,7 +115,7 @@
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
   For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
-  We also prove a strengthening of Kim and Lee's extended commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with \(m-1\) edges, in the same density range. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
+  In the same density range, we also strengthen Kim and Lee's density-sensitive commonality inequalityfor odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with \(m-1\) edges. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
   We establish their positivity through a uniform inequality comparing odd and even moments of shifted Gamma random variables.
   We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
@@ -175,7 +175,7 @@ At each density $p=1-1/k$, $k\ge3$, this uniqueness also yields a stability resu
 The remaining nontrivial range $1/2<p<2/3$ will be treated in a companion paper using different methods.
 For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
 
-\subsection{Extended Commonality}
+\subsection{Extension of Commonality}
 Our proof of \Cref{thm:main} passes through a stronger inequality involving $W$ and its complement $1-W$.
 For a graph $H$, we say that $H$ is \emph{common} if the random red-blue edge colouring of $E(K_n)$ asymptotically minimises the number of monochromatic copies of $H$.
 In the graphon setting, this notion translates to the inequality
@@ -189,16 +189,16 @@ A famous conjecture by Erd\H{o}s states that all complete graphs are common, and
 This was later disproved by Thomason~\cite{thomason1989disproof}, who showed that $K_4$ is not common.
 Many other graphs have been studied to determine whether they are common or not common~\cite{grzesik2022tripartite,hatami2012non,jagger1996multiplicities,ko2023common,kral2025common,lee2026disconnected,sidorenko1989cycles}, but the complete classification remains open.
 
-Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
+Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening for every path or cycle $H$ and every graphon $W$\footnote{Their result holds more generally for every kernel, that is, every bounded symmetric measurable function $W\colon[0,1]^2\to\mathbb{R}$.} with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
   \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)}.
 \end{equation}
 This answers a question of Sidorenko~\cite{sidorenko1989cycles}.
 It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison, and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
-Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, extended commonality implies commonality.
+Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, \eqref{eq:intro-extended-commonality} implies commonality.
 
 
-For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by a  path-density term.
+For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by a path-density term.
 A graphon $W$ is called $p$-regular if $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
 
 \begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
@@ -212,8 +212,8 @@ A graphon $W$ is called $p$-regular if $\int_0^1 W(x,y)\dd y=p$ for almost every
 
 
 
-The Blakley-Roy inequality~\cite{blakley1965holder} (independently proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
-Thus, \eqref{eq:intro-commonality} strengthens extended commonality.
+The Blakley--Roy inequality~\cite{blakley1965holder} (independently proved by Mulholland and Smith~\cite{mulholland1959inequality}) gives $\tP{m-1}{1-W}\ge(1-p)^{m-1}$.
+Thus, \eqref{eq:intro-commonality} strengthens \eqref{eq:intro-extended-commonality} for odd cycles.
 
 The inequality in \Cref{thm:main} follows immediately from \Cref{thm:commonality}.
 Since $0\le1-W\le1$, deleting one edge from the $m$-cycle gives
