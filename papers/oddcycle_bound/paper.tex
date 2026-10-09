@@ -1606,8 +1606,8 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 \end{lemma}
 
 \begin{proof}
-  Insert \eqref{eq:pge23-laplace-kernel} into
-  \eqref{eq:pge23-beta-integral} and exchange the two integrals:
+  By inserting \eqref{eq:pge23-laplace-kernel} into
+  \eqref{eq:pge23-beta-integral} and exchanging the two integrals, we obtain
   \begin{align*}
     \widetilde P_{m,r}(q,\lambda)
     &=\frac{\Gamma(m)}{r\Gamma(n)\Gamma(r)^2}\,\lambda^{n+r}
@@ -1650,8 +1650,10 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
   where the last equality holds because $Y$ has density $y^{r-1}e^{-y}/\Gamma(r)$ on $(0,\infty)$.
   Substituting this for the inner integral obtained after the exchange gives \eqref{eq:pge23-laplace-gamma}.
   To obtain \eqref{eq:pge23-gamma-expectation}, substitute $z=\lambda t$
-  in this integral. Since $m-r=n+r$, the powers of $\lambda$ cancel, and
-  the density $z^{m-r-1}e^{-z}/\Gamma(m-r)$ leaves the prefactor
+  in this integral. Since $m-r=n+r$, the powers of $\lambda$ cancel.
+  The probability density function of $Z$ is
+  $z^{m-r-1}e^{-z}/\Gamma(m-r)$, so the coefficient multiplying the
+  expectation is
   \[
     \frac{\Gamma(m-r)}{r\Gamma(n)\Gamma(r)}
     =\binom{m-r-1}{r}.
@@ -1660,78 +1662,65 @@ defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 \end{proof}
 
 In \eqref{eq:pge23-laplace-gamma}, the parameter $\lambda$ occurs only in
-the positive prefactor $\lambda^{n+r}$ and the positive weight
+the positive coefficient $\lambda^{n+r}/(r\Gamma(n)\Gamma(r))$ of the integral
+and the positive weight
 $t^{m-r-1}e^{-\lambda t}$. The expectation
 $\E\left[\rho_{n,m}(q+Y/t)\right]$ is independent of $\lambda$.
 Thus, to prove $\widetilde P_{m,r}(q,\lambda)\ge0$ for every $\lambda>0$,
 it suffices to prove that this expectation is nonnegative for every $t>0$.
 
 We now seek to prove $\E\left[\rho_{n,m}(q+xY)\right]\ge0$ for $0\le q\le1/3$,
-where $x=1/t>0$. To obtain a useful expression for this expectation, we
-substitute $u=\frac12+v$ into the defining formula \eqref{eq:pge23-rho}
-for $\rho_{n,m}(u)$ and expand $\rho_{n,m}(\frac12+v)$ as a polynomial
-in $v$. The choice of $1/2$ uses the symmetry of
-$u^n+(1-u)^n$ under exchanging $u$ and $1-u$.
-Set
-\[
-  A_n(u)=u^n+(1-u)^n.
-\]
-We rewrite $\rho_{n,m}$ through $A_n$ and $A_n'$.
-From $A_n'(u)=n\bigl(u^{n-1}-(1-u)^{n-1}\bigr)$,
-\[
-  (1-u)A_n'(u)
-  =n(1-u)u^{n-1}-n(1-u)^n
-  =nu^{n-1}-nu^n-n(1-u)^n
-  =nu^{n-1}-nA_n(u),
-\]
-that is, $u^{n-1}=A_n(u)+\frac1n(1-u)A_n'(u)$.
-Substituting this into \eqref{eq:pge23-rho} and using $m-n=2r$ gives
-\begin{equation}\label{eq:pge23-rho-derivative}
-  n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
-\end{equation}
+where $x=1/t>0$. The following lemma expands $\rho_{n,m}$ around $u=1/2$.
 
-Substituting $u=\frac12+v$ pairs the powers of $\frac12+v$ and
-$\frac12-v$, so the odd powers of $v$ cancel. The binomial theorem gives
-\begin{equation*}
-  A_n\left(\frac{1}{2}+v\right)
-  =\left(\frac12+v\right)^n+\left(\frac12-v\right)^n
-  =2\sum_{2j\le n}\binom n{2j}\left(\frac12\right)^{n-2j}v^{2j}
-  =\sum_{j=0}^{(n-1)/2}a_jv^{2j},
-\end{equation*}
-where $a_j=2^{2j+1-n}\binom n{2j}>0$.
-Differentiating in $v$ gives
-$A_n'(\frac12+v)=\sum_{j\ge1}2ja_jv^{2j-1}$.
-Substitute these two expansions into \eqref{eq:pge23-rho-derivative},
-with $1-u=\frac12-v$, to obtain
-\begin{align}
-  n\rho_{n,m}\left(\frac{1}{2}+v\right)
-  &=2r\sum_{j\ge0}a_jv^{2j}
-   -\left(\frac12-v\right)\sum_{j\ge1}2ja_jv^{2j-1} \nonumber \\
-  &=2ra_0+
-   \sum_{j=1}^{(n-1)/2}
-   a_j\bigl(2rv^{2j}-jv^{2j-1}+2jv^{2j}\bigr) \nonumber \\
-  &=2ra_0+
-   \sum_{j=1}^{(n-1)/2}
-   a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).\label{eq:pge23-rho-centered}
-\end{align}
+\begin{lemma}[Centered expansion of $\rho_{n,m}$]\label{lem:pge23-rho-centered}
+  Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
+  For $0\le j\le(n-1)/2$, let
+  \[
+    a_j=2^{2j+1-n}\binom n{2j}>0.
+  \]
+  Then, for every $v\in\R$,
+  \begin{equation}\label{eq:pge23-rho-centered}
+    n\rho_{n,m}\left(\frac12+v\right)
+    =2ra_0+\sum_{j=1}^{(n-1)/2}
+    a_j\bigl(2(r+j)v^{2j}-jv^{2j-1}\bigr).
+  \end{equation}
+\end{lemma}
 
-The identity \eqref{eq:pge23-rho-centered} expresses
-$n\rho_{n,m}(\frac12+v)$ as the positive constant $2ra_0$ plus the
-bracketed expressions multiplied by the positive coefficients $a_j$.
-The bracketed expressions themselves need not be nonnegative.
-At $u=q+xY$, we have $v=q+xY-1/2$, so their expectations are
-\[
-  2(r+j)\E\left[v^{2j}\right]-j\E\left[v^{2j-1}\right].
-\]
-The even moment $\E\left[v^{2j}\right]$ is nonnegative, whereas the odd moment
-$\E\left[v^{2j-1}\right]$ can have either sign. Since all the $a_j$ are positive,
-it suffices to prove
+\begin{proof}
+  Let $A_n(u)=u^n+(1-u)^n$. Since
+  \[
+    (1-u)A_n'(u)=nu^{n-1}-nA_n(u),
+  \]
+  the definition \eqref{eq:pge23-rho} and $m-n=2r$ give
+  \begin{equation}\label{eq:pge23-rho-derivative}
+    n\rho_{n,m}(u)=2rA_n(u)-(1-u)A_n'(u).
+  \end{equation}
+  By the binomial theorem,
+  \begin{align*}
+    A_n\left(\frac12+v\right)
+    &=\left(\frac12+v\right)^n+\left(\frac12-v\right)^n\\
+    &=2\sum_{2j\le n}\binom n{2j}\left(\frac12\right)^{n-2j}v^{2j}
+      =\sum_{j=0}^{(n-1)/2}a_jv^{2j}.
+  \end{align*}
+  Differentiating in $v$ and substituting into
+  \eqref{eq:pge23-rho-derivative} gives
+  \[
+    n\rho_{n,m}\left(\frac12+v\right)
+    =2r\sum_{j=0}^{(n-1)/2}a_jv^{2j}
+    -\left(\frac12-v\right)
+      \sum_{j=1}^{(n-1)/2}2ja_jv^{2j-1},
+  \]
+  which simplifies to \eqref{eq:pge23-rho-centered}.
+\end{proof}
+
+Since all $a_j$ are positive, \eqref{eq:pge23-rho-centered} shows that it
+suffices to prove
 \[
   j\E\left[v^{2j-1}\right]\le2(r+j)\E\left[v^{2j}\right],
-  \qquad 1\le j\le(n-1)/2.
+  \qquad 1\le j\le(n-1)/2,
 \]
-The following lemma gives an odd-to-even moment bound for variables of the
-form $zY-1$.
+where $v=q+xY-1/2$. The following Gamma moment bound will establish these
+inequalities.
 
 \begin{lemma}[Uniform odd-to-even Gamma moment bound]\label{lem:pge23-gamma-moment}
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
@@ -1756,8 +1745,12 @@ and $x\ge0$, we set
   \qquad v=q+xY-\frac12=\delta(zY-1).
 \]
 Thus, the lemma bounds the moments of $v/\delta=zY-1$.
-Using $\E\left[v^k\right]=\delta^k\E\left[(zY-1)^k\right]$, the proposition proves that each bracketed term in
-\eqref{eq:pge23-rho-centered} has nonnegative expectation. This gives
+Using $\E\left[v^k\right]=\delta^k\E\left[(zY-1)^k\right]$, the following proposition proves that
+\[
+  \E\left[2(r+j)v^{2j}-jv^{2j-1}\right]\ge0,
+  \qquad 1\le j\le(n-1)/2.
+\]
+Together with \eqref{eq:pge23-rho-centered}, this gives
 the nonnegativity of
 $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
 \eqref{eq:pge23-laplace-gamma}.
@@ -1772,8 +1765,12 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
 \end{proposition}
 
 \begin{proof}
-  Use $v$, $z$, and $\delta$ as defined immediately before the proposition,
-  so $v=\delta(zY-1)$ and $\delta\ge1/6$.
+  Let
+  \[
+    \delta=\frac12-q\ge\frac16,
+    \qquad z=\frac{x}{\delta}\ge0,
+    \qquad v=q+xY-\frac12=\delta(zY-1).
+  \]
   Taking expectations in \eqref{eq:pge23-rho-centered}, it suffices to
   bound each summand.
   For $j\ge1$,
@@ -1801,21 +1798,19 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
 \end{proof}
 
 \begin{remark}[Where the density threshold enters]\label{rem:pge23-threshold}
-  The verification that $2-1/(3\delta)\ge0$ in the proof of
-  \Cref{prop:pge23-gamma-positive} is the only step that requires
-  $p\ge2/3$. The factor $2-1/(3\delta)$ results from applying the
-  odd-to-even Gamma moment bound in \Cref{lem:pge23-gamma-moment}
-  to the bracketed terms in \eqref{eq:pge23-rho-centered}.
-  Since $\delta=1/2-q=p-1/2$, the factor is nonnegative precisely when
-  $\delta\ge1/6$, or $p\ge2/3$. For $1/2<p<2/3$, the lower bound
+  For $p>1/2$, the condition $2-1/(3\delta)\ge0$, where
+  $\delta=p-1/2$, is equivalent to $p\ge2/3$.
+  This is the only step in the proof of \Cref{prop:pge23-gamma-positive}
+  requiring $p\ge2/3$; for $1/2<p<2/3$, the lower bound
   \[
     \delta^{2j}(r+j)\left(2-\frac{1}{3\delta}\right)
     \E\left[(zY-1)^{2j}\right]
   \]
-  obtained for $\E\left[2(r+j)v^{2j}-jv^{2j-1}\right]$ in the proof of
-  \Cref{prop:pge23-gamma-positive} is negative. A negative lower bound
-  does not establish that the expectation itself is nonnegative.
+  for $\E\left[2(r+j)v^{2j}-jv^{2j-1}\right]$ is negative, so it does
+  not establish the required nonnegativity.
 \end{remark}
+
+\medskip
 
 \begin{proof}[Proof of the inequalities in \Cref{thm:main,thm:commonality}]
   First suppose that $W$ is a step graphon on a partition into intervals of equal length, and write $U=1-W$ and $q=1-p$.
@@ -2212,7 +2207,7 @@ This completes the equality assertion in \Cref{thm:main}.
 
 The uniqueness just proved, together with compactness and continuity in cut distance (\Cref{subsec:graphon-preliminaries}), gives the following corollary.
 
-\begin{corollary}[Stability]\label{cor:stability}
+\begin{corollary}[Qualitative stability]\label{cor:stability}
   Fix an odd integer $m\ge3$.
   For every integer $k\ge3$ and every $\varepsilon>0$, there exists $\delta>0$ such that every graphon $V$ satisfying
   \[
