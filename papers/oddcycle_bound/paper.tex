@@ -115,7 +115,7 @@
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
   For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
-  We also prove a strengthening of Kim and Lee's extended commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lowerbound, where $P_{m-1}$ is the path with \(m-1\) edges, in the same density range. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
+  We also prove a strengthening of Kim and Lee's extended commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with \(m-1\) edges, in the same density range. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
   We establish their positivity through a uniform inequality comparing odd and even moments of shifted Gamma random variables.
   We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
@@ -124,7 +124,7 @@
 
 Determining the (asymptotic) minimum density of a fixed graph $H$ at a prescribed edge density is a classical problem in extremal graph theory.
 Here subgraph densities are normalised by counting labelled copies of $H$ and dividing by $n^{|V(H)|}$, where $n$ is the number of vertices of the host graph.
-A typical examples are Tur\'an-type problems, which ask how dense a graph can be while the $H$-density remains zero.
+Typical examples are Tur\'an-type problems, which ask how dense a graph can be while the $H$-density remains zero.
 The Erd\H os-Stone-Simonovits theorem~\cite{erdos1966limit,erdos1946structure} answers it asymptotically: if $H$ has chromatic number $\chi(H)=r+1$, then every $H$-free graph has edge density at most $1-1/r+o(1)$.
 
 
@@ -185,9 +185,9 @@ In the graphon setting, this notion translates to the inequality
 for every graphon $W$.
 The notion of common graphs has been extensively studied in extremal combinatorics. 
 Goodman proved that the triangle is common.
-A famous conjecture by Erd\H{o}s states that all complete graphs are common and Burr and Rosta~\cite{burr1980ramsey} strengthened by conjecturing that all graphs are common.
+A famous conjecture by Erd\H{o}s states that all complete graphs are common, and Burr and Rosta~\cite{burr1980ramsey} strengthened it by conjecturing that all graphs are common.
 This was later disproved by Thomason~\cite{thomason1989disproof}, who showed that $K_4$ is not common.
-Many other graphs have been studied to be common or not common~\cite{jagger1996multiplicities, sidorenko1989cycles}, but the complete classification remains open.
+Many other graphs have been studied to determine whether they are common or not common~\cite{jagger1996multiplicities, sidorenko1989cycles}, but the complete classification remains open.
 
 Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening, called \emph{extended commonality}, for every path or cycle $H$ and every graphon $W$ with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
@@ -231,7 +231,7 @@ At $p=1$, $W\equiv1$ almost everywhere and equality holds; the multipartite dens
 
 We also remark that for $m\in\{3,5,7\}$, the explicit calculations in \Cref{sec:short-cycles} prove the inequality in \Cref{thm:commonality} for all $p\ge1/2$.
 Therefore, the lower bound in \Cref{thm:main} holds for every $p\in[0,1]$ for $C_3, C_5,$ and $C_7$.
-On the other hand, there is a counter example for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for all range of $p\in[0,1]$, one needs a different approach.
+On the other hand, there is a counterexample for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for the full range of $p\in[0,1]$, one needs a different approach.
 See Section~\ref{sec:conclusion} for the detailed discussion.
 
 \subsection{Proof strategy: four reductions}
@@ -1484,7 +1484,7 @@ polynomial as a Beta expectation.
     \int_0^1 x^{n+r-1}(1-x)^{r-1}
     \rho_{n,m}\left(q+\lambda\frac{1-x}{x}\right)\dd x.
   \]
-  We now substitute by 
+  We now make the substitution
   \[
     s=\lambda\frac{1-x}{x},
     \qquad
@@ -1496,7 +1496,7 @@ polynomial as a Beta expectation.
   \]
   The endpoints $x=1$ and $x\to0^+$ correspond to $s=0$ and
   $s\to\infty$, respectively. Reversing the limits and using $n+2r=m$,
-  the transformed weight is
+  we obtain the transformed weight
   \[
     \left(\frac{\lambda}{\lambda+s}\right)^{n+r-1}
     \left(\frac{s}{\lambda+s}\right)^{r-1}
@@ -2534,7 +2534,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   \]
   Let $b_0>0$ be a zero of $H$, so that $H(b_0)=0$. By \eqref{eq:pge23-gamma-H}, we have
   \[
-    F'(b_0)=-\frac{2(r+j)}{3b_0}F(b_0),
+    F'(b_0)=-\frac{2(r+j)}{3b_0}F(b_0).
   \]
   Define
   \begin{equation*}
