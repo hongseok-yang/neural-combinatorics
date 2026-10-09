@@ -1878,7 +1878,7 @@ comparison in \Cref{prop:main-equality}.
 
 For a step graphon on a partition into intervals of equal length,
 \Cref{lem:polynomial-reduction} gives
-$\Psi_m(W)=\Phi_m$, where $\Phi_m$ is the sum of spectral integrals
+$\Psi_m(W)=\Phi_m$, where $\Phi_m$ is the sum of spectral integrals defined 
 in \eqref{eq:Phi-expansion}.
 Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance bound, which we extend to arbitrary graphons by approximation.
 
@@ -1899,27 +1899,34 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
   First suppose that $W$ is constant on each rectangle $I_a\times I_b$,
   where $I_1,\ldots,I_N$ partition $[0,1]$ into intervals of length $1/N$,
   as in \Cref{subsec:step-matrices}.
-  Since $\Psi_m(W)=\Phi_m$, we use the sum \eqref{eq:Phi-expansion}
-  and keep only its top term $r=(m-1)/2$.
-  For this $r$, the degree $n=m-2r$ in \eqref{eq:Pmr} equals one, so the two
-  complete homogeneous polynomials of degree $n$ are linear,
+  Recall from \eqref{eq:Phi-expansion} that
   \[
-    h_1(\rep pr,-\lambda_1,\ldots,-\lambda_r)=rp-\sum_{i=1}^r\lambda_i,
-    \qquad
-    h_1(\rep qr,\lambda_1,\ldots,\lambda_r)=rq+\sum_{i=1}^r\lambda_i,
-  \]
-  and the subtracted term is $h_{n-1}(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)=h_0=1$.
-  The eigenvalues cancel when the two linear forms are added, and $p+q=1$, so the
-  integrand for this $r$ is the constant
-  \[
-    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
-    =\frac mr\bigl(rp+rq\bigr)-1=m-1.
+    \Psi_m(W)=\Phi_m
+    =\sum_{r=1}^{(m-1)/2}
+      \int\!\cdots\!\int
+      P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+      \prod_{i=1}^r\dd\mu(\lambda_i).
   \]
   The polynomial nonnegativity \eqref{eq:pge23-positivity-goal}, proved in
   \Cref{sec:excursion-positivity}, makes every integrand in
-  \eqref{eq:Phi-expansion} nonnegative on the support of $\mu$,
-  so all remaining integrals are nonnegative.
-  Discarding them and integrating the constant $m-1$ against the $r$-fold product of $\mu$ gives
+  this sum nonnegative on the support of $\mu$. Since $\mu$ is nonnegative,
+  we obtain a lower bound by retaining only the summand with $r=(m-1)/2$.
+  For this summand, $n=m-2r=1$, so \eqref{eq:Pmr} gives
+  \begin{align*}
+    P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
+    ={}&\frac mr\Bigl[
+      h_1(\rep pr,-\lambda_1,\ldots,-\lambda_r)
+      +h_1(\rep qr,\lambda_1,\ldots,\lambda_r)
+    \Bigr]\\
+    &-h_0(\rep q{(r+1)},\lambda_1,\ldots,\lambda_r)\\
+    ={}&\frac mr\Bigl[
+      \Bigl(rp-\sum_{i=1}^r\lambda_i\Bigr)
+      +\Bigl(rq+\sum_{i=1}^r\lambda_i\Bigr)
+    \Bigr]-1\\
+    ={}&m-1.
+  \end{align*}
+  Here we used that $h_1$ is the sum of its variables, $h_0=1$, and $p+q=1$.
+  Integrating the constant $m-1$ against the $r$-fold product of $\mu$ gives
   \[
     \Psi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
   \]
@@ -1969,8 +1976,7 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
   Thus, the right-hand side also converges to the corresponding expression
   for $W$. Taking limits in the inequality proves
   \eqref{eq:degree-variance-gap} for arbitrary graphons.
-
-  If $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
+  Moreover, if $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
 
   Conversely, suppose that $W$ is $p$-regular.
   The degree function of $U=1-W$ is then the constant $q$, so
