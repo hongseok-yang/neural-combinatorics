@@ -24,14 +24,13 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
 \usepackage{etoolbox}
 \AtBeginEnvironment{proposition}{\crefalias{theorem}{proposition}}
 \AtBeginEnvironment{lemma}{\crefalias{theorem}{lemma}}
 \AtBeginEnvironment{corollary}{\crefalias{theorem}{corollary}}
-\AtBeginEnvironment{definition}{\crefalias{theorem}{definition}}
 \AtBeginEnvironment{remark}{\crefalias{theorem}{remark}}
 
 \numberwithin{equation}{section}
@@ -90,17 +89,14 @@
 \newcommand{\sblockmat}[4]{\left(\begin{smallmatrix}#1&#2\\#3&#4\end{smallmatrix}\right)}
 
 \title{Goodman-type lower bounds for odd cycles I: The dense regime}
-\author[1,2]{Taeyoung~Kim}
-\author[3]{Jineon~Baek}
-\author[4]{Seonghyuk~Im}
-\author[2]{Joonkyung~Lee}
-\author[1,2]{Hongseok~Yang}
-\affil[1]{School of Computing, KAIST, Korea}
-\affil[2]{School of Computational Sciences, Korea Institute for Advanced Study (KIAS), Korea}
-\affil[3]{June E Huh Center for Mathematical Challenges, Korea Institute for Advanced Study (KIAS), Korea}
-\affil[4]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
-\affil[ ]{\newline\texttt{taeyoungkim21@kaist.ac.kr}, \texttt{{jineon.kias}@gmail.com}, \texttt{seonghyuk@kias.re.kr}, \texttt{joonkyunglee@kias.re.kr}, \texttt{hongseokyang@kias.re.kr}}
-\date{October 9, 2026}
+\author[1]{Seonghyuk~Im}
+\author[2,3]{Taeyoung~Kim}
+\author[2,3]{Hongseok~Yang}
+\affil[1]{Center for AI and Natural Science, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[2]{School of Computing, KAIST, Korea}
+\affil[3]{School of Computational Sciences, Korea Institute for Advanced Study (KIAS), Korea}
+\affil[ ]{\newline\texttt{seonghyuk@kias.re.kr}, \texttt{taeyoungkim21@kaist.ac.kr}, \texttt{hongseokyang@kias.re.kr}}
+\date{}
 
 \begin{document}
 \maketitle
@@ -187,19 +183,18 @@ A famous conjecture by Erd\H{o}s~\cite{erdos1962number} states that all complete
 This was later disproved by Thomason~\cite{thomason1989disproof}, who showed that $K_4$ is not common.
 Many other graphs have been studied to determine whether or not they are common~\cite{grzesik2022tripartite,hatami2012non,jagger1996multiplicities,ko2023common,kral2025common,lee2026disconnected,sidorenko1989cycles}, but the complete classification remains open.
 
-Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening for every path or cycle $H$ and every graphon $W$\footnote{Their result holds more generally for every kernel, that is, every bounded symmetric measurable function $W\colon[0,1]^2\to\mathbb{R}$.} with $\edens W=p$:
+Kim and Lee~\cite{kim2024extended} established the following density-sensitive strengthening for every path or cycle $H$ and every graphon\footnote{Their result holds more generally for every kernel, that is, every bounded symmetric measurable function $W\colon[0,1]^2\to\mathbb{R}$.} $W$ with $\edens W=p$:
 \begin{equation}\label{eq:intro-extended-commonality}
   \dens HW+\dens H{1-W}\ge p^{e(H)}+(1-p)^{e(H)}.
 \end{equation}
-This answers a question of Sidorenko~\cite{sidorenko1989cycles}.
-It also proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison, and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
+This inequality proves the conjecture that every odd cycle is strongly common, posed by Behague, Morrison, and Noel in the first arXiv version of their paper~\cite[Conjecture~9.7]{behague2022commonv1}.
 Since $p^{e(H)}+(1-p)^{e(H)}\ge2^{1-e(H)}$, \eqref{eq:intro-extended-commonality} implies commonality.
 
 
 For odd cycles with $p\ge2/3$, our second main theorem strengthens \eqref{eq:intro-extended-commonality} by a path-density term.
 A graphon $W$ is called $p$-regular if $\int_0^1 W(x,y)\dd y=p$ for almost every $x$.
 
-\begin{theorem}[Strengthened extended commonality]\label{thm:commonality}
+\begin{theorem}\label{thm:commonality}
   Let $m\ge3$ be odd, and let $W$ be a graphon with $\edens W=p\ge2/3$.
   Then, with $P_{m-1}$ the path with $m-1$ edges,
   \begin{equation}\label{eq:intro-commonality}
@@ -225,12 +220,12 @@ Rearranging \eqref{eq:intro-commonality} and using $(1-p)^m-(1-p)^{m-1}=-p(1-p)^
 Equality in \eqref{eq:intro-main} holds precisely when equality holds in both \eqref{eq:intro-commonality} and \eqref{eq:cycle-path-comparison}.
 By \Cref{thm:commonality}, this means that $W$ is $p$-regular and $\tC m{1-W}=\tP{m-1}{1-W}$.
 For $p<1$, these conditions force $1-W$ to be a union of equal cliques, as proved in \Cref{prop:main-equality}, giving the balanced complete multipartite graphons $W_k$ with $k\ge3$.
-At $p=1$, $W\equiv1$ almost everywhere and equality holds; the multipartite density formula \eqref{eq:intro-kpartite-value} establishes the converse for $W_k$.
+At $p=1$, $W\equiv1$ almost everywhere and equality holds; by \eqref{eq:intro-kpartite-value}, the converse holds for $W_k$.
 
 We also remark that for $m\in\{3,5,7\}$, the explicit calculations in \Cref{sec:short-cycles} prove the inequality in \Cref{thm:commonality} for all $p\ge1/2$.
 Therefore, the lower bound in \Cref{thm:main} holds for every $p\in[0,1]$ for $C_3$, $C_5$, and $C_7$.
 On the other hand, there is a counterexample for $C_9$ when $p = 501/1000$, showing that \Cref{thm:commonality} does not hold for all odd cycles and all $p$. Thus, to prove \Cref{thm:main} for the full range of $p\in[0,1]$, one needs a different approach.
-See Section~\ref{sec:conclusion} for the detailed discussion.
+See \Cref{sec:conclusion} for the detailed discussion.
 
 \subsection{Proof strategy: four reductions}
 Our proof strategy can be summarised as four reductions that simplify the problem while preserving the essential structure of the inequality.
@@ -276,7 +271,7 @@ It therefore remains to show that the two sums involving both components togethe
 We handle these mixed trace terms by approximating $W$ in $L^1$ by step graphons and using finite-matrix calculations (\Cref{lem:step-reduction}).
 
 \paragraph{Step 2: Excursion expansion.}
-We reduce this comparison to polynomial nonnegativity.
+We reduce this comparison to the nonnegativity of polynomials.
 Grouping the mixed trace terms into excursions gives the following expression for the difference between the two sides of \eqref{eq:intro-commonality}:
 \[
   \begin{aligned}
@@ -314,7 +309,7 @@ For the general case, we reduce \eqref{eq:intro-polynomial-positive} to a one-va
 Choose nonnegative weights $\Theta_1,\ldots,\Theta_r$, summing to one, uniformly at random.
 These weights have the Dirichlet$(1,\ldots,1)$ distribution.
 Set $L=\sum_{i=1}^r\Theta_i\lambda_i$.
-The Dirichlet averaging identity (\Cref{lem:pge23-dirichlet}) gives
+\Cref{lem:pge23-dirichlet} gives
 \[
   P_{m,r}(1-p;\lambda_1,\ldots,\lambda_r)
   =\E\bigl[P_{m,r}(1-p;L,\ldots,L)\bigr].
@@ -336,7 +331,7 @@ Here $\Gamma(a)=\int_0^\infty y^{a-1}e^{-y}\dd y$ is the Gamma function.
 An integral representation of $P_{m,r}(1-p;\lambda,\ldots,\lambda)$ establishes \eqref{eq:intro-diagonal-positive} when $\lambda\le0$ (\Cref{lem:pge23-ell-negative}).
 For $\lambda>0$, let $Y\sim\GammaLaw(r,1)$ and
 $Z\sim\GammaLaw(m-r,1)$ be independent.
-The Gamma expectation formula \eqref{eq:pge23-gamma-expectation} gives
+By \eqref{eq:pge23-gamma-expectation},
 \[
   P_{m,r}(1-p;\lambda,\ldots,\lambda)
   =\binom{m-r-1}{r}
@@ -357,8 +352,8 @@ We state its rescaled form in \Cref{lem:pge23-gamma-moment} and prove it in
 \Cref{app:gamma-moment}, using a differential equation satisfied by the even moments.
 
 The application of the moment bound in \Cref{prop:pge23-gamma-positive} is the only step requiring $p\ge2/3$.
-Averaging over $Z$ then proves the one-variable polynomial inequality \eqref{eq:intro-diagonal-positive} for $\lambda>0$, completing the fourth reduction.
-The Dirichlet averaging identity extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
+Averaging over $Z$ then proves \eqref{eq:intro-diagonal-positive} for $\lambda>0$, completing the fourth reduction.
+\Cref{lem:pge23-dirichlet} extends this nonnegativity to the multivariable polynomials in \eqref{eq:intro-polynomial-positive}.
 These polynomials are integrated against nonnegative weights in the second step, so the required trace comparison follows, proving \Cref{thm:commonality}.
 The deduction preceding this overview then gives the odd-cycle bound in \Cref{thm:main}.
 
@@ -428,7 +423,7 @@ We will use partitions into intervals of equal length, so these products form a 
 Each such graphon is specified by the finite matrix of its values, and its cycle and path densities can be expressed through matrix products.
 The following lemma justifies this restriction: proving the two inequalities in those theorems for all such graphons, with no bound on the number of parts, proves them for arbitrary graphons as well.
 
-\begin{lemma}[Step-graphon reduction]
+\begin{lemma}
 \label{lem:step-reduction}
   It suffices to prove the inequalities in \Cref{thm:main,thm:commonality} for graphons that
   are constant on each rectangle $I_a\times I_b$, where
@@ -515,7 +510,7 @@ $A\colon\mathcal E_0\to\mathcal E_0$ by
   \qquad
   A=QM_UQ\big|_{\mathcal E_0}.
 \end{equation*}
-The edge identity \eqref{eq:edge-matrix} gives
+By \eqref{eq:edge-matrix},
 \[
   e^{\mathsf T}g=e^{\mathsf T}M_Ue-q=0,
 \]
@@ -536,7 +531,7 @@ Therefore, relative to $\R e\oplus\mathcal E_0$,
   \end{pmatrix}.
 \end{equation}
 
-\begin{lemma}[Eigenvalue bound]\label{lem:half-norm}
+\begin{lemma}\label{lem:half-norm}
   Every eigenvalue of $A$ lies in $[-1/2,1/2]$.
 \end{lemma}
 
@@ -606,7 +601,7 @@ Define the finite nonnegative measure
 \end{equation*}
 Here $\delta_{\lambda_i}$ is the unit point mass at $\lambda_i$.
 
-\begin{lemma}[Spectral measure and moments]\label{lem:spectral-moments}
+\begin{lemma}\label{lem:spectral-moments}
   The measure $\mu$ is independent of the choice of orthonormal eigenvectors
   within each eigenspace. For every integer $j\ge0$,
   \begin{equation}\label{eq:moments}
@@ -637,7 +632,7 @@ Since $\mu$ is nonnegative, proving that these polynomials are nonnegative will 
 \label{sec:excursions}
 
 Using the matrix representation and spectral measure from \Cref{sec:matrix-reduction}, we express the difference between the two sides of \eqref{eq:intro-commonality} as polynomial integrals against $\mu$ (\Cref{lem:polynomial-reduction}).
-Since $\mu$ is nonnegative, polynomial nonnegativity, proved in \Cref{sec:short-cycles,sec:excursion-positivity}, will establish \Cref{thm:commonality}.
+Since $\mu$ is nonnegative, the nonnegativity of these polynomials, proved in \Cref{sec:short-cycles,sec:excursion-positivity}, will establish \Cref{thm:commonality}.
 
 To obtain these formulas, we expand matrix powers by inserting $P+Q=I$.
 For an odd integer $m\ge3$, the cycle density of $U$ satisfies
@@ -683,7 +678,7 @@ which contains its support, unless another domain is specified.
 
 We now make this expansion precise for cycle densities.
 
-\begin{lemma}[Cycle densities by excursions]
+\begin{lemma}
 \label{lem:cycle-excursions}
   For every odd $m\ge3$,
   \begin{align}
@@ -762,7 +757,7 @@ We now make this expansion precise for cycle densities.
         \prod_{i=1}^rg^{\mathsf T}A^{\beta_i}g\Bigg).
   \end{equation}
   Dividing \eqref{eq:U-r-excursions} by $r$ gives the factor $m/r$.
-  The moment identity \eqref{eq:moments} and the definition \eqref{eq:h-def} give
+  By \eqref{eq:moments} and the definition \eqref{eq:h-def},
   \begin{align*}
     &\sum_{\substack{\alpha_1,\beta_1,\ldots,\alpha_r,\beta_r\ge0\\
                      \sum_{i=1}^r(\alpha_i+\beta_i)=m-2r}}
@@ -780,7 +775,7 @@ We now make this expansion precise for cycle densities.
   \end{align*}
   Summing over $r$ and adding $q^m+\Tr(A^m)$ proves \eqref{eq:cycle-U}.
 
-  For $M_W$, the block identity \eqref{eq:block-UW} replaces
+  For $M_W$, \eqref{eq:block-UW} replaces
   $(q,g,A)$ by $(p,-g,-A)$.  The two crossing signs cancel in each block,
   while
   \[
@@ -798,7 +793,7 @@ Recall from \Cref{subsec:step-matrices} that
   \tP kU=e^{\mathsf T}M_U^ke.
 \end{equation*}
 
-\begin{lemma}[Path densities by excursions]
+\begin{lemma}
 \label{lem:path-excursions}
   For every $k\ge0$,
   \begin{equation}\label{eq:path-expansion}
@@ -851,7 +846,7 @@ Recall from \Cref{subsec:step-matrices} that
   \]
   In particular, $r\le\lfloor k/2\rfloor$.
   To evaluate the summand in \eqref{eq:path-projection-expansion}
-  associated with this word, use the same block identities as in the proof
+  associated with this word, use the same identities as in the proof
   of \Cref{lem:cycle-excursions}: each internal step in a $P$-block
   contributes $q$, and the excursion through the $i$th $Q$-block
   contributes $g^{\mathsf T}A^{\beta_i}g$.
@@ -865,7 +860,7 @@ Recall from \Cref{subsec:step-matrices} that
 
   With fixed endpoints, each admissible ordered tuple
   $(\alpha_0,\beta_1,\alpha_1,\ldots,\beta_r,\alpha_r)$ corresponds to exactly one word.
-  Combining this correspondence with the moment identity \eqref{eq:moments} and the definition \eqref{eq:h-def} gives
+  Combining this correspondence with \eqref{eq:moments} and the definition \eqref{eq:h-def} gives
   \begin{align}
     &\sum_{\substack{(R_1,\ldots,R_{k-1})\in\{P,Q\}^{k-1}\\
                      PR_1\cdots R_{k-1}P
@@ -974,7 +969,7 @@ prove, for every $1\le r\le(m-1)/2$, that
   \qquad\text{for all }(\lambda_1,\ldots,\lambda_r)\in[-1/2,1/2]^r,
 \]
 where $q=1-p\in[0,1/3]$.
-We prove this polynomial nonnegativity in \Cref{sec:short-cycles,sec:excursion-positivity}.
+We prove the nonnegativity of these polynomials in \Cref{sec:short-cycles,sec:excursion-positivity}.
 
 \section{The cycles \texorpdfstring{$C_3,C_5,C_7$}{C3, C5, C7}}
 \label{sec:short-cycles}
@@ -1144,7 +1139,7 @@ For $\lambda>0$, a further integral representation reduces the problem to
 comparing odd and even moments of $zY-1$, where $Y\sim\GammaLaw(r,1)$
 and $z\ge0$.
 Here, for $a>0$, $\GammaLaw(a,1)$ denotes the Gamma distribution with shape $a$ and rate $1$.
-The uniform odd-to-even Gamma moment bound in \Cref{lem:pge23-gamma-moment},
+The odd-to-even Gamma moment bound in \Cref{lem:pge23-gamma-moment},
 proved in \Cref{app:gamma-moment}, supplies the required comparison.
 Together, the diagonal reduction and the proof of diagonal positivity establish
 \eqref{eq:pge23-positivity-goal}, completing the proofs of
@@ -1157,7 +1152,7 @@ We begin with an averaging identity for complete homogeneous symmetric
 polynomials. It will be used both in the diagonal reduction and in the
 Beta representation.
 
-\begin{lemma}[Dirichlet representation]\label{lem:pge23-dirichlet-moment}
+\begin{lemma}\label{lem:pge23-dirichlet-moment}
   Let $k\ge1$ and $j\ge0$ be integers, let $x_1,\ldots,x_k\in\R$, and
   let $(\Theta_1,\ldots,\Theta_k)$ be uniformly distributed on the simplex
   \[
@@ -1257,7 +1252,7 @@ To carry out the first step, define the diagonal polynomial
         \Bigl(\sum_{j\ge0}h_j(b_1,\ldots,b_r)z^j\Bigr).
     \end{aligned}
   \]
-  Comparing the coefficients of $z^d$ gives the splitting identity
+  Comparing the coefficients of $z^d$ gives
   \begin{equation}\label{eq:pge23-h-split}
     h_d(a^{\times k},b_1,\ldots,b_r)
     =\sum_{j=0}^d
@@ -1336,7 +1331,7 @@ For $r\ge1$, the notation $X\sim\BetaLaw(r,r)$ means that $X$ has probability de
 \]
 and zero outside this interval.
 
-\begin{lemma}[Beta representation]\label{lem:pge23-beta-representation}
+\begin{lemma}\label{lem:pge23-beta-representation}
   Let $r\ge1$ and $j\ge0$ be integers, let $a,b\in\R$, and let
   $X\sim\BetaLaw(r,r)$. Then
   \begin{equation}\label{eq:pge23-beta-h}
@@ -1473,7 +1468,7 @@ polynomial as a Beta expectation.
   \]
   This proves \eqref{eq:pge23-beta-second}.
 
-  We now derive the integral formula~\eqref{eq:pge23-beta-integral} for the expectation.
+  We now derive \eqref{eq:pge23-beta-integral}.
   For $\lambda>0$, the probability density function of the Beta distribution gives
   \[
     \E\left[X^n\rho_{n,m}\left(q+\lambda\frac{1-X}{X}\right)\right]
@@ -1573,7 +1568,7 @@ Since the coefficient multiplying the integral in
   \frac{s^{r-1}}{(\lambda+s)^m}\rho_{n,m}(q+s)\dd s\ge0.
 \]
 The difficulty is that $\lambda$ and $s$ are coupled through
-$(\lambda+s)^{-m}$. The following Laplace-transform representation separates
+$(\lambda+s)^{-m}$. The following identity separates
 them:
 \begin{equation}\label{eq:pge23-laplace-kernel}
   \frac{1}{(\lambda+s)^m}
@@ -1582,7 +1577,7 @@ them:
 This formula follows by the change of variable $w=t(\lambda+s)$ in the
 defining integral $\Gamma(m)=\int_0^\infty w^{m-1}e^{-w}\dd w$.
 
-\begin{lemma}[Gamma representation of the diagonal polynomial]\label{lem:pge23-laplace-gamma}
+\begin{lemma}\label{lem:pge23-laplace-gamma}
   Let $m\ge3$ be odd, let $r$ be an integer satisfying
   $1\le r\le(m-1)/2$, and set $n=m-2r$.
   Let $Y\sim\GammaLaw(r,1)$.
@@ -1669,7 +1664,7 @@ it suffices to prove that this expectation is nonnegative for every $t>0$.
 We now seek to prove $\E\left[\rho_{n,m}(q+xY)\right]\ge0$ for $0\le q\le1/3$,
 where $x=1/t>0$. The following lemma expands $\rho_{n,m}$ around $u=1/2$.
 
-\begin{lemma}[Centred expansion of $\rho_{n,m}$]\label{lem:pge23-rho-centered}
+\begin{lemma}\label{lem:pge23-rho-centered}
   Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
   For $0\le j\le(n-1)/2$, let
   \[
@@ -1719,7 +1714,7 @@ suffices to prove
 where $v=q+xY-1/2$. The following Gamma moment bound will establish these
 inequalities.
 
-\begin{lemma}[Uniform odd-to-even Gamma moment bound]\label{lem:pge23-gamma-moment}
+\begin{lemma}[Odd-to-even Gamma moment bound]\label{lem:pge23-gamma-moment}
   Let $r,j\ge1$ be integers and $Y\sim\GammaLaw(r,1)$.
   For every $z\ge0$,
   \begin{equation*}
@@ -1749,10 +1744,10 @@ Using $\E\left[v^k\right]=\delta^k\E\left[(zY-1)^k\right]$, the following propos
 \]
 Together with \eqref{eq:pge23-rho-centered}, this gives
 the nonnegativity of
-$\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
+$\E\left[\rho_{n,m}(q+xY)\right]$ needed in
 \eqref{eq:pge23-laplace-gamma}.
 
-\begin{proposition}[Nonnegativity of the Gamma expectation]\label{prop:pge23-gamma-positive}
+\begin{proposition}\label{prop:pge23-gamma-positive}
   Let $n\ge1$ be odd, let $r\ge1$ be an integer, and set $m=n+2r$.
   If $0\le q\le1/3$, then for every $x\ge0$,
   \begin{equation}\label{eq:pge23-shifted-positive}
@@ -1794,7 +1789,7 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
   which proves \eqref{eq:pge23-shifted-positive}.
 \end{proof}
 
-\begin{remark}[Where the density threshold enters]\label{rem:pge23-threshold}
+\begin{remark}\label{rem:pge23-threshold}
   For $p>1/2$, the condition $2-1/(3\delta)\ge0$, where
   $\delta=p-1/2$, is equivalent to $p\ge2/3$.
   This is the only step in the proof of \Cref{prop:pge23-gamma-positive}
@@ -1811,7 +1806,7 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
 
 \begin{proof}[Proof of the inequalities in \Cref{thm:main,thm:commonality}]
   First suppose that $W$ is a step graphon on a partition into intervals of equal length, and write $U=1-W$ and $q=1-p$.
-  When $0\le q\le1/3$, \Cref{lem:pge23-dirichlet} reduces polynomial nonnegativity to
+  When $0\le q\le1/3$, \Cref{lem:pge23-dirichlet} reduces the nonnegativity of $P_{m,r}$ to
   $\widetilde P_{m,r}(q,\lambda)\ge0$ for $-1/2\le\lambda\le1/2$.
   This follows from \Cref{lem:pge23-ell-negative} when $\lambda\le0$.
   When $\lambda>0$, \Cref{lem:pge23-laplace-gamma} expresses
@@ -1819,7 +1814,7 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in the Gamma integral representation
   $\E\left[\rho_{n,m}(q+xY)\right]$, which are nonnegative by
   \Cref{prop:pge23-gamma-positive}.
   Thus, $P_{m,r}$ is nonnegative on $[-1/2,1/2]^r$.
-  For $m\in\{3,5,7\}$, \Cref{prop:short-cycles} gives the same polynomial nonnegativity throughout the larger range $0\le q\le1/2$.
+  For $m\in\{3,5,7\}$, \Cref{prop:short-cycles} gives the nonnegativity of $P_{m,r}$ throughout the larger range $0\le q\le1/2$.
 
   In both cases, the nonnegativity of $\mu$ gives $\Phi_m\ge0$, so \Cref{lem:polynomial-reduction} proves \eqref{eq:intro-commonality} for step graphons in the corresponding density ranges.
   The approximation argument used in \Cref{lem:step-reduction}, which preserves edge density, extends this inequality to arbitrary graphons.
@@ -1879,7 +1874,7 @@ $\Psi_m(W)=\Phi_m$, where $\Phi_m$ is the sum of spectral integrals defined
 in \eqref{eq:Phi-expansion}.
 Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance bound, which we extend to arbitrary graphons by approximation.
 
-\begin{proposition}[Degree variance and equality in strengthened extended commonality]
+\begin{proposition}
 \label{prop:regularity-gap}
   Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $p\ge2/3$.
   Then,
@@ -1904,7 +1899,7 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
       P_{m,r}(q;\lambda_1,\ldots,\lambda_r)
       \prod_{i=1}^r\dd\mu(\lambda_i).
   \]
-  The polynomial nonnegativity \eqref{eq:pge23-positivity-goal}, proved in
+  The nonnegativity of $P_{m,r}$ in \eqref{eq:pge23-positivity-goal}, proved in
   \Cref{sec:excursion-positivity}, makes every integrand in
   this sum nonnegative on the support of $\mu$. Since $\mu$ is nonnegative,
   we obtain a lower bound by retaining only the summand with $r=(m-1)/2$.
@@ -2026,7 +2021,7 @@ For $p<1$, the next proposition shows that these conditions force $U$ to
 be a union of equal cliques, and hence $W$ to be a balanced complete
 multipartite graphon.
 
-\begin{proposition}[Equality in the odd-cycle bound]
+\begin{proposition}
 \label{prop:main-equality}
   Let $m\ge3$ be odd, and let $W$ be a graphon of edge density $2/3\le p<1$.
   Equality holds in \Cref{thm:main} if and only if $p=1-1/k$ for an integer $k\ge3$ and, up to a measure-preserving relabelling and null sets, $W=W_k$.
@@ -2344,21 +2339,21 @@ points of equality.
 \paragraph{AI use disclosure.}
 The problem studied here arose from the neural graphon representation
 framework of Kim, Baek, Lee, and Yang~\cite{kim2026implicit}.
-The authors guided the initial proof development, which involved preliminary
-computations and a week of interactive proof search with GPT-5.5,
-GPT-5.5 Pro, and Claude Fable 5.0.
-The authors also suggested directions for simplifying the proof and seeking
-a combinatorial interpretation.
-GPT-5.5 Pro and GPT-6.0 Astra assisted with the subsequent simplification and exposition of
-the argument, including the introduction of the excursion-based proof,
-the revision of the argument following \Cref{lem:pge23-ell-negative} using
-\Cref{lem:pge23-gamma-moment}, and the results on equality and stability.
+The authors guided the initial phase of proof development, which lasted
+about a month and involved preliminary computations and interactive proof
+search with GPT-5.5, GPT-5.5 Pro, and Claude Fable 5.0.
+Over the next three months, the authors worked with these models,
+GPT-6.0 Astra, and Claude Opus 5.5 to simplify the proof and improve its exposition.
+These efforts led to the development of the excursion-based proof,
+a revision of the argument following \Cref{lem:pge23-ell-negative} using
+\Cref{lem:pge23-gamma-moment}, and the equality and stability results.
 The authors independently verified the written proof.
 
-Claude Fable 5.1 and Claude Opus 4.8 assisted with the Lean formalisation of the proof, under the authors' guidance.
-The authors checked the Lean formalisation and verified that its definitions and
-theorem statements agreed with those in the paper.
-GPT-5.6 Sol, GPT-6.0 Astra, and Claude Opus 4.8 also assisted with drafting and revising
+The Lean formalisation of the proof was carried out by Claude Fable 5.1
+and Claude Opus 4.8, with only minimal input from the authors.
+The authors checked the Lean formalisation and confirmed that its definitions
+and theorem statements matched those in the paper.
+GPT-5.6 Sol, GPT-6.0 Astra, Claude Opus 4.8, and Claude Opus 5.5 also assisted with drafting and revising
 the manuscript.
 
 \paragraph{Lean formalisation.}
@@ -2375,19 +2370,13 @@ Finally, we prove \Cref{prop:main-equality} by applying $q$-regularity and the C
 
 
 \paragraph{Acknowledgements.}
-We would like to thank Gyeongwon Jeong, Jang Soo Kim, Sangho Lim, and
-Seonghun Park for helpful discussions.
+We would like to thank Jineon Baek, Gyeongwon Jeong, Jang Soo Kim, Joonkyung Lee,
+Sangho Lim, and Seonghun Park for helpful discussions.
 S. Im was supported by a KIAS Individual Grant (AP109501) at the Korea Institute for Advanced Study.
 T. Kim and H. Yang were supported by the National Research Foundation of Korea (NRF)
 grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
-J. Lee was supported by Samsung STF Grant SSTF-BA2201-02 and
-the National Research Foundation of Korea (NRF) grant
-funded by the Korean Government (MSIT) (No.~NRF-2022R1C1C1010300).
 
 
-
-\bibliographystyle{abbrv}
-\bibliography{references}
 
 \appendix
 \crefalias{section}{appendix}
@@ -2756,5 +2745,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   every $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
   \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
+
+\bibliographystyle{abbrv}
+\bibliography{references}
 
 \end{document}
