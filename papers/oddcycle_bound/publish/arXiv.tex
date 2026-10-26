@@ -890,7 +890,7 @@ Recall from \Cref{subsec:step-matrices} that
 We now combine the cycle and path formulas to express the difference between the two sides of \eqref{eq:intro-commonality} as polynomial integrals against $\mu$.
 The following lemma completes the reduction announced at the start of this section.
 
-\begin{lemma}[Reduction to excursion polynomials]
+\begin{lemma}
 \label{lem:polynomial-reduction}
   Let $m\ge3$ be odd, and write $p=1-q$. For each integer
   $1\le r\le(m-1)/2$, let
@@ -1206,7 +1206,7 @@ To carry out the first step, define the diagonal polynomial
   =P_{m,r}(q;\lambda,\ldots,\lambda).
 \end{equation}
 
-\begin{lemma}[Diagonal reduction by Dirichlet averaging]\label{lem:pge23-dirichlet}
+\begin{lemma}[Diagonal reduction]\label{lem:pge23-dirichlet}
   Let $q,\lambda_1,\ldots,\lambda_r\in\R$, with $p=1-q$ in
   the definition \eqref{eq:Pmr} of $P_{m,r}$.
   Let $(\Theta_1,\ldots,\Theta_r)$ be uniformly distributed on the simplex
@@ -1370,7 +1370,7 @@ and zero outside this interval.
 We now apply this representation with $j=n=m-2r$ to express the diagonal
 polynomial as a Beta expectation.
 
-\begin{lemma}[Beta formula for the diagonal polynomial]\label{lem:pge23-beta}
+\begin{lemma}\label{lem:pge23-beta}
   Let $m\ge3$ be odd, let $r$ be an integer satisfying
   $1\le r\le(m-1)/2$, and set $n=m-2r$.
   Let $X\sim\BetaLaw(r,r)$ and define
@@ -2203,7 +2203,7 @@ This completes the equality assertion in \Cref{thm:main}.
 \subsection{Qualitative stability}
 \label{subsec:qualitative-stability}
 
-The uniqueness just proved, together with compactness and continuity in cut distance (\Cref{subsec:graphon-preliminaries}), gives the following corollary.
+The uniqueness together with compactness and continuity in cut distance (\Cref{subsec:graphon-preliminaries}), gives the following corollary.
 
 \begin{corollary}[Qualitative stability]\label{cor:stability}
   Fix an odd integer $m\ge3$.
@@ -2392,33 +2392,59 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
     W_s(x,y)=N^2\int_{I_a\times I_b}W(u,v)\dd u\dd v
     \qquad ((x,y)\in I_a\times I_b).
   \]
-  Each $W_s$ is a symmetric graphon with exactly the same edge density as
-  $W$:
+  We observe two properties of the symmetric graphon $W_s$.
+  First, each $W_s$ has edge density $p$:
   \[
-    \int_{[0,1]^2}W_s
-    =\sum_{a,b=1}^N\int_{I_a\times I_b}W=p.
+    \int_{[0,1]^2} W_s = \sum_{a,b=1}^N \int_{I_a \times I_b} W = p.
   \]
-  Moreover,
+  Second, we prove the $L^1$ convergence of $W_s$ to $W$.
+
+  \smallskip
+  \noindent\textbf{Claim.} 
   \begin{equation}\label{eq:step-L1}
     \norm{W_s-W}_1\longrightarrow0
     \qquad(s\to\infty).
   \end{equation}
-  To verify the convergence, let $S$ be a function constant on the
-  rectangles obtained by dividing each coordinate interval into
-  $2^{s_0}$ equal parts. For $s\ge s_0$, each averaging cell lies in
-  one of these rectangles, so its average of $S$ equals $S$ itself.
-  On each cell, the absolute value of the average of $W-S$ is at most
-  the average of $|W-S|$. Summing over the cells gives
-  $\norm{W_s-S}_1\le\norm{W-S}_1$, and hence
-  \[
-    \norm{W_s-W}_1
-    \le \norm{W_s-S}_1+\norm{S-W}_1
-    \le2\norm{W-S}_1.
-  \]
-  Dyadic step functions are dense in $L^1([0,1]^2)$, proving
-  \eqref{eq:step-L1}.
 
-  If $F$ is a finite simple graph, subtract the two products defining
+  \begin{proof}[Proof of the claim]
+    Fix $\varepsilon>0$. Since continuous functions are dense in
+    $L^1([0,1]^2)$, there exists a continuous function $f$ such that
+    $\norm{W-f}_1<\varepsilon/4$.
+    By uniform continuity of $f$, there exists an integer $s_0\ge1$ so that
+    its values at any two points of the same rectangle of the
+    $2^{s_0}\times2^{s_0}$ dyadic grid differ by less than $\varepsilon/4$.
+    Let $S$ be a step function on the $2^{s_0}\times2^{s_0}$ dyadic grid where the value of $S$ on each rectangle $D$ is $f(x)$ for arbitrary choice of $x \in D$.
+    Then $\norm{f-S}_1<\varepsilon/4$, and hence
+    \[
+      \norm{W-S}_1
+      \le\norm{W-f}_1+\norm{f-S}_1<\varepsilon/2.
+    \]
+    \textcolor{red}{SI:working here}
+    For $s\ge s_0$, let $C=I_a\times I_b$ be one of the rectangles
+    defining $W_s$. The finer dyadic grid subdivides the grid defining
+    $S$, so $S$ is constant on $C$. Thus, for $(x,y)\in C$,
+    \[
+      W_s(x,y)-S(x,y)
+      =\frac1{|C|}\int_C\bigl(W(u,v)-S(u,v)\bigr)\dd u\dd v,
+    \]
+    where $|C|$ denotes the area of $C$.
+    Since $W_s-S$ is constant on $C$, the triangle inequality gives
+    \[
+      \int_C|W_s-S|
+      =|C|\left|\frac1{|C|}\int_C(W-S)\right|
+      \le\int_C|W-S|.
+    \]
+    Summing over all rectangles $C$ gives
+    $\norm{W_s-S}_1\le\norm{W-S}_1$.
+    Therefore, for every $s\ge s_0$,
+    \[
+      \norm{W_s-W}_1
+      \le\norm{W_s-S}_1+\norm{S-W}_1
+      \le2\norm{W-S}_1<\varepsilon. \qedhere
+    \]
+  \end{proof}
+
+  Now let $F$ be a finite simple graph. Subtract the two products defining
   $\dens F{W_s}$ and $\dens FW$ by replacing one edge factor at a time.
   Each resulting term contains one factor $W_s-W$; all other factors
   lie in $[0,1]$. Integrating its absolute value bounds that term by
