@@ -2464,10 +2464,10 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
 \label{app:gamma-moment}
 
 It remains to prove \Cref{lem:pge23-gamma-moment}. Let $r,j\ge1$ be
-integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
+integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to prove the inequality
 \begin{equation}
-  3j\,\E(zY-1)^{2j-1}
-  \le(r+j)\,\E(zY-1)^{2j}. \label{eq:pge23-gamma-moment2}
+  3j\,\E\left[(zY-1)^{2j-1}\right]
+  \le(r+j)\,\E\left[(zY-1)^{2j}\right]. \label{eq:pge23-gamma-moment2}
 \end{equation}
 
 \begin{proof}[Proof of \Cref{lem:pge23-gamma-moment}]
@@ -2476,37 +2476,37 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
 
   Now assume $z>0$, write $b=1/z$, and define
   \[
-    F(b)=\E(Y-b)^{2j},
-    \quad\text{so that}\quad
-    F'(b)=-2j\,\E(Y-b)^{2j-1},
-    \quad
-    F''(b)=2j(2j-1)\,\E(Y-b)^{2j-2}.
+    F(b)=\E\left[(Y-b)^{2j}\right],
   \]
-  Since $zY-1=z(Y-b)$, dividing \eqref{eq:pge23-gamma-moment2} by
-  $z^{2j}>0$ gives the equivalent inequality
+  so that
+  \[
+    F'(b)=-2j\,\E\left[(Y-b)^{2j-1}\right],
+    \qquad
+    F''(b)=2j(2j-1)\,\E\left[(Y-b)^{2j-2}\right].
+  \]
+  Using $b=1/z$ and the formulas for $F$ and $F'$, we can rewrite the
+  inequality \eqref{eq:pge23-gamma-moment2} as
   \begin{equation}\label{eq:pge23-gamma-H}
     H(b):=(r+j)F(b)+\frac{3b}{2}F'(b)\ge0.
   \end{equation}
 
-  We first derive a differential equation for $F$ by integration by
-  parts against the Gamma density. This equation shows that any maximal interval
+  To prove this, we first derive a differential equation for $F$ by applying
+  integration by parts to the integral formulas for the Gamma moments.
+  This equation shows that any maximal interval
   on which $H$ is negative must contain an explicit point $b_*$.
-  At that point, another integration by parts reduces positivity to a
-  comparison of two local maxima. We complete this comparison with a
-  scalar bound that is uniform in $r$ and $j$.
+  To prove $H(b_*)\ge0$, we apply integration by parts once more.
+  This reduces the proof to comparing the heights of two local maxima
+  of an auxiliary function defined below.
+  We establish the required comparison by proving an inequality in the
+  single variable $t=j/r$ for every $t>0$.
 
-  \smallskip
-  \noindent\emph{The differential equation.}
-
-  For every polynomial $f$, integration by parts against the density of
-  $Y\sim\GammaLaw(r,1)$ gives the identity below; the boundary term
-  $y^re^{-y}f(y)$ vanishes both at $0$ and as $y\to\infty$:
+  For every polynomial $f$, since $y^re^{-y}f(y)$ vanishes both at $0$ and as $y\to\infty$, integration by parts gives the identity
   \begin{equation*}
-    \E\bigl[Yf'(Y)\bigr]=\E\bigl[(Y-r)f(Y)\bigr].
+    \E\left[Yf'(Y)\right]=\E\left[(Y-r)f(Y)\right].
   \end{equation*}
   For an integer $k\ge1$, apply this identity to $f(y)=(y-b)^k$
-  and write $I_\ell(b)=\E(Y-b)^\ell$ for integers $\ell\ge0$.
-  The identity becomes
+  and write $I_\ell(b)=\E\left[(Y-b)^\ell\right]$ for integers $\ell\ge0$.
+  Then the identity becomes
   \[
     kI_k(b)+kbI_{k-1}(b)=I_{k+1}(b)+(b-r)I_k(b),
   \]
@@ -2520,19 +2520,20 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     bF''(b)+(b-r-2j+1)F'(b)-2jF(b)=0.
   \end{equation}
 
-  \smallskip
-  \noindent\emph{Reduction to a single value of $b$.}
+  We next use this differential equation to reduce the problem to a
+  single value of $b$.
   First observe that
   \[
-    H(0)=(r+j)\E Y^{2j}>0,
+    H(0)=(r+j)\E\left[Y^{2j}\right]>0,
     \qquad
     H(b)=(r+4j)b^{2j}+O(b^{2j-1})
     \qquad(b\to\infty),
   \]
   so $H$ is positive at both ends of $[0,\infty)$.
-  If $H$ were negative somewhere, the maximal interval of negativity containing that point
-  would have a first zero, where $H'\le0$, and a later zero, where
-  $H'\ge0$.
+  If $H$ were negative at some point, let $(\alpha,\beta)$ be the maximal
+  interval containing such a point on which $H<0$.
+  Its endpoints satisfy $0<\alpha<\beta<\infty$ and
+  $H(\alpha)=H(\beta)=0$, with $H'(\alpha)\le0$ and $H'(\beta)\ge0$.
 
   To locate these endpoints, we next determine the sign of $H'$ at a zero of $H$.
   Differentiating \eqref{eq:pge23-gamma-H} and then eliminating $F''$ by \eqref{eq:pge23-gamma-ODE}, we obtain
@@ -2554,35 +2555,34 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
     \frac{H'(b_0)}{F(b_0)}
     =(r+4j)\frac{b_0-b_*}{b_0}.
   \end{equation}
-  Since $F(b_0)=\E(Y-b_0)^{2j}>0$, we distinguish three cases using
-  \eqref{eq:pge23-gamma-crossing}.
+  Since $F(b_0)=\E\left[(Y-b_0)^{2j}\right]>0$, we can determine the sign of $H'(b_0)$ from \eqref{eq:pge23-gamma-crossing} as follows:
   \begin{enumerate}[label=(\roman*)]
     \item If $b_0<b_*$, then $H'(b_0)<0$.
     \item If $b_0>b_*$, then $H'(b_0)>0$.
     \item If $b_0=b_*$, then $H(b_*)=H(b_0)=0$ and $H'(b_*)=0$.
-    Differentiating the formula for $H'$ above and using
+  \end{enumerate}
+
+  In case (iii), differentiating the formula for $H'$ above and using
     \eqref{eq:pge23-gamma-ODE} gives
     \[
       H''(b_*)=\frac{r+4j}{b_*}F(b_*)>0.
     \]
-    Thus $b_*$ is a strict local minimum of $H$ and cannot be an endpoint
+    Thus, $b_*$ is a strict local minimum of $H$ and cannot be an endpoint
     of an interval on which $H$ is negative.
-  \end{enumerate}
-  The first endpoint of the interval of negativity would therefore lie below $b_*$
-  and the second above it,
-  so this interval would contain $b_*$ and give $H(b_*)<0$.
+
+  The endpoints would therefore satisfy $\alpha<b_*<\beta$,
+  so $H(b_*)<0$.
   To rule out this possibility, it remains only to prove
   \begin{equation}\label{eq:pge23-gamma-Hbstar}
     H(b_*)\ge0.
   \end{equation}
 
-  \smallskip
-  \noindent\emph{An integral representation at $b_*$.}
-  We first write $H(b_*)$ as an integral.
-  Since $F'(b)=-2j\E(Y-b)^{2j-1}$, \eqref{eq:pge23-gamma-H} gives
+  To prove \eqref{eq:pge23-gamma-Hbstar}, we now write $H(b_*)$ as an integral.
+
+  Since $F'(b)=-2j\E\left[(Y-b)^{2j-1}\right]$, \eqref{eq:pge23-gamma-H} gives
   \[
-    H(b_*)=(r+j)\E(Y-b_*)^{2j}-3jb_*\E(Y-b_*)^{2j-1}
-    =(r+j)\,\E\bigl[(Y-b_*)^{2j-1}(Y-b_*-c)\bigr],
+    H(b_*)=(r+j)\E\left[(Y-b_*)^{2j}\right]-3jb_*\E\left[(Y-b_*)^{2j-1}\right]
+    =(r+j)\,\E\left[(Y-b_*)^{2j-1}(Y-b_*-c)\right],
   \]
   where $c=\frac{3jb_*}{r+j}$.
   Expanding the expectation as an integral and substituting $x=y-b_*$,
@@ -2651,10 +2651,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   $x\ge-b_*$, the integral is nonnegative as well, giving $H(b_*)>0$.
   It therefore suffices to prove that $G(x)\le G(-d)$ for every $x\ge-b_*$.
 
-  \smallskip
-  \noindent\emph{Comparison of the two local maxima.}
-  By \eqref{eq:pge23-gamma-Gprime}, the two nonzero local maxima occur at
-  $-d$ and $c$.
+  We now compare the two nonzero local maxima of $G$, which by
+  \eqref{eq:pge23-gamma-Gprime} occur at $-d$ and $c$.
   Their ratio is
   \begin{equation}\label{eq:pge23-gamma-max-ratio}
     \frac{G(c)}{G(-d)}
@@ -2676,8 +2674,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   their ratio $t$. Proving $L(t)<0$ for every $t>0$ therefore establishes
   the maximum comparison uniformly in $r$ and $j$.
 
-  \smallskip
-  \noindent\emph{Proof of the scalar bound $L(t)<0$.}
+  It remains to prove that $L(t)<0$ for every $t>0$.
   Direct differentiation gives
   \begin{align}
     L'(t)
@@ -2759,10 +2756,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. We must show that
   Together with the preceding description of the supremum, this proves
   $L(t)<0$ for every $t>0$.
 
-  \smallskip
-  \noindent\emph{Completion of the moment bound.}
-  The ratio \eqref{eq:pge23-gamma-max-ratio} is therefore smaller than $1$,
-  so $G$ attains its maximum at $-d$. Thus, the integrand in
+  Returning to \eqref{eq:pge23-gamma-max-ratio}, we obtain
+  $G(c)/G(-d)<1$, so $G$ attains its maximum at $-d$. Thus, the integrand in
   \eqref{eq:pge23-gamma-ibp-max} is nonnegative.
   The right-hand side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
   giving $H(b_*)>0$. The earlier analysis of the zeros of $H$ shows that
