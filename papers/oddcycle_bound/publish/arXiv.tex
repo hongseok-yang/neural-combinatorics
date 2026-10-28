@@ -2407,6 +2407,7 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
   \end{equation}
 
   \begin{proof}[Proof of the claim]
+    \renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
     Fix $\varepsilon>0$. Since continuous functions are dense in
     $L^1([0,1]^2)$, there exists a continuous function $f$ such that
     $\norm{W-f}_1<\varepsilon/4$.
@@ -2419,7 +2420,6 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
       \norm{W-S}_1
       \le\norm{W-f}_1+\norm{f-S}_1<\varepsilon/2.
     \]
-    \textcolor{red}{SI:working here}
     For $s\ge s_0$, let $C=I_a\times I_b$ be one of the rectangles
     defining $W_s$. The finer dyadic grid subdivides the grid defining
     $S$, so $S$ is constant on $C$. Thus, for $(x,y)\in C$,
@@ -2427,7 +2427,7 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
       W_s(x,y)-S(x,y)
       =\frac1{|C|}\int_C\bigl(W(u,v)-S(u,v)\bigr)\dd u\dd v,
     \]
-    where $|C|$ denotes the area of $C$.
+    where $|C|$ denotes the Lebesgue measure of $C$.
     Since $W_s-S$ is constant on $C$, the triangle inequality gives
     \[
       \int_C|W_s-S|
@@ -2440,25 +2440,24 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
     \[
       \norm{W_s-W}_1
       \le\norm{W_s-S}_1+\norm{S-W}_1
-      \le2\norm{W-S}_1<\varepsilon. \qedhere
+      \le2\norm{W-S}_1<\varepsilon.
     \]
+    Since $\varepsilon>0$ was arbitrary, this proves the claim.
   \end{proof}
 
-  Now let $F$ be a finite simple graph. Subtract the two products defining
-  $\dens F{W_s}$ and $\dens FW$ by replacing one edge factor at a time.
-  Each resulting term contains one factor $W_s-W$; all other factors
-  lie in $[0,1]$. Integrating its absolute value bounds that term by
-  $\norm{W_s-W}_1$. There are $|E(F)|$ terms, so
+  By \eqref{eq:step-L1},
   \[
-    \left|\dens F{W_s}-\dens FW\right|
-    \le |E(F)|\norm{W_s-W}_1.
+    \delta_\square(W_s,W)
+    \le\norm{W_s-W}_\square
+    \le\norm{W_s-W}_1\longrightarrow0.
   \]
-  The same bound holds for $U_s=1-W_s$ and $U=1-W$. Hence all cycle and
-  path densities in \eqref{eq:intro-main} and
-  \eqref{eq:intro-commonality} converge, while $p$ and $q$
-  remain unchanged.
-  Applying the two inequalities to each $W_s$ and passing to the limit
-  proves the lemma.
+  The same holds for $U_s=1-W_s$ and $U=1-W$, since
+  $\norm{U_s-U}_\square=\norm{W_s-W}_\square$.
+  By continuity of homomorphism densities in the cut distance,
+  all cycle and path densities in \eqref{eq:intro-main} and
+  \eqref{eq:intro-commonality} converge.
+  Since every $W_s$ has edge density $p$, applying the two inequalities
+  to each $W_s$ and passing to the limit proves the lemma.
 \end{proof}
 
 \section{Proof of the odd-to-even Gamma moment bound}
