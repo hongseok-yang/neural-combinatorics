@@ -2578,23 +2578,21 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
   \end{equation}
 
   To prove \eqref{eq:pge23-gamma-Hbstar}, we now write $H(b_*)$ as an integral.
-
-  Since $F'(b)=-2j\E\left[(Y-b)^{2j-1}\right]$, \eqref{eq:pge23-gamma-H} gives
+  Since $F'(b)=-2j\E\left[(Y-b)^{2j-1}\right]$, \eqref{eq:pge23-gamma-H} gives the following identity with $c=\frac{3jb_*}{r+j}$:
   \[
     H(b_*)=(r+j)\E\left[(Y-b_*)^{2j}\right]-3jb_*\E\left[(Y-b_*)^{2j-1}\right]
-    =(r+j)\,\E\left[(Y-b_*)^{2j-1}(Y-b_*-c)\right],
+    =(r+j)\,\E\left[(Y-b_*)^{2j-1}(Y-b_*-c)\right].
   \]
-  where $c=\frac{3jb_*}{r+j}$.
-  Expanding the expectation as an integral and substituting $x=y-b_*$,
+  Expanding the expectation as an integral and substituting $x=y-b_*$ gives
   \begin{equation}\label{eq:pge23-gamma-H-integral}
     H(b_*) =\frac{r+j}{\Gamma(r) e^{b_*}}\int_{-b_*}^{\infty}
     x^{2j-1}(x-c)(x+b_*)^{r-1}e^{-x}\dd x.
   \end{equation}
 
-  The integrand changes sign, so this representation does not immediately
-  establish positivity. We therefore seek a more useful representation by
-  integration by parts. To obtain the factor
-  $x^{2j-1}(x+b_*)^{r-1}e^{-x}$ upon differentiation, set
+  The integrand is negative for $0<x<c$, so we cannot conclude that the
+  integral is nonnegative from this representation alone.
+  We therefore apply integration by parts again to obtain a more useful
+  expression for $H(b_*)$. Let
   \begin{equation*}
     G(x)=x^{2j}(x+b_*)^re^{-x},
     \qquad -b_*\le x<\infty,
@@ -2604,10 +2602,10 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
     G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}
     \bigl(-x^2+(r+2j-b_*)x+2jb_*\bigr).
   \]
-  The choice of $b_*$ makes $c=3jb_*/(r+j)$ a root of this quadratic.
-  Thus, the factor $x-c$ in the signed integrand of
-  \eqref{eq:pge23-gamma-H-integral} also appears in $G'$, up to sign.
-  More precisely, the quadratic factors as $(c-x)(x+d)$, where
+  By the choice of $b_*$, the quadratic factor in $G'(x)$ vanishes at
+  $c=3jb_*/(r+j)$, so $G'(c)=0$.
+  Since $c$ is a root of the quadratic factor, we can write it as
+  $(c-x)(x+d)$, where
   \[
     d=\frac{2jb_*}{c}=\frac{2(r+j)}{3}.
   \]
@@ -2616,11 +2614,11 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
     b_*-d=\frac{r(r+j)}{r+4j}>0,
   \]
   so $-d$ lies in the interval of integration.
-  Thus
+  Thus,
   \begin{equation}\label{eq:pge23-gamma-Gprime}
     G'(x)=x^{2j-1}(x+b_*)^{r-1}e^{-x}(c-x)(x+d),
   \end{equation}
-  and the integrand of \eqref{eq:pge23-gamma-H-integral} is $-G'(x)/(x+d)$, whence
+  and the integrand of \eqref{eq:pge23-gamma-H-integral} is $-G'(x)/(x+d)$, which implies that 
   \[
     \frac{\Gamma(r)e^{b_*}}{r+j}H(b_*)
     =-\int_{-b_*}^{\infty}\frac{G'(x)}{x+d}\dd x.
@@ -2644,7 +2642,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
     \label{eq:pge23-gamma-ibp-max}
   \end{align}
   where the evaluations at $-d$ are understood by continuity, and we used
-  $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$.
+  $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$.\textcolor{red}{SI:working here}
 
   Since $G(-d)=d^{2j}(b_*-d)^re^{d}>0$ and $b_*-d>0$, the term
   $G(-d)/(b_*-d)$ is positive. If $G(x)\le G(-d)$ for every
