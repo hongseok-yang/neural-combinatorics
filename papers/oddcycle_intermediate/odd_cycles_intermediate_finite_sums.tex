@@ -1,0 +1,472 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert #1\rVert_2}
+\newcommand{\dd}{\,\mathrm d}
+\allowdisplaybreaks[1]
+\title{Odd-cycle bounds in the intermediate regime\\[3pt]
+\large A finite-sum replacement for the cutoff argument}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a complete proof of $t(C_m,W)\ge p^m-p(1-p)^{m-1}$ for graphons of density $1/2\le p\le2/3$ and odd $m\ge3$. We retain the exceptional-eigenvalue reduction and graphon compensation lemma from the supplied companion manuscript. The new part replaces its positive integration and truncated-square argument by a direct comparison of finite power sums. The unfavorable moment is bounded by a tangent estimate; the favorable contribution of the remaining spectral level pays the cost of one quadratic completion. The only auxiliary estimate is proved by uniform binomial coefficient bounds, with a short base calculation. The graphon inputs are reproduced for completeness. No claim of a wholly combinatorial proof or of literature novelty is intended.
+\end{abstract}
+
+\section{The theorem and graphon inputs}
+
+For a finite simple graph $F$ and a symmetric measurable function $W:[0,1]^2\to[0,1]$, write
+\[
+ t(F,W)=\int_{[0,1]^{V(F)}}\prod_{ij\in E(F)}W(x_i,x_j)
+          \prod_{i\in V(F)}dx_i,
+ \qquad p=\iint W,\qquad q=1-p.
+\]
+
+\begin{theorem}\label{thm:main}
+If $1/2\le p\le2/3$, then for every odd integer $m\ge3$,
+\[
+ t(C_m,W)\ge p^m-pq^{m-1}.
+\]
+\end{theorem}
+
+The case $p=1/2$ is immediate. For the triangle, the pointwise inequality $ab\ge a+b-1$ for $a,b\in[0,1]$ gives
+\[
+ t(C_3,W)\ge2\int d_W(x)^2\dd x-p\ge2p^2-p=p^3-pq^2.
+\]
+We therefore assume $1/2<p\le2/3$ and odd $m\ge5$.
+
+It suffices to work with step graphons. Indeed, conditional averages $W_N$ on finer dyadic partitions preserve $p$, converge to $W$ in $L^1$, and satisfy
+\[
+ |t(C_m,W_N)-t(C_m,W)|\le m\lVert W_N-W\rVert_{L^1}.
+\]
+All subsequent operator calculations may thus be performed on the finite-dimensional space of functions constant on the cells.
+
+Put $U=1-W$. On the decomposition $\mathbb R\one\oplus\one^\perp$, write
+\begin{equation}\label{eq:blocks}
+ T_U=\begin{pmatrix}q&g^*\\g&A\end{pmatrix},
+ \qquad
+ T_W=\begin{pmatrix}p&-g^*\\-g&-A\end{pmatrix},
+ \qquad g=d_U-q.
+\end{equation}
+The bound $U^2\le U$ gives
+\begin{equation}\label{eq:HS}
+ \Tr(A^2)+2\norm g^2\le pq.
+\end{equation}
+In particular $\lVert A\rVert_{\mathrm{op}}\le\sqrt{pq}<p$.
+
+\begin{lemma}[Excursion estimate]\label{lem:excursion}
+For every odd $m\ge3$,
+\begin{equation}\label{eq:excursion}
+ t(C_m,W)\ge p^m-\Tr(A^m)+m\ip g{k_m(A)g},
+ \qquad
+ k_m(z)=\frac{p^{m-1}-z^{m-1}}{p+z}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For $\ell\ge2$, set
+\[
+ e_\ell=\sum_{j=0}^{\ell-2}p^{\ell-2-j}\ip g{(-A)^jg}.
+\]
+Inserting the projections onto $\mathbb R\one$ and $\one^\perp$ between successive factors of $T_W$ gives
+\[
+ \Tr(T_W^m)=p^m+\Tr((-A)^m)
+ +\sum_{r=1}^{\lfloor m/2\rfloor}\frac mr
+   \sum_{\substack{\ell_1+\cdots+\ell_r=m\\\ell_i\ge2}}
+   e_{\ell_1}\cdots e_{\ell_r}.
+\]
+Here an excursion consists of departure from the constant direction, a nonempty block in $\one^\perp$, and return, followed by its constant transitions. Marking one of the $r$ departures gives the factor $m/r$. This counts indexed words and therefore also handles periodic words.
+
+For an orthonormal eigenbasis of $A$, with eigenvalues $\lambda_i$ and $g_i=\ip g{\phi_i}$,
+\[
+ e_\ell=\sum_i g_i^2\frac{p^{\ell-1}-(-\lambda_i)^{\ell-1}}{p+\lambda_i}\ge0,
+\]
+because $|\lambda_i|<p$. For odd $m$, retain only the $r=1$ term, which is $m\ip g{k_m(A)g}$. This proves \eqref{eq:excursion}.
+\end{proof}
+
+If every eigenvalue of $A$ is at most $q$, then $\lambda^m\le q^{m-2}\lambda^2$ for odd $m$, including negative $\lambda$. Thus \eqref{eq:HS} and \eqref{eq:excursion} prove the theorem immediately.
+
+There is at most one eigenvalue larger than $q$, since two would contribute more than $2q^2\ge pq$ to \eqref{eq:HS}. Suppose it exists. Write
+\begin{equation}\label{eq:exceptional}
+ A\phi=\Lambda\phi,\qquad \norm\phi=1,\qquad
+ g=\gamma\phi+g_s,\qquad s=\norm{g_s},\qquad
+ M=\sqrt{pq-\Lambda^2}.
+\end{equation}
+Let $A_s$ be the restriction to $\{\one,\phi\}^\perp$. Then
+\begin{equation}\label{eq:tail}
+ \Tr(A_s^2)+2(\gamma^2+s^2)\le M^2,
+ \qquad 0\le M<q<\Lambda<1/2<p.
+\end{equation}
+
+We use the following graphon lemma from the supplied manuscript \cite[Lemma 5]{companion}; its proof is reproduced in Appendix~\ref{app:compensation}.
+
+\begin{lemma}[Graphon compensation]\label{lem:compensation}
+One has $M>0$. The sign of $\phi$ can be chosen so that, with $\gamma_+=\max\{\gamma,0\}$,
+\begin{equation}\label{eq:compensation}
+ \Lambda-q\le c\gamma_++\frac{s^2}{\Lambda-M},
+ \qquad c>0,\qquad
+ c^2=\frac{M^2(p-\Lambda)}{\Lambda pq}.
+\end{equation}
+\end{lemma}
+
+For odd $m$, $k_m(-z)\ge k_m(z)$ for $0\le z<p$, while $k_m$ decreases on $[0,p)$. Consequently,
+\[
+ \ip g{k_m(A)g}\ge k_m(\Lambda)\gamma^2+k_m(M)s^2.
+\]
+Also,
+\[
+ \Tr(A^m)\le\Lambda^m+M^{m-2}\Tr(A_s^2)
+ \le\Lambda^m+M^m-2M^{m-2}(\gamma^2+s^2).
+\]
+It follows that
+\begin{equation}\label{eq:E-reduction}
+ t(C_m,W)-(p^m-pq^{m-1})
+ \ge E_m+2M^{m-2}(\gamma^2+s^2),
+\end{equation}
+where
+\begin{equation}\label{eq:E}
+ E_m=m k_m(\Lambda)\gamma^2+m k_m(M)s^2
+       -\Lambda^m-M^m+pq^{m-1}.
+\end{equation}
+Everything up to this point is the original spectral and graphon reduction. We now prove $E_m\ge0$ by finite sums.
+
+\section{The direct comparison of powers}
+
+The next proposition is the new all-length step. Its hypotheses are slightly weaker than those supplied by the graphon normalization.
+
+\begin{proposition}\label{prop:comparison}
+Let $0<y<1$, $S=1+y^2$, $P\ge S$, and
+\[
+ 0\le h\le\frac{1-y}{2}.
+\]
+Suppose $u,v\ge0$ and $u+v\ge h$. For an odd integer $m=2k+1\ge5$, put $n=m-2=2k-1$ and
+\begin{align*}
+ \alpha&=\frac{mS}{y^2}\sum_{j=0}^{k-1}P^{2j},\\
+ \beta&=\frac{m(1-y)}{P+y}(P^{n+1}-y^{n+1}).
+\end{align*}
+Then
+\begin{equation}\label{eq:comparison}
+ \alpha u^2+\beta v
+ \ge1+y^{n+2}-S(1-h)^n.
+\end{equation}
+In fact, the left side minus the right side is at least
+\begin{equation}\label{eq:strict-remainder}
+ \kappa_m y^2(1-y^n)^2,
+ \qquad
+ \kappa_m=\frac{n-1}{2n}-\frac{n^2}{4mk}
+ =\frac{2n^2-n-2}{2n(n+1)(n+2)}>0.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Write $T=1-y^n$. We use only two lower bounds for the coefficients:
+\begin{equation}\label{eq:coefficient-bounds}
+ \alpha\ge\frac{mkS^2}{y^2},\qquad
+ \beta\ge nST.
+\end{equation}
+For the first, arithmetic--geometric mean gives
+\[
+ \sum_{j=0}^{k-1}P^{2j}\ge kP^{k-1}\ge kS,
+\]
+because $k\ge2$ and $P\ge S\ge1$. The second bound is Lemma~\ref{lem:geometric} below.
+
+Bernoulli's inequality gives a direct upper bound for the power deficit:
+\begin{equation}\label{eq:tangent}
+ 1+y^{n+2}-S(1-h)^n\le nSh-y^2T.
+\end{equation}
+Put $Z=nST$. By \eqref{eq:coefficient-bounds} and $u+v\ge h$,
+\begin{align}\label{eq:young}
+ \alpha u^2+\beta v
+ &\ge \alpha u^2+Z(h-u)\notag\\
+ &=Zh+\alpha\left(u-\frac{Z}{2\alpha}\right)^2
+                      -\frac{Z^2}{4\alpha}\notag\\
+ &\ge Zh-\frac{Z^2}{4\alpha}.
+\end{align}
+Combining \eqref{eq:tangent}--\eqref{eq:young}, the desired difference is at least
+\begin{equation}\label{eq:reserve}
+ y^2T-nS y^n h-\frac{Z^2}{4\alpha}.
+\end{equation}
+
+The hypothesis $h\le(1-y)/2$ and arithmetic--geometric mean imply
+\[
+ \frac{T}{1-y}=1+y+\cdots+y^{n-1}\ge ny^{(n-1)/2},
+\]
+and hence
+\begin{equation}\label{eq:remaining-term}
+ y^2T-nS y^n h
+ \ge y^2T\left(1-\frac S2 y^{(n-3)/2}\right).
+\end{equation}
+For every integer $0\le r\le n$,
+\[
+ 1-y^r\ge\frac rn(1-y^n).
+\]
+For $r>0$ this follows by comparing the averages of the first $r$ and first $n$ terms of the decreasing sequence $1,y,y^2,\ldots$; the case $r=0$ is immediate. Apply this inequality at $r=(n-3)/2$ and $r=(n+1)/2$. We obtain
+\begin{align*}
+ 1-\frac S2y^{(n-3)/2}
+ &=\frac{(1-y^{(n-3)/2})+(1-y^{(n+1)/2})}{2}\\
+ &\ge\frac{n-1}{2n}T.
+\end{align*}
+Thus the first two terms of \eqref{eq:reserve} are at least
+\[
+ \frac{n-1}{2n}y^2T^2.
+\]
+The last term satisfies
+\[
+ \frac{Z^2}{4\alpha}\le\frac{n^2}{4mk}y^2T^2.
+\]
+Their difference is \eqref{eq:strict-remainder}. Its coefficient is positive since
+\[
+ 2mk(n-1)-n^3
+ =(n+2)(n+1)(n-1)-n^3=2n^2-n-2>0
+\]
+for $n\ge3$. This proves the proposition.
+\end{proof}
+
+The term $y^2T$ is the favorable contribution of the remaining spectral level. The proof retains it after the tangent estimate and uses it to pay the quadratic cost in \eqref{eq:young}. There is no need to compare the expressions at every spectral cutoff.
+
+\section{The finite geometric-sum estimate}
+
+\begin{lemma}\label{lem:geometric}
+Let $0<y<1$, $S=1+y^2$, $P\ge S$, and let $n\ge3$ be odd. Then
+\begin{equation}\label{eq:beta-bound}
+ \frac{(n+2)(1-y)}{P+y}(P^{n+1}-y^{n+1})
+ \ge nS(1-y^n).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Writing $n+1=2k$, we have
+\[
+ \frac{P^{n+1}-y^{n+1}}{P+y}
+ =(P-y)\sum_{j=0}^{k-1}P^{2j}y^{2(k-1-j)}.
+\]
+Every factor in this expression is nonnegative and nondecreasing in $P\ge S>y$. It therefore suffices to take $P=S$. After canceling $1-y$, the desired inequality becomes
+\begin{equation}\label{eq:binomial-target}
+ (n+2)(S^{n+1}-y^{n+1})\ge nR(y),
+ \qquad
+ R(y)=S(S+y)\sum_{i=0}^{n-1}y^i.
+\end{equation}
+
+First assume $n\ge5$. Since
+\[
+ S(S+y)=1+y+2y^2+y^3+y^4,
+\]
+the first four coefficients of $R$ are $1,2,4,5$, and every subsequent coefficient is at most $6$. The degree is the even integer $n+3$. Consequently,
+\[
+ nR(y)\le n+2ny+4ny^2+5ny^3
+                  +6n\sum_{j=4}^{n+3}y^j.
+\]
+Use the elementary inequalities
+\[
+ 2ny\le2+\frac{n^2}{2}y^2,
+ \qquad
+ 5ny^3\le ny^2+\frac{25n}{4}y^4,
+\]
+and replace every odd power of degree at least five using
+\[
+ 2y^{2j+1}\le y^{2j}+y^{2j+2}.
+\]
+The resulting coefficient at degree four is at most $61n/4\le16n$; every higher even coefficient is at most $12n\le16n$. Thus
+\begin{equation}\label{eq:even-bound}
+ nR(y)\le(n+2)+\left(\frac{n^2}{2}+5n\right)y^2
+          +16n\sum_{j=2}^{(n+3)/2}y^{2j}.
+\end{equation}
+
+Now expand the left side of \eqref{eq:binomial-target} by the binomial theorem. Its constant coefficient is $n+2$. Its coefficient at degree two exceeds the corresponding coefficient in \eqref{eq:even-bound} by
+\[
+ (n+2)(n+1)-\left(\frac{n^2}{2}+5n\right)
+ =\frac{(n-2)^2}{2}\ge0.
+\]
+For $2\le j\le(n+3)/2\le n-1$, its coefficient at degree $2j$ is at least
+\begin{align*}
+ (n+2)\left(\binom{n+1}{j}-1\right)
+ &\ge(n+2)\left(\frac{n(n+1)}2-1\right)\\
+ &\ge7(3n-1)\ge16n.
+\end{align*}
+The subtraction of $y^{n+1}$ is accounted for by the minus one. All remaining coefficients are nonnegative. This proves \eqref{eq:binomial-target} for $n\ge5$.
+
+For the base value $n=3$,
+\[
+ R(y)=1+2y+4y^2+4y^3+4y^4+2y^5+y^6.
+\]
+Apply
+\[
+ 6y\le2+\frac92y^2,\qquad
+ 12y^3\le3y^2+12y^4,\qquad
+ 6y^5\le y^4+9y^6.
+\]
+It follows that
+\begin{align*}
+ 3R(y)&\le5+\frac{39}{2}y^2+25y^4+12y^6\\
+ &\le5+20y^2+25y^4+20y^6+5y^8\\
+ &=5\bigl((1+y^2)^4-y^4\bigr),
+\end{align*}
+which is \eqref{eq:binomial-target} for $n=3$.
+\end{proof}
+
+\section{Application and completion of the theorem}
+
+Return to the parameters \eqref{eq:exceptional}--\eqref{eq:compensation}. Set
+\[
+ P=\frac p\Lambda,\qquad y=\frac M\Lambda,\qquad
+ S=1+y^2=\frac{pq}{\Lambda^2},\qquad
+ h=\frac{\Lambda-q}{\Lambda},
+\]
+and
+\[
+ u=\frac{c\gamma_+}{\Lambda},\qquad
+ v=\frac{s^2}{\Lambda(\Lambda-M)}.
+\]
+The compensation lemma gives $u+v\ge h$. Also $0<y<1$ and $P>S$, since $\Lambda>q$.
+
+The density restriction enters through a simple comparison of the two spectral levels:
+\[
+ \Lambda+M\le\sqrt{2(\Lambda^2+M^2)}
+ =\sqrt{2pq}\le2q,
+\]
+where the last inequality uses $p\le2q$. Therefore
+\[
+ h\le\frac{1-y}{2}.
+\]
+All hypotheses of Proposition~\ref{prop:comparison} hold.
+
+The definition of $c$ gives
+\[
+ c^2=\frac{y^2(P-1)}S,
+ \qquad
+ \frac{\gamma^2}{\Lambda^2}\ge\frac{S}{y^2(P-1)}u^2,
+ \qquad
+ \frac{s^2}{\Lambda^2}=(1-y)v.
+\]
+For $m=2k+1\ge5$ and $n=m-2$,
+\begin{align*}
+ \frac{E_m}{\Lambda^m}
+ ={}&\frac{m\gamma^2}{\Lambda^2}
+          \frac{P^{n+1}-1}{P+1}
+      +\frac{ms^2}{\Lambda^2}
+          \frac{P^{n+1}-y^{n+1}}{P+y}\\
+    &-1-y^{n+2}+S(1-h)^n\\
+ \ge{}&\alpha u^2+\beta v-1-y^{n+2}+S(1-h)^n\ge0.
+\end{align*}
+Here the finite identity
+\[
+ \frac{P^{n+1}-1}{(P+1)(P-1)}
+ =\sum_{j=0}^{k-1}P^{2j}
+\]
+identifies the coefficient $\alpha$ exactly. Equation~\eqref{eq:E-reduction} now proves the desired bound in the exceptional case. The nonexceptional case, the triangle, and the endpoint $p=1/2$ were already settled. Passing to the $L^1$ limit proves Theorem~\ref{thm:main} for every graphon.
+
+The proof actually supplies the explicit positive remainder
+\[
+ E_m\ge\kappa_m M^2\Lambda^{m-2}
+       \left(1-\left(\frac M\Lambda\right)^{m-2}\right)^2>0
+\]
+in the exceptional case, where
+\[
+ \kappa_m=\frac{2m^2-9m+8}{2m(m-1)(m-2)}.
+\]
+
+\paragraph{Scope of the replacement.}
+Sections 2--4 replace the cutoff functions, positive integration, truncated-square lemma, and cutoff interval analysis in Sections 6--8 of the supplied manuscript. The argument retains the excursion expansion and the graphon compensation lemma, including its coefficient matching. The only split by length is the short base calculation $n=3$ in the geometric-sum estimate; the main comparison treats every odd $m\ge5$ in one argument. It does not extend the short-cycle sum-of-squares expansion that fails at longer lengths.
+
+\appendix
+\section{Proof of the graphon compensation lemma}\label{app:compensation}
+
+This appendix reproduces the graphon input \cite[Lemma 5]{companion} in the notation above. Choose the sign of $\phi$ so that $b=\ip{|\phi|}\phi\ge0$, and decompose
+\[
+ |\phi|=a\one+b\phi+k,\qquad k\perp\one,\phi.
+\]
+Then $a=\int|\phi|>0$ and $a^2+b^2+\norm k^2=1$. The positive and negative parts of $\phi$ both have integral $a/2$. The bounds $0\le U\le1$ imply
+\begin{equation}\label{eq:abs-basic}
+ \Lambda=\ip\phi{T_U\phi}\le\frac{a^2}{2},
+ \qquad
+ \ip{|\phi|}{T_U|\phi|}\ge\Lambda.
+\end{equation}
+The first inequality follows by discarding the negative cross terms and bounding the two same-sign terms by $(a/2)^2$ each.
+
+Write $\varepsilon=\Lambda-q$. Using $A\preceq\Lambda I$ in the second inequality of \eqref{eq:abs-basic}, followed by Cauchy--Schwarz, gives
+\[
+ \varepsilon a\le2\norm g\sqrt{1-a^2}.
+\]
+In particular $a<1$ and $\norm g>0$. Since $a^2\ge2\Lambda$ and $\Lambda<1/2$,
+\[
+ \norm g^2\ge\frac{\Lambda\varepsilon^2}{2(1-2\Lambda)}.
+\]
+Together with $2\norm g^2\le M^2$, this proves $M>0$ and
+\begin{align}\label{eq:feasible}
+ 0&\le M^2(1-2\Lambda)-\Lambda\varepsilon^2\notag\\
+  &=(p-\Lambda)\bigl(q(1-\Lambda)-\Lambda^2\bigr).
+\end{align}
+Thus $q(1-\Lambda)\ge\Lambda^2$.
+
+Use $A_s\preceq MI$ in the expansion of the second inequality of \eqref{eq:abs-basic}. This gives
+\[
+ \varepsilon a^2+(\Lambda-M)\norm k^2
+ \le2ab\gamma+2a\ip{g_s}k.
+\]
+Dividing by $a^2$ and completing a square yields
+\begin{equation}\label{eq:two-components}
+ \varepsilon\le\frac{2b\gamma}{a}+\frac{s^2}{\Lambda-M}.
+\end{equation}
+If $\gamma\le0$, this already proves \eqref{eq:compensation}. Suppose $\gamma>0$. Pointwise,
+\[
+ T_U\phi=\gamma\one+\Lambda\phi\le\int\phi_+=a/2.
+\]
+Taking its inner product with $\phi_+$ gives
+\[
+ 2a\gamma+2\Lambda(1+b)\le a^2\le1-b^2.
+\]
+It follows that $0\le b\le1-2\Lambda$, and therefore
+\[
+ \frac{b^2}{a^2}
+ \le\frac{b^2}{2\Lambda(1+b)}
+ \le\frac{(1-2\Lambda)^2}{4\Lambda(1-\Lambda)}.
+\]
+Substituting into \eqref{eq:two-components},
+\[
+ \varepsilon\le
+ \frac{1-2\Lambda}{\sqrt{\Lambda(1-\Lambda)}}\gamma
+ +\frac{s^2}{\Lambda-M}.
+\]
+
+Finally, the identity
+\begin{align*}
+ &(1-\Lambda)M^2(p-\Lambda)-pq(1-2\Lambda)^2\\
+ &\qquad=
+ \varepsilon\Bigl((1-2\Lambda)(q-p\Lambda)
+       +\varepsilon\bigl(q(1-\Lambda)-\Lambda^2\bigr)\Bigr)
+\end{align*}
+has a nonnegative right-hand side. Indeed, \eqref{eq:feasible} gives the sign of the second term, while
+\[
+ q-p\Lambda\ge q-p/2=(3q-1)/2\ge0.
+\]
+Dividing by $\Lambda pq(1-\Lambda)>0$ shows
+\[
+ \frac{(1-2\Lambda)^2}{\Lambda(1-\Lambda)}
+ \le\frac{M^2(p-\Lambda)}{\Lambda pq}=c^2.
+\]
+This completes the proof of Lemma~\ref{lem:compensation}.
+
+\begin{thebibliography}{9}
+\bibitem{companion}
+T.~Kim, J.~Baek, S.~Im, J.~Lee, and H.~Yang,
+\emph{Goodman-type lower bounds for odd cycles II: The intermediate regime},
+supplied manuscript dated September 23, 2026, especially Sections 2--5.
+\end{thebibliography}
+
+\end{document}
