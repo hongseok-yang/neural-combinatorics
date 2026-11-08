@@ -108,7 +108,7 @@
   \[
     \tC mW\ge p^m-p(1-p)^{m-1}.
   \]
-  For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
+  For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence.
   In the same density range, we also strengthen Kim and Lee's density-sensitive commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with $m-1$ edges. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
   We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
@@ -162,8 +162,6 @@ Our main result extends this bound to every odd cycle in the dense regime $p\ge2
   \end{equation}
   Equality holds if and only if $W$ is equal to $W_k$ up to relabelling for some integer $k\ge3$, or $W\equiv1$.
 \end{theorem}
-
-At each density $p=1-1/k$, $k\ge3$, this uniqueness also yields a stability result in cut distance (\Cref{cor:stability}).
 
 A companion paper proves the odd-cycle Goodman bound \eqref{eq:intro-main} in the remaining nontrivial range $1/2<p<2/3$ using different methods.
 For $p\le1/2$, the bound is immediate because $p^m-p(1-p)^{m-1}$ is nonpositive.
@@ -1824,34 +1822,25 @@ $\E\left[\rho_{n,m}(q+xY)\right]$ needed in
   which is \eqref{eq:intro-main}.
 \end{proof}
 
-\section{Equality and qualitative stability}
+\section{Equality conditions}
 \label{sec:equality-stability}
 
-This section characterises equality in the odd-cycle Goodman bound \eqref{eq:intro-main}
-by analysing the two inequalities used to derive it: the strengthened
-extended commonality inequality \eqref{eq:intro-commonality} and the
-comparison between cycle and path densities \eqref{eq:cycle-path-comparison}.
-We first prove in \Cref{prop:regularity-gap} that equality in
-\eqref{eq:intro-commonality} forces $W$ to have constant degree $p$.
-We then show in \Cref{prop:main-equality} that, under this regularity condition,
-equality in \eqref{eq:cycle-path-comparison} forces the complement $1-W$
-to be a union of equal cliques.
-Together, these conditions identify the balanced complete multipartite graphons as the only graphons attaining the bound when $2/3\le p<1$.
-Finally, we use this uniqueness and graphon compactness to prove qualitative
-stability at densities $p=1-1/k$, $k\ge3$, in \Cref{cor:stability}.
+This section characterises equality in the odd-cycle Goodman bound
+\eqref{eq:intro-main} and proves qualitative stability at densities
+$p=1-1/k$, $k\ge3$.
 
 For a graphon $W$ of edge density $p$, define its degree function by
 \[
   \dW(x)=\int_0^1 W(x,y)\dd y.
 \]
-We call $W$ \emph{$p$-regular} if $\dW(x)=p$ for almost every $x$.
+Recall that we call $W$ \emph{$p$-regular} if $\dW(x)=p$ for almost every $x$.
 With $U=1-W$ and $q=1-p$, define $\Psi_m(W)$ for any graphon $W$
 as the difference between the left- and right-hand sides of
 \eqref{eq:intro-commonality}:
 \begin{equation}\label{eq:equality-gap}
   \Psi_m(W):=\tC mW+\tC mU-\tP{m-1}U-\bigl(p^m-pq^{m-1}\bigr).
 \end{equation}
-The gap in the odd-cycle bound splits as
+The gap in the odd-cycle bound can be decomposed into
 \begin{equation}\label{eq:one-colour-gap}
   \tC mW-\bigl(p^m-pq^{m-1}\bigr)
   =\Psi_m(W)+\bigl[\tP{m-1}U-\tC mU\bigr].
@@ -1860,9 +1849,13 @@ For $p\ge2/3$, both terms on the right are nonnegative: the first by
 \eqref{eq:intro-commonality}, proved in \Cref{sec:excursion-positivity},
 and the second by \eqref{eq:cycle-path-comparison}.
 Thus, equality in \eqref{eq:intro-main} holds exactly when both terms vanish.
-We first characterise the condition $\Psi_m(W)=0$ in
-\Cref{prop:regularity-gap}, and then analyse equality in the cycle-path
-comparison in \Cref{prop:main-equality}.
+By \Cref{prop:regularity-gap}, the first term vanishes exactly when $W$
+is $p$-regular. Under this regularity condition and for $p<1$,
+\Cref{prop:main-equality} shows that the second term vanishes exactly
+when $1-W$ is a disjoint union of cliques. Regularity forces these
+cliques to have equal measure $1-p$. Thus, for $p<1$, both terms vanish
+exactly when $W$ is equivalent to $W_k$, with $p=1-1/k$ for some integer
+$k\ge3$. The case $p=1$ is immediate.
 
 \subsection{Degree variance and regularity}
 \label{subsec:degree-variance}
