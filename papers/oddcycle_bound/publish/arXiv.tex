@@ -110,7 +110,6 @@
   \]
   For $2/3\le p<1$, equality holds precisely for balanced complete $k$-partite graphons with an integer $k\ge3$, up to graphon equivalence, and we establish qualitative stability at these densities.
   In the same density range, we also strengthen Kim and Lee's density-sensitive commonality inequality for odd cycles by adding the nonnegative term $t(P_{m-1},1-W)-(1-p)^{m-1}$ to the lower bound, where $P_{m-1}$ is the path with $m-1$ edges. To prove the main results, we develop a spectral excursion expansion and use Dirichlet averaging to reduce the resulting polynomial inequalities in arbitrarily many spectral variables to a one-variable problem.
-  We prove the one-variable inequality through a uniform inequality comparing odd and even moments of shifted Gamma random variables.
   We also formalise the odd-cycle lower-bound theorem in Lean~4.
 \end{abstract}
 
@@ -2378,6 +2377,9 @@ grant funded by the Korean Government (MSIT) (No.~RS-2023-00279680).
 
 
 
+\bibliographystyle{abbrv}
+\bibliography{references}
+
 \appendix
 \crefalias{section}{appendix}
 
@@ -2641,13 +2643,13 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
     +\int_{-b_*}^{\infty}\frac{G(-d)-G(x)}{(x+d)^2}\dd x,
     \label{eq:pge23-gamma-ibp-max}
   \end{align}
-  where the evaluations at $-d$ are understood by continuity, and we used
-  $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$.\textcolor{red}{SI:working here}
+  where the boundary terms at $x=-d$ vanish, and we used
+  $G(-b_*)=0$ and $G(x)\to0$ as $x\to\infty$.
 
   Since $G(-d)=d^{2j}(b_*-d)^re^{d}>0$ and $b_*-d>0$, the term
   $G(-d)/(b_*-d)$ is positive. If $G(x)\le G(-d)$ for every
-  $x\ge-b_*$, the integral is nonnegative as well, giving $H(b_*)>0$.
-  It therefore suffices to prove that $G(x)\le G(-d)$ for every $x\ge-b_*$.
+  $x\ge-b_*$, the integral is nonnegative, which implies $H(b_*)>0$.
+  Thus, it suffices to prove that $G(x)\le G(-d)$ for every $x\ge-b_*$.
 
   We now compare the two nonzero local maxima of $G$, which by
   \eqref{eq:pge23-gamma-Gprime} occur at $-d$ and $c$.
@@ -2668,11 +2670,8 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
     L(t)=2t\log A(t)+\log B(t)
       -\frac{32t^2+25t+2}{3(1+4t)}.
   \]
-  After division by $r$, the parameters $r$ and $j$ occur only through
-  their ratio $t$. Proving $L(t)<0$ for every $t>0$ therefore establishes
-  the maximum comparison uniformly in $r$ and $j$.
-
-  It remains to prove that $L(t)<0$ for every $t>0$.
+  Since $G(c)/G(-d)=\exp(rL(j/r))$ and $r>0$, proving $L(t)<0$
+  for every $t>0$ gives $G(c)<G(-d)$ for every $r,j\ge1$.
   Direct differentiation gives
   \begin{align}
     L'(t)
@@ -2686,8 +2685,7 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
     \label{eq:pge23-gamma-Lsecond}
   \end{align}
   In \eqref{eq:pge23-gamma-Lsecond}, the denominator and the factor
-  $32t^2+25t+2$ are positive for $t>0$. The initial minus sign therefore
-  makes the sign of $L''$ opposite to that of the quartic
+  $32t^2+25t+2$ are positive for $t>0$. Thus, the sign of $L''$ is opposite to the sign of the polynomial
   $P(t)=128t^4+224t^3+120t^2-28t-25$.
   The coefficients of $P$ change sign once, so by Descartes' rule of signs $P$ has at most one positive root.
   Since $P(0)=-25<0$ and $P(t)\to\infty$, it has exactly one positive
@@ -2696,33 +2694,18 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
 
   We now determine the sign of $L'$ near $0$, at $1$, and at $3/2$
   to locate its two zeros.
-  We will use the elementary bounds $\log2<7/10$ and
-  $\log13<13/5$. The positive terms in the exponential series give
-  \[
-    e^{7/10}>\sum_{\ell=0}^{3}\frac{(7/10)^\ell}{\ell!}>2,
-    \qquad
-    e^{13/5}>\sum_{\ell=0}^{6}\frac{(13/5)^\ell}{\ell!}>13,
-  \]
-  which prove both bounds by taking logarithms.
-  As $t\downarrow0$ the argument $A(t)$ tends to $0$ while the rational term of \eqref{eq:pge23-gamma-Lprime} tends to $-14/15$, so $L'(t)\to-\infty$.
-  At $t=1$ we have $A(1)=39/20$ and the rational term equals $2419/1950$, so the bound
-  \[
-    \log x\ge\frac{2(x-1)}{x+1}\qquad(x\ge1)
-  \]
-  gives $2\log A(1)\ge\frac{76}{59}$ and
+  We use the elementary bounds $\log2<7/10$ and $\log13<13/5$.
+  As $t\downarrow0$, $A(t)$ tends to $0$ while the rational term of \eqref{eq:pge23-gamma-Lprime} tends to $-14/15$, so $L'(t)\to-\infty$.
+  At $t=1$ we have $A(1)=39/20$ and the rational term equals $2419/1950$, so using the bound $2\log A(1)\ge\frac{76}{59}$, we obtain
   \[
     L'(1)\ge\frac{76}{59}-\frac{2419}{1950}
     =\frac{5479}{115050}>0.
   \]
-  At $t=3/2$ we have $A(3/2)=153/70$ and the rational term equals $19847/12495$; concavity of the logarithm at $x=2$ gives
-  \[
-    \log\frac{153}{70}\le\log2+\frac{1}{2}\left(\frac{153}{70}-2\right)
-    =\log2+\frac{13}{140},
-  \]
-  so with $2 \log 2 < 7/5$,
+  At $t=3/2$, using $\log x\le\log2+(x-2)/2$ and $\log2<7/10$,
+  we obtain
   \[
     L'\left(\frac{3}{2}\right)
-    <\frac{7}{5} + \frac{13}{70}-\frac{19847}{12495}
+    <\frac{111}{70}-\frac{19847}{12495}
     =-\frac{67}{24990}<0.
   \]
 
@@ -2731,31 +2714,36 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
   $t_2\in(1,3/2)$ with $L''(t_2)<0$.
   Thus, $L$ decreases on $(0,t_1)$, increases on $(t_1,t_2)$, and
   decreases on $(t_2,\infty)$. Its supremum over $(0,\infty)$ is therefore
-  the larger of $L(t_2)$ and its limit at $0$.
-  The latter is negative,
+  the maximum of $L(t_2)$ and the limit of $L(t)$ as $t\downarrow0$.
+  The latter is negative as
   \[
-    \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0,
+    \lim_{t\downarrow0}L(t)=\log\frac{5}{3}-\frac{2}{3}<0.
   \]
-  and $t_2$ lies in $[1,3/2]$, so it remains to control $L$ on $[1,3/2]$.
+  Since $t_2$ lies in $[1,3/2]$, it remains to control $L$ on $[1,3/2]$.
   By concavity of $\log$,
   \[
     \log A\le\log2+\frac{A-2}{2},
     \qquad
     \log B\le\log13+\frac{B-13}{13}.
   \]
-  Using $\log2<7/10$ and $\log13<13/5$, exact simplification gives
+  Using $\log2<7/10$ and $\log13<13/5$, we obtain the bound
   \begin{equation}\label{eq:pge23-gamma-L-rational}
     L(t)<
     \frac{3(96t^3-191t^2-16t+46)}
     {130(t+1)(4t+1)}.
   \end{equation}
-  On $[1,3/2]$ we have $96t-191<0$ and $t^2\ge1$, so the cubic numerator is at most $(96t-191)-16t+46=80t-145\le-25$, and $L(t)<0$ there as well.
-
-  Together with the preceding description of the supremum, this proves
+  On $[1,3/2]$ we have $96t-191<0$ and $t^2\ge1$, the numerator of \eqref{eq:pge23-gamma-L-rational} is bounded above by
+  \begin{equation*}
+  96t^3-191t^2-16t+46 \leq (96t-191)-16t+46=80t-145\le-25,
+  \end{equation*}
+ and therefore $L(t)<0$.
+  This proves
   $L(t)<0$ for every $t>0$.
 
   Returning to \eqref{eq:pge23-gamma-max-ratio}, we obtain
-  $G(c)/G(-d)<1$, so $G$ attains its maximum at $-d$. Thus, the integrand in
+  $G(c)<G(-d)$. The sign of $G'$ in \eqref{eq:pge23-gamma-Gprime}
+  shows that the global maximum of $G$ is attained at either $-d$ or $c$,
+  so it is attained at $-d$. Thus, the integrand in
   \eqref{eq:pge23-gamma-ibp-max} is nonnegative.
   The right-hand side of \eqref{eq:pge23-gamma-ibp-max} is then positive,
   giving $H(b_*)>0$. The earlier analysis of the zeros of $H$ shows that
@@ -2763,8 +2751,5 @@ integers, let $Y\sim\GammaLaw(r,1)$, and let $z\ge0$. Recall that our goal is to
   every $b>0$, which is \eqref{eq:pge23-gamma-H} and hence implies
   \eqref{eq:pge23-gamma-moment2}.
 \end{proof}
-
-\bibliographystyle{abbrv}
-\bibliography{references}
 
 \end{document}
