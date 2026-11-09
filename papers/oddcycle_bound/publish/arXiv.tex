@@ -1910,11 +1910,11 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
     ={}&m-1.
   \end{align*}
   Here we used that $h_1$ is the sum of its variables, $h_0=1$, and $p+q=1$.
-  Integrating the constant $m-1$ against the $r$-fold product of $\mu$ gives
+  Integrating this identity with respect to $\prod_{i=1}^r\dd\mu(\lambda_i)$ gives
   \[
     \Psi_m(W)\ge(m-1)\mu(\R)^{(m-1)/2}.
   \]
-  To obtain \eqref{eq:degree-variance-gap} from this bound, we use the identity
+  To obtain \eqref{eq:degree-variance-gap} from this bound, it suffices to prove the identity
   \[
     \mu(\R)=\norm g^2
     =\int_0^1(\dW(x)-p)^2\dd x.
@@ -1947,10 +1947,9 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
     \left(\int_0^1(d_{W_s}(x)-p)^2\dd x\right)^{(m-1)/2}.
   \]
   All homomorphism densities of $W_s$ and $1-W_s$ converge to those of
-  $W$ and $1-W$, respectively. By the definition \eqref{eq:equality-gap},
-  the left-hand side therefore converges to $\Psi_m(W)$.
-  For the right-hand side, express the degree variance through the
-  two-edge path density:
+  $W$ and $1-W$, respectively. Thus, by the definition \eqref{eq:equality-gap},
+  $\Psi_m(W_s)$ converges to $\Psi_m(W)$.
+  For the right-hand side, by expressing the degree variance in terms of the path density, we have
   \begin{align*}
     \int_0^1(d_{W_s}(x)-p)^2\dd x
     =\Big(\tP2{W_s}-p^2\Big)
@@ -1960,7 +1959,7 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
   Thus, the right-hand side also converges to the corresponding expression
   for $W$. Taking limits in the inequality proves
   \eqref{eq:degree-variance-gap} for arbitrary graphons.
-  Moreover, if $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular.
+  Moreover, if $\Psi_m(W)=0$, \eqref{eq:degree-variance-gap} forces $W$ to be $p$-regular, which concludes the proof of the one direction.
 
   Conversely, suppose that $W$ is $p$-regular.
   The degree function of $U=1-W$ is then the constant $q$, so
@@ -1969,16 +1968,16 @@ Keeping the term $r=(m-1)/2$ in \eqref{eq:Phi-expansion} gives a degree-variance
     \qquad
     \Tker U\one=q\one .
   \]
-  Both operators are self-adjoint, so each leaves the orthogonal complement
-  $\one^\perp=\{f\in L^2[0,1]:\int_0^1f(x)\dd x=0\}$ invariant.
-  On $\one^\perp$, the two operators are negatives of each other: the identity
-  $W+U\equiv1$ gives
+  Both operators are self-adjoint, so
+  $\one^\perp=\{f\in L^2[0,1]:\int_0^1f(x)\dd x=0\}$ is invariant under both operators.
+  Since
+  $W+U\equiv1$, we have
   \[
     \Tker Wf+\Tker Uf=\Bigl(\int_0^1f(y)\dd y\Bigr)\one=\ip f\one\one
     \qquad\text{for all }f\in L^2[0,1],
   \]
-  which is the orthogonal projection onto the constants and therefore vanishes on
-  $\one^\perp$.
+  which vanishes on
+  $\one^\perp$. Thus, the restriction of $\Tker U$ to $\one^\perp$ is the negative of the restriction of $\Tker W$ to $\one^\perp$.
   Write $\nu_1,\nu_2,\ldots$ for the eigenvalues of the restriction of $\Tker W$ to
   $\one^\perp$.
   The eigenvalues of $\Tker W$ are then $p$ together with the $\nu_j$, and those of
@@ -2025,8 +2024,7 @@ multipartite graphon.
   \eqref{eq:intro-main}, and write $U=1-W$ and $q=1-p>0$.
   Then, \eqref{eq:one-colour-gap} and \Cref{prop:regularity-gap} imply
   that $W$ is $p$-regular and $\tC mU=\tP{m-1}U$.
-  Since $d_U(x)=1-\dW(x)=q$ almost everywhere, $U$ is $q$-regular
-  and $\Tker U\one=q\one$. Consequently,
+  Consequently,
   \[
     \tC mU=\tP{m-1}U
     =\ip\one{\Tker U^{m-1}\one}=q^{m-1}.
@@ -2046,17 +2044,17 @@ multipartite graphon.
   The first factor is the degree $d_U(x)$. Since $U$ is $q$-regular,
   $d_U(x)=q$ for almost every $x$, giving
   \[
-    \bigl|\Tker Uf(x)\bigr|^2\le q\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y .
+    \bigl|\Tker Uf(x)\bigr|^2\le q\int_0^1 U(x,y)\bigl|f(y)\bigr|^2\dd y
   \]
-  Integrating in $x$, exchanging the order of integration, and using $q$-regularity a
-  second time, now in the variable $y$,
+  for almost all $x$.
+  Integrating in $x$, exchanging the order of integration, and using $q$-regularity, we get
   \[
     \norm{\Tker Uf}_2^2
     \le q\int_0^1\bigl|f(y)\bigr|^2
       \left(\int_0^1 U(x,y)\dd x\right)\dd y
     =q^2\norm f_2^2 .
   \]
-  This proves the operator-norm bound. Since $\Tker U$ is self-adjoint,
+  This proves the operator-norm is at most $q$. Since $\Tker U$ is self-adjoint,
   its eigenvalues $\lambda_i$ lie in $[-q,q]$.
   Since $|\lambda_i|\le q$ and $m\ge3$, each eigenvalue satisfies
   \[
@@ -2069,15 +2067,16 @@ multipartite graphon.
   \[
     \sum_i\lambda_i^2=\intsq U(x,y)^2\ddxy.
   \]
-  The trace formula and the pointwise inequality $U(x,y)^2\le U(x,y)$ therefore give
+  Since $\tC mU=q^{m-1}$ and $\intsq U(x,y)\ddxy=q$,
+  the trace formula, the preceding eigenvalue bound, and the pointwise
+  inequality $U(x,y)^2\le U(x,y)$ give
   \begin{equation}\label{eq:regular-complement-cycle}
     q^{m-1}=\sum_i\lambda_i^m
     \le q^{m-2}\sum_i\lambda_i^2
     =q^{m-2}\intsq U(x,y)^2\ddxy
     \le q^{m-1}.
   \end{equation}
-  The two ends of \eqref{eq:regular-complement-cycle} agree, so equality
-  holds in both inequalities. Equality in the last inequality forces
+  Thus, two inequalities of \eqref{eq:regular-complement-cycle} are indeed equality. Equality in the last inequality forces
   $U(x,y)^2=U(x,y)$ for almost every $(x,y)$, so $U$ takes values in $\{0,1\}$.
   Equality in the eigenvalue inequality forces $|\lambda_i|=q$ for every
   nonzero eigenvalue. Since $m$ is odd, a negative eigenvalue would satisfy
@@ -2114,25 +2113,23 @@ multipartite graphon.
   Thus, the two neighbourhoods differ only on a set of measure zero.
   For almost every pair with $U(x,y)=0$, their intersection has measure
   zero, so the neighbourhoods are disjoint apart from a set of measure zero.
-  In the construction below, equality, containment, and disjointness of sets
-  are understood up to null sets. Statements that $U=1$ or $U=0$ on a region mean that the
-  asserted value holds for almost every pair of points in that region.
-
-  We now partition $[0,1]$ into disjoint sets $B_1,\ldots,B_k$ of
-  measure $q$, with $U=1$ within each set and $U=0$ between different
-  sets. At stage $j$, we have chosen pairwise disjoint measurable sets
+  We now construct disjoint measurable sets $B_1,\ldots,B_k$ of measure
+  $q$ that cover $[0,1]$ up to a null set, with $U=1$ almost everywhere
+  on each $B_i\times B_i$ and $U=0$ almost everywhere on $B_i\times B_\ell$
+  for $i\ne\ell$. At stage $j$, we have chosen pairwise disjoint measurable sets
   $B_1,\ldots,B_j$, and the remaining set is
   \[
     R_j=[0,1]\setminus\bigcup_{i=1}^j B_i.
   \]
   We maintain the following invariant:
   \begin{enumerate}[label=(\roman*)]
-    \item For each $i\le j$, $|B_i|=q$ and $N(y)=B_i$ for almost
-      every $y\in B_i$. Thus, $B_i$ is a clique with no edges to its
-      complement.
+    \item For each $i\le j$, $|B_i|=q$ and, for almost every $y\in B_i$,
+      $N(y)=B_i$ up to a null set. Thus, $U=1$ almost everywhere on
+      $B_i\times B_i$ and $U=0$ almost everywhere on
+      $B_i\times([0,1]\setminus B_i)$.
     \item For almost every $x\in R_j$, $|N(x)|=q$ and
       $|N(x)\setminus R_j|=0$. Thus, almost every point in the
-      remainder still has all its neighbours in the remainder.
+      remainder still has almost all its neighbours in the remainder.
   \end{enumerate}
   Initially, $j=0$ and $R_0=[0,1]$. Condition (i) is vacuous, and
   condition (ii) follows from the $q$-regularity of $U$.
@@ -2142,8 +2139,9 @@ multipartite graphon.
   every $x\in[0,1]$ we have
   \[
     U(x,y)=1\quad\Longrightarrow\quad N(y)=N(x)
-    \qquad\text{for almost every }y\in[0,1].
+    \quad\text{up to a null set}
   \]
+  for almost every $y\in[0,1]$.
   Since $R_j$ has positive measure, choose such an $x\in R_j$ also
   satisfying condition (ii): $|N(x)|=q$ and
   $|N(x)\setminus R_j|=0$. Set
@@ -2154,13 +2152,14 @@ multipartite graphon.
   The new block is disjoint from the earlier blocks and has measure
   $q$. For almost every $y\in B_{j+1}$, we have
   $U(x,y)=1$, so the neighbourhood relation gives
-  $N(y)=N(x)=B_{j+1}$. This verifies condition (i) for the new block;
+  $N(y)=N(x)=B_{j+1}$ up to null sets. This verifies condition (i) for the new block;
   the earlier blocks are unchanged.
 
   To verify condition (ii), we must show that almost every point of
   $R_{j+1}$ still has a neighbourhood of measure $q$ contained in
-  $R_{j+1}$. For almost every $z\in B_{j+1}$, the identity
-  $N(z)=B_{j+1}$ shows that $z$ has no neighbours in $R_{j+1}$.
+  $R_{j+1}$ up to a null set. By condition (i) and the disjointness of
+  $B_{j+1}$ and $R_{j+1}$, we have $|N(z)\cap R_{j+1}|=0$ for almost
+  every $z\in B_{j+1}$.
   Symmetry of $U$ and Fubini's theorem therefore give
   \[
     \begin{aligned}
@@ -2181,10 +2180,10 @@ multipartite graphon.
   Each step removes measure $q>0$, so $|R_j|=1-jq$ and at most
   $\lfloor1/q\rfloor$ steps are possible. The construction can continue
   whenever the remainder has positive measure, so it must end with
-  $|R_k|=0$ for some $k$. Hence $B_1,\ldots,B_k$ cover $[0,1]$,
-  and $kq=1$. By condition (i), $U$ consists of the
-  $k$ disjoint cliques $B_i\times B_i$, so its complement is $W_k$
-  after relabelling.
+  $|R_k|=0$ for some $k$. Hence $B_1,\ldots,B_k$ cover $[0,1]$ up to
+  a null set, and $kq=1$. By condition (i), $U=1$ almost everywhere on
+  each $B_i\times B_i$ and $U=0$ almost everywhere between different
+  blocks. Thus, $W=W_k$ almost everywhere after relabelling.
   Finally, $p=1-1/k\ge2/3$ implies $k\ge3$.
 \end{proof}
 
